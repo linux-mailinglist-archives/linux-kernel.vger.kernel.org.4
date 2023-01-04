@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4CE65D447
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3E065D449
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbjADNcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S238969AbjADNc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbjADNbe (ORCPT
+        with ESMTP id S233855AbjADNbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:31:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB986598;
-        Wed,  4 Jan 2023 05:29:44 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304C2XI8005046;
-        Wed, 4 Jan 2023 13:29:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=qVxLVNi1vjauSf0iGsvDfnimrpo5LpqH79zwOIt7/GY=;
- b=PLECV1xkzKzLGSpt8JUye6iuuHY6AfXobF+YlwZrqI7Km7ajT0hJ9RE75or1Isg4C+kI
- vDGhVhC1PQAPJNPXOG0nGTwwEkq9GFXDuxMDauqyN5ddusLqVqC2Kg1q17eA56nWeroG
- LPmwYcnn/d9pfU5eQICb7wZZ4tiD3yqs1qHptTtMV6WyBBJfDUCEltTNyaEpRd3ybSCs
- rSVjzZQSuM929LPI7SPmr13TwN8n2uUFkR4YKkk4XrlFOWu6Ipil3WNeQ7z5xJEwY4VH
- m4yHc7TsbQhRoH7l9RmuPr3g05dtjOu8bhu+rPu2HUMxHEZImG0ZdVUr40HI1f8XPd2b Pw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvwt0q8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 13:29:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304DTasa005660
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 4 Jan 2023 13:29:36 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 4 Jan 2023 05:29:31 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v3 1/4] dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode property
-Date:   Wed, 4 Jan 2023 18:59:12 +0530
-Message-ID: <1672838955-7759-2-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1672838955-7759-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1672838955-7759-1-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 4 Jan 2023 08:31:23 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B78E2199
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:29:21 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id x11so11023380ljh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 05:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BN1HuBOcO1xYyZSvoay0D2AQ+5agsRugOrVDoErpX48=;
+        b=uMe1/V2U49qWV8NEZPXnBhv604lrMCVmp6V05gDvgxyyTl20RkdTh00exLaCUIaY4Q
+         IvLpwr+q71gbuCtjpDyihO6jOPT2cJ24BsFGEmiMp6HLVS0CYA0JomJmC8qRaADhCwNT
+         fX+C6Zx7R9vdr5inLwnj1LgcLe1NP0KgnOBMUjsPCAeN14UIaJZFvvReWGnr3DyxAvVd
+         mmSPx+ridlbM0fgTSxazMOshc/VqIHt4c3eM+hXC4hx7lr5T5YKIx+WjsPsLNfhd1l5u
+         LLqVdkMj18OK9Ti0eu7HoQfNYK+UBqszfOR2Zi5iaa04EeLZkszuuxntIZyRg+fI9d3J
+         rcEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BN1HuBOcO1xYyZSvoay0D2AQ+5agsRugOrVDoErpX48=;
+        b=cxs2dwt0JZVsPDgUd3cDPHu4uopvKjC7YUbGk2UhkLCCVPo4iTFMX8Nz3pnYt+YAVC
+         FSaoBJK5NCHDF6CKR7E5UzrpB/BJqpviVZb09V7FsPQ1hIa4QGTJ/kXaxJoYJY03Jaox
+         AWzyoh4zgLHc5dYJG32uyfUiqvOsE0r1RK2n67y4na0JTokqahne3gta13JiXIpHmtpu
+         vdgwKv52dEe/SVAxgosS0v+znHGC8i8k9tTYbR0ksZ/o9KRdA9yKo2VxV7k0HI8Cu8YF
+         dkxBk/xv7iMQ3vHIB8GEdvYAuEBB7OEyByRAQbMln65aqlLltWjUN8OnSO44S4veNqDY
+         S7Yg==
+X-Gm-Message-State: AFqh2kqV8UTn0kw8jAblXip/ga8naTlf0laMEiKmS4RF9gUY2usWC5uk
+        bzciEcNLClL8UcPKXMegIg8nKA==
+X-Google-Smtp-Source: AMrXdXsXU/nsbyBQ9CPaj3vZFjbU28wyzDRKxpG4BSqgr17viXzaeC0sFPTLEdg2UJcwsic716/a0w==
+X-Received: by 2002:a2e:a988:0:b0:27f:e6e6:9bdf with SMTP id x8-20020a2ea988000000b0027fe6e69bdfmr4940249ljq.36.1672838959487;
+        Wed, 04 Jan 2023 05:29:19 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id k23-20020a2e92d7000000b0027fd02c99d4sm1947071ljh.75.2023.01.04.05.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 05:29:18 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: interconnect: OSM L3: Add SM6350 OSM L3 compatible
+Date:   Wed,  4 Jan 2023 14:29:13 +0100
+Message-Id: <20230104132915.667946-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AJZHsfQdua3cR68m-0oLf1Mk9lvAvy0L
-X-Proofpoint-ORIG-GUID: AJZHsfQdua3cR68m-0oLf1Mk9lvAvy0L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 clxscore=1015 malwarescore=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 adultscore=13
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301040113
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When this property is set, the remoteproc is used to boot the
-LPASS and therefore qdsp6ss clocks would be used to bring LPASS
-out of reset, hence they are directly controlled by the remoteproc.
+SM6350, similarly to SDM845, uses OSM hardware for L3 scaling.
+Document it.
 
-This is a cleanup done to handle overlap of regmap of lpasscc
-and adsp remoteproc blocks.
-
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-index 6151fde..97c6bd9 100644
---- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-@@ -41,6 +41,12 @@ properties:
-       - const: qdsp6ss
-       - const: top_cc
- 
-+  qcom,adsp-pil-mode:
-+    description:
-+      Indicates if the LPASS would be brought out of reset using
-+      remoteproc peripheral loader.
-+    type: boolean
-+
- required:
-   - compatible
-   - reg
-@@ -60,6 +66,7 @@ examples:
-       reg-names = "qdsp6ss", "top_cc";
-       clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
-       clock-names = "iface";
-+      qcom,adsp-pil-mode;
-       #clock-cells = <1>;
-     };
- ...
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+index 00afbbca9038..9d0a98d77ae9 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+@@ -22,6 +22,7 @@ properties:
+               - qcom,sc7180-osm-l3
+               - qcom,sc8180x-osm-l3
+               - qcom,sdm845-osm-l3
++              - qcom,sm6350-osm-l3
+               - qcom,sm8150-osm-l3
+           - const: qcom,osm-l3
+       - items:
 -- 
-2.7.4
+2.39.0
 
