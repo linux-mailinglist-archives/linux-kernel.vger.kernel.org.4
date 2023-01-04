@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D6565CEEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B112265CEEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238579AbjADI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S234663AbjADJAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbjADI70 (ORCPT
+        with ESMTP id S238646AbjADI7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:59:26 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21C81F2
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:59:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1672822747; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=d5eZy/gk6QR6EU8i/njR8r3ZZHpMWIMIVJFfLzXnm9HTVOKh8dNr4ki5iBl/sOoehHF0/KrFDKJgmKV5JPPlcv49uPpxrSJnTUiB8/eGp0Awy7FkSoI4Xz/dj2Olbosu3Dw0mkOtZaBvlPZOuRqz+4a9jgE9M2S6Sm0MBhtg53Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1672822747; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=mGVEEqg9y41OGC1daXDP6Rf+M/fdNyUu5fMaF3ljaNI=; 
-        b=bwcTxJ1E3mJQjGu/+VVD0QgaBlmG2zMZqIKQuyREfU7F0ufSfziXCIrCUezt0gk+z9tduvBZ2mnghYM0FNL8Jt377qrdnhOmxHRcDhZRz9RutqAuwYeN+TPRGkm1Qquht4D44i+tTnSwCsf6gOIcvs+nvwQyGSjSmPCH9wND8a4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672822747;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=mGVEEqg9y41OGC1daXDP6Rf+M/fdNyUu5fMaF3ljaNI=;
-        b=Vk0Fjlc3K4sq3GmQZCScu/Z96MNb3aTZ31Uaa8YkZD3/jSWd5Mn0V53D5N2pI1jZ
-        ZFXGTNMO6iqbV9c0Llx99tDnXG1X8ZW5OaurALPzzX28GFKPDG9xG6o5UGlvKDodDOf
-        yRLAsdWCSIygmH/ofZ8YLlpoJGGatmTT3ggpFhfQ=
-Received: from edelgard.fodlan.icenowy.me (120.85.96.143 [120.85.96.143]) by mx.zohomail.com
-        with SMTPS id 1672822745390708.8255740342773; Wed, 4 Jan 2023 00:59:05 -0800 (PST)
-Message-ID: <a2a8c7522b9b57f074d6962511b6d779cfd4b56b.camel@icenowy.me>
-Subject: Re: [RFC PATCH 2/3] riscv: use VA+PA variant of CMO macros for DMA
- synchorization
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 04 Jan 2023 16:59:00 +0800
-In-Reply-To: <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
-References: <20230104074146.578485-1-uwu@icenowy.me>
-         <20230104074146.578485-3-uwu@icenowy.me>
-         <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 
+        Wed, 4 Jan 2023 03:59:50 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324B222;
+        Wed,  4 Jan 2023 00:59:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672822777; bh=MI19Bt6j5+vEb0xMTmFMufyPhjb/G2VdVdfSJyngXD4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=D26SDwqEZYm04/bd7F7nTISPscO8ULSmnLTq+oeBqdx25JKeKRDQIMNIC379hjrIT
+         v5eDcg5AL6MP0grpr5R4oY0uX01fvTPpSV+zr6333naHzMbYupbBIhMthVU4V9QRS+
+         5M6r2Ega5TMYW4PCCcHIf1qJ/+Lhkbl0IYUj1yZU=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed,  4 Jan 2023 09:59:37 +0100 (CET)
+X-EA-Auth: 3dYqcVzlZK1WvubetNrJWt8ppfWde/HMNvQ0EK01li/n4JhPYD5rf0RiytvtHMVkS3hYJaukvBTjexSuWZHOcVytsiYiLNcD
+Date:   Wed, 4 Jan 2023 14:29:31 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v4 1/2] tty: serial: dz: convert atomic_* to refcount_*
+ APIs for map_guard
+Message-ID: <Y7U/8zMVwTP7NKXI@qemulion>
+References: <cover.1671898144.git.drv@mailo.com>
+ <d85c7441b96ce387d9010142efc3469d53b6aedc.1671898144.git.drv@mailo.com>
+ <e42d5d19-7ed5-468b-98cc-13d0187dc555@kernel.org>
+ <Y7P926/+N9IDKCyR@qemulion>
+ <Y7U4ncG4Gkd5uRsb@kroah.com>
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7U4ncG4Gkd5uRsb@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5ZyoIDIwMjMtMDEtMDTmmJ/mnJ/kuInnmoQgMTY6NTAgKzA4MDDvvIxHdW8gUmVu5YaZ6YGT77ya
-Cj4gT24gV2VkLCBKYW4gNCwgMjAyMyBhdCAzOjQzIFBNIEljZW5vd3kgWmhlbmcgPHV3dUBpY2Vu
-b3d5Lm1lPiB3cm90ZToKPiA+IAo+ID4gRE1BIHN5bmNob3JpemF0aW9uIGlzIGRvbmUgb24gUEEg
-YW5kIHRoZSBWQSBpcyBjYWxjdWxhdGVkIGZyb20gdGhlCj4gPiBQQS4KPiA+IAo+ID4gVXNlIHRo
-ZSBhbHRlcm5hdGl2ZSBtYWNybyB2YXJpYW50IHRoYXQgdGFrZXMgYm90aCBWQSBhbmQgUEEgYXMK
-PiA+IHBhcmFtZXRlcnMsIHRodXMgaW4gY2FzZSB0aGUgSVNBIGV4dGVuc2lvbiB1c2VkIHN1cHBv
-cnQgUEEKPiA+IGRpcmVjdGx5LCB0aGUKPiA+IG92ZXJoZWFkIGZvciByZS1jb252ZXJ0aW5nIFZB
-IHRvIFBBIGNhbiBiZSBvbWl0dGVkLgo+ID4gCj4gPiBTdWdnZXN0ZWQtYnk6IEd1byBSZW4gPGd1
-b3JlbkBrZXJuZWwub3JnPgo+ID4gU2lnbmVkLW9mZi1ieTogSWNlbm93eSBaaGVuZyA8dXd1QGlj
-ZW5vd3kubWU+Cj4gPiAtLS0KPiA+IMKgYXJjaC9yaXNjdi9tbS9kbWEtbm9uY29oZXJlbnQuYyB8
-IDggKysrKy0tLS0KPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxl
-dGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3YvbW0vZG1hLW5vbmNvaGVy
-ZW50LmMgYi9hcmNoL3Jpc2N2L21tL2RtYS0KPiA+IG5vbmNvaGVyZW50LmMKPiA+IGluZGV4IGQ5
-MTllZmFiNmViYS4uYTc1MWY0YWVjZTYyIDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9yaXNjdi9tbS9k
-bWEtbm9uY29oZXJlbnQuYwo+ID4gKysrIGIvYXJjaC9yaXNjdi9tbS9kbWEtbm9uY29oZXJlbnQu
-Ywo+ID4gQEAgLTE5LDEzICsxOSwxMyBAQCB2b2lkIGFyY2hfc3luY19kbWFfZm9yX2RldmljZShw
-aHlzX2FkZHJfdAo+ID4gcGFkZHIsIHNpemVfdCBzaXplLAo+ID4gCj4gPiDCoMKgwqDCoMKgwqDC
-oCBzd2l0Y2ggKGRpcikgewo+ID4gwqDCoMKgwqDCoMKgwqAgY2FzZSBETUFfVE9fREVWSUNFOgo+
-ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUChjbGVhbiwgdmFkZHIs
-IHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoY2xlYW4sIHZhZGRyLCBwYWRkciwgc2l6ZSwKPiA+
-IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gQUxUX0NNT19PUCAtPiBBTFRfQ01PX09QX1ZQQSwg
-aXMgdGhlIHJlbmFtaW5nIG5lY2Vzc2FyeT8KCkkgZGlkbid0IHJlbmFtZSB0aGUgb3JpZ2luYWwg
-QUxUX0NNT19PUCwgQUxUX0NNT19PUF9WUEEgaXMgc29tZXRoaW5nCm5ldy4KCj4gCj4gT3RoZXJz
-Ogo+IFJldmlld2VkLWJ5OiBHdW8gUmVuIDxndW9yZW5Aa2VybmVsLm9yZz4KPiAKPiA+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IMKgwqDCoMKgwqDCoMKgIGNhc2Ug
-RE1BX0ZST01fREVWSUNFOgo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NN
-T19PUChjbGVhbiwgdmFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoY2xlYW4sIHZhZGRy
-LCBwYWRkciwgc2l6ZSwKPiA+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiDCoMKgwqDCoMKgwqDCoCBjYXNlIERNQV9C
-SURJUkVDVElPTkFMOgo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19P
-UChmbHVzaCwgdmFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUF9WUEEoZmx1c2gsIHZhZGRyLCBw
-YWRkciwgc2l6ZSwKPiA+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiDCoMKgwqDCoMKgwqDCoCBkZWZhdWx0Ogo+ID4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gQEAgLTQyLDcgKzQyLDcg
-QEAgdm9pZCBhcmNoX3N5bmNfZG1hX2Zvcl9jcHUocGh5c19hZGRyX3QgcGFkZHIsCj4gPiBzaXpl
-X3Qgc2l6ZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IMKg
-wqDCoMKgwqDCoMKgIGNhc2UgRE1BX0ZST01fREVWSUNFOgo+ID4gwqDCoMKgwqDCoMKgwqAgY2Fz
-ZSBETUFfQklESVJFQ1RJT05BTDoKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFM
-VF9DTU9fT1AoZmx1c2gsIHZhZGRyLCBzaXplLAo+ID4gcmlzY3ZfY2JvbV9ibG9ja19zaXplKTsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFMVF9DTU9fT1BfVlBBKGZsdXNoLCB2
-YWRkciwgcGFkZHIsIHNpemUsCj4gPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gwqDCoMKgwqDCoMKgwqAgZGVmYXVs
-dDoKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IC0tCj4gPiAy
-LjM4LjEKPiA+IAo+IAo+IAoK
+On Wed, Jan 04, 2023 at 09:28:13AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 03, 2023 at 03:35:15PM +0530, Deepak R Varma wrote:
+> > > > -			printk(KERN_ERR
+> > > > -			       "dz: Unable to reserve MMIO resource\n");
+> > > > +	refcount_inc(&mux->map_guard);
+> > > > +	if (refcount_read(&mux->map_guard) == 1) {
+> > >
+> > > This is now racy, right?
+> >
+> > Hello Jiri,
+> > Thank you for the feedback. You are correct. I have split a single instruction
+> > in two (or more?) instructions potentially resulting in race conditions. I
+> > looked through the refcount_* APIs but did not find a direct match.
+> >
+> >
+> > Can you please comment if the the following variation will avoid race condition?
+> >
+> > 	if (!refcount_add_not_zero(1, &mux->map_guard)) {
+> > 		refcount_inc(&mux->map_guard);
+> > 		...
+> > 	}
+>
+> What do you think?  The onus is on you to prove the conversion is
+> correct, otherwise, why do the conversion at all?
+
+Hello Greg,
+Okay. Sounds good. I think the revised approach should be safer. I will work on
+finding a means to prove that.
+
+>
+> Actually, why do this at all, what is the goal here?  And how was this
+> tested?
+
+The objective here is to migrate to specific and improved APIs that are already
+proved to be better for different reasons as mentioned in the patch log
+messages. This is as per the Linux Kernel documentation.
+
+In terms of testing, First, I did a compile and build test of the changes.
+I also wrote separate small dummy modules and tested the API transformation.
+However, these modules were standalone and limited in complexity and intensity.
+I will try to make these more intense, multithreaded and run the test again.
+
+Thank you as always :)
+./drv
+
+>
+> thanks,
+>
+> greg k-h
+
 
