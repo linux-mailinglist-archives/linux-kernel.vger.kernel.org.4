@@ -2,101 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47EF65DC67
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED4F65DC6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 19:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbjADSzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 13:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S235439AbjADS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 13:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjADSzh (ORCPT
+        with ESMTP id S231392AbjADS5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 13:55:37 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C031DF00
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 10:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672858537; x=1704394537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O6CS1YaqJdLRkKNpM+ISDo/CBjJK7EGwS7kmRWufSFo=;
-  b=Rz7FcouESPtvsCCBpFgd9dL1u3fX1lVAE86gj1MqgHMnEKAOxigadfdl
-   nRuRRRKRwitSGpIKGHYUdEFv6I8+EmhrH1TrnFc4UaD8otcW5Z7zauIR6
-   k7iVjmEuXqr62GdQbEYe92j7J8s55TTwJbDjHfJF4fA5Ib5DRq4PBnNWL
-   6JLO/5jep0505rMTEOsVwZUdiVDw3zj1wMcTKp1oDWiLZHRAltyTEsv6+
-   PXlMn8cp6WTis1DZ4JXjeKEgVYP5yd/eSQ4f0sO3o4JOFXJ6M0lJNMw01
-   5Y8jjKPEEWCfLS+AmhXzpLVyt8uhbotoMgRV83i7F9tV8RCiZrFjSbgmp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="319721352"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="319721352"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 10:55:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="657214817"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="657214817"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Jan 2023 10:55:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pD8vD-004RD0-2V;
-        Wed, 04 Jan 2023 20:55:31 +0200
-Date:   Wed, 4 Jan 2023 20:55:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/5] ASoC: Intel: bytcht_cx2072x: Replace open coded
- acpi_dev_put()
-Message-ID: <Y7XLo8febtiSLGAD@smile.fi.intel.com>
-References: <Y7WtywhUZCTx3akM@smile.fi.intel.com>
- <Y7W0VOJKlMtaIp13@sirena.org.uk>
+        Wed, 4 Jan 2023 13:57:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3296B13DFA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 10:56:58 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F8D71EC02FE;
+        Wed,  4 Jan 2023 19:56:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672858617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eI6hrybg3gLaj8bRbb/kt2kToyODb7dNUhJzp/ZLGpY=;
+        b=l9gQ/gxHxlA9XtFIgW4MXMZ1vjMsP+AdznrIPuUUkXphaUE1LhTpk4529b/7ZShKtpo6Ud
+        v6V33oRywy0qwExgp4lfdnI52CzmXNWY2jSYaq800QemysqMc3sZs5dBUC47WLIbPQ1bN5
+        Lv+GPYpEe13qujigxQIsY3Uq1GyNDl4=
+Date:   Wed, 4 Jan 2023 19:56:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH v3 2/6] x86/microcode/core: Take a snapshot before and
+ after applying microcode
+Message-ID: <Y7XL9Pr9DiW0wdaM@zn.tnic>
+References: <20230103180212.333496-1-ashok.raj@intel.com>
+ <20230103180212.333496-3-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7W0VOJKlMtaIp13@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230103180212.333496-3-ashok.raj@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 05:16:04PM +0000, Mark Brown wrote:
-> On Wed, Jan 04, 2023 at 06:48:11PM +0200, Andy Shevchenko wrote:
-> > On Wed, Jan 04, 2023 at 04:42:28PM +0000, Mark Brown wrote:
-> 
-> > > According to b4 you've only acked the first patch here because Andy
-> > > doesn't send cover letters :/
-> 
-> > Is b4 capable to spread tags from cover letter to the whole series?
-> > (Sorry, I'm a bit outdated with all Swiss-knife possibilities that
-> >  b4 provides)
-> 
-> Yes, it does that.
+On Tue, Jan 03, 2023 at 10:02:08AM -0800, Ashok Raj wrote:
+> Fixes: 1008c52c09dc ("x86/CPU: Add a microcode loader callback")
 
-Oh, cool to know! So it makes a lot of sense to create the cover letters
-even for straightforward independent changes that are united into the
-series for the easy handling.
+Why a Fixes tag? Do you have a failure scenario for current kernels?
 
-Thank you!
+If so, then it would need stable backporting.
 
-P.S. Tell me if I need to resend with tags applied this time?
+If so, it would need the previous patch too.
+
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index 387578049de0..ac2e67156b9b 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -697,6 +697,7 @@ bool xen_set_default_idle(void);
+>  #endif
+>  
+>  void __noreturn stop_this_cpu(void *dummy);
+> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info);
+
+s/microcode_store_cpu_caps/store_cpu_caps/g
+
+>  void microcode_check(struct cpuinfo_x86 *info);
+>  
+>  enum l1tf_mitigations {
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index b9c7529c920e..7c86c6fd07ae 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -2297,28 +2297,43 @@ void cpu_init_secondary(void)
+>  #endif
+>  
+>  #ifdef CONFIG_MICROCODE_LATE_LOADING
+> +
+> +void microcode_store_cpu_caps(struct cpuinfo_x86 *info)
+> +{
+> +	/* Reload CPUID max function as it might've changed. */
+
+Might've changed how?
+
+> +	info->cpuid_level = cpuid_eax(0);
+> +
+> +	/*
+> +	 * Copy all capability leafs to pick up the synthetic ones so that
+> +	 * memcmp() below doesn't fail on that...
+
+split that comment and put the second part...
+
+> +	 */
+> +	memcpy(info->x86_capability, &boot_cpu_data.x86_capability,
+> +	       sizeof(info->x86_capability));
+> +
+
+... here:
+
+	/*
+	 * ... the ones coming from CPUID will get overwritten here:
+	 */
+
+> +	get_cpu_cap(info);
+> +}
+> +
+>  /*
+>   * The microcode loader calls this upon late microcode load to recheck features,
+>   * only when microcode has been updated. Caller holds microcode_mutex and CPU
+>   * hotplug lock.
+>   */
+> -void microcode_check(struct cpuinfo_x86 *info)
+> +void microcode_check(struct cpuinfo_x86 *orig)
+					   ^^^^^
+
+Yeah, what dhansen said.
+
+Thx.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
