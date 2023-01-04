@@ -2,275 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BD065CBFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 03:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106665CBE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 03:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbjADCpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 21:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
+        id S234079AbjADCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 21:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbjADCpA (ORCPT
+        with ESMTP id S230322AbjADCfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 21:45:00 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E76EE0C;
-        Tue,  3 Jan 2023 18:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672800299; x=1704336299;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8QNJtacdRTo+/Ecyygp6bWUeytPKsDWwcsRi2vB/5d8=;
-  b=BjhEebDaFjDvduVYSn0o3Fg8J+bCjc419S3nfh8hbalnmVy0LUKCzl70
-   Ag0k6ZIS+thX2Y22Me0AY2fgnfzxRhpGyIWXC8AULJ3KONwF+1ring1wH
-   xYxTdZLVtUIbM8FKvGwv0Aa1UlvcO+F1YaOVMjU/4k8zNPDzFpyftHv3Z
-   NFTw7DiqS22/pr/3viXLDFglZqyDwz8/pO8gQFvW562f8IY874hiElvcK
-   omXo2iQru5tF6L3H/ZsIvOCZgTzOrKLtOnLrFG0nTUnFlhxMMr0InHqXQ
-   dc3ZDCpAjaR0382Ci3tqlgZ46vd6R0a4C6B+UYx4CZ5Fpe312OLObg6GU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="302188775"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="302188775"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 18:44:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="687387606"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="687387606"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga001.jf.intel.com with ESMTP; 03 Jan 2023 18:44:48 -0800
-Date:   Wed, 4 Jan 2023 10:34:36 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v7 3/4] fpga: dfl: add basic support for DFHv1
-Message-ID: <Y7TlvD+tULKVl8WQ@yilunxu-OptiPlex-7050>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com>
- <20221220163652.499831-4-matthew.gerlach@linux.intel.com>
- <Y6HqyjFkiUDeNmH1@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2212211105490.570436@rhweight-WRK1>
- <Y6kR632DYwilj505@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2212311237320.2138420@rhweight-WRK1>
- <Y7OteZ2FuLtHfg5D@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2301031143420.4963@rhweight-WRK1>
+        Tue, 3 Jan 2023 21:35:20 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E4810EC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 18:35:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BzyaCkDv94CZDuUu3OqrA34LqHL0Ccl9dzKxnVRcqC2LY8KSnt2xzlEGTgtMwko4/4/dRnsp+mMHIZZW3shKgh5ipg2fgh1VcvKKMH0picHODLbMi4HF+bX1K3XoHopT0nzOZ9b+ACCzXQkSsR9ZcFw4Ob2Ld1/t+Nh8rXT8gcUHygDQLewih6+fX1jdyyoQ9/pay9fMkTsAGYZ8LKPaXlF80LvCB0OtV/MIzpRwt6feUN86br5zXKf8Ftjh0Zd15485wIPLaGVDdttrg7Ba+QyKTI7MEkF0MqbU7A3NsKRiAG1l8btW8zGXcaj66X4IVBGLtVQhEb154Oj9EJhc/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k/5eV+oQ59zItuF6V1Tgs1gRL6+i8eptjbRJQBrCppU=;
+ b=Wzfz7vSAmsZj4oAEnwHMtTifrqQs4bhpAuTEJo1mgK+6QN94M0vgxZkaBjf/hKA9mgMt0NJ5qsUUznRBCN0Dj2FYJYxpS697zyIHV2A5t0YvU6zuXQFC3F4RxzvmJa4TNa8ASYARlqvhAcAqlCyX8CJIu3eQlH9kepbTOLWMPSnjmuWCy/tS/e8znr9Hz+zUYnylUikNTq9RocdBl6hBVCcKJJwgCm815IiefU/7deW5vL2l3z5sl6B7NM7dqn+p/Zz1susNCN7/n7M/fp9kSR6pzymUpU8tyokJ2VI+7lLIdYdaf22dnwB9jZejOPvDGMzEcBlSdqoTCtxxNHq56g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k/5eV+oQ59zItuF6V1Tgs1gRL6+i8eptjbRJQBrCppU=;
+ b=DY7ndw6nd7r9hCOwmBCFP/3hf0LzVaszLS9og4Sfw/NSL3/PrRDFFgTH/K1JgmSubv5LJvlntCMVpIBT+pcVQ4w110GCWCydGLrKA44XXOrmhJDzNtGM6PnZlUvE09Ts3WSGivOsCzPqXo4Lk0sYZgDnQLPXJVMjft0xlCEV7gBTn4hzftH0Z1CZWBjC8d60oy2IvYeKYtTb4A7Qs6IszpamukF/GMYMdSobPAN8Wb9beQRQGCaSRH/qEjaLuOyzy1PYOg2/Mc6tjwnyKson9AEVu7QudvMUtqIiWj30Fg5UF0L3FjTbmWZs4CbYJFmCIGB2wQvVBH71R/tYluRG2g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
+ by DM4PR12MB6253.namprd12.prod.outlook.com (2603:10b6:8:a6::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 02:35:18 +0000
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::f263:d93d:ba53:25fe]) by MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::f263:d93d:ba53:25fe%5]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
+ 02:35:17 +0000
+Message-ID: <6da077d9-60e7-218d-4fc7-bac59c9e4247@nvidia.com>
+Date:   Tue, 3 Jan 2023 20:35:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] arm64: gic: increase the number of IRQ descriptors
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230104012215.1222263-1-sdonthineni@nvidia.com>
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+In-Reply-To: <20230104012215.1222263-1-sdonthineni@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:5:40::15) To MN0PR12MB5762.namprd12.prod.outlook.com
+ (2603:10b6:208:375::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2301031143420.4963@rhweight-WRK1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|DM4PR12MB6253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 322aadc1-6dac-4ba5-fb55-08daedfc5133
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YCWa6CGPtqlfNH3V58PjLOCkAOlMUHficE+Qzw3v7MDKWgSuvFO2HD25Wv9RMsKyT8+meSlMCokShlUjDpfplAf6+/RWipQWjp05zlr8E2vAMFNz+6Vh2qJ3sXCjk0MuNPlMq5QmViZwi2uAyar6U1giGPkX/Eow3c+bSxWkHUFxcuwn+yNVVBa2omA29tRKOgSPMsU9BaYcrIbwhKmh+x3D6lq0PDlXyyEUTw3YZcR5+QV0XzlN+0UVcvRnj9CZdwRkcJf6OYhLdamAzoauLTpAS9oyrYWtRPuR5PIxaTX7TXG8tM0MDXMtgE2VQVeFDMoFnxTPvMP8aadNfn/jWMvhV0KJWIHtmkTPV/eRJHUuHojpKpWRGrjGCtRwUiTNEJTijR6fPTp7fo31NWBXhREnG0UkcuOA3qqZQQjaGPDQoTNgNwa88gnlpTYL4+YcF4blALuW+dL4e80bTsOU/BO6ftaQ8eza/XNGtaiz8GtplmAJLMt41cm/Mc/TisZzPOfGmFZUyHcEIV3Qh2cogkIVuItMK3CbQKI+uMl8AMVbpgqFQF1m3tDXrL776731Q7Wo1HqsJdpo0xMFQ58iNREGbBcvw6YxqG0rvEJ2uAfSVNnZjUNFGwdqijoQn6XSEZH16MuNTTPZlCaxR+e7TT8zfTdC7lJhRhNtaD88HZRKNTygJGwzjmU3dPLzmEAQELsZMqSAfRWKq39gOUIUlCRDNsS3Zjzud6Si/42tguM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(39860400002)(346002)(366004)(451199015)(6506007)(6666004)(53546011)(36756003)(478600001)(110136005)(86362001)(31696002)(38100700002)(6512007)(26005)(186003)(6486002)(2616005)(4744005)(5660300002)(31686004)(66476007)(66556008)(4326008)(66946007)(8676002)(8936002)(316002)(2906002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OG5yYXF5ekE4bW1acjlqY0FJNDIzcm8xRWdJc0c0KzhJOFJyeFQxV2NoTUtj?=
+ =?utf-8?B?MUFZN3JhWEswRDRUQXpGZDNEcEhxdUFyd3lhTnpqZ2dGQ0hLZ21zTi84dmgr?=
+ =?utf-8?B?dUlQMnU2cDdXZ3RBWGp1NVYyemp1d3l0Rld3c1hlMlVCQ2x1ejJRMWdTSXFl?=
+ =?utf-8?B?M3haS1NHdTJBL0g4R0RFMG5GZ0xnRkoyRHI3ZWUvVHN1TzA4Mkg5cHJmYXNp?=
+ =?utf-8?B?eTZaUHNlOGg2VFhUSTJJcDV3Nys3Mkl0YUJ6YVU4b09wdXNvMDBHKzJGNU9O?=
+ =?utf-8?B?Z3R5eU9NNVZpdmtCQk5kSUgzb2pNQ203YjRPcUZScjVJUzdnUUZVQUVoWVhw?=
+ =?utf-8?B?bmdCc0VsYW84dU8rQzA3eVBwWEZmbCs1b2N0ME5EeCtHbW9OZ0Z2a3FIV1Rl?=
+ =?utf-8?B?RXVsQUtTaldTaVZFdUxneEdUZmZ6UVUzenlVc0c1KzZnYlVwcDU4MVVFNU00?=
+ =?utf-8?B?R0dxOFN6Njg0MWx4SmQvNUdobzBLbk5ic0hLRlc0eFA1YmFmV0pxaStSOVgy?=
+ =?utf-8?B?NlBkWFJHTTZ5WGIrUnUyM1pvR2d1WGJETjNYYTIxQy9KR0dIcUJ1akJvNExv?=
+ =?utf-8?B?bzR1YkRPU0wxOXkrZWROTk9ZeC9BbktXYVI1NGhYVTBPa0o5eUs1NUF5WUh2?=
+ =?utf-8?B?Zk9ReHA1VGw3bmxJVlJ2TnhGZXFTUWhpMGFGUS9LTmpsRUVNSDBXN0wwRkFR?=
+ =?utf-8?B?ME1yeDdVZTNQT05TVEV3RVNSSUhzRWZBSHl2RlVEeFc4UERtckRCQUdyZWJV?=
+ =?utf-8?B?MGZXMzNOcmJGRzl3RmpsK2dNSUZycHg4dUFSR2VhQXZIWCtQc0UxNUM4ZDFy?=
+ =?utf-8?B?WEl6VzEyWE5FeUg1RXpaa2U1TVd4RnRuTmt6M1MrOTJGY0xjRmpXQWNlVmQv?=
+ =?utf-8?B?MC9KaEVIUldDRUNVbW5MR0NIWElBdlBFYUtqNVl6TktKU0hEUUJOcDRyampR?=
+ =?utf-8?B?ZWhDZ0FiM2t5YUd4TTFxRWtvM0lRdUJYQ3JFMlFQTTJrYnA3cHBieEFUL1o2?=
+ =?utf-8?B?cERDVGJPTzBySHNDME0yZ1N6TVpjR2VVM2N4OWtoRnF4OHVHWUFMSFU4UDhv?=
+ =?utf-8?B?VDNoenl3MkxtemV5M2VGKy8xWCtrQ21ydzlGU1ExclhidTZFaUhydklMakV3?=
+ =?utf-8?B?Rm5WNnlXdlFLYm4za0xkbDF5WFBEQ2tQc0NZbHRzUGxGVW9kSDU4Sk55SjRU?=
+ =?utf-8?B?OXZiVXFpbFNZT3BwMEd6V0dPSU5TbGRlOG9FZm5wSDlGcGFaSERubm1ZaE1u?=
+ =?utf-8?B?Z0lrUHVBWnAvYkhKUERqUjcvMGFOYXpGMlBVN2tKeW0xSnlScFFoSmNkWEl6?=
+ =?utf-8?B?dWNLcWJveU51d1o2NE16Q3hPdFMzcGlpR2tJV2FodlVURXRJbXVzdDBXbzhl?=
+ =?utf-8?B?dTVtUHJiUWtsdXF6aG93VDFmNFIrSkV6SW4rRFJoZCs1UElNMU90VTZjZzFz?=
+ =?utf-8?B?WDVHc3BxYlowQ2tNMGd2MlFWYW1mWk1yWk9Jb0NOdE4zNWEzbnM5VzdpUlFP?=
+ =?utf-8?B?alhWTVI1WkR0ZTZ4bXFmVTJXaG52c3NvSTZQYUhaVHBUZ2k3WXNhRDRoMFB3?=
+ =?utf-8?B?ZHU4Y2Z3b3ZRRi9SZ2hDSDlMSEw0VDZzNXJMcDdsOW1SRFZ6KytSSEQ3bUp5?=
+ =?utf-8?B?a0dTZ3JvbWtjRTJrcHJ6a3k5QVdLdWlKWngwNXRBRzRaM2VoVkllSlc2OXlW?=
+ =?utf-8?B?YXRCMUFrc0RNQVdqRmxhUkpvMUpabzkweUhrU0Z1WDVTWGQxMHBHMHFyUDQ0?=
+ =?utf-8?B?d0JhUzNMbVhLcGNpanFnRlU1Vy9XUGdTNWp3L21zc09wT3oyS2x5S3IrVmJo?=
+ =?utf-8?B?bHNEdUtHcVQya1B2UEM4NFI1TTN2STNKWkt0YTVOUnZHQ3Vyb2V3YkFRdU5r?=
+ =?utf-8?B?eGgrU3plNlRUaEtNYXUvN1dMakZIKzlMZUgyaWpSU2duc2h4SGhRQ0x2ZXVF?=
+ =?utf-8?B?QldKR3ZNVnczSGl5NHFZdnRtajZadnZFRVgzVC9ZbjkwQ3FmUUNTZFhBb0tL?=
+ =?utf-8?B?WGhBVm5PUW44dU9ndDdpSUpHaTEvNVU1bnpvQnIwQmdCNmM0R1JtTnYxWnhs?=
+ =?utf-8?B?UU1DQkFGK1d4UHNwZ0plMVBiVk9YK09LRzBVaUJDZEwzc2dxaDdYd3JnV1Uv?=
+ =?utf-8?B?VmUwQWhmbFZrSDBUb21nYTJ3K2I0aUJvTFFCTlliRDI3dVZyYTA0WHl5UFVP?=
+ =?utf-8?B?elE9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 322aadc1-6dac-4ba5-fb55-08daedfc5133
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 02:35:17.8748
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J/wofL/4cPCGnqxQJ0RYHQp7KcPLny4FUkA3WtQn+qfJwWHbnZ2C+WFLeni3oi0I2oZOETP6M6zjjhDXxWnqfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6253
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-03 at 11:50:04 -0800, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Tue, 3 Jan 2023, Xu Yilun wrote:
-> 
-> > On 2022-12-31 at 12:46:28 -0800, matthew.gerlach@linux.intel.com wrote:
-> > > 
-> > > 
-> > > On Mon, 26 Dec 2022, Xu Yilun wrote:
-> > > 
-> > > > On 2022-12-21 at 11:14:59 -0800, matthew.gerlach@linux.intel.com wrote:
-> > > > > 
-> > > > > 
-> > > > > On Tue, 20 Dec 2022, Andy Shevchenko wrote:
-> > > > > 
-> > > > > > On Tue, Dec 20, 2022 at 08:36:51AM -0800, matthew.gerlach@linux.intel.com wrote:
-> > > > > > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > > > 
-> > > > > > > Version 1 of the Device Feature Header (DFH) definition adds
-> > > > > > > functionality to the DFL bus.
-> > > > > > > 
-> > > > > > > A DFHv1 header may have one or more parameter blocks that
-> > > > > > > further describes the HW to SW.  Add support to the DFL bus
-> > > > > > > to parse the MSI-X parameter.
-> > > > > > > 
-> > > > > > > The location of a feature's register set is explicitly
-> > > > > > > described in DFHv1 and can be relative to the base of the DFHv1
-> > > > > > > or an absolute address.  Parse the location and pass the information
-> > > > > > > to DFL driver.
-> > > > > > 
-> > > > > > ...
-> > > > > > 
-> > > > > > > +/**
-> > > > > > > + * dfh_find_param() - find data for the given parameter id
-> > > > > > > + * @dfl_dev: dfl device
-> > > > > > > + * @param: id of dfl parameter
-> > > > > > > + *
-> > > > > > > + * Return: pointer to parameter header on success, NULL otherwise.
-> > > > > > 
-> > > > > > header is a bit confusing here, does it mean we give and ID and we got
-> > > > > > something more than just a data as summary above suggests?
-> > > > > 
-> > > > > Yes, the summary is not correct.  It should say "find the parameter block
-> > > > > for the given parameter id".
-> > > > > 
-> > > > > > 
-> > > > > > In such case summary and this text should clarify what exactly we get
-> > > > > > and layout of the data. Since this is a pointer, who is responsible of
-> > > > > > checking out-of-boundary accesses? For instance, if the parameters are
-> > > > > > variadic by length the length should be returned as well. Otherwise it
-> > > > > > should be specified as a constant somewhere, right?
-> > > > > 
-> > > > > The parameter header has the next/size field; so the caller of
-> > > > > dfh_find_param should perform boundary checking as part of interpreting the
-> > > > > parameter data.  I think a function to perform this checking and data
-> > > > > interpretation would help here.
-> > > > 
-> > > > It is better the DFL core provides the size of the parameter block, just
-> > > > in this API. It provides the pointer and should be ensured the memory
-> > > > for the pointer be correctly understood.
-> > > 
-> > > Ok, how about the following API for dfh_find_param?
-> > > 
-> > > /**
-> > >  * dfh_find_param() - find parameter block for the given parameter id
-> > >  * @dfl_dev: dfl device
-> > >  * @param_id: id of dfl parameter
-> > >  * @pver: destination to store parameter version
-> > >  * @pcount: destination to store size of parameter data in u64 bit words
-> > 
-> > The size of the parameter data could just be number of bytes (size_t is
-> > ok?), this is the most common way for a data block.
-> > 
-> > >  *
-> > >  * Return: pointer to start of parameter data, PTR_ERR otherwise.
-> > >  */
-> > > void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, unsigned
-> > > *pver, unsigned *pcount)
-> > 
-> > For now no driver is caring about parameter version, so we could just have
-> > a simplified API without version, like:
-> > 
-> >  void *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t *psize)
-> 
-> Using size_t and the simplified API you suggest is fine with me.
-> 
-> > 
-> > I assume this simplified API should be most commonly used by drivers,
-> > changing the layout of the parameter block is not such a good idea to
-> > me, try best not to do so.
-> > 
-> > If more property is to be added without changing the existing fields,
-> > drivers could be aware of this just by the parameter size?
-> > 
-> > 
-> > Anyway, if version is really needed in future, create another API like:
-> > 
-> >  void *dfh_find_param_version(struct dfl_device *dfl_dev, int param_id,
-> >  			       size_t *psize, unsigned int *pver)
-> 
-> Sure, we can add API when it is actually used, as you point out, the
-> structure of a particular paramater should not change very often.
-> 
-> > 
-> > Thanks,
-> > Yilun
-> > 
-> > > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > > + */
-> > > > > > > +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
-> > > > > > > +{
-> > > > > > > +	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
-> > > > > > > +}
-> > > > > > > +EXPORT_SYMBOL_GPL(dfh_find_param);
-> > > > > > 
-> > > > > > ...
-> > > > > > 
-> > > > > > > +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
-> > > > > > 
-> > > > > > It sounds like a candidate for struct_size() from overflow.h.
-> > > > > > I.o.w. check that header and come up with the best what can
-> > > > > > suit your case.
-> > > > > 
-> > > > > 	finfo = kzalloc(struct_size(finfo, params, dfh_psize/sizeof(u64)),
-> > > > > GFP_KERNEL);
-> > > > > 
-> > > > > Does seem better.
-> > > > 
-> > > > How about we change the dfh_get_psize() to like dfh_get_pcount(), so we
-> > > > don't have to multiply & divide back and forth.
-> > > 
-> > > We need the size in bytes for calls to kmemdup, devm_kmemdup, and
-> > 
-> > When the count of u64 is caculated, you could still convert it to size of
-> > bytes when needed.
-> 
-> We need to use number of bytes more often than than count of u64.  How would
-> calculating bytes from counts of u64 three times be better than calculating
-> counts of u64 once, like it is now?
+Hi,
 
-And adding a local variable
-dfh_psize = dfh_pcount * sizeof(u64) solves your concern.
-
-Using pcount for struct_size is more straightforward to me. dfh_psize
-could be truncated if it is not aligned to u64. People need to look into
-the dfh_get_psize() to check the correctness.
-
-Anyway this is trivial, I'm also OK with the change in v8.
-
-Thanks,
-Yilun
-
+On 1/3/23 19:22, Shanker Donthineni wrote:
+> The default value of NR_IRQS is not sufficient to support GICv4.1
+> features and ~64K LPIs. This parameter would be too small for certain
+> server platforms where it has many IO devices and is capable of
+> direct injection of vSGI and vLPI features.
 > 
-> Thanks,
-> Matthew Gerlach
+> Currently, maximum of 64 + 8192 (IRQ_BITMAP_BITS) IRQ descriptors
+> are allowed. The vCPU creation fails after reaching count ~400 with
+> kvm-arm.vgic_v4_enable=1.
 > 
-> > 
-> > > memcpy_fromio, but we only need to divide once here.
-> > > 
-> > > 
-> > > > 
-> > > > Or we just use size_add()?
-> > > 
-> > > I think using struct_size is better because the params member of struct
-> > > dfl_feature_info is a trailing flexible array.
-> > 
-> > That's OK.
-> > 
-> > > 
-> > > Thanks for the feedback,
-> > > Matthew
-> > > 
-> > > 
-> > > > 
-> > > > Thanks,
-> > > > Yilun
-> > > > 
-> > > > > 
-> > > > > Thanks for the suggestion,
-> > > > > Matthew Gerlach
-> > > > > 
-> > > > > 
-> > > > > > 
-> > > > > > >  	if (!finfo)
-> > > > > > >  		return -ENOMEM;
-> > > > > > 
-> > > > > > --
-> > > > > > With Best Regards,
-> > > > > > Andy Shevchenko
-> > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > 
-> > 
+> This patch increases NR_IRQS to 1^19  to cover 64K LPIs and 262144
+> vSGIs (16K vPEs x 16).
+
+Sorry, created a patch from the wrong kernel branch.
+Please review v2 patch.
