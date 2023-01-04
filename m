@@ -2,175 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCB565CE61
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C670265CE62
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbjADIdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S233974AbjADIeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbjADIct (ORCPT
+        with ESMTP id S233760AbjADIeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:32:49 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2721A049
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:32:44 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id t3-20020a6bc303000000b006f7844c6298so6088643iof.23
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:32:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cSkahVvsZRBcROIks7EB2xw2wtudP/Y4o1gq5YY7s6U=;
-        b=5dS2zjm34sSeR+XXRoWz+g/qwz9m+2k9MKagix1ae/mFCV6JyBDfYHFcNCZZKO9XAn
-         S5VXi1SN3RbU78aSgO9ae8sCJDg07Xx/plNAX/PzdzrCoUk3oKeeHlNvQuE0rl65q7Iz
-         JuXRZPiJN90j1XPxikpT9Orl+AZpoTiXHmSkYLtYgF25EgvOFdyi6GpotYBFToEy4A1n
-         CaWCtkohrxDr1YAeTdDVg3NrIUOyieBLbjdFze2oQ8erX0qwjJce+2Uj+I3Gm6mfjs12
-         NLopLut5F07naX0dDju4NFSPhpmerbG6W+pDbAHLz54ZK3/5NPdE7GpWSP6qYqXYPQhs
-         COLQ==
-X-Gm-Message-State: AFqh2kq+up4iLWm9Etq3gnPqBDXoODO2a77cXrP4efMAPn4OSdTxVVZI
-        XuYYGOS90p6DhRxHniVYioDOIGlvbthDe7TT9HWsZrBgYmBC
-X-Google-Smtp-Source: AMrXdXtDRr97kUF2j/fbhG0KhegAO9e4L0gJ+1BjTm7gykvGulfEWCM4JqlJI1CbeRTtJqPdCsiTb73H1FEPV3cHGnmhxBme5Hx0
+        Wed, 4 Jan 2023 03:34:25 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCDC5FF7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:34:23 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Nn2sz4l2Wz16MP2;
+        Wed,  4 Jan 2023 16:32:55 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 4 Jan 2023 16:34:20 +0800
+Message-ID: <f2e121f3-2bb7-5389-79e3-91edbebe60b8@huawei.com>
+Date:   Wed, 4 Jan 2023 16:34:20 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a92:a007:0:b0:30c:1ec6:23d0 with SMTP id
- e7-20020a92a007000000b0030c1ec623d0mr1985774ili.134.1672821164142; Wed, 04
- Jan 2023 00:32:44 -0800 (PST)
-Date:   Wed, 04 Jan 2023 00:32:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000042f98c05f16c0792@google.com>
-Subject: [syzbot] [ntfs?] BUG: unable to handle kernel paging request in step_into
-From:   syzbot <syzbot+0994679b6f098bb3da6d@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 0/9] Add OPTPROBES feature on RISCV
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <sfr@canb.auug.org.au>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
+ <87y1qkvmpf.fsf@all.your.base.are.belong.to.us>
+From:   "liaochang (A)" <liaochang1@huawei.com>
+In-Reply-To: <87y1qkvmpf.fsf@all.your.base.are.belong.to.us>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi，Björn，appreciate for your review and testing about this feature.
 
-syzbot found the following issue on:
+在 2023/1/3 2:02, Björn Töpel 写道:
+> Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
+> 
+>> Add jump optimization support for RISC-V.
+> 
+> Thank you for continuing to work on the series! I took the series for a
+> spin, and ran into a number of issues that makes me wonder how you test
+> the series, and how the testing is different from my runs.
 
-HEAD commit:    bff687b3dad6 Merge tag 'block-6.2-2022-12-29' of git://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10341ca2480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=68e0be42c8ee4bb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=0994679b6f098bb3da6d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11307974480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c567f2480000
+I have pick some kernel functions to test this series, which means all optprobe
+are install at entry of function, i guess the instruction pattern is not versatile
+enough for my testcases leads to some bugs are not discovered.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b1982d688f97/disk-bff687b3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c7c5609f900d/vmlinux-bff687b3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ee4e79832281/bzImage-bff687b3.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ad10dc248cd4/mount_0.gz
+Do you think it is good idea to test this feature via binary ftracetest and the
+kprobe related tc scripts in tools/testing/ftrace directory?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0994679b6f098bb3da6d@syzkaller.appspotmail.com
+Thanks.
 
-ntfs: (device loop0): check_windows_hibernation_status(): Failed to find inode number for hiberfil.sys.
-ntfs: (device loop0): load_system_files(): Failed to determine if Windows is hibernated.  Will not be able to remount read-write.  Run chkdsk.
-ntfs: (device loop0): ntfs_lookup(): ntfs_lookup_ino_by_name() failed with error code 83886016.
-BUG: unable to handle page fault for address: fffffbffff600008
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 23ffe4067 P4D 23ffe4067 PUD 23ffe3067 PMD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5067 Comm: syz-executor133 Not tainted 6.2.0-rc1-syzkaller-00068-gbff687b3dad6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:traverse_mounts fs/namei.c:1428 [inline]
-RIP: 0010:handle_mounts fs/namei.c:1540 [inline]
-RIP: 0010:step_into+0x197/0x10f0 fs/namei.c:1831
-Code: 38 00 49 89 c7 74 0a 48 8b 7c 24 38 e8 b2 60 ec ff 48 8b 9c 24 d8 00 00 00 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <8a> 04 08 84 c0 0f 85 4f 0c 00 00 8b 1b 89 de 81 e6 00 00 07 00 31
-RSP: 0018:ffffc90003b8f680 EFLAGS: 00010a02
-RAX: 1fffffffff600008 RBX: fffffffffb000040 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003b8f7e0 R08: ffffffff81f52253 R09: ffffed100e6185a9
-R10: ffffed100e6185a9 R11: 1ffff1100e6185a8 R12: ffffc90003b8f750
-R13: ffffc90003b8fba0 R14: 0000000000000000 R15: 1ffff92000771eeb
-FS:  0000555555c7b300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbffff600008 CR3: 0000000071d1d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lookup_last fs/namei.c:2450 [inline]
- path_lookupat+0x17d/0x450 fs/namei.c:2474
- do_o_path+0x84/0x240 fs/namei.c:3685
- path_openat+0x27cd/0x2dd0 fs/namei.c:3707
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f51b212dc49
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe3c84b5d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f51b212dc49
-RDX: 0000000000000000 RSI: 0000000001ee0000 RDI: 0000000020000340
-RBP: 00007f51b20ed250 R08: 00007ffe3c84b4b0 R09: 0000000000000000
-R10: 00007ffe3c84b4a0 R11: 0000000000000246 R12: 00007f51b20ed2e0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
-CR2: fffffbffff600008
----[ end trace 0000000000000000 ]---
-RIP: 0010:traverse_mounts fs/namei.c:1428 [inline]
-RIP: 0010:handle_mounts fs/namei.c:1540 [inline]
-RIP: 0010:step_into+0x197/0x10f0 fs/namei.c:1831
-Code: 38 00 49 89 c7 74 0a 48 8b 7c 24 38 e8 b2 60 ec ff 48 8b 9c 24 d8 00 00 00 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <8a> 04 08 84 c0 0f 85 4f 0c 00 00 8b 1b 89 de 81 e6 00 00 07 00 31
-RSP: 0018:ffffc90003b8f680 EFLAGS: 00010a02
-RAX: 1fffffffff600008 RBX: fffffffffb000040 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003b8f7e0 R08: ffffffff81f52253 R09: ffffed100e6185a9
-R10: ffffed100e6185a9 R11: 1ffff1100e6185a8 R12: ffffc90003b8f750
-R13: ffffc90003b8fba0 R14: 0000000000000000 R15: 1ffff92000771eeb
-FS:  0000555555c7b300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbffff600008 CR3: 0000000071d1d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	38 00                	cmp    %al,(%rax)
-   2:	49 89 c7             	mov    %rax,%r15
-   5:	74 0a                	je     0x11
-   7:	48 8b 7c 24 38       	mov    0x38(%rsp),%rdi
-   c:	e8 b2 60 ec ff       	callq  0xffec60c3
-  11:	48 8b 9c 24 d8 00 00 	mov    0xd8(%rsp),%rbx
-  18:	00
-  19:	48 89 d8             	mov    %rbx,%rax
-  1c:	48 c1 e8 03          	shr    $0x3,%rax
-  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  27:	fc ff df
-* 2a:	8a 04 08             	mov    (%rax,%rcx,1),%al <-- trapping instruction
-  2d:	84 c0                	test   %al,%al
-  2f:	0f 85 4f 0c 00 00    	jne    0xc84
-  35:	8b 1b                	mov    (%rbx),%ebx
-  37:	89 de                	mov    %ebx,%esi
-  39:	81 e6 00 00 07 00    	and    $0x70000,%esi
-  3f:	31                   	.byte 0x31
+> 
+> I'll outline the general/big issues here, and leave the specifics per-patch.
+> 
+> I've done simple testing, using "Kprobe-based Event Tracing"
+> (CONFIG_KPROBE_EVENTS=y) via tracefs.
+> 
+> All the tests were run on commit 88603b6dc419 ("Linux 6.2-rc2") with the
+> series applied. All the bugs were trigged by setting different probes to
+> do_sys_openat2. Code:
+> 
+> do_sys_openat2:
+> ...snip...
+> ffffffff802d138c:       89aa                    c.mv    s3,a0    // +44
+> ffffffff802d138e:       892e                    c.mv    s2,a1    // +46
+> ffffffff802d1390:       8532                    c.mv    a0,a2
+> ffffffff802d1392:       fa040593                addi    a1,s0,-96
+> ffffffff802d1396:       84b2                    c.mv    s1,a2
+> ffffffff802d1398:       fa043023                sd      zero,-96(s0)
+> ffffffff802d139c:       fa043423                sd      zero,-88(s0)
+> ffffffff802d13a0:       fa042823                sw      zero,-80(s0)
+> ffffffff802d13a4:       00000097                auipc   ra,0x0
+> ...snip...
+> 
+> 
+> 1. Fail to register kprobe to c.mv
+> 
+> Add a kprobe:
+>   echo 'p do_sys_openat2+44' > /sys/kernel/debug/tracing/kprobe_events
+> 
+> register_kprobe returns -22 (EINVAL). This is due to a bug in the
+> instruction decoder. I've sent to fix upstream [1].
+> 
+> 2. (with [1] applied) Oops when register a probe
+> 
+> Add a kprobe:
+>   echo 'p do_sys_openat2+44' > /sys/kernel/debug/tracing/kprobe_events
+> 
+> You get a splat:
+>   Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000008
+>   Oops [#1]
+>   Modules linked in:
+>   CPU: 1 PID: 242 Comm: bash Tainted: G        W          6.2.0-rc2-00010-g09ff1aa7b1f9-dirty #14
+>   Hardware name: riscv-virtio,qemu (DT)
+>   epc : riscv_probe_decode_insn+0x16a/0x192
+>    ra : riscv_probe_decode_insn+0x32/0x192
+>   epc : ffffffff8127b2bc ra : ffffffff8127b184 sp : ff2000000173bac0
+>    gp : ffffffff82533f70 tp : ff60000086ab2b40 t0 : 0000000000000000
+>    t1 : 0000000000000850 t2 : 65646f6365642054 s0 : ff2000000173bae0
+>    s1 : 0000000000000017 a0 : 000000000000e001 a1 : 000000000000003f
+>    a2 : 0000000000009002 a3 : 0000000000000017 a4 : 000000000000c001
+>    a5 : ffffffff8127b38a a6 : ff6000047d666000 a7 : 0000000000040000
+>    s2 : 0000000000000000 s3 : 0000000000000006 s4 : ff6000008558f718
+>    s5 : ff6000008558f718 s6 : 0000000000000001 s7 : ff6000008558f768
+>    s8 : 0000000000000007 s9 : 0000000000000003 s10: 0000000000000002
+>    s11: 00aaaaaad62baf78 t3 : 0000000000000000 t4 : 8dd70b0100000000
+>    t5 : ffffffffffffe000 t6 : ff2000000173b8c8
+>   status: 0000000200000120 badaddr: 0000000000000008 cause: 000000000000000f
+>   [<ffffffff81257e48>] arch_prepare_optimized_kprobe+0xc2/0x4ec
+>   [<ffffffff8125b420>] alloc_aggr_kprobe+0x5c/0x6a
+>   [<ffffffff8125ba0a>] register_kprobe+0x5dc/0x6a2
+>   [<ffffffff8016f266>] __register_trace_kprobe.part.0+0x98/0xbc
+>   [<ffffffff80170544>] __trace_kprobe_create+0x6ea/0xbcc
+>   [<ffffffff80176cee>] trace_probe_create+0x6c/0x7c
+>   [<ffffffff8016f1a2>] create_or_delete_trace_kprobe+0x24/0x50
+>   [<ffffffff80150642>] trace_parse_run_command+0x9e/0x12a
+>   [<ffffffff8016f176>] probes_write+0x18/0x20
+>   [<ffffffff802d494a>] vfs_write+0xca/0x41e
+>   [<ffffffff802d4f96>] ksys_write+0x70/0xee
+>   [<ffffffff802d5036>] sys_write+0x22/0x2a
+>   [<ffffffff80004196>] ret_from_syscall+0x0/0x2
+> 
+> This is because a call to riscv_probe_decode_insn(probe_opcode_t *addr,
+> struct arch_probe_insn *api), where api is NULL (and tripping over
+> auipc). Should be a common scenario...
+> 
+> 3. No bound check for instructions
+> 
+> Add a probe to a non-valid instruction (in the middle of addi):
+>   echo 'p 0xffffffff802d1394' > /sys/kernel/debug/tracing/kprobe_events
+> 
+> You get the same splat as above from the auipc NULL-pointer, but the
+> "half" addi-instruction is parsed as a correct instruction.
+> 
+> 4. Lockdep splat
+> 
+> Might be false positive; When enabling a probe, e.g.
+>   echo 1 > /sys/kernel/debug/tracing/events/kprobes/myprobe/enable
+> 
+> 
+>   ======================================================
+>   WARNING: possible circular locking dependency detected
+>   
+>   ------------------------------------------------------
+>   bash/244 is trying to acquire lock:                                                     
+>   ffffffff8223ee90 (cpu_hotplug_lock){++++}-{0:0}, at: stop_machine+0x2c/0x54
+>                                                                                           
+>   but task is already holding lock:                                                       
+>   ffffffff82249f70 (text_mutex){+.+.}-{3:3}, at: ftrace_arch_code_modify_prepare+0x1a/0x22
+>                                                                                           
+>   which lock already depends on the new lock. 
+>                                                                                           
+>                                                                                           
+>   the existing dependency chain (in reverse order) is:         
+>                                                                                           
+>   -> #1 (text_mutex){+.+.}-{3:3}:                                                         
+>          lock_acquire+0x10a/0x328                                                         
+>          __mutex_lock+0xa8/0x770                                                          
+>          mutex_lock_nested+0x28/0x30                                                      
+>          register_kprobe+0x3ae/0x5ea
+>          __register_trace_kprobe.part.0+0x98/0xbc
+>          __trace_kprobe_create+0x6ea/0xbcc
+>          trace_probe_create+0x6c/0x7c
+>          create_or_delete_trace_kprobe+0x24/0x50
+>          trace_parse_run_command+0x9e/0x12a
+>          probes_write+0x18/0x20
+>          vfs_write+0xca/0x41e
+>          ksys_write+0x70/0xee
+>          sys_write+0x22/0x2a
+>          ret_from_syscall+0x0/0x2
+>   
+>   -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+>          check_noncircular+0x122/0x13a
+>          __lock_acquire+0x1058/0x20e4
+>          lock_acquire+0x10a/0x328
+>          cpus_read_lock+0x4c/0x11c
+>          stop_machine+0x2c/0x54
+>          arch_ftrace_update_code+0x2e/0x4c
+>          ftrace_startup+0xd0/0x15e
+>          register_ftrace_function+0x32/0x7c
+>          arm_kprobe+0x132/0x198
+>          enable_kprobe+0x9c/0xc0
+>          enable_trace_kprobe+0x6e/0xea
+>          kprobe_register+0x64/0x6c
+>          __ftrace_event_enable_disable+0x72/0x246
+>          event_enable_write+0x94/0xe4
+>          vfs_write+0xca/0x41e
+>          ksys_write+0x70/0xee
+>          sys_write+0x22/0x2a
+>          ret_from_syscall+0x0/0x2
+>   
+>   other info that might help us debug this:
 
+Need to study this backtrace further, but at first glance, i guess CONFIG_DYNAMIC_FTRACE is enabled on your kernel, right?
+If so, all krpobe is installed via ftrace stub, then kprobe optimiztion occur in the ftrace trampoline code, and it also
+a corner case to current optprobe implementation.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>   
+>    Possible unsafe locking scenario:
+>   
+>          CPU0                    CPU1
+>          ----                    ----
+>     lock(text_mutex);
+>                                  lock(cpu_hotplug_lock);
+>                                  lock(text_mutex);
+>     lock(cpu_hotplug_lock);
+>   
+>    *** DEADLOCK ***
+>   
+>   5 locks held by bash/244:
+>    #0: ff60000080f49438 (sb_writers#12){.+.+}-{0:0}, at: ksys_write+0x70/0xee
+>    #1: ffffffff822d9468 (event_mutex){+.+.}-{3:3}, at: event_enable_write+0x7c/0xe4
+>    #2: ffffffff822d3fa8 (kprobe_mutex){+.+.}-{3:3}, at: enable_kprobe+0x32/0xc0
+>    #3: ffffffff822d56d8 (ftrace_lock){+.+.}-{3:3}, at: register_ftrace_function+0x26/0x7c
+>    #4: ffffffff82249f70 (text_mutex){+.+.}-{3:3}, at: ftrace_arch_code_modify_prepare+0x1a/0x22
+>   
+>   stack backtrace:
+>   CPU: 2 PID: 244 Comm: bash Not tainted 6.2.0-rc1-00008-g544b2c59fd81 #1
+>   Hardware name: riscv-virtio,qemu (DT)
+>   Call Trace:
+>   [<ffffffff80006e80>] dump_backtrace+0x30/0x38
+>   [<ffffffff81256e82>] show_stack+0x40/0x4c
+>   [<ffffffff8126e054>] dump_stack_lvl+0x62/0x84
+>   [<ffffffff8126e08e>] dump_stack+0x18/0x20
+>   [<ffffffff8009b37e>] print_circular_bug+0x2ac/0x318
+>   [<ffffffff8009b50c>] check_noncircular+0x122/0x13a
+>   [<ffffffff8009e020>] __lock_acquire+0x1058/0x20e4
+>   [<ffffffff8009f90c>] lock_acquire+0x10a/0x328
+>   [<ffffffff8002fb8a>] cpus_read_lock+0x4c/0x11c
+>   [<ffffffff8011ed60>] stop_machine+0x2c/0x54
+>   [<ffffffff8013aec6>] arch_ftrace_update_code+0x2e/0x4c
+>   [<ffffffff8013e796>] ftrace_startup+0xd0/0x15e
+>   [<ffffffff8013e856>] register_ftrace_function+0x32/0x7c
+>   [<ffffffff8012f928>] arm_kprobe+0x132/0x198
+>   [<ffffffff8012fa2a>] enable_kprobe+0x9c/0xc0
+>   [<ffffffff8016ff62>] enable_trace_kprobe+0x6e/0xea
+>   [<ffffffff801700da>] kprobe_register+0x64/0x6c
+>   [<ffffffff8015eba6>] __ftrace_event_enable_disable+0x72/0x246
+>   [<ffffffff8015eeea>] event_enable_write+0x94/0xe4
+>   [<ffffffff802d5e1a>] vfs_write+0xca/0x41e
+>   [<ffffffff802d6466>] ksys_write+0x70/0xee
+>   [<ffffffff802d6506>] sys_write+0x22/0x2a
+>   [<ffffffff80004196>] ret_from_syscall+0x0/0x2
+> 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+My comment is same as the last one.
+
+> 
+> 5. 32b support?
+> 
+> I've noticed that there code supports rv32. Is this tested? Does regular
+> kprobes work on 32b?
+
+Not yet, i will test on rv32.
+
+>
+> 
+> Thanks,
+> Björn
+> 
+> 
+> [1] https://lore.kernel.org/linux-riscv/20230102160748.1307289-1-bjorn@kernel.org/
+> 
+> 
+
+-- 
+BR,
+Liao, Chang
