@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FA865E0C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6B465E0C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 00:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbjADXMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 18:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S234881AbjADXNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 18:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235071AbjADXLq (ORCPT
+        with ESMTP id S235180AbjADXNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:11:46 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBD53AAB0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:11:32 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id c9so19148071pfj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:11:32 -0800 (PST)
+        Wed, 4 Jan 2023 18:13:19 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E56442E36
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 15:13:08 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bk16so21353608wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 15:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FG5G46Dbq/DHdzwesOF9acAVNcEs0Ihso0tlt5RXEDY=;
-        b=MKKIREX/08pI6E8vkOoofFwjY3M8sB7K04FWqTLmNuPd9Qk7lcXPgxWLqg3+XZl50o
-         ebC7yxKLsuflJjmMtNcutEfbRM5dzNXbggfomOQS+47VXV9D34YU76vOy1tgDj2FfOsP
-         xEDtQfaRY9jXuIqxfHT1nkQX/LdUUQwGdEa0ZzXlmlo1vTxQaENn9+OTnlmXZhz+RMtT
-         jyYcr44TErf5ycQgSGXCxfiYBDY8P60OY9zP4GTgNqS+KUzYNYL8jRxtV+Dx82yLpEoC
-         nrZ8RcOxTsr1VdeWApqwuS+/659pl/AqoSgpfOrWFcWdN0/alvrhk2SKnsJ65y+IMgEr
-         Hh4g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjj6P6cPGhiVQiupD0AtIKtwyJPxy/e9xg2W8dCMeFw=;
+        b=ouGR609RZOmkZkvxjmkRCqfeRj/MaXMqx30eH319QaNfdm7YgDjxkxbal7Kja6Qh7Z
+         +8BGZA+ddz6SjOd7xOBtx619uDQtRU8ZJFD0c3aGCbOcQw94ZPH1JN8lGfibLu90IPMj
+         BVOPJh1aEAKa558Atw5gIiF+YzZrWeh+nFdhqFxunNNAD3xiXY+ryhwiQEfVe+a4G2Vz
+         l2x/gFlxRAxYBvtmcWIMqR1rhXRJZ9rxOz7LM9bpopaSRJr42ggzM/Q+zNHRrqiiNjQp
+         MiLNX+CFFRsEFnHgCrNKgVVAXsvR2wgiCN8cWy3fkJMojvWnTHMSPpw8Pv0ZRcnodyb/
+         ZALA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FG5G46Dbq/DHdzwesOF9acAVNcEs0Ihso0tlt5RXEDY=;
-        b=0O5qXQI5j1JfQNrsX0BlrzyG4QqkUG5D8C7z6kcbWeCpq4jUoAjlgRmbhLA4c+KGyl
-         R2+f1ldFayAXbPB14Pel0aPrAbLRNV9sPiaIKl4RKOP6fcoHbEm6uITg4GAIPOgT35s9
-         wwDKySctHv4gPVwphTpiW//iAh0okFPb1pwrxKN/ueAt7RNqQLfhzKVPR7aqR9afu26o
-         mpwRrBshJ1fTDWQvBwPr2OZl3wIUXD2+abLVBJg79JLIIgeIvtBUNj3ZVZbYiKlnpK4I
-         eGHEJiYyEh9taEx78E0pTWosToKL2XibH8CvwMVzKF67amc8AbyuuCccmvxDZYrpG4b2
-         fpQQ==
-X-Gm-Message-State: AFqh2krWVRe7bJ2Zy2Y5vgHeZsfJVHp20925QhqpU+oRaXx1LhzOM/LN
-        N6zJ0hkGTySSGqX7C4dxpjM=
-X-Google-Smtp-Source: AMrXdXtdeR2vM4/s95j38EzQBAXAvDd3YtVoBBZG2BgXsnWFdpgfcepFXTND04fapdK9UWKFmcMj+w==
-X-Received: by 2002:a05:6a00:4107:b0:582:f34a:266a with SMTP id bu7-20020a056a00410700b00582f34a266amr3750019pfb.23.1672873892298;
-        Wed, 04 Jan 2023 15:11:32 -0800 (PST)
-Received: from localhost (fwdproxy-prn-000.fbsv.net. [2a03:2880:ff::face:b00c])
-        by smtp.gmail.com with ESMTPSA id w187-20020a627bc4000000b0058119caa82csm18389147pfc.205.2023.01.04.15.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 15:11:31 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, kernel-team@meta.com
-Subject: [PATCH v5 3/3] selftests: Add selftests for cachestat
-Date:   Wed,  4 Jan 2023 15:11:27 -0800
-Message-Id: <20230104231127.2634648-4-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230104231127.2634648-1-nphamcs@gmail.com>
-References: <20230104231127.2634648-1-nphamcs@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xjj6P6cPGhiVQiupD0AtIKtwyJPxy/e9xg2W8dCMeFw=;
+        b=xqIiWNxTCnxXgZYosEU/jppUrXynVGK4xsrJozMDBnpGH+dLBH2H7ulX3PE2u75iDD
+         cIz4HO3qzmus7T/83lY8TeolrQnJtdLdEkl2PnhbyWJ8b1tBphdJu3zB1YL9lTGZc+Xp
+         kGKNcPKZogREjhuVotcDVgplaKeCFtmhGyw22tS+kTHAl7frjAJrLkTzS7HxiwV5+2Vc
+         8lKEUhQKL22OHj8NwF99PcMGnXVDqKTg8hrXt3XGZY5RhvaTvYw47A2Q2/Z0VEteILHA
+         qBx6sis2ek3KT91HNbRrHrSpfAf0IdK5Og+o+7Mo5umpYq0I2NtDT1x5i0Eun2VKc62z
+         bvXA==
+X-Gm-Message-State: AFqh2kpWdcIYUzH+HlfSf3WytthF6T5DYh3eX9YzKExB7g7+0kgcOCFK
+        E6vR+KNoXQnEZiq2VlYtBiFQDDaJdJfdXgHplalXKQ==
+X-Google-Smtp-Source: AMrXdXvQmmKJF7je2ykyKg49si6vBOiZgYQ24TRXbwt8ecY4G5pcHzqdaCr3ixetzN2QoOodEwa6JbYV4Q8cdSd4PLo=
+X-Received: by 2002:a5d:640b:0:b0:290:ef26:df02 with SMTP id
+ z11-20020a5d640b000000b00290ef26df02mr947557wru.664.1672873986523; Wed, 04
+ Jan 2023 15:13:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230101230042.244286-1-jthoughton@google.com>
+ <Y7SA839SDcpf+Ll0@monkey> <CADrL8HVeOkj0QH5VZZbRzybNE8CG-tEGFshnA+bG9nMgcWtBSg@mail.gmail.com>
+ <Y7Sq+Rs9cpSaHZSk@monkey> <CADrL8HV73m0nVJOK3uv4sbyGKOVZhVxSv2+i4pUV7tozu6vW5Q@mail.gmail.com>
+ <Y7Xbo0tUO26khHCA@x1n>
+In-Reply-To: <Y7Xbo0tUO26khHCA@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 4 Jan 2023 23:12:53 +0000
+Message-ID: <CADrL8HVMCxHPBUuXo6dxam0giVcx2kAn=8n-3NjVO0ZddFw_tQ@mail.gmail.com>
+Subject: Re: [PATCH] hugetlb: unshare some PMDs when splitting VMAs
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,338 +74,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test cachestat on a newly created file, /dev/ files, and /proc/ files.
-Also test on a shmem file (which can also be tested with huge pages
-since tmpfs supports huge pages).
+On Wed, Jan 4, 2023 at 8:03 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Wed, Jan 04, 2023 at 07:10:11PM +0000, James Houghton wrote:
+> > > > I'll see if I can confirm that this is indeed possible and send a
+> > > > repro if it is.
+> > >
+> > > I think your analysis above is correct.  The key being the failure to unshare
+> > > in the non-PUD_SIZE vma after the split.
+> >
+> > I do indeed hit the WARN_ON_ONCE (repro attached), and the MADV wasn't
+> > even needed (the UFFDIO_REGISTER does the VMA split before "unsharing
+> > all PMDs"). With the fix, we avoid the WARN_ON_ONCE, but the behavior
+> > is still incorrect: I expect the address range to be write-protected,
+> > but it isn't.
+> >
+> > The reason why is that hugetlb_change_protection uses huge_pte_offset,
+> > even if it's being called for a UFFDIO_WRITEPROTECT with
+> > UFFDIO_WRITEPROTECT_MODE_WP. In that particular case, I'm pretty sure
+> > we should be using huge_pte_alloc, but even so, it's not trivial to
+> > get an allocation failure back up to userspace. The non-hugetlb
+> > implementation of UFFDIO_WRITEPROTECT seems to also have this problem.
+> >
+> > Peter, what do you think?
+>
+> Indeed.  Thanks for spotting that, James.
+>
+> Non-hugetlb should be fine with having empty pgtable entries. Anon doesn't
+> need to care about no-pgtable-populated ranges so far. Shmem does it with a
+> few change_prepare() calls to populate the entries so the markers can be
+> installed later on.
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- MAINTAINERS                                   |   7 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/cachestat/.gitignore  |   2 +
- tools/testing/selftests/cachestat/Makefile    |   8 +
- .../selftests/cachestat/test_cachestat.c      | 259 ++++++++++++++++++
- 5 files changed, 277 insertions(+)
- create mode 100644 tools/testing/selftests/cachestat/.gitignore
- create mode 100644 tools/testing/selftests/cachestat/Makefile
- create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
+Ah ok! :)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a198da986146..792a866353ec 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4552,6 +4552,13 @@ S:	Supported
- F:	Documentation/filesystems/caching/cachefiles.rst
- F:	fs/cachefiles/
- 
-+CACHESTAT: PAGE CACHE STATS FOR A FILE
-+M:	Nhat Pham <nphamcs@gmail.com>
-+M:	Johannes Weiner <hannes@cmpxchg.org>
-+L:	linux-mm@kvack.org
-+S:	Maintained
-+F:	tools/testing/selftests/cachestat/test_cachestat.c
-+
- CADENCE MIPI-CSI2 BRIDGES
- M:	Maxime Ripard <mripard@kernel.org>
- L:	linux-media@vger.kernel.org
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4..3cad0b38c5c2 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += amd-pstate
- TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
-+TARGETS += cachestat
- TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += clone3
-diff --git a/tools/testing/selftests/cachestat/.gitignore b/tools/testing/selftests/cachestat/.gitignore
-new file mode 100644
-index 000000000000..d6c30b43a4bb
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+test_cachestat
-diff --git a/tools/testing/selftests/cachestat/Makefile b/tools/testing/selftests/cachestat/Makefile
-new file mode 100644
-index 000000000000..fca73aaa7d14
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_GEN_PROGS := test_cachestat
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -Wall
-+CFLAGS += -lrt
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-new file mode 100644
-index 000000000000..3f5cd5695c51
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <linux/kernel.h>
-+#include <linux/mman.h>
-+#include <sys/mman.h>
-+#include <sys/shm.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+
-+#include "../kselftest.h"
-+
-+static const char * const dev_files[] = {
-+	"/dev/zero", "/dev/null", "/dev/urandom",
-+	"/proc/version", "/proc"
-+};
-+static const int cachestat_nr = 451;
-+
-+void print_cachestat(struct cachestat *cs)
-+{
-+	ksft_print_msg(
-+	"Using cachestat: Cached: %lu, Dirty: %lu, Writeback: %lu, Evicted: %lu, Recently Evicted: %lu\n",
-+	cs->nr_cache, cs->nr_dirty, cs->nr_writeback,
-+	cs->nr_evicted, cs->nr_recently_evicted);
-+}
-+
-+bool write_exactly(int fd, size_t filesize)
-+{
-+	char data[filesize];
-+	bool ret = true;
-+	int random_fd = open("/dev/urandom", O_RDONLY);
-+
-+	if (random_fd < 0) {
-+		ksft_print_msg("Unable to access urandom.\n");
-+		ret = false;
-+		goto out;
-+	} else {
-+		int remained = filesize;
-+		char *cursor = data;
-+
-+		while (remained) {
-+			ssize_t read_len = read(random_fd, cursor, remained);
-+
-+			if (read_len <= 0) {
-+				ksft_print_msg("Unable to read from urandom.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= read_len;
-+			cursor += read_len;
-+		}
-+
-+		/* write random data to fd */
-+		remained = filesize;
-+		cursor = data;
-+		while (remained) {
-+			ssize_t write_len = write(fd, cursor, remained);
-+
-+			if (write_len <= 0) {
-+				ksft_print_msg("Unable write random data to file.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= write_len;
-+			cursor += write_len;
-+		}
-+	}
-+
-+close_random_fd:
-+	close(random_fd);
-+out:
-+	return ret;
-+}
-+
-+/*
-+ * Open/create the file at filename, (optionally) write random data to it
-+ * (exactly num_pages), then test the cachestat syscall on this file.
-+ *
-+ * If test_fsync == true, fsync the file, then check the number of dirty
-+ * pages.
-+ */
-+bool test_cachestat(const char *filename, bool write_random, bool create,
-+		bool test_fsync, unsigned long num_pages, int open_flags,
-+		mode_t open_mode)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	int filesize = num_pages * PS;
-+	bool ret = true;
-+	long syscall_ret;
-+	struct cachestat cs;
-+
-+	int fd = open(filename, open_flags, open_mode);
-+
-+	if (fd == -1) {
-+		ksft_print_msg("Unable to create/open file.\n");
-+		goto out;
-+	} else {
-+		ksft_print_msg("Create/open %s\n", filename);
-+	}
-+
-+	if (write_random) {
-+		if (!write_exactly(fd, filesize)) {
-+			ksft_print_msg("Unable to access urandom.\n");
-+			ret = false;
-+			goto out1;
-+		}
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, 0, filesize,
-+		sizeof(struct cachestat), &cs, 0);
-+
-+	ksft_print_msg("Cachestat call returned %ld\n", syscall_ret);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto out1;
-+
-+	} else {
-+		print_cachestat(&cs);
-+
-+		if (write_random) {
-+			if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+				ksft_print_msg(
-+					"Total number of cached and evicted pages is off.\n");
-+				ret = false;
-+			}
-+		}
-+	}
-+
-+	if (test_fsync) {
-+		if (fsync(fd)) {
-+			ksft_print_msg("fsync fails.\n");
-+			ret = false;
-+		} else {
-+			syscall_ret = syscall(cachestat_nr, fd, 0, filesize,
-+				sizeof(struct cachestat), &cs, 0);
-+
-+			ksft_print_msg("Cachestat call (after fsync) returned %ld\n",
-+				syscall_ret);
-+
-+			if (!syscall_ret) {
-+				print_cachestat(&cs);
-+
-+				if (cs.nr_dirty) {
-+					ret = false;
-+					ksft_print_msg(
-+						"Number of dirty should be zero after fsync.\n");
-+				}
-+			} else {
-+				ksft_print_msg("Cachestat (after fsync) returned non-zero.\n");
-+				ret = false;
-+				goto out1;
-+			}
-+		}
-+	}
-+
-+out1:
-+	close(fd);
-+
-+	if (create)
-+		remove(filename);
-+out:
-+	return ret;
-+}
-+
-+bool test_cachestat_shmem(void)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	size_t filesize = PS * 512 * 2; /* 2 2MB huge pages */
-+	int syscall_ret;
-+	off_t off = PS;
-+	size_t compute_len = PS * 512;
-+	char *filename = "tmpshmcstat";
-+	struct cachestat cs;
-+	bool ret = true;
-+	unsigned long num_pages = compute_len / PS;
-+	int fd = shm_open(filename, O_CREAT | O_RDWR, 0600);
-+
-+	if (fd < 0) {
-+		ksft_print_msg("Unable to create shmem file.\n");
-+		ret = false;
-+		goto out;
-+	}
-+
-+	if (ftruncate(fd, filesize)) {
-+		ksft_print_msg("Unable to trucate shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	if (!write_exactly(fd, filesize)) {
-+		ksft_print_msg("Unable to write to shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, off, compute_len,
-+		sizeof(struct cachestat), &cs, 0);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto close_fd;
-+	} else {
-+		print_cachestat(&cs);
-+		if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+			ksft_print_msg(
-+				"Total number of cached and evicted pages is off.\n");
-+			ret = false;
-+		}
-+	}
-+
-+close_fd:
-+	shm_unlink(filename);
-+out:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = 0;
-+
-+	for (int i = 0; i < 5; i++) {
-+		const char *dev_filename = dev_files[i];
-+
-+		if (test_cachestat(dev_filename, false, false, false,
-+			4, O_RDONLY, 0400))
-+			ksft_test_result_pass("cachestat works with %s\n", dev_filename);
-+		else {
-+			ksft_test_result_fail("cachestat fails with %s\n", dev_filename);
-+			ret = 1;
-+		}
-+	}
-+
-+	if (test_cachestat("tmpfilecachestat", true, true,
-+		true, 4, O_CREAT | O_RDWR, 0400 | 0600))
-+		ksft_test_result_pass("cachestat works with a normal file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with normal file\n");
-+		ret = 1;
-+	}
-+
-+	if (test_cachestat_shmem())
-+		ksft_test_result_pass("cachestat works with a shmem file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with a shmem file\n");
-+		ret = 1;
-+	}
-+
-+	return ret;
-+}
--- 
-2.30.2
+>
+> However I think the fault handling is still not well handled as you pointed
+> out even for shmem: that's the path I probably never triggered myself yet
+> before and the code stayed there since a very early version:
+>
+> #define  change_pmd_prepare(vma, pmd, cp_flags)                         \
+>         do {                                                            \
+>                 if (unlikely(uffd_wp_protect_file(vma, cp_flags))) {    \
+>                         if (WARN_ON_ONCE(pte_alloc(vma->vm_mm, pmd)))   \
+>                                 break;                                  \
+>                 }                                                       \
+>         } while (0)
+>
+> I think a better thing we can do here (instead of warning and stop the
+> UFFDIO_WRITEPROTECT at the current stage) is returning with -ENOMEM
+> properly so the user can know the error.  We'll need to touch the stacks up
+> to uffd_wp_range() as it's the only one that can trigger the -ENOMEM so
+> far, so as to not ignore retval from change_protection().
+>
+> Meanwhile, I'd also wonder whether we should call pagefault_out_of_memory()
+> because it should be the same as when pgtable allocation failure happens in
+> page faults, we may want to OOM already.  I can take care of hugetlb part
+> too along the way.
+
+I might be misunderstanding, the only case where
+hugetlb_change_protection() would *need* to allocate is when it is
+called from UFFDIO_WRITEPROTECT, not while handling a #pf. So I don't
+think any calls to pagefault_out_of_memory() need to be added.
+
+>
+> Man page of UFFDIO_WRITEPROTECT may need a fixup too to introduce -ENOMEM.
+>
+> I can quickly prepare some patches for this, and hopefully it doesn't need
+> to block the current fix on split.
+
+I don't think it should block this splitting fix. I'll send another
+version of this fix soon.
+
+>
+> Any thoughts?
+>
+> >
+> > >
+> > > To me, the fact it was somewhat difficult to come up with this scenario is an
+> > > argument what we should just unshare at split time as you propose.  Who
+> > > knows what other issues may exist.
+> > >
+> > > > 60dfaad65a ("mm/hugetlb: allow uffd wr-protect none ptes") is the
+> > > > commit that introduced the WARN_ON_ONCE; perhaps it's a good choice
+> > > > for a Fixes: tag (if above is indeed true).
+> > >
+> > > If the key issue in your above scenario is indeed the failure of
+> > > hugetlb_unshare_all_pmds in the non-PUD_SIZE vma, then perhaps we tag?
+> > >
+> > > 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when
+> > > register wp")
+> >
+> > SGTM. Thanks Mike.
+>
+> Looks good here too.
+
+Thanks, Peter!
