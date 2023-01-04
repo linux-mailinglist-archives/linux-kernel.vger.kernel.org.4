@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DC465D3FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639C465D401
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239366AbjADNSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
+        id S239353AbjADNTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239119AbjADNSY (ORCPT
+        with ESMTP id S231130AbjADNTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:18:24 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEB93BA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:18:23 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m18so82301623eji.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 05:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=84fez/ucWTww6NSVV6G0atDkJcgY0oGG1v+FAR1TxNY=;
-        b=JAgCx2eqLgGc08EMjQPLJLJdM45V4H24UGXWCqCVcWPnLC4RuTaC39AX5sQnrkz2Ok
-         /ukjXXhCKa1m3/Co+aDvmf7nqhkWG8e0qbvF3ec77Sq3udTiqU5A7TuQeb7nWxZxqrK/
-         Kh+8jlqycp7H1ONgeowiSQSMImrMRKnWZELw3GHUqKswDca3xGcU7HOvLOg74zT8RoJo
-         YqrH7o9715DW21d928mrvGgGanh50mhKM4rqZbcRA+W8vrExPYly+InUk4Q05GgH91zh
-         psQFK3XZyCbanbMLOiU+7CkjwDVJrV9FB43AD/MymRnBr/iZ8VmW0sw2XhElkb/EbKvx
-         7hWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=84fez/ucWTww6NSVV6G0atDkJcgY0oGG1v+FAR1TxNY=;
-        b=rfUQfrcGwbjEivKnqMXqnc7UVzycbEeMBVeZ51wjq7ar33RiRKSGDX9a8yAQQkQ7Vo
-         8PC4Kxh5EZxA1ui09N+24vXVqBgNmRGt2hVQRhrqoOennAyBW5GoCWWHI1EcjUMq3TUh
-         WqWDT9q3ohZ1P0vHNlGiasV5i+1VnYrpS2oZzCQUao1OBMnyIbkzA6cJPsG9ZfZB4JfB
-         RsCySR5g2JQhKbvppfcNzI/1DBO1MWrn68kRjDZ3qjeCWNFG+nT9NGoQWnGU62bfVWwV
-         t+z/txJGFJ/KgySmJNk0BZirvCgNVZAETm7XNvCK/gZn0kWx5RD52z2P50kPvSkqnCZu
-         L/SA==
-X-Gm-Message-State: AFqh2krN6WHzCzuzddI1gL8XeP3+UCVY0asfUcNfs75jXa7jCxSChJua
-        HCz5NLPogcqJ/Gp3zDVGtL4=
-X-Google-Smtp-Source: AMrXdXvPIrhB2XSa5IXQh0PW2kHoCxgIGUZ5fln0nOiQ8734erNw+n5Ikqlf7f9g9MESnAEjB0wIYA==
-X-Received: by 2002:a17:907:a485:b0:7c0:e23f:17ca with SMTP id vp5-20020a170907a48500b007c0e23f17camr38689262ejc.34.1672838302310;
-        Wed, 04 Jan 2023 05:18:22 -0800 (PST)
-Received: from [192.168.178.21] (p5b0ea2e7.dip0.t-ipconnect.de. [91.14.162.231])
-        by smtp.gmail.com with ESMTPSA id u17-20020a1709061db100b0084c70c27407sm9767146ejh.84.2023.01.04.05.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 05:18:21 -0800 (PST)
-Message-ID: <61ed5d45-c79c-0c5e-ae18-b51d8925386f@gmail.com>
-Date:   Wed, 4 Jan 2023 14:18:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 27/27] drm/amd: Optimize SRIOV switch/case for PSP
- microcode load
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        Wed, 4 Jan 2023 08:19:15 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A9412A89;
+        Wed,  4 Jan 2023 05:19:15 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D67293200943;
+        Wed,  4 Jan 2023 08:19:13 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Wed, 04 Jan 2023 08:19:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1672838353; x=1672924753; bh=Bo
+        7BNFU8pROhJYRhF85cv4PW1aA16wwv31J+QatGx2E=; b=FkCKJxP4eaOksY+daQ
+        LyHpudNp3EYQ+ozdKKXENEkSK79rBHfW0sMmevKEvrCO/KKeLFX7zDBb3+pe64ZO
+        OBAzEuMgJifNnpNv6zvvctls7Gh+p2e81fXgzxS1kD/iQYy+bTITP0RPOkifyjzl
+        fqNWW7c9tJXFAPEGXgGh3v0ywtjkOHqrfYrnRPQonLMCZyVUZRywLmj5oSc4ac+9
+        0RLvU+qFZZx9kwDPG8YlEq4dJxBkpGyOXniXcQj73SFJisH1K9FNcOphLkS8z3hr
+        6wloyrsc26GlsPZdCh9ikZBiAtdB3RNPmzI5+wAN1ytmtY72BHcQ4skd5oHaqfDN
+        gYEg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672838353; x=1672924753; bh=Bo7BNFU8pROhJYRhF85cv4PW1aA1
+        6wwv31J+QatGx2E=; b=QmjUElivSGyaSA54z3Djjw+SZXmsed+7jX+t2zadnnL3
+        Yk8gKLZHmkI+F9JpWbLsma/ka4fstt8JwiHhdOUAYb3JapReREKOsv9p5bB6z+i6
+        BK6tXYtT2uTqOvTj2+r+cXRj9HTIX+7MTp2ccguWwp+YvvShfnucwmY5V+8Zfiaa
+        9O2VGqa31U8xoHzVMj4wqz1QNoC/3385pONrHrKk6Yo3BlzFqfeh1JqmwekNAPvq
+        2wN4sp+6ZtD/WJv+ZtbxhdicZBZ1l0kKRS9w9l+zlq7ox7ULHVSfVEcDJQxvROhl
+        LFGR/OUja/JM3fIC+UU9CLo79WEfFqjVNGtR1CXgUg==
+X-ME-Sender: <xms:0Xy1Y65axzY-MKXuXST9EsWLcMBF6g5GOr9SLujsv80VLg3lIrGCcA>
+    <xme:0Xy1Yz4MuDJU7A9y3uFyiaX3UYDH42_d7EsCjsjpdqnYpwTm1Y5qmSOc-6DaO4WcC
+    d07dOqVfmQlKaKPEWA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdehudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:0Xy1Y5dC5fdAw7JjIh0JTrdOz4V3KvW6C3yoX-a9j97iVSbCR0GgYg>
+    <xmx:0Xy1Y3JwiCAD_wA-GedmYqU3BV3nfqJralCq-H-8ymsL8GDXZGMjkQ>
+    <xmx:0Xy1Y-IQejAAWAp65m8x0SNvQJfXVLmJCBgtU9cgujuUMg5O6UJnSA>
+    <xmx:0Xy1Y7Cf7jmbmgJ0cLYVH72j9M7b0Dm_3pd2XlZ58IzWGGYNnKe-8g>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 43730A6007C; Wed,  4 Jan 2023 08:19:13 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <6852ebfa-bebc-48cf-a31c-04801fc90af1@app.fastmail.com>
+In-Reply-To: <20230104110013.24738-5-marcan@marcan.st>
+References: <20230104110013.24738-1-marcan@marcan.st>
+ <20230104110013.24738-5-marcan@marcan.st>
+Date:   Wed, 04 Jan 2023 14:18:52 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Janne Grunau" <j@jannau.net>, "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Lazar Lijo <Lijo.Lazar@amd.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        David Airlie <airlied@gmail.com>, christian.koenig@amd.com
-References: <20230103221852.22813-1-mario.limonciello@amd.com>
- <20230103221852.22813-28-mario.limonciello@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20230103221852.22813-28-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: Re: [PATCH 4/7] iommu: dart: Support a variable number of TTBRs per stream
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,49 +91,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.01.23 um 23:18 schrieb Mario Limonciello:
-> Now that IP version decoding is used, a number of case statements
-> can be combined.
+On Wed, Jan 4, 2023, at 12:00, Hector Martin wrote:
+> T8110 only has one TTBR per stream, so un-hardcode that.
 >
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-This patch can probably be pushed as small cleanup independent of the 
-previous patches.
-
-In general I usually suggest to push those separately to make the patch 
-set concentrate on the real changes at hand.
-
-Anyway this patch here is Reviewed-by: Christian König 
-<christian.koenig@amd.com>
-
-Regards,
-Christian.
-
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
-> v3->v4:
->   * New patch
+>  drivers/iommu/apple-dart.c | 26 ++++++++++++++++++--------
+>  1 file changed, 18 insertions(+), 8 deletions(-)
 >
->   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 8 +-------
->   1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> index f45362dd8228..83e253b5d928 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> @@ -132,14 +132,8 @@ static int psp_init_sriov_microcode(struct psp_context *psp)
->   
->   	switch (adev->ip_versions[MP0_HWIP][0]) {
->   	case IP_VERSION(9, 0, 0):
-> -		adev->virt.autoload_ucode_id = AMDGPU_UCODE_ID_CP_MEC2;
-> -		ret = psp_init_cap_microcode(psp, ucode_prefix);
-> -		break;
-> -	case IP_VERSION(11, 0, 9):
-> -		adev->virt.autoload_ucode_id = AMDGPU_UCODE_ID_CP_MEC2;
-> -		ret = psp_init_cap_microcode(psp, ucode_prefix);
-> -		break;
->   	case IP_VERSION(11, 0, 7):
-> +	case IP_VERSION(11, 0, 9):
->   		adev->virt.autoload_ucode_id = AMDGPU_UCODE_ID_CP_MEC2;
->   		ret = psp_init_cap_microcode(psp, ucode_prefix);
->   		break;
+> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+> index 48743bcd5b9d..189487c1d978 100644
+> --- a/drivers/iommu/apple-dart.c
+> +++ b/drivers/iommu/apple-dart.c
+> @@ -77,15 +77,21 @@
+>  #define DART_TCR_BYPASS0_ENABLE BIT(8)
+>  #define DART_TCR_BYPASS1_ENABLE BIT(12)
+> 
+> -#define DART_TTBR(sid, idx) (0x200 + 16 * (sid) + 4 * (idx))
+>  #define DART_TTBR_VALID BIT(31)
+>  #define DART_TTBR_SHIFT 12
+> 
+> +#define DART_TTBR(dart, sid, idx) (0x200 + \
+> +				   (((dart)->hw->ttbr_count * (sid)) << 2) + \
+> +				   ((idx) << 2))
+> +
+> +
+>  struct apple_dart_hw {
+>  	u32 oas;
+>  	enum io_pgtable_fmt fmt;
+> 
+>  	int max_sid_count;
+> +
+> +	int ttbr_count;
+>  };
+> 
+>  /*
+> @@ -245,7 +251,7 @@ static void apple_dart_hw_set_ttbr(struct 
+> apple_dart_stream_map *stream_map,
+>  	WARN_ON(paddr & ((1 << DART_TTBR_SHIFT) - 1));
+>  	for_each_set_bit(sid, stream_map->sidmap, dart->num_streams)
+>  		writel(DART_TTBR_VALID | (paddr >> DART_TTBR_SHIFT),
+> -		       dart->regs + DART_TTBR(sid, idx));
+> +		       dart->regs + DART_TTBR(dart, sid, idx));
+>  }
+> 
+>  static void apple_dart_hw_clear_ttbr(struct apple_dart_stream_map 
+> *stream_map,
+> @@ -255,7 +261,7 @@ static void apple_dart_hw_clear_ttbr(struct 
+> apple_dart_stream_map *stream_map,
+>  	int sid;
+> 
+>  	for_each_set_bit(sid, stream_map->sidmap, dart->num_streams)
+> -		writel(0, dart->regs + DART_TTBR(sid, idx));
+> +		writel(0, dart->regs + DART_TTBR(dart, sid, idx));
+>  }
+> 
+>  static void
+> @@ -263,7 +269,7 @@ apple_dart_hw_clear_all_ttbrs(struct 
+> apple_dart_stream_map *stream_map)
+>  {
+>  	int i;
+> 
+> -	for (i = 0; i < DART_MAX_TTBR; ++i)
+> +	for (i = 0; i < stream_map->dart->hw->ttbr_count; ++i)
+>  		apple_dart_hw_clear_ttbr(stream_map, i);
+>  }
+> 
+> @@ -415,7 +421,7 @@ apple_dart_setup_translation(struct 
+> apple_dart_domain *domain,
+>  	for (i = 0; i < pgtbl_cfg->apple_dart_cfg.n_ttbrs; ++i)
+>  		apple_dart_hw_set_ttbr(stream_map, i,
+>  				       pgtbl_cfg->apple_dart_cfg.ttbr[i]);
+> -	for (; i < DART_MAX_TTBR; ++i)
+> +	for (; i < stream_map->dart->hw->ttbr_count; ++i)
+>  		apple_dart_hw_clear_ttbr(stream_map, i);
+> 
+>  	apple_dart_hw_enable_translation(stream_map);
+> @@ -956,11 +962,15 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
+>  	.oas = 36,
+>  	.fmt = APPLE_DART,
+>  	.max_sid_count = 16,
+> +
+> +	.ttbr_count = 4,
+>  };
+>  static const struct apple_dart_hw apple_dart_hw_t6000 = {
+>  	.oas = 42,
+>  	.fmt = APPLE_DART2,
+>  	.max_sid_count = 16,
+> +
+> +	.ttbr_count = 4,
+>  };
+> 
+>  static __maybe_unused int apple_dart_suspend(struct device *dev)
+> @@ -970,9 +980,9 @@ static __maybe_unused int apple_dart_suspend(struct 
+> device *dev)
+> 
+>  	for (sid = 0; sid < dart->num_streams; sid++) {
+>  		dart->save_tcr[sid] = readl_relaxed(dart->regs + DART_TCR(sid));
+> -		for (idx = 0; idx < DART_MAX_TTBR; idx++)
+> +		for (idx = 0; idx < dart->hw->ttbr_count; idx++)
+>  			dart->save_ttbr[sid][idx] =
+> -				readl(dart->regs + DART_TTBR(sid, idx));
+> +				readl(dart->regs + DART_TTBR(dart, sid, idx));
+>  	}
+> 
+>  	return 0;
+> @@ -993,7 +1003,7 @@ static __maybe_unused int apple_dart_resume(struct 
+> device *dev)
+>  	for (sid = 0; sid < dart->num_streams; sid++) {
+>  		for (idx = 0; idx < DART_MAX_TTBR; idx++)
 
+s/DART_MAX_TTBR/dart->hw->ttbr_count/ I think.
+
+With that fixed:
+
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
+
+
+Sven
