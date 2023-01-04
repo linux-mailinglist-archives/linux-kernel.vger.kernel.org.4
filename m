@@ -2,154 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1708B65DAD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5258C65DAD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240093AbjADQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S239727AbjADQ6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240356AbjADQ5V (ORCPT
+        with ESMTP id S240403AbjADQ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:57:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A81C00;
-        Wed,  4 Jan 2023 08:55:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3434B617B3;
-        Wed,  4 Jan 2023 16:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401AFC433EF;
-        Wed,  4 Jan 2023 16:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672851300;
-        bh=PRT9pyRYXkxTWpB3lRIbo0OKaSnhV5A3KNAJsop1Qhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yflc5IqAZB+mr3pTNLZaIWWHnHQzKqJIK8gXyn7fIxTuSZ4pUmH878QlnmTz4dfcX
-         56gjGE+gKKaNFA2Kj3+Zb3FQGICuY9nJnXJTR/DweCBmGXxJxGRecoDldf9SU0xSJN
-         9u7O/9gNnMelBN0OGIQHou0lTsXgBDa0wIFG+UgR3RPxyK0PJMNIc8hq28zAqHzlXQ
-         Rw+qvFzlrE294xQFEAoWefHhFGC4Q9mMo9NVfcdS06OG38R/5w8N0IHUdo9CIUaadz
-         bVOKG187B8Y/3ZYdUC/WqqYfiN/MrXtEXMJ/r+7TJz9P/ER+bK3tsbWfIBzKPXStEv
-         vgW8OsZGYnIJA==
-Date:   Wed, 4 Jan 2023 16:54:53 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [RFC PATCH v3 2/2] mfd: syscon: allow reset control for syscon
- devices
-Message-ID: <Y7WvXTPxyIGw5y9R@google.com>
-References: <20221211025700.1180843-1-jk@codeconstruct.com.au>
- <20221211025700.1180843-3-jk@codeconstruct.com.au>
+        Wed, 4 Jan 2023 11:57:26 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3C713CCF;
+        Wed,  4 Jan 2023 08:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672851336; x=1704387336;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9M4xV21Pk9We3A7X02xZcAVZ8pYRkx8urRXNfwjIpDw=;
+  b=hA5lbl8lAcIlGQuAX621evWoVdP+QZamrpD5szx/AMbHP7hJGwua7wlp
+   7WHqeggQsl+8++AHNMuYgnQDic9jOrbLpnBWCZBhUubBkPMqbkDJyqL7x
+   S11UQvieFxzwyEfVfBROI65UtBDjblioxjB9jLSchyV/qpwnyU4s0Kki2
+   uKeF5nD8FBcUFsNmTZBaMsGcoVwYTNGpFiP4ZdUg5OhCPqmreHN1oDJ6q
+   uTo6nKjayEpoU46xmmQiMy5l3eCkw0Z7kJEr35+1FmBfB/plItUsvc5WV
+   zovUOIJmI+XaouM3l0BYLyURHCpKMF/+dBB2WeI4xHfGA8fC6b65+k1M/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349204673"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="349204673"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:55:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="743922587"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="743922587"
+Received: from cheungbr-mobl.amr.corp.intel.com (HELO [10.209.91.155]) ([10.209.91.155])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 08:55:15 -0800
+Message-ID: <25d07838-3904-a086-4238-f56c9424b53a@intel.com>
+Date:   Wed, 4 Jan 2023 08:55:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211025700.1180843-3-jk@codeconstruct.com.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] perf/x86/rapl: Add support for Intel Meteor Lake
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, peterz@infradead.org
+Cc:     mingo@redhat.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, kan.liang@linux.intel.com
+References: <20230104145831.25498-1-rui.zhang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230104145831.25498-1-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022, Jeremy Kerr wrote:
-
-> Simple syscon devices may require deassertion of a reset signal in order
-> to access their register set. Rather than requiring a custom driver to
-> implement this, we can use the generic "resets" specifiers to link a
-> reset line to the syscon.
-> 
-> This change adds an optional reset line to the syscon device
-> description, and deasserts the reset if detected.
-> 
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> 
-> ---
-> v2:
->  * do reset control in the early of_syscon_register() path, rather than
->    the platform device init, which isn't used.
-> v3:
->  * use a direct reset_control_deassert rather than handling in the
->    regmap
-> ---
->  drivers/mfd/syscon.c | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-> index bdb2ce7ff03b..05e286a69dbe 100644
-> --- a/drivers/mfd/syscon.c
-> +++ b/drivers/mfd/syscon.c
-> @@ -20,6 +20,7 @@
->  #include <linux/platform_data/syscon.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/reset.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/slab.h>
->  
-> @@ -31,6 +32,7 @@ static LIST_HEAD(syscon_list);
->  struct syscon {
->  	struct device_node *np;
->  	struct regmap *regmap;
-> +	struct reset_control *reset;
->  	struct list_head list;
+On 1/4/23 06:58, Zhang Rui wrote:
+> @@ -807,6 +807,8 @@ static const struct x86_cpu_id rapl_model_match[] __initconst = {
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&model_skl),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&model_skl),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&model_skl),
+> +	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,		&model_skl),
+> +	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	&model_skl),
+>  	{},
 >  };
->  
-> @@ -40,7 +42,7 @@ static const struct regmap_config syscon_regmap_config = {
->  	.reg_stride = 4,
->  };
->  
-> -static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
-> +static struct syscon *of_syscon_register(struct device_node *np, bool check_res)
->  {
->  	struct clk *clk;
->  	struct syscon *syscon;
-> @@ -50,6 +52,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
->  	int ret;
->  	struct regmap_config syscon_config = syscon_regmap_config;
->  	struct resource res;
-> +	struct reset_control *reset;
->  
->  	syscon = kzalloc(sizeof(*syscon), GFP_KERNEL);
->  	if (!syscon)
-> @@ -114,7 +117,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
->  		goto err_regmap;
->  	}
->  
-> -	if (check_clk) {
-> +	if (check_res) {
->  		clk = of_clk_get(np, 0);
->  		if (IS_ERR(clk)) {
->  			ret = PTR_ERR(clk);
-> @@ -124,7 +127,17 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
->  		} else {
->  			ret = regmap_mmio_attach_clk(regmap, clk);
->  			if (ret)
-> -				goto err_attach;
-> +				goto err_attach_clk;
-> +		}
-> +
-> +		reset = of_reset_control_get_optional_exclusive(np, NULL);
-> +		if (IS_ERR(reset)) {
-> +			ret = PTR_ERR(reset);
-> +			goto err_attach_clk;
-> +		} else {
-> +			ret = reset_control_deassert(reset);
-> +			if (ret)
-> +				goto err_reset;
->  		}
 
-The else is superfluous, right?
-
-Arnd, besides this are you happy with the patch?
-
--- 
-Lee Jones [李琼斯]
+Any chance this will ever get architectural enumeration?  Or, are we
+doomed to grow this model list until the end of time?
