@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BE265D2F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C50F65D2FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239257AbjADMny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S239259AbjADMpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234944AbjADMnu (ORCPT
+        with ESMTP id S229739AbjADMpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:43:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16623186CE;
-        Wed,  4 Jan 2023 04:43:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B64D1B8162F;
-        Wed,  4 Jan 2023 12:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CEAC433EF;
-        Wed,  4 Jan 2023 12:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672836226;
-        bh=gKK35ke75uzbLNdiFo+ZUF6+OSLS2q0DB62aiLXqFus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/7nfHYE0649pnd56Dza8eBumthC+1bmiU/8A0efpKWDA9tLXbh+bR/ew+v+6yt7S
-         r98T4XdbtBoNszBgq6/jjGeVS955ekatwSuOgQ1l1gBR4yVM8M/H57jlug9U8wYQrd
-         rhqBIzXzaf6LhifUtNuy4PDCFiCNOYwIwU6c2XNs=
-Date:   Wed, 4 Jan 2023 13:43:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     stable@vger.kernel.org, willemdebruijn.kernel@gmail.com,
-        mst@redhat.com, jasowang@redhat.com, edumazet@google.com,
-        virtualization@lists.linux-foundation.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        willemb@google.com, syzkaller@googlegroups.com,
-        liuhangbin@gmail.com, linux-kernel@vger.kernel.org,
-        joneslee@google.com
-Subject: Re: [PATCH 0/2] net/af_packet: Fix kernel BUG in __skb_gso_segment
-Message-ID: <Y7V0f77yhwYplQQz@kroah.com>
-References: <20221222083545.1972489-1-tudor.ambarus@linaro.org>
+        Wed, 4 Jan 2023 07:45:09 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D0219C24
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:45:08 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so26304270wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JoyE4PJWzp52kEQxZdg5xRzmINtYTSDR3GIdh/fen5o=;
+        b=i2Q/j+795TYv9w0QGb5kGADj0/TDDYgZ7oc9eCOCy8Xrgx1fBkExbj4IrVJVkwUM21
+         8ES9qTesJVKLd49BSl+uXksWGO7vf8sI4EfhxMK67L6JQNFTqZHqwHTCWgxiEy+oavFK
+         EeDqIPKvUKsMvoyQLGSptukGhbsdLBw/cZUVnLx2I4XaGt9RwZSdpqfmwgF3t991ES0p
+         LVq9LKBrnxUzguC22xPQ/UT+gi43vjis4XleOV7RqPvh3jLowLV+eDI2POPaY/bIG1eF
+         tHqFKVlTXMUYlTENM0qkltyKfY/W0kbXBdXeLdhJCffE1bB794OhfPPGSoBnCmWgTKsw
+         Pu3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JoyE4PJWzp52kEQxZdg5xRzmINtYTSDR3GIdh/fen5o=;
+        b=ixc96Cy2sxtf8iYDGB7YiWodbtYUMv+IjpzAG1spa7oJBKKA4OUHL1sFk1qCiamj1d
+         Spvk0RRvOGfpG08WZqzr/IzM8NchkS3of9DeYumuhU02wvU+W6FoQkqSySZzisET+bpO
+         nBEb4r7yerNOU2iHmRyUOSXl2qBy7F7Gl/K8OJIchTbP/oIQdS/843LIbGWL49Bdk0hB
+         Kc7kD5Pg/dbeGwJubWq12bLg0OfIDXmhgoc3+x1kXO1jn7s0i8r31SX9L1l3QTwTcwM6
+         k5GyjEDYRMAaCSIKt23/5ERYHipemhmJRvFmCPkty0z7T4knvpm7pOFSDgQ3WQYddtVs
+         kBHA==
+X-Gm-Message-State: AFqh2kqHnlYqnxO0TTqHhOoFsBqpU5HoHme7W6ffdpD7G1+xOlrVCDo/
+        Pjhf+wsonSG3/Dx4zFR82w5XVQ==
+X-Google-Smtp-Source: AMrXdXuOHq0R3jJqhQZ89qbuXqn8jDJ+4fL/qm9ZowCLln8b45hYqyJuEujJSRfFX1H2V9Pf4KG6pg==
+X-Received: by 2002:a05:600c:4a9b:b0:3d1:dc6f:b1a4 with SMTP id b27-20020a05600c4a9b00b003d1dc6fb1a4mr41485468wmp.5.1672836306720;
+        Wed, 04 Jan 2023 04:45:06 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id m28-20020a05600c3b1c00b003d1e3b1624dsm54726447wms.2.2023.01.04.04.45.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 04:45:06 -0800 (PST)
+Date:   Wed, 4 Jan 2023 14:45:04 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 3/4] clk: qcom: rpmh: Add support for SM8550 rpmh
+ clocks
+Message-ID: <Y7V00JiPAYfqF4wH@linaro.org>
+References: <20230104093450.3150578-1-abel.vesa@linaro.org>
+ <20230104093450.3150578-4-abel.vesa@linaro.org>
+ <07a849a9-03dc-f3af-1d3f-2369cb71451e@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221222083545.1972489-1-tudor.ambarus@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <07a849a9-03dc-f3af-1d3f-2369cb71451e@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,50 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 10:35:43AM +0200, Tudor Ambarus wrote:
-> The series is intended for stable@vger.kernel.org # 5.4+
+On 23-01-04 12:46:55, Dmitry Baryshkov wrote:
+> On 04/01/2023 11:34, Abel Vesa wrote:
+> > Adds the RPMH clocks present in SM8550 SoC.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> >   drivers/clk/qcom/clk-rpmh.c | 36 ++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 36 insertions(+)
 > 
-> Syzkaller reported the following bug on linux-5.{4, 10, 15}.y:
-> https://syzkaller.appspot.com/bug?id=ce5575575f074c33ff80d104f5baee26f22e95f5
-> 
-> The upstream commit that introduces this bug is:
-> 1ed1d5921139 ("net: skip virtio_net_hdr_set_proto if protocol already set")
-> 
-> Upstream fixes the bug with the following commits, one of which introduces
-> new support:
-> e9d3f80935b6 ("net/af_packet: make sure to pull mac header")
-> dfed913e8b55 ("net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO") 
-> 
-> The additional logic and risk backported seems manageable.
-> 
-> The blammed commit introduces a kernel BUG in __skb_gso_segment for
-> AF_PACKET SOCK_RAW GSO VLAN tagged packets. What happens is that
-> virtio_net_hdr_set_proto() exists early as skb->protocol is already set to
-> ETH_P_ALL. Then in packet_parse_headers() skb->protocol is set to
-> ETH_P_8021AD, but neither the network header position is adjusted, nor the
-> mac header is pulled. Thus when we get to validate the xmit skb and enter
-> skb_mac_gso_segment(), skb->mac_len has value 14, but vlan_depth gets
-> updated to 18 after skb_network_protocol() is called. This causes the
-> BUG_ON from __skb_pull(skb, vlan_depth) to be hit, as the mac header has
-> not been pulled yet.
-> 
-> The fixes from upstream backported cleanly without conflicts. I updated
-> the commit message of the first patch to describe the problem encountered,
-> and added Cc, Fixes, Reported-by and Tested-by tags. For the second patch
-> I just added Cc to stable indicating the versions to be fixed, and added
-> my Tested and Signed-off-by tags.
-> 
-> I tested the patches on linux-5.{4, 10, 15}.y.
-> 
-> Eric Dumazet (1):
->   net/af_packet: make sure to pull mac header
-> 
-> Hangbin Liu (1):
->   net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO
-> 
->  net/packet/af_packet.c | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
+> I think the plan was to have the _PAD clock as a child node of the rpmcc. Is
+> it still the planned implementation?
 
-Now queued up, thanks.
+Yes. Here is how the dts rpmhcc node will look like:
 
-greg k-h
+         rpmhcc: clock-controller {
+                 compatible = "qcom,sm8550-rpmh-clk";
+                 #clock-cells = <1>;
+                 clock-names = "xo";
+                 clocks = <&xo_board>;
+
+                 bi_tcxo_div2: bi-tcxo-div2-clk {
+                         #clock-cells = <0>;
+                         compatible = "fixed-factor-clock";
+                         clocks = <&rpmhcc RPMH_CXO_CLK>;
+                         clock-mult = <1>;
+                         clock-div = <2>;
+                 };
+
+                 bi_tcxo_ao_div2: bi-tcxo-div2-ao-clk {
+                         #clock-cells = <0>;
+                         compatible = "fixed-factor-clock";
+                         clocks = <&rpmhcc RPMH_CXO_CLK_A>;
+                         clock-mult = <1>;
+                         clock-div = <2>;
+                 };
+         };
+
+The clock nodes will be probed on of_clk_init.
+
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
