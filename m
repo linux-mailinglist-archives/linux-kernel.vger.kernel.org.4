@@ -2,80 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F1865DCF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DB265DCF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbjADTic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S235270AbjADTkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240186AbjADTiX (ORCPT
+        with ESMTP id S235302AbjADTkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:38:23 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C701325C9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:38:20 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id j3-20020a056e02154300b00304bc968ef1so21545241ilu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:38:20 -0800 (PST)
+        Wed, 4 Jan 2023 14:40:19 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B03BCB
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:40:18 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d3so36871553plr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:40:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=78Xud8uaBV6HMH18sEo7KX+Q7S8hBzv9DwytUiPzVXc=;
+        b=blRiiJyMG0QFf70ZcWAtGacCvsBwciLVCQXLdhc8+vV0GBhpFeCDB3/S4HgskxMRvn
+         gvTjkfb32S6N6NG7A4JBQevbxu7rMxkYBb2zFwAvw4E+p3fOHPbrWy30Do3VXuLWEkDp
+         fzU47nn8DJ3DY4bC7my3tkw+A0pW69PPrqidvOyBwPvSLCS7pafZpG6x3aEyW7nmuVWk
+         1y8xd6cue/C2L3r08VxPGtoDqMgLmoliw1KjwZEkmb62ipIMX+ewkYPQweuI1/OGOVDm
+         F60F7L/T8EDwJdlUWERfFsuhyUukQVLbQ7CABuIFOjts5/i339sIvS//3ti04ZGUNwdz
+         L2qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4klnHWgFntXJFe1mNy3ktVGZOT5lIaQUJZBRl6du9As=;
-        b=u5USPUEFl1kF+njk1X/x9kTWVS6UNh8wQ2vW1+4UxASp6g4MDBuPzZtl7LqJwiWVPi
-         M8rKPsxA+Rr8IF+DRqx1Ve+I0lDlL2TRGSjx0Qw18tI2Bh/C2lYp2+l8uFtwisfag8p2
-         zxGHnkm7kLgOx32PmwrRVOgDbPHgmeuAD3qiAVpV0XlX1JnxJqhRM+E5yvHV4zoxEE36
-         OsvaCSh40B8mAH5RVtzkuj2Op25IIxpIOQuKg1wcT2ub9U6rABAs4yh9sn3FJPdWVm2B
-         JRmhcKTkqZVxNZD+ihuoqUdlh7cDibPx5uw3EVqlkYinIxbn6qM9eA7kwt2vZUDjj1Ob
-         3WVQ==
-X-Gm-Message-State: AFqh2kq6a2KKPFp2XNrOa7rwDoLjZeZbqkNojdQEbKAsvvhU7U6itvwy
-        EMTWlW8EBXeXAKqu0UoxEMWqI8fj+fGF+A8PtNnVGF0fC1Cb
-X-Google-Smtp-Source: AMrXdXvyG+VLSqREN5kVIlZt67ykVaVDAsb4CMVjysJYq7UJqNBRTeukgJg3xjw94TDfvueU6efvADxCWW38A/y0GwmGafcXTngs
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=78Xud8uaBV6HMH18sEo7KX+Q7S8hBzv9DwytUiPzVXc=;
+        b=zuYW8T2R7fiDBxA6wplCOPrNiFLTMV6Kt073uNT+dUGgcUeotC3bMME6wh/93zNu6n
+         WdVzlwVIXecBLddFoXmGpaLdct4sSvvou5HWsYGqIJlpE0vdakYSPy3CizvTmZHIUDuE
+         7ww1fGgBv7eaeq3mbtl/VHT8xbOSOoxUyl+75uYyTj0svV2FFuwmGk7zm2pr8BwIuMjz
+         c+xoJdhx3iDKHQpwm4z+UAnVP8MDHsMAS97D9wxmiHvuexU4bK+Bny3cxasPSWcZ4UZc
+         tJ13ZU3JGnaTIys+X5/S2sOq0dsAftCiopCdVBMKE2bjC5SVfJxAV3Q9hfyoDgU0MAmU
+         svww==
+X-Gm-Message-State: AFqh2ko8BDYb1IQRwEdBbqMiA2P552nZaL7PMUse5r8tnQ72AJtHGAys
+        n+O+na/6F6/4SE1WNA0gyjDfpw==
+X-Google-Smtp-Source: AMrXdXsH095EcaGEvfVVviy/+4gQ6bUYk6ez6u38GKfOav+N0EC7dY+ovj6RpVZufmNIKRdZf/KeSQ==
+X-Received: by 2002:a05:6a20:7f59:b0:ac:af5c:2970 with SMTP id e25-20020a056a207f5900b000acaf5c2970mr3251490pzk.3.1672861218316;
+        Wed, 04 Jan 2023 11:40:18 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 11-20020a63050b000000b0049b7b1205a0sm14393894pgf.54.2023.01.04.11.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 11:40:17 -0800 (PST)
+Date:   Wed, 4 Jan 2023 19:40:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paul Durrant <pdurrant@amazon.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v6 2/2] KVM: x86/xen: update Xen CPUID Leaf 4 (tsc info)
+ sub-leaves, if present
+Message-ID: <Y7XWHr1kb4AHd4Lv@google.com>
+References: <20221220134053.15591-1-pdurrant@amazon.com>
+ <20221220134053.15591-3-pdurrant@amazon.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9c0a:0:b0:6a1:2c0c:6084 with SMTP id
- 10-20020a5d9c0a000000b006a12c0c6084mr2993349ioe.128.1672861100139; Wed, 04
- Jan 2023 11:38:20 -0800 (PST)
-Date:   Wed, 04 Jan 2023 11:38:20 -0800
-In-Reply-To: <00000000000099fc4705f1192c71@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a1ed5905f1755333@google.com>
-Subject: Re: [syzbot] [f2fs?] KASAN: use-after-free Read in __update_extent_tree_range
-From:   syzbot <syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com>
-To:     chao@kernel.org, daehojeong@google.com, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220134053.15591-3-pdurrant@amazon.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Tue, Dec 20, 2022, Paul Durrant wrote:
+> @@ -143,6 +148,8 @@ int kvm_xen_hypercall(struct kvm_vcpu *vcpu);
+>  #include <asm/xen/interface.h>
+>  #include <xen/interface/vcpu.h>
+>  
+> +#define XEN_SIGNATURE "XenVMMXenVMM"
 
-commit 3db1de0e582c358dd013f3703cd55b5fe4076436
-Author: Daeho Jeong <daehojeong@google.com>
-Date:   Thu Apr 28 18:18:09 2022 +0000
+arch/x86/include/asm/xen/hypervisor.h also open codes the signature.  Rather than
+add a KVM-specific define, what about putting in xen/cpuid.h?  (I've had a version
+of this series sitting in my todo pile for far too long, sorry).
 
-    f2fs: change the current atomic write way
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Mon, 11 Jul 2022 15:18:42 -0700
+Subject: [PATCH] xen: Add a #define to provide Xen's CPUID signature as a
+ string
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15c77d38480000
-start commit:   1b929c02afd3 Linux 6.2-rc1
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17c77d38480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13c77d38480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2651619a26b4d687
-dashboard link: https://syzkaller.appspot.com/bug?extid=823000d23b3400619f7c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12597238480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ae9d7f880000
+Add XEN_SIGNATURE instead of open coding it in xen_cpuid_base() so
+that KVM can reuse the definition when querying a VM's CPUID.
 
-Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+No functional change intended.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/xen/cpuid.h      | 1 +
+ arch/x86/include/asm/xen/hypervisor.h | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/xen/cpuid.h b/arch/x86/include/asm/xen/cpuid.h
+index 6daa9b0c8d11..38f1bd153f42 100644
+--- a/arch/x86/include/asm/xen/cpuid.h
++++ b/arch/x86/include/asm/xen/cpuid.h
+@@ -49,6 +49,7 @@
+  * EBX-EDX: "XenVMMXenVMM" signature, allowing positive identification
+  *      of a Xen host.
+  */
++#define XEN_SIGNATURE     "XenVMMXenVMM"
+ #define XEN_CPUID_SIGNATURE_EBX 0x566e6558 /* "XenV" */
+ #define XEN_CPUID_SIGNATURE_ECX 0x65584d4d /* "MMXe" */
+ #define XEN_CPUID_SIGNATURE_EDX 0x4d4d566e /* "nVMM" */
+diff --git a/arch/x86/include/asm/xen/hypervisor.h b/arch/x86/include/asm/xen/hypervisor.h
+index 16f548a661cf..32ff6583b3d9 100644
+--- a/arch/x86/include/asm/xen/hypervisor.h
++++ b/arch/x86/include/asm/xen/hypervisor.h
+@@ -37,10 +37,11 @@ extern struct shared_info *HYPERVISOR_shared_info;
+ extern struct start_info *xen_start_info;
+ 
+ #include <asm/processor.h>
++#include <asm/xen/cpuid.h>
+ 
+ static inline uint32_t xen_cpuid_base(void)
+ {
+-	return hypervisor_cpuid_base("XenVMMXenVMM", 2);
++	return hypervisor_cpuid_base(XEN_SIGNATURE, 2);
+ }
+ 
+ struct pci_dev;
+
+base-commit: 91dc252b0dbb6879e4067f614df1e397fec532a1
+-- 
