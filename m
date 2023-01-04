@@ -2,180 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD7165DBA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303E165DBA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240147AbjADRxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S240023AbjADRxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbjADRws (ORCPT
+        with ESMTP id S240103AbjADRxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:52:48 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA7E34762
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 09:52:45 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id c20so16007480ilj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 09:52:45 -0800 (PST)
+        Wed, 4 Jan 2023 12:53:00 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A2E0A2;
+        Wed,  4 Jan 2023 09:52:58 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso40639463fac.6;
+        Wed, 04 Jan 2023 09:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=25pBUtrT1XiV3gX50trdZQF7DviwuSyPLPkde8po6zE=;
-        b=QzGxU6DyX6RsSixFWY74idDrVdmgX5O5hTxK/7AVVmBGM8s0hr4iCZZLCcjXZoSEMo
-         JWzBpHqdSe9BavTDo1C6VPwZBh4yd7D4SkIr78s8hd2a/rUmtt94bbBcBS0wh36WyGl4
-         ehpgsPYz5KsFI1zy4JkyPAitdwH94bdRfNRVIoWNP/AghYb1vvAbIevXUkR05tl9LG0R
-         ClHyTNVjC3SAHP4TXVib2rWVo2QIUsLINdy0w03Q137gUED3/pE++84/SC0dxTQL/wTJ
-         tuMTKY1bb/g08dJk51Lm0QdF2Gh3dqeintbZS179zTj2AOjauGzYOQCJ6dn03yb5ujgc
-         Y8Rw==
+        bh=pzRN+ThvK9tCIgke9+TLEirKqYpVwfmOcXrEgIxAajI=;
+        b=Bh+eN9QLMyipT6Z9HuZkAw5U7DOXS0Yx86HMEMI1AQBref5j0cYWdKlY5pro1eo5Ij
+         of6QbL7Spuzk6CPXZGDPJIXYypt377XLxZChKWDpQvyoxzlpyynetvJKRlI3mZ7wytrO
+         IOQGPvzOde80/6rR7tpK9Vn1LpJMMPN7A3Fq+b9WRkUFk+Kn/AMqoqbvFCnIX1ksj7kJ
+         XOOyoaxzgOUSoH0temzpJ7qYs7Apg6I+KLygDD0ffiO8WYc4fuI/UNcrtmEX44KRUPsh
+         eYN3bJqXDU46KyU6P+aYthrIj7UEYBAxG6zGu8LoLDyOg2uKp+mjQY3ZkKPwRj3J2SZF
+         VDsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=25pBUtrT1XiV3gX50trdZQF7DviwuSyPLPkde8po6zE=;
-        b=Cqw+myGPVzAu+71NYpNHFcfQUtB9dKqqs7sgs7D3HSbIOYrrVAy+lEPTB7sBtSaATo
-         bt5vbMHHqL2Cs27N3TEbahmvFnJ8xRCmPnOq9FcFB5OBLmhHItbCmZ0U2fh8KtG+c1yp
-         ET4GqZqhx+GVO5rSc7XBuHxOYnqVZBgimJvGmPQMJ7IlVeF3tauBOjuvxgmKpVESHzwO
-         u89SJLMomTWlg+FlOuxh+QrzyL8y+GXqYTSY8WGwxfqQs0K/Sn8ICafilPtFxin3eNnj
-         cTTujNO355bGIUIT+rS03X7GUVGkcSvTkeG+iHa0xhhe+HaSeDVAU2eJTOstdQGbrwwI
-         oZgA==
-X-Gm-Message-State: AFqh2kprVxDnP4j9FRoMv80S7dpEZplapdbi/71iP1vs66YXbksnjXWR
-        kMH7Q5uj24nApvYQCMgCTXXWbA==
-X-Google-Smtp-Source: AMrXdXscaRcNn1dXmwqBDLPOSnFWZCgr0sJ8XlokTYwH69p0B0Yzu99xwasjRP87mqb9n0TILekp1Q==
-X-Received: by 2002:a92:d06:0:b0:30c:2bb4:a2dc with SMTP id 6-20020a920d06000000b0030c2bb4a2dcmr12940791iln.22.1672854764635;
-        Wed, 04 Jan 2023 09:52:44 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id u3-20020a02cbc3000000b00375783003fcsm10872304jaq.136.2023.01.04.09.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 09:52:44 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 6/6] net: ipa: don't maintain IPA interrupt handler array
-Date:   Wed,  4 Jan 2023 11:52:33 -0600
-Message-Id: <20230104175233.2862874-7-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230104175233.2862874-1-elder@linaro.org>
-References: <20230104175233.2862874-1-elder@linaro.org>
+        bh=pzRN+ThvK9tCIgke9+TLEirKqYpVwfmOcXrEgIxAajI=;
+        b=LYgJTr3QrNhbq2KDGUWVlhFvAP/Ef476BZIx0lw/LZuHnZLutUhkJeASRCqh1CYi0E
+         9uw1vH0kLZO/brFoGq+fFzYKDdJ2GWLnhDVtMkX+ryUnoCscE3BB+rfHJo+3YY+54vFs
+         DziqxbI1heAHefds2GonQjAbjFAfdA8bpffR5QeDJHjo4Ehjl/MssFmwI7DoUp2pX/3y
+         wEkhnSYaD+iX0fDHTNqy8Oty/tVDps1tHb/SnsYjewQ9csiISPKzK70SbQ9BVOZPGt0f
+         b1ZH2BhPxObW1c0MTZXGkyova4wwgwg0rDwJI685Nq+5G6X9EHOUfUX0crQBz/+Znnv3
+         xP2w==
+X-Gm-Message-State: AFqh2kqKM4RQsEIYRpKt3k9iGpBsERGmjVIFZFcOHZnbXjisvNFHCrgR
+        BRCfPqCypFaax8EutmN/3vipQF6JhMq4iN2ggI8=
+X-Google-Smtp-Source: AMrXdXtD98iNnP9l7LW63xiy0OQEGh+Cg1ggoDhD+5dqZSCaUmMt1C4pJrxjmNENyM2O1Wio9LnMyetUHjAgFag9Lv8=
+X-Received: by 2002:a05:6870:ac10:b0:144:bf10:eecd with SMTP id
+ kw16-20020a056870ac1000b00144bf10eecdmr3806466oab.204.1672854777368; Wed, 04
+ Jan 2023 09:52:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221228060346.352362-1-wedsonaf@gmail.com> <20221228060346.352362-4-wedsonaf@gmail.com>
+ <20221231194352.55cf0a26.gary@garyguo.net> <CANeycqrVsbNJ+A+A26LXkBezBNUHvnZU2Q3_whexCwwG5ZcgPQ@mail.gmail.com>
+ <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
+In-Reply-To: <df2f6c0b-fb4c-97e5-b607-7df626ea5933@crisal.io>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Wed, 4 Jan 2023 17:52:46 +0000
+Message-ID: <CANeycqrBLoYSMcdNbD=SCbDc4dMFy3qi0rc2AznaBn5rQ0auEQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] rust: sync: introduce `ArcBorrow`
+To:     =?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>
+Cc:     Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can call the two IPA interrupt handler functions directly;
-there's no need to maintain the array of handler function pointers
-any more.
+On Wed, 4 Jan 2023 at 16:06, Emilio Cobos =C3=81lvarez <emilio@crisal.io> w=
+rote:
+>
+> Sorry for the drive-by comment, but maybe it saves some work.
+>
+> On 1/4/23 16:29, Wedson Almeida Filho wrote:
+> > On Sat, 31 Dec 2022 at 19:43, Gary Guo <gary@garyguo.net> wrote:
+> >>
+> >> On Wed, 28 Dec 2022 06:03:43 +0000
+> >> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+> >>
+> >>> This allows us to create references to a ref-counted allocation witho=
+ut
+> >>> double-indirection and that still allow us to increment the refcount =
+to
+> >>> a new `Arc<T>`.
+> >>>
+> >>> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> >>> ---
+> >>>   rust/kernel/sync.rs     |  2 +-
+> >>>   rust/kernel/sync/arc.rs | 97 ++++++++++++++++++++++++++++++++++++++=
++++
+> >>>   2 files changed, 98 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> >>> index 39b379dd548f..5de03ea83ea1 100644
+> >>> --- a/rust/kernel/sync.rs
+> >>> +++ b/rust/kernel/sync.rs
+> >>> @@ -7,4 +7,4 @@
+> >>>
+> >>>   mod arc;
+> >>>
+> >>> -pub use arc::Arc;
+> >>> +pub use arc::{Arc, ArcBorrow};
+> >>> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> >>> index dbc7596cc3ce..f68bfc02c81a 100644
+> >>> --- a/rust/kernel/sync/arc.rs
+> >>> +++ b/rust/kernel/sync/arc.rs
+> >>> @@ -19,6 +19,7 @@ use crate::{bindings, error::Result, types::Opaque}=
+;
+> >>>   use alloc::boxed::Box;
+> >>>   use core::{
+> >>>       marker::{PhantomData, Unsize},
+> >>> +    mem::ManuallyDrop,
+> >>>       ops::Deref,
+> >>>       ptr::NonNull,
+> >>>   };
+> >>> @@ -164,6 +165,18 @@ impl<T: ?Sized> Arc<T> {
+> >>>               _p: PhantomData,
+> >>>           }
+> >>>       }
+> >>> +
+> >>> +    /// Returns an [`ArcBorrow`] from the given [`Arc`].
+> >>> +    ///
+> >>> +    /// This is useful when the argument of a function call is an [`=
+ArcBorrow`] (e.g., in a method
+> >>> +    /// receiver), but we have an [`Arc`] instead. Getting an [`ArcB=
+orrow`] is free when optimised.
+> >>> +    #[inline]
+> >>> +    pub fn as_arc_borrow(&self) -> ArcBorrow<'_, T> {
+> >>> +        // SAFETY: The constraint that the lifetime of the shared re=
+ference must outlive that of
+> >>> +        // the returned `ArcBorrow` ensures that the object remains =
+alive and that no mutable
+> >>> +        // reference can be created.
+> >>> +        unsafe { ArcBorrow::new(self.ptr) }
+> >>> +    }
+> >>>   }
+> >>>
+> >>>   impl<T: ?Sized> Deref for Arc<T> {
+> >>> @@ -208,3 +221,87 @@ impl<T: ?Sized> Drop for Arc<T> {
+> >>>           }
+> >>>       }
+> >>>   }
+> >>> +
+> >>> +/// A borrowed reference to an [`Arc`] instance.
+> >>> +///
+> >>> +/// For cases when one doesn't ever need to increment the refcount o=
+n the allocation, it is simpler
+> >>> +/// to use just `&T`, which we can trivially get from an `Arc<T>` in=
+stance.
+> >>> +///
+> >>> +/// However, when one may need to increment the refcount, it is pref=
+erable to use an `ArcBorrow<T>`
+> >>> +/// over `&Arc<T>` because the latter results in a double-indirectio=
+n: a pointer (shared reference)
+> >>> +/// to a pointer (`Arc<T>`) to the object (`T`). An [`ArcBorrow`] el=
+iminates this double
+> >>> +/// indirection while still allowing one to increment the refcount a=
+nd getting an `Arc<T>` when/if
+> >>> +/// needed.
+> >>> +///
+> >>> +/// # Invariants
+> >>> +///
+> >>> +/// There are no mutable references to the underlying [`Arc`], and i=
+t remains valid for the
+> >>> +/// lifetime of the [`ArcBorrow`] instance.
+> >>> +///
+> >>> +/// # Example
+> >>> +///
+> >>> +/// ```
+> >>> +/// use crate::sync::{Arc, ArcBorrow};
+> >>> +///
+> >>> +/// struct Example;
+> >>> +///
+> >>> +/// fn do_something(e: ArcBorrow<'_, Example>) -> Arc<Example> {
+> >>> +///     e.into()
+> >>> +/// }
+> >>> +///
+> >>> +/// let obj =3D Arc::try_new(Example)?;
+> >>> +/// let cloned =3D do_something(obj.as_arc_borrow());
+> >>> +///
+> >>> +/// // Assert that both `obj` and `cloned` point to the same underly=
+ing object.
+> >>> +/// assert!(core::ptr::eq(&*obj, &*cloned));
+> >>> +/// ```
+> >>> +pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+> >>> +    inner: NonNull<ArcInner<T>>,
+> >>> +    _p: PhantomData<&'a ()>,
+> >>> +}
+> >>> +
+> >>> +impl<T: ?Sized> Clone for ArcBorrow<'_, T> {
+> >>> +    fn clone(&self) -> Self {
+> >>> +        *self
+> >>> +    }
+> >>> +}
+> >>> +
+> >>> +impl<T: ?Sized> Copy for ArcBorrow<'_, T> {}
+> >>
+> >> Couldn't this just be derived `Clone` and `Copy`?
+> >
+> > Indeed. I'll send a v2 with this.
+>
+> I'm not sure this is true. Deriving will add the T: Copy and T: Clone
+> bound, which I think is not what you want here.
+>
+> i.e., I assume you want an ArcBorrow to be Copy even if the underlying T
+> is not.
+>
+> See <https://github.com/rust-lang/rust/issues/26925> for the relevant
+> (really long-standing) Rust issue.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_interrupt.c | 46 ++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 26 deletions(-)
+Thanks for the heads up, Emilio!
 
-diff --git a/drivers/net/ipa/ipa_interrupt.c b/drivers/net/ipa/ipa_interrupt.c
-index f0a68b0a242c1..5f047b29e6ef0 100644
---- a/drivers/net/ipa/ipa_interrupt.c
-+++ b/drivers/net/ipa/ipa_interrupt.c
-@@ -30,54 +30,52 @@
- #include "ipa_uc.h"
- #include "ipa_interrupt.h"
- 
--typedef void (*ipa_irq_handler_t)(struct ipa *ipa, enum ipa_irq_id irq_id);
--
- /**
-  * struct ipa_interrupt - IPA interrupt information
-  * @ipa:		IPA pointer
-  * @irq:		Linux IRQ number used for IPA interrupts
-  * @enabled:		Mask indicating which interrupts are enabled
-- * @handler:		Array of handlers indexed by IPA interrupt ID
-  */
- struct ipa_interrupt {
- 	struct ipa *ipa;
- 	u32 irq;
- 	u32 enabled;
--	ipa_irq_handler_t handler[IPA_IRQ_COUNT];
- };
- 
--/* Returns true if the interrupt type is associated with the microcontroller */
--static bool ipa_interrupt_uc(struct ipa_interrupt *interrupt, u32 irq_id)
--{
--	return irq_id == IPA_IRQ_UC_0 || irq_id == IPA_IRQ_UC_1;
--}
--
- /* Process a particular interrupt type that has been received */
- static void ipa_interrupt_process(struct ipa_interrupt *interrupt, u32 irq_id)
- {
--	bool uc_irq = ipa_interrupt_uc(interrupt, irq_id);
- 	struct ipa *ipa = interrupt->ipa;
- 	const struct ipa_reg *reg;
- 	u32 mask = BIT(irq_id);
- 	u32 offset;
- 
--	/* For microcontroller interrupts, clear the interrupt right away,
--	 * "to avoid clearing unhandled interrupts."
--	 */
- 	reg = ipa_reg(ipa, IPA_IRQ_CLR);
- 	offset = ipa_reg_offset(reg);
--	if (uc_irq)
-+
-+	switch (irq_id) {
-+	case IPA_IRQ_UC_0:
-+	case IPA_IRQ_UC_1:
-+		/* For microcontroller interrupts, clear the interrupt right
-+		 * away, "to avoid clearing unhandled interrupts."
-+		 */
- 		iowrite32(mask, ipa->reg_virt + offset);
-+		ipa_uc_interrupt_handler(ipa, irq_id);
-+		break;
- 
--	if (irq_id < IPA_IRQ_COUNT && interrupt->handler[irq_id])
--		interrupt->handler[irq_id](interrupt->ipa, irq_id);
-+	case IPA_IRQ_TX_SUSPEND:
-+		/* Clearing the SUSPEND_TX interrupt also clears the
-+		 * register that tells us which suspended endpoint(s)
-+		 * caused the interrupt, so defer clearing until after
-+		 * the handler has been called.
-+		 */
-+		ipa_power_suspend_handler(ipa, irq_id);
-+		fallthrough;
- 
--	/* Clearing the SUSPEND_TX interrupt also clears the register
--	 * that tells us which suspended endpoint(s) caused the interrupt,
--	 * so defer clearing until after the handler has been called.
--	 */
--	if (!uc_irq)
-+	default:	/* Silently ignore (and clear) any other condition */
- 		iowrite32(mask, ipa->reg_virt + offset);
-+		break;
-+	}
- }
- 
- /* IPA IRQ handler is threaded */
-@@ -268,10 +266,6 @@ struct ipa_interrupt *ipa_interrupt_config(struct ipa *ipa)
- 		goto err_free_irq;
- 	}
- 
--	interrupt->handler[IPA_IRQ_UC_0] = ipa_uc_interrupt_handler;
--	interrupt->handler[IPA_IRQ_UC_1] = ipa_uc_interrupt_handler;
--	interrupt->handler[IPA_IRQ_TX_SUSPEND] = ipa_power_suspend_handler;
--
- 	return interrupt;
- 
- err_free_irq:
--- 
-2.34.1
+After trying this out, derive doesn't work. The errors brought me back
+memories of when I first implemented this over a year ago, though I
+didn't take the time to try to understand why it was failing.
 
+So no v2. The series will remain as is.
+
+Cheers
+
+>
+> Cheers,
+>
+>   -- Emilio
