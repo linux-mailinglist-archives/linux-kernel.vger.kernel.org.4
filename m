@@ -2,565 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FED165D44F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D92D665D445
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjADNcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S239466AbjADNcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239444AbjADNbV (ORCPT
+        with ESMTP id S239445AbjADNbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 08:31:21 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC61EF0A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:26:55 -0800 (PST)
-X-UUID: 6c9df9eac25040d5a4235af62affc18a-20230104
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WsjzggQZ+DBBf42kQ6cN1/K4zj1wv7mu5ct0V5x2y3k=;
-        b=XRzmaSdMB6QLo7xolosVYOaun+kLPzEnohEPSFEwmRDPxxiY6rYCj5tkGi/2npG6QieoXr/SCFDSgmnQbX4iqQEGqopcU2XdpCtSytf2OAggZ9xo15pVS/40/PDMN09hCO+wGHjrI9A8i3A8O1SeMhhtW583aJsWwa5kkUo0EEQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.16,REQID:5dc49808-d90e-4405-88b7-07c41d7d8ba8,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:09771b1,CLOUDID:9608cbf4-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 6c9df9eac25040d5a4235af62affc18a-20230104
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 304824388; Wed, 04 Jan 2023 21:26:50 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 4 Jan 2023 21:26:49 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 4 Jan 2023 21:26:48 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH v6 3/3] phy: mediatek: tphy: add debugfs files
-Date:   Wed, 4 Jan 2023 21:26:46 +0800
-Message-ID: <20230104132646.7100-3-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
-References: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A6E3D9DA;
+        Wed,  4 Jan 2023 05:27:06 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id c7so27127172qtw.8;
+        Wed, 04 Jan 2023 05:27:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3apLs5SUEYCS8chIsKhmtTxwRF+eOByUathcApBcwhU=;
+        b=tREeZoatX4hC/sEGfSkC1T1RW1lXCIzjWw+rj9cIsb9iu8R8hZTL2c+vcMs+mEgx+r
+         2HASgJVSloNieaOSRBx6DCScq/wFT7yT0giPVLl95oOgwNzK2xQRWm22i/VWaJY1Fogl
+         Z7AKmlIq2i8zjj6Q/CW8vbB8ztiG9V+w0ANKO0bVbGVcwdJCoSUcWJOg2+DaQWAo0kd6
+         1SKd6TMi2W7pL2YzdHFr3HGSHrocdGEqnKSFpFP0MQ7bsqXX+XPf7NKAUfVdQD/LAVYF
+         7zKugAyV0elP7apZoW9LsUjzzFYj9T1kaFkV5PIl+aqC1F2lCbSmLDoAVtY5BKFdK0Pe
+         ubIA==
+X-Gm-Message-State: AFqh2kobJKjg+4uKtGowr/HMaFm4VeFeVzVF8+JVpcSPGwG+bM8ATn+Q
+        t50nxYqVvrRtlq73k0kpC/8fl2i2Lu4LKw==
+X-Google-Smtp-Source: AMrXdXsRMiUBdFPQxgwSndmnnsvCE17pTM+kW/eH0JJCydi8O/nTMKjYyO0fMfFeldbzuW4PnIow1Q==
+X-Received: by 2002:ac8:7457:0:b0:3a8:2122:7c28 with SMTP id h23-20020ac87457000000b003a821227c28mr69960797qtr.47.1672838825357;
+        Wed, 04 Jan 2023 05:27:05 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id g14-20020ac87d0e000000b003a7eceb8cbasm20494228qtb.90.2023.01.04.05.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 05:27:05 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-43ea87d0797so476160087b3.5;
+        Wed, 04 Jan 2023 05:27:04 -0800 (PST)
+X-Received: by 2002:a81:1b0a:0:b0:37e:6806:a5f9 with SMTP id
+ b10-20020a811b0a000000b0037e6806a5f9mr5542429ywb.47.1672838824691; Wed, 04
+ Jan 2023 05:27:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <f904fd28b2087d1463ea65f059924e3b1acc193c.1672764239.git.geert+renesas@glider.be>
+ <Y7RmnswYX+1g5vci@spud>
+In-Reply-To: <Y7RmnswYX+1g5vci@spud>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 4 Jan 2023 14:26:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX--sfenmb7WMgpe5045YfR7UjXAM-T9ZNZO3eTN_R=bg@mail.gmail.com>
+Message-ID: <CAMuHMdX--sfenmb7WMgpe5045YfR7UjXAM-T9ZNZO3eTN_R=bg@mail.gmail.com>
+Subject: Re: [PATCH] clk: microchip: mpfs-ccc: Use devm_kasprintf() for
+ allocating formatted strings
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These debugfs files are mainly used to make eye diagram test easier,
-especially helpful to do HQA test for a new IC without efuse enabled.
+Hi Conor,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v6: no changes
+On Tue, Jan 3, 2023 at 6:32 PM Conor Dooley <conor@kernel.org> wrote:
+> On Tue, Jan 03, 2023 at 05:45:30PM +0100, Geert Uytterhoeven wrote:
+> > In various places, string buffers of a fixed size are allocated, and
+> > filled using snprintf() with the same fixed size, which is error-prone.
+> >
+> > Replace this by calling devm_kasprintf() instead, which always uses the
+> > appropriate size.
+> >
+> > While at it, remove an unneeded intermediate variable, which allows us
+> > to drop a cast as a bonus.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-v5: using common debugfs config CONFIG_DEBUG_FS
+Thanks!
 
-v4: fix build warning of sometimes uninitialized variable
+> I half wonder if this should actually have a fixes tag too. Since it
+> used what came after the @ in $full_name, it'd be possible to create
+> (an incorrect) DTS that would lead to a clash between pll names &
+> therefore probe would fail.
+> The tag would be:
+> Fixes: d39fb172760e ("clk: microchip: add PolarFire SoC fabric clock support")
 
-v3: fix typo of "debugfs" suggested by AngeloGioacchino
+But I don't change any of that in my patch?
+/me confused.
 
-v2: add CONFIG_PHY_MTK_TPHY_DEBUGFS suggested by AngeloGioacchino
----
- drivers/phy/mediatek/phy-mtk-tphy.c | 405 +++++++++++++++++++++++++++-
- 1 file changed, 404 insertions(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-index e906a82791bd..923e5ee119f3 100644
---- a/drivers/phy/mediatek/phy-mtk-tphy.c
-+++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/phy/phy.h>
- #include <linux/clk.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/iopoll.h>
- #include <linux/mfd/syscon.h>
-@@ -264,6 +265,8 @@
- 
- #define TPHY_CLKS_CNT	2
- 
-+#define USER_BUF_LEN(count) min_t(size_t, 8, (count))
-+
- enum mtk_phy_version {
- 	MTK_PHY_V1 = 1,
- 	MTK_PHY_V2,
-@@ -310,6 +313,7 @@ struct mtk_phy_instance {
- 	struct clk_bulk_data clks[TPHY_CLKS_CNT];
- 	u32 index;
- 	u32 type;
-+	struct dentry *dbgfs;
- 	struct regmap *type_sw;
- 	u32 type_sw_reg;
- 	u32 type_sw_index;
-@@ -332,10 +336,391 @@ struct mtk_tphy {
- 	const struct mtk_phy_pdata *pdata;
- 	struct mtk_phy_instance **phys;
- 	int nphys;
-+	struct dentry *dbgfs_root;
- 	int src_ref_clk; /* MHZ, reference clock for slew rate calibrate */
- 	int src_coef; /* coefficient for slew rate calibrate */
- };
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+
-+enum u2_phy_params {
-+	U2P_EYE_VRT = 0,
-+	U2P_EYE_TERM,
-+	U2P_EFUSE_EN,
-+	U2P_EFUSE_INTR,
-+	U2P_DISCTH,
-+	U2P_PRE_EMPHASIS,
-+};
-+
-+enum u3_phy_params {
-+	U3P_EFUSE_EN = 0,
-+	U3P_EFUSE_INTR,
-+	U3P_EFUSE_TX_IMP,
-+	U3P_EFUSE_RX_IMP,
-+};
-+
-+static const char *const u2_phy_files[] = {
-+	[U2P_EYE_VRT] = "vrt",
-+	[U2P_EYE_TERM] = "term",
-+	[U2P_EFUSE_EN] = "efuse",
-+	[U2P_EFUSE_INTR] = "intr",
-+	[U2P_DISCTH] = "discth",
-+	[U2P_PRE_EMPHASIS] = "preemph",
-+};
-+
-+static const char *const u3_phy_files[] = {
-+	[U3P_EFUSE_EN] = "efuse",
-+	[U3P_EFUSE_INTR] = "intr",
-+	[U3P_EFUSE_TX_IMP] = "tx-imp",
-+	[U3P_EFUSE_RX_IMP] = "rx-imp",
-+};
-+
-+static int u2_phy_params_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *fname = file_dentry(sf->file)->d_iname;
-+	struct u2phy_banks *u2_banks = &inst->u2_banks;
-+	void __iomem *com = u2_banks->com;
-+	u32 max = 0;
-+	u32 tmp = 0;
-+	u32 val = 0;
-+	int ret;
-+
-+	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (ret) {
-+	case U2P_EYE_VRT:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_VRT_SEL, tmp);
-+		max = FIELD_MAX(PA1_RG_VRT_SEL);
-+		break;
-+
-+	case U2P_EYE_TERM:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_TERM_SEL, tmp);
-+		max = FIELD_MAX(PA1_RG_TERM_SEL);
-+		break;
-+
-+	case U2P_EFUSE_EN:
-+		if (u2_banks->misc) {
-+			tmp = readl(u2_banks->misc + U3P_MISC_REG1);
-+			max = 1;
-+		}
-+
-+		val = !!(tmp & MR1_EFUSE_AUTO_LOAD_DIS);
-+		break;
-+
-+	case U2P_EFUSE_INTR:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_INTR_CAL, tmp);
-+		max = FIELD_MAX(PA1_RG_INTR_CAL);
-+		break;
-+
-+	case U2P_DISCTH:
-+		tmp = readl(com + U3P_USBPHYACR6);
-+		val = FIELD_GET(PA6_RG_U2_DISCTH, tmp);
-+		max = FIELD_MAX(PA6_RG_U2_DISCTH);
-+		break;
-+
-+	case U2P_PRE_EMPHASIS:
-+		tmp = readl(com + U3P_USBPHYACR6);
-+		val = FIELD_GET(PA6_RG_U2_PRE_EMP, tmp);
-+		max = FIELD_MAX(PA6_RG_U2_PRE_EMP);
-+		break;
-+
-+	default:
-+		seq_printf(sf, "invalid, %d\n", ret);
-+		break;
-+	}
-+
-+	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-+
-+	return 0;
-+}
-+
-+static int u2_phy_params_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, u2_phy_params_show, inode->i_private);
-+}
-+
-+static ssize_t u2_phy_params_write(struct file *file, const char __user *ubuf,
-+				   size_t count, loff_t *ppos)
-+{
-+	const char *fname = file_dentry(file)->d_iname;
-+	struct seq_file *sf = file->private_data;
-+	struct mtk_phy_instance *inst = sf->private;
-+	struct u2phy_banks *u2_banks = &inst->u2_banks;
-+	void __iomem *com = u2_banks->com;
-+	ssize_t rc;
-+	u32 val;
-+	int ret;
-+
-+	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
-+	if (rc)
-+		return rc;
-+
-+	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
-+	if (ret < 0)
-+		return (ssize_t)ret;
-+
-+	switch (ret) {
-+	case U2P_EYE_VRT:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_VRT_SEL, val);
-+		break;
-+
-+	case U2P_EYE_TERM:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_TERM_SEL, val);
-+		break;
-+
-+	case U2P_EFUSE_EN:
-+		if (u2_banks->misc)
-+			mtk_phy_update_field(u2_banks->misc + U3P_MISC_REG1,
-+					     MR1_EFUSE_AUTO_LOAD_DIS, !!val);
-+		break;
-+
-+	case U2P_EFUSE_INTR:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_INTR_CAL, val);
-+		break;
-+
-+	case U2P_DISCTH:
-+		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_DISCTH, val);
-+		break;
-+
-+	case U2P_PRE_EMPHASIS:
-+		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_PRE_EMP, val);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations u2_phy_fops = {
-+	.open = u2_phy_params_open,
-+	.write = u2_phy_params_write,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+};
-+
-+static void u2_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
-+{
-+	u32 count = ARRAY_SIZE(u2_phy_files);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		debugfs_create_file(u2_phy_files[i], 0644, inst->dbgfs, inst, &u2_phy_fops);
-+}
-+
-+static int u3_phy_params_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *fname = file_dentry(sf->file)->d_iname;
-+	struct u3phy_banks *u3_banks = &inst->u3_banks;
-+	u32 val = 0;
-+	u32 max = 0;
-+	u32 tmp;
-+	int ret;
-+
-+	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (ret) {
-+	case U3P_EFUSE_EN:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_RSV);
-+		val = !!(tmp & P3D_RG_EFUSE_AUTO_LOAD_DIS);
-+		max = 1;
-+		break;
-+
-+	case U3P_EFUSE_INTR:
-+		tmp = readl(u3_banks->phya + U3P_U3_PHYA_REG0);
-+		val = FIELD_GET(P3A_RG_IEXT_INTR, tmp);
-+		max = FIELD_MAX(P3A_RG_IEXT_INTR);
-+		break;
-+
-+	case U3P_EFUSE_TX_IMP:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL0);
-+		val = FIELD_GET(P3D_RG_TX_IMPEL, tmp);
-+		max = FIELD_MAX(P3D_RG_TX_IMPEL);
-+		break;
-+
-+	case U3P_EFUSE_RX_IMP:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL1);
-+		val = FIELD_GET(P3D_RG_RX_IMPEL, tmp);
-+		max = FIELD_MAX(P3D_RG_RX_IMPEL);
-+		break;
-+
-+	default:
-+		seq_printf(sf, "invalid, %d\n", ret);
-+		break;
-+	}
-+
-+	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-+
-+	return 0;
-+}
-+
-+static int u3_phy_params_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, u3_phy_params_show, inode->i_private);
-+}
-+
-+static ssize_t u3_phy_params_write(struct file *file, const char __user *ubuf,
-+				   size_t count, loff_t *ppos)
-+{
-+	const char *fname = file_dentry(file)->d_iname;
-+	struct seq_file *sf = file->private_data;
-+	struct mtk_phy_instance *inst = sf->private;
-+	struct u3phy_banks *u3_banks = &inst->u3_banks;
-+	void __iomem *phyd = u3_banks->phyd;
-+	ssize_t rc;
-+	u32 val;
-+	int ret;
-+
-+	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
-+	if (rc)
-+		return rc;
-+
-+	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
-+	if (ret < 0)
-+		return (ssize_t)ret;
-+
-+	switch (ret) {
-+	case U3P_EFUSE_EN:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_RSV,
-+				     P3D_RG_EFUSE_AUTO_LOAD_DIS, !!val);
-+		break;
-+
-+	case U3P_EFUSE_INTR:
-+		mtk_phy_update_field(u3_banks->phya + U3P_U3_PHYA_REG0, P3A_RG_IEXT_INTR, val);
-+		break;
-+
-+	case U3P_EFUSE_TX_IMP:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_TX_IMPEL, val);
-+		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_FORCE_TX_IMPEL);
-+		break;
-+
-+	case U3P_EFUSE_RX_IMP:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_RX_IMPEL, val);
-+		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_FORCE_RX_IMPEL);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations u3_phy_fops = {
-+	.open = u3_phy_params_open,
-+	.write = u3_phy_params_write,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+};
-+
-+static void u3_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
-+{
-+	u32 count = ARRAY_SIZE(u3_phy_files);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		debugfs_create_file(u3_phy_files[i], 0644, inst->dbgfs, inst, &u3_phy_fops);
-+}
-+
-+static int tphy_type_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *type;
-+
-+	switch (inst->type) {
-+	case PHY_TYPE_USB2:
-+		type = "USB2";
-+		break;
-+	case PHY_TYPE_USB3:
-+		type = "USB3";
-+		break;
-+	case PHY_TYPE_PCIE:
-+		type = "PCIe";
-+		break;
-+	case PHY_TYPE_SGMII:
-+		type = "SGMII";
-+		break;
-+	case PHY_TYPE_SATA:
-+		type = "SATA";
-+		break;
-+	default:
-+		type = "";
-+	}
-+
-+	seq_printf(sf, "%s\n", type);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(tphy_type);
-+
-+static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
-+{
-+	char name[16];
-+
-+	snprintf(name, sizeof(name) - 1, "phy.%d", inst->index);
-+	inst->dbgfs = debugfs_create_dir(name, tphy->dbgfs_root);
-+
-+	debugfs_create_file("type", 0444, inst->dbgfs, inst, &tphy_type_fops);
-+
-+	switch (inst->type) {
-+	case PHY_TYPE_USB2:
-+		u2_phy_dbgfs_files_create(inst);
-+		break;
-+	case PHY_TYPE_USB3:
-+	case PHY_TYPE_PCIE:
-+		u3_phy_dbgfs_files_create(inst);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
-+{
-+	debugfs_remove_recursive(inst->dbgfs);
-+	inst->dbgfs = NULL;
-+}
-+
-+static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
-+{
-+	tphy->dbgfs_root = debugfs_create_dir(dev_name(tphy->dev), phy_debug_root);
-+}
-+
-+static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
-+{
-+	debugfs_remove_recursive(tphy->dbgfs_root);
-+	tphy->dbgfs_root = NULL;
-+}
-+
-+#else
-+
-+static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
-+{}
-+
-+static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
-+{}
-+
-+static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
-+{}
-+
-+static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
-+{}
-+
-+#endif
-+
- static void hs_slew_rate_calibrate(struct mtk_tphy *tphy,
- 	struct mtk_phy_instance *instance)
- {
-@@ -1032,6 +1417,8 @@ static int mtk_phy_init(struct phy *phy)
- 		return -EINVAL;
- 	}
- 
-+	tphy_debugfs_init(tphy, instance);
-+
- 	return 0;
- }
- 
-@@ -1068,6 +1455,8 @@ static int mtk_phy_exit(struct phy *phy)
- 	struct mtk_phy_instance *instance = phy_get_drvdata(phy);
- 	struct mtk_tphy *tphy = dev_get_drvdata(phy->dev.parent);
- 
-+	tphy_debugfs_exit(instance);
-+
- 	if (instance->type == PHY_TYPE_USB2)
- 		u2_phy_instance_exit(tphy, instance);
- 
-@@ -1295,15 +1684,29 @@ static int mtk_tphy_probe(struct platform_device *pdev)
- 	}
- 
- 	provider = devm_of_phy_provider_register(dev, mtk_phy_xlate);
-+	if (IS_ERR(provider))
-+		return dev_err_probe(dev, PTR_ERR(provider), "probe failed\n");
-+
-+	tphy_debugfs_root_create(tphy);
-+	return 0;
- 
--	return PTR_ERR_OR_ZERO(provider);
- put_child:
- 	of_node_put(child_np);
- 	return retval;
- }
- 
-+static int mtk_tphy_remove(struct platform_device *pdev)
-+{
-+	struct mtk_tphy *tphy;
-+
-+	tphy = platform_get_drvdata(pdev);
-+	tphy_debugfs_root_remove(tphy);
-+	return 0;
-+}
-+
- static struct platform_driver mtk_tphy_driver = {
- 	.probe		= mtk_tphy_probe,
-+	.remove		= mtk_tphy_remove,
- 	.driver		= {
- 		.name	= "mtk-tphy",
- 		.of_match_table = mtk_tphy_id_table,
--- 
-2.18.0
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
