@@ -2,99 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C3A65CD0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302FD65CD77
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbjADGZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S233497AbjADHEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjADGYZ (ORCPT
+        with ESMTP id S230404AbjADHE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:24:25 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019917419;
-        Tue,  3 Jan 2023 22:24:24 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nn01b119Cz4f3nGH;
-        Wed,  4 Jan 2023 14:24:19 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgDnnbGOG7Vju3lKBA--.23788S15;
-        Wed, 04 Jan 2023 14:24:21 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-        ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     hch@lst.de, john.garry@huawei.com, jack@suse.cz
-Subject: [PATCH v2 13/13] blk-mq: correct stale comment of .get_budget
-Date:   Wed,  4 Jan 2023 22:22:59 +0800
-Message-Id: <20230104142259.2673013-14-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
-References: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
+        Wed, 4 Jan 2023 02:04:29 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AC311A15
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:04:28 -0800 (PST)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nn0tD261wznTyg;
+        Wed,  4 Jan 2023 15:03:00 +0800 (CST)
+Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 15:04:26 +0800
+Subject: Re: [bug-report] possible performance problem in ret_to_user_from_irq
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <7ecb8f3c-2aeb-a905-0d4a-aa768b9649b5@huawei.com>
+ <Y7P+MjPNA6Tg8JBr@shell.armlinux.org.uk>
+ <50a5ebdb-4107-26cc-a2f6-da551d99ff38@kernel.dk>
+ <Y7Q88aBpxfWRqzTe@shell.armlinux.org.uk>
+ <1ecb9b0c-1103-650a-e32a-93110466b2ae@kernel.dk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Hui Tang <tanghui20@huawei.com>
+Message-ID: <36320fa5-83e7-daf8-0c8b-9ae8e9561258@huawei.com>
+Date:   Wed, 4 Jan 2023 15:04:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDnnbGOG7Vju3lKBA--.23788S15
-X-Coremail-Antispam: 1UD129KBjvJXoW7CryrWr47uF1kXw43Jr45trb_yoW8Ar1xpr
-        ZxKrWYkr4jqryDXFyfAa17JanakanFqF9xJr1ftw1Fy3W3CrZ7Xr48K345Ca18AFZaka9x
-        ZrsF9r90qws3u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
-        FVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3w
-        A2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE
-        3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr2
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUIL05UUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+In-Reply-To: <1ecb9b0c-1103-650a-e32a-93110466b2ae@kernel.dk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.54]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 88022d7201e96 ("blk-mq: don't handle failure in .get_budget")
-remove BLK_STS_RESOURCE return value and we only check if we can get
-the budget from .get_budget() now.
-Correct stale comment that ".get_budget() returns BLK_STS_NO_RESOURCE"
-to ".get_budget() fails to get the budget".
 
-Fixes: 88022d7201e9 ("blk-mq: don't handle failure in .get_budget")
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- block/blk-mq-sched.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-index ae40cdb7a383..06b312c69114 100644
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -81,7 +81,7 @@ static bool blk_mq_dispatch_hctx_list(struct list_head *rq_list)
- /*
-  * Only SCSI implements .get_budget and .put_budget, and SCSI restarts
-  * its queue by itself in its completion handler, so we don't need to
-- * restart queue if .get_budget() returns BLK_STS_NO_RESOURCE.
-+ * restart queue if .get_budget() fails to get the budget.
-  *
-  * Returns -EAGAIN if hctx->dispatch was found non-empty and run_work has to
-  * be run again.  This is necessary to avoid starving flushes.
-@@ -209,7 +209,7 @@ static struct blk_mq_ctx *blk_mq_next_ctx(struct blk_mq_hw_ctx *hctx,
- /*
-  * Only SCSI implements .get_budget and .put_budget, and SCSI restarts
-  * its queue by itself in its completion handler, so we don't need to
-- * restart queue if .get_budget() returns BLK_STS_NO_RESOURCE.
-+ * restart queue if .get_budget() fails to get the budget.
-  *
-  * Returns -EAGAIN if hctx->dispatch was found non-empty and run_work has to
-  * be run again.  This is necessary to avoid starving flushes.
--- 
-2.30.0
+On 2023/1/3 22:59, Jens Axboe wrote:
+> On 1/3/23 7:34?AM, Russell King (Oracle) wrote:
+>> On Tue, Jan 03, 2023 at 07:25:26AM -0700, Jens Axboe wrote:
+>>> On 1/3/23 3:06?AM, Russell King (Oracle) wrote:
+>>>> On Mon, Dec 26, 2022 at 04:45:20PM +0800, Hui Tang wrote:
+>>>>> hi folks.
+>>>>>
+>>>>> I found a performance problem which is introduced by commit
+>>>>> 32d59773da38 ("arm: add support for TIF_NOTIFY_SIGNAL").
+>>>>> After the commit,  any bit in the range of 0..15 will cause
+>>>>> do_work_pending() to be invoked. More frequent do_work_pending()
+>>>>> invoked possible result in worse performance.
+>>>>>
+>>>>> Some of the tests I've done? as follows:
+>>>>> lmbench test			base		with patch
+>>>>> ./lat_ctx -P 1 -s 0  2		7.3167		11.04
+>>>>> ./lat_ctx -P 1 -s 16 2          8.0467		14.5367
+>>>>> ./lat_ctx -P 1 -s 64 2		7.8667		11.43
+>>>>> ./lat_ctx -P 1 -s 16 16		16.47		18.3667
+>>>>> ./lat_pipe -P 1			28.1671		44.7904
+>>>>>
+>>>>> libMicro-0.4.1 test		base		with patch
+>>>>> ./cascade_cond -E -C 200\
+>>>>>  -L -S -W -N "c_cond_1" -I 100	286.3333	358
+>>>>>
+>>>>> When I adjust test bit, the performance problem gone.
+>>>>> -	movs	r1, r1, lsl #16
+>>>>> +	ldr	r2, =#_TIF_WORK_MASK
+>>>>> +	tst	r1, r2
+>>>>>
+>>>>> Does anyone have a good suggestion for this problem?
+>>>>> should just test _TIF_WORK_MASK, as before?
+>>>>
+>>>> I think it should be fine - but I would suggest re-organising the
+>>>> TIF definitions so that those TIF bits that shouldn't trigger
+>>>> do_work_pending are not in the first 16 bits.
+>>>>
+>>>> Note that all four bits in _TIF_SYSCALL_WORK need to stay within
+>>>> an 8-bit even-bit-aligned range, so the value is suitable for an
+>>>> immediate assembly constant.
+>>>>
+>>>> I'd suggest moving the TIF definitions for 20 to 19, and 4..7 to
+>>>> 20..23, and then 8 to 4.
+>>>
+>>> Like this?
+>>>
+>>> diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
+>>> index aecc403b2880..7f092cb55a41 100644
+>>> --- a/arch/arm/include/asm/thread_info.h
+>>> +++ b/arch/arm/include/asm/thread_info.h
+>>> @@ -128,15 +128,16 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
+>>>  #define TIF_NEED_RESCHED	1	/* rescheduling necessary */
+>>>  #define TIF_NOTIFY_RESUME	2	/* callback before returning to user */
+>>>  #define TIF_UPROBE		3	/* breakpointed or singlestepping */
+>>> -#define TIF_SYSCALL_TRACE	4	/* syscall trace active */
+>>> -#define TIF_SYSCALL_AUDIT	5	/* syscall auditing active */
+>>> -#define TIF_SYSCALL_TRACEPOINT	6	/* syscall tracepoint instrumentation */
+>>> -#define TIF_SECCOMP		7	/* seccomp syscall filtering active */
+>>> -#define TIF_NOTIFY_SIGNAL	8	/* signal notifications exist */
+>>> +#define TIF_NOTIFY_SIGNAL	4	/* signal notifications exist */
+>>>
+>>>  #define TIF_USING_IWMMXT	17
+>>>  #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
+>>> -#define TIF_RESTORE_SIGMASK	20
+>>> +#define TIF_RESTORE_SIGMASK	19
+>>> +#define TIF_SYSCALL_TRACE	20	/* syscall trace active */
+>>> +#define TIF_SYSCALL_AUDIT	21	/* syscall auditing active */
+>>> +#define TIF_SYSCALL_TRACEPOINT	22	/* syscall tracepoint instrumentation */
+>>> +#define TIF_SECCOMP		23	/* seccomp syscall filtering active */
+>>> +
+>>>
+>>>  #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+>>>  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+>>
+>> Yep, LGTM, thanks.
+>
+> Hui Tang, can you give it a whirl? Just checked and it applies to
+> 5.10-stable as well, just with a slight offset.
 
+With the latest patch, the testcase rusults shown in the 'new patch' column.
+I also retested previous commit of 32d59773da38, the results shown in the 'base' column.
+
+lmbench test                base        32d59773da38  	new patch
+./lat_ctx -P 1 -s 0  2      8.04          11.04		8.25
+./lat_ctx -P 1 -s 16 2      9.08          14.5367     	9.26
+./lat_ctx -P 1 -s 64 2      8.78          11.43		8.71
+./lat_ctx -P 1 -s 16 16     17.22         18.3667     	17.32
+./lat_pipe -P 1             43.5021       44.7904     	41.3729
+
+libMicro-0.4.1 test        	  base  32d59773da38    new patch
+./cascade_cond -E -C 200\
+  -L -S -W -N "c_cond_1" -I 100    281    358     	 281
+
+The performance problem also seem to gone with the latest patch, thanks.
