@@ -2,137 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EB965D5D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C566E65D59E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 15:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239557AbjADOfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 09:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S234735AbjADO3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 09:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239556AbjADOfT (ORCPT
+        with ESMTP id S233142AbjADO3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:35:19 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6BE39FBF;
-        Wed,  4 Jan 2023 06:35:15 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-14fb3809eaeso34051467fac.1;
-        Wed, 04 Jan 2023 06:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zB+vRGMvvASIB5FujPNRSjnu/+QE/GLU5nqwmEXwDCk=;
-        b=mGKZXEGIWCYErVLo5gZNoIHd62FHkktA36fKyP2jKsCZWJZ7biZepb8vtiQ/v/B3HY
-         MM//PuBNKbeGhf8htKi4KsxYY+L+RzLyYbUSczkTaIoyhy60pqqOIo6/jjiwNKm69F8v
-         PwrP4w8oIWa5BWCqwasZMrf1Xj0ctq8Oic9T1583P5XpMWFSol5pGOPk14mhNJGxBV9G
-         rHc7aPg5glTmL3undODJcJvij81q1GHzh1bp5uIvp5NimvarjU5R9DAyaM0FCI8cvIMG
-         Yx+yBeUGSFK2IBnlODPCrz3SqF8OuVcEWoeNP6z+/uRqX+nNRbwT/C8Tj972pdyDo8Nl
-         iKhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zB+vRGMvvASIB5FujPNRSjnu/+QE/GLU5nqwmEXwDCk=;
-        b=Z99IocEJhpYhIQiARFkuIry9zBT+Prc6/PxYmtFTG7v8TbweU2WP+BIi9Ga664/V4i
-         2ev4ER0jZ2CDhdX9KBDAZ3CoRGXE4hEo841jzJpo6g/DsxhnK1EquTDMLtXStQq6GycY
-         bF1QV3i/N0UZsgWQxSqCGVwpjGq2yiC66xA6U6TMs0CI1RW7nJGhYvYS7CUXXbOiZFGq
-         VRvi7rCyX5XwgWOnoXWb/4/hX5hB45I7f+BLwxNkhb1YsxwiIRpVJ6q0N+TzTOD13Lbm
-         XcoMkfEoOZmeAHYuHgb4Y6rqKOPdNxY6XSUUVjRO/fCPXLuk4bZhckxc/ninWv+bCCrc
-         u5KQ==
-X-Gm-Message-State: AFqh2kqRDxeCjBGFda9XYLJ/jDkKwlr4hZBD6hc64iqSNVF8NuaaHITo
-        EpVKlCSuSqgClMu9YgTt0wkz+HJcpEIgh/PaZ9o=
-X-Google-Smtp-Source: AMrXdXthZjoFH2Z/y+TKvd6b7bmn6ZTqN4X5a6sl/E9Q/d2q2OP73JbqQWqOvQAkSsrPczN5keTwc53e1FiR9xp4BWg=
-X-Received: by 2002:a05:6870:c59c:b0:150:d9aa:4011 with SMTP id
- ba28-20020a056870c59c00b00150d9aa4011mr466653oab.96.1672842914879; Wed, 04
- Jan 2023 06:35:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20230103184308.511448-1-dragos.panait@windriver.com>
- <20230103184308.511448-2-dragos.panait@windriver.com> <Y7Vz8mm0X+1h844b@kroah.com>
- <a8c6859f-5876-08cf-5949-ecf88e6bb528@amd.com>
-In-Reply-To: <a8c6859f-5876-08cf-5949-ecf88e6bb528@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 4 Jan 2023 09:35:03 -0500
-Message-ID: <CADnq5_Ons+yMyGxcSaFaOb5uNXooHgH_4N=ThHOGYaW9Pb_Q8A@mail.gmail.com>
-Subject: Re: [PATCH 4.19 1/1] drm/amdkfd: Check for null pointer after calling kmemdup
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dragos-Marian Panait <dragos.panait@windriver.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        David Zhou <David1.Zhou@amd.com>,
-        amd-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 09:29:09 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BFE1743A;
+        Wed,  4 Jan 2023 06:29:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672842548; x=1704378548;
+  h=from:to:cc:subject:date:message-id;
+  bh=LjoN4gPM2Xqx189nas75Dz8thY4msPK/MRpkF+8Sm0w=;
+  b=EroMluxrM0S4a6LWbRiVdkBK/rnVocJG5BTDc+SQKTFH3ydf3YnNmU20
+   wdu7RfEE1r+oSC8fQ96mYFYqzQ6R4bCWZ3D1Zc218sDa5R85BNIZT2gJK
+   i6OwiSqAFc+XYCRLdurBTASHCWd9+YZ9aFkSHaJtVMMd4lIf8gCfz33L/
+   dj++vSwwC7KnqyfOt/RJkbdMm707oisxeP5J5IZJj0X7AxDjZlgdlKr4I
+   VwH8KwxGSIjyj5lluHSz4s1/IFbxxaD8AtSvDrmasKkOsRFAXsNQ8I2hE
+   +O8Nky3Dxrk/2f1CHMbQs4qWJ+B/f0kHA70BYrqME1KdQ3L7KLkct0eii
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="319652435"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="319652435"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:29:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="762684935"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="762684935"
+Received: from power-sh.sh.intel.com ([10.239.183.7])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Jan 2023 06:29:06 -0800
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] powercap: intel_rapl: add support for METEORLAKE
+Date:   Wed,  4 Jan 2023 22:36:01 +0800
+Message-Id: <20230104143602.23792-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 8:23 AM Christian K=C3=B6nig <christian.koenig@amd.c=
-om> wrote:
->
-> Am 04.01.23 um 13:41 schrieb Greg KH:
-> > On Tue, Jan 03, 2023 at 08:43:08PM +0200, Dragos-Marian Panait wrote:
-> >> From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> >>
-> >> [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
-> >>
-> >> As the possible failure of the allocation, kmemdup() may return NULL
-> >> pointer.
-> >> Therefore, it should be better to check the 'props2' in order to preve=
-nt
-> >> the dereference of NULL pointer.
-> >>
-> >> Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
-> >> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> >> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> >> Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> >> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> >> Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
-> >> ---
-> >>   drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> > For obvious reasons, I can't take a patch for 4.19.y and not newer
-> > kernel releases, right?
-> >
-> > Please provide backports for all kernels if you really need to see this
-> > merged.  And note, it's not a real bug at all, and given that a CVE was
-> > allocated for it that makes me want to even more reject it to show the
-> > whole folly of that mess.
->
-> Well as far as I can see this is nonsense to back port.
->
-> The code in question is only used only once during driver load and then
-> never again, that exactly this allocation fails while tons of other are
-> made before and after is extremely unlikely.
->
-> It's nice to have it fixed in newer kernels, but not worth a backport
-> and certainly not stuff for a CVE.
+Add METEORLAKE to the list of supported processor models in the Intel
+RAPL power capping driver.
 
-It's already fixed in Linus' tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3Dabfaf0eee97925905e742aa3b0b72e04a918fa9e
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/powercap/intel_rapl_common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Alex
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 26d00b1853b4..ca6ff27b4384 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1113,6 +1113,8 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&rapl_defaults_core),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,		&rapl_defaults_core),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
+ 	X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,		&rapl_defaults_core),
+ 
+-- 
+2.25.1
 
->
-> Regards,
-> Christian.
->
->
-> >
-> > thanks,
-> >
-> > greg k-h
->
