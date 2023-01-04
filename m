@@ -2,198 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271BE65D3A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850DE65D3A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjADNCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S239135AbjADNCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbjADNCd (ORCPT
+        with ESMTP id S233916AbjADNCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:02:33 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433DB1006F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:02:32 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304BSjNk022820;
-        Wed, 4 Jan 2023 14:02:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=hgiH8ltvo3OuQOLuGkA7ONnzC2YMWMCv1OtKzJek1ws=;
- b=6bsxQLK2yftNt0pXES8+NJ6SrqExZsfawwjh1CsuiLRABNICsHIOWX3fZKSlNrgzGSbK
- b8qFBdDz6c/5r+YuFe7RQe69XgkFIQPpkbmz6cUVSsg5eGyV/sRBwv321KqnD2JBmyw1
- oTXxS5v2uaL2Zoo4YiTo6r/a2kCyfVjZrF7r2sLyRSPmtkpkPx5FcyHMwhbRYodsZvhU
- pRyD1NF9httxSODfZxO61uXUEslqajhOvv8YO0AG/uoXwXcAdXxfuMisM8ilXdPirFkm
- WWxst5NNeKzTRsVbDzwucHl75y3CULL8Fwh1IupMteVPZYUGiFFi72kzK9nfL/t32aYv 6g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mtda6apaq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 14:02:25 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DE27710002A;
-        Wed,  4 Jan 2023 14:02:24 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D80C521D387;
-        Wed,  4 Jan 2023 14:02:24 +0100 (CET)
-Received: from [10.48.0.157] (10.48.0.157) by SHFDAG1NODE3.st.com
- (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 4 Jan
- 2023 14:02:21 +0100
-Message-ID: <5d7dac5f-2a39-316f-2123-fe2e7808eec0@foss.st.com>
-Date:   Wed, 4 Jan 2023 14:02:21 +0100
+        Wed, 4 Jan 2023 08:02:36 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7B6167EF;
+        Wed,  4 Jan 2023 05:02:34 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t15so23994020wro.9;
+        Wed, 04 Jan 2023 05:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MWjOlCqMwzQz/Hg94TN2KxI6imNafL+AVNRZZCemGVk=;
+        b=TWF80AnTeMUmdMxOuazU8OayeCgApz3GNHYOaziZhvjkJ6R8P7mWJATQR9jXBbT2Al
+         82xMyz4BGlqoNTaH8c+9tVjN9u8jjbOfnYc3M10cO33OdPc8ylLgfTpe6EkamBe77KwN
+         Ns4RcWCrE4EexHFGh0d6/tbSBcvj8cpgiERYeN3Ps9TO3etSGxqwweCVn/HZn+Zw9aLz
+         MYLebHrclSGhOw5mDlGjQmxell1WoAZbWoXBVH0JoIVXU0oz8X+3kEgzPYI3zYtzdlwP
+         9uDCNIoKi3Z9et1m5pzX1jSwb6ZbSLkn5ie/gtsqvhWaQwNVu3A1uC2xTK1rusjXqZvT
+         YvJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MWjOlCqMwzQz/Hg94TN2KxI6imNafL+AVNRZZCemGVk=;
+        b=nVjvlVYQtNgshnPWiG6R8hiiLdb9BdaMXQ6BGoCWl96NvZeMG8qYRGvPmCqnGFiqTJ
+         I2bjYo9wCLU5Q3WvH1Hs4o2z7It7vIX3C/u/T8YGPS4WFPpyqB6J0cvSRHdoP3zasfmu
+         qbUdxoKyx2VqBpYYhvtXuCKI40lwAYVMvmKEJl/ZKG1wlxvOPzjlzVkYVhQeUTBribZy
+         4zOY3zYCbR6vB5iEI1JyYl0/exSROzftrnyDbcyEUKYVrxwG7PZRJvaAHfVt7eMqivc1
+         BfRrDM6DiNgnizt5cIw1cazQsHFqbOh7j/mf2snyHUAnbFkwcsRV6Yhrs4dSRijutq4B
+         G+hg==
+X-Gm-Message-State: AFqh2koU39eGeeQzFJ7EQaF760GCCwCV/KPH/AdIg0XRfOH5GVgZ7Ayo
+        5l3KZZ0ocgv5jJbpHQZGWCI=
+X-Google-Smtp-Source: AMrXdXtoldOFg6N0VCr5Vo24GCpxEqGx4BjSLHXShIJ3HiTr6wpi7qB3NEhQ6i6p2636C/XUGp6BhQ==
+X-Received: by 2002:a5d:5612:0:b0:279:d235:790c with SMTP id l18-20020a5d5612000000b00279d235790cmr22354110wrv.42.1672837352461;
+        Wed, 04 Jan 2023 05:02:32 -0800 (PST)
+Received: from suse.localnet (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
+        by smtp.gmail.com with ESMTPSA id e13-20020adfe7cd000000b0027f9f073211sm25104720wrn.65.2023.01.04.05.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 05:02:31 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Ira Weiny <ira.weiny@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 2/4] fs/sysv: Change the signature of dir_get_page()
+Date:   Wed, 04 Jan 2023 14:02:30 +0100
+Message-ID: <1840126.tdWV9SEqCh@suse>
+In-Reply-To: <202301041814.3Lbh2QfK-lkp@intel.com>
+References: <202301041814.3Lbh2QfK-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 3/3] nvmem: stm32: detect bsec pta presence for
- STM32MP15x
-Content-Language: en-US
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-CC:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Lionel DEBIEVE <lionel.debieve@foss.st.com>,
-        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
-        Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230103140521.187678-1-patrick.delaunay@foss.st.com>
- <20230103150515.v4.3.I59210046e368cfc22bd3cca2afe1653674f8ece8@changeid>
- <CAN5uoS-dXLSs9DiJFBTAOJbPZPp4BUfxqZ7ND_irzBbUEwaUHg@mail.gmail.com>
-From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
-In-Reply-To: <CAN5uoS-dXLSs9DiJFBTAOJbPZPp4BUfxqZ7ND_irzBbUEwaUHg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On mercoled=EC 4 gennaio 2023 12:59:24 CET Dan Carpenter wrote:
+> Hi Fabio,
+>=20
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:  =20
+> https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-sy=
+sv-U
+> se-the-offset_in_page-helper/20221231-155850 base: =20
+> git://git.infradead.org/users/hch/configfs.git for-next
+> patch link:  =20
+> https://lore.kernel.org/r/20221231075717.10258-3-fmdefrancesco%40gmail.com
+> patch subject: [PATCH 2/4] fs/sysv: Change the signature of dir_get_page()
+> config: xtensa-randconfig-m031-20230101
+> compiler: xtensa-linux-gcc (GCC) 12.1.0
+>=20
+> If you fix the issue, kindly add following tag where applicable
+>=20
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+>=20
+> smatch warnings:
+> fs/sysv/dir.c:190 sysv_add_link() warn: passing zero to 'PTR_ERR'
+>=20
+> vim +/PTR_ERR +190 fs/sysv/dir.c
+>=20
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  174  int=20
+sysv_add_link(struct
+> dentry *dentry, struct inode *inode) ^1da177e4c3f41 Linus Torvalds      =
+=20
+> 2005-04-16  175  {
+> 2b0143b5c986be David Howells         2015-03-17  176  	struct inode *dir=
+=20
+=3D
+> d_inode(dentry->d_parent); ^1da177e4c3f41 Linus Torvalds        2005-04-1=
+6=20
+> 177  	const char * name =3D dentry->d_name.name; ^1da177e4c3f41 Linus=20
+Torvalds=20
+>       2005-04-16  178  	int namelen =3D dentry->d_name.len;=20
+^1da177e4c3f41
+> Linus Torvalds        2005-04-16  179  	struct page *page =3D NULL;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  180  	struct=20
+sysv_dir_entry
+> * de; ^1da177e4c3f41 Linus Torvalds        2005-04-16  181  =09
+unsigned long
+> npages =3D dir_pages(dir); ^1da177e4c3f41 Linus Torvalds        2005-04-1=
+6 =20
+182
+>  	unsigned long n; ^1da177e4c3f41 Linus Torvalds        2005-04-16 =20
+183=20
+> 	char *kaddr;
+> 26a6441aadde86 Nicholas Piggin       2007-10-16  184  	loff_t pos;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  185  	int err;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  186
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  187  	/* We take care=20
+of
+> directory expansion in the same loop */ ^1da177e4c3f41 Linus Torvalds    =
+  =20
+> 2005-04-16  188  	for (n =3D 0; n <=3D npages; n++) { 4b8a9c0afda16b Fabi=
+o M. De
+> Francesco 2022-12-31  189  		kaddr =3D dir_get_page(dir, n, &page);
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16 @190  		err =3D=20
+PTR_ERR(page);
+>=20
+> This "err" assignment is a dead store (pointless/never used).
 
-On 1/4/23 10:30, Etienne Carriere wrote:
-> Hi Patrick,
->
-> On Tue, 3 Jan 2023 at 15:08, Patrick Delaunay
-> <patrick.delaunay@foss.st.com> wrote:
->> On STM32MP15x SoC, the SMC backend is optional when OP-TEE is used;
->> the PTA BSEC should be used as it is done on STM32MP13x platform,
->> but the BSEC SMC can be also used: it is a legacy mode in OP-TEE,
->> not recommended but used in previous OP-TEE firmware.
->>
->> The presence of OP-TEE is dynamically detected in STM32MP15x device tree
->> and the supported NVMEM backend is dynamically detected:
->> - PTA with stm32_bsec_pta_find
->> - SMC with stm32_bsec_check
->>
->> With OP-TEE but without PTA and SMC detection, the probe is deferred for
->> STM32MP15x devices.
->>
->> On STM32MP13x platform, only the PTA is supported with cfg->ta = true
->> and this detection is skipped.
->>
->> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
->> ---
->>
->> (no changes since v3)
->>
->> Changes in v3:
->> - use of_find_compatible_node in optee_presence_check function
->>    instead of of_find_node_by_path("/firmware/optee")
->>
->> Changes in v2:
->> - Added patch in the serie for BSEC PTA support on STM32MP15x
->>    with dynamic detection of OP-TEE presence and SMC support (legacy mode)
->>
->>   drivers/nvmem/stm32-romem.c | 33 +++++++++++++++++++++++++++++++--
->>   1 file changed, 31 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
->> index 2edc61925e52..1b90c78301fa 100644
->> --- a/drivers/nvmem/stm32-romem.c
->> +++ b/drivers/nvmem/stm32-romem.c
->> @@ -159,6 +159,31 @@ static int stm32_bsec_pta_write(void *context, unsigned int offset, void *buf,
->>          return stm32_bsec_optee_ta_write(priv->ctx, priv->lower, offset, buf, bytes);
->>   }
->>
->> +static bool stm32_bsec_smc_check(void)
->> +{
->> +       u32 val;
->> +       int ret;
->> +
->> +       /* check that the OP-TEE support the BSEC SMC (legacy mode) */
->> +       ret = stm32_bsec_smc(STM32_SMC_READ_SHADOW, 0, 0, &val);
->> +
->> +       return !ret;
->> +}
->> +
->> +static bool optee_presence_check(void)
->> +{
->> +       struct device_node *np;
->> +       bool tee_detected = false;
->> +
->> +       /* check that the OP-TEE node is present and available. */
->> +       np = of_find_compatible_node(NULL, NULL, "linaro,optee-tz");
->> +       if (np && of_device_is_available(np))
->> +               tee_detected = true;
->> +       of_node_put(np);
->> +
->> +       return tee_detected;
->> +}
->> +
->>   static int stm32_romem_probe(struct platform_device *pdev)
->>   {
->>          const struct stm32_romem_cfg *cfg;
->> @@ -195,10 +220,14 @@ static int stm32_romem_probe(struct platform_device *pdev)
->>          } else {
->>                  priv->cfg.size = cfg->size;
->>                  priv->lower = cfg->lower;
->> -               if (cfg->ta) {
->> +               if (cfg->ta || optee_presence_check()) {
->>                          rc = stm32_bsec_optee_ta_open(&priv->ctx);
->>                          /* wait for OP-TEE client driver to be up and ready */
->> -                       if (rc)
->> +                       if (rc == -EPROBE_DEFER) {
->> +                               /* BSEC PTA is required or SMC not ready */
->> +                               if (cfg->ta || !stm32_bsec_smc_check())
->> +                                       return -EPROBE_DEFER;
->> +                       } else if (rc)
-> Could you fix the logic? The sequence here fails to fallback to BSEC
-> SMC service if optee does not embed BSEC PTA service and optee driver
-> is probed before stm32_romem.
+Hi Dan,
+
+Thanks for catching it.
+I'll wait for comments on this series one or two more days and then delete=
+=20
+that assignment.
+
+Again thanks,
+
+=46abio
+
+> 4b8a9c0afda16b Fabio M. De Francesco 2022-12-31  191  		if=20
+(IS_ERR(kaddr))
+> 4b8a9c0afda16b Fabio M. De Francesco 2022-12-31  192  		=09
+return
+> PTR_ERR(kaddr); ^1da177e4c3f41 Linus Torvalds        2005-04-16  193  =09
+	de =3D
+> (struct sysv_dir_entry *)kaddr; 09cbfeaf1a5a67 Kirill A. Shutemov  =20
+> 2016-04-01  194  		kaddr +=3D PAGE_SIZE - SYSV_DIRSIZE;=20
+^1da177e4c3f41 Linus
+> Torvalds        2005-04-16  195  		while ((char *)de <=3D kaddr)=20
+{
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  196  		=09
+if (!de->inode)
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  197  		=09
+	goto got_it;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  198  		=09
+err =3D -EEXIST;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  199  		=09
+if
+> (namecompare(namelen, SYSV_NAMELEN, name, de->name)) ^1da177e4c3f41 Linus
+> Torvalds        2005-04-16  200  				goto=20
+out_page; ^1da177e4c3f41 Linus
+> Torvalds        2005-04-16  201  			de++;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  202  		}
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  203  	=09
+dir_put_page(page);
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  204  	}
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  205  	BUG();
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  206  	return -EINVAL;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  207
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  208  got_it:
+> 1023904333f9cb Fabio M. De Francesco 2022-12-31  209  	pos =3D=20
+page_offset(page)
+> + offset_in_page(de); ^1da177e4c3f41 Linus Torvalds        2005-04-16  21=
+0=20
+> 	lock_page(page); f4e420dc423148 Christoph Hellwig     2010-06-04 =20
+211  	err
+> =3D sysv_prepare_chunk(page, pos, SYSV_DIRSIZE); ^1da177e4c3f41 Linus Tor=
+valds=20
+>       2005-04-16  212  	if (err)
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  213  		goto=20
+out_unlock;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  214  	memcpy (de->name,=
+=20
+name,
+> namelen); ^1da177e4c3f41 Linus Torvalds        2005-04-16  215  	memset
+> (de->name + namelen, 0, SYSV_DIRSIZE - namelen - 2); ^1da177e4c3f41 Linus
+> Torvalds        2005-04-16  216  	de->inode =3D
+> cpu_to_fs16(SYSV_SB(inode->i_sb), inode->i_ino); 26a6441aadde86 Nicholas
+> Piggin       2007-10-16  217  	err =3D dir_commit_chunk(page, pos,
+> SYSV_DIRSIZE); 02027d42c3f747 Deepa Dinamani        2016-09-14  218=20
+> 	dir->i_mtime =3D dir->i_ctime =3D current_time(dir); ^1da177e4c3f41=20
+Linus
+> Torvalds        2005-04-16  219  	mark_inode_dirty(dir); ^1da177e4c3f41=20
+Linus
+> Torvalds        2005-04-16  220  out_page:
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  221  =09
+dir_put_page(page);
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  222  	return err;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  223  out_unlock:
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  224  =09
+unlock_page(page);
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  225  	goto out_page;
+> ^1da177e4c3f41 Linus Torvalds        2005-04-16  226  }
+>=20
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
 
-Yes, I will modify it...
 
 
-my patch is working only if OP-TEE is probed after BSEC NVMEM when RC = 
-defered
-
-
-stm32_bsec_smc_check() is  not called the OP-TEE is already porbed
-
-(not deferred) but TA is not integrated
-
-
->
-> Br,
-> etienne
->
->>                                  return rc;
->>                          rc = devm_add_action_or_reset(dev, stm32_bsec_optee_ta_close, priv->ctx);
->>                          if (rc) {
->> --
->> 2.25.1
->>
