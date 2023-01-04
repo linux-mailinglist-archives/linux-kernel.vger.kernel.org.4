@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A2765DCCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1CE65DCD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240136AbjADTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S240162AbjADTe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240137AbjADTeT (ORCPT
+        with ESMTP id S240138AbjADTey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:34:19 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C453D1C0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:34:17 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id z17-20020a25e311000000b00719e04e59e1so34887874ybd.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:34:17 -0800 (PST)
+        Wed, 4 Jan 2023 14:34:54 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322EC3C3B5
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:34:54 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 36so22928443pgp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:34:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1tPYYgfmJsbQWqu0ltxW4RY1Nkj1mo/Al1PbZ2zMD4Q=;
-        b=smJNk0zhuo1/1zHEXj0d6yRUmkqnDpfIx58BEn/cGg72LNn90pxpjarz3SeORF9+yR
-         yl478rY3Qppd5f2Y2rZddHE4v8a3gs+QAutJk1j+5azEWDoaxwtIegEqQuDJ3prj1Dnd
-         1SykFQVuvIO49v0UGRh5vXfggrpNq1r2pN7O6akJ9lVtiSpQ6r25tG99U4dkahMHP0fZ
-         ugdj2OGR8BNOj38eCHSjfyUB+X0SwCYD98iAle3qi1XqCvIJGo/NsOnerjHn262s7apJ
-         4n5Uq6j6d+L7QR9x+bLGU1VyjWUbIhmGiO8nuCF7RLGyL5gvU0COr4DthqITRqypavI+
-         /d9g==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hec4l6+at5WSRcm7OYvARniaVMgLC26qEPf8vcDcszw=;
+        b=lAfdpdRAWCHlsIepuddv34x9a8FqsGMAnXmLXaUtAv2nYJENBdHCf6oGBuVHkOjQjH
+         EDqn7eTzgEfaRUJoy1w7rl0Pe4T+iZhj/dp2m8DMo/s9BBdQaRm3+Tur4By66hSmxtR6
+         44IbGgoazsxg5JG7IkyHCUL1TFVLCRXWR/ludEle/oXzWhSL47e1blotcrmF9o17mHDX
+         mjXtkCBFpPdMOH4t3ePqxZ4eIynrgSnEZf1VIbIR1D17Zz3Di3acZ2KZ1xpV3X9Bata8
+         hXGoPEaQEpG1moN6GDs64l8VPW/u5i9rKgL8w41Y5ja256ZpPF0oc5aRU4yz0RQltWgH
+         2KEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1tPYYgfmJsbQWqu0ltxW4RY1Nkj1mo/Al1PbZ2zMD4Q=;
-        b=0ejT82eL57yts8jnfRFxlAQPkROcQuQryIsJVC8VFmSwy+fNJYx8hlLEZ2JKI27m27
-         EnZP/++eKHDXDRw9wtV6TY/8pcLLcj+jbpw3iDM+cB0B20J78yjgFIvyJiSWLknbSmmk
-         hen0PmSQ9R2x/L/I59PARLNZOqnDAt2mOl/H6abnx6KLBy1Jkr94IeIGikrcukR7WXA9
-         lAhGmlwRq5pln4a3otxG5ZEMVqfUj+0U8aEC4EKF13AcnlBGU0Vtp71gvy5WFZtp3uKn
-         2t/ZGI4D4ZoSDQP8fixm93X+LIhV7zx2tsjRRSFIsSEn1e2O8jFHhp4FgNpVRQGEyPzq
-         9dJg==
-X-Gm-Message-State: AFqh2krbFDyocA2pnHLE92BeHMNEi1YFwgj/lIZBbpzTtOOGNBfezJ5P
-        i3lVAmYAfV+2EIsSAHTpS5FfLrj8vyOjCXw=
-X-Google-Smtp-Source: AMrXdXudx83GP3Mrrft7oAK5KgZusnNPxKJ/c9Yu72lCZ4dQmJoXMT56KJYtoNZOE58Swk/uWBTV1OiO8Y3xHSU=
-X-Received: from jesussanp.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5f10])
- (user=jesussanp job=sendgmr) by 2002:a25:790d:0:b0:7b0:62c8:d02b with SMTP id
- u13-20020a25790d000000b007b062c8d02bmr433902ybc.272.1672860857141; Wed, 04
- Jan 2023 11:34:17 -0800 (PST)
-Date:   Wed,  4 Jan 2023 11:34:14 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230104193414.606905-1-jesussanp@google.com>
-Subject: [PATCH v2] perf: Add missing sys/types.h include
-From:   Jesus Sanchez-Palencia <jesussanp@google.com>
-To:     linux-perf-users@vger.kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        Jesus Sanchez-Palencia <jesussanp@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hec4l6+at5WSRcm7OYvARniaVMgLC26qEPf8vcDcszw=;
+        b=6XNGkdXebmqXsFj7hjbv8mrG8L22/V87xleZretD9hczG/QUzAmUOzab/v66A8EKfZ
+         CpyRTmnX+/TlVVygStWpFs4c02S4kdcOgjrA9vt3beKwbCqAN/3OCmRopviky6uC9aye
+         rGkEi3kgt5Rjv+zsIvhXCHhQ0aaLu8BX1V/s6KpNDDshWorvAbPCEQGXkd5capJRRkYz
+         SuXdSAfXTaaIITrlSIsx2s7JtQ4cgKYF/5UITwcV+BhwgiZ6pm66W3NUOyFwLl63A98T
+         QkufrVLz4sHyzl7HmnnYFDWtRseaK9/ULTHnolGQYMznd4DuX/ARU4vBe/fNYSrVxF6+
+         vSRg==
+X-Gm-Message-State: AFqh2kpjrUdPImN5eV5exXaiSDIv1+gWIugBKuQB+A0h3UncGc51sLt5
+        pdLSuRACb2Ucz3IJAeekLVhiXQ==
+X-Google-Smtp-Source: AMrXdXsy0gl5nkmrz2u2oeezJO6bgxcJOrlyv+1OHKLZ3HSm4tTUeMsCNRHvqfcfkmnVN/Li5pjVtw==
+X-Received: by 2002:aa7:8084:0:b0:574:8995:c0d0 with SMTP id v4-20020aa78084000000b005748995c0d0mr3883534pff.1.1672860893603;
+        Wed, 04 Jan 2023 11:34:53 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa78f18000000b0058134d2df41sm17961993pfr.146.2023.01.04.11.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 11:34:53 -0800 (PST)
+Date:   Wed, 4 Jan 2023 19:34:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paul Durrant <pdurrant@amazon.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v6 1/2] KVM: x86/cpuid: generalize
+ kvm_update_kvm_cpuid_base() and also capture limit
+Message-ID: <Y7XU2R0f3pCYF9uz@google.com>
+References: <20221220134053.15591-1-pdurrant@amazon.com>
+ <20221220134053.15591-2-pdurrant@amazon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220134053.15591-2-pdurrant@amazon.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +78,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all libc implementations define ssize_t as part of stdio.h like
-glibc does since the standard only requires this type to be defined by
-unistd.h and sys/types.h. For this reason the perf build is currently
-broken for toolchains based on uClibc, for instance.
+On Tue, Dec 20, 2022, Paul Durrant wrote:
+> A sunsequent patch will need to acquire the CPUID leaf range for emulated
+> Xen so explicitly pass the signature of the hypervisor we're interested in
+> to the new function. Also introduce a new kvm_hypervisor_cpuid structure
+> so we can neatly store both the base and limit leaf indices.
+> 
+> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+> ---
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Woodhouse <dwmw2@infradead.org>
+> 
+> v6:
+>  - New in this version
+> ---
+>  arch/x86/include/asm/kvm_host.h |  7 ++++++-
+>  arch/x86/kvm/cpuid.c            | 15 ++++++++-------
+>  2 files changed, 14 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index f35f1ff4427b..ff201ad35551 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -710,6 +710,11 @@ struct kvm_queued_exception {
+>  	bool has_payload;
+>  };
+>  
+> +struct kvm_hypervisor_cpuid {
+> +	u32 base;
+> +	u32 limit;
+> +};
 
-Include sys/types.h explicitly to fix that.
+Probably makes sense to place this above "struct kvm_vcpu_xen" right away to
+avoid the (very minor) churn.
 
-Fixes: 378ef0f5d9d7 ("perf build: Use libtraceevent from the system")
-Signed-off-by: Jesus Sanchez-Palencia <jesussanp@google.com>
----
- tools/perf/util/trace-event.h | 1 +
- 1 file changed, 1 insertion(+)
+>  struct kvm_vcpu_arch {
+>  	/*
+>  	 * rip and regs accesses must go through
+> @@ -826,7 +831,7 @@ struct kvm_vcpu_arch {
+>  
+>  	int cpuid_nent;
+>  	struct kvm_cpuid_entry2 *cpuid_entries;
+> -	u32 kvm_cpuid_base;
+> +	struct kvm_hypervisor_cpuid kvm_cpuid;
+>  
+>  	u64 reserved_gpa_bits;
+>  	int maxphyaddr;
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0b5bf013fcb8..2468720f8d84 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -180,12 +180,13 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
+>  	return 0;
+>  }
+>  
+> -static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
+> +static void kvm_update_hypervisor_cpuid(struct kvm_vcpu *vcpu, const char *hypervisor_signature,
 
-diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
-index add6c5d9531c..9b3cd79cca12 100644
---- a/tools/perf/util/trace-event.h
-+++ b/tools/perf/util/trace-event.h
-@@ -4,6 +4,7 @@
- 
- #include <stdbool.h>
- #include <stdio.h>
-+#include <sys/types.h>
- #include <linux/types.h>
- 
- struct evlist;
--- 
-2.39.0.314.g84b9a713c41-goog
+Please wrap.  The 80 char limit is a soft limit, but should still be honored unless
+there's a good reason to run over.
 
+I also vote to name the param "sig" to keep line lengths short.
+
+> +					struct kvm_hypervisor_cpuid *hypervisor_cpuid)
+
+Since the struct is a 64-bit value, what about making this a pure getter that
+returns a copy?
+
+static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
+							    const char *sig)
+{
+	struct kvm_hypervisor_cpuid cpuid = {};
+	struct kvm_cpuid_entry2 *entry;
+	u32 function;
+
+	for_each_possible_hypervisor_cpuid_base(cpuid.base) {
+		entry = kvm_find_cpuid_entry(vcpu, function);
+
+		if (entry) {
+			u32 signature[3];
+
+			signature[0] = entry->ebx;
+			signature[1] = entry->ecx;
+			signature[2] = entry->edx;
+
+			if (!memcmp(signature, sig, sizeof(signature))) {
+				cpuid.base = function;
+				cpuid.limit = entry->eax;
+				break;
+			}
+		}
+	}
+
+	return cpuid;
+}
+
+
+	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
+	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
