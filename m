@@ -2,128 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A8565DAED
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BAA65DAF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 18:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239854AbjADRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 12:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S235232AbjADRH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 12:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbjADRFH (ORCPT
+        with ESMTP id S240067AbjADRHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 12:05:07 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D434186E3;
-        Wed,  4 Jan 2023 09:05:06 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id y18-20020a0568301d9200b0067082cd4679so21117558oti.4;
-        Wed, 04 Jan 2023 09:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zfchq3z9RqrMHrMAPr0oOfboNargOdRcSf8XQTWDpFg=;
-        b=aqAoCHfZVbCfPwNUxAOSiiAUaDbAKlvAy+hptOI8dUL4ZJkNVfDTTujvDQ5ClVtVc2
-         PhAPMareQPJBuoLExdRAzYrWFZh4tR8c9YpSQnIOAnvL372EKcXMGZjJNW4csIoMK6d5
-         52PyQ2Dinxhh1LSaMnqfNHikPn1qOz6tuWyNnHat68Cc3ABW5iL1wJ7RXFgQI5XTsOF5
-         5QXfYyzLfnLoYcv/SgVyEQIVOWAeqsCYKFO5/Hy6WldWHkp599ivh8ZctxHRryl3tl8f
-         aJ3Gdox5KGwVYbw2CBCGtKE0sOkGdPbHpvMTBrKEgSR0vKyH8K+tOAhr4VO+4HO6XMW5
-         37kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zfchq3z9RqrMHrMAPr0oOfboNargOdRcSf8XQTWDpFg=;
-        b=d1/3VJS3zKAmvAVrih/oDpZFM0Y5jsH1i9Gr+8KG9OLJkfnMIvtfNFoZ21Em/ytY1i
-         AYk1sMH8yEFB37eXC2irJ0llLPH0EnIzJOFbrC2dDHILrZuFivDuvAwOfYUfdz44j1/N
-         8rJ/a+8WHwgrjy5yThmZ930U47MAhJgYhoUzIQgR4KxYNu6eCBPmZu0Swi2MoWtAyEIp
-         w934Tl24fptIp4+zaojLYAfCWTVOn6ZCyHJzxLaw3Xq2xqKSTp3PXDgnKuwAB40bIbFr
-         LmJW/B5nXTJfhoW5GJ6ND0+KDHzKMR4+kiw2KorJvNpOE3j0f6EptdvwLHoWHbhZKKME
-         Jl3w==
-X-Gm-Message-State: AFqh2kp3cztQDelpepGmwcAixyhlZXz2SsvUBhfr+Ef/NV2p0Hy3rpjx
-        2UjBBJg+i2x/0dTJnAnHXpJVwKJjToo=
-X-Google-Smtp-Source: AMrXdXutUK/CGUtPMUYPBOpL8lgY0hDUYoKQ3k11Pv3IPl7yVFonRq+Ao9i+cRgPlXouTWnmtQlsoQ==
-X-Received: by 2002:a9d:12e4:0:b0:66e:b906:c1b9 with SMTP id g91-20020a9d12e4000000b0066eb906c1b9mr28527675otg.8.1672851905073;
-        Wed, 04 Jan 2023 09:05:05 -0800 (PST)
-Received: from neuromancer. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
-        by smtp.gmail.com with ESMTPSA id k25-20020a056830151900b0066e873e4c2csm16693927otp.45.2023.01.04.09.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 09:05:04 -0800 (PST)
-Message-ID: <63b5b1c0.050a0220.a0efc.de06@mx.google.com>
-X-Google-Original-Message-ID: <Y7WxvXO+xAAzmsFX@neuromancer.>
-Date:   Wed, 4 Jan 2023 11:05:01 -0600
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
- RTL8821CS chipset
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
- <20221227233020.284266-20-martin.blumenstingl@googlemail.com>
- <63b4b3e1.050a0220.791fb.767c@mx.google.com>
- <CAFBinCDpMjHPZ4CA-YdyAu=k1F_7DxxYEMSjnBEX2aMWfSCCeA@mail.gmail.com>
+        Wed, 4 Jan 2023 12:07:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562C7DEF0;
+        Wed,  4 Jan 2023 09:07:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE851617C2;
+        Wed,  4 Jan 2023 17:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF89C433A0;
+        Wed,  4 Jan 2023 17:07:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672852037;
+        bh=XIJG7ewqo5kzp9edbZOx9BOvNMni+jLemYlHy7gF5jg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kfExFvmItt4dG419jptDEGrPnxaHEl7ANZY3Su0tEfVP9fWO7oyj4EAKfTnr/om74
+         ohRHZkSDujsAQxXMzO/wDVR6RAGymtNmL5Jla6eiFErIrtUKAuK3JntirLyOJtl9B8
+         uSMx5PSyx7yu03mz4T7FX51KaNCSi8PNUGW/ekWS0FqraBIyMtW212zxsAcpGrdWQg
+         PePwf21cYLqd27Do/l7O6V7q3kBK+EfOD2pWMqxHpdd98mRDuEXjt9IHslTaCyxNjh
+         zhjmUGRMv8YiAqWQnalrYloStOP/QdV3iDytIohrGr9vQA0VfPChDY69BD+1qFN4xH
+         xe+N83K8+1MpQ==
+Received: by mail-lf1-f49.google.com with SMTP id b3so51334140lfv.2;
+        Wed, 04 Jan 2023 09:07:17 -0800 (PST)
+X-Gm-Message-State: AFqh2kp6krRbk5HI6C01pHOWYwSbvnqz/VXnixH+++djHrUFqw37CfSj
+        kxn7jNO8nDsmZbOmJaV9JkaKs7YhRmHc7hcKDuE=
+X-Google-Smtp-Source: AMrXdXundjKp8Y8z3TAzqVpDm1DiOwJOMJ1w4ildaIhc+9uQOPt8d+wG6ixJzIoFdowAOSSzx68CkqC0YZEraLz7J2w=
+X-Received: by 2002:a05:6512:3f07:b0:4ca:f873:7cf3 with SMTP id
+ y7-20020a0565123f0700b004caf8737cf3mr3156707lfa.89.1672852035170; Wed, 04 Jan
+ 2023 09:07:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFBinCDpMjHPZ4CA-YdyAu=k1F_7DxxYEMSjnBEX2aMWfSCCeA@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+In-Reply-To: <Y7WoZARt37xGpjXD@alley>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 4 Jan 2023 09:07:02 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+Message-ID: <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 04:40:51PM +0100, Martin Blumenstingl wrote:
-> Hi Chris,
-> 
-> On Wed, Jan 4, 2023 at 12:01 AM Chris Morgan <macroalpha82@gmail.com> wrote:
+On Wed, Jan 4, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+> > Function __module_address() can quickly return the pointer of the module
+> > to which an address belongs. We do not need to traverse the symbols of all
+> > modules to check whether each address in addrs[] is the start address of
+> > the corresponding symbol, because register_fprobe_ips() will do this check
+> > later.
 > >
-> > On Wed, Dec 28, 2022 at 12:30:20AM +0100, Martin Blumenstingl wrote:
-> > > Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
-> > > well as the existing RTL8821C chipset code.
-> > >
+> > Assuming that there are m modules, each module has n symbols on average,
+> > and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+> > complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+> > and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+> > (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+> > the ratio is still greater than 1. Therefore, the new method will
+> > generally have better performance.
 > >
-> > Unfortunately, this doesn't work for me. I applied it on top of 6.2-rc2
-> > master and I get errors during probe (it appears the firmware never
-> > loads).
-> That's unfortunate.
-> 
-> > Relevant dmesg logs are as follows:
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > ---
+> >  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+> >  1 file changed, 40 insertions(+), 61 deletions(-)
 > >
-> > [    0.989545] mmc2: new high speed SDIO card at address 0001
-> > [    0.989993] rtw_8821cs mmc2:0001:1: Firmware version 24.8.0, H2C version 12
-> > [    1.005684] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x14): -110
-> > [    1.005737] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1080): -110
-> > [    1.005789] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x11080): -110
-> > [    1.005840] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x3): -110
-> > [    1.005920] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x1103): -110
-> > [    1.005998] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x80): -110
-> > [    1.006078] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1700): -110
-> The error starts with a write to register 0x14 (REG_SDIO_HIMR), which
-> happens right after configuring RX aggregation.
-> Can you please try two modifications inside
-> drivers/net/wireless/realtek/rtw88/sdio.c:
-> 1. inside the rtw_sdio_start() function: change
-> "rtw_sdio_rx_aggregation(rtwdev, false);" to
-> "rtw_sdio_rx_aggregation(rtwdev, true);"
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 5f3be4bc16403a5..0ff9037098bd241 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+> >       }
+> >  }
+> >
+> > -struct module_addr_args {
+> > -     unsigned long *addrs;
+> > -     u32 addrs_cnt;
+> > -     struct module **mods;
+> > -     int mods_cnt;
+> > -     int mods_cap;
+> > -};
+> > -
+> > -static int module_callback(void *data, const char *name,
+> > -                        struct module *mod, unsigned long addr)
+> > +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+> >  {
+> > -     struct module_addr_args *args = data;
+> > -     struct module **mods;
+> > -
+> > -     /* We iterate all modules symbols and for each we:
+> > -      * - search for it in provided addresses array
+> > -      * - if found we check if we already have the module pointer stored
+> > -      *   (we iterate modules sequentially, so we can check just the last
+> > -      *   module pointer)
+> > -      * - take module reference and store it
+> > -      */
+> > -     if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+> > -                    bpf_kprobe_multi_addrs_cmp))
+> > -             return 0;
+> > +     int i, j, err;
+> > +     int mods_cnt = 0;
+> > +     int mods_cap = 0;
+> > +     struct module *mod;
+> > +     struct module **mods = NULL;
+> >
+> > -     if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+> > -             return 0;
+> > +     for (i = 0; i < addrs_cnt; i++) {
+> > +             mod = __module_address(addrs[i]);
+>
+> This must be called under module_mutex to make sure that the module
+> would not disappear.
 
-No change, still receive identical issue.
+module_mutex is not available outside kernel/module/. The common
+practice is to disable preempt before calling __module_address().
+CONFIG_LOCKDEP should catch this.
 
-> 2. if 1) does not work: remove the call to rtw_sdio_rx_aggregation()
-> from rtw_sdio_start()
-> 
+Thanks,
+Song
 
-Same here, still receive identical issue.
-
-> 
-> Best regards,
-> Martin
+[...]
