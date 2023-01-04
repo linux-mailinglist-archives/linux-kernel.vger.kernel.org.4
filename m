@@ -2,257 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777D565D150
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1646C65D158
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbjADLWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S234599AbjADLYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbjADLWZ (ORCPT
+        with ESMTP id S230423AbjADLYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:22:25 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF50AE0FA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:22:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iU2qA4BZGeMWZ1gWC9PlU7x6QYD5Y0lj78Bru1q/mkKESwRVx6Fjv+11pnq6ON/TQ+ZE/73bP4LBAMy4hhCasUbvtu0H9u/99b2oOOjf/9ica7fNfKxS4+7hURbvsmeUFJrsKXPP176vCB4a7LWGCaajOJguRvcrDBsXoqmTLEw0OjqaQrLmIOlxIUrGOP8N7IUPhUVoRxPIfX/v8rPEzE35n/oC1d9Nv+MZmZ3rcbaR/wQQdV+PhlXcdX6Oq31QBdAC1AJBBnRhYrwgaboHCqa0Swr9lcPRUtC7/b77VR9EWwcBLPzfMIg2sqjQcHYjMofgvt3XkvyAdtML5loIJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aTwZm2+h36fEdJFVdOIECscrmn5oM/ndZ/c6/wSyopw=;
- b=k94Fc4xCkIbKCtd6hxAtx9IjtE5akF+FUI+rZ+DmQ07tjhZI9LsR2g+BO/GKFl0UExW+eLGmFWIjerL+PFbAn0uUFBUtAfpCT0SnzjmQG+Ar7gPAOXhD4dXkN+McU0Zotz33wfjBThW1hfn1SjP0PiLkzKqAo3tIrt76Ek6ByLX1GeZKyCBEZGkF0pBuPhL0kGJ6IkO9TzAdlpoaRzvbFLe5rajt2hjDbUeQPMbwx32v0FS/2VP+SDTacXdHgJn9MhdFiqi7DG3N7LeyPldnevESTgmXQRWKtpf4k3beIEGOSLxv/fyTXt/zP/8xOofYqCOEJPx78NL4Z/c3GgNw3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aTwZm2+h36fEdJFVdOIECscrmn5oM/ndZ/c6/wSyopw=;
- b=dRe38ct97em4M7l0cfgrb4NGo1inpUVTioAtTYt0poavt8mqFf3fRTAvEpQEoZvdF6SzRuB+JQjq4nqNxA/hV5cK3jzqypCs+s+vI1LaDdBvZ1g+GZH5rd8ORQd01bZO1m/+9mi8egm28TCOdMphi19lKma/Yg6vMr0jcIq1RuZ6mEEP9OGeAUNaD65Yu12HwFfv4T4xYbDrtyY20y/jU0NcQzLLIqGelpqszqqAMgnn0aX2bv1QWAmbx80hf0s0eHFPWjqbmN2TQJNNDtvbOf/rm9ndy6CmS3oOC/I4eJpBxVRp22QiJilItHst90rWnJzrFjuIeXNe7oT/zvqH6g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYZPR06MB5844.apcprd06.prod.outlook.com (2603:1096:400:284::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
- 2023 11:22:22 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::7969:5a45:8509:7d80]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::7969:5a45:8509:7d80%4]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
- 11:22:22 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH 4/4] f2fs: rename rw_iostat to iostat_bytes
-Date:   Wed,  4 Jan 2023 19:21:58 +0800
-Message-Id: <20230104112158.15844-4-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230104112158.15844-1-frank.li@vivo.com>
-References: <20230104112158.15844-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0002.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::16) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Wed, 4 Jan 2023 06:24:39 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484A81A839;
+        Wed,  4 Jan 2023 03:24:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672831478; x=1704367478;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=e3dnwHcZnNjJi9JOEYjRBlsq3Z+daJrut682oSaz7Oo=;
+  b=JAJQ/5vbLhKx6q7wP937T4miOT9SLEUJ5gVPxoDmqsOFRqUY3oQHSNBU
+   7AWbbGY6KzQw2ZPKnQXcn/YgCQQBv2E4abysPysFxht94nqR/lk4zXesw
+   wuO/M1X0UCAWJg6afiAXxQ5RKZ5hAQ/7EPNlMU60cagTCEkdAdLmcbbJS
+   iZIo5bNbUWgIrVu303CJJI6NB+EavgmXX9HLw530YYQrxjkNy0msvZsto
+   2vQYAS3O/u+nkDVidpYVh+Tv5/+8ihk3ZrBx47Bx/RKNo43T/tkjYCTGS
+   hPRQWkGBE+FylpgfBwoHMhjPHfAU7aaL4hUNQKEe25ua309bG7rsnI7b+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305419650"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="305419650"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 03:24:37 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="900526406"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="900526406"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 03:24:35 -0800
+Date:   Wed, 4 Jan 2023 12:24:31 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Taku Izumi <izumi.taku@jp.fujitsu.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net] fjes: Fix an error handling path in fjes_probe()
+Message-ID: <Y7Vh73c74R9xhjWZ@localhost.localdomain>
+References: <fde673f106d2b264ad76759195901aae94691b5c.1671569785.git.christophe.jaillet@wanadoo.fr>
+ <Y6LZEVU7tKPzjHQ8@localhost.localdomain>
+ <437145bf-d925-e91e-affd-835d272c55a0@wanadoo.fr>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB5844:EE_
-X-MS-Office365-Filtering-Correlation-Id: d24588b3-2ed3-4492-1f40-08daee45f30a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mp9fTtMY6lu5xh2d7fk5cInns8XG51nVJDTyOVx88LkARXBHvqZ+rge5AtPfKc3V/myLibbnzYVNAsHCwMeE6lTq9+Mud761x9pE+AS4t0OE4xx040ZtcZUPWKsEG05Zq/ax7yzAzK30I1zRC+SoxABftJfYpr9BXx/bFBzPp17ssI7C+fiH74uErirnME9HbAnBmTVbe9JPDUpUfuPDPwoBxiE/yuDdcCxwjo1AB+s9H4T83khFrjypnhF9MTyNdig4enAV9GHRvtTa9/gapm40TjaiCt2AbF1J1DdYwLZDVnOmz3G0vvGRO4pylmwSvN2r2TTuNPdL6BKu7OKE2GFj1iWqTs7X1caS9VRpZUPFMcV9SVi0HxfT1d6TjP9wV3AgE7Km+v3B4ELdz1QCP8k4fuUENMSSuvDPF1b8Ui3Yo5YobeduwTCeXNCnF5WaFKrUfwrpUK5DJUiGqKZKQvxlft3O+9FwqGTeJbGsFuG28MDsgEPHXjGST167pY5CbNT/GWNpHSqcZbxtY/FWbZxJch/4DBmfqNRwdAAm99TpoFbJmtHaZVSXu8X+Heau1yPbvTFdI2qYBX6bU+kHIdt8zh3ZysqqQ0vDsQZU7Tbt+RIv36Gflw6VKraiTBzYC0ZL/LWwNBC71frxV9Kh7HHQKrjiQ8nzxgIIZhsHa3rzGA88LjvpBJnPaq+hvqyU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199015)(2616005)(1076003)(83380400001)(186003)(26005)(6512007)(86362001)(36756003)(38100700002)(38350700002)(2906002)(5660300002)(316002)(8676002)(66556008)(66476007)(66946007)(4326008)(8936002)(107886003)(6666004)(41300700001)(6506007)(478600001)(52116002)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A44h1MyPUepfoCn29VAkrq/QRoPbNwNmcpQR2JfHYWcLs23B63rPsuTnE5CS?=
- =?us-ascii?Q?t0YQPjAomEt+cd5thxOjcDBT2HZ9kzIFCSX6O16t9SMliqS4ufAtfE+ePuoS?=
- =?us-ascii?Q?bjO6iXFoCoFMM5i4mLshct5leppuweCQh7SDcIUnUJ0V1rYTxDMyPHUsO6VE?=
- =?us-ascii?Q?1TD0pE4fD+Liosln4YtmnV/tCqEB/Hc4TY27iaCbp71WBo2KYHQTd0GpxF7j?=
- =?us-ascii?Q?2ZKMrlJswzPBXMDVheyRcvpzQdOFcfX8S/v5zC/aQdkbyTiqO0cU60oZECAO?=
- =?us-ascii?Q?C+JFvTe78XJfNKwh+qdk70jiQWLRAH13m1Dw7EIOE56Se/EYPQDl+K1i3IQb?=
- =?us-ascii?Q?XGqvMTibufwEVSINjta150PoKtLSUoANP5KZ/jjqCKU7/g1WMhgiDZebQ1AF?=
- =?us-ascii?Q?z0fiUm/Ao3zN90Iey+ZYj9iJ2NjqqpgTUnq/Dv5MRRYrWFcm4BzZvar1DDDQ?=
- =?us-ascii?Q?2yFZaMrKpJsAcTolCeWb0wvL4S/SGGShIvxUX1czZSaxIpqUn+a2udn2aS68?=
- =?us-ascii?Q?83w011PWTwv92ma1KvMKjB1x7DEd7FZBTGjnfiAbBmDd8DwlXMuHPTUoQ0S4?=
- =?us-ascii?Q?1zD7t2xTHLg95opAufMwyXnsHIpuuCTHEZodbmC7HkuHjQKk+EyVxSMjiHxn?=
- =?us-ascii?Q?mAI5aZFvh6mtE/EeodUN/NH2Dylx/zov04WNEq2VT4lyIoeKaJcBA0ozsK4K?=
- =?us-ascii?Q?64r23Y59GGTiXszQd3GePQ0m6lfK7YgYYIoG9mtoOHY+4S+Qvq52Ik5LeH0a?=
- =?us-ascii?Q?OepG/qVPcDG32eAA+stou7I9wDMuftaDRLTkhaqdg33kbeAyRAg4sMGKb6x3?=
- =?us-ascii?Q?oQV5sO15oXQ1XKx7bHEj76dyUTQ6re1rzqRPi+x71IFPqOUpxiysU5M3Jmcj?=
- =?us-ascii?Q?bVy++ftJ9D79oirVR4y8D2/mnpJxAgsnLWwpM7ub77DVJxcA7tcGSyGM3PkM?=
- =?us-ascii?Q?ielaE30lYamCsCEkkAwN7MaqOZS6vEh29P43jr0FcW+XKJihNp2WHvlvxOmR?=
- =?us-ascii?Q?xB3CnNUU5aezOAdxAnpeiLd00/vnZRNACcN+ZdDcp4txhvkcmEI4V9caG6IH?=
- =?us-ascii?Q?sEGlybPAQ2kB2OLfHRd42+mJn3tZij53EYn6ijQOA5HWJ+zfIw5b3np/8mEG?=
- =?us-ascii?Q?fP291OveqoBKpdO8EO3+mdNh6T54xfCeKVqJlx4ILtZXskhYiUO+vNYGIkSl?=
- =?us-ascii?Q?zAzfTH82hc054FmbPsIQcYkYULrc4RyDW4lunm95AVczuo2EqUnR6SFQ4/ed?=
- =?us-ascii?Q?9LRNfhillzZ87osvifiSX6MwZTpaJW46sNgTx3Es2mFpbF+Bh6I6o3i8UVyz?=
- =?us-ascii?Q?XzxOSoE77uiTbdk+olr/0mvvWwgs4YwKC7GNKbgjFxqGvcQw4wajrkziRDLo?=
- =?us-ascii?Q?m2Vh/li51YqTgLQ/oFNvruMfNBr+SsDbQBa+RErApzG2l6hXmcAm3T40pSq7?=
- =?us-ascii?Q?tJZw33EdDNyzngc8my44lWkuKADfLM4bacTY7lVCxnkWawMTmHU3rqMaRp2f?=
- =?us-ascii?Q?PBO9xksWY2yv4Bw8GCXat107jFXK7jYqyR4kXqvuNt0LB8XsZrZS6mT2YZrL?=
- =?us-ascii?Q?LJgFwW6USpwIqFCxiGk5GkBu3WrvJhFRaCgoV/+L?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d24588b3-2ed3-4492-1f40-08daee45f30a
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 11:22:22.5746
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Sp8VHFMUzicHRKoUzKuHb+Df9il9SOe9p9WBNmpyHwtKspsfohfcpsoqyxKxheL+bVkhq6bK9xo3ff7bbyKMyA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5844
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <437145bf-d925-e91e-affd-835d272c55a0@wanadoo.fr>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The contents stored in the rw_iostat and prev_rw_iostat arrays do not
-quite match the meaning of the names. In fact, array storage is not
-only read, write io, but also discard and flush. In addition, in order
-to better distinguish it from the iostat_count array, it is more accurate
-to say that io bytes are stored in it. Also, the FS_DISCARD and FS_FLUSH_IO
-names are less harmonious than others. Let's change to new names.
+On Thu, Dec 29, 2022 at 05:34:22PM +0100, Christophe JAILLET wrote:
+> Le 21/12/2022 à 10:59, Michal Swiatkowski a écrit :
+> > On Tue, Dec 20, 2022 at 09:57:06PM +0100, Christophe JAILLET wrote:
+> > > A netif_napi_add() call is hidden in fjes_sw_init(). It should be undone
+> > > by a corresponding netif_napi_del() call in the error handling path of the
+> > > probe, as already done inthe remove function.
+> > > 
+> > > Fixes: 265859309a76 ("fjes: NAPI polling function")
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > > ---
+> > >   drivers/net/fjes/fjes_main.c | 4 +++-
+> > >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+> > > index 2513be6d4e11..01b4c9c6adbd 100644
+> > > --- a/drivers/net/fjes/fjes_main.c
+> > > +++ b/drivers/net/fjes/fjes_main.c
+> > > @@ -1370,7 +1370,7 @@ static int fjes_probe(struct platform_device *plat_dev)
+> > >   	adapter->txrx_wq = alloc_workqueue(DRV_NAME "/txrx", WQ_MEM_RECLAIM, 0);
+> > >   	if (unlikely(!adapter->txrx_wq)) {
+> > >   		err = -ENOMEM;
+> > > -		goto err_free_netdev;
+> > > +		goto err_del_napi;
+> > >   	}
+> > >   	adapter->control_wq = alloc_workqueue(DRV_NAME "/control",
+> > > @@ -1431,6 +1431,8 @@ static int fjes_probe(struct platform_device *plat_dev)
+> > >   	destroy_workqueue(adapter->control_wq);
+> > >   err_free_txrx_wq:
+> > >   	destroy_workqueue(adapter->txrx_wq);
+> > > +err_del_napi:
+> > > +	netif_napi_del(&adapter->napi);
+> > >   err_free_netdev:
+> > >   	free_netdev(netdev);
+> > >   err_out:
+> > 
+> > Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+> > 
+> > I wonder if it won't be better to have fjes_sw_deinit() instead or
+> > change fjes_sw_init to only netif_napi_add(). You know, to avoid another
+> > bug here when someone add sth to the fjes_sw_deinit(). This is only
+> > suggestion, patch looks fine.
+> 
+> hi,
+> 
+> based on Jakub's comment [1], free_netdev() already cleans up NAPIs (see
+> [2]).
+> 
+> So would it make more sense to remove netif_napi_del() from the .remove()
+> function instead?
+> The call looks useless to me now.
+> 
+> CJ
+> 
+> [1]: https://lore.kernel.org/all/20221221174043.1191996a@kernel.org/
+> [2]: https://elixir.bootlin.com/linux/v6.2-rc1/source/net/core/dev.c#L10710
+> 
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/f2fs.h              |  8 ++++----
- fs/f2fs/iostat.c            | 20 ++++++++++----------
- fs/f2fs/segment.c           |  4 ++--
- include/trace/events/f2fs.h |  2 +-
- 4 files changed, 17 insertions(+), 17 deletions(-)
+Yeah, it make more sense.
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 0a24447472db..331c330ea31d 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1191,8 +1191,8 @@ enum iostat_type {
- 	FS_META_READ_IO,		/* meta read IOs */
- 
- 	/* other */
--	FS_DISCARD,			/* discard */
--	FS_FLUSH,			/* flush */
-+	FS_DISCARD_IO,			/* discard */
-+	FS_FLUSH_IO,			/* flush */
- 	NR_IO_TYPE,
- };
- 
-@@ -1856,8 +1856,8 @@ struct f2fs_sb_info {
- 	/* For app/fs IO statistics */
- 	spinlock_t iostat_lock;
- 	unsigned long long iostat_count[NR_IO_TYPE];
--	unsigned long long rw_iostat[NR_IO_TYPE];
--	unsigned long long prev_rw_iostat[NR_IO_TYPE];
-+	unsigned long long iostat_bytes[NR_IO_TYPE];
-+	unsigned long long prev_iostat_bytes[NR_IO_TYPE];
- 	bool iostat_enable;
- 	unsigned long iostat_next_period;
- 	unsigned int iostat_period_ms;
-diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-index 991605fcfe0b..59c72f92191a 100644
---- a/fs/f2fs/iostat.c
-+++ b/fs/f2fs/iostat.c
-@@ -21,13 +21,13 @@ static mempool_t *bio_iostat_ctx_pool;
- static inline unsigned long long iostat_get_avg_bytes(struct f2fs_sb_info *sbi,
- 	enum iostat_type type)
- {
--	return sbi->iostat_count[type] ? div64_u64(sbi->rw_iostat[type],
-+	return sbi->iostat_count[type] ? div64_u64(sbi->iostat_bytes[type],
- 		sbi->iostat_count[type]) : 0;
- }
- 
- #define IOSTAT_INFO_SHOW(name, type)					\
- 	seq_printf(seq, "%-23s %-16llu %-16llu %-16llu\n",	\
--			name":", sbi->rw_iostat[type],				\
-+			name":", sbi->iostat_bytes[type],			\
- 			sbi->iostat_count[type],					\
- 			iostat_get_avg_bytes(sbi, type))			\
- 
-@@ -79,8 +79,8 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
- 
- 	/* print other IOs */
- 	seq_puts(seq, "[OTHER]\n");
--	IOSTAT_INFO_SHOW("fs discard", FS_DISCARD);
--	IOSTAT_INFO_SHOW("fs flush", FS_FLUSH);
-+	IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
-+	IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
- 
- 	return 0;
- }
-@@ -129,9 +129,9 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
- 				msecs_to_jiffies(sbi->iostat_period_ms);
- 
- 	for (i = 0; i < NR_IO_TYPE; i++) {
--		iostat_diff[i] = sbi->rw_iostat[i] -
--				sbi->prev_rw_iostat[i];
--		sbi->prev_rw_iostat[i] = sbi->rw_iostat[i];
-+		iostat_diff[i] = sbi->iostat_bytes[i] -
-+				sbi->prev_iostat_bytes[i];
-+		sbi->prev_iostat_bytes[i] = sbi->iostat_bytes[i];
- 	}
- 	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
- 
-@@ -148,8 +148,8 @@ void f2fs_reset_iostat(struct f2fs_sb_info *sbi)
- 	spin_lock_irq(&sbi->iostat_lock);
- 	for (i = 0; i < NR_IO_TYPE; i++) {
- 		sbi->iostat_count[i] = 0;
--		sbi->rw_iostat[i] = 0;
--		sbi->prev_rw_iostat[i] = 0;
-+		sbi->iostat_bytes[i] = 0;
-+		sbi->prev_iostat_bytes[i] = 0;
- 	}
- 	spin_unlock_irq(&sbi->iostat_lock);
- 
-@@ -161,7 +161,7 @@ void f2fs_reset_iostat(struct f2fs_sb_info *sbi)
- static inline void __f2fs_update_iostat(struct f2fs_sb_info *sbi,
- 			enum iostat_type type, unsigned long long io_bytes)
- {
--	sbi->rw_iostat[type] += io_bytes;
-+	sbi->iostat_bytes[type] += io_bytes;
- 	sbi->iostat_count[type]++;
- }
- 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 34e9dc4df5bb..38bae9107a3b 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -504,7 +504,7 @@ static int __submit_flush_wait(struct f2fs_sb_info *sbi,
- {
- 	int ret = blkdev_issue_flush(bdev);
- 	if (!ret)
--		f2fs_update_iostat(sbi, NULL, FS_FLUSH, 0);
-+		f2fs_update_iostat(sbi, NULL, FS_FLUSH_IO, 0);
- 
- 	trace_f2fs_issue_flush(bdev, test_opt(sbi, NOBARRIER),
- 				test_opt(sbi, FLUSH_MERGE), ret);
-@@ -1184,7 +1184,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 
- 		atomic_inc(&dcc->issued_discard);
- 
--		f2fs_update_iostat(sbi, NULL, FS_DISCARD, len * F2FS_BLKSIZE);
-+		f2fs_update_iostat(sbi, NULL, FS_DISCARD_IO, len * F2FS_BLKSIZE);
- 
- 		lstart += len;
- 		start += len;
-diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-index 9183a0a11e26..3852085198fb 100644
---- a/include/trace/events/f2fs.h
-+++ b/include/trace/events/f2fs.h
-@@ -1972,7 +1972,7 @@ TRACE_EVENT(f2fs_iostat,
- 		__entry->fs_cdrio	= iostat[FS_CDATA_READ_IO];
- 		__entry->fs_nrio	= iostat[FS_NODE_READ_IO];
- 		__entry->fs_mrio	= iostat[FS_META_READ_IO];
--		__entry->fs_discard	= iostat[FS_DISCARD];
-+		__entry->fs_discard	= iostat[FS_DISCARD_IO];
- 	),
- 
- 	TP_printk("dev = (%d,%d), "
--- 
-2.25.1
-
+Thanks, Michal
+> > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> 
