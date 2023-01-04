@@ -2,68 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F965CACC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4444F65CADF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 01:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbjADA1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 19:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S238695AbjADAbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 19:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbjADA0u (ORCPT
+        with ESMTP id S233889AbjADAa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 19:26:50 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41000175A8
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 16:26:37 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-466c5fb1c39so445996167b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 16:26:37 -0800 (PST)
+        Tue, 3 Jan 2023 19:30:56 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8295FCD;
+        Tue,  3 Jan 2023 16:30:54 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303Jn3AU000313;
+        Wed, 4 Jan 2023 00:28:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=aoCSdc3IxCqWcsTPrDFmX3OILlpp9T3BLxXn3Dy1W6I=;
+ b=f75F/F/BLYcMa2zeZjf5ar78aNIMY5jSAGUNBnmTyZXoFdIJlWRBrT8nAaeHzq8dVj75
+ G0eJRX8FepyUJLuEa8w/VfSY3i39fSQO73R7Hp4RO2eHWJem21mURvgNe1XNMAtXf3cL
+ ZgOneFpUrRIyrUksFczj9HXJkyc63hhUxbbVnTym+EhgsMPkqJna+yw16xpQMlHlOuGS
+ hVZLsgEXGFCGZj3T30aMQrwMM08ebnudjC0mK/xxip4P1d4sipmF6n/upnK/Nwthwks9
+ qgnP201n6pANyWhgwc+zrnIxzHsR/N/8A4eIiXScvGtMvKRQAzjye0z5zoVNZsDFS6KC 4w== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mtdmtnbh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Jan 2023 00:28:02 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 303MwcHk013691;
+        Wed, 4 Jan 2023 00:28:01 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mvwmjj636-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Jan 2023 00:28:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JNvYb4nfmFgd7XiH9I1IHOqfyycaJDQOR9dCR1fsY4jeLZzvFwUoxUqeVN9qnudiM3JaVkdZE/sx5isG7kc5Lty7lqJBDa6ikt2UxRi2Fq6+WG8C0HK+9Ol9y1dKjK12lVelRW6njOwehs/gOe9wbYn8mXCR+S64GFN+ZD0uIfVqLPVgxVOmdmLOpcUYOulhbjaDJe8SfSCvF3O1Jo7bDffMZPh8SePpyMvI78wKSVarRmpVQMihfl4zCURPO50jDcYxQw0Pettscu517WuKdtmh7PRlkzhrOx9vlf1BjkJFoQp9SNME1/7M/MyLGiMNY//CVjq8W5udvxS1FHcbxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aoCSdc3IxCqWcsTPrDFmX3OILlpp9T3BLxXn3Dy1W6I=;
+ b=DDTse2ioJGYRo8cZk+EiHF2A5OeKqmK/UBnVUW96Aoinq6iyD6EneLRVZ/zZPK7mDop0mnBEt3TKYGZ/8e50Nzh6a7dri9PD97CvAVPnHXoFY6adf8HETUYKLJ354D6Cmnqo8aDXHgxHfnBMlwhqj5cQOkC3+H860BlR6w6J/aYdTXHeLHazby4Hn7ZbgY0HROwr7vEV7gKGrbnOdwyc6XltQ2CCorBoGn5OJG9Givbl7lKubRZbekO3XilxdV7OAt17Ch5YYKltjBRVGCuXCpOoPFFGteUeux0V8Yl7kTf2uBOSqDnMzxmOv6frWmilkv9ytSw7Ymc+C37PccthOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=02mnvKjkhi+xqLep6DzPBxrzeHbprJIX5INEltwEFXw=;
-        b=gGZg55l1b1mZlnDCLtatnvQwmQA2FRB/ktmm4UXYdg3wvFnQvOi/QtzqCUUhsOkM6W
-         M1beO67ciuMC/B1h85YFSncgsD3ZtKbyo5hCbHy1p20qReZJ+j8iX2qrwak8oez851MV
-         WnhPvutG+SWH90aVJZBoRZZRCM2re1Q5hGgzN6C+EJlcw8hGZp+xrNjQdKNjldmafBTq
-         Mu1lwd+147Nm8CYZEnKvXH//t4Myg1IMeIyuBk1kW6sqp4R4VDVbUl/pP6cqjsKgDBIF
-         6040jlc1umqQE/yCj11drvRRkWjtlErx0+/S+yrG4OF0X5ZDJuQorJurH83YbEfEdkrh
-         g+QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=02mnvKjkhi+xqLep6DzPBxrzeHbprJIX5INEltwEFXw=;
-        b=vqgAGFaKb8OL/aRhNmbuwHzCz4FhNekkOvoUklH2nR5rvpvcyLLkCYftPWmYj32ulr
-         bN+b1rLBch4DJNbD+XvFxS13y86Denhb8wPQgrOyXjyEDXNp8ggfNvFEey2zWKkvmXnv
-         cFbEo53bC5WgjMr16nTwi3t51ms5LqgRHJ9e9+0sDFCAjl16NuvaV08V3Ym47y2mJw6v
-         0ln08My1+jgXfoG/skKF5+EnBXg226JS10v0Ra8mt/W7D+g2F/+mgWT5ecnagGffuGXD
-         CNBtbxwMoKIdsk2OlyJhtif6J4FDGsIWi2XhEui9NZEXZ6LJvoZO+LrTmPKkcd4vVRzG
-         c+4w==
-X-Gm-Message-State: AFqh2kq5P5ZhMWtG3Sy4prTfbUP9xI6677Rx7VGDgN+uY4jCLXy3GQGD
-        Y+pt7Oy+wUCdbZAZTvvV1owuN6bYTfRaZJ1dQtRGQQ==
-X-Google-Smtp-Source: AMrXdXsRncjs155iDBzmCdCkR0Og3SGOHrZ62e2qaHcfaYHvZ/YWeTsIDl7qRKcnpHiZjrZYaClIUnmR+hbn1NE4d/4=
-X-Received: by 2002:a81:1605:0:b0:475:d2f4:6522 with SMTP id
- 5-20020a811605000000b00475d2f46522mr4693939yww.120.1672791996047; Tue, 03 Jan
- 2023 16:26:36 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aoCSdc3IxCqWcsTPrDFmX3OILlpp9T3BLxXn3Dy1W6I=;
+ b=0Rc/i7I5b0d68TJE8UlGeXjAUQ/FKMI0huY9CnFmvgvueRSrEI4xWlkhl6+c2wTCdXvPXTQgLFuy1nzZ5qpn7Y2+Jqp1FOHsc3UUjRbjNvoBGm68FtvVTRWBWfE4OqcmYfRs2pzMBdT8gGj0NMFhihIVIyORc/0no5u2jT+btbU=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by CH3PR10MB7496.namprd10.prod.outlook.com (2603:10b6:610:164::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 00:27:36 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14%8]) with mapi id 15.20.5944.019; Wed, 4 Jan 2023
+ 00:27:36 +0000
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH] mm: remove zap_page_range and create zap_vma_pages
+Date:   Tue,  3 Jan 2023 16:27:32 -0800
+Message-Id: <20230104002732.232573-1-mike.kravetz@oracle.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0075.namprd03.prod.outlook.com
+ (2603:10b6:303:b6::20) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-2-vipinsh@google.com>
- <Y64MsBubSyPNmMyk@google.com> <CAHVum0efBBe+OEiJw1-L+F1R8d-xPanAKjktgkg7Q2SXDot+KQ@mail.gmail.com>
-In-Reply-To: <CAHVum0efBBe+OEiJw1-L+F1R8d-xPanAKjktgkg7Q2SXDot+KQ@mail.gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 3 Jan 2023 16:25:59 -0800
-Message-ID: <CAHVum0cZtDYZN2bD3TZgUNpcWiy2-Qkw1mb40syut_2kkR=Agg@mail.gmail.com>
-Subject: Re: [Patch v3 1/9] KVM: x86/mmu: Repurpose KVM MMU shrinker to purge
- shadow page caches
-To:     David Matlack <dmatlack@google.com>, seanjc@google.com,
-        pbonzini@redhat.com
-Cc:     bgardon@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|CH3PR10MB7496:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5674cfd-b8d3-49a5-3e48-08daedea7aac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9MQSiTxk3MmzMfQqBaHv+Ri35jRk+Q+MgHEKDqZ6ad3d4/n0gf1rp1D2YAwqLhrUFYQABQJuJuccdRXByV4xIFlByegRHorAkEyjiZMfzRwlGfqZ100pG/gLWPS8aqJmqYtNU5ZkOrEP2ZiKt6pFZCUOZthpE7VqLLB4QTO1KE6AKfXvhpjPUork9u2CuTdyA5aXpscB8iWEZ+tYhIWLJpFsU6pXhcxf3C+Mx5u7nLShrcjWxMfzeTCWlhT73S2ntvj9MFFldK5+811w+yfpnN/Fyyjo85bX6oNfYpEOwk4P6WVDTuv/6yQxmgx3wBUyrOc6NG0lxOp6gF3KlCDOx1ssldRh5f88oh7wVa5dcg5NHLl0wicSspDfYODBeVnpSe++YLm/mSxzCdg3Y5JdAYdgXcaAb7QOzkcyaS3q35lhlkVMUKOV/rbO8lwpIvLwxoGy996eJvdMi5QnAAQDtdHCwVjPlA05JXm7S1FGAmMyZvZSHsii7D9S/vJJSMaG1SgZ5aQbiDRZbTnz4888SWrTpYwLnatej0hsSmBsxLHYypwEetFuUiwCHTmCicUAPARMe37SvSXS8xtZvxg0Yez7xjH30fS56R0O4xRgy6wGUgFMrfgnCAmhvBAcm4W8MYXECMPWiKqrC/sFTKtAC74bZiRCkMXekBWj4A4gCWQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(396003)(39860400002)(346002)(376002)(451199015)(26005)(30864003)(1076003)(186003)(2616005)(6512007)(38100700002)(86362001)(83380400001)(36756003)(44832011)(7416002)(41300700001)(8936002)(8676002)(4326008)(5660300002)(66556008)(66946007)(6666004)(316002)(107886003)(66476007)(966005)(6486002)(478600001)(54906003)(6506007)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WT862/fL+SxChoAPQSuNrqsUQXlAUhKJ7XmwhS2cB/ZLv71dbm1ZoRC5KwAZ?=
+ =?us-ascii?Q?502uNLNTimax9bdu1GzggDDk5GAQJFeNGHLn55wgJUo5MmVNtZYZ1seY3iJO?=
+ =?us-ascii?Q?Lhn37nR2c7EOS02hA4okADgPgqEgpbDZ+gKtcqK3MCwxMI6tY792nnewIAzl?=
+ =?us-ascii?Q?pv16V/avYDF/jLUTDcdZ4snUdHm+sxlK1TRkaKVhnYlScL7PoSh7uBw6ELTX?=
+ =?us-ascii?Q?SwOe1xKNColQWC/ZcROkqOcniDyNlXfuWbsFoHLQbKqeK62CybuQyJCHnBM0?=
+ =?us-ascii?Q?mdHp2xQFvSN3GdyQFpIMj3uMpUJ/tmF5eyYJm2VxLE1nag2cOG4fS8najyOq?=
+ =?us-ascii?Q?r0YYyGsCmvUdL870v6EKQ7vRuuWzQ1NW15PVSMOzkHyFOF4n7zHL9/PdmGvk?=
+ =?us-ascii?Q?i+750z0yseuTMvaiaO4xSWxFZL/lPRSKqp5Xpve7Ffc2W1tlvI9CE77X1sGI?=
+ =?us-ascii?Q?VUigU3F0IZUAJgFUi0EFqgyhbxBhyG3c2YhYGJGlLcCg1WdSW/oL1FRZNHWB?=
+ =?us-ascii?Q?IZUOCC5fXPO8UhmqPQm0MF/6R1z2Jo2KTrpDxfYbJYT08XEVY4hczmUuDyOX?=
+ =?us-ascii?Q?inUWO23DXBcuHUxwcMAc3z2hd0HRyXr0WUODdbsxGNIkKNTJZYkto2xMDE6g?=
+ =?us-ascii?Q?b1501emL7elLsU4CnRpwBUFCPvhlLRo2CbMrLtXNlvN3LkwaB4zS/Egke8lX?=
+ =?us-ascii?Q?jqmfDfvhJVtnahVEcZ8AcqpbWfwWPQAhTM9LqRNBJIgaLipvQlGNYYotQzj8?=
+ =?us-ascii?Q?3d42SFb0CbYxhTQQodOEoqwGymcd+0297269pQhLOB6KGarYtQxKbU17kH/B?=
+ =?us-ascii?Q?DqbzMa1loCl/HuCPiIVih2OvVX6mm1vo4m/SfmqzPzD3M7qd9so8KIFwRSCL?=
+ =?us-ascii?Q?+Oj/xXx1gf8TK2MNsavxSEco5H+90bd8C+OG2n7Kw5YfV+U1ewwyLgumXd3T?=
+ =?us-ascii?Q?ARX/VxC+faEU78y1jnsl1m14qlmEddbkWFsoCIPpmxctt2u0w4yz9OwUjjve?=
+ =?us-ascii?Q?nFfXEbSRDggYPy5OaUupd4LrdEAgUOYVeEQu3EEMsK8zWA7IUO1q0e7hyy0e?=
+ =?us-ascii?Q?KWrzLFrTfwP6ZTJFubvV5fmNi4eWjB9/QEAPlvvpjbFjD1TQgWjD0QcVLMT8?=
+ =?us-ascii?Q?DWdsXGeAloiCjoEAH19F6vwSnBQuoCwLG4e8vaql9c9fqwXUsFSu10Q4HJVn?=
+ =?us-ascii?Q?yD+ZGh57T+C59Rb7tOmlg463RxNBBbsEV4hiwjgmqcTSPQeqP9CTLDKaf3Rz?=
+ =?us-ascii?Q?pGCXXYF0xh3urwn1W6w+I0mTw0zTCF14PnYqpISs9TqjeUNPbeyiG8CVz9h1?=
+ =?us-ascii?Q?WwljS4ACP9Qz8pnpr42ANJciBIm9+pRHMK/yukPl7Nz4UnrqNtr6fCDLD5/f?=
+ =?us-ascii?Q?oR7vNMP7XapmfKkkHamBwHxdRWa3T3euloLHzIh9gZcnioi6P3yddmAGUiSz?=
+ =?us-ascii?Q?nbrZPUFY8mX9jOEgvUsS7d/1fedOe/RoVyTPCq/4oMjsUwrnCdOfIqHiRowF?=
+ =?us-ascii?Q?adviqkyNxKFYmURQwoUTPMtWNEDtPVPD732U5hQtx9mAiNTiZL7h0PHc3N8z?=
+ =?us-ascii?Q?4L+rPfcITtwT7rp0AWC4s26nANihz6CWsiwC0tofUzYlqs+IC7iqNhWxtI1e?=
+ =?us-ascii?Q?ZA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ZJP94li21I/CIifMv0KXDcMYGrgmwdwZq3p0rh1t6M++t7rXa8QTS+Y/YzSt?=
+ =?us-ascii?Q?jcLNmlUolFACLBK+2ls5ymKNX7I1vkub0uBf93loSvU0vtYPe22Zdtxgv7sL?=
+ =?us-ascii?Q?zwIUxCa2ogDigfQwzGlkf3V5/u5cQuJV55M2F9QRd/78tTBS335r++jLypVJ?=
+ =?us-ascii?Q?CUxCWiOoNzHvLnEQwWpNP/ZE5k0mbiJVqh8k7LgdqF0ilwaDxaKBwKvOgUtq?=
+ =?us-ascii?Q?W6ljTV4aaSWSRuesau135pDAEJWDWGQzT9UyBkMspBVW6cozfOoLBEYYs9UG?=
+ =?us-ascii?Q?6XIWcxaCjLhvdq9SA+vzLXodb75x6RXw0hlvCw9cMYL13tK2hix0mv6ZzWXx?=
+ =?us-ascii?Q?BkZgiptISYJH/iWGE792kqJAxRYWDDgKXFLLBtLkBDcugWjQVRYH9bS0wapG?=
+ =?us-ascii?Q?jaPqXzFhipjd82P/Dz8DcDlg156WhZXPd5Yz4SyIHTDg03lWlZO1uTy6C6Lb?=
+ =?us-ascii?Q?4oEYj4COJn+krigmDmBxjydrUiBNfUEUDXeaemTml0eZ/6vFny1llpwHqkx+?=
+ =?us-ascii?Q?wI7ppz8N163v5mlxN+1e7m0RsyX0ZjO2b1DonTnvuwxX8g0IEYHTezzO9y9I?=
+ =?us-ascii?Q?UjYqjMxMaurnt0XuaGdYpJFxJk+1xsFmdvxxEvv6VEXTRATiVVy50+HWoi9z?=
+ =?us-ascii?Q?Ae0NkYoc1vHjlweIjR8rzjn2CMyFCxeP6AV0ysXNEy+nhNvemfzBniemRbws?=
+ =?us-ascii?Q?Xwg6nbuHkj3y1fQIvxI4ZZ3adEdi3K8riIVvjpM5BqpwTYQ+Rj7kGxD/6+tQ?=
+ =?us-ascii?Q?rlhmbaEQjtEYBqZLqaQegUzZrv8j2my6kQfKuKi+44XyBbf2+u+zOWOfb8Wl?=
+ =?us-ascii?Q?uwbQupjgVQ4/jag/58x3+KZT4EWiQuwGpYx1dMjfc6rnjCMGw92ZfN0L01Z0?=
+ =?us-ascii?Q?YLFLbZhukUroYnD/W7STcMXGG8PkXnz5gBQ8Abvi18xrv525Si/6dKJzf+Qf?=
+ =?us-ascii?Q?UEb4ONdS5vEPO1SmDflllBAMkhxgyP5Hmv7ZGaUV/CJcdTPZ3I2Sd09g8DZ6?=
+ =?us-ascii?Q?7/gqUUqBMS5qF+padl4JaG14eBCmOhW+ev1grDLGD1sl1Ph6VvyhecmE4Vlw?=
+ =?us-ascii?Q?W4ypUH7uTwd3lE4Eu0kU30QaRmVcgGuviGyyQPWMHfrljrHQTsZe6gykNbJ6?=
+ =?us-ascii?Q?y9SvkKz9+xsEG3Yt/vEDDNqIPUwJ2YqZOX2Lzy7SIDslT0b+xbyDi3xgKmmm?=
+ =?us-ascii?Q?tHinKmbh8qe3OR6xTpH8dYYl3wtmftCrgo+UF79R1vVBSs5kk+wqCktPNR+d?=
+ =?us-ascii?Q?VyrjRPiV3mACL5Lv0VNdNeyjLX4x17bO6xvNGbqU5nEYltVcPx/N+31FpckQ?=
+ =?us-ascii?Q?byv3tJJVbG8LUo1x9vxshmseFhRsoOo4P1g533YlGEtvVgUAtLylYPyEm71I?=
+ =?us-ascii?Q?ZA9tyINwSHM4LLj3XzKsw8N1LkaTsJhcVOnCd1aTklBYhUVQaD+/5laGYw8b?=
+ =?us-ascii?Q?NPC48p6vFiGfmsta5gs4lEds1NF7E4nwaYdxH75QpSVbALSvS21uZXCIlrp2?=
+ =?us-ascii?Q?TBJrKEpugSvuTkcJ8Z6Xrw6Wpzosogc4kg/1?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5674cfd-b8d3-49a5-3e48-08daedea7aac
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 00:27:36.4459
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ueCL4adKmenjXSPAqM5mmmwGM1Y99tlKfxUQyE/itfI9MxKww7cepSASoAtFZvJO+L27imRIFSBDc7aBl1/SUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7496
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_08,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301040002
+X-Proofpoint-GUID: 7oCefhu8HPTyVclxe1iF2ymLOiMCUf9M
+X-Proofpoint-ORIG-GUID: 7oCefhu8HPTyVclxe1iF2ymLOiMCUf9M
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,506 +186,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 10:01 AM Vipin Sharma <vipinsh@google.com> wrote:
->
-> On Thu, Dec 29, 2022 at 1:55 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 06:34:49PM -0800, Vipin Sharma wrote:
-> > > mmu_shrink_scan() is very disruptive to VMs. It picks the first
-> > > VM in the vm_list, zaps the oldest page which is most likely an upper
-> > > level SPTEs and most like to be reused. Prior to TDP MMU, this is even
-> > > more disruptive in nested VMs case, considering L1 SPTEs will be the
-> > > oldest even though most of the entries are for L2 SPTEs.
-> > >
-> > > As discussed in
-> > > https://lore.kernel.org/lkml/Y45dldZnI6OIf+a5@google.com/
-> > > shrinker logic has not be very useful in actually keeping VMs performant
-> > > and reducing memory usage.
-> > >
-> > > Change mmu_shrink_scan() to free pages from the vCPU's shadow page
-> > > cache.  Freeing pages from cache doesn't cause vCPU exits, therefore, a
-> > > VM's performance should not be affected.
-> >
-> > Can you split this commit up? e.g. First drop the old shrinking logic in
-> > one commit (but leave the shrinking infrastructure in place). Then a
-> > commit to make the shrinker free the per-vCPU shadow page caches. And
-> > then perhaps another to make the shrinker free the per-VM shadow page
-> > cache used for eager splitting.
-> >
->
-> Sounds good, I will separate it in two parts, one for dropping old
-> logic, one for adding per vcpu shadow page caches. Patch 3 is enabling
-> shrinkerto free per-VM shadow page.
->
-> > >
-> > > This also allows to change cache capacities without worrying too much
-> > > about high memory usage in cache.
-> > >
-> > > Tested this change by running dirty_log_perf_test while dropping cache
-> > > via "echo 2 > /proc/sys/vm/drop_caches" at 1 second interval
-> > > continuously. There were WARN_ON(!mc->nobjs) messages printed in kernel
-> > > logs from kvm_mmu_memory_cache_alloc(), which is expected.
-> > >
-> > > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  arch/x86/include/asm/kvm_host.h |   5 +
-> > >  arch/x86/kvm/mmu/mmu.c          | 163 +++++++++++++++++++-------------
-> > >  arch/x86/kvm/mmu/mmu_internal.h |   2 +
-> > >  arch/x86/kvm/mmu/tdp_mmu.c      |   3 +-
-> > >  include/linux/kvm_host.h        |   1 +
-> > >  virt/kvm/kvm_main.c             |  11 ++-
-> > >  6 files changed, 114 insertions(+), 71 deletions(-)
-> > >
-> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > index aa4eb8cfcd7e..89cc809e4a00 100644
-> > > --- a/arch/x86/include/asm/kvm_host.h
-> > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > @@ -786,6 +786,11 @@ struct kvm_vcpu_arch {
-> > >       struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
-> > >       struct kvm_mmu_memory_cache mmu_page_header_cache;
-> > >
-> > > +     /*
-> > > +      * Protects change in size of mmu_shadow_page_cache cache.
-> > > +      */
-> > > +     spinlock_t mmu_shadow_page_cache_lock;
-> > > +
-> > >       /*
-> > >        * QEMU userspace and the guest each have their own FPU state.
-> > >        * In vcpu_run, we switch between the user and guest FPU contexts.
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 254bc46234e0..157417e1cb6e 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -164,7 +164,10 @@ struct kvm_shadow_walk_iterator {
-> > >
-> > >  static struct kmem_cache *pte_list_desc_cache;
-> > >  struct kmem_cache *mmu_page_header_cache;
-> > > -static struct percpu_counter kvm_total_used_mmu_pages;
-> > > +/*
-> > > + * Total number of unused pages in MMU shadow page cache.
-> > > + */
-> > > +static struct percpu_counter kvm_total_unused_mmu_pages;
-> > >
-> > >  static void mmu_spte_set(u64 *sptep, u64 spte);
-> > >
-> > > @@ -655,6 +658,22 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
-> > >       }
-> > >  }
-> > >
-> > > +static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
-> > > +                                  spinlock_t *cache_lock)
-> > > +{
-> > > +     int orig_nobjs;
-> > > +     int r;
-> > > +
-> > > +     spin_lock(cache_lock);
-> > > +     orig_nobjs = cache->nobjs;
-> > > +     r = kvm_mmu_topup_memory_cache(cache, PT64_ROOT_MAX_LEVEL);
-> > > +     if (orig_nobjs != cache->nobjs)
-> > > +             percpu_counter_add(&kvm_total_unused_mmu_pages,
-> > > +                                (cache->nobjs - orig_nobjs));
-> > > +     spin_unlock(cache_lock);
-> > > +     return r;
-> > > +}
-> > > +
-> > >  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
-> > >  {
-> > >       int r;
-> > > @@ -664,8 +683,8 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
-> > >                                      1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
-> > >       if (r)
-> > >               return r;
-> > > -     r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> > > -                                    PT64_ROOT_MAX_LEVEL);
-> > > +     r = mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> > > +                                   &vcpu->arch.mmu_shadow_page_cache_lock);
-> > >       if (r)
-> > >               return r;
-> > >       if (maybe_indirect) {
-> > > @@ -678,10 +697,25 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
-> > >                                         PT64_ROOT_MAX_LEVEL);
-> > >  }
-> > >
-> > > +static void mmu_free_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
-> > > +                                  spinlock_t *cache_lock)
-> > > +{
-> > > +     int orig_nobjs;
-> > > +
-> > > +     spin_lock(cache_lock);
-> > > +     orig_nobjs = cache->nobjs;
-> > > +     kvm_mmu_free_memory_cache(cache);
-> > > +     if (orig_nobjs)
-> > > +             percpu_counter_sub(&kvm_total_unused_mmu_pages, orig_nobjs);
-> > > +
-> > > +     spin_unlock(cache_lock);
-> > > +}
-> >
-> > It would be nice to avoid adding these wrapper functions.
-> >
-> > Once you add a mutex to protect the caches from being freed while vCPUs
-> > are in the middle of a page fault you can drop the spin lock. After that
-> > the only reason to have these wrappers is to update
-> > kvm_total_unused_mmu_pages.
-> >
-> > Do we really need kvm_total_unused_mmu_pages? Why not just dynamically
-> > calculate the number of of unused pages in mmu_shrink_count()? Or just
-> > estimate the count, e.g. num_vcpus * KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE?
-> > Or have per-VM or per-vCPU shrinkers to avoid needing to do any
-> > aggregation?
-> >
->
-> I think we can drop this, by default we can return num_kvms *
-> num_vcpus * nodes * KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
->
-> Whenever mmu_shrink_scan() is called if there are no pages to free
-> then return SHRINK_STOP which will stop any subsequent calls during
-> that time.
->
->
-> > > +
-> > >  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
-> > >  {
-> > >       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
-> > > -     kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
-> > > +     mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> > > +                              &vcpu->arch.mmu_shadow_page_cache_lock);
-> > >       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadowed_info_cache);
-> >
-> > mmu_shadowed_info_cache can be freed by the shrinker as well.
-> >
+zap_page_range was originally designed to unmap pages within an address
+range that could span multiple vmas.  While working on [1], it was
+discovered that all callers of zap_page_range pass a range entirely within
+a single vma.  In addition, the mmu notification call within zap_page
+range does not correctly handle ranges that span multiple vmas.  When
+crossing a vma boundary, a new mmu_notifier_range_init/end call pair
+with the new vma should be made.
 
-Yes, I can do that as well.
+Instead of fixing zap_page_range, do the following:
+- Create a new routine zap_vma_pages() that will remove all pages within
+  the passed vma.  Most users of zap_page_range pass the entire vma and
+  can use this new routine.
+- For callers of zap_page_range not passing the entire vma, instead call
+  zap_page_range_single().
+- Remove zap_page_range.
 
-> > >       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
-> > >  }
-> > > @@ -1693,27 +1727,15 @@ static int is_empty_shadow_page(u64 *spt)
-> > >  }
-> > >  #endif
-> > >
-> > > -/*
-> > > - * This value is the sum of all of the kvm instances's
-> > > - * kvm->arch.n_used_mmu_pages values.  We need a global,
-> > > - * aggregate version in order to make the slab shrinker
-> > > - * faster
-> > > - */
-> > > -static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
-> > > -{
-> > > -     kvm->arch.n_used_mmu_pages += nr;
-> > > -     percpu_counter_add(&kvm_total_used_mmu_pages, nr);
-> > > -}
-> > > -
-> > >  static void kvm_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> > >  {
-> > > -     kvm_mod_used_mmu_pages(kvm, +1);
-> > > +     kvm->arch.n_used_mmu_pages++;
-> > >       kvm_account_pgtable_pages((void *)sp->spt, +1);
-> > >  }
-> > >
-> > >  static void kvm_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> > >  {
-> > > -     kvm_mod_used_mmu_pages(kvm, -1);
-> > > +     kvm->arch.n_used_mmu_pages--;
-> > >       kvm_account_pgtable_pages((void *)sp->spt, -1);
-> > >  }
-> > >
-> > > @@ -2150,8 +2172,31 @@ struct shadow_page_caches {
-> > >       struct kvm_mmu_memory_cache *page_header_cache;
-> > >       struct kvm_mmu_memory_cache *shadow_page_cache;
-> > >       struct kvm_mmu_memory_cache *shadowed_info_cache;
-> > > +     /*
-> > > +      * Protects change in size of shadow_page_cache cache.
-> > > +      */
-> > > +     spinlock_t *shadow_page_cache_lock;
-> > >  };
-> > >
-> > > +void *kvm_mmu_sp_memory_cache_alloc(struct kvm_mmu_memory_cache *shadow_page_cache,
-> > > +                                 spinlock_t *cache_lock)
-> > > +{
-> > > +     int orig_nobjs;
-> > > +     void *page;
-> > > +
-> > > +     if (!cache_lock) {
-> > > +             spin_lock(cache_lock);
-> > > +             orig_nobjs = shadow_page_cache->nobjs;
-> > > +     }
-> > > +     page = kvm_mmu_memory_cache_alloc(shadow_page_cache);
-> > > +     if (!cache_lock) {
-> > > +             if (orig_nobjs)
-> > > +                     percpu_counter_dec(&kvm_total_unused_mmu_pages);
-> > > +             spin_unlock(cache_lock);
-> > > +     }
-> > > +     return page;
-> > > +}
-> > > +
-> > >  static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
-> > >                                                     struct shadow_page_caches *caches,
-> > >                                                     gfn_t gfn,
-> > > @@ -2161,7 +2206,8 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
-> > >       struct kvm_mmu_page *sp;
-> > >
-> > >       sp = kvm_mmu_memory_cache_alloc(caches->page_header_cache);
-> > > -     sp->spt = kvm_mmu_memory_cache_alloc(caches->shadow_page_cache);
-> > > +     sp->spt = kvm_mmu_sp_memory_cache_alloc(caches->shadow_page_cache,
-> > > +                                             caches->shadow_page_cache_lock);
-> > >       if (!role.direct)
-> > >               sp->shadowed_translation = kvm_mmu_memory_cache_alloc(caches->shadowed_info_cache);
-> > >
-> > > @@ -2218,6 +2264,7 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
-> > >               .page_header_cache = &vcpu->arch.mmu_page_header_cache,
-> > >               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache,
-> > >               .shadowed_info_cache = &vcpu->arch.mmu_shadowed_info_cache,
-> > > +             .shadow_page_cache_lock = &vcpu->arch.mmu_shadow_page_cache_lock
-> > >       };
-> > >
-> > >       return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
-> > > @@ -5916,6 +5963,7 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
-> > >       vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
-> > >
-> > >       vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> > > +     spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
-> > >
-> > >       vcpu->arch.mmu = &vcpu->arch.root_mmu;
-> > >       vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
-> > > @@ -6051,11 +6099,6 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
-> > >               kvm_tdp_mmu_zap_invalidated_roots(kvm);
-> > >  }
-> > >
-> > > -static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
-> > > -{
-> > > -     return unlikely(!list_empty_careful(&kvm->arch.zapped_obsolete_pages));
-> > > -}
-> > > -
-> > >  static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
-> > >                       struct kvm_memory_slot *slot,
-> > >                       struct kvm_page_track_notifier_node *node)
-> > > @@ -6277,6 +6320,7 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
-> > >       /* Direct SPs do not require a shadowed_info_cache. */
-> > >       caches.page_header_cache = &kvm->arch.split_page_header_cache;
-> > >       caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache;
-> > > +     caches.shadow_page_cache_lock = NULL;
-> > >
-> > >       /* Safe to pass NULL for vCPU since requesting a direct SP. */
-> > >       return __kvm_mmu_get_shadow_page(kvm, NULL, &caches, gfn, role);
-> > > @@ -6646,66 +6690,49 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
-> > >  static unsigned long
-> > >  mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-> > >  {
-> > > -     struct kvm *kvm;
-> > > -     int nr_to_scan = sc->nr_to_scan;
-> > > +     struct kvm_mmu_memory_cache *cache;
-> > > +     struct kvm *kvm, *first_kvm = NULL;
-> > >       unsigned long freed = 0;
-> > > +     /* spinlock for memory cache */
-> > > +     spinlock_t *cache_lock;
-> > > +     struct kvm_vcpu *vcpu;
-> > > +     unsigned long i;
-> > >
-> > >       mutex_lock(&kvm_lock);
-> > >
-> > >       list_for_each_entry(kvm, &vm_list, vm_list) {
-> > > -             int idx;
-> > > -             LIST_HEAD(invalid_list);
-> > > -
-> > > -             /*
-> > > -              * Never scan more than sc->nr_to_scan VM instances.
-> > > -              * Will not hit this condition practically since we do not try
-> > > -              * to shrink more than one VM and it is very unlikely to see
-> > > -              * !n_used_mmu_pages so many times.
-> > > -              */
-> > > -             if (!nr_to_scan--)
-> > > +             if (first_kvm == kvm)
-> > >                       break;
-> > > -             /*
-> > > -              * n_used_mmu_pages is accessed without holding kvm->mmu_lock
-> > > -              * here. We may skip a VM instance errorneosly, but we do not
-> > > -              * want to shrink a VM that only started to populate its MMU
-> > > -              * anyway.
-> > > -              */
-> > > -             if (!kvm->arch.n_used_mmu_pages &&
-> > > -                 !kvm_has_zapped_obsolete_pages(kvm))
-> > > -                     continue;
-> > > +             if (!first_kvm)
-> > > +                     first_kvm = kvm;
-> > > +             list_move_tail(&kvm->vm_list, &vm_list);
-> > >
-> > > -             idx = srcu_read_lock(&kvm->srcu);
-> > > -             write_lock(&kvm->mmu_lock);
-> > > +             kvm_for_each_vcpu(i, vcpu, kvm) {
-> >
-> > What protects this from racing with vCPU creation/deletion?
-> >
+[1] https://lore.kernel.org/linux-mm/20221114235507.294320-2-mike.kravetz@oracle.com/
+Suggested-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+---
+RFC->v1 Created zap_vma_pages to zap entire vma (Christoph Hellwig)
+        Did not add Acked-by's as routine was changed.
 
-vCPU deletion:
-We take kvm_lock in mmu_shrink_scan(), the same lock is taken in
-kvm_destroy_vm() to remove a vm from vm_list. So, once we are
-iterating vm_list we will not see any VM removal which will means no
-vcpu removal.
+ arch/arm64/kernel/vdso.c                |  6 ++---
+ arch/powerpc/kernel/vdso.c              |  4 +---
+ arch/powerpc/platforms/book3s/vas-api.c |  2 +-
+ arch/powerpc/platforms/pseries/vas.c    |  3 +--
+ arch/riscv/kernel/vdso.c                |  6 ++---
+ arch/s390/kernel/vdso.c                 |  4 +---
+ arch/s390/mm/gmap.c                     |  2 +-
+ arch/x86/entry/vdso/vma.c               |  4 +---
+ drivers/android/binder_alloc.c          |  2 +-
+ include/linux/mm.h                      |  7 ++++--
+ mm/memory.c                             | 30 -------------------------
+ mm/page-writeback.c                     |  2 +-
+ net/ipv4/tcp.c                          |  7 +++---
+ 13 files changed, 21 insertions(+), 58 deletions(-)
 
-I didn't find any other code for vCPU deletion except failures during
-VM and VCPU set up. A VM is only added to vm_list after successful
-creation.
+diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
+index e59a32aa0c49..0119dc91abb5 100644
+--- a/arch/arm64/kernel/vdso.c
++++ b/arch/arm64/kernel/vdso.c
+@@ -138,13 +138,11 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_lock(mm);
+ 
+ 	for_each_vma(vmi, vma) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+ 		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_AA64].dm))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ #ifdef CONFIG_COMPAT_VDSO
+ 		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_AA32].dm))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ #endif
+ 	}
+ 
+diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
+index 507f8228f983..7a2ff9010f17 100644
+--- a/arch/powerpc/kernel/vdso.c
++++ b/arch/powerpc/kernel/vdso.c
+@@ -120,10 +120,8 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 
+ 	mmap_read_lock(mm);
+ 	for_each_vma(vmi, vma) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+ 		if (vma_is_special_mapping(vma, &vvar_spec))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ 	}
+ 	mmap_read_unlock(mm);
+ 
+diff --git a/arch/powerpc/platforms/book3s/vas-api.c b/arch/powerpc/platforms/book3s/vas-api.c
+index eb5bed333750..9580e8e12165 100644
+--- a/arch/powerpc/platforms/book3s/vas-api.c
++++ b/arch/powerpc/platforms/book3s/vas-api.c
+@@ -414,7 +414,7 @@ static vm_fault_t vas_mmap_fault(struct vm_fault *vmf)
+ 	/*
+ 	 * When the LPAR lost credits due to core removal or during
+ 	 * migration, invalidate the existing mapping for the current
+-	 * paste addresses and set windows in-active (zap_page_range in
++	 * paste addresses and set windows in-active (zap_vma_pages in
+ 	 * reconfig_close_windows()).
+ 	 * New mapping will be done later after migration or new credits
+ 	 * available. So continue to receive faults if the user space
+diff --git a/arch/powerpc/platforms/pseries/vas.c b/arch/powerpc/platforms/pseries/vas.c
+index 4ad6e510d405..559112312810 100644
+--- a/arch/powerpc/platforms/pseries/vas.c
++++ b/arch/powerpc/platforms/pseries/vas.c
+@@ -760,8 +760,7 @@ static int reconfig_close_windows(struct vas_caps *vcap, int excess_creds,
+ 		 * is done before the original mmap() and after the ioctl.
+ 		 */
+ 		if (vma)
+-			zap_page_range(vma, vma->vm_start,
+-					vma->vm_end - vma->vm_start);
++			zap_vma_pages(vma);
+ 
+ 		mmap_write_unlock(task_ref->mm);
+ 		mutex_unlock(&task_ref->mmap_mutex);
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index e410275918ac..5c30212d8d1c 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -124,13 +124,11 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_lock(mm);
+ 
+ 	for_each_vma(vmi, vma) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+ 		if (vma_is_special_mapping(vma, vdso_info.dm))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ #ifdef CONFIG_COMPAT
+ 		if (vma_is_special_mapping(vma, compat_vdso_info.dm))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ #endif
+ 	}
+ 
+diff --git a/arch/s390/kernel/vdso.c b/arch/s390/kernel/vdso.c
+index ff7bf4432229..bbaefd84f15e 100644
+--- a/arch/s390/kernel/vdso.c
++++ b/arch/s390/kernel/vdso.c
+@@ -59,11 +59,9 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 
+ 	mmap_read_lock(mm);
+ 	for_each_vma(vmi, vma) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+ 		if (!vma_is_special_mapping(vma, &vvar_mapping))
+ 			continue;
+-		zap_page_range(vma, vma->vm_start, size);
++		zap_vma_pages(vma);
+ 		break;
+ 	}
+ 	mmap_read_unlock(mm);
+diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+index 74e1d873dce0..69af6cdf1a2a 100644
+--- a/arch/s390/mm/gmap.c
++++ b/arch/s390/mm/gmap.c
+@@ -722,7 +722,7 @@ void gmap_discard(struct gmap *gmap, unsigned long from, unsigned long to)
+ 		if (is_vm_hugetlb_page(vma))
+ 			continue;
+ 		size = min(to - gaddr, PMD_SIZE - (gaddr & ~PMD_MASK));
+-		zap_page_range(vma, vmaddr, size);
++		zap_page_range_single(vma, vmaddr, size, NULL);
+ 	}
+ 	mmap_read_unlock(gmap->mm);
+ }
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index b8f3f9b9e53c..ec5e4d2048cb 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -113,10 +113,8 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 
+ 	mmap_read_lock(mm);
+ 	for_each_vma(vmi, vma) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+ 		if (vma_is_special_mapping(vma, &vvar_mapping))
+-			zap_page_range(vma, vma->vm_start, size);
++			zap_vma_pages(vma);
+ 	}
+ 	mmap_read_unlock(mm);
+ 
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 4ad42b0f75cd..55a3c3c2409f 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -1019,7 +1019,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
+ 	if (vma) {
+ 		trace_binder_unmap_user_start(alloc, index);
+ 
+-		zap_page_range(vma, page_addr, PAGE_SIZE);
++		zap_page_range_single(vma, page_addr, PAGE_SIZE, NULL);
+ 
+ 		trace_binder_unmap_user_end(alloc, index);
+ 	}
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index c1ea18bc99e2..e4374baadbf3 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1977,10 +1977,13 @@ struct page *vm_normal_page_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 
+ void zap_vma_ptes(struct vm_area_struct *vma, unsigned long address,
+ 		  unsigned long size);
+-void zap_page_range(struct vm_area_struct *vma, unsigned long address,
+-		    unsigned long size);
+ void zap_page_range_single(struct vm_area_struct *vma, unsigned long address,
+ 			   unsigned long size, struct zap_details *details);
++static inline void zap_vma_pages(struct vm_area_struct *vma)
++{
++	zap_page_range_single(vma, vma->vm_start,
++			      vma->vm_end - vma->vm_start, NULL);
++}
+ void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		struct vm_area_struct *start_vma, unsigned long start,
+ 		unsigned long end);
+diff --git a/mm/memory.c b/mm/memory.c
+index 4000e9f017e0..14e63e14adc4 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1693,36 +1693,6 @@ void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+ 	mmu_notifier_invalidate_range_end(&range);
+ }
+ 
+-/**
+- * zap_page_range - remove user pages in a given range
+- * @vma: vm_area_struct holding the applicable pages
+- * @start: starting address of pages to zap
+- * @size: number of bytes to zap
+- *
+- * Caller must protect the VMA list
+- */
+-void zap_page_range(struct vm_area_struct *vma, unsigned long start,
+-		unsigned long size)
+-{
+-	struct maple_tree *mt = &vma->vm_mm->mm_mt;
+-	unsigned long end = start + size;
+-	struct mmu_notifier_range range;
+-	struct mmu_gather tlb;
+-	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
+-
+-	lru_add_drain();
+-	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
+-				start, start + size);
+-	tlb_gather_mmu(&tlb, vma->vm_mm);
+-	update_hiwater_rss(vma->vm_mm);
+-	mmu_notifier_invalidate_range_start(&range);
+-	do {
+-		unmap_single_vma(&tlb, vma, start, range.end, NULL);
+-	} while ((vma = mas_find(&mas, end - 1)) != NULL);
+-	mmu_notifier_invalidate_range_end(&range);
+-	tlb_finish_mmu(&tlb);
+-}
+-
+ /**
+  * zap_page_range_single - remove user pages in a given range
+  * @vma: vm_area_struct holding the applicable pages
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index ad608ef2a243..ffa36cfe5884 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -2713,7 +2713,7 @@ void folio_account_cleaned(struct folio *folio, struct bdi_writeback *wb)
+  *
+  * The caller must hold lock_page_memcg().  Most callers have the folio
+  * locked.  A few have the folio blocked from truncation through other
+- * means (eg zap_page_range() has it mapped and is holding the page table
++ * means (eg zap_vma_pages() has it mapped and is holding the page table
+  * lock).  This can also be called from mark_buffer_dirty(), which I
+  * cannot prove is always protected against truncate.
+  */
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index c567d5e8053e..f713c0422f0f 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2092,7 +2092,7 @@ static int tcp_zerocopy_vm_insert_batch_error(struct vm_area_struct *vma,
+ 		maybe_zap_len = total_bytes_to_map -  /* All bytes to map */
+ 				*length + /* Mapped or pending */
+ 				(pages_remaining * PAGE_SIZE); /* Failed map. */
+-		zap_page_range(vma, *address, maybe_zap_len);
++		zap_page_range_single(vma, *address, maybe_zap_len, NULL);
+ 		err = 0;
+ 	}
+ 
+@@ -2100,7 +2100,7 @@ static int tcp_zerocopy_vm_insert_batch_error(struct vm_area_struct *vma,
+ 		unsigned long leftover_pages = pages_remaining;
+ 		int bytes_mapped;
+ 
+-		/* We called zap_page_range, try to reinsert. */
++		/* We called zap_page_range_single, try to reinsert. */
+ 		err = vm_insert_pages(vma, *address,
+ 				      pending_pages,
+ 				      &pages_remaining);
+@@ -2234,7 +2234,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
+ 	total_bytes_to_map = avail_len & ~(PAGE_SIZE - 1);
+ 	if (total_bytes_to_map) {
+ 		if (!(zc->flags & TCP_RECEIVE_ZEROCOPY_FLAG_TLB_CLEAN_HINT))
+-			zap_page_range(vma, address, total_bytes_to_map);
++			zap_page_range_single(vma, address, total_bytes_to_map,
++					      NULL);
+ 		zc->length = total_bytes_to_map;
+ 		zc->recv_skip_hint = 0;
+ 	} else {
+-- 
+2.38.1
 
-vCPU creation:
-I think it will work.
-
-kvm_vm_ioctl_create_vcpus() initializes the vcpu, adds it to
-kvm->vcpu_array which is of the type xarray and is managed by RCU.
-After this online_vcpus is incremented. So, kvm_for_each_vcpu() which
-uses RCU to read entries, if it sees incremented online_vcpus value
-then it will also sees all of the vcpu initialization.
-
-@Sean, Paolo
-
-Is the above explanation correct, kvm_for_each_vcpu() is safe without any lock?
-
-> > > +                     cache = &vcpu->arch.mmu_shadow_page_cache;
-> > > +                     cache_lock = &vcpu->arch.mmu_shadow_page_cache_lock;
-> > > +                     if (READ_ONCE(cache->nobjs)) {
-> > > +                             spin_lock(cache_lock);
-> > > +                             freed += kvm_mmu_empty_memory_cache(cache);
-> > > +                             spin_unlock(cache_lock);
-> > > +                     }
-> >
-> > What about freeing kvm->arch.split_shadow_page_cache as well?
-> >
-
-I am doing this in patch 3.
-
-> > >
-> > > -             if (kvm_has_zapped_obsolete_pages(kvm)) {
-> > > -                     kvm_mmu_commit_zap_page(kvm,
-> > > -                           &kvm->arch.zapped_obsolete_pages);
-> > > -                     goto unlock;
-> > >               }
-> > >
-> > > -             freed = kvm_mmu_zap_oldest_mmu_pages(kvm, sc->nr_to_scan);
-> > > -
-> > > -unlock:
-> > > -             write_unlock(&kvm->mmu_lock);
-> > > -             srcu_read_unlock(&kvm->srcu, idx);
-> > > -
-> > > -             /*
-> > > -              * unfair on small ones
-> > > -              * per-vm shrinkers cry out
-> > > -              * sadness comes quickly
-> > > -              */
-> > > -             list_move_tail(&kvm->vm_list, &vm_list);
-> > > -             break;
-> > > +             if (freed >= sc->nr_to_scan)
-> > > +                     break;
-> > >       }
-> > >
-> > > +     if (freed)
-> > > +             percpu_counter_sub(&kvm_total_unused_mmu_pages, freed);
-> > >       mutex_unlock(&kvm_lock);
-> > > +     percpu_counter_sync(&kvm_total_unused_mmu_pages);
-> > >       return freed;
-> > >  }
-> > >
-> > >  static unsigned long
-> > >  mmu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
-> > >  {
-> > > -     return percpu_counter_read_positive(&kvm_total_used_mmu_pages);
-> > > +     return percpu_counter_sum_positive(&kvm_total_unused_mmu_pages);
-> > >  }
-> > >
-> > >  static struct shrinker mmu_shrinker = {
-> > > @@ -6820,7 +6847,7 @@ int kvm_mmu_vendor_module_init(void)
-> > >       if (!mmu_page_header_cache)
-> > >               goto out;
-> > >
-> > > -     if (percpu_counter_init(&kvm_total_used_mmu_pages, 0, GFP_KERNEL))
-> > > +     if (percpu_counter_init(&kvm_total_unused_mmu_pages, 0, GFP_KERNEL))
-> > >               goto out;
-> > >
-> > >       ret = register_shrinker(&mmu_shrinker, "x86-mmu");
-> > > @@ -6830,7 +6857,7 @@ int kvm_mmu_vendor_module_init(void)
-> > >       return 0;
-> > >
-> > >  out_shrinker:
-> > > -     percpu_counter_destroy(&kvm_total_used_mmu_pages);
-> > > +     percpu_counter_destroy(&kvm_total_unused_mmu_pages);
-> > >  out:
-> > >       mmu_destroy_caches();
-> > >       return ret;
-> > > @@ -6847,7 +6874,7 @@ void kvm_mmu_destroy(struct kvm_vcpu *vcpu)
-> > >  void kvm_mmu_vendor_module_exit(void)
-> > >  {
-> > >       mmu_destroy_caches();
-> > > -     percpu_counter_destroy(&kvm_total_used_mmu_pages);
-> > > +     percpu_counter_destroy(&kvm_total_unused_mmu_pages);
-> > >       unregister_shrinker(&mmu_shrinker);
-> > >  }
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > index ac00bfbf32f6..c2a342028b6a 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -325,4 +325,6 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> > >  void track_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >  void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >
-> > > +void *kvm_mmu_sp_memory_cache_alloc(struct kvm_mmu_memory_cache *shadow_page_cache,
-> > > +                                 spinlock_t *cache_lock);
-> > >  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > index 764f7c87286f..4974fa96deff 100644
-> > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > @@ -264,7 +264,8 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
-> > >       struct kvm_mmu_page *sp;
-> > >
-> > >       sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
-> > > -     sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
-> > > +     sp->spt = kvm_mmu_sp_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache,
-> > > +                                             &vcpu->arch.mmu_shadow_page_cache_lock);
-> > >
-> > >       return sp;
-> > >  }
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index 01aad8b74162..efd9b38ea9a2 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -1362,6 +1362,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm);
-> > >  int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
-> > >  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min);
-> > >  int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
-> > > +int kvm_mmu_empty_memory_cache(struct kvm_mmu_memory_cache *mc);
-> > >  void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
-> > >  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> > >  #endif
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index 13e88297f999..f2d762878b97 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -438,8 +438,10 @@ int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
-> > >       return mc->nobjs;
-> > >  }
-> > >
-> > > -void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
-> > > +int kvm_mmu_empty_memory_cache(struct kvm_mmu_memory_cache *mc)
-> > >  {
-> > > +     int freed = mc->nobjs;
-> > > +
-> > >       while (mc->nobjs) {
-> > >               if (mc->kmem_cache)
-> > >                       kmem_cache_free(mc->kmem_cache, mc->objects[--mc->nobjs]);
-> > > @@ -447,8 +449,13 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
-> > >                       free_page((unsigned long)mc->objects[--mc->nobjs]);
-> > >       }
-> > >
-> > > -     kvfree(mc->objects);
-> > > +     return freed;
-> > > +}
-> > >
-> > > +void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
-> > > +{
-> > > +     kvm_mmu_empty_memory_cache(mc);
-> > > +     kvfree(mc->objects);
-> > >       mc->objects = NULL;
-> > >       mc->capacity = 0;
-> > >  }
-> > > --
-> > > 2.39.0.314.g84b9a713c41-goog
-> > >
