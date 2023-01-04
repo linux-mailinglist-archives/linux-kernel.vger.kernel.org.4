@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E047C65E02F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6F265E031
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbjADWpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S235558AbjADWpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbjADWo7 (ORCPT
+        with ESMTP id S235227AbjADWp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:44:59 -0500
-Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F9142E06
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:44:57 -0800 (PST)
-Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-14455716674so41425526fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:44:57 -0800 (PST)
+        Wed, 4 Jan 2023 17:45:29 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36A742E11;
+        Wed,  4 Jan 2023 14:45:28 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id h185so8202682oif.5;
+        Wed, 04 Jan 2023 14:45:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XppnWxwUDd4VKlDQMnttNa0YhBi85GdHW05upV3mZfc=;
-        b=bIvXeO4Mj2vxG1xzoD857JzcNYfyRAkxCnlrQdShaibm/rGHHiqrfelqzS1wLbc638
-         cVLQsaIhV68pENM0f69tmtijPn1Fi6J/DaadrFQd7o4xGR/gTIU89mUQt5tnsN7eOJx6
-         QRgRhoJ7fNlcNt/xRC9JDtXBo4qeglVSynZlbj0el8hRIr6oLuj6v+iGeZA3mqHq0MaF
-         PDBApaAfGgKoDMVXPen3ZjFu+YJ0pKO4zsEBuCrw6LihhDZ8okYDE2KqyJcp1K8+Rk6F
-         xXXQVI2/G4T5xSo1CQnqkXJMrsVgl1W6hK1eJgjKdy2lL9VC3q/mjC87rcUCPBpzCKfq
-         chjw==
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=n0P1Cn3HY9tpg3++h0RgufbLi9nhgqUDgcarrxGrEhc=;
+        b=CTW47R0r4NmIs6nU+t9MKUeCBx6pEjcnIVkPO0q//i1TLZZf6BtV5PJGbQMXosd++o
+         uSd088mijuoe1rTdoK5ci2YBpW6svSFp89RAkA5F2k4JwTO5NNpS/M0bij6it42iyt82
+         DBrlEb7nHLtbz9YgXUyZ/naOrgjCZVin0M+hgg1Uv6W+FAuWSpIVsXX/QDJdF+GYQqKO
+         H0CVgU0hVh0iBCwn66cSmS2FIMujHwg09VbWzUzC/bz5u8rf6skGiYgxdO4OqBxPsytl
+         P4VUsp35wsnosc94bjTDu3Od7My9UoGXvMCQTuEtMsZWbGdxGnlOKGjTYZ4yZSbuwSSK
+         wHJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XppnWxwUDd4VKlDQMnttNa0YhBi85GdHW05upV3mZfc=;
-        b=MUqE2pF5wGlvlPflgXJhwHwX1Wv/MUSfW4SbDXfaNsnCsEfvK+3rdmpaYjtnUzmVPP
-         HsTg5i2JNQLo41FYXTXJNa9vgQi1NFhAtKWn47fvNEanCmlR8FGCO1/ucUKwwuE/yYio
-         spRBUTpToLmEaZvE7dmV7P8LZQNx02WtJS5Njsl01qpfKhX4q9WrDLnDMcNFct7DO7Yx
-         Br1zYjcKk1EWa/3vzi0mnS9ChomRH66jMEDuIV0hTP19Ntr3dMTxhGxbPztC1ZtEyEdS
-         Cbb1q2eiWuVLMg1TwTfM2IiYsv9PPERI/zCJz1CFkYkcEvwW9sw/vYYOfpVIwRpOp0gs
-         2daQ==
-X-Gm-Message-State: AFqh2kruglYhxMTJk5fgm+WR53jjLFhWOond9VyiG7nihEycDZsu1jag
-        mnZmRmG5FDjohU9BeqH9vjWUvuOCECQMze7agUs=
-X-Google-Smtp-Source: AMrXdXslGLLlOkPtAHVEZM3AK6rULv95xVo/pVcWGjge6Oz09JrRRdjtHCfBTobP7caAFgKgk3dkmUWboPSAfIYXpiM=
-X-Received: by 2002:a05:6871:68c:b0:150:60e7:8d83 with SMTP id
- l12-20020a056871068c00b0015060e78d83mr1238945oao.163.1672872296795; Wed, 04
- Jan 2023 14:44:56 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n0P1Cn3HY9tpg3++h0RgufbLi9nhgqUDgcarrxGrEhc=;
+        b=Co2bM3jh7Rm9fq4t4xkjT0gX8pFxztVBYh0VeCZjy7oxIQVWZhXo2c66lZOAsI9zeU
+         xiNGbdfAwpVcRAUGpQ/7fQQ8/H2YTn8GLXwvOutj5UfXBuS8J/B+gF34HB5lPBEJXYwW
+         1mLTCbJrqfwjbvKnLkfgn66O880JiPUnde2E0yZVpZ5odMNPY7iJaKhWDNNs6GSMbl+K
+         Id8WV5CCVfZu7//pphJFbsHmY+jYKCukzEpqbfETGnhA9NZI0zO853ssQYTaaChw99RJ
+         YNZbk0sFLjonOeB63tPCArtkdQbOUBY5fqx9flOyPgh8BKhvbcm62tsXkHP6B5TDMd0l
+         oczA==
+X-Gm-Message-State: AFqh2ko+/gd2Jyi0rzisRBcNuRaDC579b+2sWellR8k2NXVkJpKjnXMY
+        z4yVX9hoe3/sfrXvDJ1nJ66QRjw+8Ho=
+X-Google-Smtp-Source: AMrXdXs2r16GJCTizyevH27pi+20ETe7z/MiQjxbt7H7twer0U6M2TcXHj+kjrH1sRwEQ4dCYqNl4w==
+X-Received: by 2002:a05:6808:2898:b0:35e:13d2:ac2f with SMTP id eu24-20020a056808289800b0035e13d2ac2fmr20625764oib.8.1672872328058;
+        Wed, 04 Jan 2023 14:45:28 -0800 (PST)
+Received: from neuromancer. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
+        by smtp.gmail.com with ESMTPSA id o189-20020aca41c6000000b00360e46a1edasm14594612oia.22.2023.01.04.14.45.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 14:45:27 -0800 (PST)
+Message-ID: <63b60187.ca0a0220.a832f.5d69@mx.google.com>
+X-Google-Original-Message-ID: <Y7YBhOuq6jNaT99m@neuromancer.>
+Date:   Wed, 4 Jan 2023 16:45:24 -0600
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
+ RTL8821CS chipset
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+ <20221227233020.284266-20-martin.blumenstingl@googlemail.com>
+ <63b4b3e1.050a0220.791fb.767c@mx.google.com>
+ <CAFBinCDpMjHPZ4CA-YdyAu=k1F_7DxxYEMSjnBEX2aMWfSCCeA@mail.gmail.com>
+ <63b5b1c0.050a0220.a0efc.de06@mx.google.com>
+ <CAFBinCCvf8E6jwjtoSgATnBxULgytFsUnphzUuaVPygsO3Prwg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6838:2307:b0:577:153e:6778 with HTTP; Wed, 4 Jan 2023
- 14:44:56 -0800 (PST)
-Reply-To: lisaarobet@gmail.com
-In-Reply-To: <63b55bf8.050a0220.2b2fc.308b.GMR@mx.google.com>
-References: <CALcNZmGVi_msZ=XLrJ4opKeqNvOk5vpM_0TdvkOYG+GWregYyA@mail.gmail.com>
- <CALcNZmGVi_msZ=XLrJ4opKeqNvOk5vpM_0TdvkOYG+GWregYyA@mail.gmail.com> <63b55bf8.050a0220.2b2fc.308b.GMR@mx.google.com>
-From:   Lisa <ws6392981@gmail.com>
-Date:   Wed, 4 Jan 2023 22:44:56 +0000
-Message-ID: <CALcNZmFWcqOm3PnYO11xP6o-qUG9kD4PMEfa=2DcKqkE4FfKjA@mail.gmail.com>
-Subject: Re: Delivery Status Notification (Delay)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCCvf8E6jwjtoSgATnBxULgytFsUnphzUuaVPygsO3Prwg@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:42 listed in]
-        [list.dnswl.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [2001:4860:4864:20:0:0:0:42 listed in]
-        [zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4857]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ws6392981[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ws6392981[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 04, 2023 at 06:23:24PM +0100, Martin Blumenstingl wrote:
+> On Wed, Jan 4, 2023 at 6:05 PM Chris Morgan <macroalpha82@gmail.com> wrote:
+> [...]
+> > > > [    0.989545] mmc2: new high speed SDIO card at address 0001
+> > > > [    0.989993] rtw_8821cs mmc2:0001:1: Firmware version 24.8.0, H2C version 12
+> > > > [    1.005684] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x14): -110
+> > > > [    1.005737] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1080): -110
+> > > > [    1.005789] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x11080): -110
+> > > > [    1.005840] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x3): -110
+> > > > [    1.005920] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x1103): -110
+> > > > [    1.005998] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x80): -110
+> > > > [    1.006078] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1700): -110
+> > > The error starts with a write to register 0x14 (REG_SDIO_HIMR), which
+> > > happens right after configuring RX aggregation.
+> > > Can you please try two modifications inside
+> > > drivers/net/wireless/realtek/rtw88/sdio.c:
+> > > 1. inside the rtw_sdio_start() function: change
+> > > "rtw_sdio_rx_aggregation(rtwdev, false);" to
+> > > "rtw_sdio_rx_aggregation(rtwdev, true);"
+> >
+> > No change, still receive identical issue.
+> >
+> > > 2. if 1) does not work: remove the call to rtw_sdio_rx_aggregation()
+> > > from rtw_sdio_start()
+> > >
+> >
+> > Same here, still receive identical issue.
+> Thanks for testing and for reporting back!
+> 
+> Looking back at it again: I think I mis-interpreted your error output.
+> I think it's actually failing in __rtw_mac_init_system_cfg()
+> 
+> Can you please try the latest code from [0] (ignoring any changes I
+> recommended previously)?
+> There's two bug fixes in there (compared to this series) which may
+> solve the issue that you are seeing:
+> - fix typos to use "if (!*err_ret ..." (to read the error code)
+> instead of "if (!err_ret ..." (which just checks if a non-null pointer
+> was passed) in rtw_sdio_read_indirect{8,32}
+> - change buf[0] to buf[i] in rtw_sdio_read_indirect_bytes
+> 
+> These fixes will be part of v2 of this series anyways.
 
-Just wanted to check in and see if you receive my request?
+That still doesn't fix it, I receive the same error. I'm using an older
+patch series of yours (that I can't seem to find on github anymore),
+so I'll see if I can compare the older series that works with this one
+and find out the root cause.
 
-Thanks
+Thank you.
+
+> 
+> 
+> Best regards,
+> Martin
+> 
+> 
+> [0] https://github.com/xdarklight/linux/tree/d115a8631d208996510822f0805df5dfc8dfb548
