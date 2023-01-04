@@ -2,142 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C0665D6F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8A965D6F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 16:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbjADPPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 10:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S237684AbjADPP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 10:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjADPPn (ORCPT
+        with ESMTP id S230056AbjADPPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 10:15:43 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822AF1AA2C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 07:15:42 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id a30so7422995pfr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 07:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NcHEJMiIJ2CTsxxcy2YLVjiMLnHtyJJbhyDHZkGM4Oc=;
-        b=F9bpsh37Sd0YglgZi0WpS89CpHqfv0diullW3FFmTO9bOi7hfscSE/OjGPxPEPQkEN
-         30dLoca9DbFdO0h28yq/V0+zKhhwP7if4KzONvm0C5e4ZGN7RR/mJV/dX+GglLwSPMpc
-         Gck5P/9AM6XxWAH5yODKBjx04KGJHJrt3cUGzkNpLz7TtkHshqQEQMmgpRlw05G6wUeV
-         5W4gvQ8VVwwjaGsE/rtTb24nlbbWIKIJVIXrbhMZpYUq/nPtkr3qwhzF10vZuWlV1+AP
-         2/8yaiwVmq1nGEh+/72E1SVue5OHi7WQ+fmXOrDqBI08/KLZ3ui1bKaArAvMh6A4NakM
-         rQ1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NcHEJMiIJ2CTsxxcy2YLVjiMLnHtyJJbhyDHZkGM4Oc=;
-        b=xIaVDtK/NargfbEcRy5aRwUiOJjAyXEfUVF4deiOBIMJR4ukkSwekctD9Z+aqTnO5S
-         SBp18GMKg+KTHL+ScvimpvvHPe3OizAYaPLcspYZSmk7jn2X/OXZ9S5RL6bqwqmSBKxl
-         qmaHgDBUJKyCfdWD49+F3fM7LZgL7oqBXK8HyyqKhBBKC6fYkOHZXCFJyZLcjFyIxy1i
-         zFNW8h73ut/5Do9mB6Bxk+PCW+XTTvqlfK/ASr4WfoqbIijAsDkkqnQLA+8xJNAgYF4P
-         t02EAPHvRnr/T1Pgihv1EBI2yXEjM4+gdUKL7+gET2sZwfMfcDOtG7Vrv9L+85hlGPCK
-         TOsg==
-X-Gm-Message-State: AFqh2kpOPMLhFumyjn5NUrxbKivyTOQw/8KCr0afxAjDrTW90TVFhiSy
-        gTpvBvvyFTYIzfVifeN65fODIoWQpMk00ZoWD02wBA==
-X-Google-Smtp-Source: AMrXdXt93Kj3tA2/Y9cGuM6OLuxk7FuAuBumQ9h/vxk1VLQQewgTolksdOkOGf5EMaiCJCDrv92isJrfu7ZsSe9hYkE=
-X-Received: by 2002:a63:ba09:0:b0:479:2227:3aa1 with SMTP id
- k9-20020a63ba09000000b0047922273aa1mr2127830pgf.595.1672845341858; Wed, 04
- Jan 2023 07:15:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org> <Y6Iq1CyHScvZM++Y@fedora>
-In-Reply-To: <Y6Iq1CyHScvZM++Y@fedora>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 Jan 2023 16:15:05 +0100
-Message-ID: <CAPDyKFpCK-z5TH02rFTUHwsFTz83xtiAq=Vp0iE+iztB-CcB5w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] PM: Fixes for Realtime systems
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CDF193DD;
+        Wed,  4 Jan 2023 07:15:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672845342; x=1704381342;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tJ3bj3MrfiZCAxDXbBCyEWZjTJi5n8tfV2A1B0+qdBM=;
+  b=dFu/L8Bdj6gG4dNeANl50zz7iXZwgDE4dLDVL5laMNP0hRlB1V5bICua
+   Mv6sHLlaTb/dFirGnsTKco1Z2+SwruHBO6htwzFoZZI5H2lGA8SPrnaid
+   2OdV6iByTmLXXyf+6kXkeRtowNEXZ5/7vF1AwKLy3WTgfstytUqaaoPUm
+   GukutDmYyubFWunYcClPo86t2lewORcF9l+O69PE8EaBob3xfBWIKJoVE
+   L7iR0AOfTFS7gejiBIs6Yv5TTv+JXd1600KIBDOHUlPg4mZ4zyC6iJrAJ
+   zfE1FMScpp7/R7j8054YvyrDkblp7ChRpQxvaCjNUAReR5+NRntSHd0vQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301644274"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="301644274"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 07:15:41 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="762700641"
+X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
+   d="scan'208";a="762700641"
+Received: from msvoboda-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.48.119])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 07:15:39 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/10] tty/serial: bool conversions and cleanups
+Date:   Wed,  4 Jan 2023 17:15:21 +0200
+Message-Id: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 at 22:36, Adrien Thierry <athierry@redhat.com> wrote:
->
-> Hi Krzysztof,
-> Thanks for looking into this!
->
-> I tested your patchset on the QDrive3 on a CentOS Stream 9 RT kernel (I
-> couldn't test it on mainline because the latest RT patchset only supports
-> 6.1 which is missing some bits needed to boot QDrive3).
->
-> It fixes the PSCI cpuidle issue I was encountering in [1]. However, I may
-> have found another code path that triggers a similar issue:
->
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 113, name: kworker/4:2
-> preempt_count: 1, expected: 0
-> RCU nest depth: 0, expected: 0
-> 4 locks held by kworker/4:2/113:
->  #0: ffff09b0c2376928 ((wq_completion)pm){+.+.}-{0:0}, at: process_one_work+0x1f4/0x7c0
->  #1: ffff800008bf3dd0 ((work_completion)(&genpd->power_off_work)){+.+.}-{0:0}, at: process_one_work+0x1f4/0x7c0
->  #2: ffff09b0c2e44860 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x20/0x30
->  #3: ffff09b0c6696a20 (&dev->power.lock){+.+.}-{2:2}, at: dev_pm_qos_flags+0x2c/0x60
-> irq event stamp: 170
-> hardirqs last  enabled at (169): [<ffffa1be822f8a78>] _raw_spin_unlock_irq+0x48/0xc4
-> hardirqs last disabled at (170): [<ffffa1be822f8df4>] _raw_spin_lock_irqsave+0xb0/0xfc
-> softirqs last  enabled at (0): [<ffffa1be814cfff0>] copy_process+0x68c/0x1500
-> softirqs last disabled at (0): [<0000000000000000>] 0x0
-> Preemption disabled at:
-> [<ffffa1be81d7e620>] genpd_lock_rawspin+0x20/0x30
-> CPU: 4 PID: 113 Comm: kworker/4:2 Tainted: G               X --------- ---  5.14.0-rt14+ #2
-> Hardware name: Qualcomm SA8540 ADP (DT)
-> Workqueue: pm genpd_power_off_work_fn
-> Call trace:
->  dump_backtrace+0xb4/0x12c
->  show_stack+0x1c/0x70
->  dump_stack_lvl+0x98/0xd0
->  dump_stack+0x14/0x2c
->  __might_resched+0x180/0x220
->  rt_spin_lock+0x74/0x11c
->  dev_pm_qos_flags+0x2c/0x60
->  genpd_power_off.part.0.isra.0+0xac/0x2d0
->  genpd_power_off_work_fn+0x68/0x8c
->  process_one_work+0x2b8/0x7c0
->  worker_thread+0x15c/0x44c
->  kthread+0xf8/0x104
->  ret_from_fork+0x10/0x20
->
-> This happens consistently during boot. But on the mainline kernel, this
-> code path has changed: genpd_power_off no longer calls dev_pm_qos_flags.
-> So it might not happen on mainline. I hope to be able to test your
-> patchset again soon on mainline with the next version of the RT patchset
-> (which should be able to boot the QDrive3).
+There are number of functions in tty/serial which have arguments or
+return types that expect/behave like bool. Likely due to them existing
+before bool was available, other types are used. Make conversions to
+bool and cleanups.
 
-You are right, since commit 3f9ee7da724a ("PM: domains: Don't check
-PM_QOS_FLAG_NO_POWER_OFF in genpd") dev_pm_qos_flags() doesn't get
-called in genpd_power_off() anymore. That patch was introduced in
-v5.19.
->
-> Best,
-> Adrien
->
-> [1] https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
->
+Ilpo Järvinen (10):
+  tty: Cleanup tty_port_set_initialized() bool parameter
+  tty: Cleamup tty_port_set_suspended() bool parameter
+  tty: Cleanup tty_port_set_active() bool parameter
+  tty: moxa: Make local var storing tty_port_initialized() bool
+  serial: Convert uart_{,port_}startup() init_hw param to bool
+  tty: Convert ->carrier_raised() and callchains to bool
+  tty: Convert ->dtr_rts() to take bool argument
+  tty/serial: Make ->dcd_change()+uart_handle_dcd_change() status bool
+  serial: Make uart_handle_cts_change() status param bool
+  tty: Return bool from tty_termios_hw_change()
 
-Kind regards
-Uffe
+ drivers/char/pcmcia/synclink_cs.c    | 16 ++++----
+ drivers/ipack/devices/ipoctal.c      |  4 +-
+ drivers/mmc/core/sdio_uart.c         | 11 +++---
+ drivers/pps/clients/pps-ldisc.c      |  2 +-
+ drivers/s390/char/con3215.c          |  4 +-
+ drivers/staging/greybus/uart.c       |  2 +-
+ drivers/tty/amiserial.c              | 10 ++---
+ drivers/tty/hvc/hvc_console.c        |  4 +-
+ drivers/tty/hvc/hvc_console.h        |  2 +-
+ drivers/tty/hvc/hvc_iucv.c           |  4 +-
+ drivers/tty/moxa.c                   | 24 ++++++------
+ drivers/tty/mxser.c                  |  9 +++--
+ drivers/tty/n_gsm.c                  | 14 +++----
+ drivers/tty/serial/imx.c             |  2 +-
+ drivers/tty/serial/max3100.c         |  2 +-
+ drivers/tty/serial/max310x.c         |  3 +-
+ drivers/tty/serial/serial_core.c     | 55 +++++++++++++---------------
+ drivers/tty/serial/sunhv.c           |  8 ++--
+ drivers/tty/synclink_gt.c            | 19 +++++-----
+ drivers/tty/tty_ioctl.c              | 10 ++---
+ drivers/tty/tty_port.c               | 22 +++++------
+ drivers/usb/class/cdc-acm.c          |  2 +-
+ drivers/usb/serial/ch341.c           |  9 ++---
+ drivers/usb/serial/console.c         |  2 +-
+ drivers/usb/serial/cp210x.c          |  4 +-
+ drivers/usb/serial/cypress_m8.c      |  6 +--
+ drivers/usb/serial/digi_acceleport.c |  6 +--
+ drivers/usb/serial/f81232.c          |  8 ++--
+ drivers/usb/serial/f81534.c          |  2 +-
+ drivers/usb/serial/ftdi_sio.c        |  2 +-
+ drivers/usb/serial/generic.c         |  2 +-
+ drivers/usb/serial/ipw.c             |  2 +-
+ drivers/usb/serial/keyspan.c         |  2 +-
+ drivers/usb/serial/keyspan_pda.c     |  2 +-
+ drivers/usb/serial/mct_u232.c        |  4 +-
+ drivers/usb/serial/mxuport.c         |  2 +-
+ drivers/usb/serial/pl2303.c          |  9 ++---
+ drivers/usb/serial/quatech2.c        |  2 +-
+ drivers/usb/serial/sierra.c          |  2 +-
+ drivers/usb/serial/spcp8x5.c         |  9 ++---
+ drivers/usb/serial/ssu100.c          |  2 +-
+ drivers/usb/serial/upd78f0730.c      |  6 +--
+ drivers/usb/serial/usb-serial.c      |  6 +--
+ drivers/usb/serial/usb-wwan.h        |  2 +-
+ drivers/usb/serial/usb_wwan.c        |  2 +-
+ drivers/usb/serial/xr_serial.c       |  6 +--
+ include/linux/serial_core.h          |  6 +--
+ include/linux/tty.h                  |  2 +-
+ include/linux/tty_ldisc.h            |  4 +-
+ include/linux/tty_port.h             | 10 ++---
+ include/linux/usb/serial.h           |  6 +--
+ net/bluetooth/rfcomm/tty.c           |  2 +-
+ 52 files changed, 170 insertions(+), 188 deletions(-)
+
+-- 
+2.30.2
+
