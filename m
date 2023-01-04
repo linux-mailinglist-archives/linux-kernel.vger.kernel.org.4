@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D2D65D3D4
+	by mail.lfdr.de (Postfix) with ESMTP id C47F765D3D5
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbjADNIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S239327AbjADNI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239466AbjADNIP (ORCPT
+        with ESMTP id S239321AbjADNIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:08:15 -0500
+        Wed, 4 Jan 2023 08:08:21 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75A737387
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:07:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5427A3E0F7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:07:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672837646; x=1704373646;
+  t=1672837652; x=1704373652;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NqpK1UK4zC2YasbUe6iVPvT9t2cN4N0bRVM1VXzIvT0=;
-  b=NF02FhD1eQM8nLxU8MfxJIF+u/my/1K27BVf1gMkLbLLjiuSeKr5a0Fm
-   niM6Jr5o2h414Bgcp2/6C/+MOm99E1OEMXCnn+CygQNjvSUTL23aj3HNK
-   nM7J+uIXVMcqa8brT0zft6ZU76wyHe1rjEcSvoaV/3FNRXTyE6UQ2pKs/
-   b6pngtha8x9/k+N8N/56WARCcMI3hryh5lx7KbeZePsJMdd4cO9oYcgk2
-   aevOlXJF6wIeRB9pnW4it6d6p5Yitysnz8d8y21q6skBIBLvhia1YtX29
-   fooK1hrOea/r6iGb5OGKybUO5fhs5xB2kNIn9Axdur+xiYJCMhzRRWwE6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640190"
+  bh=Xleto1bNcJbkoJR+rItuVcszZ5LEAV28VIm/LQTaL2s=;
+  b=KGG6mN+8e5MPITVi6+TTaycglDqIk8rdmnQBtz5eyjFryRSn0WYo7YPO
+   mwyLCmLTSCSnKR5s1Bfof9kcdLOpqF02OpkOqN4t/YH5PmGZoMlZfMGTb
+   GCjsbtx0EOqVn+g2Y2IRyCn25BS13P9SZajq7cgOgZ0s4DlZhzhwpN6bn
+   IzHVvV9aBTy5tQUtkYTfhTp8qddDZjl3P/hEQ6AoCv7Ilxv5PtpEhx/nN
+   YoUdIeCq3nsxHtj/i7Bwk71jInHEq4N7F/ZzpSvBGS19wai5SsJG0Cpkq
+   6gkwvwkXWDYKvQfJFsf/ydyxawbq8VOrCcVSaW8dkVpHqb046Kly6/ZC6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="320640234"
 X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="320640190"
+   d="scan'208";a="320640234"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:07:00 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 05:07:07 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529147"
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797529180"
 X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
-   d="scan'208";a="797529147"
+   d="scan'208";a="797529180"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:06:54 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 05:07:00 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v4 15/19] iommu/s390: Add set_platform_dma_ops callback
-Date:   Wed,  4 Jan 2023 20:57:21 +0800
-Message-Id: <20230104125725.271850-16-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 16/19] iommu/gart: Add set_platform_dma_ops callback
+Date:   Wed,  4 Jan 2023 20:57:22 +0800
+Message-Id: <20230104125725.271850-17-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104125725.271850-1-baolu.lu@linux.intel.com>
 References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
@@ -84,46 +84,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 This IOMMU driver doesn't support default domain. Add the implementation
 of set_platform_dma_ops callback so that the IOMMU core could return the
-DMA control. With the set_platform_dma implemented, there's no need for
+DMA control. With set_platform_dma_ops implemented, there's no need for
 detach_dev. Remove it to avoid dead code.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/s390-iommu.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/iommu/tegra-gart.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index ed33c6cce083..5591dab99446 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -144,13 +144,10 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
- 	return 0;
+diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
+index ed53279d1106..a482ff838b53 100644
+--- a/drivers/iommu/tegra-gart.c
++++ b/drivers/iommu/tegra-gart.c
+@@ -124,9 +124,9 @@ static int gart_iommu_attach_dev(struct iommu_domain *domain,
+ 	return ret;
  }
  
--static void s390_iommu_detach_device(struct iommu_domain *domain,
--				     struct device *dev)
-+static void s390_iommu_set_platform_dma(struct device *dev)
+-static void gart_iommu_detach_dev(struct iommu_domain *domain,
+-				  struct device *dev)
++static void gart_iommu_set_platform_dma(struct device *dev)
  {
- 	struct zpci_dev *zdev = to_zpci_dev(dev);
++	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+ 	struct gart_device *gart = gart_handle;
  
--	WARN_ON(zdev->s390_domain != to_s390_domain(domain));
--
- 	__s390_iommu_detach_device(zdev);
- 	zpci_dma_init_device(zdev);
- }
-@@ -435,11 +432,11 @@ static const struct iommu_ops s390_iommu_ops = {
- 	.probe_device = s390_iommu_probe_device,
- 	.release_device = s390_iommu_release_device,
- 	.device_group = generic_device_group,
-+	.set_platform_dma_ops = s390_iommu_set_platform_dma,
- 	.pgsize_bitmap = SZ_4K,
- 	.get_resv_regions = s390_iommu_get_resv_regions,
+ 	spin_lock(&gart->dom_lock);
+@@ -270,11 +270,11 @@ static const struct iommu_ops gart_iommu_ops = {
+ 	.domain_alloc	= gart_iommu_domain_alloc,
+ 	.probe_device	= gart_iommu_probe_device,
+ 	.device_group	= generic_device_group,
++	.set_platform_dma_ops = gart_iommu_set_platform_dma,
+ 	.pgsize_bitmap	= GART_IOMMU_PGSIZES,
+ 	.of_xlate	= gart_iommu_of_xlate,
  	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= s390_iommu_attach_device,
--		.detach_dev	= s390_iommu_detach_device,
- 		.map_pages	= s390_iommu_map_pages,
- 		.unmap_pages	= s390_iommu_unmap_pages,
- 		.flush_iotlb_all = s390_iommu_flush_iotlb_all,
+ 		.attach_dev	= gart_iommu_attach_dev,
+-		.detach_dev	= gart_iommu_detach_dev,
+ 		.map		= gart_iommu_map,
+ 		.unmap		= gart_iommu_unmap,
+ 		.iova_to_phys	= gart_iommu_iova_to_phys,
 -- 
 2.34.1
 
