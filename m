@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9AB65DE1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793C265DE4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 22:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240157AbjADVOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 16:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
+        id S240312AbjADVPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 16:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjADVOS (ORCPT
+        with ESMTP id S235287AbjADVO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 16:14:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723A71CB24;
-        Wed,  4 Jan 2023 13:14:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E43D61826;
-        Wed,  4 Jan 2023 21:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078F6C433EF;
-        Wed,  4 Jan 2023 21:14:15 +0000 (UTC)
-Date:   Wed, 4 Jan 2023 16:14:12 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH] tracing: Make sure trace_printk() can output as soon as it
- can be used
-Message-ID: <20230104161412.019f6c55@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 4 Jan 2023 16:14:57 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689731B9DA;
+        Wed,  4 Jan 2023 13:14:56 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so1873607pjb.1;
+        Wed, 04 Jan 2023 13:14:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XF0rWcwOaeOy9W3XDndGOlTI6VOcqMAlw6Z0kSP+ZIE=;
+        b=mwUaRHyXO3QpRK5P0JqCEjtDjkmGl7YgUMaT1I2YjsKhseOwqNkNS33mOlEf/eRTXu
+         Dx4cepCH0DpI7UZias9hAXzrqhmP9FqJPQ5SpCcrNsEip5tDid5QCJ8rq3xSJ7zfXgzS
+         VkkY41Iwf5a5gzpho+eHq9V7JD1kKJVPOfzCuRJq6ljFPE+NlmpfzNYoSMe4wocuCgzf
+         S6i7hTWrnSsU5BeCV3tLAdKHoc+E6ZXdQXMGE1pFenz1nLeHJTOMKZAollRFOqAqS7OZ
+         auFae1eJ8Ii2yGyYjhvy6b6WvXd1YJI0BgZbYV7R5btP09Ol+PqZuvdKcR/Dbg+8nqw5
+         sxBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XF0rWcwOaeOy9W3XDndGOlTI6VOcqMAlw6Z0kSP+ZIE=;
+        b=VXUdT2qJNV2+51ymPdStnnbXkLEO+YYaaZqRzKkqvwyTrB8ZiM5kvLPWDZuyIkp40t
+         KwuvYPgYLdFs/AUWR1oj/IwdEjYnv62J6K63fw4Nbou1Kn2jEe2nc+rE1fyYps2SiMUC
+         fp6hb2ErAaJvfFtth+DS50MmNNkmUzIiOzsGMPQqtFI/SSMdMyAe43GLUzqGHTILSa51
+         tOnjlpsIH3s3BHucazaHZuRefdP1Ck0jooQbGJrg93ia6AE0opLYo1RLoXeIXAPXz8iU
+         lRRg350TTraGEnL8udJCWl0NpSfUElVywgRHTY3nPau69R8Js2uGBvSw8TSVckoJAFvB
+         X3dA==
+X-Gm-Message-State: AFqh2kpDWAd7wjlled99pb0sBQSDjMptgWcma3nf84rFxSYBdwaC6ju8
+        TTv6m3s2goEH2Fqi5mlXfd6hHv/26T0=
+X-Google-Smtp-Source: AMrXdXuHWcLr2ISD1AWLN6noveXBmNIMzDKhC6iHCDPkCElkMLkDu5P/j13SKsDU15gZnXatqrr41A==
+X-Received: by 2002:a17:90a:cc0b:b0:219:5955:7570 with SMTP id b11-20020a17090acc0b00b0021959557570mr23943541pju.46.1672866895416;
+        Wed, 04 Jan 2023 13:14:55 -0800 (PST)
+Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::a55d])
+        by smtp.googlemail.com with ESMTPSA id i8-20020a17090a138800b00226369149cesm6408pja.21.2023.01.04.13.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 13:14:54 -0800 (PST)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [PATCH v5 00/23] Convert to filemap_get_folios_tag()
+Date:   Wed,  4 Jan 2023 13:14:25 -0800
+Message-Id: <20230104211448.4804-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+This patch series replaces find_get_pages_range_tag() with
+filemap_get_folios_tag(). This also allows the removal of multiple
+calls to compound_head() throughout.
+It also makes a good chunk of the straightforward conversions to folios,
+and takes the opportunity to introduce a function that grabs a folio
+from the pagecache.
 
-Currently trace_printk() can be used as soon as early_trace_init() is
-called from start_kernel(). But if a crash happens, and
-"ftrace_dump_on_oops" is set on the kernel command line, all you get will
-be:
+I've run xfstests on xfs, btrfs, ext4, f2fs, and nilfs2, but more testing may
+be beneficial. The page-writeback and filemap changes implicitly work. Still
+looking for review of cifs, gfs2, and ext4.
 
-  [    0.456075]   <idle>-0         0dN.2. 347519us : Unknown type 6
-  [    0.456075]   <idle>-0         0dN.2. 353141us : Unknown type 6
-  [    0.456075]   <idle>-0         0dN.2. 358684us : Unknown type 6
-
-This is because the trace_printk() event (type 6) hasn't been registered
-yet. That gets done via an early_initcall(), which may be early, but not
-early enough.
-
-Instead of registering the trace_printk() event (and other ftrace events,
-which are not trace events) via an early_initcall(), have them registered at
-the same time that trace_printk() can be used. This way, if there is a
-crash before early_initcall(), then the trace_printk()s will actually be
-useful.
-
-Cc: stable@vger.kernel.org
-Reported-by: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Fixes: e725c731e3bb1 ("tracing: Split tracing initialization into two for early initialization")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace.c        | 2 ++
- kernel/trace/trace.h        | 1 +
- kernel/trace/trace_output.c | 3 +--
- 3 files changed, 4 insertions(+), 2 deletions(-)
+v5:
+  Rebased onto upstream 6.2-rc2
+  Filesystems modified to use folio_get() instead of folio_ref_inc()
+  F2fs modified to maintain use of F2FS_ONSTACK_PAGES
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index d3005279165d..80de338f1277 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -10196,6 +10196,8 @@ void __init early_trace_init(void)
- 			static_key_enable(&tracepoint_printk_key.key);
- 	}
- 	tracer_alloc_buffers();
-+
-+	init_events();
- }
- 
- void __init trace_init(void)
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 900e75d96c84..11c4918ff202 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1504,6 +1504,7 @@ extern void trace_event_enable_cmd_record(bool enable);
- extern void trace_event_enable_tgid_record(bool enable);
- 
- extern int event_trace_init(void);
-+extern int init_events(void);
- extern int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr);
- extern int event_trace_del_tracer(struct trace_array *tr);
- extern void __trace_early_add_events(struct trace_array *tr);
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 67f47ea27921..5cd4fb656306 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -1568,7 +1568,7 @@ static struct trace_event *events[] __initdata = {
- 	NULL
- };
- 
--__init static int init_events(void)
-+__init int init_events(void)
- {
- 	struct trace_event *event;
- 	int i, ret;
-@@ -1581,4 +1581,3 @@ __init static int init_events(void)
- 
- 	return 0;
- }
--early_initcall(init_events);
+v4:
+  Fixed a bug with reference counting in cifs changes
+  - Reported-by: kernel test robot <oliver.sang@intel.com> 
+  Improved commit messages to be more meaningful
+  Got some Acked-bys and Reviewed-bys
+
+v3:
+  Rebased onto upstream 6.1
+  Simplified the ceph patch to only necessary changes
+  Changed commit messages throughout to be clearer
+  Got an Acked-by for another nilfs patch
+  Got Tested-by for afs
+
+v2:
+  Got Acked-By tags for nilfs and btrfs changes
+  Fixed an error arising in f2fs
+  - Reported-by: kernel test robot <lkp@intel.com>
+
+Vishal Moola (Oracle) (23):
+  pagemap: Add filemap_grab_folio()
+  filemap: Added filemap_get_folios_tag()
+  filemap: Convert __filemap_fdatawait_range() to use
+    filemap_get_folios_tag()
+  page-writeback: Convert write_cache_pages() to use
+    filemap_get_folios_tag()
+  afs: Convert afs_writepages_region() to use filemap_get_folios_tag()
+  btrfs: Convert btree_write_cache_pages() to use
+    filemap_get_folio_tag()
+  btrfs: Convert extent_write_cache_pages() to use
+    filemap_get_folios_tag()
+  ceph: Convert ceph_writepages_start() to use filemap_get_folios_tag()
+  cifs: Convert wdata_alloc_and_fillpages() to use
+    filemap_get_folios_tag()
+  ext4: Convert mpage_prepare_extent_to_map() to use
+    filemap_get_folios_tag()
+  f2fs: Convert f2fs_fsync_node_pages() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_flush_inline_data() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_sync_node_pages() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_write_cache_pages() to use filemap_get_folios_tag()
+  f2fs: Convert last_fsync_dnode() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_sync_meta_pages() to use filemap_get_folios_tag()
+  gfs2: Convert gfs2_write_cache_jdata() to use filemap_get_folios_tag()
+  nilfs2: Convert nilfs_lookup_dirty_data_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_lookup_dirty_node_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_btree_lookup_dirty_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_copy_dirty_pages() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_clear_dirty_pages() to use
+    filemap_get_folios_tag()
+  filemap: Remove find_get_pages_range_tag()
+
+ fs/afs/write.c          | 116 ++++++++++++++++++++--------------------
+ fs/btrfs/extent_io.c    |  57 ++++++++++----------
+ fs/ceph/addr.c          |  58 ++++++++++----------
+ fs/cifs/file.c          |  32 +++++++++--
+ fs/ext4/inode.c         |  65 +++++++++++-----------
+ fs/f2fs/checkpoint.c    |  49 +++++++++--------
+ fs/f2fs/data.c          |  84 ++++++++++++++++++++---------
+ fs/f2fs/node.c          |  72 +++++++++++++------------
+ fs/gfs2/aops.c          |  64 ++++++++++++----------
+ fs/nilfs2/btree.c       |  14 ++---
+ fs/nilfs2/page.c        |  59 ++++++++++----------
+ fs/nilfs2/segment.c     |  44 +++++++--------
+ include/linux/pagemap.h |  32 +++++++----
+ include/linux/pagevec.h |   8 ---
+ mm/filemap.c            |  84 ++++++++++++++---------------
+ mm/page-writeback.c     |  44 +++++++--------
+ mm/swap.c               |  10 ----
+ 17 files changed, 481 insertions(+), 411 deletions(-)
+
 -- 
-2.35.1
+2.38.1
 
