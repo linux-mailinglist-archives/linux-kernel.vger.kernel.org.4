@@ -2,124 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C794765CEC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D653965CECA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbjADIwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S238547AbjADIwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbjADIvq (ORCPT
+        with ESMTP id S238936AbjADIwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:51:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933D012AFB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:51:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AC73B81440
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:51:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0FAAC433F0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672822261;
-        bh=BAa/Fb4Ybg4enWz1rxJLnXeOGBYh9ADpZmSkL1qRZg0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mgkhdwz9K/1kUcvSJSL2wWD5otFO4451IjcYtsMOZO6Ftoeijv3wDlAlAYfk+VHlq
-         LP4D+gTYwxTU0H0dOfwy+DDL1EVlnN7IiPb8Xfe56FUCwhyTUZZPsShuQJts5UQ7EA
-         XKIqvQjDDGWb+8fyQfOfZc2HKZu7ZAF4lIQ7i9AUjVQ/lk8LfNJgDDUKuScog885p6
-         YyhA5dU3apPaoESDuCV0owWErhIWkRBFHrhzMIqqm6+domJ//DRY+rFXUf9zQwEGQ0
-         O9CLkQOdJ8CLZ2W/I+xPcREc5vywt1Q4s6FHeZOg9rjOo92MlXMPfoSJyAjKgNTLtq
-         +uXEGb8iLrNYQ==
-Received: by mail-ej1-f50.google.com with SMTP id gh17so81014367ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:51:01 -0800 (PST)
-X-Gm-Message-State: AFqh2koOoLOaE4B4eBH7+HUWsS1oAlzAmjQ+ZeLwVEqWX7jVbPMn/rOc
-        h9v8uihzAmzHFRHBTG6bJtJxJOdUubO1Z3C2SxQ=
-X-Google-Smtp-Source: AMrXdXuUiz5OOTTeQZ0iuBYxnbOgxe/GyCd9Zfk6syDioGxgdqEXRSkq0CPWwolmi8ZjVryTX9WR0edCVP+atSz0rJ4=
-X-Received: by 2002:a17:906:66d8:b0:7c4:efcf:3bc8 with SMTP id
- k24-20020a17090666d800b007c4efcf3bc8mr5732010ejp.702.1672822260122; Wed, 04
- Jan 2023 00:51:00 -0800 (PST)
+        Wed, 4 Jan 2023 03:52:00 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2FBB9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:51:59 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id d14so5942301uak.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 00:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pUKsoV4Lm/CWZW8qi8AxjB5QcnN+u3WoDRCFgIJvRGg=;
+        b=JrJ2p1o+y2QfQPv83Y9jQ8FhwJ10JLWuRCN/A7ttuek/HpHP2BSQD+0V5GOF3LVtrj
+         djP3n+tApFeAMDb3VYf+kkVJzaDcjuepyt/RTMIwuR2ZIvjc4U6VpcQFgyELWJOou80M
+         5H/6c1uCx+PAupXq2aAdYs0l5jPhtiATPTdU1iPdeMVtevVajievN9dTqzyQaiEymuXT
+         6wHdrURo8P7+QJTGkujGpG7QLvM65M1CEh1FP/FxqlqEljr0hlHI1R2l6mEg/jFBfrlO
+         yVDHiQts5WRyp2mW9qFB/3Nf3iqGQSm/Yz4wKMNzjHOnUlGO2ZIPnH+N5OkA5AOt0icC
+         7oKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pUKsoV4Lm/CWZW8qi8AxjB5QcnN+u3WoDRCFgIJvRGg=;
+        b=pxNJ6ES2ff6X0EY+A3+5BGqS4v5Z0YE6bKiUT59HnxsgKwel9xhomcjo7GzukCnjiT
+         LZmS5LHn5qJDftWTrlgzblSCEHHp+Tav5CwkEw+uxKfU8bVHK3Cch47u7gx861UVP8Tq
+         9HwjWEjPAjDIdQBiyhrlHWcKJqtXiA7V3tQFN7ZgFpBMp4vRgtxzKlzWOI9ODoGh4wGY
+         cwQyd6g+pP46/dFy/ZL2q5Q6dCc17nyVrkLktGqkDzPgo0+e5FVnU0ju9D1xZNujGDvp
+         viqFoJDgoC3fU1wiotcmJgjWKCDsymLQ5/wyv9XULYu5jwHHd2aylhhryxphbP5KiGip
+         BXOA==
+X-Gm-Message-State: AFqh2kp2fKezBdGKis0+C46sMz7NXAknZAPrz8yBjHk/JLsqsWTZFWUs
+        6g/zog6S5wVjktOwM7fXi/fDzK2sauTNakqUNycyQg==
+X-Google-Smtp-Source: AMrXdXvywqTwg5gwiAgwD6OwzN41CwmUiVACqEFuvW80D3qdhKKKjymm4mzEWpsTC5AxtOAlbJ8TPh/TQwzCCdZL+tg=
+X-Received: by 2002:ab0:5a49:0:b0:424:e8b8:7bcb with SMTP id
+ m9-20020ab05a49000000b00424e8b87bcbmr4312189uad.123.1672822318273; Wed, 04
+ Jan 2023 00:51:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230104074146.578485-1-uwu@icenowy.me> <20230104074146.578485-3-uwu@icenowy.me>
-In-Reply-To: <20230104074146.578485-3-uwu@icenowy.me>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 4 Jan 2023 16:50:48 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
-Message-ID: <CAJF2gTSb4qEPHw8hy1ro+UMoyKQaoQESNGveSGLdPL=cXac8jQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] riscv: use VA+PA variant of CMO macros for DMA synchorization
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221228092045.80425-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221228092045.80425-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 4 Jan 2023 09:51:47 +0100
+Message-ID: <CAMRc=Mdvc=VC=9pVaB8spj6ErS1rRM37qyDZ_03P1R-sQ0soCw@mail.gmail.com>
+Subject: Re: [rft, PATCH v4 0/3] gpiolib: eventual of_node retirement
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Thierry Reding <treding@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 3:43 PM Icenowy Zheng <uwu@icenowy.me> wrote:
+On Wed, Dec 28, 2022 at 10:20 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> DMA synchorization is done on PA and the VA is calculated from the PA.
+> Now that all GPIO library users are converted to use fwnode,
+> Drop redundant field from struct gpio_chip and accompanying
+> code.
 >
-> Use the alternative macro variant that takes both VA and PA as
-> parameters, thus in case the ISA extension used support PA directly, the
-> overhead for re-converting VA to PA can be omitted.
+> Bart, I prefer this series to go as soon as possible if you
+> have no objection. Or even as v6.2 material.
 >
-> Suggested-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
->  arch/riscv/mm/dma-noncoherent.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> Thierry, can you please test it once again, so we will be sure
+> there is no breakage for OF platforms?
 >
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> index d919efab6eba..a751f4aece62 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -19,13 +19,13 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+> Cc: Thierry Reding <treding@nvidia.com>
 >
->         switch (dir) {
->         case DMA_TO_DEVICE:
-> -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP_VPA(clean, vaddr, paddr, size, riscv_cbom_block_size);
-ALT_CMO_OP -> ALT_CMO_OP_VPA, is the renaming necessary?
-
-Others:
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
->                 break;
->         case DMA_FROM_DEVICE:
-> -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP_VPA(clean, vaddr, paddr, size, riscv_cbom_block_size);
->                 break;
->         case DMA_BIDIRECTIONAL:
-> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP_VPA(flush, vaddr, paddr, size, riscv_cbom_block_size);
->                 break;
->         default:
->                 break;
-> @@ -42,7 +42,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
->                 break;
->         case DMA_FROM_DEVICE:
->         case DMA_BIDIRECTIONAL:
-> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP_VPA(flush, vaddr, paddr, size, riscv_cbom_block_size);
->                 break;
->         default:
->                 break;
+> v4: added couple of additional patches to the bundle that missed
+>     the merge window by one or another reason
+>
+> v3: rebased against latest Linux Next: expected not to fail now
+>     (Also keeping in mind Thierry's report, so reworked a bit)
+>
+> v2: resent against latest Linux Next: expected not to fail now
+>     (Linux Next has no more users of of_node member of gpio_chip)
+>
+> v1: to test for now (using CIs and build bots) what is left unconverted
+>     (Expected to fail in some configurations!)
+>
+> Andy Shevchenko (3):
+>   gpiolib: Introduce gpio_device_get() and gpio_device_put()
+>   gpiolib: Get rid of not used of_node member
+>   gpiolib: sort header inclusion alphabetically
+>
+>  drivers/gpio/gpiolib-acpi.c | 10 -------
+>  drivers/gpio/gpiolib-acpi.h |  4 ---
+>  drivers/gpio/gpiolib-cdev.c | 21 ++++++-------
+>  drivers/gpio/gpiolib-of.c   | 25 ++++------------
+>  drivers/gpio/gpiolib-of.h   |  5 ----
+>  drivers/gpio/gpiolib.c      | 60 +++++++++++++++++--------------------
+>  drivers/gpio/gpiolib.h      | 10 +++++++
+>  include/linux/gpio/driver.h |  7 -----
+>  8 files changed, 51 insertions(+), 91 deletions(-)
+>
+>
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 > --
-> 2.38.1
+> 2.35.1
 >
 
+I applied the series, let's give it some time in next and see that
+nothing breaks.
 
--- 
-Best Regards
- Guo Ren
+Bart
