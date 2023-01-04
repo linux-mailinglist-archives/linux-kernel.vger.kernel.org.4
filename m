@@ -2,123 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68F165D3BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E45265D3BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 14:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239114AbjADNE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 08:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S239300AbjADNFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 08:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239184AbjADNEz (ORCPT
+        with ESMTP id S229679AbjADNF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:04:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB041869E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 05:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672837447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qox/oCIKrJgN89xrHJUvG+swnnlfN7DPV4U9vLlEgHk=;
-        b=T164K/udNfLL3MHRvqoM9xWudo1b6jZvyCK7ugALKhfH/o0PIVa8XselgTWUwdz2l6VmPX
-        dohisYVXSYg3fOnjQi+FLv4W/MZ1GjNLeGnRChsdIUBKbL9VQyWPzWUQ1YIG0lK8cNtKSK
-        TgIXhjNOXpKnrINi+njdW1DWZ+lGpFU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-190-E1ifpp8JOcWn-wj-SvkKPw-1; Wed, 04 Jan 2023 08:04:06 -0500
-X-MC-Unique: E1ifpp8JOcWn-wj-SvkKPw-1
-Received: by mail-wm1-f69.google.com with SMTP id ay32-20020a05600c1e2000b003d9730391b5so15567930wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 05:04:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qox/oCIKrJgN89xrHJUvG+swnnlfN7DPV4U9vLlEgHk=;
-        b=l70ZSbnNkQfm5G9o/cqoj10QaG4u+rPpDrcAM5+InJjehCilygMquOWZxD6xrdD/Fv
-         u2NOFpS8uVRCUSMTTT6ZH2OT6lCE1310Xzdoo5c8QuVMSFedqMnCeXk8dMtUEKHkTDvs
-         WtlvAxvWeC9tUpZC812fj7LtIt8fHRNpV563SPM6JsEpUgR/aKS78lY5R++mOB1atTCG
-         l7hqwSFvpo25kXaWNV6yNm0fJZA44S9+Z2+OD0GlReiLbP4djlxsZC6XaH+n52xQd4cM
-         PzTjl9ywqRt6yDlHbIjGXZ1NlrPe/wleOf5qkwZPG2ELD7aMWll/QhrKxP97MH8bvVBz
-         M/og==
-X-Gm-Message-State: AFqh2kr4a1BYxx3G7PBzIqiwva/g0sh2oIQG8q9VkPHQOaK9/1UjqvQX
-        cRhWva55//L3fY5MXzKBDf2H9Ihg2hMP/xdqnD/Fo3QNUtLHGdMtyewYP32OgpGdDO4wz0xInqm
-        TRpudauOtRULfqggbv2xTA4lH
-X-Received: by 2002:a05:6000:18c3:b0:288:ca2e:7d74 with SMTP id w3-20020a05600018c300b00288ca2e7d74mr14295789wrq.14.1672837444935;
-        Wed, 04 Jan 2023 05:04:04 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtlcfpal455TLuLVy79Kxfe58vG4oN1jPIOPsIFNn4IYhDNS4aZnX9DtEvIz+VUUb8U5/RbTg==
-X-Received: by 2002:a05:6000:18c3:b0:288:ca2e:7d74 with SMTP id w3-20020a05600018c300b00288ca2e7d74mr14295762wrq.14.1672837444627;
-        Wed, 04 Jan 2023 05:04:04 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id j1-20020adfff81000000b0024cb961b6aesm33027899wrr.104.2023.01.04.05.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 05:04:03 -0800 (PST)
-Date:   Wed, 4 Jan 2023 08:03:59 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc:     Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot <syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        sgarzare@redhat.com, stefanha@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, bobby.eshleman@gmail.com
-Subject: Re: [syzbot] kernel BUG in vhost_vsock_handle_tx_kick
-Message-ID: <20230104074613-mutt-send-email-mst@kernel.org>
-References: <0000000000003a68dc05f164fd69@google.com>
- <Y7T+xTIq2izSlHHE@pop-os.localdomain>
- <Y6A/Yyoh2uZSR0xj@bullseye>
+        Wed, 4 Jan 2023 08:05:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775C1DDC2;
+        Wed,  4 Jan 2023 05:05:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D16CEB8163C;
+        Wed,  4 Jan 2023 13:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA8BC433EF;
+        Wed,  4 Jan 2023 13:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672837524;
+        bh=HgcYcbLQUuCY1Kc4OAO0bhkr3GGWCNM95MhsYtgwtFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MpEmyY0KD/wAbTx9zt1oOJuG2pGJ/yjn3463c+ljDnKtFAukM8ayLV8EQ64TEQV49
+         HQiOVLtYs5gkbjT8SSwJfeCfmLJ6QrM46YiFFTHuTgyLcUvdqPcUeZeYfpHC+jzK2r
+         j/mMC30uncw75IpfdAjFtq27tmAAZqtFcyFGn4NyOmXnibldHFTNAfxCIrrSHzWXhw
+         waV3Q1XGW30xj6rLHB7+Z3wQJ6IwX5JobdnvDYWeB6h/mK8soAEttepQEvgKQZpktM
+         BOaIo4TomDJRWFAfy5SjZ7Q/OKQJLx2s2+nNWQhMX3LJMVElRXE+MMaAQnQ8kUf4xN
+         sYK36Yb0j4RCg==
+Date:   Wed, 4 Jan 2023 13:05:21 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ben Boeckel <me@benboeckel.net>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Vitaly Chikunov <vt@altlinux.org>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: certs: fix FIPS selftest depenency
+Message-ID: <Y7V5kQVgK3PTWRHi@kernel.org>
+References: <20221215170259.2553400-1-arnd@kernel.org>
+ <Y6tF52G6/bnG+VfJ@kernel.org>
+ <Y6xCYmZkggGzzzBM@farprobe>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6A/Yyoh2uZSR0xj@bullseye>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y6xCYmZkggGzzzBM@farprobe>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 10:46:47AM +0000, Bobby Eshleman wrote:
-> On Tue, Jan 03, 2023 at 08:21:25PM -0800, Cong Wang wrote:
-> > On Tue, Jan 03, 2023 at 04:08:51PM -0800, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    c76083fac3ba Add linux-next specific files for 20221226
-> > > git tree:       linux-next
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1723da42480000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c217c755f1884ab6
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=30b72abaa17c07fe39dd
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fc414c480000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1604b20a480000
-> > > 
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/e388f26357fd/disk-c76083fa.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/e24f0bae36d5/vmlinux-c76083fa.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/a5a69a059716/bzImage-c76083fa.xz
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com
-> > 
-> > +bobby.eshleman@gmail.com
-> > 
-> > Bobby, please take a look.
-> > 
-> > Thanks.
+On Wed, Dec 28, 2022 at 08:19:30AM -0500, Ben Boeckel wrote:
+> On Tue, Dec 27, 2022 at 19:22:38 +0000, Jarkko Sakkinen wrote:
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
-> Roger that, I'll take a gander asap.
+> Might want to fix this when picked:
+> 
+> > Subject: Re: [PATCH] crypto: certs: fix FIPS selftest depenency
+>                                              dependency ^^^^^^^^^
+> 
+> --Ben
 
-I'll going to revert commit f169a9538803469418d9ba2c42a0236fc43cd876 unless
-I hear from you soon, we need linux-next testable.
+Thank you! I updated the patch accordingly.
 
--- 
-MST
+It should be soon available in linux-next tree.
 
+BR, Jarkko
