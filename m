@@ -2,195 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9093E65D00F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E011C65CFE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234164AbjADJ5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S234061AbjADJqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbjADJ5W (ORCPT
+        with ESMTP id S231128AbjADJqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:57:22 -0500
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF531C932;
-        Wed,  4 Jan 2023 01:57:19 -0800 (PST)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1pD0Kx-00G7tJ-Mm; Wed, 04 Jan 2023 09:45:31 +0000
-Message-ID: <6ef122f6-12fa-777f-b4e7-a02531380391@codethink.co.uk>
-Date:   Wed, 4 Jan 2023 09:45:30 +0000
+        Wed, 4 Jan 2023 04:46:11 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F67F13CCF
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:46:10 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id g14so34822668ljh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xLn2bt9y0tlIr7p0iSmEuj9u/yaMgCFX32OBdxNgivg=;
+        b=QesHGYAH3/oBzujE24SxNEFgv671Lygrg1IqLa48kTIW1bAZCao5PTjg3ZTQMGxVu9
+         qbtAXGqFRz59RlNBmTXCgJgScChAAmFYIWdbqk9l17dRWsZkKrbLaJBujo8dBXDLlk0B
+         NgpooMW07nLSoZ41/a/5We5sRcBSw6itCUeuNT7LmzQt7BckIuQM4rIDAh/5YYQIEXa1
+         RwWGYYzA7XjFD+nVZcPl5VGbHlBP5Gd+4qQcUTLmt8gDA8jLYOx8wJwQ9DPQaz/0XK25
+         4wFMQOU/iIpFvm4PB+3CclA12V39T20KcJ18g3PL8fNfDIaGuYr1lCLcXJLdrbpwRcOI
+         t46w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLn2bt9y0tlIr7p0iSmEuj9u/yaMgCFX32OBdxNgivg=;
+        b=WDqdEtVzAQVVabBGHKVe5OuN2yK0s2sKTTiAXBoMyGdbFKYOHsNodwSgEDD0rvwvH6
+         X8X8P5CEwuEAOt/NahICusXNHGeOQ6J5oaqsYxGnWPn74ifHJMmt4BVI+yDBFig1nSM8
+         pjjpte2zfrJOV8Mm1rjLS5GHVRoRzry3v5Pyi9cpINICUkUgjNSEbonVMUyc8jUEzeMV
+         2nMZkrL4lPaY8Om241dQEVAZ89PsMEnMHoXndx4c2bJHiWxZFbiMfToMvHZWSZxn39ym
+         0UInOPlC8iGC7TusCVzv6XBeZT13vP6Abdf7bxDQ+aCrQnWY09338Bquwe1UNTtqfwMm
+         f3iw==
+X-Gm-Message-State: AFqh2kowp7BdfX5LOwHurlvK65wDv9X/1D+jzzoPvSstySKoUfQvioEv
+        y86iFgK+lkKmi8yJEFGNVv3W0g==
+X-Google-Smtp-Source: AMrXdXtVOq8Byz0bWtV2/2hZ7V337JltXS2U1orF9hGxvAEjfykXA0Z3HJKdyd/cKK6hWH10tGShVg==
+X-Received: by 2002:a05:651c:1a29:b0:280:b13e:8e84 with SMTP id by41-20020a05651c1a2900b00280b13e8e84mr537926ljb.16.1672825568416;
+        Wed, 04 Jan 2023 01:46:08 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id z4-20020a2ebe04000000b0027fd65e4faesm1636051ljq.108.2023.01.04.01.46.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 01:46:08 -0800 (PST)
+Message-ID: <97ca4286-09c2-6883-f480-fbf6f94f74f2@linaro.org>
+Date:   Wed, 4 Jan 2023 11:46:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [RFC v5.1 9/9] [DON'T APPLY] cache: sifive-ccache: add cache
- flushing capability
+Subject: Re: [PATCH 4/6] drm/msm: mdss: add support for SM8550
 Content-Language: en-GB
-To:     Conor Dooley <conor@kernel.org>, arnd@arndb.de, palmer@dabbelt.com,
-        prabhakar.csengg@gmail.com
-Cc:     Conor Dooley <conor.dooley@microchip.com>, ajones@ventanamicro.com,
-        aou@eecs.berkeley.edu, apatel@ventanamicro.com,
-        atishp@rivosinc.com, biju.das.jz@bp.renesas.com,
-        devicetree@vger.kernel.org, geert@linux-m68k.org,
-        guoren@kernel.org, hch@infradead.org, heiko@sntech.de,
-        jszhang@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, magnus.damm@gmail.com,
-        nathan@kernel.org, paul.walmsley@sifive.com,
-        philipp.tomsich@vrull.eu, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        robh+dt@kernel.org, samuel@sholland.org, soc@kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-References: <Y62nOqzyuUKqYDpq@spud>
- <20230103210400.3500626-10-conor@kernel.org>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20230103210400.3500626-10-conor@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
+ <20230103-topic-sm8550-upstream-mdss-dsi-v1-4-9ccd7e652fcd@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v1-4-9ccd7e652fcd@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 21:04, Conor Dooley wrote:
-> From: Daire McNamara <daire.mcnamara@microchip.com>
+On 04/01/2023 11:08, Neil Armstrong wrote:
+> Add support for the MDSS block on SM8550 platform.
 > 
-> SiFive L2 cache controller can flush L2 cache. Expose this capability via
-> driver.
-> 
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> [Conor: rebase on top of move to cache subsystem]
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> This commit needs more work, and a way to enable it from errata. I've
-> not gone and done this as PolarFire SoC has archid etc all set to zero.
-> So we need to go figure out a workaround for this, before adding in
-> errata enabling code for this. I've included it here as a second user of
-> the cache management stuff, since what's currently upstream for the
-> ccache driver does not do any cache management.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-I think errata isn't the right word here, it's more of a system 
-requirement for anything that isn't coherent. All the SiFive systems
-I have are coherent so won't need this.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > ---
->   drivers/cache/sifive_ccache.c | 45 +++++++++++++++++++++++++++++++++++
->   1 file changed, 45 insertions(+)
+>   drivers/gpu/drm/msm/msm_mdss.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/cache/sifive_ccache.c b/drivers/cache/sifive_ccache.c
-> index 47e7d6557f85..3c00f205bace 100644
-> --- a/drivers/cache/sifive_ccache.c
-> +++ b/drivers/cache/sifive_ccache.c
-> @@ -9,12 +9,14 @@
->   #define pr_fmt(fmt) "CCACHE: " fmt
->   
->   #include <linux/debugfs.h>
-> +#include <linux/dma-direction.h>
->   #include <linux/interrupt.h>
->   #include <linux/of_irq.h>
->   #include <linux/of_address.h>
->   #include <linux/device.h>
->   #include <linux/bitfield.h>
->   #include <asm/cacheinfo.h>
-> +#include <asm/cacheflush.h>
->   #include <cache/sifive_ccache.h>
->   
->   #define SIFIVE_CCACHE_DIRECCFIX_LOW 0x100
-> @@ -42,11 +44,15 @@
->   #define SIFIVE_CCACHE_WAYENABLE 0x08
->   #define SIFIVE_CCACHE_ECCINJECTERR 0x40
->   
-> +#define SIFIVE_CCACHE_FLUSH64 0x200
-> +#define SIFIVE_CCACHE_FLUSH32 0x240
-> +
->   #define SIFIVE_CCACHE_MAX_ECCINTR 4
->   
->   static void __iomem *ccache_base;
->   static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
->   static struct riscv_cacheinfo_ops ccache_cache_ops;
-> +static struct riscv_cache_maint_ops ccache_cmos;
->   static int level;
->   
->   enum {
-> @@ -205,6 +211,42 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
->   	return IRQ_HANDLED;
->   }
->   
-> +static void sifive_ccache_dma_wback_inv(void* vaddr, unsigned long size)
-> +{
-> +	void * __iomem flush = ccache_base + SIFIVE_CCACHE_FLUSH64;
-> +	phys_addr_t start = virt_to_phys(vaddr);
-> +	phys_addr_t aligned_start = start & ~0x3f;
-> +	u64 addr;
-> +	u64 end;
-> +	u64 aligned_end;
-> +
-> +	size += start - aligned_start;
-> +	end = start + size;
-> +	aligned_end = end += 0x3f;
-
-I think you meant + 0x3f here. There is an align macro in the kernel
-headers, and I'm not sure by inspection if you'd miss the last line
-with this code.
-
-> +	aligned_end &= ~0x3f;
-> +
-> +	for (addr = aligned_start; addr < aligned_end; addr += 64)
-> +		writeq(addr, flush);
-> +}
-
-The p550 manual states that the zero device flush method is quicker for
-any large area flush. However not sure what that level is and whether it
-is worth dealing with here? If so we need to have the L3 zero are mapped.
-
-> +
-> +static void sifive_ccache_cmo(unsigned int cache_size, void *vaddr, size_t size,
-> +			      int dir, int ops)
-> +{
-
-technically dir should have been of type "enum dma_data_direction"
-
-> +	switch (dir) {
-> +	case DMA_TO_DEVICE:
-> +		sifive_ccache_dma_wback_inv(vaddr, size);
-> +		break;
-> +	case DMA_FROM_DEVICE:
-> +		sifive_ccache_dma_wback_inv(vaddr, size);
-> +		break;
-> +	case DMA_BIDIRECTIONAL:
-> +		sifive_ccache_dma_wback_inv(vaddr, size);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-
-I'm not sure why you'd bother checking the dir here, the cache can
-only be flushed (I hope DMA_FROM_DEVICE is done /before/ the DMA op).
-
-You could have saved yourself an include if just ignoring dir.
-
-> +
->   static int __init sifive_ccache_init(void)
->   {
->   	struct device_node *np;
-> @@ -254,6 +296,9 @@ static int __init sifive_ccache_init(void)
->   	ccache_cache_ops.get_priv_group = ccache_get_priv_group;
->   	riscv_set_cacheinfo_ops(&ccache_cache_ops);
->   
-> +	ccache_cmos.cmo_patchfunc = sifive_ccache_cmo;
-> +	riscv_set_cache_maint_ops(&ccache_cmos);
-> +
->   #ifdef CONFIG_DEBUG_FS
->   	setup_sifive_debug();
->   #endif
+> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> index 144c8dd82be1..54483fe30ffd 100644
+> --- a/drivers/gpu/drm/msm/msm_mdss.c
+> +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> @@ -288,6 +288,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
+>   		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_3_0, 6, 1, 1, 1);
+>   		break;
+>   	case DPU_HW_VER_810:
+> +	case DPU_HW_VER_900:
+>   		/* TODO: highest_bank_bit = 2 for LP_DDR4 */
+>   		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_4_0, 6, 1, 3, 1);
+>   		break;
+> @@ -521,6 +522,7 @@ static const struct of_device_id mdss_dt_match[] = {
+>   	{ .compatible = "qcom,sm8150-mdss" },
+>   	{ .compatible = "qcom,sm8250-mdss" },
+>   	{ .compatible = "qcom,sm8450-mdss" },
+> +	{ .compatible = "qcom,sm8550-mdss" },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, mdss_dt_match);
+> 
 
 -- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
+With best wishes
+Dmitry
 
