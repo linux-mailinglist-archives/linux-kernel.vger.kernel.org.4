@@ -2,150 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A2665DA31
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8212D65DA0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 17:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239507AbjADQmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 11:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S235007AbjADQkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 11:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239591AbjADQly (ORCPT
+        with ESMTP id S234879AbjADQj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 11:41:54 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C91C131
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 08:41:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YkfCKWYPEqtaggVkWdOFBMNVPsDcWgaZBM9KEhWcauCkgDdq6DbElqDxGflisvqmKFkf55eUQxnTqk657jbpikcf1Ab/fIX0gKWK6z7ZeMRT0RbhGVziz70k88IOfal05f5oJ7Ny9lfH1qtNS9wlUyOmTiHkJ/bb+E+NwmLEYAvyHrJDkL1J0o2xLS4xShq5VhujrHYsHl0p2fC2WLY3fu0L2j1UGAuoCI1psUONdSoXC54ds3KFYG6MKOUKfQ3WS+eZbHJ6vPboZIeOAug7BYssHmb1Xi96QgoArCJHT38Zrpdll1bA8eidLx1MWeLvp8Dn/9SDXH8G/9qiGdpaOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nSyu8no0i4tN1bff68akPDEKxhO4iVdu4y+ah8dMRi8=;
- b=OoOS4C2TBsgQ2Lr5iVNWprIJIrorhY53Hx99W0jV/124or4tsMlt6nQOI0ameh/ImHjR++CbYmcQjCVC0H3VpjN+Wlk391J8qNpsoKjJ+GUHj8KKZHelhkkfEoEgq6k5Si3JtWa2JKeqeuYZaWJoU0wCXH/4Pl0qxIItB7FYAKacyi0Hp/mtd8pwIJVxMZq210v2xDaWN/uZD65OBFusQMkNJZoXkBGkmuwDJ77QFf/mjPDFK5YPtRUA+s/dq9kmk13BLrASHvRRe78h9l+X4lqDrkaq0k9Q6H24FxHP6kmFaj+vtqtFNs7A5Sy2GDp+/BymhHPqHt0VpjtH/5bs9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nSyu8no0i4tN1bff68akPDEKxhO4iVdu4y+ah8dMRi8=;
- b=2eqCHrdMp6wmSKhyKIqoYA+NzWNeKl2Vm2X2foPxkzW0AiXDnMHUGJgYy0eXvkKc2R1TxD8VnhqKb+fC3oPf7FW61AScXMtnCWChG9bay9xkOhiTbp/rPB+zlTQW1Dt7KGZmjDulQw856QsJwE57jKuYYkZMI3AvSkAuwPfGUFs=
-Received: from DS7PR03CA0313.namprd03.prod.outlook.com (2603:10b6:8:2b::18) by
- DM6PR12MB4315.namprd12.prod.outlook.com (2603:10b6:5:223::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Wed, 4 Jan 2023 16:41:51 +0000
-Received: from DS1PEPF0000E644.namprd02.prod.outlook.com
- (2603:10b6:8:2b:cafe::6d) by DS7PR03CA0313.outlook.office365.com
- (2603:10b6:8:2b::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Wed, 4 Jan 2023 16:41:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E644.mail.protection.outlook.com (10.167.17.200) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5944.8 via Frontend Transport; Wed, 4 Jan 2023 16:41:51 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 10:41:49 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Javier Martinez Canillas <javierm@redhat.com>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <christian.koenig@amd.com>,
-        Lazar Lijo <Lijo.Lazar@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Evan Quan" <evan.quan@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH v5 04/45] drm/amd: Convert SMUv13 microcode to use `amdgpu_ucode_ip_version_decode`
-Date:   Wed, 4 Jan 2023 10:39:53 -0600
-Message-ID: <20230104164042.30271-5-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104164042.30271-1-mario.limonciello@amd.com>
-References: <20230104164042.30271-1-mario.limonciello@amd.com>
+        Wed, 4 Jan 2023 11:39:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A9A12AEA;
+        Wed,  4 Jan 2023 08:39:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC6A1617AA;
+        Wed,  4 Jan 2023 16:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E66C433D2;
+        Wed,  4 Jan 2023 16:39:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672850395;
+        bh=h/jv+uc6C6fvuckoeygXFmUHyc8ekbQX8LzVof57rmU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sAW/38lR5Li7sDcOiH8PBrPeuCvf2bAmOoJREGCVe5RkZW/LwOLIyWuckeeop1CKW
+         XqyHLRbR2qhheYpf2e3jbeWM7imXGbM48sipJ2jAvbdl/Hv/fKWvGZ39H0QZEHfl5Z
+         GJEuDMCOr79MdP1/2D3tZlaJr0L+5nDSIXukPtalUaqqGE49Y9Fj61Rl8uzv5Ae1wu
+         We2sG+YVU07gnt0s/xQ59bbBacStfc7gi3+9eUV4wwB3/DNcUWaM4kVmAE0AAMpSy4
+         +/VRDYEQO1K7ratEFw8f3A0DRd1gjaLmM7TituMZtKFbNXmbhcbGTjmM93QMTi19WR
+         VUOmskYJH12Ww==
+Date:   Wed, 4 Jan 2023 08:39:54 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>
+Subject: Re: [PATCH v2 3/7] fs: Introduce FALLOC_FL_PROVISION
+Message-ID: <Y7Wr2uadI+82BB6a@magnolia>
+References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
+ <20221229081252.452240-4-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E644:EE_|DM6PR12MB4315:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1ef3230-e0c0-4b01-c66e-08daee7294e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p9t46LSgv4jayZrH/v/K95ZAqXKRC1NNHSJ7g+klYeymPj8r5N1BWxmSyzs+53yGpiJALlN11i8iNKIDwWgjZtGOCgk3lVDC82U7XgeRZETwH59CdNC9BoqPeGsYafqb2CLw66KUiv9Yd5FuL2ofSzXgHa7iZce+BV2vPrZxCOmsaAMW8H+LPnSqQOluIJ31RZkqH+5k96nPSx3ecQGDlPid7X56vxqBsNyMRdURsfmAZ3JgqlAzVCcDDXDGcmSjy7opxRS5G5gSiPdxA0MLrKorj/6m/FexAAo7c06ygElzArOvZNJe0loQP0ceXHYJvUIgyUn/IFUTsLVJ0FtgrLxS+0hPiaOG29LO/baiG8XWx4ucLhgkzOQ6uCXb1xqwo+RvpNLah4I13lNBTfVVg8q9+Yxhj7/Fe+fTNUAQbmZjnSOwEY7eQdnY0egL+ep3WaXwPTFGyjK9SN9xa1y2S089VlyWlkAlZphsavj0GWefIp574eko9RMq7bnl4PI4fAJyvBd/Uf2BIPrqb7yn4N0BDK7p1jF3ejbZB2FnZW5Bob4cYzlcbfZv2NE7vAHTdJOjxDfvWKuqMPpzL8Eukch0pFlEvSVdTOCLwI2q5D5pEV2KP0wayvWqsLNAn6JRRo/qjjySacRo70yvWrGcnN+2itJVmKuNG9jFobLmST7yemQC+d8dbYXfixepVgg+xUBaQwjSj4gmBFPCkm5Bhv6cbFNHM8s2PwTSg2O0occgXFivecj2k7cLAXxDdyWdmw1eWM3Zgx6es3maoMlIwQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(4326008)(5660300002)(6666004)(8676002)(70206006)(70586007)(316002)(8936002)(41300700001)(40460700003)(110136005)(478600001)(2906002)(54906003)(7696005)(81166007)(16526019)(356005)(82740400003)(1076003)(426003)(66574015)(47076005)(2616005)(186003)(26005)(40480700001)(336012)(86362001)(36756003)(44832011)(36860700001)(82310400005)(83380400001)(81973001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 16:41:51.7071
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1ef3230-e0c0-4b01-c66e-08daee7294e1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E644.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4315
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221229081252.452240-4-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The special case for the one dGPU has been moved into
-`amdgpu_ucode_ip_version_decode`, so simplify this code.
+On Thu, Dec 29, 2022 at 12:12:48AM -0800, Sarthak Kukreti wrote:
+> FALLOC_FL_PROVISION is a new fallocate() allocation mode that
+> sends a hint to (supported) thinly provisioned block devices to
+> allocate space for the given range of sectors via REQ_OP_PROVISION.
+> 
+> The man pages for both fallocate(2) and posix_fallocate(3) describe
+> the default allocation mode as:
+> 
+> ```
+> The default operation (i.e., mode is zero) of fallocate()
+> allocates the disk space within the range specified by offset and len.
+> ...
+> subsequent writes to bytes in the specified range are guaranteed
+> not to fail because of lack of disk space.
+> ```
+> 
+> For thinly provisioned storage constructs (dm-thin, filesystems on sparse
+> files), the term 'disk space' is overloaded and can either mean the apparent
+> disk space in the filesystem/thin logical volume or the true disk
+> space that will be utilized on the underlying non-sparse allocation layer.
+> 
+> The use of a separate mode allows us to cleanly disambiguate whether fallocate()
+> causes allocation only at the current layer (default mode) or whether it propagates
+> allocations to underlying layers (provision mode)
 
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+Why is it important to make this distinction?  The outcome of fallocate
+is supposed to be that subsequent writes do not fail with ENOSPC.  In my
+(fs developer) mind, REQ_OP_PROVISION simply an extra step to be taken
+after allocating file blocks.
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index 0ac9cac805f9..506a49a4b425 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -88,7 +88,6 @@ static const int link_speed[] = {25, 50, 80, 160};
- int smu_v13_0_init_microcode(struct smu_context *smu)
- {
- 	struct amdgpu_device *adev = smu->adev;
--	const char *chip_name;
- 	char fw_name[30];
- 	char ucode_prefix[30];
- 	int err = 0;
-@@ -100,16 +99,9 @@ int smu_v13_0_init_microcode(struct smu_context *smu)
- 	if (amdgpu_sriov_vf(adev))
- 		return 0;
- 
--	switch (adev->ip_versions[MP1_HWIP][0]) {
--	case IP_VERSION(13, 0, 2):
--		chip_name = "aldebaran_smc";
--		break;
--	default:
--		amdgpu_ucode_ip_version_decode(adev, MP1_HWIP, ucode_prefix, sizeof(ucode_prefix));
--		chip_name = ucode_prefix;
--	}
-+	amdgpu_ucode_ip_version_decode(adev, MP1_HWIP, ucode_prefix, sizeof(ucode_prefix));
- 
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", chip_name);
-+	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", ucode_prefix);
- 
- 	err = request_firmware(&adev->pm.fw, fw_name, adev->dev);
- 	if (err)
--- 
-2.34.1
+If you *don't* add this API flag and simply bake the REQ_OP_PROVISION
+call into mode 0 fallocate, then the new functionality can be added (or
+even backported) to existing kernels and customers can use it
+immediately.  If you *do*, then you get to wait a few years for
+developers to add it to their codebases only after enough enterprise
+distros pick up a new kernel to make it worth their while.
 
+> for thinly provisioned filesystems/
+> block devices. For devices that do not support REQ_OP_PROVISION, both these
+> allocation modes will be equivalent. Given the performance cost of sending provision
+> requests to the underlying layers, keeping the default mode as-is allows users to
+> preserve existing behavior.
+
+How expensive is this expected to be?  Is this why you wanted a separate
+mode flag?
+
+--D
+
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  block/fops.c                | 15 +++++++++++----
+>  include/linux/falloc.h      |  3 ++-
+>  include/uapi/linux/falloc.h |  8 ++++++++
+>  3 files changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/block/fops.c b/block/fops.c
+> index 50d245e8c913..01bde561e1e2 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -598,7 +598,8 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  
+>  #define	BLKDEV_FALLOC_FL_SUPPORTED					\
+>  		(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |		\
+> -		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
+> +		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE |	\
+> +		 FALLOC_FL_PROVISION)
+>  
+>  static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  			     loff_t len)
+> @@ -634,9 +635,11 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+>  	/* Invalidate the page cache, including dirty pages. */
+> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> -	if (error)
+> -		goto fail;
+> +	if (mode != FALLOC_FL_PROVISION) {
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +	}
+>  
+>  	switch (mode) {
+>  	case FALLOC_FL_ZERO_RANGE:
+> @@ -654,6 +657,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  		error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL);
+>  		break;
+> +	case FALLOC_FL_PROVISION:
+> +		error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
+> +					       len >> SECTOR_SHIFT, GFP_KERNEL);
+> +		break;
+>  	default:
+>  		error = -EOPNOTSUPP;
+>  	}
+> diff --git a/include/linux/falloc.h b/include/linux/falloc.h
+> index f3f0b97b1675..b9a40a61a59b 100644
+> --- a/include/linux/falloc.h
+> +++ b/include/linux/falloc.h
+> @@ -30,7 +30,8 @@ struct space_resv {
+>  					 FALLOC_FL_COLLAPSE_RANGE |	\
+>  					 FALLOC_FL_ZERO_RANGE |		\
+>  					 FALLOC_FL_INSERT_RANGE |	\
+> -					 FALLOC_FL_UNSHARE_RANGE)
+> +					 FALLOC_FL_UNSHARE_RANGE |	\
+> +					 FALLOC_FL_PROVISION)
+>  
+>  /* on ia32 l_start is on a 32-bit boundary */
+>  #if defined(CONFIG_X86_64)
+> diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
+> index 51398fa57f6c..2d323d113eed 100644
+> --- a/include/uapi/linux/falloc.h
+> +++ b/include/uapi/linux/falloc.h
+> @@ -77,4 +77,12 @@
+>   */
+>  #define FALLOC_FL_UNSHARE_RANGE		0x40
+>  
+> +/*
+> + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
+> + * blocks for the range/EOF.
+> + *
+> + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
+> + */
+> +#define FALLOC_FL_PROVISION		0x80
+> +
+>  #endif /* _UAPI_FALLOC_H_ */
+> -- 
+> 2.37.3
+> 
