@@ -2,157 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7384A65E010
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9B665E017
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240600AbjADWfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S240607AbjADWiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbjADWfQ (ORCPT
+        with ESMTP id S235536AbjADWh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:35:16 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205AE42E0B;
-        Wed,  4 Jan 2023 14:35:16 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 873B95C0134;
-        Wed,  4 Jan 2023 17:35:15 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 04 Jan 2023 17:35:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672871715; x=
-        1672958115; bh=9nSj1q7zrjVrHxpXLsqOcxeqElrzwEPSBvGhfldNRfM=; b=U
-        ESssoN41ZgPoFtZQUPojTuKCXpL2LDZjkED16G9s7nCnA1tmfRBbKWwLeV24ruBt
-        Pl66tQD8eOuVsOWDV0R9qoG8944S0nn1xh2n6PZ5CdvTMBLAluNNqCge1oGUMiuo
-        Y7KWxq6loXsyP4NPnfjO/d0JC6+Dsk1d5Hvctz8ZNOCIFIp4JxRNWKfuM6qhgGSp
-        BJn6PgjB8IQEJ/E0WCADHDI0oauTruA3DCY+FYk1SM4rLE/6bpOm9wkJHt2OCsJe
-        f0Xl8t6FIVdI8yTj60mPgFLuuiO4DB2Qt+Oh1uhUS/9/vlWF0zuzRdDKVPsv2A/w
-        vfovqM1+tXItTbzszBO1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672871715; x=
-        1672958115; bh=9nSj1q7zrjVrHxpXLsqOcxeqElrzwEPSBvGhfldNRfM=; b=x
-        XfeFMMSkIjqDp/ACOh7XxE3Dx+Fv61YQAGYNzAvb0u8GFNexp4S/9LxfkflJSgBf
-        25mG36h9xzl992ZkLKhzATAADHw07YYufGZZ1fpF06hegAOdXrmXaUvOmjy1wuky
-        5EhNinBnzlARntFOfhrjuaJvpyIlzcWZTrl13fFCd0aYF8szenBUbIO5e9XFLry+
-        wDdHW5rMc+a5zwUUm0IFP7wQGo5rVzF+A4p12lrGlmZiBZ2rP5CXu8lamuMCHtHt
-        +O3iDLfiiqcNzcYXPtipaRcRavY/8n/DiP1hEb1DEVhglKtwK/84UnjiusZJMecC
-        CiYxAkQyZY/ui3TmeTNdQ==
-X-ME-Sender: <xms:Iv-1Y1IWnYU2LJGoYaBdWWaW9R6EzoupAydBJZKg6iQmP71xyvSziw>
-    <xme:Iv-1YxJJfv1JaISL-r0QkEpoakedfLWauRJ50UqhRfU0wm8O_0RiS975ftZH0jxQv
-    BGgp9mLErwfxSU518s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeejucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedtgfejveen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Iv-1Y9ugY1So_65wAHgDHHEau78vxDvUPnpVkgGqBE_okLqtL3iwTQ>
-    <xmx:Iv-1Y2art-m0VjeJGkMtl1HXIEaD8OYdlqL2sQointxIq_7Hmldx0A>
-    <xmx:Iv-1Y8ZifTk2vC9y7Xla4m0jHUMnKw7rKALtRf06a4O4SW8zslqH2Q>
-    <xmx:I_-1Y7wfUr8KFUIfe0wuQQF0zlIdBqjezD-x-S0vy_XLSPOxr8nqtA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E348FB60086; Wed,  4 Jan 2023 17:35:14 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <acaa26a6-f918-4dfc-8326-888e8d35fb09@app.fastmail.com>
-In-Reply-To: <Y7W+E2/bywt16BqJ@google.com>
-References: <20221211025700.1180843-1-jk@codeconstruct.com.au>
- <20221211025700.1180843-3-jk@codeconstruct.com.au>
- <Y7WvXTPxyIGw5y9R@google.com>
- <33f6f9e66c8143515d36d17bf33d95362830f83f.camel@codeconstruct.com.au>
- <Y7W+E2/bywt16BqJ@google.com>
-Date:   Wed, 04 Jan 2023 23:34:54 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lee Jones" <lee@kernel.org>,
-        "Jeremy Kerr" <jk@codeconstruct.com.au>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Mark Brown" <broonie@kernel.org>
-Subject: Re: [RFC PATCH v3 2/2] mfd: syscon: allow reset control for syscon devices
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 17:37:59 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1971D0DE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:37:58 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id d10so20236533ilc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
+        b=ohe7m4zraaZuCG6StlOr3NDElGbtNTt/AgB57cgRJ7fR/62RRKlU/4Kkq1hw+ths9X
+         H+IwFo9T4WLorbzXH15hXAuWYP0qA7UDgvG6zA0vgTCHsVQaPXB9tzFAp3rNEU/pjGFP
+         Aj6X4ML3gX7K7csd049yNiopXlnTHatPghoj0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YcNoql4sxZAAG0Z9x382x27f16j/NJH8gvjDj7DBfeY=;
+        b=LoR3pS/R1SV5L/oCA2Dk+4HX4k1ZebEsixh6NS0QkI7K+/7BXHTQqisNRNcMmL6jCh
+         qC82dNxT5B1UR+8LITtLaho1izG7O4SAF168mxahuldPDSZ/AaY4WvuTVEzEu0EbmWnw
+         QoPpaGPlHm4oZEOg52eUm1+eG5uTq/7NW6ah87bA233QLZFchU9pBQSAzRiFNj2tiZyP
+         wqnPgkIc0QTU1Sb5fw6j2aSR/uX4SZ7PrvH+6n06VqexuVN6cwXzc1FZdN9ehsLwPGwN
+         szKjfeqJETr+IcF2N+MVEQtsLfLkEN6tiF54wz48okoxw8w/EiTO7NnhpZPfErcCsTO7
+         C7yA==
+X-Gm-Message-State: AFqh2kolvEE67UGqmiYSu6QrtgbO6LAFL3vLDHFhmtMFKZHWyqiRjddv
+        WnQclVf9mpPgYfFq4c32uNsZAbarGYEwMLSa
+X-Google-Smtp-Source: AMrXdXsnV5WKBO3y2D9jF6L7JkTbhKxnOGOhp02IPb09JTYoS/rGNOwzeyl6ujdBGNOViFzaAqfhkA==
+X-Received: by 2002:a05:6e02:b2c:b0:304:c95e:8c36 with SMTP id e12-20020a056e020b2c00b00304c95e8c36mr39114239ilu.14.1672871878123;
+        Wed, 04 Jan 2023 14:37:58 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id r22-20020a02b116000000b00363ec4dcaacsm11304062jah.22.2023.01.04.14.37.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 14:37:57 -0800 (PST)
+Date:   Wed, 4 Jan 2023 22:37:57 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
+ VL817Q7 hub controller
+Message-ID: <Y7X/xadXIA2f9lHz@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-9-linux.amoon@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023, at 18:57, Lee Jones wrote:
-> On Thu, 05 Jan 2023, Jeremy Kerr wrote:
->
->> Hi Lee,
->>=20
->> > > @@ -124,7 +127,17 @@ static struct syscon *of_syscon_register(str=
-uct device_node *np, bool check_clk)
->> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} else {
->> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0ret =3D regmap_mmio_attach_clk(regmap, clk);
->> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0if (ret)
->> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto err_attach;
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto err_attach_clk;
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0}
->> > > +
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0reset =3D of_reset_control_get_optional_exclusiv=
-e(np, NULL);
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(reset)) {
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-ret =3D PTR_ERR(reset);
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-goto err_attach_clk;
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0} else {
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-ret =3D reset_control_deassert(reset);
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-if (ret)
->> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto err_reset;
->> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->> >=20
->> > The else is superfluous, right?
->>=20
->> Yep, we could move that reset_control_deassert() out of the else bloc=
-k.
->> If there are no other changes, I'll send a v4 with that.
->
-> I'd wait a little while to give Arnd a chance to respond.
->
-> Might save you a little work.
+On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
+> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
+> features 4 downstream ports, an internal 5V regulator and has
+> external reset pin.
+> 
+> Add a device tree binding for its USB protocol part.
+> The internal LDO is not covered by this and can just be modelled
+> as a fixed regulator.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> new file mode 100644
+> index 000000000000..4ae995160fd5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Via labs VL817Q7 USB 3.1 hub controller
 
-Looks all good to me,
+nit: VIA Labs VL817-Q7
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> +
+> +maintainers:
+> +  - Anand Moon <linux.amoon@gmail.com>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - vialab,usb2109
+
+This is not a valid compatible string as Johan already noted.
+
+Besides that the VL817-Q7 provides both a 3.1 and a 2.0 USB hub, which
+are enumerated separately. Please also add a compatible string for the
+2.0 hub (assuming 0x2109 is the 3.1 hub).
+
+> +
+> +  reg: true
+> +
+> +  reset-gpios:
+> +    description: GPIO controlling the RESET# pin.
+> +
+> +  vdd-supply:
+> +    description:
+> +      the regulator that provides 5.0V core power to the hub.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    usb {
+> +        dr_mode = "host";
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        hub: hub@1 {
+> +            compatible = "vialab,usb2109"
+> +            reg = <1>;
+> +            reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
+> +        };
+
+Please also add a node for the other hub and link the two nodes with
+each other through the 'peer-hub' property. See realtek,rts5411.yaml
+for reference.
