@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF76865CFD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D83365CFE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233967AbjADJns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S234011AbjADJpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjADJnq (ORCPT
+        with ESMTP id S234054AbjADJpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:43:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD60AE7A;
-        Wed,  4 Jan 2023 01:43:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5869EB811A2;
-        Wed,  4 Jan 2023 09:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55DE1C433EF;
-        Wed,  4 Jan 2023 09:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672825423;
-        bh=GFCkxrwWNgg3EDS4bs73kYo8VaU7YWYv528Dyhkwodg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cBRdYwaF9rvneXWWpfBfXtC04WI/HLROvyAyCiBqFH9E6SHUI9oVJUnccX4MIYCJQ
-         RE7Eea0nyS/BgIkiRGu3cTAmxEESMDcd1jaivPbSP78mAnFh2oowRnuAO8JDDGHEbi
-         hgREYjjJ6ivL79VC0TsQLKnuOuE4g1FIVRik5fQ6C3tudtDDGv2IlAOizFxoZU1skD
-         eus5Rb+3ImcV0O4WeRE5Dd4KaqexD6UoMxEkBf3REOOIP9yzpYpDfSSh9obuVQREcP
-         VfG+nerm/fW1lCD6KzMtArHCVl96S24h12ThhEO3s1GxjsVR8FRc99s7y/Gm5yacZb
-         Q745KtNOJCh3w==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
-        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Patrisious Haddad <phaddad@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH rdma-next v1 0/3] Provide more error details when a QP moves to error state
-Date:   Wed,  4 Jan 2023 11:43:33 +0200
-Message-Id: <cover.1672821186.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 4 Jan 2023 04:45:07 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C336F140D1
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:45:05 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bq39so41840259lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dwK7KmsCtxSzE0Aa/jU5YH7OuDhIFXIXllhG0Cv+W8c=;
+        b=U296PG3EHPyZ+bRqZpBXS40UO8rB2b2MDcMN/8PhFG9G5W9Q8dO2r/auwQ4Zbke3Tc
+         lMlAhcSKPpas+Ve44UhcObOZMiq3vjGa+cZ5fC/ybWyVNs0erUVQPTeYouY5de0tZBKI
+         hM0w+xhEhVWQkVqOBj9Tvg0TMfzZwGhs01JBe26hCqh4lrCD7ALBtfsFw3ej50RxCMYm
+         e9YJ3lFaQ4bQVlJyhESEubYjK1me1MvXzGUq3G+JTueZhmAlAI55kTj5XqI2nz+ixYen
+         laGsuFYO6KyE4qV6dxiQJS0bToiU2VNh6q6WjvHALswSpneThMbKJGdZGn2G+fkkNSuf
+         58dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dwK7KmsCtxSzE0Aa/jU5YH7OuDhIFXIXllhG0Cv+W8c=;
+        b=dNjv+rWNQtuqb4f5GXqgmAx9aFTdonQsSZrKoe0H7E6dMN6Guu+ymdofnFOkEJb8x4
+         bi44bvtXEyN64tTp0sI95pnxh1W3qAIlzGuczmH6AihzHHCQHC/SaMnPTBDOd5F+UQM2
+         K97sJA9abQlnDHtnD3osOUbCSfPwao1A8mHLkK5yWC1tM5CcQjFus/mUsP8CV7CsXyVD
+         vWiz3lN+cYzUFNgmxn5TOduzXDtroGHZrjXs0CVJ9f32AtW+eXDVtbfhbwK/PRM52e9X
+         GzkmOuIqCC5k5aN/Ac8mipyaXiVn6NMI1owTBW+RxXaTKK6mC3M5vIbC7LNPkEE1lmhg
+         84fg==
+X-Gm-Message-State: AFqh2koUDcJ/Z+QW3dlwkmqOkehtQgxp9zFcgn6ioXBD40rrORPIHx8b
+        JogEpyPpwbEug9cfa6ci43i8cQ==
+X-Google-Smtp-Source: AMrXdXs0l2W2ThNFSAkpY3pdmtbMYW35dXfIkkHtyIDzecLdnWSjjziGTOaK1lFvf1HMa3Z71/FToQ==
+X-Received: by 2002:a05:6512:22d3:b0:4b7:66:8231 with SMTP id g19-20020a05651222d300b004b700668231mr15353428lfu.58.1672825504070;
+        Wed, 04 Jan 2023 01:45:04 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id q14-20020a056512210e00b004a2c447598fsm5083600lfr.159.2023.01.04.01.45.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 01:45:03 -0800 (PST)
+Message-ID: <96ccae6f-3788-e030-480f-7aa2478ca560@linaro.org>
+Date:   Wed, 4 Jan 2023 11:45:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 3/6] drm/msm/dpu: add support for SM8550
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-mdss-dsi-v1-0-9ccd7e652fcd@linaro.org>
+ <20230103-topic-sm8550-upstream-mdss-dsi-v1-3-9ccd7e652fcd@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v1-3-9ccd7e652fcd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,48 +83,339 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+On 04/01/2023 11:08, Neil Armstrong wrote:
+> Add definitions for the display hardware used on Qualcomm SM8550
+> platform.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 197 +++++++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |   2 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c        |   1 +
+>   4 files changed, 201 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index b4ca123d8e69..adf5e25269dc 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -402,6 +402,20 @@ static const struct dpu_caps sm8450_dpu_caps = {
+>   	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>   };
+>   
+> +static const struct dpu_caps sm8550_dpu_caps = {
+> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> +	.max_mixer_blendstages = 0xb,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
+> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+> +	.ubwc_version = DPU_HW_UBWC_VER_40,
+> +	.has_src_split = true,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.has_3d_merge = true,
+> +	.max_linewidth = 5120,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> +};
+> +
+>   static const struct dpu_caps sc7280_dpu_caps = {
+>   	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>   	.max_mixer_blendstages = 0x7,
+> @@ -579,6 +593,37 @@ static const struct dpu_mdp_cfg sm8450_mdp[] = {
+>   	},
+>   };
+>   
+> +static const struct dpu_mdp_cfg sm8550_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0, .len = 0x494,
+> +	.features = BIT(DPU_MDP_PERIPH_0_REMOVED),
+> +	.highest_bank_bit = 0x3, /* TODO: 2 for LP_DDR4 */
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+> +			.reg_off = 0x4330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+> +			.reg_off = 0x6330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+> +			.reg_off = 0x8330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+> +			.reg_off = 0xa330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+> +			.reg_off = 0x24330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+> +			.reg_off = 0x26330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA2] = {
+> +			.reg_off = 0x28330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA3] = {
+> +			.reg_off = 0x2a330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+> +			.reg_off = 0x2c330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+> +			.reg_off = 0x2e330, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = {
+> +			.reg_off = 0x2bc, .bit_off = 20},
+> +	},
+> +};
+> +
+>   static const struct dpu_mdp_cfg sc7280_mdp[] = {
+>   	{
+>   	.name = "top_0", .id = MDP_TOP,
+> @@ -776,6 +821,45 @@ static const struct dpu_ctl_cfg sm8450_ctl[] = {
+>   	},
+>   };
+>   
+> +static const struct dpu_ctl_cfg sm8550_ctl[] = {
+> +	{
+> +	.name = "ctl_0", .id = CTL_0,
+> +	.base = 0x15000, .len = 0x290,?
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
 
-Changelog:
-v1: 
- * Reworked mlx4 to allow non-atomic IB QP event handler.
-v0: https://lore.kernel.org/linux-rdma/20220907113800.22182-1-phaddad@nvidia.com/
+CTL_SC7280_MASK | BIT(DPU_CTL_SPLIT_DISPLAY) ?
 
-------------------------------------------
-The following series adds ability to get information about fatal QP events.
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> +	},
+> +	{
+> +	.name = "ctl_1", .id = CTL_1,
+> +	.base = 0x16000, .len = 0x290,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_SPLIT_DISPLAY) | BIT(DPU_CTL_FETCH_ACTIVE),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+> +	},
+> +	{
+> +	.name = "ctl_2", .id = CTL_2,
+> +	.base = 0x17000, .len = 0x290,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
 
-This functionality is extremely useful for the following reasons:
- * Provides an information about the reason why QP moved to error state,
-   in cases where CQE isn't generated.
- * Allows to provide vendor specfic error codes and information that
-   could be very useful to users who know them.
+CTL_SC7280_MASK?
 
-An example of a case without CQE is a remote write with RKEY violation.
-In this flow, on remote side no CQEs are generated and such error without
-indication is hard to debug.
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+> +	},
+> +	{
+> +	.name = "ctl_3", .id = CTL_3,
+> +	.base = 0x18000, .len = 0x290,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+> +	},
+> +	{
+> +	.name = "ctl_4", .id = CTL_4,
+> +	.base = 0x19000, .len = 0x290,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
+> +	},
+> +	{
+> +	.name = "ctl_5", .id = CTL_5,
+> +	.base = 0x1a000, .len = 0x290,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
+> +	},
+> +};
+> +
+>   static const struct dpu_ctl_cfg sc7280_ctl[] = {
+>   	{
+>   	.name = "ctl_0", .id = CTL_0,
+> @@ -1032,6 +1116,40 @@ static const struct dpu_sspp_cfg sm8450_sspp[] = {
+>   		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+>   };
+>   
+> +static const struct dpu_sspp_sub_blks sm8550_vig_sblk_0 =
+> +				_VIG_SBLK("0", 7, DPU_SSPP_SCALER_QSEED3LITE);
+> +static const struct dpu_sspp_sub_blks sm8550_vig_sblk_1 =
+> +				_VIG_SBLK("1", 8, DPU_SSPP_SCALER_QSEED3LITE);
+> +static const struct dpu_sspp_sub_blks sm8550_vig_sblk_2 =
+> +				_VIG_SBLK("2", 9, DPU_SSPP_SCALER_QSEED3LITE);
+> +static const struct dpu_sspp_sub_blks sm8550_vig_sblk_3 =
+> +				_VIG_SBLK("3", 10, DPU_SSPP_SCALER_QSEED3LITE);
+> +static const struct dpu_sspp_sub_blks sm8550_dma_sblk_4 = _DMA_SBLK("12", 5);
+> +static const struct dpu_sspp_sub_blks sd8550_dma_sblk_5 = _DMA_SBLK("13", 6);
+> +
+> +static const struct dpu_sspp_cfg sm8550_sspp[] = {
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
+> +		sm8550_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SC7180_MASK,
+> +		sm8550_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SC7180_MASK,
+> +		sm8550_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SC7180_MASK,
+> +		sm8550_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA2),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA3),
+> +	SSPP_BLK("sspp_12", SSPP_DMA4, 0x2c000,  DMA_CURSOR_SDM845_MASK,
+> +		sm8550_dma_sblk_4, 14, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> +	SSPP_BLK("sspp_13", SSPP_DMA5, 0x2e000,  DMA_CURSOR_SDM845_MASK,
+> +		sd8550_dma_sblk_5, 15, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +};
+> +
+>   static const struct dpu_sspp_cfg sc7280_sspp[] = {
+>   	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7280_MASK,
+>   		sc7280_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> @@ -1268,6 +1386,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>   	.len = 0x20, .version = 0x20000},
+>   };
+>   
+> +#define PP_BLK_DIPHER(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+> +	{\
+> +	.name = _name, .id = _id, \
+> +	.base = _base, .len = 0, \
 
-Thanks.
+len = 0 looks incorrect. Any particular reason why can't we use plain 
+PP_BLK here?
 
-Mark Zhang (1):
-  RDMA/mlx: Calling qp event handler in workqueue context
-
-Patrisious Haddad (2):
-  net/mlx5: Introduce CQE error syndrome
-  RDMA/mlx5: Print error syndrome in case of fatal QP errors
-
- drivers/infiniband/hw/mlx4/main.c       |   8 ++
- drivers/infiniband/hw/mlx4/mlx4_ib.h    |   3 +
- drivers/infiniband/hw/mlx4/qp.c         | 121 +++++++++++------
- drivers/infiniband/hw/mlx5/main.c       |   7 +
- drivers/infiniband/hw/mlx5/qp.c         | 164 ++++++++++++++++++------
- drivers/infiniband/hw/mlx5/qp.h         |   4 +-
- drivers/infiniband/hw/mlx5/qpc.c        |   7 +-
- drivers/net/ethernet/mellanox/mlx4/qp.c |  14 +-
- include/linux/mlx4/qp.h                 |   1 +
- include/linux/mlx5/mlx5_ifc.h           |  47 ++++++-
- include/rdma/ib_verbs.h                 |   2 +-
- 11 files changed, 292 insertions(+), 86 deletions(-)
+> +	.features = BIT(DPU_PINGPONG_DITHER), \
+> +	.merge_3d = _merge_3d, \
+> +	.sblk = &_sblk, \
+> +	.intr_done = _done, \
+> +	.intr_rdptr = _rdptr, \
+> +	}
+>   #define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+>   	{\
+>   	.name = _name, .id = _id, \
+> @@ -1371,6 +1499,33 @@ static const struct dpu_pingpong_cfg sm8450_pp[] = {
+>   			-1),
+>   };
+>   
+> +static const struct dpu_pingpong_cfg sm8550_pp[] = {
+> +	PP_BLK_DIPHER("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_6", PINGPONG_6, 0x66000, MERGE_3D_3, sc7280_pp_sblk,
+> +			-1,
+> +			-1),
+> +	PP_BLK_DIPHER("pingpong_7", PINGPONG_7, 0x66400, MERGE_3D_3, sc7280_pp_sblk,
+> +			-1,
+> +			-1),
+> +};
+> +
+>   /*************************************************************
+>    * MERGE_3D sub blocks config
+>    *************************************************************/
+> @@ -1395,6 +1550,13 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>   };
+>   
+> +static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
+> +	MERGE_3D_BLK("merge_3d_0", MERGE_3D_0, 0x4e000),
+> +	MERGE_3D_BLK("merge_3d_1", MERGE_3D_1, 0x4f000),
+> +	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+> +	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+> +};
+> +
+>   /*************************************************************
+>    * DSC sub blocks config
+>    *************************************************************/
+> @@ -1481,6 +1643,14 @@ static const struct dpu_intf_cfg sm8450_intf[] = {
+>   	INTF_BLK("intf_3", INTF_3, 0x37000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+>   };
+>   
+> +static const struct dpu_intf_cfg sm8550_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x34000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> +	/* TODO TE sub-blocks for intf1 & intf2 */
+> +	INTF_BLK("intf_1", INTF_1, 0x35000, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_2", INTF_2, 0x36000, INTF_DSI, 1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> +	INTF_BLK("intf_3", INTF_3, 0x37000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +};
+> +
+>   /*************************************************************
+>    * Writeback blocks config
+>    *************************************************************/
+> @@ -2188,6 +2358,32 @@ static const struct dpu_mdss_cfg sm8450_dpu_cfg = {
+>   	.mdss_irqs = IRQ_SM8450_MASK,
+>   };
+>   
+> +static const struct dpu_mdss_cfg sm8550_dpu_cfg = {
+> +	.caps = &sm8550_dpu_caps,
+> +	.mdp_count = ARRAY_SIZE(sm8550_mdp),
+> +	.mdp = sm8550_mdp,
+> +	.ctl_count = ARRAY_SIZE(sm8550_ctl),
+> +	.ctl = sm8550_ctl,
+> +	.sspp_count = ARRAY_SIZE(sm8550_sspp),
+> +	.sspp = sm8550_sspp,
+> +	.mixer_count = ARRAY_SIZE(sm8150_lm),
+> +	.mixer = sm8150_lm,
+> +	.dspp_count = ARRAY_SIZE(sm8150_dspp),
+> +	.dspp = sm8150_dspp,
+> +	.pingpong_count = ARRAY_SIZE(sm8550_pp),
+> +	.pingpong = sm8550_pp,
+> +	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+> +	.merge_3d = sm8550_merge_3d,
+> +	.intf_count = ARRAY_SIZE(sm8550_intf),
+> +	.intf = sm8550_intf,
+> +	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> +	.vbif = sdm845_vbif,
+> +	.reg_dma_count = 1,
+> +	.dma_cfg = &sm8450_regdma,
+> +	.perf = &sm8450_perf_data,
+> +	.mdss_irqs = IRQ_SM8450_MASK,
+> +};
+> +
+>   static const struct dpu_mdss_cfg sc7280_dpu_cfg = {
+>   	.caps = &sc7280_dpu_caps,
+>   	.mdp_count = ARRAY_SIZE(sc7280_mdp),
+> @@ -2248,6 +2444,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
+>   	{ .hw_rev = DPU_HW_VER_650, .dpu_cfg = &qcm2290_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_720, .dpu_cfg = &sc7280_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_810, .dpu_cfg = &sm8450_dpu_cfg},
+> +	{ .hw_rev = DPU_HW_VER_900, .dpu_cfg = &sm8550_dpu_cfg},
+>   };
+>   
+>   const struct dpu_mdss_cfg *dpu_hw_catalog_init(u32 hw_rev)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 29e7ea5840a2..7a8380f5c643 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -48,6 +48,7 @@
+>   #define DPU_HW_VER_650	DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
+>   #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
+>   #define DPU_HW_VER_810	DPU_HW_VER(8, 1, 0) /* sm8450 */
+> +#define DPU_HW_VER_900	DPU_HW_VER(9, 0, 0) /* sm8550 */
+>   
+>   #define IS_MSM8996_TARGET(rev) IS_DPU_MAJOR_MINOR_SAME((rev), DPU_HW_VER_170)
+>   #define IS_MSM8998_TARGET(rev) IS_DPU_MAJOR_MINOR_SAME((rev), DPU_HW_VER_300)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> index 6d8e1bb3b3cc..dccad33532a9 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> @@ -120,6 +120,8 @@ enum dpu_sspp {
+>   	SSPP_DMA1,
+>   	SSPP_DMA2,
+>   	SSPP_DMA3,
+> +	SSPP_DMA4,
+> +	SSPP_DMA5,
+>   	SSPP_CURSOR0,
+>   	SSPP_CURSOR1,
+>   	SSPP_MAX
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 0434cad511a4..18fefa116a56 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1303,6 +1303,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>   	{ .compatible = "qcom,sm8150-dpu", },
+>   	{ .compatible = "qcom,sm8250-dpu", },
+>   	{ .compatible = "qcom,sm8450-dpu", },
+> +	{ .compatible = "qcom,sm8550-dpu", },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, dpu_dt_match);
+> 
 
 -- 
-2.38.1
+With best wishes
+Dmitry
 
