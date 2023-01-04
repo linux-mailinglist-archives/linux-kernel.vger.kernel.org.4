@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611F665D28F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C7665D29A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 13:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbjADMZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 07:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S234350AbjADM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 07:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbjADMZi (ORCPT
+        with ESMTP id S234206AbjADM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:25:38 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53583C57;
-        Wed,  4 Jan 2023 04:25:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 61B236C7;
-        Wed,  4 Jan 2023 13:25:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672835136;
-        bh=ISQ3UHUxD3o+GfzGM62iW4mcXRNTs4TvFWcCqoYdqXs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeuO6Qr1Z3eP8plgokW0EbiJHCHc2DNV6y4CvsdinT81q6ZYkvPl2sOrKwiEfIk5S
-         yss9I6tlrskfEsJjplYLYEI2MJQ1T0Fe+MoVg+mP4Pso6ZOAiNda2mgs/BmNrT+rsl
-         UqWs68gatBldVyS9eAuqeCQ3rBpTLMA8nYCqNnmU=
-Date:   Wed, 4 Jan 2023 14:25:32 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: platform: ti: Add missing check for
- devm_regulator_get
-Message-ID: <Y7VwPOQtKC1eDGg+@pendragon.ideasonboard.com>
-References: <20230104085537.20646-1-jiasheng@iscas.ac.cn>
+        Wed, 4 Jan 2023 07:27:12 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103771A21D
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 04:27:11 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z16so16286769wrw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 04:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C30T6tNGFSuxvz3Mz5j5spVtycMF/lADJz0DPiFP6T8=;
+        b=luMd9K3IkxjocbML0QXFirxmtfakpeCmxnFW7ekh8TEqv2B+6u88Ll/XSxONlFR1CC
+         H0sj7UWnqBTF8cMsxY8A5Q1I1H0xQMupfQQhzVXA4jfEvjHi23ZwrVfKpZwgyh+wbL9I
+         VaeKEkIYHn5OGvzlIM/I4/YyP/mKrbPLVc/PykKH9bNVJvkZvG2Xd3EuAJ9wz8L3R81f
+         A2dch1C9pGi42sMsdLXqNwn6T5uDLVHcjmvoH/UKV/9wronAPuHWFNKIJn8YfcoSV4xX
+         piWmF/EfvFWCMAnvekQ+ju7XW0oUtqhWhCjI25HbKsuh25oJ1+blb6HR6qfNTFkk7M6F
+         GMvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C30T6tNGFSuxvz3Mz5j5spVtycMF/lADJz0DPiFP6T8=;
+        b=mOYaPTc3gESyuO68cVmxY2FFzB4GJ3tEo6EXZQmP8ADiQbrVyGRhxi2uJhV6YZTTZ/
+         jk25MPaS4AcMfSzjocogbujeascYuIRwHbEPE2TNPw87OWDZg6SshFzIcbF90yECSZ1Q
+         RVBqG1a3MIhRiRWzIXROYn6MiX43IXI/AchAZDtA7r3tYt8umFvWbubsN+zaJCjt5CGb
+         AsXNossd+giHSx88Ejxa38mozzvuHKti1fAmjGW/CJPBeKMcfMxvVmL22FmTOjnJOemF
+         3MRNDir8/O1LL+OkTqG0qUjCAW5M73QFIuCbAU5tQNFqy9XKW6zZ1yGTbCEF55Va9Esy
+         RJug==
+X-Gm-Message-State: AFqh2kofwByZWKn1J+kIHGL2cz0S+4ZKR1KtVWvek3PCtQcFfx5ozGfy
+        zzVvvZVN1wGWNE/26WeKlxajF3FwjCWl4+brZFY=
+X-Google-Smtp-Source: AMrXdXv53xtPSbIhxmlMfoYs3hxEElTh4PBEm7t6OokhRJO2RAsiyRKmAqzRYpsXcr3bFj74XxxNimMgRJEQ0VS8u+M=
+X-Received: by 2002:a5d:5d8a:0:b0:242:257f:3006 with SMTP id
+ ci10-20020a5d5d8a000000b00242257f3006mr1004952wrb.147.1672835229563; Wed, 04
+ Jan 2023 04:27:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230104085537.20646-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: michealkeini@gmail.com
+Received: by 2002:a05:6000:250:0:0:0:0 with HTTP; Wed, 4 Jan 2023 04:27:09
+ -0800 (PST)
+From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
+Date:   Wed, 4 Jan 2023 00:27:09 -1200
+X-Google-Sender-Auth: 1-TA2zXowpn1vCm3GsNY1SwZ6Uw
+Message-ID: <CAJ9PX1Yj4Wkpn_r4_xBdUxB00bSxbmuricQX+HLW+hrWKMu_9g@mail.gmail.com>
+Subject: Good Day My beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiasheng,
-
-Thank you for the patch.
-
-On Wed, Jan 04, 2023 at 04:55:37PM +0800, Jiasheng Jiang wrote:
-> Add check for the return value of devm_regulator_get since it may return
-> error pointer.
-> 
-> Fixes: 448de7e7850b ("[media] omap3isp: OMAP3 ISP core")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/platform/ti/omap3isp/isp.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-> index 1d40bb59ff81..e7327e38482d 100644
-> --- a/drivers/media/platform/ti/omap3isp/isp.c
-> +++ b/drivers/media/platform/ti/omap3isp/isp.c
-> @@ -2307,7 +2307,16 @@ static int isp_probe(struct platform_device *pdev)
->  
->  	/* Regulators */
->  	isp->isp_csiphy1.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy1");
-> +	if (IS_ERR(isp->isp_csiphy1.vdd)) {
-> +		ret = PTR_ERR(isp->isp_csiphy1.vdd);
-> +		goto error;
-> +	}
-> +
->  	isp->isp_csiphy2.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy2");
-> +	if (IS_ERR(isp->isp_csiphy2.vdd)) {
-> +		ret = PTR_ERR(isp->isp_csiphy2.vdd);
-> +		goto error;
-> +	}
->  
->  	/* Clocks
->  	 *
-
--- 
-Regards,
-
-Laurent Pinchart
+I came across your e-mail contact prior to a private search while in
+need of a trusted person. My name is Mrs. Aisha Gaddafi, a single
+Mother and a Widow with three Children. I am the only biological
+Daughter of the late Libyan President (Late Colonel Muammar Gaddafi)I
+have a business Proposal for you worth $27.5 Million dollars and I
+need mutual respect, trust, honesty and transparency, adequate support
+and assistance, Hope to hear from you for further details.
+Warmest regards
+Mrs Aisha Gaddafi
