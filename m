@@ -2,149 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE91665E01D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE51C65E026
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240619AbjADWiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S240640AbjADWkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:40:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbjADWiq (ORCPT
+        with ESMTP id S235536AbjADWjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:38:46 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FC1EC79;
-        Wed,  4 Jan 2023 14:38:45 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304ME1CI018620;
-        Wed, 4 Jan 2023 22:38:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=dnzle0EcHMmwGRtnVfx0mWs2UVkVr780qRGnF49Zxbw=;
- b=PqUzd7tArfL9HGT34lPsW6zlrVMMIK535/wJOQoVQZ0gW1WTH0F34zg8wHIkJ0T+78zI
- 9SyDP/o+2ZSjXkXAwWoQm4LWk8v8NBwrycMasue3XpHOqx9HtkSfcE9Qv2iEj09hOeK5
- ZIG+dkVdQSWcxT0MMKKcPZ/lD4VaGFMdEskERUchWy1oyuzogVTUrXMvvyKx+0sLfvK5
- Lyozi++13HBffdqTXnsN4UG1Az1KEBfTh+bBtkC1a+5gwyTw/TK8Stih7oG/fuFEq5r/
- LZZsu2j9NXhehyg7bXZRWmK7dT2D7I3TZuQwtkvszafXOvb6uyHsp8HXBpLCWIz4ENGV Zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwj2hgkfd-1
+        Wed, 4 Jan 2023 17:39:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56DE41036;
+        Wed,  4 Jan 2023 14:39:53 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304Lr1w8004709;
+        Wed, 4 Jan 2023 22:38:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PvgHZ++oCdiQinYipin27gvaecbZmAEzWRutKJOVX3M=;
+ b=YtB7Jw/dFK0o6jNWJGYZJImoKHqHOfUS9PqilzpUXkxJKBugq170pe6zuGcEpkd4SzlM
+ 5t6FzxesA9NmPMzJXVnCM3Slh9GoGTaLJjtSEI7VmizV6HwE6ZH39hn0kIR6S2FcLFMP
+ x/kg+tC7bYv7Zq7vIgn2Ne+Euowu4foGIa9sJZE8nNIgRp2TPVLzWicXtGwcHVWrU2zu
+ b5S7Ao+EzMz8dyyN6Q/RW98TkujcN88bC+WjpgTFX20a1p4AedzLed4Ra41Mv87Tjrfb
+ 2umcVpWeBye4Izf4Jxxchl+XR3k7jnI00nzoPvQxwVFee2QSZFZwtDk6ds9ScgIBGfmQ OQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsw32yhf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 22:38:16 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 304MZFBa004552;
-        Wed, 4 Jan 2023 22:38:15 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwj2hgker-1
+        Wed, 04 Jan 2023 22:38:56 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304Mcssx002166
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 22:38:15 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 304MW0JQ019440;
-        Wed, 4 Jan 2023 22:38:15 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7tgas-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 22:38:15 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 304McERA2622200
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Jan 2023 22:38:14 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5B3A58066;
-        Wed,  4 Jan 2023 22:38:13 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B763A58062;
-        Wed,  4 Jan 2023 22:38:11 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.185.16])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Jan 2023 22:38:11 +0000 (GMT)
-Message-ID: <1738bcddc690825f634bfe41ca1df778a1a50b0a.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 03/10] KEYS: X.509: Parse Basic Constraints for CA
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        Coiby Xu <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 04 Jan 2023 17:38:07 -0500
-In-Reply-To: <5F14DD59-7139-427E-A263-D5DED6EB57F8@oracle.com>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
-         <20221214003401.4086781-4-eric.snowberg@oracle.com>
-         <b0f29738b919e2705d770017f2f1eb0542c2fad4.camel@linux.ibm.com>
-         <Y7VxDloaHyF8cX5j@kernel.org>
-         <5F14DD59-7139-427E-A263-D5DED6EB57F8@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qxLcN76R_0JpWidhJf1J_gZEXtL92O2g
-X-Proofpoint-GUID: shNbEMAaO2O3rlpd5WibO3G1L5cR6plP
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 4 Jan 2023 22:38:54 GMT
+Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 4 Jan 2023
+ 14:38:54 -0800
+Message-ID: <ee22783a-7c64-608f-7d7b-02fd2d4f2e81@quicinc.com>
+Date:   Wed, 4 Jan 2023 14:38:53 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 09/14] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-10-quic_wcheng@quicinc.com>
+ <87edscsv5p.wl-tiwai@suse.de>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <87edscsv5p.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -LNlQNIzroWBPk4dk30kS_5phwiMNb2T
+X-Proofpoint-ORIG-GUID: -LNlQNIzroWBPk4dk30kS_5phwiMNb2T
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- mlxlogscore=999 mlxscore=0 clxscore=1015 malwarescore=0 phishscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301040183
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040184
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-04 at 20:14 +0000, Eric Snowberg wrote:
+Hi Takashi,
+
+On 1/2/2023 9:28 AM, Takashi Iwai wrote:
+> On Sat, 24 Dec 2022 00:31:55 +0100,
+> Wesley Cheng wrote:
+>>
+>> Several Qualcomm SoCs have a dedicated audio DSP, which has the ability to
+>> support USB sound devices.  This vendor driver will implement the required
+>> handshaking with the DSP, in order to pass along required resources that
+>> will be utilized by the DSP's USB SW.  The communication channel used for
+>> this handshaking will be using the QMI protocol.  Required resources
+>> include:
+>> - Allocated secondary event ring address
+>> - EP transfer ring address
+>> - Interrupter number
+>>
+>> The above information will allow for the audio DSP to execute USB transfers
+>> over the USB bus.  It will also be able to support devices that have an
+>> implicit feedback and sync endpoint as well.  Offloading these data
+>> transfers will allow the main/applications processor to enter lower CPU
+>> power modes, and sustain a longer duration in those modes.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > 
-> > On Jan 4, 2023, at 5:29 AM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > 
-> > On Thu, Dec 15, 2022 at 06:10:04AM -0500, Mimi Zohar wrote:
-> >>> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-> >>> index a299c9c56f40..7c5c0ad1c22e 100644
-> >>> --- a/crypto/asymmetric_keys/x509_parser.h
-> >>> +++ b/crypto/asymmetric_keys/x509_parser.h
-> >>> @@ -38,6 +38,7 @@ struct x509_certificate {
-> >>> 	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
-> >>> 	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
-> >>> 	bool		blacklisted;
-> >>> +	bool		root_ca;		/* T if basic constraints CA is set */
-> >>> }; 
-> >> 
-> >> The variable "root_ca" should probably be renamed to just "ca", right?
-> > 
-> > Perhaps is_ca?
+> Hmm, this must be the main part that works to bypass the normal USB
+> packet handling in USB audio driver but hooks to the own offload one,
+> but there is no description how to take over and manage.
+> A missing "big picture" makes it difficult to understand and review.
 > 
-> I am open to renaming this, but need an agreement on whether the “is_” should be used or not:
+
+Technically, we are not taking over the functionality of the USB SND, as 
+we still want the normal path to be accessible in case there is an audio 
+profile/format that can't be supported by the audio DSP.  I can add some 
+more information on how this offload driver co-exists with the USB SND.
+
+> Also, since both drivers are asynchronous, we may need some proper
+> locking.
 > 
-> https://lore.kernel.org/lkml/b28ea211d88e968a5487b20477236e9b507755f4.camel@linux.ibm.com/
 
-Examples of both functions and variables exist that are prefixed with
-"is_".   One is a question; the other a statement.   Naming the
-variable "is_ca" and using it like "if (cert->is_ca)" does make sense.
+Yes, I think locking is needed in some places.  Will add that in the 
+next revision.
 
--- 
-thanks,
+> More on the code change:
+> 
+>> +static int snd_interval_refine_set(struct snd_interval *i, unsigned int val)
+>> +{
+>> +	struct snd_interval t;
+>> +
+>> +	t.empty = 0;
+>> +	t.min = t.max = val;
+>> +	t.openmin = t.openmax = 0;
+>> +	t.integer = 1;
+>> +	return snd_interval_refine(i, &t);
+>> +}
+>> +
+>> +static int _snd_pcm_hw_param_set(struct snd_pcm_hw_params *params,
+>> +				 snd_pcm_hw_param_t var, unsigned int val,
+>> +				 int dir)
+>> +{
+>> +	int changed;
+>> +
+>> +	if (hw_is_mask(var)) {
+>> +		struct snd_mask *m = hw_param_mask(params, var);
+>> +
+>> +		if (val == 0 && dir < 0) {
+>> +			changed = -EINVAL;
+>> +			snd_mask_none(m);
+>> +		} else {
+>> +			if (dir > 0)
+>> +				val++;
+>> +			else if (dir < 0)
+>> +				val--;
+>> +			changed = snd_mask_refine_set(
+>> +					hw_param_mask(params, var), val);
+>> +		}
+>> +	} else if (hw_is_interval(var)) {
+>> +		struct snd_interval *i = hw_param_interval(params, var);
+>> +
+>> +		if (val == 0 && dir < 0) {
+>> +			changed = -EINVAL;
+>> +			snd_interval_none(i);
+>> +		} else if (dir == 0)
+>> +			changed = snd_interval_refine_set(i, val);
+>> +		else {
+>> +			struct snd_interval t;
+>> +
+>> +			t.openmin = 1;
+>> +			t.openmax = 1;
+>> +			t.empty = 0;
+>> +			t.integer = 0;
+>> +			if (dir < 0) {
+>> +				t.min = val - 1;
+>> +				t.max = val;
+>> +			} else {
+>> +				t.min = val;
+>> +				t.max = val+1;
+>> +			}
+>> +			changed = snd_interval_refine(i, &t);
+>> +		}
+>> +	} else
+>> +		return -EINVAL;
+>> +	if (changed) {
+>> +		params->cmask |= 1 << var;
+>> +		params->rmask |= 1 << var;
+>> +	}
+>> +	return changed;
+>> +}
+> 
+> Those are taken from sound/core/oss/pcm_oss.c?  We may put to the
+> common PCM helper instead of duplication.
+> 
 
-Mimi
+Sure, I can do that.
 
+>> +static void disable_audio_stream(struct snd_usb_substream *subs)
+>> +{
+>> +	struct snd_usb_audio *chip = subs->stream->chip;
+>> +
+>> +	if (subs->data_endpoint || subs->sync_endpoint) {
+>> +		close_endpoints(chip, subs);
+>> +
+>> +		mutex_lock(&chip->mutex);
+>> +		subs->cur_audiofmt = NULL;
+>> +		mutex_unlock(&chip->mutex);
+>> +	}
+>> +
+>> +	snd_usb_autosuspend(chip);
+>> +}
+>> +
+>> +static int enable_audio_stream(struct snd_usb_substream *subs,
+>> +				snd_pcm_format_t pcm_format,
+>> +				unsigned int channels, unsigned int cur_rate,
+>> +				int datainterval)
+>> +{
+>> +	struct snd_usb_audio *chip = subs->stream->chip;
+>> +	struct snd_pcm_hw_params params;
+>> +	const struct audioformat *fmt;
+>> +	int ret;
+>> +
+>> +	_snd_pcm_hw_params_any(&params);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_FORMAT,
+>> +			pcm_format, 0);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_CHANNELS,
+>> +			channels, 0);
+>> +	_snd_pcm_hw_param_set(&params, SNDRV_PCM_HW_PARAM_RATE,
+>> +			cur_rate, 0);
+> 
+> What about other parameters like period / buffer sizes?
+> 
+
+I don't think we will need those parameters on the audio DSP.  The 
+"params" here is used to pass the pcm format into the qmi response.
+
+>> +struct qmi_uaudio_stream_req_msg_v01 {
+>> +	u8 enable;
+>> +	u32 usb_token;
+>> +	u8 audio_format_valid;
+>> +	u32 audio_format;
+>> +	u8 number_of_ch_valid;
+>> +	u32 number_of_ch;
+>> +	u8 bit_rate_valid;
+>> +	u32 bit_rate;
+>> +	u8 xfer_buff_size_valid;
+>> +	u32 xfer_buff_size;
+>> +	u8 service_interval_valid;
+>> +	u32 service_interval;
+>> +};
+> 
+> Are this and the other structs a part of DSP ABI?
+> Or is it a definition only used in kernel?  I'm asking because
+> __packed attribute is required for most of ABI definitions with
+> different field types.
+> 
+
+This would be in the kernel only.
+
+Thanks
+Wesley Cheng
