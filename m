@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ADC65CDD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C4165CDDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbjADHry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 02:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S233798AbjADHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjADHrt (ORCPT
+        with ESMTP id S233782AbjADHuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:47:49 -0500
-Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364DE167CF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:47:48 -0800 (PST)
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198]) by mx-outbound46-4.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Wed, 04 Jan 2023 07:47:46 +0000
-Received: by mail-lj1-f198.google.com with SMTP id bn17-20020a05651c179100b0027905fa8e48so7698921ljb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 23:47:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9f5z3cCFhs4FR8+gGLSNtq0xtNbjblXeZzCadPdRGE=;
-        b=O6d2M1Vej/BwZLu4EoGLh5uM7yv0nu6iP0TkVbc3k7WGicrfyEfKuHmSdPUv0bUcUd
-         oojLPhabL2JIoviRqHTudV0sDgdh9LehmAKWbFMRLoVLzlUrFhq+UVvr2Nr3itsInn0j
-         fJ/6JBCHqi6sVeveJG6TMbN+vzYYCCkPszDWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9f5z3cCFhs4FR8+gGLSNtq0xtNbjblXeZzCadPdRGE=;
-        b=gUrRT3+cjOOcVhdK/Wx+11cneZs1iuXqH3F/JsGMnXecC8yYjMmO+MVDQlCk+xx6ga
-         8ypDpquz5ueUzSxbMwbCJRmHGQjZyiOW2dO2Hd8F4wzvC92oThHIRO6ELkBbGWh6dNSr
-         D9wCibDmGKeylluPPhf0FcQM0D+heznFKxKeFWCmlFcPaDoswGepvJt9JtmG58f12hw7
-         9ZYsTGpoqJhIKZ7iQcSPRJ1g6sxNyzu2LpB+Wu5k7iTzphoNi2QwhmWFXFp/K59EUeZ3
-         Csftt/7PTXdDwWKqofv2MuIfiQsSZlMGuorm9zTHJpl4x42xIT1sM5c5ZJ3WqCDZ0oa/
-         /HcQ==
-X-Gm-Message-State: AFqh2koAPSX6rbbwOttNo/48vOuneoCyORJbZ8OhGAxISPL7PzjwnGng
-        TLvo/F7Sitxu2IqATg5te/pQ2uu1u4wm9X+AcAnX/lnDWnW+lRJFcFJ9iJRx/lvLbmHn3/k29k+
-        t4D9l7YB0k/tZgxmuCc9qQ+p6PG7/xwC+B7rVoXnH71OE7MRncbGPT6CQnjLkHZmadT/e8BruFP
-        i4
-X-Received: by 2002:ac2:5de3:0:b0:4b4:a536:f866 with SMTP id z3-20020ac25de3000000b004b4a536f866mr1787908lfq.262.1672818464887;
-        Tue, 03 Jan 2023 23:47:44 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvcwoBZoAjr1B1FS1N0PlG/MN9fvsCDXnPzOywCadO0g5UuE7gHb7YLH7P42zk3VwKiejVRKyn1giV2dty0xqY=
-X-Received: by 2002:ac2:5de3:0:b0:4b4:a536:f866 with SMTP id
- z3-20020ac25de3000000b004b4a536f866mr1787900lfq.262.1672818464592; Tue, 03
- Jan 2023 23:47:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20221213124854.3779-1-sinthu.raja@ti.com> <20221213124854.3779-2-sinthu.raja@ti.com>
- <b4f725b1-3ed6-51fd-4973-92e28987f488@kernel.org>
-In-Reply-To: <b4f725b1-3ed6-51fd-4973-92e28987f488@kernel.org>
-From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Date:   Wed, 4 Jan 2023 13:17:32 +0530
-Message-ID: <CAEd-yTQEUcXYP1hJkUHyvd95-tyDMRETDNHBf07-_zbQu7UAJw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] phy: ti: j721e-wiz: Manage TypeC lane swap if
- typec-gpio-dir not specified
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sinthu Raja <sinthu.raja@ti.com>
+        Wed, 4 Jan 2023 02:50:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752D119C07
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:50:24 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30470TJA004692;
+        Wed, 4 Jan 2023 07:50:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=nlR5v9LbmlouqW9g8B2hSA5SQ8aDtdzdBWD3vT1ml/4=;
+ b=IvNAPIwSCM4p7CTfxdvMmqTSJvTDygbrSyZn8NX6PixRIZuq6B8iYA3kf8DDtmVhIpmz
+ VUCiG6P/s5qpcvf7IKLajnrNOBrizO0y9/Ok1D3JDFK3Zk6Y+JHKDa2P8KI+gabeOxZy
+ N2/gAV/Ih3Xn0h2rsqXyY0e60BtY8lJsV1ZhT78EHuCANRVneZjkF1bFzhRtIDAFSYtK
+ ggf0sRTYP7Tl3b9FcWNZF8MA5eepVdr3P0tGYu74mxM0MRRiXjjCbdU/Ifnasb2gwZZo
+ UqqBZmM9V65Qh9nEnXCVjP496k4xrYdNYAnjeWzZq0gDrPfFsrTPG/ll0ZuVvAZHmZS3 CQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mvjk2rj6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 07:50:16 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 303Mh0KM003741;
+        Wed, 4 Jan 2023 07:50:13 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfcxa6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 07:50:12 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3047oAOg45679070
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Jan 2023 07:50:10 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7230B2004F;
+        Wed,  4 Jan 2023 07:50:10 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 757FA2004D;
+        Wed,  4 Jan 2023 07:50:09 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  4 Jan 2023 07:50:09 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 25F1060060;
+        Wed,  4 Jan 2023 18:50:06 +1100 (AEDT)
+Message-ID: <01993c7ec9d4d97906dc54c165c32b6d8a30f1ec.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 5/7] powerpc/secvar: Handle max object size in the
+ consumer
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Russell Currey <ruscur@russell.cc>, linuxppc-dev@lists.ozlabs.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        zohar@linux.ibm.com, mpe@ellerman.id.au
+Date:   Wed, 04 Jan 2023 18:50:05 +1100
+In-Reply-To: <20221230042014.154483-6-ruscur@russell.cc>
+References: <20221230042014.154483-1-ruscur@russell.cc>
+         <20221230042014.154483-6-ruscur@russell.cc>
 Content-Type: text/plain; charset="UTF-8"
-X-BESS-ID: 1672818465-311780-5566-1560-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.208.198
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245240 [from 
-        cloudscan10-254.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ltg5V2iHgSJbFfI-qLhijx_YaW9q10bf
+X-Proofpoint-GUID: ltg5V2iHgSJbFfI-qLhijx_YaW9q10bf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_04,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 priorityscore=1501 suspectscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301040063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,172 +92,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+T24gRnJpLCAyMDIyLTEyLTMwIGF0IDE1OjIwICsxMTAwLCBSdXNzZWxsIEN1cnJleSB3cm90ZToK
+PiBDdXJyZW50bHkgdGhlIG1heCBvYmplY3Qgc2l6ZSBpcyBoYW5kbGVkIGluIHRoZSBjb3JlIHNl
+Y3ZhciBjb2RlIHdpdGgKPiBhbgo+IGVudGlyZWx5IE9QQUwtc3BlY2lmaWMgaW1wbGVtZW50YXRp
+b24sIHNvIGNyZWF0ZSBhIG5ldyBtYXhfc2l6ZSgpIG9wCj4gYW5kCj4gbW92ZSB0aGUgZXhpc3Rp
+bmcgaW1wbGVtZW50YXRpb24gaW50byB0aGUgcG93ZXJudiBwbGF0Zm9ybS7CoCBTaG91bGQKPiBi
+ZQo+IG5vIGZ1bmN0aW9uYWwgY2hhbmdlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJ1c3NlbGwgQ3Vy
+cmV5IDxydXNjdXJAcnVzc2VsbC5jYz4KCkxHVE0KClJldmlld2VkLWJ5OiBBbmRyZXcgRG9ubmVs
+bGFuIDxhamRAbGludXguaWJtLmNvbT4KCj4gLS0tCj4gwqBhcmNoL3Bvd2VycGMvaW5jbHVkZS9h
+c20vc2VjdmFyLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxICsKPiDCoGFyY2gvcG93ZXJw
+Yy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmPCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE3ICsrKy0tLS0t
+LS0tLS0tLS0tCj4gwqBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybnYvb3BhbC1zZWN2YXIu
+YyB8IDE5Cj4gKysrKysrKysrKysrKysrKysrKwo+IMKgMyBmaWxlcyBjaGFuZ2VkLCAyMyBpbnNl
+cnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBj
+L2luY2x1ZGUvYXNtL3NlY3Zhci5oCj4gYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFy
+LmgKPiBpbmRleCAzYjdlNWEzNjI1YmQuLjkyZDJjMDUxOTE4YiAxMDA2NDQKPiAtLS0gYS9hcmNo
+L3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFyLmgKPiArKysgYi9hcmNoL3Bvd2VycGMvaW5jbHVk
+ZS9hc20vc2VjdmFyLmgKPiBAQCAtMjEsNiArMjEsNyBAQCBzdHJ1Y3Qgc2VjdmFyX29wZXJhdGlv
+bnMgewo+IMKgwqDCoMKgwqDCoMKgwqBpbnQgKCpzZXQpKGNvbnN0IGNoYXIgKmtleSwgdWludDY0
+X3Qga2V5X2xlbiwgdTggKmRhdGEsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIHVpbnQ2NF90IGRhdGFfc2l6ZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoHNzaXplX3QgKCpmb3Jt
+YXQpKGNoYXIgKmJ1Zik7Cj4gK8KgwqDCoMKgwqDCoMKgaW50ICgqbWF4X3NpemUpKHVpbnQ2NF90
+ICptYXhfc2l6ZSk7Cj4gwqB9Owo+IMKgCj4gwqAjaWZkZWYgQ09ORklHX1BQQ19TRUNVUkVfQk9P
+VAo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gYi9h
+cmNoL3Bvd2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gaW5kZXggMTkwMjM4ZjUxMzM1Li5h
+YTFkYWVjNDgwZTEgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZWN2YXItc3lz
+ZnMuYwo+ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmMKPiBAQCAtMTIy
+LDI3ICsxMjIsMTYgQEAgc3RhdGljIHN0cnVjdCBrb2JqX3R5cGUgc2VjdmFyX2t0eXBlID0gewo+
+IMKgc3RhdGljIGludCB1cGRhdGVfa29ial9zaXplKHZvaWQpCj4gwqB7Cj4gwqAKPiAtwqDCoMKg
+wqDCoMKgwqBzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGU7Cj4gwqDCoMKgwqDCoMKgwqDCoHU2NCB2
+YXJzaXplOwo+IC3CoMKgwqDCoMKgwqDCoGludCByYyA9IDA7Cj4gK8KgwqDCoMKgwqDCoMKgaW50
+IHJjID0gc2VjdmFyX29wcy0+bWF4X3NpemUoJnZhcnNpemUpOwo+IMKgCj4gLcKgwqDCoMKgwqDC
+oMKgbm9kZSA9IG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKE5VTEwsIE5VTEwsICJpYm0sc2VjdmFy
+LQo+IGJhY2tlbmQiKTsKPiAtwqDCoMKgwqDCoMKgwqBpZiAoIW9mX2RldmljZV9pc19hdmFpbGFi
+bGUobm9kZSkpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmMgPSAtRU5PREVW
+Owo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dDsKPiAtwqDCoMKgwqDC
+oMKgwqB9Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoHJjID0gb2ZfcHJvcGVydHlfcmVhZF91NjQobm9k
+ZSwgIm1heC12YXItc2l6ZSIsICZ2YXJzaXplKTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJjKQo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dDsKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJjOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGRhdGFf
+YXR0ci5zaXplID0gdmFyc2l6ZTsKPiDCoMKgwqDCoMKgwqDCoMKgdXBkYXRlX2F0dHIuc2l6ZSA9
+IHZhcnNpemU7Cj4gwqAKPiAtb3V0Ogo+IC3CoMKgwqDCoMKgwqDCoG9mX25vZGVfcHV0KG5vZGUp
+Owo+IC0KPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gcmM7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJu
+IDA7Cj4gwqB9Cj4gwqAKPiDCoHN0YXRpYyBpbnQgc2VjdmFyX3N5c2ZzX2xvYWQodm9pZCkKPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9wb3dlcm52L29wYWwtc2VjdmFyLmMK
+PiBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJudi9vcGFsLXNlY3Zhci5jCj4gaW5kZXgg
+NWU5ZGUwNmIyNTMzLi4wNzI2MDQ2MGU5NjYgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9wb3dlcnBjL3Bs
+YXRmb3Jtcy9wb3dlcm52L29wYWwtc2VjdmFyLmMKPiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZv
+cm1zL3Bvd2VybnYvb3BhbC1zZWN2YXIuYwo+IEBAIC0xMjUsMTEgKzEyNSwzMCBAQCBzdGF0aWMg
+c3NpemVfdCBvcGFsX3NlY3Zhcl9mb3JtYXQoY2hhciAqYnVmKQo+IMKgwqDCoMKgwqDCoMKgwqBy
+ZXR1cm4gcmM7Cj4gwqB9Cj4gwqAKPiArc3RhdGljIGludCBvcGFsX3NlY3Zhcl9tYXhfc2l6ZSh1
+aW50NjRfdCAqbWF4X3NpemUpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpbnQgcmM7Cj4gK8KgwqDC
+oMKgwqDCoMKgc3RydWN0IGRldmljZV9ub2RlICpub2RlOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBu
+b2RlID0gb2ZfZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgImlibSxzZWN2YXItCj4g
+YmFja2VuZCIpOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghb2ZfZGV2aWNlX2lzX2F2YWlsYWJsZShu
+b2RlKSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByYyA9IC1FTk9ERVY7Cj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gb3V0Owo+ICvCoMKgwqDCoMKgwqDC
+oH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgcmMgPSBvZl9wcm9wZXJ0eV9yZWFkX3U2NChub2RlLCAi
+bWF4LXZhci1zaXplIiwgbWF4X3NpemUpOwo+ICsKPiArb3V0Ogo+ICvCoMKgwqDCoMKgwqDCoG9m
+X25vZGVfcHV0KG5vZGUpOwo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiByYzsKPiArfQo+ICsKPiDC
+oHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc2VjdmFyX29wZXJhdGlvbnMgb3BhbF9zZWN2YXJfb3BzID0g
+ewo+IMKgwqDCoMKgwqDCoMKgwqAuZ2V0ID0gb3BhbF9nZXRfdmFyaWFibGUsCj4gwqDCoMKgwqDC
+oMKgwqDCoC5nZXRfbmV4dCA9IG9wYWxfZ2V0X25leHRfdmFyaWFibGUsCj4gwqDCoMKgwqDCoMKg
+wqDCoC5zZXQgPSBvcGFsX3NldF92YXJpYWJsZSwKPiDCoMKgwqDCoMKgwqDCoMKgLmZvcm1hdCA9
+IG9wYWxfc2VjdmFyX2Zvcm1hdCwKPiArwqDCoMKgwqDCoMKgwqAubWF4X3NpemUgPSBvcGFsX3Nl
+Y3Zhcl9tYXhfc2l6ZSwKPiDCoH07Cj4gwqAKPiDCoHN0YXRpYyBpbnQgb3BhbF9zZWN2YXJfcHJv
+YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKCi0tIApBbmRyZXcgRG9ubmVsbGFuICAg
+IE96TGFicywgQURMIENhbmJlcnJhCmFqZEBsaW51eC5pYm0uY29tICAgSUJNIEF1c3RyYWxpYSBM
+aW1pdGVkCg==
 
-On Wed, Dec 14, 2022 at 3:12 PM Roger Quadros <rogerq@kernel.org> wrote:
->
-> Hi,
->
-> Some more comments below.
->
-> On 13/12/2022 14:48, Sinthu Raja wrote:
-> > It's possible that the Type-C plug orientation on the DIR line will be
-> > implemented through hardware design. In that situation, there won't be
-> > an external GPIO line available, but the driver still needs to address
-> > this since the DT won't use the typec-gpio-dir property.
-> >
-> > Add code to handle LN10 Type-C swap if typec-gpio-dir property is not
-> > specified in DT.
-> >
-> > Remove typec-gpio-dir check to use minimum debounce from Type-C spec if
-> > it is not provided in DT
-> >
-> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> > ---
-> >  drivers/phy/ti/phy-j721e-wiz.c | 65 +++++++++++++++++++++-------------
-> >  1 file changed, 40 insertions(+), 25 deletions(-)
-> >
-> > diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-> > index 141b51af4427..b17eec632d49 100644
-> > --- a/drivers/phy/ti/phy-j721e-wiz.c
-> > +++ b/drivers/phy/ti/phy-j721e-wiz.c
-> > @@ -375,6 +375,7 @@ struct wiz {
-> >       struct gpio_desc        *gpio_typec_dir;
-> >       int                     typec_dir_delay;
-> >       u32 lane_phy_type[WIZ_MAX_LANES];
-> > +     u32 lane_phy_reg[WIZ_MAX_LANES];
->
-> This name looks misleading. I'll discuss about it where you are setting it.
-Will change the name to master_lane_num[];
->
-> >       struct clk              *input_clks[WIZ_MAX_INPUT_CLOCKS];
-> >       struct clk              *output_clks[WIZ_MAX_OUTPUT_CLOCKS];
-> >       struct clk_onecell_data clk_data;
-> > @@ -1231,14 +1232,28 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
-> >       int ret;
-> >
-> >       /* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
-> > -     if (id == 0 && wiz->gpio_typec_dir) {
-> > -             if (wiz->typec_dir_delay)
-> > -                     msleep_interruptible(wiz->typec_dir_delay);
-> > -
-> > -             if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
-> > -                     regmap_field_write(wiz->typec_ln10_swap, 1);
-> > -             else
-> > -                     regmap_field_write(wiz->typec_ln10_swap, 0);
-> > +     if (id == 0 && wiz->typec_dir_delay) {
-> > +             msleep_interruptible(wiz->typec_dir_delay);
-> > +
-> > +             if (wiz->gpio_typec_dir) {
-> > +                     if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
-> > +                             regmap_field_write(wiz->typec_ln10_swap, 1);
-> > +                     else
-> > +                             regmap_field_write(wiz->typec_ln10_swap, 0);
-> > +             } else {
-> > +                     /* if no typec-dir gpio was specified, and USB lines
-> > +                      * are connected to Lane 0 then set LN10 SWAP bit to 1.
-> > +                      */
->
-> Why should lanes 1 and 0 be swapped if USB is connected to lane 0?
-My Bad! I should have been more precise in mentioning the USB3 Type C.
-Lanes 0 and 2 are reserved for USB3 for type-C connector lane swap.
->
-> > +                     u32 num_lanes = wiz->num_lanes;
-> > +                     int i;
-> > +
-> > +                     for (i = 0; i < num_lanes; i++) {
-> > +                             if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3) \
-> > +                                             && wiz->lane_phy_reg[i] == 0) {
-> > +                                     regmap_field_write(wiz->typec_ln10_swap, 1);
-> > +                             }
-> > +                     }
->
-> I really don't understand what you are doing here.
-> It definitely doesn't match your comment.
-> As an example. If num_lanes = 2 then wiz->lane_phy_reg[1] is being used without being
-> really initialized (see later). Just because of kzalloc, it would of course be 0.
-This register is used to configure the external lanes selections that
-need to be swapped for SerDes type C. The initialization of the lanes
-is done separately. This bit is set to configure that all control for
-lane 0 will apply to lane 1 and vice versa.  Will update the commit
-description.
->
-> > +             }
-> >       }
-> >
-> >       if (id == 0) {
-> > @@ -1370,8 +1385,10 @@ static int wiz_get_lane_phy_types(struct device *dev, struct wiz *wiz)
-> >               dev_dbg(dev, "%s: Lanes %u-%u have phy-type %u\n", __func__,
-> >                       reg, reg + num_lanes - 1, phy_type);
-> >
-> > -             for (i = reg; i < reg + num_lanes; i++)
-> > +             for (i = reg; i < reg + num_lanes; i++) {
-> > +                     wiz->lane_phy_reg[i] = reg;
->
-> As per DT binding
->       reg:
->         description:
->           The master lane number. This is the lowest numbered lane in the lane group.
->
-> So you are in fact storing the Master lane number of every Link (or lane group).
-> A link may have 1 or more lanes in it.
->
-> Also notice that if num_lanes has been 2 then wiz->lane_phy_reg[1] is not initialized.
-Irrespective of the number of lanes that are connected to the link, if
-the master lane is '0' or '2'  and the PHY type is USB3, then this bit
-needs to be set in the SerDes WIZ control register (according to the
-design).
->
-> >                       wiz->lane_phy_type[i] = phy_type;
-> > +             }
-> >       }
-> >
-> >       return 0;
-> > @@ -1464,24 +1481,22 @@ static int wiz_probe(struct platform_device *pdev)
-> >               goto err_addr_to_resource;
-> >       }
-> >
-> > -     if (wiz->gpio_typec_dir) {
-> > -             ret = of_property_read_u32(node, "typec-dir-debounce-ms",
-> > -                                        &wiz->typec_dir_delay);
-> > -             if (ret && ret != -EINVAL) {
-> > -                     dev_err(dev, "Invalid typec-dir-debounce property\n");
-> > -                     goto err_addr_to_resource;
-> > -             }
-> > +     ret = of_property_read_u32(node, "typec-dir-debounce-ms",
-> > +                                &wiz->typec_dir_delay);
-> > +     if (ret && ret != -EINVAL) {
-> > +             dev_err(dev, "Invalid typec-dir-debounce property\n");
-> > +             goto err_addr_to_resource;
-> > +     }
-> >
-> > -             /* use min. debounce from Type-C spec if not provided in DT  */
-> > -             if (ret == -EINVAL)
-> > -                     wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
-> > +     /* use min. debounce from Type-C spec if not provided in DT  */
-> > +     if (ret == -EINVAL)
-> > +             wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
-> >
-> > -             if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
-> > -                 wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
-> > -                     ret = -EINVAL;
-> > -                     dev_err(dev, "Invalid typec-dir-debounce property\n");
-> > -                     goto err_addr_to_resource;
-> > -             }
-> > +     if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
-> > +         wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
-> > +             ret = -EINVAL;
-> > +             dev_err(dev, "Invalid typec-dir-debounce property\n");
-> > +             goto err_addr_to_resource;
-> >       }
-> >
-> >       ret = wiz_get_lane_phy_types(dev, wiz);
->
-> cheers,
-> -roger
-
-
-
--- 
-With Regards
-Sinthu Raja
