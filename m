@@ -2,101 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E03665CF0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26C365CF11
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbjADJHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S234250AbjADJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbjADJGn (ORCPT
+        with ESMTP id S233121AbjADJIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:06:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F298CB1B
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:06:42 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672823200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sU4x9/BqxCUthBYuCLU8Ml8yQvKGj5tCmV4eN7Bf/NI=;
-        b=P/R+Pd8OylSV3wtqOlk+AgYv4gDqcOHAG8CQcVLa94ON3OwBo56xSfJ16rfNKUelUER3lE
-        q0mNeF1tEapi4wXdDD+RdRBERv+DG6Rx9e4N9cGk/UKco2GAIyBlv6tnkp3LNjEmsQ0k8v
-        QmZxUjZCglzE8kCr/a1kXTSE12+OCU2qudWT/I72FVf1DuH+Wkbl29tavZ9P4qHTKzi7ty
-        HD9uDFRNbzye8z5AkoKQ2VCnrRNKyMLJnXnhZh/bnIcwFtGMMCfKmmqDWwfEq8MLiKuCAe
-        S0pBy6/oZcBHhNq9RpeOeLm2rjeGg5KQXhsiDQ+BSnfXlx4qEQVdctkeUjHcmA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672823200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sU4x9/BqxCUthBYuCLU8Ml8yQvKGj5tCmV4eN7Bf/NI=;
-        b=MKAVTSb6e76zqE2U/1AUr5tC8DRw8t20OcCpF9CNy2MZj7Kr0mTACper0nN6GoAHhvPKoo
-        4it6dg2aO4MhR9DA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 6/6] printk: introduce
- console_prepend_dropped() for dropped messages
-In-Reply-To: <Y7RUF1zhmJEJKWl3@alley>
-References: <20221221202704.857925-1-john.ogness@linutronix.de>
- <20221221202704.857925-7-john.ogness@linutronix.de>
- <Y7MEDmP1zqWblj0N@alley> <87y1qjdimw.fsf@jogness.linutronix.de>
- <Y7QtusGlIX3AU+TN@alley> <87o7rfd96w.fsf@jogness.linutronix.de>
- <Y7Q4u9ICptw0RnXb@alley> <87fscrd5os.fsf@jogness.linutronix.de>
- <Y7RUF1zhmJEJKWl3@alley>
-Date:   Wed, 04 Jan 2023 10:12:01 +0106
-Message-ID: <874jt6fz46.fsf@jogness.linutronix.de>
+        Wed, 4 Jan 2023 04:08:23 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFC17B1B;
+        Wed,  4 Jan 2023 01:08:21 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABnSab5QbVj8mZsCg--.32128S2;
+        Wed, 04 Jan 2023 17:08:09 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        lpieralisi@kernel.org, kw@linux.com, mani@kernel.org,
+        kishon@kernel.org, bhelgaas@google.com
+Cc:     ntb@lists.linux.dev, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] PCI: endpoint: pci-epf-vntb: Add missing check for alloc_workqueue
+Date:   Wed,  4 Jan 2023 17:08:08 +0800
+Message-Id: <20230104090808.46085-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABnSab5QbVj8mZsCg--.32128S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrW5Ar1fGF13GryfXrWkZwb_yoWfZFX_Wa
+        97ZrsrWrZ8Gr18uryYkw4xZFyvkwnYqFn3ZFWrKFyakFyfC3yY93yDJryDGr1xWF15tryD
+        u34qvr90yr12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfU09NVDUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-03, Petr Mladek <pmladek@suse.com> wrote:
->> Unless you think it is OK to kmalloc 8KB instead of 1KB for the
->> syslog calls. Then yes, we do not need SYSLOG_MESSAGE_MAX.
->
-> IMHO, it is acceptable and even correct. syslog uses the same
-> prefixes as console. It would make sense to use the same
-> buffers for formatting.
->
-> That said, 8kB looks non-necessary big to me.
->
-> It seems that it comes from devkmsg interface, see the commit
-> d43ff430f434d862db59582 ("printk: guard the amount written
-> per line by devkmsg_read()"). It was supposed to include
-> the message, the extended prefix and dictionary, where
->
->    + message is limited by LOG_LINE_MAX
->    + prefix includes few well defined fields (should be < 128B)
->    + dictionary comes from dev_printk() => ( < 128B as well)
->
-> I believe that 2kB or 4kB would be perfectly fine.
+Add check for the return value of alloc_workqueue since it may return
+NULL pointer.
 
-The main issue is multi-line records. Normal messages become _much_
-larger than extended messages in this case because they add a prefix per
-'\n', whereas extended messages just use "\x0a". Extended messages
-really could only end up being significantly longer than normal messages
-if there are many non-printable characters in the message. But AFAIK
-non-printables are not really used in printk messages.
+Fixes: e35f56bb0330 ("PCI: endpoint: Support NTB transfer between RC and EP")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/pci/endpoint/functions/pci-epf-vntb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-So IMHO it does not make sense that normal messages are limited to 1KB
-but extended messages can use 8KB. I agree that a universal limit of 2KB
-for normal/extended/syslog would be a nice compromise. Normal messages
-will have more space available and it will reduce the overall static
-buffer usage. It would mean that syslog calls will kmalloc 2KB instead
-of 1KB, but I expect that should be acceptable since, generally
-speaking, overall we are reducing memory usage.
+diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+index 04698e7995a5..05c99185ba65 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+@@ -1441,6 +1441,9 @@ static int __init epf_ntb_init(void)
+ 
+ 	kpcintb_workqueue = alloc_workqueue("kpcintb", WQ_MEM_RECLAIM |
+ 					    WQ_HIGHPRI, 0);
++	if (!kpcintb_workqueue)
++		return -ENOMEM;
++
+ 	ret = pci_epf_register_driver(&epf_ntb_driver);
+ 	if (ret) {
+ 		destroy_workqueue(kpcintb_workqueue);
+-- 
+2.25.1
 
-John
