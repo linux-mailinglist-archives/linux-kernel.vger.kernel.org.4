@@ -2,128 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0134765D17E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB21E65D185
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 12:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbjADLdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 06:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S234812AbjADLep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 06:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjADLds (ORCPT
+        with ESMTP id S234645AbjADLek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:33:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA1F0D;
-        Wed,  4 Jan 2023 03:33:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5BFF613E9;
-        Wed,  4 Jan 2023 11:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A6DC433EF;
-        Wed,  4 Jan 2023 11:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672832026;
-        bh=4LX8ySPAS/dr/hJWVCAwW0xJ1a9yy3B2zuAS7iq9iy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFLTJdtSXLs14beqlYBetKAOMJjMgg0Z0qWG574Td8JDgBg9iCxX1bEjRUFwU8qfO
-         gbwOS5zoc0N9T5ECtyELlL+YHmiFDzBRmqp5i7GeEBd+qQy3zkmrPawW8gip17eNxp
-         P6iMN8psct7btmH+cSSAKdXwhyfzUv+heMw5UytH5IUB6F0BwBS9rdiOxI/gFM40WG
-         rF15rpx7Cqi0UeaGWJepgU5JRP2jqZS1pJmSnVOoCN6KkIcibH5HxCu0B5kl5v1I63
-         jrJanrjxDsPTNMOEon/L4iCcv6sP8yIZv24EubbgYvFKIyxa84kmZuf5Xu0rG41T/9
-         55hL9vZrs1ezg==
-Date:   Wed, 4 Jan 2023 11:33:42 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 02/10] KEYS: Add missing function documentation
-Message-ID: <Y7VkFqQ1He/RXY1N@kernel.org>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <20221214003401.4086781-3-eric.snowberg@oracle.com>
+        Wed, 4 Jan 2023 06:34:40 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79341B9EA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 03:34:38 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso20968572ilj.17
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 03:34:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V5gRBWvCrC4ivORDLYanYAKruxMNDrxF3nhXlCgZ6d4=;
+        b=owViCX3QTjBkqgnb95JPmSQ5Yso1qRPOUbdUy6+FAFZEoJTj67ZBaXIZi9VXMX+YcE
+         RDqZbsjWyeYFyRlzqvk2tPqVnGva7TXXfqpNZIT0WQI78G7b0QSVtv0WwRJ/3MElPiqu
+         417dwaF7bzHFukFDNS5zngRxFCLS5hCOouNf83ZX9DmISoUh9l9bdoiYBiGX1HC2PTa/
+         TdQcdMfWSgzQUNLNLdFX19+WwcBDssNOL0Ry0v0PZIRPNB3tYq8cR4TLc0ZSmtYhv0SB
+         xfCf1E9UcUbcx9KsIgeNgyoxq6uJ7QhZ+4HRQOJam8J+iEQNXihPlQap3/I9WVyEsRRP
+         YRgg==
+X-Gm-Message-State: AFqh2kplMlw6h0BfMS37l3WEB8AGOOO9TMkLTts64Yk08LxXw7Ss+BtC
+        xgu+JIXOCfLh/1vTWydmams0or2bwjtamAxmKG8AWBAi3MwX
+X-Google-Smtp-Source: AMrXdXtYnU0n+7Mz66+jF3YyEbOSXpsWchRQh4OWWMAkTgA+jN6H8D5b4L843NTdw6V/0AriGfmSejO1PiEbK7VCcfnaujakKtak
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214003401.4086781-3-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c728:0:b0:399:6200:63dc with SMTP id
+ h8-20020a02c728000000b00399620063dcmr4409365jao.194.1672832078148; Wed, 04
+ Jan 2023 03:34:38 -0800 (PST)
+Date:   Wed, 04 Jan 2023 03:34:38 -0800
+In-Reply-To: <0000000000006c411605e2f127e5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c97b2a05f16e91c5@google.com>
+Subject: Re: kernel BUG in ext4_free_blocks (2)
+From:   syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
+        lczerner@redhat.com, lee@kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nogikh@google.com, sashal@kernel.org,
+        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:33:53PM -0500, Eric Snowberg wrote:
-> Compiling with 'W=1' results in warnings that 'Function parameter or member
-> not described'
-> 
-> Add the missing parameters for
-> restrict_link_by_builtin_and_secondary_trusted and
-> restrict_link_to_builtin_trusted.
-> 
-> Use /* instead of /** for get_builtin_and_secondary_restriction, since
-> it is a static function.
-> 
-> Fix wrong function name restrict_link_to_builtin_trusted brought by:
-> commit d3bfe84129f6 ("certs: Add a secondary system keyring that can be added to dynamically")
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> ---
->  certs/system_keyring.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 5042cc54fa5e..e531b88bc570 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -33,7 +33,11 @@ extern __initconst const unsigned long system_certificate_list_size;
->  extern __initconst const unsigned long module_cert_size;
->  
->  /**
-> - * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
-> + * restrict_link_by_builtin_trusted - Restrict keyring addition by built in CA
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restriction_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in the built in system keyring.
-> @@ -50,7 +54,11 @@ int restrict_link_by_builtin_trusted(struct key *dest_keyring,
->  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
->  /**
->   * restrict_link_by_builtin_and_secondary_trusted - Restrict keyring
-> - *   addition by both builtin and secondary keyrings
-> + *   addition by both builtin and secondary keyrings.
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restrict_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in either the built-in or the secondary system
-> @@ -75,7 +83,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
->  					  secondary_trusted_keys);
->  }
->  
-> -/**
-> +/*
->   * Allocate a struct key_restriction for the "builtin and secondary trust"
->   * keyring. Only for use in system_trusted_keyring_init().
->   */
-> -- 
-> 2.27.0
-> 
+This bug is marked as fixed by commit:
+ext4: block range must be validated before use in ext4_mb_clear_bb()
 
-Should this have a fixes tag?
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-BR, Jarkko
+#syz fix: exact-commit-title
+
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Android 5.10
+Dashboard link: https://syzkaller.appspot.com/bug?extid=15cd994e273307bf5cfa
+
+---
+[1] I expect the commit to be present in:
+
+1. android12-5.10-lts branch of
+https://android.googlesource.com/kernel/common
