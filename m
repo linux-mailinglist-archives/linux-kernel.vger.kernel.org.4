@@ -2,157 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BC865CEFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9CD65CF0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 10:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbjADJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 04:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S234763AbjADJFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 04:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbjADJDM (ORCPT
+        with ESMTP id S238718AbjADJE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:03:12 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D92CC1;
-        Wed,  4 Jan 2023 01:03:11 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id g1so33437380edj.8;
-        Wed, 04 Jan 2023 01:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=v14YvbLcvOvEEBLM4yEOrYyC0ZeYfeUq6338/1b7iTU=;
-        b=BSoNnQgHQLxRFG+gbiQo/TGHclyNKaui+czns0YMlPb92Dk9YKJcdj3TUIz03DT3h0
-         IgTEKTa59lyp345x+wGtQqGrKi71zvQ9IglCec3lJCpC1PJxvSaHtipAQfXd1H1IHied
-         p7FGmSceo3U1Li/GgHQwaEujwz4iLLP9tZp3pL4GUtA8FZjIGzJJkCXMLBAatKcURvhp
-         M+JFSRJJhes9+9v0HGEitWlighW2Wy7TeQ0VRsSu2FDBWGFyMOYkXkfsHv7VNlWUcvui
-         1wpNCc72xHdt57239zJpyDyv4ZlBTbNLltC9mAUduASFZJZBMaD2y9wQrphnNPRFvgs8
-         5dcQ==
+        Wed, 4 Jan 2023 04:04:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3687413F94
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 01:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672823050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3v5Qr9aSLQNkwvt7Qa+s/hSgVujW47TYO8SFPz2SG6c=;
+        b=VlNTSyWKjesu8o48I+tXtaKd2x3uSIFX+tO67r7JKzFmG4qCUcAWVfuGMJbmJgPyDgvUJY
+        qhCcZkqQA0jmkznAGGXavp8KE2BqFOJ1TtFvcJi7ntPqi94NzuzvabqO33fZATRjut5Rsk
+        2ue42wyN+bMMqcOdu0v8qRD6/2LiQGg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-231-OUXjoY53Pdu2_vEVWvLhwA-1; Wed, 04 Jan 2023 04:04:08 -0500
+X-MC-Unique: OUXjoY53Pdu2_vEVWvLhwA-1
+Received: by mail-wm1-f69.google.com with SMTP id m7-20020a05600c4f4700b003d971a5e770so15779678wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 01:04:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v14YvbLcvOvEEBLM4yEOrYyC0ZeYfeUq6338/1b7iTU=;
-        b=3fYl7Oy9RJM29UhsGqXjcAbWYnzji3ivqf4WHK/0ryzir0dKtR3YQCsDVqRbV3ZzU7
-         vcPk9LjZZ80GRWLMLC0nsEo5gN1gXAvNCx6r/GRo7XU4JMXCteUlHfm7h6vdVlC811dW
-         DUL0a7fYxfxsSYlP0PCpdWFrvBglz9zHLgfF/yMEeCGuNetP9XtKvi+lVlZ49A/QsPV+
-         NqSowiLJNByXSKmK+KPJ/pg01uPmAGuAQQfIjU/t+LCL4z2ukltGuR3kyfVsNLGYVBls
-         Iq4bPKOtsItVeTdPPQlJIoDK+DKcDYlsP5cVcjMKLagW8Yfux1sCrFmdMw25Y8/86k5w
-         8SzA==
-X-Gm-Message-State: AFqh2kpYE1ZsKo2eeLfofvU/aompIQFUHxX/HOGXZqNbHot7fLnnY7cD
-        +DH4L1VWAoYcOuNRv5ZXaQBE8Gd1XGrh55XMlCI/0YY4W2yniw==
-X-Google-Smtp-Source: AMrXdXvNh6m6TnHYN5XuyeXe7H0PtAz883yuvOE+9MqHXhy7M46vdbImBa03sPvDjyk9iZxE19AloEUqoT0Dq8Xybcw=
-X-Received: by 2002:a05:6402:1b10:b0:485:59b5:d8c9 with SMTP id
- by16-20020a0564021b1000b0048559b5d8c9mr3777154edb.285.1672822989432; Wed, 04
- Jan 2023 01:03:09 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3v5Qr9aSLQNkwvt7Qa+s/hSgVujW47TYO8SFPz2SG6c=;
+        b=G4pwMMmL1GrRzDO99RO2QZK+aJrA87/BAQDzjUcjHk0fVa1OOVrAfZlH/b9uuSFqBU
+         0XK2P3Tbf0so7dyzT/IgNnqAuMLcSC06o4Z9WfIj3c8zHw3Xl3QyN6tM8w1hOPrAPLTj
+         xIPqqjHsoLgCZrUp343aLzaXPVe85sOoZs+7zm5wWxeatLCN5/Czjue8eq/GWnfAg7NX
+         0YiV96O7LmsXoBKpErbLjwMAFlm4+cOWO2ptmyTovU1qRL6gE1Tr+7b01DQdMNlvBbTC
+         Ov+iSdGYBrXu6J/KDlvfiS2cX3fQ7nH1KsSz34XHbpOIkWTuB5+XAN47tlZzyb4wfwDY
+         XWcg==
+X-Gm-Message-State: AFqh2kqdkTWvR2F8ARF+obgKLqObLhTm3U3TZNO09DSUZj10pMt+1ZFY
+        k2tbMHFu5r0yMDUdPonCryHiQ1x/dCdDHk6lCFDJWoW4Gz0CkO0VSga0DGL44v2Gau9R7xP9xit
+        8hazPK8CI5Lrp3IJ646ppZmnV
+X-Received: by 2002:a05:600c:2d85:b0:3d0:7d89:2256 with SMTP id i5-20020a05600c2d8500b003d07d892256mr32189733wmg.13.1672823047441;
+        Wed, 04 Jan 2023 01:04:07 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu6TKYF8n/sbH/DYFQlrGieorL58hStPNcoaQHix/JEwDP10q76ayzPzUHCuWo/AHMULsh+lA==
+X-Received: by 2002:a05:600c:2d85:b0:3d0:7d89:2256 with SMTP id i5-20020a05600c2d8500b003d07d892256mr32189690wmg.13.1672823046983;
+        Wed, 04 Jan 2023 01:04:06 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:f100:8100:5a6c:eb:fd3b? (p200300cbc703f10081005a6c00ebfd3b.dip0.t-ipconnect.de. [2003:cb:c703:f100:8100:5a6c:eb:fd3b])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c314900b003d99469ece1sm28460642wmo.24.2023.01.04.01.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 01:04:06 -0800 (PST)
+Message-ID: <b3aec4d4-737d-255a-d25e-451222fc9bb9@redhat.com>
+Date:   Wed, 4 Jan 2023 10:04:04 +0100
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Wed, 4 Jan 2023 17:02:33 +0800
-Message-ID: <CAO4mrfcFp4YDvuCEMhe_0qizVf1XL3MjEk2PX10LW5f_4LKmbQ@mail.gmail.com>
-Subject: BUG: corrupted list in mb_update_avg_fragment_size
-To:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tytso@mit.edu, adilger.kernel@dilger.ca,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzkaller@googlegroups.com>, tudor.ambarus@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/1] mm: fix vma->anon_name memory leak for anonymous
+ shmem VMAs
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hughd@google.com, hannes@cmpxchg.org,
+        vincent.whitchurch@axis.com, seanjc@google.com, rppt@kernel.org,
+        shy828301@gmail.com, pasha.tatashin@soleen.com,
+        paul.gortmaker@windriver.com, peterx@redhat.com, vbabka@suse.cz,
+        Liam.Howlett@oracle.com, ccross@google.com, willy@infradead.org,
+        arnd@arndb.de, cgel.zte@gmail.com, yuzhao@google.com,
+        bagasdotme@gmail.com, suleiman@google.com, steven@liquorix.net,
+        heftig@archlinux.org, cuigaosheng1@huawei.com,
+        kirill@shutemov.name, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
+References: <20221228194249.170354-1-surenb@google.com>
+ <6ddb468a-3771-92a1-deb1-b07a954293a3@redhat.com>
+ <CAJuCfpGUpPPoKjAAmV7UK2H2o2NqsSa+-_M6JwesCfc+VRY2vw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAJuCfpGUpPPoKjAAmV7UK2H2o2NqsSa+-_M6JwesCfc+VRY2vw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developers,
+On 03.01.23 20:53, Suren Baghdasaryan wrote:
+> On Mon, Jan 2, 2023 at 4:00 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 28.12.22 20:42, Suren Baghdasaryan wrote:
+>>> free_anon_vma_name() is missing a check for anonymous shmem VMA which
+>>> leads to a memory leak due to refcount not being dropped. Fix this by
+>>> adding the missing check.
+>>>
+>>> Fixes: d09e8ca6cb93 ("mm: anonymous shared memory naming")
+>>> Reported-by: syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
+>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>> ---
+>>>    include/linux/mm_inline.h | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+>>> index e8ed225d8f7c..d650ca2c5d29 100644
+>>> --- a/include/linux/mm_inline.h
+>>> +++ b/include/linux/mm_inline.h
+>>> @@ -413,7 +413,7 @@ static inline void free_anon_vma_name(struct vm_area_struct *vma)
+>>>         * Not using anon_vma_name because it generates a warning if mmap_lock
+>>>         * is not held, which might be the case here.
+>>>         */
+>>> -     if (!vma->vm_file)
+>>> +     if (!vma->vm_file || vma_is_anon_shmem(vma))
+>>>                anon_vma_name_put(vma->anon_name);
+>>
+>> Wouldn't it be me more consistent to check for "vma->anon_name"?
+>>
+>> That's what dup_anon_vma_name() checks. And it's safe now because
+>> anon_name is no longer overloaded in vm_area_struct.
+> 
+> Thanks for the suggestion, David. Yes, with the recent change that
+> does not overload anon_name, checking for "vma->anon_name" would be
+> simpler. I think we can also drop anon_vma_name() function now
+> (https://elixir.bootlin.com/linux/v6.2-rc2/source/mm/madvise.c#L94)
+> since vma->anon_name does not depend on vma->vm_file anymore, remove
+> the last part of this comment:
+> https://elixir.bootlin.com/linux/v6.2-rc2/source/include/linux/mm_types.h#L584
+> and use vma->anon_name directly going forward. If all that sounds
+> good, I'll post a separate patch implementing all these changes.
+> So, for this patch I would suggest keeping it as is because
+> functionally it is correct and will change this check along with other
+> corrections I mentioned above in a separate patch. Does that sound
+> good?
 
-Recently, when using our tool to fuzz kernel, the following crash was triggered.
+Works for me.
 
-HEAD commit: e45fb347b630 Linux 6.1.0-next-20221220
-git tree: linux-next
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1gh6F0I93Cdy8zQ1tv-L5kCaBGkd2tXhp/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1mMD6aopttKDGK4aYUlgiwAk6bOQHivd-/view?usp=share_link
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Unfortunately, I didn't find a reproducer for this crash yet.
+for this one, as it fixes the issue.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
+-- 
+Thanks,
 
-list_add corruption. prev is NULL.
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:24!
-invalid opcode: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 19499 Comm: syz-executor.0 Not tainted 6.1.0-next-20221220 #6
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-RIP: 0010:__list_add_valid+0x73/0xc0 lib/list_debug.c:23
-Code: 41 5f c3 48 c7 c7 70 3d 65 85 4c 89 fe 48 89 da 4c 89 f1 31 c0
-e8 0d 2f 02 03 0f 0b 48 c7 c7 6f 3c 65 85 31 c0 e8 fd 2e 02 03 <0f> 0b
-48 c7 c7 a6 3c 65 85 31 c0 e8 ed 2e 02 03 0f 0b 48 c7 c7 cc
-RSP: 0018:ffffc90005b97730 EFLAGS: 00010246
-RAX: 0000000000000022 RBX: ffff88800a6257e8 RCX: 113c3aae3e481700
-RDX: ffffc90000b35000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000000 R08: ffffffff81179fd9 R09: 0000000000000000
-R10: 0001ffffffffffff R11: 000188807dc1b588 R12: ffff88800945a6d8
-R13: ffff88800a6257e0 R14: ffff88800945a678 R15: 00000000000001e0
-FS:  00007fc40c27d700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b31522000 CR3: 000000005ccbd000 CR4: 00000000003506f0
-DR0: 0000000020000140 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-Call Trace:
- <TASK>
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- mb_update_avg_fragment_size+0x26c/0x2e0 fs/ext4/mballoc.c:849
- mb_mark_used+0xb5c/0xcc0 fs/ext4/mballoc.c:1958
- ext4_mb_use_best_found+0x105/0x440 fs/ext4/mballoc.c:1979
- ext4_mb_find_by_goal+0x58b/0x660
- ext4_mb_regular_allocator+0x126/0x1e00 fs/ext4/mballoc.c:2614
- ext4_mb_new_blocks+0x828/0x1240 fs/ext4/mballoc.c:5605
- ext4_ext_map_blocks+0x1545/0x1f20 fs/ext4/extents.c:4286
- ext4_map_blocks+0x748/0x1060 fs/ext4/inode.c:651
- ext4_alloc_file_blocks+0x285/0x720 fs/ext4/extents.c:4470
- ext4_fallocate+0x2c5/0x570 fs/ext4/extents.c:4757
- vfs_fallocate+0x486/0x710 fs/open.c:323
- ksys_fallocate fs/open.c:346 [inline]
- __do_sys_fallocate fs/open.c:354 [inline]
- __se_sys_fallocate fs/open.c:352 [inline]
- __x64_sys_fallocate+0x75/0xc0 fs/open.c:352
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x4697f9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc40c27cc48 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000006
-RBP: 00000000004d29e9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000080000941 R11: 0000000000000246 R12: 000000000077bf80
-R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd6cd30fb0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_add_valid+0x73/0xc0 lib/list_debug.c:23
-Code: 41 5f c3 48 c7 c7 70 3d 65 85 4c 89 fe 48 89 da 4c 89 f1 31 c0
-e8 0d 2f 02 03 0f 0b 48 c7 c7 6f 3c 65 85 31 c0 e8 fd 2e 02 03 <0f> 0b
-48 c7 c7 a6 3c 65 85 31 c0 e8 ed 2e 02 03 0f 0b 48 c7 c7 cc
-RSP: 0018:ffffc90005b97730 EFLAGS: 00010246
-RAX: 0000000000000022 RBX: ffff88800a6257e8 RCX: 113c3aae3e481700
-RDX: ffffc90000b35000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000000 R08: ffffffff81179fd9 R09: 0000000000000000
-R10: 0001ffffffffffff R11: 000188807dc1b588 R12: ffff88800945a6d8
-R13: ffff88800a6257e0 R14: ffff88800945a678 R15: 00000000000001e0
-FS:  00007fc40c27d700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b31522000 CR3: 000000005ccbd000 CR4: 00000000003506f0
-DR0: 0000000020000140 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
+David / dhildenb
 
-Best,
-Wei
