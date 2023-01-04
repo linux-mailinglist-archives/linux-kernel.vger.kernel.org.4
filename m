@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041BB65CE44
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9392365CE55
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 09:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbjADI27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 03:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S234010AbjADIay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 03:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjADI2y (ORCPT
+        with ESMTP id S234126AbjADIab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:28:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0244D1869B;
-        Wed,  4 Jan 2023 00:28:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91F4F615B3;
-        Wed,  4 Jan 2023 08:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F1AC433EF;
-        Wed,  4 Jan 2023 08:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672820933;
-        bh=ar58y5os2YGCAH8RwgQby1IB5feNCexZ70wETyJ4bsI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OuC2NROcRWzws+vDOMTnmXLtUpumjs6aEgJvqZVed3L4FCLNjg7iFFvdotMv/HFbS
-         deug4P+0xscrQpTGM6RvF/g3sMX5GBp9Tn+y3yK1BpTjaUzFuwxq+PLXwb8K5G4xzE
-         7O3PzrwbNw9PJ2oEXLip6A0ourIhlFFdXdYjrU4Y=
-Date:   Wed, 4 Jan 2023 09:28:50 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_*
- APIs for irq_guard
-Message-ID: <Y7U4wiLM/z+H/rOc@kroah.com>
-References: <cover.1671898144.git.drv@mailo.com>
- <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
- <3c4e744f-c313-e195-af93-a22382c81bb6@kernel.org>
- <Y7P+zZEF09YWs5yW@qemulion>
+        Wed, 4 Jan 2023 03:30:31 -0500
+Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387EE1BE94
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 00:30:01 -0800 (PST)
+Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1pCz9j-005EGa-9e; Wed, 04 Jan 2023 08:29:51 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1pCz9f-00617y-UC; Wed, 04 Jan 2023 08:29:50 +0000
+Message-ID: <7bd5ca75-5e97-5afb-5da2-fd35d7ef8b80@cambridgegreys.com>
+Date:   Wed, 4 Jan 2023 08:29:47 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7P+zZEF09YWs5yW@qemulion>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] um: vector: Fix memory leak in vector_config
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230104081408.4074275-1-linmq006@gmail.com>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+In-Reply-To: <20230104081408.4074275-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -2.0
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:39:17PM +0530, Deepak R Varma wrote:
-> On Tue, Jan 03, 2023 at 10:00:48AM +0100, Jiri Slaby wrote:
-> > On 26. 12. 22, 7:21, Deepak R Varma wrote:
-> > > The refcount_* APIs are designed to address known issues with the
-> > > atomic_t APIs for reference counting. They provide following distinct
-> > > advantages:
-> > >     - protect the reference counters from overflow/underflow
-> > >     - avoid use-after-free errors
-> > >     - provide improved memory ordering guarantee schemes
-> > >     - neater and safer.
-> > > Hence, replace the atomic_* APIs by their equivalent refcount_t
-> > > API functions.
-> > >
-> > > This patch proposal address the following warnings generated by
-> > > the atomic_as_refcounter.cocci coccinelle script
-> > > atomic_add_return(-1, ...)
-> > ...
-> > > --- a/drivers/tty/serial/dz.c
-> > > +++ b/drivers/tty/serial/dz.c
-> > ...
-> > > @@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
-> > >   	struct dz_port *dport = to_dport(uport);
-> > >   	struct dz_mux *mux = dport->mux;
-> > >   	unsigned long flags;
-> > > -	int irq_guard;
-> > >   	int ret;
-> > >   	u16 tmp;
-> > >
-> > > -	irq_guard = atomic_add_return(1, &mux->irq_guard);
-> > > -	if (irq_guard != 1)
-> > > +	refcount_inc(&mux->irq_guard);
-> > > +	if (refcount_read(&mux->irq_guard) != 1)
-> > >   		return 0;
-> > >
-> > > -	ret = request_irq(dport->port.irq, dz_interrupt,
-> > > -			  IRQF_SHARED, "dz", mux);
-> > > +	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
-> >
-> > How is this related to the above described change?
+
+
+On 04/01/2023 08:14, Miaoqian Lin wrote:
+> kstrdup() return newly allocated copy of the string.
+> Call kfree() to release the memory when uml_parse_vector_ifspec() fails.
 > 
-> No, it is not. My apologies. I must have joined the lines for improved readability
-> and forgot to revert. I will restore this in next revision based on the feedback
-> on the other patch of this series. OR I can include this change in the current
-> change log as a "while at it..." statement. Would you advise me?
+> Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> changes in v2:
+> - only call kfree() when uml_parse_vector_ifspec() fails.
+> ---
+>   arch/um/drivers/vector_kern.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
+> index ded7c47d2fbe..131b7cb29576 100644
+> --- a/arch/um/drivers/vector_kern.c
+> +++ b/arch/um/drivers/vector_kern.c
+> @@ -767,6 +767,7 @@ static int vector_config(char *str, char **error_out)
+>   
+>   	if (parsed == NULL) {
+>   		*error_out = "vector_config failed to parse parameters";
+> +		kfree(params);
+>   		return -EINVAL;
+>   	}
+>   
 
-NEVER have a "while at it..." change as part of a commit unless it is
-relevant to the main change being made.  You know better...
+Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
-thanks,
-
-greg k-h
+-- 
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/
