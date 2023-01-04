@@ -2,114 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C660665DFAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDC065DFA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 23:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240489AbjADWMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 17:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S240468AbjADWMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 17:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240460AbjADWMv (ORCPT
+        with ESMTP id S240460AbjADWMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:12:51 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD897193E7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 14:12:50 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id g10so12923238wmo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 14:12:50 -0800 (PST)
+        Wed, 4 Jan 2023 17:12:03 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73CF193E7;
+        Wed,  4 Jan 2023 14:12:01 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso26336316pjc.2;
+        Wed, 04 Jan 2023 14:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qyxWpwZrLC0D/z1TOjudaUZ9Mh7byi3hhDukVq1HkVU=;
-        b=Egcm8LR+wxVfNvHjtn0fZUQphH9szo/KzOeAEKN5vZ/g39b305WhxRlb0pHFFKPzVr
-         UJFvVfPwsOLuwohy4yZ/WDy2xDbbCYOYD8czWjpBLcqoIi2wrJnGTqZDwp5auYZEe+K1
-         DLMuDwIysgj74J7gb+D+0RRPrOeJgdKZxXMPAU+nMxNNLxdhVi6E/Ac1rXIGte9Azbe4
-         pdw0yfHsS3FaDDfVyDab/JeMJBdf33ykmwc+dm01dei4LDCJH3uBnk8xpjUBsa9gxAeX
-         0bwmsiwmIaxQJ0BTbCVDoaiqvlL/y9cjXET/FrPRLJKfEg1xs6lqvY4rt39plejEQEr2
-         3aAQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pKNXM54CWmj3ArGU8axmSVIl3xxiHyUVTW8v6DzGRHA=;
+        b=XeyuieaOtOOzRKGFjqn1IrRy3FbUpNBsXgm5p31jD6s62WfLwgMNey9QWnbRAniiTI
+         ffWLGD3JyLqTrn3kDeC6Ye79OjQ9b6aI1KxXAOg5mJ3cnwHIaz/XNdSIgPHgKy092C/9
+         z/dU/KUeru7A2hoGC84bFrOi1V8+5haTDs+DANlEuNy538SPL7H6GGtJAlBRJoSfsWdV
+         Q5EHgRKCpgfbJ0J0+VAKOYZIV9+y4JrXs1V78W16MvAFzweAYYPwAeOe3Zszj6osT6jl
+         1qtpRy83+l5cPjnq5rwOlsAona6qhEYXLVJlPd/jFHHWHQMNjHm+7F8OCm59Q09zUY3F
+         CrIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qyxWpwZrLC0D/z1TOjudaUZ9Mh7byi3hhDukVq1HkVU=;
-        b=sy7y5zCzEvFT2NOHdm/1qOMOzfh3+wpt+YoUaqKODvvuM5J4U/fFducs9+6gOH0EPt
-         GFcjH89q5LdOTPD1mbyn7qGvcG5BYsJIlbKZfUTYCApeJAjVRPpEnPdmL2bG4PafCWYO
-         g9uI5DihBEmK/lTHNegKlbdD3yiQHPunTRIwrVEVh8dP0Em7z8bL2uDPqxzP9ZmMpc9H
-         lPBF8bRl2FNCuudmZasKcIBTFIYJzS2CGH+Xdnsf7vJjjPH45/ydP/Ein7SAr2hMObA9
-         KPSDBxw1+xfGa6Sz8Z6kmDrBgPDCUD5BkJvlch5bqvcYiOgpUgOB/jxFcv1p7M3/HS1w
-         2/JA==
-X-Gm-Message-State: AFqh2koPQjGxMiUPFARz2o/0hvatTEv7WhOknCiy5sXcPdhpBYGMsHaE
-        eSL86P66R9asxtXoDJGccQQ=
-X-Google-Smtp-Source: AMrXdXvVRHX6G5nROCXAc/gfZf1AAG7SnrFtp2cDaVixa07sqCFDBUnOm6sL2JLBRzHIv+N19hTwZQ==
-X-Received: by 2002:a05:600c:a10:b0:3d2:2904:dfe9 with SMTP id z16-20020a05600c0a1000b003d22904dfe9mr38999565wmp.21.1672870369472;
-        Wed, 04 Jan 2023 14:12:49 -0800 (PST)
-Received: from arch-laptop.. (host31-53-119-24.range31-53.btcentralplus.com. [31.53.119.24])
-        by smtp.gmail.com with ESMTPSA id l24-20020a1ced18000000b003d99da8d30asm57164wmh.46.2023.01.04.14.12.47
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pKNXM54CWmj3ArGU8axmSVIl3xxiHyUVTW8v6DzGRHA=;
+        b=gFceMz74KirvnQCckeC5eiDGAHrdHOu3NYzfDxYwKhDxI5bqexhI2tgMMaJ9aWOrFZ
+         I0EfptFfOHgqINO4j/+t65xrV/EUFPBHh8u41IRjb7AjlM21oDte2Z6gv6o0Bkmc9WV7
+         xu7xT2Jy9qwV1oOlOb1CsWZztXC0ghlAaRAIJHmfj8y55BuHsrKFWSMsk7V4RzQqk4Ua
+         hib1zbEL+z8241VjdZ0OFTE4VzOE56OXGp0R5qC1yadLcpMVWfGBmmkKQXlCavZZpRQz
+         ABBWB2WUPFV94CeWZKihCgIIjmGE6CcsUPh+De+U5KzJqgbl2voJWC8sj0gGIFMWPkEA
+         Ning==
+X-Gm-Message-State: AFqh2kphq1NrnPVyY/q6YfGbjkU+snuYNO9ogTkZ2YzP3TWDZbbvbCP5
+        1j20vuHL0mOE5XxhPOt8kZ0=
+X-Google-Smtp-Source: AMrXdXs5iIsV2LNtOVaok+0Pnio9CVJpFiNtbSeHyJGNSVLtmvYrSX0k9cih/OS/l8px84TfOjAu0Q==
+X-Received: by 2002:a17:902:f791:b0:192:5ec4:6656 with SMTP id q17-20020a170902f79100b001925ec46656mr48694739pln.3.1672870321040;
+        Wed, 04 Jan 2023 14:12:01 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s24-20020a170902a51800b0018996404dd5sm16780685plq.109.2023.01.04.14.11.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 14:12:48 -0800 (PST)
-From:   Ben Carter <craterrender@gmail.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Divya Prakash <divya1.prakash@intel.com>,
-        Ben Carter <craterrender@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sound: hda: increase timeouts to stop crash on resume with ALC3204 and others
-Date:   Wed,  4 Jan 2023 22:10:24 +0000
-Message-Id: <20230104221024.23524-1-craterrender@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 04 Jan 2023 14:12:00 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 4 Jan 2023 12:11:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jinke Han <hanjinke.666@bytedance.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
+ blk-throtl
+Message-ID: <Y7X5rsnYCAAYRGQd@slm.duckdns.org>
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Upon waking after system suspend, ALSA often crashed with:
-  snd_hda_intel 0000:00:1f.3: CORB reset timeout#2, CORBRP = 65535
-  snd_hda_codec_hdmi hdaudioC1D2: Unable to sync register 0x2f8100. -5
-  snd_hda_codec_realtek hdaudioC1D0: Unable to sync register 0x2b8000. -5
-A temporary fix was established by reloading snd_hda_intel, but increasing
-the rather strict timeout of 1ms to 100ms has remedied the issue on my
-device. Although this is a much larger delay, most hardware took less than
-1ms anyway and it's preferable to the whole audio system crashing.
+Hello,
 
-Signed-off-by: Ben Carter <craterrender@gmail.com>
----
- sound/hda/hdac_controller.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, Dec 26, 2022 at 09:05:05PM +0800, Jinke Han wrote:
+>  static void throtl_pending_timer_fn(struct timer_list *t);
+> +static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn);
 
-diff --git a/sound/hda/hdac_controller.c b/sound/hda/hdac_controller.c
-index 3c7af6558249..1ab573248452 100644
---- a/sound/hda/hdac_controller.c
-+++ b/sound/hda/hdac_controller.c
-@@ -16,7 +16,7 @@ static void azx_clear_corbrp(struct hdac_bus *bus)
- {
- 	int timeout;
- 
--	for (timeout = 1000; timeout > 0; timeout--) {
-+	for (timeout = 100000; timeout > 0; timeout--) {
- 		if (snd_hdac_chip_readw(bus, CORBRP) & AZX_CORBRP_RST)
- 			break;
- 		udelay(1);
-@@ -26,7 +26,7 @@ static void azx_clear_corbrp(struct hdac_bus *bus)
- 			snd_hdac_chip_readw(bus, CORBRP));
- 
- 	snd_hdac_chip_writew(bus, CORBRP, 0);
--	for (timeout = 1000; timeout > 0; timeout--) {
-+	for (timeout = 100000; timeout > 0; timeout--) {
- 		if (snd_hdac_chip_readw(bus, CORBRP) == 0)
- 			break;
- 		udelay(1);
+Just define it before the first usage? Also, I think it'd be fine to let the
+compiler decide whether to inline.
+
+> +#define BLK_THROTL_SYNC(bio) (bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
+
+Nitpick but the above is used only in one place. Does it help to define it
+as a macro?
+
+> +/**
+> + * throtl_qnode_bio_peek - peek a bio for a qn
+> + * @qn: the qnode to peek from
+> + *
+> + * For read qn, just peek bio from the SYNC queue and return.
+> + * For write qn, we first ask the next_to_disp for bio and will pop a bio
+> + * to fill it if it's NULL. The next_to_disp is used to pin the bio for
+> + * next to dispatch. It is necessary. In the dispatching  process, a peeked
+> + * bio may can't be dispatched due to lack of budget and has to wait, the
+> + * dispatching process may give up and the spin lock of the request queue
+> + * will be released. New bio may be queued in as the spin lock were released.
+> + * When it's time to dispatch the waiting bio, another bio may be selected to
+> + * check the limit and may be dispatched. If the dispatched bio is smaller
+> + * than the waiting bio, the bandwidth may be hard to satisfied as we may
+> + * trim the slice after each dispatch.
+> + * So pinning the next_to_disp to make sure that the waiting bio and the
+> + * dispatched one later always the same one in case that the spin lock of
+> + * queue was released and re-holded.
+
+Can you please format it better and proof-read it. I can mostly understand
+what it's saying but it can be improved quite a bit. Can you elaborate the
+starvation scenario further? What about the [a]sync queue split makes this
+more likely?
+
+> +/**
+> + * throtl_qnode_bio_pop: pop a bio from sync/async queue
+> + * @qn: the qnode to pop a bio from
+> + *
+> + * For write io qn, the target queue to pop was determined by the disp_sync_cnt.
+> + * Try to pop bio from target queue, fetch the bio and return it when it is not
+> + * empty. If the target queue empty, pop bio from another queue instead.
+
+How about:
+
+        For reads, always pop from the ASYNC queue. For writes, target SYNC
+        or ASYNC queue based on disp_sync_cnt. If empty, try the other
+        queue.
+
+> +static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn)
+> +{
+> +	struct bio *bio;
+> +	int from = SYNC;
+> +
+> +	if (qn->disp_sync_cnt == THROTL_SYNC_FACTOR)
+> +		from = ASYNC;
+
+?: often is less readable but I wonder whether it'd be more readable here:
+
+        from = qn->disp_sync_cnt == THROTL_SYNC_FACTOR ? ASYNC : SYNC;
+
+> +
+> +	bio = bio_list_pop(&qn->bios[from]);
+> +	if (!bio) {
+> +		from = 1 - from;
+> +		bio = bio_list_pop(&qn->bios[from]);
+> +	}
+> +
+> +	if ((qn->disp_sync_cnt < THROTL_SYNC_FACTOR) &&
+> +		(from == SYNC))
+
+Why the line break? Also, this may be more personal preference but I'm not
+sure the parentheses are helping much here.
+
+> +		qn->disp_sync_cnt++;
+> +	else
+> +		qn->disp_sync_cnt = 0;
+> +
+> +	return bio;
+> +}
+
+Thanks.
+
 -- 
-2.39.0
-
+tejun
