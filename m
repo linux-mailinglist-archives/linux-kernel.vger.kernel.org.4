@@ -2,157 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522EB65CDC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF77C65CDCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 08:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjADHn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 02:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        id S233539AbjADHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 02:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjADHnz (ORCPT
+        with ESMTP id S230251AbjADHpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:43:55 -0500
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C11E193D5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:43:54 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id m18so80427975eji.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 23:43:54 -0800 (PST)
+        Wed, 4 Jan 2023 02:45:18 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C30193E2
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 23:45:17 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso9283838iob.4
+        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 23:45:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZ8pbCA+OTt6oEpW5LfqQng/isugNYiLjWw5Cr2oGF8=;
-        b=Hei71CS+Y2vRzFTEhQOPZEcCCDBDA1JczyUbjZMj8BCgzi74H7vGeyike5AXpcGFnp
-         /aaUn5naSIKb+03bLXdUpmY5OlJAArpaNP1ZCIh/qZnFDY5PWKDdX+ZzDkcrcuXxWAtE
-         +Oj76dibOQbZ7haWU1ts+lvhhVduli+YTnfzb3CFDIJSBkyUMXzaFH3qG/5yBDFJk06/
-         gOPsu9PSqQmyQQWA/w5+XgdvypNuaLQ8rd2JvClaGiE7xNRFiSe5RigfvTV1SJskRd9E
-         vQgW3W+MX6N9lEMRXFlkC7tZbh+UfPUU6tertyq9kOJJocDsYNMGyb3H32ndXjU4rn/5
-         DtBQ==
-X-Gm-Message-State: AFqh2kq0NssoDrrsOyEehxQLS0I1/qW+TRjYfEHtB/4E3IlBcy6seO6n
-        QBPpUA6DH0yiUWtGwZsNTGQGJ+fcBlg=
-X-Google-Smtp-Source: AMrXdXv0S5wtWh5nI3F5bmPCu+jZbqgKCjNoL8HUUu5jspwVNqETZ+95Nn3H6repYf/I918hVMBnBg==
-X-Received: by 2002:a17:906:9f12:b0:7c1:61a6:2cd2 with SMTP id fy18-20020a1709069f1200b007c161a62cd2mr39824253ejc.9.1672818232848;
-        Tue, 03 Jan 2023 23:43:52 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170906341300b007a8de84ce36sm14886835ejb.206.2023.01.03.23.43.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 23:43:52 -0800 (PST)
-Message-ID: <1b184587-128d-e5cc-67e9-1d27feb87213@kernel.org>
-Date:   Wed, 4 Jan 2023 08:43:51 +0100
+        bh=rJ4W8/mmVdVrFQNvYsx/DMYr6reSTCisMPcgxKG9a3E=;
+        b=Y/OMm8agIJlwjPiovEipFXIguBcDpeEtVBAXxjVHdRD8UaMavPBZ4KhYUlOM+BkX4q
+         jA/z7Jf4uYtz1sidMOdHcFmkDhYfqpD/XRNd4PXLvkwAp/5+iQR9/6rRAxhIv/VmC2Uu
+         i6SkZfSs0tYYzRcy0//s/SdCm/6pnUjRB1HpaSHvz3yXCBxswWUyWamuNCw/Pf6hf/Us
+         MnP1HJvwr0kukBegDw6nl609bAFilt62TC+K0jPPAfcKdWWRGQ8I761A7sZbmW70++p5
+         FDsWtyzE5adJmMzPOi3PuPvVFX7lN+JTk+tTtn+xvp7lkvWuODaxEdv5KG40uup6vuPC
+         agbg==
+X-Gm-Message-State: AFqh2kpnOrFvKSjkmarRVOosbG4JU75RWakoKpqD4os3VCPtuvbgrAL/
+        J2qWJd0M/Yy3+r1xQWBLqo6fr8RiN8oqT97X832KmfTaxJ+g
+X-Google-Smtp-Source: AMrXdXvwVkZzng5C+4mgIQ68JLoEjHniOdUfoFXDLNJACOLxpO5H5li69Yq+KOnQHWVPVTeiZxT3qGrJ3R5yiNYWg4ya6Xq+pKB+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] x86: also disable FSRM if ERMS is disabled
-Content-Language: en-US
-To:     Daniel Verkamp <dverkamp@chromium.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>
-References: <20220923005827.1533380-1-dverkamp@chromium.org>
- <Yy2U2BW6Tx0imGpK@zn.tnic>
- <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
- <Yy3yJfz213Lqo4KC@zn.tnic>
- <CABVzXAkO4pU+gpUcWOEWDw+W4id=1WEOgeP5+3tBG_LR6=oa=g@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CABVzXAkO4pU+gpUcWOEWDw+W4id=1WEOgeP5+3tBG_LR6=oa=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:9f97:0:b0:39d:7413:1ac1 with SMTP id
+ a23-20020a029f97000000b0039d74131ac1mr2985730jam.75.1672818316311; Tue, 03
+ Jan 2023 23:45:16 -0800 (PST)
+Date:   Tue, 03 Jan 2023 23:45:16 -0800
+In-Reply-To: <20230104040132.4103-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000084839c05f16b5d95@google.com>
+Subject: Re: [syzbot] [gfs2?] INFO: task hung in freeze_super (3)
+From:   syzbot <syzbot+f51cb4b9afbd87ec06f2@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longman@redhat.com, penguin-kernel@i-love.sakura.ne.jp,
+        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 10. 22, 20:08, Daniel Verkamp wrote:
-> On Fri, Sep 23, 2022 at 10:51 AM Borislav Petkov <bp@alien8.de> wrote:
->>
->> On Fri, Sep 23, 2022 at 10:25:05AM -0700, Daniel Verkamp wrote:
->>> Yes, we hit this in crosvm when booting the guest kernel with either
->>> OVMF or u-boot on an Intel 12th Gen CPU. The guest kernel boots fine
->>> when loaded directly (using the crosvm kernel loader and not running
->>> any firmware setup in the guest), but it crashes when booting with
->>> firmware inside the first forward memmove() after alternatives are set
->>> up (which happens to be in printk). I haven't gotten to the bottom of
->>> why exactly using firmware is causing this to be set up in an
->>> inconsistent way, but this is a real-world situation, not just a
->>> hypothetical.
->>
->> Sounds like broken virt firmware or so. And if that is not an issue on
->> baremetal, then the virt stack should be fixed - not the kernel.
->>
->>> Now that I look at it with fresh eyes again, maybe we should instead
->>> directly patch the memmove FSRM alternative so that the flag-set
->>> version just does the same jmp as the ERMS one. I can prepare a patch
->>> for that instead of (or in addition to) this one if that sounds
->>> better.
->>
->> So, if the virt firmware deviates from how the real hardware behaves,
->> then the kernel needs no fixing.
->>
->> So you'd have to figure out why is the virt firmware causing this and
->> not baremetal.
->>
->> Then we can talk about fixes.
-> 
-> Hi Borislav,
-> 
-> We found that the IA32_MISC_ENABLE MSR setup was missing in the crosvm
-> firmware boot path (but not when directly booting a kernel, which is
-> why it did not get noticed for a while). Setting the fast string bit
-> in the MSR avoids the issue.
-> 
-> However, I still think it would be appropriate to apply this patch or
-> something like it, since there could be a CPU, microcode update, BIOS,
-> etc. that clears this bit while still having the CPUID flags for FSRM
-> and ERMS.
+Hello,
 
-Let me resurrect this thread... Our customer has an AMD CPU which has 
-indeed both capabilities under normal circumstances. But they have a 
-cool UEFI BIOS too. They say:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+possible deadlock in freeze_super
 
-"""
-In AMD platform, while disalbe ERMS(Enhanced Rep MOVSB/STOSB) in UEFI 
-(system setup -> processor -> Enhanced Rep MOVSB/STOSB), the OS can't 
-boot normally.
-"""
+======================================================
+WARNING: possible circular locking dependency detected
+6.2.0-rc2-syzkaller-00127-g69b41ac87e4a-dirty #0 Not tainted
+------------------------------------------------------
+kworker/1:1H/93 is trying to acquire lock:
+ffff88802666e0e0 (&type->s_umount_key#50){+.+.}-{3:3}, at: freeze_super+0x45/0x420 fs/super.c:1655
 
-That is exactly the case here. So can we have the patch (the original 
-one, the one below or a better one) to fix this?
+but task is already holding lock:
+ffffc90002587d00 ((work_completion)(&(&gl->gl_work)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
 
-> The Intel SDM says: "Software can disable fast-string
-> operation by clearing the fast-string-enable bit (bit 0) of
-> IA32_MISC_ENABLE MSR", so it's not an invalid configuration for this
-> bit to be unset.
-> 
-> Additionally, something like this avoids the problem by making the
-> FSRM case jump directly to the REP MOVSB rather than falling through
-> to the ERMS jump in the next instruction, which seems like basically
-> free insurance (but if the FSRM flag gets used somewhere else in the
-> future, having it set consistently with ERMS is probably still a good
-> idea, per the original patch):
-> 
-> diff --git a/arch/x86/lib/memmove_64.S b/arch/x86/lib/memmove_64.S
-> index 724bbf83eb5b..8ac557409c7d 100644
-> --- a/arch/x86/lib/memmove_64.S
-> +++ b/arch/x86/lib/memmove_64.S
-> @@ -38,7 +38,7 @@ SYM_FUNC_START(__memmove)
-> 
->           /* FSRM implies ERMS => no length checks, do the copy directly */
->   .Lmemmove_begin_forward:
-> -        ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "", X86_FEATURE_FSRM
-> +        ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "jmp .Lmemmove_erms",
-> X86_FEATURE_FSRM
->           ALTERNATIVE "", "jmp .Lmemmove_erms", X86_FEATURE_ERMS
-> 
-> And hey, this means one less instruction to execute in the FSRM path. :)
+which lock already depends on the new lock.
 
-thanks,
--- 
-js
-suse labs
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 ((work_completion)(&(&gl->gl_work)->work)){+.+.}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       process_one_work+0x852/0xdb0 kernel/workqueue.c:2265
+       worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+       kthread+0x266/0x300 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+-> #1 ((wq_completion)glock_workqueue){+.+.}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __flush_workqueue+0x17c/0x16d0 kernel/workqueue.c:2809
+       gfs2_gl_hash_clear+0xa3/0x300 fs/gfs2/glock.c:2191
+       gfs2_put_super+0x862/0x8d0 fs/gfs2/super.c:627
+       generic_shutdown_super+0x130/0x310 fs/super.c:492
+       kill_block_super+0x79/0xd0 fs/super.c:1386
+       deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+       cleanup_mnt+0x494/0x520 fs/namespace.c:1291
+       task_work_run+0x243/0x300 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
+       exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+       syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+       do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&type->s_umount_key#50){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
+       freeze_super+0x45/0x420 fs/super.c:1655
+       freeze_go_sync+0x178/0x340 fs/gfs2/glops.c:577
+       do_xmote+0x34d/0x13d0 fs/gfs2/glock.c:708
+       glock_work_func+0x2c2/0x450 fs/gfs2/glock.c:1056
+       process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+       worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+       kthread+0x266/0x300 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+other info that might help us debug this:
+
+Chain exists of:
+  &type->s_umount_key#50 --> (wq_completion)glock_workqueue --> (work_completion)(&(&gl->gl_work)->work)
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock((work_completion)(&(&gl->gl_work)->work));
+                               lock((wq_completion)glock_workqueue);
+                               lock((work_completion)(&(&gl->gl_work)->work));
+  lock(&type->s_umount_key#50);
+
+ *** DEADLOCK ***
+
+2 locks held by kworker/1:1H/93:
+ #0: ffff888012bf7d38 ((wq_completion)glock_workqueue){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90002587d00 ((work_completion)(&(&gl->gl_work)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+
+stack backtrace:
+CPU: 1 PID: 93 Comm: kworker/1:1H Not tainted 6.2.0-rc2-syzkaller-00127-g69b41ac87e4a-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: glock_workqueue glock_work_func
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
+ freeze_super+0x45/0x420 fs/super.c:1655
+ freeze_go_sync+0x178/0x340 fs/gfs2/glops.c:577
+ do_xmote+0x34d/0x13d0 fs/gfs2/glock.c:708
+ glock_work_func+0x2c2/0x450 fs/gfs2/glock.c:1056
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+Tested on:
+
+commit:         69b41ac8 Merge tag 'for-6.2-rc2-tag' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=154506dc480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+dashboard link: https://syzkaller.appspot.com/bug?extid=f51cb4b9afbd87ec06f2
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11d59a52480000
 
