@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5564A65DDE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1640465DDEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 21:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjADUxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 15:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S233779AbjADU4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 15:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbjADUxK (ORCPT
+        with ESMTP id S230233AbjADU4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 15:53:10 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D63D9D7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:53:03 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id p15so9112197ilg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 12:53:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VvPBmhnK4Q9HxzeQD/MDc8OKkrjpvJu9PsbKOMLRVCY=;
-        b=apfUpUE2RvS7EjOZFtrYAW0yRTMG0bsW1XpF8htHBA0KyqAtCEuH625OtLnkI5Q2mb
-         /SKBvQ49ge1I9Ynf7k4QIDPQWPQ3UJ7OIhcXi0qgkGR9q7QEe9goF11NPUFHWgCYKLYF
-         U8xRmH7vmHiD9pVgtiY+W6lW6WxolyoaLsjX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VvPBmhnK4Q9HxzeQD/MDc8OKkrjpvJu9PsbKOMLRVCY=;
-        b=OWq4OfLm3mZwejwPBeTdF4vi0Q3lUj7LxKf22P2tgDzs4H4p6ACwDnJ9L4MWE0esKs
-         iR/u7bx9+9v3AGPsaDGG3eKIplG1+IfwCokTvqjojmJliG6eEtmbKkapMFQa7zXZKV5V
-         X57FOZthS/WN8vrMC9kk+TByKZ469P95fo1uonrt6IFyTSsZnnsLVn6sQorkigAbWc+q
-         /yhLi5idY+IGU9VuocPyKB3Gz911akTy03ZLkf/rU4DIXkY0H0i0Hffuh2f5xR09Pu4u
-         HzAHOboiwDecDFoPbbnitlEOnaI9fAnvNAYOpHFSz/9pGFAt0mQ6sjqNbeLuI0sa/6ti
-         rPbw==
-X-Gm-Message-State: AFqh2krXEX1WrdwkZaEEyU4PV9SKWTg2tr1mdA0kERvDvSw/kMTOMJd9
-        AoSib3nEf9z98x5e6q30u7mWEg==
-X-Google-Smtp-Source: AMrXdXuiVXIyPMuGV80wVV0FEy5DR2Fndb+zQsxWmkdLzfYvfBdyxmNScdXxPiSBV7teuXTX45TGjQ==
-X-Received: by 2002:a05:6e02:1ba9:b0:30b:fdb5:bd07 with SMTP id n9-20020a056e021ba900b0030bfdb5bd07mr30415134ili.1.1672865582405;
-        Wed, 04 Jan 2023 12:53:02 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id c7-20020a023307000000b0038a6ae38ceasm11404660jae.26.2023.01.04.12.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 12:53:02 -0800 (PST)
-Date:   Wed, 4 Jan 2023 20:53:01 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 05/11] usb: misc: onboard_usb_hub: add Genesys Logic
- GL852G-OHG hub support
-Message-ID: <Y7XnLYbHxfADz7gk@google.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com>
- <20221228100321.15949-6-linux.amoon@gmail.com>
- <Y7XhYm0nvBsSS8MN@google.com>
+        Wed, 4 Jan 2023 15:56:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0582644F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 12:56:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C0D461820
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 20:56:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56146C433D2;
+        Wed,  4 Jan 2023 20:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672865803;
+        bh=kjiExM4xf3HO6ijvfx7QZuh23bpGDHwsVCfc7Yyk1HU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MisCrzJOQ2AlaoDlUpXq+Z+JR+Yv85yfsw+BX1dGsdcAAK1F3KFqWAGBoy9b3AdJy
+         tenpgFDWp1PWRHP9fBbvk/B+CgcN2tuwAvWoYjbo2ClvYi/WS8bOiPTiM8SD+w0ioz
+         Nc/gSsFOGGJzPNfQMUb4ccqQ+d/WbQNyhHxyWiXacohkg1fgLSOTNA9MCPuXUpjBF+
+         zuoGh3PmfWhKbG4TMGOQvapiZ5l0VZY/jJ9gVeL7M+Vzluo0MHBzyVrwRfTqcoD/TH
+         vi9KS8VYG7DIDxSyRvrvjduugQVqVVyyZqQTV6w+qL0+xnwnjn9Q3A8dViQx0SYWl2
+         WSruTixfjYQtw==
+Received: by pali.im (Postfix)
+        id 6CCE2A3A; Wed,  4 Jan 2023 21:56:40 +0100 (CET)
+Date:   Wed, 4 Jan 2023 21:56:40 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.2-rc1
+Message-ID: <20230104205640.o2uy2jk4v6yfm4w3@pali>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali>
+ <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7XhYm0nvBsSS8MN@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 08:28:18PM +0000, Matthias Kaehlcke wrote:
-> On Wed, Dec 28, 2022 at 10:03:14AM +0000, Anand Moon wrote:
-> > Genesys Logic GL852G-OHG is a 4-port USB 2.0 STT hub that has a reset pin to
-> > toggle and a 5.0V core supply exported though an integrated LDO is
-> > available for powering it.
-> > 
-> > Add the support for this hub, for controlling the reset pin and the core
-> > power supply.
-> > 
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  drivers/usb/misc/onboard_usb_hub.c | 1 +
-> >  drivers/usb/misc/onboard_usb_hub.h | 1 +
-> >  2 files changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> > index 94e7966e199d..c0e8e6f4ec0a 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > @@ -409,6 +409,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
-> >  
-> >  static const struct usb_device_id onboard_hub_id_table[] = {
-> >  	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
-> > +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G-OHG USB 2.0 */
-
-Do you happen to know what '-OHG' stands for? The Genesys website only
-mentions a GL852G with different package types (none of them 'OHG').
-Unless there is an 'OHG' variant with a different product id I'd say
-let's drop the suffix.
-
-> >  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
-> >  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
-> >  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-> > index 62129a6a1ba5..2ee1b0032d23 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.h
-> > +++ b/drivers/usb/misc/onboard_usb_hub.h
-> > @@ -31,6 +31,7 @@ static const struct of_device_id onboard_hub_match[] = {
-> >  	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
-> >  	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
-> >  	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
-> > +	{ .compatible = "genesys,usb5e3,610", .data = &genesys_gl850g_data, },
+On Wednesday 04 January 2023 11:25:41 Linus Torvalds wrote:
+> On Wed, Jan 4, 2023 at 11:01 AM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > Driver is still used and userspace tools for it are part of the udftools
+> > project, which is still under active maintenance. More people already
+> > informed me about this "surprise".
 > 
-> s/genesys,//
+> Why is that driver used?
 > 
-> >  	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
-> >  	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
-> >  	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
-> > -- 
-> > 2.38.1
-> > 
+> It's *literally* pointless. It's just a shell that forwards ioctl's to
+> the real drivers.
+> 
+> > Any comments on this? Because until now nobody answered why this
+> > actively used driver was removed from kernel without informing anybody:
+> 
+> Well, it's been marked as deprecated for five years, so any kernel
+> config should have gotten this notice for the help entry
+> 
+>           Note: This driver is deprecated and will be removed from the
+>           kernel in the near future!
+> 
+> but I guess people didn't notice.
+> 
+> It could be re-instated, but it really is a completely useless driver.
+> Just use the *regular* device nodes, not the pointless pktcd ones.
+> 
+> Is there any real reason why udftools can't just use the normal device node?
+> 
+> The historical reason for this driver being pointless goes back *much*
+> longer than five years - it used to be that the pktcd driver was
+> special, and was the only thing that did raw commands.
+> 
+> But the regular block layer was taught to do that back around 2004, so
+> the "pktcd" driver has literally just been a pointless shell for
+> almost two decades.
+> 
+> And I know it was in 2004, because I actually did most of that "make
+> SCSI commands generic" work myself (but had to go back to the old BK
+> archives to find the exact date - it's been two decades, after all).
+> 
+> I did it because I was fed up with the crazy pktcd driver requiring
+> extra work, when I just wanted to write CD's on my regular IDE CD-ROM
+> the obvious way.
+> 
+> So if there is some reason to actually use the pktcd driver, please
+> tell us what that is.
+> 
+>               Linus
+
+Last time I did big retest of optical media was two years ago. At that
+time kernel was not able to mount CD-RW disc in full read-write mode
+from the normal node /dev/cdrom. Via pktcdvd driver mapping it was
+possible without any issue. Was there any change in last 5 (or more)
+years in this CD-RW area? Mounting CD-RW media in read-only mode via
+normal /dev/cdrom node always worked fine. Also "burning" CD-R media
+with userspace burning tools on normal /dev/cdrom node also worked.
+But here it is CD-RW media in read-write mode with kernel udf filesystem
+driver without any userspace involved (after proper formatting).
