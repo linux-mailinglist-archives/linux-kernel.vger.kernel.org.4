@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0128C65DCCD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A2765DCCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 20:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbjADTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 14:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S240136AbjADTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 14:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240122AbjADTeO (ORCPT
+        with ESMTP id S240137AbjADTeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:34:14 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5D0395DF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:34:13 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id s9so2091744wru.13
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:34:13 -0800 (PST)
+        Wed, 4 Jan 2023 14:34:19 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C453D1C0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 11:34:17 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id z17-20020a25e311000000b00719e04e59e1so34887874ybd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 11:34:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KonOja3gt2Do8uQ+N5ZsHzrJgX0wr3tVjawKXZm29t0=;
-        b=jIC6riemWxGAILjZDvMRYsp+OMPV442Ttv+U6vX9yAxZQ7i2/aOQ5/ebU0i/UgtSsI
-         ZWmvXeso6jxm4e1PGA9tAKEAfivX7HMbVMvRTmhxxis1aqUemalqgndfs6d8LUsfVUF3
-         aZQ47hP1aOqmnGbedybRs314i1hSjujHla3kVdpJgcymBKTGvwRu+D4yHal6mCxEN8Uu
-         EXnZmK2xIeXDToeo8t3d1ikJN84nNqM2zprgNNvj2GcFtwPyH6pvTNVkBAdU/5Z/H3lh
-         P88HQscp46reWK1h/qQ6B2kyJ+jVHQ3xNrnwP3nyFjDjZoD3Ot3T2bADQ1Pj9a3198CX
-         T33A==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1tPYYgfmJsbQWqu0ltxW4RY1Nkj1mo/Al1PbZ2zMD4Q=;
+        b=smJNk0zhuo1/1zHEXj0d6yRUmkqnDpfIx58BEn/cGg72LNn90pxpjarz3SeORF9+yR
+         yl478rY3Qppd5f2Y2rZddHE4v8a3gs+QAutJk1j+5azEWDoaxwtIegEqQuDJ3prj1Dnd
+         1SykFQVuvIO49v0UGRh5vXfggrpNq1r2pN7O6akJ9lVtiSpQ6r25tG99U4dkahMHP0fZ
+         ugdj2OGR8BNOj38eCHSjfyUB+X0SwCYD98iAle3qi1XqCvIJGo/NsOnerjHn262s7apJ
+         4n5Uq6j6d+L7QR9x+bLGU1VyjWUbIhmGiO8nuCF7RLGyL5gvU0COr4DthqITRqypavI+
+         /d9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KonOja3gt2Do8uQ+N5ZsHzrJgX0wr3tVjawKXZm29t0=;
-        b=hWDRVscJ+x/SRRF4hVZT/NaZPE5DMEPDp8cJNiKaDN4fMjCVIHfWy1e1mx6ylrI8vz
-         l5oDQxlafpMjnBw9QWqG/q9kX6Ad+b2OcH3Qt6An9zzBuIcZ2qtNPlHbOrnsRyse4ZrQ
-         xa5Toxh2Uda6rJzNqgiryINLv3TR9eKICxUmHihu5L9uolCne+mH3lW7tk6EFfD0cVhL
-         RRTODucVqObtxBol1yKXGaQwenWsJeQ+9hd0nHzloWbejUL+lxPAZyXg6EBn5ZaP5yF9
-         wSqgsUirp+9T5y3389IuKrcBml+uK3dQhJ9GXRb/hgaJLoxr+CMDSb2Hyc5/Kyi6UWXN
-         2Oaw==
-X-Gm-Message-State: AFqh2krMSG0HoW19cEnQmEg18iFd7pYeQNbchhNcCExw5ja4OzPJDtj1
-        hN+EbU4B4mVIb9VBGs1Pj2rrN+6kJ8BHvPDMEElMlg==
-X-Google-Smtp-Source: AMrXdXuE+Jz47ACBTQhXSDrEl9W9Z4cli3e6SXSyl0QMgoIf6o2paDsXXUoCTlyv4rQ8nnF9koQftCuvIKwPkpdFMDY=
-X-Received: by 2002:a05:6000:1367:b0:28c:295f:3369 with SMTP id
- q7-20020a056000136700b0028c295f3369mr748046wrz.355.1672860851698; Wed, 04 Jan
- 2023 11:34:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230101230042.244286-1-jthoughton@google.com> <Y7S0lDCeBYLMHBvR@x1n>
-In-Reply-To: <Y7S0lDCeBYLMHBvR@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 4 Jan 2023 19:34:00 +0000
-Message-ID: <CADrL8HWSym93=yNpTUdWebOEzUOTR2ffbfUk04XdK6O+PNJNoA@mail.gmail.com>
-Subject: Re: [PATCH] hugetlb: unshare some PMDs when splitting VMAs
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1tPYYgfmJsbQWqu0ltxW4RY1Nkj1mo/Al1PbZ2zMD4Q=;
+        b=0ejT82eL57yts8jnfRFxlAQPkROcQuQryIsJVC8VFmSwy+fNJYx8hlLEZ2JKI27m27
+         EnZP/++eKHDXDRw9wtV6TY/8pcLLcj+jbpw3iDM+cB0B20J78yjgFIvyJiSWLknbSmmk
+         hen0PmSQ9R2x/L/I59PARLNZOqnDAt2mOl/H6abnx6KLBy1Jkr94IeIGikrcukR7WXA9
+         lAhGmlwRq5pln4a3otxG5ZEMVqfUj+0U8aEC4EKF13AcnlBGU0Vtp71gvy5WFZtp3uKn
+         2t/ZGI4D4ZoSDQP8fixm93X+LIhV7zx2tsjRRSFIsSEn1e2O8jFHhp4FgNpVRQGEyPzq
+         9dJg==
+X-Gm-Message-State: AFqh2krbFDyocA2pnHLE92BeHMNEi1YFwgj/lIZBbpzTtOOGNBfezJ5P
+        i3lVAmYAfV+2EIsSAHTpS5FfLrj8vyOjCXw=
+X-Google-Smtp-Source: AMrXdXudx83GP3Mrrft7oAK5KgZusnNPxKJ/c9Yu72lCZ4dQmJoXMT56KJYtoNZOE58Swk/uWBTV1OiO8Y3xHSU=
+X-Received: from jesussanp.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5f10])
+ (user=jesussanp job=sendgmr) by 2002:a25:790d:0:b0:7b0:62c8:d02b with SMTP id
+ u13-20020a25790d000000b007b062c8d02bmr433902ybc.272.1672860857141; Wed, 04
+ Jan 2023 11:34:17 -0800 (PST)
+Date:   Wed,  4 Jan 2023 11:34:14 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230104193414.606905-1-jesussanp@google.com>
+Subject: [PATCH v2] perf: Add missing sys/types.h include
+From:   Jesus Sanchez-Palencia <jesussanp@google.com>
+To:     linux-perf-users@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > @@ -4828,6 +4830,23 @@ static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
-> >  {
-> >       if (addr & ~(huge_page_mask(hstate_vma(vma))))
-> >               return -EINVAL;
-> > +
-> > +     /* We require PUD_SIZE VMA alignment for PMD sharing. */
->
-> I can get the point, but it reads slightly awkward.  How about:
->
->         /*
->          * If the address to split can be in the middle of a shared pmd
->          * range, unshare before split the vma.
->          */
->
+Not all libc implementations define ssize_t as part of stdio.h like
+glibc does since the standard only requires this type to be defined by
+unistd.h and sys/types.h. For this reason the perf build is currently
+broken for toolchains based on uClibc, for instance.
 
-How about:
+Include sys/types.h explicitly to fix that.
 
-/*
- * PMD sharing is only possible for PUD_SIZE-aligned address ranges
- * in HugeTLB VMAs. If we will lose PUD_SIZE alignment due to this split,
- * unshare PMDs in the PUD_SIZE interval surrounding addr now.
- */
+Fixes: 378ef0f5d9d7 ("perf build: Use libtraceevent from the system")
+Signed-off-by: Jesus Sanchez-Palencia <jesussanp@google.com>
+---
+ tools/perf/util/trace-event.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> I remember you had a helper to check pmd sharing possibility.  Can use here
-> depending on whether that existed in the code base or in your hgm series
-> (or just pick that up with this one?).
+diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
+index add6c5d9531c..9b3cd79cca12 100644
+--- a/tools/perf/util/trace-event.h
++++ b/tools/perf/util/trace-event.h
+@@ -4,6 +4,7 @@
+ 
+ #include <stdbool.h>
+ #include <stdio.h>
++#include <sys/types.h>
+ #include <linux/types.h>
+ 
+ struct evlist;
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-Right, it introduces `pmd_sharing_possible` but I don't think it helps here.
-
->
-> > +     if (addr & ~PUD_MASK) {
-> > +             /*
-> > +              * hugetlb_vm_op_split is called right before we attempt to
-> > +              * split the VMA. We will need to unshare PMDs in the old and
-> > +              * new VMAs, so let's unshare before we split.
-> > +              */
-> > +             unsigned long floor = addr & PUD_MASK;
-> > +             unsigned long ceil = floor + PUD_SIZE;
-> > +
-> > +             if (floor < vma->vm_start || ceil >= vma->vm_end)
->
-> s/>=/>/?
-
-Indeed, thanks.
-
->
-> > +                     /* PMD sharing is already impossible. */
-> > +                     return 0;
->
-> IMHO slightly cleaner to write in the reversed way and let it fall through:
->
->   if (floor >= vma->vm_start && ceil <= vma->vm_end)
->       hugetlb_unshare_pmds(vma, floor, ceil);
-
-Will do.
-
->
-> Thanks,
->
-
-Thanks Peter!
