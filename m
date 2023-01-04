@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5056E65CD12
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EBC65CD14
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 07:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbjADG2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 01:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S231235AbjADG2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 01:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbjADG1f (ORCPT
+        with ESMTP id S233309AbjADG1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:27:35 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4218E2B;
-        Tue,  3 Jan 2023 22:26:46 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3046QOIH054824;
-        Wed, 4 Jan 2023 00:26:24 -0600
+        Wed, 4 Jan 2023 01:27:41 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0211B1F8;
+        Tue,  3 Jan 2023 22:26:48 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3046QRPu120495;
+        Wed, 4 Jan 2023 00:26:27 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672813584;
-        bh=JH3+7om56Hn+Os1YAI02Uac/iNLa0MUdUR9qw1LiMaE=;
+        s=ti-com-17Q1; t=1672813587;
+        bh=NliV50lmKoUKDsRuaYCtjajFhmQGOUAjwjZaOIj01AY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Stq26XXZB7DzzkC24qob+ewfNrA/y9zB5IfuzGmBxtxohNFg19VX0qXXgHZGvTbPZ
-         HB6Yg7KJQkiMThxQvn+QynvtxcQhEFHLxTaLTYy9hKYwBNAWWK659EzFUpBID2AA26
-         sdqKVgU671FKd04mp2iwadtHOD7lqdVqJXyY9OXk=
+        b=KtEB5PTlqItNnIv3+LQTbhE/nFUMn45P43x100P19gUOYY/tQVqSaIlrcb4p6dRjW
+         VuYKfMrLu+y7ntvhbW2D3ZAk4K261aHJnv1+01gJExU8BHwAw4s0BUFhE//RRmDH6M
+         m+DfEjLV0r95NNX7hfN0YLex7sqzj4GxTSl6w4cI=
 Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3046QOs0104566
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3046QRPN004457
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 4 Jan 2023 00:26:24 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE111.ent.ti.com
+        Wed, 4 Jan 2023 00:26:27 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
  (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 4
- Jan 2023 00:26:24 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 00:26:27 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 4 Jan 2023 00:26:24 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3046QNO0095871;
-        Wed, 4 Jan 2023 00:26:23 -0600
+ Frontend Transport; Wed, 4 Jan 2023 00:26:27 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3046QPv3095883;
+        Wed, 4 Jan 2023 00:26:26 -0600
 From:   Dhruva Gole <d-gole@ti.com>
 To:     <broonie@kernel.org>
 CC:     Dhruva Gole <d-gole@ti.com>, <linux-spi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Vignesh <vigneshr@ti.com>,
         Pratyush Yadav <pratyush@kernel.org>,
         Vaishnav Achath <vaishnav.a@ti.com>
-Subject: [PATCH 1/2] spi: cadence-quadspi: setup ADDR Bits in cmd reads
-Date:   Wed, 4 Jan 2023 11:56:03 +0530
-Message-ID: <20230104062604.1556763-2-d-gole@ti.com>
+Subject: [PATCH 2/2] spi: cadence-quadspi: use STIG mode for small reads
+Date:   Wed, 4 Jan 2023 11:56:04 +0530
+Message-ID: <20230104062604.1556763-3-d-gole@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230104062604.1556763-1-d-gole@ti.com>
 References: <20230104062604.1556763-1-d-gole@ti.com>
@@ -65,41 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setup the Addr bit field while issuing register reads in STIG mode. This
-is needed for example flashes like cypress define in their transaction
-table that to read any register there is 1 cmd byte and a few more address
-bytes trailing the cmd byte. Absence of addr bytes will obviously fail
-to read correct data from flash register that maybe requested by flash
-driver because the controller doesn't even specify which address of the
-flash register the read is being requested from.
+Fix the issue where some flash chips like cypress S25HS256T return the
+value of the same register over and over in DAC mode.
+
+For example in the TI K3-AM62x Processors refer [0] Technical Reference
+Manual there is a layer of digital logic in front of the QSPI/OSPI
+Drive when used in DAC mode. This is part of the Flash Subsystem (FSS)
+which provides access to external Flash devices.
+
+The FSS0_0_SYSCONFIG Register (Offset = 4h) has a BIT Field for
+OSPI_32B_DISABLE_MODE which has a Reset value = 0. This means, OSPI 32bit
+mode enabled by default.
+
+Thus, by default controller operates in 32 bit mode causing it to always
+align all data to 4 bytes from a 4byte aligned address. In some flash
+chips like cypress for example if we try to read some regs in DAC mode
+then it keeps sending the value of the first register that was requested
+and inorder to read the next reg, we have to stop and re-initiate a new
+transaction.
+
+This causes wrong register values to be read than what is desired when
+registers are read in DAC mode. Hence if the data.nbytes is very less
+then prefer STIG mode for such small reads.
+
+[0] https://www.ti.com/lit/ug/spruiv7a/spruiv7a.pdf
 
 Signed-off-by: Dhruva Gole <d-gole@ti.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/spi/spi-cadence-quadspi.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 676313e1bdad..8c7938776cfc 100644
+index 8c7938776cfc..f5188dc52db6 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -531,6 +531,17 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
- 	/* 0 means 1 byte. */
- 	reg |= (((n_rx - 1) & CQSPI_REG_CMDCTRL_RD_BYTES_MASK)
- 		<< CQSPI_REG_CMDCTRL_RD_BYTES_LSB);
-+
-+	/* setup ADDR BIT field */
-+	if (op->addr.nbytes) {
-+		reg |= (0x1 << CQSPI_REG_CMDCTRL_ADDR_EN_LSB);
-+		reg |= ((op->addr.nbytes - 1) &
-+			CQSPI_REG_CMDCTRL_ADD_BYTES_MASK)
-+			<< CQSPI_REG_CMDCTRL_ADD_BYTES_LSB;
-+
-+		writel(op->addr.val, reg_base + CQSPI_REG_CMDADDRESS);
-+	}
-+
- 	status = cqspi_exec_flash_cmd(cqspi, reg);
- 	if (status)
- 		return status;
+@@ -1344,7 +1344,13 @@ static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	cqspi_configure(f_pdata, mem->spi->max_speed_hz);
+ 
+ 	if (op->data.dir == SPI_MEM_DATA_IN && op->data.buf.in) {
+-		if (!op->addr.nbytes)
++	/*
++	 * Performing reads in DAC mode forces to read minimum 4 bytes
++	 * which is unsupported on some flash devices during register
++	 * reads, prefer STIG mode for such small reads.
++	 */
++		if (!op->addr.nbytes ||
++		    op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
+ 			return cqspi_command_read(f_pdata, op);
+ 
+ 		return cqspi_read(f_pdata, op);
 -- 
 2.25.1
 
