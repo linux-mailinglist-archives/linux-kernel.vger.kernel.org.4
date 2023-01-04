@@ -2,173 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BFA65CC5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 05:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1466165CC5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 Jan 2023 05:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238569AbjADEYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 Jan 2023 23:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S234045AbjADEZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 Jan 2023 23:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjADEYD (ORCPT
+        with ESMTP id S229802AbjADEZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 Jan 2023 23:24:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19582115B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:23:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672806195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mgnhlnuG8Qrqs2IY3wKLTrPyEJc3j7HXcojektB5wC8=;
-        b=fTJ2pzU9apKVA1cwmNUpb8u5UoOD0b3PqrX440xJdSaFhPT2OR67f5dQEJQH4xWJ8mOnRl
-        RSTKYNcvE3mwK+Ps2w2DLMnquy4LhBFGsSKD7QV0T11C6dS813i6NlYIoEqokwXi+eT4Cg
-        7lo8vHpbtmAC1CscRuSr4ntoMa5wZJk=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-97-82r5DplWPr6EK-pw0jtt5Q-1; Tue, 03 Jan 2023 23:23:14 -0500
-X-MC-Unique: 82r5DplWPr6EK-pw0jtt5Q-1
-Received: by mail-pg1-f199.google.com with SMTP id 84-20020a630257000000b00477f88d334eso14842235pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 Jan 2023 20:23:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mgnhlnuG8Qrqs2IY3wKLTrPyEJc3j7HXcojektB5wC8=;
-        b=Cir98njF7JCxbXmyxC0hIjbmZpD8vilpQQkwCQTrfj2nYTSENa2CfYhXUdlaQtClAl
-         7MhZXlc0g2PQKRNoM5oLnuk3ijAZtAtNJhP4CwSv1iFyOYzko5z9ahQEJW0pu7zIXvMv
-         XKYq3bJ/uKX4KIfasvlotXF94pCfKKf1xgMKEMpyrKbAHeB5JLKIAsCxxYEM+tTNqKLL
-         lAPR7sBkqWhKpBMtOrGrLkwySu3PKesIVXJUhXEEC7aO8WxUSbYSglKmjeLSBqjG5YTr
-         P/VJH05lbcSeqae1zeDGGzB38KM/XSsz6b7HFVdhSecmZg7WAP/aM32PuVcMnBhO1Per
-         R6vg==
-X-Gm-Message-State: AFqh2krdQwONYtVRbTIh7JuvPtuQ64krFjVtTKGt2SZGrWQUeuMWutYJ
-        vJ+UviKq/wVtedjSAMpG5V2c/G8iwqoZ0Ae8vXhgEK38zwZodsJFeNGZpee6JOSAyjEmLwjSd8k
-        wZP5/gBp4R7C1klUQ00fAOSsg
-X-Received: by 2002:a17:90a:a28:b0:223:f78c:15d with SMTP id o37-20020a17090a0a2800b00223f78c015dmr50555164pjo.41.1672806193512;
-        Tue, 03 Jan 2023 20:23:13 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvowa9FjwdVvcjzcMHRWWWzT3O0PY8GaSTGVqf+/FTk/nR/PayTpQ5bku/F9FLYRf2r3tu2LQ==
-X-Received: by 2002:a17:90a:a28:b0:223:f78c:15d with SMTP id o37-20020a17090a0a2800b00223f78c015dmr50555150pjo.41.1672806193244;
-        Tue, 03 Jan 2023 20:23:13 -0800 (PST)
-Received: from [10.72.12.120] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id ml4-20020a17090b360400b00217090ece49sm20040933pjb.31.2023.01.03.20.23.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 20:23:12 -0800 (PST)
-Message-ID: <50eb0df0-89fe-a5df-f89f-07bf69bd00ae@redhat.com>
-Date:   Wed, 4 Jan 2023 12:23:07 +0800
+        Tue, 3 Jan 2023 23:25:28 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AB3102D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 Jan 2023 20:25:26 -0800 (PST)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NmxH14VVyzqTLB;
+        Wed,  4 Jan 2023 12:20:45 +0800 (CST)
+Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 4 Jan 2023 12:25:23 +0800
+From:   "Longpeng(Mike)" <longpeng2@huawei.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>, <sgarzare@redhat.com>
+CC:     <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
+        <huangzhichao@huawei.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Longpeng <longpeng2@huawei.com>
+Subject: [PATCH v3] vp_vdpa: harden the logic of set status
+Date:   Wed, 4 Jan 2023 12:25:19 +0800
+Message-ID: <20230104042519.170-1-longpeng2@huawei.com>
+X-Mailer: git-send-email 2.25.0.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH net V2] virtio-net: correctly enable callback during
- start_xmit
-From:   Jason Wang <jasowang@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com
-References: <20221215032719.72294-1-jasowang@redhat.com>
- <20221215034740-mutt-send-email-mst@kernel.org>
- <CACGkMEsLeCRDqyuyGzWw+kjYrTVDjUjOw6+xHESPT2D1p03=sQ@mail.gmail.com>
- <20221215042918-mutt-send-email-mst@kernel.org>
- <CACGkMEsbvTQrEp5dmQRHp58Mu=E7f433Xrvsbs4nZMA5R3B6mQ@mail.gmail.com>
- <CACGkMEsu_OFFs15d2dzNbfSjzAZfYXLn9CNcO3ELPbDqZsndzg@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CACGkMEsu_OFFs15d2dzNbfSjzAZfYXLn9CNcO3ELPbDqZsndzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.148.223]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi100025.china.huawei.com (7.221.188.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Longpeng <longpeng2@huawei.com>
 
-在 2022/12/23 14:29, Jason Wang 写道:
-> On Fri, Dec 16, 2022 at 11:43 AM Jason Wang <jasowang@redhat.com> wrote:
->> On Thu, Dec 15, 2022 at 5:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>> On Thu, Dec 15, 2022 at 05:15:43PM +0800, Jason Wang wrote:
->>>> On Thu, Dec 15, 2022 at 5:02 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>>>> On Thu, Dec 15, 2022 at 11:27:19AM +0800, Jason Wang wrote:
->>>>>> Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
->>>>>> virtqueue callback via the following statement:
->>>>>>
->>>>>>          do {
->>>>>>             ......
->>>>>>        } while (use_napi && kick &&
->>>>>>                 unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
->>>>>>
->>>>>> When NAPI is used and kick is false, the callback won't be enabled
->>>>>> here. And when the virtqueue is about to be full, the tx will be
->>>>>> disabled, but we still don't enable tx interrupt which will cause a TX
->>>>>> hang. This could be observed when using pktgen with burst enabled.
->>>>>>
->>>>>> Fixing this by trying to enable tx interrupt after we disable TX when
->>>>>> we're not using napi or kick is false.
->>>>>>
->>>>>> Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
->>>>>> Signed-off-by: Jason Wang <jasowang@redhat.com>
->>>>>> ---
->>>>>> The patch is needed for -stable.
->>>>>> Changes since V1:
->>>>>> - enable tx interrupt after we disable tx
->>>>>> ---
->>>>>>   drivers/net/virtio_net.c | 2 +-
->>>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->>>>>> index 86e52454b5b5..dcf3a536d78a 100644
->>>>>> --- a/drivers/net/virtio_net.c
->>>>>> +++ b/drivers/net/virtio_net.c
->>>>>> @@ -1873,7 +1873,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
->>>>>>         */
->>>>>>        if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
->>>>>>                netif_stop_subqueue(dev, qnum);
->>>>>> -             if (!use_napi &&
->>>>>> +             if ((!use_napi || !kick) &&
->>>>>>                    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
->>>>>>                        /* More just got used, free them then recheck. */
->>>>>>                        free_old_xmit_skbs(sq, false);
->>>>> This will work but the following lines are:
->>>>>
->>>>>                         if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
->>>>>                                  netif_start_subqueue(dev, qnum);
->>>>>                                  virtqueue_disable_cb(sq->vq);
->>>>>                          }
->>>>>
->>>>>
->>>>> and I thought we are supposed to keep callbacks enabled with napi?
->>>> This seems to be the opposite logic of commit a7766ef18b33 that
->>>> disables callbacks for NAPI.
->>>>
->>>> It said:
->>>>
->>>>      There are currently two cases where we poll TX vq not in response to a
->>>>      callback: start xmit and rx napi.  We currently do this with callbacks
->>>>      enabled which can cause extra interrupts from the card.  Used not to be
->>>>      a big issue as we run with interrupts disabled but that is no longer the
->>>>      case, and in some cases the rate of spurious interrupts is so high
->>>>      linux detects this and actually kills the interrupt.
->>>>
->>>> My undersatnding is that it tries to disable callbacks on TX.
->>> I think we want to disable callbacks while polling, yes. here we are not
->>> polling, and I think we want a callback because otherwise nothing will
->>> orphan skbs and a socket can be blocked, not transmitting anything - a
->>> deadlock.
->> I'm not sure how I got here, did you mean a partial revert of
->> a7766ef18b33 (the part that disables TX callbacks on start_xmit)?
-> Michael, any idea on this?
->
-> Thanks
+1. We should not set status to 0 when invoking vp_vdpa_set_status(),
+   trigger a warning in that case.
 
+2. The driver MUST wait for a read of device_status to return 0 before
+   reinitializing the device. But we also don't want to keep us in an
+   infinite loop forever, so wait for 5s if we try to reset the device.
 
-Michael, any comment?
+Signed-off-by: Longpeng <longpeng2@huawei.com>
+---
+Changes v3->v2:
+ - move VP_VDPA_RESET_TIMEOUT_US near the other macros. [Stefano]
+ - refer v1.2 in comments. [Stefano]
+ - s/keep/keeping/  [Jason]
+ - use readx_poll_timeout. [Jason]
 
-Thanks
+Changes v1->v2:
+ - use WARN_ON instead of BUG_ON. [Stefano]
+ - use "warning + failed" instead of "infinite loop". [Jason, Stefano]
+ - use usleep_range instead of msleep (checkpatch). [Longpeng]
+
+---
+ drivers/vdpa/virtio_pci/vp_vdpa.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+index d448db0c4de3..3fc496aea456 100644
+--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
++++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
++#include <linux/iopoll.h>
+ #include <linux/pci.h>
+ #include <linux/vdpa.h>
+ #include <linux/virtio.h>
+@@ -22,6 +23,7 @@
+ #define VP_VDPA_QUEUE_MAX 256
+ #define VP_VDPA_DRIVER_NAME "vp_vdpa"
+ #define VP_VDPA_NAME_SIZE 256
++#define VP_VDPA_RESET_TIMEOUT_US 5000000 /* 5s */
+ 
+ struct vp_vring {
+ 	void __iomem *notify;
+@@ -214,6 +216,9 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+ 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 s = vp_vdpa_get_status(vdpa);
+ 
++	/* We should never be setting status to 0. */
++	WARN_ON(status == 0);
++
+ 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
+ 	    !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
+ 		vp_vdpa_request_irq(vp_vdpa);
+@@ -226,10 +231,25 @@ static int vp_vdpa_reset(struct vdpa_device *vdpa)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+ 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+-	u8 s = vp_vdpa_get_status(vdpa);
++	u8 tmp, s = vp_vdpa_get_status(vdpa);
++	int ret;
+ 
+ 	vp_modern_set_status(mdev, 0);
+ 
++	/*
++	 * As the virtio v1.1/v1.2 spec (4.1.4.3.2) says: After writing 0 to
++	 * device_status, the driver MUST wait for a read of device_status
++	 * to return 0 before reinitializing the device.
++	 * To avoid keeping us here forever, we only wait for 5 seconds.
++	 */
++	ret = readx_poll_timeout(vp_ioread8, &mdev->common->device_status, tmp,
++				 tmp == 0, 1000, VP_VDPA_RESET_TIMEOUT_US);
++	if (ret) {
++		dev_err(&mdev->pci_dev->dev,
++			"vp_vdpa: fail to reset device, %d\n", ret);
++		return ret;
++	}
++
+ 	if (s & VIRTIO_CONFIG_S_DRIVER_OK)
+ 		vp_vdpa_free_irq(vp_vdpa);
+ 
+-- 
+2.23.0
 
