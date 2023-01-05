@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B5665E737
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2851F65E73A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbjAEJCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S231783AbjAEJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjAEJCJ (ORCPT
+        with ESMTP id S231766AbjAEJCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:02:09 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5543D50073
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:02:08 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-45a51c37009so375241547b3.17
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 01:02:08 -0800 (PST)
+        Thu, 5 Jan 2023 04:02:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D990DCE5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:02:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v13-20020a25ab8d000000b007b54623bf71so931467ybi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 01:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gMeOMpb58LKwXdrW/getzyijMXrw75Kv1TqJV/9UOLk=;
-        b=MK3MwIy9qtEF2d12ORUyteoXB3r3fdkipI3neUqhPW9L4iFXR8Y9eHgFhPnQBPKEyw
-         CcbA1i9gWaUKDLzVFLTm/qz1vlBeEaew0jj9T73xH0niNlDmQ1mVExHOxxAB3a6TMg3W
-         XIwqUkTM0qZUBUZ24QeLdi0L+o7Cv1E5tgWd2Lr/5mNa5F6QdUfiLjhwlLQzxV1YyJah
-         ljfXzChmqwm6Xj9Ti4BAXm0mIpkZm0Fe95ARzPSzpjwGJ9gNjqWIneqBSuqY3e7gHFQN
-         uuO4+FhlSZVCaXWR45Qn4IVzqp2QfPwzlTdEIhD7BJJe7+Fru4bJ4XUo13EVq/6FxUu6
-         4kEg==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DpWkZKk39/eacUAN3ZgYzWujc2fjIBkDhCf4XLMsvxE=;
+        b=bq34XRJBjaA7mS5pbSs4ua8HLD37IrJe3Xy9FCGoPRS0ZbgdzN5KSoA0tuHSlcDaal
+         tsCrnR3iyBORSY55MxAAO95DHfSPyguQjOYIk5w3Sqdt+EwEfQ++rlbMcxqOpxa5sCA8
+         HBwjlxzXXhjnxms8ZhbMObirCzEODalfNBde0pMtLWqdqrNPkN356SoQEu4Dh/d10voL
+         1J8DVmwIKTbpXOhiBVzOjNYM3x7Wt/tKmUtlOmaVtLqaBmPm+mhswD7saXwVtnbD8aOt
+         t+QsSZWzOWGZDFIfwS4JSR0+sz4FZBy5NzTyoNGb/p4iNSHMFPcl9yRy2rqK7Ix4xyif
+         wI/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gMeOMpb58LKwXdrW/getzyijMXrw75Kv1TqJV/9UOLk=;
-        b=EZUxcVkHzXLXIC1gWfNNxoQvux8EBa+eokCcvcEwvMlrd+sSvj4eci5wA/sDWCrrER
-         PLvEj/5HUKsLaN5xDNIhvdW2fW+fXS1cCcSGwAVCziMPkHsSAGgoS8y5XPh/swUCR31d
-         0F7j7U8cBfKrH08RcP838qRVXAZz6Na+0eIfLHrgSbfNfDmm4dIEer/jIjBMLlxTyASD
-         +kZx8QI2kCFUmTsIKAQg9cM0akGhaOCnQwbIwSbKVPVsrcOTx4OFOc8WMULloye7QFcb
-         REm9tuPKYVDVSdLWgsMYAY6gTKftoJJSdeGdTlXtIooyFC4njKlygSW9diO89Ds4vhhI
-         DdZw==
-X-Gm-Message-State: AFqh2ko2sy9+XIlmzUvpUbeOnnXUPs9PGzW8yM02/5BNL0AoD39iXaFk
-        BSicpPbqJl+sR/dulmgnoWZ5zsLsb7Op
-X-Google-Smtp-Source: AMrXdXt3HTp4nhbHIsvBvQIUz4QjOclWmn3a5/q0lyFKC2IeLzTXVQLnvrBBjGhXdx5yZc0L5SA/8FfScl53
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DpWkZKk39/eacUAN3ZgYzWujc2fjIBkDhCf4XLMsvxE=;
+        b=IxF3t+op87wERBTUhlLLqLMb9YZ++FbxaKc3Zysn9xlSvN/OuYz3Hf8t2A72QungsC
+         z6JjAjUYXemFzonrXXp9y9jndiZrSGBPpEBeDDaowMmP822MZVIoR5ZXQGQqGrp8z9FN
+         00JBKHME2fYutvf0W3INBRklYzXXTWThQ6xSdLeWnYYAmSHqcksU7IYbSatMayf3P5OS
+         q+aqdQBmojAbVk1OD3Ay9nkYU0sB10Kqtuix/PEM5j3sPqFXR5WiZGonhVDmZ+UFkz30
+         kNLanobso7cxcWtAmnQ2tMNEWfH32cpcMUNIfrlvtccBGkHRuuFUPXCTf9cxPYgtYDQf
+         sUYg==
+X-Gm-Message-State: AFqh2krNtP4R2oa1iOgOwSSNDtgV5/B1OmBkT1wXm9G1z3CvNUqnhWX8
+        L1mtolDniaVKuVUd/3oItgCUEgNoOOWG
+X-Google-Smtp-Source: AMrXdXtApMqDcsv4OilzV3AXaN+Kg7gN0cxjchQ6nOCOq7RlDaA8NCq7Yr5hwLjAwpiS668psNAm1iQuWFuU
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:8775:c864:37e:2f9b])
- (user=irogers job=sendgmr) by 2002:a05:690c:886:b0:367:27b7:af89 with SMTP id
- cd6-20020a05690c088600b0036727b7af89mr83353ywb.292.1672909327417; Thu, 05 Jan
- 2023 01:02:07 -0800 (PST)
-Date:   Thu,  5 Jan 2023 01:01:52 -0800
-Message-Id: <20230105090155.357604-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:550a:0:b0:708:522d:cd52 with SMTP id
+ j10-20020a25550a000000b00708522dcd52mr5582240ybb.312.1672909335154; Thu, 05
+ Jan 2023 01:02:15 -0800 (PST)
+Date:   Thu,  5 Jan 2023 01:01:53 -0800
+In-Reply-To: <20230105090155.357604-1-irogers@google.com>
+Message-Id: <20230105090155.357604-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230105090155.357604-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v3 0/3] objtool build improvements
+Subject: [PATCH v3 1/3] objtool: Install libsubcmd in build
 From:   Ian Rogers <irogers@google.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -77,39 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Install libsubcmd and then get headers from there, this avoids
-inadvertent dependencies on things in tools/lib. Fix V=1
-support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
-being set for say gcc, and then CC being overridden to clang. Support
-HOSTCFLAGS as a make option.
+Including from tools/lib can create inadvertent dependencies. Install
+libsubcmd in the objtool build and then include the headers from
+there.
 
-v3. Is a rebase that removes the merged "tools lib subcmd: Add install
-    target" patch. In:
-https://lore.kernel.org/lkml/CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com/
-    Nick rightly points out that:
-WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-    became:
-WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-    losing the EXTRA_WARNINGS which v3 now adds back in. Previous
-    testing had added the warnings to the end rather than the
-    beginning, thereby causing unexpected build issues that aren't present in v3.
-v2. Include required "tools lib subcmd: Add install target" that is
-    already in Arnaldo's tree:
-https://lore.kernel.org/lkml/20221109184914.1357295-3-irogers@google.com/
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
-    When building libsubcmd.a from objtool's Makefile, clear the
-    subdir to avoid it being appended onto OUTPUT and breaking the
-    build.
-
-Ian Rogers (3):
-  objtool: Install libsubcmd in build
-  objtool: Properly support make V=1
-  objtool: Alter how HOSTCC is forced
-
+Signed-off-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+---
  tools/objtool/Build    |  2 --
- tools/objtool/Makefile | 66 ++++++++++++++++++++++++++++++------------
- 2 files changed, 47 insertions(+), 21 deletions(-)
+ tools/objtool/Makefile | 33 +++++++++++++++++++++++++--------
+ 2 files changed, 25 insertions(+), 10 deletions(-)
 
+diff --git a/tools/objtool/Build b/tools/objtool/Build
+index 33f2ee5a46d3..a3cdf8af6635 100644
+--- a/tools/objtool/Build
++++ b/tools/objtool/Build
+@@ -16,8 +16,6 @@ objtool-y += libctype.o
+ objtool-y += str_error_r.o
+ objtool-y += librbtree.o
+ 
+-CFLAGS += -I$(srctree)/tools/lib
+-
+ $(OUTPUT)libstring.o: ../lib/string.c FORCE
+ 	$(call rule_mkdir)
+ 	$(call if_changed_dep,cc_o_c)
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index a3a9cc24e0e3..fd9b3e3113c6 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -12,9 +12,15 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
+ endif
+ 
+-SUBCMD_SRCDIR		= $(srctree)/tools/lib/subcmd/
+-LIBSUBCMD_OUTPUT	= $(or $(OUTPUT),$(CURDIR)/)
+-LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
++LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
++ifneq ($(OUTPUT),)
++  LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
++else
++  LIBSUBCMD_OUTPUT = $(CURDIR)/libsubcmd
++endif
++LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
++LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
++CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
+ 
+ OBJTOOL    := $(OUTPUT)objtool
+ OBJTOOL_IN := $(OBJTOOL)-in.o
+@@ -28,7 +34,8 @@ INCLUDES := -I$(srctree)/tools/include \
+ 	    -I$(srctree)/tools/arch/$(HOSTARCH)/include/uapi \
+ 	    -I$(srctree)/tools/arch/$(SRCARCH)/include	\
+ 	    -I$(srctree)/tools/objtool/include \
+-	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include
++	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
++	    -I$(LIBSUBCMD_OUTPUT)/include
+ WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
+ CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
+ LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
+@@ -38,6 +45,7 @@ elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E -
+ CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+ 
+ AWK = awk
++MKDIR = mkdir
+ 
+ BUILD_ORC := n
+ 
+@@ -57,13 +65,22 @@ $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
+ 	$(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
+ 
+ 
+-$(LIBSUBCMD): fixdep FORCE
+-	$(Q)$(MAKE) -C $(SUBCMD_SRCDIR) OUTPUT=$(LIBSUBCMD_OUTPUT)
++$(LIBSUBCMD_OUTPUT):
++	@$(MKDIR) -p $@
++
++$(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
++	@$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
++		DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= subdir= \
++		$@ install_headers
++
++$(LIBSUBCMD)-clean:
++	$(call QUIET_CLEAN, libsubcmd)
++	$(Q)$(RM) -r -- $(LIBSUBCMD_OUTPUT)
+ 
+-clean:
++clean: $(LIBSUBCMD)-clean
+ 	$(call QUIET_CLEAN, objtool) $(RM) $(OBJTOOL)
+ 	$(Q)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+-	$(Q)$(RM) $(OUTPUT)arch/x86/lib/inat-tables.c $(OUTPUT)fixdep $(LIBSUBCMD)
++	$(Q)$(RM) $(OUTPUT)arch/x86/lib/inat-tables.c $(OUTPUT)fixdep
+ 
+ FORCE:
+ 
 -- 
 2.39.0.314.g84b9a713c41-goog
 
