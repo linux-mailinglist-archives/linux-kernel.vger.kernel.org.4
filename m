@@ -2,195 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3052965F244
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB4165F245
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbjAERJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S235256AbjAERJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235158AbjAERHm (ORCPT
+        with ESMTP id S235496AbjAERHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:07:42 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B4B671A1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672938238; x=1704474238;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=WGsLEEJNqz+irOyKr5WCgOERgXylDgXa+Ae2PSBcdgU=;
-  b=N63HNgSiDq5O3+15tn2q8aykON6/t+WTgriLYdyuCxwbo7gvcoACieAX
-   6KR8kYSjwxanP3Yn5ahzXlep5TBqNillFxuiMg3uXEiWiDIYV/ryRv+2X
-   tQBaPcsMqjxsKCbfnrZMoUzS/EuHFNfNncZnBa2VhZegiwjjr5xchpPBJ
-   BAF6p12lm+JbQY52Te3QpcaYfK4PnFLEUI1BovACsIIX18yrvosgusv9M
-   gEUYpLV3JOrj4D5VbU57JW4/oNj4ucOYRL/rV1ChnSn4ZzNEH8L18If32
-   M+9sh2Exn4fyUnUaWgD/aRcGh9MLBhpBrVJJQrNGduKw56vzfymkGgekD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="324278832"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="324278832"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 09:02:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="605624798"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="605624798"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 09:02:36 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 09:02:36 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 09:02:36 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 5 Jan 2023 09:02:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G5VqFdZGHLy23/Ksr70KwN/gE35GDQQKz88PT1VZPC/4oRrnnYo0nvINZxdWU+VGFpdzu4b2mFuk8ln1oNRzPgCyHGmgYiW8JEOMgtT1lvYqBRBwVDRt34ovSPK9OBwXfz9ubyVgsGMcVf6Nps/UmcYVhsdgJiFRExh7rhbDqavMK22m4dYvnDVpOC/cS6j2hK4RpAZFeydJkIBXRXa+T1+93lNeHHlDkvtOyWAuuaehnxJTBC7NWGu6rvQL/2IDvH2QQserZowV58RFZDpuB1iBkU34C3Yr6jRQXK5Qojymzj+S+ZHs8MxjuOYwwPDrkTeCmdgyknZZsylFjipD6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1hBuA6QBzVy3PxbvWepJqx4VZR8patAoeQ81PLACVtE=;
- b=N1BMOpA6WFVPrUKE5l/qCdaWVDHm9F79IDa8inpW+TA0iBuh6dTel+TlCk2gC0/VnYUXWJBfNjfJfVZ2U42A0uhv2XwDWeWpH9FRjsXnXNwvNhSNK5VA02fyK6uZyTagvbuMsCJrG4FCIrLkQHQj241Rn7p27iAKDTm9LCBfPXn8wG1NcqCFeFDwMUGZj2njhjIZCVwlHzyCqdhZ6l2DeKLvbCoBJslEbI4JitR32p2dIoHamDxIwxPRrsaOg2OBTLgHBBEIv5cmsenKdmoeWx4le3/GeAJWIbH+SznR+BOUicMrVn9umOxlTQ6y2leS2uz/5Vl00SWzF1qp8FwxVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by PH7PR11MB6700.namprd11.prod.outlook.com (2603:10b6:510:1ae::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 17:02:34 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b%7]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 17:02:34 +0000
-Date:   Thu, 5 Jan 2023 09:02:30 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        "Tony Luck" <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: Fix two spelling mistakes in highmem.h
-Message-ID: <Y7cCprZBVrNO3aZ9@iweiny-desk3>
-References: <20230105121305.30714-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230105121305.30714-1-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0155.namprd03.prod.outlook.com
- (2603:10b6:a03:338::10) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Thu, 5 Jan 2023 12:07:51 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C35C67195;
+        Thu,  5 Jan 2023 09:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1FDgYSKQhd3giVPz5gfCHhUbEd6bTlcL5Xxaq2PRvag=; b=xwtamS40OnsNMZA49FFVpZj8/b
+        gHCwzgAmDYqqpzDUI0IRT0Yd69gUkO/u8XgzpNv9sLpXy2ssfK5+rphQPcgdJU+zLYThCP71Au3fr
+        9uaGGY76dmRDP2xsA2tGLzFGBG0isVlNtUTegfQq6id7iDPwL4NteD7gUvZWHtAC1+C8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pDTeC-001EwT-AA; Thu, 05 Jan 2023 18:03:20 +0100
+Date:   Thu, 5 Jan 2023 18:03:20 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Frank <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 2/3] net: phy: Add dts support for Motorcomm
+ yt8521/yt8531s gigabit ethernet phy
+Message-ID: <Y7cC2MKYK4omdZKg@lunn.ch>
+References: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
+ <20230105073024.8390-3-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|PH7PR11MB6700:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2281425-c49e-4d6f-e2b8-08daef3ea408
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +Tv4wmcB07TUVBlyw7ljjHqJ3HM/PQbOn+8l7U/wz+yeHkMK5CKy70qR80ImrEqswbXdSJvDoiKU0+xbAYjUEIOwbKrHuUvavvsbiyCRJCqwn/pS6SnD8m1BrPBqmCyfrx/WjIJJuCd9xVhEaED5BUtIPNPeW58Kob1I53NG4A3oNGFMSkAbtmVux+TeJYg0Q8FIjA5ejZNFVKz4XwBdrHF5PWGFL9T0O6KqZdfNmzH0eTLrtbnckXxRXTWs6Ckj6YOkJmvYUjbVKV048UzUg4nelk61xX+NsqusJyeyQ7FRa71pYnteGHpS+vfky42pA3agArFlWb1J0GXasn3NZhm76oUdjXuZlllNlcIY/lBHhzyEvA6GE6Nc1p6zgChqHvHjFQ9t9iUJCW8tUkdYnAsAlgnvqNQP9sCvGPbBlrZo9IVd68Umxse35TuwIgYaDomWVR7MfgjPCAtxzqQwFnvTk3unQvOlv+ahxA8C8gSnUTtlCQvQxcfYFOfGn+hNJeMadGItDOQUSFcw2R1K/0VCfbLOl2jJQzyaZXTTJGxazYnRbzNIk61/MSLkFgeAKsRcdN/HZLrCRR54RSjSYRh+P9tk0ZwMO6RPQ4j7LnR7QrnlwcVl1Yk7wPcgEr5EbgRWo0pTzjivkIMtO53qbpK1MfuxNp2MFaZGkeBiMmQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(376002)(136003)(346002)(366004)(396003)(451199015)(83380400001)(26005)(9686003)(6666004)(186003)(6506007)(6512007)(86362001)(82960400001)(38100700002)(33716001)(8676002)(41300700001)(4326008)(2906002)(8936002)(44832011)(5660300002)(966005)(66556008)(6486002)(478600001)(66946007)(316002)(54906003)(66476007)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9hIxHlKqZEJkmN9VFk3EqMcMla1wvgUpEkHJtO3Q09M/4XwsB0m71pE3tJcg?=
- =?us-ascii?Q?5C42s1XlGfnIEe+mtt1SgfiwiEB8gB058HT9BshAFErjBV7HG0nxlZXR0VvK?=
- =?us-ascii?Q?b+6FtXN9ucn41T+O+YcyreuKMA1gOdKkPlTGTzGxmdl1ww6HdUlO6YFfkHQQ?=
- =?us-ascii?Q?oitgTucP2k/QsqPwTclvkwCTVlrkDKEabXDf24qsKJHM4zNoWJV/I9uk2Mow?=
- =?us-ascii?Q?6gp+OZH0r8Yc+IT4FPqXNUELzkaYJGd6oBnwJo5H1UHbJMw4WzJFDmYmhC6F?=
- =?us-ascii?Q?nrU0VmcF9AUkl7w8HwLcDJfB9h6XrxwMikga15NHQ76x7Cjf1v3+ht4SKrLG?=
- =?us-ascii?Q?I4Jxzg+mqSqjG3dwgYGBtlK2xWUCjC1/GuNaVmDFdGtGTxYUG9maPWlmm4Ft?=
- =?us-ascii?Q?TkA89PrdsC2k+rQnGc29CkAKB5U/xsTRyIN5PQGSwpGuDBo6WOICshO4HCdM?=
- =?us-ascii?Q?yMJC8sAM5HQoT0vGyMl0dOLXBZ7sOnxh79LL4afqIIQ7sxvfHgYPRqXB0V4o?=
- =?us-ascii?Q?ejPq2YN3rheCjqB0Nv48XXa9BzjtKS/6jKcfgwCZotsVj+Il7a/Pl2A4QznF?=
- =?us-ascii?Q?QPeQhK+2tCZ0xyXarlx7L+JoJUabicW9IxWz5GDK/QvBfzIIF8C2kHdnDGd9?=
- =?us-ascii?Q?p+qLsPXOpV4kAFkN+FUEnYVAezrcXIcDNDZSYnpDy1mxh+AgBCXioLRdbNy4?=
- =?us-ascii?Q?VMDHOCgvRAQTifK5r8a30lFdVNletVlFvo/fNi9Qj1H4W8jKbtaYmZyNVEAL?=
- =?us-ascii?Q?hTgInOOTlwSfHOh4WCLIJCX1TRPhoG8pd03NwggfPE4GlXJNJv3SEqpcapvA?=
- =?us-ascii?Q?nwhJ9qGVGMC6bnEuCaOL54gMAv8bGn7Yn0KZXqUDK4wmg4U7ttQlUljQAYX0?=
- =?us-ascii?Q?BYoR3QYohcFLgzFNhufpdyG8FdhJxUVDDzg+m7Y7KK/Wyh24soAtHHhMfZyu?=
- =?us-ascii?Q?Z7WmZmZsW9Qg8UkACkrSXaKN3cukxKLebhJ00blEx48cCtJid4XqQ5M56otP?=
- =?us-ascii?Q?hwDMABJUI5brU1XgHDWCupAiaxlM0/b6b474vd+MdzzvZJC1SR2ecI5gc1ND?=
- =?us-ascii?Q?vB7h+Z3rwwnsKF/e/Nq2Ptft89VDLMXa2G3CSIPBCIVqCNm8uInIwO+jdJB6?=
- =?us-ascii?Q?ettEZ+3CZVuXAy79JvrHXsbgz8h6OgZGgwkcXwSefIoGe3P8gbdSzPjJYWSk?=
- =?us-ascii?Q?sclWc7IEVof87ocZefCjwLAME2LKSngy/YuHjugrNmewK4sp8I7FfhupQNgL?=
- =?us-ascii?Q?46qIvANpvpsUzXUvnV3z0P0z/uwuX9JlD9oXPog9PoC9wGAwOvGkfGiHodn1?=
- =?us-ascii?Q?yQjTutIQsTYvrxQlH2zr8OvmPbGF9J1usqWFPFvUGYv6nGJLnQ8SmDepTI8Y?=
- =?us-ascii?Q?DwNWNUvXiEjGwOkBpxj8Tt4LbvqISQZUhpo6yR54EJjW0TobKweC2Uxvpe8Q?=
- =?us-ascii?Q?lxyipALa6nsWZtsEAmyEHHetlBEn9g9XmDtzLc21rvRuZwv1/jZLResWZAhe?=
- =?us-ascii?Q?/Ce1PdNOANrib2ZqvgheTdODBEVyMdPVw3H9ElqM5VmjGU0tGDKgSYSjJM3i?=
- =?us-ascii?Q?iTc2Dt6wouMSts1I8gfxyfCV4/xIFFuj+M0vY6+L?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2281425-c49e-4d6f-e2b8-08daef3ea408
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:02:34.6809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i26R7BwswE4i0340y9b2j+3XmrwSztv2dT6bZ1W15NSwoytxEXwbcd5vUSBbUx1co4SpbG6WyKywr5wHwv96Zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6700
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105073024.8390-3-Frank.Sae@motor-comm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:13:05PM +0100, Fabio M. De Francesco wrote:
-> Substitute two occurrencies of "higmem" with "highmem" in highmem.h.
-
-The change looks fine but for Andrew's benefit I believe this patch is based on
-the other one you submitted to fix kmap_local_folio()?[1]  Is that correct?
-
-[1] https://lore.kernel.org/all/20230105120424.30055-1-fmdefrancesco@gmail.com/
-
-With that note:
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
+On Thu, Jan 05, 2023 at 03:30:23PM +0800, Frank wrote:
+> Add dts support for yt8521 and yt8531s. This patch has
+> been tested on AM335x platform which has one YT8531S interface
+> card and passed all test cases.
 > 
-> Suggested-by: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Frank <Frank.Sae@motor-comm.com>
 > ---
->  include/linux/highmem.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/net/phy/motorcomm.c | 517 ++++++++++++++++++++++++++++++------
+>  1 file changed, 434 insertions(+), 83 deletions(-)
 > 
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index 7b0085a61e67..ae1670ccdf45 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -86,7 +86,7 @@ static inline void kmap_flush_unused(void);
->   * virtual address of the direct mapping. Only real highmem pages are
->   * temporarily mapped.
->   *
-> - * While it is significantly faster than kmap() for the higmem case it
-> + * While it is significantly faster than kmap() for the highmem case it
->   * comes with restrictions about the pointer validity.
->   *
->   * On HIGHMEM enabled systems mapping a highmem page has the side effect of
-> @@ -119,7 +119,7 @@ static inline void *kmap_local_page(struct page *page);
->   * virtual address of the direct mapping. Only real highmem pages are
->   * temporarily mapped.
->   *
-> - * While it is significantly faster than kmap() for the higmem case it
-> + * While it is significantly faster than kmap() for the highmem case it
->   * comes with restrictions about the pointer validity.
->   *
->   * On HIGHMEM enabled systems mapping a highmem page has the side effect of
-> -- 
-> 2.39.0
-> 
-> 
+> diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
+> index 685190db72de..7ebcca374a67 100644
+> --- a/drivers/net/phy/motorcomm.c
+> +++ b/drivers/net/phy/motorcomm.c
+> @@ -10,10 +10,11 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/phy.h>
+> +#include <linux/of.h>
+>  
+>  #define PHY_ID_YT8511		0x0000010a
+> -#define PHY_ID_YT8521		0x0000011A
+> -#define PHY_ID_YT8531S		0x4F51E91A
+> +#define PHY_ID_YT8521		0x0000011a
+> +#define PHY_ID_YT8531S		0x4f51e91a
+
+Please do the lower case conversion as a separate patch.
+
+>  
+>  /* YT8521/YT8531S Register Overview
+>   *	UTP Register space	|	FIBER Register space
+> @@ -144,6 +145,16 @@
+>  #define YT8521_ESC1R_SLEEP_SW			BIT(15)
+>  #define YT8521_ESC1R_PLLON_SLP			BIT(14)
+>  
+> +/* Phy Serdes analog cfg2 Register */
+> +#define YTPHY_SERDES_ANALOG_CFG2_REG		0xA1
+> +#define YTPHY_SAC2R_TX_AMPLITUDE_MASK		((0x7 << 13) | (0x7 << 1))
+> +#define YT8521_SAC2R_TX_AMPLITUDE_LOW		((0x7 << 13) | (0x0 << 1))
+> +#define YT8521_SAC2R_TX_AMPLITUDE_MIDDLE	((0x5 << 13) | (0x5 << 1))
+> +#define YT8521_SAC2R_TX_AMPLITUDE_HIGH		((0x3 << 13) | (0x6 << 1))
+
+So there are two values which control the amplitude? Buts 1-3, and bit
+7-9?  Can they be used independently?  Also, 7, 5, 3 is also add. Does
+bit 0 of this value have some special meaning? Please document this
+fully.
+
+> +#define YT8531S_SAC2R_TX_AMPLITUDE_LOW		((0x0 << 13) | (0x0 << 1))
+> +#define YT8531S_SAC2R_TX_AMPLITUDE_MIDDLE	((0x0 << 13) | (0x1 << 1))
+> +#define YT8531S_SAC2R_TX_AMPLITUDE_HIGH		((0x0 << 13) | (0x2 << 1))
+
+This more sense, but why the 0 << 13? What do the bits 13-? mean?
+
+> +
+>  /* Phy fiber Link timer cfg2 Register */
+>  #define YT8521_LINK_TIMER_CFG2_REG		0xA5
+>  #define YT8521_LTCR_EN_AUTOSEN			BIT(15)
+> @@ -161,6 +172,7 @@
+>  
+>  #define YT8521_CHIP_CONFIG_REG			0xA001
+>  #define YT8521_CCR_SW_RST			BIT(15)
+> +#define YT8521_CCR_RXC_DLY_EN			BIT(8)
+>  
+>  #define YT8521_CCR_MODE_SEL_MASK		(BIT(2) | BIT(1) | BIT(0))
+>  #define YT8521_CCR_MODE_UTP_TO_RGMII		0
+> @@ -178,22 +190,27 @@
+>  #define YT8521_MODE_POLL			0x3
+>  
+>  #define YT8521_RGMII_CONFIG1_REG		0xA003
+> -
+> +#define YT8521_RC1R_TX_CLK_SEL_MASK		BIT(14)
+> +#define YT8521_RC1R_TX_CLK_SEL_ORIGINAL		(0x0 << 14)
+> +#define YT8521_RC1R_TX_CLK_SEL_INVERTED		(0x1 << 14)
+
+Please use the BIT macro.
+
+
+>  /* TX Gig-E Delay is bits 3:0, default 0x1
+>   * TX Fast-E Delay is bits 7:4, default 0xf
+>   * RX Delay is bits 13:10, default 0x0
+>   * Delay = 150ps * N
+>   * On = 2250ps, off = 0ps
+>   */
+> -#define YT8521_RC1R_RX_DELAY_MASK		(0xF << 10)
+> -#define YT8521_RC1R_RX_DELAY_EN			(0xF << 10)
+> -#define YT8521_RC1R_RX_DELAY_DIS		(0x0 << 10)
+> -#define YT8521_RC1R_FE_TX_DELAY_MASK		(0xF << 4)
+> -#define YT8521_RC1R_FE_TX_DELAY_EN		(0xF << 4)
+> -#define YT8521_RC1R_FE_TX_DELAY_DIS		(0x0 << 4)
+> -#define YT8521_RC1R_GE_TX_DELAY_MASK		(0xF << 0)
+> -#define YT8521_RC1R_GE_TX_DELAY_EN		(0xF << 0)
+> -#define YT8521_RC1R_GE_TX_DELAY_DIS		(0x0 << 0)
+> +#define YT8521_RC1R_GE_TX_DELAY_BIT		(0)
+> +#define YT8521_RC1R_FE_TX_DELAY_BIT		(4)
+> +#define YT8521_RC1R_RX_DELAY_BIT		(10)
+> +#define YT8521_RC1R_RX_DELAY_MASK		(0xF << YT8521_RC1R_RX_DELAY_BIT)
+> +#define YT8521_RC1R_RX_DELAY_EN			(0xF << YT8521_RC1R_RX_DELAY_BIT)
+> +#define YT8521_RC1R_RX_DELAY_DIS		(0x0 << YT8521_RC1R_RX_DELAY_BIT)
+> +#define YT8521_RC1R_FE_TX_DELAY_MASK		(0xF << YT8521_RC1R_FE_TX_DELAY_BIT)
+> +#define YT8521_RC1R_FE_TX_DELAY_EN		(0xF << YT8521_RC1R_FE_TX_DELAY_BIT)
+> +#define YT8521_RC1R_FE_TX_DELAY_DIS		(0x0 << YT8521_RC1R_FE_TX_DELAY_BIT)
+> +#define YT8521_RC1R_GE_TX_DELAY_MASK		(0xF << YT8521_RC1R_GE_TX_DELAY_BIT)
+> +#define YT8521_RC1R_GE_TX_DELAY_EN		(0xF << YT8521_RC1R_GE_TX_DELAY_BIT)
+> +#define YT8521_RC1R_GE_TX_DELAY_DIS		(0x0 << YT8521_RC1R_GE_TX_DELAY_BIT)
+>  
+>  #define YTPHY_MISC_CONFIG_REG			0xA006
+>  #define YTPHY_MCR_FIBER_SPEED_MASK		BIT(0)
+> @@ -222,11 +239,33 @@
+>   */
+>  #define YTPHY_WCR_TYPE_PULSE			BIT(0)
+>  
+> -#define YT8531S_SYNCE_CFG_REG			0xA012
+> -#define YT8531S_SCR_SYNCE_ENABLE		BIT(6)
+> +#define YTPHY_SYNCE_CFG_REG			0xA012
+> +#define YT8521_SCR_CLK_SRC_MASK			(BIT(2) | BIT(1))
+> +#define YT8521_SCR_CLK_SRC_PLL_125M		(0x0 << 1)
+> +#define YT8521_SCR_CLK_SRC_REF_25M		(0x3 << 1)
+> +#define YT8521_SCR_SYNCE_ENABLE			BIT(5)
+> +#define YT8521_SCR_CLK_FRE_SEL_MASK		BIT(3)
+> +#define YT8521_SCR_CLK_FRE_SEL_125M		(0x1 << 3)
+> +#define YT8521_SCR_CLK_FRE_SEL_25M		(0x0 << 3)
+
+Whenever it is a single bit, please use the BIT macro.
+
+> +#define YT8531_SCR_CLK_SRC_MASK			(BIT(3) | BIT(2) | BIT(1))
+> +#define YT8531_SCR_CLK_SRC_PLL_125M		(0x0 << 1)
+> +#define YT8531_SCR_CLK_SRC_REF_25M		(0x4 << 1)
+> +#define YT8531_SCR_SYNCE_ENABLE			BIT(6)
+> +#define YT8531_SCR_CLK_FRE_SEL_MASK		BIT(4)
+> +#define YT8531_SCR_CLK_FRE_SEL_125M		(0x1 << 4)
+> +#define YT8531_SCR_CLK_FRE_SEL_25M		(0x0 << 4)
+>  
+>  /* Extended Register  end */
+>  
+> +#define YTPHY_DTS_MAX_TX_AMPLITUDE		0x2
+> +#define YTPHY_DTS_MAX_DELAY_VAL			2250
+> +#define YTPHY_DTS_STEP_DELAY_VAL		150
+> +#define YTPHY_DTS_INVAL_VAL			0xFF
+> +
+> +#define YTPHY_DTS_OUTPUT_CLK_DIS		0
+> +#define YTPHY_DTS_OUTPUT_CLK_25M		25000000
+> +#define YTPHY_DTS_OUTPUT_CLK_125M		125000000
+> +
+>  struct yt8521_priv {
+>  	/* combo_advertising is used for case of YT8521 in combo mode,
+>  	 * this means that yt8521 may work in utp or fiber mode which depends
+> @@ -243,6 +282,30 @@ struct yt8521_priv {
+>  	 * YT8521_RSSR_TO_BE_ARBITRATED
+>  	 */
+>  	u8 reg_page;
+> +
+> +	/* The following parameters are from dts */
+> +	/* rx delay = rx_delay_basic + rx_delay_additional
+> +	 * basic delay is ~2ns, 0 = off, 1 = on
+> +	 * rx_delay_additional,delay time = 150ps * val
+> +	 */
+> +	u8 rx_delay_basic;
+> +	u8 rx_delay_additional;
+> +
+> +	/* tx_delay_ge is tx_delay for 1000Mbps
+> +	 * tx_delay_fe is tx_delay for 100Mbps or 10Mbps
+> +	 * delay time = 150ps * val
+> +	 */
+> +	u8 tx_delay_ge;
+> +	u8 tx_delay_fe;
+> +	u8 sds_tx_amplitude;
+> +	bool keep_pll_enabled;
+> +	bool auto_sleep_disabled;
+> +	bool clock_ouput;	/* output clock ctl: 0=off, 1=on */
+> +	bool clock_freq_125M;	/* output clock freq selcect: 0=25M, 1=125M */
+> +	bool tx_clk_adj_enabled;/* tx clk adj ctl: 0=off, 1=on */
+> +	bool tx_clk_10_inverted;
+> +	bool tx_clk_100_inverted;
+> +	bool tx_clk_1000_inverted;
+
+Do you need to store all these values? In general, PHY drivers parse
+DT, and program the hardware directly. If these values are lost on
+reset, and you need to perform a reset for normal operation, then yes,
+it makes sense to store them. But in general, that is not how hardware
+works.
+
+> +static int ytphy_parse_dt(struct phy_device *phydev)
+> +{
+> +	struct device_node *node = phydev->mdio.dev.of_node;
+> +	struct yt8521_priv *priv = phydev->priv;
+> +	u32 freq, val;
+> +	int ret;
+> +
+> +	priv->rx_delay_additional = YTPHY_DTS_INVAL_VAL;
+> +	priv->sds_tx_amplitude = YTPHY_DTS_INVAL_VAL;
+> +	priv->rx_delay_basic = YTPHY_DTS_INVAL_VAL;
+> +	priv->tx_delay_ge = YTPHY_DTS_INVAL_VAL;
+> +	priv->tx_delay_fe = YTPHY_DTS_INVAL_VAL;
+> +
+> +	if (!IS_ENABLED(CONFIG_OF_MDIO)) {
+
+No other PHY driver does this. Why is this here?
+
+As a general rule, if you do something which no other driver does, you
+are doing something wrong. All PHY drivers should basically look the
+same, follow the same structure, etc. So it is a good idea to review 5
+other drivers, and make your driver look similar.
+
+> +		priv->auto_sleep_disabled = true;
+> +		priv->keep_pll_enabled = true;
+> +		return 0;
+> +	}
+> +
+> +	ret = of_property_read_u32(node, "motorcomm,clk-out-frequency", &freq);
+> +	if (ret < 0)
+> +		freq = YTPHY_DTS_OUTPUT_CLK_DIS;/* default value as dts*/
+> +
+> +	switch (freq) {
+> +	case YTPHY_DTS_OUTPUT_CLK_DIS:
+> +		priv->clock_ouput = false;
+> +		break;
+> +	case YTPHY_DTS_OUTPUT_CLK_25M:
+> +		priv->clock_freq_125M = false;
+> +		priv->clock_ouput = true;
+> +		break;
+> +	case YTPHY_DTS_OUTPUT_CLK_125M:
+> +		priv->clock_freq_125M = true;
+> +		priv->clock_ouput = true;
+> +		break;
+> +	default:
+> +		phydev_err(phydev, "invalid motorcomm,clk-out-frequency\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!of_property_read_u32(node, "motorcomm,rx-delay-basic", &val)) {
+> +		if (val > 1) {
+> +			phydev_err(phydev,
+> +				   "invalid motorcomm,rx-delay-basic\n");
+> +			return -EINVAL;
+> +		}
+> +		priv->rx_delay_basic = val;
+> +	}
+> +
+> +	if (!of_property_read_u32(node, "motorcomm,rx-delay-additional-ps", &val)) {
+> +		if (val > YTPHY_DTS_MAX_DELAY_VAL) {
+> +			phydev_err(phydev, "invalid motorcomm,rx-delay-additional-ps\n");
+> +			return -EINVAL;
+> +		}
+
+Please check the value is also one of the supported values. Please do
+that for all your delays.
+
+> +	if (of_property_read_bool(node, "motorcomm,keep-pll-enabled"))
+> +		priv->keep_pll_enabled = true;
+
+I think this only makes sense when priv->clock_output is true? Please
+test for that.
+
+
+> +static int ytphy_rgmii_clk_delay_config(struct phy_device *phydev)
+> +{
+> +	struct yt8521_priv *priv = phydev->priv;
+> +	u16 mask = 0;
+> +	u16 val = 0;
+> +	int ret;
+> +
+> +	/* rx delay basic controlled by dts.*/
+> +	if (priv->rx_delay_basic != YTPHY_DTS_INVAL_VAL) {
+> +		if (priv->rx_delay_basic)
+> +			val = YT8521_CCR_RXC_DLY_EN;
+> +		ret = ytphy_modify_ext(phydev, YT8521_CHIP_CONFIG_REG,
+> +				       YT8521_CCR_RXC_DLY_EN, val);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	val = 0;
+> +	/* If rx_delay_additional and tx_delay_* are all not be seted in dts,
+> +	 * then used the fixed *_DELAY_DIS or *_DELAY_EN. Otherwise, use the
+> +	 * value set by rx_delay_additional, tx_delay_ge and tx_delay_fe.
+> +	 */
+
+So what you should be doing here is always respecting
+phydev->interface. You can then fine tune the delays using
+rx-internal-delay-ps and tx-internal-delay-ps.
+
+> +static int ytphy_probe_helper(struct phy_device *phydev)
+> +{
+> +	struct device *dev = &phydev->mdio.dev;
+> +	struct yt8521_priv *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	phydev->priv = priv;
+> +
+> +	ret = ytphy_parse_dt(phydev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	phy_lock_mdio_bus(phydev);
+> +	ret = ytphy_clk_out_config(phydev);
+> +	phy_unlock_mdio_bus(phydev);
+> +	return ret;
+> +}
+> +
+>  /**
+>   * yt8521_probe() - read chip config then set suitable polling_mode
+>   * @phydev: a pointer to a &struct phy_device
+> @@ -601,16 +983,15 @@ static int yt8521_write_page(struct phy_device *phydev, int page)
+>   */
+>  static int yt8521_probe(struct phy_device *phydev)
+>  {
+> -	struct device *dev = &phydev->mdio.dev;
+>  	struct yt8521_priv *priv;
+>  	int chip_config;
+>  	int ret;
+>  
+> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> -	if (!priv)
+> -		return -ENOMEM;
+> +	ret = ytphy_probe_helper(phydev);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	phydev->priv = priv;
+> +	priv = phydev->priv;
+
+I don't see why you added this probe helper.
+
+Is this to make the driver look more like the vendor driver? Please
+seperate refactoring patches from new functionality. We want to see
+lots of simple, obviously correct patches which are easy to review.
+
+     Andrew
+  
