@@ -2,120 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C4E65E673
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FD265E667
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjAEIHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S231326AbjAEIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAEIHF (ORCPT
+        with ESMTP id S231312AbjAEICx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:07:05 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDF7544F3;
-        Thu,  5 Jan 2023 00:07:05 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3057kGWt005426;
-        Thu, 5 Jan 2023 08:06:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=em0hYjDj0abFWoDkUwKCbrdF0k41o839F18VwMFiLbQ=;
- b=r5SbpYYMV7SfkmKmBgrnFjKFuMAC3R7tY8OfcVgbKHy5sBghZmuk5jiky1sc4AuE4bbL
- wfM5lrCKuQE6qW2wwEqM37nEstHy7n0ACWgNED9hPp0r4S8yO5GwcvjTCAakDODz7b1z
- zSQsC6GsHgnBd9zEeFYtgDrOMJFq+yU2f2sEBV9ZMWyWYd7e6bnSBrpzPJrJTEC5ha2x
- BOpAauydOjlX8dI0VD1aIhTtMYeRrm6IPGSVWO8ehDFb/fV/wJpBgocd96Dvqw+Emo8p
- mDpZjVHLC4P3T5/CSA+a5WDqgAnN++VXbe7hWgh2b4XjgW124lvm5GaFLUxCix2HC4Su YQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtf18ejp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 08:06:34 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3057vaZ9013612;
-        Thu, 5 Jan 2023 08:06:34 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtf18ej1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 08:06:34 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30518CNv008371;
-        Thu, 5 Jan 2023 08:06:32 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3mtcbfmqxw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 08:06:32 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30586SbA24510954
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Jan 2023 08:06:28 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9A3F720043;
-        Thu,  5 Jan 2023 08:06:28 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFE4420040;
-        Thu,  5 Jan 2023 08:06:27 +0000 (GMT)
-Received: from osiris (unknown [9.171.68.186])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu,  5 Jan 2023 08:06:27 +0000 (GMT)
-Date:   Thu, 5 Jan 2023 09:06:26 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH rcu 06/27] arch/s390/kvm: Remove "select SRCU"
-Message-ID: <Y7aFAqmgF4eu6SNH@osiris>
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <20230105003813.1770367-6-paulmck@kernel.org>
+        Thu, 5 Jan 2023 03:02:53 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AB250F4C;
+        Thu,  5 Jan 2023 00:02:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672905772; x=1704441772;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gTdmaEIXM0CetcuquO33CxCL8gL+ukVn2Q9KZ2a2Guw=;
+  b=dWplkrZkVVLpOpxHxjxaNC0WcqoGKHZY+uifasWs6G7STBJu32CHJqiP
+   8Ii6Qk7IiEHGWjL5y8slsEa1DkcbUnoh9jF76XI6K8+0Fub1Wr+nxcz8o
+   jYMBDPskaVWntfSDgHIs1uMZLET56/4KgKWl3m06nMRj5yGfPIZ4cmhOc
+   iPvvUrGL1ad2USFvlxu8prmaNrN5BHva9osfHEE7q9hdUVCvh3YgXa2Tf
+   Sd2IGpQM/ZiOgUbKAXg6CB5d9DtYGcv0TdZC4VqQmm4gdnATjCliX1ztH
+   1AGKTeQ1l/Jbr3AJEFnEGQrwcOZyJvsGOIkwa7INsjWlyfHLIG4U7yef+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="305645058"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="305645058"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 00:02:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="779499786"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="779499786"
+Received: from icg-kernel3.bj.intel.com ([172.16.126.100])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2023 00:02:35 -0800
+From:   bingbu.cao@intel.com
+To:     linux-kernel@vger.kernel.org,
+        stable.vger.kernel.org@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Cc:     baolu.lu@linux.intel.com, senozhatsky@chromium.org,
+        bingbu.cao@intel.com, bingbu.cao@linux.intel.com,
+        sangram.k.y@intel.com
+Subject: [PATCH v3] iommu/vt-d: Use passthrough mode for the Intel IPUs
+Date:   Thu,  5 Jan 2023 16:10:36 +0800
+Message-Id: <20230105081036.4080071-1-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105003813.1770367-6-paulmck@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bFKzjL5BSCYr32RZTpDpfBd6VwtgBcQx
-X-Proofpoint-ORIG-GUID: YJxYUOCrB21-BA5binzfh_-OHRIhi9Jk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_02,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 phishscore=0 mlxlogscore=361 impostorscore=0 spamscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 04:37:52PM -0800, Paul E. McKenney wrote:
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> Kconfig statements.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Janosch Frank <frankja@linux.ibm.com>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: <kvm@vger.kernel.org>
-> Cc: <linux-s390@vger.kernel.org>
-> ---
->  arch/s390/kvm/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+From: Bingbu Cao <bingbu.cao@intel.com>
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Intel IPU(Image Processing Unit) has its own (IO)MMU hardware,
+The IPU driver allocates its own page table that is not mapped
+via the DMA, and thus the Intel IOMMU driver blocks access giving
+this error:
+
+DMAR: DRHD: handling fault status reg 3
+DMAR: [DMA Read] Request device [00:05.0] PASID ffffffff
+      fault addr 76406000 [fault reason 06] PTE Read access is not set
+
+As IPU is not an external facing device which is not risky, so use
+IOMMU passthrough mode for Intel IPUs.
+
+Fixes: 26f5689592e2 ("media: staging/intel-ipu3: mmu: Implement driver")
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+changes v2 -> v3: add 2 new IPU devices DIDs
+---
+ drivers/iommu/intel/iommu.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 59df7e42fd53..b9097ef5b8a6 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -37,6 +37,15 @@
+ #define IS_GFX_DEVICE(pdev) ((pdev->class >> 16) == PCI_BASE_CLASS_DISPLAY)
+ #define IS_USB_DEVICE(pdev) ((pdev->class >> 8) == PCI_CLASS_SERIAL_USB)
+ #define IS_ISA_DEVICE(pdev) ((pdev->class >> 8) == PCI_CLASS_BRIDGE_ISA)
++#define IS_INTEL_IPU(pdev) ((pdev)->vendor == PCI_VENDOR_ID_INTEL &&	\
++			    ((pdev)->device == 0x9a19 ||		\
++			     (pdev)->device == 0x9a39 ||		\
++			     (pdev)->device == 0x4e19 ||		\
++			     (pdev)->device == 0x465d ||		\
++			     (pdev)->device == 0x462e ||		\
++			     (pdev)->device == 0xa75d ||		\
++			     (pdev)->device == 0x7d19 ||		\
++			     (pdev)->device == 0x1919))
+ #define IS_AZALIA(pdev) ((pdev)->vendor == 0x8086 && (pdev)->device == 0x3a3e)
+ 
+ #define IOAPIC_RANGE_START	(0xfee00000)
+@@ -287,12 +296,14 @@ int intel_iommu_enabled = 0;
+ EXPORT_SYMBOL_GPL(intel_iommu_enabled);
+ 
+ static int dmar_map_gfx = 1;
++static int dmar_map_ipu = 1;
+ static int intel_iommu_superpage = 1;
+ static int iommu_identity_mapping;
+ static int iommu_skip_te_disable;
+ 
+ #define IDENTMAP_GFX		2
+ #define IDENTMAP_AZALIA		4
++#define IDENTMAP_IPU		8
+ 
+ const struct iommu_ops intel_iommu_ops;
+ 
+@@ -2584,6 +2595,9 @@ static int device_def_domain_type(struct device *dev)
+ 
+ 		if ((iommu_identity_mapping & IDENTMAP_GFX) && IS_GFX_DEVICE(pdev))
+ 			return IOMMU_DOMAIN_IDENTITY;
++
++		if ((iommu_identity_mapping & IDENTMAP_IPU) && IS_INTEL_IPU(pdev))
++			return IOMMU_DOMAIN_IDENTITY;
+ 	}
+ 
+ 	return 0;
+@@ -2973,6 +2987,9 @@ static int __init init_dmars(void)
+ 	if (!dmar_map_gfx)
+ 		iommu_identity_mapping |= IDENTMAP_GFX;
+ 
++	if (!dmar_map_ipu)
++		iommu_identity_mapping |= IDENTMAP_IPU;
++
+ 	check_tylersburg_isoch();
+ 
+ 	ret = si_domain_init(hw_pass_through);
+@@ -4799,6 +4816,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
+ 	dmar_map_gfx = 0;
+ }
+ 
++static void quirk_iommu_ipu(struct pci_dev *dev)
++{
++	if (!IS_INTEL_IPU(dev))
++		return;
++
++	if (risky_device(dev))
++		return;
++
++	pci_info(dev, "Passthrough IOMMU for integrated Intel IPU\n");
++	dmar_map_ipu = 0;
++}
++
+ /* G4x/GM45 integrated gfx dmar support is totally busted. */
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2a40, quirk_iommu_igfx);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2e00, quirk_iommu_igfx);
+@@ -4834,6 +4863,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x1632, quirk_iommu_igfx);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163A, quirk_iommu_igfx);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163D, quirk_iommu_igfx);
+ 
++/* make IPU dmar use identity mapping */
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_ANY_ID, quirk_iommu_ipu);
++
+ static void quirk_iommu_rwbf(struct pci_dev *dev)
+ {
+ 	if (risky_device(dev))
+-- 
+2.39.0
+
