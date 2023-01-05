@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F0465F41A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3F065F41B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbjAETG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S235388AbjAETHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbjAETGX (ORCPT
+        with ESMTP id S230089AbjAETGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:06:23 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D4311B;
-        Thu,  5 Jan 2023 11:06:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ixGY7io/rE5K6EAUf3CTJ6PelTCXFqcbJYe+h11qlvs=; b=HX8w/kUto03BZlvL5JJrZfMEVo
-        PW0Hpcy/xdauC8tMOg2C9pcBM1XxQDdf5CWRQhrEn0o9q6NY9CYhWHH17IuOyQSROIs76ZgDCt0TI
-        vOPnL5BUXO4XqtS4Y8SzLqz6gUtzgvXTHmTZV7pjOGL8JiNgmuNjJAwr26iRbqRWD96mDGa7GQMes
-        tSlmJs52ReE8yfjCP4bd+hysHn5WRTUbkyjPvNNetEH97zvalJHE1nJMj0zH251DNjzlfSLvAincy
-        GvppPWra6aXfhu19vCQgZsSy7qCnI4U0PX/cZEoCXQX5WCQbjui2qAoWBgnBWYm5mXtLCgLEYVgtp
-        rxjRwVeA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35992)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pDVZD-0007TX-Ou; Thu, 05 Jan 2023 19:06:19 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pDVZB-0004DV-VE; Thu, 05 Jan 2023 19:06:17 +0000
-Date:   Thu, 5 Jan 2023 19:06:17 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <Y7cfqdVzrCNX6VqE@shell.armlinux.org.uk>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
- <20230105175206.h3nmvccnzml2xa5d@skbuf>
- <Y7cdMyxap2hdPTec@shell.armlinux.org.uk>
- <18453c4e-484d-5131-36fe-77d3e55d6ac7@seco.com>
+        Thu, 5 Jan 2023 14:06:41 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A92911B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:06:40 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id s9so30718076qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:06:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=50Eb16QjsIw9SD65sdRjmbA7POji/2BHEYoTDmHONlU=;
+        b=M5Potr2S3IITg0WUsCyyGdzXmhKZCS5nDWm/pv5x0ntd+fAUu+RsoT/xIB2tmnmrVh
+         WfwZEBhv1MHpcyH2h4AZMfM2iK2iaoxI0IM+dVyJ02CD/hOk7k6iqKxfJMDdqhjNgaGe
+         5FraqYJDB6wR1BhFxXQETxN2YbGbozMON7V/U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=50Eb16QjsIw9SD65sdRjmbA7POji/2BHEYoTDmHONlU=;
+        b=3GeLaggf4xOfhEKfne8T9QoXeoXbvV91OAyiqC6ZH5Zj5yyyjJwgCZAg7FppVqfAa7
+         6tEUMQl1rbTUXvP9+yHtFKzECgiRGi3TYNAZpPGBf5NvJ2JN8pzqa9t+5tHYtSmHrCfY
+         WbeGsUt8+3IAn5a5pM72/KDhi1znFBGzcUkAqGfr2qORTSLzgIxLdQh24S3AFS7X8Zxi
+         w7nroipS8fD6l5MBdQvc+Zaxi02bmmje/D3Nwe52eJHQyNCLtbojZ/5vZJnYPxSlcZO+
+         G9MG9LSc9JJjxzm8/+ejAc/XwO8uXAw0EqpcAH/kDdTdQNtXo+Hb7zRUbT2u5y+NMYFh
+         vGng==
+X-Gm-Message-State: AFqh2ko1n3gs/Ql8C77XVbtQRoZia2y156XKXrjSaMuGCIBhRXbSL4J9
+        27AnhSLWalXbnFO1PYLvGxDHSqACIojwwQwN
+X-Google-Smtp-Source: AMrXdXtyxiKy3PpBtWpAEviGzBYrICU/eHMIGyQ03Lfvg4Mz++yshFdfA8zkjlmSEFj8JrizxSFOHQ==
+X-Received: by 2002:a05:622a:4a1a:b0:3a5:f9cb:8869 with SMTP id fv26-20020a05622a4a1a00b003a5f9cb8869mr78170636qtb.12.1672945598298;
+        Thu, 05 Jan 2023 11:06:38 -0800 (PST)
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com. [209.85.219.44])
+        by smtp.gmail.com with ESMTPSA id a10-20020ac844aa000000b00398ed306034sm21749530qto.81.2023.01.05.11.06.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 11:06:37 -0800 (PST)
+Received: by mail-qv1-f44.google.com with SMTP id y8so2092999qvn.11
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:06:37 -0800 (PST)
+X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
+ t5-20020a056214118500b004c6608c6b2cmr2444140qvv.130.1672945597254; Thu, 05
+ Jan 2023 11:06:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18453c4e-484d-5131-36fe-77d3e55d6ac7@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali> <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali> <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+ <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk> <20230105174210.jbjoqelllcrd57q6@pali>
+ <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk>
+In-Reply-To: <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 5 Jan 2023 11:06:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
+Message-ID: <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
+Subject: Re: Linux 6.2-rc1
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:59:27PM -0500, Sean Anderson wrote:
-> On 1/5/23 13:55, Russell King (Oracle) wrote:
-> > On Thu, Jan 05, 2023 at 07:52:06PM +0200, Vladimir Oltean wrote:
-> >> On Thu, Jan 05, 2023 at 12:43:47PM -0500, Sean Anderson wrote:
-> >> > Again, this is to comply with the existing API assumptions. The current
-> >> > code is buggy. Of course, another way around this is to modify the API.
-> >> > I have chosen this route because I don't have a situation like you
-> >> > described. But if support for that is important to you, I encourage you
-> >> > to refactor things.
-> >> 
-> >> I don't think I'm aware of a practical situation like that either.
-> >> I remember seeing some S32G boards with Aquantia PHYs which use 2500BASE-X
-> >> for 2.5G and SGMII for <=1G, but that's about it in terms of protocol switching.
-> > 
-> > 88x3310 can dynamically switch between 10GBASE-R, 5GBASE-R, 2500BASE-X
-> > and SGMII if rate adaption is not being used (and the rate adaption
-> > method it supports in non-MACSEC PHYs is only via increasing the IPG on
-> > the MAC... which currently no MAC driver supports.)
-> > 
-> 
-> As an aside, do you know of any MACs which support open-loop rate
-> matching to below ~95% of the line rate (the amount necessary for
-> 10GBASE-W)?
+On Thu, Jan 5, 2023 at 9:45 AM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> Not quite sure what that refers to, as I'm pretty sure I did all of that
+> work. But maybe Linus can refresh my memory here :-)
 
-I'm afraid I haven't paid too much attention to BASE-W, and I'm not
-aware of anything within the realms of phylink/phylib supporting MAC
-drivers having anything for it. I don't even remember mention of it
-in any SoC datasheets.
+I was definitely there, part of making it actually work for *every*
+block device.
 
-Are you aware of a 10GBASE-W setup?
+Long long ago, it used to be limited to the sg_io() interface, and
+only worked for SCSI devices.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+So you couldn't actually burn CD's with the regular IDE/ATA CD ROM
+drivers directly, but had to use a shim driver, kind of like pktcdvd.
+Except I think it was just /dev/cdrom.
+
+See
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=90df68e70b
+
+for some of it (exposing SG_IO to all the block ioctls), and the "make
+it more usable" parts that made it do sane permission checking in
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=a75aaa84276
+
+and the commits preceding it for that part of the work.
+
+But yes, you were very much involved too.
+
+> As mentioned, I don't think this kind of code belongs in the kernel. sr
+> or cdrom could easily be modified to support the necessary bits to
+> handle a writeable open, but the grunt of the pktcdvd code deals with
+> retrieving and writing out bigger chunks of data. And that part really
+> does belong in userspace imho.
+
+Well, it's the UDF write support that is the issue.. I didn't even
+realize people did that.
+
+You'd presumably have to re-do it as a FUSE thing.
+
+                 Linus
