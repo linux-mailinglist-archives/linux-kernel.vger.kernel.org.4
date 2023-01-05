@@ -2,114 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C36C65EA8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC4E65EA8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjAEMRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S233024AbjAEMR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbjAEMRW (ORCPT
+        with ESMTP id S232896AbjAEMRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:17:22 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9F64FCE4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:17:20 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id co23so35948144wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:17:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kwt7t/CJH1y9ow8O0/w8MvRjyKQlEsOGR187S/Ep1Yc=;
-        b=EEHa3dsN09ZqzdRIQzB3skfi58Ttb6P5m9dQKWMu4EWf45Ny8zFqRTXKGlnuZuykg1
-         53QIwOHCaSXs7PFlifjY/i6VZj9PKxGwMHB/QzMLbX4IkeSLHqovpz1pLJNPxKZ93iPq
-         9XJJXV7hVVNb50tQVfE5s4lkaeBMSLkqqCf4oOQ0bC4AzVlJcbXqcqLbZQnnkn1V991b
-         tGYPFkSd1NnFPQsKYy0vByVsTECHhBjlh5+47BFuvFqos3s/VWAiHiAws5SyV8Tk7L6X
-         xzwm6idQBKh0FnyHFHZ83lYgQNzUq57yW15Epyfzx9L5iDiwcnkTVjBrtp8pGtwUadbu
-         1/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kwt7t/CJH1y9ow8O0/w8MvRjyKQlEsOGR187S/Ep1Yc=;
-        b=VHxBF/U06JKFMT+Jqyce6uimzRjsnHyxWsc9EWflud2QSbGGTfpkEcr+xHonYPFLlD
-         dBjixN7zaovevQKii8Gt69GnDeVS5hAJ3Ts3W8tr9Zw9N7Q9ZTQpfuZOnSdHcKlnt1vP
-         RhD78gRegAx8gr+j0h5qSrIuX7ScWtQE/kXnHHVmrZcbSh/nf0t2MJ8F0v+VTZh6KKfh
-         W4LYOgkT4NZpVk/pmzLZjomyC8OyPpkAWzCV/BoVnZmoRuFIydnfQ8O8CgvdUpKjcGzK
-         O2YZuw9IxSuW50tP+q67Nl1mKSqAxCHECRb8oHQKu8+fmEoGWFwDZN4WOLVJBVelEXD3
-         H/pg==
-X-Gm-Message-State: AFqh2kpY1i2HCyX3AOn8iq+9fJFXby5G8FuFP9VpMb/bULj0bnzMUELE
-        0HHINWeFVnTZWln12QHINy8=
-X-Google-Smtp-Source: AMrXdXtc6CuEAd4hOJmOLbfJkC/PUZxn0pqlC6OaHDUrm2oDJb3Z5ScuShHqV64Hl216ISr93ru+Og==
-X-Received: by 2002:adf:e703:0:b0:242:15af:27f with SMTP id c3-20020adfe703000000b0024215af027fmr33092970wrm.28.1672921039487;
-        Thu, 05 Jan 2023 04:17:19 -0800 (PST)
-Received: from suse.localnet (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
-        by smtp.gmail.com with ESMTPSA id y2-20020a5d4ac2000000b0027323b19ecesm34747506wrs.16.2023.01.05.04.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 04:17:18 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] mm: Remove a sentence from kmap_local_folio() kdocs
-Date:   Thu, 05 Jan 2023 13:17:17 +0100
-Message-ID: <3474652.iIbC2pHGDl@suse>
-In-Reply-To: <Y7WP2gyTRqTZWAQZ@casper.infradead.org>
-References: <20230104121845.15770-1-fmdefrancesco@gmail.com>
- <Y7WP2gyTRqTZWAQZ@casper.infradead.org>
+        Thu, 5 Jan 2023 07:17:53 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D485A58FB4;
+        Thu,  5 Jan 2023 04:17:51 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305BgmS3032003;
+        Thu, 5 Jan 2023 12:17:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=5F/YFHehYM03qImAEfUwzbfjgcKlIcmRxOHpxAMS35Y=;
+ b=kh1uwG9SzqbSrIny/6jaB1cOo5q8ujbocUEqcoGebSk7Ihs3kQzlxqa3C23BqDxKdTO5
+ Rxf/HGuwQHru083xWgkOpL8TdbGzTHWGC3sFLAJuUV8H71fcIX9Qsh0vXwCPPUbIdr9G
+ QbPtA2nNlhkAXFJHHcbq2WS5B0YNw3M8RIXFxDlRVq4CbUsASCkPDOJbyXvNagzTKWJX
+ 4qzYH1Ch4NBguC3aRRvO5H8cPSErE8HprDl+hoqhlXrTNZPhEH+6o+SPbpfSuK/kB9E3
+ +lo+gmhCbeSmGG5RM7dnoYfucK0AHlsMEujFVCVk9+S26HohOGVCHbTceLEPRfIHEKYt 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwwwvrpy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 12:17:34 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 305BmeA2019021;
+        Thu, 5 Jan 2023 12:17:33 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwwwvrpx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 12:17:33 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 304NvbIW000998;
+        Thu, 5 Jan 2023 12:17:31 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3mtcbfmy8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 12:17:31 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 305CHR7739453130
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Jan 2023 12:17:27 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A42120043;
+        Thu,  5 Jan 2023 12:17:27 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAC6220040;
+        Thu,  5 Jan 2023 12:17:26 +0000 (GMT)
+Received: from [9.171.49.209] (unknown [9.171.49.209])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Jan 2023 12:17:26 +0000 (GMT)
+Message-ID: <645e311c-9aca-b42d-c13c-b4365635e4c2@linux.ibm.com>
+Date:   Thu, 5 Jan 2023 13:17:26 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] s390/qeth: convert sysfs snprintf to sysfs_emit
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>,
+        patchwork-bot+netdevbpf@kernel.org
+Cc:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, zhangxuezhi1@coolpad.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221227110352.1436120-1-zhangxuezhi3@gmail.com>
+ <167223001583.30539.3371420401703338150.git-patchwork-notify@kernel.org>
+ <Y7a8OaOnQtRmGLIu@corigine.com>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <Y7a8OaOnQtRmGLIu@corigine.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: M11VbWyu_4CvEv5Gi_wAcKVgdFqizTHo
+X-Proofpoint-ORIG-GUID: cQ-NWJcSjYMQYGzEbJvV0x9tvpIN-92K
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_04,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=483 bulkscore=0
+ phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301050095
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 4 gennaio 2023 15:40:26 CET Matthew Wilcox wrote:
-> On Wed, Jan 04, 2023 at 01:18:45PM +0100, Fabio M. De Francesco wrote:
-> > In the kdocs of kmap_local_folio() there is a an ambiguous sentence
-> > which suggests to use this API "only when really necessary".
->=20
-> Looks like you removed it from kmap_local_page() docs in 72f1c55adf70
-> after I copied it in 53c36de0701f.  That information should probably
-> also be in this changelog.
->
-Matthew,
-=20
-I just added that information in v2 (I didn't know that I should have bette=
-r=20
-added it - thanks for letting me know about this practice):=20
-https://lore.kernel.org/lkml/20230105120424.30055-1-fmdefrancesco@gmail.com/
->
-> >   * While it is significantly faster than kmap() for the higmem case it
->=20
-> Also, s/higmem/highmem/ (both in the kmap_local_page() and
-> kmap_local_folio() docs)
->
-Since these spelling mistakes are un-related to the purpose of the deletion=
-, I=20
-fixed them in a separate patch:
-https://lore.kernel.org/lkml/20230105121305.30714-1-fmdefrancesco@gmail.com/
-
-Again thanks for commenting my patch and suggesting improvements.
-
-=46abio
 
 
+On 05.01.23 13:02, Simon Horman wrote:
+> On Wed, Dec 28, 2022 at 12:20:15PM +0000, patchwork-bot+netdevbpf@kernel.org wrote:
+>> Hello:
+>>
+>> This patch was applied to netdev/net.git (master)
+>> by David S. Miller <davem@davemloft.net>:
+>>
+>> On Tue, 27 Dec 2022 19:03:52 +0800 you wrote:
+>>> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+>>>
+>>> Follow the advice of the Documentation/filesystems/sysfs.rst
+>>> and show() should only use sysfs_emit() or sysfs_emit_at()
+>>> when formatting the value to be returned to user space.
+>>>
+>>> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+>>>
+>>> [...]
+>>
+>> Here is the summary with links:
+>>   - s390/qeth: convert sysfs snprintf to sysfs_emit
+>>     https://git.kernel.org/netdev/net/c/c2052189f19b
+> 
+> I'm a little late to the party here, but should the use of sprintf() in
+> show functions elsewhere in the qeth_core_sys.c also be updated?
+> 
 
-
-
+Yes, we are working on this. Several patches will come soon, that cleanup whole files.
+No need to send additional small patches on this topic at the moment.
