@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C4165EB18
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A85265EB1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjAEMvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S233483AbjAEMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjAEMv1 (ORCPT
+        with ESMTP id S233327AbjAEMv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:51:27 -0500
+        Thu, 5 Jan 2023 07:51:28 -0500
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACDB48CD7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439D8485A6;
         Thu,  5 Jan 2023 04:51:26 -0800 (PST)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 509D2420E9;
+        by box.trvn.ru (Postfix) with ESMTPSA id F1E90420EA;
         Thu,  5 Jan 2023 17:34:01 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1672922041; bh=X/5AJksXQf17kf4+orqMNYWY3Pk7OE2P5lNRHc4uMus=;
+        t=1672922042; bh=AfmbF3JjmXKU9T2jtly2Mo3ig2mVtRaWbIeULclrM7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KdHPXCU4DmUQaohQf+3WmjH7BUzIgX+SeiCg2HmlHBhw4WZq9VvvSDXGE4XMzo+vm
-         4vEIUckbcXq8uMCFngzqQXcCowhltz/K1Hj0nJIjJ/S5ETaOCSt2KiDs4oHyfSxOTw
-         Vp7vBXUAvKI+l7Y622KE0NN5omDtPrhwB+YzNYKAH6hxkeFBzjfWfzlIW63KXI6ipW
-         FtalGJwwl9ld+pfu5OTA8oSVcNYAhO1FdPVLQJEEDKI/D8VhLU1hGcGnA4JBnD2BJz
-         v6sxoELVq5QdkRgw70tTpNvq1EKK6Wrizrnb4AoOkCxmLdJ+HbxVjg+j8FkTWAHgxH
-         UwwVxNfMfdtDQ==
+        b=pxAl392HXkVVnPLj+qaVI87DjLtaphJO4FmU0L84V6CdB/k4zVhciI7XNqB5YpIBD
+         Y56OJ9kQ8PT9s0Bk8voY46XNSRj8yTZta+7eHx39zF00d5KqMbevNpLp1sj3iV9ayg
+         GoI6jWi13kvBtZP+f63LrKKl1YY1WFGQWjGvBa5SdbPpaNhTFJkElkWxIwgH3CP0wV
+         DrtPO4CFP5VWBUx6h0mlVeWtK6MrhrXlxnheQC7Vi4sAco57hwh62sx9NGwWlaQBSo
+         nVcDvescddiD5ARDSOh+F2uxAusOXYxmtQ0dQKE1Y6W7OWQFQwhlW6JZn6fMkyLUnb
+         a8TBFI+AEFaNA==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>
@@ -41,9 +41,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH 7/8] arm64: dts: qcom: msm8916-samsung-gt5-common: Add fuelgauge
-Date:   Thu,  5 Jan 2023 17:32:39 +0500
-Message-Id: <20230105123240.1089375-8-nikita@trvn.ru>
+Subject: [PATCH 8/8] arm64: dts: qcom: msm8916-samsung-gt5-common: add sensors
+Date:   Thu,  5 Jan 2023 17:32:40 +0500
+Message-Id: <20230105123240.1089375-9-nikita@trvn.ru>
 In-Reply-To: <20230105123240.1089375-1-nikita@trvn.ru>
 References: <20230105123240.1089375-1-nikita@trvn.ru>
 MIME-Version: 1.0
@@ -57,58 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gt5 devices use additional MAX77849 MFD to handle battery, charging
-and usb switching. Fuel-gauge from this MFD has a separate i2c line.
+From: Siddharth Manthan <siddharth.manthan@gmail.com>
 
+This device has ST LIS2HH12 accelerometer and Capella CM3323 light sensor.
+Add support for it.
+
+Signed-off-by: Siddharth Manthan <siddharth.manthan@gmail.com>
 Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
- .../dts/qcom/msm8916-samsung-gt5-common.dtsi  | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ .../dts/qcom/msm8916-samsung-gt5-common.dtsi  | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-index 9cdb33247691..9f97a8129278 100644
+index 9f97a8129278..bb1b1e814d8a 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-@@ -63,6 +63,25 @@ hall-sensor-switch {
+@@ -82,6 +82,35 @@ fuelgauge@36 {
  	};
  };
  
-+&blsp_i2c4 {
++&blsp_i2c2 {
 +	status = "okay";
 +
-+	fuelgauge@36 {
-+		compatible = "maxim,max77849-battery";
-+		reg = <0x36>;
++	accelerometer@1d {
++		compatible = "st,lis2hh12";
++		reg = <0x1d>;
 +
-+		maxim,rsns-microohm = <10000>;
-+		maxim,over-heat-temp = <600>;
-+		maxim,over-volt = <4400>;
++		vdd-supply = <&pm8916_l17>;
++		vddio-supply = <&pm8916_l5>;
 +
 +		interrupt-parent = <&msmgpio>;
-+		interrupts = <121 IRQ_TYPE_EDGE_FALLING>;
++		interrupts = <115 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "INT1";
 +
-+		pinctrl-0 = <&fuelgauge_int_default>;
++		st,drdy-int-pin = <1>;
++		mount-matrix = "0", "1", "0",
++			      "-1", "0", "0",
++			       "0", "0", "1";
++
++		pinctrl-0 = <&accel_int_default>;
 +		pinctrl-names = "default";
++	};
++
++	light-sensor@10 {
++		compatible = "capella,cm3323";
++		reg = <0x10>;
 +	};
 +};
 +
  &blsp1_uart2 {
  	status = "okay";
  };
-@@ -218,6 +237,14 @@ l18 {
+@@ -237,6 +266,14 @@ l18 {
  };
  
  &msmgpio {
-+	fuelgauge_int_default: fuelgauge-int-default-state {
-+		pins = "gpio121";
++	accel_int_default: accel-int-default-state {
++		pins = "gpio115";
 +		function = "gpio";
 +
 +		drive-strength = <2>;
 +		bias-disable;
 +	};
 +
- 	gpio_keys_default: gpio-keys-default-state {
- 		pins = "gpio107", "gpio109";
+ 	fuelgauge_int_default: fuelgauge-int-default-state {
+ 		pins = "gpio121";
  		function = "gpio";
 -- 
 2.38.1
