@@ -2,150 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595A765F6D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFC865F6D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbjAEWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S236078AbjAEWc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236068AbjAEWcC (ORCPT
+        with ESMTP id S236208AbjAEWch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:32:02 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDCD15822
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:31:59 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-15085b8a2f7so19750844fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:31:59 -0800 (PST)
+        Thu, 5 Jan 2023 17:32:37 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB915822
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:32:34 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 124so26438228pfy.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:32:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzW/w/1hM8B3dAJhNRkp0Jphokn3JFk7Z5V07SJ3Qvg=;
-        b=irhVthMkbXMEX15iArMrcDY5gNuF5eBvK4eo1OtUylhsmE3IG9S+mrhZxQOiqFOCIp
-         B0NdfYGQgplol+qXFg23OWfulPwvSU6W3PDU1vto6PpvE0VAeFfNIFN4a8ZuHbQY9yux
-         PXeSKyeq3An9rFPoa3fVNGzGEqqWpmTNW/IhDMPZHTEGo5GXlC3tHCL+PpUMhytJ91mi
-         VnE7MFoMeikcgMvkL5CbthLdijfrodW+nJq5InxHQqUSFW5SY7wrPzcsnCf8IgP9ADVl
-         OSDDZsGxvXwBgux7z61kSSUwbOnmCiTQmx5XrBl1LtTxgEFPc4Tdi1LcRhBuf47g7+EW
-         8CKA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RMspBu+uWa9sfLmLyUJ/wSTZmKLpqqXkwp6DWYRYmTM=;
+        b=ZzyGzoeKKvZaoMdQYk9/JEb/R0fTMTl8jdxKSg3s6JKyfR79CnB4sS8bEQ0ONL6UQB
+         YBcEnGw41a+iNz23j6xzSeW7vrD1JAOeqwfntUXzII3h4d96KHoVSc/4Kb16WiQKOAvq
+         HUM40kmHERgBRNXvQuc2zDBkmB/8ypXu6eaE8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bzW/w/1hM8B3dAJhNRkp0Jphokn3JFk7Z5V07SJ3Qvg=;
-        b=3yuNlRONY6Xg4dXUJhWJDLmmM8wHxSrNA6Rz7EpIR2djtjLW7GZRq59+eSwVrrbeis
-         pMIRFk1uYsEwkTO7VCNdeU4WPm+m9jWPLJ4YXAr288vYuhOSka/VO5OoXohiGOe8bZXF
-         felgGSKwh26CEEdiPZWtji9FHPf5DBx+9Xd9SucsZsGGEd+gvyYKc+HP0Tv3gkvu87pW
-         LCEekGqDfFoW7vq6rRTCO04ZtwEKu/Vyq777gLEycq5a99KAt0LBEueqOqMO6AhB5ONa
-         1PZwefFk8NCZh6ARCK6hDl/RpaMaW8K9W/HfWe9+7gMzfKdMBVXmJuEJQmuMB1qKE15b
-         vlIQ==
-X-Gm-Message-State: AFqh2ko5FZ4zFYcz6rjSgtyHzjhndV1rpBhzrfvSNWYWI7I7mafRn/1Q
-        jY2R4evfHJaP7fMIoh6VbGN+3GVtNT9NpUiebHCR1g==
-X-Google-Smtp-Source: AMrXdXuhK0FyKkeqVW5l22eKW+0UG+HL1l0rnz8gKZ4dAVgXGahu6I04Z2YvHkfHXjMPojl5mAzlig7pu90phEAYxnc=
-X-Received: by 2002:a05:6870:b020:b0:14f:9d87:3d58 with SMTP id
- y32-20020a056870b02000b0014f9d873d58mr4259851oae.108.1672957918361; Thu, 05
- Jan 2023 14:31:58 -0800 (PST)
+        bh=RMspBu+uWa9sfLmLyUJ/wSTZmKLpqqXkwp6DWYRYmTM=;
+        b=NzjhYn2h14AM3VAzuYnBSvm2TELHFnIoFf0q2DSA2MpGo714Pm885DPjK0Rirq1BvB
+         bG58CDF+1h4zUmybpioDgsfq3+spcYwL+ofEK2yErTHZArPgwNA1XGkLKqcH7kdLtLAY
+         v74hhe7Y9K0w9GK5kufbA6sCV/GYj47nd7RPzKPCeUrYHkYfU/+tsgiOLceUfssDxwgx
+         f1jb/6OICeK31bLkf1i0s2Og+/JprXp9yOQl6orqXuvv9AHW/j3yT5maH50gHogRndBX
+         sqLpFIGA3E3Y98P+uLFNrB3lb92fhes3PnGTgdshKmlbgJdeS+rjj2gqNZObD2IthQIn
+         22MA==
+X-Gm-Message-State: AFqh2kpsSn0iCxfOzMqMJzUTTO/aLOfebrae4k98/LgU+AwJ9aL7OTIm
+        7dRttbL6guiAF7mV6YZRPW46Xw==
+X-Google-Smtp-Source: AMrXdXsqq4Mi747oUWhsFhMpsCCbXt0HvHTAJ74J9uJiiSUwowl84oG/P6DbQxUEysWYLcBj9mSczg==
+X-Received: by 2002:a62:1a51:0:b0:581:d46a:343a with SMTP id a78-20020a621a51000000b00581d46a343amr25696694pfa.18.1672957954467;
+        Thu, 05 Jan 2023 14:32:34 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x74-20020a62864d000000b0058217bbc6f5sm11470796pfd.215.2023.01.05.14.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 14:32:34 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Potnuri Bharat Teja <bharat@chelsio.com>
+Cc:     Kees Cook <keescook@chromium.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] RDMA/cxgb4: Replace 0-length arrays with flexible arrays
+Date:   Thu,  5 Jan 2023 14:32:32 -0800
+Message-Id: <20230105223225.never.252-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
- <YuFvbm/Zck9Tr5pq@zn.tnic> <20221219150026.bltiyk72pmdc2ic3@amd.com>
- <Y6DEv4QuvIfwWlCW@zn.tnic> <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
- <CAA03e5GKCcevo7goyyRqWrgk3KeFPTddb-E2pRmgDmyPSNxDvA@mail.gmail.com> <993e0896-cda6-5033-ad0e-e21508a58077@amd.com>
-In-Reply-To: <993e0896-cda6-5033-ad0e-e21508a58077@amd.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Thu, 5 Jan 2023 14:31:47 -0800
-Message-ID: <CAA03e5EZtTqNHOuKAPKpw0xJ_tSa4DYCAf-nSDqsjaSxbJZVkg@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
- when adding it to RMP table
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-14.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3478; h=from:subject:message-id; bh=dxMDzsMc6oaxPr4Do5C0Wr2AT/H+H0SzXI+dU/p0IOo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1AA6TRACNi/UTQWnJlFJAmhMJxt1Q/q61h8WXc3 5MfFzMqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dQAAAKCRCJcvTf3G3AJjVaD/ 9JTizo/XmwroMPtX6agewL84FuMweJSgXJ/ngjmZqAvjA4oSofA1pqyp6qjaTkS7Ffi97TBUNKh731 qz9L0CmgSdP0hBnpfosBkNgfM5pO2u+ag48S3IfVZeg7VsLTTVZp04S2OamHaMqESexB39eRz0uIh8 dcGypx0LM5c6nxKDc5xRL6BnMUiCCiJeHtd/IVQuOZb3yNZoxeIUsHHQoreTaxorIm52+u5eG0bAEJ PRqXLoHf2rbQR3MuRnvASk9NxmIXnL1X+uNshx/DDixHa47N5acBqgPOzz68JBvXVP9SBUCjpjgQce lIuze1Nl9AJB8B4D8ldabt89DnJM7+SHgdm1MWvoi6CRqdzNtvdez7GI4P0pduHVryotdSUjkXjGfQ uwBdIPmBsiE06weLdk1sZD6/sDbB2Ly/8MZBG0ZQqMicHPkJAbuKPgLcOjUxNrpMFemTcWatisk3hH O9d2LDnrcdn3ruLoUyvN5XhiuxK9qdoY0JKyLNfcxBgnHtvN3IZOyAADW13W1hQOZ9E3MtrGwVG867 8sGHv9T6Ph6OtZJWHdcwvI762jAWfFy55Cg2OUCBlko0lKcrVCANTNU94drHuN7dBbFHV3PF16DS2U TikaXuZ026+s1VSX3/FrNaVB4vyaK2bjIONqe8znqyMKfK0n+l3YFgm+IKtg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 2:27 PM Kalra, Ashish <ashish.kalra@amd.com> wrote:
->
-> Hello Marc,
->
-> On 1/5/2023 4:08 PM, Marc Orr wrote:
-> > On Tue, Dec 27, 2022 at 1:49 PM Kalra, Ashish <ashish.kalra@amd.com> wrote:
-> >>
-> >> Hello Boris,
-> >>
-> >> On 12/19/2022 2:08 PM, Borislav Petkov wrote:
-> >>> On Mon, Dec 19, 2022 at 09:00:26AM -0600, Michael Roth wrote:
-> >>>> We implemented this approach for v7, but it causes a fairly significant
-> >>>> performance regression, particularly for the case for npages > 1 which
-> >>>> this change was meant to optimize.
-> >>>>
-> >>>> I still need to dig in a big but I'm guessing it's related to flushing
-> >>>> behavior.
-> >>>
-> >>> Well, AFAICT, change_page_attr_set_clr() flushes once at the end.
-> >>>
-> >>> Don't you need to flush when you modify the direct map?
-> >>>
-> >>
-> >> Milan onward, there is H/W support for coherency between mappings of the
-> >> same physical page with different encryption keys, so AFAIK, there
-> >> should be no need to flush during page state transitions, where we
-> >> invoke these direct map interface functions for re-mapping/invalidating
-> >> pages.
-> >>
-> >> I don't know if there is any other reason to flush after modifying
-> >> the direct map ?
-> >
-> > Isn't the Milan coherence feature (SME_COHERENT?) about the caches --
-> > not the TLBs? And isn't the flushing being discussed here about the
-> > TLBs?
->
-> Actually, the flush does both cache and TLB flushing.
->
-> Both cpa_flush() and cpa_flush_all() will also do cache flushing if
-> cache argument is not NULL. As in this case, no page caching attributes
-> are being changed so there is no need to do cache flushing.
->
-> But TLB flushing (as PTE is updated) is still required and will be done.
+Zero-length arrays are deprecated[1]. Replace all remaining
+0-length arrays with flexible arrays. Detected with GCC 13, using
+-fstrict-flex-arrays=3:
 
-Ah, got it now. Thanks for explaining. (I should've looked at the code
-a bit closer.)
+In function 'build_rdma_write',
+    inlined from 'c4iw_post_send' at ../drivers/infiniband/hw/cxgb4/qp.c:1173:10:
+../drivers/infiniband/hw/cxgb4/qp.c:597:38: warning: array subscript 0 is outside array bounds of 'struct fw_ri_immd[0]' [-Warray-bounds=]
+  597 |                 wqe->write.u.immd_src[0].r2 = 0;
+      |                 ~~~~~~~~~~~~~~~~~~~~~^~~
+../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h: In function 'c4iw_post_send':
+../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:567:35: note: while referencing 'immd_src'
+  567 |                 struct fw_ri_immd immd_src[0];
+      |                                   ^~~~~~~~
 
-> > Also, I thought that Mingwei Zhang <mizhang@google.com> found that the
-> > Milan SEV coherence feature was basically unusable in Linux because it
-> > only works across CPUs. It does not extend to IO (e.g., CPU caches
-> > need to be flushed prior to free'ing a SEV VM's private address and
-> > reallocating that location to a device driver to be used for IO). My
-> > understanding of this feature and its limitations may be too coarse.
-> > But I think we should be very careful about relying on this feature as
-> > it is implemented in Milan.
-> >
-> > That being said, I guess I could see an argument to rely on the
-> > feature here, since we're not deallocating the memory and reallocating
-> > it to a device. But again, I thought the feature was about cache
-> > coherence -- not TLB coherence.
->
-> Yes, this is just invalidating or re-mapping into the kernel direct map,
-> so we can rely on this feature for the use case here.
+Additionally drop the unused C99_NOT_SUPPORTED ifndef lines.
 
-SGTM and that does make sense then. Thanks for confirming.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+
+Cc: Potnuri Bharat Teja <bharat@chelsio.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/infiniband/hw/cxgb4/t4fw_ri_api.h | 26 ++++++-----------------
+ 1 file changed, 6 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h b/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
+index a2f5e29ef226..1f79537fc8d1 100644
+--- a/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
++++ b/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
+@@ -122,9 +122,7 @@ struct fw_ri_dsgl {
+ 	__be16	nsge;
+ 	__be32	len0;
+ 	__be64	addr0;
+-#ifndef C99_NOT_SUPPORTED
+ 	struct fw_ri_dsge_pair sge[];
+-#endif
+ };
+ 
+ struct fw_ri_sge {
+@@ -138,9 +136,7 @@ struct fw_ri_isgl {
+ 	__u8	r1;
+ 	__be16	nsge;
+ 	__be32	r2;
+-#ifndef C99_NOT_SUPPORTED
+ 	struct fw_ri_sge sge[];
+-#endif
+ };
+ 
+ struct fw_ri_immd {
+@@ -148,9 +144,7 @@ struct fw_ri_immd {
+ 	__u8	r1;
+ 	__be16	r2;
+ 	__be32	immdlen;
+-#ifndef C99_NOT_SUPPORTED
+ 	__u8	data[];
+-#endif
+ };
+ 
+ struct fw_ri_tpte {
+@@ -320,9 +314,7 @@ struct fw_ri_res_wr {
+ 	__be32 op_nres;
+ 	__be32 len16_pkd;
+ 	__u64  cookie;
+-#ifndef C99_NOT_SUPPORTED
+ 	struct fw_ri_res res[];
+-#endif
+ };
+ 
+ #define FW_RI_RES_WR_NRES_S	0
+@@ -562,12 +554,10 @@ struct fw_ri_rdma_write_wr {
+ 	__be32 plen;
+ 	__be32 stag_sink;
+ 	__be64 to_sink;
+-#ifndef C99_NOT_SUPPORTED
+ 	union {
+-		struct fw_ri_immd immd_src[0];
+-		struct fw_ri_isgl isgl_src[0];
++		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
++		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
+ 	} u;
+-#endif
+ };
+ 
+ struct fw_ri_send_wr {
+@@ -581,12 +571,10 @@ struct fw_ri_send_wr {
+ 	__be32 plen;
+ 	__be32 r3;
+ 	__be64 r4;
+-#ifndef C99_NOT_SUPPORTED
+ 	union {
+-		struct fw_ri_immd immd_src[0];
+-		struct fw_ri_isgl isgl_src[0];
++		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
++		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
+ 	} u;
+-#endif
+ };
+ 
+ #define FW_RI_SEND_WR_SENDOP_S		0
+@@ -618,12 +606,10 @@ struct fw_ri_rdma_write_cmpl_wr {
+ 		struct fw_ri_isgl isgl_src;
+ 	} u_cmpl;
+ 	__be64 r3;
+-#ifndef C99_NOT_SUPPORTED
+ 	union fw_ri_write {
+-		struct fw_ri_immd immd_src[0];
+-		struct fw_ri_isgl isgl_src[0];
++		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
++		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
+ 	} u;
+-#endif
+ };
+ 
+ struct fw_ri_rdma_read_wr {
+-- 
+2.34.1
+
