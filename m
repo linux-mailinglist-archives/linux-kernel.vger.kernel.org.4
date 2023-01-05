@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E71865F31E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EBF65F2AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbjAERtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S234584AbjAERa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbjAERsz (ORCPT
+        with ESMTP id S234360AbjAERa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:48:55 -0500
-X-Greylist: delayed 1229 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 09:48:51 PST
-Received: from sr40.hostlife.net (sr40.hostlife.net [185.43.220.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1149B4EC8A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:48:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=hardclanz.org; s=default; h=To:From:Subject:Message-Id:Date:Content-Type:
-        Content-Transfer-Encoding:Mime-Version:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zeOrvwIxvJz40GHeZdY4SXewmPJFYtfrDzHK/M/sG+c=; b=RvYtUxLEwxfLqXkuO5QBwfwjYv
-        Jdm1jPwpyL5K7x0gwRYVoxwPHHEME4QCvtG+hYDXfQjySbv8CLX2Udiv/prODMboyJRUo3ZT9uVAg
-        SeHh8evJKAsAdUtyMZ5QNzByYZNfgbTvDiUHZPqA0I2qOfIr4y9uD98sQFS8JVitWhNh3UCz6MVmW
-        bZTA1Njg5DcvxSAFVyhfROHD4SydtJuQ1kBxTV0VcHWz2MvhsCH8RdV+umuZQFXv6HMOHxqaDKULa
-        +Du1deS5YWcFHlhDwKDOJDLoUcSMWdz8se4+vJofz5/J9T4ubMaColXsxr5BapHhMgKVzZPNDztYM
-        NNRqs70g==;
-Received: from [109.225.40.181] (port=36788 helo=localhost)
-        by sr40.hostlife.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <emptiedsoul@hardclanz.org>)
-        id 1pDU2O-006rXo-GY
-        for linux-kernel@vger.kernel.org;
-        Thu, 05 Jan 2023 18:28:19 +0100
-Mime-Version: 1.0
+        Thu, 5 Jan 2023 12:30:26 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7733392;
+        Thu,  5 Jan 2023 09:30:25 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso1882830wmp.3;
+        Thu, 05 Jan 2023 09:30:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o5jZcZ+YgPoIjP8SOU3FjXlsuvcwtes2avBtwRlJmuo=;
+        b=Jm4esGPypCFk9CsOcodMN6zqTZiqZyUp+yCwCShUysTZojG5j/XGWOVabVR1zfnKEl
+         qarZQJ17W3XHSuVEn72fDOsYjg8LWSryNbUvxOZazMjdM6eZBSbIoVocNxUwJgyWjoED
+         Eg5ix4nnNgnKyG/EI8zgmFc56NSBtQeb6VdQ6G+rREAFvOoU00Izcg4Zx9yoEpzT9hNJ
+         +2yjaApu6bXySJXBCh5RoQa2QRDE0zDdtjdN/kU9d1xHYEthN1I7rQeLsHQygTrHuVef
+         ez7W69mmn5/wR/UG8hzuSSETs5BjIZ/njSj+EUEv6BnoujzKgHWz9ehZz+cV6Ds4xxwy
+         +RXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o5jZcZ+YgPoIjP8SOU3FjXlsuvcwtes2avBtwRlJmuo=;
+        b=BaaGvKdIXv243ckzlFsM7QB+5bUhurTqECBIkpaBDJz5rpg2gy/LU7XfU+a/7MUras
+         xicmSOHBiGEpKxaSjN1/WT34JGf7MeOV6n+dDJNXKalPdjqAeQIB6Pqb7lpr1cTRJPDz
+         Z8EQG8PhrHj80gxo5CY0R8Nq9GbQG3fFjXqwkCiCSL1yvp2tGPI6/AQA9qG+lhKfumEP
+         k3uWdw+MzzCTqAozM71A/LtJHlcRLgb9Bw/ueZ6fWsxYiANu74ufvClh6JNIQOApUkDW
+         yVdF7pB0bMQQgaWvX1WSVkdK5Z9KR78IyZGNn7n+1xxe5iMOLjkH3eiqXF7RTQcmC7Ap
+         qFQw==
+X-Gm-Message-State: AFqh2krzqk28ElCgqBncev4otmCvkcUDHrMbw05mrwLmD7lnjT/g34kM
+        42wYwxU6sUvifdKmCWFo2pY=
+X-Google-Smtp-Source: AMrXdXtoWb7E6Dy6FLBwdAlWwtTGcbQjgmyTvP7NyPyv/3l4C9+TmdcOtOwt7pi9RmpFSm+BPb2nLw==
+X-Received: by 2002:a05:600c:1e10:b0:3cf:973e:c874 with SMTP id ay16-20020a05600c1e1000b003cf973ec874mr37716677wmb.14.1672939824130;
+        Thu, 05 Jan 2023 09:30:24 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm3641462wms.31.2023.01.05.09.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 09:30:23 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] clk: sunxi-ng: h3/h5: Model H3 CLK_DRAM as a fixed clock
+Date:   Thu, 05 Jan 2023 18:30:21 +0100
+Message-ID: <3394555.QJadu78ljV@jernej-laptop>
+In-Reply-To: <20221229042230.24532-1-samuel@sholland.org>
+References: <20221229042230.24532-1-samuel@sholland.org>
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 05 Jan 2023 20:28:19 +0300
-Message-Id: <CPKFMO8Q6ON2.OEO6RMYUAK76@hardclanz>
-Subject: [RFC] SIGOOM proposal
-From:   "Arseniy Lesin" <emptiedsoul@hardclanz.org>
-To:     <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.12.0
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - sr40.hostlife.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - hardclanz.org
-X-Get-Message-Sender-Via: sr40.hostlife.net: authenticated_id: emptiedsoul@hardclanz.org
-X-Authenticated-Sender: sr40.hostlife.net: emptiedsoul@hardclanz.org
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Introduction
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Dne =C4=8Detrtek, 29. december 2022 ob 05:22:30 CET je Samuel Holland napis=
+al(a):
+> The DRAM controller clock is only allowed to change frequency while the
+> DRAM chips are in self-refresh. To support this, changes to the CLK_DRAM
+> mux and divider have no effect until acknowledged by the memory dynamic
+> frequency scaling (MDFS) hardware inside the DRAM controller. (There is
+> a SDRCLK_UPD bit in DRAM_CFG_REG which should serve a similar purpose,
+> but this bit actually does nothing.)
+>=20
+> However, the MDFS hardware in H3 appears to be broken. Triggering a
+> frequency change using the procedure from similar SoCs (A64/H5) hangs
+> the hardware. Additionally, the vendor BSP specifically avoids using the
+> MDFS hardware on H3, instead performing all DRAM PHY parameter updates
+> and resets in software.
+>=20
+> Thus, it is effectively impossible to change the CLK_DRAM mux/divider,
+> so those features should not be modeled. Add CLK_SET_RATE_PARENT so
+> frequency changes apply to PLL_DDR instead.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-AFAIK, majority of linux-running machines are configured to overcommit
-memory -- so, memory needs of every process are always pleased. However,
-in the Out-Of-Memory condition we repay cruely -- by _killing_ the most
-memory-hungry process.=20
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Dealing with OOM was always questionable -- kernel-space OOM-killer
-often works as the last resort -- system can hang for a pretty long time
-(especially when using swap) before it resolves the OOM condition.
+Best regards,
+Jernej
 
-User-space OOM-killers solve this problem _partially_ -- they can _kill_
-such processes preventively or even display nice GUI prompt for user.
-
-However, the key problem persists -- we can only _kill_ unaware process,
-possibly causing valuable data loss. There is no way to tell process: "You
-are causing system OOM, release memory or you will be terminated forcefully=
-"!
-
-2. Proposal
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-2.1. The SIGOOM Signal
-------------------
-
-I propose the addition of new signal: SIGOOM (Out-Of-Memory SIGnal)=20
-
-This signal is intended to be sent to the most memory-hungry process(es)
-in order to give process a chance to release memory used for
-non-valuable data (for example, browser can unload tabs, that are
-currently not in use, assuming tabs are not separate processes) or to
-write down valuable data and exit gracefully (for example, some
-graphical editor).
-
-Some applications can even set up a poll for OOM event by using signalfd
-
-Default action: 	IGNORE
-Proposed senders: 	kernel- and user-space OOM-killers
-
-The technical detail of this addition is a bit unpleasant: there is
-actually no room for new signals!=20
-
-Numbers 1-31 are already assigned, every signal with number > SIGRTMIN=20
-(currently 32) is considered realtime and queued accordingly.=20
-
-Adding SIGOOM as signal #32 by shifting SIGRTMIN to 33 can do a trick,
-but this will almost certainly break compatibility (namely, with glibc
-threading)
-
-I propose adding SIGOOM as signal #65 (after SIGRTMAX), but we should
-clarify some checks in kernel/signal.c (possibly in other places too,
-where signal number is tested against being realtime) and possibly add a
-such-like macro:
-
-#define SIG_IS_REALTIME(signum) (((signum) > SIGRTMIN) && ((signum) < SIGRT=
-MAX))
-
-I expect your comments on this topic very much, thanks in advance.
-
-2.2. Adjusting kernel oom-killer to use SIGOOM
-----------------------------------------------
-
-Since we now have a way to inform process of it's memory utilization we
-can try to send process SIGOOM signal first (if process set up handler
-or poll for it) and only then kill it.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-I will try to prepare a patchset for kernel in next couple of weeks.
-Also going to create some patches for user-space oom-killers (sd-oomd,
-meta's oomd) and propose a new system call for those (it is not as
-important, so i decided not to include it for this RFC).
-
-I invite all interested to discuss this RFC here on list, or you can
-catch me on #linux IRC channel (libera network) tonight (nick:
-emptiedsoul)
-
-THX for reading, and again, thanks in advance for your comments.
 
