@@ -2,179 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10D965F511
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFE465F505
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbjAEUNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 15:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S235569AbjAEUM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 15:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235714AbjAEUNR (ORCPT
+        with ESMTP id S235407AbjAEUMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 15:13:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B12DFB2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 12:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672949551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qP7GgaungF4LpLiIW53DOAlPCQeFqX17MNRkX0URUPQ=;
-        b=ivnapsYDo8NyMqV7ddjlW7zMyG/eOh9m+Nn2EjVXjFNbZqOXShkQDDO/+3rG3anhbzwlMJ
-        4iFTqXcV6NpV7pYepzszPvlCa/yQcLqSNGDPxr6Pm/I3XX4uK5dw4RDxXgRZIpsFA/9hdS
-        Nyty+DcQ5PltVduJ6laYX9e/TOkfqJc=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-248-NkuSDxWVP5-x2Adw9wQQWw-1; Thu, 05 Jan 2023 15:12:22 -0500
-X-MC-Unique: NkuSDxWVP5-x2Adw9wQQWw-1
-Received: by mail-pf1-f198.google.com with SMTP id n22-20020a62e516000000b005817b3a197aso11560518pff.14
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 12:12:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qP7GgaungF4LpLiIW53DOAlPCQeFqX17MNRkX0URUPQ=;
-        b=rv7MPZJWH2zYWJS53YGzH6zGp1TxrsHcmVY/rak8gLD5zpdQqlFrjTDPRNPLiXNUZx
-         8Jc1iBEPR9cGZ69dx1tHtQXzXWaBgIybF65nHeo83F2fK7l9NM27sC77tETOtNSi1t7q
-         /LZPHOyzRoDAC5C3yzdhKY3STreHiYHVjyEFrIK1lFvGcHxFsjdUvD1dgpWz6p+t2H8W
-         HtYSKmBTnHw2/Z2FeoF6KwqzbeBPrtPBIbnfd4fzPbwoY3dKtqodOrW9XAUW3Nxia4J5
-         k9ux9mpRnYdCc4qp7bdtseXQEy5sAKONtkco6X/kaLqFfwE9dh/v4X5/JCFQ5eCGChgk
-         lfAg==
-X-Gm-Message-State: AFqh2kqW0UmNl2vCd7w8FCtJD4amJghJYFbzLNKnI413sVut1yx9m9Fo
-        eDqYFonwgtbS8IYZL3UFqVIWhdXoeT8Rvw0waVB1LPOwYT98s29HG0QnucP6apHQEUWaek7yuV0
-        QyP654z8bj+pGXqNipEwu/qjY
-X-Received: by 2002:a17:902:f711:b0:192:8ca0:b86e with SMTP id h17-20020a170902f71100b001928ca0b86emr44610321plo.35.1672949540784;
-        Thu, 05 Jan 2023 12:12:20 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvh5BYK9jnJ1/ierKFbMs7rt9oYDnwOUEI3E2+7h8gq5HjwHZr6D4+K/PXVYDnWkRaAoFcGJQ==
-X-Received: by 2002:a17:902:f711:b0:192:8ca0:b86e with SMTP id h17-20020a170902f71100b001928ca0b86emr44610295plo.35.1672949540483;
-        Thu, 05 Jan 2023 12:12:20 -0800 (PST)
-Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090322cf00b001896ba683b9sm16754710plg.131.2023.01.05.12.12.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 12:12:20 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dmytro@shytyi.net, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>
-Subject: [PATCH] mptcp: Fix deadlock in mptcp_sendmsg()
-Date:   Fri,  6 Jan 2023 05:12:05 +0900
-Message-Id: <20230105201205.1087439-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 5 Jan 2023 15:12:53 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C691E19039;
+        Thu,  5 Jan 2023 12:12:51 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,303,1665414000"; 
+   d="scan'208";a="145308096"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 06 Jan 2023 05:12:50 +0900
+Received: from mulinux.example.org (unknown [10.226.92.64])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B0B16400515A;
+        Fri,  6 Jan 2023 05:12:45 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v4 0/2] Driver support for RZ/V2M PWC
+Date:   Thu,  5 Jan 2023 20:12:40 +0000
+Message-Id: <20230105201242.189195-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__mptcp_close_ssk() can be called from mptcp_sendmsg() with subflow
-socket locked.  This can cause a deadlock as below:
+The PWC IP found in the RZ/V2M family of chips fits the Multi-Function
+Device (MFD) model quite well, and comes with the below capabilities:
+* external power supply on/off sequence generation
+* on/off signal generation for the LPDDR4 core power supply (LPVDD)
+* key input signals processing
+* general-purpose output pins
 
-mptcp_sendmsg()
-  mptcp_sendmsg_fastopen() --> lock ssk
-    tcp_sendmsg_fastopen()
-       __inet_stream_connect()
-          mptcp_disconnect()
-             mptcp_destroy_common()
-                __mptcp_close_ssk() --> lock ssk again
+Version 4 of this series basically just moves the dt-bindings
+file under Documentation/devicetree/bindings/soc/renesas.
 
-This patch fixes the issue by skipping locking for subflow socket
-which is already locked.
+Thanks,
+Fab
+Fabrizio Castro (2):
+  dt-bindings: mfd: Add RZ/V2M PWC
+  soc: renesas: Add PWC support for RZ/V2M
 
-Fixes: d98a82a6afc7 ("mptcp: handle defer connect in mptcp_sendmsg")
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- net/mptcp/protocol.c | 15 +++++++++------
- net/mptcp/protocol.h |  4 ++--
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ .../soc/renesas/renesas,rzv2m-pwc.yaml        |  56 +++++++
+ drivers/soc/renesas/Kconfig                   |   4 +
+ drivers/soc/renesas/Makefile                  |   1 +
+ drivers/soc/renesas/pwc-rzv2m.c               | 141 ++++++++++++++++++
+ 4 files changed, 202 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/renesas/renesas,rzv2m-pwc.yaml
+ create mode 100644 drivers/soc/renesas/pwc-rzv2m.c
 
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index f6f93957275b..979265f66082 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -1672,9 +1672,9 @@ static int mptcp_sendmsg_fastopen(struct sock *sk, struct sock *ssk, struct msgh
- 	lock_sock(ssk);
- 	msg->msg_flags |= MSG_DONTWAIT;
- 	msk->connect_flags = O_NONBLOCK;
--	msk->is_sendmsg = 1;
-+	msk->sendmsg_locked_sk = ssk;
- 	ret = tcp_sendmsg_fastopen(ssk, msg, copied_syn, len, NULL);
--	msk->is_sendmsg = 0;
-+	msk->sendmsg_locked_sk = NULL;
- 	msg->msg_flags = saved_flags;
- 	release_sock(ssk);
- 
-@@ -2319,7 +2319,8 @@ static void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- 	if (dispose_it)
- 		list_del(&subflow->node);
- 
--	lock_sock_nested(ssk, SINGLE_DEPTH_NESTING);
-+	if (msk->sendmsg_locked_sk != ssk)
-+		lock_sock_nested(ssk, SINGLE_DEPTH_NESTING);
- 
- 	if (flags & MPTCP_CF_FASTCLOSE) {
- 		/* be sure to force the tcp_disconnect() path,
-@@ -2335,7 +2336,8 @@ static void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- 		tcp_disconnect(ssk, 0);
- 		msk->subflow->state = SS_UNCONNECTED;
- 		mptcp_subflow_ctx_reset(subflow);
--		release_sock(ssk);
-+		if (msk->sendmsg_locked_sk != ssk)
-+			release_sock(ssk);
- 
- 		goto out;
- 	}
-@@ -2362,7 +2364,8 @@ static void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- 		/* close acquired an extra ref */
- 		__sock_put(ssk);
- 	}
--	release_sock(ssk);
-+	if (msk->sendmsg_locked_sk != ssk)
-+		release_sock(ssk);
- 
- 	sock_put(ssk);
- 
-@@ -3532,7 +3535,7 @@ static int mptcp_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
- 	/* if reaching here via the fastopen/sendmsg path, the caller already
- 	 * acquired the subflow socket lock, too.
- 	 */
--	if (msk->is_sendmsg)
-+	if (msk->sendmsg_locked_sk)
- 		err = __inet_stream_connect(ssock, uaddr, addr_len, msk->connect_flags, 1);
- 	else
- 		err = inet_stream_connect(ssock, uaddr, addr_len, msk->connect_flags);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 955fb3d88eb3..43afc399e16b 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -294,8 +294,7 @@ struct mptcp_sock {
- 	u8		mpc_endpoint_id;
- 	u8		recvmsg_inq:1,
- 			cork:1,
--			nodelay:1,
--			is_sendmsg:1;
-+			nodelay:1;
- 	int		connect_flags;
- 	struct work_struct work;
- 	struct sk_buff  *ooo_last_skb;
-@@ -318,6 +317,7 @@ struct mptcp_sock {
- 	u32 setsockopt_seq;
- 	char		ca_name[TCP_CA_NAME_MAX];
- 	struct mptcp_sock	*dl_next;
-+	struct sock	*sendmsg_locked_sk;
- };
- 
- #define mptcp_data_lock(sk) spin_lock_bh(&(sk)->sk_lock.slock)
 -- 
-2.39.0
+2.34.1
 
