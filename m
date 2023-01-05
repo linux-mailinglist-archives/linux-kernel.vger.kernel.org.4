@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C647E65EFEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706C065EFF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbjAEPX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S233378AbjAEPXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjAEPXB (ORCPT
+        with ESMTP id S234509AbjAEPXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:23:01 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8E5DE57;
-        Thu,  5 Jan 2023 07:22:46 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 2EDCC75;
-        Thu,  5 Jan 2023 16:22:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1672932164;
+        Thu, 5 Jan 2023 10:23:09 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7D288;
+        Thu,  5 Jan 2023 07:23:07 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 89348E0015;
+        Thu,  5 Jan 2023 15:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672932186;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=72cBbNqSr6yQ92+9me+hKJsaMA8mwYkWgjfNH6oHMXM=;
-        b=FXe7iYppD07cJRl07JNEPzDki39/mie1AEdrWVhNLVCHZdS0DatHHkciKbaenIcr7+9veE
-        LApYm9QCDiJyg4lyx2yQdtzwixCtJGHCOx5/fBpEEcjM04CSkIpKk1sEbFkMdlRROVbB2u
-        Pn0gImf3SezpTYQpMLh7/bkLqd6e8/aFO3iHIHxvJykwGHtpYLu8ZidWj4nFuuOuMqQH/r
-        h9y+Xx2F5OxOBqJEqDcyg702f8ycjk8egrcJOVW4hDC1+4pwtNO7cbJYATloL5AmUSdSv8
-        tXktaBYs5SLGdxfURH8QW7JWM8oyxS5EyLVQCEICVSVxqMa/4UuWzCMireAbug==
-From:   Michael Walle <michael@walle.cc>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        bh=Y7hEx4jCdi5gZ1clrt4nc1ulwGgfHk1FihM6F9ggSy4=;
+        b=G/qSdJ0ydV8Xr7/XCkRJgxtAvxWYqZr8MKEt1Hi93EBzvUUdqVbu28IIZlQDeEJ1MBQ2u5
+        Dzd0gKB9pavVblmFt7cuEyE3SDi4JsSKTddd5RwcP03y0W2HkgpFO1PwJiOi7WoEHDw6WS
+        /7tspGqfhXQq9BevoClufVtGuXi+119mZg9IoMjI+KYIlF8kWC0Hq/tO4Ei4cBon4Axq7+
+        kPB+QGdviuDD3z0sQsmjdJQRg/IpwvzwZA1pQZayhOuz6WcZ4ELSeFDiclrXBkhdg9KnPW
+        nbygepLIVF5ENUoKQRbVR+mnJrjtD76zwYOu5eiyNfD4ytNH75OEFimyL+qveQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH] arm64: dts: ls1028a: sl28: get MAC addresses from VPD
-Date:   Thu,  5 Jan 2023 16:22:30 +0100
-Message-Id: <20230105152230.2814812-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v5 0/5] Add the Renesas USBF controller support
+Date:   Thu,  5 Jan 2023 16:22:52 +0100
+Message-Id: <20230105152257.310642-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,190 +60,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that it is finally possible to get the MAC addresses from the OTP
-memory, use it to set the addresses of the network devices.
+Hi,
 
-There are 8 reserved MAC addresses in total per board. Distribute them
-as follows:
+This series add support for the Renesas USBF controller (USB Device
+Controller) available in the Renesas RZ/N1 SoC.
 
-+----------+------+------+------+------+------+
-|          | var1 | var2 | var3 | var4 | kbox |
-+----------+------+------+------+------+------+
-| enetc #0 |   +0 |      |      |   +0 |   +0 |
-| enetc #1 |      |      |   +0 |   +1 |   +1 |
-| enetc #2 |      |   +2 |      |      |   +2 |
-| enetc #3 |      |   +3 |      |      |   +3 |
-| felix p0 |      |   +0 |      |      |   +4 |
-| felix p1 |      |   +1 |      |      |   +5 |
-| felix p2 |      |      |      |      |   +6 |
-| felix p3 |      |      |      |      |   +7 |
-| felix p4 |      |      |      |      |      |
-| felix p5 |      |      |      |      |      |
-+----------+------+------+------+------+------+
+Based on previous iteration:
+  https://lore.kernel.org/lkml/20221213133302.218955-1-herve.codina@bootlin.com/
+Custom debug macros present in the controller driver source code
+have been replaced by dev_dbg() calls.
 
-An empty cell means, the port is not available and thus doesn't need an
-ethernet address.
+Best regards,
+Herve Codina
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- .../fsl-ls1028a-kontron-kbox-a-230-ls.dts       | 12 ++++++++++++
- .../freescale/fsl-ls1028a-kontron-sl28-var1.dts |  2 ++
- .../freescale/fsl-ls1028a-kontron-sl28-var2.dts |  8 ++++++++
- .../freescale/fsl-ls1028a-kontron-sl28-var4.dts |  2 ++
- .../dts/freescale/fsl-ls1028a-kontron-sl28.dts  | 17 +++++++++++++++++
- 5 files changed, 41 insertions(+)
+Changes v4 -> v5:
+  - patch 1
+    Add 'Reviewed-by: Rob Herring <robh@kernel.org>'
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-index 73eb6061c73e..af9194eca556 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-@@ -56,10 +56,14 @@ qsgmii_phy3: ethernet-phy@10 {
- };
- 
- &enetc_port2 {
-+	nvmem-cells = <&base_mac_address 2>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
- &enetc_port3 {
-+	nvmem-cells = <&base_mac_address 3>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -80,6 +84,8 @@ &mscc_felix_port0 {
- 	managed = "in-band-status";
- 	phy-handle = <&qsgmii_phy0>;
- 	phy-mode = "qsgmii";
-+	nvmem-cells = <&base_mac_address 4>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -88,6 +94,8 @@ &mscc_felix_port1 {
- 	managed = "in-band-status";
- 	phy-handle = <&qsgmii_phy1>;
- 	phy-mode = "qsgmii";
-+	nvmem-cells = <&base_mac_address 5>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -96,6 +104,8 @@ &mscc_felix_port2 {
- 	managed = "in-band-status";
- 	phy-handle = <&qsgmii_phy2>;
- 	phy-mode = "qsgmii";
-+	nvmem-cells = <&base_mac_address 6>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -104,6 +114,8 @@ &mscc_felix_port3 {
- 	managed = "in-band-status";
- 	phy-handle = <&qsgmii_phy3>;
- 	phy-mode = "qsgmii";
-+	nvmem-cells = <&base_mac_address 7>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dts
-index 7cd29ab970d9..1f34c7553459 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dts
-@@ -55,5 +55,7 @@ &enetc_port0 {
- &enetc_port1 {
- 	phy-handle = <&phy0>;
- 	phy-mode = "rgmii-id";
-+	nvmem-cells = <&base_mac_address 0>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dts
-index 113b1df74bf8..aac41192caa1 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dts
-@@ -36,10 +36,14 @@ &enetc_port0 {
- };
- 
- &enetc_port2 {
-+	nvmem-cells = <&base_mac_address 2>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
- &enetc_port3 {
-+	nvmem-cells = <&base_mac_address 3>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -52,6 +56,8 @@ &mscc_felix_port0 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy0>;
- 	phy-mode = "sgmii";
-+	nvmem-cells = <&base_mac_address 0>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -60,6 +66,8 @@ &mscc_felix_port1 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy1>;
- 	phy-mode = "sgmii";
-+	nvmem-cells = <&base_mac_address 1>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dts
-index 9b5e92fb753e..a4421db3784e 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dts
-@@ -43,5 +43,7 @@ vddh: vddh-regulator {
- &enetc_port1 {
- 	phy-handle = <&phy1>;
- 	phy-mode = "rgmii-id";
-+	nvmem-cells = <&base_mac_address 1>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-index 4ab17b984b03..8b65af4a7147 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-@@ -92,6 +92,8 @@ &enetc_port0 {
- 	phy-handle = <&phy0>;
- 	phy-mode = "sgmii";
- 	managed = "in-band-status";
-+	nvmem-cells = <&base_mac_address 0>;
-+	nvmem-cell-names = "mac-address";
- 	status = "okay";
- };
- 
-@@ -154,6 +156,21 @@ partition@3e0000 {
- 				label = "bootloader environment";
- 			};
- 		};
-+
-+		otp-1 {
-+			compatible = "user-otp";
-+
-+			nvmem-layout {
-+				compatible = "kontron,sl28-vpd";
-+
-+				serial_number: serial-number {
-+				};
-+
-+				base_mac_address: base-mac-address {
-+					#nvmem-cell-cells = <1>;
-+				};
-+			};
-+		};
- 	};
- };
- 
+  - patch 3
+    Remove custom TRACE() and TRACEEP() debug macros and
+    use directly dev_dbg() instead.
+
+  - patch 2, 4 and 5
+    No changes
+
+Changes v3 -> v4:
+  - v3 patches 1, 2, 3 and 4 removed
+
+  - Patch 1 (v3 patch 5)
+    Remove 'depends-on' property
+
+  - Patch 2 (v3 patch 6)
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 3 (v3 patch 7)
+    Fix warning raised by the kernel test robot
+
+  - Patch 4 (v3 patch 8)
+    Remove 'depends-on' property
+    add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 5 (v3 patch 9)
+    No changes
+
+Changes v2 -> v3:
+  - v2 Patches 1, 2 and 3 removed.
+
+  - Patches 1, 2, 3 and 4 (new patches)
+
+  - Patch 5 (v2 patch 4):
+    Add 'depends-on' property
+    Removed redundant 'binding' word
+
+  - Patch 6 (new patch)
+
+  - Patch 7 (v2 patch 5)
+    Removed h2mode checking. This check is no more needed and the API no more
+    available.
+
+  - Patch 8 (v2 patch 6)
+    Add 'depends-on' property
+
+  - Patch 9 (v2 patch 7)
+    Fix file name
+
+Changes v1 -> v2:
+  - Patch 1:
+    Rename r9a06g032_sysctrl_get_usb_h2mode to r9a06g032_sysctrl_get_usb_role
+    and return USB_ROLE_{HOST,DEVICE} or an error code.
+    Reword commit log
+
+  - Patches 2 and 3:
+    No changes. Some previous feedbacks still need to be taken into account
+      https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+      https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+
+  - Patch 4:
+    Rename file from renesas,usbf.yaml to renesas,rzn1-usbf.yaml.
+    Remove 'oneOf'.
+    Add blank line and line break.
+    Add 'power-domains'.
+    Reword commit log
+
+  - Patch 5:
+    Remove clocks handling (handled by runtime PM through the clock domain
+    pointed by power-domains).
+    Fix compilation warning raised by the 'kernel test robot'.
+
+  - Patch 6:
+    Add 'power-domains'
+
+  - Patch 7:
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+
+Herve Codina (5):
+  dt-bindings: usb: add the Renesas RZ/N1 USBF controller
+  soc: renesas: r9a06g032-sysctrl: Handle h2mode setting based on USBF
+    presence
+  usb: gadget: udc: add Renesas RZ/N1 USBF controller support
+  ARM: dts: r9a06g032: Add the USBF controller node
+  MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
+
+ .../bindings/usb/renesas,rzn1-usbf.yaml       |   68 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |   12 +
+ drivers/clk/renesas/r9a06g032-clocks.c        |   28 +
+ drivers/usb/gadget/udc/Kconfig                |   11 +
+ drivers/usb/gadget/udc/Makefile               |    1 +
+ drivers/usb/gadget/udc/renesas_usbf.c         | 3406 +++++++++++++++++
+ 7 files changed, 3534 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
+ create mode 100644 drivers/usb/gadget/udc/renesas_usbf.c
+
 -- 
-2.30.2
+2.38.1
 
