@@ -2,180 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E9B65F41F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF0365F422
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbjAETKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S235025AbjAETNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjAETKS (ORCPT
+        with ESMTP id S233074AbjAETM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:10:18 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2070.outbound.protection.outlook.com [40.107.14.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C0B5F916;
-        Thu,  5 Jan 2023 11:10:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZRS9VLkkNh/ag6U+uV5NiV12ytXHUo/j4x6qzeTAM9ROVHysXfcGdMAIX3nDWQPu0E1FPB/bUJkpI49hh0sa6nFcmMb5973BHUHBaNyIl7tVKTICmZ/KWUxydaX9denVNV0iQxtTJwaMhZ1e57xFTukmk0Q1bnz7ZK+Ird9XTAUhOiXlA/sx1fqB3RVSBsg5dCbGT9ucOeJqZeJvr/JOWWjKJHngDnwRlfpIm3qiGE5Un77r29ibJujpKwEvoHWzPUIqJ+ZystKujAIU2oLLjV1bu9OLj4xvdwKu3LfKzVC/j3v44afEmFWs2hLvpBaqwwXT8JoCB8v9TMVHyVXAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6o1En3WcQBRmOsbBhZXLv5uW/oh+k2BhJhfFSWygzAk=;
- b=gJjcH+UnM0OODcwdn8aA1nProddKt+fgWAq5LFgxlCCJ8DrDmOWpVtWu7vYMbmvjj9bI0Bi1se63BnwHLiOMEdP36074IfwGGLiU106Xp0p5xwNmdxRtF1lQYY2CN/r6sc0TSu01krbyhKEIturSIKgryMb+ChhJCJ1kOWl8GkWwt1+h8brDR20cHW+y3wGWxNG0qllE8OmjECbPv1tAzPqvahMhFnfBnVwEUEKKo2eUEhTAxYetr0b1SA5OqOiwBDmp+E1LqS2fXm1zhfqsy6jzzBD5yKlKQwfvr3X1hx0Iyo1XdufkcWiBML1ccAvJQtwU0Iz4p1kAPRnQMAE9ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6o1En3WcQBRmOsbBhZXLv5uW/oh+k2BhJhfFSWygzAk=;
- b=0qqWe6ZnnVzD7C8JvRqwgkJOiUNRzqpztrGgSSXoscfo8Ffn0McNRn5UKagnaQt+anUVE8M0OYqkUCeuqfB/xoKlHeTFqHwdieUIKFFd60SZYYWOOXSvvqpVZIPvgP+8CRyfIiRXDUvCZLybWoSmkoU338iUCy+9bCoKBFEWziukIzdBAcTh8StP57kzwPKoe/1ojhO+4rsu84nebufkN3QYt9Ky9eSJAgeKjt4Z7QeJk24+wy0+7awhCVDXZjBK84n5ropN9yy41nicjEKZkBJavLFDKW15LTGG3v424A+Mhlfkufh4kIz3V4x2XQjF8fFYFMIGkmgrjpeWXhGpqA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DBAPR03MB6551.eurprd03.prod.outlook.com (2603:10a6:10:196::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 19:10:14 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%8]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 19:10:14 +0000
-Message-ID: <bdd84dcd-3f3c-4ed6-2694-bb8252a9a266@seco.com>
-Date:   Thu, 5 Jan 2023 14:10:02 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
- <20230105175206.h3nmvccnzml2xa5d@skbuf>
- <Y7cdMyxap2hdPTec@shell.armlinux.org.uk>
- <18453c4e-484d-5131-36fe-77d3e55d6ac7@seco.com>
- <Y7cfqdVzrCNX6VqE@shell.armlinux.org.uk>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <Y7cfqdVzrCNX6VqE@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR15CA0035.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::48) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Thu, 5 Jan 2023 14:12:57 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF05360CCE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:12:56 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so23197868ili.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:12:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=piCnIGXhXOnYV1hmjsRPMyKFWfqmILLLm5+CjusFvYg=;
+        b=lkdSeh5pfkbQKixjyuj/CBlkcX+GR0Ka2gOapwk+2aVMXmZ1FuL2lfly4qrhXkRnN5
+         1uEDAOoSQnVauZjpltj4HBgoA616AncnzSFK6iyG4gIzgg5q7GbeLFMuF32rBkMEUbOI
+         NFSd11iu1E1MglZfT9PdB+x8c3Vz6lqhxC0tulf7HShpvlTLfqnA7zED4Taec4nsh5ox
+         3jkt4/I/AVqtn16T4C9c5yF8qEQWiRas5WpBInnD+P/KSVa5pJERWZS3+HMhqprvWTpN
+         wqvtkJClwcFeX1Wv/DfIoXN1KDlQYNNQn/EZ4xZxpsMrChHXmRyxiO2PwQY9rhUUp9/l
+         QLxg==
+X-Gm-Message-State: AFqh2kpIHjz20D6iAoe5gyGAG4ETs8lkJbDn+TThZhbar7KZYdfnX1bj
+        IBqtzUZrCXdBfVgrPmjntvlFGEce5+vqx+Tbqvx1LzT1Ghem
+X-Google-Smtp-Source: AMrXdXtYjImq2UDlySiZ+1mq7rYAR8WXEtlmn2w932wLCzvukrwRtb+QpcE3YxGOG1UJBFvedvoSlEae34BEBwbWl8hjCyZSlKk8
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DBAPR03MB6551:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45f93091-63ad-4f7b-e558-08daef507988
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kRNcxHFcn2zaAug2tZPLF3qv8OJRRuNXRJssGZ6qav+EnEUdNl6EyyLp0hlfqkxRkmG9BwRrpKt5trMZfJ5gevPbAZs3/BBXFCgi3JAruJdBV5APosVwzgPKEJH4/baHtET8b9dpdLqgl/PS+rwUE7Tffjb2C2R9Ial7n6/vpFIhlNJ1zAnpgPJRndCrCWq1QMm6Qx8e59vf89l14hm8CSEInkHOMA8uc3ofSLXpK7sz4e7VC5O7Z4bOX4TDCvfoV8TPCEmOxVWJ+g08n27Hya8f8eh1Bdp0xMRIXCmkpK2W6Qx9qB39DmwGjy8zRfA9kv1YyM6InRZ23F6BXKWVY6mSug+HQGII9z+dVWoSZlvhDaLAYI+EtxJ2QhDqo88xnGzxO3tM02fXF4nKliroDLIDcr7CzrfD5NE23Iu09y3vQfnwozOQ+IQSQxIdF3bjrlN3Wf0fZv5TSdJWlgYFXSot0f5U6AVTj4FzOhvB0mcsMbWe+F+8ahq4lQwpY44+Mbi/Mv2p+pnBAQlFpyblcAPmeAs2Si4g42LKa92oE/mkCKlkF4oY417I9qH9xIOD2PjOdzoduvuTusdRGo3xvOnc2ZIQ6OS1S9JP+vxSF536bWVg9seozcnySrtxMkRtFbUb8YZHywDIfZNrRF30aIfHuYfL7hwJgc7qRZTzrgWRu1K480FRnCqau7Sq8Vna6gqtpB52wxVr0d0YiSwoy5sXz/EH0OqTM34SoX0erHqyvV6cQpPcrVwodcsTOobfeoy8qc3J6mB1+RBfbrF1tw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39840400004)(396003)(376002)(346002)(366004)(451199015)(5660300002)(2906002)(7416002)(31686004)(44832011)(8936002)(41300700001)(4326008)(8676002)(316002)(66476007)(66946007)(6916009)(54906003)(52116002)(6486002)(478600001)(66556008)(53546011)(2616005)(26005)(6512007)(6666004)(6506007)(186003)(38100700002)(38350700002)(31696002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTJYQ3g2MVFhSHpLTlgwNWpLbkh5SEVGQ3IxVzZmQURYN2lNNFZ3RDA5R2hs?=
- =?utf-8?B?SGRqTkR4TUhXOTlvS1IxSEVKYUl4akhGY2VyR1EvK1VDYUk3eURuWW1sbXQy?=
- =?utf-8?B?OGdVRnFlOWYzQTRSNXFxK0lCZi9KZms2S0RKenBtenRxNnFWeDYyRC91ZCt4?=
- =?utf-8?B?aHQ0RWpmbXhUQzdLRXY3T1IzT1IyZTRYMlBqcVgzQXFuSzFyU09CSE5qWjZl?=
- =?utf-8?B?ZlZzamdwbnZOM3NYMjBUV01BbEIwRThkMjgyK2M2SlpFNGRxNXVWTTBPNE5R?=
- =?utf-8?B?NDYxVGkwbENnTUlnOThlMG1EU3paTGF2YUhzNjN6R3VJRmdCL1ZyeWhqRldr?=
- =?utf-8?B?aW0wK240c1huSS9HUkZLbmt4RmhMSnN2OTUwUjVyV0h6eHhsM1BzUnBoVGM4?=
- =?utf-8?B?Q0g0dW9JT1htL0l1ZVN2dDE3NWR4RkZjNWh5Wm9tVTF4OGF5cUUxZXdqSFZU?=
- =?utf-8?B?Z3hLdVhCcHZ0SkkzcmFobHI4elcvTThWQ0FhMmI4dXI2OW01K250WlZZUjZz?=
- =?utf-8?B?TC9tblZKUGczNTdiV09IM1BCZmY0SithbmFTODM4Q0JpWU9XYkdnQ0lJTnBk?=
- =?utf-8?B?dHErV2xVd1lWTEFxYWJraktTang1UlVlQjllRFFpaWpUekZJQTN6QXR1NVhE?=
- =?utf-8?B?bXdremZ4aGx2NG92dkp3a2ZMVmwxZXdwVEtUYnp4MGlUZ1dwT2hLT0RlQ25Y?=
- =?utf-8?B?ejR6VFZ2bDN6OWJWTVVuUVo3UGMrN1hzNUpsYVozSCtEaytKT1dleWNsQlQ2?=
- =?utf-8?B?UnJKR2xrYWp1cVhDVmxjeFBCNUR3dk5iOVFXOEVTTlA5NWlLSWNKc21raHR6?=
- =?utf-8?B?ZDJrd3lrc1JUSDdtdkhJV1dtcSthRCt1amcyZEEyTWNNZi85bEtuMjYzSjgw?=
- =?utf-8?B?Q3VxbEVLRmhQeVZQLy9vQVV1ZDZEeXhEenU5OThoeUc2b2pLdm8wVDEzNEJl?=
- =?utf-8?B?NFBMSjBveWRpM3g1QnNFTDBhOW9SMy8zdWpkWXg0Z0UwUzVXekRrbGJzbng0?=
- =?utf-8?B?VjEvc01rUkhCU1JsWkc3emJvdkllb3ZqSHNaTnpLRnZVNmFzY0tLekZJdFUv?=
- =?utf-8?B?V3hYbzdNTGFRUkNLNGZRK2xPRE1DNytLZ3d6alFqQlhyc3BrL01NcVcwQ3Vo?=
- =?utf-8?B?SUNUVmthOCtPcmlvbmdGRlZ2dm1vY2tJVmVEL3BXUm41b3JOdzFHWXNkdDlZ?=
- =?utf-8?B?VWpkQ1V6akc4OXE4M281b3VraDdiVUtoLzVKdkZVeTJRNFdXQ0ZLTkxMZWxC?=
- =?utf-8?B?M1pCRnJNQ085U3VOV29XcjFDUXdXNTllNVlBZDg3b004dnFWWmZmdXMvUThP?=
- =?utf-8?B?aGlwTDlXWlcxcjh0eDFnTlN2aVU1TWxOVHB5MjRSZWU3N2ovanlqWUc5S3dx?=
- =?utf-8?B?dlJFM2xCUTNyR0JnMTJ5WkMyaXRJcU9JZnVHV09pdis5UzFpdzBoRzNIVVNS?=
- =?utf-8?B?cFlTK0JOT0dUYTRDOGJhOXRpOFpSRE8zK1lPTGdiQ1hISTQ5dXhNbFlQNFZy?=
- =?utf-8?B?L3VBYytZdjQ0QmlidU4wT2pmQ3hXTmNDcGhqRW9GSy9zL3FNZnZmbVVWMVNU?=
- =?utf-8?B?L3BqMUhnYUFaUEJzTWxidEJRakpJQVVseGl5ZE5jSFN4VmZNVmdjdVhDYjFh?=
- =?utf-8?B?RWFxMWlrT29nMVFZL0kzVndyV24rQ3h4RXJqeWExdGxDeGJlSFlOTXJRWURB?=
- =?utf-8?B?WS9kVlYzaTA5cUpzMEgxM0pJcnJNU25pS0tmTS9peGdQVUhFTWc2ZVBoTUd5?=
- =?utf-8?B?K0lYS0x5WkxScFY4TGVXTWVTc29iRVlQUjB1aThCcWR6dHQ5RWFHUkV3Y3Ax?=
- =?utf-8?B?VlBFTHY0STFpOFVzRktxVFlQY21vK29YL3p5Uytwbkw5N1lxR2xBYkxzTnRt?=
- =?utf-8?B?THJUWHVCTFR4cmF6aVd5UjJyNUg0UlUvbisxWlZNZ29IS2tycWltVVd4cGhk?=
- =?utf-8?B?UDlJLzZKdkR4UWV5anV5ZFlid0tQZWRGalZMZU92Z05KdlE2cXRkdkhHakll?=
- =?utf-8?B?ZnliTG5CT2dOaG1TMGxYM204SDlmMGJFUmF2SGFlZWtFd25QaFZzYkQ3VnRE?=
- =?utf-8?B?ZnJpSEx4VlYwTDN2NjQrY0dUMDBYLzl0N3Jyc3hyQTFWR2htM0hOVWxVTFMz?=
- =?utf-8?B?RnJMV3hEUk5uUFhXZUhUTW1LeE9MWmJTeWFDKzYyV1VDTWFYeDNzL25vMW83?=
- =?utf-8?B?RFE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45f93091-63ad-4f7b-e558-08daef507988
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 19:10:14.3189
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GXIqXaAH8BtkobDEztl6eFC+wdbzw4yxN3Fp7K6EwjJ+0Q/kqQQa3ciqKIFxihtuJ3Pcwo+JrAcr080dfxRMxw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR03MB6551
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:b608:0:b0:39e:536f:e5db with SMTP id
+ h8-20020a02b608000000b0039e536fe5dbmr192883jam.50.1672945976178; Thu, 05 Jan
+ 2023 11:12:56 -0800 (PST)
+Date:   Thu, 05 Jan 2023 11:12:56 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a3818b05f18916e0@google.com>
+Subject: [syzbot] [reiserfs?] [jfs?] BUG: unable to handle kernel paging
+ request in reiserfs_readdir_inode
+From:   syzbot <syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, shaggy@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 14:06, Russell King (Oracle) wrote:
-> On Thu, Jan 05, 2023 at 01:59:27PM -0500, Sean Anderson wrote:
->> On 1/5/23 13:55, Russell King (Oracle) wrote:
->> > On Thu, Jan 05, 2023 at 07:52:06PM +0200, Vladimir Oltean wrote:
->> >> On Thu, Jan 05, 2023 at 12:43:47PM -0500, Sean Anderson wrote:
->> >> > Again, this is to comply with the existing API assumptions. The current
->> >> > code is buggy. Of course, another way around this is to modify the API.
->> >> > I have chosen this route because I don't have a situation like you
->> >> > described. But if support for that is important to you, I encourage you
->> >> > to refactor things.
->> >> 
->> >> I don't think I'm aware of a practical situation like that either.
->> >> I remember seeing some S32G boards with Aquantia PHYs which use 2500BASE-X
->> >> for 2.5G and SGMII for <=1G, but that's about it in terms of protocol switching.
->> > 
->> > 88x3310 can dynamically switch between 10GBASE-R, 5GBASE-R, 2500BASE-X
->> > and SGMII if rate adaption is not being used (and the rate adaption
->> > method it supports in non-MACSEC PHYs is only via increasing the IPG on
->> > the MAC... which currently no MAC driver supports.)
->> > 
->> 
->> As an aside, do you know of any MACs which support open-loop rate
->> matching to below ~95% of the line rate (the amount necessary for
->> 10GBASE-W)?
-> 
-> I'm afraid I haven't paid too much attention to BASE-W, and I'm not
-> aware of anything within the realms of phylink/phylib supporting MAC
-> drivers having anything for it. I don't even remember mention of it
-> in any SoC datasheets.
+Hello,
 
-The mEMAC supports "WAN mode" which does open-loop rate matching, but
-it can really only adapt down to 9.5 GBit/s or so.
+syzbot found the following issue on:
 
-> Are you aware of a 10GBASE-W setup?
+HEAD commit:    247f34f7b803 Linux 6.1-rc2
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15de909a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f6ef04b7cf85153b528
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100896ec480000
 
-No.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/b331beed692c/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/980b2ce32188/mount_1.gz
 
---Sean
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com
 
+REISERFS (device loop0): Using rupasov hash to sort names
+REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
+loop0: detected capacity change from 0 to 32768
+Unable to handle kernel paging request at virtual address ffff00001a06e183
+Mem abort info:
+  ESR = 0x0000000096000021
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x21: alignment fault
+Data abort info:
+  ISV = 0, ISS = 0x00000021
+  CM = 0, WnR = 0
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c54db000
+[ffff00001a06e183] pgd=180000023fff8003, p4d=180000023fff8003, pud=180000023fff7003, pmd=180000023ff26003, pte=006800005a06e707
+Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3121 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
+pc : __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
+pc : __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
+pc : osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
+lr : osq_lock+0x38/0x1f8 kernel/locking/osq_lock.c:94
+sp : ffff80001305b980
+x29: ffff80001305b980 x28: ffff80000eec9000 x27: ffff80000cbb6d47
+x26: 0000000000000000 x25: ffff800008774160 x24: ffff0000cbd3ce90
+x23: ffff80000879e1b8 x22: ffff80000d2e2c40 x21: ffff00001a06e183
+x20: ffff0001fefd0c40 x19: ffff0000cbd3ce70 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+x11: 0000000000000000 x10: ffff0001fefd0c50 x9 : 0000000000000002
+x8 : ffff0001fefd0c40 x7 : 0000000000000000 x6 : ffff80000879e1b8
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : ffff0001fefd0c40 x0 : ffff00001a06e183
+Call trace:
+ __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
+ __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
+ __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
+ osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
+ mutex_optimistic_spin+0x1dc/0x254 kernel/locking/mutex.c:460
+ __mutex_lock_common+0x1b4/0xca8 kernel/locking/mutex.c:607
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_readdir_inode+0x9c/0x684 fs/reiserfs/dir.c:79
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: aa1503e0 aa1403e1 aa1f03e2 aa0103e8 (c8e8fea2) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	aa1503e0 	mov	x0, x21
+   4:	aa1403e1 	mov	x1, x20
+   8:	aa1f03e2 	mov	x2, xzr
+   c:	aa0103e8 	mov	x8, x1
+* 10:	c8e8fea2 	casal	x8, x2, [x21] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
