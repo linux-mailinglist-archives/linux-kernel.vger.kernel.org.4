@@ -2,123 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4513965F4C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179E265F4CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbjAEToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
+        id S235143AbjAETsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbjAETod (ORCPT
+        with ESMTP id S234755AbjAETrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:44:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3F35FEF;
-        Thu,  5 Jan 2023 11:44:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B55261C22;
-        Thu,  5 Jan 2023 19:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B34AC433EF;
-        Thu,  5 Jan 2023 19:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672947871;
-        bh=F9ytvTqf53Pui3bJMCgwez1qUkcHFn1L1hfgQzkn+7w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Ro/nHfXSWUqGhft9um6BlZ0xoVAXYK4oo/u7rsmsk78Cj96IkyDMOlR0OJfAbB4gP
-         sVLhrtAlOpOX0SHvP9MdRxbBw48AwZ8/2n4kaoPwwml/oScDgCe0WFmSoXoYYV/SFK
-         fMAYcnSQoVTeQCpgi5zRNDADSNhRmGMczvkRcGm6wsIRkY1e9uVQPh5FPnHtr1uXmx
-         L/1slQryJ1998b1ooDBrqI0Dc79xjif6uH4YejUPcPnP1vrk5foMU+jv4tUTHnUxQU
-         DiCpPuLGY1j2++XNXsb/QBUjcAADJgDkna7+sOswenwlFNmxOpadmYHGBKq/9UYiOD
-         vCdf955Si+sEw==
-Date:   Thu, 5 Jan 2023 13:44:29 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105194429.GA1164120@bhelgaas>
+        Thu, 5 Jan 2023 14:47:39 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC16714D29;
+        Thu,  5 Jan 2023 11:47:38 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 4C6111C09F4; Thu,  5 Jan 2023 20:47:37 +0100 (CET)
+Date:   Thu, 5 Jan 2023 20:47:36 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, nathan@kernel.org,
+        marcus.folkesson@gmail.com, cuigaosheng1@huawei.com,
+        andriy.shevchenko@linux.intel.com, m.szyprowski@samsung.com,
+        jack@suse.cz
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.9 000/251] 4.9.337-rc1 review
+Message-ID: <Y7cpWKbQlNW5qEeO@duo.ucw.cz>
+References: <20230105125334.727282894@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="W88MDnI1irEhoaY2"
 Content-Disposition: inline
-In-Reply-To: <36dab127-93f9-ad87-26be-cb406fed6212@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105125334.727282894@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 02:23:45PM -0500, Liang, Kan wrote:
-> On 2023-01-05 1:29 p.m., Bjorn Helgaas wrote:
-> > On Thu, Jan 05, 2023 at 06:04:52PM +0000, Luck, Tony wrote:
-> >>> Hi Tony, can you share a dmesg log?  Does it look like the same thing
-> >>> Kan reported, where the ECAM space is reported only via an
-> >>> EfiMemoryMappedIO region and is not otherwise reserved by firmware?
-> >>
-> >> Attached are serial logs. "broken" is the one from v6.2-rc2, "revert" is the
-> >> one with your commit reverted.
-> >>
-> >> I don't see the string "ECAM" in either of them.
-> > 
-> > Yeah, "ECAM" is what the PCIe spec calls it, but Linux logging uses
-> > "MMCONFIG".  Probably should change that.
-> > 
-> > Anyway, your dmesg log shows the same problem:
-> > 
-> >   DMI: Intel Corporation BRICKLAND/BRICKLAND, BIOS BRBDXSD1.86B.0338.V01.1603162127 03/16/2016
-> >   efi: Remove mem48: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
-> >   PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
-> >   [Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
-> >   PCI: not using MMCONFIG
-> >   acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
-> > 
-> > Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
-> > firmware/kernel interface is as an EfiMemoryMappedIO region.
-> > 
-> > I think this is a firmware bug, but obviously we're going to have to
-> > figure out a way around it.
-> 
-> I just want to share that I did more tests on an Ice Lake server (a
-> different generation from my original report and Tony's machine).
-> 
-> The same problem can be found as well.
-> 
-> [    0.000000] DMI: Intel Corporation M50CYP2SB2U/M50CYP2SB2U, BIOS
-> SE5C6200.86B.4018.D65.2010201151 10/20/2020
-> [    0.000000] efi: Remove mem375: MMIO range=[0x80000000-0x8fffffff]
-> (256MB) from e820 map
-> [    0.000000] e820: remove [mem 0x80000000-0x8fffffff] reserved
-> 
-> [    1.528341] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem
-> 0x80000000-0x8fffffff] (base 0x80000000)
-> [    1.566605] [Firmware Info]: PCI: MMCONFIG at [mem
-> 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
-> [    1.566611] PCI: not using MMCONFIG
-> 
-> This firmware implementation should exist on the existing platforms for
-> a long time.
 
-Yes.  Frustrating, but I think we have no choice but to make Linux
-work with the firmware as it is, whether it is buggy or not.  From
-your first report, I hoped it was isolated to unreleased firmware that
-had a chance of being fixed, but obviously that's not the case.
+--W88MDnI1irEhoaY2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bjorn
+Hi!
+
+> This is the start of the stable review cycle for the 4.9.337 release.
+> There are 251 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+These are kCFI fixes, we don't really need them in 4.9:
+
+> Nathan Chancellor <nathan@kernel.org>
+>     net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+> Nathan Chancellor <nathan@kernel.org>
+>     hamradio: baycom_epp: Fix return type of baycom_send_packet()
+> Nathan Chancellor <nathan@kernel.org>
+>     drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
+> Nathan Chancellor <nathan@kernel.org>
+>     drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
+
+This is marked as not-for-stable, and does not fix anything really
+bad, just smatch warning:
+
+> Marcus Folkesson <marcus.folkesson@gmail.com>
+>     HID: hid-sensor-custom: set fixed size for custom attributes
+
+This is quite wrong. Real bug is registering the interrupt before the
+device is set up -- it should be fixed by reordering the init code,
+not by checking for NULL.
+
+> Gaosheng Cui <cuigaosheng1@huawei.com>
+>     ALSA: mts64: fix possible null-ptr-defer in snd_mts64_interrupt
+
+This may turn working config into non-working for someone, as people
+now need to enable PWM manually to get fully working driver. I don't
+think we want it in stable.
+
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>     fbdev: ssd1307fb: Drop optional dependency
+
+This claims to fix a deadlock, but in turn it calls
+cancel_delayed_work_sync from interrupt handler. I don't think that is
+good idea.
+
+> Marek Szyprowski <m.szyprowski@samsung.com>
+>     ASoC: wm8994: Fix potential deadlock
+
+This one is okay in mainline, but contains wrong error handling in the
+4.9 backport. 4.19 seems okay. It needs to "goto out_unlock", not
+return directly.
+
+> Jan Kara <jack@suse.cz>
+>     ext4: initialize quota before expanding inode in setproject ioctl
+
+Best regards,
+								Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--W88MDnI1irEhoaY2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY7cpWAAKCRAw5/Bqldv6
+8ojEAKCY75U3fxHtetJmbMdT2+rhB2HWhACgs7WB0SnN3QEXI1p9VceTklePlfU=
+=giGP
+-----END PGP SIGNATURE-----
+
+--W88MDnI1irEhoaY2--
