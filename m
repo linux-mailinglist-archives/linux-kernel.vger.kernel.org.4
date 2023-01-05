@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7052A65F6F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCE365F6F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbjAEWlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S235951AbjAEWno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235778AbjAEWle (ORCPT
+        with ESMTP id S232346AbjAEWn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:41:34 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C701C41E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:41:33 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d15so40871735pls.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XbEJ6C+ug2NsljTwx4DoQKNa+OlQLxZIBsSb223c9lE=;
-        b=asfVO7RRpHj7y2lWWMRxdkl4uWIT0Zk7rrOxBjwe9bKXgbEimJH8eSs5y7phpZbhat
-         Xstmhy+yo3meVAL6UXTXRdfEM8C08TPjaMjJaVECOe36cCJoonFoyZh8S7sYdx2VU96X
-         0sOKfsNGdk4DKJK/HfeyNbwuCgDd+9cgb3jFk=
+        Thu, 5 Jan 2023 17:43:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF981BE87
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672958562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vgUHJzZE66px4h3+wgCbKciUz0W22+aUBNT6U4fGi2Y=;
+        b=UEIeMpjPbkBKUYo/NAVMqR+7XKFGQQ7ZGiDNq1I+b6rLpDWeUiP8Vqvw2Ds98HoQDf3Bip
+        ylU76MsN0XB8NFxHpXmf7eVMz57Il9qKDzQCrhsRt9LNT/TbBNFoG0vzXaMcA3SurVJSBJ
+        sq951NJrNH98aIqF08zrKbb7MxZMW/c=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-486-T0WM0OGiMk6sMBgat84DRA-1; Thu, 05 Jan 2023 17:42:38 -0500
+X-MC-Unique: T0WM0OGiMk6sMBgat84DRA-1
+Received: by mail-qk1-f197.google.com with SMTP id l16-20020a05620a28d000b00704af700820so25583848qkp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:42:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XbEJ6C+ug2NsljTwx4DoQKNa+OlQLxZIBsSb223c9lE=;
-        b=0Hwcn6tRHCMpEisEvAZwogBRVsNx+qMST4IkGU7bZ+f0vxdz/cg5/f0JsfE6VmHRLY
-         A0YuCVPXw8ibBICvyGjQLlqAXf3F1OBNuiCVgHq0Dao8d0I0NLtC0WxoQ3EBjqli/UNh
-         XtlHYreaOZZDHNV0qQfcG/BMxcphCc+Ar+PBmu1ixtmkoxcHTzNFxXdvX8Y9Pq8uloye
-         QfQCDhIX7OUbi5UUCTqVPfZOBF/PYYuU/rObe/ww9dwfmpcnjDgyWZk7SZZkRxIVV5L3
-         Lgl3sC+ndxfeBjXEE/qsl8wIqT/jglXNWw506/+ZBSLj/9+3JQhDraVMH8aZcjAU0JIw
-         CQ+g==
-X-Gm-Message-State: AFqh2kq/cn+z52zNYoyIzjuB/R4P0EuR9aT343wtKkdu41tTSasoVMTZ
-        zOq7svI0HOCrAmu49GunDn4Kig==
-X-Google-Smtp-Source: AMrXdXtRgYj4OiBZyps7r7FG9SkHxrncQcTUVL9JLKBGfn3J0hm3xbYWINTp2A3YBjRyZct6O4L3nA==
-X-Received: by 2002:a17:902:f78d:b0:192:ae36:f760 with SMTP id q13-20020a170902f78d00b00192ae36f760mr27050793pln.47.1672958492567;
-        Thu, 05 Jan 2023 14:41:32 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b001925016e34bsm26665004plg.79.2023.01.05.14.41.32
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgUHJzZE66px4h3+wgCbKciUz0W22+aUBNT6U4fGi2Y=;
+        b=2TnXA+MsPKD9cLj9nMB9XVPnbsR3ChK5r+aYdziDxtAqND+5H64HzA40XyoJzK3tve
+         XvCiwgXCC6pcBCvVRfKn0QAYGO4SSJx737lUO3qJii2JGKi3EpzsdGDBgP5tkso0m1pU
+         jEQ9g9WmUmSc6aSQM+NxSSK0VeoRQH0vmzkzotW9da6ZWWPnDLwNdeeP9Fb/aFVTAFHb
+         zaS2DKom2GztaT6TF0sKy3U/gzNJHwAfc54go27Ng4IKVedIDV9IOjMmchEtsr7tR2Th
+         Ffz/ccg/oVfttLoDcZkbNhMvWHAKtl8s7f2lsK0lF9rtd10wdibVaAThZepwJSnr4fr6
+         9CGg==
+X-Gm-Message-State: AFqh2kqNwQUVmT//3qfUw0H4WMyM4ESLurrAt2CuGrXfHUoRo+3aifHV
+        21G234Fez+PRQ60uOw701LGkMrJUe+olbdjZ97NKqzoimhT+IP7nYh10MUeg8oF35mhzQHZxPAu
+        Up8sqxaYLCv6OtCQCw5uecKbu
+X-Received: by 2002:ac8:7766:0:b0:3a5:f9cb:886f with SMTP id h6-20020ac87766000000b003a5f9cb886fmr72417713qtu.29.1672958558366;
+        Thu, 05 Jan 2023 14:42:38 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsb7QMoGw7hkQTzlQFXCKWwVIMRvtRiRSKc80lHWO9Msaear+owA5O3ECrqcaUd58w1BSTVGA==
+X-Received: by 2002:ac8:7766:0:b0:3a5:f9cb:886f with SMTP id h6-20020ac87766000000b003a5f9cb886fmr72417698qtu.29.1672958558192;
+        Thu, 05 Jan 2023 14:42:38 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
+        by smtp.gmail.com with ESMTPSA id fa11-20020a05622a4ccb00b003a68fe872a5sm22317208qtb.96.2023.01.05.14.42.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:41:32 -0800 (PST)
-Date:   Thu, 5 Jan 2023 14:41:31 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Thu, 05 Jan 2023 14:42:37 -0800 (PST)
+Date:   Thu, 5 Jan 2023 17:42:34 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-mm@kvack.org,
-        Alistair Popple <apopple@nvidia.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] memremap: Replace 0-length array with flexible array
-Message-ID: <202301051441.C1D7291921@keescook>
-References: <20230105220151.never.343-kees@kernel.org>
- <Y7dLrdOETjg/+XKq@work>
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
+ walk_hugetlb_range
+Message-ID: <Y7dSWj+sGyXIPs/U@x1n>
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-22-jthoughton@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7dLrdOETjg/+XKq@work>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230105101844.1893104-22-jthoughton@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:14:05PM -0600, Gustavo A. R. Silva wrote:
-> I think this is the same patch:
-> 
-> https://lore.kernel.org/linux-hardening/YxKO%2FjY1x0xTpl4r@work/
-> 
-> It's actually in linux-next.
+On Thu, Jan 05, 2023 at 10:18:19AM +0000, James Houghton wrote:
+> -static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+> +static void damon_hugetlb_mkold(struct hugetlb_pte *hpte, pte_t entry,
+> +				struct mm_struct *mm,
+>  				struct vm_area_struct *vma, unsigned long addr)
+>  {
+>  	bool referenced = false;
+> -	pte_t entry = huge_ptep_get(pte);
+> +	pte_t entry = huge_ptep_get(hpte->ptep);
 
-Hm, it's been in -next since September? Is this in a tree of yours that
-didn't get pulled for v6.2?
+My compiler throws me:
+
+mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
+mm/damon/vaddr.c:338:15: error: ‘entry’ redeclared as different kind of symbol
+  338 |         pte_t entry = huge_ptep_get(hpte->ptep);
+      |               ^~~~~   
+
+I guess this line can just be dropped.
+
+>  	struct folio *folio = pfn_folio(pte_pfn(entry));
+>  
+>  	folio_get(folio);
 
 -- 
-Kees Cook
+Peter Xu
+
