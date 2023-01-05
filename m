@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B1365F259
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F25765F25A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbjAERP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S235096AbjAERPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbjAERO0 (ORCPT
+        with ESMTP id S235277AbjAEROb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:14:26 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198C467BEC
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:08:45 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso1854930wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 09:08:45 -0800 (PST)
+        Thu, 5 Jan 2023 12:14:31 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7641463D04
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:08:52 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r2so1949523wrv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 09:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sncxYiJ19EBEMYozwgCXbGEKSdQ2+11yxAIRrAVvyso=;
-        b=L8GGi7ni7dl6wFN8IW77qB70367v8PhZ3Sd7+oJtMLY5Ej9cNvDNLQSAsDm09a+xsP
-         wK3c5FXsCw2fAI8nS6woEXI0BA5uhEXQAs1+yNidpxEMs39ztajNLQMH9bjXgBm615vp
-         3UTrsw/syO8Q2MNa9PtePGoMM7ezHfYurfTCo5Ds8UGYdF/+rmD+F7wd79Y8dZwU7VSn
-         B14ErNIeK6oq02bUfQPt0ZEJNesP1wNbvDsX2THshhyp5+nW2Par/RJXvy52WSR2YMq1
-         ZFJUeYixlF/HoXntuGwSv4jBB+damvcCP4cq//5M4DNqUB6jD+nSsg5nryz18+5IskYw
-         fWLw==
+        bh=vP64e5b9ohPWmtQISJdT6ZMeITPgHiIqXiaeBFbmRb0=;
+        b=eCNMHDOaWZVSQxYE+JmQV8tG4HWDvxojEViLcY7wJRhQzMqsxDtzFgrjlujeERKhEJ
+         K0R+BPVOcnmZJN/RtFEVPnktuxHBcDaWQFKZjnQc9SiYGXl050ITes6RIuDXKQvovVsx
+         cQLSaMVucd2bHrRVTvYJXc51FFdbtJjUMmUBO5enk1YjPGB41+VRZeiayZVAjQN4P7MV
+         4vXCOG2iTMFbLNZwUX6bethu+JxTW4TqemawA2IosX5KXyVrFxR+/KDGM5hbpwXU8iFt
+         RUdriaIDnqvhqMXPjviX6VExdGwnWGyJKKpnrXqdALfTL8unN3/nibCPRyzkxe7qbeI1
+         ns7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sncxYiJ19EBEMYozwgCXbGEKSdQ2+11yxAIRrAVvyso=;
-        b=S53kgJI4ZQN1rqqNK4n/YdV5FlaWc/V9yH3w91msucvsRJ73rohba/7c5NMfkIHysz
-         TqwKjE1bGBU4XBbTasnuCXNszyfozmyYsaV8x6rXeTrHUbpqVPA3nZ/xY76zRQTlpi+s
-         1Nl4/1szHUtn/LvqtFtGjTqR2soM6rSDCS4tVokJgOTdiwC7tr4VgBxrrsvZC+4yaLvm
-         gUef+R2jr1K3h/h54S6p7D8UD8dx0IWMsu5bfOFVk/3tiTKcnHKpkpjmet+YysVHRQuK
-         YsiRZIMoC5ahngFGD3nRmvkx4KeaQJxXcP+OCRph71EtT1w9TAWtfvbbz8PzUHssM5Er
-         ZdiA==
-X-Gm-Message-State: AFqh2koxOxe6yqilv9c4aB7KH9FGhKqZCUD1ojzqSVppxLKhYaq8fcID
-        BlrScrXJlsigkg64of5V3GH8hA==
-X-Google-Smtp-Source: AMrXdXsa25aMnGI1cayPOWzrjuYzyQhetcgmL1o5YukwOgaRADsQ2/BrQNcacZ4JwiA8kuPZNNtW5g==
-X-Received: by 2002:a1c:770b:0:b0:3cf:a18d:399c with SMTP id t11-20020a1c770b000000b003cfa18d399cmr39048182wmi.1.1672938474085;
-        Thu, 05 Jan 2023 09:07:54 -0800 (PST)
+        bh=vP64e5b9ohPWmtQISJdT6ZMeITPgHiIqXiaeBFbmRb0=;
+        b=KkWHv7aC6uM3CNvo6jF8ANnnQerqCZw8ZQy9q76SGhWg72xLpytsxd9qLafKDOCDjG
+         cBzXGnxyd9yafWQxeTFnFBDCxJf3QyretTCRFaoWioPwXmNnl+pAoeUECPf+EQ+ghVci
+         EiyeOC8ASdKC+KEugcPNng1bC0GsWqsW8eraTLz5/i7oiHyh3E0sriceZzzbbbp5iFvH
+         SBFQXEFwAO8/HiVwoQ8ryVcOSZGKL+bWHnF8r1J19GEk6atdvktC2S7hvUHV7ql1duGc
+         tomofxEG8QCcmaQbaDFwObBcwxuA46Dzykkfh7TG5AXEnd8P7d+L0I8v/wfBDJLIUQgj
+         pv+A==
+X-Gm-Message-State: AFqh2kriRFBMM19ZXP4lRmJho/3CuXYXOJ5T1cRszTdwsI38OkvdvWEH
+        paaUTyLtH8g15QyDDI8jJJe+8A==
+X-Google-Smtp-Source: AMrXdXs2RKfEtCAqsPWOgrfPiuG4a6OOYOxjvHp/8Zh9GrpmHzgNu0JjO9S3KNSOrksOPYFxO2638A==
+X-Received: by 2002:a05:6000:242:b0:27f:aa94:a9f2 with SMTP id m2-20020a056000024200b0027faa94a9f2mr23955810wrz.68.1672938475251;
+        Thu, 05 Jan 2023 09:07:55 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4091:a245:805c:9cf4:fdb8:bb61:5f4e])
-        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b002365730eae8sm37164853wrm.55.2023.01.05.09.07.53
+        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b002365730eae8sm37164853wrm.55.2023.01.05.09.07.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 09:07:53 -0800 (PST)
+        Thu, 05 Jan 2023 09:07:54 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,115 +60,213 @@ Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
         Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
-        Alexandre Bailon <abailon@baylibre.com>,
         Fabien Parent <fparent@baylibre.com>,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 7/8] soc: mediatek: Add support for MTK_SCPD_STRICT_BUS_PROTECTION cap
-Date:   Thu,  5 Jan 2023 18:07:34 +0100
-Message-Id: <20230105170735.1637416-8-msp@baylibre.com>
+Subject: [PATCH 8/8] soc: mediatek: pm-domains: Add support for MT8365
+Date:   Thu,  5 Jan 2023 18:07:35 +0100
+Message-Id: <20230105170735.1637416-9-msp@baylibre.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105170735.1637416-1-msp@baylibre.com>
 References: <20230105170735.1637416-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Bailon <abailon@baylibre.com>
+From: Fabien Parent <fparent@baylibre.com>
 
-This adds support for MTK_SCPD_STRICT_BUS_PROTECTION capability. It is a
-strict bus protection policy that requires the bus protection to be
-disabled before accessing the bus.
-This is required by the mt8365, for the MM power domain.
+Add the needed board data to support MT8365 SoC.
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
+ drivers/soc/mediatek/mt8365-pm-domains.h | 147 +++++++++++++++++++++++
+ drivers/soc/mediatek/mtk-pm-domains.c    |   5 +
+ 2 files changed, 152 insertions(+)
+ create mode 100644 drivers/soc/mediatek/mt8365-pm-domains.h
 
-Notes:
-    Changes in v4:
-    - Change name in title and commit message
-    
-    Changes in v3:
-    - Rename MTK_SCPD_STRICT_BUSP to MTK_SCPD_STRICT_BUS_PROTECTION
-    - Remove extra bool variable reflecting the capability
-    
-    Changes in v2:
-    - Fixup error handling path.
-
- drivers/soc/mediatek/mtk-pm-domains.c | 27 +++++++++++++++++++++++----
- drivers/soc/mediatek/mtk-pm-domains.h |  1 +
- 2 files changed, 24 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/soc/mediatek/mt8365-pm-domains.h b/drivers/soc/mediatek/mt8365-pm-domains.h
+new file mode 100644
+index 000000000000..8735e833b15b
+--- /dev/null
++++ b/drivers/soc/mediatek/mt8365-pm-domains.h
+@@ -0,0 +1,147 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++#ifndef __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
++#define __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
++
++#include "mtk-pm-domains.h"
++#include <dt-bindings/power/mediatek,mt8365-power.h>
++
++/*
++ * MT8365 power domain support
++ */
++
++static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
++	[MT8365_POWER_DOMAIN_MM] = {
++		.name = "mm",
++		.sta_mask = PWR_STATUS_DISP,
++		.ctl_offs = 0x30c,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(8, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_WAY_EN,
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(16) | BIT(17), 0x2a8, 0x2ac, 0x258),
++			BUS_PROT_WR(BIT(1) | BIT(2) | BIT(10) | BIT(11), 0x2a0, 0x2a4, 0x228),
++			BUS_PROT_WAY_EN(BIT(6), 0x200, BIT(24), 0x0),
++			BUS_PROT_WAY_EN(BIT(5), 0x234, BIT(14), 0x28),
++			BUS_PROT_WR(BIT(6), 0x2a0, 0x2a4, 0x228),
++		},
++	},
++	[MT8365_POWER_DOMAIN_VENC] = {
++		.name = "venc",
++		.sta_mask = PWR_STATUS_VENC,
++		.ctl_offs = 0x0304,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(8, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.bp_smi = {
++			BUS_PROT_WR(BIT(1), 0x3c4, 0x3c8, 0x3c0),
++		},
++	},
++	[MT8365_POWER_DOMAIN_AUDIO] = {
++		.name = "audio",
++		.sta_mask = PWR_STATUS_AUDIO,
++		.ctl_offs = 0x0314,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(12, 8),
++		.sram_pdn_ack_bits = GENMASK(17, 13),
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(27) | BIT(28), 0x2a8, 0x2ac, 0x258),
++		},
++		.caps = MTK_SCPD_ACTIVE_WAKEUP,
++	},
++	[MT8365_POWER_DOMAIN_CONN] = {
++		.name = "conn",
++		.sta_mask = PWR_STATUS_CONN,
++		.ctl_offs = 0x032c,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = 0,
++		.sram_pdn_ack_bits = 0,
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(13), 0x2a0, 0x2a4, 0x228),
++			BUS_PROT_WR(BIT(18), 0x2a8, 0x2ac, 0x258),
++			BUS_PROT_WR(BIT(14), 0x2a0, 0x2a4, 0x228),
++			BUS_PROT_WR(BIT(21), 0x2a8, 0x2ac, 0x258),
++		},
++		.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_KEEP_DEFAULT_OFF,
++	},
++	[MT8365_POWER_DOMAIN_MFG] = {
++		.name = "mfg",
++		.sta_mask = PWR_STATUS_MFG,
++		.ctl_offs = 0x0338,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(9, 8),
++		.sram_pdn_ack_bits = GENMASK(13, 12),
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(25), 0x2a0, 0x2a4, 0x228),
++			BUS_PROT_WR(BIT(21) | BIT(22), 0x2a0, 0x2a4, 0x228),
++		},
++	},
++	[MT8365_POWER_DOMAIN_CAM] = {
++		.name = "cam",
++		.sta_mask = BIT(25),
++		.ctl_offs = 0x0344,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(9, 8),
++		.sram_pdn_ack_bits = GENMASK(13, 12),
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(19), 0x2a8, 0x2ac, 0x258),
++		},
++		.bp_smi = {
++			BUS_PROT_WR(BIT(2), 0x3c4, 0x3c8, 0x3c0),
++		},
++	},
++	[MT8365_POWER_DOMAIN_VDEC] = {
++		.name = "vdec",
++		.sta_mask = BIT(31),
++		.ctl_offs = 0x0370,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(8, 8),
++		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.bp_smi = {
++			BUS_PROT_WR(BIT(3), 0x3c4, 0x3c8, 0x3c0),
++		},
++	},
++	[MT8365_POWER_DOMAIN_APU] = {
++		.name = "apu",
++		.sta_mask = BIT(16),
++		.ctl_offs = 0x0378,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(14, 8),
++		.sram_pdn_ack_bits = GENMASK(21, 15),
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(2) | BIT(20), 0x2a8, 0x2ac, 0x258),
++		},
++		.bp_smi = {
++			BUS_PROT_WR(BIT(4), 0x3c4, 0x3c8, 0x3c0),
++		},
++	},
++	[MT8365_POWER_DOMAIN_DSP] = {
++		.name = "dsp",
++		.sta_mask = BIT(17),
++		.ctl_offs = 0x037C,
++		.pwr_sta_offs = 0x0180,
++		.pwr_sta2nd_offs = 0x0184,
++		.sram_pdn_bits = GENMASK(11, 8),
++		.sram_pdn_ack_bits = GENMASK(15, 12),
++		.bp_infracfg = {
++			BUS_PROT_WR(BIT(24) | BIT(30) | BIT(31), 0x2a8, 0x2ac, 0x258),
++		},
++		.caps = MTK_SCPD_ACTIVE_WAKEUP,
++	},
++};
++
++static const struct scpsys_soc_data mt8365_scpsys_data = {
++	.domains_data = scpsys_domain_data_mt8365,
++	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt8365),
++};
++
++#endif /* __SOC_MEDIATEK_MT8365_PM_DOMAINS_H */
 diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-index d53309f050ee..29a9028dd9b3 100644
+index 29a9028dd9b3..adb7716df0a8 100644
 --- a/drivers/soc/mediatek/mtk-pm-domains.c
 +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-@@ -265,9 +265,17 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
- 	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
+@@ -23,6 +23,7 @@
+ #include "mt8186-pm-domains.h"
+ #include "mt8192-pm-domains.h"
+ #include "mt8195-pm-domains.h"
++#include "mt8365-pm-domains.h"
  
--	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
--	if (ret)
--		goto err_pwr_ack;
-+	/*
-+	 * In few Mediatek platforms(e.g. MT6779), the bus protect policy is
-+	 * stricter, which leads to bus protect release must be prior to bus
-+	 * access.
-+	 */
-+	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
-+		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
-+					      pd->subsys_clks);
-+		if (ret)
-+			goto err_pwr_ack;
-+	}
+ #define MTK_POLL_DELAY_US		10
+ #define MTK_POLL_TIMEOUT		USEC_PER_SEC
+@@ -647,6 +648,10 @@ static const struct of_device_id scpsys_of_match[] = {
+ 		.compatible = "mediatek,mt8195-power-controller",
+ 		.data = &mt8195_scpsys_data,
+ 	},
++	{
++		.compatible = "mediatek,mt8365-power-controller",
++		.data = &mt8365_scpsys_data,
++	},
+ 	{ }
+ };
  
- 	ret = scpsys_sram_enable(pd);
- 	if (ret < 0)
-@@ -277,12 +285,23 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 	if (ret < 0)
- 		goto err_disable_sram;
- 
-+	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
-+		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
-+					      pd->subsys_clks);
-+		if (ret)
-+			goto err_enable_bus_protect;
-+	}
-+
- 	return 0;
- 
-+err_enable_bus_protect:
-+	scpsys_bus_protect_enable(pd);
- err_disable_sram:
- 	scpsys_sram_disable(pd);
- err_disable_subsys_clks:
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION))
-+		clk_bulk_disable_unprepare(pd->num_subsys_clks,
-+					   pd->subsys_clks);
- err_pwr_ack:
- 	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
- err_reg:
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-index 1fa634509db1..e5aa2348a9db 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.h
-+++ b/drivers/soc/mediatek/mtk-pm-domains.h
-@@ -11,6 +11,7 @@
- /* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
- #define MTK_SCPD_ALWAYS_ON		BIT(5)
- #define MTK_SCPD_HAS_WAY_EN		BIT(6)
-+#define MTK_SCPD_STRICT_BUS_PROTECTION	BIT(7)
- #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
- 
- #define SPM_VDE_PWR_CON			0x0210
 -- 
 2.39.0
 
