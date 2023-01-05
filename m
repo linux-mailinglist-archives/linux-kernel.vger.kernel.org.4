@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ACF65F3B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024DE65F3BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbjAESdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S235153AbjAESdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbjAEScw (ORCPT
+        with ESMTP id S234934AbjAESdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:32:52 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395B7564CE;
-        Thu,  5 Jan 2023 10:32:52 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 124so25988311pfy.0;
-        Thu, 05 Jan 2023 10:32:52 -0800 (PST)
+        Thu, 5 Jan 2023 13:33:18 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7E7564CE;
+        Thu,  5 Jan 2023 10:33:17 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id z16so20509599wrw.1;
+        Thu, 05 Jan 2023 10:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3EeGNF5xHs7sa7n7ZiCZflKuJGwYRLGHpWxAaRy01+4=;
-        b=kUNN2cTNsj/b/55vlzGN+y0U6V9ZyiXDdNzPzxqqj9oo7Roqr6UEJ9qqTk4+6j9f6J
-         61L1iPQS88OfzaJZVuayJzm9pl15tC+jOmAMCU6JQ9HkKFBgNhmiUUk0uAShnufjANDU
-         h2oM3xF4cdvftyhjsNPxRRhbXwTgx2vG0CXsHgbL4vV0H1PdHs9WbBba1QEa2HgxZb+L
-         MhkW5xMVcx/d2Nd0jBJO7HWSNJrMEoRw2RurqciPBx+C5S58cfqdp5vONRlraL165Wnz
-         kerx6YfAoBdwHqJwzwtaqmeUfK8oupeAI/vT400AbrbpGSWyOqpGhTZUbbl5BxEhYV51
-         NlXQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUPwa7KxD0+pG9NyQ6Wyn6qhlGS+n6AKwqwRVnYWk0Y=;
+        b=KvVT9tPDVsA9kdQufrBybdgLUcJV9JBGQ2sh5Ji3kWzMT6O24oSJb5bJpNnkkR/kou
+         HRcWREqSE+zfoM28vgUH+ZrCjfvrRXaprPpOU7qVZWcKRmTywkNipIqjUQaJSWlse2oJ
+         l/roJlFRC5AW8fraHY5vuSkYHc+FDAqQY5jwU2SqkNzLx4iKm4KnUklBtmuHu/xemLSl
+         KL6D9T1IIE2oLPXxz6ZyxB3brQUrWSqo+opkiLRSSvvXpzzGhivxtYIZnXqUD+YHViaf
+         J66jXfAjrq/ZWQ7+ft2k+lxbGxaBL5TOOQE+HdE//KoMSL9jVuj3Ip+r7CTR//nMRyIP
+         do2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3EeGNF5xHs7sa7n7ZiCZflKuJGwYRLGHpWxAaRy01+4=;
-        b=beOcg/EGpprM7B4BSxfbTnGSwEzckk19Bq6Lb56m510rWmHFhxxqOHhUHIwdm7npp9
-         6NXb5TD8vf6o24i+/OlsIvpkYFHpPcpazILcSjCp/KGQREDY1tpqopxgEmzknBb4ydzU
-         ipBShUx4wvjYKyDXrGZ9kmNZgE1oa9h+uTtxO+jaWktwJmYsmo/vyY/cb9SsfQcqi+hh
-         f0xnTSDe6uzZ1O5i2qE41KORVBbPYm6J08ucOv8Qb9VAJFaS6STAgk8eBPDQmGiu5qct
-         JeQF6OmVZfAOw/tzyTFfbtxB7E5+BFBtkH6egRQRPI3nrb5gFx8PVTQGW27EpUoDmCt3
-         qE+w==
-X-Gm-Message-State: AFqh2kqiXbUNs2BAS0TUS40uS72LumqQtOxwOHqUjFeSvQ9luZEV1a6I
-        LDasKUqasbg1OuWf4CEntjw=
-X-Google-Smtp-Source: AMrXdXvpY+Q3vWOoS5G6f7NeF7ydpL/GRO+5dXR0bQpac8gQ8f78efxbU5ssTcyu6aGKcUzm1HnNEQ==
-X-Received: by 2002:a05:6a00:26e8:b0:583:3d0a:4c34 with SMTP id p40-20020a056a0026e800b005833d0a4c34mr624379pfw.4.1672943571536;
-        Thu, 05 Jan 2023 10:32:51 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b005832c23f33fsm1642897pfn.15.2023.01.05.10.32.50
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eUPwa7KxD0+pG9NyQ6Wyn6qhlGS+n6AKwqwRVnYWk0Y=;
+        b=lyUnyV3xEIkFM0M9ahyP8urXOquD7Yl3rCU5vR4v9XIk9SLYh+Kh/jKysWZ1xSaU2t
+         ML54N8cSSRoMXJsjd7QZAjpOf7Sd6dLWs7oSuxdyOX+YCJ1D8W6f75QExr/jTfmQ7F4d
+         A1RJNEW9kCgPMiJw6qAOYsrPzi6QopXBICKAtPxYzIaxl3JBry9rmBACEaien413aXze
+         5N9cwquh4RbkgXf3NBJjXRTgMS2IrNOWtNF7fzFLw2ClC4zeiWvidpyYpZbRjHrs+Vog
+         SL/UHWSrY/qBrmJv5mJUZlgwfMi/k/109w8IYU1nHanEiR3sgwNQtLQEGV7KMtEDYWs7
+         Hx4w==
+X-Gm-Message-State: AFqh2krDsAvXnTw3BW1v3uIFzs2vD4P5aNt/7CJfGtt3KdMpIfiwuUfZ
+        Jxp2+fxh4ZmOthyCDo0Z+zdT71vYhBsd8yzy
+X-Google-Smtp-Source: AMrXdXtZIqBiAhbDcFGq0bT49zrMcD7N+SAhYjRhbse+8LWS/ce9Rc9rg6YxXIbYWh99v0rgNeRlIw==
+X-Received: by 2002:a5d:4005:0:b0:242:5877:1ebc with SMTP id n5-20020a5d4005000000b0024258771ebcmr32457681wrp.33.1672943595922;
+        Thu, 05 Jan 2023 10:33:15 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d410f000000b002683695bf97sm37377687wrp.58.2023.01.05.10.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 10:32:51 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 5 Jan 2023 08:32:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-Message-ID: <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
-References: <20221227125502.541931-1-yukuai1@huaweicloud.com>
- <20221227125502.541931-2-yukuai1@huaweicloud.com>
- <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
- <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
+        Thu, 05 Jan 2023 10:33:15 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Daniel W . S . Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] media: vidtv: make const array DURATION static
+Date:   Thu,  5 Jan 2023 18:33:14 +0000
+Message-Id: <20230105183314.62820-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:14:07AM +0800, Yu Kuai wrote:
-> 1) is related to blkg, while 2) is not, hence refcnting from blkg can't
-> fix the problem. refcnting from blkcg_policy_data should be ok, but I
-> see that bfq already has the similar refcnting, while other policy
-> doesn't require such refcnting.
+Don't populate the read-only const array DURATION on the stack but
+instead make it static. Also makes the object code a little smaller.
 
-Hmm... taking a step back, wouldn't this be solved by moving the first part
-of ioc_pd_free() to pd_offline_fn()? The ordering is strictly defined there,
-right?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks.
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index a5875380ef40..ce0b7a6e92dc 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -1940,7 +1940,7 @@ u32 vidtv_psi_eit_write_into(struct vidtv_psi_eit_write_args *args)
+ struct vidtv_psi_table_eit_event
+ *vidtv_psi_eit_event_init(struct vidtv_psi_table_eit_event *head, u16 event_id)
+ {
+-	const u8 DURATION[] = {0x23, 0x59, 0x59}; /* BCD encoded */
++	static const u8 DURATION[] = {0x23, 0x59, 0x59}; /* BCD encoded */
+ 	struct vidtv_psi_table_eit_event *e;
+ 	struct timespec64 ts;
+ 	struct tm time;
+-- 
+2.30.2
 
---
-tejun
