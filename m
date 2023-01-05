@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A55B65F09B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B66F65F09D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbjAEP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S234844AbjAEP4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbjAEP4J (ORCPT
+        with ESMTP id S234813AbjAEP4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:56:09 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCA7632D;
-        Thu,  5 Jan 2023 07:56:08 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305DvBxm028713;
-        Thu, 5 Jan 2023 15:56:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CtPIhHeAJA4m+zVi/FDKTYFd5B/YC6Qu98yEWmwyBT8=;
- b=YEMflYDb0nYr+oKTjJTERmOF2dqGaZIXCZXSt09SOHoHOmCNWNkuwvu9ZwssvsY3DmvH
- 4iYsntDV+gRdvwd+oeX21Gt3BGC4mriRoSzU5++0D1/WwZraFYg33NBnP9gc1VuCnbub
- huSDpHjHcaq7G6D4GfWmqy6NN/mlHsI6VruObBTW1978xiUotndrDLFQFX3hrLE7ZUoS
- Og1S4RfqKGlNxJMnmmY0/doQ80ZCvyRE2Qq9F6Kqny04cKxotFfSejxFZ7811fF7DTni
- EprEJFNfDfVY6E9DhCAINBKjkEkDz3IAw01tfru1GSYjSKU4EalHa7Pf51hFDZsblHW5 vw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwpc299r1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 15:56:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305Fu3wm013402
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 15:56:03 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
- 07:56:03 -0800
-Message-ID: <40f16530-304e-3916-e5f2-7556e2e9b7dd@quicinc.com>
-Date:   Thu, 5 Jan 2023 08:56:02 -0700
+        Thu, 5 Jan 2023 10:56:22 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D6BF66
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672934182; x=1704470182;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CfL9dZ1rzL5mXr20kSmlyvPC+VGG8odMIP1hyKJqCIM=;
+  b=QeQZtS4ijf2w9iMWsZ85rtLdgOQifibPCxF01tMbbWyhVaxB/t0aDnJf
+   Aoo7GX9q3nipSd0jPIdO4kM5VVp5zYPwlQsy8HcnKU/o2WPHswr4ZIt2m
+   0fMVPXlAOZ1hyAuojROcMaKM9PuMXwvIU4JvNtzO9UT4SMg7o7DuYRVGi
+   Z5OqiIynRmrTv17iz2WmTbKdDmVH4Wb6kvi4Guhdb7+hEAz2VUfCfNNuq
+   sM4b06oGlIHKgOlKohCBFJ4oip8VeppnEVsar0Gz7nULWVEA8hVuZ8ROx
+   zf42CwX7kujeGCkyrIv8fotaojhWxfu+NZNFdlGitrjp8ipc+w89bw98y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="384550113"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="384550113"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 07:56:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="763174541"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="763174541"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Jan 2023 07:56:20 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDSbL-0001zX-1E;
+        Thu, 05 Jan 2023 15:56:19 +0000
+Date:   Thu, 5 Jan 2023 23:56:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>
+Subject: versioncheck: ./drivers/soc/tegra/cbb/tegra-cbb.c: 19
+ linux/version.h not needed.
+Message-ID: <202301052344.cl9DUyQX-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 5/6] bus: mhi: ep: Move chan->lock to the start of
- processing queued ch ring
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <mhi@lists.linux.dev>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
- <20221228161704.255268-6-manivannan.sadhasivam@linaro.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221228161704.255268-6-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RMOHYaUKmaD1ZziuTHpGvEcKtmWoSHQW
-X-Proofpoint-ORIG-GUID: RMOHYaUKmaD1ZziuTHpGvEcKtmWoSHQW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_06,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=752
- spamscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050125
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/2022 9:17 AM, Manivannan Sadhasivam wrote:
-> There is a good chance that while the channel ring gets processed, the STOP
-> or RESET command for the channel might be received from the MHI host. In
-> those cases, the entire channel ring processing needs to be protected by
-> chan->lock to prevent the race where the corresponding channel ring might
-> be reset.
-> 
-> While at it, let's also add a sanity check to make sure that the ring is
-> started before processing it. Because, if the STOP/RESET command gets
-> processed while mhi_ep_ch_ring_worker() waited for chan->lock, the ring
-> would've been reset.
-> 
-> Cc: <stable@vger.kernel.org> # 5.19
-> Fixes: 03c0bb8ec983 ("bus: mhi: ep: Add support for processing channel rings")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   41c03ba9beea760bd2d2ac9250b09a2e192da2dc
+commit: b7134422146692e096e807751656fc58ee1a717d soc/tegra: cbb: Add CBB 1.0 driver for Tegra194
+date:   4 months ago
+reproduce:
+        make versioncheck
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+>> ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+>> ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./init/version.c: 19 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 301: need linux/version.h
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
