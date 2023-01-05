@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CF065E7E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77DA65E7FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjAEJf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S231617AbjAEJiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjAEJfx (ORCPT
+        with ESMTP id S229970AbjAEJiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:35:53 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EE54C72C;
-        Thu,  5 Jan 2023 01:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672911352; x=1704447352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kkHuRRG9KBM8yFvsN3QAm76ykshPmwlBpfFrGtmd/04=;
-  b=bo7iwZ4ZyWLRfRTL6P0bfdtvi44RDdrvVXQc5hdFQaI9/7zXNAtLswkg
-   7jx55CwHZAN1ucdAxTuCl1VHkgkPGCm6pDr6FMCFL1aYBJi0l4exjQ2JO
-   czoKJ23VHe3f7jP+rz+QOsa665e2uCGgC393qwro0Lbvv3LJZKG70vVLq
-   sRjBdyP6SI7JU4SsDX1nHQKljGOcKIxWVO5kgBOy98tIZRP4cPUZQxfeP
-   h3lk6tzXuMJ127132WiWRHewRxnJE6kR5gnO+PJsJCUkY+OrJE48ALwKN
-   mo3+LAZAuHYayys5Hko5KGMX2/mW0ZJt5ZCGauMfj0tn1qdS/mWuvVfyi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349380928"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="349380928"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 01:35:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="724007263"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="724007263"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 01:35:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pDMf6-004i5u-39;
-        Thu, 05 Jan 2023 11:35:48 +0200
-Date:   Thu, 5 Jan 2023 11:35:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-Message-ID: <Y7aZ9Mmm16HVUnnu@smile.fi.intel.com>
-References: <20221007153323.1326-1-henning.schild@siemens.com>
- <Y6WX1Y9GZmvxqlCc@google.com>
- <20230102162227.523d2a73@md1za8fc.ad001.siemens.net>
- <20230103212059.5c80fecb@md1za8fc.ad001.siemens.net>
- <Y7WMHl1Mv1alXadG@google.com>
- <20230104153924.0b92c52c@md1za8fc.ad001.siemens.net>
- <Y7WghcaWPpCHh6Wz@smile.fi.intel.com>
- <20230104203005.5654f3bc@md1za8fc.ad001.siemens.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104203005.5654f3bc@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 04:38:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718BE568A3;
+        Thu,  5 Jan 2023 01:38:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16B27B81A3F;
+        Thu,  5 Jan 2023 09:38:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C80CC433EF;
+        Thu,  5 Jan 2023 09:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672911484;
+        bh=kHAI8zX0uBtCstQDgOED+LDtgDTq97uWCIZyDoDKHu4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W7XrrmflgJ9P/ki81ddlfeirNnY/o+GQpNfTUolbTUMYk5lZ09CJFHnMKZXeax9vN
+         9V7lRtw2jUy+r0QzkzTAMyHizXGNlRgqwYxg88212lubeTPkU/prRvQPTTQRbJUp2/
+         TdbSWZQnUXHHxvN6gv32zL91nzzmlo+z9v22OqmvagWrW69yjwvW2e1q8ioJ3GWXg4
+         wYTYSGWiKRig54wnZyfWrx33CoeAcmX4kpMzig+xcV08eNEUMIpydWcWiaC0JcgUiq
+         0civdiFzurUDcZPPeY3KuWpv/lV0fFyAC2Ma5/Q//1qDM0BAcJR3N7h5KoLGUQ5KjM
+         xk2x+0zhstyrw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pDMhF-00GxQu-TI;
+        Thu, 05 Jan 2023 09:38:02 +0000
+Date:   Thu, 05 Jan 2023 09:38:01 +0000
+Message-ID: <86mt6x724m.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH rcu 02/27] arch/arm64/kvm: Remove "select SRCU"
+In-Reply-To: <20230105003813.1770367-2-paulmck@kernel.org>
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+        <20230105003813.1770367-2-paulmck@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: paulmck@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com, rostedt@goodmis.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 08:30:05PM +0100, Henning Schild wrote:
-> Am Wed, 4 Jan 2023 17:51:33 +0200
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Wed, Jan 04, 2023 at 03:39:24PM +0100, Henning Schild wrote:
-> > > Am Wed, 4 Jan 2023 14:24:30 +0000
-> > > schrieb Lee Jones <lee@kernel.org>:  
-
-...
-
-> > > As we speak i already have the third box to eventually support,
-> > > which will likely be similar but this time around with
-> > > PINCTRL_ELKHARTLAKE  
-> > 
-> > A bit of offtopic here.
-> > 
-> > Are you able to get / fix / ... the firmware to work with the
-> > upstreamed version of pin control driver for Intel Elkhart Lake?
-> > 
-> > (I'm asking this in terms of the
-> > https://bugzilla.kernel.org/show_bug.cgi?id=213365)
-> > 
+On Thu, 05 Jan 2023 00:37:48 +0000,
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> I can not tell. At the moment i am in a Siemens internal review where i
-> see code that is not even close to being ready for upstream. Somewhat
-> open-coded again from what it looks like.
+> Now that the SRCU Kconfig option is unconditionally selected, there is
+> no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> Kconfig statements.
 > 
-> And i do not have the machine the code is for.
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Oliver Upton <oliver.upton@linux.dev>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: <linux-arm-kernel@lists.infradead.org>
+> Cc: <kvmarm@lists.linux.dev>
+> Cc: <kvmarm@lists.cs.columbia.edu>
+> ---
+>  arch/arm64/kvm/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Let me say "it is complicated" but some point in time a device with
-> LEDs attached to PINCTRL_ELKHARTLAKE will be proposed. Likely by me,
-> when i hopefully have such a device on my desk.
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index 05da3c8f7e88f..312f0e9869111 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -28,7 +28,6 @@ menuconfig KVM
+>  	select KVM_MMIO
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>  	select KVM_XFER_TO_GUEST_WORK
+> -	select SRCU
+>  	select KVM_VFIO
+>  	select HAVE_KVM_EVENTFD
+>  	select HAVE_KVM_IRQFD
 
-Thanks for the information.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-Consider above just as a point to be aware of when you come to
-the productization, so we won't need another pin control driver for
-the same chip.
+	M.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Without deviation from the norm, progress is not possible.
