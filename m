@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD87365E1E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6579565E1CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjAEAoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S235010AbjAEAlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240708AbjAEAiv (ORCPT
+        with ESMTP id S240719AbjAEAiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:38:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995F5C55;
-        Wed,  4 Jan 2023 16:38:20 -0800 (PST)
+        Wed, 4 Jan 2023 19:38:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F829C4B;
+        Wed,  4 Jan 2023 16:38:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91DA8B8198D;
-        Thu,  5 Jan 2023 00:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C419EC4332D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86BD5618B8;
+        Thu,  5 Jan 2023 00:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C90C4332F;
         Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672879095;
-        bh=tTPpQxCe30EzZFaC8M8h6GJmnI2dQGjCQpcbnqvTzS4=;
+        bh=h6bjYJAJ6MmX8IBKY+t7pThy5+DMPKWOhSwAgfRS86w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qv+kcb288Gibon1xC+W5aPz+TYF7FmP0Id4z1GWhP8X2I0HPBM93VkZON5J8FaI6L
-         xO37MP/VyZVMaaeVVUxfY6VFsuwfqFdyd36Vjj+UMMhMPTRfn3ZaTSBSCaNyw3k0xd
-         eKxooI0lPoQB1tb6g+jUcv1R7/YWT3w4KsBAMgdsqeoS9NUrhC4G1T28hBL2eSexSe
-         oDwBdsa+BzjX+tr9+bpLorTjZrjr+Pom0Ohfo1ebufb9Iw7bVHXQONAeHCJARAX4qb
-         jjPXsLjPWBS+GwDv9CS/Zby6oom5jQ10t0gKWrhTJzcMaYzFt/soq6bicsHgviIOr6
-         xZ2FeGiIlm9dw==
+        b=Qd+GXxMIVHrrf8spj28vw7je+1WS+GM/SBz1383t3dCPs/i7wIqL58W5cPSqE3Q+o
+         Lz5wpGscM9DjTt2af9TwLhzceYBoSy4jhpJuYtMmRejxAn2mSWkXRNSwSwzzE41E7I
+         EfQ5gmSn+D9+cn+zWx2LKe4K0Osz6Jf0ouMkyqYMrX6vrOm08uex03FzZxvMUOAQaS
+         lG3JeECS6w4F5fHLcDDYZXLCxXm3x+J03xWCDUh5qZiJCJwSKVEJ8g2d0DgcTeR47x
+         LTtfz6qXhDek/q0g1xssFYa2QjJzxHFiKLKvkONf1YLup5vIpcEey6g/epOXmgw3Hf
+         VUGNtnWdCPWdg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DC4A65C1CA0; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+        id DE76F5C1CAE; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Jan Kara <jack@suse.com>
-Subject: [PATCH rcu 21/27] fs/quota: Remove "select SRCU"
-Date:   Wed,  4 Jan 2023 16:38:07 -0800
-Message-Id: <20230105003813.1770367-21-paulmck@kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH rcu 22/27] init: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:38:08 -0800
+Message-Id: <20230105003813.1770367-22-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
@@ -61,23 +71,35 @@ no longer any point in selecting it.  Therefore, remove the "select SRCU"
 Kconfig statements.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Jan Kara <jack@suse.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Aaron Tomlin <atomlin@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- fs/quota/Kconfig | 1 -
+ init/Kconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
-index b59cd172b5f97..d5a85a8062d05 100644
---- a/fs/quota/Kconfig
-+++ b/fs/quota/Kconfig
-@@ -6,7 +6,6 @@
- config QUOTA
- 	bool "Quota support"
- 	select QUOTACTL
+diff --git a/init/Kconfig b/init/Kconfig
+index 7e5c3ddc341de..af511c726d695 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1865,7 +1865,6 @@ config PERF_EVENTS
+ 	default y if PROFILING
+ 	depends on HAVE_PERF_EVENTS
+ 	select IRQ_WORK
 -	select SRCU
  	help
- 	  If you say Y here, you will be able to set per user limits for disk
- 	  usage (also called disk quotas). Currently, it works for the
+ 	  Enable kernel support for various performance events provided
+ 	  by software and hardware.
 -- 
 2.31.1.189.g2e36527f23
 
