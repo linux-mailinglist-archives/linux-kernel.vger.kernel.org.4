@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E1765E91F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC0F65E91D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjAEKin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S232196AbjAEKii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbjAEKiR (ORCPT
+        with ESMTP id S233060AbjAEKiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 05:38:17 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A33395DF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC37E395E2
         for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:38:16 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1672915095;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MdjBBReZIfmoiufuLij38tBr00juxvxCP4KNiop85+Q=;
-        b=lranmi2OrApPXfpJ5WnnZ/2MIDjwCOJ6mZ5/h9LsvNkvISYyHiL5vBJd+kTh5MLNVkvHsC
-        fObg2bS8ligwD2ER0fGnCWzd2xE7ir3gqSoqXGQObU3HZtPdFu3iTykj8RQ1J5GPN+r+KX
-        q2Wg/pu9JOjLef7+dexBL2wZKvS6wIE1pkwDVelepjAB180w9S9vvUph7X0SqWBO7XjQuw
-        0pJQdqkdItv0rreJVdSj4Ut9Utt9Sy5mOw64EOCzrjKOGsQ8dMbMlks+tCRitIvqifc2zy
-        ldxMQuvN9G0DlqMseIBZjZAr23Ohr3c5yO3ulwjLlKikarFx+0oXMOUt9hPOXg==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=abSBMFxz6OGnYpZ+uMTv9uCdX0Afe+r827cQ4Qs2ufY=;
+        b=tqehtiMLazk/qWuhSsaz5i2yKpuIumt7UJ/O9IVTFwWS8oUv9OP2KsY25Vyh2Ur2hw5AhE
+        rwJqybiVS56Yz0rcozukcD4ENkQVvWrLwJUMaz4x3cz7Y9gHEo8gBcEmv9bwJ/DM3kiHXl
+        YBViDZDDmjjZCOYK/joLlQjreviSc1YQrKVp5UVeH+EyqGTkx7Dd99G7UU1rHQelKSDbpl
+        yTdxQ5Xk8WlvhcdCmNWYaLJ1Ia2dVVBipBmCBCVXMilZ56bx7SPWWxJy0dH8CC0WKVCmil
+        VmVdaCKkFjMbbW4rjteHr0nLAU9xmfOOF9kOKRNxCjpdQ5aCOjFT+AAIylidcg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672915095;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MdjBBReZIfmoiufuLij38tBr00juxvxCP4KNiop85+Q=;
-        b=8F4zIxJ1e6LpR6bzNMw8AlxZgBK2vc32t6oVcOEwyH7SsByOnZLXOQTq1xVGaZEr1wqmRe
-        4vxjqVfPtS8zpoBw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=abSBMFxz6OGnYpZ+uMTv9uCdX0Afe+r827cQ4Qs2ufY=;
+        b=6A/kl4DuJAeDd+nmgvm37gEIK/iEFtiobj2bA8QZuL8FsdR0mmgRRamGvkcbmbZ2eS1ZVc
+        zbGTvoCRfWk/GlDg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk v4 0/8] printk: cleanup buffer handling
-Date:   Thu,  5 Jan 2023 11:43:27 +0106
-Message-Id: <20230105103735.880956-1-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v4 1/8] printk: move size limit macros into internal.h
+Date:   Thu,  5 Jan 2023 11:43:28 +0106
+Message-Id: <20230105103735.880956-2-john.ogness@linutronix.de>
+In-Reply-To: <20230105103735.880956-1-john.ogness@linutronix.de>
+References: <20230105103735.880956-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,106 +59,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The size limit macros are located further down in printk.c and
+behind ifdef conditionals. This complicates their usage for
+upcoming changes. Move the macros into internal.h so that they
+are still invisible outside of printk, but easily accessible
+for printk.
 
-This is v4 of a series to cleanup console buffer handling and
-prepare for code sharing with the upcoming threaded/atomic
-consoles. v3 is here [0].
+Also, the maximum size of formatted extended messages does not
+need to be known by any code outside of printk, so move it to
+internal.h as well. And like CONSOLE_LOG_MAX, for !CONFIG_PRINTK
+set CONSOLE_EXT_LOG_MAX to 0 to reduce the static memory
+footprint.
 
-The main purpose of the series is to introduce two new lockless
-functions to handle reading and formatting of printk messages. These
-functions can then be used from any context, which is important for
-the upcoming threaded/atomic consoles. The series also helps to
-cleanup some of the internal printk interfaces and cleanly separate
-formatting code from outputting code.
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+---
+ include/linux/printk.h   |  2 --
+ kernel/printk/internal.h | 24 ++++++++++++++++++++++++
+ kernel/printk/printk.c   | 17 -----------------
+ 3 files changed, 24 insertions(+), 19 deletions(-)
 
-Some changes in this version were not part of the feedback. However,
-from the discussions and examples I decided that some of the names
-I had previously chosen were not appropriate. Particularly, structs,
-variables, and functions should only use the "console_" prefix if it
-is console-specific. Things that are used for general printk
-processing should use a "printk_" prefix. This makes the diff to v3
-rather large, even though the "real code" has only minor changes.
-
-@Petr: Like with v3, this version uses a wrapper struct for the
-message metadata to avoid clobbering. Making the message formatting
-code robust enough to handle metadata clobbering was too complex
-(particularly with the dropped tracking).
-
-Changes since v3:
-
-- Provide a detailed explanation in the commit message about why
-  message metadata is put into a wrapper struct instead of the
-  buffer struct.
-
-- Reorder stack variable definitions so that static variables are at
-  the top and separated from non-static variables. IMHO it is
-  important to clearly see which of the variables are static.
-
-- Drop a previous coding-style change from a line not related to
-  this series.
-
-- In console_prepend_dropped() make sure the buffer is large enough
-  for the dropped message and at least PREFIX_MAX of the current
-  message.
-
-- Define the PREFIX_MAX macro for !CONFIG_PRINTK in internal.h
-  because console_prepend_dropped() now needs it.
-
-- Rename various functions, structs, fields, and macros:
-
-    console_get_next_message()  ->  printk_get_next_message()
-
-    struct console_buffers      ->  struct printk_buffers
-
-    struct console_message      ->  struct printk_message
-
-    console_message.cbufs       ->  printk_message.pbufs
-
-    console_message.outbuf_seq  ->  printk_message.seq
-
-    LOG_LINE_MAX                ->  PRINTKRB_RECORD_MAX
-
-    PREFIX_MAX                  ->  PRINTK_PREFIX_MAX
-
-    CONSOLE_LOG_MAX and
-    CONSOLE_EXT_LOG_MAX         ->  PRINTK_MESSAGE_MAX
-
-- Adjust the values of string limit macros. This is explained in
-  detail in the commit message.
-
-- Replace @buf and @text_buf in struct devkmsg_user with struct
-  printk_buffers.
-
-- Replace message formatting code in devkmsg_read() with
-  printk_get_next_message().
-
-- Define all printk_message structs on the stack.
-
-John Ogness
-
-[0] https://lore.kernel.org/lkml/20221221202704.857925-1-john.ogness@linutronix.de
-
-John Ogness (6):
-  printk: move size limit macros into internal.h
-  printk: introduce struct printk_buffers
-  printk: introduce printk_get_next_message() and printk_message
-  printk: introduce console_prepend_dropped() for dropped messages
-  printk: use printk_buffers for devkmsg
-  printk: adjust string limit macros
-
-Thomas Gleixner (2):
-  console: Use BIT() macros for @flags values
-  console: Document struct console
-
- include/linux/console.h  | 100 +++++++++----
- include/linux/printk.h   |   2 -
- kernel/printk/internal.h |  45 ++++++
- kernel/printk/printk.c   | 293 +++++++++++++++++++++++----------------
- 4 files changed, 288 insertions(+), 152 deletions(-)
-
-
-base-commit: 6b2b0d839acaa84f05a77184370f793752e786e9
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index 8c81806c2e99..8ef499ab3c1e 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -44,8 +44,6 @@ static inline const char *printk_skip_headers(const char *buffer)
+ 	return buffer;
+ }
+ 
+-#define CONSOLE_EXT_LOG_MAX	8192
+-
+ /* printk's without a loglevel use this.. */
+ #define MESSAGE_LOGLEVEL_DEFAULT CONFIG_MESSAGE_LOGLEVEL_DEFAULT
+ 
+diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
+index d947ca6c84f9..f394332410c9 100644
+--- a/kernel/printk/internal.h
++++ b/kernel/printk/internal.h
+@@ -14,6 +14,24 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
+ 
+ #ifdef CONFIG_PRINTK
+ 
++#ifdef CONFIG_PRINTK_CALLER
++#define PREFIX_MAX		48
++#else
++#define PREFIX_MAX		32
++#endif
++
++/* the maximum size of a formatted record (i.e. with prefix added per line) */
++#define CONSOLE_LOG_MAX		1024
++
++/* the maximum size of a formatted extended record */
++#define CONSOLE_EXT_LOG_MAX	8192
++
++/* the maximum size for a dropped text message */
++#define DROPPED_TEXT_MAX	64
++
++/* the maximum size allowed to be reserved for a record */
++#define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
++
+ /* Flags for a single printk record. */
+ enum printk_info_flags {
+ 	LOG_NEWLINE	= 2,	/* text ended with a newline */
+@@ -48,6 +66,12 @@ u16 printk_parse_prefix(const char *text, int *level,
+ 			enum printk_info_flags *flags);
+ #else
+ 
++#define PREFIX_MAX		0
++#define CONSOLE_LOG_MAX		0
++#define CONSOLE_EXT_LOG_MAX	0
++#define DROPPED_TEXT_MAX	0
++#define LOG_LINE_MAX		0
++
+ /*
+  * In !PRINTK builds we still export console_sem
+  * semaphore and some of console functions (console_unlock()/etc.), so
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 7decf1e9c486..55bb065de65f 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -465,21 +465,6 @@ static struct latched_seq clear_seq = {
+ 	.val[1]		= 0,
+ };
+ 
+-#ifdef CONFIG_PRINTK_CALLER
+-#define PREFIX_MAX		48
+-#else
+-#define PREFIX_MAX		32
+-#endif
+-
+-/* the maximum size of a formatted record (i.e. with prefix added per line) */
+-#define CONSOLE_LOG_MAX		1024
+-
+-/* the maximum size for a dropped text message */
+-#define DROPPED_TEXT_MAX	64
+-
+-/* the maximum size allowed to be reserved for a record */
+-#define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
+-
+ #define LOG_LEVEL(v)		((v) & 0x07)
+ #define LOG_FACILITY(v)		((v) >> 3 & 0xff)
+ 
+@@ -2387,8 +2372,6 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
+ 
+ #else /* CONFIG_PRINTK */
+ 
+-#define CONSOLE_LOG_MAX		0
+-#define DROPPED_TEXT_MAX	0
+ #define printk_time		false
+ 
+ #define prb_read_valid(rb, seq, r)	false
 -- 
 2.30.2
 
