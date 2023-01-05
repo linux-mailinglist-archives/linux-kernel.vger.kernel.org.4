@@ -2,272 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E875465E546
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B704165E54E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjAEFyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 00:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S230131AbjAEF6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 00:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjAEFyI (ORCPT
+        with ESMTP id S229462AbjAEF6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 00:54:08 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DD13D9EC
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 21:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672898047; x=1704434047;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=VmEZjSfJDXSrUyUEeB9nOlbhCCZ3NoNLGnwj9XiAsqY=;
-  b=BJ4tr215oNus406X3+cuMgPlkJfNPNJDlm8fwDVs+AwoZHyj1u1jE2Ie
-   x+WeJGfcYTVwjDSzEt92V0UmwUEOyM66NDEy3f2ZTEY98pE20K1BjSOBW
-   OtyNPVe3e6OTsrOJ1zBYBw9lmSWwV7wIgVDCRqEMFNIHeXKtCgd6S2+vo
-   NLoH1lW9pSmESIIhtlCKeB36/fArw65uKUG7gUkJMLzpvvE871eEFDF7H
-   Tyc93TpvU/xLHoDfTO7uGpOi5r2BpEBrlrrY7VtOoEDfOewm3eCeEh0zV
-   9xMDHihi4ue8vWL23soK0f7ZUG9gE2jHBkY5tKxDvOWmC+Nt2yL9ZlAWX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349342772"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="349342772"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 21:54:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="657381594"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="657381594"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 21:54:04 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 1/8] migrate_pages: organize stats with struct
- migrate_pages_stats
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-2-ying.huang@intel.com>
-        <87y1qhu0to.fsf@nvidia.com>
-Date:   Thu, 05 Jan 2023 13:53:11 +0800
-In-Reply-To: <87y1qhu0to.fsf@nvidia.com> (Alistair Popple's message of "Thu,
-        05 Jan 2023 14:02:12 +1100")
-Message-ID: <87lemheddk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 5 Jan 2023 00:58:53 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E96548824;
+        Wed,  4 Jan 2023 21:58:52 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id c6so5166158pls.4;
+        Wed, 04 Jan 2023 21:58:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7tNdvPdu+g7RYVhcJLZlq9O+uy6an39IXGO//h1iwuE=;
+        b=jn9Gt5k69FQrB1By9QFNQpLTbmrKZhHwPNdfyJe0rAW/vl2+i85JKiCHohQWMtBFzN
+         dWupUyVBx1PUr9D4tRn8bfL7z/lVqWZYpmvy/rFn+lIfV+XbYJw4rmvimQmdQQfwIfcZ
+         8kFteXfBPf36bzn4j5lfaJkmsevv3J5kRdWdw46KL1tNTumuKLdN82VISgcWkE6tXYxD
+         lH3bPaRXmhF4POU2LFEtg5xjqAAzsuR9SL85bsZ/3LLNt6O0c4PVUQ7K+LZecM8eJHvN
+         +G3UQavd/EkyUF+rkXBDN5tqt7MOVws7PMx2BPKesZspF23qb820qDq3X6OSxtOSmxeQ
+         NrpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7tNdvPdu+g7RYVhcJLZlq9O+uy6an39IXGO//h1iwuE=;
+        b=BpUefj+BgbcS/AhLFNdVYRKrGpBgrPabQfN8H+1OGbbjkq3jk7G9coDMqnO/QDF1nn
+         nBKOchg3m6SfYS/9Nkg/JhOiJvSLu+TdIlNIl74vBdMv3ilVx1wN/F/fjoWIpIWa2D2c
+         oUkcGQRtTrm9tDdDZ05U4YWfPq/sC5b3x3LQNeR8HPLoZu1W3h5G/21IKCnvvzopkoqZ
+         JbNBqb6/LCSIMmCggAlu6WKSUb5uJ3whgIp5tTfnxm/sWL7qZeoSIkLlO1VdWv8t4OWB
+         qdaBv0Jb7gPW1bDxG3WRDPlK/9VACOaojoECKGIaAS7cpCGHeTjKz2p1yBQ7PyEOJ8pZ
+         dfrg==
+X-Gm-Message-State: AFqh2kpfn22bbOnc/ZXCpdKGyZ3UV6KIgKFjRbmIgufox7Nw6o/MWMFB
+        8wksqYoFpIiuzb6EozArWNk=
+X-Google-Smtp-Source: AMrXdXsMzpPxQVFf3iC5UduJOyd52AgwM83STADIqtXW9/oQoxz4zKdGwqEtYw6UOdFykFHK9xknAA==
+X-Received: by 2002:a05:6a20:b047:b0:ac:10:adfe with SMTP id dx7-20020a056a20b04700b000ac0010adfemr47173436pzb.30.1672898331195;
+        Wed, 04 Jan 2023 21:58:51 -0800 (PST)
+Received: from carrot.. (i220-108-121-218.s42.a014.ap.plala.or.jp. [220.108.121.218])
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709027fce00b0019141c79b1dsm25111577plb.254.2023.01.04.21.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 21:58:49 -0800 (PST)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        syzbot <syzbot+ede796cecd5296353515@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] nilfs2: fix general protection fault in nilfs_btree_insert()
+Date:   Thu,  5 Jan 2023 14:53:56 +0900
+Message-Id: <20230105055356.8811-1-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <000000000000bd89e205f0e38355@google.com>
+References: <000000000000bd89e205f0e38355@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
+If nilfs2 reads a corrupted disk image and tries to reads a b-tree node
+block by calling __nilfs_btree_get_block() against an invalid virtual
+block address, it returns -ENOENT because conversion of the virtual
+block address to a disk block address fails.  However, this return
+value is the same as the internal code that b-tree lookup routines
+return to indicate that the block being searched does not exist, so
+functions that operate on that b-tree may misbehave.
 
-> Huang Ying <ying.huang@intel.com> writes:
->
->> Define struct migrate_pages_stats to organize the various statistics
->> in migrate_pages().  This makes it easier to collect and consume the
->> statistics in multiple functions.  This will be needed in the
->> following patches in the series.
->>
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Cc: Oscar Salvador <osalvador@suse.de>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Bharata B Rao <bharata@amd.com>
->> Cc: Alistair Popple <apopple@nvidia.com>
->> Cc: haoxin <xhao@linux.alibaba.com>
->> ---
->>  mm/migrate.c | 58 +++++++++++++++++++++++++++++-----------------------
->>  1 file changed, 32 insertions(+), 26 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index a4d3fc65085f..ec9263a33d38 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1396,6 +1396,14 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
->>  	return rc;
->>  }
->>  
->> +struct migrate_pages_stats {
->> +	int nr_succeeded;
->> +	int nr_failed_pages;
->> +	int nr_thp_succeeded;
->> +	int nr_thp_failed;
->> +	int nr_thp_split;
->
-> I think some brief comments in the code for what each stat is tracking
-> and their relationship to each other would be helpful (ie. does
-> nr_succeeded include thp subpages, etc). Or at least a reference to
-> where this is documented (ie. page_migration.rst) as I recall there has
-> been some confusion in the past that has lead to bugs.
+When nilfs_btree_insert() receives this spurious 'not found' code from
+nilfs_btree_do_lookup(), it misunderstands that the 'not found' check
+was successful and continues the insert operation using incomplete
+lookup path data, causing the following crash:
 
-OK, will do that in the next version.
+ general protection fault, probably for non-canonical address
+ 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
+ KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+ ...
+ RIP: 0010:nilfs_btree_get_nonroot_node fs/nilfs2/btree.c:418 [inline]
+ RIP: 0010:nilfs_btree_prepare_insert fs/nilfs2/btree.c:1077 [inline]
+ RIP: 0010:nilfs_btree_insert+0x6d3/0x1c10 fs/nilfs2/btree.c:1238
+ Code: bc 24 80 00 00 00 4c 89 f8 48 c1 e8 03 42 80 3c 28 00 74 08 4c 89
+ ff e8 4b 02 92 fe 4d 8b 3f 49 83 c7 28 4c 89 f8 48 c1 e8 03 <42> 80 3c
+ 28 00 74 08 4c 89 ff e8 2e 02 92 fe 4d 8b 3f 49 83 c7 02
+ ...
+ Call Trace:
+ <TASK>
+  nilfs_bmap_do_insert fs/nilfs2/bmap.c:121 [inline]
+  nilfs_bmap_insert+0x20d/0x360 fs/nilfs2/bmap.c:147
+  nilfs_get_block+0x414/0x8d0 fs/nilfs2/inode.c:101
+  __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+  __block_write_begin fs/buffer.c:2041 [inline]
+  block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+  nilfs_write_begin+0x9c/0x110 fs/nilfs2/inode.c:261
+  generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3772
+  __generic_file_write_iter+0x176/0x400 mm/filemap.c:3900
+  generic_file_write_iter+0xab/0x310 mm/filemap.c:3932
+  call_write_iter include/linux/fs.h:2186 [inline]
+  new_sync_write fs/read_write.c:491 [inline]
+  vfs_write+0x7dc/0xc50 fs/read_write.c:584
+  ksys_write+0x177/0x2a0 fs/read_write.c:637
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ ...
+ </TASK>
 
-> Otherwise the patch looks good so:
->
-> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+This patch fixes the root cause of this problem by replacing the error
+code that __nilfs_btree_get_block() returns on block address conversion
+failure from -ENOENT to another internal code -EINVAL which means that
+the b-tree metadata is corrupted.
 
-Thanks!
+By returning -EINVAL, it propagates without glitches, and for all
+relevant b-tree operations, functions in the upper bmap layer output
+an error message indicating corrupted b-tree metadata via
+nilfs_bmap_convert_error(), and code -EIO will be eventually returned
+as it should be.
 
-Best Regards,
-Huang, Ying
+Link: https://lkml.kernel.org/r/000000000000bd89e205f0e38355@google.com
+Reported-by: syzbot+ede796cecd5296353515@syzkaller.appspotmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: stable@vger.kernel.org
+---
+Hi Andrew, please apply this bugfix.
+This fixes the kernel crash above for corrupted disk images like
+the one syzbot produced, and presumably fixes some unexpected WARN_ONs
+on nilfs2 as well (which I will continue to investigate).
 
->> +};
->> +
->>  /*
->>   * migrate_pages - migrate the folios specified in a list, to the free folios
->>   *		   supplied as the target for the page migration
->> @@ -1430,13 +1438,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  	int large_retry = 1;
->>  	int thp_retry = 1;
->>  	int nr_failed = 0;
->> -	int nr_failed_pages = 0;
->>  	int nr_retry_pages = 0;
->> -	int nr_succeeded = 0;
->> -	int nr_thp_succeeded = 0;
->>  	int nr_large_failed = 0;
->> -	int nr_thp_failed = 0;
->> -	int nr_thp_split = 0;
->>  	int pass = 0;
->>  	bool is_large = false;
->>  	bool is_thp = false;
->> @@ -1446,9 +1449,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  	LIST_HEAD(split_folios);
->>  	bool nosplit = (reason == MR_NUMA_MISPLACED);
->>  	bool no_split_folio_counting = false;
->> +	struct migrate_pages_stats stats;
->>  
->>  	trace_mm_migrate_pages_start(mode, reason);
->>  
->> +	memset(&stats, 0, sizeof(stats));
->>  split_folio_migration:
->>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
->>  		retry = 0;
->> @@ -1502,9 +1507,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  				/* Large folio migration is unsupported */
->>  				if (is_large) {
->>  					nr_large_failed++;
->> -					nr_thp_failed += is_thp;
->> +					stats.nr_thp_failed += is_thp;
->>  					if (!try_split_folio(folio, &split_folios)) {
->> -						nr_thp_split += is_thp;
->> +						stats.nr_thp_split += is_thp;
->>  						break;
->>  					}
->>  				/* Hugetlb migration is unsupported */
->> @@ -1512,7 +1517,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  					nr_failed++;
->>  				}
->>  
->> -				nr_failed_pages += nr_pages;
->> +				stats.nr_failed_pages += nr_pages;
->>  				list_move_tail(&folio->lru, &ret_folios);
->>  				break;
->>  			case -ENOMEM:
->> @@ -1522,13 +1527,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  				 */
->>  				if (is_large) {
->>  					nr_large_failed++;
->> -					nr_thp_failed += is_thp;
->> +					stats.nr_thp_failed += is_thp;
->>  					/* Large folio NUMA faulting doesn't split to retry. */
->>  					if (!nosplit) {
->>  						int ret = try_split_folio(folio, &split_folios);
->>  
->>  						if (!ret) {
->> -							nr_thp_split += is_thp;
->> +							stats.nr_thp_split += is_thp;
->>  							break;
->>  						} else if (reason == MR_LONGTERM_PIN &&
->>  							   ret == -EAGAIN) {
->> @@ -1546,7 +1551,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  					nr_failed++;
->>  				}
->>  
->> -				nr_failed_pages += nr_pages + nr_retry_pages;
->> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
->>  				/*
->>  				 * There might be some split folios of fail-to-migrate large
->>  				 * folios left in split_folios list. Move them back to migration
->> @@ -1556,7 +1561,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  				list_splice_init(&split_folios, from);
->>  				/* nr_failed isn't updated for not used */
->>  				nr_large_failed += large_retry;
->> -				nr_thp_failed += thp_retry;
->> +				stats.nr_thp_failed += thp_retry;
->>  				goto out;
->>  			case -EAGAIN:
->>  				if (is_large) {
->> @@ -1568,8 +1573,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  				nr_retry_pages += nr_pages;
->>  				break;
->>  			case MIGRATEPAGE_SUCCESS:
->> -				nr_succeeded += nr_pages;
->> -				nr_thp_succeeded += is_thp;
->> +				stats.nr_succeeded += nr_pages;
->> +				stats.nr_thp_succeeded += is_thp;
->>  				break;
->>  			default:
->>  				/*
->> @@ -1580,20 +1585,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  				 */
->>  				if (is_large) {
->>  					nr_large_failed++;
->> -					nr_thp_failed += is_thp;
->> +					stats.nr_thp_failed += is_thp;
->>  				} else if (!no_split_folio_counting) {
->>  					nr_failed++;
->>  				}
->>  
->> -				nr_failed_pages += nr_pages;
->> +				stats.nr_failed_pages += nr_pages;
->>  				break;
->>  			}
->>  		}
->>  	}
->>  	nr_failed += retry;
->>  	nr_large_failed += large_retry;
->> -	nr_thp_failed += thp_retry;
->> -	nr_failed_pages += nr_retry_pages;
->> +	stats.nr_thp_failed += thp_retry;
->> +	stats.nr_failed_pages += nr_retry_pages;
->>  	/*
->>  	 * Try to migrate split folios of fail-to-migrate large folios, no
->>  	 * nr_failed counting in this round, since all split folios of a
->> @@ -1626,16 +1631,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  	if (list_empty(from))
->>  		rc = 0;
->>  
->> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
->> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
->> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
->> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
->> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
->> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
->> -			       nr_thp_failed, nr_thp_split, mode, reason);
->> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
->> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
->> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
->> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
->> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
->> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
->> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
->> +			       stats.nr_thp_split, mode, reason);
->>  
->>  	if (ret_succeeded)
->> -		*ret_succeeded = nr_succeeded;
->> +		*ret_succeeded = stats.nr_succeeded;
->>  
->>  	return rc;
->>  }
+Thanks,
+Ryusuke Konishi
+
+fs/nilfs2/btree.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/fs/nilfs2/btree.c b/fs/nilfs2/btree.c
+index b9d15c3df3cc..40ce92a332fe 100644
+--- a/fs/nilfs2/btree.c
++++ b/fs/nilfs2/btree.c
+@@ -480,9 +480,18 @@ static int __nilfs_btree_get_block(const struct nilfs_bmap *btree, __u64 ptr,
+ 	ret = nilfs_btnode_submit_block(btnc, ptr, 0, REQ_OP_READ, &bh,
+ 					&submit_ptr);
+ 	if (ret) {
+-		if (ret != -EEXIST)
+-			return ret;
+-		goto out_check;
++		if (likely(ret == -EEXIST))
++			goto out_check;
++		if (ret == -ENOENT) {
++			/*
++			 * Block address translation failed due to invalid
++			 * value of 'ptr'.  In this case, return internal code
++			 * -EINVAL (broken bmap) to notify bmap layer of fatal
++			 * metadata corruption.
++			 */
++			ret = -EINVAL;
++		}
++		return ret;
+ 	}
+ 
+ 	if (ra) {
+-- 
+2.34.1
+
