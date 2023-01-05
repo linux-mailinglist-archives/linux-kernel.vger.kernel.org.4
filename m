@@ -2,172 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A1865EB00
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CE165EB1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjAEMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S233538AbjAEMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbjAEMt6 (ORCPT
+        with ESMTP id S232952AbjAEMwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:49:58 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A539F90
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:49:57 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id z16so19523774wrw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T3qMRF1GNRdJeDqkXuS2/nTO+iJTQuqw4vXy5aAbbK8=;
-        b=X+2PEgw8rt7VT+EdaBphMOTic4+GLKrNo5BKPs7V4isiRAFuLwaAvBB6hEhMvsxkTp
-         TfkDrSAUw0xWRoTQPLvLromGbOrePs0K7f+ta91kcazZvGWcblftX3Med5BuNdwvXdw1
-         N0Uwmd5JJ+ifHeVx/lfVVXJJBgQUokhffq46c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T3qMRF1GNRdJeDqkXuS2/nTO+iJTQuqw4vXy5aAbbK8=;
-        b=yyUnq94HdFhLno0L6s46fdBfLy28GHtxuwZdtrjTPYwUuXjLtjbppo9YmpfWLJ+EmO
-         OnEubu2GFZkn1BpAlfZDrtrZ3YN7i9wbga14/N6xyxoSdjd/vA4/yceccXgXGVtlz4Pu
-         mlPcAw6Zp95jwhTnRTUVXQ+rj6xhoGJ3kLNtvyQrM7jP7jdZg+Yu6+fZGS+NOfBiTiUV
-         l+HnIhlnTUKE4E+lT3XJ9GkUprIGAnTRMnO83K4S5Ej7TYDXXJf/OYWyqm78NzRua/8P
-         qzySQIEO5TEn4DYCNzzSsoc2xcKgyY4C0io3qdglkWkVjfCXECOdxayb5M2MaNIVLW+d
-         xhQA==
-X-Gm-Message-State: AFqh2kp9Ar2QpvVLG9O0Ho3aU71gBnALHosz8Hy4WdXL/Gcq+4CtyRQw
-        Q3kPhqg8JSGX2kt1kaHRhTFaDg==
-X-Google-Smtp-Source: AMrXdXszzCjklGnfpRwtfSRuYLCAYmB6iRZ01GByyDPZYpy5kgOcT+REOcuLIRSEsB2bdG+WQDpvAw==
-X-Received: by 2002:a5d:5965:0:b0:27f:1c70:58c3 with SMTP id e37-20020a5d5965000000b0027f1c7058c3mr22851191wri.24.1672922995942;
-        Thu, 05 Jan 2023 04:49:55 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id c11-20020a5d4ccb000000b002b6bcc0b64dsm382668wrt.4.2023.01.05.04.49.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 04:49:55 -0800 (PST)
-Date:   Thu, 5 Jan 2023 13:49:53 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Chia-I Wu <olvaffe@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/msm: Add MSM_SUBMIT_BO_NO_IMPLICIT
-Message-ID: <Y7bHcRAvk6GgMi5F@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Chia-I Wu <olvaffe@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221206192123.661448-1-robdclark@gmail.com>
+        Thu, 5 Jan 2023 07:52:34 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22895BA3C;
+        Thu,  5 Jan 2023 04:51:55 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 8395C61;
+        Thu,  5 Jan 2023 13:51:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672923113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ox2AHpCozB9D2AA+DmLS+FQ8YK9yjntjf01mZPEqQQ=;
+        b=CbTHCYy/PpHg9tnJL40N0QyKfSBPMEuWodnDHIS2Q7bnFFNSiBHUO8kGYkCu4CqzxlvpMN
+        OD4EUMcJSjPq9EfPoSPo9i5yFs8YqU91BDNZV584H0em1c0Pwhx2G9e3YjETGgGeCtJ+xM
+        QQraL2B4cfCIigOQJMsKIgFWxhDzsvI9TrBAxlPDonU1Z2fHXehQ1J1ze2mHfg8DyYowJp
+        N/dYi3TdxeyV2uoBowyNYdNWPNJ7fOTD4IO8b1IjyE/H0GhaWegBc+q969OAQ5Nd9GBtdZ
+        L35+YPXFm/qu7vt8J20PtJANmzQOKqvDnkBeuQ/mIP96ETVkIs5j8n6m52NgsA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206192123.661448-1-robdclark@gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+Date:   Thu, 05 Jan 2023 13:51:53 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v5 00/21] nvmem: core: introduce NVMEM layouts
+In-Reply-To: <5906091.UjTJXf6HLC@steina-w>
+References: <20221206200740.3567551-1-michael@walle.cc>
+ <20230105123534.38a70640@xps-13> <34cddc1aa4f8a55c752a9565d1726127@walle.cc>
+ <5906091.UjTJXf6HLC@steina-w>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <13fca55324d55f9d4e30ca7fcc930e15@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:21:23AM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> In cases where implicit sync is used, it is still useful (for things
-> like sub-allocation, etc) to allow userspace to opt-out of implicit
-> sync on per-BO basis.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/msm_drv.c        |  3 ++-
->  drivers/gpu/drm/msm/msm_gem_submit.c | 11 +++++++++++
->  include/uapi/drm/msm_drm.h           |  4 +++-
->  3 files changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 017a512982a2..e0e1199a822f 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -45,9 +45,10 @@
->   * - 1.7.0 - Add MSM_PARAM_SUSPENDS to access suspend count
->   * - 1.8.0 - Add MSM_BO_CACHED_COHERENT for supported GPUs (a6xx)
->   * - 1.9.0 - Add MSM_SUBMIT_FENCE_SN_IN
-> + * - 1.10.0 - Add MSM_SUBMIT_BO_NO_IMPLICIT
->   */
->  #define MSM_VERSION_MAJOR	1
-> -#define MSM_VERSION_MINOR	9
-> +#define MSM_VERSION_MINOR	10
->  #define MSM_VERSION_PATCHLEVEL	0
->  
->  static const struct drm_mode_config_funcs mode_config_funcs = {
-> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-> index eb3536e3d66a..8bad07a04f85 100644
-> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
-> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-> @@ -334,9 +334,20 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
->  		if (ret)
->  			return ret;
->  
-> +		/* If userspace has determined that explicit fencing is
-> +		 * used, it can disable implicit sync on the entire
-> +		 * submit:
-> +		 */
->  		if (no_implicit)
->  			continue;
->  
-> +		/* Otherwise userspace can ask for implicit sync to be
-> +		 * disabled on specific buffers.  This is useful for internal
-> +		 * usermode driver managed buffers, suballocation, etc.
-> +		 */
-> +		if (submit->bos[i].flags & MSM_SUBMIT_BO_NO_IMPLICIT)
-> +			continue;
-> +
->  		ret = drm_sched_job_add_implicit_dependencies(&submit->base,
+Hi,
 
-Won't this break shrinkers and fun stuff like that? It's why we added the
-new USAGE_OTHER fence slot at least, and also why I wonder whether we
-shouldn't push this into the helper to make the right call. Every driver
-kinda needs the same wheel.
--Daniel
-
->  							      obj,
->  							      write);
-> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-> index f54b48ef6a2d..329100016e7c 100644
-> --- a/include/uapi/drm/msm_drm.h
-> +++ b/include/uapi/drm/msm_drm.h
-> @@ -222,10 +222,12 @@ struct drm_msm_gem_submit_cmd {
->  #define MSM_SUBMIT_BO_READ             0x0001
->  #define MSM_SUBMIT_BO_WRITE            0x0002
->  #define MSM_SUBMIT_BO_DUMP             0x0004
-> +#define MSM_SUBMIT_BO_NO_IMPLICIT      0x0008
->  
->  #define MSM_SUBMIT_BO_FLAGS            (MSM_SUBMIT_BO_READ | \
->  					MSM_SUBMIT_BO_WRITE | \
-> -					MSM_SUBMIT_BO_DUMP)
-> +					MSM_SUBMIT_BO_DUMP | \
-> +					MSM_SUBMIT_BO_NO_IMPLICIT)
->  
->  struct drm_msm_gem_submit_bo {
->  	__u32 flags;          /* in, mask of MSM_SUBMIT_BO_x */
-> -- 
-> 2.38.1
+Am 2023-01-05 13:21, schrieb Alexander Stein:
+> Am Donnerstag, 5. Januar 2023, 13:11:37 CET schrieb Michael Walle:
+>> thanks for debugging. I'm not yet sure what is going wrong, so
+>> I have some more questions below.
+>> 
+>> >> This causes the following errors on existing boards (imx8mq-tqma8mq-
+>> >> mba8mx.dtb):
+>> >> root@tqma8-common:~# uname -r
+>> >> 6.2.0-rc2-next-20230105
+>> >>
+>> >> > OF: /soc@0: could not get #nvmem-cell-cells for /soc@0/bus@30000000/
+>> >>
+>> >> efuse@30350000/soc-uid@4
+>> >>
+>> >> > OF: /soc@0/bus@30800000/ethernet@30be0000: could not get
+>> >> > #nvmem-cell-cells
+>> >>
+>> >> for /soc@0/bus@30000000/efuse@30350000/mac-address@90
+>> >>
+>> >> These are caused because '#nvmem-cell-cells = <0>;' is not explicitly
+>> >> set in
+>> >> DT.
+>> >>
+>> >> > TI DP83867 30be0000.ethernet-1:0e: error -EINVAL: failed to get nvmem
+>> >> > cell
+>> >>
+>> >> io_impedance_ctrl
+>> >>
+>> >> > TI DP83867: probe of 30be0000.ethernet-1:0e failed with error -22
+>> >>
+>> >> These are caused because of_nvmem_cell_get() now returns -EINVAL
+>> >> instead of -
+>> >> ENODEV if the requested nvmem cell is not available.
+>> 
+>> What do you mean with not available? Not yet available because of 
+>> probe
+>> order?
 > 
+> Ah, I was talking about there is no nvmem cell being used in my PHY 
+> node, e.g.
+> no 'nvmem-cells' nor 'nvmem-cell-names' (set to 'io_impedance_ctrl'). 
+> That's
+> why of_property_match_string returns -EINVAL.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Ahh I see. You mean ENOENT instead of ENODEV, right?
+
+>> > Should we just assume #nvmem-cell-cells = <0> by default? I guess it's
+>> > a safe assumption.
+>> 
+>> Actually, that's what patch 2/21 is for.
+>> 
+>> Alexander, did you verify that the EINVAL is returned by
+>> of_parse_phandle_with_optional_args()?
+> 
+> Yep.
+> 
+> --8<--
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 1b61c8bf0de4..f2a85a31d039 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -1339,9 +1339,11 @@ struct nvmem_cell *of_nvmem_cell_get(struct 
+> device_node
+> *np, const char *id)
+>         if (id)
+>                 index = of_property_match_string(np, 
+> "nvmem-cell-names", id);
+> 
+> +       pr_info("%s: index: %d\n", __func__, index);
+>         ret = of_parse_phandle_with_optional_args(np, "nvmem-cells",
+>                                                   "#nvmem-cell-cells",
+>                                                   index, &cell_spec);
+> +       pr_info("%s: of_parse_phandle_with_optional_args: %d\n", 
+> __func__,
+> ret);
+>         if (ret)
+>                 return ERR_PTR(ret);
+> --8<--
+> 
+> Results in:
+>> [    1.861896] of_nvmem_cell_get: index: -22
+>> [    1.865934] of_nvmem_cell_get: of_parse_phandle_with_optional_args: 
+>> -22
+>> [    1.872595] TI DP83867 30be0000.ethernet-1:0e: error -EINVAL: 
+>> failed to
+> get nvmem cell io_impedance_ctrl
+>> [    2.402575] TI DP83867: probe of 30be0000.ethernet-1:0e failed with 
+>> error
+> -22
+> 
+> So, the index is wrong in the first place, but this was no problem 
+> until now.
+
+Thanks, could you try the following patch:
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1b61c8bf0de4..1085abfcd9b1 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1336,8 +1336,11 @@ struct nvmem_cell *of_nvmem_cell_get(struct 
+device_node *np, const char *id)
+         int ret;
+
+         /* if cell name exists, find index to the name */
+-       if (id)
++       if (id) {
+                 index = of_property_match_string(np, "nvmem-cell-names", 
+id);
++               if (index < 0)
++                       return ERR_PTR(-ENOENT);
++       }
+
+         ret = of_parse_phandle_with_optional_args(np, "nvmem-cells",
+                                                   "#nvmem-cell-cells",
+
+Before patch 6/21, the -EINVAL was passed as index to of_parse_phandle()
+which then returned NULL, which caused the nvmem core to return ENOENT.
+I have a vague memory, that I made sure, that
+of_parse_phandle_with_optional_args() will also propagate the
+wrong index to its return code. But now, it won't be converted
+to ENOENT.
+
+-michael
