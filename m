@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDC265E945
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EA365E946
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjAEKsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S232936AbjAEKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbjAEKsL (ORCPT
+        with ESMTP id S233263AbjAEKsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:48:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC8E4FD69
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672915645;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UEbDwXIUB2tT4FTtzGYCDFhGThKelFO7bSLAhtp8Ky4=;
-        b=APqgzo131CTTXKHAX1DkmxWpJ60W4AfQM4DkpjY36jY0cUvFTndjJzDmKMhbyO3D/9Q1l2
-        xi9KGUd4TuCnT2Sx08mPASZ1XHErGHUf2ff1/3qCpxa7ThQy3wsNo32PuaMmdIvDp0AEdO
-        nSQWRwkaTsPq7g7I3minfmQYF6pQS78=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-342-_4uSYXhDNNW3ffGLiWlbbg-1; Thu, 05 Jan 2023 05:47:23 -0500
-X-MC-Unique: _4uSYXhDNNW3ffGLiWlbbg-1
-Received: by mail-wr1-f69.google.com with SMTP id o5-20020adfba05000000b0029064ccbe46so2300713wrg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:47:23 -0800 (PST)
+        Thu, 5 Jan 2023 05:48:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC4A4FD69;
+        Thu,  5 Jan 2023 02:48:18 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id c17so52240394edj.13;
+        Thu, 05 Jan 2023 02:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6qLrWDP8UxJVLXXHnMyGiQx4P9YZKALZZuu63FSiH6E=;
+        b=E9K3NJxE30vOeMc0DOcQs6pSTojhjB7VLiWumrWgtVBlynfouL2iOIIZjBQlA011se
+         3PvotfAYQx0uvyVsV3uk2OY3h3brtmDIxPl0L48Xy8zFsV6malBcnPUYTgNZrdVinMNX
+         F6nb6b7Kjjw6m4lsrqnpiUNq4ILqGBfJvKObH6L0rUNZm18rkzP4w2xGkHzp1FHa9Rvm
+         BLtL0upydoAO/nkIVsz/9wUmDjnhGBIRLg1YpwRWuJ5aGyCVTrjf2bD6lUHK6fvkyEB+
+         S2B3dOJ/J6rg9ekk6KoVGdA+Qi0yaOxNng0aL9zuTM2bJBEByO6xvhdLSifOUP6wEZKk
+         klYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UEbDwXIUB2tT4FTtzGYCDFhGThKelFO7bSLAhtp8Ky4=;
-        b=lO0fab28isyGY90ujouh7mK2SNSMHa3IHXsyTOfYaPasC8zgwP3rbJGAmTDZvt5ePy
-         W7cIznOFFUPRjJl8mDD01iRbS3E1jzs3yMsng8eLu1UZXm7QVsEFp95TvPCWHBUdADDw
-         D2TOjPBQltU1eNPDgfapfQ6Uv6P7ipNcmIKYxIp1/d1XvHqVO+JQCs9AqSGbTaQFUPw4
-         LCWyPPDxBLSodJulLvg+WVrhLrGBeq0avHprkFuMXtxgNUEF7kfvKmL1AKExaVKH1Q7y
-         WcURyK81ubGWYTka126X09NutlQpQzcjGHaemthLTymq9UvX7mbkfYx6Bm7flJuOux11
-         f6zw==
-X-Gm-Message-State: AFqh2ko6lvzP/dwIEpAJbYc/Zfsontwt/kEpDyjbgu9SKrdwaKN11acO
-        /GHq4BwxBT0pp5tBSW/8H83nWYZkxw0L5TYRXSQM4uUqsL5yHlqNLbKcacc369tR5SV6+PcRAoz
-        JE3lno+GGQgrQAczaANExPDDq
-X-Received: by 2002:a05:600c:1d16:b0:3d1:fe93:f1d3 with SMTP id l22-20020a05600c1d1600b003d1fe93f1d3mr37269266wms.36.1672915642121;
-        Thu, 05 Jan 2023 02:47:22 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsU2MGUZIy8dexSPWz2offZfmPZMIC0nghsnlwgXQoP1gSAxKdkUVmLWFuL3F34KmxnbI9rAQ==
-X-Received: by 2002:a05:600c:1d16:b0:3d1:fe93:f1d3 with SMTP id l22-20020a05600c1d1600b003d1fe93f1d3mr37269237wms.36.1672915641823;
-        Thu, 05 Jan 2023 02:47:21 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e? (p200300cbc7076e00ff02ec7aded5ec1e.dip0.t-ipconnect.de. [2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b003d35acb0fd7sm2093683wmo.34.2023.01.05.02.47.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 02:47:21 -0800 (PST)
-Message-ID: <60f06008-dea5-a08e-edec-fc4aec76dfb5@redhat.com>
-Date:   Thu, 5 Jan 2023 11:47:20 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6qLrWDP8UxJVLXXHnMyGiQx4P9YZKALZZuu63FSiH6E=;
+        b=EHCTtM3BcMG3gt34KEZ8rUD8DMMBgtgohm1NjoYp3tYX3sG0qBfh6d19jdEi4gdSbr
+         Y+1XpesdR+Nr7dW94vji0NjMjpXV85VMNtZUXbbxhDUdX4w0Mq5bjHsmpqAa8IR67jrh
+         RafNEZy6lv3baO0jnQJbu14iRuORLJyotjbh6Kf3pQuZEj1SHOXS9NRk/X0XnkPbqBBo
+         4dz+kI7l7SnnjBLAvr5CXivuVcmVW4Zhl61UU5/9hDL+FmHRUtrvwhn+sZCcjXP4m0uv
+         LbyFSpu3uNXarNn1ku+oKsLYz6j348f1zNsi906SdHOr0Xr4wb4yZ9fjHE9juofhAqgc
+         Eyng==
+X-Gm-Message-State: AFqh2kqCiEdBm8+hvPu8IGQCDTK1UcopyszB0Pb+QaQbsjyvxAnccbNc
+        95nYCsbmw7xaVJEYdULTZSI=
+X-Google-Smtp-Source: AMrXdXuJWhyrmy1YZjk6sB1ll1kMT60CGgwsH2fEDRfVrLmdIwzKXMnsgcamI+al2donwj3dOaq/aw==
+X-Received: by 2002:a05:6402:3784:b0:46d:cead:4eab with SMTP id et4-20020a056402378400b0046dcead4eabmr46314439edb.6.1672915696661;
+        Thu, 05 Jan 2023 02:48:16 -0800 (PST)
+Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170906b08b00b007806c1474e1sm16297503ejy.127.2023.01.05.02.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 02:48:15 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 5 Jan 2023 11:48:13 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Aaron Thompson <dev@aaront.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 1/1] mm: Always release pages to the buddy allocator
+ in memblock_free_late().
+Message-ID: <Y7aq7fzKZ/EdLVp3@gmail.com>
+References: <010101857bbc3a41-173240b3-9064-42ef-93f3-482081126ec2-000000@us-west-2.amazonses.com>
+ <20230105041650.1485-1-dev@aaront.org>
+ <010001858025fc22-e619988e-c0a5-4545-bd93-783890b9ad14-000000@email.amazonses.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 00/46] Based on latest mm-unstable (85b44c25cd1e).
-Content-Language: en-US
-To:     James Houghton <jthoughton@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230105101844.1893104-1-jthoughton@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <010001858025fc22-e619988e-c0a5-4545-bd93-783890b9ad14-000000@email.amazonses.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.01.23 11:17, James Houghton wrote:
-> This series introduces the concept of HugeTLB high-granularity mapping
-> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
-> high-granularity, similar to how THPs can be PTE-mapped.
+
+* Aaron Thompson <dev@aaront.org> wrote:
+
+> For example, on an Amazon EC2 t3.micro VM (1 GB) booting via EFI:
 > 
-> Support for HGM in this series is for MAP_SHARED VMAs on x86 only. Other
-> architectures and (some) support for MAP_PRIVATE will come later.
+> v6.2-rc2:
+>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>   Node 0, zone      DMA
+>           spanned  4095
+>           present  3999
+>           managed  3840
+>   Node 0, zone    DMA32
+>           spanned  246652
+>           present  245868
+>           managed  178867
+> 
+> v6.2-rc2 + patch:
+>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>   Node 0, zone      DMA
+>           spanned  4095
+>           present  3999
+>           managed  3840
+>   Node 0, zone    DMA32
+>           spanned  246652
+>           present  245868
+>           managed  222816   # +43,949 pages
 
-Why even care about the complexity of COW-sharable anon pages? TBH, I'd 
-just limit this to MAP_SHARED and call it a day. Sure, we can come up 
-with use cases for everything (snapshotting VMs using fork while also 
-support optimized postcopy), but I think this would need some real 
-justification for the added complexity and possible (likely!) issues.
+[ Note the annotation I added to the output - might be useful in the changelog too. ]
 
--- 
+So this patch adds around +17% of RAM to this 1 GB virtual system? That 
+looks rather significant ...
+
 Thanks,
 
-David / dhildenb
-
+	Ingo
