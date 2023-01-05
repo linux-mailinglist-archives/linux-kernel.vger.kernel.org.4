@@ -2,192 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFC865F6D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B000A65F6D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236078AbjAEWc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
+        id S236112AbjAEWc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbjAEWch (ORCPT
+        with ESMTP id S236070AbjAEWcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:32:37 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB915822
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:32:34 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id 124so26438228pfy.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMspBu+uWa9sfLmLyUJ/wSTZmKLpqqXkwp6DWYRYmTM=;
-        b=ZzyGzoeKKvZaoMdQYk9/JEb/R0fTMTl8jdxKSg3s6JKyfR79CnB4sS8bEQ0ONL6UQB
-         YBcEnGw41a+iNz23j6xzSeW7vrD1JAOeqwfntUXzII3h4d96KHoVSc/4Kb16WiQKOAvq
-         HUM40kmHERgBRNXvQuc2zDBkmB/8ypXu6eaE8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RMspBu+uWa9sfLmLyUJ/wSTZmKLpqqXkwp6DWYRYmTM=;
-        b=NzjhYn2h14AM3VAzuYnBSvm2TELHFnIoFf0q2DSA2MpGo714Pm885DPjK0Rirq1BvB
-         bG58CDF+1h4zUmybpioDgsfq3+spcYwL+ofEK2yErTHZArPgwNA1XGkLKqcH7kdLtLAY
-         v74hhe7Y9K0w9GK5kufbA6sCV/GYj47nd7RPzKPCeUrYHkYfU/+tsgiOLceUfssDxwgx
-         f1jb/6OICeK31bLkf1i0s2Og+/JprXp9yOQl6orqXuvv9AHW/j3yT5maH50gHogRndBX
-         sqLpFIGA3E3Y98P+uLFNrB3lb92fhes3PnGTgdshKmlbgJdeS+rjj2gqNZObD2IthQIn
-         22MA==
-X-Gm-Message-State: AFqh2kpsSn0iCxfOzMqMJzUTTO/aLOfebrae4k98/LgU+AwJ9aL7OTIm
-        7dRttbL6guiAF7mV6YZRPW46Xw==
-X-Google-Smtp-Source: AMrXdXsqq4Mi747oUWhsFhMpsCCbXt0HvHTAJ74J9uJiiSUwowl84oG/P6DbQxUEysWYLcBj9mSczg==
-X-Received: by 2002:a62:1a51:0:b0:581:d46a:343a with SMTP id a78-20020a621a51000000b00581d46a343amr25696694pfa.18.1672957954467;
-        Thu, 05 Jan 2023 14:32:34 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x74-20020a62864d000000b0058217bbc6f5sm11470796pfd.215.2023.01.05.14.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:32:34 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Potnuri Bharat Teja <bharat@chelsio.com>
-Cc:     Kees Cook <keescook@chromium.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] RDMA/cxgb4: Replace 0-length arrays with flexible arrays
-Date:   Thu,  5 Jan 2023 14:32:32 -0800
-Message-Id: <20230105223225.never.252-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 5 Jan 2023 17:32:55 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC10DF0;
+        Thu,  5 Jan 2023 14:32:54 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np1Sh6sQTz4xwy;
+        Fri,  6 Jan 2023 09:32:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672957973;
+        bh=Cvd6DoNzRdTLa/kgU2bq9vznfp/vCxDw0FcHNRFdYDY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dtWoPhprS9UJTJIGguaU98R4EOEE9kb19fKOc9Q4ijqjDAR1p6PyoVfvrbwMONQbR
+         hnrffmw09YhHS9I9ymfVo0jpip7CG0pDDg8xLCVR1tIbvVFBY4PWR2D+Qtj0alfMk9
+         tSPcC2kh6jUIMjwpCMG5b9AGcXwEMMXChQNn0nrKbIGoEodAdMNAukjiWOyG8YsGkv
+         99V24FY9SMjiAKnqErWFtJMutfM+9Bf/r5Uyl5gHzbs7Jqjrr/Ga5gaHSNKEmlqXZs
+         J5MXih6T5GAXhTYvFHB8r40i2M9kqjGGJL9H3OJjQuGT4+ISCipWdiFZYxQ8+qgelc
+         1OFjM0ovjQ9hg==
+Date:   Fri, 6 Jan 2023 09:32:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the spi-fixes tree
+Message-ID: <20230106093252.333e715c@canb.auug.org.au>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3478; h=from:subject:message-id; bh=dxMDzsMc6oaxPr4Do5C0Wr2AT/H+H0SzXI+dU/p0IOo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1AA6TRACNi/UTQWnJlFJAmhMJxt1Q/q61h8WXc3 5MfFzMqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dQAAAKCRCJcvTf3G3AJjVaD/ 9JTizo/XmwroMPtX6agewL84FuMweJSgXJ/ngjmZqAvjA4oSofA1pqyp6qjaTkS7Ffi97TBUNKh731 qz9L0CmgSdP0hBnpfosBkNgfM5pO2u+ag48S3IfVZeg7VsLTTVZp04S2OamHaMqESexB39eRz0uIh8 dcGypx0LM5c6nxKDc5xRL6BnMUiCCiJeHtd/IVQuOZb3yNZoxeIUsHHQoreTaxorIm52+u5eG0bAEJ PRqXLoHf2rbQR3MuRnvASk9NxmIXnL1X+uNshx/DDixHa47N5acBqgPOzz68JBvXVP9SBUCjpjgQce lIuze1Nl9AJB8B4D8ldabt89DnJM7+SHgdm1MWvoi6CRqdzNtvdez7GI4P0pduHVryotdSUjkXjGfQ uwBdIPmBsiE06weLdk1sZD6/sDbB2Ly/8MZBG0ZQqMicHPkJAbuKPgLcOjUxNrpMFemTcWatisk3hH O9d2LDnrcdn3ruLoUyvN5XhiuxK9qdoY0JKyLNfcxBgnHtvN3IZOyAADW13W1hQOZ9E3MtrGwVG867 8sGHv9T6Ph6OtZJWHdcwvI762jAWfFy55Cg2OUCBlko0lKcrVCANTNU94drHuN7dBbFHV3PF16DS2U TikaXuZ026+s1VSX3/FrNaVB4vyaK2bjIONqe8znqyMKfK0n+l3YFgm+IKtg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/aCOG5T=yLrKKq5DoRRXHb_H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace all remaining
-0-length arrays with flexible arrays. Detected with GCC 13, using
--fstrict-flex-arrays=3:
+--Sig_/aCOG5T=yLrKKq5DoRRXHb_H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In function 'build_rdma_write',
-    inlined from 'c4iw_post_send' at ../drivers/infiniband/hw/cxgb4/qp.c:1173:10:
-../drivers/infiniband/hw/cxgb4/qp.c:597:38: warning: array subscript 0 is outside array bounds of 'struct fw_ri_immd[0]' [-Warray-bounds=]
-  597 |                 wqe->write.u.immd_src[0].r2 = 0;
-      |                 ~~~~~~~~~~~~~~~~~~~~~^~~
-../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h: In function 'c4iw_post_send':
-../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:567:35: note: while referencing 'immd_src'
-  567 |                 struct fw_ri_immd immd_src[0];
-      |                                   ^~~~~~~~
+Hi all,
 
-Additionally drop the unused C99_NOT_SUPPORTED ifndef lines.
+The following commit is also in the sound-asoc-fixes tree as a different
+commit (but the same patch):
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+  b24cded8c065 ("spi: mediatek: Enable irq before the spi registration")
 
-Cc: Potnuri Bharat Teja <bharat@chelsio.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-rdma@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/infiniband/hw/cxgb4/t4fw_ri_api.h | 26 ++++++-----------------
- 1 file changed, 6 insertions(+), 20 deletions(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h b/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
-index a2f5e29ef226..1f79537fc8d1 100644
---- a/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
-+++ b/drivers/infiniband/hw/cxgb4/t4fw_ri_api.h
-@@ -122,9 +122,7 @@ struct fw_ri_dsgl {
- 	__be16	nsge;
- 	__be32	len0;
- 	__be64	addr0;
--#ifndef C99_NOT_SUPPORTED
- 	struct fw_ri_dsge_pair sge[];
--#endif
- };
- 
- struct fw_ri_sge {
-@@ -138,9 +136,7 @@ struct fw_ri_isgl {
- 	__u8	r1;
- 	__be16	nsge;
- 	__be32	r2;
--#ifndef C99_NOT_SUPPORTED
- 	struct fw_ri_sge sge[];
--#endif
- };
- 
- struct fw_ri_immd {
-@@ -148,9 +144,7 @@ struct fw_ri_immd {
- 	__u8	r1;
- 	__be16	r2;
- 	__be32	immdlen;
--#ifndef C99_NOT_SUPPORTED
- 	__u8	data[];
--#endif
- };
- 
- struct fw_ri_tpte {
-@@ -320,9 +314,7 @@ struct fw_ri_res_wr {
- 	__be32 op_nres;
- 	__be32 len16_pkd;
- 	__u64  cookie;
--#ifndef C99_NOT_SUPPORTED
- 	struct fw_ri_res res[];
--#endif
- };
- 
- #define FW_RI_RES_WR_NRES_S	0
-@@ -562,12 +554,10 @@ struct fw_ri_rdma_write_wr {
- 	__be32 plen;
- 	__be32 stag_sink;
- 	__be64 to_sink;
--#ifndef C99_NOT_SUPPORTED
- 	union {
--		struct fw_ri_immd immd_src[0];
--		struct fw_ri_isgl isgl_src[0];
-+		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
-+		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
- 	} u;
--#endif
- };
- 
- struct fw_ri_send_wr {
-@@ -581,12 +571,10 @@ struct fw_ri_send_wr {
- 	__be32 plen;
- 	__be32 r3;
- 	__be64 r4;
--#ifndef C99_NOT_SUPPORTED
- 	union {
--		struct fw_ri_immd immd_src[0];
--		struct fw_ri_isgl isgl_src[0];
-+		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
-+		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
- 	} u;
--#endif
- };
- 
- #define FW_RI_SEND_WR_SENDOP_S		0
-@@ -618,12 +606,10 @@ struct fw_ri_rdma_write_cmpl_wr {
- 		struct fw_ri_isgl isgl_src;
- 	} u_cmpl;
- 	__be64 r3;
--#ifndef C99_NOT_SUPPORTED
- 	union fw_ri_write {
--		struct fw_ri_immd immd_src[0];
--		struct fw_ri_isgl isgl_src[0];
-+		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
-+		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
- 	} u;
--#endif
- };
- 
- struct fw_ri_rdma_read_wr {
--- 
-2.34.1
+--Sig_/aCOG5T=yLrKKq5DoRRXHb_H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3UBQACgkQAVBC80lX
+0GxctAf/eYvW8s8hAdp4hTs0Y1czH6gGgmvuuMVYb0RGSffn3MscQpj1c0JjsXA0
+PHHvkZzLFDZOmH5HxoAsUhGEcvQZrjxOu8OBjyEmJNkFT9TBdJPRz1nDe1+cY+lz
+OyNp+xWpAbanblO684vRYvqk4VfJd5qRVtSEpxCNn0c7ph8T2MjG9LXwZMlkUFe1
+mgg2ZgNL2xb1ipvE/VlV8NSBOhC/yYl3Q5Uq59lk5k+aYKVuqkBF+2MDs15lAMVN
+70zlYkb3gyGJDe4WLX3or/vArrjzrCuh/RXw6tqlWazYO7ZsX+GvDu3vRxE0A4CN
+/+R+6UrSFUur3YyVru6cEA4vrky63Q==
+=zb1m
+-----END PGP SIGNATURE-----
+
+--Sig_/aCOG5T=yLrKKq5DoRRXHb_H--
