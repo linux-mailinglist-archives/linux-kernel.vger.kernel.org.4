@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69AE65F47F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95DA65F476
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbjAETbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S235613AbjAETa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbjAETaj (ORCPT
+        with ESMTP id S235545AbjAETaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:30:39 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D786B1AD;
-        Thu,  5 Jan 2023 11:25:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672946719; x=1704482719;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=17ds322DZ1gBtrZfbyVCluaxkZsYnqX1QIiiGQuNQm4=;
-  b=ZNDM4eNWMgsmEm1DuKClShIaWmfxETQMhhxNGqFBtpQplfTE1e81NfOP
-   UIQ9JBFo6ON42xu6P4pFSkzigkxVtP51lqD/aB/O+5KVscFQ3Bw95W3/3
-   nfPFOrZ1JJtXJCpOit1zEul4gZ74Mf3e69UYDwN3b38Ix7mYXCAvrI94L
-   sED2ayX15QUg7A8JdY3FRG/yMIT5etjPCd5dOH+XdYFmqMSy8OIu+iBEf
-   IaNBo2aCZrm5WyNnDFn15c9pfV1HUoDccld7Zxp/yhGGnK97qUqNalAx5
-   PiPhynhYWPDuM+L3f0MFFb8ITpY/2xBcJlH5U+J0UKmTEfCZZtJ6Ry0iW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="386754163"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="386754163"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 11:23:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="724179316"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="724179316"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 11:23:49 -0800
-Received: from [10.252.211.52] (kliang2-mobl1.ccr.corp.intel.com [10.252.211.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 5 Jan 2023 14:30:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC4963F75
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:24:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 91F3A580BE0;
-        Thu,  5 Jan 2023 11:23:46 -0800 (PST)
-Message-ID: <36dab127-93f9-ad87-26be-cb406fed6212@linux.intel.com>
-Date:   Thu, 5 Jan 2023 14:23:45 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE51261BCD
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 19:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14384C433D2;
+        Thu,  5 Jan 2023 19:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672946671;
+        bh=8sug4N+XOkt7hHrOlUu1is4NYUzllmpcO7ETWOyO+08=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZHpiPx1jjkVospHkCnRuOjvxSzaRhOs8AsSyrnSF/m6CGFWiOAqzY0aIi67QWs7mS
+         6vNh/o/mS8aOW3nJflDyCJDk/nwh4hvOgf27yrLmv1n5XkHYVlPj2JrNXL4YY17BsF
+         93KeZwIEjxsud0GFzt3jPTMcgt9bD8vg+65B5bEtLkk/WLPyy2TiPnGUlTLq3syR6/
+         hXOATAdq+bZvWgb8VFyzorqCD0HtNDEOfAMnoE/GxtwARX6i8BltCIE0eYmhwV6lb2
+         X5M/NX3rcH41bSXGrKMiwk7AviUwNMxcurTI88A9wvEHrfaxS49xmzbz2NqCiHWqHr
+         ofErHzdteW6cw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A14E85C0544; Thu,  5 Jan 2023 11:24:30 -0800 (PST)
+Date:   Thu, 5 Jan 2023 11:24:30 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: Re: [PATCH x86/nmi 2/2] x86/nmi: Print reasons why backtrace NMIs
+ are ignored
+Message-ID: <20230105192430.GJ4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105011537.1774941-1-paulmck@kernel.org>
+ <20230105011537.1774941-2-paulmck@kernel.org>
+ <Y7apHi9A0i63X4Me@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>
-Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-References: <20230105182950.GA1158496@bhelgaas>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230105182950.GA1158496@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7apHi9A0i63X4Me@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-01-05 1:29 p.m., Bjorn Helgaas wrote:
-> On Thu, Jan 05, 2023 at 06:04:52PM +0000, Luck, Tony wrote:
->>> Hi Tony, can you share a dmesg log?  Does it look like the same thing
->>> Kan reported, where the ECAM space is reported only via an
->>> EfiMemoryMappedIO region and is not otherwise reserved by firmware?
->>
->> Attached are serial logs. "broken" is the one from v6.2-rc2, "revert" is the
->> one with your commit reverted.
->>
->> I don't see the string "ECAM" in either of them.
+On Thu, Jan 05, 2023 at 11:40:30AM +0100, Ingo Molnar wrote:
 > 
-> Yeah, "ECAM" is what the PCIe spec calls it, but Linux logging uses
-> "MMCONFIG".  Probably should change that.
+> * Paul E. McKenney <paulmck@kernel.org> wrote:
 > 
-> Anyway, your dmesg log shows the same problem:
+> > +#ifdef CONFIG_NMI_CHECK_CPU
+> > +
+> > +static char *nmi_check_stall_msg[] = {
+> > +/*									*/
+> > +/* +--------- nsp->idt_seq_snap & 0x1: CPU is in NMI handler.		*/
+> > +/* | +------ cpu_is_offline(cpu)					*/
+> > +/* | | +--- nsp->idt_calls_snap != atomic_long_read(&nsp->idt_calls):	*/
+> > +/* | | |	NMI handler has been invoked.				*/
+> > +/* | | |								*/
+> > +/* V V V								*/
+> > +/* 0 0 0 */ "NMIs are not reaching exc_nmi handler",
+> > +/* 0 0 1 */ "exc_nmi handler is ignoring NMIs",
+> > +/* 0 1 0 */ "CPU is offline and NMIs are not reaching exc_nmi handler",
+> > +/* 0 1 1 */ "CPU is offline and exc_nmi handler is legitimately ignoring NMIs",
+> > +/* 1 0 0 */ "CPU is in exc_nmi handler and no further NMIs are reaching handler",
+> > +/* 1 0 1 */ "CPU is in exc_nmi handler which is legitimately ignoring NMIs",
+> > +/* 1 1 0 */ "CPU is offline in exc_nmi handler and no further NMIs are reaching exc_nmi handler",
+> > +/* 1 1 1 */ "CPU is offline in exc_nmi handler which is legitimately ignoring NMIs",
 > 
->   DMI: Intel Corporation BRICKLAND/BRICKLAND, BIOS BRBDXSD1.86B.0338.V01.1603162127 03/16/2016
->   efi: Remove mem48: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
->   PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
->   [Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
->   PCI: not using MMCONFIG
->   acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+> That kind of disambiguation of why a CPU is stuck looks really useful:
 > 
-> Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
-> firmware/kernel interface is as an EfiMemoryMappedIO region.
+>    Reviewed-by: Ingo Molnar <mingo@kernel.org>
+
+Glad you like it and thank you!  I will apply this on the next rebase.
+
+> One small suggestion would be to do this in the messages:
 > 
-> I think this is a firmware bug, but obviously we're going to have to
-> figure out a way around it.
+>    s/exc_nmi handler
+>     /exc_nmi() handler
 > 
+> ... to make it clear that it's a regular kernel function [well, hw entry 
+> handler], not a function pointer or some other indirection? No strong 
+> feelings though.
 
-I just want to share that I did more tests on an Ice Lake server (a
-different generation from my original report and Tony's machine).
+Will do!  I would balk at "DEFINE_IDTENTRY_RAW(exc_nmi)", though.  ;-)
 
-The same problem can be found as well.
-
-[    0.000000] DMI: Intel Corporation M50CYP2SB2U/M50CYP2SB2U, BIOS
-SE5C6200.86B.4018.D65.2010201151 10/20/2020
-[    0.000000] efi: Remove mem375: MMIO range=[0x80000000-0x8fffffff]
-(256MB) from e820 map
-[    0.000000] e820: remove [mem 0x80000000-0x8fffffff] reserved
-
-[    1.528341] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem
-0x80000000-0x8fffffff] (base 0x80000000)
-[    1.566605] [Firmware Info]: PCI: MMCONFIG at [mem
-0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
-[    1.566611] PCI: not using MMCONFIG
-
-This firmware implementation should exist on the existing platforms for
-a long time.
-
-Thanks,
-Kan
+							Thanx, Paul
