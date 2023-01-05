@@ -2,79 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A2765E80F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5056865E815
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjAEJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        id S231326AbjAEJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjAEJkl (ORCPT
+        with ESMTP id S229834AbjAEJnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:40:41 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C918C56889;
-        Thu,  5 Jan 2023 01:40:39 -0800 (PST)
-X-UUID: 947685667712421c9d4cfc3f7c906f29-20230105
-X-CPASD-INFO: 94df836ab5fe4ed7a27774bb7dd53dca@goSehmVlZJGOVaixg6ivcYFjZ2dnYIK
-        xeZ6EZWGUj4GVhH5xTV5nX1V9gnNXZF5dXFV3dnBQYmBhXVJ3i3-XblBgXoZgUZB3iHaehmhhZg==
-X-CLOUD-ID: 94df836ab5fe4ed7a27774bb7dd53dca
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:73.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5.
-        0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5
-        ,AUF:6,DUF:11701,ACD:193,DCD:193,SL:0,EISP:0,AG:0,CFC:0.373,CFSR:0.127,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 947685667712421c9d4cfc3f7c906f29-20230105
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 947685667712421c9d4cfc3f7c906f29-20230105
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1746260541; Thu, 05 Jan 2023 17:40:38 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     deller@gmx.de
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        xurui <xurui@kylinos.cn>
-Subject: [PATCH] fbdev/g364fb: Fix a compilation issue
-Date:   Thu,  5 Jan 2023 17:40:39 +0800
-Message-Id: <20230105094039.1474255-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 5 Jan 2023 04:43:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184B6479F5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:43:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C032AB81A29
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D730C433F1;
+        Thu,  5 Jan 2023 09:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672911831;
+        bh=xk1y0PNrseh0gfuyYl1OAwYL8s7WC1qYIROo2bur1vA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZSyAQtiNY121quJjcDB1/aD7gGRdHulbZWPvCgwYTntvaK1Y0FQ5mxMcEeA2HwwxX
+         f3Brl0T3UZGTjCTLPhU8u+8kidWiXU4OHXJCks6D8GP6oZuIAdpI3M3TxRzUwvv/yH
+         41sIQxhNVrDtvo1u7GFm2kZtvS3ZqUebKnZ7Rrk87yQAjEoxO2yJY01eJ7SD8BG1Hh
+         eUJMK3HHzySkWOx5V0T0dlAG/aKr01AAefrfW3qUMWHYouRAxVFZuapZJ2k+Ts7bQX
+         Zm8gLFwCRZ2vvBpcX6ajRNwtl2hWMhiYXZas8SX2Xt0rsmClFl+sz+P/4Gf309fB+i
+         cOmN/7HAxbtbw==
+Date:   Thu, 5 Jan 2023 11:43:45 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, mgorman@suse.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/page_alloc: Repalce with deferred_pages_enabled()
+ wherever applicable
+Message-ID: <Y7ab0VbU4gBLHqI7@kernel.org>
+References: <20230105082506.241529-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105082506.241529-1-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/video/fbdev/g364fb.c:202:4: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+On Thu, Jan 05, 2023 at 01:55:06PM +0530, Anshuman Khandual wrote:
+> Instead of directly accessing static deferred_pages, replace such instances
+> with the helper deferred_pages_enabled(). No functional change is intended.
+> 
+> Cc; Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Signed-off-by: xurui <xurui@kylinos.cn>
----
- drivers/video/fbdev/g364fb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
-index 05837a3b985c..beef4bcec3c5 100644
---- a/drivers/video/fbdev/g364fb.c
-+++ b/drivers/video/fbdev/g364fb.c
-@@ -175,7 +175,8 @@ int __init g364fb_init(void)
- {
- 	volatile unsigned int *curs_pal_ptr =
- 	    (volatile unsigned int *) CURS_PAL_REG;
--	int mem, i;
-+	int mem;
-+	uintptr_t i;
- 
- 	if (fb_get_options("g364fb", NULL))
- 		return -ENODEV;
+> ---
+> This applies on v6.2-rc2.
+> 
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0745aedebb37..232d0323047b 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -4244,7 +4244,7 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>  			 * Watermark failed for this zone, but see if we can
+>  			 * grow this zone if it contains deferred pages.
+>  			 */
+> -			if (static_branch_unlikely(&deferred_pages)) {
+> +			if (deferred_pages_enabled()) {
+>  				if (_deferred_grow_zone(zone, order))
+>  					goto try_this_zone;
+>  			}
+> @@ -4293,7 +4293,7 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>  		} else {
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>  			/* Try again if zone has deferred pages */
+> -			if (static_branch_unlikely(&deferred_pages)) {
+> +			if (deferred_pages_enabled()) {
+>  				if (_deferred_grow_zone(zone, order))
+>  					goto try_this_zone;
+>  			}
+> -- 
+> 2.25.1
+> 
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
