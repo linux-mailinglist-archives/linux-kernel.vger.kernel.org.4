@@ -2,169 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2946465E907
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D68465E90B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjAEKbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S233032AbjAEKdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbjAEKbW (ORCPT
+        with ESMTP id S233149AbjAEKdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:31:22 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF495E670
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:25:39 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1584868pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:25:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dt0BUqKwqWWibWQTb1wPCoKjm4VxsUkn0xweZKKMDlI=;
-        b=YVRGKFa0easmpbhxNK49mPSwSm4p0yLlLolRTqAAayxsax3xiNb/DSU6taZNhLfwg2
-         NwU/6V3PZ+hSXVdRw9G7LGmz5qE5R2f+uFoPn72pC1tJ2p7L4DjEcG1XFmIQqHqu2QH+
-         jn+Z3syF3bwWcXBb55yis6EiEW7pTcDYekbDg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dt0BUqKwqWWibWQTb1wPCoKjm4VxsUkn0xweZKKMDlI=;
-        b=09Y5499kNa+d3udI0Ld0AnMOTdyn6mFf2W9OwLc7Jsh+l5OxIqJTPpq3WW9il6BWT5
-         AaMWpCcxSeFg2NbX6R9zyumCJDm5afixrG4jO5ZvxvucVM05FXakRKfLrDn4v8drCqBz
-         Bx4XiIuOBEw99xu0ukd0OWuFAHtliXP72e5va+4AvVjGeFDzgVF6WNUtWDQYqBrsvIRE
-         8ZydoRng576N63tliQuNFlk3DK2ogJdTcMEE0Ft/b7VkbaSTQaKCIPnUwN0lWbjD3+QR
-         oCjSUEPJHBR3FE1KPQW22VSLkojAKVOZZRXfHqSAv11aKnlOpivgvCM0kZsZVFi8sJod
-         9gCQ==
-X-Gm-Message-State: AFqh2kptMFf/2QauA44Xdd3HtApxEtTyAb5Caq5YrgtXU3HImHbcoycP
-        fN4wzWrjCO+elu1OxfrNtN+BW+Cw2Fnuy+z3R2wvLQ==
-X-Google-Smtp-Source: AMrXdXtH8U8MGVN+aDur6Y5usog53kmDoioY+u7d3Z2CRLX/YuYF2BfABux+LurZUiHsDsT7IgRi8tjHf6ScJFu4mbA=
-X-Received: by 2002:a17:902:bf45:b0:189:505b:73dd with SMTP id
- u5-20020a170902bf4500b00189505b73ddmr2984463pls.143.1672914317807; Thu, 05
- Jan 2023 02:25:17 -0800 (PST)
+        Thu, 5 Jan 2023 05:33:19 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2088.outbound.protection.outlook.com [40.107.212.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505CC44C68;
+        Thu,  5 Jan 2023 02:27:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NQuKAZoSEA+EFuh6I8sszZm/BOBOrOtbEpmhgtjxvmsUcQP1bgejJvS3itYekav7/my6AKsvvnlenOK600SUL5OeCkDHrWKdzNT/tFy1aNyyRE1z0vu7+LEsb69kU0B3WQTVriayvxCXHwXQhp4BFWAh//6vQejInR+X4ca8rcTD7+0mDE3c2n/7RaSocPVKp6xp40c1VyDVvDDL+rrYIL2HsJUD7t+aOMNqGneTOzk6w4hTJBkArp6TRWu1fU5j68PaXbhoE36cBriVC5DBfPnFwvX0dRdv2h3CjVpPpP6w4IAjp5is5Riokemga+MHa0GfJjbmgHkUV3OKO6weRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hU47etcGxb2QomgoFACnAFsFxnqU7Rk0kq2MAtjR6Rc=;
+ b=RN40WGJqWnZUnjuGinHiFtngFvHOGvB84rxuWygCmcCwEt38Fs8C/KB/7Fq2s4rKJV9o+nrDqUmvYtDnklq3JpY3EiaFkt9aQHlo+eRhgP+who2hu4+tWbCLyT4slHgvUnjAM2lVKTANPQ/8qTqNZot2c1xVieEBgsPDwoSg7DVisHjFOVWP+xwMzgyY/Gcwg+fnI/+4rZQ2HV83YMQ7iJ5lN5QDDrI50wIqhObdnIJMSjsO6vYEh4CJgzNEIX0jxRkjl+/0YYT/+rbsKAGMgPDIlNDeMRA6nNm0KWxASgYPiCi78iNQS9RInhOrX4t06OMT5batv7CySpdwuOwsvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hU47etcGxb2QomgoFACnAFsFxnqU7Rk0kq2MAtjR6Rc=;
+ b=Tfpve/0moWk9Qa5nYIymkVb1nrtnAQBrKHkH6cqu2N8U+xog+4Q7FmHkh6a+pJmk9wFSCQ04mBEYp6PCGAl0WFbs7o7lXcUvvvsZvqtjZlevshBnQosxjVzBEG3HomdY1XPBM7CXkpcyPDQwOMLyrS2Sm7WU6/26YbqCkexMlVQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
+ PH7PR12MB8040.namprd12.prod.outlook.com (2603:10b6:510:26b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 10:27:41 +0000
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::4014:79ea:392b:b4f6]) by DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::4014:79ea:392b:b4f6%5]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 10:27:41 +0000
+Message-ID: <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+Date:   Thu, 5 Jan 2023 15:57:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
+ =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
+ =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
+Content-Language: en-US
+To:     Matt Fagnani <matt.fagnani@bell.net>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
+ <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
+ <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
+ <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
+ <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+From:   Vasant Hegde <vasant.hegde@amd.com>
+In-Reply-To: <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0074.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:9a::18) To DS7PR12MB6048.namprd12.prod.outlook.com
+ (2603:10b6:8:9f::5)
 MIME-Version: 1.0
-References: <20221230063528.41037-1-zh.nvgt@gmail.com> <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
- <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
-In-Reply-To: <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 5 Jan 2023 11:25:06 +0100
-Message-ID: <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
-Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with console_lock()
-To:     Helge Deller <deller@gmx.de>
-Cc:     Hang Zhang <zh.nvgt@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|PH7PR12MB8040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 250e5b58-0402-4538-d5f1-08daef077974
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w0y5gR9hxXgSuTnlD4v/TdHyawUu1+bXvAxl0WOV5ezeSkIJaWqvXnl99UdpUhbGkXpFzGNZ+lgMWQDHIXEix48lTj3gCPuuvPVSjThUjgUHJaQNxg2J0FHYLWUcbSgViqsQxsGN0CGvbX76ullNZuJeqbxVY4uuFQ9oRvTBz+Hlv1fuf/7+69rRnhRMC/bc9tOPdzWMFdOGgVYCprf3WQScY5kLEqlx7c/bb9aYp5nMOWKvquNsd4BeCIsUIfmR6WCLWYtAs0CnGS/427tywwtakq7E0b/9d03vfI5rvzcosPZac13s5by4OEXGIfT63T9BF6vEJ+ZZouZPy7jUbEaNXUsJDLQ29GnVoOTJ9GTEMknf+mcGxxDA93uX9+WuFYMRxYso1Oepd3odu1QMAlpZI8QTZ7zgsh4z/ymdFv/N2UfgzcXM3IEadsOapYdh01q8Pq5vXaI0r8RytZ+1Lo1kiMmvMapGXj2RK9oU9S+hnBr8Ve/beDVotTXexskD4g3rxJT8R70xM+NZQfU/YfGYv+3vE189NCTLdKW7bdiw5TaBVaIZx8e8+3t6rOoiYot261aWRFFYRs1U15PuWxRr/ZnkpZYlcJBP38oIaMHAyp99vB0XZk6gT0iUPwBV7Mpib9x0EJePzSPersXLrxFZEyYGGr5RWgViLcYIRnu2l4ORpgPTv6GUqw0bZG5Y8ChJb6+QNVTNs02uSeYZgQWq0cfBBw6RWtteD5QLr0U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199015)(110136005)(6506007)(478600001)(6666004)(36756003)(53546011)(86362001)(38100700002)(31696002)(186003)(26005)(83380400001)(2616005)(6486002)(6512007)(8936002)(5660300002)(4744005)(44832011)(31686004)(66946007)(4326008)(66556008)(66476007)(316002)(54906003)(41300700001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzZtZE5ETENVd2hiOXg0N2NrNnZxaUMzQnNyQzgwdkFlZTFQZjNmZXlzd1dH?=
+ =?utf-8?B?YUdBclVGZTRDdnJEdGhmZmczTDdJM1kwTWVJYzNmdi9CUHQrUEo5OURKdUcr?=
+ =?utf-8?B?WFJnL29lVVNWbUJNVUhFWUNYN0dyblB6STkvR1lTUzQxRUlsSitFQmtVVG14?=
+ =?utf-8?B?YUpaQmVDM2Yrc0pVUWY0NTU5aElqamJVQnZxb3NqQ21qR3hBcGsxTlIyUGNG?=
+ =?utf-8?B?T21HemJyb0duNWFqTmJLSVhWVFFTVmcvRmVFK1NLenFPYmVRQmxrZGs4Q1ZU?=
+ =?utf-8?B?OTI4TVJROGtPOGJjbmxKOHF3c2F0dzd1bXRMUFA2SURJNndoaUxZeUVZclpH?=
+ =?utf-8?B?WGFIVWJVMDVobXhhYzlhMm9hSzkrKzdrNHJycjFkckFTMGVVM1N6RUZDK1Z6?=
+ =?utf-8?B?NDJ2NkdwTzRWNTQ1emhmNkdmVERVMEJGOHdremJ3K3NmN2lkbERpNHRYL2kz?=
+ =?utf-8?B?WXR1cm5XRDFnTkxFdEdZTWdiNlU0a1JSclhMTkROaTMvNE5DR3c2MWlidGc5?=
+ =?utf-8?B?SlRmVEkzcTY2cU94WEc0SUJ0SjYxUjViL2RoTWlYcWJXbHRMa2xnSTdTU1Vn?=
+ =?utf-8?B?Z1ZYQjBQdGZtRDl3OHQzVHVjZ0g4Vm90Y1VNdTVicUFKaitlbmxMWDlnSzAy?=
+ =?utf-8?B?c3dFZWdLQ3R4R1FxWU9BU0YrYmtkOHBMcTJmR0dtK3dOUHJISUZsRFZKQW1a?=
+ =?utf-8?B?L2lsQWZ0dHJ4QnBzMlV3TE1LWUhwOGR4c2hJOVQ5NStjcWlQU3grNHJDY0pp?=
+ =?utf-8?B?MEgxeGg1Mk9ENkhHemcweG8xaHliTXo4djhoOWErazIrVTZId2xYUTEvVElF?=
+ =?utf-8?B?a2ZFM2xaTk1QQ1YzQnYrWVpjd2g1VHVTeC9XcHZIQkY3WFFrYU1oa3RFL0pQ?=
+ =?utf-8?B?Lytna0JJa1JDWmpwem1mbEFSY3ZBZHFqOC9UU1VhNktxbWVGaWQveU03eG51?=
+ =?utf-8?B?UEdrRGRqcVoyWVhxdkZEclFXSzh2MnN0aStTTUVETHZia1JJYm1aY3NMOEFV?=
+ =?utf-8?B?T3g4UzFNMm9rRmJ5N3ZTcVpiZ0tYanJ0NUNIREgrNnQrQ3V4Z0d5cW1jZ3lp?=
+ =?utf-8?B?OUdXUTF0YTZQcjNZcXhFN0hkVTg3bjVLRlZXa2NhdksybWtYQXRNQU9DL29m?=
+ =?utf-8?B?K200WTlTUzVYWnovaVNKZmJZcG9EK3IvRnNUbDlQdENsaHoxMGR4WHlPN3dh?=
+ =?utf-8?B?S2d5V3dpa3RzdzczUEhzdkNtSDNpeFgvdld2NjNqNVU4ak1Bay90UjJWSkpT?=
+ =?utf-8?B?c2owYlJ4Z2ZPZWlVVmQrT3loakpXUitrVHd0RlhraEdZa3lsS3UxZmtkbk14?=
+ =?utf-8?B?RzIwck5tcmY4bXJFWGxQelFVN0ovNXQrazZvZ3NsMURlYW5QV3diaEdibWlK?=
+ =?utf-8?B?QXlIdmVUSDRaT0JiN1d4Y2s1S1AvWnYwcVhvcFNuN2prWm9IVmY2QllhWGxL?=
+ =?utf-8?B?Szc4OWk5dW5rdFBRVXFzeFJxN2liSzM3RTJpWlI0U0s0d1A5TXI2cXhxcEFr?=
+ =?utf-8?B?M1pCaXMvai9rRGxDQUZrL0dvU0ZjUnllR1lsZS9UamFYdFRnM2tRL25pamFZ?=
+ =?utf-8?B?ZmdVdmFTRXZVdEpKVVI2Sjc3SU4zT2tYR055aE1CK1VFUkxudktkMVJXQ3Vr?=
+ =?utf-8?B?QXU2Zmtyay82Vmx3bjBuV2tNUkl5bzlQNHpjeGhsT0QxMnhCUFlDcDBxN2tE?=
+ =?utf-8?B?WTByOHR2RTUyUFFqOVNFUzVjWU96RHVhbEVQZjhsd2xaRzR6OCtiaGFlR1dJ?=
+ =?utf-8?B?VHU1YVpEa1Fxc0xjSTBVY295aWFKYm1uNUxBM3J1Uk0ySGxCTUp1dDBMdjNy?=
+ =?utf-8?B?MFlXRXZnNFkydUJ4YlhMWDVLYlhnU1ZHREQ0TWY4b0pzMVpKM0lmKzlsc3VP?=
+ =?utf-8?B?TVdUby8rWnZ1Wno0dWYvNWVWR0RLWFlOYVdseU1SdkhIOGpYenBSVDg4RW1s?=
+ =?utf-8?B?cndKdXJVS3NGNTlWUU9IZlNHMnFLZHEyQmFXYVJyOWJndXMzck96bzZtU3dT?=
+ =?utf-8?B?dFJnMzg0TnNBeUEyMStjWlY5U29ZeHJxRkNOd1NnS2pGbERtMjlEOVFXMTl1?=
+ =?utf-8?B?UHhoUFJOelA2UXJZSmdBQXI1bTZOMk43WjhKQUhzQnFyZUhkdXYxSkRLQ3Rx?=
+ =?utf-8?Q?DohgCYlPJedcwOk62bLUEQnej?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 250e5b58-0402-4538-d5f1-08daef077974
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 10:27:41.1449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6q78C7QNTkn7N3qsWJwV8qPC1Fh2ahpakn6QTebZjeZ2q1MDhcSRYv/bCjzqCqaiXKlmynQ8sjzpuIdT6w2+pQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8040
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> Hi Helge
->
-> On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
-> >
-> > On 12/30/22 07:35, Hang Zhang wrote:
-> > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
-> > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
-> > > con2fb_release_oldinfo(), this free operation is protected by
-> > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
-> > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
-> > > so that it can be checked to avoid use-after-free before the use sites
-> > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
-> > > the problem is that the use site is not protected by the same locks
-> > > as for the free operation, e.g., "default" case in do_fb_ioctl()
-> > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
-> > > which can invalidate the aforementioned state set and check in a
-> > > concurrent setting.
-> > >
-> > > Prevent the potential use-after-free issues by protecting the "default"
-> > > case in do_fb_ioctl() with console_lock(), similarly as for many other
-> > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
-> > >
-> > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
-> >
-> > applied to fbdev git tree.
->
-> The patch above makes no sense at all to me:
->
-> - fb_info is protected by lock_fb_info and
-> - the lifetime of fb_info is protected by the get/put functions
-> - yes there's the interaction with con2fb, which is protected by
-> console_lock, but the lifetime guarantees are ensured by the device
-> removal
-> - which means any stuff happening in matroxfb_remove is also not a
-> concern here (unless matroxfb completely gets all the device lifetime
-> stuff wrong, but it doesn't look like it's any worse than any of the
-> other fbdev drivers that we haven't recently fixed up due to the
-> takeover issues with firmware drivers
+Matt,
 
-I have also a really hard timing finding the con2fb map use in the
-matroxfb ioctl code, but that just might be that I didn't look
-carefully enough. Maybe that would shed some light on this.
--Daniel
+On 1/5/2023 6:39 AM, Matt Fagnani wrote:
+> I built 6.2-rc2 with the patch applied. The same black screen problem happened
+> with 6.2-rc2 with the patch. I tried to use early kdump with 6.2-rc2 with the
+> patch twice by panicking the kernel with sysrq+alt+c after the black screen
+> happened. The system rebooted after about 10-20 seconds both times, but no kdump
+> and dmesg files were saved in /var/crash. I'm attaching the lspci -vvv output as
+> requested.
+> 
+
+Thanks for testing. As mentioned earlier I was not expecting this patch to fix
+the black screen issue. It should fix kernel warnings and IOMMU page fault
+related call traces. By any chance do you have the kernel boot logs?
 
 
->
-> On the very clear downside this now means we take console_lock for the
-> vblank ioctl (which is a device driver extension for reasons, despite
-> that it's a standard fbdev ioctl), which is no good at all given how
-> console_lock() is a really expensive lock.
->
-> Unless I'm massively missing something, can you pls push the revert
-> before this lands in Linus' tree?
->
-> Thanks, Daniel
->
-> > Thanks,
-> > Helge
-> >
-> > > ---
-> > >   drivers/video/fbdev/core/fbmem.c | 2 ++
-> > >   1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-> > > index 1e70d8c67653..8b1a1527d18a 100644
-> > > --- a/drivers/video/fbdev/core/fbmem.c
-> > > +++ b/drivers/video/fbdev/core/fbmem.c
-> > > @@ -1182,6 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
-> > >               console_unlock();
-> > >               break;
-> > >       default:
-> > > +             console_lock();
-> > >               lock_fb_info(info);
-> > >               fb = info->fbops;
-> > >               if (fb->fb_ioctl)
-> > > @@ -1189,6 +1190,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
-> > >               else
-> > >                       ret = -ENOTTY;
-> > >               unlock_fb_info(info);
-> > > +             console_unlock();
-> > >       }
-> > >       return ret;
-> > >   }
-> >
->
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+@Baolu,
+  Looking into lspci output, it doesn't list ACS feature for Graphics card. So
+with your fix it didn't enable PASID and hence it failed to boot.
 
+-Vasant
 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
