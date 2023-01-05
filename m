@@ -2,79 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6240465E81A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B4065E822
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjAEJoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S230282AbjAEJoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:44:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAEJod (ORCPT
+        with ESMTP id S229839AbjAEJox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:44:33 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5C1479EA;
-        Thu,  5 Jan 2023 01:44:32 -0800 (PST)
-X-UUID: 804c3e73b6a14ec39fec93fa705b63bf-20230105
-X-CPASD-INFO: 67c3d77b275c46ada19488d1ec90ff30@f4edU5FpZZJeV3evg3msnoFiaWRoZIS
-        Ap51ZYpSWX1CVhH5xTV5nX1V9gnNXZF5dXFV3dnBQYmBhXVJ3i3-XblBiXoZgUZB3hXmdU5ZlZw==
-X-CLOUD-ID: 67c3d77b275c46ada19488d1ec90ff30
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:73.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5.
-        0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:2.0,SPC:0,SIG:-5
-        ,AUF:7,DUF:11702,ACD:193,DCD:193,SL:0,EISP:0,AG:0,CFC:0.373,CFSR:0.127,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 804c3e73b6a14ec39fec93fa705b63bf-20230105
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 804c3e73b6a14ec39fec93fa705b63bf-20230105
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 210505913; Thu, 05 Jan 2023 17:44:30 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     deller@gmx.de
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        xurui <xurui@kylinos.cn>
-Subject: [PATCH] fbdev/g364fb: Fix a compilation issue
-Date:   Thu,  5 Jan 2023 17:44:39 +0800
-Message-Id: <20230105094439.1478337-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 5 Jan 2023 04:44:53 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268A551FC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:44:51 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id h27so23840922vsq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 01:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3toQXUWWPCcvltIO7u9Wn10hSBHJoQ6TUMDeTDfT/fc=;
+        b=atep7uUtb+zxhTBJ+hGEP68PwdoXUqeZB4/OWzzhkITRaOAGHztYd/QfoWt4G3mMBj
+         9+vICojJnySUJ6qaCESiryRM6KhFqr6KD+SZKvCa25Lf8QBt1b5395RC98SeWEbmfGOH
+         8HNzrxcgYh+hyrvfSUN+sEAneaBosYOuk/x0vM5zsQOE7TN+XJgCYcPGHrkhO69sSmQH
+         eJfHhnc8xlXyqHjio6E1gPcS/koqkrqbAXj+wK0N9opPEB5L1/K+axw7O0NF81oCau+6
+         BPs6XcJR/qrbmMjs3zkQqVF8DL9PAMdXgkiKCIGSm14vGVm02IrR+51HSFMvCGwesOo0
+         mLSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3toQXUWWPCcvltIO7u9Wn10hSBHJoQ6TUMDeTDfT/fc=;
+        b=reAmGIrYqrIsqHeetTHPA+mnzafwhj4nfJw+ym+wDni21gPndGMwnJg51R+zd9/1iQ
+         lnbfbWst3RmQSw1gHrnWflcczMGkAMJo1XODxSXudsMqsNbxrVYWoS9E5IoaYJ+AGm0y
+         VmcCC6QTHFVPpH8/umGUGARWVFHnzzsAWD9D5oxKNqyUXlZMvUMZJJ26nnCt8aop7TBg
+         F9dAhQ6fsGz3Zf7MNYv5VF7jLTQm1ybzCBTmFg3zSUIpBbMP69x7VTRSphNmsIUe9pgu
+         RKwPi2SALHbdIuKOdYhWP57h3p2rH2aS7eFLKvUNoK8KMr84/ZF2NzJJjlb9j1IUkwQW
+         qolQ==
+X-Gm-Message-State: AFqh2koelGPx/gGSjnqZlT407nY2gaGcj3tA4TRRgb3fU0xMVkXTINgU
+        8Fy75d/dnWw4bwQrHmxUIKCqrx9Zd7DXGd0fK51AVQ==
+X-Google-Smtp-Source: AMrXdXt3n/sZhnaK52Jh5rEIWCW4sc9q839sYD5svAgMfQxgJC/9Tev5bANJTmfvz3NKHbT00zIOXp19WY5MVtAvpyY=
+X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
+ y14-20020a0561020c4e00b003c8c5130197mr3877679vss.9.1672911890351; Thu, 05 Jan
+ 2023 01:44:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 5 Jan 2023 15:14:39 +0530
+Message-ID: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
+Subject: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000 [#1]
+ PREEMPT SMP
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jeff Xu <jeffxu@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Pranith Kumar <bobby.prani@gmail.com>,
+        David Herrmann <dh.herrmann@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/video/fbdev/g364fb.c:202:4: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
+following invalid opcode was noticed on stable-rc 6.1 and  6.0.
 
-Signed-off-by: xurui <xurui@kylinos.cn>
----
- drivers/video/fbdev/g364fb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
+Build, config and test log details provided in the below links [1].
 
-diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
-index 05837a3b985c..beef4bcec3c5 100644
---- a/drivers/video/fbdev/g364fb.c
-+++ b/drivers/video/fbdev/g364fb.c
-@@ -175,7 +175,8 @@ int __init g364fb_init(void)
- {
- 	volatile unsigned int *curs_pal_ptr =
- 	    (volatile unsigned int *) CURS_PAL_REG;
--	int mem, i;
-+	int mem;
-+	uintptr_t i;
- 
- 	if (fb_get_options("g364fb", NULL))
- 		return -ENODEV;
--- 
-2.25.1
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+# selftests: memfd: run_hugetlbfs_test.sh
+[  111.866742] run_hugetlbfs_t (1023): drop_caches: 3
+[  111.892484] invalid opcode: 0000 [#1] PREEMPT SMP
+[  111.893089] CPU: 2 PID: 1026 Comm: memfd_test Tainted: G
+     N 6.1.4-rc1 #1
+[  111.894015] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  111.895048] EIP: hugetlb_file_setup.cold+0x0/0x33
+[  111.895597] Code: ff e9 07 f3 26 ff 0f 0b c7 04 24 c8 ee dd c9 e8
+25 47 ff ff b8 ea ff ff ff e9 ac f8 26 ff 0f 0b 0f 0b 0f 0b 0f 0b 0f
+0b 0f 0b <0f> 0b 64 a1 98 48 3a ca c6 05 f3 42 22 ca 01 8b 90 d4 03 00
+00 05
+[  111.897716] EAX: c4957128 EBX: 00000000 ECX: 00000020 EDX: 00000000
+[  111.898431] ESI: 80000004 EDI: 00000005 EBP: c552bf04 ESP: c552bee4
+[  111.899218] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010212
+[  111.899991] CR0: 80050033 CR2: 00000000 CR3: 0528b000 CR4: 003506d0
+[  111.900774] Call Trace:
+[  111.901072]  __ia32_sys_memfd_create+0x196/0x220
+[  111.901616]  __do_fast_syscall_32+0x77/0xd0
+[  111.902119]  do_fast_syscall_32+0x32/0x70
+[  111.902620]  do_SYSENTER_32+0x15/0x20
+[  111.903134]  entry_SYSENTER_32+0x98/0xf6
+[  111.903701] EIP: 0xb7ef1549
+[  111.904034] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01
+10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[  111.906124] EAX: ffffffda EBX: 0804b486 ECX: 80000004 EDX: 080493de
+[  111.906902] ESI: b7ccf220 EDI: b7dc58e0 EBP: bfe56cf8 ESP: bfe56c8c
+[  111.907637] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000292
+[  111.908502] Modules linked in: sch_fq_codel fuse configfs [last
+unloaded: test_strscpy(N)]
+[  111.909502] ---[ end trace 0000000000000000 ]---
+[  111.910064] EIP: hugetlb_file_setup.cold+0x0/0x33
+[  111.910638] Code: ff e9 07 f3 26 ff 0f 0b c7 04 24 c8 ee dd c9 e8
+25 47 ff ff b8 ea ff ff ff e9 ac f8 26 ff 0f 0b 0f 0b 0f 0b 0f 0b 0f
+0b 0f 0b <0f> 0b 64 a1 98 48 3a ca c6 05 f3 42 22 ca 01 8b 90 d4 03 00
+00 05
+[  111.912785] EAX: c4957128 EBX: 00000000 ECX: 00000020 EDX: 00000000
+[  111.913518] ESI: 80000004 EDI: 00000005 EBP: c552bf04 ESP: c552bee4
+[  111.914259] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010212
+[  111.915104] CR0: 80050033 CR2: 00000000 CR3: 0528b000 CR4: 003506d0
+# ./run_hugetlbfs_test.sh: line 60:  1026 Segmentation fault
+./memfd_test hugetlbfs
+# opening: ./mnt/memfd
+# fuse: DONE
+ok 3 selftests: memfd: run_hugetlbfs_test.sh
+
+[1]
+https://lkft.validation.linaro.org/scheduler/job/6022150#L2079
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.3-208-ga31425cbf493/testrun/13974189/suite/log-parser-test/tests/
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.3-208-ga31425cbf493/testrun/13974189/suite/log-parser-test/test/check-kernel-invalid-opcode/details/
+
+metadata:
+  git_ref: linux-6.1.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: a31425cbf493ef8bc7f7ce775a1028b1e0612f32
+  git_describe: v6.1.3-208-ga31425cbf493
+  kernel_version: 6.1.4-rc1
+  kernel-config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/738268273
+  artifact-location:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w
+  toolchain: gcc-11
+  vmlinux: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/vmlinux.xz
+  System.map: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/System.map
+
+--
+Linaro LKFT
+https://lkft.linaro.org
