@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FE765EFB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9115465EFC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbjAEPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S232825AbjAEPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbjAEPJy (ORCPT
+        with ESMTP id S231725AbjAEPOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:09:54 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C7B5C916;
-        Thu,  5 Jan 2023 07:09:53 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id jo4so90752514ejb.7;
-        Thu, 05 Jan 2023 07:09:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NPqwtXJcnV/yOJo+keiiaPa7yqhjqKpHG2APIjKSvok=;
-        b=5zdNsGkjQRhBg1srr5FM3lHU8jOfLhgKZc9ONhDhWsNVKmfFNLoFBgtgJwnEdn2775
-         otefr91u1N6DSwCVjPpfuIePFr/xESP0jJAPU6ttlHGWZ8fNwZ/t/sGKBRHWbxHHI705
-         4nbio46xFEKkAB2T69FqxSinA7vrttraye85dH1sEFLVn38Ajs23QqQw36/Whptd0Xcr
-         ICCRU5lMhSoWF5DQfrxQhqu/DJaWLlYm2Vz/RvQQoWWL1x2DPx3t2XQBSmCokjSwkuHV
-         BrrBkTqiaVZ9HAyJ4sD/z05QhFKsUfw5xq/ZZylhcjSh4K3uSTZlr+eZTpXqoSOBzArc
-         VUNg==
-X-Gm-Message-State: AFqh2kqoRynqXxaKj/yDLEMefOnipiYWLNo5h13cFxwdAEoWHSlTDRcE
-        upfoJ+OJ9usL5txTTJovQbOodUbcM7xJqjEU+6A=
-X-Google-Smtp-Source: AMrXdXv/fN/pEqOjc1QOCIu41MbCtvDo3E6LWlWwMv2mxzajBEOM5qCK33X3iMg1PTKam1yyLerMwnFZ6ZINn09a7S8=
-X-Received: by 2002:a17:907:6d2a:b0:7c0:efba:b39c with SMTP id
- sa42-20020a1709076d2a00b007c0efbab39cmr5537944ejc.209.1672931391939; Thu, 05
- Jan 2023 07:09:51 -0800 (PST)
+        Thu, 5 Jan 2023 10:14:35 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE11E50E4F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=tZjV9jpuEK4Y2XqKI/OT0o3B7gcC
+        cq0sQKnRF7DSmjw=; b=dS5JSKGc5w2j51S+cCn85pOOS6H5K4+HfhFA+rpX+YLs
+        ASmLCWG2lAUoVk/lr4YAW7+7mHm+6klsJvuUSBDXSuStZPer5j49CmcxoMdDqFRE
+        K2u9KUTyNoaPsqWHsB0Netoyg64tEKHfVggboQp7Z+tE/tbIMtXZn91JiCO3+yA=
+Received: (qmail 1656785 invoked from network); 5 Jan 2023 16:14:29 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Jan 2023 16:14:29 +0100
+X-UD-Smtp-Session: l3s3148p1@3djgwYXxHKxehh9g
+Date:   Thu, 5 Jan 2023 16:14:28 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Ian Molton <spyro@f2s.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 21/27] mmc: remove tmio_mmc driver
+Message-ID: <Y7bpVFG41DVU6hXS@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Ian Molton <spyro@f2s.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-22-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1> <20230105003813.1770367-10-paulmck@kernel.org>
-In-Reply-To: <20230105003813.1770367-10-paulmck@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 5 Jan 2023 16:09:38 +0100
-Message-ID: <CAJZ5v0j4M3Xco7bSPNog9h-zDgEuHE+jqktWNoRZKyLZCVJeBA@mail.gmail.com>
-Subject: Re: [PATCH rcu 10/27] drivers/cpufreq: Remove "select SRCU"
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+plC2ZH96e31NEJu"
+Content-Disposition: inline
+In-Reply-To: <20230105134622.254560-22-arnd@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 1:38 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> Kconfig statements.
->
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: <linux-pm@vger.kernel.org>
 
-Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
+--+plC2ZH96e31NEJu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/cpufreq/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-> index 2a84fc63371e2..785541df59379 100644
-> --- a/drivers/cpufreq/Kconfig
-> +++ b/drivers/cpufreq/Kconfig
-> @@ -3,7 +3,6 @@ menu "CPU Frequency scaling"
->
->  config CPU_FREQ
->         bool "CPU Frequency scaling"
-> -       select SRCU
->         help
->           CPU Frequency scaling allows you to change the clock speed of
->           CPUs on the fly. This is a nice method to save power, because
-> --
-> 2.31.1.189.g2e36527f23
->
+On Thu, Jan 05, 2023 at 02:46:16PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> With the TMIO MFD support gone, the corresponding MMC host driver can
+> be removed as well. The remaining tmio_mmc_core module however is still
+> used by both the Renesas and Socionext host drivers.
+>=20
+> Cc: Ian Molton <spyro@f2s.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-renesas-soc@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+I trust Arnd's research that the driver becomes unused after the PXA
+removal. I can add to it that the plain TMIO driver hasn't seen any
+functional update in 10 years maybe. Most modifications were tree-wide
+cleanups or adjustments because the TMIO core changed. It will be
+interesting to see what cleanups can be done once this driver is gone.
+
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+
+--+plC2ZH96e31NEJu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmO26VQACgkQFA3kzBSg
+KbZryRAAsP2ilw61YHDXp7tFw+jW83ObuNAFRybR9fjDVe+mWZSwrtb17iABxFsd
+f8eP4ELMzbI8dmX2rZ6kl/5WFRbsJbSOZHaePwk7pNX/nCaQLsaZCsEF3wf76BLY
+CQ1znFYgyKGkJg4s/ofW2XqvbegrKkhancbFYXQdh2f1MV/POW0zGSmkC3uWqZSD
+fmw8qQIPylrxFwum4PEpxK9L3hh1gwVNh37jTvfviVkFrrDz1Wd+QT9YEIikmAyT
+iRmbXbqeOoc+0k6TKQapZSCysgedAamR9ZHG72s6GqrFx1QBRlSnDxySvmMWwkUr
+XK4gHeiIs/kLaNFu2bZSeIOhhRk84ykHO2Yhxj3NHRX0BwWrSDCbjcFwFozGMMNW
+N91CRN2enh8MneYgcH+WoISB3byrFaxwjvgpH3NjUDWiExyBNSdXrALbc9lHLA4q
+5ND+ysxn2KtyOP1l2iFHUY75Oym+pGmG4755QWPLqQHsm1hYHaQN/EnGAh3EyApo
+e67TFAwVbQqjdNu0oRBk2BylfNbVrRf/1+c7X9bvGrJFBMhvj9iKPTktE3G5FOvo
+YeNo2P9Z9sjuJQBKBKtvhfCUnPscMmcZoJzrUKo8fKhLbsw5qb0NWVoNpc0qZGeL
+TGsbyddaUvOagAFLXS+HHsr5iDnc0rE8lgeLB3uq5yvFqzMrjBU=
+=IQN3
+-----END PGP SIGNATURE-----
+
+--+plC2ZH96e31NEJu--
