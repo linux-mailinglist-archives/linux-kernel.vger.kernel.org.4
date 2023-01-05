@@ -2,123 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCE365F6F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A6E65F6FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbjAEWno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S236034AbjAEWpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbjAEWn2 (ORCPT
+        with ESMTP id S232346AbjAEWpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:43:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF981BE87
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672958562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vgUHJzZE66px4h3+wgCbKciUz0W22+aUBNT6U4fGi2Y=;
-        b=UEIeMpjPbkBKUYo/NAVMqR+7XKFGQQ7ZGiDNq1I+b6rLpDWeUiP8Vqvw2Ds98HoQDf3Bip
-        ylU76MsN0XB8NFxHpXmf7eVMz57Il9qKDzQCrhsRt9LNT/TbBNFoG0vzXaMcA3SurVJSBJ
-        sq951NJrNH98aIqF08zrKbb7MxZMW/c=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-486-T0WM0OGiMk6sMBgat84DRA-1; Thu, 05 Jan 2023 17:42:38 -0500
-X-MC-Unique: T0WM0OGiMk6sMBgat84DRA-1
-Received: by mail-qk1-f197.google.com with SMTP id l16-20020a05620a28d000b00704af700820so25583848qkp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:42:38 -0800 (PST)
+        Thu, 5 Jan 2023 17:45:13 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE68DEF5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:45:12 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id z16so21051791wrw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:45:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4cO+u87mI/nV+bun08/ev5aZ5aM32c1zKnNuBi2Thmo=;
+        b=VOpunnFY5TWwDTmahygTGnYTe+O8Of+jYUboE5H5nJyo3yoDpH0sKBVdx98kK/GjAU
+         7JtNMwQQZfhdg70tAcuhdOiW+1S2pOZ3WpVnBGTvNVog/CP9YD8siMTsc3OxL/EqFT7U
+         TAAt+mSy92+1ANyEye6HjkbAdb4jvCPP58Bp8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgUHJzZE66px4h3+wgCbKciUz0W22+aUBNT6U4fGi2Y=;
-        b=2TnXA+MsPKD9cLj9nMB9XVPnbsR3ChK5r+aYdziDxtAqND+5H64HzA40XyoJzK3tve
-         XvCiwgXCC6pcBCvVRfKn0QAYGO4SSJx737lUO3qJii2JGKi3EpzsdGDBgP5tkso0m1pU
-         jEQ9g9WmUmSc6aSQM+NxSSK0VeoRQH0vmzkzotW9da6ZWWPnDLwNdeeP9Fb/aFVTAFHb
-         zaS2DKom2GztaT6TF0sKy3U/gzNJHwAfc54go27Ng4IKVedIDV9IOjMmchEtsr7tR2Th
-         Ffz/ccg/oVfttLoDcZkbNhMvWHAKtl8s7f2lsK0lF9rtd10wdibVaAThZepwJSnr4fr6
-         9CGg==
-X-Gm-Message-State: AFqh2kqNwQUVmT//3qfUw0H4WMyM4ESLurrAt2CuGrXfHUoRo+3aifHV
-        21G234Fez+PRQ60uOw701LGkMrJUe+olbdjZ97NKqzoimhT+IP7nYh10MUeg8oF35mhzQHZxPAu
-        Up8sqxaYLCv6OtCQCw5uecKbu
-X-Received: by 2002:ac8:7766:0:b0:3a5:f9cb:886f with SMTP id h6-20020ac87766000000b003a5f9cb886fmr72417713qtu.29.1672958558366;
-        Thu, 05 Jan 2023 14:42:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsb7QMoGw7hkQTzlQFXCKWwVIMRvtRiRSKc80lHWO9Msaear+owA5O3ECrqcaUd58w1BSTVGA==
-X-Received: by 2002:ac8:7766:0:b0:3a5:f9cb:886f with SMTP id h6-20020ac87766000000b003a5f9cb886fmr72417698qtu.29.1672958558192;
-        Thu, 05 Jan 2023 14:42:38 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id fa11-20020a05622a4ccb00b003a68fe872a5sm22317208qtb.96.2023.01.05.14.42.36
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4cO+u87mI/nV+bun08/ev5aZ5aM32c1zKnNuBi2Thmo=;
+        b=UxCtKqmFABrklhFFHPYBalkmTW5g4w8jc4Vt5uhW2xYyahg8Y5cEg3RLS8fMs2Y4Xw
+         zYxshLY+ro0fDmhFqUzxDeTz4+Hwb2h6iWaOWmywNJBTdnqYBBlBeRB6lO6bQJkfZS1V
+         7FTPpN5DfgB/UxYMVcq60thxYfeC5LY5YOWQszBOk/DyqzseKMTf06D1TuvA1jV7k7in
+         01NHVoLIAEFEK+VEQpjYjXDI+mY8tCXmMJQnfJiwpeYnGqOWSRONHnKD5o2rw0T63P5u
+         UcfgD+tVKltzr67fX+9WuHGBk62YhxVxV9xr9yFtE5+XrUTYeiyl8hX+faaWMkS25eci
+         Z5hQ==
+X-Gm-Message-State: AFqh2kpYEnu48ffHfl4hySc13sdbbKhkqm5rv4o1R5dSXDWhllo0OtoT
+        Q8WCymFSz2FKGeSCBR57ivOxAg==
+X-Google-Smtp-Source: AMrXdXvfbReK1LrViFj6NpGRsd9X417J7+hDteJlHcBGp88rp0eeAozCzjpIm4dLyeBsddSvPm5CaQ==
+X-Received: by 2002:adf:e584:0:b0:29c:3721:8fba with SMTP id l4-20020adfe584000000b0029c37218fbamr8309813wrm.15.1672958710759;
+        Thu, 05 Jan 2023 14:45:10 -0800 (PST)
+Received: from ?IPv6:2001:8b0:aba:5f3c:49cf:c46d:e32d:e951? ([2001:8b0:aba:5f3c:49cf:c46d:e32d:e951])
+        by smtp.gmail.com with ESMTPSA id l7-20020adfc787000000b002238ea5750csm45779874wrg.72.2023.01.05.14.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:42:37 -0800 (PST)
-Date:   Thu, 5 Jan 2023 17:42:34 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
- walk_hugetlb_range
-Message-ID: <Y7dSWj+sGyXIPs/U@x1n>
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-22-jthoughton@google.com>
+        Thu, 05 Jan 2023 14:45:10 -0800 (PST)
+Message-ID: <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
+Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
+From:   Richard Purdie <richard.purdie@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Baryshkov <dbaryshkov@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ales Bardorfer <ales@i-tech.si>,
+        Ales Snuparek <snuparek@atlas.cz>,
+        Alex Osborne <ato@meshy.org>,
+        Alex Osborne <bobofdoom@gmail.com>,
+        Dirk Opfer <dirk@opfer-online.de>, Ian Molton <spyro@f2s.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Michael Petchkovsky <mkpetch@internode.on.net>,
+        Nick Bane <nick@cecomputing.co.uk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Tomas Cech <sleep_walker@suse.cz>
+Date:   Thu, 05 Jan 2023 22:45:09 +0000
+In-Reply-To: <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
+References: <20230105134622.254560-1-arnd@kernel.org>
+         <20230105134622.254560-2-arnd@kernel.org>
+         <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
+         <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
+         <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105101844.1893104-22-jthoughton@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 10:18:19AM +0000, James Houghton wrote:
-> -static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
-> +static void damon_hugetlb_mkold(struct hugetlb_pte *hpte, pte_t entry,
-> +				struct mm_struct *mm,
->  				struct vm_area_struct *vma, unsigned long addr)
->  {
->  	bool referenced = false;
-> -	pte_t entry = huge_ptep_get(pte);
-> +	pte_t entry = huge_ptep_get(hpte->ptep);
+On Thu, 2023-01-05 at 23:16 +0100, Arnd Bergmann wrote:
+> On Thu, Jan 5, 2023, at 18:05, Richard Purdie wrote:
+> > On Thu, 2023-01-05 at 17:50 +0200, Dmitry Baryshkov wrote:
+> > > =D1=87=D1=82, 5 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 15:46, Arnd B=
+ergmann <arnd@kernel.org>:
+> > > >=20
+> > > > From: Arnd Bergmann <arnd@arndb.de>
+> > > >=20
+> > > > The majority of all pxa board files has not been touched in a long =
+time,
+> > > > and no users have spoken up in favor of keeping them around. This l=
+eaves
+> > > > only support for the platforms that were already converted to DT, a=
+s
+> > > > well as the gumstix and spitz/akita/borzoi machines that work in qe=
+mu
+> > > > and can still be converted to DT later.
+> > >=20
+> > > Well, tosa also works in qemu.
+> > > Nevertheless:
+> > > Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >=20
+> > I'm kind of sad to see corgi at this point but it isn't really
+> > surprising. The hardware is old/slow and likely not used by many
+> > anymore, things have moved on and the systems ended up being heavily
+> > kernel size footprint limited.
+> >=20
+> > I'd just note that corgi (and shepherd/husky) are strongly related to
+> > spitz/akita/borzoi, the difference is basically pxa25x vs pxa27x
+> > processor and pin changes. We chose just to emulate one set in qemu but
+> > the others would be relatively trivial.
+> >=20
+> > tosa and poodle have much less in common with the other Zaurus devices.
+> >=20
+> > I guess what I'm saying is that if spitz is remaining it might make
+> > sense to have corgi with it.
+>=20
+> Ok, good to know, thanks for the background.
+>=20
+> The way we came up with the list of unused boards is to
+> assume they are all unused unless someone asked for it
+> to be kept around for this time, for pretty much any reason.
+> I probably forgot to have you on the Cc list when we discussed
+> this in the past.
 
-My compiler throws me:
+I didn't see any discussion about this until now, no.
 
-mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
-mm/damon/vaddr.c:338:15: error: ‘entry’ redeclared as different kind of symbol
-  338 |         pte_t entry = huge_ptep_get(hpte->ptep);
-      |               ^~~~~   
+> IIRC, nobody specifically asked about keeping either
+> the corgi or the spitz series, the reason for keeping it
+> was to have at least one handheld platform with qemu
+> support remain for testing, but I don't see a reason
+> for keeping more than one of them.
+>=20
+> If you feel like we should keep tosa or corgi and ask
+> again next year, we could do that, but reworking the series
+> to keep tosa around would have additional side-effects
+> on the tmio-mmc driver that can otherwise get cleaned
+> up quite a bit.
+>=20
+> In the long run, I expect we will remove all the remaining
+> legacy boardfiles and only keep the DT support. Ideally
+> if someone is motivated to convert spitz to DT, supporting
+> corgi the same way is also easy.
 
-I guess this line can just be dropped.
+Personally, I'm not that interested in tosa (or poodle/collie).
 
->  	struct folio *folio = pfn_folio(pte_pfn(entry));
->  
->  	folio_get(folio);
+The other zaurus devices are interesting for me as I know the platform,
+they have qemu emulation, there are set of devices which are similar
+but also have differences and there were one of the original targets
+for OpenEmbedded and Yocto Project. I did quite a bit of work to get
+one kernel which could run on multiple devices, as best you could at
+the time! I'd actually forgotten about the qemu emulation.
 
--- 
-Peter Xu
+There is a need for better automated testing around DT in OE/YP and
+this is making me wonder about a few potential ideas.
+
+Is there any conversion to DT you can easily point at as an example of
+the kinds of changes needed?
+
+Cheers,
+
+Richard
+
 
