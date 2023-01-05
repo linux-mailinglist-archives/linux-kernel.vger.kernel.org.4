@@ -2,165 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F90865E832
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA49C65E83B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjAEJuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S231839AbjAEJvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjAEJuE (ORCPT
+        with ESMTP id S232145AbjAEJuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:50:04 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB356887
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:50:02 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VYvX.gW_1672912199;
-Received: from 30.97.48.239(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VYvX.gW_1672912199)
+        Thu, 5 Jan 2023 04:50:51 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD0A544FA;
+        Thu,  5 Jan 2023 01:50:50 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VYvRqMu_1672912240;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VYvRqMu_1672912240)
           by smtp.aliyun-inc.com;
-          Thu, 05 Jan 2023 17:50:00 +0800
-Message-ID: <f126fc95-fdbe-cc2e-5efb-ab704d13bd41@linux.alibaba.com>
-Date:   Thu, 5 Jan 2023 17:49:59 +0800
+          Thu, 05 Jan 2023 17:50:47 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] iio: light: max44009: Remove the unused variable max44009_of_match
+Date:   Thu,  5 Jan 2023 17:50:38 +0800
+Message-Id: <20230105095038.112564-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [syzbot] [erofs?] WARNING: CPU: NUM PID: NUM at
- mm/page_alloc.c:LINE get_page_from_freeli
-To:     syzbot <syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-References: <000000000000c0a08805f07291a0@google.com>
-From:   Xiang Gao <hsiangkao@linux.alibaba.com>
-In-Reply-To: <000000000000c0a08805f07291a0@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Variable max44009_of_match is not effectively used, so delete it.
 
-On 2022/12/23 06:55, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15aa58f7880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=827916bd156c2ec6
+drivers/iio/light/max44009.c:545:34: warning: ‘max44009_of_match’ defined but not used.
 
-I wasn't able to build the kernel with this kernel config, it shows:
-"...
-FATAL: modpost: vmlinux.o is truncated. sechdrs[i].sh_offset=1399394064 > sizeof(*hrd)=64
-make[2]: *** [Module.symvers] Error 1
-make[1]: *** [modpost] Error 2
-make: *** [__sub-make] Error 2
-"
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3632
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/iio/light/max44009.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Not sure what happened, and it seems some other person also reported
-before:
-https://lore.kernel.org/r/CAAGKmqL9k87xw68zwH9ZM7fQFFsgMnA7V=RB+tQ-M2WS6CZg4A@mail.gmail.com/
+diff --git a/drivers/iio/light/max44009.c b/drivers/iio/light/max44009.c
+index 3dadace09fe2..2f80a654ad6a 100644
+--- a/drivers/iio/light/max44009.c
++++ b/drivers/iio/light/max44009.c
+@@ -542,12 +542,6 @@ static struct i2c_driver max44009_driver = {
+ };
+ module_i2c_driver(max44009_driver);
+ 
+-static const struct of_device_id max44009_of_match[] = {
+-	{ .compatible = "maxim,max44009" },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(of, max44009_of_match);
+-
+ MODULE_AUTHOR("Robert Eshleman <bobbyeshleman@gmail.com>");
+ MODULE_LICENSE("GPL v2");
+ MODULE_DESCRIPTION("MAX44009 ambient light sensor driver");
+-- 
+2.20.1.7.g153144c
 
-
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c3729cda01706a04fb98
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11bdd020480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c53ab3880000
-
-Then I tried this C reproducer with my own kernel config and
-it didn't show any strange.
-
-
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/0c8a5f06ceb3/disk-f9ff5644.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/be222e852ae2/vmlinux-f9ff5644.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d9f42a53b05e/bzImage-f9ff5644.xz
-
-Finally I tried the original kernel image, and it printed some other
-random bug when booting system and then reboot, like:
-
-[   36.991123][    T1] ==================================================================
-[   36.991800][    T1] BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100
-[   36.992438][    T1] Write of size 32 at addr ffff888018c34640 by task systemd/1
-[   36.993032][    T1]
-[   36.993249][    T1] CPU: 2 PID: 1 Comm: systemd Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-[   36.993980][    T1] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[   36.994520][    T1] Call Trace:
-[   36.994806][    T1]  <TASK>
-[   36.995060][    T1]  dump_stack_lvl+0xd1/0x138
-[   36.995488][    T1]  print_report+0x15e/0x45d
-[   36.995891][    T1]  ? __phys_addr+0xc8/0x140
-[   36.996293][    T1]  ? copy_array+0x96/0x100
-[   36.996677][    T1]  kasan_report+0xbf/0x1f0
-[   36.997063][    T1]  ? copy_array+0x96/0x100
-[   36.997448][    T1]  kasan_check_range+0x141/0x190
-[   36.997865][    T1]  memcpy+0x3d/0x60
-[   36.998196][    T1]  copy_array+0x96/0x100
-[   36.998561][    T1]  copy_verifier_state+0xa9/0xc60
-[   36.998985][    T1]  ? bpf_log+0x270/0x270
-[   36.999343][    T1]  ? check_buffer_access.constprop.0+0x2e0/0x2e0
-[   36.999867][    T1]  pop_stack+0x8c/0x2f0
-[   37.000223][    T1]  do_check_common+0x5663/0xbca0
-[   37.000654][    T1]  ? _raw_spin_unlock_irqrestore+0x54/0x70
-[   37.001152][    T1]  ? check_helper_call+0x8ef0/0x8ef0
-[   37.001614][    T1]  ? kvfree+0x46/0x50
-[   37.001963][    T1]  ? check_cfg+0x6aa/0xb20
-[   37.002353][    T1]  bpf_check+0x7348/0xacc0
-[   37.002751][    T1]  ? find_held_lock+0x2d/0x110
-[   37.003168][    T1]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   37.003676][    T1]  ? bpf_get_btf_vmlinux+0x20/0x20
-[   37.004104][    T1]  ? find_held_lock+0x2d/0x110
-[   37.004524][    T1]  ? bpf_prog_load+0x1486/0x2230
-[   37.004935][    T1]  ? lock_downgrade+0x6e0/0x6e0
-[   37.005341][    T1]  ? __might_fault+0xd9/0x180
-[   37.005747][    T1]  ? memset+0x24/0x50
-[   37.006087][    T1]  ? bpf_obj_name_cpy+0x148/0x1a0
-[   37.006541][    T1]  bpf_prog_load+0x1543/0x2230
-[   37.006943][    T1]  ? __bpf_prog_put.constprop.0+0x220/0x220
-[   37.007438][    T1]  ? find_held_lock+0x2d/0x110
-[   37.007854][    T1]  ? __might_fault+0xd9/0x180
-[   37.008261][    T1]  ? lock_downgrade+0x6e0/0x6e0
-[   37.008673][    T1]  ? bpf_lsm_bpf+0x9/0x10
-[   37.009055][    T1]  __sys_bpf+0x1436/0x4ff0
-[   37.009434][    T1]  ? bpf_perf_link_attach+0x520/0x520
-[   37.009875][    T1]  ? lock_downgrade+0x6e0/0x6e0
-[   37.010299][    T1]  __x64_sys_bpf+0x79/0xc0
-[   37.010678][    T1]  ? syscall_enter_from_user_mode+0x26/0xb0
-[   37.011171][    T1]  do_syscall_64+0x39/0xb0
-[   37.011561][    T1]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   37.012058][    T1] RIP: 0033:0x7fee6fa1c5a9
-...
-
-May I ask it can be reproducable on the latest -rc kernel?
-
-Thanks,
-Gao Xiang
-
-
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/7f2f76b76cd2/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 4386 at mm/page_alloc.c:3829 get_page_from_freeli
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
