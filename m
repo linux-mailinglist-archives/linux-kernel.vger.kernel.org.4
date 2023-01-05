@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473F265ED4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDE265ED4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjAENjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S233921AbjAENjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbjAENjB (ORCPT
+        with ESMTP id S233815AbjAENj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:39:01 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480EB37273;
-        Thu,  5 Jan 2023 05:38:54 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305CtAWL032660;
-        Thu, 5 Jan 2023 13:38:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=o+Gzip8MI1YUsrzvw8xu85Wc4SqiMoRcrC30w+2ptfY=;
- b=R/My7XUSz4IsSCZ+ttIV0CtaBD+Bxj2cvHQEv3F7KNkzAEPShtPVm4/f+067TMTjgHEb
- neaAmzdXATroYVDefcM2RQEKg/W/238J+3PL/PbS3JCvt7AMyNyMaAbIBL7krIGq/xXH
- z5N3wqzl+Lwadsi29SIpG7dtvHErsIslvUNe5qcOSMtgj+5SjEuO7e+v4TomDdY66Oe/
- EDt9Fpyo1rJwbO7pjR4JqfTrh9/+uoSA3F5JiHEvKJbPDpQfgeBdan187pKvoLqdKBZW
- Do0lucNtf2PKZ5sgPCTJmX1JYgfOtxryECYeATGp/H1WSoyBN9yu+jQv+TFDcbY/VnXW 3Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwuuurcue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 13:38:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305DcnM8015206
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 13:38:49 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 5 Jan 2023 05:38:45 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <konrad.dybcio@linaro.org>, <mka@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2 8/8] arm64: dts: qcom: sc7280: audioreach: Disable legacy path clock nodes
-Date:   Thu, 5 Jan 2023 19:07:55 +0530
-Message-ID: <1672925875-2107-9-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1672925875-2107-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1672925875-2107-1-git-send-email-quic_srivasam@quicinc.com>
+        Thu, 5 Jan 2023 08:39:27 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED4134757;
+        Thu,  5 Jan 2023 05:39:10 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m18so89931071eji.5;
+        Thu, 05 Jan 2023 05:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UgbHyDIg1UpvRWoP7FT1pLYch906VM3MibctMjquEGs=;
+        b=YyDdvIrgCIZu26dMcsyngRC/Dhukn5+AlaEDZLLskx/G+QVE4wP7HCp3GTWk9fkFZQ
+         0wW6wSGvHLIIHd0Iv/ReX4ODy5afy6+OaXgxp/44SinSwpWVE+pxOcNQ4YPD9hZ0w0ZO
+         Guoh4klRUCz3jaQ/HCyKCMcc9iTmEtzU4OWTYeyXAEuJgZIi2Sx15tD3dfBMxUS+WwWn
+         N9OZD6pdD9edxAH1X/gpKKeHOQeStqJYj1h/w3UePdi1JZ/URxCimyCXiagYhghov0Cu
+         ul9r6bvX0LNWiSuc8HcVqA+hIN4FRIBXHU7PlTtYZTlOMKatXwiVrLajKGSsWgAxPhJf
+         EKvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UgbHyDIg1UpvRWoP7FT1pLYch906VM3MibctMjquEGs=;
+        b=zbEVribF9obN3vSnGFnYEFHiaywck2hSHU9FMQgZfsM6UZRQz5fggku3TQUEu8i0Sn
+         hlgdbxOrhdYU6bK3ZfSeEKV0PmvTrBvEGRtlalPCIyJIW/YdBPcrrEBlp8CT34FVNF1F
+         O+HNSnYhandTfvYzJGgNWsFktSzbnciBEE65M+888j4cJS/Eh1lXBSL8KgNvjP7lP0l4
+         ACuTKFklH5JMbyq42GeM+pvoQY89EdLrsWJffBmruMPvotfS0z9gw2hVhJAjVDciRQNp
+         5UhFVWZPVC5sUAURV75Ai+1jZsHNIs9zXO0gAL2zvCZ7IgIDMvfn0S7wy5xY0iaH8+87
+         eatw==
+X-Gm-Message-State: AFqh2kpqDuxJdw+MCD1ACTrqaYCfx1CnaBJ6PpS89CEoUFQLmGvGx8nT
+        1UzrGKouUm4YHlaPyW5xixw=
+X-Google-Smtp-Source: AMrXdXvAHrW0gtWpfT6u/It9KMyxjm5r4CFgzqADETsHCfstdnNfvWo5fe+A0U+EZpmIDqXYBCThkw==
+X-Received: by 2002:a17:906:7e46:b0:78d:f454:37a0 with SMTP id z6-20020a1709067e4600b0078df45437a0mr43665800ejr.67.1672925949228;
+        Thu, 05 Jan 2023 05:39:09 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id o17-20020a1709062e9100b007bd9e683639sm16468173eji.130.2023.01.05.05.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 05:39:08 -0800 (PST)
+Date:   Thu, 5 Jan 2023 15:39:06 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH net-next v5 0/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <20230105133906.srx57bkfdl4ey32f@skbuf>
+References: <20230103220511.3378316-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ygNOXtA2FTftNLN4xEjhk4FzEN6jN1Bc
-X-Proofpoint-ORIG-GUID: ygNOXtA2FTftNLN4xEjhk4FzEN6jN1Bc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_04,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 suspectscore=0 spamscore=0
- mlxscore=0 phishscore=0 mlxlogscore=937 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301050107
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103220511.3378316-1-sean.anderson@seco.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable legacy path clock nodes to avoid conflicts with audioreach
-clock node.
+Hi Sean,
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- .../boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi   | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Tue, Jan 03, 2023 at 05:05:07PM -0500, Sean Anderson wrote:
+> This attempts to address the problems first reported in [1]. Tim has an
+> Aquantia phy where the firmware is set up to use "5G XFI" (underclocked
+> 10GBASE-R) when rate adapting lower speeds. This results in us
+> advertising that we support lower speeds and then failing to bring the
+> link up. To avoid this, determine whether to enable rate adaptation
+> based on what's programmed by the firmware. This is "the worst choice"
+> [2], but we can't really do better until we have more insight into
+> what the firmware is doing. At the very least, we can prevent bad
+> firmware from causing us to advertise the wrong modes.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-index 175ed9c..a88b305 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-@@ -190,3 +190,15 @@
- &swr1 {
- 	resets = <&lpasscc LPASS_AUDIO_SWR_TX_CGCR>;
- };
-+
-+&lpass_aon {
-+	status = "disabled";
-+};
-+
-+&lpass_audiocc {
-+	status = "disabled";
-+};
-+
-+&lpass_core {
-+	status = "disabled";
-+};
--- 
-2.7.4
-
+After this patch set, is there any reason why phydev->rate_matching
+still exists and must be populated by the PHY driver?
