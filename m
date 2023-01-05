@@ -2,88 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CF665EE7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A71D65EE88
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbjAEOMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S234460AbjAEONb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbjAEOL7 (ORCPT
+        with ESMTP id S234356AbjAEOMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:11:59 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEC851310
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:11:55 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id e10so10674058pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:11:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JoOKD3fhvjltOz/BKivLTcbhttDC/bdQobavcXcDp9Q=;
-        b=gAzUJJZY5TesWCbvlLm0Nvx5S8CWI/OFNcWGJRSXMa4u88qBLtq5Z57hlmLeVUiUXT
-         Q8qjI/S0cMW9p8VYrieFiq0UGy5hnC86U+wYcFYymtPtgcdR/0SMbf0iXhDaBCaYTWVM
-         6EV941rjN0MvpnXmnAsYcu+KRfPbRLXLKs5RFKov6UP4Z/rLlMqHNZTWzc0GjfGZ98vL
-         7bK6FnyecXCpEKUA/oLqjRvQgzrsb270C9MAuES3bQRVOJIjEaB8QihVyc4pLscEdypU
-         yNTS7dDPW3Idv+LDW+1kKfPZSvzqYRKttpcOuTb5lR7YyW8LbbVVpp2tQm+NbqpazAAB
-         xKIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JoOKD3fhvjltOz/BKivLTcbhttDC/bdQobavcXcDp9Q=;
-        b=cMHY7S6bnb4rKKWU8lwC9jLHb8xJ4OLNDysX5rZocUVP6yTCxZ0sKIji/v1tcPotWY
-         o5sCKnKbkvL7B495juIcJ/CcZKTdEK5UbhsYHjZy8aWTjQnJNN9LbeGjFRYgQ7N7dPUl
-         TxHYPR4su61tuhjMGcDXJpdKk+tiiycorEr1L7AOPgryQvBsx9LwbU2xVJNykD1RuQDu
-         KS/FtxFBk+zS0I6QSVd5/caW7UAg913QOycI5mM9/Ps5YWq3W6lmdVYRLvdYG6WBH9Y8
-         8Qa2+y+f7q4behbtP/mSjAI8oebgGl8ezHQyn91/BIaXG+vao5n9NGr1fSuAyoIFzANf
-         LTvg==
-X-Gm-Message-State: AFqh2kp2cAIkL8GcJkl6Xsizy012dSXQhWA9vIOLxt0dH5vxST2B9y3B
-        mDfwTnxsbdV2EKXk+Z6Ntg5yXA==
-X-Google-Smtp-Source: AMrXdXt6ixVFYcF7JJc/xVT+7SfOpce9UgPPB+H+PfeNMBECoEDdXUIxAj9b40GeUTZxLY9XysPaXQ==
-X-Received: by 2002:a05:6a00:c5:b0:582:6173:c6c5 with SMTP id e5-20020a056a0000c500b005826173c6c5mr18357064pfj.14.1672927914729;
-        Thu, 05 Jan 2023 06:11:54 -0800 (PST)
-Received: from localhost (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id f76-20020a62384f000000b005810a54fdefsm20048453pfa.114.2023.01.05.06.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 06:11:54 -0800 (PST)
-Date:   Thu, 5 Jan 2023 15:11:51 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Taku Izumi <izumi.taku@jp.fujitsu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v2] fjes: Fix an error handling path in
- fjes_probe()
-Message-ID: <Y7bap08pgqs1LL48@nanopsycho>
-References: <a294f5f3af7e29212a27cc7d17503fba346266b5.1672864635.git.christophe.jaillet@wanadoo.fr>
+        Thu, 5 Jan 2023 09:12:38 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E94EE59319;
+        Thu,  5 Jan 2023 06:12:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73CE315BF;
+        Thu,  5 Jan 2023 06:13:04 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.45.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78B243F71A;
+        Thu,  5 Jan 2023 06:12:21 -0800 (PST)
+Date:   Thu, 5 Jan 2023 14:12:11 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Yogesh Lal <quic_ylal@quicinc.com>
+Cc:     maz@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
+Message-ID: <Y7bar/zQ4khMDyiv@FVFF77S0Q05N>
+References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a294f5f3af7e29212a27cc7d17503fba346266b5.1672864635.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jan 04, 2023 at 09:40:47PM CET, christophe.jaillet@wanadoo.fr wrote:
->free_netdev() already calls netif_napi_del(), no need to call it
->explicitly.
->It's harmless, but useless.
->
->Remove the call, make the  error handling path of the probe and the remove
->function be consistent one with the other.
->
->Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Thu, Jan 05, 2023 at 07:03:48PM +0530, Yogesh Lal wrote:
+> Hi,
+> 
+> We are observing issue on A73 core where ERRATUM_858921 is broken.
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+Do you *only* see this issue on v5.15.y, or is mainline (e.g. v6.2-rc2) also
+broken?
+
+I don't see any fix that fits your exact description below, but I do see that
+we've made a bunch of changes in this area since.
+
+> 
+> On 5.15 kernel arch_timer_enable_workaround is set by reading
+> arm64_858921_read_cntpct_el0 and arm64_858921_read_cntvct_el0 during timer
+> register using following path.
+> 
+> arch_timer_enable_workaround->atomic_set(&timer_unstable_counter_workaround_in_use,
+> 1);
+> 
+> [code snap]
+> 564 static
+> 565 void arch_timer_enable_workaround(const struct
+> arch_timer_erratum_workaround *wa,
+> 566                               bool local)
+> 567 {
+> 568     int i;
+> 569
+> 570     if (local) {
+> 571 __this_cpu_write(timer_unstable_counter_workaround, wa);
+> 572     } else {
+> 573             for_each_possible_cpu(i)
+> 574                     per_cpu(timer_unstable_counter_workaround, i) = wa;
+> 575     }
+> 576
+> 577     if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
+> 578 atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+> 
+> 
+> and based on above workaround enablement , appropriate function to get
+> counter is used.
+> 
+> 1008 static void __init arch_counter_register(unsigned type)
+> 1009 {
+> 1010     u64 start_count;
+> 1011
+> 1012     /* Register the CP15 based counter if we have one */
+> 1013     if (type & ARCH_TIMER_TYPE_CP15) {
+> 1014         u64 (*rd)(void);
+> 1015
+> 1016         if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+> 1017             arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+> 1018             if (arch_timer_counter_has_wa())
+> 1019                 rd = arch_counter_get_cntvct_stable;
+> 1020             else
+> 1021                 rd = arch_counter_get_cntvct;
+> 1022         } else {
+> 1023             if (arch_timer_counter_has_wa())
+> 1024                 rd = arch_counter_get_cntpct_stable;
+> 1025             else
+> 1026                 rd = arch_counter_get_cntpct;
+> 1027         }
+> [snap]
+> 1043     /* 56 bits minimum, so we assume worst case rollover */
+> 1044     sched_clock_register(arch_timer_read_counter, 56, arch_timer_rate);
+> 
+> 
+> As our boot cores are not impacted by errata sched_clock_register() will
+> register !arch_timer_counter_has_wa() callback.
+
+It would be helpful to mention this fact (that the system is big.LITTLE, and
+the boot cores are not Cortex-A73) earlier in the report.
+
+> Now when errata impacted core boots up and sched_clock_register already
+> register will !arch_timer_counter_has_wa() path.
+> As sched_clock_register is not per_cpu bases so arch_timer_read_counter will
+> always point to !arch_timer_counter_has_wa() function calls.
+
+Hmm... yes, AFAICT this cannot work unless the affected CPUs are up before we
+probe, and it doesn't make much sense for arch_counter_register() to look at
+arch_timer_counter_has_wa() since it can be called before all CPUs are up.
+
+> Looks like this bug is side effect of following patch:
+> 
+> commit 0ea415390cd345b7d09e8c9ebd4b68adfe873043
+> Author: Marc Zyngier <marc.zyngier@arm.com>
+> Date:   Mon Apr 8 16:49:07 2019 +0100
+> 
+>     clocksource/arm_arch_timer: Use arch_timer_read_counter to access stable
+> counters
+> 
+>     Instead of always going via arch_counter_get_cntvct_stable to access the
+>     counter workaround, let's have arch_timer_read_counter point to the
+>     right method.
+> 
+>     For that, we need to track whether any CPU in the system has a
+>     workaround for the counter. This is done by having an atomic variable
+>     tracking this.
+> 
+>     Acked-by: Mark Rutland <mark.rutland@arm.com>
+>     Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
+>     Signed-off-by: Will Deacon <will.deacon@arm.com>
+> 
+
+Yeah, that does look to be broken, but I think there are futher issues anyway
+(e.g. late onlining).
+
+AFAICT we need to detect this *stupidly early* in the CPU bringup path in order
+to handle this safely, which is quite painful.
+
+What a great.
+
+Thanks,
+Mark.
