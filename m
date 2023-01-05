@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4F265E690
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE5E65E687
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbjAEIPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S231472AbjAEIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjAEIOe (ORCPT
+        with ESMTP id S231570AbjAEIOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:14:34 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D08E58F83;
-        Thu,  5 Jan 2023 00:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672906465; x=1704442465;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bpHk6sTN8PVAmzAuUUvN2naSStnPanPMw4vOz0P3M/Y=;
-  b=SGTd+KFFa8hhlw7hsK4P2GmvgMyXxYLVgGv0+f/QjD2avfTzklffxj62
-   2JufUtIv9oGekbMXSkGyUT6tTK1m/lzmbzsiyXPi0jrtnyifl0ZwcNEFB
-   lRp5DGU8Wpre7INtM5hR+uNCo5C8Ylu1Nt/HToJPgF/Uhl2R4CJi8rfv0
-   Pli4k+hPXe6+xy+Tvdbdq7lBgeyACKDjzhRbK7KwuzWDrD+rOn6nAKD1x
-   MYHoyuZHoIht216y4j9rTgCQDaSFFK1GBZDWB6RSnP4XdWve7CZLW0RYX
-   tbDRVVzE+Ps1hAVSu1u6tjpt5sqaN0XP8vuGISnwUJ75hfnqizF1m7IId
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="194363301"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jan 2023 01:14:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 01:14:12 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 01:14:09 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH net-next 8/8] net: microchip: vcap api: Enable/Disable rules via chains in VCAP HW
-Date:   Thu, 5 Jan 2023 09:13:35 +0100
-Message-ID: <20230105081335.1261636-9-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105081335.1261636-1-steen.hegelund@microchip.com>
-References: <20230105081335.1261636-1-steen.hegelund@microchip.com>
+        Thu, 5 Jan 2023 03:14:06 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6512158320;
+        Thu,  5 Jan 2023 00:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672906437; bh=CGzT08iim77SF3hU99ejpjFf5EG6Rl2ItIprKmEgLtY=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=Ehs/8wo9Gks5PCvbWS3s9SW7nONzx6a38cyKKITH/xm+UQ4SBGl9zo98iW7+GqUPx
+         yqX7sbOfwqXzV15gXzQZ5s5KW7mThPtfWJ5J/Lird24hj8nkwS/OZeZTqbdaNTxycQ
+         FT1ilMhlDe+yv/o5JV2TQzRQs2CG91NgIdtadUrFT/+SjGVdyh/GZZkCJQRZ/cnXAr
+         q5Xem7yR2E7coOcnkwk1WvvKoFpqe+1iE3Y9pb6w+L7LicgSKUpuHLnEitDdFsO8yd
+         iH8dK1roQHprsdmtDh29TDeZEXCecPZ7Ko8ehQXu4RYCYviafVOYEzGX6JxCUBwdcD
+         ycJAPQ3CkAkxw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([92.116.173.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63RQ-1okjjJ1BSC-016MjW; Thu, 05
+ Jan 2023 09:13:57 +0100
+Date:   Thu, 5 Jan 2023 09:13:55 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev fixes for v6.2-rc3
+Message-ID: <Y7aGw/irynC61O85@ls3530>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:e6ixn9x3qrMQjq5CqimdU7JpgjsjVfDoNyoLBcb4EczLrtrNX2U
+ ixFxDAtD48kLgFDrPNFAtl3EjKeMmGGy+mNWLbC368qglH80q7IJQc42I90nVdO3HoJWC5p
+ LJR0PbX5gc/GC9llc6V6Sc3hKaoe0/xTDqY1wERRsxd/nqE+eftxoEKY5i1wUk3oZiFxrfi
+ 85AumXIc2Kq4aQ9JPAIEQ==
+UI-OutboundReport: notjunk:1;M01:P0:OZlzwYr2Qw0=;IDBYe5yVimYZIWzoGw/RJniwNZo
+ 0uolB61iaJtJ7/PD9C8a1Mc1v4VCpRbKCogcoHML5XQ2mFzrOYEQkDeTUw4hUmgFTCd5ua5zV
+ 05yftmCaW0llhRpSSAEBGSnm/5uIwtkh0mVJU1A2jmPsJpvyw0ejaxm5+BemLXRoCjQgV18tZ
+ W8AqN0RHL2+7Jg87Jagu3lDvhM7nm0FVbM/CKscnID5Rc6neheP9c/Pf1EsE+cezW5Ezjn624
+ Gs50PmkbMsA3CEOFv/G6SsrtTFLj6L8zDyD4b1165OME9skmYdaQc+ZEUn91dJcFmc+xyeMvN
+ QjemPbGRllKACic6Gk3r/nfzhse3i84yuz7KX0rpbgI4i5PE/+TfG/prDCvdzFfvSLLhPPYkp
+ AtlJFY8dsu8CJC/otOnchry7zuhKwlbvlA3pW4piTvRJu6+Bzpj1Edzys095c3cXk372RB6Ry
+ nDhRWbFyRI2Sbdlluw4rqC7UyDlopBM019uw3ZIa/eh0WeTrDtwxZEv+y7VH2HCyK8mTH4NlN
+ 4Tx+Bylc8wO4deDHuCw/O6vTw338HCS6qkiwN0/4aI5qqoQpP0VRCY+MuPNlTaaEAbXPNkRRF
+ XTQy1F0/hPsySkLhTkfYJTmYoDfezsEDvxOTSha5oazarOm/TlNrEO17Wm1mFriZqkkeZ8Q2c
+ xJo73OXF0d/JwVE9obNoUiZacFhq9UZlWRgSaPdBDA2j+CQreds5Hj8ODyFSldamrI3RflYsp
+ 0VP6q9r3r0GwVLkAniB+qakskzYqPbl6NrsBIyXLND33LtsniMtAldQLHs7WTAlTeJf9wNFIw
+ Wvs5Xr2fBAKfskFRMlLux5bgl36+d7kLRlk99kVnwIiUtiFCU9yTZ4EsldIZPr+aBQnc/ME51
+ 4PF3Hdv5TYS7n7XPFC/Qj9+n1XrT8VYOK29zPFStjj1Jx6GshEosyjOUBB7o6dMQISFT/CiwS
+ sT9Ygw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,343 +67,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This supports that individual rules are enabled and disabled via chain
-information.
-This is done by keeping disabled rules in the VCAP list (cached) until they
-are enabled, and only at this time are the rules written to the VCAP HW.
+Hi Linus,
 
-Fixes: 4426b78c626d ("net: lan966x: Add port keyset config and callback interface")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- .../net/ethernet/microchip/vcap/vcap_api.c    | 195 +++++++++++++++++-
- .../ethernet/microchip/vcap/vcap_api_client.h |   1 -
- .../microchip/vcap/vcap_api_debugfs.c         |  11 +-
- .../ethernet/microchip/vcap/vcap_api_kunit.c  |  11 +-
- .../microchip/vcap/vcap_api_private.h         |   3 +
- 5 files changed, 211 insertions(+), 10 deletions(-)
+please pull the fbdev driver updates for 6.2-rc3, to receive
+fixes for matroxfb, offb, omapfb and fbmem.
 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-index 94df0e7b58ea..7cb7086248c3 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-@@ -2025,8 +2025,6 @@ static void vcap_rule_set_state(struct vcap_rule_internal *ri)
- 		ri->state = VCAP_RS_ENABLED;
- 	else
- 		ri->state = VCAP_RS_DISABLED;
--	/* For now always store directly in HW */
--	ri->state = VCAP_RS_PERMANENT;
- }
- 
- /* Encode and write a validated rule to the VCAP */
-@@ -2709,6 +2707,119 @@ void vcap_set_tc_exterr(struct flow_cls_offload *fco, struct vcap_rule *vrule)
- }
- EXPORT_SYMBOL_GPL(vcap_set_tc_exterr);
- 
-+/* Write a rule to VCAP HW to enable it */
-+static int vcap_enable_rule(struct vcap_rule_internal *ri)
-+{
-+	struct vcap_client_actionfield *af, *naf;
-+	struct vcap_client_keyfield *kf, *nkf;
-+
-+	vcap_erase_cache(ri);
-+	vcap_encode_rule(ri);
-+	vcap_write_rule(ri);
-+
-+	/* Deallocate the list of keys and actions */
-+	list_for_each_entry_safe(kf, nkf, &ri->data.keyfields, ctrl.list) {
-+		list_del(&kf->ctrl.list);
-+		kfree(kf);
-+	}
-+	list_for_each_entry_safe(af, naf, &ri->data.actionfields, ctrl.list) {
-+		list_del(&af->ctrl.list);
-+		kfree(af);
-+	}
-+	ri->state = VCAP_RS_ENABLED;
-+	return 0;
-+}
-+
-+/* Enable all disabled rules for a specific chain/port in the VCAP HW */
-+static int vcap_enable_rules(struct vcap_control *vctrl,
-+			     struct net_device *ndev, int chain)
-+{
-+	struct vcap_rule_internal *ri;
-+	struct vcap_admin *admin;
-+	int err = 0;
-+
-+	list_for_each_entry(admin, &vctrl->list, list) {
-+		if (!(chain >= admin->first_cid && chain <= admin->last_cid))
-+			continue;
-+
-+		/* Found the admin, now find the offloadable rules */
-+		mutex_lock(&admin->lock);
-+		list_for_each_entry(ri, &admin->rules, list) {
-+			if (ri->data.vcap_chain_id != chain)
-+				continue;
-+
-+			if (ri->ndev != ndev)
-+				continue;
-+
-+			if (ri->state != VCAP_RS_DISABLED)
-+				continue;
-+
-+			err = vcap_enable_rule(ri);
-+			if (err)
-+				break;
-+		}
-+		mutex_unlock(&admin->lock);
-+		if (err)
-+			break;
-+	}
-+	return err;
-+}
-+
-+/* Read and erase a rule from VCAP HW to disable it */
-+static int vcap_disable_rule(struct vcap_rule_internal *ri)
-+{
-+	int err;
-+
-+	err = vcap_read_rule(ri);
-+	if (err)
-+		return err;
-+	err = vcap_decode_keyset(ri);
-+	if (err)
-+		return err;
-+	err = vcap_decode_actionset(ri);
-+	if (err)
-+		return err;
-+
-+	ri->state = VCAP_RS_DISABLED;
-+	ri->vctrl->ops->init(ri->ndev, ri->admin, ri->addr, ri->size);
-+	return 0;
-+}
-+
-+/* Disable all enabled rules for a specific chain/port in the VCAP HW */
-+static int vcap_disable_rules(struct vcap_control *vctrl,
-+			      struct net_device *ndev, int chain)
-+{
-+	struct vcap_rule_internal *ri;
-+	struct vcap_admin *admin;
-+	int err = 0;
-+
-+	list_for_each_entry(admin, &vctrl->list, list) {
-+		if (!(chain >= admin->first_cid && chain <= admin->last_cid))
-+			continue;
-+
-+		/* Found the admin, now find the rules on the chain */
-+		mutex_lock(&admin->lock);
-+		list_for_each_entry(ri, &admin->rules, list) {
-+			if (ri->data.vcap_chain_id != chain)
-+				continue;
-+
-+			if (ri->ndev != ndev)
-+				continue;
-+
-+			if (ri->state != VCAP_RS_ENABLED)
-+				continue;
-+
-+			err = vcap_disable_rule(ri);
-+			if (err)
-+				break;
-+		}
-+		mutex_unlock(&admin->lock);
-+		if (err)
-+			break;
-+	}
-+	return err;
-+}
-+
- /* Check if this port is already enabled for this VCAP instance */
- static bool vcap_is_enabled(struct vcap_control *vctrl, struct net_device *ndev,
- 			    int dst_cid)
-@@ -2750,6 +2861,15 @@ static int vcap_enable(struct vcap_control *vctrl, struct net_device *ndev,
- 	list_add_tail(&eport->list, &admin->enabled);
- 	mutex_unlock(&admin->lock);
- 
-+	/* Enable chained lookups */
-+	while (dst_cid) {
-+		admin = vcap_find_admin(vctrl, dst_cid);
-+		if (!admin)
-+			return -ENOENT;
-+
-+		vcap_enable_rules(vctrl, ndev, dst_cid);
-+		dst_cid = vcap_get_next_chain(vctrl, ndev, dst_cid);
-+	}
- 	return 0;
- }
- 
-@@ -2759,6 +2879,7 @@ static int vcap_disable(struct vcap_control *vctrl, struct net_device *ndev,
- {
- 	struct vcap_enabled_port *elem, *eport = NULL;
- 	struct vcap_admin *found = NULL, *admin;
-+	int dst_cid;
- 
- 	list_for_each_entry(admin, &vctrl->list, list) {
- 		list_for_each_entry(elem, &admin->enabled, list) {
-@@ -2775,6 +2896,17 @@ static int vcap_disable(struct vcap_control *vctrl, struct net_device *ndev,
- 	if (!eport)
- 		return -ENOENT;
- 
-+	/* Disable chained lookups */
-+	dst_cid = eport->dst_cid;
-+	while (dst_cid) {
-+		admin = vcap_find_admin(vctrl, dst_cid);
-+		if (!admin)
-+			return -ENOENT;
-+
-+		vcap_disable_rules(vctrl, ndev, dst_cid);
-+		dst_cid = vcap_get_next_chain(vctrl, ndev, dst_cid);
-+	}
-+
- 	mutex_lock(&found->lock);
- 	list_del(&eport->list);
- 	mutex_unlock(&found->lock);
-@@ -2901,6 +3033,65 @@ int vcap_rule_get_counter(struct vcap_rule *rule, struct vcap_counter *ctr)
- }
- EXPORT_SYMBOL_GPL(vcap_rule_get_counter);
- 
-+/* Get a copy of a client key field */
-+static int vcap_rule_get_key(struct vcap_rule *rule,
-+			     enum vcap_key_field key,
-+			     struct vcap_client_keyfield *ckf)
-+{
-+	struct vcap_client_keyfield *field;
-+
-+	field = vcap_find_keyfield(rule, key);
-+	if (!field)
-+		return -EINVAL;
-+	memcpy(ckf, field, sizeof(*ckf));
-+	INIT_LIST_HEAD(&ckf->ctrl.list);
-+	return 0;
-+}
-+
-+/* Get the keysets that matches the rule key type/mask */
-+int vcap_rule_get_keysets(struct vcap_rule_internal *ri,
-+			  struct vcap_keyset_list *matches)
-+{
-+	struct vcap_control *vctrl = ri->vctrl;
-+	enum vcap_type vt = ri->admin->vtype;
-+	const struct vcap_set *keyfield_set;
-+	struct vcap_client_keyfield kf = {};
-+	u32 value, mask;
-+	int err, idx;
-+
-+	err = vcap_rule_get_key(&ri->data, VCAP_KF_TYPE, &kf);
-+	if (err)
-+		return err;
-+
-+	if (kf.ctrl.type == VCAP_FIELD_BIT) {
-+		value = kf.data.u1.value;
-+		mask = kf.data.u1.mask;
-+	} else if (kf.ctrl.type == VCAP_FIELD_U32) {
-+		value = kf.data.u32.value;
-+		mask = kf.data.u32.mask;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	keyfield_set = vctrl->vcaps[vt].keyfield_set;
-+	for (idx = 0; idx < vctrl->vcaps[vt].keyfield_set_size; ++idx) {
-+		if (keyfield_set[idx].sw_per_item != ri->keyset_sw)
-+			continue;
-+
-+		if (keyfield_set[idx].type_id == (u8)-1) {
-+			vcap_keyset_list_add(matches, idx);
-+			continue;
-+		}
-+
-+		if ((keyfield_set[idx].type_id & mask) == value)
-+			vcap_keyset_list_add(matches, idx);
-+	}
-+	if (matches->cnt > 0)
-+		return 0;
-+
-+	return -EINVAL;
-+}
-+
- static int vcap_rule_mod_key(struct vcap_rule *rule,
- 			     enum vcap_key_field key,
- 			     enum vcap_field_type ftype,
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_client.h b/drivers/net/ethernet/microchip/vcap/vcap_api_client.h
-index f44228436051..b8980b22352f 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_client.h
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_client.h
-@@ -264,5 +264,4 @@ int vcap_rule_mod_action_u32(struct vcap_rule *rule,
- /* Get a 32 bit key field value and mask from the rule */
- int vcap_rule_get_key_u32(struct vcap_rule *rule, enum vcap_key_field key,
- 			  u32 *value, u32 *mask);
--
- #endif /* __VCAP_API_CLIENT__ */
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-index d6a09ce75e4f..dc06f6d4f513 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-@@ -164,10 +164,13 @@ static int vcap_debugfs_show_keysets(struct vcap_rule_internal *ri,
- 	matches.cnt = 0;
- 	matches.max = ARRAY_SIZE(keysets);
- 
--	err = vcap_find_keystream_keysets(ri->vctrl, admin->vtype,
--					  admin->cache.keystream,
--					  admin->cache.maskstream,
--					  false, 0, &matches);
-+	if (ri->state == VCAP_RS_DISABLED)
-+		err = vcap_rule_get_keysets(ri, &matches);
-+	else
-+		err = vcap_find_keystream_keysets(ri->vctrl, admin->vtype,
-+						  admin->cache.keystream,
-+						  admin->cache.maskstream,
-+						  false, 0, &matches);
- 	if (err) {
- 		pr_err("%s:%d: could not find valid keysets: %d\n",
- 		       __func__, __LINE__, err);
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-index fdef9102a9b3..22690c669028 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-@@ -1305,8 +1305,8 @@ static void vcap_api_encode_rule_test(struct kunit *test)
- 
- 	struct vcap_admin is2_admin = {
- 		.vtype = VCAP_TYPE_IS2,
--		.first_cid = 10000,
--		.last_cid = 19999,
-+		.first_cid = 8000000,
-+		.last_cid = 8099999,
- 		.lookups = 4,
- 		.last_valid_addr = 3071,
- 		.first_valid_addr = 0,
-@@ -1319,7 +1319,7 @@ static void vcap_api_encode_rule_test(struct kunit *test)
- 	};
- 	struct vcap_rule *rule;
- 	struct vcap_rule_internal *ri;
--	int vcap_chain_id = 10005;
-+	int vcap_chain_id = 8000000;
- 	enum vcap_user user = VCAP_USER_VCAP_UTIL;
- 	u16 priority = 10;
- 	int id = 100;
-@@ -1391,6 +1391,11 @@ static void vcap_api_encode_rule_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 2, ri->keyset_sw_regs);
- 	KUNIT_EXPECT_EQ(test, 4, ri->actionset_sw_regs);
- 
-+	/* Enable lookup, so the rule will be written */
-+	ret = vcap_enable_lookups(&test_vctrl, &test_netdev, 0,
-+				  rule->vcap_chain_id, rule->cookie, true);
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+
- 	/* Add rule with write callback */
- 	ret = vcap_add_rule(rule);
- 	KUNIT_EXPECT_EQ(test, 0, ret);
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_private.h b/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-index ce35af9a853d..86542accffe6 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-@@ -115,4 +115,7 @@ int vcap_find_keystream_keysets(struct vcap_control *vctrl, enum vcap_type vt,
- 				u32 *keystream, u32 *mskstream, bool mask,
- 				int sw_max, struct vcap_keyset_list *kslist);
- 
-+/* Get the keysets that matches the rule key type/mask */
-+int vcap_rule_get_keysets(struct vcap_rule_internal *ri,
-+			  struct vcap_keyset_list *matches);
- #endif /* __VCAP_API_PRIVATE__ */
--- 
-2.39.0
+Thanks,
+Helge
 
+----
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.2-rc3
+
+for you to fetch changes up to 764043cccd7232a783753a612d628fc0cb7854be:
+
+  fbdev: omapfb: avoid stack overflow warning (2023-01-04 19:09:40 +0100)
+
+----------------------------------------------------------------
+fbdev updates for kernel 6.2-rc3:
+
+- Fix Matrox G200eW initialization failure
+- Fix build failure of offb driver when built as module
+- Optimize stack usage in omapfb
+- Prevent use-after-free in fbmem
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      fbdev: omapfb: avoid stack overflow warning
+
+Hang Zhang (1):
+      fbdev: fbmem: prevent potential use-after-free issues with console_lock()
+
+Paul Menzel (1):
+      fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+
+Randy Dunlap (1):
+      fbdev: make offb driver tristate
+
+Xu Panda (2):
+      fbdev: omapfb: use strscpy() to instead of strncpy()
+      fbdev: atyfb: use strscpy() to instead of strncpy()
+
+ drivers/video/fbdev/Kconfig                |  4 ++--
+ drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
+ drivers/video/fbdev/core/fbmem.c           |  2 ++
+ drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
+ drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
+ drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++----------
+ 6 files changed, 27 insertions(+), 19 deletions(-)
