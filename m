@@ -2,112 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30E165E9A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C04265E9A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjAELPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 06:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S232424AbjAELQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 06:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbjAELPM (ORCPT
+        with ESMTP id S231712AbjAELQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 06:15:12 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A148574D2;
-        Thu,  5 Jan 2023 03:15:01 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bk16so22553742wrb.11;
-        Thu, 05 Jan 2023 03:15:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=86+q+Qg4Mtt40/M5jVCX/R4x8CTXT7lPu4cQ2thqb54=;
-        b=NfADKSaeWac47xmY5tV2DJYIvVmBqPQUCTLMTzIIpGNF0g4v3IwpQ2aN5hw2t0BTG4
-         xIINOPf+cPbYWgkZ+71/IJWzWhMGRdXd7RlD67P5+48oYXtFttjM5xCp+PbUshXw58is
-         Hr/mgxae7ChT+7yRfYKSZeGBnTD6joaizJCXOCQS9ftIetljdUsYkPlT+NrhqDWb1BbO
-         Le1hnlur7Ywyteqi6X1yVVkMAPNdzr3rxNGthnHj5QVMggbeQ6QQQxaQA/2CzDHNKBKv
-         AbPxZsI4t1aLcmG0YbimV603ruadsbQdgk3PBYUqDzDgAYh87v+Y4Ni2N4a1tmqOv43Q
-         A2kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=86+q+Qg4Mtt40/M5jVCX/R4x8CTXT7lPu4cQ2thqb54=;
-        b=zRxBDuxNl0bKA+qcLVRf7oSi5FJ640qmX5iL/dOVkZYSDhs5ZPcwVkhNqC/394fdGZ
-         6RDVtv1b0A02ddOHEHUOL0TRHCTJBv/TQEJJyHyWRLIxSActLBQtJrgw0wLKDqf/8C0V
-         vZZ+w8o2baeAs09mSCWS23j+U8za7eD3K0eCb2oK/6R714XxPAfjJsItp+wX/NuggquP
-         e1vv1lnhTsYRRFjWUaIlM0nZcoVp7R1K67u7N7tNT9Do3YZI6YlsIZtjy+RPDvJx8Nrk
-         gjEflVJJGS6Jl/ZKzVKnvzDMGt5fcFb/DCoEMH/2jFFqiLQSWWnoFWQ+MMFF4r7RWEJT
-         k5yw==
-X-Gm-Message-State: AFqh2kqQf7oEac9F7q5WbrX9nUGKD+aVTTZzouJwpdPx6au8gH0E/LHl
-        CaUWxM+n0mLv8FfzltFRHJs=
-X-Google-Smtp-Source: AMrXdXvT+YBSRy7nCyvEbQI6Ep3rnuWCLY9a8Hc1SArTdh63c2Svif4IsSGWLaW0MG+/k6AUEwyktQ==
-X-Received: by 2002:adf:e78d:0:b0:242:5469:55dd with SMTP id n13-20020adfe78d000000b00242546955ddmr31114084wrm.36.1672917299600;
-        Thu, 05 Jan 2023 03:14:59 -0800 (PST)
-Received: from debian ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
-        by smtp.gmail.com with ESMTPSA id f8-20020a5d58e8000000b0022e57e66824sm41581877wrd.99.2023.01.05.03.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 03:14:59 -0800 (PST)
-Date:   Thu, 5 Jan 2023 11:14:57 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
-Message-ID: <Y7axMUGRQCJXt8pp@debian>
-References: <20230104160507.635888536@linuxfoundation.org>
+        Thu, 5 Jan 2023 06:16:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558CC1D0F0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 03:16:17 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B86F41EC04F0;
+        Thu,  5 Jan 2023 12:16:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672917375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=sYCv9u4CQpRS47MBdEdo6QEOn787RP/SmqW6LhEI0a0=;
+        b=WjTPr0LLwRQs4SSRgcNVGk7Yipd2rogy9bfwgwLiXS+BXbWyStNpV/QwuEepKA2kRbM2N0
+        qQEiHkCA2K/SkjuduJ5deHqC2BbUpgIu/8g98sqW0LVXKPgeHFgBo2FFAWxmLcQC7/z/op
+        kAQ0NeMoN54AM+OqhEvsdfVoI8sg41c=
+Date:   Thu, 5 Jan 2023 12:16:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH -v2] x86/alternatives: Add alt_instr.flags
+Message-ID: <Y7axe5t79c0gEL4+@zn.tnic>
+References: <20221219195312.7054-1-bp@alien8.de>
+ <Y6RCoJEtxxZWwotd@zn.tnic>
+ <Y7atvpsIOk+p3TLv@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
+In-Reply-To: <Y7atvpsIOk+p3TLv@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Jan 05, 2023 at 12:00:14PM +0100, Ingo Molnar wrote:
+> Neat - my only nitpick would be s/ft_flgs/ft_flags - it's more readable and 
+> we haven't run out of a's yet I guess. ;-)
 
-On Wed, Jan 04, 2023 at 05:04:51PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.18 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Yeah, probably leftover from when I was trying to fit the params in 80 cols...
+
+>    Reviewed-by: Ingo Molnar <mingo@kernel.org>
 > 
-> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
-> Anything received after that time might be too late.
+> I minimally boot-tested it as well.
 
-Build test (gcc version 12.2.1 20221127):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2559
-[2]. https://openqa.qa.codethink.co.uk/tests/2571
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Thx, lemme queue it.
 
 -- 
-Regards
-Sudip
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
