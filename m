@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BBE65F796
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B54D65F79A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjAEXdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S235717AbjAEXe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 18:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbjAEXdD (ORCPT
+        with ESMTP id S235636AbjAEXe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:33:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1179167BF1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672961581; x=1704497581;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jlKgx9WSgbyevM0j24pS3GGx39cKDb3R2MwISe1GN+8=;
-  b=LHk74K1zDSDKwQEnkJ+jfzDeEImN5uohjKLmIXPWiXC81F4vJiuDi6Ow
-   PzPVJ2NePbiXeBAxfMB3zXdud7TfXYrK0Nw6xM7vn6legJ1g7jPxqTNfN
-   M3OCMCvBOdPKVLTh85MHaFYlU0jwC8wQrd9JZgl7gILYj3lKYdVy0gtxa
-   XqfLtsvkFvQuIDZBXHri/300CVCiUK0X+4ez0zVVbUGpSWP8EBbLJdxfd
-   aWV9kZrCLQ2e2asQWZttNFT3ehAA7qt/XD4TumxFURxLfQQFJ1towxL/B
-   gxqOcGlQzcuUg6gWr4wCyKye8o+zP0uRN+uCSZcry3TUxisPpv4xXTcay
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="323604349"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="323604349"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 15:32:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="633326808"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="633326808"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Jan 2023 15:32:57 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDZjE-0002h5-2w;
-        Thu, 05 Jan 2023 23:32:56 +0000
-Date:   Fri, 6 Jan 2023 07:32:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: versioncheck: ./tools/lib/bpf/bpf_helpers.h: 146: need
- linux/version.h
-Message-ID: <202301060753.kZbwchKM-lkp@intel.com>
+        Thu, 5 Jan 2023 18:34:26 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EA66B195
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:34:25 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cl14so5036704pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 15:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mnjMUsNaqsc3bFj0hCnVr+HEVRtXh9lYu5+A3u3k9jE=;
+        b=FhgoiBz//Hq2zlHWEY0GvHC+3EwQsZYrLRlOg/ijq+CY+n7ocXTRyTT2U9n6GaiG1g
+         8tFvFAd2FaUxs01khfZf/3AGBTzAeDSGHFa43YjkF/9b0q1P2rQ9McEnafj4Wh9l93xp
+         rgVYxfKA8NCly3YkJHFHxjVfebbhkhEn8GCdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mnjMUsNaqsc3bFj0hCnVr+HEVRtXh9lYu5+A3u3k9jE=;
+        b=ARTgw63twHjbeR2nb3s1RPM11UJTzvOmTuF7XZe5eY08y0QvFc/Xysu3EKe1C6vwdy
+         oWJSbHz7XyhRs7rwCLUgEMgp+OhD05C1IN5MAe2GgJCcTIG7s7YjjnddFlDOfrY4mTSS
+         gpJHsbzP03MMRx8KMgHlMUYGUfXO4jPkasohu2A2WYZi3VrQiEYTWKHzTTZu9y7cSBy+
+         3YwE7WA/0RElbrf7vDLJ6L7m+o+bx3WVh8wATC1dHy7BLTo+jKkPWw6uefZMjr7HUqPA
+         n4LIKZyMMmlRUwzwwnshHA5QrLAAbUxQbsBClE1SOWEW4lKeRZWyuNHrnrA6LZYJ3r5s
+         4Rcw==
+X-Gm-Message-State: AFqh2kqQROvTK7dFkICHQ2owQdqWmuze8yt066kwMIeci0iZEIBDuQ35
+        zmho/y576NYGXt2FskUOUmV8sA==
+X-Google-Smtp-Source: AMrXdXsBBxekHc6xo6pHUp9oxWIKd2cWsWBJDt0TtPVkqgfY24rtDvS0KLlN9m3jTju75mh0ew3kKA==
+X-Received: by 2002:a05:6a20:13a6:b0:af:9c75:6699 with SMTP id w38-20020a056a2013a600b000af9c756699mr88571915pzh.1.1672961664564;
+        Thu, 05 Jan 2023 15:34:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 72-20020a63064b000000b00477602ff6a8sm22294810pgg.94.2023.01.05.15.34.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 15:34:23 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        kernel test robot <lkp@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2] ethtool: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 15:34:21 -0800
+Message-Id: <20230105233420.gonna.036-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2085; h=from:subject:message-id; bh=1iUGLA8kaB3CJRvh3FxMd+ySF+NlZH9NcPM8ecAtiFU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt159CzP7YQEWftITKlRz8J/J8bWwOE7S1bgJ1+SZ 82F5dO6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7defQAKCRCJcvTf3G3AJm6WEA CAy/JSaB1kXgZoiUaYTmjDoZKr77QATHK2tWv+MhNSKsFmmege3NRhulIiLPLBFNKEA7j4ISCBXB+8 4pVbmSRTi6cv1ofOiUX4gNv0coMncSuSlhsfo7izhdvb1zIpMxp51s0gTh6VZcfqgFI577CfdvsoiT PZDPuGDLxUNw2Vp4Qk7gZufL08RUm43Xc/Cj5OQ/z2QLY6mNCJpIgf8ZtjNjV7yQW9jnW6YcUsX5YL z09J9yCa2tRjXiU/MIEOV2Lb+XsRF6l6mqB/2uXBr/LAoLKcjpVWNmMbQRFSxYPwviIZe9LYCU47S6 gGmJUhElWFFWcF6HPRnmsn2JeyssMKKc+ZcpN6VEsRqT0ziuh0izxDnrSvGmlahxw/Wv0L5m2Wh06b obAQnPLXKx9NxzpoKGeqVS1byQTEShf/xAg9kAGng1FDqNxfXISw9sgXcNj3HodZ+0ou6kpPDHnZPD R6BSKe8B0LFjNF5IU2A2+xFtXRQ3szwtu6HAJ6yOshwJmvQWaLZxwshPWRSJIrTe3zF/tuOveZ+Mic IOBc3N1xkIbFvoYkiiDaOCzKCR02EBCwMXsHLDEupJ/FWDf2DWCYCo8RjjsPdXlyHgyf4McqxG6RO4 /MBIMDGc6f/N5oopHgfNdwNCZmww5/Rh5wqd0ixmQEuOGIHQ4OPTjwCOjGTw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
-commit: 9ae2c26e43248b722e79fe867be38062c9dd1e5f libbpf: provide NULL and KERNEL_VERSION macros in bpf_helpers.h
-date:   1 year, 10 months ago
-reproduce:
-        make versioncheck
+Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
+"rule_locs" 0-length array with a flexible array. Detected with GCC 13,
+using -fstrict-flex-arrays=3:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
+net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+  558 |                         .fs.location = info->rule_locs[i],
+      |                                        ~~~~~~~~~~~~~~~^~~
+In file included from include/linux/ethtool.h:19,
+                 from include/uapi/linux/ethtool_netlink.h:12,
+                 from include/linux/ethtool_netlink.h:6,
+                 from net/ethtool/common.c:3:
+include/uapi/linux/ethtool.h:1186:41: note: while referencing
+'rule_locs'
+ 1186 |         __u32                           rule_locs[0];
+      |                                         ^~~~~~~~~
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-   ./arch/csky/include/asm/uaccess.h: 14 linux/version.h not needed.
-   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
-   ./arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
-   ./arch/s390/include/asm/setup.h: 177: need linux/version.h
-   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
-   ./arch/x86/hyperv/hv_proc.c: 3 linux/version.h not needed.
-   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
-   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_display.c: 14 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_drv.c: 47 linux/version.h not needed.
-   ./drivers/hv/hv.c: 16 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
-   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
-   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
-   ./drivers/media/usb/uvc/uvc_driver.c: 19 linux/version.h not needed.
-   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
-   ./drivers/net/ethernet/mellanox/mlx5/core/main.c: 53 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 10 linux/version.h not needed.
-   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
-   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf.h: 14 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
-   ./drivers/usb/core/hcd.c: 14 linux/version.h not needed.
-   ./drivers/usb/gadget/udc/aspeed-vhub/hub.c: 33 linux/version.h not needed.
-   ./include/linux/qed/qed_ll2_if.h: 15 linux/version.h not needed.
-   ./include/linux/usb/composite.h: 39 linux/version.h not needed.
-   ./init/version.c: 16 linux/version.h not needed.
-   ./kernel/sys.c: 42 linux/version.h not needed.
-   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
-   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
-   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
->> ./tools/lib/bpf/bpf_helpers.h: 146: need linux/version.h
-   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: kernel test robot <lkp@intel.com>
+Cc: Oleksij Rempel <linux@rempel-privat.de>
+Cc: Sean Anderson <sean.anderson@seco.com>
+Cc: Alexandru Tachici <alexandru.tachici@analog.com>
+Cc: Amit Cohen <amcohen@nvidia.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: resend, this time without missing netdev CC. :)
+---
+ include/uapi/linux/ethtool.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+index 58e587ba0450..9b97b3e0ec1f 100644
+--- a/include/uapi/linux/ethtool.h
++++ b/include/uapi/linux/ethtool.h
+@@ -1183,7 +1183,7 @@ struct ethtool_rxnfc {
+ 		__u32			rule_cnt;
+ 		__u32			rss_context;
+ 	};
+-	__u32				rule_locs[0];
++	__DECLARE_FLEX_ARRAY(__u32,	rule_locs);
+ };
+ 
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
