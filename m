@@ -2,128 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C2D65EEA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3B165EEA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbjAEOVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S232069AbjAEOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbjAEOU7 (ORCPT
+        with ESMTP id S233077AbjAEOWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:20:59 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77698313
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:20:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672928457; x=1704464457;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5NSOtoeMbNg7K9lSDnR+3y2JY7MECEcqj20jo+eSw7k=;
-  b=H7U8yGQ+7lzB/4ayW/GQ9cqHx8UXuEYnafdza/0Epy7eLkx3LJCh0/4W
-   oGP/vkOBVjp2Psb3zxY1DbeGDLUM8y8HN/RI+rusYyw2zUr0y8nbAFK0I
-   WkKu1stXA020Exks7Q5jKkUOvZBUUMxeF6zln+z50adaPargRA6uvpboX
-   AH50/llDHPJwwcwYlEdwmFU8EVq22sPt9rjF4uf0UAIrgu5cC1Eow/P3F
-   kgVKAmARpMaiSIlvHnzJnPq1KJIrAkc14gSHQQOUaxqgyZKgA67P3AA4m
-   62iP5oLDBs2Ycq6uWlkl2sdIrSLyKYivNgBKzKhXXkQhD/FpyX0iv++Yy
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,303,1665439200"; 
-   d="scan'208";a="28261937"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 05 Jan 2023 15:20:55 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 05 Jan 2023 15:20:55 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 05 Jan 2023 15:20:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672928455; x=1704464455;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5NSOtoeMbNg7K9lSDnR+3y2JY7MECEcqj20jo+eSw7k=;
-  b=mlikXSKuHyTwyxv2JRpkP5Gx++ghPNvohSG4XxMs1dcYIJ8O0K/paU9t
-   XbLVqBAforSNlFQLqAGMOe5zZ86Z5OaRaLojihGQ4l2yhXgZAOkX4USoO
-   a8XbMkjWoMsEGyJfFxAFm4bYjBZK2LzZIER4O/AT6eUkkA/7YLkbkmm59
-   5l/paPAL40FxSReBAa8aCxQHyZdhL5dRAvxqL+68DZxgsREA+IVV8HljM
-   HF0FQolZ0m/7XU4KNVGzagP2EX0fj9t1oUgvTBy5CMGyLnkfmOUivoaLK
-   kTuLLG1A9P70IJUCzgsXM6UQrmLRScO10MjDt6u9VteMsKrKTWoAARNuK
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,303,1665439200"; 
-   d="scan'208";a="28261936"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 05 Jan 2023 15:20:55 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Thu, 5 Jan 2023 09:22:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740C644C76;
+        Thu,  5 Jan 2023 06:22:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9C15A280056;
-        Thu,  5 Jan 2023 15:20:55 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Michael Walle <michael@walle.cc>
-Cc:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH] nvmem: core: return -ENOENT if nvmem cell is not found
-Date:   Thu, 05 Jan 2023 15:20:53 +0100
-Message-ID: <1888904.g5d078U9FE@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230105135931.2743351-1-michael@walle.cc>
-References: <20230105135931.2743351-1-michael@walle.cc>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C1E8B81AE6;
+        Thu,  5 Jan 2023 14:22:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CE7C433EF;
+        Thu,  5 Jan 2023 14:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672928541;
+        bh=CGd0JdacF6pHnwbp0w0jPBNen22NaJhE2zmyCL4nB+E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a/i+eCP2jEIXfdvnROL5C/JRloqbsMH/h49y/qL8zjBr0gAbp5LjafKlMU9Kv04d8
+         DAKhcgaUeMKEv7z2xZuWTyha6+qsVCrbqHGyqboTr6cwt/fsoHiDujl6FH2gwwekhL
+         Ax4CvwpC+0wi9NE6eVo6gBH8fBBgbZkN+hS59DuZC5OUp6PAUYxVJed2IIEFLsJQkH
+         Wwi2qGXhpj3sUnjfCX+pxTepAzxfkS2TSpa9rAEiaASYjjo9oB4kTVWYdXpeCU38l8
+         ATaawivr9vanDcka5ByHWdSOBUExJb0xpOqkZZNtG6VKasXKISCxIW8w+RhdrRYPpM
+         vT27RVbNG1l2A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pDR8N-00H107-Fi;
+        Thu, 05 Jan 2023 14:22:19 +0000
+Date:   Thu, 05 Jan 2023 14:22:07 +0000
+Message-ID: <86sfgpnjsg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yogesh Lal <quic_ylal@quicinc.com>
+Cc:     <mark.rutland@arm.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
+In-Reply-To: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_ylal@quicinc.com, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 5. Januar 2023, 14:59:31 CET schrieb Michael Walle:
-> Prior to commit 3cb05fdbaed6 ("nvmem: core: add an index parameter to
-> the cell") of_nvmem_cell_get() would return -ENOENT if the cell wasn't
-> found. Particularly, if of_property_match_string() returned -EINVAL,
-> that return code was passed as the index to of_parse_phandle(), which
-> then detected it as invalid and returned NULL. That led to an return
-> code of -ENOENT.
-> 
-> With the new code, the negative index will lead to an -EINVAL of
-> of_parse_phandle_with_optional_args() which pass straight to the
-> caller and break those who expect an -ENOENT.
-> 
-> Fix it by always returning -ENOENT.
-> 
-> Fixes: 3cb05fdbaed6 ("nvmem: core: add an index parameter to the cell")
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> 
-> Alexander, could you give this another try? I've changed it slightly,
-> so it's a better match with how the handling was before.
-> 
-> 
->  drivers/nvmem/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 1b61c8bf0de4..cc885b602690 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -1343,7 +1343,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct
-> device_node *np, const char *id) "#nvmem-cell-cells",
->  						  index, 
-&cell_spec);
->  	if (ret)
-> -		return ERR_PTR(ret);
-> +		return ERR_PTR(-ENOENT);
-> 
->  	if (cell_spec.args_count > 1)
->  		return ERR_PTR(-EINVAL);
+On Thu, 05 Jan 2023 13:33:48 +0000,
+Yogesh Lal <quic_ylal@quicinc.com> wrote:
+>=20
+> Hi,
+>=20
+> We are observing issue on A73 core where ERRATUM_858921 is broken.
+>=20
+> On 5.15 kernel arch_timer_enable_workaround is set by reading
+> arm64_858921_read_cntpct_el0 and arm64_858921_read_cntvct_el0 during
+> timer register using following path.
 
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Have you checked whether the issue is still present on 6.1?
 
+>=20
+> arch_timer_enable_workaround->atomic_set(&timer_unstable_counter_workarou=
+nd_in_use,
+> 1);
+>=20
+> [code snap]
+> 564 static
+> 565 void arch_timer_enable_workaround(const struct
+> arch_timer_erratum_workaround *wa,
+> 566=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool local)
+> 567 {
+> 568=C2=A0=C2=A0=C2=A0=C2=A0 int i;
+> 569
+> 570=C2=A0=C2=A0=C2=A0=C2=A0 if (local) {
+> 571 __this_cpu_write(timer_unstable_counter_workaround, wa);
+> 572=C2=A0=C2=A0=C2=A0=C2=A0 } else {
+> 573=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 for_each_possible_cpu(i)
+> 574=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 per_cpu(timer_unstable_=
+counter_workaround, i) =3D wa;
+> 575=C2=A0=C2=A0=C2=A0=C2=A0 }
+> 576
+> 577=C2=A0=C2=A0=C2=A0=C2=A0 if (wa->read_cntvct_el0 || wa->read_cntpct_el=
+0)
+> 578 atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+>=20
+>=20
+> and based on above workaround enablement , appropriate function to get
+> counter is used.
+>=20
+> 1008 static void __init arch_counter_register(unsigned type)
+> 1009 {
+> 1010=C2=A0=C2=A0=C2=A0=C2=A0 u64 start_count;
+> 1011
+> 1012=C2=A0=C2=A0=C2=A0=C2=A0 /* Register the CP15 based counter if we hav=
+e one */
+> 1013=C2=A0=C2=A0=C2=A0=C2=A0 if (type & ARCH_TIMER_TYPE_CP15) {
+> 1014=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 (*rd)(void);
+> 1015
+> 1016=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((IS_ENABLED(CONF=
+IG_ARM64) && !is_hyp_mode_available()) ||
+> 1017=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 arch_timer_uses_ppi =3D=3D ARCH_TIMER_VIRT_PPI) {
+> 1018=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 if (arch_timer_counter_has_wa())
+> 1019=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 rd =3D arch_counter_get_cntvct_stable;
+> 1020=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 else
+> 1021=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 rd =3D arch_counter_get_cntvct;
+> 1022=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
+> 1023=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 if (arch_timer_counter_has_wa())
+> 1024=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 rd =3D arch_counter_get_cntpct_stable;
+> 1025=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 else
+> 1026=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 rd =3D arch_counter_get_cntpct;
+> 1027=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> [snap]
+> 1043 =C2=A0=C2=A0=C2=A0 /* 56 bits minimum, so we assume worst case rollo=
+ver */
+> 1044 =C2=A0=C2=A0=C2=A0 sched_clock_register(arch_timer_read_counter, 56,=
+ arch_timer_rate);
+>=20
+>=20
+> As our boot cores are not impacted by errata sched_clock_register()
+> will register !arch_timer_counter_has_wa() callback.
+>=20
+> Now when errata impacted core boots up and sched_clock_register
+> already register will !arch_timer_counter_has_wa() path.
+> As sched_clock_register is not per_cpu bases so
+> arch_timer_read_counter will always point to
+> !arch_timer_counter_has_wa() function calls.
 
+Please try the following hack, only compile tested as I do not have
+access to any affected HW, and report whether this solves your issue
+or not. Note that this is based on 6.2-rc2.
 
+Thanks,
+
+	M.
+
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm=
+_arch_timer.c
+index e09d4427f604..a7cf0a2c86d3 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -230,6 +230,28 @@ static u64 arch_counter_read_cc(const struct cyclecoun=
+ter *cc)
+ 	return arch_timer_read_counter();
+ }
+=20
++static bool arch_timer_counter_has_wa(void);
++
++static u64 (*arch_counter_get_read_fn(void))(void)
++{
++	u64 (*rd)(void);
++
++	if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
++	    arch_timer_uses_ppi =3D=3D ARCH_TIMER_VIRT_PPI) {
++		if (arch_timer_counter_has_wa())
++			rd =3D arch_counter_get_cntvct_stable;
++		else
++			rd =3D arch_counter_get_cntvct;
++	} else {
++		if (arch_timer_counter_has_wa())
++			rd =3D arch_counter_get_cntpct_stable;
++		else
++			rd =3D arch_counter_get_cntpct;
++	}
++
++	return rd;
++}
++
+ static struct clocksource clocksource_counter =3D {
+ 	.name	=3D "arch_sys_counter",
+ 	.id	=3D CSID_ARM_ARCH_COUNTER,
+@@ -571,8 +593,10 @@ void arch_timer_enable_workaround(const struct arch_ti=
+mer_erratum_workaround *wa
+ 			per_cpu(timer_unstable_counter_workaround, i) =3D wa;
+ 	}
+=20
+-	if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
++	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
+ 		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
++		arch_timer_read_counter =3D arch_counter_get_read_fn();
++	}
+=20
+ 	/*
+ 	 * Don't use the vdso fastpath if errata require using the
+@@ -641,7 +665,7 @@ static bool arch_timer_counter_has_wa(void)
+ #else
+ #define arch_timer_check_ool_workaround(t,a)		do { } while(0)
+ #define arch_timer_this_cpu_has_cntvct_wa()		({false;})
+-#define arch_timer_counter_has_wa()			({false;})
++static bool arch_timer_counter_has_wa(void)		{ return false; }
+ #endif /* CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND */
+=20
+ static __always_inline irqreturn_t timer_handler(const int access,
+@@ -1079,22 +1103,7 @@ static void __init arch_counter_register(unsigned ty=
+pe)
+=20
+ 	/* Register the CP15 based counter if we have one */
+ 	if (type & ARCH_TIMER_TYPE_CP15) {
+-		u64 (*rd)(void);
+-
+-		if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+-		    arch_timer_uses_ppi =3D=3D ARCH_TIMER_VIRT_PPI) {
+-			if (arch_timer_counter_has_wa())
+-				rd =3D arch_counter_get_cntvct_stable;
+-			else
+-				rd =3D arch_counter_get_cntvct;
+-		} else {
+-			if (arch_timer_counter_has_wa())
+-				rd =3D arch_counter_get_cntpct_stable;
+-			else
+-				rd =3D arch_counter_get_cntpct;
+-		}
+-
+-		arch_timer_read_counter =3D rd;
++		arch_timer_read_counter =3D arch_counter_get_read_fn();
+ 		clocksource_counter.vdso_clock_mode =3D vdso_default;
+ 	} else {
+ 		arch_timer_read_counter =3D arch_counter_get_cntvct_mem;
+
+--=20
+Without deviation from the norm, progress is not possible.
