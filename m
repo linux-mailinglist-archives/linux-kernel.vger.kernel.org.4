@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1355865E154
+	by mail.lfdr.de (Postfix) with ESMTP id 5E27365E155
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbjAEAKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S239670AbjAEAKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbjAEAKB (ORCPT
+        with ESMTP id S235433AbjAEAKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:10:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE843A2D;
-        Wed,  4 Jan 2023 16:09:59 -0800 (PST)
+        Wed, 4 Jan 2023 19:10:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF2644348;
+        Wed,  4 Jan 2023 16:10:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE396188F;
-        Thu,  5 Jan 2023 00:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92851C433AA;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B3CEB8198A;
+        Thu,  5 Jan 2023 00:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E14C43444;
         Thu,  5 Jan 2023 00:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672877397;
-        bh=ho1bxeu1IhGy97GpWjdnxhE2TC9LF5q8tcAiwvvPzeQ=;
+        bh=50t2JhGfBuLq9wZOJgcb1sE9TNLXRw/1jZ3BmOlQGeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NJ3zgjmmeVYRUZWKz3Hc3b4JA/1xhMBBNSCPzttQ53K1KG0VdevBIr+rUJdITVKnZ
-         dHtVC2CfB3z+rzT4NEKQO++KJFVpV7lhTcRIPd7Xtw44wTFG2I8J6LGbeKK4lXASsP
-         x/L9YC7/SOGNohGoUdj2eY7/DTOfW3Lj5ZG/QpoUlA2ifquhafpk9t8TwyIdxAvcou
-         gtb/BQmMP5ov+Rvz7wW1MuFOAuUNgk5eSA684ynLxPYjMJQll70kEM57xJ8OY5iuD0
-         YxpXeTw/5Tf2nj3ulELuWxc5ylVvv4i+7WqQEP3CaXA3hJfL7U95mEBUlx+ccg2r/n
-         iLKQm+rkenU+Q==
+        b=dSIC4AuizxrG9CF/+aE7ID2IVaxuhXgCIZuFAtDsNyVoU01fkkRdq0HUAIecpB4rk
+         49hyTHjAt+PgZMWw+qNNmW3IjJcV81xFKQaIWvHsP46Pnm4ucgJ5a00UjVjZ1VObm8
+         71wkNt179WJOfZCVnZXEmOOvFKupbGSHQpOe+wHyr0rgh+A/J3uzMbc/kX6gt+O3QI
+         vL3JW5wdZAI5+feEl/iqoTsHPJovFRgevkG7lNN05d0bzOnrUycf1jRF1rFF2rrhsA
+         1+y01t1yvhIDm0Rpelz7UC+LSI4aD4MQlhDivcBKK/Cgetxnpkn6k0PZetx5/beG5O
+         2VFCIonb04ooA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DBD785C1C98; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
+        id DDE215C1C99; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Akira Yokosawa <akiyks@gmail.com>,
+        rostedt@goodmis.org, Zhen Lei <thunder.leizhen@huawei.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Akira Yokosawa <akiyks@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 14/15] docs/RCU/rcubarrier: Right-adjust line numbers in code snippets
-Date:   Wed,  4 Jan 2023 16:09:54 -0800
-Message-Id: <20230105000955.1767218-14-paulmck@kernel.org>
+Subject: [PATCH rcu 15/15] doc: Fix htmldocs build warnings of stallwarn.rst
+Date:   Wed,  4 Jan 2023 16:09:55 -0800
+Message-Id: <20230105000955.1767218-15-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
@@ -56,242 +58,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: Zhen Lei <thunder.leizhen@huawei.com>
 
-Line numbers in code snippets in rcubarrier.rst have beed left adjusted
-since commit 4af498306ffd ("doc: Convert to rcubarrier.txt to ReST").
-This might have been because right adjusting them had confused Sphinx.
+Documentation/RCU/stallwarn.rst:
+401: WARNING: Literal block expected; none found.
+428: WARNING: Literal block expected; none found.
+445: WARNING: Literal block expected; none found.
+459: WARNING: Literal block expected; none found.
+468: WARNING: Literal block expected; none found.
 
-The rules around a literal block in reST are:
+The literal block needs to be indented, so this commit adds two spaces
+to each line.
 
-  - Need a blank line above it.
-  - A line with the same indent level as the line above it is regarded
-    as the end of it.
+In addition, ':', which is used as a boundary in the literal block, is
+replaced by '|'.
 
-Those line numbers can be right adjusted by keeping indents at two-
-digit numbers. While at it, add some spaces between the column of line
-numbers and the code area for better readability.
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Link: https://lore.kernel.org/linux-next/20221123163255.48653674@canb.auug.org.au/
+Fixes: 3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Tested-by: Akira Yokosawa <akiyks@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/rcubarrier.rst | 168 +++++++++++++++----------------
- 1 file changed, 84 insertions(+), 84 deletions(-)
+ Documentation/RCU/stallwarn.rst | 56 ++++++++++++++++++---------------
+ 1 file changed, 30 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/RCU/rcubarrier.rst b/Documentation/RCU/rcubarrier.rst
-index 9fb9ed7773552..6da7f66da2a80 100644
---- a/Documentation/RCU/rcubarrier.rst
-+++ b/Documentation/RCU/rcubarrier.rst
-@@ -72,9 +72,9 @@ For example, if it uses call_rcu(), call_srcu() on srcu_struct_1, and
- call_srcu() on srcu_struct_2, then the following three lines of code
- will be required when unloading::
+diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+index c1e92dfef40d5..ca7b7cd806a16 100644
+--- a/Documentation/RCU/stallwarn.rst
++++ b/Documentation/RCU/stallwarn.rst
+@@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
+ rcupdate.rcu_cpu_stall_cputime=1, the following additional information
+ is supplied with each RCU CPU stall warning::
  
-- 1 rcu_barrier();
-- 2 srcu_barrier(&srcu_struct_1);
-- 3 srcu_barrier(&srcu_struct_2);
-+  1  rcu_barrier();
-+  2  srcu_barrier(&srcu_struct_1);
-+  3  srcu_barrier(&srcu_struct_2);
+-rcu:          hardirqs   softirqs   csw/system
+-rcu:  number:      624         45            0
+-rcu: cputime:       69          1         2425   ==> 2500(ms)
++  rcu:          hardirqs   softirqs   csw/system
++  rcu:  number:      624         45            0
++  rcu: cputime:       69          1         2425   ==> 2500(ms)
  
- If latency is of the essence, workqueues could be used to run these
- three functions concurrently.
-@@ -82,69 +82,69 @@ three functions concurrently.
- An ancient version of the rcutorture module makes use of rcu_barrier()
- in its exit function as follows::
+ These statistics are collected during the sampling period. The values
+ in row "number:" are the number of hard interrupts, number of soft
+@@ -412,22 +412,24 @@ in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
+ stalls, these tasks are typically kernel tasks, which is why only the
+ system CPU time are considered.
  
-- 1  static void
-- 2  rcu_torture_cleanup(void)
-- 3  {
-- 4    int i;
-- 5
-- 6    fullstop = 1;
-- 7    if (shuffler_task != NULL) {
-- 8     VERBOSE_PRINTK_STRING("Stopping rcu_torture_shuffle task");
-- 9     kthread_stop(shuffler_task);
-- 10   }
-- 11   shuffler_task = NULL;
-+  1  static void
-+  2  rcu_torture_cleanup(void)
-+  3  {
-+  4    int i;
-+  5
-+  6    fullstop = 1;
-+  7    if (shuffler_task != NULL) {
-+  8      VERBOSE_PRINTK_STRING("Stopping rcu_torture_shuffle task");
-+  9      kthread_stop(shuffler_task);
-+ 10    }
-+ 11    shuffler_task = NULL;
-  12
-- 13   if (writer_task != NULL) {
-- 14     VERBOSE_PRINTK_STRING("Stopping rcu_torture_writer task");
-- 15     kthread_stop(writer_task);
-- 16   }
-- 17   writer_task = NULL;
-+ 13    if (writer_task != NULL) {
-+ 14      VERBOSE_PRINTK_STRING("Stopping rcu_torture_writer task");
-+ 15      kthread_stop(writer_task);
-+ 16    }
-+ 17    writer_task = NULL;
-  18
-- 19   if (reader_tasks != NULL) {
-- 20     for (i = 0; i < nrealreaders; i++) {
-- 21       if (reader_tasks[i] != NULL) {
-- 22         VERBOSE_PRINTK_STRING(
-- 23           "Stopping rcu_torture_reader task");
-- 24         kthread_stop(reader_tasks[i]);
-- 25       }
-- 26       reader_tasks[i] = NULL;
-- 27     }
-- 28     kfree(reader_tasks);
-- 29     reader_tasks = NULL;
-- 30   }
-- 31   rcu_torture_current = NULL;
-+ 19    if (reader_tasks != NULL) {
-+ 20      for (i = 0; i < nrealreaders; i++) {
-+ 21        if (reader_tasks[i] != NULL) {
-+ 22          VERBOSE_PRINTK_STRING(
-+ 23            "Stopping rcu_torture_reader task");
-+ 24          kthread_stop(reader_tasks[i]);
-+ 25        }
-+ 26        reader_tasks[i] = NULL;
-+ 27      }
-+ 28      kfree(reader_tasks);
-+ 29      reader_tasks = NULL;
-+ 30    }
-+ 31    rcu_torture_current = NULL;
-  32
-- 33   if (fakewriter_tasks != NULL) {
-- 34     for (i = 0; i < nfakewriters; i++) {
-- 35       if (fakewriter_tasks[i] != NULL) {
-- 36         VERBOSE_PRINTK_STRING(
-- 37           "Stopping rcu_torture_fakewriter task");
-- 38         kthread_stop(fakewriter_tasks[i]);
-- 39       }
-- 40       fakewriter_tasks[i] = NULL;
-- 41     }
-- 42     kfree(fakewriter_tasks);
-- 43     fakewriter_tasks = NULL;
-- 44   }
-+ 33    if (fakewriter_tasks != NULL) {
-+ 34      for (i = 0; i < nfakewriters; i++) {
-+ 35        if (fakewriter_tasks[i] != NULL) {
-+ 36          VERBOSE_PRINTK_STRING(
-+ 37            "Stopping rcu_torture_fakewriter task");
-+ 38          kthread_stop(fakewriter_tasks[i]);
-+ 39        }
-+ 40        fakewriter_tasks[i] = NULL;
-+ 41      }
-+ 42      kfree(fakewriter_tasks);
-+ 43      fakewriter_tasks = NULL;
-+ 44    }
-  45
-- 46   if (stats_task != NULL) {
-- 47     VERBOSE_PRINTK_STRING("Stopping rcu_torture_stats task");
-- 48     kthread_stop(stats_task);
-- 49   }
-- 50   stats_task = NULL;
-+ 46    if (stats_task != NULL) {
-+ 47      VERBOSE_PRINTK_STRING("Stopping rcu_torture_stats task");
-+ 48      kthread_stop(stats_task);
-+ 49    }
-+ 50    stats_task = NULL;
-  51
-- 52   /* Wait for all RCU callbacks to fire. */
-- 53   rcu_barrier();
-+ 52    /* Wait for all RCU callbacks to fire. */
-+ 53    rcu_barrier();
-  54
-- 55   rcu_torture_stats_print(); /* -After- the stats thread is stopped! */
-+ 55    rcu_torture_stats_print(); /* -After- the stats thread is stopped! */
-  56
-- 57   if (cur_ops->cleanup != NULL)
-- 58     cur_ops->cleanup();
-- 59   if (atomic_read(&n_rcu_torture_error))
-- 60     rcu_torture_print_module_parms("End of test: FAILURE");
-- 61   else
-- 62     rcu_torture_print_module_parms("End of test: SUCCESS");
-- 63 }
-+ 57    if (cur_ops->cleanup != NULL)
-+ 58      cur_ops->cleanup();
-+ 59    if (atomic_read(&n_rcu_torture_error))
-+ 60      rcu_torture_print_module_parms("End of test: FAILURE");
-+ 61    else
-+ 62      rcu_torture_print_module_parms("End of test: SUCCESS");
-+ 63  }
+-The sampling period is shown as follows:
+-:<------------first timeout---------->:<-----second timeout----->:
+-:<--half timeout-->:<--half timeout-->:                          :
+-:                  :<--first period-->:                          :
+-:                  :<-----------second sampling period---------->:
+-:                  :                  :                          :
+-:          snapshot time point    1st-stall                  2nd-stall
++The sampling period is shown as follows::
  
- Line 6 sets a global variable that prevents any RCU callbacks from
- re-posting themselves. This will not be necessary in most cases, since
-@@ -193,16 +193,16 @@ which point, all earlier RCU callbacks are guaranteed to have completed.
++  |<------------first timeout---------->|<-----second timeout----->|
++  |<--half timeout-->|<--half timeout-->|                          |
++  |                  |<--first period-->|                          |
++  |                  |<-----------second sampling period---------->|
++  |                  |                  |                          |
++             snapshot time point    1st-stall                  2nd-stall
  
- The original code for rcu_barrier() was roughly as follows::
+ The following describes four typical scenarios:
  
-- 1   void rcu_barrier(void)
-- 2   {
-- 3     BUG_ON(in_interrupt());
-- 4     /* Take cpucontrol mutex to protect against CPU hotplug */
-- 5     mutex_lock(&rcu_barrier_mutex);
-- 6     init_completion(&rcu_barrier_completion);
-- 7     atomic_set(&rcu_barrier_cpu_count, 1);
-- 8     on_each_cpu(rcu_barrier_func, NULL, 0, 1);
-- 9     if (atomic_dec_and_test(&rcu_barrier_cpu_count))
-- 10       complete(&rcu_barrier_completion);
-+  1  void rcu_barrier(void)
-+  2  {
-+  3    BUG_ON(in_interrupt());
-+  4    /* Take cpucontrol mutex to protect against CPU hotplug */
-+  5    mutex_lock(&rcu_barrier_mutex);
-+  6    init_completion(&rcu_barrier_completion);
-+  7    atomic_set(&rcu_barrier_cpu_count, 1);
-+  8    on_each_cpu(rcu_barrier_func, NULL, 0, 1);
-+  9    if (atomic_dec_and_test(&rcu_barrier_cpu_count))
-+ 10      complete(&rcu_barrier_completion);
-  11    wait_for_completion(&rcu_barrier_completion);
-  12    mutex_unlock(&rcu_barrier_mutex);
-  13  }
-@@ -232,16 +232,16 @@ still gives the general idea.
- The rcu_barrier_func() runs on each CPU, where it invokes call_rcu()
- to post an RCU callback, as follows::
+-1. A CPU looping with interrupts disabled.::
++1. A CPU looping with interrupts disabled.
  
-- 1  static void rcu_barrier_func(void *notused)
-- 2  {
-- 3    int cpu = smp_processor_id();
-- 4    struct rcu_data *rdp = &per_cpu(rcu_data, cpu);
-- 5    struct rcu_head *head;
-- 6
-- 7    head = &rdp->barrier;
-- 8    atomic_inc(&rcu_barrier_cpu_count);
-- 9    call_rcu(head, rcu_barrier_callback);
-- 10 }
-+  1  static void rcu_barrier_func(void *notused)
-+  2  {
-+  3    int cpu = smp_processor_id();
-+  4    struct rcu_data *rdp = &per_cpu(rcu_data, cpu);
-+  5    struct rcu_head *head;
-+  6
-+  7    head = &rdp->barrier;
-+  8    atomic_inc(&rcu_barrier_cpu_count);
-+  9    call_rcu(head, rcu_barrier_callback);
-+ 10  }
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:        0          0            0
+-   rcu: cputime:        0          0            0   ==> 2500(ms)
++   ::
++
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:        0          0            0
++     rcu: cputime:        0          0            0   ==> 2500(ms)
  
- Lines 3 and 4 locate RCU's internal per-CPU rcu_data structure,
- which contains the struct rcu_head that needed for the later call to
-@@ -254,11 +254,11 @@ The rcu_barrier_callback() function simply atomically decrements the
- rcu_barrier_cpu_count variable and finalizes the completion when it
- reaches zero, as follows::
+    Because interrupts have been disabled throughout the measurement
+    interval, there are no interrupts and no context switches.
+@@ -440,11 +442,11 @@ The following describes four typical scenarios:
  
-- 1 static void rcu_barrier_callback(struct rcu_head *notused)
-- 2 {
-- 3   if (atomic_dec_and_test(&rcu_barrier_cpu_count))
-- 4     complete(&rcu_barrier_completion);
-- 5 }
-+  1  static void rcu_barrier_callback(struct rcu_head *notused)
-+  2  {
-+  3    if (atomic_dec_and_test(&rcu_barrier_cpu_count))
-+  4      complete(&rcu_barrier_completion);
-+  5  }
+    This is similar to the previous example, but with non-zero number of
+    and CPU time consumed by hard interrupts, along with non-zero CPU
+-   time consumed by in-kernel execution.::
++   time consumed by in-kernel execution::
  
- .. _rcubarrier_quiz_3:
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:      624          0            0
+-   rcu: cputime:       49          0         2446   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:      624          0            0
++     rcu: cputime:       49          0         2446   ==> 2500(ms)
  
+    The fact that there are zero softirqs gives a hint that these were
+    disabled, perhaps via local_bh_disable().  It is of course possible
+@@ -454,20 +456,22 @@ The following describes four typical scenarios:
+ 
+ 3. A CPU looping with preemption disabled.
+ 
+-   Here, only the number of context switches is zero.::
++   Here, only the number of context switches is zero::
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:      624         45            0
+-   rcu: cputime:       69          1         2425   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:      624         45            0
++     rcu: cputime:       69          1         2425   ==> 2500(ms)
+ 
+    This situation hints that the stalled CPU was looping with preemption
+    disabled.
+ 
+-4. No looping, but massive hard and soft interrupts.::
++4. No looping, but massive hard and soft interrupts.
++
++   ::
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:       xx         xx            0
+-   rcu: cputime:       xx         xx            0   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:       xx         xx            0
++     rcu: cputime:       xx         xx            0   ==> 2500(ms)
+ 
+    Here, the number and CPU time of hard interrupts are all non-zero,
+    but the number of context switches and the in-kernel CPU time consumed
 -- 
 2.31.1.189.g2e36527f23
 
