@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9112265EEF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9A565EEFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbjAEOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S233569AbjAEOlx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 Jan 2023 09:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbjAEOlA (ORCPT
+        with ESMTP id S233552AbjAEOlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:41:00 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DCC30;
-        Thu,  5 Jan 2023 06:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=VcmkmclKmW24sYOpS8HuiKKoxvXwxynwv/26mO7Ol30=; b=OYZqncrdNKyRrul8nw4C/ZHiR+
-        C/P1hTz1qeTRCKP52NzSXLU16s+70WpAaKtpW/gTlCpbQ4HgnGuqcJIvs41vLCN+3ycsOAc1RVkRF
-        /88uF2MKsPAFkj+65SwJDClk631M2cuGXFAGaov32Q84L3sni34D4JXA6a9EbWyGeTpCJiO49tZby
-        78KdDfO7T0VZpGci2UNkBQIrimNMugNs5rwpf6mDnQCNzG29CcA7kdZHb3nNwBPN6p8TXUA/ZMeew
-        0niHlhp32OOG4bzoDmZDfHtIVQCGhqtFrZ5gE8X7UxXTdUN5X0YTEO6KMpVYjWFV13Y96YkeI9w1Q
-        PcPM1vPg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35978)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pDRQL-0007H2-9N; Thu, 05 Jan 2023 14:40:52 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pDRQI-00044L-75; Thu, 05 Jan 2023 14:40:50 +0000
-Date:   Thu, 5 Jan 2023 14:40:50 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <Y7bhctPZoyNnw1ay@shell.armlinux.org.uk>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
+        Thu, 5 Jan 2023 09:41:49 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E42678
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:41:47 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-267-TONGIBv5N4Gn3vUIarjFdA-1; Thu, 05 Jan 2023 14:41:44 +0000
+X-MC-Unique: TONGIBv5N4Gn3vUIarjFdA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 5 Jan
+ 2023 14:41:43 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Thu, 5 Jan 2023 14:41:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Daniel Vetter' <daniel@ffwll.ch>
+CC:     'Jani Nikula' <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        'Andrzej Hajda' <andrzej.hajda@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: RE: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of
+ xchg
+Thread-Topic: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version
+ of xchg
+Thread-Index: AQHZC+X/n2yHksRnF0Csd/+tl8P8Ka5qAX6ggCX6JSGAAADCAIAAC3eAgAAFAzA=
+Date:   Thu, 5 Jan 2023 14:41:43 +0000
+Message-ID: <6617dfb150f94cbb9654a585843e3287@AcuMS.aculab.com>
+References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
+ <f58ab17e5c6c4a4e8b0d687b44618c51@AcuMS.aculab.com>
+ <Y7bK8drngH/NIlOa@phenom.ffwll.local> <875ydlw1p4.fsf@intel.com>
+ <733cd0037bd14a269b54d701e1b80323@AcuMS.aculab.com>
+ <Y7ba8UlkhjpJI4F0@phenom.ffwll.local>
+In-Reply-To: <Y7ba8UlkhjpJI4F0@phenom.ffwll.local>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105140421.bqd2aed6du5mtxn4@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:04:21PM +0200, Vladimir Oltean wrote:
-> On Tue, Jan 03, 2023 at 05:05:11PM -0500, Sean Anderson wrote:
-> >  static int aqr107_get_rate_matching(struct phy_device *phydev,
-> >  				    phy_interface_t iface)
-> >  {
-> > -	if (iface == PHY_INTERFACE_MODE_10GBASER ||
-> > -	    iface == PHY_INTERFACE_MODE_2500BASEX ||
-> > -	    iface == PHY_INTERFACE_MODE_NA)
-> > -		return RATE_MATCH_PAUSE;
-> > -	return RATE_MATCH_NONE;
-> > +	static const struct aqr107_link_speed_cfg speed_table[] = {
-> > +		{
-> > +			.speed = SPEED_10,
-> > +			.reg = VEND1_GLOBAL_CFG_10M,
-> > +			.speed_bit = MDIO_PMA_SPEED_10,
-> > +		},
-> > +		{
-> > +			.speed = SPEED_100,
-> > +			.reg = VEND1_GLOBAL_CFG_100M,
-> > +			.speed_bit = MDIO_PMA_SPEED_100,
-> > +		},
-> > +		{
-> > +			.speed = SPEED_1000,
-> > +			.reg = VEND1_GLOBAL_CFG_1G,
-> > +			.speed_bit = MDIO_PMA_SPEED_1000,
-> > +		},
-> > +		{
-> > +			.speed = SPEED_2500,
-> > +			.reg = VEND1_GLOBAL_CFG_2_5G,
-> > +			.speed_bit = MDIO_PMA_SPEED_2_5G,
-> > +		},
-> > +		{
-> > +			.speed = SPEED_5000,
-> > +			.reg = VEND1_GLOBAL_CFG_5G,
-> > +			.speed_bit = MDIO_PMA_SPEED_5G,
-> > +		},
-> > +		{
-> > +			.speed = SPEED_10000,
-> > +			.reg = VEND1_GLOBAL_CFG_10G,
-> > +			.speed_bit = MDIO_PMA_SPEED_10G,
-> > +		},
-> > +	};
-> > +	int speed = phy_interface_max_speed(iface);
-> > +	bool got_one = false;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(speed_table) &&
-> > +		    speed_table[i].speed <= speed; i++) {
-> > +		if (!aqr107_rate_adapt_ok(phydev, speed, &speed_table[i]))
-> > +			return RATE_MATCH_NONE;
-> > +		got_one = true;
-> > +	}
+From: Daniel Vetter
+> Sent: 05 January 2023 14:13
+...
+> > > So here we are, with Andrzej looking to add the common helper. And the
+> > > same concerns crop up. What should it be called to make it clear that
+> > > it's not atomic? Is that possible?
+> >
+> > old_value = read_write(variable, new_value);
+> >
+> > But two statements are much clearer.
 > 
-> Trying to wrap my head around the API for rate matching that was
-> originally proposed and how it applies to what we read from Aquantia
-> registers now.
+> Yeah this is my point for fetch_and_zero or any of the other proposals.
+> We're essentially replacing these two lines:
 > 
-> IIUC, phylink (via the PHY library) asks "what kind of rate matching is
-> supported for this SERDES protocol?". It doesn't ask "via what kind of
-> rate matching can this SERDES protocol support this particular media
-> side speed?".
+> 	var = some->pointer->chase;
+> 	some->pointer->chase = NULL;
 > 
-> Your code walks through the speed_table[] of media speeds (from 10M up
-> until the max speed of the SERDES) and sees whether the PHY was
-> provisioned, for that speed, to use PAUSE rate adaptation.
-> 
-> If the PHY firmware uses a combination like this: 10GBASE-R/XFI for
-> media speeds of 10G, 5G, 2.5G (rate adapted), and SGMII for 1G, 100M
-> and 10M, a call to your implementation of
-> aqr107_get_rate_matching(PHY_INTERFACE_MODE_10GBASER) would return
-> RATE_MATCH_NONE, right? So only ETHTOOL_LINK_MODE_10000baseT_Full_BIT
-> would be advertised on the media side?
+> with a macro. C is verbose, and sometimes painfully so,
 
-No, beause of the special condition in phylink that if it's a clause 45
-PHY and we use something like 10GBASE-R, we don't limit to just 10G
-speed, but try all interface modes - on the assumption that the PHY
-will switch its host interface.
+Try ADA or VHDL :-)
 
-RATE_MATCH_NONE doesn't state anything about whether the PHY operates
-in a single interface mode or not - with 10G PHYs (and thus clause 45
-PHYs) it seems very common from current observations for
-implementations to do this kind of host-interface switching.
+> if the pointer
+> chase is really to onerous then I think that should be refactored with a
+> meaningfully locally name variable, not fancy macros wrapped around to
+> golf a few characters away.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Provided 'var' is a local the compiler is pretty likely to only do the
+'pointer chase' once.
+You can also do:
+	var = NULL;
+	swap(some->pointer->chase, var);
+and get pretty much the same object code.
+
+> But what about swap() you ask? That one needs a temp variable, and it does
+> make sense to hide that in a ({}) block in a macro.
+
+Sometimes, but not enough for the 'missed opportunity for swap()'
+message. 
+
+> But for the above two
+> lines I really don't see a point outside of obfuscated C contexts.
+
+Indeed.
+
+Isn't the suggested __xchg() in one of the 'reserved for implementation'
+namespaces - so shouldn't be a function that might be expected to be
+actually used.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
