@@ -2,75 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295B865F7E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFA265F7D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbjAEXvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S236006AbjAEXqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 18:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235896AbjAEXvN (ORCPT
+        with ESMTP id S235525AbjAEXqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:51:13 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403893C0CA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:51:13 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id w203so9898346pfc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 15:51:13 -0800 (PST)
+        Thu, 5 Jan 2023 18:46:05 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C9F5F8D
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:46:04 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id fz16-20020a17090b025000b002269d6c2d83so4641429pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 15:46:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6dUGG4xNbmHxqZEWk1QIkj1J4BmjM8dGcX1VYzdsWsY=;
-        b=AkF8e5fzAZ2VeUWgeccokzgmGMkI/xbhVuZWko5E+WUCvTbBhrEKmFzqLouhvH+mff
-         qSqo5/ZV3earTqKSCp3SucQw6ZEGAkuyiK3Va6Q3oXWSho1ztU5OiVZ3KGLnymu6SJyF
-         yJYorrv3G2fCSumBtEidADBhZh5crz739IbFEP5+7NCyC5U+LgwrtBXkkrYFbt2jOXWq
-         Y449etWueBSN1zELXIYwdt5uyRHikVqeb51i58uQwmdHeqEo3o44FSBxNW34TTRgo/m9
-         jJH9mwbhak1aC6v/2dJ4HHsUFY3j5uoPORWHh05YdVfKLqkVjjUuMV7nkiWOtRDGTt9L
-         MeDA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ixmy6mGcgoBkvJjym9GQ9iC/bNIzdQTH6bspDgeDvy4=;
+        b=GQGTpbZ8i0H+pQVuEFS/65Vxh3N38d3B8Qxa0GhO13fYdDKPLvvcDpThsjFzLgM3iN
+         HqqSkAojzTJ1ZyfI/h4Zf+xjZKbxsjbwWQnvxDePVyJWrCGpv9CFrDDTQBEsvMy/HxmT
+         X6Xrpxmz7XzHy8xBw1arDnEJJ7/R1G+IWVPzw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6dUGG4xNbmHxqZEWk1QIkj1J4BmjM8dGcX1VYzdsWsY=;
-        b=xLIF9oDuTo1E0NAqm7t1deVZxxBVW2sbcPXITske4XCj82sqrkPfdlGavvatBwjB8H
-         uYppn/7Kq6Wg8+Wy/BnN9tlDo5wOyNNOltJZy1mWwuAlvDbZQoNJ2g3/urHH9XtDaezd
-         qLYvibGsZLmwF/ziH/DSczDODX00+Yc53yQtvcrSHtcS0z2wkj5pLOwFCZ/1nqoAZoiR
-         Su5E7wD0MwjTxP+ItM2DC+b+yU1a/Zal6B/BwL6rMOr4FbJa0dtCmTVuoDyM/RldPFm8
-         vEegLRgzJ/EREnre0TFc9YeXmU/ruSuYVwmc14xsAY3w7VhDZZKpupFx8vjig0szwn2r
-         TGPg==
-X-Gm-Message-State: AFqh2kolousmTPXgwWAS1agQetND31zXu4veakj3oLZS+4TVD7J3OjID
-        1dJOWlhi8j0ppUal6a5lewzIBStFDL6n6At8WwC2JstJQwTP5XLwl2grHw==
-X-Google-Smtp-Source: AMrXdXvnfYaDhVS8foEMYOEQlITVPNRz/fxf/qtKT1wYa+88dUuBCAVEBsDcBAahaCKU6vtleoo7q7KppsH16zgzEeY=
-X-Received: by 2002:a05:6602:110:b0:6e9:a169:c879 with SMTP id
- s16-20020a056602011000b006e9a169c879mr3296848iot.99.1672962309821; Thu, 05
- Jan 2023 15:45:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ixmy6mGcgoBkvJjym9GQ9iC/bNIzdQTH6bspDgeDvy4=;
+        b=x0nymAl/143IHyxZmCaz9f/qU+Y0uV3dZutSiip1RTKdNwqCs6JpvWZL6Q7HLqDqOC
+         qLaDjCpQThnsFZKd4QCMPaT72uMpm6K7vHd/WzGg2fWj+nNYllRizX/GKNNdNnFMI5sm
+         mrYXP0arlNeWGJrkHs96YpAJ33PjqFgPqsmWrcYv3CdzSyL+jWhBDSowogT+UdHTvWu2
+         Xwn9mN3Kac4KRK4kPlXu/1Y8Q/RCzCj3odE+IhXcmpBcZ8+Ayxj9rIL3ojWy1zo7Gnu0
+         jyPPiiW1W0MfgqGmzXJL/boT7pZive5LigH11Mb5oo5p7wwj0L5BYrCMmPwKwsUtVHb5
+         VB4Q==
+X-Gm-Message-State: AFqh2kqWcjFB+5VjbJJZ5YuvEPgLucZZUZiU6Ks1j8A2tt7/X2Dclacp
+        OG1zSGqkr9DMx0wKtXtKnuEd0A==
+X-Google-Smtp-Source: AMrXdXsQ29gxsjUu8TwAEiufSQwno9s8pvZUaHEdBElLVjiWT9haDQNYooObacLrznyAr376FCbTXg==
+X-Received: by 2002:a17:902:8698:b0:193:a5b:ccf6 with SMTP id g24-20020a170902869800b001930a5bccf6mr1196588plo.0.1672962364271;
+        Thu, 05 Jan 2023 15:46:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170903018500b0019258bcf3ffsm26402243plg.56.2023.01.05.15.46.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 15:46:03 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] net/i40e: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 15:46:01 -0800
+Message-Id: <20230105234557.never.799-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a92:c147:0:b0:304:bdf2:e728 with HTTP; Thu, 5 Jan 2023
- 15:45:09 -0800 (PST)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <mcaitlin9999@gmail.com>
-Date:   Fri, 6 Jan 2023 00:45:09 +0100
-Message-ID: <CAPfBHRZD4pVvik6GendF69T3qA4ykoMKDEioXBhGmcT6ACQgxw@mail.gmail.com>
-Subject: From Dr Ava Smith in United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1893; h=from:subject:message-id; bh=7oqp1H8bnjca8UKRWJizcoup+xvwTPIAvLIjStmgIhg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt2E5B/QBFZKrXqubEBxJWkonAnCaVOq5GJ3FscS0 OD9vd36JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dhOQAKCRCJcvTf3G3AJlTVD/ 4hn023GoXsD0/jMdOjvZG3DjtedIRTLFclHpsVnAfKSEwTg9hkk/Z6AHKcCC/WsDyxnUfMCXmW5jZz 8ziYYoZzJHtBy0M7wBUgzgxwdH9sOgg94Qj9AEj/ovDnfjJNMSSrorxm/PJre/U+RT3Hb9X3/W09I1 Y1xRSvrO5TTjHUAOP90f7bnvp5A0BQ6uQ3RL6C0eOxSTcrVxhrv4pJiGYpRqW+xAa6dPkuYnw+zzwl 0ItMswnDOsTQytcjgtcPqRqw7pmH5vzyGRzwkVo5V2TnNt3skeKNBMTfxnXrF6yOE1AMbun+X6rNzY R2XlShoDgfUIYEb7VF96k2Vwg9mF8fM+g0jC2iZjqmERyDj1Mnqu6s145AMUOv+z2LNUS3LvvF5xZr 4+zoKrc14NELHWb1CZ6lCgBz/uyc9K6vGWTGTvLV080sqUd54uqJ00veOOAZRLij6afsCdGiiIzkZD H3Q860ipa63ykgKuAmxBGCuEyaWmzWO8NAyLN42H/gqOsV8Ydo7hpyWDOlDr8rvzmsq7XsZuMyLVib CXLtVIl18PrWLD4XpRayzh2gnMiIVnii32h496olyVC6QmZ9KKmM3zEhhoWojrFNclPf/HdZr4V+5x gtdYTagMrjmZ0n/yK08TAFqvMorhfXCKn5GqRMGQ90A5mg4MbO3wFzI/L8VA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Zero-length arrays are deprecated[1]. Replace struct i40e_lump_tracking's
+"list" 0-length array with a flexible array. Detected with GCC 13,
+using -fstrict-flex-arrays=3:
+
+In function 'i40e_put_lump',
+    inlined from 'i40e_clear_interrupt_scheme' at drivers/net/ethernet/intel/i40e/i40e_main.c:5145:2:
+drivers/net/ethernet/intel/i40e/i40e_main.c:278:27: warning: array subscript <unknown> is outside array bounds of 'u16[0]' {aka 'short unsigned int[]'} [-Warray-bounds=]
+  278 |                 pile->list[i] = 0;
+      |                 ~~~~~~~~~~^~~
+drivers/net/ethernet/intel/i40e/i40e.h: In function 'i40e_clear_interrupt_scheme':
+drivers/net/ethernet/intel/i40e/i40e.h:179:13: note: while referencing 'list'
+  179 |         u16 list[0];
+      |             ^~~~
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: intel-wired-lan@lists.osuosl.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/intel/i40e/i40e.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/i40e/i40e.h b/drivers/net/ethernet/intel/i40e/i40e.h
+index 60e351665c70..3a1c28ca5bb4 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e.h
++++ b/drivers/net/ethernet/intel/i40e/i40e.h
+@@ -176,7 +176,7 @@ enum i40e_interrupt_policy {
+ 
+ struct i40e_lump_tracking {
+ 	u16 num_entries;
+-	u16 list[0];
++	u16 list[];
+ #define I40E_PILE_VALID_BIT  0x8000
+ #define I40E_IWARP_IRQ_PILE_ID  (I40E_PILE_VALID_BIT - 2)
+ };
 -- 
-Hello Dear,
-My name is Dr Ava Smith.Am an English and French nationalities.
-I will be waiting to get a response from you so i can tell you more
-about my self and share so some photos too.
-Thanks
-Ava
+2.34.1
+
