@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7729C65EE77
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CF665EE7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbjAEOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S234104AbjAEOMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbjAEOLc (ORCPT
+        with ESMTP id S234091AbjAEOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:11:32 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D654737
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:11:32 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so2103986pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:11:32 -0800 (PST)
+        Thu, 5 Jan 2023 09:11:59 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEC851310
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:11:55 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id e10so10674058pgc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:11:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=scylladb.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KI88ddFjWKkuzUOtDfBNJeuHrq8LZ9xQwEmrI18ahQs=;
-        b=BOGgzGnWyZJLBdQXhLHwWy0IskfokqvbD02y+h83alCNPRx6k5voX92lS9WTcJEGai
-         GF3pQ97xddFkg3pqTNXXsxHTZqwKevz+83E4rB8LCEN87i/fnpVe7yDI2liJNMqLURhP
-         o/k0muKEP+LoTQJIeywSZH0r8v9HdYg0ACI7W/6RvA9SAjgxd1nTJfVryCE43vvWKdZD
-         uUKbqaX2gp/pAAEnR9NWWBGMe6J6tSRgsNk3r1iE2SwnkNLODrd/CHCxYl8u9EArzcjt
-         2lPoDchqj7UNSUwxgZbQmiu0iDi6eWEo5dT/7OnysYPuScY+y1AFP6Vhb/mhMZ1wenrD
-         HbwQ==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JoOKD3fhvjltOz/BKivLTcbhttDC/bdQobavcXcDp9Q=;
+        b=gAzUJJZY5TesWCbvlLm0Nvx5S8CWI/OFNcWGJRSXMa4u88qBLtq5Z57hlmLeVUiUXT
+         Q8qjI/S0cMW9p8VYrieFiq0UGy5hnC86U+wYcFYymtPtgcdR/0SMbf0iXhDaBCaYTWVM
+         6EV941rjN0MvpnXmnAsYcu+KRfPbRLXLKs5RFKov6UP4Z/rLlMqHNZTWzc0GjfGZ98vL
+         7bK6FnyecXCpEKUA/oLqjRvQgzrsb270C9MAuES3bQRVOJIjEaB8QihVyc4pLscEdypU
+         yNTS7dDPW3Idv+LDW+1kKfPZSvzqYRKttpcOuTb5lR7YyW8LbbVVpp2tQm+NbqpazAAB
+         xKIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KI88ddFjWKkuzUOtDfBNJeuHrq8LZ9xQwEmrI18ahQs=;
-        b=tsLYlDVz9QIFl8K0roJ3/FTCZKwjE1d591WOSK7pv9JOgCj/hW93o+TctmTlieD/RH
-         7gNS+/0HcdFAslvCDfx76NFnE3EIlXP6fVoalLroM1MlI8e2f+0gZzE0W94Z6mwv2P1Z
-         zkrje4nYn46Ot7awxIORTfdgR2dPzfgReKp/2GB4QATzT5Uvo7j1k5BtID0gCwcPsq+4
-         N9h0G9DaceOqMO3BY8HHMZkF9CChZi38x5dxE8HTtux7Og521L98OEuHNY8hj/FezfmH
-         ukj4SNhcnRa1u8M2PM73NC6HhOGOeiROaKiwtZuT9UUo+Yizd8HEohf+KKJ+5V0KzHQ6
-         60UQ==
-X-Gm-Message-State: AFqh2koRoJWb1M/3og6pYfV9ZcE3XUhDGQ+tLwoNkZmtEoniw5rI84qq
-        v8Ino0qoLHpNeiCSRk1Pj8LyqI/9E2f9oWzGLbr9xWJss9O0It6x0/Q4f/XVCc+2laHiu9gQZPR
-        sauB8r/67F9l7x2g4xOiAEpENjjPOV2ZEyh4NEXF5Y+ukkBpF/kQnm0OE4eEKsrLOPilfZjJF4J
-        rBSDEhy5Jg7qAqMwol0XIkE6h+abKBVdJrqJUJ6e4qssWSMVIXGNIQTvbrPVb5xMbhOg==
-X-Google-Smtp-Source: AMrXdXs5UKVr9jYZzc/+xjXnT4UCr8Egwru9kdoZ1vXCxoIda0jQI/0KfN3UhAG1UmQcXsftQ24R1nbKCue9k/U3gGk=
-X-Received: by 2002:a17:902:c245:b0:192:6195:44cd with SMTP id
- 5-20020a170902c24500b00192619544cdmr3725829plg.126.1672927891556; Thu, 05 Jan
- 2023 06:11:31 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JoOKD3fhvjltOz/BKivLTcbhttDC/bdQobavcXcDp9Q=;
+        b=cMHY7S6bnb4rKKWU8lwC9jLHb8xJ4OLNDysX5rZocUVP6yTCxZ0sKIji/v1tcPotWY
+         o5sCKnKbkvL7B495juIcJ/CcZKTdEK5UbhsYHjZy8aWTjQnJNN9LbeGjFRYgQ7N7dPUl
+         TxHYPR4su61tuhjMGcDXJpdKk+tiiycorEr1L7AOPgryQvBsx9LwbU2xVJNykD1RuQDu
+         KS/FtxFBk+zS0I6QSVd5/caW7UAg913QOycI5mM9/Ps5YWq3W6lmdVYRLvdYG6WBH9Y8
+         8Qa2+y+f7q4behbtP/mSjAI8oebgGl8ezHQyn91/BIaXG+vao5n9NGr1fSuAyoIFzANf
+         LTvg==
+X-Gm-Message-State: AFqh2kp2cAIkL8GcJkl6Xsizy012dSXQhWA9vIOLxt0dH5vxST2B9y3B
+        mDfwTnxsbdV2EKXk+Z6Ntg5yXA==
+X-Google-Smtp-Source: AMrXdXt6ixVFYcF7JJc/xVT+7SfOpce9UgPPB+H+PfeNMBECoEDdXUIxAj9b40GeUTZxLY9XysPaXQ==
+X-Received: by 2002:a05:6a00:c5:b0:582:6173:c6c5 with SMTP id e5-20020a056a0000c500b005826173c6c5mr18357064pfj.14.1672927914729;
+        Thu, 05 Jan 2023 06:11:54 -0800 (PST)
+Received: from localhost (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id f76-20020a62384f000000b005810a54fdefsm20048453pfa.114.2023.01.05.06.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 06:11:54 -0800 (PST)
+Date:   Thu, 5 Jan 2023 15:11:51 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Taku Izumi <izumi.taku@jp.fujitsu.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2] fjes: Fix an error handling path in
+ fjes_probe()
+Message-ID: <Y7bap08pgqs1LL48@nanopsycho>
+References: <a294f5f3af7e29212a27cc7d17503fba346266b5.1672864635.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1> <Y7bT0OL8RAWkCu0Z@kroah.com>
-In-Reply-To: <Y7bT0OL8RAWkCu0Z@kroah.com>
-From:   "Raphael S. Carvalho" <raphaelsc@scylladb.com>
-Date:   Thu, 5 Jan 2023 11:11:15 -0300
-Message-ID: <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
-Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Pavel Boldin <pboldin@cloudlinux.com>,
-        Pavel Boldin <boldin.pavel@gmail.com>,
-        Moritz Lipp <github@mlq.me>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Michael Schwarz <michael.schwarz91@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-CLOUD-SEC-AV-Sent: true
-X-CLOUD-SEC-AV-Info: scylladb,google_mail,monitor
-X-Gm-Spam: 0
-X-Gm-Phishy: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a294f5f3af7e29212a27cc7d17503fba346266b5.1672864635.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 10:42 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+Wed, Jan 04, 2023 at 09:40:47PM CET, christophe.jaillet@wanadoo.fr wrote:
+>free_netdev() already calls netif_napi_del(), no need to call it
+>explicitly.
+>It's harmless, but useless.
 >
-> On Thu, Jan 05, 2023 at 08:35:05PM +0800, Aaron Lu wrote:
-> > To capture potential programming errors like mistakenly setting Global
-> > bit on kernel page table entries, a selftest for meltdown is added.
-> >
-> > This selftest is based on Pavel Boldin's work at:
-> > https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c
-> >
-> > In addition to the existing test of reading kernel variable
-> > saved_command_line from user space, one more test of reading user local
-> > variable through kernel direct map address is added. For the existing
-> > test(reading saved_command_line) to report a failure, both the high kernel
-> > mapping and low kernel mapping have to be in leaked state; For the added
-> > test(read local var), only low kernel mapping leak is enough to trigger
-> > a test fail, so both tests are useful.
-> >
-> > Test results of 10 runs:
-> >
-> > On v6.1-rc8 with nopti kernel cmdline option:
-> >
-> > host              test_out_rate_1    test_out_rate_2
-> > lkp-bdw-de1            50%               100%
-> > lkp-hsw-d01            70%               100%
-> > lkp-hsw-d02             0%                80%
-> > lkp-hsw-d03            60%               100%
-> > lkp-hsw-d04            20%               100%
-> > lkp-hsw-d05            60%               100%
-> > lkp-ivb-d01             0%                70%
-> > lkp-kbl-d01           100%               100%
-> > lkp-skl-d02           100%                90%
-> > lkp-skl-d03            90%               100%
-> > lkp-skl-d05            60%               100%
-> > kbl-vm                100%                80%
-> > 2 other machines have 0% rate for both tests.
-> >
-> > bdw=broadwell, hsw=haswell, ivb=ivybridge, etc.
-> >
-> > test_out_rate_1: test reports fail rate for the test of reading
-> > saved_command_line from user space;
-> > test_out_rate_2: test reports fail rate for the test of reading user
-> > local variable through kernel direct map address in user space.
-> >
-> > On v5.19 without nopti cmdline option:
-> > host              test_out_rate_2
-> > lkp-bdw-de1            80%
-> > lkp-hsw-4ex1           50%
-> > lkp-hsw-d01            30%
-> > lkp-hsw-d03            10%
-> > lkp-hsw-d04            10%
-> > lkp-kbl-d01            10%
-> > kbl-vm                 80%
-> > 7 other machines have 0% rate for test2.
-> >
-> > Also tested on an i386 VM with 512M memory and the test out rate is 100%
-> > when adding nopti to kernel cmdline with v6.1-rc8.
-> >
-> > Main changes I made from Pavel Boldin's meltdown test are:
-> > - Replace rdtscll() and clflush() with kernel's implementation;
-> > - Reimplement find_symbol_in_file() to avoid bringing in LTP's library
-> >   functions;
-> > - Coding style changes: placing the function return type in the same
-> >   line of the function.
-> >
-> > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
-> > ---
-> > Notable changes from RFC v3:
-> > - Drop RFC tag;
-> > - Change the base code from zlib licensed one to GPL licensed one.
+>Remove the call, make the  error handling path of the probe and the remove
+>function be consistent one with the other.
 >
-> Sorry, but this still gets my NAK for the issues raised in previous
-> reviews that are not addressed here for some reason :(
+>Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Greg, the selftest is no longer based on
-https://github.com/IAIK/meltdown/blob/master/LICENSE, which is
-originally zlib licensed. In this version, Aaron is basing the test on
-https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c,
-which is indeed licensed with: GPL-2.0-or-later
-
->
-> greg k-h
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
