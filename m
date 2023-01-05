@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ECC65EDB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134EE65EDC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbjAENrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S233857AbjAENsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbjAENrP (ORCPT
+        with ESMTP id S233685AbjAENrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 08:47:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB69C3F10C;
-        Thu,  5 Jan 2023 05:47:13 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46A13D9DF;
+        Thu,  5 Jan 2023 05:47:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B88EB81AD7;
-        Thu,  5 Jan 2023 13:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E9FC433D2;
-        Thu,  5 Jan 2023 13:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6474E61A8D;
+        Thu,  5 Jan 2023 13:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30FCC433F0;
+        Thu,  5 Jan 2023 13:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926431;
-        bh=py+J7Io7igGLkvTKhQuQwnmjg68rvRYi5ZkHo5Gcwck=;
+        s=k20201202; t=1672926433;
+        bh=5PvMVJ+De8GLNJxPP8DhyDrpZdidR1+tQOfU9i8T7uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NNR50j4X56it5NK2HPfvo4WLzgECROMps0deXNlkrJctv0s5PCTpf3eLmbIxtaTLD
-         uloOhvOnkqHAAtK2sx4Rc8g6IOsyWVAi5XiOFF6neO9LqqAjZo92F0LGzbSufGRAqj
-         nY5fQlP/u5WiEgo6iFTuU/4qnySn8q7Pf6x3doe0f4UKB2obKxXi25qk/tL1tf/NM4
-         owV2kzbi9wlinVjGWF12sk8ZR8Gym5HyDNtHIe+nWQxhDxOKRFYF9cDoDuGfMhcrYZ
-         MmDrTAU32HyQCUTT6b57KPnV62yiePUmdQbytuj7IK/gUJV6oMMLPMkOp4k+Sf18Uy
-         RZ1wR4+XuCUHw==
+        b=mw2+yIKhRrAXQmrCfUNpEWl94azK5I8+iqKBydGYHk6o8kfI9128IY5wVCjdKXECL
+         MIXqh5QuXse6XkGENWc+s0wE2bX2PGpJGRmUSQvFOssPorPiCVEYRvwiNckBiQOdMw
+         izgrWrne5+bC2HqNibiwNwCRC2ure4/a3NKFRvo6zG2cVhwlNuAQK5nFtQ9Uz6W/F/
+         wWSlXfjh/uhQkTS8z4yslaNUUy8k84l3w77B+aI1g66t1xG9qDIsmjabHcucEMYI6u
+         zStpYC6bU6u67G/oYY2WWYuUrbCl+8CQNy8g0y860hizA669dc4dmyki4HVmI8h3sj
+         9+iNFhARVcdCg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
@@ -39,10 +39,10 @@ Cc:     Daniel Mack <daniel@zonque.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: [PATCH 11/27] input: remove pxa930_rotary keyboard driver
-Date:   Thu,  5 Jan 2023 14:46:06 +0100
-Message-Id: <20230105134622.254560-12-arnd@kernel.org>
+        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org
+Subject: [PATCH 12/27] input: remove zylonite touchscreen driver
+Date:   Thu,  5 Jan 2023 14:46:07 +0100
+Message-Id: <20230105134622.254560-13-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -59,59 +59,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The pxa930 platform is getting removed and no upstream machine
-ever defined a rotary keyboard device.
+The PXA zylonite platform was removed, so this driver has no
+remaining users.
 
 Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
 Cc: linux-input@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/input/keyboard/Kconfig                |   9 -
- drivers/input/keyboard/Makefile               |   1 -
- drivers/input/keyboard/pxa930_rotary.c        | 195 ------------------
- .../platform_data/keyboard-pxa930_rotary.h    |  21 --
- 4 files changed, 226 deletions(-)
- delete mode 100644 drivers/input/keyboard/pxa930_rotary.c
- delete mode 100644 include/linux/platform_data/keyboard-pxa930_rotary.h
+ drivers/input/touchscreen/Kconfig           |  14 --
+ drivers/input/touchscreen/Makefile          |   1 -
+ drivers/input/touchscreen/zylonite-wm97xx.c | 220 --------------------
+ 3 files changed, 235 deletions(-)
+ delete mode 100644 drivers/input/touchscreen/zylonite-wm97xx.c
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 5d481847d718..d98650426dc2 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -550,15 +550,6 @@ config KEYBOARD_PXA27x
+diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
+index 5abb45ea1b1b..ca00f55eaf45 100644
+--- a/drivers/input/touchscreen/Kconfig
++++ b/drivers/input/touchscreen/Kconfig
+@@ -928,20 +928,6 @@ config TOUCHSCREEN_WM97XX_MAINSTONE
  	  To compile this driver as a module, choose M here: the
- 	  module will be called pxa27x_keypad.
+ 	  module will be called mainstone-wm97xx.
  
--config KEYBOARD_PXA930_ROTARY
--	tristate "PXA930/PXA935 Enhanced Rotary Controller Support"
--	depends on CPU_PXA930 || CPU_PXA935
+-config TOUCHSCREEN_WM97XX_ZYLONITE
+-	tristate "Zylonite accelerated touch"
+-	depends on TOUCHSCREEN_WM97XX && MACH_ZYLONITE
+-	depends on SND_PXA2XX_LIB_AC97
+-	select TOUCHSCREEN_WM9713
 -	help
--	  Enable support for PXA930/PXA935 Enhanced Rotary Controller.
+-	  Say Y here for support for streaming mode with the touchscreen
+-	  on Zylonite systems.
+-
+-	  If unsure, say N.
 -
 -	  To compile this driver as a module, choose M here: the
--	  module will be called pxa930_rotary.
+-	  module will be called zylonite-wm97xx.
 -
- config KEYBOARD_PMIC8XXX
- 	tristate "Qualcomm PMIC8XXX keypad support"
- 	depends on MFD_PM8XXX
-diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-index 5ccfdf5c0222..aecef00c5d09 100644
---- a/drivers/input/keyboard/Makefile
-+++ b/drivers/input/keyboard/Makefile
-@@ -54,7 +54,6 @@ obj-$(CONFIG_KEYBOARD_OPENCORES)	+= opencores-kbd.o
- obj-$(CONFIG_KEYBOARD_PINEPHONE)	+= pinephone-keyboard.o
- obj-$(CONFIG_KEYBOARD_PMIC8XXX)		+= pmic8xxx-keypad.o
- obj-$(CONFIG_KEYBOARD_PXA27x)		+= pxa27x_keypad.o
--obj-$(CONFIG_KEYBOARD_PXA930_ROTARY)	+= pxa930_rotary.o
- obj-$(CONFIG_KEYBOARD_QT1050)           += qt1050.o
- obj-$(CONFIG_KEYBOARD_QT1070)           += qt1070.o
- obj-$(CONFIG_KEYBOARD_QT2160)		+= qt2160.o
-diff --git a/drivers/input/keyboard/pxa930_rotary.c b/drivers/input/keyboard/pxa930_rotary.c
+ config TOUCHSCREEN_USB_COMPOSITE
+ 	tristate "USB Touchscreen Driver"
+ 	depends on USB_ARCH_HAS_HCD
+diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
+index 3bc2a47c489c..7053fede594e 100644
+--- a/drivers/input/touchscreen/Makefile
++++ b/drivers/input/touchscreen/Makefile
+@@ -107,7 +107,6 @@ wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9705)	+= wm9705.o
+ wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9712)	+= wm9712.o
+ wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9713)	+= wm9713.o
+ obj-$(CONFIG_TOUCHSCREEN_WM97XX_MAINSTONE)	+= mainstone-wm97xx.o
+-obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
+ obj-$(CONFIG_TOUCHSCREEN_SX8654)	+= sx8654.o
+ obj-$(CONFIG_TOUCHSCREEN_TPS6507X)	+= tps6507x-ts.o
+ obj-$(CONFIG_TOUCHSCREEN_ZET6223)	+= zet6223.o
+diff --git a/drivers/input/touchscreen/zylonite-wm97xx.c b/drivers/input/touchscreen/zylonite-wm97xx.c
 deleted file mode 100644
-index 2fe9dcfe0a6f..000000000000
-diff --git a/include/linux/platform_data/keyboard-pxa930_rotary.h b/include/linux/platform_data/keyboard-pxa930_rotary.h
-deleted file mode 100644
-index 3271aa01cbe8..000000000000
+index a70fe4abe520..000000000000
 -- 
 2.39.0
 
