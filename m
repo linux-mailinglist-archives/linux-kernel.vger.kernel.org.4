@@ -2,201 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944D865F3E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788B565F3DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbjAESjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        id S235260AbjAESjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbjAESjQ (ORCPT
+        with ESMTP id S235088AbjAESjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:39:16 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E985F49E;
-        Thu,  5 Jan 2023 10:39:05 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-14fb7fdb977so37217913fac.12;
-        Thu, 05 Jan 2023 10:39:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N0AB2x4qCilYXNN66qpiEjklcJr+ewmZBA/9Mtvh7+Y=;
-        b=I4ymJC1LD9APlEXUMwtIT5TECUDlW7u6vpX4qge/EmRQCdkmAn1/3oUo+qWYty0Jl3
-         hpoVUsUfASLZibDOcVc3ATfFV6UXHb4bd8N2mplIrS2KAKUtiM/OHl1TGgaWwVCu7Ewo
-         E3thvCUbT5deEYkDzGiwVRnXFcJADeFJ6x6iRlyJ0DWFnjZiTuhOpVqSh3L7CbqeBcc9
-         AAP2lOCt2xwkPAa73EC5hAn64oI4y98ZRvAQtOCwUV8iS1wSTbjc5J1bWX3cWk1bWNrb
-         hZnrtafaaFAjqk5B+5WK9KePsCJjrB1q8wtPwu6y5U079El0JREX790ToHxPEaQvdLUC
-         hZKg==
+        Thu, 5 Jan 2023 13:39:07 -0500
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A47658822;
+        Thu,  5 Jan 2023 10:39:01 -0800 (PST)
+Received: by mail-pj1-f50.google.com with SMTP id q64so2304262pjq.4;
+        Thu, 05 Jan 2023 10:39:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N0AB2x4qCilYXNN66qpiEjklcJr+ewmZBA/9Mtvh7+Y=;
-        b=nOH1zMfbMcVX6bSC/HVmZU6TNgvO4YLdEqH2GepD+xGbVoY/Z+5Rympy22l5vJqVKD
-         4o6FUKmsgmqIbt9cwHjaQ5Nm7u7fVD4grudRm8UNh4iNKCOvF8hMCVPQQDZvXorbxwcp
-         PfxltPikrE9FB4SHoXL8a+j/thIHSLaSMaG4FCLG8Nbo7B1Ea2UwGGYIXSh9bNwMkepJ
-         mxSWWuKE+S455x2RyVMlonA2+c8iKGt90MiBJxbFGwvybH5ri8zOw1Kc70tL7HF+07ff
-         eYsy77/FhT7hvG487sUyMWePS8Gd82RHZcFL7MAYwpAakd/D7/jU3QkhsumFk2mMOfyk
-         E3SQ==
-X-Gm-Message-State: AFqh2kouzwqJpBjPoG2Xrc5gTXGa5LVTPkIQ2rHOv8gvg47I2ndCtOWm
-        KCL7TYeTkLxfJk4aj/fc9AMnPpNdumf2Cfzt2iU=
-X-Google-Smtp-Source: AMrXdXsdMfEt5J885g1j3Ot5GIl62/nRUiRrClg26yZH58s7d8RhcsuMZq2Q3v4IZVgAMMy7VsYYTksCGBjAyZF+/Gg=
-X-Received: by 2002:a05:6870:1706:b0:144:dffd:8302 with SMTP id
- h6-20020a056870170600b00144dffd8302mr4104835oae.146.1672943945260; Thu, 05
- Jan 2023 10:39:05 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6z58OIH54ss9cN62GyLhaIjgexylm6sw14uIEBRIwWs=;
+        b=zXpoZeXA3/ahCbiHHNwzsWN4kLqTYNGUbh3iJVxnEo18G7Ypy/IyyohsBEVIHiHmr9
+         kekNVBTs1o8kmpYekuYm6mQ0QmeYyzC7iLk+UhuBlmSQSH4jOCHvn2W1+N1PqV0LxkJu
+         fOszP2a2A3OyH7ojHBAvDrryiwZdm0NlcUwQb29XCpKkHeuJziXvV9GV5yG2drXN/vac
+         PNIICWVNtAxMjrj+6nQk1UhRMpD40iA+e++zwFKq3bcx7A+CpPXwYoIjjCe4999mrWSL
+         KEVv4l4IqKXewYFLw+Ge2G8iedL/QP2Zf/tN9I08odhYSBzG5LCgeWQ45MKZJSzwUj9N
+         04TA==
+X-Gm-Message-State: AFqh2kro7BoHxO8DSEQD+0wGHl8tstKzOhOtzC61H2Mc4wIPEStYe6U2
+        5HtPrcT0rM2t/aSRibfZ8o0=
+X-Google-Smtp-Source: AMrXdXuuDIwImr2AW4/8U7pEe9cDrH/4IUfr35rdJ/vKQ5tn+g3Eex2Pqs8cXFI/4iePpMvHBDAOsg==
+X-Received: by 2002:a17:90a:4804:b0:220:bad8:b4e7 with SMTP id a4-20020a17090a480400b00220bad8b4e7mr57715911pjh.7.1672943940910;
+        Thu, 05 Jan 2023 10:39:00 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:f9eb:49b6:75b:111e? ([2620:15c:211:201:f9eb:49b6:75b:111e])
+        by smtp.gmail.com with ESMTPSA id k60-20020a17090a14c200b00225bc0e5f19sm1668520pja.1.2023.01.05.10.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 10:39:00 -0800 (PST)
+Message-ID: <349e3564-10d4-9429-93d2-7bb639253fc2@acm.org>
+Date:   Thu, 5 Jan 2023 10:38:58 -0800
 MIME-Version: 1.0
-References: <20221230063528.41037-1-zh.nvgt@gmail.com> <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
- <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com> <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
-In-Reply-To: <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
-From:   Hang Zhang <zh.nvgt@gmail.com>
-Date:   Thu, 5 Jan 2023 13:38:54 -0500
-Message-ID: <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com>
-Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with console_lock()
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] scsi: ufs: core: fix devfreq deadlocks
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Can Guo <quic_cang@quicinc.com>
+References: <20221222102121.18682-1-johan+linaro@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20221222102121.18682-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 5:25 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > Hi Helge
-> >
-> > On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
-> > >
-> > > On 12/30/22 07:35, Hang Zhang wrote:
-> > > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
-> > > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
-> > > > con2fb_release_oldinfo(), this free operation is protected by
-> > > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
-> > > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
-> > > > so that it can be checked to avoid use-after-free before the use sites
-> > > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
-> > > > the problem is that the use site is not protected by the same locks
-> > > > as for the free operation, e.g., "default" case in do_fb_ioctl()
-> > > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
-> > > > which can invalidate the aforementioned state set and check in a
-> > > > concurrent setting.
-> > > >
-> > > > Prevent the potential use-after-free issues by protecting the "default"
-> > > > case in do_fb_ioctl() with console_lock(), similarly as for many other
-> > > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
-> > > >
-> > > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
-> > >
-> > > applied to fbdev git tree.
-> >
-> > The patch above makes no sense at all to me:
-> >
-> > - fb_info is protected by lock_fb_info and
-> > - the lifetime of fb_info is protected by the get/put functions
-> > - yes there's the interaction with con2fb, which is protected by
-> > console_lock, but the lifetime guarantees are ensured by the device
-> > removal
-> > - which means any stuff happening in matroxfb_remove is also not a
-> > concern here (unless matroxfb completely gets all the device lifetime
-> > stuff wrong, but it doesn't look like it's any worse than any of the
-> > other fbdev drivers that we haven't recently fixed up due to the
-> > takeover issues with firmware drivers
->
-> I have also a really hard timing finding the con2fb map use in the
-> matroxfb ioctl code, but that just might be that I didn't look
-> carefully enough. Maybe that would shed some light on this.
-> -Daniel
->
->
-> >
-> > On the very clear downside this now means we take console_lock for the
-> > vblank ioctl (which is a device driver extension for reasons, despite
-> > that it's a standard fbdev ioctl), which is no good at all given how
-> > console_lock() is a really expensive lock.
-> >
-> > Unless I'm massively missing something, can you pls push the revert
-> > before this lands in Linus' tree?
-> >
-> > Thanks, Daniel
+On 12/22/22 02:21, Johan Hovold wrote:
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index bda61be5f035..5c3821b2fcf8 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -1234,12 +1234,14 @@ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba)
+>   	 * clock scaling is in progress
+>   	 */
+>   	ufshcd_scsi_block_requests(hba);
+> +	mutex_lock(&hba->wb_mutex);
+>   	down_write(&hba->clk_scaling_lock);
+>   
+>   	if (!hba->clk_scaling.is_allowed ||
+>   	    ufshcd_wait_for_doorbell_clr(hba, DOORBELL_CLR_TOUT_US)) {
+>   		ret = -EBUSY;
+>   		up_write(&hba->clk_scaling_lock);
+> +		mutex_unlock(&hba->wb_mutex);
+>   		ufshcd_scsi_unblock_requests(hba);
+>   		goto out;
+>   	}
+> @@ -1251,12 +1253,16 @@ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba)
+>   	return ret;
+>   }
 
-Hi, Daniel. Thank you for your feedback. We're not developers of the
-video subsystem and thus may be short in domain knowledge (e.g., the
-performance of console_lock() and the complex lifetime management).
-This patch initially intended to bring up the potential use-after-free
-issues here to the community - we have performed a best-effort code
-review and cannot exclude the possibility based on our understanding.
+Please add an __acquires(&hba->wb_mutex) annotation for sparse.
 
-What we have observed is that the call chain leading to the free site
-(do_fb_ioctl()->fbcon_set_con2fb_map_ioctl()->set_con2fb_map()->
-con2fb_release_oldinfo()-> ... ->matroxfb_remove()) is only protected
-by console_lock() but not lock_fb_info(), while the potential use
-site (call chain starts from the default case in do_fb_ioctl()) is
-only protected by lock_fb_info() but not console_lock().
-We thus propose to add this extra console_lock() to the default case,
-which is inspired by the lock protection of many other existing
-switch-case terms in the same function.
+> -static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
+> +static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool scale_up)
+>   {
+> -	if (writelock)
+> -		up_write(&hba->clk_scaling_lock);
+> -	else
+> -		up_read(&hba->clk_scaling_lock);
+> +	up_write(&hba->clk_scaling_lock);
+> +
+> +	/* Enable Write Booster if we have scaled up else disable it */
+> +	if (ufshcd_enable_wb_if_scaling_up(hba))
+> +		ufshcd_wb_toggle(hba, scale_up);
+> +
+> +	mutex_unlock(&hba->wb_mutex);
+> +
+>   	ufshcd_scsi_unblock_requests(hba);
+>   	ufshcd_release(hba);
+>   }
 
-Since we do not have deep domain knowledge of this subsystem, we will
-rely on the developers to make a decision regarding the patch. Thank
-you again for your review and help!
+Please add a __releases(&hba->wb_mutex) annotation for sparse.
 
-Best,
-Hang
+> @@ -1273,7 +1279,6 @@ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
+>   static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+>   {
+>   	int ret = 0;
+> -	bool is_writelock = true;
+>   
+>   	ret = ufshcd_clock_scaling_prepare(hba);
+>   	if (ret)
+> @@ -1302,15 +1307,8 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+>   		}
+>   	}
+>   
+> -	/* Enable Write Booster if we have scaled up else disable it */
+> -	if (ufshcd_enable_wb_if_scaling_up(hba)) {
+> -		downgrade_write(&hba->clk_scaling_lock);
+> -		is_writelock = false;
+> -		ufshcd_wb_toggle(hba, scale_up);
+> -	}
+> -
+>   out_unprepare:
+> -	ufshcd_clock_scaling_unprepare(hba, is_writelock);
+> +	ufshcd_clock_scaling_unprepare(hba, scale_up);
+>   	return ret;
+>   }
 
-> >
-> > > Thanks,
-> > > Helge
-> > >
-> > > > ---
-> > > >   drivers/video/fbdev/core/fbmem.c | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-> > > > index 1e70d8c67653..8b1a1527d18a 100644
-> > > > --- a/drivers/video/fbdev/core/fbmem.c
-> > > > +++ b/drivers/video/fbdev/core/fbmem.c
-> > > > @@ -1182,6 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
-> > > >               console_unlock();
-> > > >               break;
-> > > >       default:
-> > > > +             console_lock();
-> > > >               lock_fb_info(info);
-> > > >               fb = info->fbops;
-> > > >               if (fb->fb_ioctl)
-> > > > @@ -1189,6 +1190,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
-> > > >               else
-> > > >                       ret = -ENOTTY;
-> > > >               unlock_fb_info(info);
-> > > > +             console_unlock();
-> > > >       }
-> > > >       return ret;
-> > > >   }
-> > >
-> >
-> >
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
->
->
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+This patch moves the ufshcd_wb_toggle() from before the out_unprepare 
+label to after the out_unprepare label (into 
+ufshcd_clock_scaling_unprepare()). Does this change perhaps introduce a 
+new call to ufshcd_wb_toggle() in error paths?
+
+Thanks,
+
+Bart.
+
