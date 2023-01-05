@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F3F65F5BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEDB65F5BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbjAEV1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S235826AbjAEV2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbjAEV1R (ORCPT
+        with ESMTP id S235750AbjAEV2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:27:17 -0500
+        Thu, 5 Jan 2023 16:28:03 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A9963F4B;
-        Thu,  5 Jan 2023 13:27:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9CB631AD;
+        Thu,  5 Jan 2023 13:28:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672954036; x=1704490036;
+  t=1672954081; x=1704490081;
   h=message-id:date:mime-version:from:subject:to:cc:
    references:in-reply-to:content-transfer-encoding;
-  bh=epuSkSpTV05tOW5Nee19IGsto+DluCEjzQHE5p2lsag=;
-  b=TOvbsiL/P4vfwRfV0ABY+E1fFT3OuDdD5TfiL6XC8zXeSzcn9dnndW//
-   0EckoiNR6cBcW/5r5wXsw66bo7XC/jV7xz4yf/sjEx04CXeGlgPWhO79g
-   1w781v2xHXeU5Xs7v1mdFZT93VdlpfCcIa8uDvSVQXaqsY5rBC0qGf0v7
-   PMT5qR8oTXm4JxCHyp713+cBkqpSah802eAZnlMC5gDkxPQfUXwQTywzp
-   nn1lKXqsyGjGwAUmQbBZfYZiy//EjOghyeZ6zXoAQ+ZxywNyoeCF+KESp
-   apQxbcfm4gxWv64WOZtYt/25vImR6+i7uzyvGbqRzOxOC5zva6AQ82l2O
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="320035003"
+  bh=rOZ5NQORGOvm5SR3gDts3vxKRM9Vwh+sB/udUwG5PD8=;
+  b=hXdG4Myohaf9Yq2IPeZT9eNPGBM6l93VGpU+AOQz3jv3pdq8sXWWp0Iv
+   5Sl6Pb8DjwcRlS+Puy5KDM1cfgyPS5N6ow6G0Mr1qvoUWSTcYFX7CrF2P
+   sWvFXm3naQb9gmTQZv91EoYkyeHpZMsex6omfvTQBM2h7M3uJDcy09aRn
+   EB69s4dxg1gF+qp5noQ3eRLX54Br4mC5GWzMAoa/QZn6sVPeoXZyZyX8G
+   OLhR5I2bD5KlrbgEZSLqJX9YwDl1wW50QUVfOrH4XHGQztIV/A5Wy7kxe
+   cLv1HfMuti3ryME0JsRWnJU4xHo0wDVoVNDvN+Xusg0CmcBYc1QQ/FMzL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="320035120"
 X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="320035003"
+   d="scan'208";a="320035120"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:27:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="657673488"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:28:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="657673723"
 X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="657673488"
+   d="scan'208";a="657673723"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.42.126])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:27:12 -0800
-Message-ID: <d828948f-2cd4-9bc1-688d-5de6bd7b58bc@intel.com>
-Date:   Thu, 5 Jan 2023 23:27:08 +0200
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:27:57 -0800
+Message-ID: <fcd88dd6-4538-cb35-a4e8-750bef1a6c08@intel.com>
+Date:   Thu, 5 Jan 2023 23:27:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.6.1
 From:   Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH V6 11/24] mmc: sdhci-uhs2: add set_power() to support vdd2
+Subject: Re: [PATCH V6 14/24] mmc: sdhci-uhs2: add set_ios()
 To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
@@ -52,11 +52,11 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
         Ben Chuang <ben.chuang@genesyslogic.com.tw>
 References: <20221213090047.3805-1-victor.shih@genesyslogic.com.tw>
- <20221213090047.3805-12-victor.shih@genesyslogic.com.tw>
+ <20221213090047.3805-15-victor.shih@genesyslogic.com.tw>
 Content-Language: en-US
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
  Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221213090047.3805-12-victor.shih@genesyslogic.com.tw>
+In-Reply-To: <20221213090047.3805-15-victor.shih@genesyslogic.com.tw>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,213 +70,305 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 13/12/22 11:00, Victor Shih wrote:
-> This is a UHS-II version of sdhci's set_power operation.
-> VDD2, as well as VDD, is handled here.
+> This is a sdhci version of mmc's set_ios operation.
+> It covers both UHS-I and UHS-II.
 > 
 > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
 > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 > ---
->  drivers/mmc/host/sdhci-uhs2.c | 46 +++++++++++++++++++++++++
->  drivers/mmc/host/sdhci.c      | 63 +++++++++++++++++++----------------
->  drivers/mmc/host/sdhci.h      |  1 +
->  3 files changed, 82 insertions(+), 28 deletions(-)
+>  drivers/mmc/host/sdhci-uhs2.c | 96 +++++++++++++++++++++++++++++++++++
+>  drivers/mmc/host/sdhci-uhs2.h |  1 +
+>  drivers/mmc/host/sdhci.c      | 53 +++++++++++--------
+>  drivers/mmc/host/sdhci.h      |  2 +
+>  4 files changed, 131 insertions(+), 21 deletions(-)
 > 
 > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-> index ae862e1eadab..780491781613 100644
+> index 00b1b69b49ea..3d52d35a91a5 100644
 > --- a/drivers/mmc/host/sdhci-uhs2.c
 > +++ b/drivers/mmc/host/sdhci-uhs2.c
-> @@ -57,6 +57,13 @@ EXPORT_SYMBOL_GPL(sdhci_uhs2_dump_regs);
->   *                                                                           *
->  \*****************************************************************************/
+> @@ -213,6 +213,68 @@ void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd)
+>  }
+>  EXPORT_SYMBOL_GPL(sdhci_uhs2_set_timeout);
 >  
-> +static inline int mmc_opt_regulator_set_ocr(struct mmc_host *mmc,
-> +					    struct regulator *supply,
-> +					    unsigned short vdd_bit)
+> +/**
+> + * sdhci_uhs2_clear_set_irqs - set Error Interrupt Status Enable register
+> + * @host:	SDHCI host
+> + * @clear:	bit-wise clear mask
+> + * @set:	bit-wise set mask
+> + *
+> + * Set/unset bits in UHS-II Error Interrupt Status Enable register
+> + */
+> +void sdhci_uhs2_clear_set_irqs(struct sdhci_host *host, u32 clear, u32 set)
 > +{
-> +	return IS_ERR_OR_NULL(supply) ? 0 : mmc_regulator_set_ocr(mmc, supply, vdd_bit);
+> +	u32 ier;
+> +
+> +	ier = sdhci_readl(host, SDHCI_UHS2_INT_STATUS_ENABLE);
+> +	ier &= ~clear;
+> +	ier |= set;
+> +	sdhci_writel(host, ier, SDHCI_UHS2_INT_STATUS_ENABLE);
+> +	sdhci_writel(host, ier, SDHCI_UHS2_INT_SIGNAL_ENABLE);
+> +}
+> +EXPORT_SYMBOL_GPL(sdhci_uhs2_clear_set_irqs);
+> +
+> +static void __sdhci_uhs2_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	u8 cmd_res, dead_lock;
+> +	u16 ctrl_2;
+> +
+> +	/* UHS2 Timeout Control */
+> +	sdhci_calc_timeout_uhs2(host, &cmd_res, &dead_lock);
+> +
+> +	/* change to use calculate value */
+> +	cmd_res |= FIELD_PREP(SDHCI_UHS2_TIMER_CTRL_DEADLOCK_MASK, dead_lock);
+> +
+> +	sdhci_uhs2_clear_set_irqs(host,
+> +				  SDHCI_UHS2_INT_CMD_TIMEOUT |
+> +				  SDHCI_UHS2_INT_DEADLOCK_TIMEOUT,
+> +				  0);
+> +	sdhci_writeb(host, cmd_res, SDHCI_UHS2_TIMER_CTRL);
+> +	sdhci_uhs2_clear_set_irqs(host, 0,
+> +				  SDHCI_UHS2_INT_CMD_TIMEOUT |
+> +				  SDHCI_UHS2_INT_DEADLOCK_TIMEOUT);
+> +
+> +	/* UHS2 timing */
+
+Please extend comment to include:
+
+	Note, UHS2 timing is disabled when powering off
+
+> +	ctrl_2 = sdhci_readw(host, SDHCI_HOST_CONTROL2);
+> +	if (ios->timing == MMC_TIMING_SD_UHS2)
+> +		ctrl_2 |= SDHCI_CTRL_UHS2 | SDHCI_CTRL_UHS2_ENABLE;
+> +	else
+> +		ctrl_2 &= ~(SDHCI_CTRL_UHS2 | SDHCI_CTRL_UHS2_ENABLE);
+> +	sdhci_writew(host, ctrl_2, SDHCI_HOST_CONTROL2);
+> +
+> +	if (!(host->quirks2 & SDHCI_QUIRK2_PRESET_VALUE_BROKEN))
+> +		sdhci_enable_preset_value(host, true);
+> +
+> +	if (host->ops->set_power)
+> +		host->ops->set_power(host, ios->power_mode, ios->vdd);
+> +	else
+> +		sdhci_uhs2_set_power(host, ios->power_mode, ios->vdd);
+
+sdhci_set_ios_common() already set the power.  Are both needed?
+
+> +	udelay(100);
+
+Please add a comment for why this delay is here.
+
+> +
+> +	host->timing = ios->timing;
+
+Please move this up to where the timing change is.
+
+> +	sdhci_set_clock(host, host->clock);
 > +}
 > +
->  bool sdhci_uhs2_mode(struct sdhci_host *host)
->  {
->  	return host->mmc->flags & MMC_UHS2_SUPPORT;
-> @@ -95,6 +102,45 @@ void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask)
+>  /*****************************************************************************\
+>   *                                                                           *
+>   * MMC callbacks                                                             *
+> @@ -234,6 +296,39 @@ static int sdhci_uhs2_start_signal_voltage_switch(struct mmc_host *mmc,
+>  	return sdhci_start_signal_voltage_switch(mmc, ios);
 >  }
->  EXPORT_SYMBOL_GPL(sdhci_uhs2_reset);
 >  
-> +static void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
-> +			  unsigned short vdd)
-> +{
-> +	struct mmc_host *mmc = host->mmc;
-> +	u8 pwr;
-> +
-> +	if (mode != MMC_POWER_OFF) {
-> +		pwr = sdhci_get_vdd_value(vdd);
-> +		if (!pwr)
-> +			WARN(1, "%s: Invalid vdd %#x\n",
-> +			     mmc_hostname(host->mmc), vdd);
-> +		pwr |= SDHCI_VDD2_POWER_180;
-> +	}
-> +
-> +	if (host->pwr == pwr)
-> +		return;
-> +	host->pwr = pwr;
-> +
-> +	if (pwr == 0) {
-> +		sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
-> +
-> +		mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
-> +		mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc2, 0);
-> +	} else {
-> +		mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc, vdd);
-> +		/* support 1.8v only for now */
-> +		mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc2, fls(MMC_VDD2_165_195) - 1);
-> +
-		/* Clear the power reg before setting a new value */
-		sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
+> +int sdhci_uhs2_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 
-> +		/* vdd first */
-> +		pwr |= SDHCI_POWER_ON;
-> +		sdhci_writeb(host, pwr & 0xf, SDHCI_POWER_CONTROL);
-> +		mdelay(5);
+Should be static
+
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
 > +
-> +		pwr |= SDHCI_VDD2_POWER_ON;
-> +		sdhci_writeb(host, pwr, SDHCI_POWER_CONTROL);
-> +		mdelay(5);
+> +	if (!(host->version >= SDHCI_SPEC_400) ||
+> +	    !(host->mmc->flags & MMC_UHS2_SUPPORT &&
+> +	      host->mmc->caps2 & MMC_CAP2_SD_UHS2)) {
+
+This can be just:
+
+	if (!sdhci_uhs2_mode(host)) {
+
+Not sure if this is actually possible?
+
+> +		sdhci_set_ios(mmc, ios);
+> +		return 0;
 > +	}
+> +
+> +	if (ios->power_mode == MMC_POWER_UNDEFINED)
+> +		return 0;
+> +
+> +	if (host->flags & SDHCI_DEVICE_DEAD) {
+> +		if (!IS_ERR(mmc->supply.vmmc) &&
+> +		    ios->power_mode == MMC_POWER_OFF)
+> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
+> +		if (!IS_ERR_OR_NULL(mmc->supply.vmmc2) &&
+> +		    ios->power_mode == MMC_POWER_OFF)
+> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc2, 0);
+
+This can be just:
+
+		if (ios->power_mode == MMC_POWER_OFF) {
+			mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
+			mmc_opt_regulator_set_ocr(mmc, mmc->supply.vmmc2, 0);
+		}
+
+> +		return -1;
+> +	}
+> +
+> +	host->timing = ios->timing;
+
+__sdhci_uhs2_set_ios() does this so it is not needed here.
+
+> +
+> +	sdhci_set_ios_common(mmc, ios);
+> +
+> +	__sdhci_uhs2_set_ios(mmc, ios);
+> +
+> +	return 0;
 > +}
 > +
 >  /*****************************************************************************\
 >   *                                                                           *
 >   * Driver init/exit                                                          *
+> @@ -244,6 +339,7 @@ static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
+>  {
+>  	host->mmc_host_ops.start_signal_voltage_switch =
+>  		sdhci_uhs2_start_signal_voltage_switch;
+> +	host->mmc_host_ops.uhs2_set_ios = sdhci_uhs2_set_ios;
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs2.h
+> index a58ef19c08aa..184fee80253c 100644
+> --- a/drivers/mmc/host/sdhci-uhs2.h
+> +++ b/drivers/mmc/host/sdhci-uhs2.h
+> @@ -178,5 +178,6 @@ void sdhci_uhs2_dump_regs(struct sdhci_host *host);
+>  bool sdhci_uhs2_mode(struct sdhci_host *host);
+>  void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask);
+>  void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd);
+> +void sdhci_uhs2_clear_set_irqs(struct sdhci_host *host, u32 clear, u32 set);
+>  
+>  #endif /* __SDHCI_UHS2_H */
 > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 9b66b9a32c72..99633a3ef549 100644
+> index 99633a3ef549..49bbdc155b2b 100644
 > --- a/drivers/mmc/host/sdhci.c
 > +++ b/drivers/mmc/host/sdhci.c
-> @@ -23,7 +23,7 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/of.h>
-> -
-> +#include <linux/bug.h>
->  #include <linux/leds.h>
+> @@ -47,8 +47,6 @@
+>  static unsigned int debug_quirks = 0;
+>  static unsigned int debug_quirks2;
 >  
->  #include <linux/mmc/mmc.h>
-> @@ -2061,41 +2061,48 @@ static void sdhci_set_power_reg(struct sdhci_host *host, unsigned char mode,
->  		sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
+> -static void sdhci_enable_preset_value(struct sdhci_host *host, bool enable);
+> -
+>  static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd);
+>  
+>  void sdhci_dumpregs(struct sdhci_host *host)
+> @@ -1877,6 +1875,9 @@ static u16 sdhci_get_preset_value(struct sdhci_host *host)
+>  	case MMC_TIMING_MMC_HS400:
+>  		preset = sdhci_readw(host, SDHCI_PRESET_FOR_HS400);
+>  		break;
+> +	case MMC_TIMING_SD_UHS2:
+> +		preset = sdhci_readw(host, SDHCI_PRESET_FOR_UHS2);
+> +		break;
+>  	default:
+>  		pr_warn("%s: Invalid UHS-I mode selected\n",
+>  			mmc_hostname(host->mmc));
+> @@ -2325,24 +2326,9 @@ static bool sdhci_presetable_values_change(struct sdhci_host *host, struct mmc_i
+>  	       (sdhci_preset_needed(host, ios->timing) || host->drv_type != ios->drv_type);
 >  }
 >  
-> +unsigned short sdhci_get_vdd_value(unsigned short vdd)
-> +{
-> +	u8 pwr;
-
-It is simpler without pwr
-
+> -void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+> +void sdhci_set_ios_common(struct mmc_host *mmc, struct mmc_ios *ios)
+>  {
+>  	struct sdhci_host *host = mmc_priv(mmc);
+> -	bool reinit_uhs = host->reinit_uhs;
+> -	bool turning_on_clk = false;
+> -	u8 ctrl;
+> -
+> -	host->reinit_uhs = false;
+> -
+> -	if (ios->power_mode == MMC_POWER_UNDEFINED)
+> -		return;
+> -
+> -	if (host->flags & SDHCI_DEVICE_DEAD) {
+> -		if (!IS_ERR(mmc->supply.vmmc) &&
+> -		    ios->power_mode == MMC_POWER_OFF)
+> -			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
+> -		return;
+> -	}
+>  
+>  	/*
+>  	 * Reset the chip on each power off.
+> @@ -2359,8 +2345,6 @@ void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+>  		sdhci_enable_preset_value(host, false);
+>  
+>  	if (!ios->clock || ios->clock != host->clock) {
+> -		turning_on_clk = ios->clock && !host->clock;
+> -
+>  		host->ops->set_clock(host, ios->clock);
+>  		host->clock = ios->clock;
+>  
+> @@ -2381,6 +2365,32 @@ void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+>  		host->ops->set_power(host, ios->power_mode, ios->vdd);
+>  	else
+>  		sdhci_set_power(host, ios->power_mode, ios->vdd);
+> +}
+> +EXPORT_SYMBOL_GPL(sdhci_set_ios_common);
 > +
-> +	switch (1 << vdd) {
-> +	case MMC_VDD_165_195:
-> +	/*
-> +	 * Without a regulator, SDHCI does not support 2.0v
-> +	 * so we only get here if the driver deliberately
-> +	 * added the 2.0v range to ocr_avail. Map it to 1.8v
-> +	 * for the purpose of turning on the power.
-> +	 */
-> +	case MMC_VDD_20_21:
-> +		pwr = SDHCI_POWER_180;
-> +		break;
-
-		return SDHCI_POWER_180;
-
-> +	case MMC_VDD_29_30:
-> +	case MMC_VDD_30_31:
-> +		pwr = SDHCI_POWER_300;
-> +		break;
-		
-		return SDHCI_POWER_300;
-
-> +	case MMC_VDD_32_33:
-> +	case MMC_VDD_33_34:
-
-Missing:
-
-	/*
-	 * 3.4 ~ 3.6V are valid only for those platforms where it's
-	 * known that the voltage range is supported by hardware.
-	 */
-	case MMC_VDD_34_35:
-	case MMC_VDD_35_36:
-
-
-> +		pwr = SDHCI_POWER_330;
-> +		break;
-
-		return SDHCI_POWER_330;
-
-> +	default:
-> +		pwr = 0;
-> +		break;
-
-		return 0;
-
+> +void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	bool reinit_uhs = host->reinit_uhs;
+> +	bool turning_on_clk = false;
+> +	u8 ctrl;
+> +
+> +	host->reinit_uhs = false;
+> +
+> +	if (ios->power_mode == MMC_POWER_UNDEFINED)
+> +		return;
+> +
+> +	if (host->flags & SDHCI_DEVICE_DEAD) {
+> +		if (!IS_ERR(mmc->supply.vmmc) &&
+> +		    ios->power_mode == MMC_POWER_OFF)
+> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
+> +		return;
 > +	}
 > +
-> +	return pwr;
-
-Not needed. Control never reaches it anymore.
-
-> +}
-> +EXPORT_SYMBOL_GPL(sdhci_get_vdd_value);
+> +	sdhci_set_ios_common(mmc, ios);
 > +
->  void sdhci_set_power_noreg(struct sdhci_host *host, unsigned char mode,
->  			   unsigned short vdd)
+> +	if (!ios->clock || ios->clock != host->clock)
+> +		turning_on_clk = ios->clock && !host->clock;
+>  
+>  	if (host->ops->platform_send_init_74_clocks)
+>  		host->ops->platform_send_init_74_clocks(host, ios->power_mode);
+> @@ -2959,7 +2969,7 @@ int sdhci_execute_tuning(struct mmc_host *mmc, u32 opcode)
+>  }
+>  EXPORT_SYMBOL_GPL(sdhci_execute_tuning);
+>  
+> -static void sdhci_enable_preset_value(struct sdhci_host *host, bool enable)
+> +void sdhci_enable_preset_value(struct sdhci_host *host, bool enable)
 >  {
->  	u8 pwr = 0;
->  
->  	if (mode != MMC_POWER_OFF) {
-> -		switch (1 << vdd) {
-> -		case MMC_VDD_165_195:
-> -		/*
-> -		 * Without a regulator, SDHCI does not support 2.0v
-> -		 * so we only get here if the driver deliberately
-> -		 * added the 2.0v range to ocr_avail. Map it to 1.8v
-> -		 * for the purpose of turning on the power.
-> -		 */
-> -		case MMC_VDD_20_21:
-> -			pwr = SDHCI_POWER_180;
-> -			break;
-> -		case MMC_VDD_29_30:
-> -		case MMC_VDD_30_31:
-> -			pwr = SDHCI_POWER_300;
-> -			break;
-> -		case MMC_VDD_32_33:
-> -		case MMC_VDD_33_34:
-> -		/*
-> -		 * 3.4 ~ 3.6V are valid only for those platforms where it's
-> -		 * known that the voltage range is supported by hardware.
-> -		 */
-> -		case MMC_VDD_34_35:
-> -		case MMC_VDD_35_36:
-> -			pwr = SDHCI_POWER_330;
-> -			break;
-> -		default:
-> +		pwr = sdhci_get_vdd_value(vdd);
-> +		if (!pwr) {
->  			WARN(1, "%s: Invalid vdd %#x\n",
->  			     mmc_hostname(host->mmc), vdd);
-> -			break;
->  		}
+>  	/* Host Controller v3.00 defines preset value registers */
+>  	if (host->version < SDHCI_SPEC_300)
+> @@ -2987,6 +2997,7 @@ static void sdhci_enable_preset_value(struct sdhci_host *host, bool enable)
+>  		host->preset_enabled = enable;
 >  	}
+>  }
+> +EXPORT_SYMBOL_GPL(sdhci_enable_preset_value);
 >  
+>  static void sdhci_post_req(struct mmc_host *mmc, struct mmc_request *mrq,
+>  				int err)
 > diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index f41c19c76994..df7fa0c0ebf8 100644
+> index df7fa0c0ebf8..c2f989dc2361 100644
 > --- a/drivers/mmc/host/sdhci.h
 > +++ b/drivers/mmc/host/sdhci.h
-> @@ -840,6 +840,7 @@ void sdhci_set_power(struct sdhci_host *host, unsigned char mode,
->  void sdhci_set_power_and_bus_voltage(struct sdhci_host *host,
->  				     unsigned char mode,
->  				     unsigned short vdd);
-> +unsigned short sdhci_get_vdd_value(unsigned short vdd);
->  void sdhci_set_power_noreg(struct sdhci_host *host, unsigned char mode,
->  			   unsigned short vdd);
->  int sdhci_get_cd_nogpio(struct mmc_host *mmc);
+> @@ -850,6 +850,8 @@ void sdhci_set_bus_width(struct sdhci_host *host, int width);
+>  void sdhci_reset(struct sdhci_host *host, u8 mask);
+>  void sdhci_set_uhs_signaling(struct sdhci_host *host, unsigned timing);
+>  int sdhci_execute_tuning(struct mmc_host *mmc, u32 opcode);
+> +void sdhci_enable_preset_value(struct sdhci_host *host, bool enable);
+> +void sdhci_set_ios_common(struct mmc_host *mmc, struct mmc_ios *ios);
+>  void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios);
+>  int sdhci_start_signal_voltage_switch(struct mmc_host *mmc,
+>  				      struct mmc_ios *ios);
 
