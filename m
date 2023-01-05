@@ -2,194 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80CB65E941
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDC265E945
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbjAEKrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S233114AbjAEKsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbjAEKrR (ORCPT
+        with ESMTP id S233237AbjAEKsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:47:17 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07E950054;
-        Thu,  5 Jan 2023 02:47:16 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id jo4so89170002ejb.7;
-        Thu, 05 Jan 2023 02:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1LL4PmBB1pvqQG5tOhMu+jjeyKAtVmuz5IqwO930qQU=;
-        b=QBsTEvPO+m09NOsi5gTFe7aqT7oPRZbnlKzfg/LIrZtl+r3bBd1XM/AVhNXEMXBLIx
-         JuA1o/Xe6J8KPFdXWKpjZ1eRfVqh6ld0S/BhRA8OqBG1NfGbj/Hr86Vrvfbh2UBF6YDJ
-         U3oznAWuhyYmTr3SPTqUmhm2YwLJ5cEAtKExeLyuzaG2Rj/CSaF6paZMRR2rWxJu3Zko
-         UYR96R+O4itXF4HVwhVLmEYB53ZF5QVvxtb2dtx/4JFYXLzBOQ7yJqFIuCEgRZr73prS
-         vW9KAfzkGtqBHJ3MIxHxRdn+IwNbL26a82gRTA1LfnsXFYfa558VLoREhsQ1+Cfc9nFt
-         8zSw==
+        Thu, 5 Jan 2023 05:48:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC8E4FD69
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672915645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UEbDwXIUB2tT4FTtzGYCDFhGThKelFO7bSLAhtp8Ky4=;
+        b=APqgzo131CTTXKHAX1DkmxWpJ60W4AfQM4DkpjY36jY0cUvFTndjJzDmKMhbyO3D/9Q1l2
+        xi9KGUd4TuCnT2Sx08mPASZ1XHErGHUf2ff1/3qCpxa7ThQy3wsNo32PuaMmdIvDp0AEdO
+        nSQWRwkaTsPq7g7I3minfmQYF6pQS78=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-342-_4uSYXhDNNW3ffGLiWlbbg-1; Thu, 05 Jan 2023 05:47:23 -0500
+X-MC-Unique: _4uSYXhDNNW3ffGLiWlbbg-1
+Received: by mail-wr1-f69.google.com with SMTP id o5-20020adfba05000000b0029064ccbe46so2300713wrg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:47:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1LL4PmBB1pvqQG5tOhMu+jjeyKAtVmuz5IqwO930qQU=;
-        b=lAI0qraa4Ftx1TVn3bW+YAQJgZ4s5gLp7zJwXLaN8+4p7CjsVVOO1X84+4kMUCc6fo
-         eNCnPedGlmNBuxYL05HyUIISVpNLal5L3qse7miOMrRB41oCW2iVFzgg+1sacfH3uxux
-         Pzi4/2jifcDPTkuGAo6iVGpkSisNdnsRM4IJGdUe0rQYHSCU9/PVgZdQ+Z5OPDCjKwf9
-         PqhST2pCZiASL/PYXsdHlpR7Aw7Obdi6UKChLR2sLyNXxrP/CHlNnXGZtbBQeBtGvvGo
-         rSx5WcX30/kPNw8piIzrb+eAIeBMymSfZNG3uc42y812iMcAIa1rkIOhq6yFKx1pZKhc
-         g51Q==
-X-Gm-Message-State: AFqh2krjbWnd+ynhuTEzgMyajUCCKls4lcRybQMC07YfoGMfrqHQXMQZ
-        4C8nPE2IO+kM/DNSPPKA7PEHMhSFL8Bpx8+0
-X-Google-Smtp-Source: AMrXdXsQ1UzaCEtGI2BREzyrMKBffvNVBx05JVKcDdsthUI8/V4jqM9V6DUdrt1BUz00IqmXeingPw==
-X-Received: by 2002:a17:907:6d0b:b0:83f:1f64:c1e with SMTP id sa11-20020a1709076d0b00b0083f1f640c1emr48651653ejc.47.1672915635162;
-        Thu, 05 Jan 2023 02:47:15 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b007c073be0127sm16050618ejh.202.2023.01.05.02.47.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 02:47:14 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UEbDwXIUB2tT4FTtzGYCDFhGThKelFO7bSLAhtp8Ky4=;
+        b=lO0fab28isyGY90ujouh7mK2SNSMHa3IHXsyTOfYaPasC8zgwP3rbJGAmTDZvt5ePy
+         W7cIznOFFUPRjJl8mDD01iRbS3E1jzs3yMsng8eLu1UZXm7QVsEFp95TvPCWHBUdADDw
+         D2TOjPBQltU1eNPDgfapfQ6Uv6P7ipNcmIKYxIp1/d1XvHqVO+JQCs9AqSGbTaQFUPw4
+         LCWyPPDxBLSodJulLvg+WVrhLrGBeq0avHprkFuMXtxgNUEF7kfvKmL1AKExaVKH1Q7y
+         WcURyK81ubGWYTka126X09NutlQpQzcjGHaemthLTymq9UvX7mbkfYx6Bm7flJuOux11
+         f6zw==
+X-Gm-Message-State: AFqh2ko6lvzP/dwIEpAJbYc/Zfsontwt/kEpDyjbgu9SKrdwaKN11acO
+        /GHq4BwxBT0pp5tBSW/8H83nWYZkxw0L5TYRXSQM4uUqsL5yHlqNLbKcacc369tR5SV6+PcRAoz
+        JE3lno+GGQgrQAczaANExPDDq
+X-Received: by 2002:a05:600c:1d16:b0:3d1:fe93:f1d3 with SMTP id l22-20020a05600c1d1600b003d1fe93f1d3mr37269266wms.36.1672915642121;
+        Thu, 05 Jan 2023 02:47:22 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsU2MGUZIy8dexSPWz2offZfmPZMIC0nghsnlwgXQoP1gSAxKdkUVmLWFuL3F34KmxnbI9rAQ==
+X-Received: by 2002:a05:600c:1d16:b0:3d1:fe93:f1d3 with SMTP id l22-20020a05600c1d1600b003d1fe93f1d3mr37269237wms.36.1672915641823;
+        Thu, 05 Jan 2023 02:47:21 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e? (p200300cbc7076e00ff02ec7aded5ec1e.dip0.t-ipconnect.de. [2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b003d35acb0fd7sm2093683wmo.34.2023.01.05.02.47.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 02:47:21 -0800 (PST)
+Message-ID: <60f06008-dea5-a08e-edec-fc4aec76dfb5@redhat.com>
 Date:   Thu, 5 Jan 2023 11:47:20 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 1/5] net/ethtool: add netlink interface for the
- PLCA RS
-Message-ID: <Y7aquABWDDmPeRAV@gvm01>
-References: <cover.1672840325.git.piergiorgio.beruto@gmail.com>
- <76d0a77273e4b4e7c1d22a897c4af9109a8edc51.1672840325.git.piergiorgio.beruto@gmail.com>
- <Y7aQcgR4C9Lg/+yK@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7aQcgR4C9Lg/+yK@unreal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 00/46] Based on latest mm-unstable (85b44c25cd1e).
+Content-Language: en-US
+To:     James Houghton <jthoughton@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230105101844.1893104-1-jthoughton@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Leon for your review.
-Please, see my comments below.
+On 05.01.23 11:17, James Houghton wrote:
+> This series introduces the concept of HugeTLB high-granularity mapping
+> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
+> high-granularity, similar to how THPs can be PTE-mapped.
+> 
+> Support for HGM in this series is for MAP_SHARED VMAs on x86 only. Other
+> architectures and (some) support for MAP_PRIVATE will come later.
 
-On Thu, Jan 05, 2023 at 10:55:14AM +0200, Leon Romanovsky wrote:
-> On Wed, Jan 04, 2023 at 03:05:44PM +0100, Piergiorgio Beruto wrote:
-> > Add support for configuring the PLCA Reconciliation Sublayer on
-> > multi-drop PHYs that support IEEE802.3cg-2019 Clause 148 (e.g.,
-> > 10BASE-T1S). This patch adds the appropriate netlink interface
-> > to ethtool.
-> > 
-> > Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-> > ---
-> >  Documentation/networking/ethtool-netlink.rst | 138 ++++++++++
-> >  MAINTAINERS                                  |   6 +
-> >  include/linux/ethtool.h                      |  12 +
-> >  include/linux/phy.h                          |  57 ++++
-> >  include/uapi/linux/ethtool_netlink.h         |  25 ++
-> >  net/ethtool/Makefile                         |   2 +-
-> >  net/ethtool/netlink.c                        |  29 ++
-> >  net/ethtool/netlink.h                        |   6 +
-> >  net/ethtool/plca.c                           | 276 +++++++++++++++++++
-> >  9 files changed, 550 insertions(+), 1 deletion(-)
-> >  create mode 100644 net/ethtool/plca.c
-> 
-> <...>
-> 
-> > --- /dev/null
-> > +++ b/net/ethtool/plca.c
-> > @@ -0,0 +1,276 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +#include <linux/phy.h>
-> > +#include <linux/ethtool_netlink.h>
-> > +
-> > +#include "netlink.h"
-> > +#include "common.h"
-> > +
-> > +struct plca_req_info {
-> > +	struct ethnl_req_info		base;
-> > +};
-> > +
-> > +struct plca_reply_data {
-> > +	struct ethnl_reply_data		base;
-> > +	struct phy_plca_cfg		plca_cfg;
-> > +	struct phy_plca_status		plca_st;
-> > +};
-> > +
-> > +// Helpers ------------------------------------------------------------------ //
-> > +
-> > +#define PLCA_REPDATA(__reply_base) \
-> > +	container_of(__reply_base, struct plca_reply_data, base)
-> > +
-> > +static inline void plca_update_sint(int *dst, const struct nlattr *attr,
-> > +				    bool *mod)
-> 
-> No inline function in *.c files.
-Fixed, thanks.
-> 
-> > +{
-> > +	if (attr) {
-> > +		*dst = nla_get_u32(attr);
-> > +		*mod = true;
-> > +	}
-> 
-> Success oriented approach, please
-> if (!attr)
->   return;
-Fixed.
-> 
-> > +}
-> > +
-> > +// PLCA get configuration message ------------------------------------------- //
-> > +
-> > +const struct nla_policy ethnl_plca_get_cfg_policy[] = {
-> > +	[ETHTOOL_A_PLCA_HEADER]		=
-> > +		NLA_POLICY_NESTED(ethnl_header_policy),
-> > +};
-> > +
-> > +static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_base,
-> > +				     struct ethnl_reply_data *reply_base,
-> > +				     struct genl_info *info)
-> > +{
-> > +	struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-> > +	struct net_device *dev = reply_base->dev;
-> > +	const struct ethtool_phy_ops *ops;
-> > +	int ret;
-> > +
-> > +	// check that the PHY device is available and connected
-> > +	if (!dev->phydev) {
-> > +		ret = -EOPNOTSUPP;
-> > +		goto out;
-> > +	}
-> > +
-> > +	// note: rtnl_lock is held already by ethnl_default_doit
-> > +	ops = ethtool_phy_ops;
-> > +	if (!ops || !ops->get_plca_cfg) {
-> > +		ret = -EOPNOTSUPP;
-> > +		goto out;
-> > +	}
-> > +
-> > +	ret = ethnl_ops_begin(dev);
-> > +	if (ret < 0)
-> > +		goto out;
-> 
-> I see that many places in the code used this ret > 0 check, but it looks
-> like the right check is if (ret).
-Thanks. I've fixed those, although I copied this code from similar files
-(like cable test). Maybe we should check these out as well?
-> 
-> Thanks
+Why even care about the complexity of COW-sharable anon pages? TBH, I'd 
+just limit this to MAP_SHARED and call it a day. Sure, we can come up 
+with use cases for everything (snapshotting VMs using fork while also 
+support optimized postcopy), but I think this would need some real 
+justification for the added complexity and possible (likely!) issues.
 
-Thanks!
-Piergiorgio
+-- 
+Thanks,
+
+David / dhildenb
+
