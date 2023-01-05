@@ -2,210 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E07865ECD1
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3D165ECD2
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjAENSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S233890AbjAENSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjAENRo (ORCPT
+        with ESMTP id S231964AbjAENRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:17:44 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A565AC64;
-        Thu,  5 Jan 2023 05:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=KMLqgdiGpsgveS+d9Haf3IhQ0Gi2pqpU6Hr1FOq0nFo=; b=0q
-        PZfQX1Abg7bndIQjbrZuL1JGANzX3z+0NgHP3Du+YyiFaKAG7jolPcN9YeONXB0iru+VdVTybuMLv
-        YFodXcwA9i0o7JRMXg/X0He/uNZtj25HqnkaO48Wi6mW00ye9xMwt+7h9lWnku5QE5sTg3Yr9abVi
-        CsZKfiGsK07zfxI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pDQ7W-001DMp-6K; Thu, 05 Jan 2023 14:17:22 +0100
-Date:   Thu, 5 Jan 2023 14:17:22 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Frank <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/3] dt-bindings: net: Add Motorcomm yt8xxx
- ethernet phy Driver bindings
-Message-ID: <Y7bN4vJXMi66FF6v@lunn.ch>
-References: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
- <20230105073024.8390-2-Frank.Sae@motor-comm.com>
+        Thu, 5 Jan 2023 08:17:47 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51442003
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:17:46 -0800 (PST)
+Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 305DHOub054514;
+        Thu, 5 Jan 2023 22:17:24 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
+ Thu, 05 Jan 2023 22:17:24 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
+Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 305DHOkc054511
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 5 Jan 2023 22:17:24 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <032386fc-fffb-1f17-8cfd-94b35b6947ee@I-love.SAKURA.ne.jp>
+Date:   Thu, 5 Jan 2023 22:17:24 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105073024.8390-2-Frank.Sae@motor-comm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] fbcon: Use kzalloc() in fbcon_prepare_logo()
+Content-Language: en-US
+To:     Alexander Potapenko <glider@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Helge Deller <deller@gmx.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+References: <cad03d25-0ea0-32c4-8173-fd1895314bce@I-love.SAKURA.ne.jp>
+ <CAMuHMdUH4CU9EfoirSxjivg08FDimtstn7hizemzyQzYeq6b6g@mail.gmail.com>
+ <86bdfea2-7125-2e54-c2c0-920f28ff80ce@I-love.SAKURA.ne.jp>
+ <CAG_fn=VJrJDNSea6DksLt5uBe_sDu0+8Ofg+ifscOyDdMKj3XQ@mail.gmail.com>
+ <Y7a6XkCNTkxxGMNC@phenom.ffwll.local>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y7a6XkCNTkxxGMNC@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +  motorcomm,rx-delay-basic:
-> +    description: |
-> +      Tristate, setup the basic RGMII RX Clock delay of PHY.
-> +      This basic delay is fixed at 2ns (1000Mbps) or 8ns (100Mbps、10Mbps).
-> +      This basic delay usually auto set by hardware according to the voltage
-> +      of RXD0 pin (low = 0, turn off;   high = 1, turn on).
-> +      If not exist, this delay is controlled by hardware.
-> +      0: turn off;   1: turn on.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
+On 2023/01/05 20:54, Daniel Vetter wrote:
+>>> . Plain memset() in arch/x86/include/asm/string_64.h is redirected to __msan_memset()
+>>> but memsetXX() are not redirected to __msan_memsetXX(). That is, memory initialization
+>>> via memsetXX() results in KMSAN's shadow memory being not updated.
+>>>
+>>> KMSAN folks, how should we fix this problem?
+>>> Redirect assembly-implemented memset16(size) to memset(size*2) if KMSAN is enabled?
+>>>
+>>
+>> I think the easiest way to fix it would be disable memsetXX asm
+>> implementations by something like:
+>>
+>> -------------------------------------------------------------------------------------------------
+>> diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+>> index 888731ccf1f67..5fb330150a7d1 100644
+>> --- a/arch/x86/include/asm/string_64.h
+>> +++ b/arch/x86/include/asm/string_64.h
+>> @@ -33,6 +33,7 @@ void *memset(void *s, int c, size_t n);
+>>  #endif
+>>  void *__memset(void *s, int c, size_t n);
+>>
+>> +#if !defined(__SANITIZE_MEMORY__)
+>>  #define __HAVE_ARCH_MEMSET16
+>>  static inline void *memset16(uint16_t *s, uint16_t v, size_t n)
+>>  {
+>> @@ -68,6 +69,7 @@ static inline void *memset64(uint64_t *s, uint64_t
+>> v, size_t n)
+>>                      : "memory");
+>>         return s;
+>>  }
+>> +#endif
+> 
+> So ... what should I do here? Can someone please send me a revert or patch
+> to apply. I don't think I should do this, since I already tossed my credit
+> for not looking at stuff carefully enough into the wind :-)
+> -Daniel
+> 
+>>
+>>  #define __HAVE_ARCH_MEMMOVE
+>>  #if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+>> -------------------------------------------------------------------------------------------------
+>>
+>> This way we'll just pick the existing C implementations instead of
+>> reinventing them.
+>>
 
-Why is this needed? When the MAC driver connects to the PHY, it passes
-phy-mode. For RGMII, this is one of:
+I'd like to avoid touching per-arch asm/string.h files if possible.
 
-linux/phy.h:	PHY_INTERFACE_MODE_RGMII,
-linux/phy.h:	PHY_INTERFACE_MODE_RGMII_ID,
-linux/phy.h:	PHY_INTERFACE_MODE_RGMII_RXID,
-linux/phy.h:	PHY_INTERFACE_MODE_RGMII_TXID,
+Can't we do like below (i.e. keep asm implementations as-is, but
+automatically redirect to __msan_memset()) ? If yes, we could move all
+__msan_*() redirection from per-arch asm/string.h files to the common
+linux/string.h file?
 
-This tells you if you need to add a delay for the RX clock line, the
-TX clock line, or both. That is all you need to know for basic RGMII
-delays.
+diff --git a/include/linux/string.h b/include/linux/string.h
+index c062c581a98b..403813b04e00 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -360,4 +360,15 @@ static __always_inline size_t str_has_prefix(const char *str, const char *prefix
+ 	return strncmp(str, prefix, len) == 0 ? len : 0;
+ }
+ 
++#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
++#undef memset
++#define memset(dest, src, count) __msan_memset((dest), (src), (count))
++#undef memset16
++#define memset16(dest, src, count) __msan_memset((dest), (src), (count) << 1)
++#undef memset32
++#define memset32(dest, src, count) __msan_memset((dest), (src), (count) << 2)
++#undef memset64
++#define memset64(dest, src, count) __msan_memset((dest), (src), (count) << 3)
++#endif
++
+ #endif /* _LINUX_STRING_H_ */
 
-> +  motorcomm,rx-delay-additional-ps:
 
-ethernet-phy.yaml defines rx-internal-delay-ps. Please use that.
-
-> +    description: |
-> +      Setup the additional RGMII RX Clock delay of PHY defined in pico seconds.
-> +      RGMII RX Clock Delay = rx-delay-basic + rx-delay-additional-ps.
-> +    enum:
-> +      - 0
-> +      - 150
-> +      - 300
-> +      - 450
-> +      - 600
-> +      - 750
-> +      - 900
-> +      - 1050
-> +      - 1200
-> +      - 1350
-> +      - 1500
-> +      - 1650
-> +      - 1800
-> +      - 1950
-> +      - 2100
-> +      - 2250
-
-Is this property mandatory? If not, please document what value is used
-if it is not present.
-
-> +
-> +  motorcomm,tx-delay-ge-ps:
-
-tx-internal-delay-ps
-
-And please define the default.
-
-> +  motorcomm,tx-delay-fe-ps:
-
-So you can only set the TX delay? What is RX delay set to? Same as 1G?
-I would suggest you call this motorcomm,tx-internal-delay-fe-ps, so
-that it is similar to the standard tx-internal-delay-ps.
-
-> +    description: |
-> +      Setup PHY's RGMII TX Clock delay  defined in pico seconds when the speed
-> +      is 100Mbps or 10Mbps.
-> +    enum:
-> +      - 0
-> +      - 150
-> +      - 300
-> +      - 450
-> +      - 600
-> +      - 750
-> +      - 900
-> +      - 1050
-> +      - 1200
-> +      - 1350
-> +      - 1500
-> +      - 1650
-> +      - 1800
-> +      - 1950
-> +      - 2100
-> +      - 2250
-> +
-> +  motorcomm,keep-pll-enabled:
-> +    description: |
-> +      If set, keep the PLL enabled even if there is no link. Useful if you
-> +      want to use the clock output without an ethernet link.
-> +    type: boolean
-> +
-> +  motorcomm,auto-sleep-disabled:
-> +    description: |
-> +      If set, PHY will not enter sleep mode and close AFE after unplug cable
-> +      for a timer.
-> +    type: boolean
-
-These two i can see being useful. But everything afterwards seems like
-just copy/paste from vendor SDK for things which the hardware can do,
-but probably nobody ever uses. Do you have a board using any of the
-following properties?
-
-> +
-> +  motorcomm,tx-clk-adj-enabled:
-> +    description: |
-> +      Useful if you want to use tx-clk-xxxx-inverted to adj the delay of tx clk.
-> +    type: boolean
-> +
-> +  motorcomm,tx-clk-10-inverted:
-> +    description: |
-> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
-> +      Transmit PHY Clock delay train configuration when speed is 10Mbps.
-> +    type: boolean
-> +
-> +  motorcomm,tx-clk-100-inverted:
-> +    description: |
-> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
-> +      Transmit PHY Clock delay train configuration when speed is 100Mbps.
-> +    type: boolean
-> +
-> +  motorcomm,tx-clk-1000-inverted:
-> +    description: |
-> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
-> +      Transmit PHY Clock delay train configuration when speed is 1000Mbps.
-> +    type: boolean
-> +
-> +  motorcomm,sds-tx-amplitude:
-> +    description: |
-> +      Setup the tx driver amplitude control of SerDes. Higher amplitude is
-> +      helpful for long distance.
-> +      0: low;   1: middle;   2: high.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1, 2]
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    ethernet {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        ethernet-phy@5 {
-> +            reg = <5>;
-
-PHYs are on MDIO busses, so i would expect to see an MDIO bus here,
-not Ethernet.
-
-    Andrew
