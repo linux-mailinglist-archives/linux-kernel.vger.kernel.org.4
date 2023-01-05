@@ -2,108 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE4865EE76
+	by mail.lfdr.de (Postfix) with ESMTP id 7729C65EE77
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbjAEOLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S234081AbjAEOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbjAEOLL (ORCPT
+        with ESMTP id S234322AbjAEOLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:11:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40823559C3;
-        Thu,  5 Jan 2023 06:11:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBD9EB81AE8;
-        Thu,  5 Jan 2023 14:11:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9825CC433D2;
-        Thu,  5 Jan 2023 14:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672927867;
-        bh=TKF/50WPsM6WG6z/BHETGFP0N5897i84bKSxeN2lavY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iIgyQ2kNfuWNdzFW1Ecy60rMnwEWLG+l0di09vAycPOQGPHsHHnkuRPmM+s+k9fgQ
-         4qj9mDXeBcLiT1tNe69oFeqCPKu8D8E+oMiyf1+j2l9baAnKXlVlM4vnOuOoxSZaB9
-         vetSColrEFjDfGFQlky2EotoxLjfo4wNdPA8Vw7pLWf847aUZxbMH0L6wr+pjb0E/6
-         i/IWFpJncAiQmNuE02rz9ScKAdmeDyJ2WKQGYZvPyVnCx5RuxuxWsemfwSCCDGcOlI
-         92AtJpc6pW9wog0wlvPMb1RYc7Tpip4d92VMRI/6Z5PBfYWAhJwOijkZg8AIaeUF7q
-         SqeC5vpbZzXnA==
-Date:   Thu, 5 Jan 2023 14:11:02 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Fenglin Wu <quic_fenglinw@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pavel@ucw.cz, krzysztof.kozlowski@linaro.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com
-Subject: Re: [RESEND PATCH v5 0/2] Add LED driver for flash module in QCOM
- PMICs
-Message-ID: <Y7badoCDWiENrzVI@google.com>
-References: <20221227081523.2277797-1-quic_fenglinw@quicinc.com>
- <9a0d7b7c-53bb-cfa6-8629-a0c48b70364f@quicinc.com>
+        Thu, 5 Jan 2023 09:11:32 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D654737
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:11:32 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so2103986pjg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:11:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=scylladb.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KI88ddFjWKkuzUOtDfBNJeuHrq8LZ9xQwEmrI18ahQs=;
+        b=BOGgzGnWyZJLBdQXhLHwWy0IskfokqvbD02y+h83alCNPRx6k5voX92lS9WTcJEGai
+         GF3pQ97xddFkg3pqTNXXsxHTZqwKevz+83E4rB8LCEN87i/fnpVe7yDI2liJNMqLURhP
+         o/k0muKEP+LoTQJIeywSZH0r8v9HdYg0ACI7W/6RvA9SAjgxd1nTJfVryCE43vvWKdZD
+         uUKbqaX2gp/pAAEnR9NWWBGMe6J6tSRgsNk3r1iE2SwnkNLODrd/CHCxYl8u9EArzcjt
+         2lPoDchqj7UNSUwxgZbQmiu0iDi6eWEo5dT/7OnysYPuScY+y1AFP6Vhb/mhMZ1wenrD
+         HbwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KI88ddFjWKkuzUOtDfBNJeuHrq8LZ9xQwEmrI18ahQs=;
+        b=tsLYlDVz9QIFl8K0roJ3/FTCZKwjE1d591WOSK7pv9JOgCj/hW93o+TctmTlieD/RH
+         7gNS+/0HcdFAslvCDfx76NFnE3EIlXP6fVoalLroM1MlI8e2f+0gZzE0W94Z6mwv2P1Z
+         zkrje4nYn46Ot7awxIORTfdgR2dPzfgReKp/2GB4QATzT5Uvo7j1k5BtID0gCwcPsq+4
+         N9h0G9DaceOqMO3BY8HHMZkF9CChZi38x5dxE8HTtux7Og521L98OEuHNY8hj/FezfmH
+         ukj4SNhcnRa1u8M2PM73NC6HhOGOeiROaKiwtZuT9UUo+Yizd8HEohf+KKJ+5V0KzHQ6
+         60UQ==
+X-Gm-Message-State: AFqh2koRoJWb1M/3og6pYfV9ZcE3XUhDGQ+tLwoNkZmtEoniw5rI84qq
+        v8Ino0qoLHpNeiCSRk1Pj8LyqI/9E2f9oWzGLbr9xWJss9O0It6x0/Q4f/XVCc+2laHiu9gQZPR
+        sauB8r/67F9l7x2g4xOiAEpENjjPOV2ZEyh4NEXF5Y+ukkBpF/kQnm0OE4eEKsrLOPilfZjJF4J
+        rBSDEhy5Jg7qAqMwol0XIkE6h+abKBVdJrqJUJ6e4qssWSMVIXGNIQTvbrPVb5xMbhOg==
+X-Google-Smtp-Source: AMrXdXs5UKVr9jYZzc/+xjXnT4UCr8Egwru9kdoZ1vXCxoIda0jQI/0KfN3UhAG1UmQcXsftQ24R1nbKCue9k/U3gGk=
+X-Received: by 2002:a17:902:c245:b0:192:6195:44cd with SMTP id
+ 5-20020a170902c24500b00192619544cdmr3725829plg.126.1672927891556; Thu, 05 Jan
+ 2023 06:11:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9a0d7b7c-53bb-cfa6-8629-a0c48b70364f@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1> <Y7bT0OL8RAWkCu0Z@kroah.com>
+In-Reply-To: <Y7bT0OL8RAWkCu0Z@kroah.com>
+From:   "Raphael S. Carvalho" <raphaelsc@scylladb.com>
+Date:   Thu, 5 Jan 2023 11:11:15 -0300
+Message-ID: <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>, Dave Hansen <dave.hansen@intel.com>,
+        Pavel Boldin <pboldin@cloudlinux.com>,
+        Pavel Boldin <boldin.pavel@gmail.com>,
+        Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-CLOUD-SEC-AV-Sent: true
+X-CLOUD-SEC-AV-Info: scylladb,google_mail,monitor
+X-Gm-Spam: 0
+X-Gm-Phishy: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 Jan 2023, Fenglin Wu wrote:
+On Thu, Jan 5, 2023 at 10:42 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jan 05, 2023 at 08:35:05PM +0800, Aaron Lu wrote:
+> > To capture potential programming errors like mistakenly setting Global
+> > bit on kernel page table entries, a selftest for meltdown is added.
+> >
+> > This selftest is based on Pavel Boldin's work at:
+> > https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c
+> >
+> > In addition to the existing test of reading kernel variable
+> > saved_command_line from user space, one more test of reading user local
+> > variable through kernel direct map address is added. For the existing
+> > test(reading saved_command_line) to report a failure, both the high kernel
+> > mapping and low kernel mapping have to be in leaked state; For the added
+> > test(read local var), only low kernel mapping leak is enough to trigger
+> > a test fail, so both tests are useful.
+> >
+> > Test results of 10 runs:
+> >
+> > On v6.1-rc8 with nopti kernel cmdline option:
+> >
+> > host              test_out_rate_1    test_out_rate_2
+> > lkp-bdw-de1            50%               100%
+> > lkp-hsw-d01            70%               100%
+> > lkp-hsw-d02             0%                80%
+> > lkp-hsw-d03            60%               100%
+> > lkp-hsw-d04            20%               100%
+> > lkp-hsw-d05            60%               100%
+> > lkp-ivb-d01             0%                70%
+> > lkp-kbl-d01           100%               100%
+> > lkp-skl-d02           100%                90%
+> > lkp-skl-d03            90%               100%
+> > lkp-skl-d05            60%               100%
+> > kbl-vm                100%                80%
+> > 2 other machines have 0% rate for both tests.
+> >
+> > bdw=broadwell, hsw=haswell, ivb=ivybridge, etc.
+> >
+> > test_out_rate_1: test reports fail rate for the test of reading
+> > saved_command_line from user space;
+> > test_out_rate_2: test reports fail rate for the test of reading user
+> > local variable through kernel direct map address in user space.
+> >
+> > On v5.19 without nopti cmdline option:
+> > host              test_out_rate_2
+> > lkp-bdw-de1            80%
+> > lkp-hsw-4ex1           50%
+> > lkp-hsw-d01            30%
+> > lkp-hsw-d03            10%
+> > lkp-hsw-d04            10%
+> > lkp-kbl-d01            10%
+> > kbl-vm                 80%
+> > 7 other machines have 0% rate for test2.
+> >
+> > Also tested on an i386 VM with 512M memory and the test out rate is 100%
+> > when adding nopti to kernel cmdline with v6.1-rc8.
+> >
+> > Main changes I made from Pavel Boldin's meltdown test are:
+> > - Replace rdtscll() and clflush() with kernel's implementation;
+> > - Reimplement find_symbol_in_file() to avoid bringing in LTP's library
+> >   functions;
+> > - Coding style changes: placing the function return type in the same
+> >   line of the function.
+> >
+> > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
+> > ---
+> > Notable changes from RFC v3:
+> > - Drop RFC tag;
+> > - Change the base code from zlib licensed one to GPL licensed one.
+>
+> Sorry, but this still gets my NAK for the issues raised in previous
+> reviews that are not addressed here for some reason :(
 
-> Hi Pavel, Jones,
-> 
-> Can you help to review the new flash LED driver changes for Qcom flash LED
-> module when you are available? It's pending for while.
-> Thanks
+Greg, the selftest is no longer based on
+https://github.com/IAIK/meltdown/blob/master/LICENSE, which is
+originally zlib licensed. In this version, Aaron is basing the test on
+https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c,
+which is indeed licensed with: GPL-2.0-or-later
 
-The patches I have in my inbox are from last week.
-
-Please be patient - my backlog is presently very large.
-
-You're 'on the list'.
-
-> On 2022/12/27 16:15, Fenglin Wu wrote:
-> > Initial driver and binding document changes for supporting flash LED
-> > module in Qualcomm Technologies, Inc. PMICs.
-> > 
-> > Changes in V5:
-> >    1. Add MODULE_DEVICE_TABLE for auto-loading.
-> > 
-> > Changes in V4:
-> >    1. Added Tested-By tag.
-> >    2. Addressed review comments in the binding change and added
-> >       Reviewed-by tag.
-> > 
-> > Changes in V3:
-> >    1. Updated the driver to use regmap_field for register access.
-> >    2. Adressed the review comments in binding document change.
-> > 
-> > Changes in V2:
-> >    1. Addressed review comments in binding change, thanks Krzysztof!
-> >    2. Updated driver to address the compilation issue reported by
-> >       kernel test robot.
-> > 
-> > Fenglin Wu (2):
-> >    leds: flash: add driver to support flash LED module in QCOM PMICs
-> >    dt-bindings: leds: add QCOM flash LED controller
-> > 
-> >   .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
-> >   drivers/leds/flash/Kconfig                    |  15 +
-> >   drivers/leds/flash/Makefile                   |   1 +
-> >   drivers/leds/flash/leds-qcom-flash.c          | 701 ++++++++++++++++++
-> >   4 files changed, 833 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
-> >   create mode 100644 drivers/leds/flash/leds-qcom-flash.c
-> > 
-
--- 
-Lee Jones [李琼斯]
+>
+> greg k-h
