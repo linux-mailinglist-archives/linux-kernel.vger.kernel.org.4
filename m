@@ -2,160 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0224B65EE55
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4886B65EE5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbjAEOFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S234422AbjAEOGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbjAEOF0 (ORCPT
+        with ESMTP id S232361AbjAEOGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:05:26 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4FA5D42C;
-        Thu,  5 Jan 2023 06:04:25 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id vm8so83358148ejc.2;
-        Thu, 05 Jan 2023 06:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIRXXRB+sw2omNtjMhkV2HFQPFTLCgL9wZ2vi4bV6S0=;
-        b=QEYOhyxvDuZKucaFK5ymbZjBykJO3QlfnVvtHvGJb4alIwc0mOYX35B6PQ9+zUHkf5
-         KgBzJNyeqmEUlxiBdAp3T9wwBiToTrCuhlN+kI2ZyXE3V9Bbr6nI9xNL/9OHUCiWSlmk
-         CMUms4jTsAv6yvxIrhkPkJDKqKRTUrinl1OHBQweJEruL5uRGKY+uBkXoPAg2KWeTKLj
-         nFMsxFhSysGs3H3vWFE9HXGwvoPJzTGxWIl7ZtQSznNNHH+iKqf6dDcBXMHl4TBYFReL
-         RS/VBEtaRvfE21sqoG/KHa4zUB2BANsXi6BTgOaaRkNxQdwvKPnbpJWf9YRXngfns4i2
-         Oaow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MIRXXRB+sw2omNtjMhkV2HFQPFTLCgL9wZ2vi4bV6S0=;
-        b=2+12yAxk3RQZQjgTV4cnLvUjGJbrh183/ySTCTDVYHqb8tP044htcAMpoc3xGDG5RU
-         T/740gBjkb6uVw+QyqcuXXuykB00+3QmEP6Tx9fR9YjLxjH4W1/ZxZY+6694RZbmJaqo
-         x3uiQkA/AZdl5Sn3/HqW+7P7Hr/CyqMyPHuQk8tA6Lwjur0BF/zgwE1Ap9XQFgA92Hcc
-         d8cuCRRQJXQWAtILMm+9lrAZxt4Hq2XOF+FVHaNLzar0o6oup5jYYnaiw+Xh2DJG7jVt
-         PcKcDiAQxo+knoSjhKJcie0XeIRuLvNZoiQrMaw/BIGvCchyZIT7prlA3xYZaLMgmQrT
-         skaA==
-X-Gm-Message-State: AFqh2kpZCXbWl0CF756rxfJhUREwxQ5vjUtdtAevIMuF8YZs7gaUapKX
-        H6IPp2laWuWBKl5u/KL15S8=
-X-Google-Smtp-Source: AMrXdXv35xPx9swlre+rFgoitFWWHdm9wKBXF8gloEDID6Jfjmyd+RgShsJEKfVgHi3NYBP3G/KW9A==
-X-Received: by 2002:a17:907:8b0a:b0:7c0:ae13:7407 with SMTP id sz10-20020a1709078b0a00b007c0ae137407mr48620138ejc.3.1672927464143;
-        Thu, 05 Jan 2023 06:04:24 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id kx20-20020a170907775400b0078d3f96d293sm16562530ejc.30.2023.01.05.06.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 06:04:23 -0800 (PST)
-Date:   Thu, 5 Jan 2023 16:04:21 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <20230105140421.bqd2aed6du5mtxn4@skbuf>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
+        Thu, 5 Jan 2023 09:06:25 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B159339
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672927512; x=1704463512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fHQHcwMcxdoNAq/Qe0r9DmRSJPNb1uZVY/I18gvVxR4=;
+  b=ZUewcfhtm3RMa16skq7p3B1ikNSty7mv+CrMZSWRA0y/BHdOy1pUcznb
+   a8QGgIWl2pOQiqRbAR26X5JgtKhYVsP2yfkx4bb+0TqQnSRPQYLy8RdNK
+   UB48n5/dyPJaMFHNghU6+YnlAVX2xqZFDYM9Hcn5nNKechu7q38lpFabR
+   +47hnccJ5w37FCNJX5sE6WUZ/eEVH/gssN9Xk+x0tHPcNNgzb4y29XBXm
+   9dZ/hSNb+sKU/BS7V52xEOq57idY43GXY0JX6Cdi5k+0D9Q2+OGiHWNea
+   rEG/l0t4wj7HIvN+N/k3m5wcE1xc7Fb53lGW3yV06nnyO+rsZnSWytYje
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="384502428"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="384502428"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 06:05:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="648938596"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="648938596"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 05 Jan 2023 06:05:03 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDQre-0001or-0c;
+        Thu, 05 Jan 2023 14:05:02 +0000
+Date:   Thu, 5 Jan 2023 22:04:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: versioncheck: ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9
+ linux/version.h not needed.
+Message-ID: <202301052253.goTIYrWL-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103220511.3378316-5-sean.anderson@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:05:11PM -0500, Sean Anderson wrote:
->  static int aqr107_get_rate_matching(struct phy_device *phydev,
->  				    phy_interface_t iface)
->  {
-> -	if (iface == PHY_INTERFACE_MODE_10GBASER ||
-> -	    iface == PHY_INTERFACE_MODE_2500BASEX ||
-> -	    iface == PHY_INTERFACE_MODE_NA)
-> -		return RATE_MATCH_PAUSE;
-> -	return RATE_MATCH_NONE;
-> +	static const struct aqr107_link_speed_cfg speed_table[] = {
-> +		{
-> +			.speed = SPEED_10,
-> +			.reg = VEND1_GLOBAL_CFG_10M,
-> +			.speed_bit = MDIO_PMA_SPEED_10,
-> +		},
-> +		{
-> +			.speed = SPEED_100,
-> +			.reg = VEND1_GLOBAL_CFG_100M,
-> +			.speed_bit = MDIO_PMA_SPEED_100,
-> +		},
-> +		{
-> +			.speed = SPEED_1000,
-> +			.reg = VEND1_GLOBAL_CFG_1G,
-> +			.speed_bit = MDIO_PMA_SPEED_1000,
-> +		},
-> +		{
-> +			.speed = SPEED_2500,
-> +			.reg = VEND1_GLOBAL_CFG_2_5G,
-> +			.speed_bit = MDIO_PMA_SPEED_2_5G,
-> +		},
-> +		{
-> +			.speed = SPEED_5000,
-> +			.reg = VEND1_GLOBAL_CFG_5G,
-> +			.speed_bit = MDIO_PMA_SPEED_5G,
-> +		},
-> +		{
-> +			.speed = SPEED_10000,
-> +			.reg = VEND1_GLOBAL_CFG_10G,
-> +			.speed_bit = MDIO_PMA_SPEED_10G,
-> +		},
-> +	};
-> +	int speed = phy_interface_max_speed(iface);
-> +	bool got_one = false;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(speed_table) &&
-> +		    speed_table[i].speed <= speed; i++) {
-> +		if (!aqr107_rate_adapt_ok(phydev, speed, &speed_table[i]))
-> +			return RATE_MATCH_NONE;
-> +		got_one = true;
-> +	}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   41c03ba9beea760bd2d2ac9250b09a2e192da2dc
+commit: dd65acf72d0e073970459d5da80573a04304aaa9 selftests/bpf: Remove SEC("version") from test progs
+date:   1 year, 3 months ago
+reproduce:
+        make versioncheck
 
-Trying to wrap my head around the API for rate matching that was
-originally proposed and how it applies to what we read from Aquantia
-registers now.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-IIUC, phylink (via the PHY library) asks "what kind of rate matching is
-supported for this SERDES protocol?". It doesn't ask "via what kind of
-rate matching can this SERDES protocol support this particular media
-side speed?".
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./arch/csky/include/asm/io.h: 8 linux/version.h not needed.
+   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
+   ./arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
+   ./drivers/media/usb/uvc/uvc_driver.c: 19 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./init/version.c: 17 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 262: need linux/version.h
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+>> ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+>> ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
 
-Your code walks through the speed_table[] of media speeds (from 10M up
-until the max speed of the SERDES) and sees whether the PHY was
-provisioned, for that speed, to use PAUSE rate adaptation.
-
-If the PHY firmware uses a combination like this: 10GBASE-R/XFI for
-media speeds of 10G, 5G, 2.5G (rate adapted), and SGMII for 1G, 100M
-and 10M, a call to your implementation of
-aqr107_get_rate_matching(PHY_INTERFACE_MODE_10GBASER) would return
-RATE_MATCH_NONE, right? So only ETHTOOL_LINK_MODE_10000baseT_Full_BIT
-would be advertised on the media side?
-
-Shouldn't you take into consideration in your aqr107_rate_adapt_ok()
-function only the media side link speeds for which the PHY was actually
-*configured* to use the SERDES protocol @iface?
-
-> +
-> +	/* Must match at least one speed */
-> +	return got_one ? RATE_MATCH_PAUSE : RATE_MATCH_NONE;
->  }
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
