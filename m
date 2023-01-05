@@ -2,145 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123E465E43C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A7165E46B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 05:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjAEDrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S231477AbjAEEJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 23:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjAEDpq (ORCPT
+        with ESMTP id S231502AbjAEEId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:45:46 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873124F112
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 19:45:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IlfDCINolavMS6TmsaHosRHZk44NlPGqLuFBh6vRnabmf56jI9mQjllIXN9/y4cfOosHBf1uZXT631m6tQMzweiL4/xR3ODBjbreVdz7QiQJH+zJ1rH2wVWEjjjtwNQveLvQM0Rdgp9/BA1Hmw6YXVO46CdVe3TSHatJmbpyaqd/8NNqcQ88y4aPYyceWNdCcFyfddsaKogTaHxSFED1frZMv0AB8XyOu338b/hZQ3A5fNta/Vnqtr3w+4qo1x4CrhZejirdtVirCVEyBtX1PMh2SfmwTKAlrcWW003ByABpWiPX8vrFG+9tSEY8MqIgONNc7HdE616GNGGS+jY4/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QFzvu3rkAoSrTZnkuU1FPTWTPKtYPc8VJP/5mz8wnVU=;
- b=h7jsN0tIf+q9FDakFsXmG46QgaVcXcZRijGuwDGUmdaKiqbdNAAXb202fdoKGy1rW0MCFwNPqo2Bbi60jXzEQ7nF6ufkY2YU1jJe8LlgQvPgLiR6N6g4GY/xvcyHbuWZvT/oEZaN+X5r26AUHdT6SCCEog4aILAz1PCJjcqEemoEsKhFQaWBW05nZvKBrifSaB3D9E8lKLHE8JBfQVIVTPO2s/6dgFSdaP7P9hrFOxDVIAMoOBK/0MkOxSEfpZ7A7JIUcdT/VydfhlSwXT3FJJHU+qaV6x3MzFk3HC7p7LiOFxFbsFw5551cIGl+/GujNJjiBJF6mnozrtoPniM/wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QFzvu3rkAoSrTZnkuU1FPTWTPKtYPc8VJP/5mz8wnVU=;
- b=45g5tN1vFK2T5qsoompeAcabu9NPEOTGMTNmoVyHEjh1ASH2QHzbJj5QHW4ixYN+3zfGHNfNPbCmA02NrIgJMmbEJqoRfjZ4Mi99V19ERTlZP4OPnLYYMR+773Hy0/ic5rVXlZ2c62wk8WzCNSEDQryvTB+PyxIMlSeze1HOpmA=
-Received: from BN9PR03CA0909.namprd03.prod.outlook.com (2603:10b6:408:107::14)
- by SJ2PR12MB7895.namprd12.prod.outlook.com (2603:10b6:a03:4c6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 03:45:15 +0000
-Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::6d) by BN9PR03CA0909.outlook.office365.com
- (2603:10b6:408:107::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Thu, 5 Jan 2023 03:45:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5986.14 via Frontend Transport; Thu, 5 Jan 2023 03:45:15 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 21:45:13 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Javier Martinez Canillas <javierm@redhat.com>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <christian.koenig@amd.com>,
-        Lazar Lijo <Lijo.Lazar@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH v6 45/45] drm/amd: make amdgpu_ucode_validate static
-Date:   Wed, 4 Jan 2023 21:43:19 -0600
-Message-ID: <20230105034327.1439-46-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230105034327.1439-1-mario.limonciello@amd.com>
-References: <20230105034327.1439-1-mario.limonciello@amd.com>
+        Wed, 4 Jan 2023 23:08:33 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10969107;
+        Wed,  4 Jan 2023 20:06:36 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NnXV848MJz4f3lXl;
+        Thu,  5 Jan 2023 11:47:28 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP2 (Coremail) with SMTP id Syh0CgDXy+lPSLZjWGduBA--.2842S2;
+        Thu, 05 Jan 2023 11:47:31 +0800 (CST)
+Message-ID: <426fdad5-17a5-41e7-57b9-aa4c1a4f4327@huaweicloud.com>
+Date:   Thu, 5 Jan 2023 11:47:27 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH bpf-next] bpf, x86: Simplify the parsing logic of
+ structure parameters
+Content-Language: en-US
+To:     Yonghong Song <yhs@meta.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20230103013158.1945869-1-pulehui@huaweicloud.com>
+ <ba11a68a-6099-0e0e-6531-e70e64429b7e@meta.com>
+From:   Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <ba11a68a-6099-0e0e-6531-e70e64429b7e@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT017:EE_|SJ2PR12MB7895:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64fcb8f8-4fde-4fd4-7fba-08daeecf41bf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KD5cggYJ59SF/kl6u/42yI3SLdxAPsQuyONBvMPrszH3Or/IpHkHaUGTCkP7Y9ky9PsmmDD2EHswlmY3Zxo9gokEc/sWVZnJ+0H7UhMUsD4oSxPLlRbdWoKyyJsuYkSMzN2AOwXijxoccPIUSVpkmOtCiIEoOAfO2aYALWQFkJJpYnNIom1CZJaLF8xQruQdMmfvclYZT7M4hI1HfHys9gi15S6O5TMwpDugP5v8gWCRRiWTZt2a4lOIvNDtlR66VDz+f0QI5agE4WRLPGRFd2WadPksQGVF0E8Z2PhMZZBwfNC98wRFkMOvWu6gpFCGX72DXY8QITeWGkLUiOB4HKvOd7DdBQXCDFi9aTtqHOG2FTLsryHDW7b9aLEBX5bPpMaVXod1URE/lW04keiLpwV0xolvKGqLyqfdcucru+xoUa/2b8Vu030EAvhpXmCinu/uGfMHNp/zz9YHS0E8ydxBEolfsRyiwbOCv9pMgrDQIGrnKNG858rVCp2SEjDOjo9QZKc5ZDbLfBbEXFlvEIxZHl/M+YMm3u5rEI6HkODjCbIv2CpMSG3UF77ywvTFdioLAk/yV1uY47ql2tR0fKLJWiW+MrBllT3kG5j09+Vu3MWE1v3Uh6hxZ5ZyxU1GxF4e3HuDnimw/pvn4abcocekELijG6pg5W/4pjFCJF1LH69JYMHd9jNZrwcsAAGd/16akZBb3fhyKf2O3sC7W3RYpceQkBO4y8mAS6qMum4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199015)(46966006)(36840700001)(40470700004)(83380400001)(426003)(47076005)(7696005)(1076003)(26005)(16526019)(336012)(82310400005)(40480700001)(86362001)(40460700003)(36756003)(36860700001)(82740400003)(356005)(2616005)(81166007)(186003)(316002)(4326008)(41300700001)(478600001)(8676002)(2906002)(5660300002)(8936002)(44832011)(54906003)(70206006)(70586007)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 03:45:15.4587
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64fcb8f8-4fde-4fd4-7fba-08daeecf41bf
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7895
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgDXy+lPSLZjWGduBA--.2842S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFW7Wr1fXr48CFykWr4xtFb_yoW7Ww1rpF
+        s5Aw1UJryUJr1kGr18Jr1UJry7Jr4UJ3WDJr18XFyUJr4UAr1jqr1UXr10grWUJr48Jr1U
+        Jr1jqrn3Zr15Jr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IUbPEf5UUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No consumers outside of amdgpu_ucode.c use amdgpu_ucode_validate
-anymore, so make the function static.
 
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-index 8ebfec12da87..47549d659d9b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-@@ -504,7 +504,7 @@ void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr)
- 	}
- }
- 
--int amdgpu_ucode_validate(const struct firmware *fw)
-+static int amdgpu_ucode_validate(const struct firmware *fw)
- {
- 	const struct common_firmware_header *hdr =
- 		(const struct common_firmware_header *)fw->data;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-index 848579d4988b..bee93ab4298f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-@@ -543,7 +543,6 @@ void amdgpu_ucode_print_rlc_hdr(const struct common_firmware_header *hdr);
- void amdgpu_ucode_print_sdma_hdr(const struct common_firmware_header *hdr);
- void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header *hdr);
- void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr);
--int amdgpu_ucode_validate(const struct firmware *fw);
- int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
- 			 const char *fw_name);
- void amdgpu_ucode_release(const struct firmware **fw);
--- 
-2.34.1
+On 2023/1/5 2:24, Yonghong Song wrote:
+> 
+> 
+> On 1/2/23 5:31 PM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Extra_nregs of structure parameters and nr_args can be
+>> added directly at the beginning, and using a flip flag
+>> to identifiy structure parameters. Meantime, renaming
+>> some variables to make them more sense.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> 
+> Thanks for refactoring. Using nr_regs instead of nr_args indeed
+> making things easier to understand. Ack with a few nits below.
+> 
+> Acked-by: Yonghong Song <yhs@fb.com>
+> 
+>> ---
+>>   arch/x86/net/bpf_jit_comp.c | 99 +++++++++++++++++--------------------
+>>   1 file changed, 46 insertions(+), 53 deletions(-)
+>>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index e3e2b57e4e13..e7b72299f5a4 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -1839,62 +1839,57 @@ st:            if (is_imm8(insn->off))
+>>       return proglen;
+>>   }
+>> -static void save_regs(const struct btf_func_model *m, u8 **prog, int 
+>> nr_args,
+>> +static void save_regs(const struct btf_func_model *m, u8 **prog, int 
+>> nr_regs,
+>>                 int stack_size)
+>>   {
+>> -    int i, j, arg_size, nr_regs;
+>> +    int i, j, arg_size;
+>> +    bool is_struct = false;
+>> +
+>>       /* Store function arguments to stack.
+>>        * For a function that accepts two pointers the sequence will be:
+>>        * mov QWORD PTR [rbp-0x10],rdi
+>>        * mov QWORD PTR [rbp-0x8],rsi
+>>        */
+>> -    for (i = 0, j = 0; i < min(nr_args, 6); i++) {
+>> -        if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
+>> -            nr_regs = (m->arg_size[i] + 7) / 8;
+>> +    for (i = 0, j = 0; i < min(nr_regs, 6); i++) {
+>> +        arg_size = m->arg_size[j];
+>> +        if (arg_size > 8) {
+>>               arg_size = 8;
+>> -        } else {
+>> -            nr_regs = 1;
+>> -            arg_size = m->arg_size[i];
+>> +            is_struct ^= 1;
+>>           }
+>> -        while (nr_regs) {
+>> -            emit_stx(prog, bytes_to_bpf_size(arg_size),
+>> -                 BPF_REG_FP,
+>> -                 j == 5 ? X86_REG_R9 : BPF_REG_1 + j,
+>> -                 -(stack_size - j * 8));
+>> -            nr_regs--;
+>> -            j++;
+>> -        }
+>> +        emit_stx(prog, bytes_to_bpf_size(arg_size),
+>> +             BPF_REG_FP,
+>> +             i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
+>> +             -(stack_size - i * 8));
+>> +
+>> +        j = is_struct ? j : j + 1;
+>>       }
+>>   }
+>> -static void restore_regs(const struct btf_func_model *m, u8 **prog, 
+>> int nr_args,
+>> +static void restore_regs(const struct btf_func_model *m, u8 **prog, 
+>> int nr_regs,
+>>                int stack_size)
+>>   {
+>> -    int i, j, arg_size, nr_regs;
+>> +    int i, j, arg_size;
+>> +    bool is_struct = false;
+> 
+> Maybe
+>      bool next_same_struct = false
+> to better characterize what it means?
+> 
+
+agree, will do as suggested bellow.
+
+>>       /* Restore function arguments from stack.
+>>        * For a function that accepts two pointers the sequence will be:
+>>        * EMIT4(0x48, 0x8B, 0x7D, 0xF0); mov rdi,QWORD PTR [rbp-0x10]
+>>        * EMIT4(0x48, 0x8B, 0x75, 0xF8); mov rsi,QWORD PTR [rbp-0x8]
+>>        */
+>> -    for (i = 0, j = 0; i < min(nr_args, 6); i++) {
+>> -        if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
+>> -            nr_regs = (m->arg_size[i] + 7) / 8;
+>> +    for (i = 0, j = 0; i < min(nr_regs, 6); i++) {
+> 
+> Let us put a comment here so the later users can understand the logic
+> behind 'is_struct ^= 1'.
+> 
+> /* The arg_size is at most 16 bytes, enforced by the verifier. */
+> 
+>> +        arg_size = m->arg_size[j];
+>> +        if (arg_size > 8) {
+>>               arg_size = 8;
+>> -        } else {
+>> -            nr_regs = 1;
+>> -            arg_size = m->arg_size[i];
+>> +            is_struct ^= 1;
+> 
+> next_same_struct = !next_same_struct;
+> 
+> The same for above save_regs().
+> 
+>>           }
+>> -        while (nr_regs) {
+>> -            emit_ldx(prog, bytes_to_bpf_size(arg_size),
+>> -                 j == 5 ? X86_REG_R9 : BPF_REG_1 + j,
+>> -                 BPF_REG_FP,
+>> -                 -(stack_size - j * 8));
+>> -            nr_regs--;
+>> -            j++;
+>> -        }
+>> +        emit_ldx(prog, bytes_to_bpf_size(arg_size),
+>> +             i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
+>> +             BPF_REG_FP,
+>> +             -(stack_size - i * 8));
+>> +
+>> +        j = is_struct ? j : j + 1;
+>>       }
+>>   }
+> [...]
 
