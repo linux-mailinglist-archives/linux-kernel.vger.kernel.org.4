@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DFE65E39B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C5065E39E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjAEDig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S230182AbjAEDjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 22:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjAEDh4 (ORCPT
+        with ESMTP id S230304AbjAEDiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:37:56 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1727A48CD4
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 19:37:55 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so723319pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 19:37:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=r1JpqbJ9++K/xzT47dMTEov/5+2eYul5oJHyAzUfPlI=;
-        b=BHsuebGz7UeGzGoW+IgpyeSNW0q2RdIcdyQ1lia+mDfh5WQUzUcg8FBu5cGvL5bmVd
-         h1MHDMLC2Bq/qIYjylAiEzm4JqV+i62MO4R1/zf0ccUhdL6YKFMCIrdjdhNEu1v5AEST
-         zlkrBx6EmfW3RoHcj6qm3k7WqJQLxSVeHAh2Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r1JpqbJ9++K/xzT47dMTEov/5+2eYul5oJHyAzUfPlI=;
-        b=OF2Mheg4lgb7KHGi5zysnU8Znet/fqX8ps6Mcl8iDWHtA1zL5axgSEKVcNQyj2uv1b
-         8JI6jbtgNH2KR6O/JDe8wzRIOZ8FkmZmbGhl2RuaephLB6kO/QLU3H5pdH7QUlVI05xA
-         kqDPhytwpwpx1JqhV8k5pdzQu3neJ96BPrdSq1O/rF8Kt5OuPXZnF+CtpzPTbIOcDxGD
-         Ws3eSsG0Biocskoh4Tus6V21+93EsGeucYDSMgA9glSMjrXO81wrn79BXTLQlQEkSuPx
-         OyYSO689hGFb7oPK5rDV/UApTeq+Ff8LlWTLt8AbpldwWT0F25TM8lpl4fz1uxcQp9LL
-         Fdtw==
-X-Gm-Message-State: AFqh2krmAIRsY1+YD8Mg2Q+YvWIMCnP3MpdH8z0if5iRaBI6oFh3JZ3Z
-        ZLBVsrT333Hzn889ntc9HXvCyg==
-X-Google-Smtp-Source: AMrXdXuZ+klPVs4aw4KC1gI9YsEim8vZPlGfK9UnseD5KlDls5SUP49aFkwWSHMo97GKojdho/07Tw==
-X-Received: by 2002:a17:90a:f697:b0:226:1dbc:9f89 with SMTP id cl23-20020a17090af69700b002261dbc9f89mr27025085pjb.28.1672889874597;
-        Wed, 04 Jan 2023 19:37:54 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090ad25200b001fb1de10a4dsm280956pjw.33.2023.01.04.19.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 19:37:54 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        stable@vger.kernel.org, io-uring@vger.kernel.org,
-        Dylan Yudaken <dylany@fb.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] io_uring: Replace 0-length array with flexible array
-Date:   Wed,  4 Jan 2023 19:37:48 -0800
-Message-Id: <20230105033743.never.628-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 4 Jan 2023 22:38:52 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EB14435D;
+        Wed,  4 Jan 2023 19:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YqPisRF28grnN/sJc4GxvrRkcWqbtbmvHuhEku3fmYo=; b=RZ70p08k3wsvLIF6z2Joj+XcQA
+        tD5ChVuEkzksHah9jGFh+GDOfKSTc0yixT5TF52UqmFeQ4cIM1EM0icLpb0RzichaaRjH+shg9FH2
+        WS0kBvh+dqEPFyHDIcSZ+LJCd6JKgMAZBGhPSr08XACr/mC2Wh/kDVLIhXJ48Sb9g8nRZnpzCjViA
+        BIaO8VdjHbn1i/1lyCCJcnhw1yLtfY0f6uLwP4mn/S/dzWJEGeUpF+izxvxy9U5qnEXaerPfgPj0d
+        uDnBDtcnyBDqZRMTnUJhk1WuJq7W3q2/V4nhKNrMIWCc8XxRtoSiWF/UZIoEItXEvk+af8thsGXL9
+        kT18wDaA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pDH5b-00HPZf-1H;
+        Thu, 05 Jan 2023 03:38:47 +0000
+Date:   Thu, 5 Jan 2023 03:38:47 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     heng.su@intel.com, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, jmaloy@redhat.com, kuba@kernel.org,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
+Subject: [Q] is the amount of residual bytes still not guaranteed for to be
+ available for some old SCSI drivers? (was Re: Update bisect info and new
+ repro code for "[syzbot] WARNING in _copy_from_iter")
+Message-ID: <Y7ZGRy4C4MMeWIwA@ZenIV>
+References: <Y65N3pgLMsxZ99lo@xpf.sh.intel.com>
+ <Y7YsWvQaDPm2+pS3@xpf.sh.intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1795; h=from:subject:message-id; bh=r+TSIVb2BAWhTrGlFufqT3ga06iplRy8uL8xmu6l8Nc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjtkYLP77BW3IAXqPW/RhqrA24FMPNCSI45CQs2IEd fy5cqKeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7ZGCwAKCRCJcvTf3G3AJqxND/ 4oGtR93uxHdilcizcL38yy4WDqC1zZkr1T3PXAepEgKMvcdsHqd9vzYPr2LgRHkCHsXo40ZPZR82Wz sUz0G6mP2tbZB85d990jEkkNQZE6Dc6OHj5I+dEsbm59Axce8iv0TpSEt8K8CZYg3VSuG/cQwyLKWa 4LLH3lIemP13XM3j4h035U+MPCF6jawWAw4chzz75/ulJIUSvDiS0ZxuAKPYZDTbbFsqkqMZzrAp6D azrxOyTr1c22SdkFTrF+0yqN4d245n9b8ueQlddoV5yPVaOQy1oDUXFlkgXJ2jvwNPa0phSgWastVe 6fjWF2k5OHzljQeBNtb8RqEf5Ud735dMTgPEU9o3lqQc8IkmGXyAsPi89wVk/eksoWrqcMP0s6XGcP hPrzB0Ixz2AW2bM2xyWPneebhaQlYnR3RO7xn83E8lbtKSTRRxcL0KhtD4Edoizki4soYMPUHFnvnG KC1035zSBZpj9w+SWeEGDgsSJlOria6hjC0f9gfypCRMvLRdVRRhy9amB+31qZ8a5fk9TtB4jbTjZY vqZu/+TYJuwU4zTLbR8YPtSipI4GKsxg7g/aN6FGlH7euKWsWi1JfGfraY+sAB6ZsrEqH/qCcAChe8 jmUNLNZCX8679hAFztKUsOc+IgPTku8pHV1XKvutWA5doN2Yq23jvjHDPujA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7YsWvQaDPm2+pS3@xpf.sh.intel.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct io_uring_buf_ring's
-"bufs" with a flexible array member. (How is the size of this array
-verified?) Detected with GCC 13, using -fstrict-flex-arrays=3:
+On Thu, Jan 05, 2023 at 09:48:10AM +0800, Pengfei Xu wrote:
+> Hi Viro,
+> 
+> It's a soft remind: "_copy_from_iter" WARNING issue was still reproduced
+> in v6.2-rc2 mainline kernel in guest.
 
-In function 'io_ring_buffer_select',
-    inlined from 'io_buffer_select' at io_uring/kbuf.c:183:10:
-io_uring/kbuf.c:141:23: warning: array subscript 255 is outside the bounds of an interior zero-length array 'struct io_uring_buf[0]' [-Wzero-length-bounds]
-  141 |                 buf = &br->bufs[head];
-      |                       ^~~~~~~~~~~~~~~
-In file included from include/linux/io_uring.h:7,
-                 from io_uring/kbuf.c:10:
-include/uapi/linux/io_uring.h: In function 'io_buffer_select':
-include/uapi/linux/io_uring.h:628:41: note: while referencing 'bufs'
-  628 |                 struct io_uring_buf     bufs[0];
-      |                                         ^~~~
+sorry, had been sick ;-/
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+I see what's going on there; it's this bit:
 
-Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: stable@vger.kernel.org
-Cc: io-uring@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/io_uring.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+        if ((iov_iter_rw(iter) == WRITE &&
+             (!map_data || !map_data->null_mapped)) ||  
+            (map_data && map_data->from_user)) {
+                ret = bio_copy_from_iter(bio, iter);   
+                if (ret)
+                        goto cleanup;
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 2780bce62faf..9d8861899cde 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -625,7 +625,7 @@ struct io_uring_buf_ring {
- 			__u16	resv3;
- 			__u16	tail;
- 		};
--		struct io_uring_buf	bufs[0];
-+		struct io_uring_buf	bufs[];
- 	};
- };
- 
--- 
-2.34.1
+The "map_data && map_data->from_user" part is what I'd missed.
+Mea culpa.
 
+That code really is reading from destination here; in a lot of
+respects that's broken (consider the case when destination is
+mapped write-only), but it's a deliberate behaviour.
+
+Origin is in commit ecb554a846f8 "block: fix sg SG_DXFER_TO_FROM_DEV
+regression".  Before trying to kludge around that, how much of the
+original problem is still there?
+
+Are there still low-level drivers that don't bother with scsi_set_resid()
+for passthrough requests?  IOW, do we need to play with
+	copy the entire destination into kernel buffer
+	handle REQ_OP_DRV_IN request, overwriting the copy
+	copy the entire buffer back to destination
+all because we can't tell how much data had been copied in?
+Because if we had the length of that sucker in sg_rq_end_io(),
+we could just arrange for bio->bmd->iter truncated to actual
+amount read and that would be it.
+
+NOTE: no other users of blk_rq_map_user_io() go anywhere near that
+weirdness; it's really just /dev/sg*.
+
+If we that's approach is not feasible, we can always deal with
+that in bio_copy_from_iter() - forcibly flip ->data_source for the
+duration, which is OK for all kinds of iov_iter that can reach that
+thing; it would work, but that's really ugly ;-/  If there's really
+no way to get the amount of data actually transferred, that's what
+we'll have to do, but it would be much saner to avoid the entire
+song and dance and just copy the right amount out...
