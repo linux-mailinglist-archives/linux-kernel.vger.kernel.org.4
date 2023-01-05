@@ -2,210 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9586F65ED2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6070E65ED32
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjAENhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S232069AbjAENiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjAENgt (ORCPT
+        with ESMTP id S230306AbjAENiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:36:49 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0062FEAF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:36:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2028467pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 05:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AUq/fH3433jj5mBTye1N9Y+4Kwha1VQSzZyDmC40ABs=;
-        b=qqi1KR0CwVwPialeP/vVz4H2BrZcPEUSCREGYjXQQShJCMoNB0+HQeVXeRubvB1e2e
-         x2RAYpDlaRt3BOKkEyV14HcAeIaAWx9pcf1LhlN2nESIhE581wZYE/TT2RnLx9nQJEj9
-         1DWbG/O/NH/gLFa1WyB2drG7aqQBPh2NE0AaVKlgVviZmocgRrXY/Wx1SO2+kfvmDVf8
-         4pquiqpJtZbvh93ky60+1qo/px80CmlvMKaIR14dSQ8HzpjufuHuwpZBJEsxQ865rzGB
-         Tcbkn3pkreOCnOvb/5lpwisXCQvI3NXI1JRIMU45tfX6TjlER6Sbl0OSTg1ytho4tyRC
-         u5NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AUq/fH3433jj5mBTye1N9Y+4Kwha1VQSzZyDmC40ABs=;
-        b=cK5ZxuAR+FYWx7/j9Th8xBeTfUAIYrRmy8AOvxn+rl5OqBAKrmmQxz32AWOSv0Rk0J
-         nnEREWQxlyu66WOCynsZSnP/EvoFyuOCHi2VO+wIvyGWSlkZkcx3iVbQ4eBnFMKP8l7q
-         nL2Xuz6rX/MRHxVwY8yRBBS7fVVYEFN0IHbfy0/4Rx/6AcIgG/JvYVBMYK1cEz8RsPFx
-         cmZ0vWP0fLyQ75Nt6c4OuXmud8GpCQx9FOTlfxL7xtqKdlVzA3qIQvufpNYSoh6l387O
-         53C8Jgcpc5/YvMwFeh+sYNqNcrm3dulDpOb/AO5R/g3ydUxuXoTuZiyGelQIL/pTxckU
-         o36w==
-X-Gm-Message-State: AFqh2kpt1OSUA6mGllCgyz3+NuflIUyNNk8Z4y8GlW+o7Ym/NS0AxXJP
-        r/XaPB5okMijm/1dFv0/tYuT
-X-Google-Smtp-Source: AMrXdXveHUkpZc56ezsxEQLj/WhfUvK+o1mZVoRR76QAthztmcXb8pZvYykCG5PNid64jKKC8USPgA==
-X-Received: by 2002:a17:903:110d:b0:189:89e2:5406 with SMTP id n13-20020a170903110d00b0018989e25406mr92514518plh.24.1672925807368;
-        Thu, 05 Jan 2023 05:36:47 -0800 (PST)
-Received: from thinkpad ([27.111.75.153])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902c94600b00189651e5c26sm26132627pla.236.2023.01.05.05.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 05:36:46 -0800 (PST)
-Date:   Thu, 5 Jan 2023 19:06:39 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_krichai@quicinc.com,
-        johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH 1/1] PCI: qcom: Add support for system suspend and resume
-Message-ID: <20230105133639.GC4463@thinkpad>
-References: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
- <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
- <dad3aba3-a40b-8b76-c689-3dc877800263@ti.com>
+        Thu, 5 Jan 2023 08:38:18 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC9111B;
+        Thu,  5 Jan 2023 05:38:17 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305D0RXl007265;
+        Thu, 5 Jan 2023 13:38:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ypm1RLqefGFLqScvF+BmG+jhoz8Y4fxx2uPYp3gBN9I=;
+ b=PSSlMI344/3nx60Ug3+aKoRrO11hQ5uM1MpQLERc1r70xZdv8rOqXbyfTb8MEQI5W4ZY
+ GOQECrTTIXqWO3FDcnEy7nNvg/8FbNbZwK/ZrwVRvPI8sDR+3STHwDtmN0dSTXJtENQG
+ uENZiYeB6BdIpw8o2sqFVbfocHoJ84cGnRLn3jZofqw1VcUUnwyPq5s67NO8bopm3gL0
+ uzwThpqMLcBk7Hr2agrU3jPIXxt0T2lqMEowL+d2NVkafeZ10wxi2susA/pphPYnYRix
+ k/r0kQ/eceM0idG5AtMIyyjg22Fg9ZB9suWhblmeH8uNSeB9a7ZXWn3I2qMSa8uPFwVx 9A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwvapgbac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 13:38:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305DcCqF030667
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 5 Jan 2023 13:38:12 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 5 Jan 2023 05:38:07 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
+        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <konrad.dybcio@linaro.org>, <mka@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v2 0/8] Add SC7280 audioreach device tree nodes.
+Date:   Thu, 5 Jan 2023 19:07:47 +0530
+Message-ID: <1672925875-2107-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dad3aba3-a40b-8b76-c689-3dc877800263@ti.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KNL8wTMe8fFhsEKis8MiZQH2d2RGN4kl
+X-Proofpoint-ORIG-GUID: KNL8wTMe8fFhsEKis8MiZQH2d2RGN4kl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_04,2023-01-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ phishscore=0 spamscore=0 mlxlogscore=865 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301050107
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 04:46:11PM +0530, Dhruva Gole wrote:
-> 
-> 
-> On 03/01/23 13:19, Manivannan Sadhasivam wrote:
-> > During the system suspend, vote for minimal interconnect bandwidth and
-> > also turn OFF the resources like clock and PHY if there are no active
-> > devices connected to the controller. For the controllers with active
-> > devices, the resources are kept ON as removing the resources will
-> > trigger access violation during the late end of suspend cycle as kernel
-> > tries to access the config space of PCIe devices to mask the MSIs.
-> > 
-> > Also, it is not desirable to put the link into L2/L3 state as that
-> > implies VDD supply will be removed and the devices may go into powerdown
-> > state. This will affect the lifetime of storage devices like NVMe.
-> > 
-> > And finally, during resume, turn ON the resources if the controller was
-> > truly suspended (resources OFF) and update the interconnect bandwidth
-> > based on PCIe Gen speed.
-> > 
-> > Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> 
-> Nice to have another driver added to the list of system suspend
-> support!
-> 
-> Acked-by: Dhruva Gole <d-gole@ti.com>
-> 
-> >   drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
-> >   1 file changed, 52 insertions(+)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 5696e327795b..48810f1f2dba 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -227,6 +227,7 @@ struct qcom_pcie {
-> >   	struct gpio_desc *reset;
-> >   	struct icc_path *icc_mem;
-> >   	const struct qcom_pcie_cfg *cfg;qcom_pcie_icc_update
-> > +	bool suspended;
-> >   };
-> >   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> > @@ -1835,6 +1836,52 @@ static int qcom_pcie_remove(struct platform_device *pdev)
-> >   	return 0;
-> >   }
-> > +static int qcom_pcie_suspend_noirq(struct device *dev)
-> > +{
-> > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > +	int ret;
-> > +
-> > +	ret = icc_set_bw(pcie->icc_mem, 0, 0);
-> > +	if (ret) {
-> > +		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
-> > +	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
-> > +	 * (sub)states.
-> > +	 *
-> > +	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
-> > +	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
-> > +	 * config space for masking MSIs.
-> > +	 *
-> > +	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
-> > +	 * will be removed and the devices may go into powerdown state. This will affect the
-> > +	 * lifetime of the storage devices like NVMe.
-> > +	 */
-> > +	if (!dw_pcie_link_up(pcie->pci)) {
-> > +		qcom_pcie_host_deinit(&pcie->pci->pp);
-> > +		pcie->suspended = true;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int qcom_pcie_resume_noirq(struct device *dev)
-> > +{
-> > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > +
-> > +	if (pcie->suspended) {
-> > +		qcom_pcie_host_init(&pcie->pci->pp);
-> > +		pcie->suspended = false;
-> > +	}
-> > +
-> > +	qcom_pcie_icc_update(pcie);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static const struct of_device_id qcom_pcie_match[] = {
-> >   	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> >   	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> > @@ -1870,12 +1917,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
-> >   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
-> >   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
-> > +static const struct dev_pm_ops qcom_pcie_pm_ops = {
-> > +	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
-> > +};
-> > +
-> >   static struct platform_driver qcom_pcie_driver = {
-> >   	.probe = qcom_pcie_probe,
-> >   	.remove = qcom_pcie_remove,
-> >   	.driver = {
-> >   		.name = "qcom-pcie",
-> >   		.of_match_table = qcom_pcie_match,
-> > +		.pm = &qcom_pcie_pm_ops,
-> >   	},
-> >   };
-> >   module_platform_driver(qcom_pcie_driver);
-> 
-> Out of curiosity, were you able to measure how much power you were able
-> to save after adding suspend support for PCIe? I don't know if clock
-> gating really saves much amount of power, but yeah its true that we
-> can't really cut off the power domain entirely in this case.
-> 
+Add SC7280 audioreach device tree nodes and extract audio specific
+dtsi nodes and add them in new file.
 
-I did not measure the power consumption and I agree that we won't save much
-power with setting icc bandwidth to 0. But it is better to have something
-than nothing. And in the coming days, I have plans to look into other power
-saving measures also.
+This patch depends on:
+    -- https://patchwork.kernel.org/project/linux-clk/list/?series=707713
 
-Thanks,
-Mani
+Srinivasa Rao Mandadapu (8):
+  arm64: dts: qcom: sc7280: Extract audio nodes from common idp dtsi
+    file
+  arm64: dts: qcom: sc7280: audioreach: Add sound node
+  arm64: dts: qcom: sc7280: audioreach: Add lpass pil node
+  arm64: dts: qcom: sc7280: audioreach: Update VA/RX/TX macro clock
+    nodes
+  arm64: dts: qcom: sc7280: audioreach: Update lpass_tlmm node
+  arm64: dts: qcom: sc7280: audioreach: Update lpasscc reg property
+  arm64: dts: qcom: sc7280: audioreach: Add CGCR reset property
+  arm64: dts: qcom: sc7280: audioreach: Disable legacy path clock nodes
 
-> -- 
-> Thanks and Regards,
-> Dhruva Gole
+ arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi     | 135 ++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts         |  24 +--
+ .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  | 204 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 126 -------------
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  96 +++++++++-
+ 5 files changed, 434 insertions(+), 151 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.7.4
+
