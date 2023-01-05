@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C24F65F5EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA5865F5ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbjAEVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S235793AbjAEVjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjAEVjY (ORCPT
+        with ESMTP id S235729AbjAEVjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:39:24 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06023671BC;
-        Thu,  5 Jan 2023 13:39:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AhH6eLvFTyTXzefYJDRhSSM1c636n8NUP2ghngWh9B4=; b=TJE+5zRtvlUdOanWiqGg8fa+aL
-        VOYQjIk3sHp76KJSCjmZUwbfy71hJ1PYXBO3gTEuIMWYKWet2B1Yi/J4gr0cPylEPDrhNO2WLy7bp
-        m9EYIOD6xZvCJ/rOvdCFK746juuU3vZx03HSVSMdy+JBLFBoR8YeyTxMPCv025ALgM0nWhKMNhPjJ
-        yVsRsNSI2jVldje1EEJZ3VqPIlLeWhl1qLA+Rh+Vdqptz/CGXklILXIH6xX5JJ5MXBtNpBsfpVskh
-        4rJCcPTz3sQu9cV0nd4uMxchq1DAq5H501fIBsPEEkP7ecdly3qjiQkVc9QUFaPHiBuUERwcyT3R1
-        3xBG7Hbg==;
-Received: from p200300ccff1194001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff11:9400:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pDXx1-0001Ks-B1; Thu, 05 Jan 2023 22:39:03 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pDXx0-007ffw-NW; Thu, 05 Jan 2023 22:39:02 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible combinations
-Date:   Thu,  5 Jan 2023 22:38:56 +0100
-Message-Id: <20230105213856.1828360-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        Thu, 5 Jan 2023 16:39:33 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E51676C6;
+        Thu,  5 Jan 2023 13:39:30 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso3434960pjf.1;
+        Thu, 05 Jan 2023 13:39:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2B/6xg54aJ7idENEindVKE0XwrAKLTxScGdP8EUbfT4=;
+        b=ZkNdyUzEpnyBd0OlCkttYyZAG/3I+W6QG3eMejUnJp8CrNHDsyjvOt9clDf0vayE2i
+         r6lkarY5scvvcjm/rCs+97/cb8gqnaQAyMmK3VSY0WyGE8IlHrmP+m2hv6sg2w9Hc7Fj
+         oYJ+KVy30yL4L97vccgDToFnVKpG2sQ9Ip0kAUHayWMzIMzCVKcCkw/30gSAWKVx/ibj
+         VQPPP3O/BeKowqjHlsVjOEGUI1eb+l6qP37gQQoSu+PFjSgNwn7pF8Nk2hVOW4m+375W
+         JFPztt3e6nOUrCAXynvNsPVdzbNfSJw4YG57GZ8mO8YbvQ343sLQ7vMFYumsPmD5GZfz
+         ZXaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2B/6xg54aJ7idENEindVKE0XwrAKLTxScGdP8EUbfT4=;
+        b=EZNx0srpG5vSZRg1JsK8/gd6qHWOvnz15IYzZkcsPSHqKf+EAvLATZoWz6o1qTPna9
+         0l52ybsN18UfzdHA5srBUEOLhfo6M4uvJM9fbMZzsXWXUqx3pihpHDD+x5y9MTm14mbK
+         QmhYLLvlXMIh1hHmvtg777rYHL9pLAPJDeR4OlXIDyrBNrR7JiIE4UZkKkEMmrw4Sgza
+         CXUmVFi+fEKVvbIx3PFo4YrHvfVOOv9/lt9qNF9eZmivf/7tb5Tga2zbNhnrQB6S2hxN
+         rlu+q6nW9HXyE6zwUTnSV9CMT+Bywcsja6O6+kFuD3Ey2LyWWvBbgOFQJ42UXY/PucOF
+         HI8Q==
+X-Gm-Message-State: AFqh2krCGTZcNef4OH+FhoD9GAOAm80ifwwlTbdEXc+Qn5QlQRExTc8L
+        40hVddHlckCQZJPM1Jn7nzwVZmPIY+M=
+X-Google-Smtp-Source: AMrXdXvOKSzzM60MzcrxrGTOI1KuEb5c6Cr23VJevx4+hCvku1p09/yos5Tpv8O6ZF7fXbWnpFdzgw==
+X-Received: by 2002:a05:6a21:999d:b0:9e:9685:f15e with SMTP id ve29-20020a056a21999d00b0009e9685f15emr81430335pzb.0.1672954769421;
+        Thu, 05 Jan 2023 13:39:29 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 128-20020a630086000000b004a099a12937sm9627542pga.84.2023.01.05.13.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 13:39:28 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 5 Jan 2023 11:39:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jack@suse.cz
+Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
+ blk-throtl
+Message-ID: <Y7dDjyT1Gl5Mt3fl@slm.duckdns.org>
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <20230105161854.GA1259@blackbody.suse.cz>
+ <Y7cKf7IH+FJ/6IyV@slm.duckdns.org>
+ <20230105192247.GB16920@blackbody.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105192247.GB16920@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently make dtbs_check shows lots of errors because imx*.dtsi does
-not use single compatibles but combinations of them.
-Allow all the combinations used there.
+Hello, Michal.
 
-Patches fixing the dtsi files according to binding documentation were
-submitted multiple times and are commonly rejected, so relax the rules.
-Example:
-https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
+On Thu, Jan 05, 2023 at 08:22:47PM +0100, Michal Koutný wrote:
+> On Thu, Jan 05, 2023 at 07:35:59AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > Hard limits tend to make this sort of problems a lot more pronounced because
+> > the existing mechanisms tend to break down for the users which are severely
+> > throttled down even while the device as a whole is fairly idle. cpu.max
+> > often triggers severe priority inversions too, so it isn't too surprising
+> > that people hit severe priority inversion issues w/ io.max.
+> 
+> To be on the same page:
+> 1) severe PI == priority inversion across cgroups (progated e.g. via
+>    global locks (as with cpu.max) or FS journal (as with io.max)),
 
-Reason: compatibility of new dtbs with old kernels or bootloaders.
+Another important inversion vector is memory reclaim as writeback operations
+get trapped in blk-throttle and the system can pile on waiting for clean
+pages.
 
-This will significantly reduce noise on make dtbs_check.
+> 2) ordinary PI == priority inversion contained within a single cgroup,
+>    i.e. no different from an under-provisioned system.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- .../bindings/mmc/fsl-imx-esdhc.yaml           | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+I didn't use the term in a precise manner but yeah both can be problematic.
+The former a lot more so.
 
-diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-index dc6256f04b42..118ebb75f136 100644
---- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-@@ -37,6 +37,30 @@ properties:
-           - fsl,imx8mm-usdhc
-           - fsl,imxrt1050-usdhc
-           - nxp,s32g2-usdhc
-+      - items:
-+          - const: fsl,imx50-esdhc
-+          - const: fsl,imx53-esdhc
-+      - items:
-+          - const: fsl,imx6sl-usdhc
-+          - const: fsl,imx6q-usdhc
-+      - items:
-+          - const: fsl,imx6sll-usdhc
-+          - const: fsl,imx6sx-usdhc
-+      - items:
-+          - const: fsl,imx6sx-usdhc
-+          - const: fsl,imx6sl-usdhc
-+      - items:
-+          - const: fsl,imx6ul-usdhc
-+          - const: fsl,imx6sx-usdhc
-+      - items:
-+          - const: fsl,imx6ull-usdhc
-+          - const: fsl,imx6sx-usdhc
-+      - items:
-+          - const: fsl,imx7d-usdhc
-+          - const: fsl,imx6sl-usdhc
-+      - items:
-+          - const: fsl,imx7ulp-usdhc
-+          - const: fsl,imx6sx-usdhc
-       - items:
-           - enum:
-               - fsl,imx8mq-usdhc
+> The reported issue sounds like 2) but even with the separated queues 1)
+> is still possible :-/
+
+Yeah, definitely.
+
+> > Another problem with blk-throttle is that it doesn't prioritize shared IOs
+> > identified by bio_issue_as_root_blkg() like iolatency and iocost do, so
+> > there can be very severe priority inversions when e.g. journal commit gets
+> > trapped in a low priority cgroup further exacerbating issues like this.
+> 
+> Thanks for the broader view. So the separated queues are certainly an
+> improvement but ultimately a mechanism based on bio_issue_as_root_blkg()
+> predicate and deferred throttling would be better? Or is permanent limit
+> enforcement more important?
+
+Generally true but the specific scenario raised by Jinke is rather unusual
+and isn't covered by issue_as_root mechanism as it doesn't promote REQ_SYNC
+data writes. Then again, this usually isn't a problem as in most cases dirty
+throttling through writeback should stave off severe starvations.
+
+blk-throttle is pretty outdated and kinda broken and separating out sync
+writes isn't gonna solve most of its problems. However, it will help in some
+cases like the one described by Jinke and can sometimes lessen wider scope
+inversions too. Given the partial nature, I don't feel too enthusiastic but
+at the same time can't find good reasons to reject either. I don't know. I
+don't feel too strong either way.
+
+On a tangential note, I've been thinking about implementing io.max on top of
+iocost so that each cgroup can just configure the max % of total device IO
+capacity that's allowed for it, which should be a lot easier to use and has
+many of the problems already solved.
+
+Thanks.
+
 -- 
-2.30.2
-
+tejun
