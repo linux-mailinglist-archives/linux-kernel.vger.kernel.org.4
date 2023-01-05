@@ -2,85 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798C365ECAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B583E65ECD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbjAENQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S234213AbjAENTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbjAENQ1 (ORCPT
+        with ESMTP id S234308AbjAENRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:16:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52295551CE;
-        Thu,  5 Jan 2023 05:16:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07271B81A3E;
-        Thu,  5 Jan 2023 13:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3989EC433F0;
-        Thu,  5 Jan 2023 13:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672924582;
-        bh=TWkizyzMxIBO+7zu4Vof9qLzprUaIH9Rq37qiXToijs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q8Ev1hJrutf8kTctwKrkLTn/z9RW3wUTEhaVrET5DbqKqVKs6e7faFUs07nkeYMsL
-         WVOV3p85tlqd/2jS3Z07o6IowutO1MT5i8Uk8bPTpezeFSEBDWZnPwcXg8A/6/sES7
-         Fu8/OoA2lYH8xHWenYbxWcvNIFSNqxtpt4jL/MKeX3CKdQC6eM6Fmb7DF3Bj1e573z
-         PSlt13p5QY+9y5D9bAfsWLbPgS9b6y/I2itaIdoqbsP/tJDHb4EMaAyBg28/XQkp8b
-         2WVMWvwp2Mfv4pa/BOJcuGL1KfPCk7UEq2N92klMNoLtRkWpFQNPv3d9SBAQLwFUl9
-         oqycautXt2VHQ==
-Date:   Thu, 5 Jan 2023 15:16:18 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        saeedm@nvidia.com, moshe@nvidia.com, shayd@nvidia.com
-Subject: Re: [PATCH -next] net/mlx5: fix missing mutex_unlock in
- mlx5_fw_fatal_reporter_err_work()
-Message-ID: <Y7bNot3o3nH/Gxrj@unreal>
-References: <20230105114220.466631-1-yangyingliang@huawei.com>
+        Thu, 5 Jan 2023 08:17:25 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7315F921;
+        Thu,  5 Jan 2023 05:17:06 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 17so39358235pll.0;
+        Thu, 05 Jan 2023 05:17:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUkOkbYzuv5WTxnO2sv3n0IBM4omUdA6IheQF/z4HEk=;
+        b=NGtacwLgGIfh31U+j37UAkxT1pREhpEa5I7Zke513uzhR7ayCdgCJbrs6KJiPvm06G
+         fFnCmYRv+PHI1g5DcOZktq7IN/66rGcEzHoW3YjMbKRqEvewBDT8rUuYaoaaHqHZ78QP
+         PtEv4zWfcdWbJYB7ILQwRDe/bGViy3ZC63cJeYMXvm8MbStVEc3cjzLQnVHYp+FNYSb5
+         PQNcD40i+b5wMdGICjjhXSmU5X7aytJ1yHYPs94FSKOKHIuzzpjLwfEopRxYZyhe2GU3
+         nrs86tF5hzi0AXjOlJujcpTA+Bmag6mafIsPZcuIeq6mpMF3FF8GB3vZHPbXUaTjKHqL
+         Jn2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HUkOkbYzuv5WTxnO2sv3n0IBM4omUdA6IheQF/z4HEk=;
+        b=vS7ymXYw2F1mZ6u3l2JqFEzx6kMCIIzRkSLJgMRX2jsej7kp4AOfsrTkjfur/MTB/9
+         fbTFtbX5rvzw3+DallsYk1Q1GJ75tkhf/Er5n0xn5Jrax23F1fWtBhdW53PzeMt2NR8U
+         +WMovphqlCybv82HwTnK5fNNVwCqbTwOmuhJkj/pggLaFEOBHZM6ZfXaC5NgbHQCQe/Q
+         CBzx4u8bzg/GrQDOKyOYpCVKIx3dd5rYsOnOSuD/XRTN/ZdXv839r94wJ3wbw3uhyDR2
+         8vQpV/h1PP7zZnM0pnV2akJ8PuUBHSMafHFP604vQkYIcXKyG61XWpDf7aP3aD4hEWXe
+         /A/g==
+X-Gm-Message-State: AFqh2kp3/bHsovkmMo6d9iAcnR9q5A2amsbty+DWjdCi6M8GExmsweNm
+        u1YdDjnreYMreb85FYHJRmU=
+X-Google-Smtp-Source: AMrXdXu6rCc1zuGeZNCk5kWS9i/EY+REle4fGbOLkNgWpwIL6oVfmjfm6n/aQtbOiutCYncfzkjHxw==
+X-Received: by 2002:a05:6a20:4655:b0:aa:23f9:7314 with SMTP id eb21-20020a056a20465500b000aa23f97314mr52845051pzb.46.1672924626119;
+        Thu, 05 Jan 2023 05:17:06 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
+        by smtp.gmail.com with ESMTPSA id p28-20020aa79e9c000000b00575caf8478dsm12597033pfq.41.2023.01.05.05.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 05:17:05 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3792010447A; Thu,  5 Jan 2023 20:16:59 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux CGroups <cgroups@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v2 0/9] docs: cgroup-v1: formatting improv for "Memory Resource Controller" doc
+Date:   Thu,  5 Jan 2023 20:16:25 +0700
+Message-Id: <20230105131633.553574-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105114220.466631-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3353; i=bagasdotme@gmail.com; h=from:subject; bh=/kf4xrQxZdifPynYl0ZAE3ZdLLa3+RCO1xkFVH/rr78=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMnbzq74Oaf24mtmL1epe2kFR1t/Gskr2N2/xXXUT5Cp7Mit N8vOdJSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiAWcZGU5FLnntdv6I4smC0myPyx r1nxvn7So4dqmS6VnI/EmdLxYx/FOWCK2cymic2LvpZ6Cq+MkLArusbB7tVZ543rpZb8f/2WwA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 07:42:20PM +0800, Yang Yingliang wrote:
-> Add missing mutex_unlock() before returning from
-> mlx5_fw_fatal_reporter_err_work().
-> 
-> Fixes: 9078e843efec ("net/mlx5: Avoid recovery in probe flows")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/health.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> index 96417c5feed7..879555ba847d 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> @@ -677,6 +677,7 @@ static void mlx5_fw_fatal_reporter_err_work(struct work_struct *work)
->  	mutex_lock(&dev->intf_state_mutex);
->  	if (test_bit(MLX5_DROP_NEW_HEALTH_WORK, &health->flags)) {
->  		mlx5_core_err(dev, "health works are not permitted at this stage\n");
-> +		mutex_unlock(&dev->intf_state_mutex);
->  		return;
->  	}
->  	mutex_unlock(&dev->intf_state_mutex);
+"Memory Resource Controller" CGroup v1 documentation has been in reST since
+99c8b231ae6c6c ("docs: cgroup-v1: convert docs to ReST and rename to *.rst").
+The current doc look is kinda ugly, so improve the formatting (only htmldocs is
+tested).
 
-Shay is working to rewrite 9078e843efec ("net/mlx5: Avoid recovery in probe flows") completely.
+Changes since v1 [1]:
+  * Drop the underline fix, since the blamed commit had been dropped
+  * Rebase on top of current cgroup tree (for-next branch)
 
-Thanks
+Range-diff against v1:
 
-> -- 
-> 2.25.1
-> 
+ 1:  e0f2b878ad6435 <  -:  -------------- docs: cgroup-v1: extend underline of section 8
+ 2:  4e26b743ce9b42 =  1:  cb31249cacdad6 docs: cgroup-v1: replace custom note constructs with appropriate admonition blocks
+ 3:  c89f9aa1e6dac9 <  -:  -------------- docs: cgroup-v1: wrap remaining admonitions in admonition blocks
+ -:  -------------- >  2:  8e03baf289c4f2 docs: cgroup-v1: wrap remaining admonitions in admonition blocks
+ 4:  b901b2b0407e23 =  3:  790ac70bcf31e1 docs: cgroup-v1: use code block for locking order schema
+ 5:  f4112d2f9990ce =  4:  2af22c24977a38 docs: cgroup-v1: fix footnotes
+ 6:  d5d16831555e6b =  5:  9788d0e8c87cc5 docs: cgroup-v1: move hierarchy of accounting caption
+ 7:  92db959851e2c8 =  6:  b191e2bd87871b docs: cgroup-v1: use bullet lists for list of stat file tables
+ 8:  767988658f58b8 !  7:  56e4ba363e4e65 docs: cgroup-v1: use make swap extension subsections subsections
+    @@ Metadata
+     Author: Bagas Sanjaya <bagasdotme@gmail.com>
+     
+      ## Commit message ##
+    -    docs: cgroup-v1: use make swap extension subsections subsections
+    +    docs: cgroup-v1: make swap extension subsections subsections
+     
+         Subsections text of swap extension section is marked up as bold text,
+         whereas making them proper subsection is more appropriate.
+ 9:  a502f09f9a3c33 !  8:  6895ee7c84e840 docs: cgroup-v1: add internal cross-references
+    @@ Documentation/admin-guide/cgroup-v1/memory.rst: If we want to change this to 1G,
+      
+     +.. _cgroup-v1-memory-move-charges:
+     +
+    - 8. Move charges at task migration (DEPRECATED!)
+    - ===============================================
+    + 8. Move charges at task migration
+    + =================================
+      
+     @@ Documentation/admin-guide/cgroup-v1/memory.rst: If you want to enable it::
+      
+10:  895b1f1aa37d33 =  9:  b179c2788f2a36 docs: cgroup-v1: use numbered lists for user interface setup
+
+[1]: https://lore.kernel.org/linux-doc/20221219042209.22898-1-bagasdotme@gmail.com/
+
+Bagas Sanjaya (9):
+  docs: cgroup-v1: replace custom note constructs with appropriate
+    admonition blocks
+  docs: cgroup-v1: wrap remaining admonitions in admonition blocks
+  docs: cgroup-v1: use code block for locking order schema
+  docs: cgroup-v1: fix footnotes
+  docs: cgroup-v1: move hierarchy of accounting caption
+  docs: cgroup-v1: use bullet lists for list of stat file tables
+  docs: cgroup-v1: make swap extension subsections subsections
+  docs: cgroup-v1: add internal cross-references
+  docs: cgroup-v1: use numbered lists for user interface setup
+
+ .../admin-guide/cgroup-v1/cgroups.rst         |   2 +
+ .../admin-guide/cgroup-v1/memory.rst          | 268 ++++++++++--------
+ 2 files changed, 146 insertions(+), 124 deletions(-)
+
+
+base-commit: 21786e5cb375a1e58a9175fee423e1d7f892d965
+-- 
+An old man doll... just what I always wanted! - Clara
+
