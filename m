@@ -2,150 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696A965EB39
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B6565EB23
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbjAEM51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S233510AbjAEMyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjAEM5Y (ORCPT
+        with ESMTP id S233489AbjAEMx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:57:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672B51081
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:56:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672923403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=C8n9DE0ruCcCCK7cY6ZY83QBYvGpdJ8qqUIL+bP6IWU=;
-        b=gb/ZNANVaX//SnP38qcHV9CxNSKD1LwWgAx3xjgkLUe4DALRnhpUvZJKNEQVUv1RTFNHMs
-        bbyfGGIVstryDsNhXirltawYbqhVjdJJw/EUNPXoVzGsz+lhiU6jYcJHuOJrKxTgVP1kiv
-        eDrPi2xDmTK899hM10zOmpqjeNL4wUw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-120-zOn_0ctvMduyru0HaogF3g-1; Thu, 05 Jan 2023 07:56:41 -0500
-X-MC-Unique: zOn_0ctvMduyru0HaogF3g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 5 Jan 2023 07:53:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDAE5C1C6;
+        Thu,  5 Jan 2023 04:53:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A49B8802C1C;
-        Thu,  5 Jan 2023 12:56:40 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3529E53A0;
-        Thu,  5 Jan 2023 12:56:40 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id A7E8340502F46; Thu,  5 Jan 2023 09:54:47 -0300 (-03)
-Message-ID: <20230105125248.971432211@redhat.com>
-User-Agent: quilt/0.66
-Date:   Thu, 05 Jan 2023 09:52:24 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     atomlin@atomlin.com, frederic@kernel.org
-Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
-        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
-        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v13 6/6] mm/vmstat: avoid queueing work item if cpu stats are clean
-References: <20230105125218.031928326@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EA18619F2;
+        Thu,  5 Jan 2023 12:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEADC433D2;
+        Thu,  5 Jan 2023 12:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672923185;
+        bh=8sOhPJ6cEQDBx/95tSr2Zy0CaclDzG+It2Q7DiPrlYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qTBcf5JBi2vKT7ruzwq9M5Q0/T5Qtl6xJgqhbME/6TBDRC0XzlDFnU67xkFML5lp9
+         +Pfe6U53KBlwvQce7HwUD288NYvt3EqwM6S2yHQghy6c75/zEqmFSOxyH3I8Ez6vC6
+         YtrzsYPZ+JJXcINRfhvAKvWK4zphjc25MrrRWEWgXU4Yme3NMztUXHtPusYvbsu9bK
+         S9jH5rcamdXGkuisOWWvmecE5lfPp4NNMeJkln0OXHowjqZiOA7MULv3NIPIy5w5Wl
+         pIqm2j51ZURq9KHLd7ebECHdtVyOYwDbkkLdq1Z2e4N6quFUcdDDFDFGDJPqo/Gwb2
+         TL0+fjmJGakAw==
+Date:   Thu, 5 Jan 2023 14:53:01 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Hariprasad Kelam <hkelam@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        edumazet@google.com, sgoutham@marvell.com, lcherian@marvell.com,
+        gakula@marvell.com, jerinj@marvell.com, sbhatta@marvell.com,
+        Angela Czubak <aczubak@marvell.com>
+Subject: Re: [net PATCH] octeontx2-af: Fix LMAC config in
+ cgx_lmac_rx_tx_enable
+Message-ID: <Y7bILQI/tu7ag3ae@unreal>
+References: <20230104163220.954-1-hkelam@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104163220.954-1-hkelam@marvell.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not necessary to queue work item to run refresh_vm_stats
-on a remote CPU if that CPU has no dirty stats and no per-CPU
-allocations for remote nodes.
+On Wed, Jan 04, 2023 at 10:02:20PM +0530, Hariprasad Kelam wrote:
+> From: Angela Czubak <aczubak@marvell.com>
+> 
+> PF netdev can request AF to enable or disable reception and transmission
+> on assigned CGX::LMAC. The current code instead of disabling or enabling
+> 'reception and transmission' also disables/enable the LMAC. This patch
+> fixes this issue.
+> 
+> Fixes: 1435f66a28b4 ("octeontx2-af: CGX Rx/Tx enable/disable mbox handlers")
+> Signed-off-by: Angela Czubak <aczubak@marvell.com>
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> ---
+>  drivers/net/ethernet/marvell/octeontx2/af/cgx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> index b2b71fe80d61..724df6398bbe 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> @@ -774,9 +774,9 @@ int cgx_lmac_rx_tx_enable(void *cgxd, int lmac_id, bool enable)
+>  
+>  	cfg = cgx_read(cgx, lmac_id, CGXX_CMRX_CFG);
+>  	if (enable)
+> -		cfg |= CMR_EN | DATA_PKT_RX_EN | DATA_PKT_TX_EN;
+> +		cfg |= DATA_PKT_RX_EN | DATA_PKT_TX_EN;
+>  	else
+> -		cfg &= ~(CMR_EN | DATA_PKT_RX_EN | DATA_PKT_TX_EN);
+> +		cfg &= ~(DATA_PKT_RX_EN | DATA_PKT_TX_EN);
 
-This fixes sosreport hang (which uses vmstat_refresh) with
-spinning SCHED_FIFO process.
+I don't see any usage of CMR_EN after this change. You can delete that
+define too.
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Thanks
 
-Index: linux-2.6/mm/vmstat.c
-===================================================================
---- linux-2.6.orig/mm/vmstat.c
-+++ linux-2.6/mm/vmstat.c
-@@ -1931,6 +1931,31 @@ static const struct seq_operations vmsta
- 
- #ifdef CONFIG_SMP
- #ifdef CONFIG_PROC_FS
-+static bool need_drain_remote_zones(int cpu)
-+{
-+#ifdef CONFIG_NUMA
-+	struct zone *zone;
-+
-+	for_each_populated_zone(zone) {
-+		struct per_cpu_pages *pcp;
-+
-+		pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
-+		if (!pcp->count)
-+			continue;
-+
-+		if (!pcp->expire)
-+			continue;
-+
-+		if (zone_to_nid(zone) == cpu_to_node(cpu))
-+			continue;
-+
-+		return true;
-+	}
-+#endif
-+
-+	return false;
-+}
-+
- static void refresh_vm_stats(struct work_struct *work)
- {
- 	refresh_cpu_vm_stats(true);
-@@ -1940,8 +1965,12 @@ int vmstat_refresh(struct ctl_table *tab
- 		   void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	long val;
--	int err;
--	int i;
-+	int i, cpu;
-+	struct work_struct __percpu *works;
-+
-+	works = alloc_percpu(struct work_struct);
-+	if (!works)
-+		return -ENOMEM;
- 
- 	/*
- 	 * The regular update, every sysctl_stat_interval, may come later
-@@ -1955,9 +1984,21 @@ int vmstat_refresh(struct ctl_table *tab
- 	 * transiently negative values, report an error here if any of
- 	 * the stats is negative, so we know to go looking for imbalance.
- 	 */
--	err = schedule_on_each_cpu(refresh_vm_stats);
--	if (err)
--		return err;
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu) {
-+		struct work_struct *work = per_cpu_ptr(works, cpu);
-+		struct vmstat_dirty *vms = per_cpu_ptr(&vmstat_dirty_pcpu, cpu);
-+
-+		INIT_WORK(work, refresh_vm_stats);
-+
-+		if (vms->dirty || need_drain_remote_zones(cpu))
-+			schedule_work_on(cpu, work);
-+	}
-+	for_each_online_cpu(cpu)
-+		flush_work(per_cpu_ptr(works, cpu));
-+	cpus_read_unlock();
-+	free_percpu(works);
-+
- 	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
- 		/*
- 		 * Skip checking stats known to go negative occasionally.
-
-
+>  	cgx_write(cgx, lmac_id, CGXX_CMRX_CFG, cfg);
+>  	return 0;
+>  }
+> -- 
+> 2.17.1
+> 
