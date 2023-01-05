@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCD765E916
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA8565E918
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjAEKhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
+        id S232432AbjAEKhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjAEKgq (ORCPT
+        with ESMTP id S232298AbjAEKh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:36:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F4C37240;
-        Thu,  5 Jan 2023 02:36:45 -0800 (PST)
-Date:   Thu, 05 Jan 2023 10:36:41 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672915002;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=42Z11cFLGIah66u4IrHHvK0enZoFEPHbHFEuy4SF86c=;
-        b=RE+Mf4VUojsfZPLKgID3IyHN8Mhl52IQmD5I3F0xbMKBONmVPiSax/i8C55WC5fxUnBLkb
-        nFANMG4Ehdd2d3/bwefQh6Fel1fVp0irtdDf5PkRRoFROh+dUJIVVYGL7QIUqBSUd8n6lN
-        NYISAuzJSl99G61Bf422DDKF2pGl/JA1dW44FAXa59nkpKrG3pXd+q4lr2m5sN1Zrk8ClI
-        ixzOsjw9UJrWJ2nN0U2aPgPcgwUbwNX59hyLPzbpywelCU3YBRl4OoFtT4lZoF0XUKeWIZ
-        7+oksfXlVFKj1aWsJyk9/StsXSDd9hr46Hz569f8QU+ZAPmQgkY2epDNxjE/yA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672915002;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=42Z11cFLGIah66u4IrHHvK0enZoFEPHbHFEuy4SF86c=;
-        b=AG52u1YHBCe1LxGig9CtlTMhYnVBWxvdW8IWRcHTG/Fcl72OZI1nYWS/qIp0Ln22jDZBoD
-        Fn5TrJy9xQh2sgDg==
-From:   "tip-bot2 for Guo Ren" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/qspinlock: Micro-optimize pending state
- waiting for unlock
-Cc:     Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Thu, 5 Jan 2023 05:37:26 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DA444C4F;
+        Thu,  5 Jan 2023 02:37:22 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id A0BBA8531D;
+        Thu,  5 Jan 2023 11:37:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1672915040;
+        bh=N6yv+vVaCjEH/Vdac9ex4yjrrpuU16UbKkONhTmDbDs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PhSTmdky8PEq2J+EHeqsR8AGUd63hwnvcv5HioA+RxvNMt/D86NEciPzRXHy9biFg
+         eujD8P/NPvLgj8oqweMJyRc4GrnKnQfSFwIKiyf/u1aLPqKQQdw+1yAOqS41mk1UU1
+         qE52rNtXNGJlGbhPBt9A1P6vVlNy+s0NrorVCZ83NNN6/36kHyi3eP1hRo27ewrMb1
+         D2F7xGigKvNFugRctEbJfYCPTerdlfmwraigjZN8b8LaR7lFBv4tJmVm3m/i0Cn49m
+         I0iZ3yvtjQ8xn1+BwsOEdR6tD+lhYFHBFusxDS1SF2kkODr+78nE+CAN6qv3u3Y1BD
+         qg8jHd5Hy5IbA==
+Date:   Thu, 5 Jan 2023 11:37:12 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230105021952.3090070-1-guoren@kernel.org>
-References: <20230105021952.3090070-1-guoren@kernel.org>
+Subject: Re: [PATCH v3 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20230105113712.2bf0d37b@wsk>
+In-Reply-To: <20230103100251.08a5db46@wsk>
+References: <20230102150209.985419-1-lukma@denx.de>
+        <Y7M+mWMU+DJPYubp@lunn.ch>
+        <20230103100251.08a5db46@wsk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <167291500186.4906.9745084237766663051.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/6ww_7R43XAgS8UoX0pNf3AM";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,58 +66,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+--Sig_/6ww_7R43XAgS8UoX0pNf3AM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Commit-ID:     4282494a20cdcaf38d553f2c2ff6f252084f979c
-Gitweb:        https://git.kernel.org/tip/4282494a20cdcaf38d553f2c2ff6f252084f979c
-Author:        Guo Ren <guoren@linux.alibaba.com>
-AuthorDate:    Wed, 04 Jan 2023 21:19:52 -05:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 05 Jan 2023 11:01:50 +01:00
+Hi Andrew, Alexander,
 
-locking/qspinlock: Micro-optimize pending state waiting for unlock
+> Hi Andrew,
+>=20
+> > > @@ -3548,7 +3548,9 @@ static int mv88e6xxx_get_max_mtu(struct
+> > > dsa_switch *ds, int port) if
+> > > (chip->info->ops->port_set_jumbo_size) return 10240 -
+> > > VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN; else if
+> > > (chip->info->ops->set_max_frame_size)
+> > > -		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
+> > > ETH_FCS_LEN;
+> > > +		return (max_t(int, chip->info->max_frame_size,
+> > > 1632)
+> > > +			- VLAN_ETH_HLEN - EDSA_HLEN -
+> > > ETH_FCS_LEN); +
+> > >  	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
+> > > =20
+> >=20
+> > I would also prefer if all this if/else logic is removed, and the
+> > code simply returned chip->info->max_frame_size - VLAN_ETH_HLEN -
+> > EDSA_HLEN - ETH_FCS_LEN;
+> >  =20
+>=20
+> So then the mv88e6xxx_get_max_mtu shall look like:
+>=20
+> WARN_ON_ONCE(!chip->info->max_frame_size)
+>=20
+> if (chip->info->ops->port_set_jumbo_size)
+> ...
+> else=20
+>     return chip->info->max_frame_size - VLAN_ETH_HLEN -
+> 	EDSA_HLEN - ETH_FCS_LEN;
+>=20
+>=20
+> Or shall I put WARN_ON_ONCE to the mv88e6xxx_probe() function?
+>=20
+>=20
+> The above approach is contrary to one proposed by Alexander, who
+> wanted to improve the defensive approach in this driver (to avoid
+> situation where the max_frame_size callback is not defined and
+> max_frame_size member of *_info struct is not added by developer).
+>=20
+> Which approach is the recommended one for this driver?
 
-When we're pending, we only care about lock value. The xchg_tail
-wouldn't affect the pending state. That means the hardware thread
-could stay in a sleep state and leaves the rest execution units'
-resources of pipeline to other hardware threads. This situation is
-the SMT scenarios in the same core. Not an entering low-power state
-situation. Of course, the granularity between cores is "cacheline",
-but the granularity between SMT hw threads of the same core could
-be "byte" which internal LSU handles. For example, when a hw-thread
-yields the resources of the core to other hw-threads, this patch
-could help the hw-thread stay in the sleep state and prevent it
-from being woken up by other hw-threads xchg_tail.
+Is there any decision regarding the preferred approach to rewrite this
+code?
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Waiman Long <longman@redhat.com>
-Link: https://lore.kernel.org/r/20230105021952.3090070-1-guoren@kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- kernel/locking/qspinlock.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> > > +++ b/drivers/net/dsa/mv88e6xxx/chip.h
+> > > @@ -132,6 +132,7 @@ struct mv88e6xxx_info {
+> > >  	unsigned int num_gpio;
+> > >  	unsigned int max_vid;
+> > >  	unsigned int max_sid;
+> > > +	unsigned int max_frame_size;   =20
+> >=20
+> > It might be worth adding a comment here what this value actually
+> > represents. =20
+>=20
+> Ok. I will add proper comment.
+>=20
+> > We don't want any mixups where the value already has the
+> > frame checksum removed for example. =20
+>=20
+> Could you be more specific here about this use case?
+>=20
+> The max_frame_size is the maximal size of the ethernet frame for which
+> the IC designer provided specified amount of RAM (it is a different
+> value for different SoCs in the Link Street family).
+>=20
+> >=20
+> >       Andrew =20
+>=20
+>=20
+> Best regards,
+>=20
+> Lukasz Majewski
+>=20
+> --
+>=20
+> DENX Software Engineering GmbH,      Managing Director: Erika Unter
+> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+> Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email:
+> lukma@denx.de
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 2b23378..ebe6b8e 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -371,7 +371,7 @@ void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	/*
- 	 * We're pending, wait for the owner to go away.
- 	 *
--	 * 0,1,1 -> 0,1,0
-+	 * 0,1,1 -> *,1,0
- 	 *
- 	 * this wait loop must be a load-acquire such that we match the
- 	 * store-release that clears the locked bit and create lock
-@@ -380,7 +380,7 @@ void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	 * barriers.
- 	 */
- 	if (val & _Q_LOCKED_MASK)
--		atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_MASK));
-+		smp_cond_load_acquire(&lock->locked, !VAL);
- 
- 	/*
- 	 * take ownership and clear the pending bit.
+
+
+
+Best regards,
+
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/6ww_7R43XAgS8UoX0pNf3AM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmO2qFgACgkQAR8vZIA0
+zr1r9wgAys1TrWSHvZUhjo0hrnAaM6SRfe7OiUa9FMrGJeQvyJ9CwoN0iU6NcdHd
+PeNmg3VZ5mF9M32g+GbMjgMQLlHXiq7jc0qXpKUGxDhw6oO98z9knkuIor9IfNKm
+sP2cjb/8hWMh+YjLR7h2Olj98QnkMGnbG6U7o4vfKzdcvpENxptzi0LxCELD/P2E
+SUXg1L4US1ur7KSkNGT1M9FBXhGefTU38Knj2baKcVbfI6Q8z5t4GGUippqAyHhv
+rn36AexE3cg+0Kp1byPzn+/atox4Pj1IbMutKVFxaYiUxt8fHhBt734MSyhZ4w9v
+wyyfrK6mB08heO3nVnmYqOfV3A9vrQ==
+=dqKk
+-----END PGP SIGNATURE-----
+
+--Sig_/6ww_7R43XAgS8UoX0pNf3AM--
