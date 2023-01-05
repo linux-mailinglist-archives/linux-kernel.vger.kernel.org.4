@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A49E65EDB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D17E365EDBE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjAENrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S233569AbjAENsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbjAENr0 (ORCPT
+        with ESMTP id S233756AbjAENra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:47:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDA53E0F7;
-        Thu,  5 Jan 2023 05:47:25 -0800 (PST)
+        Thu, 5 Jan 2023 08:47:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E04E392DE;
+        Thu,  5 Jan 2023 05:47:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C08F61A94;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7CF6B81AE6;
+        Thu,  5 Jan 2023 13:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F52EC433F0;
         Thu,  5 Jan 2023 13:47:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDB1C433EF;
-        Thu,  5 Jan 2023 13:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926444;
-        bh=FJKWxab8jgdL8QRSTYPu5QbZT8XQ3r9MStsrq3HgraI=;
+        s=k20201202; t=1672926447;
+        bh=ersO1VXXlu3ws/sJ8m/B71Z2PrStTpAMrvLMqntlN9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TnoemKZzlRtc4RbEDYwYrCxMaldvoq9hyvkFjNaiMs5ONNoYxKPPzSjf43HdnWHT7
-         Jv74JP+8X5YGEHqPaIgTm3LPX1TA5JwLc/VA8FKXaqF+4RDrdoBrQkBLP1yk2Ux1cw
-         He4/DRqeYpjZ+mjxs6CxmaJfUgGXwaJDMCYs+GhhL35wsZ66DwI7ciwkwZOahik8kG
-         Iu31DzXvHzbi8gD0KfPvb0wXW1fj0Hyv8+p4NN19KO9YdblTjiCKI5PiAit7Ls4IAy
-         /gh112XMwrQWYIkRKDAtGUSYs9atY1N+eydNJENVGsRQyZO+R79V93XCTvl/d63IYp
-         wcA2KTxneqmYQ==
+        b=IK+36d/kRwJ3aZTNO18hBxJrEVM2hrs/c7qEUX0DXgR282A+y4QoY7/qf4rBjjDR2
+         SYQxJgcnTSqfUMu7NDmFPz1056m/L1oCy9u8UmfsVSQF+rsVlNNJGZvb1XYgBWl2SY
+         Dt9/IDSOajFuu9+VbQ4NjRUKKrUxattoZnD97ThBnI8CIyDJP+HT6SUULW9wxQPthA
+         OJ7fFf8ge2KDWTYZygnzfkwZK5BkIMYg+lHgzm8hl4RmnijCgBwpXjQSo/UC7H7nUs
+         aS4Rd7HMKSfPs7oilNGoLprbtHsT1O/pHEOPNZhCfrLQwlD5ZOy2SP7cUAty4tWi8X
+         Xa50CLLeYpxKQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Anton Vorontsov <cbou@mail.ru>, linux-pm@vger.kernel.org
-Subject: [PATCH 16/27] power: remove pda_power supply driver
-Date:   Thu,  5 Jan 2023 14:46:11 +0100
-Message-Id: <20230105134622.254560-17-arnd@kernel.org>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH 17/27] rtc: remove v3020 driver
+Date:   Thu,  5 Jan 2023 14:46:12 +0100
+Message-Id: <20230105134622.254560-18-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,90 +60,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This driver was used for a couple of Intel PXA and Samsung S3C24xx
-based PDAs, but all of those are now removed from the kernel, so
-the driver itself is no longer useful.
+The v3020 RTC driver was exclusively used by the now removed
+cm-x300.c machine.
 
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: Anton Vorontsov <cbou@mail.ru>
-Cc: linux-pm@vger.kernel.org
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- Documentation/power/power_supply_class.rst |   4 +-
- arch/arm/mach-tegra/tegra.c                |   1 -
- drivers/power/supply/Kconfig               |   9 -
- drivers/power/supply/Makefile              |   1 -
- drivers/power/supply/pda_power.c           | 520 ---------------------
- include/linux/pda_power.h                  |  39 --
- 6 files changed, 2 insertions(+), 572 deletions(-)
- delete mode 100644 drivers/power/supply/pda_power.c
- delete mode 100644 include/linux/pda_power.h
+ drivers/rtc/Kconfig                     |   9 -
+ drivers/rtc/Makefile                    |   1 -
+ drivers/rtc/rtc-v3020.c                 | 369 ------------------------
+ include/linux/platform_data/rtc-v3020.h |  41 ---
+ 4 files changed, 420 deletions(-)
+ delete mode 100644 drivers/rtc/rtc-v3020.c
+ delete mode 100644 include/linux/platform_data/rtc-v3020.h
 
-diff --git a/Documentation/power/power_supply_class.rst b/Documentation/power/power_supply_class.rst
-index c04fabee0a58..da8e275a14ff 100644
---- a/Documentation/power/power_supply_class.rst
-+++ b/Documentation/power/power_supply_class.rst
-@@ -40,8 +40,8 @@ kind of power supply, and can process/present them to a user in consistent
- manner. Results for different power supplies and machines are also directly
- comparable.
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 530b4a94ed42..2ba72de0fa47 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1212,15 +1212,6 @@ config RTC_DRV_RP5C01
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-rp5c01.
  
--See drivers/power/supply/ds2760_battery.c and drivers/power/supply/pda_power.c
--for the example how to declare and handle attributes.
-+See drivers/power/supply/ds2760_battery.c for the example how to declare
-+and handle attributes.
- 
- 
- Units
-diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
-index ab5008f35803..9ef1dfa7b926 100644
---- a/arch/arm/mach-tegra/tegra.c
-+++ b/arch/arm/mach-tegra/tegra.c
-@@ -19,7 +19,6 @@
- #include <linux/of_fdt.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
--#include <linux/pda_power.h>
- #include <linux/platform_device.h>
- #include <linux/serial_8250.h>
- #include <linux/slab.h>
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 3c37f3a6431c..e2f8dfcdd2a9 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -28,15 +28,6 @@ config POWER_SUPPLY_HWMON
- 	  Say 'Y' here if you want power supplies to
- 	  have hwmon sysfs interface too.
- 
--
--config PDA_POWER
--	tristate "Generic PDA/phone power driver"
--	depends on !S390
+-config RTC_DRV_V3020
+-	tristate "EM Microelectronic V3020"
 -	help
--	  Say Y here to enable generic power driver for PDAs and phones with
--	  one or two external power supplies (AC/USB) connected to main and
--	  backup batteries, and optional builtin charger.
+-	  If you say yes here you will get support for the
+-	  EM Microelectronic v3020 RTC chip.
 -
- config APM_POWER
- 	tristate "APM emulation for class batteries"
- 	depends on APM_EMULATION
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 55c1aae91d1d..8cb3c7f5c111 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -9,7 +9,6 @@ obj-$(CONFIG_POWER_SUPPLY)	+= power_supply.o
- obj-$(CONFIG_POWER_SUPPLY_HWMON) += power_supply_hwmon.o
- obj-$(CONFIG_GENERIC_ADC_BATTERY)	+= generic-adc-battery.o
- 
--obj-$(CONFIG_PDA_POWER)		+= pda_power.o
- obj-$(CONFIG_APM_POWER)		+= apm_power.o
- obj-$(CONFIG_AXP20X_POWER)	+= axp20x_usb_power.o
- obj-$(CONFIG_IP5XXX_POWER)	+= ip5xxx_power.o
-diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_power.c
+-	  This driver can also be built as a module. If so, the module
+-	  will be called rtc-v3020.
+-
+ config RTC_DRV_GAMECUBE
+ 	tristate "Nintendo GameCube, Wii and Wii U RTC"
+ 	depends on GAMECUBE || WII || COMPILE_TEST
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index d3c042dcbc73..59eb30289335 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -176,7 +176,6 @@ obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
+ obj-$(CONFIG_RTC_DRV_TPS6586X)	+= rtc-tps6586x.o
+ obj-$(CONFIG_RTC_DRV_TPS65910)	+= rtc-tps65910.o
+ obj-$(CONFIG_RTC_DRV_TWL4030)	+= rtc-twl.o
+-obj-$(CONFIG_RTC_DRV_V3020)	+= rtc-v3020.o
+ obj-$(CONFIG_RTC_DRV_VT8500)	+= rtc-vt8500.o
+ obj-$(CONFIG_RTC_DRV_WILCO_EC)	+= rtc-wilco-ec.o
+ obj-$(CONFIG_RTC_DRV_WM831X)	+= rtc-wm831x.o
+diff --git a/drivers/rtc/rtc-v3020.c b/drivers/rtc/rtc-v3020.c
 deleted file mode 100644
-index 03a37fd6be27..000000000000
-diff --git a/include/linux/pda_power.h b/include/linux/pda_power.h
+index 4e8341c49f51..000000000000
+diff --git a/include/linux/platform_data/rtc-v3020.h b/include/linux/platform_data/rtc-v3020.h
 deleted file mode 100644
-index 2a69db4b60b7..000000000000
+index e55d82cebf80..000000000000
 -- 
 2.39.0
 
