@@ -2,117 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9C465EEE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9112265EEF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbjAEOiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S233429AbjAEOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAEOin (ORCPT
+        with ESMTP id S233384AbjAEOlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:38:43 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192F35933D
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:38:42 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r2so1508932wrv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wVtkjpd1m5CHpqjkgjmo86bTVFs9jvutUQ4eD41Hm9g=;
-        b=NzuwNKy8Ow+MANdie+j+x4B9s960DR90E2MnehzGKe3PurQC2DCydzdAIfUDqpGSs8
-         ghkY3BWq8N1OxbwBNA0l5jg0cEfOf2IlVy/KNJ8Ymdmcjm4uM5AvP8Gv3Ad+TXbu+f9n
-         xBDs16qMuOMcjOle134JGGRL6rO19cf8k4xXM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wVtkjpd1m5CHpqjkgjmo86bTVFs9jvutUQ4eD41Hm9g=;
-        b=QdEMi/16FMSnkS/wY40j7VW9faGuxtqGKPkz1Yt2smzttGOO/93LeIkSPqdBBs8/lV
-         2BgKvgtsaO0hr4fBXsu9EHCD91SMHtjkftDEH8I89wbI/7yDSpSsYPr6HoqxwezR1GR5
-         2ClRy/x6GK/CYx9GNw/dLV6wC+qKP9B3i1xKXa6LNztqmn1EbKT5D0bJNkPIbkRAaSVp
-         ztmhH8iG6TzKwmhR05OEpagqwUEPiX7CUFUHDG8Eev9vvGm+JS9ebQl4MDc+o0ANsLIc
-         S07cvY6dzuVdNLZS/KgPW2HshWofMqLv/SvKzFlJqhg19Aj3Ae1SyqOtZHD3LWC62Hbn
-         Yv/Q==
-X-Gm-Message-State: AFqh2kqLdQW7/w6MHMyOBC0AlAUWOMAd9yKvQe/cLEvgv8tGhdV6VlJ9
-        hP5wtZMZAabppe5SGUl8A8pTeQ==
-X-Google-Smtp-Source: AMrXdXuSsMZhhd80+6OXhv75jCIyGLpgvyQQ+TVLgcPbSzqYqBhxo3s87MG+XFl/BzyUXYOexu5Z8Q==
-X-Received: by 2002:a05:6000:5c9:b0:2b0:bc05:b463 with SMTP id bh9-20020a05600005c900b002b0bc05b463mr1943816wrb.7.1672929520678;
-        Thu, 05 Jan 2023 06:38:40 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b003d99469ece1sm2845649wmo.24.2023.01.05.06.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 06:38:39 -0800 (PST)
-Date:   Thu, 5 Jan 2023 15:38:37 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Patrick Thompson <ptf@google.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: Add orientation quirk for Lenovo ideapad D330-10IGL
-Message-ID: <Y7bg7WQs0OtMLmAW@phenom.ffwll.local>
-Mail-Followup-To: Patrick Thompson <ptf@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221220205826.178008-1-ptf@google.com>
+        Thu, 5 Jan 2023 09:41:00 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DCC30;
+        Thu,  5 Jan 2023 06:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VcmkmclKmW24sYOpS8HuiKKoxvXwxynwv/26mO7Ol30=; b=OYZqncrdNKyRrul8nw4C/ZHiR+
+        C/P1hTz1qeTRCKP52NzSXLU16s+70WpAaKtpW/gTlCpbQ4HgnGuqcJIvs41vLCN+3ycsOAc1RVkRF
+        /88uF2MKsPAFkj+65SwJDClk631M2cuGXFAGaov32Q84L3sni34D4JXA6a9EbWyGeTpCJiO49tZby
+        78KdDfO7T0VZpGci2UNkBQIrimNMugNs5rwpf6mDnQCNzG29CcA7kdZHb3nNwBPN6p8TXUA/ZMeew
+        0niHlhp32OOG4bzoDmZDfHtIVQCGhqtFrZ5gE8X7UxXTdUN5X0YTEO6KMpVYjWFV13Y96YkeI9w1Q
+        PcPM1vPg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35978)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pDRQL-0007H2-9N; Thu, 05 Jan 2023 14:40:52 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pDRQI-00044L-75; Thu, 05 Jan 2023 14:40:50 +0000
+Date:   Thu, 5 Jan 2023 14:40:50 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <Y7bhctPZoyNnw1ay@shell.armlinux.org.uk>
+References: <20230103220511.3378316-1-sean.anderson@seco.com>
+ <20230103220511.3378316-5-sean.anderson@seco.com>
+ <20230105140421.bqd2aed6du5mtxn4@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221220205826.178008-1-ptf@google.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+In-Reply-To: <20230105140421.bqd2aed6du5mtxn4@skbuf>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 03:58:26PM -0500, Patrick Thompson wrote:
-> Panel is 800x1280 but mounted on a detachable form factor sideways.
+On Thu, Jan 05, 2023 at 04:04:21PM +0200, Vladimir Oltean wrote:
+> On Tue, Jan 03, 2023 at 05:05:11PM -0500, Sean Anderson wrote:
+> >  static int aqr107_get_rate_matching(struct phy_device *phydev,
+> >  				    phy_interface_t iface)
+> >  {
+> > -	if (iface == PHY_INTERFACE_MODE_10GBASER ||
+> > -	    iface == PHY_INTERFACE_MODE_2500BASEX ||
+> > -	    iface == PHY_INTERFACE_MODE_NA)
+> > -		return RATE_MATCH_PAUSE;
+> > -	return RATE_MATCH_NONE;
+> > +	static const struct aqr107_link_speed_cfg speed_table[] = {
+> > +		{
+> > +			.speed = SPEED_10,
+> > +			.reg = VEND1_GLOBAL_CFG_10M,
+> > +			.speed_bit = MDIO_PMA_SPEED_10,
+> > +		},
+> > +		{
+> > +			.speed = SPEED_100,
+> > +			.reg = VEND1_GLOBAL_CFG_100M,
+> > +			.speed_bit = MDIO_PMA_SPEED_100,
+> > +		},
+> > +		{
+> > +			.speed = SPEED_1000,
+> > +			.reg = VEND1_GLOBAL_CFG_1G,
+> > +			.speed_bit = MDIO_PMA_SPEED_1000,
+> > +		},
+> > +		{
+> > +			.speed = SPEED_2500,
+> > +			.reg = VEND1_GLOBAL_CFG_2_5G,
+> > +			.speed_bit = MDIO_PMA_SPEED_2_5G,
+> > +		},
+> > +		{
+> > +			.speed = SPEED_5000,
+> > +			.reg = VEND1_GLOBAL_CFG_5G,
+> > +			.speed_bit = MDIO_PMA_SPEED_5G,
+> > +		},
+> > +		{
+> > +			.speed = SPEED_10000,
+> > +			.reg = VEND1_GLOBAL_CFG_10G,
+> > +			.speed_bit = MDIO_PMA_SPEED_10G,
+> > +		},
+> > +	};
+> > +	int speed = phy_interface_max_speed(iface);
+> > +	bool got_one = false;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(speed_table) &&
+> > +		    speed_table[i].speed <= speed; i++) {
+> > +		if (!aqr107_rate_adapt_ok(phydev, speed, &speed_table[i]))
+> > +			return RATE_MATCH_NONE;
+> > +		got_one = true;
+> > +	}
 > 
-> Signed-off-by: Patrick Thompson <ptf@google.com>
+> Trying to wrap my head around the API for rate matching that was
+> originally proposed and how it applies to what we read from Aquantia
+> registers now.
+> 
+> IIUC, phylink (via the PHY library) asks "what kind of rate matching is
+> supported for this SERDES protocol?". It doesn't ask "via what kind of
+> rate matching can this SERDES protocol support this particular media
+> side speed?".
+> 
+> Your code walks through the speed_table[] of media speeds (from 10M up
+> until the max speed of the SERDES) and sees whether the PHY was
+> provisioned, for that speed, to use PAUSE rate adaptation.
+> 
+> If the PHY firmware uses a combination like this: 10GBASE-R/XFI for
+> media speeds of 10G, 5G, 2.5G (rate adapted), and SGMII for 1G, 100M
+> and 10M, a call to your implementation of
+> aqr107_get_rate_matching(PHY_INTERFACE_MODE_10GBASER) would return
+> RATE_MATCH_NONE, right? So only ETHTOOL_LINK_MODE_10000baseT_Full_BIT
+> would be advertised on the media side?
 
-Applied to drm-misc-fixes, thanks for your patch.
--Daniel
+No, beause of the special condition in phylink that if it's a clause 45
+PHY and we use something like 10GBASE-R, we don't limit to just 10G
+speed, but try all interface modes - on the assumption that the PHY
+will switch its host interface.
 
-> ---
-> 
->  drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> index 52d8800a8ab86..3659f0465a724 100644
-> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> @@ -304,6 +304,12 @@ static const struct dmi_system_id orientation_data[] = {
->  		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGM"),
->  		},
->  		.driver_data = (void *)&lcd1200x1920_rightside_up,
-> +	}, {	/* Lenovo Ideapad D330-10IGL (HD) */
-> +		.matches = {
-> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGL"),
-> +		},
-> +		.driver_data = (void *)&lcd800x1280_rightside_up,
->  	}, {	/* Lenovo Yoga Book X90F / X91F / X91L */
->  		.matches = {
->  		  /* Non exact match to match all versions */
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+RATE_MATCH_NONE doesn't state anything about whether the PHY operates
+in a single interface mode or not - with 10G PHYs (and thus clause 45
+PHYs) it seems very common from current observations for
+implementations to do this kind of host-interface switching.
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
