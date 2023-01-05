@@ -2,122 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E1D65F6E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C127065F6EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236157AbjAEWgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S236189AbjAEWhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236145AbjAEWgq (ORCPT
+        with ESMTP id S235668AbjAEWhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:36:46 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC71B1CE
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:36:45 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id jl4so34577977plb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTnS8YGkz+TFlaH5VylWTT81FwP8SacJ4LHArMeisg0=;
-        b=Od3RSE6LiX0RDr6NqBn7rCVN/9DDDXs0q+tdT8jFQncP6Urx8T2WMJHv89zDyEDp7O
-         4gyuEjWhxh3h7/iqTPH5ceEQX64JBhrM5b5kHvdfaEVQ9hRdLJRNOppjlomjTaI3BIGf
-         w+3D8bNOlw2KFUDHvYyOVXVe4LphI3IDQbgjc=
+        Thu, 5 Jan 2023 17:37:22 -0500
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706F511A1A;
+        Thu,  5 Jan 2023 14:37:21 -0800 (PST)
+Received: by mail-pl1-f175.google.com with SMTP id p24so18350742plw.11;
+        Thu, 05 Jan 2023 14:37:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vTnS8YGkz+TFlaH5VylWTT81FwP8SacJ4LHArMeisg0=;
-        b=oKoSAKy+On2YJDwImIUNt6NxacpQ64Teci4ndoUEPXVzG9PeI+Fniwge09p9yPkgGc
-         djVVdg2TOb7tpBa2rbBo9hfySrKRK3ao9W0NPGgdOxh9DJlvFkIetwIX1y7LKqGyx0hL
-         abR5OBEUDN77lw8inaAhGJqcTYHR3Soy1MCQv/mKdlAYpw84BVwHq0QH1UAKamd627YI
-         sryP8ZfrjWV7AK6v7ikhLyB8n8J9z3FPmYl9sewdQrKrAcmSk/OIiOXhDkLqyVVwJYru
-         L5aruvFo40WbgEAf8G6mURFHwjgivvsJQu98EdyV3goy4RM4bC+qwMSHG3mQqLdfUoZy
-         1KCg==
-X-Gm-Message-State: AFqh2krq4eDa5JFbHvrHhNxua6qAx5NajPfW1enXFkYdXArJbcB0wsuA
-        3OSb0vMk8UgET4qHh/gAQA0Gbg==
-X-Google-Smtp-Source: AMrXdXux9e5NuZPpnskqtYB+XoAQpaU8Ilr5HfAMj1CxdM9IDVskpvaO076O8SqFOoZhA8EsUBypdw==
-X-Received: by 2002:a17:902:f08a:b0:189:efe8:1e with SMTP id p10-20020a170902f08a00b00189efe8001emr51337863pla.68.1672958205276;
-        Thu, 05 Jan 2023 14:36:45 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a11-20020a63e40b000000b00478ca052819sm22392159pgi.47.2023.01.05.14.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:36:44 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] net/mlx5e: Replace 0-length array with flexible array
-Date:   Thu,  5 Jan 2023 14:36:43 -0800
-Message-Id: <20230105223642.never.980-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCTlzFm5fJtKAO2V8wQaI92SjSB9L9pSd5yrDbFK4ZI=;
+        b=Ta62VKCsdH3CYXCmweqLae5Hn912pOhv1wF8ae9jYnLyey+j0CiVBcnI3uBVfoOY6n
+         UAAQ4+Uv/EJF5s+jEnQ6IRM2JgfvE3eYX2uik9k473OdOfceN+YKKy3xLHZTFrdjerIj
+         Gcionrh2QPOuJmPn6VFPFb16aqvyLbTp/kXEztHsXdkr0vsF+ndWy6pm3K/kfG0Qx7CC
+         OuANi/qYP04+mwf2Za/m7qtYUWY1T5WCCgXp4gR9FAbxEK9HKc0I2eDPcB0YUjW5xkkw
+         HJRqGJc3AyuU0H9lCkjtvOXjLit2e5z06/bO+vsX2Y125Z7GrgOavvoIZQAfbRxC0527
+         AG6A==
+X-Gm-Message-State: AFqh2kqeaZljuNOMuvkJDfDP0xyYcRfp4H75kTHhWWcgD345GmK1te6M
+        NO8z2uoctLn5XTkoj37xKlw=
+X-Google-Smtp-Source: AMrXdXuHU/eFew8BTXJhLBgH4SuzgVSzYb7kCXylY0BzdjufeEvmH9cDwEf+OM38vM/80N78Q7XQZg==
+X-Received: by 2002:a17:903:41c6:b0:186:8238:bc9 with SMTP id u6-20020a17090341c600b0018682380bc9mr76005463ple.2.1672958240740;
+        Thu, 05 Jan 2023 14:37:20 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:f9eb:49b6:75b:111e? ([2620:15c:211:201:f9eb:49b6:75b:111e])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b001886ff822ffsm26633693plk.186.2023.01.05.14.37.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 14:37:19 -0800 (PST)
+Message-ID: <81a10cd9-7b0b-e982-5d24-5f0438e37b63@acm.org>
+Date:   Thu, 5 Jan 2023 14:37:17 -0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2058; h=from:subject:message-id; bh=z9zLbe924cMlc9bCRVzAk3TMTpuiLHM3ITNjTKxLEL0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1D68KpUigmLbVjgVr7qwolklCRIkWm8FyY1lEal zrIwQ0OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dQ+gAKCRCJcvTf3G3AJszwD/ 40sd9lxHmJk2Jotmcy0c7sImQsz4M/iSxCz1Jpo1Acu/9tBXHYG1WSg/JM6HXMs25zbP83WqwZz0ta ScdPosftzA9wgmMXb8/vXf5cULI/T6DCXW0ZjMmLqmCK/rwtV3r7z6oheW3142vbpRV16KcUPEG3cd I4F56O0hNGAOds3VxCtoqEVp7piVlUf8dB0bVyBEmFpdaXdPqRdyAOwEq3YODbu6OA/FoiGnHHpg3I ydu80/WoZOPdRL6PkOS3k+bHThq6R5S3STEcXo1ZzL3p9pg5gO2oD73XIWp+O+5oEdQ44XJ5IeQlRB C83oU0jwWetg8xUaErm2gxRVENDxW7kkm3f9H5ua/0O0HqjXbIWmIGe/IW/U7zAS7n0LJihh/aarM5 eBN190UCobxYYRfBwBgDKNaOhyVpdGloA2ctVsKl73uBOYVh22Uiyxdf1kTHlq8jdZXHY4F7c3lcnx V3hmmqzjd9J5X1mX2UixvWWgYi2tElBFI6QWnp826wGAbGWWmo2k/Az3EuzS6KU9Zigo49zT2DPfV2 pCcEPuUsbIXEii75tbJ+5iL0Drqc9BeOHZengIsBO37yKw0hkbNI8ICcqNhFpUR2Y7lvFAOQ2eJy9+ TWP/koLD8R1zAvnL6ic+lKbJeF13un/q+KpvgSiiUvs1+7ynM31ceE79ROkg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 7/7] ufs: core: Add advanced RPMB support in ufs_bsg
+Content-Language: en-US
+To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, tomas.winkler@intel.com,
+        daejun7.park@samsung.com, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201140437.549272-1-beanhuo@iokpp.de>
+ <20221201140437.549272-8-beanhuo@iokpp.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20221201140437.549272-8-beanhuo@iokpp.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct mlx5e_rx_wqe_cyc's
-"data" 0-length array with a flexible array. Detected with GCC 13,
-using -fstrict-flex-arrays=3:
+On 12/1/22 06:04, Bean Huo wrote:
+> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+> index 5cf81dff60aa..c3dfa8084b5c 100644
+> --- a/include/ufs/ufshcd.h
+> +++ b/include/ufs/ufshcd.h
+> +int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *req_upiu,
+> +				     struct utp_upiu_req *rsp_upiu, struct ufs_ehs *ehs_req,
+> +				     struct ufs_ehs *ehs_rsp, int sg_cnt,
+> +				     struct scatterlist *sg_list, enum dma_data_direction dir);
 
-drivers/net/ethernet/mellanox/mlx5/core/en_main.c: In function 'mlx5e_alloc_rq':
-drivers/net/ethernet/mellanox/mlx5/core/en_main.c:827:42: warning: array subscript f is outside array bounds of 'struct mlx5_wqe_data_seg[0]' [-Warray-bounds=]
-  827 |                                 wqe->data[f].byte_count = 0;
-      |                                 ~~~~~~~~~^~~
-In file included from drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.h:11,
-                 from drivers/net/ethernet/mellanox/mlx5/core/eswitch.h:48,
-                 from drivers/net/ethernet/mellanox/mlx5/core/en_main.c:42:
-drivers/net/ethernet/mellanox/mlx5/core/en.h:250:39: note: while referencing 'data'
-  250 |         struct mlx5_wqe_data_seg      data[0];
-      |                                       ^~~~
+Hi Bean,
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+I think this patch is the first patch that adds a declaration in 
+ufshcd.h that uses the enum dma_data_direction data type. That leads to 
+the following compiler warning:
 
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In file included from drivers/ufs/host/tc-dwc-g210-pci.c:10:
+./include/ufs/ufshcd.h:1282:72: warning: ‘enum dma_data_direction’ 
+declared inside parameter list will not be visible outside of this 
+definition or declaration
+  1282 |                                      struct scatterlist 
+*sg_list, enum dma_data_direction dir);
+       | 
+        ^~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 2d77fb8a8a01..37cf3b1bb144 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -247,7 +247,7 @@ struct mlx5e_rx_wqe_ll {
- };
- 
- struct mlx5e_rx_wqe_cyc {
--	struct mlx5_wqe_data_seg      data[0];
-+	DECLARE_FLEX_ARRAY(struct mlx5_wqe_data_seg, data);
- };
- 
- struct mlx5e_umr_wqe {
--- 
-2.34.1
+Can you please post a patch to fix this? Adding the following line is 
+probably sufficient:
 
+#include <linux/dma-direction.h>
+
+This has been detected with the following script:
+https://github.com/bvanassche/build-scsi-drivers/blob/main/build-scsi-drivers
+
+Thanks,
+
+Bart.
