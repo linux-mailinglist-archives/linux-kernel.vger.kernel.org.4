@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F3965EDD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE9765EE70
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbjAENtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S233832AbjAEOKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjAENtN (ORCPT
+        with ESMTP id S234092AbjAENt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:49:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8173F100
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:47:37 -0800 (PST)
+        Thu, 5 Jan 2023 08:49:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9356B4EC8A;
+        Thu,  5 Jan 2023 05:47:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F22861A8E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:47:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D14FC433F2;
-        Thu,  5 Jan 2023 13:47:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB9A0B81AE4;
+        Thu,  5 Jan 2023 13:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6BBC433D2;
+        Thu,  5 Jan 2023 13:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926456;
-        bh=g5Ktac+x1WGnROCjyNkddZbbPKWiUR9G99wt906iw8w=;
+        s=k20201202; t=1672926459;
+        bh=0C2s8Htv8j/a9ZgxMURdUzKBZYXWV4XjhbJ2Xum7PQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gViws4OEe4zM6qcAS0UnXS2+/1WszliXtvKxww8VZLvGh98sQBsfici0N9eZxla9K
-         ecWwuQNy64kkQ5m+503yV7Mr4GfjC4lRogui6olzhYA8eGwpnH8YVg1pd0gqbszlsK
-         Ia7XTX3rFDgkez3DJmAIqM/9c3XSNHvYrqHUFXFxs86MhozWMtPDAuGv2HeatyVSKa
-         bZjXe7swuB2k1P4RI9bAHLaI6xPVBA/E44hTVo57SmRpmuR0VfV6flGWJ9FqwaGJrl
-         mCsvt57IhfFJmTHiyTgW0ZxyaGRPbsG+TNzTgEvFCXI+KvB8tEvmaeaX802mU9+d/R
-         fi3IctlTmQaqA==
+        b=TCVjnh5Np8xRhW7xrU3mVDHXFFRFK058PFVL+U8xsvba7kysjoSsO3PUkwWSRNSn+
+         opIXXvDuuvK5nCAKRfjJrKhzmp0yHDxRZIkspXbwxrfnC64lfDD+iDMG+ZImTv/Kcl
+         HGvtsbJKaUGYSoY06qI02gaptaI+iP3wYqvocYBkq1puT+uYaQ+v+YUcYlOveQ5Xzi
+         g+/H+iiLJIXDhk+3yPPfXBAQfPAq2iOLK2SQBEGJhYxz0GNDl6rAZlJoMwHMtZ++4q
+         gxOShUc2KeTcOh8FvoEJdmlFaoTfn0PvMrGgz+g39JZEqOn7iYLiMqc9DUd2p7Au64
+         QuptAdBYvDekg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: [PATCH 20/27] mtd: remove tmio_nand driver
-Date:   Thu,  5 Jan 2023 14:46:15 +0100
-Message-Id: <20230105134622.254560-21-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, Ian Molton <spyro@f2s.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 21/27] mmc: remove tmio_mmc driver
+Date:   Thu,  5 Jan 2023 14:46:16 +0100
+Message-Id: <20230105134622.254560-22-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -61,54 +60,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With the TMIO MFD drivers gone, the NAND support is also
-obsolete and can be removed.
+With the TMIO MFD support gone, the corresponding MMC host driver can
+be removed as well. The remaining tmio_mmc_core module however is still
+used by both the Renesas and Socionext host drivers.
 
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-mtd@lists.infradead.org
+Cc: Ian Molton <spyro@f2s.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-mmc@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/mtd/nand/raw/Kconfig     |   7 -
- drivers/mtd/nand/raw/Makefile    |   1 -
- drivers/mtd/nand/raw/tmio_nand.c | 533 -------------------------------
- 3 files changed, 541 deletions(-)
- delete mode 100644 drivers/mtd/nand/raw/tmio_nand.c
+ drivers/mmc/host/Kconfig    |   8 --
+ drivers/mmc/host/Makefile   |   1 -
+ drivers/mmc/host/tmio_mmc.c | 227 ------------------------------------
+ 3 files changed, 236 deletions(-)
+ delete mode 100644 drivers/mmc/host/tmio_mmc.c
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 048b1c8f08ee..170f1185ddc4 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -193,13 +193,6 @@ config MTD_NAND_PASEMI
- 	  Enables support for NAND Flash interface on PA Semi PWRficient
- 	  based boards
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index f0456ad4b597..e1b88b51cc80 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -655,14 +655,6 @@ config MMC_SDHCI_SPRD
+ config MMC_TMIO_CORE
+ 	tristate
  
--config MTD_NAND_TMIO
--	tristate "Toshiba Mobile IO NAND controller"
--	depends on MFD_TMIO
+-config MMC_TMIO
+-	tristate "Toshiba Mobile IO Controller (TMIO) MMC/SD function support"
+-	depends on MFD_TMIO || MFD_ASIC3 || COMPILE_TEST
+-	select MMC_TMIO_CORE
 -	help
--	  Support for NAND flash connected to a Toshiba Mobile IO
--	  Controller in some PDAs, including the Sharp SL6000x.
+-	  This provides support for the SD/MMC cell found in TC6393XB,
+-	  T7L66XB and also HTC ASIC3
 -
- source "drivers/mtd/nand/raw/brcmnand/Kconfig"
- 
- config MTD_NAND_BCM47XXNFLASH
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index fa1d00120310..917cdfb815b9 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -23,7 +23,6 @@ omap2_nand-objs := omap2.o
- obj-$(CONFIG_MTD_NAND_OMAP2) 		+= omap2_nand.o
- obj-$(CONFIG_MTD_NAND_OMAP_BCH_BUILD)	+= omap_elm.o
- obj-$(CONFIG_MTD_NAND_MARVELL)		+= marvell_nand.o
--obj-$(CONFIG_MTD_NAND_TMIO)		+= tmio_nand.o
- obj-$(CONFIG_MTD_NAND_PLATFORM)		+= plat_nand.o
- obj-$(CONFIG_MTD_NAND_PASEMI)		+= pasemi_nand.o
- obj-$(CONFIG_MTD_NAND_ORION)		+= orion_nand.o
-diff --git a/drivers/mtd/nand/raw/tmio_nand.c b/drivers/mtd/nand/raw/tmio_nand.c
+ config MMC_SDHI
+ 	tristate "Renesas SDHI SD/SDIO controller support"
+ 	depends on SUPERH || ARCH_RENESAS || COMPILE_TEST
+diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+index 063d87764966..b498c17cd124 100644
+--- a/drivers/mmc/host/Makefile
++++ b/drivers/mmc/host/Makefile
+@@ -35,7 +35,6 @@ obj-$(CONFIG_MMC_DAVINCI)       += davinci_mmc.o
+ obj-$(CONFIG_MMC_SPI)		+= mmc_spi.o
+ obj-$(CONFIG_MMC_SPI)		+= of_mmc_spi.o
+ obj-$(CONFIG_MMC_SDRICOH_CS)	+= sdricoh_cs.o
+-obj-$(CONFIG_MMC_TMIO)		+= tmio_mmc.o
+ obj-$(CONFIG_MMC_TMIO_CORE)	+= tmio_mmc_core.o
+ obj-$(CONFIG_MMC_SDHI)		+= renesas_sdhi_core.o
+ obj-$(CONFIG_MMC_SDHI_SYS_DMAC)		+= renesas_sdhi_sys_dmac.o
+diff --git a/drivers/mmc/host/tmio_mmc.c b/drivers/mmc/host/tmio_mmc.c
 deleted file mode 100644
-index 8f1a42bf199c..000000000000
+index 53a2ad9a24b8..000000000000
 -- 
 2.39.0
 
