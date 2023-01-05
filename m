@@ -2,206 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EED65F5B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20BC65F5B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbjAEVY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S235789AbjAEV0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235725AbjAEVYs (ORCPT
+        with ESMTP id S235756AbjAEV03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:24:48 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE32F795;
-        Thu,  5 Jan 2023 13:24:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id z4-20020a17090a170400b00226d331390cso2283135pjd.5;
-        Thu, 05 Jan 2023 13:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptP+TRS/lGASh4wVWy3dTAfwv7VhGgtUgLBdAb814ZI=;
-        b=V7T0Xn1YdlFcaVEgPKSUl8rZlRg3c67hT1gEvABoMED52yoSZTGLsKP/5fmVcP8GjN
-         nqbdzjRpwoF6vrnnuJcKluCYDHOGqepCifxWkuL6gVqmPGz4ZCkrHTsG8r2+R+oW0K17
-         8LDDEMfCkh9D5QNAEPexlTwfdi1OlNTwsuc8bnf92AcZgL+SBVU62W9pPy1VKQp0MncR
-         YzeenEu2xyKEmAlPCT88MOb+oJk20xKflj9qbJSLZCULPGgvQSAXYr/Vk23TKgDcbpUJ
-         qaMBMxRLOj1uAlPqv+GcZu26tVU49iiiYjGRyx54DxB8ZlUACWfTBARjjw+IWlOgJ6XS
-         NVXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ptP+TRS/lGASh4wVWy3dTAfwv7VhGgtUgLBdAb814ZI=;
-        b=NpoDgZutX5RJFrB+VigjzRoGeVSjMb3JajH7QFkuIyKS1b6Ys/mmhGPPapyvKKMtM5
-         5X+B3XXK8h1a+09U/bXsSACeGzudoII9Vw2P9M/ijpGuvuyCHlT7TM5D6Z9p3DRPWwkk
-         2kT0m8nVn/qgNQHBzqmRomT++FVNLO44BXTg0hATMvIezuQwqq5qcJ6JF5iWXwOAbvL3
-         BWRxoV57ExQCg9r3sHf2GjU5ImTls1+6+c3yPWNiDZ73Z8l5DVWv5cGu4y4gxjsAhHsE
-         jkvNYOMGU2QeSAkCoRza4O1ZtVBCT0tszLLJNhyJL1mheA1rByFwSe0ntnadsx5slIXe
-         8KeA==
-X-Gm-Message-State: AFqh2kqKfYV05gwaf2sTQhcbiIo6yc2pJ5s1WgHCozK2lE+6COl1a3ZY
-        RFjlie61yViuuxsa3GonhDI=
-X-Google-Smtp-Source: AMrXdXsK3z8WPZqVWjPtPqP3vCNRacedh6LJsHsPm3ZgpPyCKjlF7RTeV3Ef3amQLbetdglMcN2iFA==
-X-Received: by 2002:a17:90b:215:b0:225:bf26:4928 with SMTP id fy21-20020a17090b021500b00225bf264928mr54101453pjb.38.1672953886879;
-        Thu, 05 Jan 2023 13:24:46 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x5-20020a17090aa38500b00219cf5c3829sm1732645pjp.57.2023.01.05.13.24.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 13:24:46 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     axboe@kernel.dk, josef@toxicpanda.com, hch@lst.de
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 4/4] blk-iolatency: Make initialization lazy
-Date:   Thu,  5 Jan 2023 11:24:32 -1000
-Message-Id: <20230105212432.289569-5-tj@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105212432.289569-1-tj@kernel.org>
-References: <20230105212432.289569-1-tj@kernel.org>
+        Thu, 5 Jan 2023 16:26:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808F5631AD;
+        Thu,  5 Jan 2023 13:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672953988; x=1704489988;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=OLDSHk6S591UWnRI9iI9am/z56fyHwzCKS1qiG1hkYI=;
+  b=D9osJkzHAys/pNjQY21EWff9ZZ2F9aSJtUa1XCOh80pV+/mnKfEM2ZNB
+   T82gmwSQ9dk2jVydSWtdUO4oQZtukPcoR8g0E8/sC6J3yW3xgzmSl8pEw
+   cN/bWV1KUXuL9pRz7ONYXhSaFRd/mxzZuCBaBu00YNEX68LCQ0BO//P+p
+   P7ltuwf+rpf0Vu3/8EG/13bsClbCv8wApym2J8Y3vEgI4IOx5LxE+bHVx
+   Hx+r27/Y5naZcSDSYoVxTzTm2XghSWYPYiBjNdmI0wMEuyJx4C/elgDPI
+   VqLJ9/2nOwUP7pfOYKP21SZxM2IF3KAonIBn24vMePaFapFWZh7hiojXY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="320034877"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="320034877"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:26:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="657673236"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="657673236"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.42.126])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:26:25 -0800
+Message-ID: <b1aa86ba-7a4e-21cc-b22b-b2f8d8b4bdcb@intel.com>
+Date:   Thu, 5 Jan 2023 23:26:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH V6 06/24] mmc: core: Support UHS-II card control and
+ access
+To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
+        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
+        Jason Lai <jason.lai@genesyslogic.com.tw>
+References: <20221213090047.3805-1-victor.shih@genesyslogic.com.tw>
+ <20221213090047.3805-7-victor.shih@genesyslogic.com.tw>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221213090047.3805-7-victor.shih@genesyslogic.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other rq_qos policies such as wbt and iocost are lazy-initialized when they
-are configured for the first time for the device but iolatency is
-initialized unconditionally from blkcg_init_disk() during gendisk init. Lazy
-init is beneficial because rq_qos policies add runtime overhead when
-initialized as every IO has to walk all registered rq_qos callbacks.
+On 13/12/22 11:00, Victor Shih wrote:
+> Embed UHS-II access/control functionality into the MMC request
+> processing flow.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Jason Lai <jason.lai@genesyslogic.com.tw>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+> ---
+>  drivers/mmc/core/block.c   |    6 +-
+>  drivers/mmc/core/core.c    |   20 +
+>  drivers/mmc/core/mmc_ops.c |   25 +-
+>  drivers/mmc/core/mmc_ops.h |    1 +
+>  drivers/mmc/core/sd.c      |   11 +-
+>  drivers/mmc/core/sd.h      |    3 +
+>  drivers/mmc/core/sd_ops.c  |   13 +
+>  drivers/mmc/core/sd_ops.h  |    3 +
+>  drivers/mmc/core/sd_uhs2.c | 1171 +++++++++++++++++++++++++++++++++++-
+>  9 files changed, 1206 insertions(+), 47 deletions(-)
+> 
 
-This patch switches iolatency to lazy initialization too so that it only
-registered its rq_qos policy when it is first configured.
+<SNIP>
 
-Note that there is a known race condition between blkcg config file writes
-and del_gendisk() and this patch makes iolatency susceptible to it by
-exposing the init path to race against the deletion path. However, that
-problem already exists in iocost and is being worked on.
+> diff --git a/drivers/mmc/core/sd_uhs2.c b/drivers/mmc/core/sd_uhs2.c
+> index 800957f74632..a79eb08ec540 100644
+> --- a/drivers/mmc/core/sd_uhs2.c
+> +++ b/drivers/mmc/core/sd_uhs2.c
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: Christoph Hellwig <hch@lst.de>
----
- block/blk-cgroup.c    |  8 --------
- block/blk-iolatency.c | 29 ++++++++++++++++++++++++++++-
- block/blk.h           |  6 ------
- 3 files changed, 28 insertions(+), 15 deletions(-)
+<SNIP>
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index d8e0625cd12d..844579aff363 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -33,7 +33,6 @@
- #include "blk-cgroup.h"
- #include "blk-ioprio.h"
- #include "blk-throttle.h"
--#include "blk-rq-qos.h"
- 
- /*
-  * blkcg_pol_mutex protects blkcg_policy[] and policy [de]activation.
-@@ -1322,14 +1321,8 @@ int blkcg_init_disk(struct gendisk *disk)
- 	if (ret)
- 		goto err_ioprio_exit;
- 
--	ret = blk_iolatency_init(disk);
--	if (ret)
--		goto err_throtl_exit;
--
- 	return 0;
- 
--err_throtl_exit:
--	blk_throtl_exit(disk);
- err_ioprio_exit:
- 	blk_ioprio_exit(disk);
- err_destroy_all:
-@@ -1345,7 +1338,6 @@ int blkcg_init_disk(struct gendisk *disk)
- void blkcg_exit_disk(struct gendisk *disk)
- {
- 	blkg_destroy_all(disk);
--	rq_qos_exit(disk->queue);
- 	blk_throtl_exit(disk);
- }
- 
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 3601345808d2..3484393dbc4a 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -755,7 +755,7 @@ static void blkiolatency_enable_work_fn(struct work_struct *work)
- 	}
- }
- 
--int blk_iolatency_init(struct gendisk *disk)
-+static int blk_iolatency_init(struct gendisk *disk)
- {
- 	struct request_queue *q = disk->queue;
- 	struct blk_iolatency *blkiolat;
-@@ -830,6 +830,29 @@ static void iolatency_clear_scaling(struct blkcg_gq *blkg)
- 	}
- }
- 
-+static int blk_iolatency_try_init(struct blkg_conf_ctx *ctx)
-+{
-+	static DEFINE_MUTEX(init_mutex);
-+	int ret;
-+
-+	ret = blkg_conf_open_bdev(ctx);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * blk_iolatency_init() may fail after rq_qos_add() succeeds which can
-+	 * confuse iolat_rq_qos() test. Make the test and init atomic.
-+	 */
-+	mutex_lock(&init_mutex);
-+
-+	if (!iolat_rq_qos(ctx->bdev->bd_queue))
-+		ret = blk_iolatency_init(ctx->bdev->bd_disk);
-+
-+	mutex_unlock(&init_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
- 			     size_t nbytes, loff_t off)
- {
-@@ -844,6 +867,10 @@ static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
- 
- 	blkg_conf_init(&ctx, buf);
- 
-+	ret = blk_iolatency_try_init(&ctx);
-+	if (ret)
-+		goto out;
-+
- 	ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, &ctx);
- 	if (ret)
- 		goto out;
-diff --git a/block/blk.h b/block/blk.h
-index 4c3b3325219a..78f1706cddca 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -392,12 +392,6 @@ static inline struct bio *blk_queue_bounce(struct bio *bio,
- 	return bio;
- }
- 
--#ifdef CONFIG_BLK_CGROUP_IOLATENCY
--int blk_iolatency_init(struct gendisk *disk);
--#else
--static inline int blk_iolatency_init(struct gendisk *disk) { return 0; };
--#endif
--
- #ifdef CONFIG_BLK_DEV_ZONED
- void disk_free_zone_bitmaps(struct gendisk *disk);
- void disk_clear_zone_settings(struct gendisk *disk);
--- 
-2.39.0
+> +/*
+> + * Mask off any voltages we don't support and select
+> + * the lowest voltage
+> + */
+> +u32 sd_uhs2_select_voltage(struct mmc_host *host, u32 ocr)
+> +{
+> +	int bit;
+> +	int err;
+> +
+> +	/*
+> +	 * Sanity check the voltages that the card claims to
+> +	 * support.
+> +	 */
+> +	if (ocr & 0x7F) {
+> +		dev_warn(mmc_dev(host), "card claims to support voltages below defined range\n");
+> +		ocr &= ~0x7F;
+> +	}
+> +
+> +	ocr &= host->ocr_avail;
+> +	if (!ocr) {
+> +		dev_warn(mmc_dev(host), "no support for card's volts\n");
+> +		return 0;
+> +	}
+> +
+> +	if (host->caps2 & MMC_CAP2_FULL_PWR_CYCLE) {
+> +		bit = ffs(ocr) - 1;
+> +		ocr &= 3 << bit;
+> +		/* Power cycle */
+> +		err = sd_uhs2_power_off(host);
+> +		if (err)
+> +			return 0;
+> +		err = sd_uhs2_reinit(host);
+
+This looks circular:
+
+sd_uhs2_select_voltage
+-> sd_uhs2_reinit
+   -> sd_uhs2_init_card
+      -> sd_uhs2_legacy_init
+         -> sd_uhs2_select_voltage
+
+> +		if (err)
+> +			return 0;
+> +	} else {
+> +		bit = fls(ocr) - 1;
+> +		ocr &= 3 << bit;
+> +		if (bit != host->ios.vdd)
+> +			dev_warn(mmc_dev(host), "exceeding card's volts\n");
+> +	}
+> +
+> +	return ocr;
+> +}
+> +
+
+<SNIP>
 
