@@ -2,46 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3353265F0A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC6665F0AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbjAEP7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S234881AbjAEQAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234692AbjAEP7Q (ORCPT
+        with ESMTP id S234692AbjAEQAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:59:16 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00340F66
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:59:14 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYwMxZY_1672934349;
-Received: from 30.27.95.191(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VYwMxZY_1672934349)
-          by smtp.aliyun-inc.com;
-          Thu, 05 Jan 2023 23:59:11 +0800
-Message-ID: <03ada837-2504-9e69-5fec-0b7a7f186d90@linux.alibaba.com>
-Date:   Thu, 5 Jan 2023 23:59:08 +0800
+        Thu, 5 Jan 2023 11:00:18 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A65F66
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672934417; x=1704470417;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8/WgwRhiv0/FiYFKv4n/XrzjJxXuz3JbFtRzxczISeg=;
+  b=MUqVqK0FjIEejx+MmUHiB6/aY/24CTccgrxyf76grkU0LOtVNAkzf1GJ
+   kIhPeYSW3IvrAaye2XVg80SiHRV0wGGTMrbN01vN3WMy7iXyNcrrspv49
+   P0RVhd5+lAYPCPI+Mj+ach+ZbHotSx1F8HKWd1on+svfXiVFekNAwkewf
+   FdHzPJ7Kkl7Yiz6OwXtDHG1dr2jogOJmwhBFqeUfceCpu1MQjietfpIvq
+   cBSt8sS4E4QF8f5StUOzzed+ZZ2Yoxf/b+muV8h2MNLhWlYJPTB2XmsPb
+   KyoqyB+HBuKgig7QDcyjtVKP74Xb/I+wzfhlQXBGw9dVlkLX6Nth5sjEZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="310028634"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="310028634"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 08:00:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="633194840"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="633194840"
+Received: from ciarapow-mobl1.ger.corp.intel.com (HELO [10.213.208.73]) ([10.213.208.73])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 08:00:13 -0800
+Message-ID: <b1aea77b-ba55-61a2-2c33-f7754e0ca586@linux.intel.com>
+Date:   Thu, 5 Jan 2023 16:00:11 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [syzbot] [erofs?] WARNING: CPU: NUM PID: NUM at
- mm/page_alloc.c:LINE get_page_from_freeli
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-References: <000000000000c0a08805f07291a0@google.com>
- <f126fc95-fdbe-cc2e-5efb-ab704d13bd41@linux.alibaba.com>
- <CANp29Y63rCdepVtantxdJEcvbRv0D61gfY_oGV7dgrmEGgPdLw@mail.gmail.com>
-From:   Xiang Gao <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CANp29Y63rCdepVtantxdJEcvbRv0D61gfY_oGV7dgrmEGgPdLw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drm/i915: Fix potential context UAFs
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        katrinzhou <katrinzhou@tencent.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        "open list:INTEL DRM DRIVERS" <intel-gfx@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230103234948.1218393-1-robdclark@gmail.com>
+ <Y7byJa9VZyKO2gnT@ashyti-mobl2.lan>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y7byJa9VZyKO2gnT@ashyti-mobl2.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,75 +80,105 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Aleksandr,
-
-On 2023/1/5 19:14, Aleksandr Nogikh wrote:
-> Hi,
+On 05/01/2023 15:52, Andi Shyti wrote:
+> Hi Rob,
 > 
-> On Thu, Jan 5, 2023 at 11:54 AM Xiang Gao <hsiangkao@linux.alibaba.com> wrote:
-> 
->> I wasn't able to build the kernel with this kernel config, it shows:
->> "...
->> FATAL: modpost: vmlinux.o is truncated. sechdrs[i].sh_offset=1399394064 > sizeof(*hrd)=64
->> make[2]: *** [Module.symvers] Error 1
->> make[1]: *** [modpost] Error 2
->> make: *** [__sub-make] Error 2
->> "
-> 
-> Could you please tell, what exact compiler/linker version did you use?
-
-Thanks for your help.
-
-GCC 9.2.1 on my developping server.
-
-> 
-> 
->>>
->>> Downloadable assets:
->>> disk image: https://storage.googleapis.com/syzbot-assets/0c8a5f06ceb3/disk-f9ff5644.raw.xz
->>> vmlinux: https://storage.googleapis.com/syzbot-assets/be222e852ae2/vmlinux-f9ff5644.xz
->>> kernel image: https://storage.googleapis.com/syzbot-assets/d9f42a53b05e/bzImage-f9ff5644.xz
+> On Tue, Jan 03, 2023 at 03:49:46PM -0800, Rob Clark wrote:
+>> From: Rob Clark <robdclark@chromium.org>
 >>
->> Finally I tried the original kernel image, and it printed some other
->> random bug when booting system and then reboot, like:
+>> gem_context_register() makes the context visible to userspace, and which
+>> point a separate thread can trigger the I915_GEM_CONTEXT_DESTROY ioctl.
+>> So we need to ensure that nothing uses the ctx ptr after this.  And we
+>> need to ensure that adding the ctx to the xarray is the *last* thing
+>> that gem_context_register() does with the ctx pointer.
 >>
->> [   36.991123][    T1] ==================================================================
->> [   36.991800][    T1] BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100
->> [   36.992438][    T1] Write of size 32 at addr ffff888018c34640 by task systemd/1
-> < .. >
+>> Signed-off-by: Rob Clark <robdclark@chromium.org>
 > 
-> Interesting!
-> I've just tried to boot it with qemu and it was fine.
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 > 
-> qemu-system-x86_64 -smp 2,sockets=2,cores=1 -m 4G -drive
-> file=disk-f9ff5644.raw,format=raw -snapshot -nographic -enable-kvm
-> 
-> So it looks like it's some difference between these VMMs that causes
-> that bug to fire.
+> I also agree with Tvrtko that we should add Stable: and Fixes:.
 
-I think the problem is that the rootfs which I used has more complicated
-workload than the given one.
+Yeah I'll add them all when merging. Just waiting for full CI results. It will be like this:
 
+Fixes: eb4dedae920a ("drm/i915/gem: Delay tracking the GEM context until it is registered")
+Fixes: a4c1cdd34e2c ("drm/i915/gem: Delay context creation (v3)")
+Fixes: 49bd54b390c2 ("drm/i915: Track all user contexts per client")
+Cc: <stable@vger.kernel.org> # v5.10+
+
+Regards,
+
+Tvrtko
+  
+> One little thing, "user after free" is clearer that UAF :)
 > 
+> Thanks,
+> Andi
+> 
+>> ---
+>>   drivers/gpu/drm/i915/gem/i915_gem_context.c | 24 +++++++++++++++------
+>>   1 file changed, 18 insertions(+), 6 deletions(-)
 >>
->> May I ask it can be reproducable on the latest -rc kernel?
-> 
-> We can ask syzbot about v6.2-rc2:
-> 
-> #syz test git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-> 88603b6dc419445847923fcb7fe5080067a30f98
-
-I think I know the root cause: It seems that kvcalloc doesn't support
-GFP_NOFAIL, I will use kcalloc directly instead.
-
-Thanks,
-Gao Xiang
-
-> 
->>
->> Thanks,
->> Gao Xiang
->>
-> 
-> --
-> Aleksandr
+>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+>> index 7f2831efc798..6250de9b9196 100644
+>> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
+>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+>> @@ -1688,6 +1688,10 @@ void i915_gem_init__contexts(struct drm_i915_private *i915)
+>>   	init_contexts(&i915->gem.contexts);
+>>   }
+>>   
+>> +/*
+>> + * Note that this implicitly consumes the ctx reference, by placing
+>> + * the ctx in the context_xa.
+>> + */
+>>   static void gem_context_register(struct i915_gem_context *ctx,
+>>   				 struct drm_i915_file_private *fpriv,
+>>   				 u32 id)
+>> @@ -1703,10 +1707,6 @@ static void gem_context_register(struct i915_gem_context *ctx,
+>>   	snprintf(ctx->name, sizeof(ctx->name), "%s[%d]",
+>>   		 current->comm, pid_nr(ctx->pid));
+>>   
+>> -	/* And finally expose ourselves to userspace via the idr */
+>> -	old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
+>> -	WARN_ON(old);
+>> -
+>>   	spin_lock(&ctx->client->ctx_lock);
+>>   	list_add_tail_rcu(&ctx->client_link, &ctx->client->ctx_list);
+>>   	spin_unlock(&ctx->client->ctx_lock);
+>> @@ -1714,6 +1714,10 @@ static void gem_context_register(struct i915_gem_context *ctx,
+>>   	spin_lock(&i915->gem.contexts.lock);
+>>   	list_add_tail(&ctx->link, &i915->gem.contexts.list);
+>>   	spin_unlock(&i915->gem.contexts.lock);
+>> +
+>> +	/* And finally expose ourselves to userspace via the idr */
+>> +	old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
+>> +	WARN_ON(old);
+>>   }
+>>   
+>>   int i915_gem_context_open(struct drm_i915_private *i915,
+>> @@ -2199,14 +2203,22 @@ finalize_create_context_locked(struct drm_i915_file_private *file_priv,
+>>   	if (IS_ERR(ctx))
+>>   		return ctx;
+>>   
+>> +	/*
+>> +	 * One for the xarray and one for the caller.  We need to grab
+>> +	 * the reference *prior* to making the ctx visble to userspace
+>> +	 * in gem_context_register(), as at any point after that
+>> +	 * userspace can try to race us with another thread destroying
+>> +	 * the context under our feet.
+>> +	 */
+>> +	i915_gem_context_get(ctx);
+>> +
+>>   	gem_context_register(ctx, file_priv, id);
+>>   
+>>   	old = xa_erase(&file_priv->proto_context_xa, id);
+>>   	GEM_BUG_ON(old != pc);
+>>   	proto_context_close(file_priv->dev_priv, pc);
+>>   
+>> -	/* One for the xarray and one for the caller */
+>> -	return i915_gem_context_get(ctx);
+>> +	return ctx;
+>>   }
+>>   
+>>   struct i915_gem_context *
+>> -- 
+>> 2.38.1
