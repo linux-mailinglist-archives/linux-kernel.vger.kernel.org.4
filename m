@@ -2,66 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9A565EEFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD3265EF05
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbjAEOlx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 Jan 2023 09:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S233789AbjAEOnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbjAEOlt (ORCPT
+        with ESMTP id S233408AbjAEOnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:41:49 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E42678
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:41:47 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-267-TONGIBv5N4Gn3vUIarjFdA-1; Thu, 05 Jan 2023 14:41:44 +0000
-X-MC-Unique: TONGIBv5N4Gn3vUIarjFdA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 5 Jan
- 2023 14:41:43 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Thu, 5 Jan 2023 14:41:43 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Daniel Vetter' <daniel@ffwll.ch>
-CC:     'Jani Nikula' <jani.nikula@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        'Andrzej Hajda' <andrzej.hajda@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: RE: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of
- xchg
-Thread-Topic: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version
- of xchg
-Thread-Index: AQHZC+X/n2yHksRnF0Csd/+tl8P8Ka5qAX6ggCX6JSGAAADCAIAAC3eAgAAFAzA=
-Date:   Thu, 5 Jan 2023 14:41:43 +0000
-Message-ID: <6617dfb150f94cbb9654a585843e3287@AcuMS.aculab.com>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <f58ab17e5c6c4a4e8b0d687b44618c51@AcuMS.aculab.com>
- <Y7bK8drngH/NIlOa@phenom.ffwll.local> <875ydlw1p4.fsf@intel.com>
- <733cd0037bd14a269b54d701e1b80323@AcuMS.aculab.com>
- <Y7ba8UlkhjpJI4F0@phenom.ffwll.local>
-In-Reply-To: <Y7ba8UlkhjpJI4F0@phenom.ffwll.local>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 5 Jan 2023 09:43:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE751B1D6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:42:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672929738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wjyslnCj3ZEltR7C79+zwgm2T1VJBZSXYdTg0fe8CHE=;
+        b=Z7gAD9/g3QUBTBB1cOD+axkV4XTiKLpnBANoCE4AU2YmuWDEbdgisVzoEW5LDiIVKKhAxO
+        oitkhR9MuW6ZrW+xa4gcQdN44DVKpHL4SxaUJY2aQ7YWII2pV1H7bbGBm7hfq4zz71WNYf
+        ZempUB8YZaUqqRamDK1sdOwg2+GViYA=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-472-a5Pdh6d6P6qv9GosnAa2DA-1; Thu, 05 Jan 2023 09:42:17 -0500
+X-MC-Unique: a5Pdh6d6P6qv9GosnAa2DA-1
+Received: by mail-yb1-f199.google.com with SMTP id y66-20020a25c845000000b00733b5049b6fso36835995ybf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:42:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wjyslnCj3ZEltR7C79+zwgm2T1VJBZSXYdTg0fe8CHE=;
+        b=Rfr/d7fIDZciwXsRFq69AeuaHd9CJNTvNCVg3qFFxzt2jqAx7w2ysspAvfK/aCnH5W
+         mLnxe684dWpIdxqL1dtzxGu8fpb4kiNcVXffIPsIcVB6fhr5+qaOGnyS4pTpcF2WO/dB
+         21/JDzPwu3xtADOrCWbHjlB3i0WJ6f2OIe5ZNsvK0BKWQCeHTv2AD4npntbMUzfKp8UG
+         YYN69OJ+bqWUb5mdfT9msAcuvBJv4sd+vZHXGVU8M3HYlnAXR+Y57ASQQSjOLcGT1J5V
+         gSTk0ZqqO/hjLeuTe20+mRfn47CHTnDPxSAc1TdX+OjxgVhvfGYIi8NuWTJNvk3PYAHs
+         XvZA==
+X-Gm-Message-State: AFqh2kq0WWxc/3gU6FAKDzMK7nFDxx3mrm+HLtVHOdEU8hxLTCGqLd/b
+        AL8xsa7r8Zgch8LbDxi7cDAPY7luQQUkdPO1uPgKOypikB8RmYtqHy1l4mCasM/B0/jYUYtGHzv
+        ppt0OXmpwaE5XZFbxHiC06Biw
+X-Received: by 2002:a05:690c:d84:b0:4b5:c61:1c02 with SMTP id da4-20020a05690c0d8400b004b50c611c02mr9863333ywb.22.1672929736367;
+        Thu, 05 Jan 2023 06:42:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtgZGayMfn5T2A3YgNPQf9Hcxwo0jOEuaE/UPyg5j2hL0RrzHck6nvnDV5RBSK1tNEA18Dwmw==
+X-Received: by 2002:a05:690c:d84:b0:4b5:c61:1c02 with SMTP id da4-20020a05690c0d8400b004b50c611c02mr9863296ywb.22.1672929736089;
+        Thu, 05 Jan 2023 06:42:16 -0800 (PST)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id ay34-20020a05620a17a200b006b929a56a2bsm25634809qkb.3.2023.01.05.06.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 06:42:15 -0800 (PST)
+Date:   Thu, 5 Jan 2023 09:43:13 -0500
+From:   Brian Foster <bfoster@redhat.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH v2 2/7] dm: Add support for block provisioning
+Message-ID: <Y7biAQyLKJDjsAlz@bfoster>
+References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
+ <20221229081252.452240-3-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221229081252.452240-3-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +91,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Vetter
-> Sent: 05 January 2023 14:13
+On Thu, Dec 29, 2022 at 12:12:47AM -0800, Sarthak Kukreti wrote:
+> Add support to dm devices for REQ_OP_PROVISION. The default mode
+> is to pass through the request and dm-thin will utilize it to provision
+> blocks.
+> 
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  drivers/md/dm-crypt.c         |  4 +-
+>  drivers/md/dm-linear.c        |  1 +
+>  drivers/md/dm-snap.c          |  7 +++
+>  drivers/md/dm-table.c         | 25 ++++++++++
+>  drivers/md/dm-thin.c          | 90 ++++++++++++++++++++++++++++++++++-
+>  drivers/md/dm.c               |  4 ++
+>  include/linux/device-mapper.h | 11 +++++
+>  7 files changed, 139 insertions(+), 3 deletions(-)
+> 
 ...
-> > > So here we are, with Andrzej looking to add the common helper. And the
-> > > same concerns crop up. What should it be called to make it clear that
-> > > it's not atomic? Is that possible?
-> >
-> > old_value = read_write(variable, new_value);
-> >
-> > But two statements are much clearer.
+> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> index 64cfcf46881d..ab3f1abfabaf 100644
+> --- a/drivers/md/dm-thin.c
+> +++ b/drivers/md/dm-thin.c
+...
+> @@ -1980,6 +1992,70 @@ static void process_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
+>  	}
+>  }
+>  
+> +static void process_provision_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
+> +{
+> +	int r;
+> +	struct pool *pool = tc->pool;
+> +	struct bio *bio = cell->holder;
+> +	dm_block_t begin, end;
+> +	struct dm_thin_lookup_result lookup_result;
+> +
+> +	if (tc->requeue_mode) {
+> +		cell_requeue(pool, cell);
+> +		return;
+> +	}
+> +
+> +	get_bio_block_range(tc, bio, &begin, &end);
+> +
+> +	while (begin != end) {
+> +		r = ensure_next_mapping(pool);
+> +		if (r)
+> +			/* we did our best */
+> +			return;
+> +
+> +		r = dm_thin_find_block(tc->td, begin, 1, &lookup_result);
+
+Hi Sarthak,
+
+I think we discussed this before.. but remind me if/how we wanted to
+handle the case if the thin blocks are shared..? Would a provision op
+carry enough information to distinguish an FALLOC_FL_UNSHARE_RANGE
+request from upper layers to conditionally provision in that case?
+
+Brian
+
+> +		switch (r) {
+> +		case 0:
+> +			begin++;
+> +			break;
+> +		case -ENODATA:
+> +			bio_inc_remaining(bio);
+> +			provision_block(tc, bio, begin, cell);
+> +			begin++;
+> +			break;
+> +		default:
+> +			DMERR_LIMIT(
+> +				"%s: dm_thin_find_block() failed: error = %d",
+> +				__func__, r);
+> +			cell_defer_no_holder(tc, cell);
+> +			bio_io_error(bio);
+> +			begin++;
+> +			break;
+> +		}
+> +	}
+> +	bio_endio(bio);
+> +	cell_defer_no_holder(tc, cell);
+> +}
+> +
+> +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
+> +{
+> +	dm_block_t begin, end;
+> +	struct dm_cell_key virt_key;
+> +	struct dm_bio_prison_cell *virt_cell;
+> +
+> +	get_bio_block_range(tc, bio, &begin, &end);
+> +	if (begin == end) {
+> +		bio_endio(bio);
+> +		return;
+> +	}
+> +
+> +	build_key(tc->td, VIRTUAL, begin, end, &virt_key);
+> +	if (bio_detain(tc->pool, &virt_key, bio, &virt_cell))
+> +		return;
+> +
+> +	process_provision_cell(tc, virt_cell);
+> +}
+> +
+>  static void process_bio(struct thin_c *tc, struct bio *bio)
+>  {
+>  	struct pool *pool = tc->pool;
+> @@ -2200,6 +2276,8 @@ static void process_thin_deferred_bios(struct thin_c *tc)
+>  
+>  		if (bio_op(bio) == REQ_OP_DISCARD)
+>  			pool->process_discard(tc, bio);
+> +		else if (bio_op(bio) == REQ_OP_PROVISION)
+> +			process_provision_bio(tc, bio);
+>  		else
+>  			pool->process_bio(tc, bio);
+>  
+> @@ -2716,7 +2794,8 @@ static int thin_bio_map(struct dm_target *ti, struct bio *bio)
+>  		return DM_MAPIO_SUBMITTED;
+>  	}
+>  
+> -	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD) {
+> +	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD ||
+> +	    bio_op(bio) == REQ_OP_PROVISION) {
+>  		thin_defer_bio_with_throttle(tc, bio);
+>  		return DM_MAPIO_SUBMITTED;
+>  	}
+> @@ -3355,6 +3434,8 @@ static int pool_ctr(struct dm_target *ti, unsigned argc, char **argv)
+>  	pt->low_water_blocks = low_water_blocks;
+>  	pt->adjusted_pf = pt->requested_pf = pf;
+>  	ti->num_flush_bios = 1;
+> +	ti->num_provision_bios = 1;
+> +	ti->provision_supported = true;
+>  
+>  	/*
+>  	 * Only need to enable discards if the pool should pass
+> @@ -4053,6 +4134,7 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
+>  		blk_limits_io_opt(limits, pool->sectors_per_block << SECTOR_SHIFT);
+>  	}
+>  
+> +
+>  	/*
+>  	 * pt->adjusted_pf is a staging area for the actual features to use.
+>  	 * They get transferred to the live pool in bind_control_target()
+> @@ -4243,6 +4325,9 @@ static int thin_ctr(struct dm_target *ti, unsigned argc, char **argv)
+>  		ti->num_discard_bios = 1;
+>  	}
+>  
+> +	ti->num_provision_bios = 1;
+> +	ti->provision_supported = true;
+> +
+>  	mutex_unlock(&dm_thin_pool_table.mutex);
+>  
+>  	spin_lock_irq(&tc->pool->lock);
+> @@ -4457,6 +4542,7 @@ static void thin_io_hints(struct dm_target *ti, struct queue_limits *limits)
+>  
+>  	limits->discard_granularity = pool->sectors_per_block << SECTOR_SHIFT;
+>  	limits->max_discard_sectors = 2048 * 1024 * 16; /* 16G */
+> +	limits->max_provision_sectors = 2048 * 1024 * 16; /* 16G */
+>  }
+>  
+>  static struct target_type thin_target = {
+> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> index e1ea3a7bd9d9..4d19bae9da4a 100644
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@ -1587,6 +1587,7 @@ static bool is_abnormal_io(struct bio *bio)
+>  		case REQ_OP_DISCARD:
+>  		case REQ_OP_SECURE_ERASE:
+>  		case REQ_OP_WRITE_ZEROES:
+> +		case REQ_OP_PROVISION:
+>  			return true;
+>  		default:
+>  			break;
+> @@ -1611,6 +1612,9 @@ static blk_status_t __process_abnormal_io(struct clone_info *ci,
+>  	case REQ_OP_WRITE_ZEROES:
+>  		num_bios = ti->num_write_zeroes_bios;
+>  		break;
+> +	case REQ_OP_PROVISION:
+> +		num_bios = ti->num_provision_bios;
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
+> index 04c6acf7faaa..b4d97d5d75b8 100644
+> --- a/include/linux/device-mapper.h
+> +++ b/include/linux/device-mapper.h
+> @@ -333,6 +333,12 @@ struct dm_target {
+>  	 */
+>  	unsigned num_write_zeroes_bios;
+>  
+> +	/*
+> +	 * The number of PROVISION bios that will be submitted to the target.
+> +	 * The bio number can be accessed with dm_bio_get_target_bio_nr.
+> +	 */
+> +	unsigned num_provision_bios;
+> +
+>  	/*
+>  	 * The minimum number of extra bytes allocated in each io for the
+>  	 * target to use.
+> @@ -357,6 +363,11 @@ struct dm_target {
+>  	 */
+>  	bool discards_supported:1;
+>  
+> +	/* Set if this target needs to receive provision requests regardless of
+> +	 * whether or not its underlying devices have support.
+> +	 */
+> +	bool provision_supported:1;
+> +
+>  	/*
+>  	 * Set if we need to limit the number of in-flight bios when swapping.
+>  	 */
+> -- 
+> 2.37.3
 > 
-> Yeah this is my point for fetch_and_zero or any of the other proposals.
-> We're essentially replacing these two lines:
-> 
-> 	var = some->pointer->chase;
-> 	some->pointer->chase = NULL;
-> 
-> with a macro. C is verbose, and sometimes painfully so,
-
-Try ADA or VHDL :-)
-
-> if the pointer
-> chase is really to onerous then I think that should be refactored with a
-> meaningfully locally name variable, not fancy macros wrapped around to
-> golf a few characters away.
-
-Provided 'var' is a local the compiler is pretty likely to only do the
-'pointer chase' once.
-You can also do:
-	var = NULL;
-	swap(some->pointer->chase, var);
-and get pretty much the same object code.
-
-> But what about swap() you ask? That one needs a temp variable, and it does
-> make sense to hide that in a ({}) block in a macro.
-
-Sometimes, but not enough for the 'missed opportunity for swap()'
-message. 
-
-> But for the above two
-> lines I really don't see a point outside of obfuscated C contexts.
-
-Indeed.
-
-Isn't the suggested __xchg() in one of the 'reserved for implementation'
-namespaces - so shouldn't be a function that might be expected to be
-actually used.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
