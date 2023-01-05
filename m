@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB0565E8F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C009765E8F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjAEKXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S232894AbjAEKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjAEKVu (ORCPT
+        with ESMTP id S233030AbjAEKVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:21:50 -0500
+        Thu, 5 Jan 2023 05:21:51 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0924C559FF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:52 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-45c1b233dd7so377526717b3.20
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62C58D1C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:53 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-460ab8a327eso378504857b3.23
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ebd8Vu/XVboNQYDKBTu4hK6f3y9obuZPyqPY5k+Gudc=;
-        b=I6ayK2fjeeV6XAYAV3ZhwaEnnQoYUdQNqveqXyF5ggg1QXVgf5LPqhurqUyX4Sg8HO
-         s6F9jORt3w8TrKLgQbE9o/ipsILjWJVWxOlolxXAYaC7l1LUJTPuzmnYXb8M/6TAOgE6
-         iV4jd4Plk12mL7A8sfE6TF+7lw9HKJSmcmSdh24PWpxCGN5c8WUgHm+WCIlfPdcQb8Va
-         oaa3biXUtYUW2lT6cUJ+TJCPkPPPYnk+RY3IQZ7J1RSQZAg/BMdpqELg44GmDZbqhD/+
-         kIK71fstpMvWu1m6mR114A35MUphScUHv/CK8JATL1Z7Dr//wEo/gsARlq+dXyJGqPZ3
-         FyGA==
+        bh=ksh61HdFJKW5FzhQ3xBVqQbws7N9eS43eLhKNpPeqew=;
+        b=MCxyEzTTO0yqg91shqPo6Ni+5EFzxsgTqYc3+pyMOGf0oatdr3BfMXYm2vwczO7xxN
+         6eXisofnTjW6ihZw5N2TmlX/02IpUvl2Obfz7KJBIRlML8eUYj2RVscTVOTPLqUOfEUl
+         7ALcPn6iafF/zuFvLcOWLr1Ggm27nMtZb4wuXZmie98LQOT+8Oo6f9LCBYicU9kTcsva
+         a2UPiZZmZL+sjQYo2rL2gE+wftIxhHkEnB5vkmujJzydzSbw5WDTc7LnG3S0nQMS6Apd
+         oD0DG4TxblVTSmtrDjw3jcw1qYcj6bz1oBV8ULyJY3Xpek6MnVH6iGGXHSiY51d0n8u/
+         xlOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ebd8Vu/XVboNQYDKBTu4hK6f3y9obuZPyqPY5k+Gudc=;
-        b=l3QEQnfbLZIhrBeIPKwd5JBPSmYWi/PpvsT87VR/6ahjoOcjnJPCI1cqs+ww7HLVAS
-         3oJyLhlUvWqqAtoulhXWtCIX5AvgYmZdSWkOaITaWUI2p0IXVXvkxRNF51VD0e0UPoR2
-         sTIslCTqodunu1zMg08/X8v6fLB+MQYXP19V+rtBhF2HqXwWH7CqCsPCsjUEHwXR+ou8
-         TdGeGvvqqg0zjKq3vRvSK23hPvg0ne3LMECKBwm2dTNUQYDdksiuEfhZP5azeOrvhS9i
-         LAN4Z0+5+kcdUqS0d64s0XtJlIVdz/JoqwK8OowGHKksWSa8H+Knd4mPQslhbFYZPah1
-         8ZGw==
-X-Gm-Message-State: AFqh2kppfkQxpLcC5D67Fy7GE3bYkaATXRjkpemiAYPmJ+vUaX8pc5Eo
-        Fh2wNOl3eGRVn/1lWZ5iKr1zeoV0I1i5ZxGH
-X-Google-Smtp-Source: AMrXdXtV4+6oO1J8uKzAHBFEmMr5riCkeBCaO8d3MxL5klPMuG1OvNmF2A8uHxD11fFnV9fuWT3AXj8ucCtp8clM
+        bh=ksh61HdFJKW5FzhQ3xBVqQbws7N9eS43eLhKNpPeqew=;
+        b=6tZ+z8JBShw/JQJtKaxOK6DrsJqczZOUOe4P2D/WFv9ViqRG8E25m/v4aySebX4rF5
+         SFCzTh5VqRHy4Xq17CHRk7Emklkc/99kEPOu9efDPQSktxtfM7yLWOcNHc52NfkQ2PhV
+         QK1emZZLKLpP+2IsfAo9wxBjIQ1rcCu6YiPQmr5gOtcckoUs2PgtIStKoeR95vvQ6SBs
+         gLYniUqkcT40oR1L9qZLE0CoD6ryAX81FiIiGb3EfYdIHLeS8cGCt3RrqvXK9YZm06X2
+         BSjNso+VvF4oN8m4pTTZFwyAzkYV3APK2wN3XQ7gQg0WQn5iDSiCOeKMfsgE9nAOHFUo
+         88yQ==
+X-Gm-Message-State: AFqh2kruN8NiX7rPCIcOKZOYJjaXzAChHHjFv3KTj+c3NiY7gj3J4uQ2
+        I+Xj+R3AJB6aiSfQB+fMujz6lPDqSp7pVZzP
+X-Google-Smtp-Source: AMrXdXuUdtLbHKVzfYol7vn49W5JNTDiD617kfFDgxP5DZEb9ADfn2YrSfngVZdq4KyN5rcGwmq3pEoz4PydDJ4S
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:690c:c81:b0:48c:9ce1:9ac8 with SMTP
- id cm1-20020a05690c0c8100b0048c9ce19ac8mr2452166ywb.305.1672913991340; Thu,
- 05 Jan 2023 02:19:51 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:37 +0000
+ (user=jthoughton job=sendgmr) by 2002:a81:1c17:0:b0:475:7911:2119 with SMTP
+ id c23-20020a811c17000000b0047579112119mr5474920ywc.359.1672913992847; Thu,
+ 05 Jan 2023 02:19:52 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:38 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-40-jthoughton@google.com>
-Subject: [PATCH 39/46] hugetlb: x86: enable high-granularity mapping
+Message-ID: <20230105101844.1893104-41-jthoughton@google.com>
+Subject: [PATCH 40/46] docs: hugetlb: update hugetlb and userfaultfd
+ admin-guides with HGM info
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,33 +85,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that HGM is fully supported for GENERAL_HUGETLB, x86 can enable it.
-The x86 KVM MMU already properly handles HugeTLB HGM pages (it does a
-page table walk to determine which size to use in the second-stage page
-table instead of, for example, checking vma_mmu_pagesize, like arm64
-does).
-
-We could also enable HugeTLB HGM for arm (32-bit) at this point, as it
-also uses GENERAL_HUGETLB and I don't see anything else that is needed
-for it. However, I haven't tested on arm at all, so I won't enable it.
+This includes information about how UFFD_FEATURE_MINOR_HUGETLBFS_HGM
+should be used and when MADV_COLLAPSE should be used with it.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/admin-guide/mm/hugetlbpage.rst |  4 ++++
+ Documentation/admin-guide/mm/userfaultfd.rst | 16 +++++++++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 3604074a878b..3d08cd45549c 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -126,6 +126,7 @@ config X86
- 	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_HUGE_PMD_SHARE
- 	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP	if X86_64
-+	select ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_THP_SWAP		if X86_64
- 	select ARCH_HAS_PARANOID_L1D_FLUSH
+diff --git a/Documentation/admin-guide/mm/hugetlbpage.rst b/Documentation/admin-guide/mm/hugetlbpage.rst
+index 19f27c0d92e0..ca7db15ae768 100644
+--- a/Documentation/admin-guide/mm/hugetlbpage.rst
++++ b/Documentation/admin-guide/mm/hugetlbpage.rst
+@@ -454,6 +454,10 @@ errno set to EINVAL or exclude hugetlb pages that extend beyond the length if
+ not hugepage aligned.  For example, munmap(2) will fail if memory is backed by
+ a hugetlb page and the length is smaller than the hugepage size.
+ 
++It is possible for users to map HugeTLB pages at a higher granularity than
++normal using HugeTLB high-granularity mapping (HGM). For example, when using 1G
++pages on x86, a user could map that page with 4K PTEs, 2M PMDs, a combination of
++the two. See Documentation/admin-guide/mm/userfaultfd.rst.
+ 
+ Examples
+ ========
+diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+index 83f31919ebb3..19877aaad61b 100644
+--- a/Documentation/admin-guide/mm/userfaultfd.rst
++++ b/Documentation/admin-guide/mm/userfaultfd.rst
+@@ -115,6 +115,14 @@ events, except page fault notifications, may be generated:
+   areas. ``UFFD_FEATURE_MINOR_SHMEM`` is the analogous feature indicating
+   support for shmem virtual memory areas.
+ 
++- ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` indicates that the kernel supports
++  small-page-aligned regions for ``UFFDIO_CONTINUE`` in HugeTLB-backed
++  virtual memory areas. ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` and
++  ``UFFD_FEATURE_EXACT_ADDRESS`` must both be specified explicitly to enable
++  this behavior. If ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` is specified but
++  ``UFFD_FEATURE_EXACT_ADDRESS`` is not, then ``UFFDIO_API`` will fail with
++  ``EINVAL``.
++
+ The userland application should set the feature flags it intends to use
+ when invoking the ``UFFDIO_API`` ioctl, to request that those features be
+ enabled if supported.
+@@ -169,7 +177,13 @@ like to do to resolve it:
+   the page cache). Userspace has the option of modifying the page's
+   contents before resolving the fault. Once the contents are correct
+   (modified or not), userspace asks the kernel to map the page and let the
+-  faulting thread continue with ``UFFDIO_CONTINUE``.
++  faulting thread continue with ``UFFDIO_CONTINUE``. If this is done at the
++  base-page size in a transparent-hugepage-eligible VMA or in a HugeTLB VMA
++  (requires ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM``), then userspace may want to
++  use ``MADV_COLLAPSE`` when a hugepage is fully populated to inform the kernel
++  that it may be able to collapse the mapping. ``MADV_COLLAPSE`` will may undo
++  the effect of any ``UFFDIO_WRITEPROTECT`` calls on the collapsed address
++  range.
+ 
+ Notes:
+ 
 -- 
 2.39.0.314.g84b9a713c41-goog
 
