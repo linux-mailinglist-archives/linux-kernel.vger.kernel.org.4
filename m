@@ -2,152 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85C165F39E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D1765F3A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234545AbjAESTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S233693AbjAESWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbjAESSi (ORCPT
+        with ESMTP id S230190AbjAESWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:18:38 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D8958807;
-        Thu,  5 Jan 2023 10:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672942715; x=1704478715;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QfhBN3v0+LdRNnoxTKN3PyhPs6swcsnVUDzQa6v+kMo=;
-  b=PYwdcKPDoEFeXoG+TQYsn6KKPmcs+Hg5XbBJ5LJKhILco3L7lKlszwYt
-   l8oyVL9m804mhmpaeNh5ZxqLdp4QyHRXpISwuFkERjkPccRnPw2vUngAK
-   NhblnTympO32HnEnbdO+mxn4xHgn9hnYIDhXf6B3FE9jzEBTv22IGg/HX
-   m9h9k8gkRxw1olmMtfzEmWK8WyzxMwuKkYwI/Lux2xAO2PJlSVWOOrkDN
-   MPAqWE86LdGu1bTffc520xVJX0XccgVB4w52OFEyu8/N+9dhmPMxhly6c
-   WU7FqWyvAgRz3Z0aFYbA4Zy+t7EIHniAuwQEKZXxXQCsYr+NyAfGDUPIQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="324305332"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="324305332"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 10:18:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="605641050"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="605641050"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 10:18:34 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDUoz-0002Fr-1F;
-        Thu, 05 Jan 2023 18:18:33 +0000
-Date:   Fri, 6 Jan 2023 02:18:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: versioncheck:
- ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h
- not needed.
-Message-ID: <202301060202.QYQl9Uej-lkp@intel.com>
+        Thu, 5 Jan 2023 13:22:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD2D564D0;
+        Thu,  5 Jan 2023 10:22:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1593161BB9;
+        Thu,  5 Jan 2023 18:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D7EC433EF;
+        Thu,  5 Jan 2023 18:22:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672942940;
+        bh=TsSzlwbYnqIlM6q7U97lFcpbwQq027/R/MVGL16vq+4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GgjMQEtnoiGsc5iIZP2/xzixWCzT782ENEo0xyYMmk38rGK6LAzr247OvMEP8e2q2
+         oBRI1T2xI73QCy1DLhqZFNNLWfUzmTpAL82uvB1fjZRrdN+0+rViNxwWVi0aPD1s3G
+         o3amxvbBFGQ/YXahGAqP1/PCJ4AbwzxjC7pzOVkuMXJFNmeFyZipTojUm/+l5dD1Sf
+         m8vJP9GTtsFVcAL1HT65OxWt+2LnxHzRQkRSersJWWEERdLf8vGHoOcfWZYSC/DMFs
+         QmEdqATN/cAOmIypGIJ+A6EQ5Fb3Ko3Xru2ukp18tFxY68mmJM0H6cDmRTZq3nt7pu
+         cC1BcHrLRyJ9A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1C9335C0544; Thu,  5 Jan 2023 10:22:20 -0800 (PST)
+Date:   Thu, 5 Jan 2023 10:22:20 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Liu, Yujie" <yujie.liu@intel.com>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        lkp <lkp@intel.com>, "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU
+ hotplug
+Message-ID: <20230105182220.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221130234533.1983769-1-qiang1.zhang@intel.com>
+ <202212181914.f5a305f3-yujie.liu@intel.com>
+ <PH0PR11MB5880EB31D9AFD82EFA3073A6DAE59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20221221193325.GE4001@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB588092AB6A014F30420D697CDAE89@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <PH0PR11MB588092AB6A014F30420D697CDAE89@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   41c03ba9beea760bd2d2ac9250b09a2e192da2dc
-commit: ad85094b293e40e7a2f831b0311a389d952ebd5e Revert "media: staging: atomisp: Remove driver"
-date:   2 years, 8 months ago
-reproduce:
-        make versioncheck
+On Thu, Dec 22, 2022 at 09:35:06AM +0000, Zhang, Qiang1 wrote:
+> >On Mon, Dec 19, 2022 at 02:21:01AM +0000, Zhang, Qiang1 wrote:
+> > >Greeting,
+> > >FYI, we noticed WARNING:at_kernel/rcu/rcutorture.c:#rcu_torture_fwd_prog_cr[rcutorture] due to commit (built with gcc-11):
+> > >
+> > >commit: 572a17843591d3c03ad891492939a06833fdd17d ("[PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug")
+> > >url: https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Make-rude-RCU-Tasks-work-well-with-CPU-hotplug/20221201-074127
+> > >base: https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
+> > >patch link: https://lore.kernel.org/all/20221130234533.1983769-1-qiang1.zhang@intel.com/
+> > >patch subject: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+> > >
+> > >in testcase: rcutorture
+> > >version: 
+> > >with following parameters:
+> > >
+> > >	runtime: 300s
+> > >	test: cpuhotplug
+> > >	torture_type: tasks-rude
+> > >
+> > >test-description: rcutorture is rcutorture kernel module load/unload test.
+> > >test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
+> > >
+> > >on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 8G
+> > >
+> > >caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > >
+> > >
+> > >[  106.051532][  T583] rcu_torture_fwd_prog: Starting forward-progress test 0
+> > >[  106.052085][  T583] rcu_torture_fwd_prog_cr: Starting forward-progress test 0
+> > >[  133.611262][  T583] rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier_tasks_rude+0x0/0x10() 0
+> > >[  146.800051][  T583] ------------[ cut here ]------------
+> > >[  146.800411][  T583] WARNING: CPU: 1 PID: 583 at kernel/rcu/rcutorture.c:2806 rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
+> > >[  146.801075][  T583] Modules linked in: rcutorture torture ipmi_msghandler crc32c_intel serio_raw processor fuse
+> > >[  146.801894][  T583] CPU: 1 PID: 583 Comm: rcu_torture_fwd Not tainted 6.1.0-rc1-00180-g572a17843591 #1 0cc09f902db70bae111a0c12c137296733dde4a9
+> > >[  146.802916][  T583] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> > >[  146.803693][  T583] EIP: rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
+> > >[  146.804177][  T583] Code: 89 d8 e8 fc c5 ff ff e8 67 49 03 00 83 c4 10 84 c0 75 79 a0 96 c6 10 ef 84 c0 75 70 e8 c8 ee ff ff 84 c0 75 67 83 fe 63 7f 02 <0f> 0b 8b 45 f0 8b 15 40 25 8a c2 ff 75 e8 ff 75 e0 01 f8 2b 45 dc
+> > >[  146.805599][  T583] EAX: 00000000 EBX: ecee3800 ECX: 00000000 EDX: 00000000
+> > >[  146.805992][  T583] ESI: 00000000 EDI: 0000c350 EBP: ed9d5f64 ESP: ed9d5f40
+> > >[  146.806491][  T583] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010293
+> > >[  146.807010][  T583] CR0: 80050033 CR2: 08082ff0 CR3: 2daaf000 CR4: 000406d0
+> > >[  146.807484][  T583] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+> > >[  146.808031][  T583] DR6: fffe0ff0 DR7: 00000400
+> > >[  146.808384][  T583] Call Trace:
+> > >[  146.808634][  T583]  rcu_torture_fwd_prog.cold+0x3b/0xee [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
+> > >[  146.809348][  T583]  kthread+0xc8/0xf0
+> > >[  146.809635][  T583]  ? rcu_torture_fwd_prog_cbfree+0x80/0x80 [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
+> > >[  146.810347][  T583]  ? kthread_complete_and_exit+0x20/0x20
+> > >[  146.810734][  T583]  ret_from_fork+0x1c/0x28
+> > >[  146.811075][  T583] irq event stamp: 205883
+> > >[  146.811400][  T583] hardirqs last  enabled at (205891): [<c114bb06>] __up_console_sem+0x66/0x80
+> > >[  146.811960][  T583] hardirqs last disabled at (205898): [<c114baed>] __up_console_sem+0x4d/0x80
+> > >[  146.812583][  T583] softirqs last  enabled at (205880): [<c1ecb40b>] __do_softirq+0x2bb/0x440
+> > >[  146.813079][  T583] softirqs last disabled at (205871): [<c10845f0>] call_on_stack+0x40/0x50
+> > >[  146.813567][  T583] ---[ end trace 0000000000000000 ]---
+> > >[  146.813926][  T583] rcu_torture_fwd_prog_cr Duration 2411 barrier: 3960 pending 50000 n_launders: 0 n_launders_sa: 0 n_max_gps: 0 n_max_cbs: 50000 cver 1 gps 0
+> > >[  147.914266][  T583] rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 6702 jiffies): 1s/10: 0:0 2s/10: 
+> > >[  149.453780][  T557] ------------[ cut here ]------------
+> > >[  149.454322][  T557] rcu_torture_writer: rtort_pipe_count: 4
+> > >[  149.454817][  T557] WARNING: CPU: 1 PID: 557 at kernel/rcu/rcutorture.c:1583 rcu_torture_writer+0x71d/0xc80 [rcutorture]
+> > 
+> > 
+> > This is not a bug.  this is caused by grace period taking too long time, the previous callback
+> > has not been completed.  from the dmesg, can be found that the cpuhotplug test is being
+> > performed periodically, this may cause the rude RCU-Tasks  grace period to take more time,
+> > due to we need to acquire the cpus_read_lock, and the CPU0 always bootup failed, that is to
+> > say, only one CPU of your system is online at this time.
+> >
+> >Onlining of a CPU failing with EIO is a new one on me.  Especially
+> >persistent failure.
+> 
+> I use the kernel configuration file in the attachment and  base on:
+> https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
+> 
+> use "echo 1 > /sys/devices/system/cpu/cpu0/online" can reproduce this problem,
+> the CPU0 always fails to go online.  
+> 
+> Debug found CPU0 is always not set in cpu_initialized_mask.
+> causes the do_boot_cpu() to return -1.
+> 
+> do_boot_cpu()
+>      wakeup_cpu_via_init_nmi();
+>      if (!boot_error) {
+>                 /*
+>                  * Wait 10s total for first sign of life from AP
+>                  */
+>                 boot_error = -1;
+>                 timeout = jiffies + 10*HZ;
+>                 while (time_before(jiffies, timeout)) {
+>                         if (cpumask_test_cpu(cpu, cpu_initialized_mask)) {
+>                                 /*
+>                                  * Tell AP to proceed with initialization
+>                                  */
+>                                 cpumask_set_cpu(cpu, cpu_callout_mask);
+>                                 boot_error = 0;
+>                                 break;
+>                         }
+>                         schedule();
+>                 }
+>         }
+> 
+> This looks related to this modification e1c467e69040c("x86, hotplug: 
+> Wake up CPU0 via NMI instead of INIT, SIPI, SIPI ").
+> 
+> 
+> The following modification can make CPU0 go online successfully(This
+> is just a test, not sure if there are other effects).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thank you for tracking this down!!!
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./arch/arm64/kernel/hibernate.c: 24 linux/version.h not needed.
-   ./arch/csky/include/asm/atomic.h: 6 linux/version.h not needed.
-   ./arch/csky/include/asm/io.h: 9 linux/version.h not needed.
-   ./arch/csky/include/asm/thread_info.h: 9 linux/version.h not needed.
-   ./arch/csky/include/asm/uaccess.h: 15 linux/version.h not needed.
-   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
-   ./arch/csky/mm/dma-mapping.c: 14 linux/version.h not needed.
-   ./arch/csky/mm/fault.c: 16 linux/version.h not needed.
-   ./arch/s390/include/asm/setup.h: 182: need linux/version.h
-   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
-   ./drivers/block/rsxx/rsxx_priv.h: 14 linux/version.h not needed.
-   ./drivers/block/skd_main.c: 28 linux/version.h not needed.
-   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
-   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
-   ./drivers/crypto/ccree/cc_driver.h: 25 linux/version.h not needed.
-   ./drivers/gpio/gpio-mlxbf2.c: 17 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c: 62 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c: 28 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c: 26 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_display.c: 15 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_drv.c: 58 linux/version.h not needed.
-   ./drivers/gpu/drm/tve200/tve200_display.c: 14 linux/version.h not needed.
-   ./drivers/gpu/drm/tve200/tve200_drv.c: 38 linux/version.h not needed.
-   ./drivers/hv/hv.c: 16 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
-   ./drivers/media/dvb-frontends/mxl5xx.c: 30 linux/version.h not needed.
-   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
-   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
-   ./drivers/media/usb/uvc/uvc_driver.c: 18 linux/version.h not needed.
-   ./drivers/mtd/nand/raw/brcmnand/brcmnand.c: 7 linux/version.h not needed.
-   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 35 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 32 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 34 linux/version.h not needed.
-   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
-   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf.h: 15 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
->> ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
-   ./drivers/usb/early/xhci-dbc.c: 21 linux/version.h not needed.
-   ./drivers/watchdog/ziirave_wdt.c: 21 linux/version.h not needed.
-   ./fs/ext4/ext4.h: 30 linux/version.h not needed.
-   ./include/linux/qed/qed_ll2_if.h: 41 linux/version.h not needed.
-   ./kernel/bpf/syscall.c: 19 linux/version.h not needed.
-   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
-   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
-   ./samples/mic/mpssd/mpssd.c: 29 linux/version.h not needed.
-   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
+Huh.  CPU 0 is normally the boot CPU.  Back in the day, it could not
+be offlined.  Given that your testing indicates that CPU 0 can now be
+taken offline, maybe this "if" statement is a holdover that someone
+forgot to remove?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+But I must defer to those who know a lot more about this level of
+x86 code than I do.
+
+							Thanx, Paul
+
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 3f3ea0287f69..26ee9cdf639e 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1013,10 +1013,10 @@ wakeup_cpu_via_init_nmi(int cpu, unsigned long start_ip, int apicid,
+>         /*
+>          * Wake up AP by INIT, INIT, STARTUP sequence.
+>          */
+> -       if (cpu) {
+> +//     if (cpu) {
+>                 boot_error = wakeup_secondary_cpu_via_init(apicid, start_ip);
+>                 goto out;
+> -       }
+> +//     }
+> 
+>         /*
+>          * Wake up BSP by nmi.
+> 
+> 
+> Thanks
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> >
+> > Thanks
+> > Zqiang
+> > 
+> > >[  149.455687][  T557] Modules linked in: rcutorture torture ipmi_msghandler crc32c_intel serio_raw processor fuse
+> > >[  149.456490][  T557] CPU: 1 PID: 557 Comm: rcu_torture_wri Tainted: G        W          6.1.0-rc1-00180-g572a17843591 #1 0cc09f902db70bae111a0c12c137296733dde4a9
+> > >[  149.457660][  T557] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> > >[  149.458484][  T557] EIP: rcu_torture_writer+0x71d/0xc80 [rcutorture]
+> > >[  149.458990][  T557] Code: 05 00 00 8d 43 f4 39 c6 74 c3 e8 0e a0 0b d2 83 ff 63 0f 87 3d 05 00 00 ff 73 fc 68 88 a0 10 ef 68 f4 9a 10 ef e8 10 01 d2 d2 <0f> 0b a1 30 c6 10 ef 83 c4 0c 85 c0 75 95 b8 01 00 00 00 87 05 30
+> > >[  149.460472][  T557] EAX: 00000027 EBX: ef10d630 ECX: e49c0f28 EDX: e49c0f24
+> > >[  149.461022][  T557] ESI: ef10d694 EDI: 0000004f EBP: ece35f8c ESP: ece35f18
+> > >[  149.461539][  T557] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010292
+> > >[  149.462101][  T557] CR0: 80050033 CR2: 08082ff0 CR3: 2daaf000 CR4: 000406d0
+> > >[  149.462642][  T557] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+> > >[  149.463172][  T557] DR6: fffe0ff0 DR7: 00000400
+> > >[  149.463526][  T557] Call Trace:
+> > >[  149.463795][  T557]  ? lockdep_hardirqs_on_prepare+0xa4/0x160
+> > >[  149.464333][  T557]  ? _raw_spin_unlock_irqrestore+0x45/0x60
+> > >[  149.464795][  T557]  ? trace_hardirqs_on+0x35/0xe0
+> > >[  149.465191][  T557]  kthread+0xc8/0xf0
+> > >[  149.465506][  T557]  ? rcu_torture_pipe_update+0x130/0x130 [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
+> > >[  149.466327][  T557]  ? kthread_complete_and_exit+0x20/0x20
+> > >[  149.466771][  T557]  ret_from_fork+0x1c/0x28
+> > >[  149.467136][  T557] irq event stamp: 45753
+> > >[  149.467457][  T557] hardirqs last  enabled at (45761): [<c114bb06>] __up_console_sem+0x66/0x80
+> > >[  149.468145][  T557] hardirqs last disabled at (45770): [<c114baed>] __up_console_sem+0x4d/0x80
+> > >[  149.468803][  T557] softirqs last  enabled at (41056): [<ef1037a0>] rcu_torture_pipe_update+0xe0/0x130 [rcutorture]
+> > >[  149.469602][  T557] softirqs last disabled at (41054): [<ef10377c>] rcu_torture_pipe_update+0xbc/0x130 [rcutorture]
+> > >[  149.470401][  T557] ---[ end trace 0000000000000000 ]---
+> > 
