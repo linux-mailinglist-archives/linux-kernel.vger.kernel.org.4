@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE5E65E687
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA2265E6CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjAEIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S231693AbjAEIWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjAEIOG (ORCPT
+        with ESMTP id S231663AbjAEIVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:14:06 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6512158320;
-        Thu,  5 Jan 2023 00:14:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672906437; bh=CGzT08iim77SF3hU99ejpjFf5EG6Rl2ItIprKmEgLtY=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=Ehs/8wo9Gks5PCvbWS3s9SW7nONzx6a38cyKKITH/xm+UQ4SBGl9zo98iW7+GqUPx
-         yqX7sbOfwqXzV15gXzQZ5s5KW7mThPtfWJ5J/Lird24hj8nkwS/OZeZTqbdaNTxycQ
-         FT1ilMhlDe+yv/o5JV2TQzRQs2CG91NgIdtadUrFT/+SjGVdyh/GZZkCJQRZ/cnXAr
-         q5Xem7yR2E7coOcnkwk1WvvKoFpqe+1iE3Y9pb6w+L7LicgSKUpuHLnEitDdFsO8yd
-         iH8dK1roQHprsdmtDh29TDeZEXCecPZ7Ko8ehQXu4RYCYviafVOYEzGX6JxCUBwdcD
-         ycJAPQ3CkAkxw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([92.116.173.134]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63RQ-1okjjJ1BSC-016MjW; Thu, 05
- Jan 2023 09:13:57 +0100
-Date:   Thu, 5 Jan 2023 09:13:55 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [GIT PULL] fbdev fixes for v6.2-rc3
-Message-ID: <Y7aGw/irynC61O85@ls3530>
+        Thu, 5 Jan 2023 03:21:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520F94D4BD;
+        Thu,  5 Jan 2023 00:19:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672906774; x=1704442774;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=tC9MfXbbP5iSwnqmC95iyTsovDGJETn82JLa7mFYxG4=;
+  b=jG1DJy8tYR/kzOlWYs+Iy43Q34IjeHasVX+dBFDnKm7OlFFSGCjI3hzq
+   yD8u/aDv0Ss0EzAsvPP4x6IGt1D7d5zjNF8gulthsxD+CNmHDeWvHJkRE
+   hxGAj0Z2UxszmOnDgtBe2TyR2xezYu3PGGpNiEdGxCe1GfOpsuPLDTwLd
+   j2hULJRjx+q3wZ/kroatt6NCcVuEhHIPP/6GmcwchlVw4Gj8bVGR5+/N4
+   +ytADuEGH3sk/uQEJKtmpVi7FJQvaHuTh21mXb6B1V+JXQpHZVGnjw6h5
+   0hYnD9NFK8pkYqQ0nkD5F7cZ7aGqYZvpK3HBr6MUvE3Ct7rFBAySnPhNC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320856195"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="320856195"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 00:18:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="605458382"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="605458382"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 00:18:16 -0800
+Date:   Thu, 5 Jan 2023 16:14:04 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, ashish.kalra@amd.com, harald@profian.com
+Subject: Re: [PATCH RFC v7 01/64] KVM: Fix memslot boundary condition for
+ large page
+Message-ID: <20230105081404.GA2257863@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-2-michael.roth@amd.com>
+ <Y7VqgbTE34/Sxupw@kernel.org>
+ <20230105033451.GA2251521@chaop.bj.intel.com>
+ <2ebc9510-d7bf-a46d-6e78-f9e528b79501@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Provags-ID: V03:K1:e6ixn9x3qrMQjq5CqimdU7JpgjsjVfDoNyoLBcb4EczLrtrNX2U
- ixFxDAtD48kLgFDrPNFAtl3EjKeMmGGy+mNWLbC368qglH80q7IJQc42I90nVdO3HoJWC5p
- LJR0PbX5gc/GC9llc6V6Sc3hKaoe0/xTDqY1wERRsxd/nqE+eftxoEKY5i1wUk3oZiFxrfi
- 85AumXIc2Kq4aQ9JPAIEQ==
-UI-OutboundReport: notjunk:1;M01:P0:OZlzwYr2Qw0=;IDBYe5yVimYZIWzoGw/RJniwNZo
- 0uolB61iaJtJ7/PD9C8a1Mc1v4VCpRbKCogcoHML5XQ2mFzrOYEQkDeTUw4hUmgFTCd5ua5zV
- 05yftmCaW0llhRpSSAEBGSnm/5uIwtkh0mVJU1A2jmPsJpvyw0ejaxm5+BemLXRoCjQgV18tZ
- W8AqN0RHL2+7Jg87Jagu3lDvhM7nm0FVbM/CKscnID5Rc6neheP9c/Pf1EsE+cezW5Ezjn624
- Gs50PmkbMsA3CEOFv/G6SsrtTFLj6L8zDyD4b1165OME9skmYdaQc+ZEUn91dJcFmc+xyeMvN
- QjemPbGRllKACic6Gk3r/nfzhse3i84yuz7KX0rpbgI4i5PE/+TfG/prDCvdzFfvSLLhPPYkp
- AtlJFY8dsu8CJC/otOnchry7zuhKwlbvlA3pW4piTvRJu6+Bzpj1Edzys095c3cXk372RB6Ry
- nDhRWbFyRI2Sbdlluw4rqC7UyDlopBM019uw3ZIa/eh0WeTrDtwxZEv+y7VH2HCyK8mTH4NlN
- 4Tx+Bylc8wO4deDHuCw/O6vTw338HCS6qkiwN0/4aI5qqoQpP0VRCY+MuPNlTaaEAbXPNkRRF
- XTQy1F0/hPsySkLhTkfYJTmYoDfezsEDvxOTSha5oazarOm/TlNrEO17Wm1mFriZqkkeZ8Q2c
- xJo73OXF0d/JwVE9obNoUiZacFhq9UZlWRgSaPdBDA2j+CQreds5Hj8ODyFSldamrI3RflYsp
- 0VP6q9r3r0GwVLkAniB+qakskzYqPbl6NrsBIyXLND33LtsniMtAldQLHs7WTAlTeJf9wNFIw
- Wvs5Xr2fBAKfskFRMlLux5bgl36+d7kLRlk99kVnwIiUtiFCU9yTZ4EsldIZPr+aBQnc/ME51
- 4PF3Hdv5TYS7n7XPFC/Qj9+n1XrT8VYOK29zPFStjj1Jx6GshEosyjOUBB7o6dMQISFT/CiwS
- sT9Ygw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2ebc9510-d7bf-a46d-6e78-f9e528b79501@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Jan 05, 2023 at 09:38:59AM +0530, Nikunj A. Dadhania wrote:
+> 
+> 
+> On 05/01/23 09:04, Chao Peng wrote:
+> > On Wed, Jan 04, 2023 at 12:01:05PM +0000, Jarkko Sakkinen wrote:
+> >> On Wed, Dec 14, 2022 at 01:39:53PM -0600, Michael Roth wrote:
+> >>> From: Nikunj A Dadhania <nikunj@amd.com>
+> >>>
+> >>> Aligned end boundary causes a kvm crash, handle the case.
+> >>>
+> >>
+> >> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fkvm%2F20221202061347.1070246-8-chao.p.peng%40linux.intel.com%2F&data=05%7C01%7Cnikunj.dadhania%40amd.com%7C7a95933fac1b433e339c08daeece6c2c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638084867591405299%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=vDEu9Uxs0QRdzbUkJbE2LsJnMHJJHBdQijkePbE2woc%3D&reserved=0
+> >>
+> >> Chao, are you aware of this issue already?
+> > 
+> > Thanks Jarkko adding me. I'm not aware of there is a fix.
+> 
+> It was discussed here: https://lore.kernel.org/all/e234d307-0b05-6548-5882-c24fc32c8e77@amd.com/
+> 
+> I was hitting this with one of the selftests case.
 
-please pull the fbdev driver updates for 6.2-rc3, to receive
-fixes for matroxfb, offb, omapfb and fbmem.
+Yeah, I remember that discussion. With the new UPM code, this bug
+should be fixed. If you still hit the issue please let me know.
 
 Thanks,
-Helge
-
-----
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.2-rc3
-
-for you to fetch changes up to 764043cccd7232a783753a612d628fc0cb7854be:
-
-  fbdev: omapfb: avoid stack overflow warning (2023-01-04 19:09:40 +0100)
-
-----------------------------------------------------------------
-fbdev updates for kernel 6.2-rc3:
-
-- Fix Matrox G200eW initialization failure
-- Fix build failure of offb driver when built as module
-- Optimize stack usage in omapfb
-- Prevent use-after-free in fbmem
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      fbdev: omapfb: avoid stack overflow warning
-
-Hang Zhang (1):
-      fbdev: fbmem: prevent potential use-after-free issues with console_lock()
-
-Paul Menzel (1):
-      fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
-
-Randy Dunlap (1):
-      fbdev: make offb driver tristate
-
-Xu Panda (2):
-      fbdev: omapfb: use strscpy() to instead of strncpy()
-      fbdev: atyfb: use strscpy() to instead of strncpy()
-
- drivers/video/fbdev/Kconfig                |  4 ++--
- drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
- drivers/video/fbdev/core/fbmem.c           |  2 ++
- drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
- drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
- drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++----------
- 6 files changed, 27 insertions(+), 19 deletions(-)
+Chao
+> 
+> > 
+> >>
+> >>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> >>> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> >>> ---
+> >>>  arch/x86/kvm/mmu/mmu.c | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> >>> index b1953ebc012e..b3ffc61c668c 100644
+> >>> --- a/arch/x86/kvm/mmu/mmu.c
+> >>> +++ b/arch/x86/kvm/mmu/mmu.c
+> >>> @@ -7159,6 +7159,9 @@ static void kvm_update_lpage_private_shared_mixed(struct kvm *kvm,
+> >>>  		for (gfn = first + pages; gfn < last; gfn += pages)
+> >>>  			linfo_set_mixed(gfn, slot, level, false);
+> >>>  
+> >>> +		if (gfn == last)
+> >>> +			goto out;
+> >>> +
+> > 
+> > Nikunj or Michael, could you help me understand in which case it causes
+> > a KVM crash? To me, even the end is aligned to huge page boundary, but:
+> >     last = (end - 1) & mask;
+> > so 'last' is the base address for the last effective huage page. Even
+> > when gfn == last, it should still a valid page and needs to be updated
+> > for mem_attrs, correct?
+> 
+> Yes, that is correct with: last = (end - 1) & mask;
+> 
+> We can drop this patch from SNP series.
+> 
+> Regards
+> Nikunj
