@@ -2,337 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C52C65E5BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7509365E5C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjAEGzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 01:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S231144AbjAEG5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 01:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjAEGzB (ORCPT
+        with ESMTP id S230489AbjAEG5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 01:55:01 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A32E52771;
-        Wed,  4 Jan 2023 22:54:57 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 01F9849C;
-        Thu,  5 Jan 2023 07:54:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672901695;
-        bh=+GF+95W2lhR+xJsyHhZ6VRdcVcpeJNuiuta11P/LtVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m3QqiNvldntDt3ggv2uqCvuH6ypB1GDs2Va/q8+JfAubI6qLD49eUlxvlHD3/kqs1
-         Ek02Rf1OuyXdVpalqbWXL0BpE0L7pqxfY/To77JRT9nt67D/2djULzTgZrYjyLDB14
-         HaTphRegEWC8vtHXrtZNgLFyvP/obw449h1IUSmc=
-Date:   Thu, 5 Jan 2023 08:54:50 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 5/8] dt-bindings: media: add bindings for TI DS90UB960
-Message-ID: <Y7Z0OjKJ6LoFq01L@pendragon.ideasonboard.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-6-tomi.valkeinen@ideasonboard.com>
- <Y5YaMpbj1WTTIp3B@pendragon.ideasonboard.com>
- <99372b9d-2050-2040-6b29-a1939c2e0c95@ideasonboard.com>
- <Y6nRWpWvWZ++V1KP@pendragon.ideasonboard.com>
- <67f2998e-131f-a4f9-1434-8e0f5bd90bd7@ideasonboard.com>
- <Y7V3z9Pf4OB3UR7l@pendragon.ideasonboard.com>
- <0cb140df-b83f-1fd8-852a-61dee1e28086@ideasonboard.com>
+        Thu, 5 Jan 2023 01:57:23 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7345A5274A;
+        Wed,  4 Jan 2023 22:57:21 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3056v22j125663;
+        Thu, 5 Jan 2023 00:57:02 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672901822;
+        bh=lApiIuTNjR6+fOleqQdOeGBS8C+PUb0O1jZIgzhKcrE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=auuS9WTGga4p1i9YsEa+8DLocA2OZD/+jcOR9RlMzYCfvRUyyBOLe4UMPX4QEnAVN
+         ZPkWW6N9B4s28Mudy467gN1hxxjrWOOjQHboAci5TLDt/Y3rHecwKpQ+Fs7i5QYZaZ
+         t8S/bgVYnmLThe+HxXtlR5Tfiyl4/NRbOT0us8do=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3056v2QQ030420
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 5 Jan 2023 00:57:02 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 5
+ Jan 2023 00:57:02 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 5 Jan 2023 00:57:02 -0600
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3056uwuq014589;
+        Thu, 5 Jan 2023 00:56:58 -0600
+Message-ID: <49f03742-82a4-7748-0b4a-c557006b04cc@ti.com>
+Date:   Thu, 5 Jan 2023 12:26:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0cb140df-b83f-1fd8-852a-61dee1e28086@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXTERNAL] Re: [PATCH v12 2/6] remoteproc: pru: Add enum for PRU
+ Core Identifiers.
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221216053313.2974826-1-danishanwar@ti.com>
+ <20221216053313.2974826-3-danishanwar@ti.com> <20230105002240.GE2112402@p14s>
+Content-Language: en-US
+From:   Md Danish Anwar <a0501179@ti.com>
+In-Reply-To: <20230105002240.GE2112402@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hi Mathieu,
 
-On Wed, Jan 04, 2023 at 04:05:08PM +0200, Tomi Valkeinen wrote:
-> On 04/01/2023 14:57, Laurent Pinchart wrote:
-> > On Wed, Jan 04, 2023 at 10:59:00AM +0200, Tomi Valkeinen wrote:
-> >> On 26/12/2022 18:52, Laurent Pinchart wrote:
-> >>> On Tue, Dec 13, 2022 at 04:25:46PM +0200, Tomi Valkeinen wrote:
-> >>>> On 11/12/2022 19:58, Laurent Pinchart wrote:
-> >>>>> On Thu, Dec 08, 2022 at 12:40:03PM +0200, Tomi Valkeinen wrote:
-> >>>>>> Add DT bindings for TI DS90UB960 FPDLink-3 Deserializer.
-> >>>>>>
-> >>>>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>>>>> ---
-> >>>>>>     .../bindings/media/i2c/ti,ds90ub960.yaml      | 358 ++++++++++++++++++
-> >>>>>>     1 file changed, 358 insertions(+)
-> >>>>>>     create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>>>>
-> >>>>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>>>> new file mode 100644
-> >>>>>> index 000000000000..d8b5e219d420
-> >>>>>> --- /dev/null
-> >>>>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>>>>> @@ -0,0 +1,358 @@
-> >>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>>>> +%YAML 1.2
-> >>>>>> +---
-> >>>>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-> >>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>>>> +
-> >>>>>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
-> >>>>>> +
-> >>>>>> +maintainers:
-> >>>>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>>>>> +
-> >>>>>> +description:
-> >>>>>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-> >>>>>> +  forwarding.
-> >>>>>> +
-> >>>>>> +properties:
-> >>>>>> +  compatible:
-> >>>>>> +    enum:
-> >>>>>> +      - ti,ds90ub960-q1
-> >>>>>> +      - ti,ds90ub9702-q1
-> >>>>>> +
-> >>>>>> +  reg:
-> >>>>>> +    maxItems: 1
-> >>>>>> +    description:
-> >>>>>> +      i2c addresses for the deserializer and the serializers
-> >>>>>
-> >>>>> s/i2c/I2C/
-> >>>>>
-> >>>>> Same below.
-> >>>>>
-> >>>>> A bit more details would be nice, for instance the order in which
-> >>>>> addresses should be specified should be documented. The example below
-> >>>>> has one address only, so it's quite unclear. Or is this a left-over,
-> >>>>> from before the i2c-alias-pool ?
-> >>>>
-> >>>> That's a left over, but not related to i2c-alias-pool but the i2c-alias
-> >>>> for the serializers. It already says above 'maxItems: 1', so now it only
-> >>>> contains the deserializer address. I'll drop the desc.
-> >>>
-> >>> Looks good to me.
-> >>>
-> >>>>>> +
-> >>>>>> +  clocks:
-> >>>>>> +    maxItems: 1
-> >>>>>> +    description:
-> >>>>>> +      Reference clock connected to the REFCLK pin.
-> >>>>>> +
-> >>>>>> +  clock-names:
-> >>>>>> +    items:
-> >>>>>> +      - const: refclk
-> >>>>>> +
-> >>>>>> +  powerdown-gpios:
-> >>>>>> +    maxItems: 1
-> >>>>>> +    description:
-> >>>>>> +      Specifier for the GPIO connected to the PDB pin.
-> >>>>>> +
-> >>>>>> +  i2c-alias-pool:
-> >>>>>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> >>>>>> +    description:
-> >>>>>> +      i2c alias pool is a pool of i2c addresses on the main i2c bus that can be
-> >>>>>> +      used to access the remote peripherals. The addresses must be available,
-> >>>>>> +      not used by any other peripheral. Each remote peripheral is assigned an
-> >>>>>> +      alias from the pool, and transactions to that address will be forwarded
-> >>>>>> +      to the remote peripheral, with the address translated to the remote
-> >>>>>> +      peripheral's real address.
-> >>>>>
-> >>>>> As this property is optional, should you describe what happens when it's
-> >>>>> not specified ?
-> >>>>>
-> >>>>> I would also indicate that the pool doesn't cover the serializers, only
-> >>>>> the devices behind them.
-> >>>>
-> >>>> Yep, I'll clarify these.
-> >>>>
-> >>>>>> +
-> >>>>>> +  links:
-> >>>>>> +    type: object
-> >>>>>> +    additionalProperties: false
-> >>>>>> +
-> >>>>>> +    properties:
-> >>>>>> +      '#address-cells':
-> >>>>>> +        const: 1
-> >>>>>> +
-> >>>>>> +      '#size-cells':
-> >>>>>> +        const: 0
-> >>>>>> +
-> >>>>>> +      ti,manual-strobe:
-> >>>>>> +        type: boolean
-> >>>>>> +        description:
-> >>>>>> +          Enable manual strobe position and EQ level
-> >>>>>> +
-> >>>>>> +    patternProperties:
-> >>>>>> +      '^link@[0-9a-f]+$':
-> >>>>>
-> >>>>> There can be up to 4 links only, right ? I would then use
-> >>>>>
-> >>>>>          '^link@[0-3]$':
-> >>>>
-> >>>> Yes, I'll change that.
-> >>>>
-> >>>>>> +        type: object
-> >>>>>> +        additionalProperties: false
-> >>>>>> +        properties:
-> >>>>>> +          reg:
-> >>>>>> +            description: The link number
-> >>>>>> +            maxItems: 1
-> >>>>>> +
-> >>>>>> +          i2c-alias:
-> >>>>>> +            description:
-> >>>>>> +              The i2c address used for the serializer. Transactions to this
-> >>>>>> +              address on the i2c bus where the deserializer resides are
-> >>>>>> +              forwarded to the serializer.
-> >>>>>> +
-> >>>>>> +          ti,rx-mode:
-> >>>>>> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >>>>>> +            enum:
-> >>>>>> +              - 0 # RAW10
-> >>>>>> +              - 1 # RAW12 HF
-> >>>>>> +              - 2 # RAW12 LF
-> >>>>>> +              - 3 # CSI2 SYNC
-> >>>>>> +              - 4 # CSI2 NON-SYNC
-> >>>>>> +            description: FPD-Link Input Mode
-> >>>>>
-> >>>>> Are there use cases for controlling this dynamically (in particular the
-> >>>>> sync/non-sync modes) ? Is there anything that could be queried at
-> >>>>> runtime from the serializers instead of being specified in DT ?
-> >>>>
-> >>>> We need a link to the serializer before we can query anything from the
-> >>>> serializer.
-> >>>
-> >>> I meant querying it from the serializer driver, not the serializer
-> >>> hardware. This being said, it would likely be difficult to do so, as the
-> >>> serializer driver would need to probe first. I think I'm thus fine
-> >>> selecting the mode in DT on the deserializer side.
-> >>>
-> >>>> To have a link, we need the mode... So, as I mentioned in
-> >>>> the other reply, we could define these in some way in the serializer's
-> >>>> properties instead of here, but I'm not sure if that's a good change.
-> >>>>
-> >>>> The driver can change the mode at runtime (say, from sync to non-sync
-> >>>> mode, if the HW supports that). But I think this property should reflect
-> >>>> the HW strapped configuration of the serializer.
-> >>>
-> >>> That would possibly work for the DS90UB953, but the DS90UB913 has no
-> >>> strapped mode selected at boot time but is instead configured
-> >>> automatically through the back-channel (see my last reply to patch 3/8).
-> >>
-> >> Indeed.
-> >>
-> >>> When connecting a DS90UB913 to a DS90UB914 deserializer, we can probably
-> >>> start without mode selection in software, as the MODE pin is meant to
-> >>> bootstrap that to a correct value which is then automatically
-> >>> transmitted to the serializer (hardware designs where the mode would
-> >>> need to be overridden should be rate). However, when connecting multiple
-> >>
-> >> I don't know if that's true. I guess it depends on how you see the deser
-> >> and the camera module. Are they part of the same HW design or not? In my
-> >> setups they are quite separate, and I connect different kinds of camera
-> >> modules to my deserializers. But I can see that if you create a, say,
-> >> car, you'd have both sides known at design time and would never change.
-> >>
-> >>> DS90UB913 to a DS90UB960, I can imagine connecting different types of
-> >>> cameras on the four input ports, so the need to specify the mode
-> >>> per-port in DT would be more common.
-> >>
-> >> Right, and even with UB914, you might well design the deserializer side
-> >> with, say, RAW10 sensors, but later in the cycle you'd need to change to
-> >> a RAW12 sensor. Depending on the deser mode strap would require you to
-> >> do a HW change on the deser side too.
-> >>
-> >> As I said in the other mail, I don't like the deser's strap, and I think
-> >> we should just basically ignore it as we can provide the necessary data
-> >> in the DT.
-> > 
-> > What I meant is that, given that the UB914 is meant to be used with a
-> > single camera, using a RAW mode, there's a much higher chance that
-> > hardware strapping will work as intended there. We could thus start
-> > without support for overrides in a UB914 driver (but as far as I
-> > understand we're not planning to work on such a driver in the near
-> > future, so it's hypothetical only), while in the UB960 driver we
-> > probably need override support from the beginning.
+On 05/01/23 05:52, Mathieu Poirier wrote:
+> On Fri, Dec 16, 2022 at 11:03:09AM +0530, MD Danish Anwar wrote:
+>> Introducing enum pruss_pru_id for PRU Core Identifiers.
+>> PRUSS_PRU0 indicates PRU Core 0.
+>> PRUSS_PRU1 indicates PRU Core 1.
+>> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
+>>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  drivers/remoteproc/pru_rproc.c |  7 ++++---
+>>  include/linux/pruss.h          | 32 ++++++++++++++++++++++++++++++++
+>>  2 files changed, 36 insertions(+), 3 deletions(-)
+>>  create mode 100644 include/linux/pruss.h
+>>
+>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>> index 128bf9912f2c..a1a208b31846 100644
+>> --- a/drivers/remoteproc/pru_rproc.c
+>> +++ b/drivers/remoteproc/pru_rproc.c
+>> @@ -16,6 +16,7 @@
+>>  #include <linux/module.h>
+>>  #include <linux/of_device.h>
+>>  #include <linux/of_irq.h>
+>> +#include <linux/pruss.h>
+>>  #include <linux/pruss_driver.h>
+>>  #include <linux/remoteproc.h>
+>>  
+>> @@ -438,7 +439,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>>  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+>>  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+>>  	/* PRU1 has its local RAM addresses reversed */
+>> -	if (pru->id == 1)
+>> +	if (pru->id == PRUSS_PRU1)
+>>  		swap(dram0, dram1);
+>>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>>  
+>> @@ -747,14 +748,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+>>  	case RTU0_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case PRU0_IRAM_ADDR_MASK:
+>> -		pru->id = 0;
+>> +		pru->id = PRUSS_PRU0;
+>>  		break;
+>>  	case TX_PRU1_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case RTU1_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case PRU1_IRAM_ADDR_MASK:
+>> -		pru->id = 1;
+>> +		pru->id = PRUSS_PRU1;
+>>  		break;
+>>  	default:
+>>  		ret = -EINVAL;
+>> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+>> new file mode 100644
+>> index 000000000000..fbe4fbb45807
+>> --- /dev/null
+>> +++ b/include/linux/pruss.h
+>> @@ -0,0 +1,32 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/**
+>> + * PRU-ICSS Subsystem user interfaces
+>> + *
+>> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
+>> + *	Suman Anna <s-anna@ti.com>
+>> + */
+>> +
+>> +#ifndef __LINUX_PRUSS_H
+>> +#define __LINUX_PRUSS_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/types.h>
+>> +
+>> +#define PRU_RPROC_DRVNAME "pru-rproc"
+>> +
+>> +/**
+>> + * enum pruss_pru_id - PRU core identifiers
+>> + * @PRUSS_PRU0: PRU Core 0.
+>> + * @PRUSS_PRU1: PRU Core 1.
+>> + * @PRUSS_NUM_PRUS: Total number of PRU Cores available.
+>> + *
+>> + */
+>> +
+>> +enum pruss_pru_id {
+>> +	PRUSS_PRU0 = 0,
+>> +	PRUSS_PRU1,
+>> +	PRUSS_NUM_PRUS,
+>> +};
+>> +
+>> +
+>> +#endif /* __LINUX_PRUSS_H */
+>> \ No newline at end of file
 > 
-> Yes, but depending on the UB914 strap mode would still be only a partial 
-> solution, and it would still need to also support overriding the strap 
-> mode (from DT). As you said in the other mail, we anyway have to define 
-> the serializer and the sensor in the DT, so even with UB914 we couldn't 
-> just switch the camera module and change the mode via a DIP switch.
+> I fixed the checkpatch warning associated with this patch but it has a cascading
+> effect on the other patches.  Please address and send a new revision.  Aside
+> from this I am good with this patchset.
 > 
-> So I still don't see why we would even bother supporting the deser strap 
-> mode, even on UB914.
+> Thanks,
+> Mathieu
+> 
 
-What I meant is that I wouldn't nack an initial UB914 driver submission
-just because it didn't support that feature, while for the UB960, I
-think it should be there from the start. That's all theoretical anyway,
-no UB914 driver is planned, and the feature should be so easy to add
-that it would likely be there from the start.
+Sure Mathieu.
+I will fix the checkpatch warning associated with this patch and send a new
+revision.
 
-> >>> For these reasons, I don't think the ti,rx-mode property can be defined
-> >>> as reflecting the hardware MODE strap with the DS90UB913. I also think
-> >>> it would be quite confusing to define it as the desired runtime
-> >>> configuration for the DS90UB913 and as the hardware MODE strap for the
-> >>> DS90UB953. Could it be (explicitly) defined as the desired runtime
-> >>> configuration in all cases ?
-> >>
-> >> That sounds bad in a DT context =). You're right that the rx-mode can't
-> >> be defined as reflecting the serializer mode strap, but I think we can
-> >> define it as reflecting the default operation mode of the serializer
-> >> hardware (or maybe rather the camera module).
-> > 
-> > What do you mean by "default operation mode" in this case ?
-> 
-> How the camera module is HW strapped and supposed to be used, how it 
-> works (more or less) out of the box:
-> 
-> - The UB953 is HW strapped to sync or non-sync CSI mode, or RAW mode.
-> - Both UB913 and UB953 (in RAW mode) have a sensor connected either with 
-> 10 or 12 lines.
-> - The sensor has a default (either HW or use-case default) pixel clock.
-> 
-> Based on those, I think we get all the possible modes. So, I think, 
-> every camera module will have a known "normal" / "default" mode, which 
-> is what the mode in the DT tells.
-> 
-> Well, for FPD4, there's also the CDR mode. UB971 can work in both FDP3 
-> and FPD4 modes. But there again it should be clear what's the "normal" 
-> operation mode, as it comes from a serializer HW strap.
-> 
-> We can do changes to those at runtime (not supported by the drivers), 
-> e.g. changing from sync to non-sync CSI mode, changing the RAW mode, and 
-> even changing from FDP4 to FDP3. But those, I believe, are rare cases, 
-> and the changes have to be done carefully, on both the deser and ser 
-> sides in certain order.
-> 
-> So, back to the original point, "desired runtime configuration" and 
-> "default operation mode" are maybe the same thing =).
+Thanks,
+Danish.
 
-I'm fine with this, it "just" needs to be expressed in a clear way in
-the bindings :-)
-
--- 
-Regards,
-
-Laurent Pinchart
+>> -- 
+>> 2.25.1
+>>
