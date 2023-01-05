@@ -2,56 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B2365E665
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2864565E669
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjAEICI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S231366AbjAEIEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjAEIB7 (ORCPT
+        with ESMTP id S231363AbjAEIEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:01:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8804C17597;
-        Thu,  5 Jan 2023 00:01:57 -0800 (PST)
+        Thu, 5 Jan 2023 03:04:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3A93E0C2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 00:04:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB3C6190B;
-        Thu,  5 Jan 2023 08:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB89C433EF;
-        Thu,  5 Jan 2023 08:01:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2D5EB819BF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22FF8C433F0;
+        Thu,  5 Jan 2023 08:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672905716;
-        bh=w5W3eLaqipVDvJWkR5utJmks9c/6Wu40ITZJrOR/Vtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ASD4yqvYISTgGKoiCrSfdnp5vYULBiuzLPyd6t5jCwXTnQ0VKRF8Kil9MYFTHwOpw
-         tC0tWgHHo+jinhek8L5B8BpBfaPOoDKQUBsR7T1J5FcI0rtgsiOWE7vYZiY6wQXIWB
-         K86khD8z7k0I7MtDJw+55IvgELxPUYPNizyY8Y5ktddjXO8YSY006TSzq8v5Z8KuAU
-         bO2jmIcp4ZG4Pj/JZeonkcjHS+gs6suQ4drs8NtlKHWVBL5U0MukZJEYzyITrhHLlQ
-         W5qroik6iikA54zX0C4WsIIbMdFiPzC0Yd/MALlee4SG0fWJ6P26U7UigVLCDEIBSq
-         GEX54KZB9ZUvA==
-Date:   Thu, 5 Jan 2023 10:01:52 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] ezchip: Switch to some devm_ function to
- simplify code
-Message-ID: <Y7aD8F5OuAwaEKjU@unreal>
-References: <cover.1672865629.git.christophe.jaillet@wanadoo.fr>
- <e1fd0cc1fd865e58af713c92f09251e6180c1636.1672865629.git.christophe.jaillet@wanadoo.fr>
- <20230104205438.61a7dc20@kernel.org>
- <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
+        s=k20201202; t=1672905842;
+        bh=TiGbJNGqjLKu/tb0EDrx8mcDvF/zOSNik1+/AM8N3aM=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=jeQ3apWwiFubrh9Fe7Y8RwV0r3fwT98bC4QAIQshndA6AoG8Omr6rJ6G0v8WB6NEn
+         P9o1xooBi8ou8goSDK7AreFAA3/6/Pb95m0iaSWo2925QqwzSx8nJwU3VgDJpG2pRl
+         +eaIo8Tw9aQTgoL10MxiSapB8PnYo8okyk1sxSHL6HGHUqeNWgJBsTcwVnrB60C9lj
+         mPF9OAR61hwgosq2kO1LyOpyDApoUXrFM8Cdh3R1Z/DapEeMelLc8zxSwbCegvuiOh
+         kwFvlDaQ3IietB6SivDGk5V7bOe2BRF/tqgcI++8X3zj7XwKiApBjpfJHXslaaywkO
+         l5n/DNrusHpfQ==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0248827C0054;
+        Thu,  5 Jan 2023 03:04:00 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 05 Jan 2023 03:04:01 -0500
+X-ME-Sender: <xms:cIS2YwROwwvu8D_Illtuiz5Apy6YWuZfnB2KdQIDWR3ZypcTh-Rd1w>
+    <xme:cIS2Y9zr5SWJUjd3BG7HpINJK43xvBm_gzYKguvhRxuQkPBJIrt0OCYEN5dBQ2fIA
+    CxodiWpkaS1XaexIg4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeejgdduudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepleevgfduieehfeeltdettdfhfffgkedugeeklefftdeivdfgveeiteet
+    keehffevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidquddvkeehudejtddvgedqvdekjedttddvieegqdgrrhhnug
+    eppehkvghrnhgvlhdrohhrghesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:cIS2Y91s_eJLjTfXOl8nZMG6CGzsH7tqhJaL_LetJg8hVF9kRPx4Ag>
+    <xmx:cIS2Y0BUVZyHpRbWw169o7Yrf59zUFr7DzrqYjNBQAxdfaOzKfK95Q>
+    <xmx:cIS2Y5gjSqHA1lAiOkTKNABKPKsiqs3cej_E1rjJZPAUQkLgfwLyuA>
+    <xmx:cIS2Y-twKb_x0ktnxT87k_MyiULbXHgXbgUCGEHg887yAIxFGWeuLQ>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7ACD7B60086; Thu,  5 Jan 2023 03:04:00 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <e211f932-77c3-427a-859a-d846598524ed@app.fastmail.com>
+In-Reply-To: <202301051008.a8468257-yujie.liu@intel.com>
+References: <202301051008.a8468257-yujie.liu@intel.com>
+Date:   Thu, 05 Jan 2023 09:03:40 +0100
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "kernel test robot" <yujie.liu@intel.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     oe-lkp@lists.linux.dev, "kernel test robot" <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [niks:has_ioport_v3] [tty] aa0652d7f1:
+ BUG:kernel_NULL_pointer_dereference,address
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,53 +81,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 07:27:00AM +0100, Christophe JAILLET wrote:
-> Le 05/01/2023 à 05:54, Jakub Kicinski a écrit :
-> > On Wed,  4 Jan 2023 22:05:33 +0100 Christophe JAILLET wrote:
-> > > devm_alloc_etherdev() and devm_register_netdev() can be used to simplify
-> > > code.
-> > > 
-> > > Now the error handling path of the probe and the remove function are
-> > > useless and can be removed completely.
-> > 
-> > Right, but this is very likely a dead driver. Why invest in refactoring?
-> > 
-> 
-> Hi Jakub,
-> 
-> this driver was just randomly picked as an example.
-> 
-> My main point is in the cover letter. I look for feed-back to know if
-> patches like that are welcomed. Only the first, Only the second, Both or
-> None.
-> 
-> 
-> I put it here, slightly rephrased:
-> 
-> 
-> These patches (at least 1 and 2) can be seen as an RFC for net MAINTAINERS,
-> to see if there is any interest in:
->   - axing useless netif_napi_del() calls, when free_netdev() is called just
-> after. (patch 1)
->   - simplifying code with axing the error handling path of the probe and the
-> remove function in favor of using devm_ functions (patch 2)
+On Thu, Jan 5, 2023, at 06:54, kernel test robot wrote:
+> Greeting,
+>
+> FYI, we noticed BUG:kernel_NULL_pointer_dereference,address due to 
+> commit (built with clang-14):
+>
+> commit: aa0652d7f1b311e55232a8153522fdaaba0f197a ("tty: serial: handle 
+> HAS_IOPORT dependencies")
+> https://git.kernel.org/cgit/linux/kernel/git/niks/linux.git 
+> has_ioport_v3
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire 
+> log/backtrace):
+>
+>
+> [    2.166733][    T0] calling  univ8250_console_init+0x0/0x30 @ 0
+> [    2.167555][    T0] BUG: kernel NULL pointer dereference, address: 
+> 00000000
 
-I would say no. In many occasions, the devm_* calls were marked as harmful.
-Latest talk about devm_kzalloc(): https://lpc.events/event/16/contributions/1227/
+I think it's this bit:
 
-Thanks
+@@ -508,12 +523,13 @@ static void set_io_from_upio(struct uart_port *p)
+                up->dl_read = au_serial_dl_read;
+                up->dl_write = au_serial_dl_write;
+                break;
+-#endif
+-
++#ifdef CONFIG_HAS_IOPORT
+        default:
+                p->serial_in = io_serial_in;
+                p->serial_out = io_serial_out;
+                break;
++#endif
++#endif
+        }
+        /* Remember loaded iotype */
+        up->cur_iotype = p->iotype;
 
-> 
->   or
-> 
-> if it doesn't worth it and would only waste MAINTAINERS' time to review what
-> is in fact only code clean-ups.
-> 
-> 
-> The rational for patch 1 is based on Jakub's comment [1].
-> free_netdev() already cleans up NAPIs (see [2]).
-> 
-> CJ
-> 
-> [1]: https://lore.kernel.org/all/20221221174043.1191996a@kernel.org/
-> [2]: https://elixir.bootlin.com/linux/v6.2-rc1/source/net/core/dev.c#L10710
+
+which puts the 'default' case inside of '#ifdef
+CONFIG_SERIAL_8250_RT288X'. x86 does not use the
+RT288x variant but relies on the default, so any
+call to io_serial_{in,out} will cause a NULL
+pointer dereference.
+
+       Arnd
