@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F5C65EDC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA7565EDAE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjAENsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S233148AbjAENre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbjAENrK (ORCPT
+        with ESMTP id S233489AbjAENrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 08:47:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABB340863;
-        Thu,  5 Jan 2023 05:47:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F83F100;
+        Thu,  5 Jan 2023 05:47:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47C9461A8A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9755061A8E;
+        Thu,  5 Jan 2023 13:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6D9C43392;
         Thu,  5 Jan 2023 13:47:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3F5C433EF;
-        Thu,  5 Jan 2023 13:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926426;
-        bh=kCdt9zcWy5Z7iBU2hEYAS5q9hfAuSycaoJsMghPPkTU=;
+        s=k20201202; t=1672926429;
+        bh=MePNggNn2Sdy9A2QPxyvtHiIGVkS0Kpugps/y3JKzaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s/Uq82a7wjGYOlAB2yEoZCR0RZ5zMqdRv7BhzgrX55PC+FXvDjhN/2+qUsOui/X/J
-         FxhNSex0pPlmit+fN6Q+ZQzpwS8RzmxCKaw2qJmR5NjPulnR3paSfT+4efe/5nNkgq
-         93sx1WUAdy0epj5JNt14gmBLLdbARS003W/ePPDxzCEZtWEfulLkx/Nub+0iq3sIRR
-         uKrX7oihiV2b5KWAIJ+QP93WkCdDcTS1a8CMVzIdOwkByqCgUupeTrSZ67DpEosa3i
-         S1SxlNCTWeBpN2DRtxfIWBlfGdxPVHrsgdy4xG1/cdYj9uioLx1Bpv76xXEy4N/E4r
-         48Ku0/y/pmy0Q==
+        b=CIfFNq+TUc4bgKQDXZX7LJ+AsYv5L19C+b57kSP+WCWPDnV+66EVyavxyDdnjwa2L
+         m7JZmu95FeBZ7HP5WaYlNIWHpccm+ST8DcBStZW9hEuK+SjMaCL8c8ml4LeCuYwB8r
+         lqTZJzXfqZwq8HyPtBdhfBQIHyHwtyTfDS3z+A95BjcBJfPk0S6gvACvIUZ1+Sq0h/
+         1tknNa7twsy7amcBfF/+1PzsKpK78HVLpOwlxu/5TK7M9xsgb6N325k9s/fR212RKz
+         oUwHFGcll88yYP3SzeJk0IIBvi1H5s9E4W9Uyu29IiedhRxyBOwjieAyB9zW7yOk/0
+         if3kYzrG8RESA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org
-Subject: [PATCH 09/27] backlight: remove pxa tosa support
-Date:   Thu,  5 Jan 2023 14:46:04 +0100
-Message-Id: <20230105134622.254560-10-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH 10/27] input: remove pxa930_trkball driver
+Date:   Thu,  5 Jan 2023 14:46:05 +0100
+Message-Id: <20230105134622.254560-11-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -59,86 +59,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The PXA tosa machine was removed, so this backlight driver is no
-longer needed.
+The pxa930 SoC support is getting removed, and no upstream
+board ever provided the trkball device that this driver
+relies on.
 
-Cc: Lee Jones <lee@kernel.org>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Jingoo Han <jingoohan1@gmail.com>
-Cc: linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-input@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/video/backlight/Kconfig    |  14 --
- drivers/video/backlight/Makefile   |   2 -
- drivers/video/backlight/tosa_bl.c  | 172 -----------------
- drivers/video/backlight/tosa_bl.h  |   8 -
- drivers/video/backlight/tosa_lcd.c | 284 -----------------------------
- 5 files changed, 480 deletions(-)
- delete mode 100644 drivers/video/backlight/tosa_bl.c
- delete mode 100644 drivers/video/backlight/tosa_bl.h
- delete mode 100644 drivers/video/backlight/tosa_lcd.c
+ drivers/input/mouse/Kconfig                   |   6 -
+ drivers/input/mouse/Makefile                  |   1 -
+ drivers/input/mouse/pxa930_trkball.c          | 250 ------------------
+ .../platform_data/mouse-pxa930_trkball.h      |  11 -
+ 4 files changed, 268 deletions(-)
+ delete mode 100644 drivers/input/mouse/pxa930_trkball.c
+ delete mode 100644 include/linux/platform_data/mouse-pxa930_trkball.h
 
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index 936ba1e4d35e..01804847c39f 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -90,13 +90,6 @@ config LCD_PLATFORM
- 	  This driver provides a platform-device registered LCD power
- 	  control interface.
+diff --git a/drivers/input/mouse/Kconfig b/drivers/input/mouse/Kconfig
+index 63c9cda555c3..32cc4c62a716 100644
+--- a/drivers/input/mouse/Kconfig
++++ b/drivers/input/mouse/Kconfig
+@@ -393,12 +393,6 @@ config MOUSE_GPIO
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called gpio_mouse.
  
--config LCD_TOSA
--	tristate "Sharp SL-6000 LCD Driver"
--	depends on I2C && SPI && MACH_TOSA
+-config MOUSE_PXA930_TRKBALL
+-	tristate "PXA930 Trackball mouse"
+-	depends on CPU_PXA930 || CPU_PXA935
 -	help
--	  If you have an Sharp SL-6000 Zaurus say Y to enable a driver
--	  for its LCD.
+-	  Say Y here to support PXA930 Trackball mouse.
 -
- config LCD_HP700
- 	tristate "HP Jornada 700 series LCD Driver"
- 	depends on SA1100_JORNADA720_SSP && !PREEMPTION
-@@ -288,13 +281,6 @@ config BACKLIGHT_APPLE
- 	  If you have an Intel-based Apple say Y to enable a driver for its
- 	  backlight.
- 
--config BACKLIGHT_TOSA
--	tristate "Sharp SL-6000 Backlight Driver"
--	depends on I2C && MACH_TOSA && LCD_TOSA
--	help
--	  If you have an Sharp SL-6000 Zaurus say Y to enable a driver
--	  for its backlight
--
- config BACKLIGHT_QCOM_WLED
- 	tristate "Qualcomm PMIC WLED Driver"
- 	select REGMAP
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index e815f3f1deff..2a9126dbfe79 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -15,7 +15,6 @@ obj-$(CONFIG_LCD_LTV350QV)		+= ltv350qv.o
- obj-$(CONFIG_LCD_OTM3225A)		+= otm3225a.o
- obj-$(CONFIG_LCD_PLATFORM)		+= platform_lcd.o
- obj-$(CONFIG_LCD_TDO24M)		+= tdo24m.o
--obj-$(CONFIG_LCD_TOSA)			+= tosa_lcd.o
- obj-$(CONFIG_LCD_VGG2432A4)		+= vgg2432a4.o
- 
- obj-$(CONFIG_BACKLIGHT_88PM860X)	+= 88pm860x_bl.o
-@@ -53,7 +52,6 @@ obj-$(CONFIG_BACKLIGHT_QCOM_WLED)	+= qcom-wled.o
- obj-$(CONFIG_BACKLIGHT_RT4831)		+= rt4831-backlight.o
- obj-$(CONFIG_BACKLIGHT_SAHARA)		+= kb3886_bl.o
- obj-$(CONFIG_BACKLIGHT_SKY81452)	+= sky81452-backlight.o
--obj-$(CONFIG_BACKLIGHT_TOSA)		+= tosa_bl.o
- obj-$(CONFIG_BACKLIGHT_TPS65217)	+= tps65217_bl.o
- obj-$(CONFIG_BACKLIGHT_WM831X)		+= wm831x_bl.o
- obj-$(CONFIG_BACKLIGHT_ARCXCNN) 	+= arcxcnn_bl.o
-diff --git a/drivers/video/backlight/tosa_bl.c b/drivers/video/backlight/tosa_bl.c
+ config MOUSE_MAPLE
+ 	tristate "Maple mouse (for the Dreamcast)"
+ 	depends on MAPLE
+diff --git a/drivers/input/mouse/Makefile b/drivers/input/mouse/Makefile
+index e49f08565076..92b3204ce84e 100644
+--- a/drivers/input/mouse/Makefile
++++ b/drivers/input/mouse/Makefile
+@@ -18,7 +18,6 @@ obj-$(CONFIG_MOUSE_MAPLE)		+= maplemouse.o
+ obj-$(CONFIG_MOUSE_NAVPOINT_PXA27x)	+= navpoint.o
+ obj-$(CONFIG_MOUSE_PC110PAD)		+= pc110pad.o
+ obj-$(CONFIG_MOUSE_PS2)			+= psmouse.o
+-obj-$(CONFIG_MOUSE_PXA930_TRKBALL)	+= pxa930_trkball.o
+ obj-$(CONFIG_MOUSE_RISCPC)		+= rpcmouse.o
+ obj-$(CONFIG_MOUSE_SERIAL)		+= sermouse.o
+ obj-$(CONFIG_MOUSE_SYNAPTICS_I2C)	+= synaptics_i2c.o
+diff --git a/drivers/input/mouse/pxa930_trkball.c b/drivers/input/mouse/pxa930_trkball.c
 deleted file mode 100644
-index 77b71f6c19b5..000000000000
-diff --git a/drivers/video/backlight/tosa_bl.h b/drivers/video/backlight/tosa_bl.h
+index f04ba12dbfa8..000000000000
+diff --git a/include/linux/platform_data/mouse-pxa930_trkball.h b/include/linux/platform_data/mouse-pxa930_trkball.h
 deleted file mode 100644
-index 589e17e6fdb2..000000000000
-diff --git a/drivers/video/backlight/tosa_lcd.c b/drivers/video/backlight/tosa_lcd.c
-deleted file mode 100644
-index 23d6c6bf0f54..000000000000
+index ba0ac7a30d8c..000000000000
 -- 
 2.39.0
 
