@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A389F65F6A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D903C65F6A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbjAEWWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S235886AbjAEWWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbjAEWWN (ORCPT
+        with ESMTP id S235813AbjAEWWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 17:22:13 -0500
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [IPv6:2001:41d0:1004:224b::bc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0F06B198
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:22:10 -0800 (PST)
-Date:   Thu, 5 Jan 2023 22:22:02 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1672957328;
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9FE6951E;
+        Thu,  5 Jan 2023 14:22:10 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 377401EC068E;
+        Thu,  5 Jan 2023 23:22:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672957329;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jUI9TSiA75B4vjGbap/Y0EjPHoVUu/AzEKZE5jFgpHg=;
-        b=QW44AXC4DbOOKrF4eAPSNoVRO42xVcoshBgAnnxFHEhd3hKj0mII5TWxIkNdocZG9Kz7bs
-        JVJXFN1rQ2WxSJ46GXjpk2quWO3M4EWu/UXD2yRhm0nM/WKX4CTJQFwJtxc5+H900NnXpR
-        PN/h8KcFXMfMKaZcQRnR4HyPcLCEpGM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v5 6/7] KVM: arm64: Mask FEAT_CCIDX
-Message-ID: <Y7dNihZMs4NSSw0v@google.com>
-References: <20221230095452.181764-1-akihiko.odaki@daynix.com>
- <20221230095452.181764-7-akihiko.odaki@daynix.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=czOsQmD34pjViax7atABy4fDrkAQPndgTpUtqjimrFc=;
+        b=dwRsEjjz/U8PKiJy/nHt/KsevM+xMAesCHF5IaybVIbL1Cz7WLi8TMwrCmwxEQYapsSxte
+        nssirL3xUjhN8lkbuVAhpi+HwnDg6NCPanriRkM39q9fF1dzN5bS9XKi0s0T3m38wDQf5o
+        zmOQS5MeXyyLCoXAX2fYHJwVdWb+dzY=
+Date:   Thu, 5 Jan 2023 23:22:04 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Borislav Petkov <bpetkov@amd.com>,
+        Leo Duran <leo.duran@amd.com>
+Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
+ be onlined for x2apic
+Message-ID: <Y7dNjHXJJwzCtYOY@zn.tnic>
+References: <20230105041059.39366-1-kvijayab@amd.com>
+ <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221230095452.181764-7-akihiko.odaki@daynix.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,44 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 06:54:51PM +0900, Akihiko Odaki wrote:
-> The CCSIDR access handler masks the associativity bits according to the
-> bit layout for processors without FEAT_CCIDX. KVM also assumes CCSIDR is
-> 32-bit where it will be 64-bit if FEAT_CCIDX is enabled. Mask FEAT_CCIDX
-> so that these assumptions hold.
+On Thu, Jan 05, 2023 at 06:09:59PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Jan 5, 2023 at 5:11 AM Kishon Vijay Abraham I <kvijayab@amd.com> wrote:
+> >
+> > Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.5
+> > spec mandates that both "enabled" and "online capable" Local APIC Flags
+> > should be used to determine if the processor is usable or not.
+> >
+> > However, Linux doesn't use the "online capable" flag for x2APIC to
+> > determine if the processor is usable. As a result, cpu_possible_mask has
+> > incorrect value and results in more memory getting allocated for per_cpu
+> > variables than it is going to be used.
+> >
+> > Make sure Linux parses both "enabled" and "online capable" flags for
+> > x2APIC to correctly determine if the processor is usable.
+> >
+> > Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+> > Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+> > Reported-by: Leo Duran <leo.duran@amd.com>
+> > Signed-off-by: Kishon Vijay Abraham I <kvijayab@amd.com>
 > 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-FYI, I'm an idiot and replied to v4 of this patch... Forwarding comments
-below:
+Are you saying, I should take it through tip?
 
-> ---
->  arch/arm64/kvm/sys_regs.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index f4a7c5abcbca..aeabf1f3370b 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -1124,6 +1124,12 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu, struct sys_reg_desc const *r
->  						      ID_DFR0_PERFMON_SHIFT,
->  						      kvm_vcpu_has_pmu(vcpu) ? ID_DFR0_PERFMON_8_4 : 0);
->  		break;
-> +	case SYS_ID_AA64MMFR2_EL1:
-> +		val &= ~ID_AA64MMFR2_EL1_CCIDX_MASK;
-> +		break;
-> +	case SYS_ID_MMFR4_EL1:
-> +		val &= ~ARM64_FEATURE_MASK(ID_MMFR4_CCIDX);
-> +		break;
+-- 
+Regards/Gruss,
+    Boris.
 
-Not that it is necessarily worth addressing, but I wanted to point
-something out.
-
-This change breaks migration from older kernels on implementations w/
-FEAT_CCIDX. There is most likely exactly 0 of those in the wild, but
-we need to be careful changing user-visible stuff like this.
-
---
-Thanks,
-Oliver
+https://people.kernel.org/tglx/notes-about-netiquette
