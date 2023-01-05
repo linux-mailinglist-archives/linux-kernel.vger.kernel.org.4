@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EBF65F2AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB4565F2C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234584AbjAERa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S234574AbjAERcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234360AbjAERa0 (ORCPT
+        with ESMTP id S233998AbjAERcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:30:26 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7733392;
-        Thu,  5 Jan 2023 09:30:25 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso1882830wmp.3;
-        Thu, 05 Jan 2023 09:30:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o5jZcZ+YgPoIjP8SOU3FjXlsuvcwtes2avBtwRlJmuo=;
-        b=Jm4esGPypCFk9CsOcodMN6zqTZiqZyUp+yCwCShUysTZojG5j/XGWOVabVR1zfnKEl
-         qarZQJ17W3XHSuVEn72fDOsYjg8LWSryNbUvxOZazMjdM6eZBSbIoVocNxUwJgyWjoED
-         Eg5ix4nnNgnKyG/EI8zgmFc56NSBtQeb6VdQ6G+rREAFvOoU00Izcg4Zx9yoEpzT9hNJ
-         +2yjaApu6bXySJXBCh5RoQa2QRDE0zDdtjdN/kU9d1xHYEthN1I7rQeLsHQygTrHuVef
-         ez7W69mmn5/wR/UG8hzuSSETs5BjIZ/njSj+EUEv6BnoujzKgHWz9ehZz+cV6Ds4xxwy
-         +RXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o5jZcZ+YgPoIjP8SOU3FjXlsuvcwtes2avBtwRlJmuo=;
-        b=BaaGvKdIXv243ckzlFsM7QB+5bUhurTqECBIkpaBDJz5rpg2gy/LU7XfU+a/7MUras
-         xicmSOHBiGEpKxaSjN1/WT34JGf7MeOV6n+dDJNXKalPdjqAeQIB6Pqb7lpr1cTRJPDz
-         Z8EQG8PhrHj80gxo5CY0R8Nq9GbQG3fFjXqwkCiCSL1yvp2tGPI6/AQA9qG+lhKfumEP
-         k3uWdw+MzzCTqAozM71A/LtJHlcRLgb9Bw/ueZ6fWsxYiANu74ufvClh6JNIQOApUkDW
-         yVdF7pB0bMQQgaWvX1WSVkdK5Z9KR78IyZGNn7n+1xxe5iMOLjkH3eiqXF7RTQcmC7Ap
-         qFQw==
-X-Gm-Message-State: AFqh2krzqk28ElCgqBncev4otmCvkcUDHrMbw05mrwLmD7lnjT/g34kM
-        42wYwxU6sUvifdKmCWFo2pY=
-X-Google-Smtp-Source: AMrXdXtoWb7E6Dy6FLBwdAlWwtTGcbQjgmyTvP7NyPyv/3l4C9+TmdcOtOwt7pi9RmpFSm+BPb2nLw==
-X-Received: by 2002:a05:600c:1e10:b0:3cf:973e:c874 with SMTP id ay16-20020a05600c1e1000b003cf973ec874mr37716677wmb.14.1672939824130;
-        Thu, 05 Jan 2023 09:30:24 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm3641462wms.31.2023.01.05.09.30.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 09:30:23 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] clk: sunxi-ng: h3/h5: Model H3 CLK_DRAM as a fixed clock
-Date:   Thu, 05 Jan 2023 18:30:21 +0100
-Message-ID: <3394555.QJadu78ljV@jernej-laptop>
-In-Reply-To: <20221229042230.24532-1-samuel@sholland.org>
-References: <20221229042230.24532-1-samuel@sholland.org>
+        Thu, 5 Jan 2023 12:32:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD55BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:32:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E49461BB8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FEFC433EF;
+        Thu,  5 Jan 2023 17:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672939938;
+        bh=ikDfHD7FglucoM7XGqmaXrMPOyauM71fIlQwyXQKJ14=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=i/mw5uV1dYUSn4qkM1Acoq4PHmc67+XvhYCEJeqvsETFHS3V7o9c446S3pr3jKRkY
+         RM7vAvR0SCGB0cnhaU6uh+BnH5Jz/K/NgGGoMJD+S4DTvYGeK26korBAbhkEgvVXt5
+         a4Q0nqO9UhOCB7+uQO4pRKagaPRRc9xj+EBRqNA3jfnEUQeKVbuD+17E5UvDW03kJy
+         72gPsNkurtYol/JsaIUb7SDVQWplOCMSStLeW1NCUbDCV2vd7HD37zy/8g3CTESqrs
+         bykJ/ksp1Ez40/BRFwvV78FRg+0P7ES40XvonscD3mkWmZ+nYp0fjYaeDBliOnNnOu
+         FP8N0it3GygDQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 12B495C0544; Thu,  5 Jan 2023 09:32:18 -0800 (PST)
+Date:   Thu, 5 Jan 2023 09:32:18 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230105173218.GB4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y7R6SPHGS9U/T6IC@rowland.harvard.edu>
+ <ee186bc17a5e48298a5373f688496dce@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee186bc17a5e48298a5373f688496dce@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 29. december 2022 ob 05:22:30 CET je Samuel Holland napis=
-al(a):
-> The DRAM controller clock is only allowed to change frequency while the
-> DRAM chips are in self-refresh. To support this, changes to the CLK_DRAM
-> mux and divider have no effect until acknowledged by the memory dynamic
-> frequency scaling (MDFS) hardware inside the DRAM controller. (There is
-> a SDRCLK_UPD bit in DRAM_CFG_REG which should serve a similar purpose,
-> but this bit actually does nothing.)
->=20
-> However, the MDFS hardware in H3 appears to be broken. Triggering a
-> frequency change using the procedure from similar SoCs (A64/H5) hangs
-> the hardware. Additionally, the vendor BSP specifically avoids using the
-> MDFS hardware on H3, instead performing all DRAM PHY parameter updates
-> and resets in software.
->=20
-> Thus, it is effectively impossible to change the CLK_DRAM mux/divider,
-> so those features should not be modeled. Add CLK_SET_RATE_PARENT so
-> frequency changes apply to PLL_DDR instead.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Wed, Jan 04, 2023 at 11:13:05AM +0000, Jonas Oberhauser wrote:
+> 
+> 
+> -----Original Message-----
+> From: Alan Stern [mailto:stern@rowland.harvard.edu] 
+> Sent: Tuesday, January 3, 2023 7:56 PM
+> > [Added LKML to the CC: list so there will be a permanent record of this part of the discussion, and changed the Subject: to something more descriptive of the topic at hand.]
+> 
+> Aha, so it's the same discussion but now with 64% improved chance of immortalizing any mistakes I make.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Welcome to our world of open-source software development!  ;-)
 
-Best regards,
-Jernej
+> > > To be more explicit, in the current LKMM, mb includes some cases of po;[UL];co;[LKW];po which also relates events between threads, and this trickles up to the ppo:
+> > > 
+> > >   let mb = ([M] ; fencerel(Mb) ; [M]) |
+> > > 	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+> > > 	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> > > 	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> > > 	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > > 		fencerel(After-unlock-lock) ; [M])
+> > >   let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+> > >   let strong-fence = mb | gp
+> > >   ...
+> > >   let ppo = to-r | to-w | (... | strong-fence | ...) | 
+> > > (po-unlock-lock-po & int) // expanded for readability
+> > > 
+> > > Because of this, not every preserved program order edge is actually a program order edge that is being preserved.
+> 
+> > Indeed, one can argue that neither the fence nor the (po-unlock-lock-po & int) sub-relations should be included in ppo, since they don't reflect dataflow constraints.  They could instead be added separately to the definition of hb, which is the only place that uses ppo.
+> 
+> One can, but one can also argue instead that fences and lock/unlock sequences preserve program order. At least for fences this is the view e.g. RISC-V takes and I prefer this view.
+> 
+> > > My suggestion for a fix would be to move this part out of mb and strong-fence, and instead introduce a new relation strong-sync that covers synchronization also between threads.
+> > > 
+> > >   let mb = ([M] ; fencerel(Mb) ; [M]) |
+> > > 	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+> > > 	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> > > 	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> > > - 	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > > -		fencerel(After-unlock-lock) ; [M])
+> > >   let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+> > >   let strong-fence = mb | gp
+> > > +  let strong-sync = strong-fence | ([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > > +		fencerel(After-unlock-lock) ; [M])
+> > > ...
+> > >   let ppo = to-r | to-w | (... | strong-fence | ...) | 
+> > > (po-unlock-lock-po & int)
+> > > 
+> > > and then use strong-sync instead of strong-fence everywhere else, e.g.
+> > > - let pb = prop ; strong-fence ; hb* ; [Marked]
+> > > + let pb = prop ; strong-sync ; hb* ; [Marked]
+> > > and similarly where strong-fence is being redefined and used in various later lines.
+> > > (In general I would prefer renaming also other *-fence relations into *-sync when they include edges between threads).
+> > > The definition of strong-sync could also be slightly simplified to 
+> > >   let strong-sync = strong-fence | ([M]; po-unlock-lock-po ; 
+> > > [After-unlock-lock] ; po ; [M]) which is kind of pretty because the after-unlock-lock is now after po-unlock-lock-po.
+> > > 
+> > > What do you think?
+> 
+> > That all sounds good to me.  However, I wonder if it might be better to use "strong-order" (and similar) for the new relation name instead of "strong-sync".  The idea being that fences are about ordering, not (or not directly) about synchronization.
+> 
+> I think that is indeed better, thanks. I suppose *-sync might be more appropriate if it *only* included edges between threads.
 
+There are quite a few ways to group the relations.  As long as we
+don't end up oscillating back and forth with too short a frequency,
+I am good.  ;-)
 
+> I'll wait a few days for other suggestions and then prepare a patch.
+
+Looking forward to seeing what you come up with!
+
+							Thanx, Paul
