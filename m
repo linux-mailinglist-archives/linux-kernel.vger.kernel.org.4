@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C5065E39E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1030365E38A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjAEDjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S229910AbjAEDem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 22:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjAEDiw (ORCPT
+        with ESMTP id S229835AbjAEDej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:38:52 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EB14435D;
-        Wed,  4 Jan 2023 19:38:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YqPisRF28grnN/sJc4GxvrRkcWqbtbmvHuhEku3fmYo=; b=RZ70p08k3wsvLIF6z2Joj+XcQA
-        tD5ChVuEkzksHah9jGFh+GDOfKSTc0yixT5TF52UqmFeQ4cIM1EM0icLpb0RzichaaRjH+shg9FH2
-        WS0kBvh+dqEPFyHDIcSZ+LJCd6JKgMAZBGhPSr08XACr/mC2Wh/kDVLIhXJ48Sb9g8nRZnpzCjViA
-        BIaO8VdjHbn1i/1lyCCJcnhw1yLtfY0f6uLwP4mn/S/dzWJEGeUpF+izxvxy9U5qnEXaerPfgPj0d
-        uDnBDtcnyBDqZRMTnUJhk1WuJq7W3q2/V4nhKNrMIWCc8XxRtoSiWF/UZIoEItXEvk+af8thsGXL9
-        kT18wDaA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pDH5b-00HPZf-1H;
-        Thu, 05 Jan 2023 03:38:47 +0000
-Date:   Thu, 5 Jan 2023 03:38:47 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     heng.su@intel.com, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, jmaloy@redhat.com, kuba@kernel.org,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
-Subject: [Q] is the amount of residual bytes still not guaranteed for to be
- available for some old SCSI drivers? (was Re: Update bisect info and new
- repro code for "[syzbot] WARNING in _copy_from_iter")
-Message-ID: <Y7ZGRy4C4MMeWIwA@ZenIV>
-References: <Y65N3pgLMsxZ99lo@xpf.sh.intel.com>
- <Y7YsWvQaDPm2+pS3@xpf.sh.intel.com>
+        Wed, 4 Jan 2023 22:34:39 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90064882C;
+        Wed,  4 Jan 2023 19:34:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672889678; x=1704425678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QUTlUNdOBhgTJmvcsTFaL20j9mIag+B96H14BJHxIUs=;
+  b=LWLxoqFJQjpjnipVakjFtQl0YcsP9FOIXBMeA6eqz3G2a3kpUSjfYQTL
+   aptaOtz71sO6QgjmzV+z9GIF1v/UUBWtuQUHjUSRuFk8TuilMgkf2zEq4
+   V+sl9Hmz16JTV20N4ndpR7NEwbnb3HoJj7qv/Ivt6ngJ55oXtdmPOsP/j
+   vOlAVbAlHszvU52S8T7CdlSVqq9p7HLfuVm/ViDA/pbB52tXaM4YOkPzc
+   ESI60UCtpJCr45d68+9GDax7Ejr/bX08uoYhrBD3mfyCJLa64ron2SxGP
+   5a8tth9lUhxzXAPHJLADh00mRMYij4HLg3tAt1PzDH+MF/eS2ghAnv7LM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="322177651"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="322177651"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 19:34:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="779428061"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="779428061"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 19:34:35 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcu: Rework tick dependency setting into rcu_exp_handler()
+Date:   Thu,  5 Jan 2023 11:40:00 +0800
+Message-Id: <20230105034000.971748-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7YsWvQaDPm2+pS3@xpf.sh.intel.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:48:10AM +0800, Pengfei Xu wrote:
-> Hi Viro,
-> 
-> It's a soft remind: "_copy_from_iter" WARNING issue was still reproduced
-> in v6.2-rc2 mainline kernel in guest.
+Currently, when first find out the expedited grace period is not end
+and timeout occurred, we set tick dependency for CPUs that have not
+yet reported the quiescent state in the rcu_node structure's->expmask
+but need to eliminate races between set and clear tick dependency, setting
+CPU tick dependency need to hold rcu_node structure's->lock.
 
-sorry, had been sick ;-/
+This commit move tick dependency setting into rcu_exp_handler(), set tick
+dependency when fail to report a quiescent state and clear tick dependency
+in rcu_report_exp_rdp(). [from Frederic Weisbecker suggestion]
 
-I see what's going on there; it's this bit:
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree_exp.h | 43 ++++++++++++++++++++-----------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-        if ((iov_iter_rw(iter) == WRITE &&
-             (!map_data || !map_data->null_mapped)) ||  
-            (map_data && map_data->from_user)) {
-                ret = bio_copy_from_iter(bio, iter);   
-                if (ret)
-                        goto cleanup;
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 7cc4856da081..f1e947675727 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -586,39 +586,16 @@ static bool synchronize_rcu_expedited_wait_once(long tlimit)
+ static void synchronize_rcu_expedited_wait(void)
+ {
+ 	int cpu;
+-	unsigned long j;
+ 	unsigned long jiffies_stall;
+ 	unsigned long jiffies_start;
+ 	unsigned long mask;
+ 	int ndetected;
+-	struct rcu_data *rdp;
+ 	struct rcu_node *rnp;
+ 	struct rcu_node *rnp_root = rcu_get_root();
+-	unsigned long flags;
+ 
+ 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
+ 	jiffies_stall = rcu_exp_jiffies_till_stall_check();
+ 	jiffies_start = jiffies;
+-	if (tick_nohz_full_enabled() && rcu_inkernel_boot_has_ended()) {
+-		if (synchronize_rcu_expedited_wait_once(1))
+-			return;
+-		rcu_for_each_leaf_node(rnp) {
+-			raw_spin_lock_irqsave_rcu_node(rnp, flags);
+-			mask = READ_ONCE(rnp->expmask);
+-			for_each_leaf_node_cpu_mask(rnp, cpu, mask) {
+-				rdp = per_cpu_ptr(&rcu_data, cpu);
+-				if (rdp->rcu_forced_tick_exp)
+-					continue;
+-				rdp->rcu_forced_tick_exp = true;
+-				if (cpu_online(cpu))
+-					tick_dep_set_cpu(cpu, TICK_DEP_BIT_RCU_EXP);
+-			}
+-			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+-		}
+-		j = READ_ONCE(jiffies_till_first_fqs);
+-		if (synchronize_rcu_expedited_wait_once(j + HZ))
+-			return;
+-	}
+ 
+ 	for (;;) {
+ 		if (synchronize_rcu_expedited_wait_once(jiffies_stall))
+@@ -729,6 +706,24 @@ static void rcu_exp_sel_wait_wake(unsigned long s)
+ 
+ #ifdef CONFIG_PREEMPT_RCU
+ 
++static void rcu_exp_set_tickdep(struct rcu_data *rdp)
++{
++	int cpu = rdp->cpu;
++
++	if (tick_nohz_full_cpu(cpu) && rcu_inkernel_boot_has_ended() &&
++						cpu_online(cpu)) {
++		/*
++		 * The rcu_exp_handler() can be invoked from stop machine,
++		 * at this time CPU has disabled all interrupts and offline,
++		 * in which case, we don't need requeue IPI or irq work.
++		 * which is not a problem since rcu_report_dead() does the
++		 * QS report.
++		 */
++		rdp->rcu_forced_tick_exp = true;
++		tick_dep_set_cpu(cpu, TICK_DEP_BIT_RCU_EXP);
++	}
++}
++
+ /*
+  * Remote handler for smp_call_function_single().  If there is an
+  * RCU read-side critical section in effect, request that the
+@@ -757,6 +752,7 @@ static void rcu_exp_handler(void *unused)
+ 			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+ 			set_tsk_need_resched(t);
+ 			set_preempt_need_resched();
++			rcu_exp_set_tickdep(rdp);
+ 		}
+ 		return;
+ 	}
+@@ -778,6 +774,7 @@ static void rcu_exp_handler(void *unused)
+ 		if (rnp->expmask & rdp->grpmask) {
+ 			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+ 			t->rcu_read_unlock_special.b.exp_hint = true;
++			rcu_exp_set_tickdep(rdp);
+ 		}
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 		return;
+-- 
+2.25.1
 
-The "map_data && map_data->from_user" part is what I'd missed.
-Mea culpa.
-
-That code really is reading from destination here; in a lot of
-respects that's broken (consider the case when destination is
-mapped write-only), but it's a deliberate behaviour.
-
-Origin is in commit ecb554a846f8 "block: fix sg SG_DXFER_TO_FROM_DEV
-regression".  Before trying to kludge around that, how much of the
-original problem is still there?
-
-Are there still low-level drivers that don't bother with scsi_set_resid()
-for passthrough requests?  IOW, do we need to play with
-	copy the entire destination into kernel buffer
-	handle REQ_OP_DRV_IN request, overwriting the copy
-	copy the entire buffer back to destination
-all because we can't tell how much data had been copied in?
-Because if we had the length of that sucker in sg_rq_end_io(),
-we could just arrange for bio->bmd->iter truncated to actual
-amount read and that would be it.
-
-NOTE: no other users of blk_rq_map_user_io() go anywhere near that
-weirdness; it's really just /dev/sg*.
-
-If we that's approach is not feasible, we can always deal with
-that in bio_copy_from_iter() - forcibly flip ->data_source for the
-duration, which is OK for all kinds of iov_iter that can reach that
-thing; it would work, but that's really ugly ;-/  If there's really
-no way to get the amount of data actually transferred, that's what
-we'll have to do, but it would be much saner to avoid the entire
-song and dance and just copy the right amount out...
