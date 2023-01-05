@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5398C65F005
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B4565F007
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbjAEPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S234716AbjAEPZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbjAEPXx (ORCPT
+        with ESMTP id S234813AbjAEPZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:23:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5312E7;
-        Thu,  5 Jan 2023 07:23:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 5 Jan 2023 10:25:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08825C938
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:25:14 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 634A7246F7;
+        Thu,  5 Jan 2023 15:24:56 +0000 (UTC)
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22ED961A8B;
-        Thu,  5 Jan 2023 15:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862E5C433EF;
-        Thu,  5 Jan 2023 15:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672932231;
-        bh=1t+dUPzSA0ksnrUuc8/Bbo1ZUCkWyj4rbPQo9hsDiJ8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ekE8Rde3RBggbbEDkhEA60YtQl5GRgO3hi1QwU9aBreHSl7bI3+UCqBNHFNPhuDWo
-         OZwnBLCy/Ttx+tOPXCJf2d4D/+hW9y7bBdQUBv2OOuOFVChia7xIwse1vlRbQKHymC
-         0jXxVSOvRFqmHz7ddIjpvjnuFx822i/JUP1WKeA9PZb3iqMZApZewGSgVPlo0ujiqo
-         C5u4ux6OfcDnNR69LAriJgAwj4S4d2yWtkx950jmyHPlerjL6LL81Yrjt5RMBE6XD/
-         m6r0wDcYagxFLnM8xW5rAojK4nVYjWKi5DgQdNksOo+ylZUXfK2NWDAey+c2+btzus
-         YaN8KHkDZuxhw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 22D145C029A; Thu,  5 Jan 2023 07:23:51 -0800 (PST)
-Date:   Thu, 5 Jan 2023 07:23:51 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 1D87B2C149;
+        Thu,  5 Jan 2023 15:24:56 +0000 (UTC)
+Date:   Thu, 5 Jan 2023 16:24:55 +0100
+From:   Petr Mladek <pmladek@suse.com>
 To:     John Ogness <john.ogness@linutronix.de>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH rcu 27/27] rcu: Remove CONFIG_SRCU
-Message-ID: <20230105152351.GP4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <20230105003813.1770367-27-paulmck@kernel.org>
- <87r0w9csqn.fsf@jogness.linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v4 5/8] printk: introduce
+ printk_get_next_message() and printk_message
+Message-ID: <Y7brx08wN+TE/YLN@alley>
+References: <20230105103735.880956-1-john.ogness@linutronix.de>
+ <20230105103735.880956-6-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87r0w9csqn.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230105103735.880956-6-john.ogness@linutronix.de>
+X-Spam-Level: 
+X-Spamd-Bar: /
+Authentication-Results: smtp-out2.suse.de;
+        none
+X-Rspamd-Server: rspamd2
+X-Spamd-Result: default: False [0.00 / 50.00]
+X-Spam-Score: 0.00
+X-Rspamd-Queue-Id: 634A7246F7
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:10:16AM +0106, John Ogness wrote:
-> On 2023-01-04, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > Now that all references to CONFIG_SRCU have been removed, it is time to
-> > remove CONFIG_SRCU itself.
+On Thu 2023-01-05 11:43:32, John Ogness wrote:
+> Code for performing the console output is intermixed with code that
+> is formatting the output for that console. Introduce a new helper
+> function printk_get_next_message() to handle the reading and
+> formatting of the printk text. The helper does not require any
+> locking so that in the future it can be used for other printing
+> contexts as well.
 > 
-> I think "all references" is a bit misleading since there still are
-> several places in the kernel code that use it:
+> This also introduces a new struct printk_message to wrap the struct
+> printk_buffers, adding metadata about its contents. This allows
+> users of printk_get_next_message() to receive all relevant
+> information about the message that was read and formatted.
 > 
-> $ git grep CONFIG_SRCU
-> drivers/base/core.c:#ifdef CONFIG_SRCU
-> drivers/base/core.c:#else /* !CONFIG_SRCU */
-> drivers/base/core.c:#endif /* !CONFIG_SRCU */
-> fs/locks.c:#if IS_ENABLED(CONFIG_SRCU)
-> fs/locks.c:#else /* !IS_ENABLED(CONFIG_SRCU) */
-> fs/locks.c:#endif /* IS_ENABLED(CONFIG_SRCU) */
-> kernel/notifier.c:#ifdef CONFIG_SRCU
-> kernel/notifier.c:#endif /* CONFIG_SRCU */
+> Why is struct printk_message a wrapper struct?
+> 
+> It is intentional that a wrapper struct is introduced instead of
+> adding the metadata directly to struct printk_buffers. The upcoming
+> atomic consoles support multiple printing contexts per CPU. This
+> means that while a CPU is formatting a message, it can be
+> interrupted and the interrupting context may also format a (possibly
+> different) message. Since the printk buffers are rather large,
+> there will only be one struct printk_buffers per CPU and it must be
+> shared by the possible contexts of that CPU.
+> 
+> If the metadata was part of struct printk_buffers, interrupting
+> contexts would clobber the metadata being prepared by the
+> interrupted context. This could be handled by robustifying the
+> message formatting functions to cope with metadata unexpectedly
+> changing. However, this would require significant amounts of extra
+> data copying, also adding significant complexity to the code.
+> 
+> Instead, the metadata can live on the stack of the formatting
+> context and the message formatting functions do not need to be
+> concerned about the metadata changing underneath them.
+> 
+> Note that the message formatting functions can handle unexpected
+> text buffer changes. So it is perfectly OK if a shared text buffer
+> is clobbered by an interrupting context. The atomic console
+> implementation will recognize the interruption and avoid printing
+> the (probably garbage) text buffer.
 
-In the -rcu tree, these are removed by these commits:
+Great description!
 
-1798c5b6b0ea ("drivers/base: Remove CONFIG_SRCU")
-19aa50512372 ("fs: Remove CONFIG_SRCU")
-fe0c9bd625ad ("kernel/notifier: Remove CONFIG_SRCU")
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-> Should those be removed before this patch?
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-When I merge the -rcu tree's "dev" branch with current mainline, "git
-grep CONFIG_SRCU" gives me no output.  Am I fat-fingering something here?
-
-							Thanx, Paul
+Best Regards,
+Petr
