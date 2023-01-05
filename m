@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5358C65E158
+	by mail.lfdr.de (Postfix) with ESMTP id 08E2465E157
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbjAEAKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S234730AbjAEAKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbjAEAJ7 (ORCPT
+        with ESMTP id S235147AbjAEAKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:09:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CC343A1C;
-        Wed,  4 Jan 2023 16:09:58 -0800 (PST)
+        Wed, 4 Jan 2023 19:10:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4D143A20;
+        Wed,  4 Jan 2023 16:09:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0E396188D;
-        Thu,  5 Jan 2023 00:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7A4C433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 645CFB81983;
+        Thu,  5 Jan 2023 00:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20065C433F1;
         Thu,  5 Jan 2023 00:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672877397;
-        bh=PS7RJ6ca0uDsIciwHIe/Mb/Re+MAuOv96kNuEUv2OMY=;
+        bh=FzkboUT+mHioIWdRgUQ1Pv6Fjcpxk2Vxw+5VTWcH2nM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DoS72ule2hem61lv95M9JtiH09qkzU0Hj+5layKP/VVObizNp1Qa758AhEzAY+c2H
-         4ci22oFx051LnFLTWeEMlh62giV84SNZwwxe/9AQ48PJjgmLeL3A1udcDgovMaMQs3
-         jokz193nPTkox7VXTabjpZyxqgUCB+BK+uJTuXSBOZWW0wD/d/qAihab4tCepYrx12
-         cO52GjTe/8nByNjeAMAKT5mYFiRokf8sxZFWhlTmbiG1VBrSh+zkGZbyf4Mi87AzBZ
-         zV/qn3Zz4cwczFI6Zc/LOWyKcMPqzk7sDoQqCPhYe/istlvax/utbJfbzkVrjYlHON
-         l4RS4Q0QPW49g==
+        b=ZhW5Rhk3h2P9grPu6H10yXEuYHKBByIe20q+iFWnIfNGQ1cwb16yxu7B2q7gjumgQ
+         0aN0xbb09qJD7v0Lh9Cro2zHAGWj8PFl5iyMunQo/OPYucQv/4YWDvcfkHpBynTtK+
+         C4ebexVsFiikvYgfcfmwABl5vPGZHqGah36/BSEbmiGmUEW4TaGpSz7jQndsZruSfF
+         iGX+uO5t/QqGA3vcT1yibcrTCEFGLmUfFL9vxLCobdxRTxktt6YbycOY7cvP1+txGu
+         P3u3VKsP2jiJdR8/qRGt/z4kUeOIq6xUF5m4Q7jDmoMmkIxM0jy4WZD3RPku8c57fQ
+         c5NWon8K8MoPA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C36105C05CA; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
+        id C5B835C086D; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 01/15] doc: Further updates to RCU's lockdep.rst
-Date:   Wed,  4 Jan 2023 16:09:41 -0800
-Message-Id: <20230105000955.1767218-1-paulmck@kernel.org>
+Subject: [PATCH rcu 02/15] doc: Update NMI-RCU.rst
+Date:   Wed,  4 Jan 2023 16:09:42 -0800
+Message-Id: <20230105000955.1767218-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
@@ -55,44 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit wordsmiths RCU's lockdep.rst.
+This commit updates NMI-RCU.rst to highlight the ancient heritage of
+the example code and to discourage wanton compiler "optimizations".
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/lockdep.rst | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ Documentation/RCU/NMI-RCU.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/RCU/lockdep.rst b/Documentation/RCU/lockdep.rst
-index 9308f1bdba05d..2749f43ec1b03 100644
---- a/Documentation/RCU/lockdep.rst
-+++ b/Documentation/RCU/lockdep.rst
-@@ -69,9 +69,8 @@ checking of rcu_dereference() primitives:
- 		value of the pointer itself, for example, against NULL.
+diff --git a/Documentation/RCU/NMI-RCU.rst b/Documentation/RCU/NMI-RCU.rst
+index 2a92bc685ef1a..dff60a80b386e 100644
+--- a/Documentation/RCU/NMI-RCU.rst
++++ b/Documentation/RCU/NMI-RCU.rst
+@@ -8,7 +8,7 @@ Although RCU is usually used to protect read-mostly data structures,
+ it is possible to use RCU to provide dynamic non-maskable interrupt
+ handlers, as well as dynamic irq handlers.  This document describes
+ how to do this, drawing loosely from Zwane Mwaikambo's NMI-timer
+-work in "arch/x86/kernel/traps.c".
++work in an old version of "arch/x86/kernel/traps.c".
  
- The rcu_dereference_check() check expression can be any boolean
--expression, but would normally include a lockdep expression.  However,
--any boolean expression can be used.  For a moderately ornate example,
--consider the following::
-+expression, but would normally include a lockdep expression.  For a
-+moderately ornate example, consider the following::
+ The relevant pieces of code are listed below, each followed by a
+ brief explanation::
+@@ -116,7 +116,7 @@ Answer to Quick Quiz:
  
- 	file = rcu_dereference_check(fdt->fd[fd],
- 				     lockdep_is_held(&files->file_lock) ||
-@@ -97,10 +96,10 @@ code, it could instead be written as follows::
- 					 atomic_read(&files->count) == 1);
+ 	This same sad story can happen on other CPUs when using
+ 	a compiler with aggressive pointer-value speculation
+-	optimizations.
++	optimizations.  (But please don't!)
  
- This would verify cases #2 and #3 above, and furthermore lockdep would
--complain if this was used in an RCU read-side critical section unless one
--of these two cases held.  Because rcu_dereference_protected() omits all
--barriers and compiler constraints, it generates better code than do the
--other flavors of rcu_dereference().  On the other hand, it is illegal
-+complain even if this was used in an RCU read-side critical section unless
-+one of these two cases held.  Because rcu_dereference_protected() omits
-+all barriers and compiler constraints, it generates better code than do
-+the other flavors of rcu_dereference().  On the other hand, it is illegal
- to use rcu_dereference_protected() if either the RCU-protected pointer
- or the RCU-protected data that it points to can change concurrently.
- 
+ 	More important, the rcu_dereference_sched() makes it
+ 	clear to someone reading the code that the pointer is
 -- 
 2.31.1.189.g2e36527f23
 
