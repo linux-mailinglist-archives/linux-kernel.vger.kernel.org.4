@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C42965F364
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4777265F366
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbjAESFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S235187AbjAESFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjAESEw (ORCPT
+        with ESMTP id S234713AbjAESFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:04:52 -0500
+        Thu, 5 Jan 2023 13:05:02 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DEB63389;
-        Thu,  5 Jan 2023 10:04:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A0C5D415
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:04:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D1CC61BF2;
-        Thu,  5 Jan 2023 18:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B540DC43392;
-        Thu,  5 Jan 2023 18:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EFF861C04
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E086C433EF;
+        Thu,  5 Jan 2023 18:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672941857;
-        bh=MWzvNqHeXhu0ygnjZOdIpCpfRnQM6QUhfxgrbv5GoMw=;
+        s=k20201202; t=1672941860;
+        bh=0KieN4fCWKrHRYJJR1ar4AhONoNLqkUZuze8+zZiMU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HyJLvjyve72FMAI4+BEgu0r45b53vrWabuX7QMfmvaXSYc2DXEJ63Zg1zgaSSB/6n
-         y8vEQxSaam3H5jgW+4BGmWnsXesnJirEU9ZrNyfsuYJRBCccF+ijPVqSxXJfHyLpE6
-         Yd1cIlTw0RHBhxFlB++sLcX6xs/6rzjmJT8CQG0vyO9ujyKFnrFQhHsxwXMiRvYTxA
-         fHLnStI5pVUPpvU1DgxBhNeR4t40w/xxTcLt+LwmDsLrEBuN9Bqv4/6C9gx28NvNaq
-         oeW5tYjBUIiKFzmR+dKVHOqxwd1Um0RmSgzeF4eFDW9GLTrJhccCQO6wiyf4K7devG
-         7/EON2ZFrxHzQ==
+        b=BXtG08wKTsCa24bHEPMrsd1lIIxd41LyV79YfBKSrxrHjVk7iMkxOUd3NnJjhcxvq
+         MQOzNfhhwHLdU7/ojbpcJqTfQ7Dk5IS2y6qoO0LNdBzdvtmKJodcpMbmVK/PgNGjpE
+         0SL2k9WICq5If6c6x4nAX6/P8eH4A0AgMgjpXmxcQyE4QcMEQ535Zmk/Jgo+EHUDYM
+         EikROdszqdtO0J4u50pnHqGLUMunFeSGi6fkaEWLOtoy0hiM9cin2kLlcO91bsqAne
+         XCcsYtLUWoCZpg4i2gmiI1HGXD5Bq5oFzlW4lnHhAzTBPGMbcDUrkgTDq/qTHiUto8
+         p5rgpesPXin7A==
 From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        peterz@infradead.org, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        arnd@arndb.de, steve.capper@arm.com
-Subject: Re: [PATCH] arm64: cmpxchg_double*: hazard against entire exchange variable
-Date:   Thu,  5 Jan 2023 18:04:00 +0000
-Message-Id: <167293249648.1466799.3332324417306480778.b4-ty@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Zenghui Yu <yuzenghui@huawei.com>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, zhouquan65@huawei.com,
+        oleg@redhat.com, sundongxu3@huawei.com, broonie@kernel.org,
+        wanghaibin.wang@huawei.com
+Subject: Re: [PATCH] arm64: ptrace: Use ARM64_SME to guard the SME register enumerations
+Date:   Thu,  5 Jan 2023 18:04:01 +0000
+Message-Id: <167293131195.1463811.15086370081939565055.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230104151626.3262137-1-mark.rutland@arm.com>
-References: <20230104151626.3262137-1-mark.rutland@arm.com>
+In-Reply-To: <20221214135943.379-1-yuzenghui@huawei.com>
+References: <20221214135943.379-1-yuzenghui@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,22 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 15:16:26 +0000, Mark Rutland wrote:
-> The inline assembly for arm64's cmpxchg_double*() implementations use a
-> +Q constraint to hazard against other accesses to the memory location
-> being exchanged. However, the pointer passed to the constraint is a
-> pointer to unsigned long, and thus the hazard only applies to the first
-> 8 bytes of the location.
+On Wed, 14 Dec 2022 21:59:43 +0800, Zenghui Yu wrote:
+> We currently guard REGSET_{SSVE, ZA} using ARM64_SVE for no good reason.
+> Both enumerations would be pointless without ARM64_SME and create two empty
+> entries in aarch64_regsets[] which would then become part of a process's
+> native regset view (they should be ignored though).
 > 
-> GCC can take advantage of this, assuming that other portions of the
-> location are unchanged, leading to a number of potential problems.
+> Switch to use ARM64_SME instead.
 > 
 > [...]
 
 Applied to arm64 (for-next/fixes), thanks!
 
-[1/1] arm64: cmpxchg_double*: hazard against entire exchange variable
-      https://git.kernel.org/arm64/c/031af50045ea
+[1/1] arm64: ptrace: Use ARM64_SME to guard the SME register enumerations
+      https://git.kernel.org/arm64/c/eb9a85261e29
 
 Cheers,
 -- 
