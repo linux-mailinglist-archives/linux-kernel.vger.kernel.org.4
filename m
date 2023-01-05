@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E05965E594
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323E265E5A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjAEGYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 01:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S230261AbjAEG1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 01:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAEGXy (ORCPT
+        with ESMTP id S230131AbjAEG1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 01:23:54 -0500
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEEA51334;
-        Wed,  4 Jan 2023 22:23:53 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so578177wma.1;
-        Wed, 04 Jan 2023 22:23:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S09kCi2B6W+kvjfavNwp/x7TIDaE6qjmKIYQzABeYWU=;
-        b=2msMzmi40nC77FxE46rxpWT+z5YQUMPLVDCCeCH1e45S9qFIokmbdV9rQ13Adi0QxN
-         pZr8wxm+zqF0IxMK20w0vd32jeqGLi7mWaxwCKiu1Oq3gYoTDUPPTzPkBcyrrV0r6lEz
-         YmLviOTKxmh3Mffg0nWRy77SRvFHch0e0Jk3XFWeUQphJAU1T2wG4pgU9pmRb/eZqZN0
-         oJInm+FIU2RWn23rruzx4KztNZJAKdwM36MpBN/J5F5OglJPw9Yf+49F/Gcd/KaTRqUL
-         avDi725/ZtjkmGzlQj3Ds41/fzeLu/GmrYYnH74KlJR04fbicnmsMCe/axOGX5SnImp6
-         8DEQ==
-X-Gm-Message-State: AFqh2krlv1SXOpw+UP6wYOFyLLa1xnipBPhmUOCABdlBIBMrMxPoNwDp
-        dYkoAZuQKxKUKHBq3Pa3/sve8Terdk2uYw==
-X-Google-Smtp-Source: AMrXdXta3kcpToCjpDWKphQJt7JPvVt6ThBOAAgGR2aeSl3+CyUHKyydRa1aJXm3/RFSQop3seLLiA==
-X-Received: by 2002:a05:600c:4255:b0:3d3:3d34:5d63 with SMTP id r21-20020a05600c425500b003d33d345d63mr37230769wmm.8.1672899832451;
-        Wed, 04 Jan 2023 22:23:52 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id iv14-20020a05600c548e00b003b47b80cec3sm1206435wmb.42.2023.01.04.22.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 22:23:52 -0800 (PST)
-Message-ID: <1a25b930-e003-6326-86ab-4d8cdc9b7da5@kernel.org>
-Date:   Thu, 5 Jan 2023 07:23:49 +0100
+        Thu, 5 Jan 2023 01:27:05 -0500
+Received: from smtp.smtpout.orange.fr (smtp-11.smtpout.orange.fr [80.12.242.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE3E50F55
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 22:27:03 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id DJiOpLFMWoBUEDJiOpC7y5; Thu, 05 Jan 2023 07:27:02 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 05 Jan 2023 07:27:02 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
+Date:   Thu, 5 Jan 2023 07:27:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 09/10] serial: Make uart_handle_cts_change() status param
- bool
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>
-References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
- <20230104151531.73994-10-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230104151531.73994-10-ilpo.jarvinen@linux.intel.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 2/3] ezchip: Switch to some devm_ function to
+ simplify code
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+References: <cover.1672865629.git.christophe.jaillet@wanadoo.fr>
+ <e1fd0cc1fd865e58af713c92f09251e6180c1636.1672865629.git.christophe.jaillet@wanadoo.fr>
+ <20230104205438.61a7dc20@kernel.org>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230104205438.61a7dc20@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 01. 23, 16:15, Ilpo Järvinen wrote:
-> Convert uart_handle_cts_change() to bool which is more appropriate
-> than unsigned int.
+Le 05/01/2023 à 05:54, Jakub Kicinski a écrit :
+> On Wed,  4 Jan 2023 22:05:33 +0100 Christophe JAILLET wrote:
+>> devm_alloc_etherdev() and devm_register_netdev() can be used to simplify
+>> code.
+>>
+>> Now the error handling path of the probe and the remove function are
+>> useless and can be removed completely.
 > 
-> Cleanup callsites from operations that are not necessary with bool.
+> Right, but this is very likely a dead driver. Why invest in refactoring?
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-...
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -3285,11 +3285,11 @@ EXPORT_SYMBOL_GPL(uart_handle_dcd_change);
->   /**
->    * uart_handle_cts_change - handle a change of clear-to-send state
->    * @uport: uart_port structure for the open port
-> - * @status: new clear to send status, nonzero if active
-> + * @status: new clear to send status, true if active
 
-ANyone else having troubles to parse "new clear to send status"?
+Hi Jakub,
 
->    *
->    * Caller must hold uport->lock.
->    */
-> -void uart_handle_cts_change(struct uart_port *uport, unsigned int status)
-> +void uart_handle_cts_change(struct uart_port *uport, bool status)
+this driver was just randomly picked as an example.
 
-This should be "bool active" then.
+My main point is in the cover letter. I look for feed-back to know if 
+patches like that are welcomed. Only the first, Only the second, Both or 
+None.
 
-thanks,
--- 
-js
-suse labs
 
+I put it here, slightly rephrased:
+
+
+These patches (at least 1 and 2) can be seen as an RFC for net 
+MAINTAINERS, to see if there is any interest in:
+   - axing useless netif_napi_del() calls, when free_netdev() is called 
+just after. (patch 1)
+   - simplifying code with axing the error handling path of the probe 
+and the remove function in favor of using devm_ functions (patch 2)
+
+   or
+
+if it doesn't worth it and would only waste MAINTAINERS' time to review 
+what is in fact only code clean-ups.
+
+
+The rational for patch 1 is based on Jakub's comment [1].
+free_netdev() already cleans up NAPIs (see [2]).
+
+CJ
+
+[1]: https://lore.kernel.org/all/20221221174043.1191996a@kernel.org/
+[2]: https://elixir.bootlin.com/linux/v6.2-rc1/source/net/core/dev.c#L10710
