@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C0165F473
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B847965F475
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbjAET3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S235674AbjAETaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbjAET24 (ORCPT
+        with ESMTP id S235722AbjAET3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:28:56 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A7F392F4;
-        Thu,  5 Jan 2023 11:23:56 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CC3FB22A9F;
-        Thu,  5 Jan 2023 19:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672946568; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 5 Jan 2023 14:29:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD056DF0B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672946574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mg38u8VDBZl2kUeOIq51W5k4gswYU2BaFcdprzVD4ho=;
-        b=Pl5Grl6tSEVdgCpRGyl9PaXajNlIjlsYnWLjdUuBJ9XyAdWiXq6MEejzoZsxIUDGG6j+fT
-        lc67hk77bkVQlX0KMffLrClAfSEboithD4tgcYWrNKrRvGSfxo21bcE0CZXZWhS7vnheSM
-        E7b9KRVkcC/0SIePI5VNChHJAIe2xCE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97374138DF;
-        Thu,  5 Jan 2023 19:22:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bo3iI4gjt2N2EwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 05 Jan 2023 19:22:48 +0000
-Date:   Thu, 5 Jan 2023 20:22:47 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jack@suse.cz
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <20230105192247.GB16920@blackbody.suse.cz>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <Y7cKf7IH+FJ/6IyV@slm.duckdns.org>
+        bh=ADW1K4PuhFmDUthAnWNZLxX9smSORrKhgThxl96aaHM=;
+        b=RVQ8BzL8WFiVfQvdJzNF118wu9XzSD8DtgzNzzMSH6MGeexwSjCVkDwnKEayiA3LurQ45q
+        oP2JUw2dotvO3B2StrvsEJnI+jE9Nt/ED3PXN6kSBJtuGNBlXqwQVSRyQ6QWoqb5I42/Ag
+        59jJ7dSqxdA+PNlT0AMcCwHkBtFKXF0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-310-TQiLpZ97Mz63R68oqcD32Q-1; Thu, 05 Jan 2023 14:22:53 -0500
+X-MC-Unique: TQiLpZ97Mz63R68oqcD32Q-1
+Received: by mail-qk1-f199.google.com with SMTP id f13-20020a05620a408d00b006fc740f837eso25936617qko.20
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:22:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ADW1K4PuhFmDUthAnWNZLxX9smSORrKhgThxl96aaHM=;
+        b=BTUaNHOinhdjIB66SChKf0vUEEZ0GGjBebhzgVnd/yOsfBfoEr4LiueofD7BnpJUBW
+         5sK4DUUJL373GaPUOIlvzIjJNf0I6tlq17fgDDnQRGhmJ2WcW5ra/aBcPpnp/t2SLt+r
+         sHeef1C4ATLxyJLRsnPdD4bsGBmpAy5WLGcM6+I9ttDug3+C/kpo5Q8+ZH2MI5T8iHTS
+         m0bHT+18HwEyPzST6MaiAC+4Coci8t6zmDTy51eeoJSsNASUNZ53ln2271DpK9WU0Hjx
+         wm5BGixeddlOy+O2vSpMhkpjv4GjNJ2P2bvPn0I9vUiTJqQN5OJ4f4SFJFwr4/H8OyTJ
+         RvOw==
+X-Gm-Message-State: AFqh2koIl7yCLJE/x9YXDW+E0VNqyAK9vI1t1jPpR4uM79UVI6M6KMaK
+        T3AeebzrHVMJgdbJunofTFUrAUiTnOcSZkefyo6cogWPnSPH0cye9hYps4E/oRS5I+guXklz02R
+        eHrYeAoapcWJi62sKQgpA6yFN
+X-Received: by 2002:ac8:7c81:0:b0:3a8:11d6:2d0d with SMTP id y1-20020ac87c81000000b003a811d62d0dmr72093652qtv.43.1672946572436;
+        Thu, 05 Jan 2023 11:22:52 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsM2kmIU2DF0AgxYxehxHQzuVMOGJNoeeqcpmHVgrPJwS2pHkY2LK4czHY0M2F7U0Ty7ZCcaw==
+X-Received: by 2002:ac8:7c81:0:b0:3a8:11d6:2d0d with SMTP id y1-20020ac87c81000000b003a811d62d0dmr72093634qtv.43.1672946572234;
+        Thu, 05 Jan 2023 11:22:52 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
+        by smtp.gmail.com with ESMTPSA id n23-20020ac86757000000b003a826e25bc4sm21893373qtp.64.2023.01.05.11.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 11:22:51 -0800 (PST)
+Date:   Thu, 5 Jan 2023 14:22:50 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 2/3] mm/mprotect: Use long for page accountings and retval
+Message-ID: <Y7cjir3+MpT8XqJT@x1n>
+References: <20230104225207.1066932-1-peterx@redhat.com>
+ <20230104225207.1066932-3-peterx@redhat.com>
+ <aabd4bb8-560b-10b0-9837-b656e1a0a9e1@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eHhjakXzOLJAF9wJ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7cKf7IH+FJ/6IyV@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <aabd4bb8-560b-10b0-9837-b656e1a0a9e1@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 05, 2023 at 09:44:16AM +0100, David Hildenbrand wrote:
+> I'm wondering if we should just return the number of changed pages via a
+> separate pointer and later using an int for returning errors -- when
+> touching this interface already.
+> 
+> Only who's actually interested in the number of pages would pass a pointer
+> to an unsigned long (NUMA).
+> 
+> And code that expects that there never ever are failures (mprotect, NUMA)
+> could simply check for WARN_ON_ONCE(ret).
+> 
+> I assume you evaluated that option as well, what was your conclusion?
 
---eHhjakXzOLJAF9wJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Since a single long can cover both things as retval, it's better to keep it
+simple?  Thanks,
 
-On Thu, Jan 05, 2023 at 07:35:59AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> Hard limits tend to make this sort of problems a lot more pronounced because
-> the existing mechanisms tend to break down for the users which are severely
-> throttled down even while the device as a whole is fairly idle. cpu.max
-> often triggers severe priority inversions too, so it isn't too surprising
-> that people hit severe priority inversion issues w/ io.max.
+-- 
+Peter Xu
 
-To be on the same page:
-1) severe PI == priority inversion across cgroups (progated e.g. via
-   global locks (as with cpu.max) or FS journal (as with io.max)),
-2) ordinary PI == priority inversion contained within a single cgroup,
-   i.e. no different from an under-provisioned system.
-
-The reported issue sounds like 2) but even with the separated queues 1)
-is still possible :-/
-
-> Another problem with blk-throttle is that it doesn't prioritize shared IOs
-> identified by bio_issue_as_root_blkg() like iolatency and iocost do, so
-> there can be very severe priority inversions when e.g. journal commit gets
-> trapped in a low priority cgroup further exacerbating issues like this.
-
-Thanks for the broader view. So the separated queues are certainly an
-improvement but ultimately a mechanism based on bio_issue_as_root_blkg()
-predicate and deferred throttling would be better? Or is permanent limit
-enforcement more important?
-
-Thanks,
-Michal
-
---eHhjakXzOLJAF9wJ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY7cjfQAKCRAkDQmsBEOq
-uXQsAP99LZP7f/n8ygASlLevHgj9Zm/D5kI8jlxOD2LanjzNzQD+JY4fvNFnGQmI
-edy1iZb/lxGcHMME7EZPqkuZJbXbcw4=
-=w2/G
------END PGP SIGNATURE-----
-
---eHhjakXzOLJAF9wJ--
