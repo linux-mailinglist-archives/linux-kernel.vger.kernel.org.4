@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41EC65EDA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668A865ED9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbjAENrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        id S232548AbjAENrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjAENqw (ORCPT
+        with ESMTP id S231449AbjAENqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 08:46:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC73B634B
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:46:50 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05BB3D9D7;
+        Thu,  5 Jan 2023 05:46:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D8A1B81AD7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB703C433F0;
-        Thu,  5 Jan 2023 13:46:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BCE261A0C;
+        Thu,  5 Jan 2023 13:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDC4C433EF;
+        Thu,  5 Jan 2023 13:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926408;
-        bh=dZp/PMQ0dnDJGdJBctPRLkuGVQfjRlJ837CIMplBJMI=;
+        s=k20201202; t=1672926410;
+        bh=G8P7Dlh0jvFyjoAJiE2Nwh9lRK7Adhw9b5koXsAYWs0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lf5LeIh5/cjC9stwe+oc7u1sgoPCrG9pnCTg3KWHueKH0FeDb2zkKZpMNB97Qiyb7
-         jrz1ENJkVrfQXQCb1pKLE59C1Ngwh2WYDfgP26VG92jy+KxtpiJN/wtF8Cf36Q3Bbo
-         RmUaLgVcyZq2t4EhAagK1uINJZkMesW6vw+uNmDcoRmoBsk2QyWsaKvBl0dShamjbL
-         3Xy7bKmg/ikuBA3hndWVoFlecwB4J+MEMcN+AlZOYqDXM0s2PxGfPEcxgcZF0KveOV
-         zZVsj/90czLCg02sxw3Nz2ig1+FSPoIyN9ASsobK63qZPuPQaK3uV3YeFFvH/aPKOS
-         RzoWqAOTXZ3Xw==
+        b=ejFxyqZdkIyc8w2gV3P0BUGzVpl19r73AB20FYQLC0ugf4mc8+x3Ph8o1LPh6aGdu
+         8o0b7hOJKWIdFVFWkA1G4bdIVzVPNXoico9eYs2d3YfYvuXHeXfsbnn001lRTuvTKu
+         KkxvEcYXpypdiMFbQ6GJ9gYrbBAuS2xNAxbm9zzXMV42tO4Rq2o2ncLFwtkogBwYT/
+         p2ofra8UNIpATWuNA+8rmWAl7iQacvuJhH0LVN1jIJiQNpUvm/DKfMn6VtXFyWIjkR
+         nggYYNCvHDLv+at6TiRKnAf2ovry3ZgeGPUByPAz5GNFb0+P6g2ecDjlx7IS40WMch
+         JJes+Bb+ONo/Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 02/27] ARM: pxa: remove irda leftover
-Date:   Thu,  5 Jan 2023 14:45:57 +0100
-Message-Id: <20230105134622.254560-3-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 03/27] ARM: pxa: remove unused pxa3xx-ulpi
+Date:   Thu,  5 Jan 2023 14:45:58 +0100
+Message-Id: <20230105134622.254560-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -57,189 +60,150 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-irda support was removed a long time ago, so stop
-registering the devices from the pxa machine.
+This was only used by the cm-x300 board, which is now gone.
 
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-pxa/devices.c                | 42 ----------------------
- arch/arm/mach-pxa/devices.h                |  1 -
- arch/arm/mach-pxa/pxa2xx.c                 | 29 ---------------
- arch/arm/mach-pxa/spitz.c                  | 23 ------------
- include/linux/platform_data/irda-pxaficp.h | 26 --------------
- 5 files changed, 121 deletions(-)
- delete mode 100644 include/linux/platform_data/irda-pxaficp.h
+ arch/arm/mach-pxa/Makefile                    |   2 +-
+ arch/arm/mach-pxa/devices.c                   |  28 --
+ arch/arm/mach-pxa/devices.h                   |   1 -
+ arch/arm/mach-pxa/pxa3xx-ulpi.c               | 385 ------------------
+ arch/arm/mach-pxa/regs-u2d.h                  | 199 ---------
+ drivers/usb/host/ohci-pxa27x.c                |   9 -
+ include/linux/platform_data/usb-pxa3xx-ulpi.h |  32 --
+ 7 files changed, 1 insertion(+), 655 deletions(-)
+ delete mode 100644 arch/arm/mach-pxa/pxa3xx-ulpi.c
+ delete mode 100644 arch/arm/mach-pxa/regs-u2d.h
+ delete mode 100644 include/linux/platform_data/usb-pxa3xx-ulpi.h
 
+diff --git a/arch/arm/mach-pxa/Makefile b/arch/arm/mach-pxa/Makefile
+index 4ca8cac2e60f..9624f90d9ef6 100644
+--- a/arch/arm/mach-pxa/Makefile
++++ b/arch/arm/mach-pxa/Makefile
+@@ -12,7 +12,7 @@ obj-$(CONFIG_PM)		+= pm.o sleep.o standby.o
+ # SoC-specific code
+ obj-$(CONFIG_PXA25x)		+= mfp-pxa2xx.o pxa2xx.o pxa25x.o
+ obj-$(CONFIG_PXA27x)		+= mfp-pxa2xx.o pxa2xx.o pxa27x.o
+-obj-$(CONFIG_PXA3xx)		+= mfp-pxa3xx.o pxa3xx.o smemc.o pxa3xx-ulpi.o
++obj-$(CONFIG_PXA3xx)		+= mfp-pxa3xx.o pxa3xx.o smemc.o
+ obj-$(CONFIG_CPU_PXA300)	+= pxa300.o
+ 
+ # NOTE: keep the order of boards in accordance to their order in Kconfig
 diff --git a/arch/arm/mach-pxa/devices.c b/arch/arm/mach-pxa/devices.c
-index a7b92dd1ca9e..72adaac9f332 100644
+index 72adaac9f332..8e3bc56d2044 100644
 --- a/arch/arm/mach-pxa/devices.c
 +++ b/arch/arm/mach-pxa/devices.c
-@@ -15,7 +15,6 @@
- #include <linux/platform_data/usb-pxa3xx-ulpi.h>
+@@ -12,7 +12,6 @@
+ #include <linux/soc/pxa/cpu.h>
+ 
+ #include "udc.h"
+-#include <linux/platform_data/usb-pxa3xx-ulpi.h>
  #include <linux/platform_data/video-pxafb.h>
  #include <linux/platform_data/mmc-pxamci.h>
--#include <linux/platform_data/irda-pxaficp.h>
  #include "irqs.h"
- #include <linux/platform_data/usb-ohci-pxa27x.h>
- #include <linux/platform_data/keypad-pxa27x.h>
-@@ -378,47 +377,6 @@ struct platform_device pxa_device_asoc_platform = {
- 	.id		= -1,
+@@ -130,33 +129,6 @@ struct platform_device pxa27x_device_udc = {
+ 	}
  };
  
--static u64 pxaficp_dmamask = ~(u32)0;
--
--static struct resource pxa_ir_resources[] = {
+-#ifdef CONFIG_PXA3xx
+-static struct resource pxa3xx_u2d_resources[] = {
 -	[0] = {
--		.start  = IRQ_STUART,
--		.end    = IRQ_STUART,
--		.flags  = IORESOURCE_IRQ,
+-		.start	= 0x54100000,
+-		.end	= 0x54100fff,
+-		.flags	= IORESOURCE_MEM,
 -	},
 -	[1] = {
--		.start  = IRQ_ICP,
--		.end    = IRQ_ICP,
--		.flags  = IORESOURCE_IRQ,
--	},
--	[3] = {
--		.start  = 0x40800000,
--		.end	= 0x4080001b,
--		.flags  = IORESOURCE_MEM,
--	},
--	[4] = {
--		.start  = 0x40700000,
--		.end	= 0x40700023,
--		.flags  = IORESOURCE_MEM,
+-		.start	= IRQ_USB2,
+-		.end	= IRQ_USB2,
+-		.flags	= IORESOURCE_IRQ,
 -	},
 -};
 -
--struct platform_device pxa_device_ficp = {
--	.name		= "pxa2xx-ir",
+-struct platform_device pxa3xx_device_u2d = {
+-	.name		= "pxa3xx-u2d",
 -	.id		= -1,
--	.num_resources	= ARRAY_SIZE(pxa_ir_resources),
--	.resource	= pxa_ir_resources,
--	.dev		= {
--		.dma_mask = &pxaficp_dmamask,
--		.coherent_dma_mask = 0xffffffff,
--	},
+-	.resource	= pxa3xx_u2d_resources,
+-	.num_resources	= ARRAY_SIZE(pxa3xx_u2d_resources),
 -};
 -
--void __init pxa_set_ficp_info(struct pxaficp_platform_data *info)
+-void __init pxa3xx_set_u2d_info(struct pxa3xx_u2d_platform_data *info)
 -{
--	pxa_register_device(&pxa_device_ficp, info);
+-	pxa_register_device(&pxa3xx_device_u2d, info);
 -}
+-#endif /* CONFIG_PXA3xx */
 -
- static struct resource pxa_rtc_resources[] = {
+ static struct resource pxafb_resources[] = {
  	[0] = {
- 		.start  = 0x40900000,
+ 		.start	= 0x44000000,
 diff --git a/arch/arm/mach-pxa/devices.h b/arch/arm/mach-pxa/devices.h
-index 498b07bc6a3e..2828bea76cd7 100644
+index 2828bea76cd7..82c83939017a 100644
 --- a/arch/arm/mach-pxa/devices.h
 +++ b/arch/arm/mach-pxa/devices.h
-@@ -17,7 +17,6 @@ extern struct platform_device pxa_device_stuart;
- extern struct platform_device pxa_device_hwuart;
- extern struct platform_device pxa_device_i2c;
- extern struct platform_device pxa_device_i2s;
--extern struct platform_device pxa_device_ficp;
- extern struct platform_device sa1100_device_rtc;
- extern struct platform_device pxa_device_rtc;
- extern struct platform_device pxa_device_ac97;
-diff --git a/arch/arm/mach-pxa/pxa2xx.c b/arch/arm/mach-pxa/pxa2xx.c
-index 4aafd692c1e8..35c23a5d73a3 100644
---- a/arch/arm/mach-pxa/pxa2xx.c
-+++ b/arch/arm/mach-pxa/pxa2xx.c
-@@ -18,7 +18,6 @@
- #include "reset.h"
- #include "smemc.h"
- #include <linux/soc/pxa/smemc.h>
--#include <linux/platform_data/irda-pxaficp.h>
- 
- void pxa2xx_clear_reset_status(unsigned int mask)
- {
-@@ -26,34 +25,6 @@ void pxa2xx_clear_reset_status(unsigned int mask)
- 	RCSR = mask;
- }
- 
--static unsigned long pxa2xx_mfp_fir[] = {
--	GPIO46_FICP_RXD,
--	GPIO47_FICP_TXD,
--};
--
--static unsigned long pxa2xx_mfp_sir[] = {
--	GPIO46_STUART_RXD,
--	GPIO47_STUART_TXD,
--};
--
--static unsigned long pxa2xx_mfp_off[] = {
--	GPIO46_GPIO | MFP_LPM_DRIVE_LOW,
--	GPIO47_GPIO | MFP_LPM_DRIVE_LOW,
--};
--
--void pxa2xx_transceiver_mode(struct device *dev, int mode)
--{
--	if (mode & IR_OFF) {
--		pxa2xx_mfp_config(pxa2xx_mfp_off, ARRAY_SIZE(pxa2xx_mfp_off));
--	} else if (mode & IR_SIRMODE) {
--		pxa2xx_mfp_config(pxa2xx_mfp_sir, ARRAY_SIZE(pxa2xx_mfp_sir));
--	} else if (mode & IR_FIRMODE) {
--		pxa2xx_mfp_config(pxa2xx_mfp_fir, ARRAY_SIZE(pxa2xx_mfp_fir));
--	} else
--		BUG();
--}
--EXPORT_SYMBOL_GPL(pxa2xx_transceiver_mode);
--
- #define MDCNFG_DRAC2(mdcnfg)	(((mdcnfg) >> 21) & 0x3)
- #define MDCNFG_DRAC0(mdcnfg)	(((mdcnfg) >> 5) & 0x3)
- 
-diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
-index 9964729cd428..26f0ebc4d136 100644
---- a/arch/arm/mach-pxa/spitz.c
-+++ b/arch/arm/mach-pxa/spitz.c
-@@ -40,7 +40,6 @@
- #include "pxa27x.h"
- #include "pxa27x-udc.h"
- #include "reset.h"
--#include <linux/platform_data/irda-pxaficp.h>
- #include <linux/platform_data/mmc-pxamci.h>
- #include <linux/platform_data/usb-ohci-pxa27x.h>
- #include <linux/platform_data/video-pxafb.h>
-@@ -687,27 +686,6 @@ static void __init spitz_uhc_init(void)
- static inline void spitz_uhc_init(void) {}
- #endif
- 
--/******************************************************************************
-- * IrDA
-- ******************************************************************************/
--#if defined(CONFIG_PXA_FICP) || defined(CONFIG_PXA_FICP_MODULE)
--static struct pxaficp_platform_data spitz_ficp_platform_data = {
--	.transceiver_cap	= IR_SIRMODE | IR_OFF,
--};
--
--static void __init spitz_irda_init(void)
--{
--	if (machine_is_akita())
--		spitz_ficp_platform_data.gpio_pwdown = AKITA_GPIO_IR_ON;
--	else
--		spitz_ficp_platform_data.gpio_pwdown = SPITZ_GPIO_IR_ON;
--
--	pxa_set_ficp_info(&spitz_ficp_platform_data);
--}
--#else
--static inline void spitz_irda_init(void) {}
--#endif
--
- /******************************************************************************
-  * Framebuffer
-  ******************************************************************************/
-@@ -1042,7 +1020,6 @@ static void __init spitz_init(void)
- 	spitz_leds_init();
- 	spitz_mmc_init();
- 	spitz_pcmcia_init();
--	spitz_irda_init();
- 	spitz_uhc_init();
- 	spitz_lcd_init();
- 	spitz_nor_init();
-diff --git a/include/linux/platform_data/irda-pxaficp.h b/include/linux/platform_data/irda-pxaficp.h
+@@ -9,7 +9,6 @@ extern struct platform_device pxa3xx_device_mci2;
+ extern struct platform_device pxa3xx_device_mci3;
+ extern struct platform_device pxa25x_device_udc;
+ extern struct platform_device pxa27x_device_udc;
+-extern struct platform_device pxa3xx_device_u2d;
+ extern struct platform_device pxa_device_fb;
+ extern struct platform_device pxa_device_ffuart;
+ extern struct platform_device pxa_device_btuart;
+diff --git a/arch/arm/mach-pxa/pxa3xx-ulpi.c b/arch/arm/mach-pxa/pxa3xx-ulpi.c
 deleted file mode 100644
-index bd35ddcf3068..000000000000
+index c29a7f0fa1b0..000000000000
+diff --git a/arch/arm/mach-pxa/regs-u2d.h b/arch/arm/mach-pxa/regs-u2d.h
+deleted file mode 100644
+index ab517ba62c9a..000000000000
+diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27x.c
+index a1dad8745622..0bc7e96bcc93 100644
+--- a/drivers/usb/host/ohci-pxa27x.c
++++ b/drivers/usb/host/ohci-pxa27x.c
+@@ -29,7 +29,6 @@
+ #include <linux/of_platform.h>
+ #include <linux/of_gpio.h>
+ #include <linux/platform_data/usb-ohci-pxa27x.h>
+-#include <linux/platform_data/usb-pxa3xx-ulpi.h>
+ #include <linux/platform_device.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/signal.h>
+@@ -275,7 +274,6 @@ static int pxa27x_start_hc(struct pxa27x_ohci *pxa_ohci, struct device *dev)
+ 	int retval;
+ 	struct pxaohci_platform_data *inf;
+ 	uint32_t uhchr;
+-	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 
+ 	inf = dev_get_platdata(dev);
+ 
+@@ -301,9 +299,6 @@ static int pxa27x_start_hc(struct pxa27x_ohci *pxa_ohci, struct device *dev)
+ 		return retval;
+ 	}
+ 
+-	if (cpu_is_pxa3xx())
+-		pxa3xx_u2d_start_hc(&hcd->self);
+-
+ 	uhchr = __raw_readl(pxa_ohci->mmio_base + UHCHR) & ~UHCHR_SSE;
+ 	__raw_writel(uhchr, pxa_ohci->mmio_base + UHCHR);
+ 	__raw_writel(UHCHIE_UPRIE | UHCHIE_RWIE, pxa_ohci->mmio_base + UHCHIE);
+@@ -316,14 +311,10 @@ static int pxa27x_start_hc(struct pxa27x_ohci *pxa_ohci, struct device *dev)
+ static void pxa27x_stop_hc(struct pxa27x_ohci *pxa_ohci, struct device *dev)
+ {
+ 	struct pxaohci_platform_data *inf;
+-	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	uint32_t uhccoms;
+ 
+ 	inf = dev_get_platdata(dev);
+ 
+-	if (cpu_is_pxa3xx())
+-		pxa3xx_u2d_stop_hc(&hcd->self);
+-
+ 	if (inf->exit)
+ 		inf->exit(dev);
+ 
+diff --git a/include/linux/platform_data/usb-pxa3xx-ulpi.h b/include/linux/platform_data/usb-pxa3xx-ulpi.h
+deleted file mode 100644
+index 4d31a5cbdeb1..000000000000
 -- 
 2.39.0
 
