@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9308D65E4C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 05:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8A965E4CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 05:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjAEEnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 23:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S230376AbjAEEo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 23:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjAEEml (ORCPT
+        with ESMTP id S229927AbjAEEoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 23:42:41 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BD186D1
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 20:42:39 -0800 (PST)
-Received: from localhost (36-226-179-107.dynamic-ip.hinet.net [36.226.179.107])
+        Wed, 4 Jan 2023 23:44:16 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7189042617;
+        Wed,  4 Jan 2023 20:44:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7F4C743586;
-        Thu,  5 Jan 2023 04:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672893757;
-        bh=tuX7FpbuFjmLFyhbHFuS7lFvYiGSSpdrXN3U+7iok5A=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=SPCZg9iCFDGxIP6lBzZS5J5+xaHIooUiz07XlAAaURlticpeCnSKFFneKLcvlTHer
-         ZGt33Kpkv2mRJ/xQjjotseVkjGl/6Mh7s2qGiaUU32pxOGdtFdAy8N0FOCRXhfmfYg
-         OWW5QINQN9YrJ1R2q6xOjUSeFwuFUeJQWqsniamfRL36fmbgh1JqekENLQj7u9yLE5
-         yu3jR83/J9vMKfkbB3afaW+wVzvXn2XgCGZ+WAURG9nFuX8JJOxhrGU0eOtq0BzTkZ
-         f0M5p7uV4XzG4UtAJVc3bYUyLqDXXoeOfyZS81Lwh19bDMMZDPN/VZ4NTuQ6jUw4Zf
-         iAdKql2lZ5Gtg==
-From:   Jeremy Szu <jeremy.szu@canonical.com>
-To:     tiwai@suse.com
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Meng Tang <tangmeng@uniontech.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Philipp Jungkamp <p.jungkamp@gmx.net>,
-        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
-        Yuchi Yang <yangyuchi66@gmail.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform
-Date:   Thu,  5 Jan 2023 12:41:53 +0800
-Message-Id: <20230105044154.8242-1-jeremy.szu@canonical.com>
-X-Mailer: git-send-email 2.38.1
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B287E3FB17;
+        Thu,  5 Jan 2023 04:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1672893840; bh=DJFwNUoKB/UR71s75mzuMGeNsfe9rog8IsGcCazIn0s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Hg3L7LNtuu+NUhRLVJ1RsE1pg5d1trRhwcI9TNMjpYeAYGE09jrE4aM6ev/6H7hWF
+         tR/YtI8q0N77OvjKGREUfiR4MzeYWzLUfW8tNqpu+kEnM2bjkKDGDJ2FU/dt2fTDab
+         KDq5SvZDAP+NWKXSNQgtHecvp1/yZ7LBQSeaICQLCJzy+N2TS59lhuJIb135hF+4Sx
+         GOeKYptu8Rz+yciSmqqC3Jrhg/7Iv2Njqp+H2bgD+wOxSr3PF0tN0s+EzVaMBLs3KF
+         vqgoDQmyPwhDDPmXWgfkBbNV0hfCXc9yUcDhzCiGzmG4S7HVuM+tMbiPA6kgQ/ZtWZ
+         s2U+Vme/xBL4g==
+Message-ID: <3af091e9-09b4-53a0-da2d-5b2640040b9d@marcan.st>
+Date:   Thu, 5 Jan 2023 13:43:54 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/7] iommu: dart: Support >64 stream IDs
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Janne Grunau <j@jannau.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230104110013.24738-1-marcan@marcan.st>
+ <20230104110013.24738-4-marcan@marcan.st>
+ <71bffbd4-f8b0-4201-b2eb-7a15847ac2c6@app.fastmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <71bffbd4-f8b0-4201-b2eb-7a15847ac2c6@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a HP platform uses ALC236 codec which using GPIO2 to control
-mute LED and GPIO1 to control micmute LED.
-Thus, add a quirk to make them work.
+On 2023/01/04 22:37, Sven Peter wrote:
+>>  #include "dma-iommu.h"
+>>
+>> -#define DART_MAX_STREAMS 16
+>> +#define DART_MAX_STREAMS 256
+> 
+> Feels a bit wasteful to allocate 256-wide sid2group and save_{tcr,ttbr}
+> arrays even for the M1 where 16 are enough. But then again, that's still <100 KiB
+> for all DARTs combined and these machine have >8 GiB of RAM so it probably won't
+> make a difference
 
-Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+Yeah, I don't think this is worth the extra fumbling around with dynamic
+allocation.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index eda4914b8aeb..8362eb4642d8 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9409,6 +9409,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
-+	SND_PCI_QUIRK(0x103c, 0x8bf0, "HP", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
- 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
--- 
-2.38.1
+>>  	/* enable all streams globally since TCR is used to control isolation */
+>> -	writel(DART_STREAM_ALL, dart->regs + DART_STREAMS_ENABLE);
+>> +	for (i = 0; i < BITS_TO_U32(dart->num_streams); i++)
+>> +		writel(U32_MAX, dart->regs + DART_STREAMS_ENABLE);
+> 
+> This seems weird: this code writes U32_MAX to the same register
+> again and again. 
 
+Whoops, that was supposed to have a `+ 4 * i` in there. Fixed for v2.
+
+- Hector
