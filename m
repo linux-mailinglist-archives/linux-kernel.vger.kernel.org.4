@@ -2,169 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DF165E6CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C70165E6DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjAEIYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S231453AbjAEIet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbjAEIYG (ORCPT
+        with ESMTP id S231437AbjAEIer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:24:06 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621DB58F82;
-        Thu,  5 Jan 2023 00:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672906869; x=1704442869;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ldOSn4RJNcTLaRtEAxrO/RtpGFwPKJQdNeOLTmCm9Kc=;
-  b=KoOit2mj1atc7XUBbB4Wme42c3iWfpHpg0/WyOYtTBQHfCPGJXncko/H
-   EZ3tU/GxGYrQLDEKCdYWQINm3j89NNEcz4J8XnYa28DqsvgDshODh9KZa
-   G71iPWGrSZlsiypYXQOlpgHkzjIYOmheKE94Wzz/yl7j5wAkyIxKH0Czl
-   8JTFMJBR53XoRRZxHPS0RUGuhOKmLZgyYMM6cPkqprxDJZny5/3Crfh7S
-   38EQp2He+/S+jgMexzX582T4tycy9cawctjN0ZXNt10Dn29JmIUX8YyDl
-   epG84phRdHMDmLyCJFWjPcRlLL5rrJZ2oTwK+VRl3lRqM4H/8i6FfOIr9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301843072"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="301843072"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 00:20:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900848238"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="900848238"
-Received: from icg-kernel3.bj.intel.com ([172.16.126.100])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Jan 2023 00:20:55 -0800
-From:   bingbu.cao@intel.com
-To:     linux-kernel@vger.kernel.org,
-        stable.vger.kernel.org@vger.kernel.org, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev
-Cc:     baolu.lu@linux.intel.com, senozhatsky@chromium.org,
-        bingbu.cao@intel.com, bingbu.cao@linux.intel.com,
-        sangram.k.y@intel.com
-Subject: [RESEND PATCH v3] iommu/vt-d: Use passthrough mode for the Intel IPUs
-Date:   Thu,  5 Jan 2023 16:28:57 +0800
-Message-Id: <20230105082857.4180299-1-bingbu.cao@intel.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 5 Jan 2023 03:34:47 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D27C4C717
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 00:34:44 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-108-6ZLZ5sXtNqe3xnp3-GeDRg-1; Thu, 05 Jan 2023 08:34:41 +0000
+X-MC-Unique: 6ZLZ5sXtNqe3xnp3-GeDRg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 5 Jan
+ 2023 08:34:40 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Thu, 5 Jan 2023 08:34:40 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Martin Blumenstingl' <martin.blumenstingl@googlemail.com>
+CC:     Ping-Ke Shih <pkshih@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Topic: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Index: AQHZGsFtJHlbRNsmYUOpTa0F4ufSPq6EmMnggAOg+qCAALbHgIAAiEwggAT0j0eAAALd0IAAB5IAgAADjxCAABjCgIAA9scQ
+Date:   Thu, 5 Jan 2023 08:34:40 +0000
+Message-ID: <4c4551c787ee4fc9ac40b34707d7365a@AcuMS.aculab.com>
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+ <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+ <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
+ <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
+ <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
+ <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com>
+ <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+ <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
+ <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com>
+ <CAFBinCC9sNvQJcu-SOSrFmo4sCx29K6KwXnc-O6MX9TJEHtXYg@mail.gmail.com>
+ <662e2f820e7a478096dd6e09725c093a@AcuMS.aculab.com>
+ <CAFBinCCTa47SRjNHbMB3t2zjiE5Vh1ZQrgT3G38g9g_-mzvh6w@mail.gmail.com>
+In-Reply-To: <CAFBinCCTa47SRjNHbMB3t2zjiE5Vh1ZQrgT3G38g9g_-mzvh6w@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bingbu Cao <bingbu.cao@intel.com>
-
-Intel IPU(Image Processing Unit) has its own (IO)MMU hardware,
-The IPU driver allocates its own page table that is not mapped
-via the DMA, and thus the Intel IOMMU driver blocks access giving
-this error:
-
-DMAR: DRHD: handling fault status reg 3
-DMAR: [DMA Read] Request device [00:05.0] PASID ffffffff
-      fault addr 76406000 [fault reason 06] PTE Read access is not set
-
-As IPU is not an external facing device which is not risky, so use
-IOMMU passthrough mode for Intel IPUs.
-
-Fixes: 26f5689592e2 ("media: staging/intel-ipu3: mmu: Implement driver")
-Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
----
- drivers/iommu/intel/iommu.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 59df7e42fd53..b9097ef5b8a6 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -37,6 +37,15 @@
- #define IS_GFX_DEVICE(pdev) ((pdev->class >> 16) == PCI_BASE_CLASS_DISPLAY)
- #define IS_USB_DEVICE(pdev) ((pdev->class >> 8) == PCI_CLASS_SERIAL_USB)
- #define IS_ISA_DEVICE(pdev) ((pdev->class >> 8) == PCI_CLASS_BRIDGE_ISA)
-+#define IS_INTEL_IPU(pdev) ((pdev)->vendor == PCI_VENDOR_ID_INTEL &&	\
-+			    ((pdev)->device == 0x9a19 ||		\
-+			     (pdev)->device == 0x9a39 ||		\
-+			     (pdev)->device == 0x4e19 ||		\
-+			     (pdev)->device == 0x465d ||		\
-+			     (pdev)->device == 0x462e ||		\
-+			     (pdev)->device == 0xa75d ||		\
-+			     (pdev)->device == 0x7d19 ||		\
-+			     (pdev)->device == 0x1919))
- #define IS_AZALIA(pdev) ((pdev)->vendor == 0x8086 && (pdev)->device == 0x3a3e)
- 
- #define IOAPIC_RANGE_START	(0xfee00000)
-@@ -287,12 +296,14 @@ int intel_iommu_enabled = 0;
- EXPORT_SYMBOL_GPL(intel_iommu_enabled);
- 
- static int dmar_map_gfx = 1;
-+static int dmar_map_ipu = 1;
- static int intel_iommu_superpage = 1;
- static int iommu_identity_mapping;
- static int iommu_skip_te_disable;
- 
- #define IDENTMAP_GFX		2
- #define IDENTMAP_AZALIA		4
-+#define IDENTMAP_IPU		8
- 
- const struct iommu_ops intel_iommu_ops;
- 
-@@ -2584,6 +2595,9 @@ static int device_def_domain_type(struct device *dev)
- 
- 		if ((iommu_identity_mapping & IDENTMAP_GFX) && IS_GFX_DEVICE(pdev))
- 			return IOMMU_DOMAIN_IDENTITY;
-+
-+		if ((iommu_identity_mapping & IDENTMAP_IPU) && IS_INTEL_IPU(pdev))
-+			return IOMMU_DOMAIN_IDENTITY;
- 	}
- 
- 	return 0;
-@@ -2973,6 +2987,9 @@ static int __init init_dmars(void)
- 	if (!dmar_map_gfx)
- 		iommu_identity_mapping |= IDENTMAP_GFX;
- 
-+	if (!dmar_map_ipu)
-+		iommu_identity_mapping |= IDENTMAP_IPU;
-+
- 	check_tylersburg_isoch();
- 
- 	ret = si_domain_init(hw_pass_through);
-@@ -4799,6 +4816,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
- 	dmar_map_gfx = 0;
- }
- 
-+static void quirk_iommu_ipu(struct pci_dev *dev)
-+{
-+	if (!IS_INTEL_IPU(dev))
-+		return;
-+
-+	if (risky_device(dev))
-+		return;
-+
-+	pci_info(dev, "Passthrough IOMMU for integrated Intel IPU\n");
-+	dmar_map_ipu = 0;
-+}
-+
- /* G4x/GM45 integrated gfx dmar support is totally busted. */
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2a40, quirk_iommu_igfx);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2e00, quirk_iommu_igfx);
-@@ -4834,6 +4863,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x1632, quirk_iommu_igfx);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163A, quirk_iommu_igfx);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163D, quirk_iommu_igfx);
- 
-+/* make IPU dmar use identity mapping */
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_ANY_ID, quirk_iommu_ipu);
-+
- static void quirk_iommu_rwbf(struct pci_dev *dev)
- {
- 	if (risky_device(dev))
--- 
-2.39.0
+RnJvbTogTWFydGluIEJsdW1lbnN0aW5nbA0KPiBTZW50OiAwNCBKYW51YXJ5IDIwMjMgMTc6NDkN
+Cj4gDQo+IE9uIFdlZCwgSmFuIDQsIDIwMjMgYXQgNTozMSBQTSBEYXZpZCBMYWlnaHQgPERhdmlk
+LkxhaWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gWy4uLl0NCj4gPiA+ID4gV2hhdCB5b3UgbWF5
+IHdhbnQgdG8gZG8gaXMgYWRkIGNvbXBpbGUtdGltZSBhc3NlcnRzIGZvciB0aGUNCj4gPiA+ID4g
+c2l6ZXMgb2YgdGhlIHN0cnVjdHVyZXMuDQo+ID4gPiBEbyBJIGdldCB5b3UgcmlnaHQgdGhhdCBz
+b21ldGhpbmcgbGlrZToNCj4gPiA+ICAgQlVJTERfQlVHX09OKHNpemVvZihydHc4ODIxY19lZnVz
+ZSkgIT0gMjU2KTsNCj4gPiA+IGlzIHdoYXQgeW91IGhhdmUgaW4gbWluZD8NCj4gPg0KPiA+IFRo
+YXQgbG9va3MgbGlrZSB0aGUgb25lLi4uDQo+IEkgdHJpZWQgdGhpcyAoc2VlIHRoZSBhdHRhY2hl
+ZCBwYXRjaCAtIGl0J3MganVzdCBtZWFudCB0byBzaG93IHdoYXQgSQ0KPiBkaWQsIGl0J3Mgbm90
+IG1lYW50IHRvIGJlIGFwcGxpZWQgdXBzdHJlYW0pLg0KPiBXaXRoIHRoZSBhdHRhY2hlZCBwYXRj
+aCBidXQgbm8gb3RoZXIgcGF0Y2hlcyB0aGlzIG1ha2VzIHRoZSBydHc4OA0KPiBkcml2ZXIgY29t
+cGlsZSBmaW5lIG9uIDYuMi1yYzIuDQo+IA0KPiBBZGRpbmcgX19wYWNrZWQgdG8gc3RydWN0IHJ0
+dzg3MjNkX2VmdXNlIGNoYW5nZXMgdGhlIHNpemUgb2YgdGhhdA0KPiBzdHJ1Y3QgZm9yIG1lIChJ
+J20gY29tcGlsaW5nIGZvciBBQXJjaDY0IC8gQVJNNjQpLg0KPiBXaXRoIHRoZSBwYWNrZWQgYXR0
+cmlidXRlIGl0IGhhcyAyNjcgYnl0ZXMsIHdpdGhvdXQgMjY4IGJ5dGVzLg0KPiANCj4gRG8geW91
+IGhhdmUgYW55IGlkZWFzIGFzIHRvIHdoeSB0aGF0IGlzPw0KDQpUYWlsIHBhZGRpbmcgLSB5b3Ug
+d29uJ3QgZ2V0IGFuIG9kZCBsZW5ndGggZm9yIGEgc3RydWN0dXJlDQp0aGF0IGNvbnRhaW5zIGEg
+MTZiaXQgaXRlbS4NCg0KT1RPSCBJIGRvdWJ0IHlvdSBjYXJlIGFib3V0IHRoZSBzaXplIG9mIHRo
+YXQgc3RydWN0dXJlLCBqdXN0DQp0aGUgb2Zmc2V0IG9mIHRoZSB1bmlvbiBhbmQgdGhlIHNpemVz
+IG9mIHRoZSB1bmlvbiBtZW1iZXJzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
+IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
+UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
