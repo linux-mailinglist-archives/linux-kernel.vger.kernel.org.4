@@ -2,74 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D84965E68C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D136F65E678
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjAEIOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S230423AbjAEINm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjAEIOO (ORCPT
+        with ESMTP id S231514AbjAEINj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:14:14 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E97358334;
-        Thu,  5 Jan 2023 00:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672906449; x=1704442449;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EjooITN2ylog9vedFcmOa/b+oGSlC9sf7OtcG+rF7ZE=;
-  b=kQ3Wn0h2P+pe5a67zNX4bmIMsH2iwiZ9Ib5q8iL/XB58ePXd/r2udlvI
-   gy6elfvpYiSCgsSRcOm3hmCXXdb3foNTNZvO16dv5Vyjf0Kybt2+X5iYP
-   VomLm5tlaXlH7UFc05Wz7PaumYoF/vIdnO84TqfdGIwOqhkQBgf+FE72f
-   2JO6LPVi9JnGz2UpcQL0eEAu6VWhtA1vAubbOJ4kBevy/6cZFbIEacFRh
-   Cf0M2lnPYXasimddRURanGFUvgGmLwDb6y/JprX3m4kEuIfYuTZReOEt3
-   EWNZpTx8sUg+b3/xKi1zhlb5dX4o56S8acPWoXYji8t20qmVDOsIG/Kvi
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="130906286"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jan 2023 01:14:09 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 01:14:08 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 01:14:05 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH net-next 7/8] net: microchip: vcap api: Add a storage state to a VCAP rule
-Date:   Thu, 5 Jan 2023 09:13:34 +0100
-Message-ID: <20230105081335.1261636-8-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105081335.1261636-1-steen.hegelund@microchip.com>
-References: <20230105081335.1261636-1-steen.hegelund@microchip.com>
+        Thu, 5 Jan 2023 03:13:39 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A23574F2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 00:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=fzV0HKTUGAzAK8YFWAsxGc2YnLeue6G6Fo1KiDz9FnA=;
+  b=M1m68CEYHog5YQ/a9PchNLN0AlK8Zpc3DIEZYEhBgFGGI364c0m+3acX
+   DtKG3ZTaM4up9xYAGM6WRlp9tw6igobXQJBcg0vtt0MzCpSskx0frIbSf
+   F6z1g4j6bPVOrf8rZjzGYeCibHT6Y8beld2quKQiwo8OY+5LnjNTWf5pL
+   I=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.96,302,1665439200"; 
+   d="scan'208";a="86036273"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 09:13:35 +0100
+Date:   Thu, 5 Jan 2023 09:13:35 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+cc:     Deepak R Varma <drv@mailo.com>,
+        Nicolai Stange <nicstange@gmail.com>,
+        Julia Lawall <Julia.Lawall@lip6.fr>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
+ attributes
+In-Reply-To: <Y7XABJ9MWCWO5IUA@intel.com>
+Message-ID: <991ac2b4-f458-f6f2-f494-648ed61efcff@inria.fr>
+References: <Y6qmNW6cOHjGwn03@qemulion> <Y6sn1BmhFJFssW0h@intel.com> <Y6s0FSK9+F+/oKSf@qemulion> <Y6wl9NhYZG5RjJL7@intel.com> <Y7PG5Hx5dDE7aHSx@qemulion> <alpine.DEB.2.22.394.2301041850570.7216@hadrien> <Y7XABJ9MWCWO5IUA@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,366 +61,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows a VCAP rule to be in one of 3 states:
+> Hi Julia, thanks for helping here.
+>
+> So, my question is why this
+>
+> make coccicheck M=drivers/gpu/drm/i915/ MODE=context COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+>
+> didn't catch this chunck:
+>
+> -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
+> -				    fbc, &intel_fbc_debugfs_false_color_fops);
+> +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
+> +					   fbc, &intel_fbc_debugfs_false_color_fops);
+>
+> When I run it it only catches and replaces this:
+>
+> - DEFINE_SIMPLE_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
+> + DEFINE_DEBUGFS_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
 
-- permanently stored in the VCAP HW (for rules that must always be present)
-- enabled (stored in HW) when the corresponding lookup has been enabled
-- disabled (stored in SW) when the lookup is disabled
+There is something strange in your question.  You have MODE=context but
+you show the output for MODE=patch.  The rule dcf matches a call to
+debugfs_create_file, and the context rule matching DEFINE_SIMPLE_ATTRIBUTE
+is only activated if dcf succeeds.  So when the context rule gives a
+report, there is always a corresponding call to debugfs_create_file in the
+same file, it is just not highlighted.  So the request is that it should
+be highlighted as well?
 
-This way important VCAP rules can be added even before the user enables the
-VCAP lookups using a TC matchall filter.
+julia
 
-Fixes: 4426b78c626d ("net: lan966x: Add port keyset config and callback interface")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- .../net/ethernet/microchip/vcap/vcap_api.c    | 126 ++++++++++++++++--
- .../microchip/vcap/vcap_api_debugfs.c         |  52 +++++---
- .../microchip/vcap/vcap_api_debugfs_kunit.c   |   1 +
- .../microchip/vcap/vcap_api_private.h         |   9 +-
- 4 files changed, 161 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-index d438554355e4..94df0e7b58ea 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-@@ -950,9 +950,12 @@ int vcap_lookup_rule_by_cookie(struct vcap_control *vctrl, u64 cookie)
- }
- EXPORT_SYMBOL_GPL(vcap_lookup_rule_by_cookie);
- 
--/* Make a shallow copy of the rule without the fields */
--struct vcap_rule_internal *vcap_dup_rule(struct vcap_rule_internal *ri)
-+/* Make a copy of the rule, shallow or full */
-+static struct vcap_rule_internal *vcap_dup_rule(struct vcap_rule_internal *ri,
-+						bool full)
- {
-+	struct vcap_client_actionfield *caf, *newcaf;
-+	struct vcap_client_keyfield *ckf, *newckf;
- 	struct vcap_rule_internal *duprule;
- 
- 	/* Allocate the client part */
-@@ -965,6 +968,27 @@ struct vcap_rule_internal *vcap_dup_rule(struct vcap_rule_internal *ri)
- 	/* No elements in these lists */
- 	INIT_LIST_HEAD(&duprule->data.keyfields);
- 	INIT_LIST_HEAD(&duprule->data.actionfields);
-+
-+	/* A full rule copy includes keys and actions */
-+	if (!full)
-+		return duprule;
-+
-+	list_for_each_entry(ckf, &ri->data.keyfields, ctrl.list) {
-+		newckf = kzalloc(sizeof(*newckf), GFP_KERNEL);
-+		if (!newckf)
-+			return ERR_PTR(-ENOMEM);
-+		memcpy(newckf, ckf, sizeof(*newckf));
-+		list_add_tail(&newckf->ctrl.list, &duprule->data.keyfields);
-+	}
-+
-+	list_for_each_entry(caf, &ri->data.actionfields, ctrl.list) {
-+		newcaf = kzalloc(sizeof(*newcaf), GFP_KERNEL);
-+		if (!newcaf)
-+			return ERR_PTR(-ENOMEM);
-+		memcpy(newcaf, caf, sizeof(*newcaf));
-+		list_add_tail(&newcaf->ctrl.list, &duprule->data.actionfields);
-+	}
-+
- 	return duprule;
- }
- 
-@@ -1877,8 +1901,8 @@ static int vcap_insert_rule(struct vcap_rule_internal *ri,
- 		ri->addr = vcap_next_rule_addr(admin->last_used_addr, ri);
- 		admin->last_used_addr = ri->addr;
- 
--		/* Add a shallow copy of the rule to the VCAP list */
--		duprule = vcap_dup_rule(ri);
-+		/* Add a copy of the rule to the VCAP list */
-+		duprule = vcap_dup_rule(ri, ri->state == VCAP_RS_DISABLED);
- 		if (IS_ERR(duprule))
- 			return PTR_ERR(duprule);
- 
-@@ -1891,8 +1915,8 @@ static int vcap_insert_rule(struct vcap_rule_internal *ri,
- 	ri->addr = vcap_next_rule_addr(addr, ri);
- 	addr = ri->addr;
- 
--	/* Add a shallow copy of the rule to the VCAP list */
--	duprule = vcap_dup_rule(ri);
-+	/* Add a copy of the rule to the VCAP list */
-+	duprule = vcap_dup_rule(ri, ri->state == VCAP_RS_DISABLED);
- 	if (IS_ERR(duprule))
- 		return PTR_ERR(duprule);
- 
-@@ -1939,6 +1963,72 @@ static bool vcap_is_chain_used(struct vcap_control *vctrl,
- 	return false;
- }
- 
-+/* Fetch the next chain in the enabled list for the port */
-+static int vcap_get_next_chain(struct vcap_control *vctrl,
-+			       struct net_device *ndev,
-+			       int dst_cid)
-+{
-+	struct vcap_enabled_port *eport;
-+	struct vcap_admin *admin;
-+
-+	list_for_each_entry(admin, &vctrl->list, list) {
-+		list_for_each_entry(eport, &admin->enabled, list) {
-+			if (eport->ndev != ndev)
-+				continue;
-+			if (eport->src_cid == dst_cid)
-+				return eport->dst_cid;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static bool vcap_path_exist(struct vcap_control *vctrl, struct net_device *ndev,
-+			    int dst_cid)
-+{
-+	struct vcap_enabled_port *eport, *elem;
-+	struct vcap_admin *admin;
-+	int tmp;
-+
-+	/* Find first entry that starts from chain 0*/
-+	list_for_each_entry(admin, &vctrl->list, list) {
-+		list_for_each_entry(elem, &admin->enabled, list) {
-+			if (elem->src_cid == 0 && elem->ndev == ndev) {
-+				eport = elem;
-+				break;
-+			}
-+		}
-+		if (eport)
-+			break;
-+	}
-+
-+	if (!eport)
-+		return false;
-+
-+	tmp = eport->dst_cid;
-+	while (tmp != dst_cid && tmp != 0)
-+		tmp = vcap_get_next_chain(vctrl, ndev, tmp);
-+
-+	return !!tmp;
-+}
-+
-+/* Internal clients can always store their rules in HW
-+ * External clients can store their rules if the chain is enabled all
-+ * the way from chain 0, otherwise the rule will be cached until
-+ * the chain is enabled.
-+ */
-+static void vcap_rule_set_state(struct vcap_rule_internal *ri)
-+{
-+	if (ri->data.user <= VCAP_USER_QOS)
-+		ri->state = VCAP_RS_PERMANENT;
-+	else if (vcap_path_exist(ri->vctrl, ri->ndev, ri->data.vcap_chain_id))
-+		ri->state = VCAP_RS_ENABLED;
-+	else
-+		ri->state = VCAP_RS_DISABLED;
-+	/* For now always store directly in HW */
-+	ri->state = VCAP_RS_PERMANENT;
-+}
-+
- /* Encode and write a validated rule to the VCAP */
- int vcap_add_rule(struct vcap_rule *rule)
- {
-@@ -1952,6 +2042,8 @@ int vcap_add_rule(struct vcap_rule *rule)
- 		return ret;
- 	/* Insert the new rule in the list of vcap rules */
- 	mutex_lock(&ri->admin->lock);
-+
-+	vcap_rule_set_state(ri);
- 	ret = vcap_insert_rule(ri, &move);
- 	if (ret < 0) {
- 		pr_err("%s:%d: could not insert rule in vcap list: %d\n",
-@@ -1960,6 +2052,13 @@ int vcap_add_rule(struct vcap_rule *rule)
- 	}
- 	if (move.count > 0)
- 		vcap_move_rules(ri, &move);
-+
-+	if (ri->state == VCAP_RS_DISABLED) {
-+		/* Erase the rule area */
-+		ri->vctrl->ops->init(ri->ndev, ri->admin, ri->addr, ri->size);
-+		goto out;
-+	}
-+
- 	vcap_erase_cache(ri);
- 	ret = vcap_encode_rule(ri);
- 	if (ret) {
-@@ -2069,9 +2168,13 @@ struct vcap_rule *vcap_get_rule(struct vcap_control *vctrl, u32 id)
- 	if (!elem)
- 		return NULL;
- 	mutex_lock(&elem->admin->lock);
--	ri = vcap_dup_rule(elem);
-+	ri = vcap_dup_rule(elem, elem->state == VCAP_RS_DISABLED);
- 	if (IS_ERR(ri))
- 		goto unlock;
-+
-+	if (ri->state == VCAP_RS_DISABLED)
-+		goto unlock;
-+
- 	err = vcap_read_rule(ri);
- 	if (err) {
- 		ri = ERR_PTR(err);
-@@ -2109,6 +2212,11 @@ int vcap_mod_rule(struct vcap_rule *rule)
- 		return -ENOENT;
- 
- 	mutex_lock(&ri->admin->lock);
-+
-+	vcap_rule_set_state(ri);
-+	if (ri->state == VCAP_RS_DISABLED)
-+		goto out;
-+
- 	/* Encode the bitstreams to the VCAP cache */
- 	vcap_erase_cache(ri);
- 	err = vcap_encode_rule(ri);
-@@ -2201,7 +2309,7 @@ int vcap_del_rule(struct vcap_control *vctrl, struct net_device *ndev, u32 id)
- 	mutex_lock(&admin->lock);
- 	list_del(&ri->list);
- 	vctrl->ops->init(ndev, admin, admin->last_used_addr, ri->size + gap);
--	kfree(ri);
-+	vcap_free_rule(&ri->data);
- 	mutex_unlock(&admin->lock);
- 
- 	/* Update the last used address, set to default when no rules */
-@@ -2230,7 +2338,7 @@ int vcap_del_rules(struct vcap_control *vctrl, struct vcap_admin *admin)
- 	list_for_each_entry_safe(ri, next_ri, &admin->rules, list) {
- 		vctrl->ops->init(ri->ndev, admin, ri->addr, ri->size);
- 		list_del(&ri->list);
--		kfree(ri);
-+		vcap_free_rule(&ri->data);
- 	}
- 	admin->last_used_addr = admin->last_valid_addr;
- 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-index e0b206247f2e..d6a09ce75e4f 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-@@ -152,37 +152,45 @@ vcap_debugfs_show_rule_actionfield(struct vcap_control *vctrl,
- 	out->prf(out->dst, "\n");
- }
- 
--static int vcap_debugfs_show_rule_keyset(struct vcap_rule_internal *ri,
--					 struct vcap_output_print *out)
-+static int vcap_debugfs_show_keysets(struct vcap_rule_internal *ri,
-+				     struct vcap_output_print *out)
- {
--	struct vcap_control *vctrl = ri->vctrl;
- 	struct vcap_admin *admin = ri->admin;
- 	enum vcap_keyfield_set keysets[10];
--	const struct vcap_field *keyfield;
--	enum vcap_type vt = admin->vtype;
--	struct vcap_client_keyfield *ckf;
- 	struct vcap_keyset_list matches;
--	u32 *maskstream;
--	u32 *keystream;
--	int res;
-+	int err;
- 
--	keystream = admin->cache.keystream;
--	maskstream = admin->cache.maskstream;
- 	matches.keysets = keysets;
- 	matches.cnt = 0;
- 	matches.max = ARRAY_SIZE(keysets);
--	res = vcap_find_keystream_keysets(vctrl, vt, keystream, maskstream,
-+
-+	err = vcap_find_keystream_keysets(ri->vctrl, admin->vtype,
-+					  admin->cache.keystream,
-+					  admin->cache.maskstream,
- 					  false, 0, &matches);
--	if (res < 0) {
-+	if (err) {
- 		pr_err("%s:%d: could not find valid keysets: %d\n",
--		       __func__, __LINE__, res);
--		return -EINVAL;
-+		       __func__, __LINE__, err);
-+		return err;
- 	}
-+
- 	out->prf(out->dst, "  keysets:");
- 	for (int idx = 0; idx < matches.cnt; ++idx)
- 		out->prf(out->dst, " %s",
--			 vcap_keyset_name(vctrl, matches.keysets[idx]));
-+			 vcap_keyset_name(ri->vctrl, matches.keysets[idx]));
- 	out->prf(out->dst, "\n");
-+	return 0;
-+}
-+
-+static int vcap_debugfs_show_rule_keyset(struct vcap_rule_internal *ri,
-+					 struct vcap_output_print *out)
-+{
-+	struct vcap_control *vctrl = ri->vctrl;
-+	struct vcap_admin *admin = ri->admin;
-+	const struct vcap_field *keyfield;
-+	struct vcap_client_keyfield *ckf;
-+
-+	vcap_debugfs_show_keysets(ri, out);
- 	out->prf(out->dst, "  keyset_sw: %d\n", ri->keyset_sw);
- 	out->prf(out->dst, "  keyset_sw_regs: %d\n", ri->keyset_sw_regs);
- 
-@@ -233,6 +241,18 @@ static void vcap_show_admin_rule(struct vcap_control *vctrl,
- 	out->prf(out->dst, "  chain_id: %d\n", ri->data.vcap_chain_id);
- 	out->prf(out->dst, "  user: %d\n", ri->data.user);
- 	out->prf(out->dst, "  priority: %d\n", ri->data.priority);
-+	out->prf(out->dst, "  state: ");
-+	switch (ri->state) {
-+	case VCAP_RS_PERMANENT:
-+		out->prf(out->dst, "permanent\n");
-+		break;
-+	case VCAP_RS_DISABLED:
-+		out->prf(out->dst, "disabled\n");
-+		break;
-+	case VCAP_RS_ENABLED:
-+		out->prf(out->dst, "enabled\n");
-+		break;
-+	}
- 	vcap_debugfs_show_rule_keyset(ri, out);
- 	vcap_debugfs_show_rule_actionset(ri, out);
- }
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
-index bef0b28a4a50..9211cb453a3d 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_debugfs_kunit.c
-@@ -445,6 +445,7 @@ static const char * const test_admin_expect[] = {
- 	"  chain_id: 0\n",
- 	"  user: 0\n",
- 	"  priority: 0\n",
-+	"  state: permanent\n",
- 	"  keysets: VCAP_KFS_MAC_ETYPE\n",
- 	"  keyset_sw: 6\n",
- 	"  keyset_sw_regs: 2\n",
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_private.h b/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-index 4fd21da97679..ce35af9a853d 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_private.h
-@@ -13,6 +13,12 @@
- 
- #define to_intrule(rule) container_of((rule), struct vcap_rule_internal, data)
- 
-+enum vcap_rule_state {
-+	VCAP_RS_PERMANENT, /* the rule is always stored in HW */
-+	VCAP_RS_ENABLED, /* enabled in HW but can be disabled */
-+	VCAP_RS_DISABLED, /* disabled (stored in SW) and can be enabled */
-+};
-+
- /* Private VCAP API rule data */
- struct vcap_rule_internal {
- 	struct vcap_rule data; /* provided by the client */
-@@ -29,6 +35,7 @@ struct vcap_rule_internal {
- 	u32 addr; /* address in the VCAP at insertion */
- 	u32 counter_id; /* counter id (if a dedicated counter is available) */
- 	struct vcap_counter counter; /* last read counter value */
-+	enum vcap_rule_state state;  /* rule storage state */
- };
- 
- /* Bit iterator for the VCAP cache streams */
-@@ -43,8 +50,6 @@ struct vcap_stream_iter {
- 
- /* Check that the control has a valid set of callbacks */
- int vcap_api_check(struct vcap_control *ctrl);
--/* Make a shallow copy of the rule without the fields */
--struct vcap_rule_internal *vcap_dup_rule(struct vcap_rule_internal *ri);
- /* Erase the VCAP cache area used or encoding and decoding */
- void vcap_erase_cache(struct vcap_rule_internal *ri);
- 
--- 
-2.39.0
-
+>
+> But looking to the .cocci script or at least to its description,
+> I believe it should catch both cases.
+>
+> But if it is not a bug in the cocci script, then I'd like to hear
+> from Nicolai why. And have this documented in the script.
+>
+> Thanks,
+> Rodrigo.
+>
+> >
+> > julia
+> >
+> >
+> > >
+> > > Thank you,
+> > > ./drv
+> > >
+> > > >
+> > > > >
+> > > > > >
+> > > > > > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > > > > > (to both patches, this and the drrs one.
+> > > > > >
+> > > > > > Also, it looks like you could contribute with other 2 patches:
+> > > > > > drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:64:0-23: WARNING: pxp_terminate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> > > > > > drivers/gpu/drm/i915/gvt/debugfs.c:150:0-23: WARNING: vgpu_scan_nonprivbb_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> > > > >
+> > > > > Yes, these are on my list. Was waiting for a feedback on the first submission
+> > > > > before I send more similar patches.
+> > > > >
+> > > > > Appreciate your time and the feedback.
+> > > > >
+> > > > >
+> > > > > Regards,
+> > > > > ./drv
+> > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > > > > ---
+> > > > > > >  drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
+> > > > > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > > > > index b5ee5ea0d010..4b481e2f908b 100644
+> > > > > > > --- a/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > > > > +++ b/drivers/gpu/drm/i915/display/intel_fbc.c
+> > > > > > > @@ -1809,10 +1809,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
+> > > > > > >  	return 0;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > -DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
+> > > > > > > -			intel_fbc_debugfs_false_color_get,
+> > > > > > > -			intel_fbc_debugfs_false_color_set,
+> > > > > > > -			"%llu\n");
+> > > > > > > +DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
+> > > > > > > +			 intel_fbc_debugfs_false_color_get,
+> > > > > > > +			 intel_fbc_debugfs_false_color_set,
+> > > > > > > +			 "%llu\n");
+> > > > > > >
+> > > > > > >  static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+> > > > > > >  				  struct dentry *parent)
+> > > > > > > @@ -1821,8 +1821,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+> > > > > > >  			    fbc, &intel_fbc_debugfs_status_fops);
+> > > > > > >
+> > > > > > >  	if (fbc->funcs->set_false_color)
+> > > > > > > -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
+> > > > > > > -				    fbc, &intel_fbc_debugfs_false_color_fops);
+> > > > > > > +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
+> > > > > > > +					   fbc, &intel_fbc_debugfs_false_color_fops);
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
+> > > > > > > --
+> > > > > > > 2.34.1
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > >
+> > > > >
+> > > >
+> > >
+> > >
+> > >
+>
