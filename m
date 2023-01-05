@@ -2,142 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5175065F041
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BC565F045
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbjAEPig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S234503AbjAEPl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbjAEPiN (ORCPT
+        with ESMTP id S234385AbjAEPlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:38:13 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992724D70C;
-        Thu,  5 Jan 2023 07:38:12 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l26so26711128wme.5;
-        Thu, 05 Jan 2023 07:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JonkN/5yYHnucf2q3jhmBsrrdYdJsV4jujR0sLg/+OQ=;
-        b=lRWu5J2E6bTiOO97Xz7WyLNGbXxJXrHQpicJ5WYrI9O6zTbgogee3hF7N6/AQ7UeQj
-         c3mTqFK5DBYelb6mMNy4EhH/Qxa2sekzj5giEceLkjCrSJhOwZsF1D+dLgVvbnIcmZP2
-         Njy3iGUmW1fxm3+W2PYGsN/2Q5ZP7Jwioy25ZYrg1/+aAIyaK6NAsdr8eJ5SnZJwWdQ4
-         /8ciPe1FMvsN3j1thtnrvKfC0k8Dtpl1M0yOk49DZx/ma758j1XwR5FmJHl9bo4c4HkB
-         olyWtfD9p5hdhbNhJD/InlNXUFhkuMehtmPppzEyrepUV3J565x0be5uxDJkSts0IOxv
-         3P/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JonkN/5yYHnucf2q3jhmBsrrdYdJsV4jujR0sLg/+OQ=;
-        b=LD9qwEGdrF6bxBC7ydLWyLmWZoMeeY4VOnksUwKYlyXMVkCrplxvxNVXTSGCxRExZ3
-         KSTiphph6RS+6iitrHK0MAp4HeyYioa1G0CSx5Ms8Poqk48gIZkOL7VB6AoEdwYUzP/H
-         /kM2Qroykx/q3ZwgLBprMp39I5zaRSNusqvjUykOGXsKojuS4tM6cP8iPIIwbR4NPrE6
-         WoNdwZkqwbfiNNbptYUAyTyUW4VDTZB6LlSHd7MSM0nxVZeB/Wno8ZfCahfQMBAdsZ/g
-         kWFFBjQrSmZN9ldL7JnLyiCbwjRDEkhq0+7jxh9sWPDFGWCkD0crjh0rT36e9rVmhLHS
-         h0EA==
-X-Gm-Message-State: AFqh2kqx6yb/faYlR7gyzobjyL9W/n751ovcs260nRYicFzT8adZw1BD
-        iT2NIllD/U6FhZ4Ja8bz++w=
-X-Google-Smtp-Source: AMrXdXskES35BGhVDGhNRFrHW7Srev49jb9drqf1nYZ5w0pgiciJYQhEhWHVVLIIRYupFQrd8EPrpg==
-X-Received: by 2002:a05:600c:22ca:b0:3d1:ebdf:d586 with SMTP id 10-20020a05600c22ca00b003d1ebdfd586mr36666492wmg.29.1672933091073;
-        Thu, 05 Jan 2023 07:38:11 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.114])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05600c358300b003d1f2c3e571sm3152999wmq.33.2023.01.05.07.38.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 07:38:10 -0800 (PST)
-Message-ID: <7b3e4eaf-258f-bf5c-80f8-68d04d285235@gmail.com>
-Date:   Thu, 5 Jan 2023 17:38:08 +0200
+        Thu, 5 Jan 2023 10:41:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D954E415
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672933238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=+FVCCMhijBne0rvQztXHE47+6us6CT7mik+LadLbEec=;
+        b=EzdqAUPXz8S6wAWwC+Dkr4oeGicXMoC9NURAah388vlZMuGUSm9gQ4HVoKVWfp0EmfhYZC
+        Px+suwez2ryK9KIwqyZ3J0oP3MmMB3I4bRWYmUv5kWBwRDiJwvjbY5Agd/CX9FkKFbHYeH
+        hr3RZJjS4InFCMHyQdbZELDk80bLOxM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-CPCFpsjwNCGxRkh36jYHMw-1; Thu, 05 Jan 2023 10:40:34 -0500
+X-MC-Unique: CPCFpsjwNCGxRkh36jYHMw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4250E80234E;
+        Thu,  5 Jan 2023 15:40:34 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CF7E9492B06;
+        Thu,  5 Jan 2023 15:40:33 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 4A2904050E5BD; Thu,  5 Jan 2023 12:40:16 -0300 (-03)
+Date:   Thu, 5 Jan 2023 12:40:16 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH RFC] fs/buffer.c: update per-CPU bh_lru cache via RCU
+Message-ID: <Y7bvYG7Vn/gYVq1S@tpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
- RTL8821CS chipset
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     Chris Morgan <macroalpha82@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
- <20221227233020.284266-20-martin.blumenstingl@googlemail.com>
- <63b4b3e1.050a0220.791fb.767c@mx.google.com>
- <0acf173d-a425-dcca-ad2f-f0f0f13a9f5e@gmail.com>
- <20230105080142.GA15042@pengutronix.de>
-Content-Language: en-US
-From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <20230105080142.GA15042@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2023 10:01, Sascha Hauer wrote:
-> On Wed, Jan 04, 2023 at 09:59:35PM +0200, Bitterblue Smith wrote:
->> On 04/01/2023 01:01, Chris Morgan wrote:
->>> On Wed, Dec 28, 2022 at 12:30:20AM +0100, Martin Blumenstingl wrote:
->>>> Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
->>>> well as the existing RTL8821C chipset code.
->>>>
->>>
->>> Unfortunately, this doesn't work for me. I applied it on top of 6.2-rc2
->>> master and I get errors during probe (it appears the firmware never
->>> loads).
->>>
->>> Relevant dmesg logs are as follows:
->>>
->>> [    0.989545] mmc2: new high speed SDIO card at address 0001
->>> [    0.989993] rtw_8821cs mmc2:0001:1: Firmware version 24.8.0, H2C version 12
->>> [    1.005684] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x14): -110
->>> [    1.005737] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1080): -110
->>> [    1.005789] rtw_8821cs mmc2:0001:1: sdio write32 failed (0x11080): -110
->>> [    1.005840] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x3): -110
->>> [    1.005920] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x1103): -110
->>> [    1.005998] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x80): -110
->>> [    1.006078] rtw_8821cs mmc2:0001:1: sdio read32 failed (0x1700): -110
->>>
->>> The error of "sdio read32 failed (0x1700): -110" then repeats several
->>> hundred times, then I get this:
->>>
->>> [    1.066294] rtw_8821cs mmc2:0001:1: failed to download firmware
->>> [    1.066367] rtw_8821cs mmc2:0001:1: sdio read16 failed (0x80): -110
->>> [    1.066417] rtw_8821cs mmc2:0001:1: sdio read8 failed (0x100): -110
->>> [    1.066697] rtw_8821cs mmc2:0001:1: failed to setup chip efuse info
->>> [    1.066703] rtw_8821cs mmc2:0001:1: failed to setup chip information
->>> [    1.066839] rtw_8821cs: probe of mmc2:0001:1 failed with error -16
->>>
->>> The hardware I am using is an rtl8821cs that I can confirm was working
->>> with a previous driver.
->>>
->>> Thank you.
->>>
->> The USB-based RTL8811CU also doesn't work, with suspiciously similar
->> errors:
->>
->> Dec 25 21:43:37 home kernel: rtw_8821cu 1-2:1.0: Firmware version 24.11.0, H2C version 12
->> Dec 25 21:43:37 home kernel: rtw_8821cu 1-2:1.0 wlp0s20f0u2: renamed from wlan0
->> Dec 25 21:43:40 home kernel: rtw_8821cu 1-2:1.0: read register 0x5 failed with -110
-> 
-> Is this the very first register access or are there other register
-> accesses before that actually do work?
-> 
-> Sascha
-> 
-It's not the first register access. rtw_mac_power_switch() runs a few
-times before things fail.
+
+umount causes invalidate_bh_lrus which calls an IPI on each 
+CPU that has non empty per-CPU cache:
+
+	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
+
+This interrupts CPUs which might be executing code sensitive 
+to interferences.
+
+To avoid the IPI, free the per-CPU caches remotely via RCU.
+Two bh_lrus structures for each CPU are allocated: one is being
+used (assigned to per-CPU bh_lru pointer), and the other is
+being freed (or idle).
+
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+
+diff --git a/fs/buffer.c b/fs/buffer.c
+index d9c6d1fbb6dd..9f9ed7fffec8 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -1203,7 +1203,21 @@ struct bh_lru {
+ 	struct buffer_head *bhs[BH_LRU_SIZE];
+ };
+ 
+-static DEFINE_PER_CPU(struct bh_lru, bh_lrus) = {{ NULL }};
++
++/*
++ * Allocate two bh_lrus structures for each CPU. bh_lru points to the
++ * one that is currently in use, and the update path does
++ * (consider cpu->bh_lru = bh_lrus[0]).
++ *
++ * cpu->bh_lru = bh_lrus[1]
++ * synchronize_rcu()
++ * free bh's in bh_lrus[0]
++ */
++unsigned int bh_lru_idx;
++static DEFINE_PER_CPU(struct bh_lru, bh_lrus[2]) = {{{ NULL }}, {{NULL}}};
++static DEFINE_PER_CPU(struct bh_lru, *bh_lru);
++
++static DEFINE_MUTEX(bh_lru_invalidate_mutex);
+ 
+ #ifdef CONFIG_SMP
+ #define bh_lru_lock()	local_irq_disable()
+@@ -1245,16 +1259,19 @@ static void bh_lru_install(struct buffer_head *bh)
+ 		return;
+ 	}
+ 
+-	b = this_cpu_ptr(&bh_lrus);
++	rcu_read_lock();
++	b = rcu_dereference(per_cpu(bh_lru, smp_processor_id()));
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
+ 		swap(evictee, b->bhs[i]);
+ 		if (evictee == bh) {
++			rcu_read_unlock();
+ 			bh_lru_unlock();
+ 			return;
+ 		}
+ 	}
+ 
+ 	get_bh(bh);
++	rcu_read_unlock();
+ 	bh_lru_unlock();
+ 	brelse(evictee);
+ }
+@@ -1266,28 +1283,32 @@ static struct buffer_head *
+ lookup_bh_lru(struct block_device *bdev, sector_t block, unsigned size)
+ {
+ 	struct buffer_head *ret = NULL;
++	struct bh_lru *lru;
+ 	unsigned int i;
+ 
+ 	check_irqs_on();
+ 	bh_lru_lock();
++	rcu_read_lock();
++
++	lru = rcu_dereference(per_cpu(bh_lru, smp_processor_id()));
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
+-		struct buffer_head *bh = __this_cpu_read(bh_lrus.bhs[i]);
++		struct buffer_head *bh = lru->bhs[i];
+ 
+ 		if (bh && bh->b_blocknr == block && bh->b_bdev == bdev &&
+ 		    bh->b_size == size) {
+ 			if (i) {
+ 				while (i) {
+-					__this_cpu_write(bh_lrus.bhs[i],
+-						__this_cpu_read(bh_lrus.bhs[i - 1]));
++					lru->bhs[i] = lru->bhs[i - 1];
+ 					i--;
+ 				}
+-				__this_cpu_write(bh_lrus.bhs[0], bh);
++				lru->bhs[0] = bh;
+ 			}
+ 			get_bh(bh);
+ 			ret = bh;
+ 			break;
+ 		}
+ 	}
++	rcu_read_unlock();
+ 	bh_lru_unlock();
+ 	return ret;
+ }
+@@ -1381,35 +1402,56 @@ static void __invalidate_bh_lrus(struct bh_lru *b)
+ 		b->bhs[i] = NULL;
+ 	}
+ }
+-/*
+- * invalidate_bh_lrus() is called rarely - but not only at unmount.
+- * This doesn't race because it runs in each cpu either in irq
+- * or with preempt disabled.
+- */
+-static void invalidate_bh_lru(void *arg)
+-{
+-	struct bh_lru *b = &get_cpu_var(bh_lrus);
+-
+-	__invalidate_bh_lrus(b);
+-	put_cpu_var(bh_lrus);
+-}
+ 
+ bool has_bh_in_lru(int cpu, void *dummy)
+ {
+-	struct bh_lru *b = per_cpu_ptr(&bh_lrus, cpu);
++	struct bh_lru *b;
+ 	int i;
+-	
++
++	rcu_read_lock();
++	b = rcu_dereference(per_cpu(bh_lru, cpu));
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
+-		if (b->bhs[i])
++               if (b->bhs[i]) {
++			rcu_read_unlock();
+ 			return true;
++		}
+ 	}
+ 
++	rcu_read_unlock();
+ 	return false;
+ }
+ 
++/*
++ * invalidate_bh_lrus() is called rarely - but not only at unmount.
++ */
+ void invalidate_bh_lrus(void)
+ {
+-	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
++	int cpu, oidx, nidx;
++
++	mutex_lock(&bh_lru_invalidate_mutex);
++	oidx = bh_lru_idx;
++	bh_lru_idx++;
++	if (bh_lru_idx >= 2)
++		bh_lru_idx = 0;
++
++	nidx = bh_lru_idx;
++	/* Assign the per-CPU bh_lru pointer */
++	cpus_read_lock();
++	for_each_online_cpu(cpu)
++		rcu_assign_pointer(per_cpu(bh_lru, cpu), per_cpu_ptr(&bh_lrus[nidx], cpu));
++	cpus_read_unlock();
++	synchronize_rcu_expedited();
++
++	cpus_read_lock();
++	for_each_online_cpu(cpu) {
++		struct bh_lru *b = per_cpu_ptr(&bh_lrus[oidx], cpu);
++
++		bh_lru_lock();
++		__invalidate_bh_lrus(b);
++		bh_lru_unlock();
++	}
++	cpus_read_unlock();
++	mutex_unlock(&bh_lru_invalidate_mutex);
+ }
+ EXPORT_SYMBOL_GPL(invalidate_bh_lrus);
+ 
+@@ -1422,8 +1464,10 @@ void invalidate_bh_lrus_cpu(void)
+ 	struct bh_lru *b;
+ 
+ 	bh_lru_lock();
+-	b = this_cpu_ptr(&bh_lrus);
++	rcu_read_lock();
++	b = rcu_dereference(per_cpu(bh_lru, smp_processor_id()));
+ 	__invalidate_bh_lrus(b);
++	rcu_read_unlock();
+ 	bh_lru_unlock();
+ }
+ 
+@@ -2923,12 +2967,15 @@ EXPORT_SYMBOL(free_buffer_head);
+ static int buffer_exit_cpu_dead(unsigned int cpu)
+ {
+ 	int i;
+-	struct bh_lru *b = &per_cpu(bh_lrus, cpu);
++	struct bh_lru *b;
+ 
++	rcu_read_lock();
++	b = rcu_dereference(per_cpu(bh_lru, cpu));
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
+ 		brelse(b->bhs[i]);
+ 		b->bhs[i] = NULL;
+ 	}
++	rcu_read_unlock();
+ 	this_cpu_add(bh_accounting.nr, per_cpu(bh_accounting, cpu).nr);
+ 	per_cpu(bh_accounting, cpu).nr = 0;
+ 	return 0;
+@@ -3021,7 +3068,7 @@ EXPORT_SYMBOL(__bh_read_batch);
+ void __init buffer_init(void)
+ {
+ 	unsigned long nrpages;
+-	int ret;
++	int ret, cpu;
+ 
+ 	bh_cachep = kmem_cache_create("buffer_head",
+ 			sizeof(struct buffer_head), 0,
+@@ -3029,6 +3076,11 @@ void __init buffer_init(void)
+ 				SLAB_MEM_SPREAD),
+ 				NULL);
+ 
++	cpus_read_lock();
++	for_each_online_cpu(cpu)
++		per_cpu(bh_lru, cpu) = per_cpu_ptr(&bh_lrus[0], cpu);
++	cpus_read_unlock();
++
+ 	/*
+ 	 * Limit the bh occupancy to 10% of ZONE_NORMAL
+ 	 */
+
