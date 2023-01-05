@@ -2,156 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8957D65E928
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F0065E969
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjAEKlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S231725AbjAEKzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbjAEKkk (ORCPT
+        with ESMTP id S232963AbjAEKzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:40:40 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9CA50E76
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:39:23 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1617674pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2lIH75JPp0HO79B17hSan6J0r/4agwXblyvknowG4AU=;
-        b=heY3FrxSZswFxVIeQb2FO3fzRPQ/mMrv+iPYV5wYl5iHp6Yv4ToVPrLR8g1GM9HsaO
-         uXpy60Ya+K3J4OSoTDMDcichnWE/ppR6+NLfpODrr6CP9ehvpjSMsyFZdWQD0Xbs93YW
-         ckODKMWxd2D/Qi03KvC6Mv4jK7ohEVDOddWpg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2lIH75JPp0HO79B17hSan6J0r/4agwXblyvknowG4AU=;
-        b=KIjY/FeMeQtdIdIWQfFTRLkTIhne4Se+kBwFCo62/fbhPTJF0gQxb4NHpRM09ba5NP
-         FF6QWXERWatczqQxAiCOlpeF2p9CUciV4/Atqw9FgdzqvXInW2YDqxMvyqrt+hvYotmp
-         rzt1p/Fql4JK1XCHfJ+HXcHhelRKI2k4kftBGswfgY4wmNr2UADzkpMO4Bom5sos2MLv
-         6Bq9bqEKigp/XnMfm7btTy/onkvRc61pOGz6fV8U6Gf/GhuyVmhoRe1LQLCdkiHp8Xov
-         YaeL5aGdpyGZ6RNeWasprZhk1nQYJTBl1Qhh0jzB4RjJAyILzuOZKg5d5q7pzwGl31dD
-         kgNg==
-X-Gm-Message-State: AFqh2kpXFtCfwC/Zk6tiADWxLkWHJP4vCQ3OLWVs9hqvra9k5o6BFbCc
-        4Z25+8j5CuDjdqOIyFl5yWvGyGbGnqVNYfqTe94fYg==
-X-Google-Smtp-Source: AMrXdXug3Rv8MtWdCbuqoeAFsFZ4JzB428LPyU99P0UT4Pupd9+ETqirDhbIJL1dNfPKpTdH8fAcEMMGdHMTLN8LkJE=
-X-Received: by 2002:a17:902:b902:b0:190:e27b:b554 with SMTP id
- bf2-20020a170902b90200b00190e27bb554mr3098677plb.148.1672915161012; Thu, 05
- Jan 2023 02:39:21 -0800 (PST)
+        Thu, 5 Jan 2023 05:55:06 -0500
+X-Greylist: delayed 881 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 02:55:04 PST
+Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF995017E
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:55:04 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 889C375AA2D
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1672915221;
+        bh=HozEVKpsnPTz1W+OmWAJHb2nflwGQpHJX/pPziyjbkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=z8nnqsOPLAZ31pVTrEaSU8Vi1jwkux3kRJ9jir01BPlgH3Vm0rvu0GKLTqA8QcOvp
+         kLczG4JPQ06aIFlsEnPWzgHdo4KICmI9A0K7HrUsCBAfrXYX+XrUXZNvGHj/AcXF+p
+         bTvO3vB+RrFhkrZgRrmVTSG9wbJg55lN4Wsmg9nc=
+Received: from fx308 (localhost [127.0.0.1]) by fx308.security-mail.net
+ (Postfix) with ESMTP id 6DB4A75AF9C; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx308.security-mail.net (Postfix) with ESMTPS id 0F44375AB2B; Thu,  5 Jan
+ 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D52FF27E0373; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id B47A227E02E4; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ h9vZft-QceM0; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 5854D27E02AC; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <141b8.63b6a915.e31d.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B47A227E02E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672915220;
+ bh=rBdSTEj4sEHV5aOdgiMVbZa0c1+4vHmKGKt/utxqTFU=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=pKs+CePZ3R3W41fZHlmw/owOk940TBb9jGKa8X1N/B6at/r5t/99lcM7BYNSm1sbm
+ GgU4FIb/vUiDD0dGYY0QwPK6QJVEAcqdlcP4MzXTRQlqlJaTfeeQw469yNJ0IyFuvr
+ H4nRIuARzCz4d0RA5Dr/HYW0RULCkMt83j3YDunc=
+Date:   Thu, 5 Jan 2023 11:40:19 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-audit@redhat.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Message-ID: <20230105104019.GA7446@tellis.lin.mbt.kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
 MIME-Version: 1.0
-References: <Y7aGw/irynC61O85@ls3530> <CAKMK7uEnFBo_YfU8OTvMS8+YkoGS=vmpGQPMa9PKxGOB3pd7nA@mail.gmail.com>
- <ed7a65bb-f521-e5a5-85eb-0f24b023421b@gmx.de>
-In-Reply-To: <ed7a65bb-f521-e5a5-85eb-0f24b023421b@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 5 Jan 2023 11:39:09 +0100
-Message-ID: <CAKMK7uFXTsCrbn3JhnjgG-WfEZcdUELuCk98=4PEGF4VS0N+gQ@mail.gmail.com>
-Subject: Re: [GIT PULL] fbdev fixes for v6.2-rc3
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 at 11:31, Helge Deller <deller@gmx.de> wrote:
->
-> On 1/5/23 11:22, Daniel Vetter wrote:
-> > On Thu, 5 Jan 2023 at 09:14, Helge Deller <deller@gmx.de> wrote:
-> >>
-> >> Hi Linus,
-> >>
-> >> please pull the fbdev driver updates for 6.2-rc3, to receive
-> >> fixes for matroxfb, offb, omapfb and fbmem.
-> >>
-> >> Thanks,
-> >> Helge
-> >>
-> >> ----
-> >>
-> >> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> >>
-> >>    Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> >>
-> >> are available in the Git repository at:
-> >>
-> >>    http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.2-rc3
-> >>
-> >> for you to fetch changes up to 764043cccd7232a783753a612d628fc0cb7854be:
-> >>
-> >>    fbdev: omapfb: avoid stack overflow warning (2023-01-04 19:09:40 +0100)
-> >>
-> >> ----------------------------------------------------------------
-> >> fbdev updates for kernel 6.2-rc3:
-> >>
-> >> - Fix Matrox G200eW initialization failure
-> >> - Fix build failure of offb driver when built as module
-> >> - Optimize stack usage in omapfb
-> >> - Prevent use-after-free in fbmem
-> >>
-> >> ----------------------------------------------------------------
-> >> Arnd Bergmann (1):
-> >>        fbdev: omapfb: avoid stack overflow warning
-> >>
-> >> Hang Zhang (1):
-> >>        fbdev: fbmem: prevent potential use-after-free issues with console_lock()
-> >
-> > I looked at this, and even by fbdev locking standards this makes
-> > absolutely no sense to me. I think this should be dropped before we've
-> > reached some sort of conclusion on what is going on, or whether this
-> > is just pure static checker conjecture without fully understanding how
-> > this is supposed to work really.
-> > -Daniel
->
-> Sure.
->
-> I'll send a new pull request where this patch is dropped.
+Hi,
 
-Thanks a lot!
--Daniel
+On Wed, Jan 04, 2023 at 04:58:25PM +0100, Arnd Bergmann wrote:
+> On Tue, Jan 3, 2023, at 17:43, Yann Sionneau wrote:
+> > This patch series adds support for the kv3-1 CPU architecture of the kvx family
+> > found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+> >
+> > This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
+> > therefore this patch series cannot be merged into Linux for now.
+> >
+> > The goal is to have preliminary reviews and to fix problems early.
+> >
+> > The Kalray VLIW processor family (kvx) has the following features:
+> > * 32/64 bits execution mode
+> > * 6-issue VLIW architecture
+> > * 64 x 64bits general purpose registers
+> > * SIMD instructions
+> > * little-endian
+> > * deep learning co-processor
+> 
+> Thanks for posting these, I had been wondering about the
+> state of the port. Overall this looks really nice, I can
+> see that you and the team have looked at other ports
+> and generally made the right decisions.
 
+Thank you and all for the reviews. We are currently going
+through every remarks and we are trying to do our best to
+send a new patch series with everything addressed.
+
+> I commented on the syscall patch directly, I think it's
+> important to stop using the deprecated syscalls as soon
+> as possible to avoid having dependencies in too many
+> libc binaries. Almost everything else can be changed
+> easily as you get closer to upstream inclusion.
+> 
+> I did not receive most of the other patches as I'm
+> not subscribed to all the mainline lists. For future 
+> submissions, can you add the linux-arch list to Cc for
+> all patches?
+
+We misused get_maintainers.pl, running it on each patch instead
+of using it on the whole series. next time every one will be in
+copy of every patch in the series and including linux-arch.
+
+> Reading the rest of the series through lore.kernel.org,
+> most of the comments I have are for improvements that
+> you may find valuable rather than serious mistakes:
+> 
+> - the {copy_to,copy_from,clear}_user functions are
+>   well worth optimizing better than the byte-at-a-time
+>   version you have, even just a C version built around
+>   your __get_user/__put_user inline asm should help, and
+>   could be added to lib/usercopy.c.
+
+right, we are using memcpy for {copy_to,copy_from}_user_page
+which has a simple optimized version introduced in
+(kvx: Add some library functions).
+I wonder if it is possible to do the same for copy_*_user functions.
+
+> - The __raw_{read,write}{b,w,l,q} helpers should
+>   normally be defined as inline asm instead of
+>   volatile pointer dereferences, I've seen cases where
+>   the compiler ends up splitting the access or does
+>   other things you may not want on MMIO areas.
 >
-> Thanks!
-> Helge
+> - I would recomment implementing HAVE_ARCH_VMAP_STACK
+>   as well as IRQ stacks, both of these help to
+>   avoid data corruption from stack overflow that you
+>   will eventually run into.
+> 
+> - You use qspinlock as the only available spinlock
+>   implementation, but only support running on a
+>   single cluster of 16 cores. It may help to use
+>   the generic ticket spinlock instead, or leave it
+>   as a Kconfig option, in particular since you only
+>   have the emulated xchg16() atomic for qspinlock.
+> 
+> - Your defconfig file enables CONFIG_EMBEDDED, which
+>   in turn enables CONFIG_EXPERT. This is probably
+>   not what you want, so better turn off both of these.
+> 
+> - The GENERIC_CALIBRATE_DELAY should not be necessary
+>   since you have a get_cycles() based delay loop.
+>   Just set loops_per_jiffy to the correct value based
+>   on the frequency of the cycle counter, to save
+>   a little time during boot and get a more accurate
+>   delay loop.
 >
->
-> >
-> >> Paul Menzel (1):
-> >>        fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
-> >>
-> >> Randy Dunlap (1):
-> >>        fbdev: make offb driver tristate
-> >>
-> >> Xu Panda (2):
-> >>        fbdev: omapfb: use strscpy() to instead of strncpy()
-> >>        fbdev: atyfb: use strscpy() to instead of strncpy()
-> >>
-> >>   drivers/video/fbdev/Kconfig                |  4 ++--
-> >>   drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
-> >>   drivers/video/fbdev/core/fbmem.c           |  2 ++
-> >>   drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
-> >>   drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
-> >>   drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++----------
-> >>   6 files changed, 27 insertions(+), 19 deletions(-)
-> >
-> >
-> >
->
+Ack !
+
+   Jules
 
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+
+
