@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DC565EDBB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F5C65EDC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjAENr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S233880AbjAENsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjAENrJ (ORCPT
+        with ESMTP id S233426AbjAENrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:47:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA583F13B;
-        Thu,  5 Jan 2023 05:47:06 -0800 (PST)
+        Thu, 5 Jan 2023 08:47:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABB340863;
+        Thu,  5 Jan 2023 05:47:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A455B81AD7;
-        Thu,  5 Jan 2023 13:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15C1C433F0;
-        Thu,  5 Jan 2023 13:47:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47C9461A8A;
+        Thu,  5 Jan 2023 13:47:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3F5C433EF;
+        Thu,  5 Jan 2023 13:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926424;
-        bh=Yiulr7Sl0+EFOJK9Ppots4MUfhCrrD1tUceLFrFQBAw=;
+        s=k20201202; t=1672926426;
+        bh=kCdt9zcWy5Z7iBU2hEYAS5q9hfAuSycaoJsMghPPkTU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Au29traIASfq9dNyl8+ZbpOYCSGvTUHA36hQmRXoeSdhcuZNHgxROKVUPJcimuE1n
-         wTEbQgbBcTh9IKa30BBGzEEizNTCmerQLas4A01ekpZ58esEAO/+Rde/Vg27XOVo9b
-         bZNnVdGZ93ajq5l4ODUBGX0WnM68txXrJsYBDAwyEidQ9mf8CIKrOVXYFYQWaPEn+O
-         SZjSn6y6w3oUdaUw+CnGpaDlHsnD5C4XYBSugOjNdoXwB2Q3c/7/PEbf9fq/02yvJT
-         D7aT/kVmyHHz6NK7VOyLFzbHEYox6ou3pPktli0m8tKNR2Nmx/a9L3hF3PeLfot47M
-         iz0s6LCgloHbQ==
+        b=s/Uq82a7wjGYOlAB2yEoZCR0RZ5zMqdRv7BhzgrX55PC+FXvDjhN/2+qUsOui/X/J
+         FxhNSex0pPlmit+fN6Q+ZQzpwS8RzmxCKaw2qJmR5NjPulnR3paSfT+4efe/5nNkgq
+         93sx1WUAdy0epj5JNt14gmBLLdbARS003W/ePPDxzCEZtWEfulLkx/Nub+0iq3sIRR
+         uKrX7oihiV2b5KWAIJ+QP93WkCdDcTS1a8CMVzIdOwkByqCgUupeTrSZ67DpEosa3i
+         S1SxlNCTWeBpN2DRtxfIWBlfGdxPVHrsgdy4xG1/cdYj9uioLx1Bpv76xXEy4N/E4r
+         48Ku0/y/pmy0Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org
-Subject: [PATCH 08/27] ata: remove palmld pata driver
-Date:   Thu,  5 Jan 2023 14:46:03 +0100
-Message-Id: <20230105134622.254560-9-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org
+Subject: [PATCH 09/27] backlight: remove pxa tosa support
+Date:   Thu,  5 Jan 2023 14:46:04 +0100
+Message-Id: <20230105134622.254560-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -61,62 +59,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The PXA palmld machine was removed, so the pata driver is no
-longer used and can be removed. There is a chance that some of
-this code might be useful for turning some of the other PXA
-PCMCIA host drivers into PATA drivers, but it's clear that
-it would not work unmodified, and it seems unlikely that
-someone would do this work.
+The PXA tosa machine was removed, so this backlight driver is no
+longer needed.
 
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Marek Vasut <marek.vasut@gmail.com>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-ide@vger.kernel.org
+Cc: Lee Jones <lee@kernel.org>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Jingoo Han <jingoohan1@gmail.com>
+Cc: linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/ata/Kconfig       |   9 ---
- drivers/ata/Makefile      |   1 -
- drivers/ata/pata_palmld.c | 137 --------------------------------------
- 3 files changed, 147 deletions(-)
- delete mode 100644 drivers/ata/pata_palmld.c
+ drivers/video/backlight/Kconfig    |  14 --
+ drivers/video/backlight/Makefile   |   2 -
+ drivers/video/backlight/tosa_bl.c  | 172 -----------------
+ drivers/video/backlight/tosa_bl.h  |   8 -
+ drivers/video/backlight/tosa_lcd.c | 284 -----------------------------
+ 5 files changed, 480 deletions(-)
+ delete mode 100644 drivers/video/backlight/tosa_bl.c
+ delete mode 100644 drivers/video/backlight/tosa_bl.h
+ delete mode 100644 drivers/video/backlight/tosa_lcd.c
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index e4d9e39b08dd..4aafb75bf0c3 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1082,15 +1082,6 @@ config PATA_OPTI
+diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+index 936ba1e4d35e..01804847c39f 100644
+--- a/drivers/video/backlight/Kconfig
++++ b/drivers/video/backlight/Kconfig
+@@ -90,13 +90,6 @@ config LCD_PLATFORM
+ 	  This driver provides a platform-device registered LCD power
+ 	  control interface.
  
- 	  If unsure, say N.
- 
--config PATA_PALMLD
--	tristate "Palm LifeDrive PATA support"
--	depends on MACH_PALMLD
+-config LCD_TOSA
+-	tristate "Sharp SL-6000 LCD Driver"
+-	depends on I2C && SPI && MACH_TOSA
 -	help
--	  This option enables support for Palm LifeDrive's internal ATA
--	  port via the new ATA layer.
+-	  If you have an Sharp SL-6000 Zaurus say Y to enable a driver
+-	  for its LCD.
 -
--	  If unsure, say N.
+ config LCD_HP700
+ 	tristate "HP Jornada 700 series LCD Driver"
+ 	depends on SA1100_JORNADA720_SSP && !PREEMPTION
+@@ -288,13 +281,6 @@ config BACKLIGHT_APPLE
+ 	  If you have an Intel-based Apple say Y to enable a driver for its
+ 	  backlight.
+ 
+-config BACKLIGHT_TOSA
+-	tristate "Sharp SL-6000 Backlight Driver"
+-	depends on I2C && MACH_TOSA && LCD_TOSA
+-	help
+-	  If you have an Sharp SL-6000 Zaurus say Y to enable a driver
+-	  for its backlight
 -
- config PATA_PCMCIA
- 	tristate "PCMCIA PATA support"
- 	depends on PCMCIA
-diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
-index 0a863e7f3c60..4ee5c0761d90 100644
---- a/drivers/ata/Makefile
-+++ b/drivers/ata/Makefile
-@@ -105,7 +105,6 @@ obj-$(CONFIG_PATA_MPIIX)	+= pata_mpiix.o
- obj-$(CONFIG_PATA_NS87410)	+= pata_ns87410.o
- obj-$(CONFIG_PATA_OPTI)		+= pata_opti.o
- obj-$(CONFIG_PATA_PCMCIA)	+= pata_pcmcia.o
--obj-$(CONFIG_PATA_PALMLD)	+= pata_palmld.o
- obj-$(CONFIG_PATA_PLATFORM)	+= pata_platform.o
- obj-$(CONFIG_PATA_OF_PLATFORM)	+= pata_of_platform.o
- obj-$(CONFIG_PATA_RB532)	+= pata_rb532_cf.o
-diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
+ config BACKLIGHT_QCOM_WLED
+ 	tristate "Qualcomm PMIC WLED Driver"
+ 	select REGMAP
+diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
+index e815f3f1deff..2a9126dbfe79 100644
+--- a/drivers/video/backlight/Makefile
++++ b/drivers/video/backlight/Makefile
+@@ -15,7 +15,6 @@ obj-$(CONFIG_LCD_LTV350QV)		+= ltv350qv.o
+ obj-$(CONFIG_LCD_OTM3225A)		+= otm3225a.o
+ obj-$(CONFIG_LCD_PLATFORM)		+= platform_lcd.o
+ obj-$(CONFIG_LCD_TDO24M)		+= tdo24m.o
+-obj-$(CONFIG_LCD_TOSA)			+= tosa_lcd.o
+ obj-$(CONFIG_LCD_VGG2432A4)		+= vgg2432a4.o
+ 
+ obj-$(CONFIG_BACKLIGHT_88PM860X)	+= 88pm860x_bl.o
+@@ -53,7 +52,6 @@ obj-$(CONFIG_BACKLIGHT_QCOM_WLED)	+= qcom-wled.o
+ obj-$(CONFIG_BACKLIGHT_RT4831)		+= rt4831-backlight.o
+ obj-$(CONFIG_BACKLIGHT_SAHARA)		+= kb3886_bl.o
+ obj-$(CONFIG_BACKLIGHT_SKY81452)	+= sky81452-backlight.o
+-obj-$(CONFIG_BACKLIGHT_TOSA)		+= tosa_bl.o
+ obj-$(CONFIG_BACKLIGHT_TPS65217)	+= tps65217_bl.o
+ obj-$(CONFIG_BACKLIGHT_WM831X)		+= wm831x_bl.o
+ obj-$(CONFIG_BACKLIGHT_ARCXCNN) 	+= arcxcnn_bl.o
+diff --git a/drivers/video/backlight/tosa_bl.c b/drivers/video/backlight/tosa_bl.c
 deleted file mode 100644
-index 51caa2a427dd..000000000000
+index 77b71f6c19b5..000000000000
+diff --git a/drivers/video/backlight/tosa_bl.h b/drivers/video/backlight/tosa_bl.h
+deleted file mode 100644
+index 589e17e6fdb2..000000000000
+diff --git a/drivers/video/backlight/tosa_lcd.c b/drivers/video/backlight/tosa_lcd.c
+deleted file mode 100644
+index 23d6c6bf0f54..000000000000
 -- 
 2.39.0
 
