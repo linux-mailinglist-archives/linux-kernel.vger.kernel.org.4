@@ -2,251 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FB865F5FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A7165F606
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235697AbjAEVng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S235636AbjAEVo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbjAEVn1 (ORCPT
+        with ESMTP id S235902AbjAEVo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:43:27 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B47671BF;
-        Thu,  5 Jan 2023 13:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672955006; x=1704491006;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=kNWeLbszZ6k6RG/8RR7RNJzsDbL2QMpJw9JtfcKB4Xo=;
-  b=L8V5VB6ZkolhBp7EZP7soXTlUmIxx0BelDPdWhfQs7dUcEoJyWbgCmmL
-   hZc8sWnCTkVbYsJqCyo1tQTHNC+NspBKT0jzrb5ZohtRUSCGL32tdkLFx
-   GfFOszh2zvE8dczw0BwU/A5O3Y/j4dZN1ndq68lC58SxNV2CcsFjKfO5r
-   Y1BV8BhMlSzN/5BEVCGinjVpRa8qDDa7jeD0fU2q75vket2YAz6Xenryx
-   BXIIVFYWAGWJ3kXa+64DbLLzmV0bas+OaH+rv2/Cy6hGPyofbpcMhADq/
-   C8rT+aqliRrpgZ4nsiCYWldvidnmAF2J2D+AP1y9PJU3urdDLIT29xxXG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="321041541"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="321041541"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:43:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="798062788"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="798062788"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jan 2023 13:43:26 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 13:43:26 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 13:43:25 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 13:43:25 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 5 Jan 2023 13:43:25 -0800
+        Thu, 5 Jan 2023 16:44:26 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54EE676C7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:44:24 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iBxG+2WPrSm4AGuHG+vo51cb5erFCH50mvEB1AH4GM4xGm3IX1QMn+9L2wrGtvipKlq4EFT00jGPcx4U6Qb6oUKIGI4T3HTa74OxzDBtfLAiSfanflF/B3iAeDnYPRsFW1mnjUCqnVcsOrNCbtV18UGg49eRSnTAYwGgu6P1AMKNEcSQMjlOZyp/weN6h0esKZP8fzh/5EiIDcUU2Sxl5vMoPhIjCLZx42ZncIEEOMt3yJ8TqmkTS3FE1xmVFac+ZGGgPPoHMB9zmhy/Jk5Izf2c1EfzDL4ZBukGs60XaV8BweqHLLVjgDi8SBMDnH+JuKfPmC3Hnhi+PO8en0PvWw==
+ b=DI5sJwG8l+HdKXKpfRkAGRrFK0uH6gQ0V1LNtxUib+sKXdW3zzZas9f5yA6uRdWwGsNmAvDIdiOjk2Xk4hMzoXBhrcFxWk0HqLzcNy40b5pbYkE4RfhVGog/1lSPSqYICtl9X5aqAyNWBKXPsbvStDN0iTqWbGgljlfPOjDhoDsnWI16Qx3yRtNpvvYZUhCRtCOuMcpYiCSIzqJ0bzNog9tLVOTVAYb7HyxL4RME0hVu0gVQOr8HqtJzWIWs1uFHhzKAAt6E/aEvtAhUAFpbHYV5LeyhgzP3+CCMQRVslbK4lpiBzjjjmNLHvADBc/qbKlzKBb7fosgxw8qzzVOdsw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pOssdlGM/ak1uXGICRrSPvM4/s6B6ZA7Z7vx0zvwVsk=;
- b=Jz6Yiv+UxV/OJ2WBMUaqf3SytJz81VFxw61m5GE60dsWOZ9mTDd/1w9n6J1yF7AH0oIynu39i2jDm85ifBuED4aolZU1UB+smtML3FhMIFUdN5Kyk+kOJXxQxkUSgS9+17pzTf5M92Y5KLWqhyX2KICgWaUl9LYNo/8+58b1JqRc2z2EeN0CC8bwuuVv3ej7yavfSfylBXRpDnibRCKTC0k7vePMAcohLOOqhL1+XU3hdY5jrHIVdl533qTTAks4hYaEIv4mTsMdTaGq/KM2FlhxKwq904719UWzLR+Lf8aTJVqou443GkI7/haobdzvqd7cKxdwGd0rX4fx66NS8A==
+ bh=9G6gc9MV4XqcYJFit0uXK/zIPREaR1Ngqad22v/NZM0=;
+ b=TsUqJv0TTO1lMsM3Ek/mNP+m7u70tbzJjs8KRzKyANse2YPrqyxkac0smAwTrmp2Lm7mc6kZXKQ12Mv10SHAQe/L/tWHB9kpQEFDDieZfrdTuYRQE+aRLRwTcg4Img6Wr9u9RwJl0rmbTbnOfza9tfzVaHQbrySHnE1AXg+OMcSQUtMQVjImk41Hc5GCgZ+i/nPoO40JE3NeQOIE7bcJOsb/Kva/wVG/kKxQe7CJ/pIcUPPLQAdcpQHElLzpwmv/ITJZ32gIExgANE2tsklr00XI1F0KuGC8TB0GBcGgg2vdUs1/zHA+pcKtYPZt6k9RcfsaKHCBuGp07HtAZhImgA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9G6gc9MV4XqcYJFit0uXK/zIPREaR1Ngqad22v/NZM0=;
+ b=3As7RyN5q4lExC1TW1gvFGc9B3urCVBi6gRr5htNVk0iCfjsaP0FE7wUPtqd0GEIJViWTNrP1dNwibzIeAOfIjFVci0Qbaas6iQggKy1uxaUOzOBDjia+hPx5Gz00RO7F5yyve5a2kzUDta1DxppYXMVSPGt9vcU9llc5iTCAek=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by IA1PR11MB8151.namprd11.prod.outlook.com
- (2603:10b6:208:44d::18) with Microsoft SMTP Server (version=TLS1_2,
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by PH8PR12MB6674.namprd12.prod.outlook.com (2603:10b6:510:1c1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 21:43:23 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd%5]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 21:43:23 +0000
-Date:   Thu, 5 Jan 2023 13:43:20 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <63b7447883c75_51741294e5@dwillia2-xfh.jf.intel.com.notmuch>
-References: <63b73f24c1a_517412943a@dwillia2-xfh.jf.intel.com.notmuch>
- <20230105213541.GA1171476@bhelgaas>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230105213541.GA1171476@bhelgaas>
-X-ClientProxiedBy: SJ0PR13CA0199.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::24) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ 2023 21:44:21 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 21:44:21 +0000
+Message-ID: <0ff6e8f7-5dd4-a81f-9328-9e6d87837439@amd.com>
+Date:   Thu, 5 Jan 2023 16:44:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] drm/amd/display: fix PSR-SU/DSC interoperability
+ support
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        David Zhang <dingchen.zhang@amd.com>,
+        Po Ting Chen <robin.chen@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Shirish S <shirish.s@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Robin Chen <po-tchen@amd.com>,
+        Camille Cho <Camille.Cho@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230105203353.378805-1-hamza.mahfooz@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230105203353.378805-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0047.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2e::16) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|IA1PR11MB8151:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0d36546-0fc1-47cb-2455-08daef65de99
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH8PR12MB6674:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1864c02-3c3d-4818-6382-08daef660132
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NgWgJhyTQPb01QyEhCgpuT4/asPpsC9D6l1saMkTsEeOdoTrDpdUaZUAAfBhChNd9sGmhSLgIcH3fXqymmgz82xxrVOHMg+vSnEowDu15Bm5AqIULbQ/aYeVd1xjTMITtSGMpAIHxENBgIOJ+1GwKbHvlgp3x+RY2A55NT5m+bD3n/+4bgRcpMPDXG+Tk2qyKAutDE+larf8pgTZHOttM7JEaCk0CGDAXdeuO6I9ZSyuNyVB1vG0bu/FP14pK3peQFBTMNDzElfw2dLx051mo53IUcoWV2B5VuxNr77aY3qRUrQCDpX51y9STYZjE5Nw0hAZAK91NrBhNaeDUyFOhTZll76PyTi8zmkjebbs9OV4IGz7G+ArXECYpjRKX2IiPCTBo9P6z0N9EpfPcbkdYZqc0AGSDBEyw8EzBjVsY0ZuULOyFJMUnCUPijtE0IgkJiD6BE90byhI+Lrbxthu3/3ZpuqsHx2f4d3AQuBIOPi3yTdO3IHXWc1sBbg+Oug34rgyVr3pFv9HdlDX25w8g3c4e/PiP+njeTlsMmHD90oAKxPXj+jjZDa8AzxLpNWRvaJ9jlEKghg4ndQBQxcLYqiCdgjD8DN+GJbXi4edvOXz21x8iZpjdvDy5tz2CLXErO0bA7u0VfTU9wgOGhwYMOO3ZYNYJmI0ujrzUQZ7UJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(5660300002)(2906002)(8676002)(7416002)(966005)(4326008)(41300700001)(8936002)(316002)(66476007)(66946007)(54906003)(110136005)(478600001)(66556008)(6486002)(186003)(9686003)(6512007)(26005)(6506007)(83380400001)(38100700002)(82960400001)(86362001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: Vk8umV4N4dOo1Ra+88es32k6Y+HM7WfVuS2z2zz/in9S3aI854Z7Rl9/4ViHhKW3PQdt571hJjgSpKwZZw8+9/r8hwr4MGv6Jasj+yVnNbmSPNrCEr65fJuPbXUZPUDvwOKT8Hk6lOZQR0pgLW+vdJlTPoFkiYJphQ26FvFJIQjeiapMZI/QumTPmD1B90Uhlfwo+sDRGc5AbVeumcNlUVWPcUvLCRgCyiYoLmRrMoNnl0ITxKg4xkNWERlbIOJhoBhxmGPZi0s31eY5D6uFLk77uOVRYx1BSRtWJocR7Xx85zEWE73kDA5ksOGzLt+7mIe0zEi0c0FXotoXluvLjBSCcz5aWgZZ6uk/eD1YX7tVUDxUr+3Z4taVunRvICRORjLL9KCI7RzHMOvidNnQHKmUGTPdl1vEsoWBgpv8ghLoJzTG/2f3LolOzalyRBxEAtaP+9H1L9A3xp+VVEYiNJnxAsVLG5gbP8mjuF4IGdvxQq/4zWYW0BHkCFDNJsCk23BZHSbu/TJ28Kjo3pIu53FBlDBPN3FsE+TCQJ1L+8HdSkpxXAP6Mx1OKWh7mQ8vCDqxouUWqR+NrHUnRz43SypCrArSRCeKlf8uW9bRMhoocpbGKBT/r/hXz/ASrkx6yWZdpEaBjhu4pXsfslhQx1booFL7E9qdGYotTLnJll17aHQ9suMbVftAs7BBTqRgEk8V4jcuzxIbdKoqOspLv0e1XhOMgRGAslpKsUUkXc0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(136003)(376002)(39860400002)(346002)(451199015)(26005)(2616005)(6666004)(6512007)(186003)(8936002)(6506007)(53546011)(478600001)(6486002)(66476007)(41300700001)(66556008)(83380400001)(4326008)(8676002)(66946007)(5660300002)(2906002)(44832011)(31686004)(38100700002)(31696002)(86362001)(54906003)(36756003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6/vpgrx4wsDqXc0AME4tprkly6BEydwl67GfZh4KR4LppaNq4iOG/KnQ5Ytf?=
- =?us-ascii?Q?ibiAtkl3lNXGQkAsLerJFPeVvBSFahdK33ymGEtH8OfzYUTkfy9ObQM+LyQV?=
- =?us-ascii?Q?1oDPmCO9E7yh8Wz/Xz1dBxfxqc5lczivVLyB3tlKqEa6NXNrs4B/qFH1evR9?=
- =?us-ascii?Q?4+3ff7uImNKP5sa91DM6AKYXrseVD4l8Er5hZYqXULxij+/nKZY/UQsDEXkN?=
- =?us-ascii?Q?eD7AIHXpxJnHhBraNQMCwhU2c8rpm+B5DMNwhLFugflf3k4j5oCEMRuLlKUA?=
- =?us-ascii?Q?4Bx3dR/d+5OHjbbjBNpc5Uo8IWqah65cAf1eSOkMsgaoQeIQJueSrKNqfCnQ?=
- =?us-ascii?Q?cXLLChJxAsHw4YgFCHQP3DkrVVUwxnN8JFIfzenVXNEPAHTkVWR6G3xqwZVO?=
- =?us-ascii?Q?eTvn8n4a2cSGETFxrJ2HpRDXVFxJy1EfnzCZUIZn7lp+AcmsRvFBAdAHY91X?=
- =?us-ascii?Q?5tZ1MU3K1oxaBlJ0lcfV2AAn9aln3+svj4fq9eMeoZjl7776IZbPEgsTwiGl?=
- =?us-ascii?Q?/0XINFjNM1vtwZH63wPGQXeTkEz+TYr/MhvZRrAqi6BkBs2ctjZfn6atUNXY?=
- =?us-ascii?Q?6MRDKfsbuMiTeSt88eOy8sLTF4LSWZB2efEF0EG0At6HrlBT3GOebou7JVRb?=
- =?us-ascii?Q?nGfJ5mgGvw+tyFIGExcZ8RXPc+N8IegUMaskMtsuhJZVjpSUZcpCstmC3Yxy?=
- =?us-ascii?Q?HwGzw9Gfd6Yua1jS9VNlI0IxTxhyJSU3KrHKki0m7YmfUVeabBiwmA1oks7O?=
- =?us-ascii?Q?6t8HalaWbi9H/7F4QpZRUU3sjia4VP3xhVPVlPpgREoqr0KcaZ8RWxciiTgC?=
- =?us-ascii?Q?0TzL5AVkJ4DbbCy8obh5gTy9wYOApBTtpVfSNlox5tZGGKqzQ8Hh4xdCI9wu?=
- =?us-ascii?Q?5RHQlIHQIP7MixDwbvF7srEt04GEdxBnXScemQPuMER9/rI/S9plUFZ6mCKq?=
- =?us-ascii?Q?mZVJLtnieaZzkGHvVcItGkE4gZ+cmRHk3YGDL/M7tO8ll7LrA6/n1PsLkaOK?=
- =?us-ascii?Q?QvLFGVxPHCY3rMS0dmOTtstMFPyot3M+gjRSnqbevWXqPq+OudihL3nW4F11?=
- =?us-ascii?Q?18ef0kJgLRD8jt3/aFNiHTz38pMMdC6AxQ8wv8Fpi1XSTiLGg+enY1HB8+PI?=
- =?us-ascii?Q?YpovKf9EhxHuKBDN41d47Sz5g8xUYSsDj9P/y0FUGELFbAaxdsemuCtp8eqO?=
- =?us-ascii?Q?T1hxZyCGHlbe0FvIZ0eAAo+jtWZhhXJWEoAm66t12SBIbDWmGxl3oxgVLh3g?=
- =?us-ascii?Q?/9B9ChqP0nQG8q76QImIVjNBNbwPPHhrOHt6lqyTrSVhoFCMqhPu+r59llgM?=
- =?us-ascii?Q?PPYLPvbysPAizkGpr+JKBuLMe6WTUwVUsa7ki0OfL6lPnlQSTaYdeB24BEDn?=
- =?us-ascii?Q?baEE+2YnZJRjT+/VKPXI3FZDDghNXFjX2Dkx41VYfVO73cCHyzXSVXXq9WTp?=
- =?us-ascii?Q?mpDzkv3+amYZ6yBgsJmehJp+s3cyVuWRxZuMYRCGJEj65tHZjRlPhOvCmG33?=
- =?us-ascii?Q?lp0kVPgPiZ673V/BSUW4wgFjSRu5r7ejE4blu55fjHRNCQSTf8CyUM5FXLb7?=
- =?us-ascii?Q?YdfFZpDUyUTCc5fZV/jztaiqYlmZ0E2KNTMyuF15pjq2O88eszBUkeiDTTAT?=
- =?us-ascii?Q?jQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0d36546-0fc1-47cb-2455-08daef65de99
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2g2UmVvR1ltcGpwQUZ4d3NLMy9VUU41ZmtjMk05MTdPL0d0SDFLUThyQXl2?=
+ =?utf-8?B?ZHZvbjJPWU1VNFpWZnVycFF1VkFIRjZWT2IzVEdvWE5qcitGdzlZVytDcWNh?=
+ =?utf-8?B?RlRBdmdTdUdQNUVlbEExQW92eml2THNLRllmQzdIdWQ5alJQK1hobXN5d0VC?=
+ =?utf-8?B?Y3RUdnpCc00rNk9lQTc2dHczYXFtZXJkb2RUSk1xU0hiVlVVUXNBci8zdEU2?=
+ =?utf-8?B?bklZWXFWLzJxQzZGdFVHNXFQTWs1RnNOYmNGMFhWYU5VK2pWR3hrejJTKzNr?=
+ =?utf-8?B?Ujh1d2ZBcFNRck05bkNuV2l1c2VEK2NWYTZHbnFBanJRL1AzamhrLzN1ZzZM?=
+ =?utf-8?B?Skd1SVRnajY2VkJ2ejJRb1JOU2NZc1BVMnl2WHBJdEZtQ0crN1dHWFVETzVE?=
+ =?utf-8?B?azZaZVpod0diZGxoNmNta0ttUG93MjRmWmVZV0lhOWpDVDZYMHJ4VXBzVlpY?=
+ =?utf-8?B?cmJkRkN2K1daRWI5a3lDblV1YjRjQjBROE50WkEvSlNXS280N2dKL0ZEM1lr?=
+ =?utf-8?B?akVUNUtQTjFKVjVBcFRYVU1aVzVycmtzbmpQNDAxSnc0SUp5NnZ6cG9VNGUv?=
+ =?utf-8?B?RndyVitRejhndlp5QWlDT0JBY3VNOC82dXpEbVlUUzZIc3pZUTM2aktRNjlZ?=
+ =?utf-8?B?S0dNM1dtZW5OdmN5dUsyakozZjhzWmJiSjYxbG8vU2wwd1lTWkZHSkcxYWl1?=
+ =?utf-8?B?R1dmUVppdmRvMTArcVlaUDQrVDRaTWdHa2xiUHMyMkxZLzBvU29GSDloOVRD?=
+ =?utf-8?B?NUpBTXBlMVczbWdvdTVydEIrWVZqM2dReUk5ejFtVVRzK2FhdEJhdEFPMVli?=
+ =?utf-8?B?WWcyaGxaSlBadnRiNXJVYlVYTFpoMXBkT2pzc2pRWlFmNzludTZESVc4U1Fx?=
+ =?utf-8?B?T090SG1kdTBhUHBVR0p0bXRFWW5yRllIRnMrT2pJb0kyVTZ4VEs1V3lsV2w3?=
+ =?utf-8?B?NGZHYUlqTW9yTXZRdGFPUXpERFhqQ2dLUWVkL1kvMkNkU0xiTXkwaXRLWWhB?=
+ =?utf-8?B?eStLMWwzbk1BdVQ4OWFBK2hRSUNEVEErNGtKNTlyek1OOTJuMVZUc2JRUCtu?=
+ =?utf-8?B?Q05HN2h0a2ZTZzdWano0eG1IUmp3bzBzWWFRVXZsYnh3VnM4OVFINzZVb3kw?=
+ =?utf-8?B?ZjNPOTlqT0hqcldXSGswbStOZnJUUmRrQ3BGbEdYY3BkRTFEa0ZIRFp4S2lP?=
+ =?utf-8?B?M2QyRldhTHJRWm03M1IyWmcyYml1YVhIU3BHb1EwL1JLOUZSRDliNUUxTjBJ?=
+ =?utf-8?B?R3F2cm00QWFJWDJoK1AwbS9uWVFscENQZU04MGNLeEp2b09aWjkrbEl6RGhk?=
+ =?utf-8?B?elM1bkFkcjc0L1BYaFZCMk9JVFRaelgxV0VlUzJWQUlNVmlzZ0JDNzhwTzMx?=
+ =?utf-8?B?ZWJWL256M0h3Qk56OTNrNmxqcnFMbFQ0MjgyZXZVNU9jVW9kaDBrd012eWsy?=
+ =?utf-8?B?dTVmVjJNZUpLd29YaytrWmNHbmxwaTlkSWVpRjZwYlBSQmlWeWJFdy8rbWFv?=
+ =?utf-8?B?SHAyUTRNeHlCN3FmMkdZRHRKRjcwdHZOSEVTeU5MK0tDVU9OalEwNFlBaGxl?=
+ =?utf-8?B?QzREK09FMTVRSmJyVmY5U1paUFlvZEdpQkVlUW9hMkhpQ2w3a3c4NTg5L1Vu?=
+ =?utf-8?B?WWN2YlZBL3hNVENvYmJFek5nVnQwOThMb0twK2l3SEVLaVBnRXJNRHB5T01H?=
+ =?utf-8?B?cEdzaGJsZVY3ak9STkE4T0tTUWRVb2Njd2MxUm4wWExBNGdWa3ZoaThRL3Rq?=
+ =?utf-8?B?bWMxR0lJaXhmYmVFZ3ZRWVZGdW5JTUFwMFliN2tDMGM4UXRIeXRDVGxxM2pp?=
+ =?utf-8?B?TXZtRDFZT3ZrL2pucnYxUGdZWFJBWit4citVUGUwbmgwOHkybE9tcjRSa0RC?=
+ =?utf-8?B?M1lZTVlUV2RXY1p3aDNvUDIzK3E3R1BiUWlIMEtlcmpPR245d2dNWEZJRFBz?=
+ =?utf-8?B?a09yR2tWUEd3MktnTTR3R09CR1FSOFRYa3FXVVlmbk11cjVYMkdFVG9HWU96?=
+ =?utf-8?B?S1B1Rzh4MDMzbDlQUDR6VXNiM2lwR0liNTZ0RlpIbE0yOThseVI4N3pob0dT?=
+ =?utf-8?B?VElmVHJoU2Zxc0pDb2UxbE9mQVRteVNWZUpmTzZWaVJwd2RZOXExNW5ERmxT?=
+ =?utf-8?Q?l7p58C0B00YK1IcsZsaFxLHAm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1864c02-3c3d-4818-6382-08daef660132
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 21:43:23.2911
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 21:44:21.3704
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 19po8UXYZZYtnNh686oK8ocug6CFYz7WfVpDOn8YPKt35IVQbFud5jssTdR8mp7baozTHeAcNY31udLPJhACqlszUbcb/9WitxDsSA5OVhg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8151
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: +OC86wLjEvJpzlhXkTsXC31jxLdxVymKl6+dXrvGUWB4sNjv/D53PrzxOpBNlXhsSeO5hpGnjLT0VbEnoKYt5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6674
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn Helgaas wrote:
-> On Thu, Jan 05, 2023 at 01:20:36PM -0800, Dan Williams wrote:
-> > Bjorn Helgaas wrote:
-> > > On Thu, Jan 05, 2023 at 11:44:28AM -0800, Dan Williams wrote:
-> > > > Bjorn Helgaas wrote:
-> > > 
-> > > > > Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
-> > > > > firmware/kernel interface is as an EfiMemoryMappedIO region.
-> > > > > 
-> > > > > I think this is a firmware bug, but obviously we're going to have to
-> > > > > figure out a way around it.
-> > > > 
-> > > > Definitely an ambiguity / conflict, but not sure it is a bug when you
-> > > > look at from the perspective of how would an EFI runtime service use
-> > > > ECAM/MMCONFIG space? 
-> > > 
-> > > I think it's perfectly fine for firmware to advertise ECAM space as an
-> > > EfiMemoryMappedIO region via EFI GetMemoryMap() because it certainly
-> > > makes sense that EFI runtime services would use config space.
-> > > 
-> > > My understanding is that the OS should learn about device address
-> > > space via ACPI _CRS, not GetMemoryMap().  The MCFG spec (PCI Firmware
-> > > Spec, r3.3, sec 4.1.2) requires ECAM space to be reserved via a
-> > > PNP0C02 motherboard device _CRS.
-> > > 
-> > > So what I think *is* a bug is that this firmware doesn't report the
-> > > ECAM space via PNP0C02 _CRS.
-> > > 
-> > > If somebody thinks the lack of this reservation is not a bug, I would
-> > > love to hear ideas about how Linux *should* be handling this.  There
-> > > are many variations on how firmware does things like this, and it's
-> > > been a nightmare trying to figure out something that works with all of
-> > > them.
-> > 
-> > I am trying to get a statement from a BIOS person, but in the meantime I
-> > am confused by this lead in sentence of Note 2 in "PCI Firmware Spec
-> > v3.2 Table 4-2: MCFG Table to Support Enhanced Configuration Space
-> > Access":
-> > 
-> >     If the operating system does not natively comprehend reserving the MMCFG
-> >     region, the MMCFG region must be reserved by firmware. The address range
-> >     reported in the MCFG table or by _CBA method (see Section 4.1.3) must be
-> >     reserved by declaring a motherboard resource...
-> > 
-> > Which seems to say it is ok for the OS to treat MMCFG space as reserved
-> > by default. It certainly fails the Robustness Principle for the BIOS to
-> > *assume* that the OS can natively comprehend that reservation, but it
-> > seems Linux is in its rights to make that assumption.
+On 1/5/23 15:33, Hamza Mahfooz wrote:
+> Currently, there are issues with enabling PSR-SU + DSC. This stems from
+> the fact that DSC imposes a slice height on transmitted video data and
+> we are not conforming to that slice height in PSR-SU regions. So, pass
+> slice_height into su_y_granularity to feed the DSC slice height into
+> PSR-SU code.
 > 
-> I read "OS natively comprehends MMCFG space" as meaning "the OS has
-> device-specific knowledge of the PCI host bridge and the associated
-> MMCFG space." But in that case, the OS wouldn't need MCFG at all, so
-> maybe I'm not reading it right.
-> 
-> There must have been some reason for that sentence, e.g., some system
-> that didn't or couldn't report MMCFG via PNP0C02 _CBA, but it sure
-> makes a mess of what could have been a simple "range must be reserved"
-> statement.
-> 
-> > > > Would it be enough to add this clarification in "EFI 2.9 Table 7-6
-> > > > Memory Type Usage after ExitBootServices()"?
-> > > > 
-> > > > s/This memory is not used by the OS./This memory is not used by the OS,
-> > > > unless ACPI declares it for another purpose./
-> > > 
-> > > I guess the idea is that MCFG is a form of "ACPI declaring it"?  I
-> > > don't have an explicit citation for it, but I infer at [1] that ACPI
-> > > static tables are second-class citizens and not intended as a way of
-> > > reserving address space because that would lead to problems booting
-> > > old OSes on firmware that provides new tables unknown to the OS.
-> > 
-> > Ah, true, certainly for new stuff, but what about MCFG specifically?
-> > What harm is there an assuming that MMCONFIG intersecting with
-> > EfiMemoryMappedIO shall be treated as reserved for MMCONFIG usage.
-> 
-> Probably none, and I think that's what we'll have to do.  Ugh.
-> Another random special-case rule.
-> 
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/PCI/acpi-info.rst?id=v6.1#n32
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
-I am still holding out that a BIOS developer can either say "whoops,
-populating MMCONFIG in _CRS was overlooked", or point out "if you take
-the derivative of the PCI spec, multiply it be the inverse of the EFI
-spec and then take the cross-product with the ACPI spec then the memory
-type comes out as implicitly reserved".
+Acked-by: Harry Wentland <harry.wentland@amd.com>
+
+Harry
+
+> ---
+> v2: move code to modules/power.
+> v3: use ASSERT() instead of WARN() and add a condition that clarifies
+>     that PSR-SU + DSC can only be enabled on an eDP connection.
+> ---
+>  .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c |  3 ++
+>  .../amd/display/modules/power/power_helpers.c | 31 +++++++++++++++++++
+>  .../amd/display/modules/power/power_helpers.h |  3 ++
+>  3 files changed, 37 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+> index 26291db0a3cf..872d06fe1436 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+> @@ -122,6 +122,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
+>  		psr_config.allow_multi_disp_optimizations =
+>  			(amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
+>  
+> +		if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
+> +			return false;
+> +
+>  		ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
+>  
+>  	}
+> diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+> index 9b5d9b2c9a6a..381f708ef756 100644
+> --- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+> +++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+> @@ -916,3 +916,34 @@ bool mod_power_only_edp(const struct dc_state *context, const struct dc_stream_s
+>  {
+>  	return context && context->stream_count == 1 && dc_is_embedded_signal(stream->signal);
+>  }
+> +
+> +bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
+> +			      struct dc_stream_state *stream,
+> +			      struct psr_config *config)
+> +{
+> +	uint16_t pic_height;
+> +	uint8_t slice_height;
+> +
+> +	if (!dc->caps.edp_dsc_support ||
+> +	    link->panel_config.dsc.disable_dsc_edp ||
+> +	    !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
+> +	    !(link->connector_signal & SIGNAL_TYPE_EDP) ||
+> +	    !stream->timing.dsc_cfg.num_slices_v)
+> +		return true;
+> +
+> +	pic_height = stream->timing.v_addressable +
+> +		stream->timing.v_border_top + stream->timing.v_border_bottom;
+> +	slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
+> +
+> +	if (slice_height) {
+> +		if (config->su_y_granularity &&
+> +		    (slice_height % config->su_y_granularity)) {
+> +			ASSERT(0);
+> +			return false;
+> +		}
+> +
+> +		config->su_y_granularity = slice_height;
+> +	}
+> +
+> +	return true;
+> +}
+> diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+> index 316452e9dbc9..bb16b37b83da 100644
+> --- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+> +++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+> @@ -59,4 +59,7 @@ void mod_power_calc_psr_configs(struct psr_config *psr_config,
+>  		const struct dc_stream_state *stream);
+>  bool mod_power_only_edp(const struct dc_state *context,
+>  		const struct dc_stream_state *stream);
+> +bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
+> +			      struct dc_stream_state *stream,
+> +			      struct psr_config *config);
+>  #endif /* MODULES_POWER_POWER_HELPERS_H_ */
+
