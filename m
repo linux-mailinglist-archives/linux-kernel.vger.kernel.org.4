@@ -2,426 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2940765EF4C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D7B65EF51
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbjAEOwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S234104AbjAEOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjAEOvr (ORCPT
+        with ESMTP id S234252AbjAEOwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:51:47 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2059.outbound.protection.outlook.com [40.92.98.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD54DE50;
-        Thu,  5 Jan 2023 06:51:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mo5458O2IjSBplavJ4fEG2+3bmOhAfL2acH3Jdd7EaYn5FCtxRZC/YoWvs6iIxyeijOG4FFmnoJ1MSeFncYb3L+goSucH0savXwxYf0ZOiOUGAV3QwYUb8bZkEqvkxXn31XfBK1AHOeEXuFKORm3lZyD8c54OK4dxmwL2RczqNUtBAc0jka9DfjpoElxtCO/Aovm0kEQceD4v60Mxng2UPHSqcg/8snNomLVvWGCG5FqHsSowzF7iAenL2aDWcXzaBVa3FJNRIAL0aGtOAPykd99wVAR5WiRIHfo5rbq+RwdbwKIKWIWb3IDCoon5M73myxWE113KJc4S9jIgJEcDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LzRMf6IPvNxTRpk6p1FdNg5o9VgYlYb0N4Sb9X2zyKg=;
- b=DpV+dScIXSKnmKynoUOBX7ZQt2YmaEjP9sREoUM8w7yr3AkgF1oQpS9ERpW2oa+D112ZonQkkh6IVzzXKKsLIwuC284+h1pIAKBIhgIaOpRRpmLJQVBxuqlAQwvZhJmFxQIArRj54ktHqsmcRqlzmL2VTE/cn/L3wknD+SAZ4CgYZlbqzNeM3z+/NPJW1U0Wb6flb1TBKMQljswVZN4wHLVMD6AaYXApS+BEIzZ2SaF/DZz5UdiFRhgAKbq4lpUuyuECqaGytEDKnlI/J046lFNQ+ZS6YkgTMIl3cBLOs+i2lBfmM6n8IWjVI85m6gmdCT9rzPJ+5hdQtjTPBlFi7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LzRMf6IPvNxTRpk6p1FdNg5o9VgYlYb0N4Sb9X2zyKg=;
- b=LxWWKBvuZb/49n6vT7AhWrkcbquOGh8680gCvhy0aWwrCRb7I8IiH1xdi4+ig4C3Zu/1+rsWNNGE6oFmIi/U2uydwNlsf0z1O3KUexYYpo1G0LgJxjxc+sQMBVLGg5utMsKQgu38P7fKEkO8VSMM0tDyhq0KGas0BxmrsxegZ68QsAqJPc5PiYnf0dacJPvO8F2J69tW4covrIWDuAc3M3yWxsKoySPFJdKQFwhqzR5B7cZM80T9MZbcUgj900yKdi9G86idSN70HQbOHA9T0kVxyYqAEmZItKP5FmSPWv1Pp6i3ENZYv3aGpGpSqyOX5xqwotlCbT7/DsKsQqD1tg==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TYVP286MB3714.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:36b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 14:51:43 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 14:51:43 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com
-Cc:     mikelley@microsoft.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH v3] Drivers: hv: Make remove callback of hyperv driver void returned
-Date:   Thu,  5 Jan 2023 22:51:23 +0800
-Message-ID: <TYCP286MB2323A93C55526E4DF239D3ACCAFA9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [G0tVtjaIOx9IGn2eUbpxDuqulXnFrt48]
-X-ClientProxiedBy: SG2PR01CA0130.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::34) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230105145123.1271897-1-set_pte_at@outlook.com>
+        Thu, 5 Jan 2023 09:52:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE5B010F1;
+        Thu,  5 Jan 2023 06:52:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6151715BF;
+        Thu,  5 Jan 2023 06:52:59 -0800 (PST)
+Received: from e126311.arm.com (unknown [10.57.76.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A9453F71A;
+        Thu,  5 Jan 2023 06:52:15 -0800 (PST)
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/2] cpuidle: teo: Introduce util-awareness
+Date:   Thu,  5 Jan 2023 14:51:57 +0000
+Message-Id: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYVP286MB3714:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3a416f8-eaf9-4849-0348-08daef2c5bf2
-X-MS-Exchange-SLBlob-MailProps: a+H6FLLcF3qbS4khOCXb+acgdOv6bjW2nCCKXLjmU0BpgyOicnBRyvwhqx9M3vMT6M/2RYr88hSBF3Yy8CaXpv6xKO/MD9Bhu+vzuIU+csF7MtOU1HDdZD1bQn9doPnTWPTcMVzU2V+DjmhEZSfBNHSMLTvISLrgVilJ7UTL/omMsapxUN3yUe9ZETjt328gd7gVcFL1uf1K12zKqip2Wvc3pvmJV/WXajU/xH2G5N7vPXDHx8HaUIxvPcQB3y90z3B2KCVzxlfJzIQ15GiQEh0nIhON85PpHTFO+bfJX/FrEvZTn2ld0TGgVA9wWedmTzNGkrsjkJ3Kgo91txGGa2ASziT1VO87Ox8gkS34SRhaNLX12JJbIYm17lQQOfs4fwBpLDE/3Jw4Wc0jFdMsruZXrZToe1ZVV3btvSd3cLVvx7w7XMLqGg5UluGDWynqLSAZQ0WkFnYT0jLXGQxKEstRA2T5Z/8loSbEQatEOaH0nP1JlW0mm9Kg6+Tx4s/1Xp61nNL5HWG/INqc0UfoYFrFfKmrz49REeqyCaUEiO5heUBClr5Xm1JC16xTAycbc1IU3Yqz0Xbx+NjoV1Z9yEGv1ZSsnGfPjr9hfiAyJPxPPOo9ZwclqRScQAl6M/lL6cDcOFkXlqb49PQ8LXUbIXt3QXEpAFx6EwZ+iRYp2YCMP8khEoazeWaBVtt5aRLhbBSq8FWgqj1/1BgBmXv+tryTcbPuQ9vmplnBaw+ZePKjeSmdWVvWv+9xHmq9aGrCJdmfLyLSMx+SIT2KRN5k/44JfefIeqtQFLdccJuJFyfQUd+TlP4yDi11OlGBQa4Z
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BHJvr+r1RbrlXwncLlox9dtnhhJohfcpeyDuXnJlKBcpbH+CyFRP8CEy0gyDS0LkxJUjW749pF6SPzz48Guy8rHqoNNJwsTM0Pu/FwkdBhqdPuUEjPLeBNwYkIYwMQrPDhB8rv9ENZJPPb50A57cKdAj+MppyN/OJjHOyCaN8DksCReJxQ/RWfApITt75+xlNrkYP3/VWYsyg/UBopLCOwuI6ByGsjAObHf8nGXqKtOBvVAc56pdWYTXFYoYeItpO3K5I88X7FcqlY/Zc3S/EbKcvSIgNeHSM6wdQ08WhTU22GNqmKJyW3J5MAhzV0jQeE9SOFDNa1/uoueKA/c4NF7WjTOLvgPL9ya3Y9kzErwJVkZ2QmoZ5L110H1IrjxUdCBjw78qv19VvdI3ofDBU6XwGYE6B+1bcIrqTR00ZTX2B4XkAjwEpnbZxFlMtOruIaV2I/uI08mWb4HyRNgziQNBTxHVbRrFbAC94kPc68lKnNIWmwwoJ5oZeE61jodD8TL1Wncn00Pql+TnE6AuKonXD9cKqr8hgm9hz7vRFiovqEF+7LApsfEgqPTiQuCesJDeML3pL/JrFhSoKMNvofKSXNf+FG1gvP3VRVwqT+Vv6ALWzmRxKRctJ3nWqbgtUkSfcmJlbxQLffzy1sWlkw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H7wZbWwo68/DWrycgVi+s9e/i8jPMf9P10r2pvhSGi2SdK08QjNrmmjTQ5iH?=
- =?us-ascii?Q?ye8100IpKGHcpoNWM8FcIJAaB7NwJ7BLqE/klUIJLOmB4/Nm0M6B0Yy4t24Z?=
- =?us-ascii?Q?3hxOfqdlbf8rgkMv0MyzrH2lpdY23eoAjR+k0ewYTrFx0bjvk1KXDAJEqwpv?=
- =?us-ascii?Q?239clCeO/g2Sv1K9mUi5JZo1QtqHsKsDjV/D6pOne5WYdtHF+/nOKDYQI/a3?=
- =?us-ascii?Q?r/c6pJhxvBxevJ5ERHU784EV9RkKZJMpVKPL2pWwxuJgJoJ0nycy6NgBhlLG?=
- =?us-ascii?Q?4P8pVLg9W9oiqKDOLvsTX09Bx2Fgsgc6s8KBHXJv6Tv2XAPaLPPtLoRVS+r/?=
- =?us-ascii?Q?zE8YrVwcgSod2z+fOYnJ58ZEWSStwsKvyeUDi7ZwVUPMsRHexBpj9ZrNr6Lp?=
- =?us-ascii?Q?OHy4emvjH9TEicDvL+B6aLiS+v5nbP4U5G/EpGn7SRBnNGRhRO49EpasNFNK?=
- =?us-ascii?Q?YxBxMQ325XFxBdUYcCo2z7JKR3V4266QcXdm2AKAUcIL5zsxUx6Dr/h/hWH1?=
- =?us-ascii?Q?ZAqX9brekxUV/TJMnLDYKaWpdXdRU7+U1iv0KCTmLnov4BQq8Pl/zZ8nCdSb?=
- =?us-ascii?Q?VbSPGK6S4/4zFs8Qp2wAs7K5MBPiskI08Py6yHomZ+Mv4rfOdHMOToHTkpAQ?=
- =?us-ascii?Q?1BymuK0PUb8PCyg71R4oaEXIu9rWxxJ4yEDdpVjcdFOlKr7QUQBbUUYPjYri?=
- =?us-ascii?Q?TSCKubzvOc0Ntkw0QYqEIMKdWgwwYFLZgA0EIC0JXi/cE7wijXQ8/dsqAZVD?=
- =?us-ascii?Q?uZFuAToEc2o2Jc+jMRBtPf+nzdE6IQsqeyxgut+TuP3BGhj7UpcyjuwzTe2Q?=
- =?us-ascii?Q?aOawvRWglvtsKM4RKzR2ExZjNo59Ypr82bTK+SskSCpa3rsnJwb+enrbwRrw?=
- =?us-ascii?Q?41rI4+Xxjjgtxdpz4xEobkigaVGdQZBKIWfZc6Qt2WikxpJ+wGwpZwmou1C2?=
- =?us-ascii?Q?rlFsbIELUm1g/YAPKEIWMW8f3ULJGJd8ND2AGFjXpz17PBCIxTEPG/lWBipy?=
- =?us-ascii?Q?d/WYr3ZjnytF1e58+rOkHnpYU+duB4fbpXfMYpagVwsRO5p9Eb42BVRv6Ih0?=
- =?us-ascii?Q?zBuCeWm4HXIbSntVWcxOD5YD52G4HH+heVWV2P/H5O/nH3xnSq5U6xzbtE9N?=
- =?us-ascii?Q?U2tPceajbRcYM0PDhXQLn9fJ44kt7zuv5KgEkI66ehbmxq2Ht5Pe68uODYG0?=
- =?us-ascii?Q?hY+FrG/u8hMf3fY3PxEeLAGEti/jPy0AMtIAKDBQ0xienvMljTWwL1YbHMB6?=
- =?us-ascii?Q?/mAiz+MjiXdVLVTH/HeUshFKvMS6o3+1Kz7p3E9jBw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3a416f8-eaf9-4849-0348-08daef2c5bf2
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 14:51:42.9657
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVP286MB3714
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit fc7a6209d571 ("bus: Make remove callback return
-void") forces bus_type::remove be void-returned, it doesn't
-make much sense for any bus based driver implementing remove
-callbalk to return non-void to its caller.
+Hi,
 
-As such, change the remove function for Hyper-V VMBus based
-drivers to return void.
+At the moment, none of the available idle governors take any scheduling
+information into account. They also tend to overestimate the idle
+duration quite often, which causes them to select excessively deep idle
+states, thus leading to increased wakeup latency and lower performance with no
+power saving. For 'menu' while web browsing on Android for instance, those
+types of wakeups ('too deep') account for over 24% of all wakeups.
 
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
----
-v2 -> v3
-- Update commit message and restore blank line as it is,
-  based on the comments from Michael Kelley.
+At the same time, on some platforms idle state 0 can be power efficient
+enough to warrant wanting to prefer it over idle state 1. This is because
+the power usage of the two states can be so close that sufficient amounts
+of too deep state 1 sleeps can completely offset the state 1 power saving to the
+point where it would've been more power efficient to just use state 0 instead.
+This is of course for systems where state 0 is not a polling state, such as
+arm-based devices.
 
-v1 -> v2
-- Fixed null dereference issue and deprecated comments, based
-  on comments by Liu Wei.
-- Fixed building issue.
-- Rebased on latest hyperv-next.
+Sleeps that happened in state 0 while they could have used state 1 ('too shallow') only
+save less power than they otherwise could have. Too deep sleeps, on the other
+hand, harm performance and nullify the potential power saving from using state 1 in
+the first place. While taking this into account, it is clear that on balance it
+is preferable for an idle governor to have more too shallow sleeps instead of
+more too deep sleeps on those kinds of platforms.
 
-v1
-- https://lore.kernel.org/all/TYCP286MB232373567792ED1AC5E0849FCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
----
- drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 4 +---
- drivers/hid/hid-hyperv.c                | 4 +---
- drivers/hv/hv_balloon.c                 | 4 +---
- drivers/hv/hv_util.c                    | 4 +---
- drivers/input/serio/hyperv-keyboard.c   | 4 +---
- drivers/net/hyperv/netvsc_drv.c         | 5 ++---
- drivers/pci/controller/pci-hyperv.c     | 8 ++------
- drivers/scsi/storvsc_drv.c              | 4 +---
- drivers/uio/uio_hv_generic.c            | 5 ++---
- drivers/video/fbdev/hyperv_fb.c         | 5 +----
- include/linux/hyperv.h                  | 2 +-
- net/vmw_vsock/hyperv_transport.c        | 4 +---
- 12 files changed, 15 insertions(+), 38 deletions(-)
+Currently the best available governor under this metric is TEO which on average results in less than
+half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+increased performance in the process.
 
-diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-index ca127ff797f7..d117fff26d99 100644
---- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-+++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-@@ -165,7 +165,7 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
- 	return ret;
- }
- 
--static int hyperv_vmbus_remove(struct hv_device *hdev)
-+static void hyperv_vmbus_remove(struct hv_device *hdev)
- {
- 	struct drm_device *dev = hv_get_drvdata(hdev);
- 	struct hyperv_drm_device *hv = to_hv(dev);
-@@ -176,8 +176,6 @@ static int hyperv_vmbus_remove(struct hv_device *hdev)
- 	hv_set_drvdata(hdev, NULL);
- 
- 	vmbus_free_mmio(hv->mem->start, hv->fb_size);
--
--	return 0;
- }
- 
- static int hyperv_vmbus_suspend(struct hv_device *hdev)
-diff --git a/drivers/hid/hid-hyperv.c b/drivers/hid/hid-hyperv.c
-index ab57b49a44ed..ef16c2a54362 100644
---- a/drivers/hid/hid-hyperv.c
-+++ b/drivers/hid/hid-hyperv.c
-@@ -535,7 +535,7 @@ static int mousevsc_probe(struct hv_device *device,
- }
- 
- 
--static int mousevsc_remove(struct hv_device *dev)
-+static void mousevsc_remove(struct hv_device *dev)
- {
- 	struct mousevsc_dev *input_dev = hv_get_drvdata(dev);
- 
-@@ -544,8 +544,6 @@ static int mousevsc_remove(struct hv_device *dev)
- 	hid_hw_stop(input_dev->hid_device);
- 	hid_destroy_device(input_dev->hid_device);
- 	mousevsc_free_device(input_dev);
--
--	return 0;
- }
- 
- static int mousevsc_suspend(struct hv_device *dev)
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index cbe43e2567a7..0d4b8fc47ac6 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -2042,7 +2042,7 @@ static int balloon_probe(struct hv_device *dev,
- 	return ret;
- }
- 
--static int balloon_remove(struct hv_device *dev)
-+static void balloon_remove(struct hv_device *dev)
- {
- 	struct hv_dynmem_device *dm = hv_get_drvdata(dev);
- 	struct hv_hotadd_state *has, *tmp;
-@@ -2083,8 +2083,6 @@ static int balloon_remove(struct hv_device *dev)
- 		kfree(has);
- 	}
- 	spin_unlock_irqrestore(&dm_device.ha_lock, flags);
--
--	return 0;
- }
- 
- static int balloon_suspend(struct hv_device *hv_dev)
-diff --git a/drivers/hv/hv_util.c b/drivers/hv/hv_util.c
-index 835e6039c186..24995ac41c86 100644
---- a/drivers/hv/hv_util.c
-+++ b/drivers/hv/hv_util.c
-@@ -602,7 +602,7 @@ static int util_probe(struct hv_device *dev,
- 	return ret;
- }
- 
--static int util_remove(struct hv_device *dev)
-+static void util_remove(struct hv_device *dev)
- {
- 	struct hv_util_service *srv = hv_get_drvdata(dev);
- 
-@@ -610,8 +610,6 @@ static int util_remove(struct hv_device *dev)
- 		srv->util_deinit();
- 	vmbus_close(dev->channel);
- 	kfree(srv->recv_buffer);
--
--	return 0;
- }
- 
- /*
-diff --git a/drivers/input/serio/hyperv-keyboard.c b/drivers/input/serio/hyperv-keyboard.c
-index d62aefb2e245..31def6ce5157 100644
---- a/drivers/input/serio/hyperv-keyboard.c
-+++ b/drivers/input/serio/hyperv-keyboard.c
-@@ -369,7 +369,7 @@ static int hv_kbd_probe(struct hv_device *hv_dev,
- 	return error;
- }
- 
--static int hv_kbd_remove(struct hv_device *hv_dev)
-+static void hv_kbd_remove(struct hv_device *hv_dev)
- {
- 	struct hv_kbd_dev *kbd_dev = hv_get_drvdata(hv_dev);
- 
-@@ -378,8 +378,6 @@ static int hv_kbd_remove(struct hv_device *hv_dev)
- 	kfree(kbd_dev);
- 
- 	hv_set_drvdata(hv_dev, NULL);
--
--	return 0;
- }
- 
- static int hv_kbd_suspend(struct hv_device *hv_dev)
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index 89eb4f179a3c..025f805e1ed9 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -2594,7 +2594,7 @@ static int netvsc_probe(struct hv_device *dev,
- 	return ret;
- }
- 
--static int netvsc_remove(struct hv_device *dev)
-+static void netvsc_remove(struct hv_device *dev)
- {
- 	struct net_device_context *ndev_ctx;
- 	struct net_device *vf_netdev, *net;
-@@ -2603,7 +2603,7 @@ static int netvsc_remove(struct hv_device *dev)
- 	net = hv_get_drvdata(dev);
- 	if (net == NULL) {
- 		dev_err(&dev->device, "No net device to remove\n");
--		return 0;
-+		return;
- 	}
- 
- 	ndev_ctx = netdev_priv(net);
-@@ -2637,7 +2637,6 @@ static int netvsc_remove(struct hv_device *dev)
- 
- 	free_percpu(ndev_ctx->vf_stats);
- 	free_netdev(net);
--	return 0;
- }
- 
- static int netvsc_suspend(struct hv_device *dev)
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 583d3aad6908..e46d9a14053f 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -3813,13 +3813,10 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- /**
-  * hv_pci_remove() - Remove routine for this VMBus channel
-  * @hdev:	VMBus's tracking struct for this root PCI bus
-- *
-- * Return: 0 on success, -errno on failure
-  */
--static int hv_pci_remove(struct hv_device *hdev)
-+static void hv_pci_remove(struct hv_device *hdev)
- {
- 	struct hv_pcibus_device *hbus;
--	int ret;
- 
- 	hbus = hv_get_drvdata(hdev);
- 	if (hbus->state == hv_pcibus_installed) {
-@@ -3842,7 +3839,7 @@ static int hv_pci_remove(struct hv_device *hdev)
- 		pci_unlock_rescan_remove();
- 	}
- 
--	ret = hv_pci_bus_exit(hdev, false);
-+	hv_pci_bus_exit(hdev, false);
- 
- 	vmbus_close(hdev->channel);
- 
-@@ -3855,7 +3852,6 @@ static int hv_pci_remove(struct hv_device *hdev)
- 	hv_put_dom_num(hbus->bridge->domain_nr);
- 
- 	kfree(hbus);
--	return ret;
- }
- 
- static int hv_pci_suspend(struct hv_device *hdev)
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 3c5b7e4227b2..02f9d1a6f4ac 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -2092,7 +2092,7 @@ static int storvsc_change_queue_depth(struct scsi_device *sdev, int queue_depth)
- 	return scsi_change_queue_depth(sdev, queue_depth);
- }
- 
--static int storvsc_remove(struct hv_device *dev)
-+static void storvsc_remove(struct hv_device *dev)
- {
- 	struct storvsc_device *stor_device = hv_get_drvdata(dev);
- 	struct Scsi_Host *host = stor_device->host;
-@@ -2108,8 +2108,6 @@ static int storvsc_remove(struct hv_device *dev)
- 	scsi_remove_host(host);
- 	storvsc_dev_remove(dev);
- 	scsi_host_put(host);
--
--	return 0;
- }
- 
- static int storvsc_suspend(struct hv_device *hv_dev)
-diff --git a/drivers/uio/uio_hv_generic.c b/drivers/uio/uio_hv_generic.c
-index c08a6cfd119f..20d9762331bd 100644
---- a/drivers/uio/uio_hv_generic.c
-+++ b/drivers/uio/uio_hv_generic.c
-@@ -355,20 +355,19 @@ hv_uio_probe(struct hv_device *dev,
- 	return ret;
- }
- 
--static int
-+static void
- hv_uio_remove(struct hv_device *dev)
- {
- 	struct hv_uio_private_data *pdata = hv_get_drvdata(dev);
- 
- 	if (!pdata)
--		return 0;
-+		return;
- 
- 	sysfs_remove_bin_file(&dev->channel->kobj, &ring_buffer_bin_attr);
- 	uio_unregister_device(&pdata->info);
- 	hv_uio_cleanup(dev, pdata);
- 
- 	vmbus_free_ring(dev->channel);
--	return 0;
- }
- 
- static struct hv_driver hv_uio_drv = {
-diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-index 3ce746a46179..cfa6a7c1eeb3 100644
---- a/drivers/video/fbdev/hyperv_fb.c
-+++ b/drivers/video/fbdev/hyperv_fb.c
-@@ -1240,8 +1240,7 @@ static int hvfb_probe(struct hv_device *hdev,
- 	return ret;
- }
- 
--
--static int hvfb_remove(struct hv_device *hdev)
-+static void hvfb_remove(struct hv_device *hdev)
- {
- 	struct fb_info *info = hv_get_drvdata(hdev);
- 	struct hvfb_par *par = info->par;
-@@ -1262,8 +1261,6 @@ static int hvfb_remove(struct hv_device *hdev)
- 
- 	hvfb_putmem(hdev, info);
- 	framebuffer_release(info);
--
--	return 0;
- }
- 
- static int hvfb_suspend(struct hv_device *hdev)
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index 85f7c5a63aa6..cd5cb9f6fae0 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -1273,7 +1273,7 @@ struct hv_driver {
- 	} dynids;
- 
- 	int (*probe)(struct hv_device *, const struct hv_vmbus_device_id *);
--	int (*remove)(struct hv_device *);
-+	void (*remove)(struct hv_device *dev);
- 	void (*shutdown)(struct hv_device *);
- 
- 	int (*suspend)(struct hv_device *);
-diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
-index 59c3e2697069..7cb1a9d2cdb4 100644
---- a/net/vmw_vsock/hyperv_transport.c
-+++ b/net/vmw_vsock/hyperv_transport.c
-@@ -879,13 +879,11 @@ static int hvs_probe(struct hv_device *hdev,
- 	return 0;
- }
- 
--static int hvs_remove(struct hv_device *hdev)
-+static void hvs_remove(struct hv_device *hdev)
- {
- 	struct vmbus_channel *chan = hdev->channel;
- 
- 	vmbus_close(chan);
--
--	return 0;
- }
- 
- /* hv_sock connections can not persist across hibernation, and all the hv_sock
+This patchset specifically tunes TEO to prefer shallower idle states in order to reduce wakeup latency
+and achieve better performance. To this end, before selecting the next idle state it uses the avg_util
+signal of a CPU's runqueue in order to determine to what extent the CPU is being utilized.
+This util value is then compared to a threshold defined as a percentage of the cpu's capacity
+(capacity >> 6 ie. ~1.5% in the current implementation). If the util is above the threshold, the idle
+state selected by TEO metrics will be reduced by 1, thus selecting a shallower state. If the util is
+below the threshold, the governor defaults to the TEO metrics mechanism to try to select the deepest
+available idle state based on the closest timer event and its own correctness.
+
+The main goal of this is to reduce latency and increase performance for some workloads. Under some
+workloads it will result in an increase in power usage (Geekbench 5) while for other workloads it
+will also result in a decrease in power usage compared to TEO (PCMark Web, Jankbench, Speedometer).
+
+As of v2 the patch includes a 'fast exit' path for arm-based and similar systems where only 2 idle
+states are present. If there's just 2 idle states and the CPU is utilized, we can directly select
+the shallowest state and save cycles by skipping the entire metrics mechanism.
+
+Under the current implementation, the state will not be reduced by 1 if the change would lead to
+selecting a polling state instead of a non-polling state.
+
+This approach can outperform all the other currently available governors, at least on mobile device
+workloads, which is why I think it is worth keeping as an option.
+
+There is no particular attachment or reliance on TEO for this mechanism, I simply chose to base
+it on TEO because it performs the best out of all the available options and I didn't think there was
+any point in reinventing the wheel on the side of computing governor metrics. If a
+better approach comes along at some point, there's no reason why the same idle aware mechanism
+couldn't be used with any other metrics algorithm. That would, however, require implemeting it as
+a separate governor rather than a TEO add-on.
+
+As for how the extension performs in practice, below I'll add some benchmark results I got while
+testing this patchset. All the benchmarks were run after holding the phone in the fridge for exactly
+an hour each time to minimise the impact of thermal issues.
+
+Pixel 6 (Android 12, mainline kernel 5.18, with newer mainline CFS patches):
+
+1. Geekbench 5 (latency-sensitive, heavy load test)
+
+The values below are gmean values across 3 back to back iteration of Geekbench 5.
+As GB5 is a heavy benchmark, after more than 3 iterations intense throttling kicks in on mobile devices
+resulting in skewed benchmark scores, which makes it difficult to collect reliable results. The actual
+values for all of the governors can change between runs as the benchmark might be affected by factors
+other than just latency. Nevertheless, on the runs I've seen, util-aware TEO frequently achieved better
+scores than all the other governors.
+
+Benchmark scores
+
++-----------------+-------------+---------+-------------+
+| metric          | kernel      |   value | perc_diff   |
+|-----------------+-------------+---------+-------------|
+| multicore_score | menu        |  2826.5 | 0.0%        |
+| multicore_score | teo         |  2764.8 | -2.18%      |
+| multicore_score | teo_util_v3 |  2849   | 0.8%        |
+| multicore_score | teo_util_v4 |  2865   | 1.36%       |
+| score           | menu        |  1053   | 0.0%        |
+| score           | teo         |  1050.7 | -0.22%      |
+| score           | teo_util_v3 |  1059.6 | 0.63%       |
+| score           | teo_util_v4 |  1057.6 | 0.44%       |
++-----------------+-------------+---------+-------------+
+
+Idle misses
+
+The numbers are percentages of too deep and too shallow sleeps computed using the new trace
+event - cpu_idle_miss. The percentage is obtained by counting the two types of misses over
+the course of a run and then dividing them by the total number of wakeups in that run.
+
++-------------+-------------+--------------+
+| wa_path     | type        |   count_perc |
+|-------------+-------------+--------------|
+| menu        | too deep    |      14.994% |
+| teo         | too deep    |       9.649% |
+| teo_util_v3 | too deep    |       4.298% |
+| teo_util_v4 | too deep    |       4.02 % |
+| menu        | too shallow |       2.497% |
+| teo         | too shallow |       5.963% |
+| teo_util_v3 | too shallow |      13.773% |
+| teo_util_v4 | too shallow |      14.598% |
++-------------+-------------+--------------+
+
+Power usage [mW]
+
++--------------+----------+-------------+---------+-------------+
+| chan_name    | metric   | kernel      |   value | perc_diff   |
+|--------------+----------+-------------+---------+-------------|
+| total_power  | gmean    | menu        |  2551.4 | 0.0%        |
+| total_power  | gmean    | teo         |  2606.8 | 2.17%       |
+| total_power  | gmean    | teo_util_v3 |  2670.1 | 4.65%       |
+| total_power  | gmean    | teo_util_v4 |  2722.3 | 6.7%        |
++--------------+----------+-------------+---------+-------------+
+
+Task wakeup latency
+
++-----------------+----------+-------------+-------------+-------------+
+| comm            | metric   | kernel      |       value | perc_diff   |
+|-----------------+----------+-------------+-------------+-------------|
+| AsyncTask #1    | gmean    | menu        | 78.16μs     | 0.0%        |
+| AsyncTask #1    | gmean    | teo         | 61.60μs     | -21.19%     |
+| AsyncTask #1    | gmean    | teo_util_v3 | 74.34μs     | -4.89%      |
+| AsyncTask #1    | gmean    | teo_util_v4 | 54.45μs     | -30.34%     |
+| labs.geekbench5 | gmean    | menu        | 88.55μs     | 0.0%        |
+| labs.geekbench5 | gmean    | teo         | 100.97μs    | 14.02%      |
+| labs.geekbench5 | gmean    | teo_util_v3 | 53.57μs     | -39.5%      |
+| labs.geekbench5 | gmean    | teo_util_v4 | 59.60μs     | -32.7%      |
++-----------------+----------+-------------+-------------+-------------+
+
+In case of this benchmark, the difference in latency does seem to translate into better scores.
+
+2. PCMark Web Browsing (non latency-sensitive, normal usage web browsing test)
+
+The table below contains gmean values across 20 back to back iterations of PCMark 2 Web Browsing.
+
+Benchmark scores
+
++----------------+-------------+---------+-------------+
+| metric         | kernel      |   value | perc_diff   |
+|----------------+-------------+---------+-------------|
+| PcmaWebV2Score | menu        |  5232   | 0.0%        |
+| PcmaWebV2Score | teo         |  5219.8 | -0.23%      |
+| PcmaWebV2Score | teo_util_v3 |  5273.5 | 0.79%       |
+| PcmaWebV2Score | teo_util_v4 |  5239.9 | 0.15%       |
++----------------+-------------+---------+-------------+
+
+Idle misses
+
++-------------+-------------+--------------+
+| wa_path     | type        |   count_perc |
+|-------------+-------------+--------------|
+| menu        | too deep    |      24.814% |
+| teo         | too deep    |       11.65% |
+| teo_util_v3 | too deep    |       3.481% |
+| teo_util_v4 | too deep    |       3.662% |
+| menu        | too shallow |       3.101% |
+| teo         | too shallow |       8.578% |
+| teo_util_v3 | too shallow |      18.326% |
+| teo_util_v4 | too shallow |      18.692% |
++-------------+-------------+--------------+
+
+Power usage [mW]
+
++--------------+----------+-------------+---------+-------------+
+| chan_name    | metric   | kernel      |   value | perc_diff   |
+|--------------+----------+-------------+---------+-------------|
+| total_power  | gmean    | menu        |   179.2 | 0.0%        |
+| total_power  | gmean    | teo         |   184.8 | 3.1%        |
+| total_power  | gmean    | teo_util_v3 |   177.4 | -1.02%      |
+| total_power  | gmean    | teo_util_v4 |   184.1 | 2.71%       |
++--------------+----------+-------------+---------+-------------+
+
+Task wakeup latency
+
++-----------------+----------+-------------+-------------+-------------+
+| comm            | metric   | kernel      |       value | perc_diff   |
+|-----------------+----------+-------------+-------------+-------------|
+| CrRendererMain  | gmean    | menu        | 236.63μs    | 0.0%        |
+| CrRendererMain  | gmean    | teo         | 201.85μs    | -14.7%      |
+| CrRendererMain  | gmean    | teo_util_v3 | 106.46μs    | -55.01%     |
+| CrRendererMain  | gmean    | teo_util_v4 | 106.72μs    | -54.9%      |
+| chmark:workload | gmean    | menu        | 100.30μs    | 0.0%        |
+| chmark:workload | gmean    | teo         | 80.20μs     | -20.04%     |
+| chmark:workload | gmean    | teo_util_v3 | 65.88μs     | -34.32%     |
+| chmark:workload | gmean    | teo_util_v4 | 57.90μs     | -42.28%     |
+| surfaceflinger  | gmean    | menu        | 97.57μs     | 0.0%        |
+| surfaceflinger  | gmean    | teo         | 98.86μs     | 1.31%       |
+| surfaceflinger  | gmean    | teo_util_v3 | 56.49μs     | -42.1%      |
+| surfaceflinger  | gmean    | teo_util_v4 | 72.68μs     | -25.52%     |
++-----------------+----------+-------------+-------------+-------------+
+
+In this case the large latency improvement does not translate into a notable increase in benchmark score as
+this particular benchmark mainly responds to changes in operating frequency.
+
+3. Jankbench (locked 60hz screen) (normal usage UI test)
+
+Frame durations
+
++---------------+------------------+---------+-------------+
+| variable      | kernel           |   value | perc_diff   |
+|---------------+------------------+---------+-------------|
+| mean_duration | menu_60hz        |    13.9 | 0.0%        |
+| mean_duration | teo_60hz         |    14.7 | 6.0%        |
+| mean_duration | teo_util_v3_60hz |    13.8 | -0.87%      |
+| mean_duration | teo_util_v4_60hz |    12.6 | -9.0%       |
++---------------+------------------+---------+-------------+
+
+Jank percentage
+
++------------+------------------+---------+-------------+
+| variable   | kernel           |   value | perc_diff   |
+|------------+------------------+---------+-------------|
+| jank_perc  | menu_60hz        |     1.5 | 0.0%        |
+| jank_perc  | teo_60hz         |     2.1 | 36.99%      |
+| jank_perc  | teo_util_v3_60hz |     1.3 | -13.95%     |
+| jank_perc  | teo_util_v4_60hz |     1.3 | -17.37%     |
++------------+------------------+---------+-------------+
+
+Idle misses
+
++------------------+-------------+--------------+
+| wa_path          | type        |   count_perc |
+|------------------+-------------+--------------|
+| menu_60hz        | too deep    |       26.00% |
+| teo_60hz         | too deep    |       11.00% |
+| teo_util_v3_60hz | too deep    |        2.33% |
+| teo_util_v4_60hz | too deep    |        2.54% |
+| menu_60hz        | too shallow |        4.74% |
+| teo_60hz         | too shallow |       11.89% |
+| teo_util_v3_60hz | too shallow |       21.78% |
+| teo_util_v4_60hz | too shallow |       21.93% |
++------------------+-------------+--------------+
+
+Power usage [mW]
+
++--------------+------------------+---------+-------------+
+| chan_name    | kernel           |   value | perc_diff   |
+|--------------+------------------+---------+-------------|
+| total_power  | menu_60hz        |   144.6 | 0.0%        |
+| total_power  | teo_60hz         |   136.9 | -5.27%      |
+| total_power  | teo_util_v3_60hz |   134.2 | -7.19%      |
+| total_power  | teo_util_v4_60hz |   121.3 | -16.08%     |
++--------------+------------------+---------+-------------+
+
+Task wakeup latency
+
++-----------------+------------------+-------------+-------------+
+| comm            | kernel           |       value | perc_diff   |
+|-----------------+------------------+-------------+-------------|
+| RenderThread    | menu_60hz        | 139.52μs    | 0.0%        |
+| RenderThread    | teo_60hz         | 116.51μs    | -16.49%     |
+| RenderThread    | teo_util_v3_60hz | 86.76μs     | -37.82%     |
+| RenderThread    | teo_util_v4_60hz | 91.11μs     | -34.7%      |
+| droid.benchmark | menu_60hz        | 135.88μs    | 0.0%        |
+| droid.benchmark | teo_60hz         | 105.21μs    | -22.57%     |
+| droid.benchmark | teo_util_v3_60hz | 83.92μs     | -38.24%     |
+| droid.benchmark | teo_util_v4_60hz | 83.18μs     | -38.79%     |
+| surfaceflinger  | menu_60hz        | 124.03μs    | 0.0%        |
+| surfaceflinger  | teo_60hz         | 151.90μs    | 22.47%      |
+| surfaceflinger  | teo_util_v3_60hz | 100.19μs    | -19.22%     |
+| surfaceflinger  | teo_util_v4_60hz | 87.65μs     | -29.33%     |
++-----------------+------------------+-------------+-------------+
+
+4. Speedometer 2 (heavy load web browsing test)
+
+Benchmark scores
+
++-------------------+-------------+---------+-------------+
+| metric            | kernel      |   value | perc_diff   |
+|-------------------+-------------+---------+-------------|
+| Speedometer Score | menu        |   102   | 0.0%        |
+| Speedometer Score | teo         |   104.9 | 2.88%       |
+| Speedometer Score | teo_util_v3 |   102.1 | 0.16%       |
+| Speedometer Score | teo_util_v4 |   103.8 | 1.83%       |
++-------------------+-------------+---------+-------------+
+
+Idle misses
+
++-------------+-------------+--------------+
+| wa_path     | type        |   count_perc |
+|-------------+-------------+--------------|
+| menu        | too deep    |       17.95% |
+| teo         | too deep    |        6.46% |
+| teo_util_v3 | too deep    |        0.63% |
+| teo_util_v4 | too deep    |        0.64% |
+| menu        | too shallow |        3.86% |
+| teo         | too shallow |        8.21% |
+| teo_util_v3 | too shallow |       14.72% |
+| teo_util_v4 | too shallow |       14.43% |
++-------------+-------------+--------------+
+
+Power usage [mW]
+
++--------------+----------+-------------+---------+-------------+
+| chan_name    | metric   | kernel      |   value | perc_diff   |
+|--------------+----------+-------------+---------+-------------|
+| total_power  | gmean    | menu        |  2059   | 0.0%        |
+| total_power  | gmean    | teo         |  2187.8 | 6.26%       |
+| total_power  | gmean    | teo_util_v3 |  2212.9 | 7.47%       |
+| total_power  | gmean    | teo_util_v4 |  2121.8 | 3.05%       |
++--------------+----------+-------------+---------+-------------+
+
+Task wakeup latency
+
++-----------------+----------+-------------+-------------+-------------+
+| comm            | metric   | kernel      |       value | perc_diff   |
+|-----------------+----------+-------------+-------------+-------------|
+| CrRendererMain  | gmean    | menu        | 17.18μs     | 0.0%        |
+| CrRendererMain  | gmean    | teo         | 16.18μs     | -5.82%      |
+| CrRendererMain  | gmean    | teo_util_v3 | 18.04μs     | 5.05%       |
+| CrRendererMain  | gmean    | teo_util_v4 | 18.25μs     | 6.27%       |
+| RenderThread    | gmean    | menu        | 68.60μs     | 0.0%        |
+| RenderThread    | gmean    | teo         | 48.44μs     | -29.39%     |
+| RenderThread    | gmean    | teo_util_v3 | 48.01μs     | -30.02%     |
+| RenderThread    | gmean    | teo_util_v4 | 51.24μs     | -25.3%      |
+| surfaceflinger  | gmean    | menu        | 42.23μs     | 0.0%        |
+| surfaceflinger  | gmean    | teo         | 29.84μs     | -29.33%     |
+| surfaceflinger  | gmean    | teo_util_v3 | 24.51μs     | -41.95%     |
+| surfaceflinger  | gmean    | teo_util_v4 | 29.64μs     | -29.8%      |
++-----------------+----------+-------------+-------------+-------------+
+
+Thank you for taking your time to read this!
+
+--
+Kajetan
+
+v5 -> v6:
+- amended some wording in the commit description & cover letter
+- included test results in the commit description
+- refactored checking the CPU utilized status to account for !SMP systems
+- dropped the RFC from the patchset header
+
+v4 -> v5:
+- remove the restriction to only apply the mechanism for C1 candidate state
+- clarify some code comments, fix comment style
+- refactor the fast-exit path loop implementation
+- move some cover letter information into the commit description
+
+v3 -> v4:
+- remove the chunk of code skipping metrics updates when the CPU was utilized
+- include new test results and more benchmarks in the cover letter
+
+v2 -> v3:
+- add a patch adding an option to skip polling states in teo_find_shallower_state()
+- only reduce the state if the candidate state is C1 and C0 is not a polling state
+- add a check for polling states in the 2-states fast-exit path
+- remove the ifdefs and Kconfig option
+
+v1 -> v2:
+- rework the mechanism to reduce selected state by 1 instead of directly selecting C0 (suggested by Doug Smythies)
+- add a fast-exit path for systems with 2 idle states to not waste cycles on metrics when utilized
+- fix typos in comments
+- include a missing header
+
+
+Kajetan Puchalski (2):
+  cpuidle: teo: Optionally skip polling states in teo_find_shallower_state()
+  cpuidle: teo: Introduce util-awareness
+
+ drivers/cpuidle/governors/teo.c | 100 ++++++++++++++++++++++++++++++--
+ 1 file changed, 96 insertions(+), 4 deletions(-)
+
 -- 
-2.25.1
+2.37.1
 
