@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B4565F007
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE3165F00A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbjAEPZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S232691AbjAEP0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234813AbjAEPZg (ORCPT
+        with ESMTP id S234586AbjAEP0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:25:36 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08825C938
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:25:14 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 634A7246F7;
-        Thu,  5 Jan 2023 15:24:56 +0000 (UTC)
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 1D87B2C149;
-        Thu,  5 Jan 2023 15:24:56 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 16:24:55 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v4 5/8] printk: introduce
- printk_get_next_message() and printk_message
-Message-ID: <Y7brx08wN+TE/YLN@alley>
-References: <20230105103735.880956-1-john.ogness@linutronix.de>
- <20230105103735.880956-6-john.ogness@linutronix.de>
+        Thu, 5 Jan 2023 10:26:19 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1275C933;
+        Thu,  5 Jan 2023 07:26:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672932374; x=1704468374;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OksWkIg+xvN3WL7qYD7ek/Aze8kUo+Yfw829bn01Z/0=;
+  b=nZrTdHbnwPLhTs/usRXzb8nZJKnziBCjnqcvnZ5GJFU6OV1l7jiuc01X
+   A8JVr+kfOcRJ/yduzVkrlprKYz6a7uAPKxOmOE3hI5YaZWgM2T3LcBIe6
+   tzDFmqHMm8Ye70Dyzi4XTVhOzCR5jhffy0kLrBQS3o234vDcx0E+oyAPb
+   HTMCYZhdTzlmBq1K2ZiXSqEFJr80DAeiHrbjA+je6AITdzphPbprKqM0U
+   zbBnDm5H1GXZwewn/oZDa4W/T19J6GP9zo9gBadWE/0k3wNDq8s3zRIoY
+   NmqoZiyrtbvLTpRoXYYqAAwrWx8Z43PDHFxlIVp/QdLyS7BQJJb2DHHCh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320939480"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="320939480"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 07:26:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="648967330"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="648967330"
+Received: from sbakshi-mobl1.amr.corp.intel.com (HELO [10.212.128.57]) ([10.212.128.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 07:26:13 -0800
+Message-ID: <8bbc881b-15ea-1c8a-43ad-423f5a014c99@intel.com>
+Date:   Thu, 5 Jan 2023 07:26:13 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105103735.880956-6-john.ogness@linutronix.de>
-X-Spam-Level: 
-X-Spamd-Bar: /
-Authentication-Results: smtp-out2.suse.de;
-        none
-X-Rspamd-Server: rspamd2
-X-Spamd-Result: default: False [0.00 / 50.00]
-X-Spam-Score: 0.00
-X-Rspamd-Queue-Id: 634A7246F7
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Raphael S. Carvalho" <raphaelsc@scylladb.com>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Pavel Boldin <pboldin@cloudlinux.com>,
+        Pavel Boldin <boldin.pavel@gmail.com>,
+        Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1> <Y7bT0OL8RAWkCu0Z@kroah.com>
+ <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+ <Y7bg5sxEZDIaGoXK@kroah.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y7bg5sxEZDIaGoXK@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-01-05 11:43:32, John Ogness wrote:
-> Code for performing the console output is intermixed with code that
-> is formatting the output for that console. Introduce a new helper
-> function printk_get_next_message() to handle the reading and
-> formatting of the printk text. The helper does not require any
-> locking so that in the future it can be used for other printing
-> contexts as well.
-> 
-> This also introduces a new struct printk_message to wrap the struct
-> printk_buffers, adding metadata about its contents. This allows
-> users of printk_get_next_message() to receive all relevant
-> information about the message that was read and formatted.
-> 
-> Why is struct printk_message a wrapper struct?
-> 
-> It is intentional that a wrapper struct is introduced instead of
-> adding the metadata directly to struct printk_buffers. The upcoming
-> atomic consoles support multiple printing contexts per CPU. This
-> means that while a CPU is formatting a message, it can be
-> interrupted and the interrupting context may also format a (possibly
-> different) message. Since the printk buffers are rather large,
-> there will only be one struct printk_buffers per CPU and it must be
-> shared by the possible contexts of that CPU.
-> 
-> If the metadata was part of struct printk_buffers, interrupting
-> contexts would clobber the metadata being prepared by the
-> interrupted context. This could be handled by robustifying the
-> message formatting functions to cope with metadata unexpectedly
-> changing. However, this would require significant amounts of extra
-> data copying, also adding significant complexity to the code.
-> 
-> Instead, the metadata can live on the stack of the formatting
-> context and the message formatting functions do not need to be
-> concerned about the metadata changing underneath them.
-> 
-> Note that the message formatting functions can handle unexpected
-> text buffer changes. So it is perfectly OK if a shared text buffer
-> is clobbered by an interrupting context. The atomic console
-> implementation will recognize the interruption and avoid printing
-> the (probably garbage) text buffer.
+On 1/5/23 06:38, Greg KH wrote:
+> But hey, what do I know, I'm not a lawyer which is why I keep insisting
+> that one from Intel actually read over this submission and sign-off on
+> it to verify that they agree with all of this.
 
-Great description!
+I guess I'm still confused what is triggering the lawyer requirement.
+Last time, you asked:
 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> You are taking source from a non-Intel developer under a different
+> license and adding copyright and different license information to it.
+> Because of all of that, I have the requirement that I want to know that
+> Intel legal has vetted all of this and agrees with the conclusions that
+> you all are stating.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+To break that down, the earlier submission[1] had:
 
-Best Regards,
-Petr
+ * Original developer from a different company
+ * Non-GPL original license
+ * Relicensing
+ * Addition of a new copyright
+
+I can see all of those thing adding up together to trigger the higher
+bar of having a lawyer sign off.  It looks like Aaron took that issue
+list and tried to improve on it.  This new submission has:
+
+ * Original developer from a different company
+
+Is there anything else in this submission which is triggering the lawyer
+review requirement?
+
+If not, I'd be happy to hack up a Documentation patch to describe this
+review requirement and make it clear to everyone.  I've gotten traction
+with my colleagues in the past once things were fully and clearly
+documented.  I'm hoping history repeats itself here.
+
+1. https://lore.kernel.org/all/Y3L2Jx3Kx9q8Dv55@ziqianlu-desk1/
