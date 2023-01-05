@@ -2,105 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5190665F2DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E3765F2E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbjAERgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        id S232199AbjAERh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbjAERgE (ORCPT
+        with ESMTP id S234713AbjAERhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:36:04 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3C3BC87;
-        Thu,  5 Jan 2023 09:36:02 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id p24so17532234plw.11;
-        Thu, 05 Jan 2023 09:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gkjsNq+41nhz5t6YNHufJptj0TXGHPydjE1ADy7+6FM=;
-        b=F7AETA8YmQngoALJiwWtbL0ff8RtVbY4EEr53C6FVlL+DjvgCS7aideTdCWmxjFESd
-         SeiRq631vXOAX++cF5PyZgvg1K66m5yYZ1/kNZWXsC6IwAeKeSZd5dJI25JEOakb5hTn
-         koOxsxdTnhPtdbZa50u70QRWGBbgPhkudNr+UVeZO49V+rJahQKqkZ1pZR+sqjplBze3
-         q35Wqugk6MwBc7S+ubvDZFqhYjXGVsB/XPQOU15imjrES3mE+4jS6D5EO6hub0FHZxAT
-         +zCaPPlxhFluLFItLj3F5QdevNoFUcoaXuo+CM0bND1qvelEblmhqLuD8fraDS1YHsIn
-         MT+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gkjsNq+41nhz5t6YNHufJptj0TXGHPydjE1ADy7+6FM=;
-        b=p5e2ZMMoptC1P2yTbIajKKg4yBAKQL0trXTiN8O3nAcR3IttqcE7EBNDrBqJG8pRSC
-         MzUzQUSdwWa+E9J2tZE9DhPMOrn0r20wq6vWSIcbrizoN0A5HTDJVSkQls07Q/jdj690
-         a046HU1Ce4w5NS7j712wX1DZBgplC8yXXPjxkwCmUmvTDK1fPRL0UkVC2PbSjiLP1N63
-         ExSaEbzLX+MoTZEfooswVkVl6ofiq8q1mtGOAbCFK4NMju34vnEDO88lDmjg7qdz+Uac
-         nzRnGs0jF1TgwVWuLRPVXJAhYU24FFw66mFT9F8FL+UD/SAGPzdXNnGGqvw9lZeK8zND
-         iRAw==
-X-Gm-Message-State: AFqh2kqdDKJP09Xqx9r7rpuWoLvsByQA+9t1/fJl1DP/SYaCrbsFPjOc
-        jya8L+A5m9bprZyxzbpZrlwL/mCI7Fs=
-X-Google-Smtp-Source: AMrXdXsYDWP5shGMiAXXVQkIfz7JzRr2YwOxVFcN+ZqNqk6WEmOWE6UE2GTNjP8E23+8A9XtfuGZfQ==
-X-Received: by 2002:a17:90a:f309:b0:219:9e19:8259 with SMTP id ca9-20020a17090af30900b002199e198259mr55174897pjb.46.1672940161933;
-        Thu, 05 Jan 2023 09:36:01 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id mz4-20020a17090b378400b0020aacde1964sm1623674pjb.32.2023.01.05.09.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 09:36:01 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 5 Jan 2023 07:35:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jack@suse.cz
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <Y7cKf7IH+FJ/6IyV@slm.duckdns.org>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
+        Thu, 5 Jan 2023 12:37:52 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705F2AE5C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:37:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=josQhijl3eh9kqSq44Gmb88SVuijyV+diV1kCXMMweceCMjFEshaKhNWOf8Wae3xmyHNxc6Ztui7kytwq0ul1Iea2zZ2wY6lN0o5y+8dIFrmX5Lg2DtTu3uCTEaWzhOU/W9kFhoQAi1v76vnWX/b3xJG013lhuWiGWR/CCTz1E6DguSGSKf0h0rYjTP5AubGpNuTQjUq1bo+J2D3iWM0lppoVLPKCYhEhh5A81Y+EP7jKYPHdxJkodXJ1pKS1JKMYRGcXue8sASFryB0dMXUqmBQozsN/xL7w6mLyJ1Yj+M32NhFuqQNRtUR/1245/pHQ0kF5etCjG4RWGt9NLDHZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U6eClMa1RZ8Dg5HqK82s80FlONIdb3tIvyiNypRO25Y=;
+ b=V0wZVvYnieqJ2jPYQJwvgEoQNOCFSOysrWHlAhQIewEWrDNepJS03z4p2Unnu35wuJ/5ihkM0xKRJpvryT6ZAKgbBQ1dEkD5BkmWjQSqzBUV5vWF2cH7jho6xg+XsnYc4p09uhQyd2j0KUjoknV1Qjwg+KuuHrQwcU0g5JFNboRdIlDYHtVMXYYHe/Fqu6E9spqx7Szh/6npPe1MBWBlRbeW2WGm9iMbenS0+ndOxIRjeVIeb5yKQxqcNki/6RfLAWCRsZQXtsO2yf2Ri47qs9VFz/+nid7E/HqMcl8l+wJ0e4WZz6jQd/AVZczj0fsByEpAYC3ZdfpmRn6MqBKUEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U6eClMa1RZ8Dg5HqK82s80FlONIdb3tIvyiNypRO25Y=;
+ b=vh7RWkrN9/9r97xNlVVV1D0oxyq3mXUBxYgWd/Rve3BPCdpuczUSKKf40phtuqfSfad+3tFdXqKH9lC2vNl1luoqMMO9Zc1NqtvyVtvXQQGj48i53of/9sQWREgahHFMGPrsSlbhmgG78zeEqaIGqdibrJjTcJ4KlUxt9zocWGs=
+Received: from MN2PR16CA0038.namprd16.prod.outlook.com (2603:10b6:208:234::7)
+ by DM8PR12MB5397.namprd12.prod.outlook.com (2603:10b6:8:38::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.19; Thu, 5 Jan 2023 17:37:46 +0000
+Received: from BL02EPF0000EE3F.namprd05.prod.outlook.com
+ (2603:10b6:208:234:cafe::2d) by MN2PR16CA0038.outlook.office365.com
+ (2603:10b6:208:234::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
+ Transport; Thu, 5 Jan 2023 17:37:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000EE3F.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.10 via Frontend Transport; Thu, 5 Jan 2023 17:37:44 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 5 Jan
+ 2023 11:37:42 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Zhang <dingchen.zhang@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Po Ting Chen <robin.chen@amd.com>,
+        Shirish S <shirish.s@amd.com>, Robin Chen <po-tchen@amd.com>,
+        Brian Chang <Brian.Chang@amd.com>,
+        Camille Cho <Camille.Cho@amd.com>,
+        Tom Chung <chiahsuan.chung@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/amd/display: fix PSR-SU/DSC interoperability support
+Date:   Thu, 5 Jan 2023 12:38:08 -0500
+Message-ID: <20230105173809.289367-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105161854.GA1259@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3F:EE_|DM8PR12MB5397:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35837f35-03bb-4d7a-5f34-08daef438d8c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fA23wUPRiReVAluhlS7ks0WrACFNg7bnCwqnkyXq1We9ZWzV0COdMd8BoQGZ3pG/sXOISZ7ZJtT2616oHk4GvAqhYoBilgk1V+Zuy0+V+my1yzUEGIdAugt5trYkPSeLAvzVggl0+vRE+2q75F0ykX41KxJr3I6Lb+yzOqkpzkDRNDVMyKd0n78pqnXi7WrmO0FrerXjsxgYmyyis1z0nmQ/hb6yNchD2XejE1wcxnnOe9U65dwDiEm4qgnjJoQEedtJg1d040fHaavwSjtEZyNDAFMn9jJGCLrD7fhXiR/Vk7Y9d1Y50+qfTX5HKWnlUhNZvTMS8Ak3MiQ3m+1xKsRHEuMDl6sb9xKsPOHeL3K5MfOAunjdEBgBPoX75eJnbpfZCpd8ESgUGFYG+3PYEHWYNQbiftH5WCG/Pq+dogIl1pyRN9oB9mo4klno9ldArchVZ4pS4g7VFwzwMBYjtzbtcMIODbVHEPt1B+CSeGCykOheVDPEXf7hM4YKu0wgN3PN7hdlZORDiew2ZFpdQvr7TyJ4gmyd/sPHP8Uv+KtPdGcMuiWcPP6RYb1CmIb0YDE6f65pMIcqgIOiR8OSOSjRe+dzY1Y8OXnSrl/b4OsZz0Iy8v4A0HzaGbeNopluwEMrZOeAafMQRKRVAp/ywW7M6O0GZpdfBXmshJLLV7P1a9EcM/7H/tAUcmohMkbDL0bCR7zp/ZrImzA2xgnaoRsiSMZtjb5KCCk1AbqKRYd0kcBif74+qFtIL/+tDd1jcdIJw0iHj/yX+v+C4PO0Sg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(70586007)(5660300002)(44832011)(8936002)(41300700001)(8676002)(4326008)(2906002)(70206006)(316002)(54906003)(6916009)(478600001)(2616005)(336012)(26005)(186003)(82310400005)(40480700001)(6666004)(16526019)(83380400001)(426003)(1076003)(47076005)(82740400003)(356005)(81166007)(86362001)(40460700003)(36756003)(36860700001)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:37:44.2668
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35837f35-03bb-4d7a-5f34-08daef438d8c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3F.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5397
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Currently, there are issues with enabling PSR-SU + DSC. This stems from
+the fact that DSC imposes a slice height on transmitted video data and
+we are not conforming to that slice height in PSR-SU regions. So, pass
+slice_height into su_y_granularity to feed the DSC slice height into
+PSR-SU code.
 
-On Thu, Jan 05, 2023 at 05:18:54PM +0100, Michal Koutný wrote:
-> I guess similar problem would arise for devices that are "naturally"
-> slow.
-> Then:
-> a) it must have been solved elsewhere in the block layer (but it's
->    broken),
-> b) it should be solved generically in the block layer (thus this is only
->    a partial solution).
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+v2: move code to modules/power.
+---
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c |  3 ++
+ .../amd/display/modules/power/power_helpers.c | 35 +++++++++++++++++++
+ .../amd/display/modules/power/power_helpers.h |  3 ++
+ 3 files changed, 41 insertions(+)
 
-Hard limits tend to make this sort of problems a lot more pronounced because
-the existing mechanisms tend to break down for the users which are severely
-throttled down even while the device as a whole is fairly idle. cpu.max
-often triggers severe priority inversions too, so it isn't too surprising
-that people hit severe priority inversion issues w/ io.max.
-
-Another problem with blk-throttle is that it doesn't prioritize shared IOs
-identified by bio_issue_as_root_blkg() like iolatency and iocost do, so
-there can be very severe priority inversions when e.g. journal commit gets
-trapped in a low priority cgroup further exacerbating issues like this.
-
-Thanks.
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+index 26291db0a3cf..872d06fe1436 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+@@ -122,6 +122,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
+ 		psr_config.allow_multi_disp_optimizations =
+ 			(amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
+ 
++		if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
++			return false;
++
+ 		ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
+ 
+ 	}
+diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+index 9b5d9b2c9a6a..4d27ad9f7370 100644
+--- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
++++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+@@ -916,3 +916,38 @@ bool mod_power_only_edp(const struct dc_state *context, const struct dc_stream_s
+ {
+ 	return context && context->stream_count == 1 && dc_is_embedded_signal(stream->signal);
+ }
++
++bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
++			      struct dc_stream_state *stream,
++			      struct psr_config *config)
++{
++	uint16_t pic_height;
++	uint8_t slice_height;
++
++	if (!dc->caps.edp_dsc_support ||
++	    link->panel_config.dsc.disable_dsc_edp ||
++	    !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
++	    !stream->timing.dsc_cfg.num_slices_v)
++		return true;
++
++	pic_height = stream->timing.v_addressable +
++		stream->timing.v_border_top + stream->timing.v_border_bottom;
++	slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
++
++	if (slice_height) {
++		if (config->su_y_granularity &&
++		    (slice_height % config->su_y_granularity)) {
++			WARN(1,
++			     "%s: dsc: %d, slice_height: %d, num_slices_v: %d\n",
++			     __func__,
++			     stream->sink->dsc_caps.dsc_dec_caps.is_dsc_supported,
++			     slice_height,
++			     stream->timing.dsc_cfg.num_slices_v);
++			return false;
++		}
++
++		config->su_y_granularity = slice_height;
++	}
++
++	return true;
++}
+diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+index 316452e9dbc9..bb16b37b83da 100644
+--- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
++++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+@@ -59,4 +59,7 @@ void mod_power_calc_psr_configs(struct psr_config *psr_config,
+ 		const struct dc_stream_state *stream);
+ bool mod_power_only_edp(const struct dc_state *context,
+ 		const struct dc_stream_state *stream);
++bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
++			      struct dc_stream_state *stream,
++			      struct psr_config *config);
+ #endif /* MODULES_POWER_POWER_HELPERS_H_ */
 -- 
-tejun
+2.38.1
+
