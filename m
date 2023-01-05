@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134EE65EDC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F3C65EDBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbjAENsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S232917AbjAENsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbjAENrP (ORCPT
+        with ESMTP id S231823AbjAENrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:47:15 -0500
+        Thu, 5 Jan 2023 08:47:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46A13D9DF;
-        Thu,  5 Jan 2023 05:47:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26C7392DE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:47:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6474E61A8D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1D361A8A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47080C433F1;
         Thu,  5 Jan 2023 13:47:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30FCC433F0;
-        Thu,  5 Jan 2023 13:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926433;
-        bh=5PvMVJ+De8GLNJxPP8DhyDrpZdidR1+tQOfU9i8T7uE=;
+        s=k20201202; t=1672926435;
+        bh=hn3HISdXEY51xtvJzrgO8TbVIWPbUwezVx/zrFwoZfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mw2+yIKhRrAXQmrCfUNpEWl94azK5I8+iqKBydGYHk6o8kfI9128IY5wVCjdKXECL
-         MIXqh5QuXse6XkGENWc+s0wE2bX2PGpJGRmUSQvFOssPorPiCVEYRvwiNckBiQOdMw
-         izgrWrne5+bC2HqNibiwNwCRC2ure4/a3NKFRvo6zG2cVhwlNuAQK5nFtQ9Uz6W/F/
-         wWSlXfjh/uhQkTS8z4yslaNUUy8k84l3w77B+aI1g66t1xG9qDIsmjabHcucEMYI6u
-         zStpYC6bU6u67G/oYY2WWYuUrbCl+8CQNy8g0y860hizA669dc4dmyki4HVmI8h3sj
-         9+iNFhARVcdCg==
+        b=OOu0etm9SyEPsON530cLE3M9D98J3SXv/oR6KUshtU9XE18FvozfgoE70ywh2tbUv
+         pz2z0yAokfqjdCZ/WxKmHbcIOhCjVr0ZaGz5uAWYNWIoJ6pgRq+348PUoX20nTJxYc
+         IfeZtuZBRUEDGNbImoRFZ3LLnR2M3RJuYA7s+zLC4fPuIORSSI9bhHrDUBtdLsutu6
+         1cpoVtEJQxCmcUzLr7cA2qIrcXm+HIVgQY9NynVYJ9qqJ+/AoZdBKpKg2Chw0PyjVm
+         ZVLKmE1pjRpXjzk9Mmz5HDcB3wF1CndfduKTM5FPC3wmYSCfwYF2Hkwu2DZNP3N/7R
+         Yn4LhhgsSdrvQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org
-Subject: [PATCH 12/27] input: remove zylonite touchscreen driver
-Date:   Thu,  5 Jan 2023 14:46:07 +0100
-Message-Id: <20230105134622.254560-13-arnd@kernel.org>
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH 13/27] pcmcia: remove unused pxa/sa1100 drivers
+Date:   Thu,  5 Jan 2023 14:46:08 +0100
+Message-Id: <20230105134622.254560-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -59,60 +58,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The PXA zylonite platform was removed, so this driver has no
-remaining users.
+A number of boards got removed, so this code is now orphaned.
 
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-input@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/input/touchscreen/Kconfig           |  14 --
- drivers/input/touchscreen/Makefile          |   1 -
- drivers/input/touchscreen/zylonite-wm97xx.c | 220 --------------------
- 3 files changed, 235 deletions(-)
- delete mode 100644 drivers/input/touchscreen/zylonite-wm97xx.c
+ drivers/pcmcia/Kconfig            |  12 +--
+ drivers/pcmcia/Makefile           |   5 -
+ drivers/pcmcia/pxa2xx_mainstone.c | 122 -----------------------
+ drivers/pcmcia/sa1100_simpad.c    | 115 ----------------------
+ drivers/pcmcia/sa1111_badge4.c    | 158 ------------------------------
+ drivers/pcmcia/sa1111_lubbock.c   | 155 -----------------------------
+ 6 files changed, 2 insertions(+), 565 deletions(-)
+ delete mode 100644 drivers/pcmcia/pxa2xx_mainstone.c
+ delete mode 100644 drivers/pcmcia/sa1100_simpad.c
+ delete mode 100644 drivers/pcmcia/sa1111_badge4.c
+ delete mode 100644 drivers/pcmcia/sa1111_lubbock.c
 
-diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
-index 5abb45ea1b1b..ca00f55eaf45 100644
---- a/drivers/input/touchscreen/Kconfig
-+++ b/drivers/input/touchscreen/Kconfig
-@@ -928,20 +928,6 @@ config TOUCHSCREEN_WM97XX_MAINSTONE
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called mainstone-wm97xx.
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index 1525023e49b6..44c16508ef14 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -194,10 +194,8 @@ config PCMCIA_SA1111
+ 	tristate "SA1111 support"
+ 	depends on ARM && SA1111 && PCMCIA
+ 	select PCMCIA_SOC_COMMON
+-	select PCMCIA_SA11XX_BASE if ARCH_SA1100
+-	select PCMCIA_PXA2XX if ARCH_LUBBOCK && SA1111
++	select PCMCIA_SA11XX_BASE
+ 	select PCMCIA_MAX1600 if ASSABET_NEPONSET
+-	select PCMCIA_MAX1600 if ARCH_LUBBOCK && SA1111
+ 	help
+ 	  Say Y  here to include support for SA1111-based PCMCIA or CF
+ 	  sockets, found on the Jornada 720, Graphicsmaster and other
+@@ -207,14 +205,8 @@ config PCMCIA_SA1111
  
--config TOUCHSCREEN_WM97XX_ZYLONITE
--	tristate "Zylonite accelerated touch"
--	depends on TOUCHSCREEN_WM97XX && MACH_ZYLONITE
--	depends on SND_PXA2XX_LIB_AC97
--	select TOUCHSCREEN_WM9713
--	help
--	  Say Y here for support for streaming mode with the touchscreen
--	  on Zylonite systems.
--
--	  If unsure, say N.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called zylonite-wm97xx.
--
- config TOUCHSCREEN_USB_COMPOSITE
- 	tristate "USB Touchscreen Driver"
- 	depends on USB_ARCH_HAS_HCD
-diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
-index 3bc2a47c489c..7053fede594e 100644
---- a/drivers/input/touchscreen/Makefile
-+++ b/drivers/input/touchscreen/Makefile
-@@ -107,7 +107,6 @@ wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9705)	+= wm9705.o
- wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9712)	+= wm9712.o
- wm97xx-ts-$(CONFIG_TOUCHSCREEN_WM9713)	+= wm9713.o
- obj-$(CONFIG_TOUCHSCREEN_WM97XX_MAINSTONE)	+= mainstone-wm97xx.o
--obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
- obj-$(CONFIG_TOUCHSCREEN_SX8654)	+= sx8654.o
- obj-$(CONFIG_TOUCHSCREEN_TPS6507X)	+= tps6507x-ts.o
- obj-$(CONFIG_TOUCHSCREEN_ZET6223)	+= zet6223.o
-diff --git a/drivers/input/touchscreen/zylonite-wm97xx.c b/drivers/input/touchscreen/zylonite-wm97xx.c
+ config PCMCIA_PXA2XX
+ 	tristate "PXA2xx support"
+-	depends on ARM && ARCH_PXA && PCMCIA
+-	depends on (ARCH_LUBBOCK || MACH_MAINSTONE || PXA_SHARPSL \
+-		    || ARCH_PXA_PALM || TRIZEPS_PCMCIA \
+-		    || ARCOM_PCMCIA || ARCH_PXA_ESERIES \
+-		    || MACH_VPAC270 || MACH_BALLOON3 || MACH_COLIBRI \
+-		    || MACH_COLIBRI320 || MACH_H4700)
++	depends on ARM && ARCH_PXA && PCMCIA && PXA_SHARPSL
+ 	select PCMCIA_SOC_COMMON
+-	select PCMCIA_MAX1600 if MACH_MAINSTONE
+ 	help
+ 	  Say Y here to include support for the PXA2xx PCMCIA controller
+ 
+diff --git a/drivers/pcmcia/Makefile b/drivers/pcmcia/Makefile
+index b3a2accf47af..c9d51b150682 100644
+--- a/drivers/pcmcia/Makefile
++++ b/drivers/pcmcia/Makefile
+@@ -36,17 +36,12 @@ obj-$(CONFIG_PCMCIA_MAX1600)			+= max1600.o
+ 
+ sa1111_cs-y					+= sa1111_generic.o
+ sa1111_cs-$(CONFIG_ASSABET_NEPONSET)		+= sa1111_neponset.o
+-sa1111_cs-$(CONFIG_SA1100_BADGE4)		+= sa1111_badge4.o
+ sa1111_cs-$(CONFIG_SA1100_JORNADA720)		+= sa1111_jornada720.o
+-sa1111_cs-$(CONFIG_ARCH_LUBBOCK)		+= sa1111_lubbock.o
+ 
+ sa1100_cs-y					+= sa1100_generic.o
+ sa1100_cs-$(CONFIG_SA1100_COLLIE)		+= pxa2xx_sharpsl.o
+-sa1100_cs-$(CONFIG_SA1100_H3100)		+= sa1100_h3600.o
+ sa1100_cs-$(CONFIG_SA1100_H3600)		+= sa1100_h3600.o
+-sa1100_cs-$(CONFIG_SA1100_SIMPAD)		+= sa1100_simpad.o
+ 
+-pxa2xx-obj-$(CONFIG_MACH_MAINSTONE)		+= pxa2xx_mainstone.o
+ pxa2xx-obj-$(CONFIG_PXA_SHARPSL)		+= pxa2xx_sharpsl.o
+ obj-$(CONFIG_PCMCIA_PXA2XX)			+= pxa2xx_base.o $(pxa2xx-obj-y)
+ obj-$(CONFIG_PCMCIA_XXS1500)			+= xxs1500_ss.o
+diff --git a/drivers/pcmcia/pxa2xx_mainstone.c b/drivers/pcmcia/pxa2xx_mainstone.c
 deleted file mode 100644
-index a70fe4abe520..000000000000
+index a076e4108452..000000000000
+diff --git a/drivers/pcmcia/sa1100_simpad.c b/drivers/pcmcia/sa1100_simpad.c
+deleted file mode 100644
+index 784ada5b8c4f..000000000000
+diff --git a/drivers/pcmcia/sa1111_badge4.c b/drivers/pcmcia/sa1111_badge4.c
+deleted file mode 100644
+index e76d5ba921dd..000000000000
+diff --git a/drivers/pcmcia/sa1111_lubbock.c b/drivers/pcmcia/sa1111_lubbock.c
+deleted file mode 100644
+index f1b5160cb8fa..000000000000
 -- 
 2.39.0
 
