@@ -2,62 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BF165E544
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AA865E542
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjAEFw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 00:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S230106AbjAEFwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 00:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAEFwx (ORCPT
+        with ESMTP id S229970AbjAEFwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 00:52:53 -0500
+        Thu, 5 Jan 2023 00:52:20 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2993D9EC
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 21:52:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C974043A05;
+        Wed,  4 Jan 2023 21:52:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672897972; x=1704433972;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=3EXkT2fNQRTFG2OT2VWG5ftzhhu7iIfPyf2Gk/i3nmc=;
-  b=IuyCgEBYo2Vg4Lqsl0Zh31bZATVhXlCAQMKc03qHX+U92GA3rKUMthX4
-   rNKKIgROFNBGoeBcYRpF/uuc7aHA4kVhckp4FwIdriR2OxDM9W+oeJGCD
-   hGPoIMNbc7wUdZmD2sveYEVfFNhuBwfmCyZeHnI6RDRoxS7OHN8Ok1ef/
-   dGRU32nkdu+VGzbNlbF0Oi8C1ae3j5PKKowGSXq8J5dYHgDYlCsVTAUSY
-   oUXuZM9Y0a8i1fZXZnYgy/Jxk7sW7QM8SRNi56nfTbnCGAU6ISlbWGxOb
-   DwNDR+J6ONAYFfytk3RosXKRI7+4VqM7CGQgi1iXbjZpHBGPOGAK31QEO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320830750"
+  t=1672897939; x=1704433939;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=w3ghNSN6Qry5E1NbPDSDBDBM+g78Y1P6N4pNSduy/9g=;
+  b=PoSSVaptgq1BlS09F8uispZGD5Qx2a7GwErYAyByGV0CAx3vOF7hRihn
+   FfkcU+awqq1h+l1TV8EmkqWJM7+q293IrXBmO8/YvjyrxhRJ0CIl/CtGg
+   ex5jF7S0NfGwCF434GUYBFGxkl4piQudcNf+/c4JW5F3NSv1Of8KI0wJ7
+   txodslefGFMO2XMmM5EZwTOTDZMARe0LWv5RYpo+KXcbPyWMn4RQy2cnJ
+   RRAh8xcfjB9hZMkRDAh7czV0+JLZ0JV8TvyIKhU3cKU9AAyumetG5I8j7
+   w/V/dcjvbX/s1gG9iNOjthFC0UqOkWsutxZDDSNvqp7SUMNhIVwMCZ3C0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320830667"
 X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="320830750"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 21:52:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="655435332"
+   d="scan'208";a="320830667"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 21:52:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="605417991"
 X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="655435332"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 21:52:47 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 2/8] migrate_pages: separate hugetlb folios migration
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-3-ying.huang@intel.com>
-        <87pmbttxmj.fsf@nvidia.com>
-Date:   Thu, 05 Jan 2023 13:51:54 +0800
-In-Reply-To: <87pmbttxmj.fsf@nvidia.com> (Alistair Popple's message of "Thu,
-        05 Jan 2023 15:13:25 +1100")
-Message-ID: <87pmbtedfp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="605417991"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jan 2023 21:52:17 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 4 Jan 2023 21:52:16 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 4 Jan 2023 21:52:15 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 4 Jan 2023 21:52:15 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 4 Jan 2023 21:52:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RdDbEW2yUnDqo1TpbNJC7G4p/fIyB34tX0j/5AQugb+wWXLN0EGALnKCAEiULBsD3a6tTUUG6WY2SG5Ok7gxU92rKUIcmxQeKw2tlPz0JwAc3GgkL3z16pnGsl7ffdBqW7Ls6v/tZXSyUc2IMlcvjtvdBYHGSY0Z6f2dcKEB3SgaCNI8yfjztd3Qup5KvfeaHJObYnDFkLsgJNDvBsRfhYrjarMNF/iKwLK1bBLGw7X0LzXYlH72xGtC2s22ZTYJtm5oGC1yLv8HMltYa9Ly7DElOXaksiXRbfPC7KV/4OyUJw5Rm36dVmgP1fmevYZw/6oDjzVr/qzY3tbusc5Bjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Np8akPw4A6p3YbzkTDJC1/+8MOGpb5coDW36Q0T7nPs=;
+ b=GbQivSAJtTEKpJK1xp0YH1MxtaNmVAYI0D5jb8nrugd67eWzdfStU/Z1TWeXLmv3rpaWAlawZn/P35vqkww3N3iGVfYAMUhIGTQ5jfcOVwCc8z1bMWALzkSk13p7JK6Vzt8IcIPeNxG8GqQjZ0Jpe4JKWQI4k6R4voGShWCZtcP5lrbdj4oeTrq0sOfcHHPGQwVqpZWI9uUkehmsd82ctiJpB7fzqqX4oJQj8Yr2+ccg/3eM/ULnXoh3lOobcNHHTDr0K80XjTRU3aVM4LayGGufpom9fkEVp9wx8uBmCpUaL6nRldrozVMaGRCMlJgj2Ektlf4incZuY+3kfL5vdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
+ by DS7PR11MB6197.namprd11.prod.outlook.com (2603:10b6:8:9b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 05:52:14 +0000
+Received: from BYAPR11MB3367.namprd11.prod.outlook.com
+ ([fe80::86b7:ffac:438a:5f44]) by BYAPR11MB3367.namprd11.prod.outlook.com
+ ([fe80::86b7:ffac:438a:5f44%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 05:52:14 +0000
+From:   "G, GurucharanX" <gurucharanx.g@intel.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "jiri@resnulli.us" <jiri@resnulli.us>
+CC:     "leon@kernel.org" <leon@kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: RE: [Intel-wired-lan] [PATCH net v4] ice: Add check for kzalloc
+Thread-Topic: [Intel-wired-lan] [PATCH net v4] ice: Add check for kzalloc
+Thread-Index: AQHZCwn9v0rjK++f206vYyno195yEa6PfYUg
+Date:   Thu, 5 Jan 2023 05:52:13 +0000
+Message-ID: <BYAPR11MB3367038BA3776DF1C17D1B97FCFA9@BYAPR11MB3367.namprd11.prod.outlook.com>
+References: <20221208133552.21915-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20221208133552.21915-1-jiasheng@iscas.ac.cn>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR11MB3367:EE_|DS7PR11MB6197:EE_
+x-ms-office365-filtering-correlation-id: b23d99ba-9356-48ea-5dc5-08daeee0feb8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WajosZH0PNZM7UvT5+fXoEhka1i8p0isOgtkeTM+RGA6M231b4fOxNYxqeApf+P3GFU+llSqvN4EuA8ju6jBZa7yGtWB1AbTUyrCD90MBFyO0dHkd9+WY7rZMZkqCM6wUk6dOwLaOjHa14vgdcgLuo2uVEse6lrXto0B5lveysnZmNjAmf4tqYn7XQdmuROT2qM8ViGXUAFn2RcM8Jb0DogIfTZskIKZEbS/S0sHWE7jRHQyCxcND62tM8vERRb/P45cxhVPjzQMRjiYk0Bviy2V8NFBkRcDSmQTeGFAbfjQsvBDmHgrJJF2R4iUuCpzKidQ0pulhH9hPp0DjNEGqGWEVL66S98joQEbtCX0eH9/9CRYJ6HKKg0GWiciJJuFMtX3tUEBQKaql+rPybmHL1EvYvx1OeoyVUtCfwh5TD5QsjgpeFV1ECuEjL5I/hplUPqEJmKtxurBUuUWvpNvecPaUdprBoUz1NprckYiDsVT8ZaxZWu7sYRUvrzCAW3N7SPUJn9sQfRgsycGcVutbgzJcHTXd3KDmfARF60DcwXZA2EtuN3TVAjOpXwsQVP+CoozsInn9rf+1rjnalngw7D3ZGcA3KWoKvimnnXvfFjAcHXuLwOy8hbdzOtnOU4c7uoCws707gQ7vmmpGPaHKfnjmP/xehBEBxHG0NjQdW3zEyGVab8pnvKF8ws8jxxKbevMfOv3mj3weFhbwAuQ3g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(396003)(376002)(136003)(346002)(451199015)(41300700001)(8936002)(4326008)(66946007)(5660300002)(8676002)(76116006)(7416002)(54906003)(110136005)(316002)(2906002)(52536014)(53546011)(66556008)(7696005)(6506007)(71200400001)(55236004)(66446008)(66476007)(64756008)(478600001)(86362001)(55016003)(26005)(9686003)(83380400001)(186003)(122000001)(38100700002)(82960400001)(38070700005)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3GKaj7n2WUHqGQH00REZ5d4zUl8gQiUvAbJZv3ool3wWVbjf2EUPiBEQ1WOr?=
+ =?us-ascii?Q?XNSfHU+tuIB1MiPmktu7MRwL/siDUwHMN5RBJYubnaPubAxaJgxKIYl2LG1O?=
+ =?us-ascii?Q?0K3otVO9WPBUj+pFn0+73i5jBV8ih1GAU1oP+an5MP7CVOQK/kNmINVmR1WI?=
+ =?us-ascii?Q?IzervQfEDrrJORp7lzbNmjb5zLZ3PixkB/SXD1AV9gEATLXCXxOyGfStf72o?=
+ =?us-ascii?Q?YCk3C91AnrjibPBjdwCH0s5ZcLQb0LpTmBh4v98oHlZwijKRlHE+FvIjIqm/?=
+ =?us-ascii?Q?mORywcWIUeTDUkmsPaAnlean+b8xYye5eHvrLXcfq8Svbc7JwoWnW15KCP26?=
+ =?us-ascii?Q?ljMnjek2/4A616CVvzDhqSROKsxUQTV+fX9YWtCmhmuvxKk7OFJ4guR6kFo3?=
+ =?us-ascii?Q?AW/wzM/c97vt/Lri060aB+22ffyjPENu+nAFKd+G+0+AquWOBXzjveU1UbzB?=
+ =?us-ascii?Q?hmAbwiEO3rvyq2zPRy6udtF9MqwA2u8CIMyNk+4wJDsZBfjo3zIJ+W4Uhopq?=
+ =?us-ascii?Q?XgiL/BPdMgHr3Q+RSA5OYg96IdJ5FVoi+9Flsaqkk7gAbBVdzUqiqgo6Mk98?=
+ =?us-ascii?Q?aw9eFT8uyvPG+IhJic0YXNjAe4IgpQzdZ3JvnLidawLNlrX+WjBzOTGkUIdG?=
+ =?us-ascii?Q?7EOAHg3xhzDGiRUYH6971/pRnGHffb7JJrTrNTvNR3wNL0GxUUYZBAAmz8Ht?=
+ =?us-ascii?Q?JCkkMJ271yOpfaipakTw1F9hKfWpFVQbbU9CWL1SzKsQFb6iFzO+F6h+haOF?=
+ =?us-ascii?Q?1fEZOXqMper6wj48YnIh28frrwGLSCLJGGduAs1fq4G7PSePUY1UF5GCiYtA?=
+ =?us-ascii?Q?cs1Ioy9fhcMzPIVO+9Hi/Yc7tSf9QK/R5GTQJIJnajoOgrOVEaoxeg4SgLMR?=
+ =?us-ascii?Q?gCrf67B58RoWoN5o5esGbPriUoYHl9dlCw/Hz2les7bgPL2omzy1QPcPAmi8?=
+ =?us-ascii?Q?JojAV+OTE2T66I0ih06bU7a3B474eZ4IkOdHUwoQa4umlF7s0nA2GLJ+eWHH?=
+ =?us-ascii?Q?1J10To5jiRUrZvBMoY3RGInxd90syJgsMDY33Qv6ig6UGjgxANhL8zBYGYPw?=
+ =?us-ascii?Q?bRnVTmaY2zJRKzx1gFVIxy/9f1ucHOgQ7f9VF7HfAW/5aKbZYKoaphJ3ngre?=
+ =?us-ascii?Q?gLB8ad7hbqrVbWAv3Gmob5ftrEPa+LLnLrH4ZQSB4+r+Op0bTsYmoNxPiod0?=
+ =?us-ascii?Q?M4Vjzqg7GxVP9QPaKkfY1MVD8n+SOXE2xzomtur54HOWtZ1/Wt6wBEfMtkTP?=
+ =?us-ascii?Q?1bT4SsXJeNDUb1SDYVRVzZKfhe0Lmz1/CiodaRsAGECqqYcPQBrZQBl5YCyF?=
+ =?us-ascii?Q?duk6TXadUJercvh/Aul+jMERqISWPuykpX5tuQ6O/wwIsO/GjQuhJK71w2Dt?=
+ =?us-ascii?Q?h3ec41iaR/CACSfmbpF8cIIN+uXbMf8m1azLVyZHmsHjghpYvMXyOPsK1RWx?=
+ =?us-ascii?Q?UNwYs3pSdg9DmwPXduUGTUnL8nNdXRqrnQsQyUer5nj0V21CBN4yl0R2vOlL?=
+ =?us-ascii?Q?58arP8G0LpJlZ+M2qrcytWhZECj5qv8gTHWAW0ChcZPuVltgk9NhQU3AcWPb?=
+ =?us-ascii?Q?EIrwLzXswTyen+E9dKUewEJ+rbFGJbzgzybVybO+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b23d99ba-9356-48ea-5dc5-08daeee0feb8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2023 05:52:13.9770
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ayndtA8It02B2uqE3ZA9YhDD/ICSyKqfn3Mxs86PypJQKYknaedQH26FvsMPKH630+hck8MJbqUwcT0Qx4xA9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6197
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,224 +159,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
 
-> Huang Ying <ying.huang@intel.com> writes:
->
->> This is a preparation patch to batch the folio unmapping and moving
->> for the non-hugetlb folios.  Based on that we can batch the TLB
->> shootdown during the folio migration and make it possible to use some
->> hardware accelerator for the folio copying.
->>
->> In this patch the hugetlb folios and non-hugetlb folios migration is
->> separated in migrate_pages() to make it easy to change the non-hugetlb
->> folios migration implementation.
->>
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Cc: Oscar Salvador <osalvador@suse.de>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Bharata B Rao <bharata@amd.com>
->> Cc: Alistair Popple <apopple@nvidia.com>
->> Cc: haoxin <xhao@linux.alibaba.com>
->> ---
->>  mm/migrate.c | 114 ++++++++++++++++++++++++++++++++++++++++++++-------
->>  1 file changed, 99 insertions(+), 15 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index ec9263a33d38..bdbe73fe2eb7 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1404,6 +1404,87 @@ struct migrate_pages_stats {
->>  	int nr_thp_split;
->>  };
->>  
->> +static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
->> +			    free_page_t put_new_page, unsigned long private,
->> +			    enum migrate_mode mode, int reason,
->> +			    struct migrate_pages_stats *stats,
->> +			    struct list_head *ret_folios)
->> +{
->> +	int retry = 1;
->> +	int nr_failed = 0;
->> +	int nr_retry_pages = 0;
->> +	int pass = 0;
->> +	struct folio *folio, *folio2;
->> +	int rc = 0, nr_pages;
->> +
->> +	for (pass = 0; pass < 10 && retry; pass++) {
->> +		retry = 0;
->> +		nr_retry_pages = 0;
->> +
->> +		list_for_each_entry_safe(folio, folio2, from, lru) {
->> +			if (!folio_test_hugetlb(folio))
->> +				continue;
->> +
->> +			nr_pages = folio_nr_pages(folio);
->> +
->> +			cond_resched();
->> +
->> +			rc = unmap_and_move_huge_page(get_new_page,
->> +						      put_new_page, private,
->> +						      &folio->page, pass > 2, mode,
->> +						      reason, ret_folios);
->> +			/*
->> +			 * The rules are:
->> +			 *	Success: hugetlb folio will be put back
->> +			 *	-EAGAIN: stay on the from list
->> +			 *	-ENOMEM: stay on the from list
->> +			 *	-ENOSYS: stay on the from list
->> +			 *	Other errno: put on ret_folios list
->> +			 */
->> +			switch(rc) {
->> +			case -ENOSYS:
->> +				/* Hugetlb migration is unsupported */
->> +				nr_failed++;
->> +				stats->nr_failed_pages += nr_pages;
->> +				list_move_tail(&folio->lru, ret_folios);
->> +				break;
->> +			case -ENOMEM:
->> +				/*
->> +				 * When memory is low, don't bother to try to migrate
->> +				 * other folios, just exit.
->> +				 */
->> +				nr_failed++;
->
-> This currently isn't relevant for -ENOMEM and I think it would be
-> clearer if it was dropped.
 
-OK.
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+> Jiasheng Jiang
+> Sent: Thursday, December 8, 2022 7:06 PM
+> To: jiri@resnulli.us
+> Cc: leon@kernel.org; intel-wired-lan@lists.osuosl.org; Jiasheng Jiang
+> <jiasheng@iscas.ac.cn>; Brandeburg, Jesse <jesse.brandeburg@intel.com>;
+> linux-kernel@vger.kernel.org; edumazet@google.com; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; netdev@vger.kernel.org; kuba@kernel.org;
+> pabeni@redhat.com; davem@davemloft.net
+> Subject: [Intel-wired-lan] [PATCH net v4] ice: Add check for kzalloc
+>=20
+> Add the check for the return value of kzalloc in order to avoid NULL poin=
+ter
+> dereference.
+> Moreover, use the goto-label to share the clean code.
+>=20
+> Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+>=20
+> v3 -> v4:
+>=20
+> 1. Move the check right after the kzalloc.
+>=20
+> v2 -> v3:
+>=20
+> 1. Use "while (i--)" to simplify the code.
+>=20
+> v1 -> v2:
+>=20
+> 1. Use goto-label to share the clean code.
+> ---
+>  drivers/net/ethernet/intel/ice/ice_gnss.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+>=20
 
->> +				stats->nr_failed_pages += nr_pages;
->
-> Makes sense not to continue migration with low memory, but shouldn't we
-> add the remaining unmigrated hugetlb folios to stats->nr_failed_pages as
-> well? Ie. don't we still have to continue the iteration to to find and
-> account for these?
-
-I think nr_failed_pages only counts tried pages.  IIUC, it's the
-original behavior and behavior for non-hugetlb pages too.
-
->> +				goto out;
->
-> Given this is the only use of the out label, and that there is a special
-> case for -ENOMEM there anyway I think it would be clearer to return
-> directly.
-
-Sounds good.  Will do that in next version.
-
->> +			case -EAGAIN:
->> +				retry++;
->> +				nr_retry_pages += nr_pages;
->> +				break;
->> +			case MIGRATEPAGE_SUCCESS:
->> +				stats->nr_succeeded += nr_pages;
->> +				break;
->> +			default:
->> +				/*
->> +				 * Permanent failure (-EBUSY, etc.):
->> +				 * unlike -EAGAIN case, the failed folio is
->> +				 * removed from migration folio list and not
->> +				 * retried in the next outer loop.
->> +				 */
->> +				nr_failed++;
->> +				stats->nr_failed_pages += nr_pages;
->> +				break;
->> +			}
->> +		}
->> +	}
->> +out:
->> +	nr_failed += retry;
->> +	stats->nr_failed_pages += nr_retry_pages;
->> +	if (rc != -ENOMEM)
->> +		rc = nr_failed;
->> +
->> +	return rc;
->> +}
->> +
->>  /*
->>   * migrate_pages - migrate the folios specified in a list, to the free folios
->>   *		   supplied as the target for the page migration
->> @@ -1437,7 +1518,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  	int retry = 1;
->>  	int large_retry = 1;
->>  	int thp_retry = 1;
->> -	int nr_failed = 0;
->> +	int nr_failed;
->>  	int nr_retry_pages = 0;
->>  	int nr_large_failed = 0;
->>  	int pass = 0;
->> @@ -1454,6 +1535,12 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  	trace_mm_migrate_pages_start(mode, reason);
->>  
->>  	memset(&stats, 0, sizeof(stats));
->> +	rc = migrate_hugetlbs(from, get_new_page, put_new_page, private, mode, reason,
->> +			      &stats, &ret_folios);
->> +	if (rc < 0)
->> +		goto out;
->> +	nr_failed = rc;
->> +
->>  split_folio_migration:
->>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
->>  		retry = 0;
->> @@ -1462,30 +1549,28 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  		nr_retry_pages = 0;
->>  
->>  		list_for_each_entry_safe(folio, folio2, from, lru) {
->> +			if (folio_test_hugetlb(folio)) {
->
-> How do we hit this case? Shouldn't migrate_hugetlbs() have already moved
-> any hugetlb folios off the from list?
-
-Retried hugetlb folios will be kept in from list.
-
->> +				list_move_tail(&folio->lru, &ret_folios);
->> +				continue;
->> +			}
->> +
->>  			/*
->>  			 * Large folio statistics is based on the source large
->>  			 * folio. Capture required information that might get
->>  			 * lost during migration.
->>  			 */
->> -			is_large = folio_test_large(folio) && !folio_test_hugetlb(folio);
->> +			is_large = folio_test_large(folio);
->>  			is_thp = is_large && folio_test_pmd_mappable(folio);
->>  			nr_pages = folio_nr_pages(folio);
->> +
->>  			cond_resched();
->>  
->> -			if (folio_test_hugetlb(folio))
->> -				rc = unmap_and_move_huge_page(get_new_page,
->> -						put_new_page, private,
->> -						&folio->page, pass > 2, mode,
->> -						reason,
->> -						&ret_folios);
->> -			else
->> -				rc = unmap_and_move(get_new_page, put_new_page,
->> -						private, folio, pass > 2, mode,
->> -						reason, &ret_folios);
->> +			rc = unmap_and_move(get_new_page, put_new_page,
->> +					    private, folio, pass > 2, mode,
->> +					    reason, &ret_folios);
->>  			/*
->>  			 * The rules are:
->> -			 *	Success: non hugetlb folio will be freed, hugetlb
->> -			 *		 folio will be put back
->> +			 *	Success: folio will be freed
->>  			 *	-EAGAIN: stay on the from list
->>  			 *	-ENOMEM: stay on the from list
->>  			 *	-ENOSYS: stay on the from list
->> @@ -1512,7 +1597,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>  						stats.nr_thp_split += is_thp;
->>  						break;
->>  					}
->> -				/* Hugetlb migration is unsupported */
->>  				} else if (!no_split_folio_counting) {
->>  					nr_failed++;
->>  				}
-
-Best Regards,
-Huang, Ying
+Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at I=
+ntel)
