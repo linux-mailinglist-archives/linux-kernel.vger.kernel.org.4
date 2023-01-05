@@ -2,191 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108FF65E60B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC0665E60D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjAEH2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S231258AbjAEH2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:28:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjAEH2l (ORCPT
+        with ESMTP id S231244AbjAEH2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:28:41 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CEB52764
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:28:36 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3056hdea023052;
-        Thu, 5 Jan 2023 07:28:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0ZqWfpEWKdJqFzp4KsjrnYoNMDEmX6W7KWnwcqrc+10=;
- b=kSfL7gvE5OlxA/Rpcm82VOeu1mB6C3AHoHfYaZvgz3AHltEjEluNWBXLWL3nWv4GmU30
- u+W9/btuq/KnwC9swz8U7YbpJbLPFQkgaB3pmlTTb2KsXo5/CJ2osVEY9lQdv0PFG1MO
- 5o8guImeYSctnwzcSLTBCeBy4GlWvi2x5eYbPTKcNXvM/YE+U8dVNyrqIUOLeMa5LgQU
- nVJHHWzOVSlKbUH64v6fIdBaZ1STg2d0XehYgJ93YxUvQdhy7FV7ZROe89Wi45yXO9Jk
- h75dm4vNVj3kxutmVfABGuYgdwOKgzUlZQtfbdIdWlfiTprckpBC9nCbD9MbAR42uyHi nw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwshnryv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 07:28:27 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3054vfLo020172;
-        Thu, 5 Jan 2023 07:28:25 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mtcq6ed1e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 07:28:24 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3057SMDg45351338
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Jan 2023 07:28:22 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F8DC20043;
-        Thu,  5 Jan 2023 07:28:22 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EDDC20040;
-        Thu,  5 Jan 2023 07:28:21 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  5 Jan 2023 07:28:21 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 60D8D60431;
-        Thu,  5 Jan 2023 18:28:17 +1100 (AEDT)
-Message-ID: <20729da992c608ed40f5f037a7314395075a4254.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 6/7] powerpc/secvar: Extend sysfs to include config
- vars
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Russell Currey <ruscur@russell.cc>, linuxppc-dev@lists.ozlabs.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, mpe@ellerman.id.au
-Date:   Thu, 05 Jan 2023 18:28:16 +1100
-In-Reply-To: <20221230042014.154483-7-ruscur@russell.cc>
-References: <20221230042014.154483-1-ruscur@russell.cc>
-         <20221230042014.154483-7-ruscur@russell.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Thu, 5 Jan 2023 02:28:48 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D44A4BD59
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:28:24 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id ge16so35345587pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 23:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qt1/1jt/A2jfQF0MWqTApdHyZ/eifCsttJnc6t5bAhc=;
+        b=ljjg/ss9Lr0VO0mLUyc8ixTvn6Ok2pFNoVH+NGeMcx1aPc7QRcxbtAKSBTSKNkWSJL
+         Nb/hAeuEZCNR9DsrceMmOedZ/y3fCBj7dVamRS83iFoMnySckQHIqS9y2lWDvFGNmUKQ
+         LZQZwPi91qAHOF/LoG+aTj8j0fkARFuKmXRNt4gAia446UDCDgELl3oY78P8vDyEEn1A
+         QbJNDLj/IvL8GY6MRRNWNXXGYhMsgxi2LRYKivmjdjG8Cn0zSBNmLK+lGzTdFKTDrxVM
+         eu7DTiCavtT8mJeqwi0Thp1Sj87Sn9tp9v1eS6DoCk9AdWdne67kBmKDkumdQyFuaVqx
+         9ivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qt1/1jt/A2jfQF0MWqTApdHyZ/eifCsttJnc6t5bAhc=;
+        b=buH9izrvluADodj+Bkinf/sh36iipRscO85Km5myIi0SszwaZd8AWzR1cc2dbt+wla
+         QMCXsGhGw6ToDA44Jt8CdPtetQWuVF55wscnVEY2DDpCTrtMrtL31cyflGMzCX6DT6bT
+         zPHkWZnsXqkHoziNzK4zLlUoJVJSG5AN48xVUOjvgHWjg+T9KY0AXcJfbEmc/toZJdah
+         30iw9ib+UlRMPw3RqLExStf/rWNFd7E75xeMgtTf+ve2KBiR3nKI+ecqaSZlrH2zevVs
+         aK0lUJq4A2C5xb6Ce44lxWZCmAM87n1eiFKiZJUEqfiqnChQXXK0s7REuW7DhtfKbe5k
+         1Qeg==
+X-Gm-Message-State: AFqh2kruI7HsOMkNSo36G1c0aa9tUfIx2Wri5pWy9OI4TAQak+lwFvHH
+        6emWFrxnvV4L6AF/m+tSfO+Rig==
+X-Google-Smtp-Source: AMrXdXsnbMemu2nVkzxSdqMRJx7ZyMX5+UPy2NhBqROjcigZp5T+NspeFAmJU3SqyL94m5ik8saxFw==
+X-Received: by 2002:a17:902:c9d2:b0:192:ee98:664c with SMTP id q18-20020a170902c9d200b00192ee98664cmr3888405pld.54.1672903703559;
+        Wed, 04 Jan 2023 23:28:23 -0800 (PST)
+Received: from [10.3.153.16] ([61.213.176.8])
+        by smtp.gmail.com with ESMTPSA id x4-20020a1709029a4400b00189af02aba4sm25421862plv.3.2023.01.04.23.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 23:28:23 -0800 (PST)
+Message-ID: <4d4f0a3f-6906-0c9b-1b56-22b9ff8795d4@bytedance.com>
+Date:   Thu, 5 Jan 2023 15:28:17 +0800
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5SnJrs8iOIZ39TN1muwGd-B2d2MLVV03
-X-Proofpoint-GUID: 5SnJrs8iOIZ39TN1muwGd-B2d2MLVV03
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_02,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
- mlxscore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
+ queues for blk-throtl
+To:     Tejun Heo <tj@kernel.org>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <Y7X5rsnYCAAYRGQd@slm.duckdns.org>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <Y7X5rsnYCAAYRGQd@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTMwIGF0IDE1OjIwICsxMTAwLCBSdXNzZWxsIEN1cnJleSB3cm90ZToK
-PiBUaGUgZm9ydGhjb21pbmcgcHNlcmllcyBjb25zdW1lciBvZiB0aGUgc2VjdmFyIEFQSSB3YW50
-cyB0byBleHBvc2UgYQo+IG51bWJlciBvZiBjb25maWcgdmFyaWFibGVzLsKgIEFsbG93aW5nIHNl
-Y3ZhciBpbXBsZW1lbnRhdGlvbnMgdG8KPiBwcm92aWRlCj4gdGhlaXIgb3duIHN5c2ZzIGF0dHJp
-YnV0ZXMgbWFrZXMgaXQgZWFzeSBmb3IgY29uc3VtZXJzIHRvIGV4cG9zZSB3aGF0Cj4gdGhleSBu
-ZWVkIHRvLgo+IAo+IFRoaXMgaXMgbm90IGJlaW5nIHVzZWQgYnkgdGhlIE9QQUwgc2VjdmFyIGlt
-cGxlbWVudGF0aW9uIGF0IHByZXNlbnQsCj4gYW5kCj4gdGhlIGNvbmZpZyBkaXJlY3Rvcnkgd2ls
-bCBub3QgYmUgY3JlYXRlZCBpZiBubyBhdHRyaWJ1dGVzIGFyZSBzZXQuCj4gCj4gU2lnbmVkLW9m
-Zi1ieTogUnVzc2VsbCBDdXJyZXkgPHJ1c2N1ckBydXNzZWxsLmNjPgoKTWlub3IgY29tbWVudHMg
-YmVsb3csIGJ1dCByZWdhcmRsZXNzOgoKUmV2aWV3ZWQtYnk6IEFuZHJldyBEb25uZWxsYW4gPGFq
-ZEBsaW51eC5pYm0uY29tPgoKPiAtLS0KPiBJIHBsYXllZCBhcm91bmQgd2l0aCBhZGRpbmcgYW4g
-QVBJIGNhbGwgdG8gZmFjaWxpdGF0ZSBhIG1vcmUgZ2VuZXJpYwo+IGtleS92YWx1ZSBpbnRlcmZh
-Y2UgZm9yIGNvbmZpZyB2YXJpYWJsZXMgYW5kIGl0IHNlZW1lZCBsaWtlCj4gdW5uZWNlc3NhcnkK
-PiBjb21wbGV4aXR5LsKgIEkgdGhpbmsgdGhpcyBpcyBjbGVhbmVyLsKgIElmIHRoZXJlIHdhcyBl
-dmVyIGEgc2VjdmFyCj4gaW50ZXJmYWNlIG90aGVyIHRoYW4gc3lzZnMgd2UnZCBoYXZlIHRvIHJl
-d29yayBpdCwgdGhvdWdoLgoKSSBjb25jdXIsIHRoaXMgY2FuIGJlIGRlYWx0IHdpdGggaWYvd2hl
-biB0aGUgc2VjdmFyIGludGVyZmFjZSBpcwpleHBvc2VkIGJ5IHNvbWUgb3RoZXIgbWVhbnMgdGhh
-biBzeXNmcy4KCj4gCj4gwqBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFyLmjCoCB8wqAg
-MyArKysKPiDCoGFyY2gvcG93ZXJwYy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmMgfCA0MCArKysrKysr
-KysrKysrKysrKysrKysrKysrKy0tCj4gLS0KPiDCoDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0
-aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2lu
-Y2x1ZGUvYXNtL3NlY3Zhci5oCj4gYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vc2VjdmFyLmgK
-PiBpbmRleCA5MmQyYzA1MTkxOGIuLjI1MGU3MDY2YjZkYSAxMDA2NDQKPiAtLS0gYS9hcmNoL3Bv
-d2VycGMvaW5jbHVkZS9hc20vc2VjdmFyLmgKPiArKysgYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9h
-c20vc2VjdmFyLmgKPiBAQCAtMTAsNiArMTAsNyBAQAo+IMKgCj4gwqAjaW5jbHVkZSA8bGludXgv
-dHlwZXMuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9lcnJuby5oPgo+ICsjaW5jbHVkZSA8bGludXgv
-c3lzZnMuaD4KPiDCoAo+IMKgZXh0ZXJuIGNvbnN0IHN0cnVjdCBzZWN2YXJfb3BlcmF0aW9ucyAq
-c2VjdmFyX29wczsKPiDCoAo+IEBAIC0yNywxMCArMjgsMTIgQEAgc3RydWN0IHNlY3Zhcl9vcGVy
-YXRpb25zIHsKPiDCoCNpZmRlZiBDT05GSUdfUFBDX1NFQ1VSRV9CT09UCj4gwqAKPiDCoGV4dGVy
-biB2b2lkIHNldF9zZWN2YXJfb3BzKGNvbnN0IHN0cnVjdCBzZWN2YXJfb3BlcmF0aW9ucyAqb3Bz
-KTsKPiArZXh0ZXJuIHZvaWQgc2V0X3NlY3Zhcl9jb25maWdfYXR0cnMoY29uc3Qgc3RydWN0IGF0
-dHJpYnV0ZSAqKmF0dHJzKTsKPiDCoAo+IMKgI2Vsc2UKPiDCoAo+IMKgc3RhdGljIGlubGluZSB2
-b2lkIHNldF9zZWN2YXJfb3BzKGNvbnN0IHN0cnVjdCBzZWN2YXJfb3BlcmF0aW9ucwo+ICpvcHMp
-IHsgfQo+ICtzdGF0aWMgaW5saW5lIHZvaWQgc2V0X3NlY3Zhcl9jb25maWdfYXR0cnMoY29uc3Qg
-c3RydWN0IGF0dHJpYnV0ZQo+ICoqYXR0cnMpIHsgfQo+IMKgCj4gwqAjZW5kaWYKPiDCoAo+IGRp
-ZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gYi9hcmNoL3Bv
-d2VycGMva2VybmVsL3NlY3Zhci1zeXNmcy5jCj4gaW5kZXggYWExZGFlYzQ4MGUxLi5hZDFlMWQ3
-MmQyYWUgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZWN2YXItc3lzZnMuYwo+
-ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2VjdmFyLXN5c2ZzLmMKPiBAQCAtMTUsOSArMTUs
-MTcgQEAKPiDCoAo+IMKgI2RlZmluZSBOQU1FX01BWF9TSVpFwqDCoMKgwqAgMTAyNAo+IMKgCj4g
-K2NvbnN0IHN0cnVjdCBhdHRyaWJ1dGUgKipzZWN2YXJfY29uZmlnX2F0dHJzIF9fcm9fYWZ0ZXJf
-aW5pdCA9IE5VTEw7Cj4gKwo+IMKgc3RhdGljIHN0cnVjdCBrb2JqZWN0ICpzZWN2YXJfa29iajsK
-PiDCoHN0YXRpYyBzdHJ1Y3Qga3NldCAqc2VjdmFyX2tzZXQ7Cj4gwqAKPiArdm9pZCBzZXRfc2Vj
-dmFyX2NvbmZpZ19hdHRycyhjb25zdCBzdHJ1Y3QgYXR0cmlidXRlICoqYXR0cnMpCj4gK3sKPiAr
-wqDCoMKgwqDCoMKgwqBXQVJOX09OX09OQ0Uoc2VjdmFyX2NvbmZpZ19hdHRycyk7Cj4gK8KgwqDC
-oMKgwqDCoMKgc2VjdmFyX2NvbmZpZ19hdHRycyA9IGF0dHJzOwo+ICt9Cj4gKwo+IMKgc3RhdGlj
-IHNzaXplX3QgZm9ybWF0X3Nob3coc3RydWN0IGtvYmplY3QgKmtvYmosIHN0cnVjdAo+IGtvYmpf
-YXR0cmlidXRlICphdHRyLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgY2hhciAqYnVmKQo+IMKgewo+IEBAIC0xMzQsNiArMTQyLDE2IEBAIHN0
-YXRpYyBpbnQgdXBkYXRlX2tvYmpfc2l6ZSh2b2lkKQo+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
-MDsKPiDCoH0KPiDCoAo+ICtzdGF0aWMgaW50IHNlY3Zhcl9zeXNmc19jb25maWcoc3RydWN0IGtv
-YmplY3QgKmtvYmopCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgYXR0cmlidXRlX2dyb3Vw
-IGNvbmZpZ19ncm91cCA9IHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLm5hbWUg
-PSAiY29uZmlnIiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLmF0dHJzID0gKHN0
-cnVjdCBhdHRyaWJ1dGUgKiopc2VjdmFyX2NvbmZpZ19hdHRycywKPiArwqDCoMKgwqDCoMKgwqB9
-OwoKSSB3YXMgc2xpZ2h0bHkgY29uY2VybmVkIHRoYXQgeW91J3JlIHB1dHRpbmcgdGhpcyBvbiB0
-aGUgc3RhY2ssIGJ1dCBpdApkb2Vzbid0IGFwcGVhciB0aGF0IHN5c2ZzX2NyZWF0ZV9ncm91cCgp
-IGtlZXBzIGFueSByZWZlcmVuY2VzIHRvIHRoZQpncm91cCBhcm91bmQgYWZ0ZXIgaXQgY3JlYXRl
-cyBhbGwgdGhlIGZpbGVzLCBzbyBJIHRoaW5rIHRoaXMgaXMgZmluZS4KCj4gKwo+ICvCoMKgwqDC
-oMKgwqDCoHJldHVybiBzeXNmc19jcmVhdGVfZ3JvdXAoa29iaiwgJmNvbmZpZ19ncm91cCk7Cj4g
-K30KPiArCj4gwqBzdGF0aWMgaW50IHNlY3Zhcl9zeXNmc19sb2FkKHZvaWQpCj4gwqB7Cj4gwqDC
-oMKgwqDCoMKgwqDCoGNoYXIgKm5hbWU7Cj4gQEAgLTE5NiwyNiArMjE0LDM4IEBAIHN0YXRpYyBp
-bnQgc2VjdmFyX3N5c2ZzX2luaXQodm9pZCkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqByYyA9IHN5
-c2ZzX2NyZWF0ZV9maWxlKHNlY3Zhcl9rb2JqLCAmZm9ybWF0X2F0dHIuYXR0cik7Cj4gwqDCoMKg
-wqDCoMKgwqDCoGlmIChyYykgewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrb2Jq
-ZWN0X3B1dChzZWN2YXJfa29iaik7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
-dHVybiAtRU5PTUVNOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwcl9lcnIoInNl
-Y3ZhcjogRmFpbGVkIHRvIGNyZWF0ZSBmb3JtYXQgb2JqZWN0XG4iKTsKClRoaXMgZmlsZSBkZWZp
-bmVzIHByX2ZtdCwgc28gdGhlIHNlY3ZhcjogcHJlZml4IGhlcmUgY2FuIGdvIGF3YXksCnRob3Vn
-aCBJIG5vdGljZSB0aGF0IGlzIHRoZSBjYXNlIGZvciBhbGwgdGhlIGV4aXN0aW5nIHByaW50cyBp
-biB0aGlzCmZ1bmN0aW9uIHRvby4KCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJj
-ID0gLUVOT01FTTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBlcnI7Cj4g
-wqDCoMKgwqDCoMKgwqDCoH0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBzZWN2YXJfa3NldCA9IGtz
-ZXRfY3JlYXRlX2FuZF9hZGQoInZhcnMiLCBOVUxMLCBzZWN2YXJfa29iaik7Cj4gwqDCoMKgwqDC
-oMKgwqDCoGlmICghc2VjdmFyX2tzZXQpIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHByX2Vycigic2VjdmFyOiBzeXNmcyBrb2JqZWN0IHJlZ2lzdHJhdGlvbgo+IGZhaWxlZC5c
-biIpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrb2JqZWN0X3B1dChzZWN2YXJf
-a29iaik7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PTUVNOwo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByYyA9IC1FTk9NRU07Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gZXJyOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAK
-PiDCoMKgwqDCoMKgwqDCoMKgcmMgPSB1cGRhdGVfa29ial9zaXplKCk7Cj4gwqDCoMKgwqDCoMKg
-wqDCoGlmIChyYykgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcHJfZXJyKCJD
-YW5ub3QgcmVhZCB0aGUgc2l6ZSBvZiB0aGUgYXR0cmlidXRlXG4iKTsKPiAtwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJjOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBnb3RvIGVycjsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlm
-IChzZWN2YXJfY29uZmlnX2F0dHJzKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oHJjID0gc2VjdmFyX3N5c2ZzX2NvbmZpZyhzZWN2YXJfa29iaik7Cj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmIChyYykgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcHJfZXJyKCJzZWN2YXI6IEZhaWxlZCB0byBjcmVhdGUgY29uZmln
-Cj4gZGlyZWN0b3J5XG4iKTsKClNhbWUgY29tbWVudCBhcyBhYm92ZQoKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gZXJyOwo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqDCoMKgwqDCoMKgwqDCoH0KPiDCoAo+IMKgwqDCoMKg
-wqDCoMKgwqBzZWN2YXJfc3lzZnNfbG9hZCgpOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHJldHVy
-biAwOwo+ICtlcnI6Cj4gK8KgwqDCoMKgwqDCoMKga29iamVjdF9wdXQoc2VjdmFyX2tvYmopOwo+
-ICvCoMKgwqDCoMKgwqDCoHJldHVybiByYzsKPiDCoH0KPiDCoAo+IMKgbGF0ZV9pbml0Y2FsbChz
-ZWN2YXJfc3lzZnNfaW5pdCk7CgotLSAKQW5kcmV3IERvbm5lbGxhbiAgICBPekxhYnMsIEFETCBD
-YW5iZXJyYQphamRAbGludXguaWJtLmNvbSAgIElCTSBBdXN0cmFsaWEgTGltaXRlZAo=
 
+
+在 2023/1/5 上午6:11, Tejun Heo 写道:
+> Hello,
+> 
+> On Mon, Dec 26, 2022 at 09:05:05PM +0800, Jinke Han wrote:
+>>   static void throtl_pending_timer_fn(struct timer_list *t);
+>> +static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn);
+> 
+> Just define it before the first usage? Also, I think it'd be fine to let the
+> compiler decide whether to inline.
+> 
+>> +#define BLK_THROTL_SYNC(bio) (bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
+> 
+> Nitpick but the above is used only in one place. Does it help to define it
+> as a macro?
+> 
+>> +/**
+>> + * throtl_qnode_bio_peek - peek a bio for a qn
+>> + * @qn: the qnode to peek from
+>> + *
+>> + * For read qn, just peek bio from the SYNC queue and return.
+>> + * For write qn, we first ask the next_to_disp for bio and will pop a bio
+>> + * to fill it if it's NULL. The next_to_disp is used to pin the bio for
+>> + * next to dispatch. It is necessary. In the dispatching  process, a peeked
+>> + * bio may can't be dispatched due to lack of budget and has to wait, the
+>> + * dispatching process may give up and the spin lock of the request queue
+>> + * will be released. New bio may be queued in as the spin lock were released.
+>> + * When it's time to dispatch the waiting bio, another bio may be selected to
+>> + * check the limit and may be dispatched. If the dispatched bio is smaller
+>> + * than the waiting bio, the bandwidth may be hard to satisfied as we may
+>> + * trim the slice after each dispatch.
+>> + * So pinning the next_to_disp to make sure that the waiting bio and the
+>> + * dispatched one later always the same one in case that the spin lock of
+>> + * queue was released and re-holded.
+> 
+> Can you please format it better and proof-read it. I can mostly understand
+> what it's saying but it can be improved quite a bit. Can you elaborate the
+> starvation scenario further? What about the [a]sync queue split makes this
+> more likely?
+> 
+>> +/**
+>> + * throtl_qnode_bio_pop: pop a bio from sync/async queue
+>> + * @qn: the qnode to pop a bio from
+>> + *
+>> + * For write io qn, the target queue to pop was determined by the disp_sync_cnt.
+>> + * Try to pop bio from target queue, fetch the bio and return it when it is not
+>> + * empty. If the target queue empty, pop bio from another queue instead.
+> 
+> How about:
+> 
+>          For reads, always pop from the ASYNC queue. For writes, target SYNC
+>          or ASYNC queue based on disp_sync_cnt. If empty, try the other
+>          queue.
+> 
+>> +static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn)
+>> +{
+>> +	struct bio *bio;
+>> +	int from = SYNC;
+>> +
+>> +	if (qn->disp_sync_cnt == THROTL_SYNC_FACTOR)
+>> +		from = ASYNC;
+> 
+> ?: often is less readable but I wonder whether it'd be more readable here:
+> 
+>          from = qn->disp_sync_cnt == THROTL_SYNC_FACTOR ? ASYNC : SYNC;
+> 
+>> +
+>> +	bio = bio_list_pop(&qn->bios[from]);
+>> +	if (!bio) {
+>> +		from = 1 - from;
+>> +		bio = bio_list_pop(&qn->bios[from]);
+>> +	}
+>> +
+>> +	if ((qn->disp_sync_cnt < THROTL_SYNC_FACTOR) &&
+>> +		(from == SYNC))
+> 
+> Why the line break? Also, this may be more personal preference but I'm not
+> sure the parentheses are helping much here.
+> 
+>> +		qn->disp_sync_cnt++;
+>> +	else
+>> +		qn->disp_sync_cnt = 0;
+>> +
+>> +	return bio;
+>> +}
+> 
+> Thanks.
+> 
+
+Thanks. Your suggestion is detailed and helpful. I will accept it and 
+send the v4.
+
+Thanks.
