@@ -2,548 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AED65EE09
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907A565EE0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbjAEN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S234402AbjAEN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbjAEN4z (ORCPT
+        with ESMTP id S234358AbjAEN7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:56:55 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA7B4BD67;
-        Thu,  5 Jan 2023 05:55:50 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 18FD660014;
-        Thu,  5 Jan 2023 13:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672926948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLtJhJZB5nejLIzVybvU40f+sUT0Wy9doE8Een6Xuj4=;
-        b=WCgcvthiwOKyphVExE0/osh3Ul2B3+0XjZxRWw5BijjKNWDo1JQmmJ7jf5bGqoqfN3qwXQ
-        JjheN5sh7ULMfSMfq8SmIcG3iBQYti2rPTb7bm9g2GEgq1JFR97sY2ZltDz+Y294OjAOsb
-        8RYcsUBbr9xWSoaRM4AnOiF3FX607QJiWp8uqVY4Xvf8gMqFoT1dyldLt49RaMzR3D22FB
-        EvrGFKG4yG4PqtcWAzRLNjZDihA87RWoUggxRdqQiYMT5DoC6OhRoDHbEZrX/AOoEU5OiV
-        OsKNTO3O8mC/7lFKVcIOs6oGTCsb7/Vi0Fgjvp60XxpSb1REDOgfIVdNjkyjeQ==
-Date:   Thu, 5 Jan 2023 14:55:43 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v4 07/12] riscv: dts: allwinner: Add Sipeed Lichee RV
- devicetrees
-Message-ID: <Y7bW32i3EUmGHqSK@aptenodytes>
-References: <20221231233851.24923-1-samuel@sholland.org>
- <20221231233851.24923-8-samuel@sholland.org>
+        Thu, 5 Jan 2023 08:59:35 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32F1321A8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:57:29 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id a184so14581226pfa.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 05:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnPTTZBQxeUaGmr3kM8/hj78PXm2U95GjDvhf9qEzdc=;
+        b=k6UgecyzrnaDlQF/U4Ucqwk1+n4vLnnF4AZjImX0LDU6yQbCVJj6awiwpR2ltrPq96
+         +IQzBk54n1W5NuxTbtemdMKp/yHKJBAv2/VwlRAStqJSWeQD94x66ISdoOi2BsPta/9P
+         L/328kqldOx2gxZB2Yj1VjXHzmQ0sAO+4eoUOBxwzXsDcGY3Z74FxqgR1sC8XvR3wiHu
+         okDfMKQbBX7lC2auQdXsem/ea6VRhtSZaAKLqKAoFQvIXu0U70Bo99JX48GvC2G7IXL5
+         znfC+9pIBYF44TLzWiwcZOjOZxO02yFFePZ2Jq64TN6JgRXexk2KkEfyTq+t4NxCIpRL
+         2isg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JnPTTZBQxeUaGmr3kM8/hj78PXm2U95GjDvhf9qEzdc=;
+        b=yWmwcikit5kcX4R/tffZkwrl3teQGf3tddAA55pn9Ju+zrKEvXfhlwwc9yZNJYyfsk
+         6t+0R1L8DBJnTu1pUWWjrTPlKpCehhkpkEmJGNWR6aAxpaotdQKMt8h1U1od+Pcf7rW5
+         Ra+ma/xLvPQTXmXLd3KWLKbc2IwMvlfAjnZMwnCrX+L8+TNpWtnVy9fpjqnWa5NqvFeW
+         T5QUwgGXK2jHTJR/8DojpbQ5gWxSf9djqGQa22Wp3SjIdgNTBLuvUEyXN7Ome1zRZVOX
+         FrS+giQVxhEdXg66/+65fI1LayFXARiWNoaxYFvAma2JzemtjTSmngkQMExxaj3sz8KV
+         ex4w==
+X-Gm-Message-State: AFqh2krFN5a5kI6PINtig0hXO4m6qH/9mfWzJHGRLTe9+yKYKPYlIZM9
+        pQWY7N6lbV36iGAY31UHpajNIA==
+X-Google-Smtp-Source: AMrXdXtscTc883URlpW45mC1YQ7zXRZBVh/czHCs5ScfTjmicT7ACG8h7+KhxgKs6LOTGl8aM30nNQ==
+X-Received: by 2002:aa7:8284:0:b0:580:e549:559e with SMTP id s4-20020aa78284000000b00580e549559emr37040352pfm.17.1672927049337;
+        Thu, 05 Jan 2023 05:57:29 -0800 (PST)
+Received: from localhost (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id u4-20020a62d444000000b005809542aaf3sm23296669pfl.135.2023.01.05.05.57.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 05:57:28 -0800 (PST)
+Date:   Thu, 5 Jan 2023 14:57:26 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     stf_xl@wp.pl, helmut.schaa@googlemail.com, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] wifi: rt2x00: Remove useless else if
+Message-ID: <Y7bXRivrmsVq6nUW@nanopsycho>
+References: <20230105085802.30905-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZzslqN1XBFOeLLZc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221231233851.24923-8-samuel@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105085802.30905-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thu, Jan 05, 2023 at 09:58:02AM CET, jiapeng.chong@linux.alibaba.com wrote:
+>The assignment of the else and else if branches is the same, so the else
+>if here is redundant, so we remove it and add a comment to make the code
+>here readable.
+>
+>./drivers/net/wireless/ralink/rt2x00/rt2800lib.c:8927:9-11: WARNING: possible condition with no effect (if == else).
+>
+>Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3631
+>Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>---
+> drivers/net/wireless/ralink/rt2x00/rt2800lib.c | 4 +---
+> 1 file changed, 1 insertion(+), 3 deletions(-)
+>
+>diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+>index 12b700c7b9c3..36b9cd4dd138 100644
+>--- a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+>+++ b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+>@@ -8924,9 +8924,7 @@ static void rt2800_rxiq_calibration(struct rt2x00_dev *rt2x00dev)
+> 
+> 				if (i < 2 && (bbptemp & 0x800000))
+> 					result = (bbptemp & 0xffffff) - 0x1000000;
+>-				else if (i == 4)
+>-					result = bbptemp;
+>-				else
+>+				else /* This branch contains if(i==4) */
 
---ZzslqN1XBFOeLLZc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't see how this comment is useful. Better to remove. One way or
+another:
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 
-Hi Samuel,
 
-On Sat 31 Dec 22, 17:38, Samuel Holland wrote:
-> Sipeed manufactures a "Lichee RV" system-on-module, which provides a
-> minimal working system on its own, as well as a few carrier boards. The
-> "Dock" board provides audio, USB, and WiFi. The "86 Panel" additionally
-> provides 100M Ethernet and a built-in display panel.
->=20
-> The 86 Panel repurposes the USB ID and VBUS detection GPIOs for its RGB
-> panel interface, since the USB OTG port is inaccessible inside the case.
 
-Looks like the panel-enabled variants would better be described as device-t=
-ree
-overlays as they are not specific devices but are peripheral extensions.
-
-What do you think?
-
-Cheers,
-
-Paul
-
-> Co-developed-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->=20
-> (no changes since v3)
->=20
-> Changes in v3:
->  - Fix `make W=3D1 dtbs` warnings (missing reg properties)
->  - Drop mmc alias
->=20
-> Changes in v2:
->  - Added DMIC sound card to Lichee RV dock and Lichee RV 86 Panel
->  - Removed LRADC (depends on analog LDOs)
->=20
->  arch/riscv/boot/dts/allwinner/Makefile        |   4 +
->  .../sun20i-d1-lichee-rv-86-panel-480p.dts     |  29 +++++
->  .../sun20i-d1-lichee-rv-86-panel-720p.dts     |  10 ++
->  .../sun20i-d1-lichee-rv-86-panel.dtsi         | 119 ++++++++++++++++++
->  .../allwinner/sun20i-d1-lichee-rv-dock.dts    |  97 ++++++++++++++
->  .../dts/allwinner/sun20i-d1-lichee-rv.dts     |  87 +++++++++++++
->  6 files changed, 346 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-=
-panel-480p.dts
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-=
-panel-720p.dts
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-=
-panel.dtsi
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-doc=
-k.dts
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dts
->=20
-> diff --git a/arch/riscv/boot/dts/allwinner/Makefile b/arch/riscv/boot/dts=
-/allwinner/Makefile
-> index 277e59d1c907..f1c70b9dc9bf 100644
-> --- a/arch/riscv/boot/dts/allwinner/Makefile
-> +++ b/arch/riscv/boot/dts/allwinner/Makefile
-> @@ -1,3 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1-lichee-rv-86-panel-480p.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1-lichee-rv-86-panel-720p.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1-lichee-rv-dock.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1-lichee-rv.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1-nezha.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) +=3D sun20i-d1s-mangopi-mq.dtb
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-4=
-80p.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.d=
-ts
-> new file mode 100644
-> index 000000000000..4df8ffb71561
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.dts
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-> +
-> +#include "sun20i-d1-lichee-rv-86-panel.dtsi"
-> +
-> +/ {
-> +	model =3D "Sipeed Lichee RV 86 Panel (480p)";
-> +	compatible =3D "sipeed,lichee-rv-86-panel-480p", "sipeed,lichee-rv",
-> +		     "allwinner,sun20i-d1";
-> +};
-> +
-> +&i2c2 {
-> +	pinctrl-0 =3D <&i2c2_pb0_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +
-> +	touchscreen@48 {
-> +		compatible =3D "focaltech,ft6236";
-> +		reg =3D <0x48>;
-> +		interrupt-parent =3D <&pio>;
-> +		interrupts =3D <6 14 IRQ_TYPE_LEVEL_LOW>; /* PG14 */
-> +		iovcc-supply =3D <&reg_vcc_3v3>;
-> +		reset-gpios =3D <&pio 6 15 GPIO_ACTIVE_LOW>; /* PG15 */
-> +		touchscreen-size-x =3D <480>;
-> +		touchscreen-size-y =3D <480>;
-> +		vcc-supply =3D <&reg_vcc_3v3>;
-> +		wakeup-source;
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-7=
-20p.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.d=
-ts
-> new file mode 100644
-> index 000000000000..1874fc05359f
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.dts
-> @@ -0,0 +1,10 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-> +
-> +#include "sun20i-d1-lichee-rv-86-panel.dtsi"
-> +
-> +/ {
-> +	model =3D "Sipeed Lichee RV 86 Panel (720p)";
-> +	compatible =3D "sipeed,lichee-rv-86-panel-720p", "sipeed,lichee-rv",
-> +		     "allwinner,sun20i-d1";
-> +};
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel.d=
-tsi b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel.dtsi
-> new file mode 100644
-> index 000000000000..6cc7dd0c1ae2
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel.dtsi
-> @@ -0,0 +1,119 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-> +
-> +#include "sun20i-d1-lichee-rv.dts"
-> +
-> +/ {
-> +	aliases {
-> +		ethernet0 =3D &emac;
-> +		ethernet1 =3D &xr829;
-> +	};
-> +
-> +	dmic_codec: dmic-codec {
-> +		compatible =3D "dmic-codec";
-> +		num-channels =3D <2>;
-> +		#sound-dai-cells =3D <0>;
-> +	};
-> +
-> +	dmic-sound {
-> +		compatible =3D "simple-audio-card";
-> +		simple-audio-card,name =3D "DMIC";
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +
-> +		simple-audio-card,dai-link@0 {
-> +			reg =3D <0>;
-> +			format =3D "pdm";
-> +			frame-master =3D <&link0_cpu>;
-> +			bitclock-master =3D <&link0_cpu>;
-> +
-> +			link0_cpu: cpu {
-> +				sound-dai =3D <&dmic>;
-> +			};
-> +
-> +			link0_codec: codec {
-> +				sound-dai =3D <&dmic_codec>;
-> +			};
-> +		};
-> +	};
-> +
-> +	/* PC1 is repurposed as BT_WAKE_AP */
-> +	/delete-node/ leds;
-> +
-> +	wifi_pwrseq: wifi-pwrseq {
-> +		compatible =3D "mmc-pwrseq-simple";
-> +		clocks =3D <&ccu CLK_FANOUT1>;
-> +		clock-names =3D "ext_clock";
-> +		reset-gpios =3D <&pio 6 12 GPIO_ACTIVE_LOW>; /* PG12 */
-> +		assigned-clocks =3D <&ccu CLK_FANOUT1>;
-> +		assigned-clock-rates =3D <32768>;
-> +		pinctrl-0 =3D <&clk_pg11_pin>;
-> +		pinctrl-names =3D "default";
-> +	};
-> +};
-> +
-> +&dmic {
-> +	pinctrl-0 =3D <&dmic_pb11_d0_pin>, <&dmic_pe17_clk_pin>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status =3D "okay";
-> +};
-> +
-> +&emac {
-> +	pinctrl-0 =3D <&rmii_pe_pins>;
-> +	pinctrl-names =3D "default";
-> +	phy-handle =3D <&ext_rmii_phy>;
-> +	phy-mode =3D "rmii";
-> +	phy-supply =3D <&reg_vcc_3v3>;
-> +	status =3D "okay";
-> +};
-> +
-> +&mdio {
-> +	ext_rmii_phy: ethernet-phy@1 {
-> +		compatible =3D "ethernet-phy-ieee802.3-c22";
-> +		reg =3D <1>;
-> +		reset-gpios =3D <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-> +	};
-> +};
-> +
-> +&mmc1 {
-> +	bus-width =3D <4>;
-> +	mmc-pwrseq =3D <&wifi_pwrseq>;
-> +	non-removable;
-> +	vmmc-supply =3D <&reg_vcc_3v3>;
-> +	vqmmc-supply =3D <&reg_vcc_3v3>;
-> +	pinctrl-0 =3D <&mmc1_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +
-> +	xr829: wifi@1 {
-> +		reg =3D <1>;
-> +	};
-> +};
-> +
-> +&ohci1 {
-> +	status =3D "okay";
-> +};
-> +
-> +&uart1 {
-> +	uart-has-rtscts;
-> +	pinctrl-0 =3D <&uart1_pg6_pins>, <&uart1_pg8_rts_cts_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +
-> +	/* XR829 bluetooth is connected here */
-> +};
-> +
-> +&usb_otg {
-> +	status =3D "disabled";
-> +};
-> +
-> +&usbphy {
-> +	/* PD20 and PD21 are repurposed for the LCD panel */
-> +	/delete-property/ usb0_id_det-gpios;
-> +	/delete-property/ usb0_vbus_det-gpios;
-> +	usb1_vbus-supply =3D <&reg_vcc>;
-> +};
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts b=
-/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-> new file mode 100644
-> index 000000000000..52b91e1affed
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +// Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-> +
-> +#include <dt-bindings/input/input.h>
-> +
-> +#include "sun20i-d1-lichee-rv.dts"
-> +
-> +/ {
-> +	model =3D "Sipeed Lichee RV Dock";
-> +	compatible =3D "sipeed,lichee-rv-dock", "sipeed,lichee-rv",
-> +		     "allwinner,sun20i-d1";
-> +
-> +	aliases {
-> +		ethernet1 =3D &rtl8723ds;
-> +	};
-> +
-> +	dmic_codec: dmic-codec {
-> +		compatible =3D "dmic-codec";
-> +		num-channels =3D <2>;
-> +		#sound-dai-cells =3D <0>;
-> +	};
-> +
-> +	dmic-sound {
-> +		compatible =3D "simple-audio-card";
-> +		simple-audio-card,name =3D "DMIC";
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +
-> +		simple-audio-card,dai-link@0 {
-> +			reg =3D <0>;
-> +			format =3D "pdm";
-> +			frame-master =3D <&link0_cpu>;
-> +			bitclock-master =3D <&link0_cpu>;
-> +
-> +			link0_cpu: cpu {
-> +				sound-dai =3D <&dmic>;
-> +			};
-> +
-> +			link0_codec: codec {
-> +				sound-dai =3D <&dmic_codec>;
-> +			};
-> +		};
-> +	};
-> +
-> +	wifi_pwrseq: wifi-pwrseq {
-> +		compatible =3D "mmc-pwrseq-simple";
-> +		reset-gpios =3D <&pio 6 12 GPIO_ACTIVE_LOW>; /* PG12 */
-> +	};
-> +};
-> +
-> +&dmic {
-> +	pinctrl-0 =3D <&dmic_pb11_d0_pin>, <&dmic_pe17_clk_pin>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status =3D "okay";
-> +};
-> +
-> +&mmc1 {
-> +	bus-width =3D <4>;
-> +	mmc-pwrseq =3D <&wifi_pwrseq>;
-> +	non-removable;
-> +	vmmc-supply =3D <&reg_vcc_3v3>;
-> +	vqmmc-supply =3D <&reg_vcc_3v3>;
-> +	pinctrl-0 =3D <&mmc1_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +
-> +	rtl8723ds: wifi@1 {
-> +		reg =3D <1>;
-> +	};
-> +};
-> +
-> +&ohci1 {
-> +	status =3D "okay";
-> +};
-> +
-> +&uart1 {
-> +	uart-has-rtscts;
-> +	pinctrl-0 =3D <&uart1_pg6_pins>, <&uart1_pg8_rts_cts_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +
-> +	bluetooth {
-> +		compatible =3D "realtek,rtl8723ds-bt";
-> +		device-wake-gpios =3D <&pio 6 15 GPIO_ACTIVE_HIGH>; /* PG16 */
-> +		enable-gpios =3D <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 */
-> +		host-wake-gpios =3D <&pio 6 17 GPIO_ACTIVE_HIGH>; /* PG17 */
-> +	};
-> +};
-> +
-> +&usbphy {
-> +	usb1_vbus-supply =3D <&reg_vcc>;
-> +};
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dts b/arch=
-/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dts
-> new file mode 100644
-> index 000000000000..d60a0562a8b1
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dts
-> @@ -0,0 +1,87 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +// Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/dts-v1/;
-> +
-> +#include "sun20i-d1.dtsi"
-> +#include "sun20i-common-regulators.dtsi"
-> +
-> +/ {
-> +	model =3D "Sipeed Lichee RV";
-> +	compatible =3D "sipeed,lichee-rv", "allwinner,sun20i-d1";
-> +
-> +	aliases {
-> +		serial0 =3D &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path =3D "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible =3D "gpio-leds";
-> +
-> +		led-0 {
-> +			color =3D <LED_COLOR_ID_GREEN>;
-> +			function =3D LED_FUNCTION_STATUS;
-> +			gpios =3D <&pio 2 1 GPIO_ACTIVE_HIGH>; /* PC1 */
-> +		};
-> +	};
-> +
-> +	reg_vdd_cpu: vdd-cpu {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "vdd-cpu";
-> +		regulator-min-microvolt =3D <900000>;
-> +		regulator-max-microvolt =3D <900000>;
-> +		vin-supply =3D <&reg_vcc>;
-> +	};
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply =3D <&reg_vdd_cpu>;
-> +};
-> +
-> +&dcxo {
-> +	clock-frequency =3D <24000000>;
-> +};
-> +
-> +&ehci0 {
-> +	status =3D "okay";
-> +};
-> +
-> +&mmc0 {
-> +	broken-cd;
-> +	bus-width =3D <4>;
-> +	disable-wp;
-> +	vmmc-supply =3D <&reg_vcc_3v3>;
-> +	vqmmc-supply =3D <&reg_vcc_3v3>;
-> +	pinctrl-0 =3D <&mmc0_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +};
-> +
-> +&ohci0 {
-> +	status =3D "okay";
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-0 =3D <&uart0_pb8_pins>;
-> +	pinctrl-names =3D "default";
-> +	status =3D "okay";
-> +};
-> +
-> +&usb_otg {
-> +	dr_mode =3D "otg";
-> +	status =3D "okay";
-> +};
-> +
-> +&usbphy {
-> +	usb0_id_det-gpios =3D <&pio 3 21 GPIO_ACTIVE_HIGH>; /* PD21 */
-> +	usb0_vbus_det-gpios =3D <&pio 3 20 GPIO_ACTIVE_HIGH>; /* PD20 */
-> +	usb0_vbus-supply =3D <&reg_vcc>;
-> +	status =3D "okay";
-> +};
-> --=20
-> 2.37.4
->=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---ZzslqN1XBFOeLLZc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmO21t8ACgkQ3cLmz3+f
-v9GGLQf9HBkCr5oNpaskusphb6b0KAy20qcx5jsTbPu1DcU/9TU1+RZXY+n/ePbD
-+GRVvPysHN7R8tptI+hAX/r3lwzbae6bKJUYh3/2zkdNVh7SBkll0bqTjqHncTw2
-MN0ovPTUPETT/6EWQ2HZ0Pnu7KO5TlbCRZp4NJYQ69yxQhlMu9d4sSwatc8PvMQY
-2lfaVaI6VCP5L7WEemne+uvI5vEyCEH29BIvnmbYhSJNpfiCSIWF1ZvbJLhm2FLE
-Fnv7BTZAKYeTeqf4H3dBTON1RWcl1YOOI7kW6CT7aMgxjQUrBiRbL1N8ejV5m5ib
-IfRdNCtMYIySf/4GQ62IWRAOEgKbAg==
-=yeLh
------END PGP SIGNATURE-----
-
---ZzslqN1XBFOeLLZc--
+> 					result = bbptemp;
+> 
+> 				if (i == 0)
+>-- 
+>2.20.1.7.g153144c
+>
