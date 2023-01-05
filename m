@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE4365E389
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2234865E3A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjAEDeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S230200AbjAEDjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 22:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjAEDeJ (ORCPT
+        with ESMTP id S230241AbjAEDjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:34:09 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D4B485B6;
-        Wed,  4 Jan 2023 19:34:08 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id CCB9B32009B8;
-        Wed,  4 Jan 2023 22:34:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 04 Jan 2023 22:34:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672889644; x=
-        1672976044; bh=J5dtluVJN/sDCz5O/tnIQDUHTV9zIL4n+5iOhogQdAc=; b=f
-        q2f0L04VWkCVzGLPpVpe6pu2vwvu11ugBpr1YE5NsGVWfNamFZTtA6mb8RB7obcI
-        dKiKjqO/7zNxppLTWA1WRgGri6Lmz7dHUdF1Jroo1bDq7kogE4xfTvKubRGwmdwM
-        AhDHzlSTCS4aW5KGxdc7zgfNHR50lbaxDz+Ay1j/5JgkOZKC+5JqIz6GjZbqL6Nb
-        PCRFaa4IQorYDTcKT0IYchcNKTpN9IeDMfIiPWmS8/VzrgZZLeORErEcRXw0mbLS
-        8mCTnvSfjw/CiDEJn90jQittQ5FwGHk9/9RQiBIkbcHY5n3otPYXs0WhN4NjYqRS
-        vhW6b8N6B/nIsAnn9fPxQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672889644; x=
-        1672976044; bh=J5dtluVJN/sDCz5O/tnIQDUHTV9zIL4n+5iOhogQdAc=; b=Q
-        O+QQMzzT6VCvmRtb8h9gVIM9Y7MBT8BBuNHuVMAZTqP3jXCUcw3wGAFCw19LOYHz
-        BrFvURAIwm43NbnQ0F0D5XsN1zm8VKC6Xlf3YweUJxVoRwOo1foK3E5mtBg/304j
-        D1ZzFR3dcGl2IlYefSabtAj8R59DaQO7VvcgyDZR38vmzackopGpHUAjeF/1mmfK
-        QyMKzicWxlH/q8IXJ1mmR2HQ4VB2NQGV/2E49+53/LC3yCa5wqYc9xWO6N26K2AW
-        cg/mXu7+/t1OWrQlHGhIEKFPWtQrH0VaHQwrnMFG5KPGx3YbYUOkAq7ZbOIOFYxy
-        /jHoz5fvBEWwlBGBMf6Hg==
-X-ME-Sender: <xms:K0W2Y3DTkQj5xtaTFYAaqTM7_efDj7gwl97GHYQrDBMHyyFwcnzk5w>
-    <xme:K0W2Y9jCQ_2jqa5blvk76vQajAx9zWL_ohspG3b_vPxzow8IMBKWaZhsewD2YhR73
-    Stx-BcCfLSpynqSQQ>
-X-ME-Received: <xmr:K0W2YyleaJ2T-D3kpRaOLNBw3A7z74GbeWrGGdNeZfuLSnPHDiN4FtbH_3oxI87iJDWMpNBf33vD5jHLbbmdL425RFIlulLnZpY4YX0P1pnz3afGJXeddfgbJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeejgdeiudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepheettdefgeeuudelvdffleejheejueeludduiedvkeffgeetueev
-    vdelvdetfeejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:K0W2Y5xZuGqFpBxlUXh3QbSx-fGevjcGeGfBkjJjfKw3ZrMtyTY5iA>
-    <xmx:K0W2Y8QTFDFwSKurhzAaFS5Cx11OUoaN3yWds8uh9FSsVz-Zt3_1Zw>
-    <xmx:K0W2Y8Ye5aABlp4CH9IAZv4K26nl1d8ZkjCu9fIzZ1fkUv1-hIW4jw>
-    <xmx:LEW2YxJYz-mzlMrdCqjuXT6YnzW4XjX1Ps6CA4nsfFBGUKNle_H7Nw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 4 Jan 2023 22:34:02 -0500 (EST)
-Message-ID: <15cd1727-eedd-d476-e52c-2234cf66a5c9@sholland.org>
-Date:   Wed, 4 Jan 2023 21:34:02 -0600
+        Wed, 4 Jan 2023 22:39:15 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55E748CE6;
+        Wed,  4 Jan 2023 19:39:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672889954; x=1704425954;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=7+whF6O83FkAi7trCF9TEjov28V0K0S8cRinP/bHSI4=;
+  b=ElbdV5eTGT0Yeh0HM7g0ELxfawM/y47UILcCEBkPM68kEcmsvpMG+yo2
+   cXyNaWIwr5t8fjT02RdsoajI+ciGPSFbNWp73UECvKAgpC7jDrabEqrBH
+   EgVTKZeEapj7m8WNX4e00SdxMrrq2WYVewX2G0SVcSbWm/FrjexK91IXG
+   41WXjiJSG/GHmgk94LfsV1ZUi0KFQYzdg9w/KZtSHupwiikwFlSHYKxdS
+   hNCtxMFuWG2qNqyDsnLN9xtVyKWNSROjcQ0k9l/cq+XlD/Gb+2ugG23W2
+   2O+SAOO4XgMQdA4ML+KfswJKuUmxX9tvfRWUSmQCxaOAeX5WaRqWLy4E+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349328871"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="349328871"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 19:39:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="829394357"
+X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
+   d="scan'208";a="829394357"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga005.jf.intel.com with ESMTP; 04 Jan 2023 19:39:04 -0800
+Date:   Thu, 5 Jan 2023 11:34:51 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, ashish.kalra@amd.com, harald@profian.com,
+        Nikunj A Dadhania <nikunj@amd.com>
+Subject: Re: [PATCH RFC v7 01/64] KVM: Fix memslot boundary condition for
+ large page
+Message-ID: <20230105033451.GA2251521@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-2-michael.roth@amd.com>
+ <Y7VqgbTE34/Sxupw@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Christopher Schramm <debian@cschramm.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org
-References: <20230104140459.1147626-1-masahiroy@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH] kbuild: readd -w option when vmlinux.o or Module.symver
- is missing
-In-Reply-To: <20230104140459.1147626-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7VqgbTE34/Sxupw@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/23 08:04, Masahiro Yamada wrote:
-> Commit 63ffe00d8c93 ("kbuild: Fix running modpost with musl libc")
-> accidentally turned the unresolved symbol warnings into errors when
-> vmlinux.o (for in-tree builds) or Module.symver (for external module
-> builds) is missing.
+On Wed, Jan 04, 2023 at 12:01:05PM +0000, Jarkko Sakkinen wrote:
+> On Wed, Dec 14, 2022 at 01:39:53PM -0600, Michael Roth wrote:
+> > From: Nikunj A Dadhania <nikunj@amd.com>
+> > 
+> > Aligned end boundary causes a kvm crash, handle the case.
+> > 
 > 
-> In those cases, unresolved symbols are expected, but the -w option
-> is not set because 'missing-input' is referenced before set.
+> Link: https://lore.kernel.org/kvm/20221202061347.1070246-8-chao.p.peng@linux.intel.com/
 > 
-> Move $(missing-input back to the original place. This should be fine
-> for musl libc because vmlinux.o and -w are not added at the same time.
-> 
-> With this change, -w may be passed twice, but it is not a big deal.
-> 
-> Link: https://lore.kernel.org/all/b56a03b8-2a2a-f833-a5d2-cdc50a7ca2bb@cschramm.eu/
-> Fixes: 63ffe00d8c93 ("kbuild: Fix running modpost with musl libc")
-> Reported-by: Christopher Schramm <debian@cschramm.eu>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  scripts/Makefile.modpost | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+> Chao, are you aware of this issue already?
 
-Sorry for the breakage. This works fine for me, with or without vmlinux.o.
+Thanks Jarkko adding me. I'm not aware of there is a fix.
 
-Tested-by: Samuel Holland <samuel@sholland.org>
+> 
+> > Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> > Signed-off-by: Michael Roth <michael.roth@amd.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index b1953ebc012e..b3ffc61c668c 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -7159,6 +7159,9 @@ static void kvm_update_lpage_private_shared_mixed(struct kvm *kvm,
+> >  		for (gfn = first + pages; gfn < last; gfn += pages)
+> >  			linfo_set_mixed(gfn, slot, level, false);
+> >  
+> > +		if (gfn == last)
+> > +			goto out;
+> > +
 
+Nikunj or Michael, could you help me understand in which case it causes
+a KVM crash? To me, even the end is aligned to huge page boundary, but:
+    last = (end - 1) & mask;
+so 'last' is the base address for the last effective huage page. Even
+when gfn == last, it should still a valid page and needs to be updated
+for mem_attrs, correct?
+
+Thanks,
+Chao
+> >  		gfn = last;
+> >  		gfn_end = min(last + pages, slot->base_gfn + slot->npages);
+> >  		mixed = mem_attrs_mixed(kvm, slot, level, attrs, gfn, gfn_end);
+> > -- 
+> > 2.25.1
+> > 
+> 
+> 
+> BR, Jarkko
