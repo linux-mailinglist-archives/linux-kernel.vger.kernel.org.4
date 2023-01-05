@@ -2,117 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D3E65F789
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A400765F78D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjAEXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S236370AbjAEXZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 18:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjAEXWc (ORCPT
+        with ESMTP id S235302AbjAEXZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:22:32 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053269516
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:22:31 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id o21so11348632pjw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 15:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QWqazbyRLoTC8Db/Whc37KnLoFkdsyWjRIzge1/UbpU=;
-        b=VnP0aHc4axpEKI97b+IZ6oWN+okfDvFssMTLbHzN1OGnrqMPIb5h1awy2f07zRIQ4C
-         icvlH9o1vRj7vrO9ELlRp1Xq0S33XjDuaBdRVjnqLg4SuSZuqU0V/qlkYFJQQstBeRRB
-         R8NVulvpT2OY9NfJ3exH2qhtJveVptIOOHduA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QWqazbyRLoTC8Db/Whc37KnLoFkdsyWjRIzge1/UbpU=;
-        b=qnhXZ6hHRKbpUBk5L2yWM7E5fxrfX/HH0Km89Im1nG5mOF/GY844VtRFBwNrwlUH0u
-         gdVJ3M7geFwZJuEs4aPNWXlgFkpQrzPtAYbLEsIqOYnExkO5OmbkgtaFpXPpUABbDUAZ
-         px2pfKP5oDZGu8u4+Eh2483JOCGKWTBrI38pnr5Yz5UJZN9C6VcfhMca8BXGfeALDVl0
-         S6JoZOZYlOKRAvIONK8E+PdEk2F+PzqLwrFJGOg9R1vOhHyaFY5CsaCmPxsuzx7WvwCL
-         +BugSV4e4RjEXUcxL+Vr55mYJ4b5Ll8a++HWMdfR4H8fg2urkuL1gukD628oZoZVT2x2
-         zXAA==
-X-Gm-Message-State: AFqh2kp08k5WYNrlwKx1MYPTH7prMLHk4HyYIS5QSehiADFf2rxjXXwY
-        UTk9rwUsRkHvL0+XTItMHC/vsQNzDhaIvNm9
-X-Google-Smtp-Source: AMrXdXs+zHy3f189mopMN53werK0+UClxehE+3BPUmiez17LUdiLIkzSI4JauiyJN33wESV5RRzVDQ==
-X-Received: by 2002:a17:902:e886:b0:192:fd24:8bb with SMTP id w6-20020a170902e88600b00192fd2408bbmr5499697plg.62.1672960951150;
-        Thu, 05 Jan 2023 15:22:31 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t12-20020a170902b20c00b001801aec1f6bsm6793044plr.141.2023.01.05.15.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 15:22:30 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>, Petr Machata <petrm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] mlxsw: spectrum_router: Replace 0-length array with flexible array
-Date:   Thu,  5 Jan 2023 15:22:29 -0800
-Message-Id: <20230105232224.never.150-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 5 Jan 2023 18:25:06 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5569B6E40C;
+        Thu,  5 Jan 2023 15:25:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672961105; x=1704497105;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=hXqUVT/upEnUUi7fjaPVeLYwfxFzq9DTbBRm52nCOqI=;
+  b=EYSf/iU7XJPq8K26JuMdlXNYzRE2gu6yNOlNBLcD06RQyuwZVEqJ4C9q
+   oAC1TXZYJWgSM3xsFaf5IMeol4EFX+7VgNJzUAMt+yAo1iSRsDIwiiaMX
+   7O7gayxmlTdhEqBQwHkQtw+5POVueneouyq6nam/f3cmeHvzSfYPzPMkb
+   SuKBvkTcMK2IDmlu2tjf0ftkkBFTdIPEG7MzdjMaqBEUCDA+ZfWQUGqId
+   5iKRYRI/39C9xiCvMFjaPsJNl9cXyX7lkCrKCaXlEgsYxnMu7cDqZ0paX
+   h7Tv0iKwO96H1/CA39K+9w/5XulCRJKzLoRMSrCnpfiWc0y2PJn168GpQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="323602872"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="323602872"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 15:25:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="633323775"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="633323775"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jan 2023 15:25:04 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 5 Jan 2023 15:25:04 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 5 Jan 2023 15:25:03 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 15:25:03 -0800
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 5 Jan 2023 15:25:03 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SgnmVoBdZVOFPpWirhq1txlq1tP0sUCtfXFr3uo+RpZ32Ne9lUFR7DbgtyNMMyXMMFk4FJqHuuiP5GU3ollRCC6OhBofgDmfHV27g/I8CtgSiXn2739YWuPFL805zn7GWz1gqPC3trqTMoxn85SuP+ErEWuXXfuBTgWU+0pMQ8yjiw6xa9a+GyjbYWs6PBdWv1mbY9p37sIsIP9Ibvsy6W8VOs80r8STnFMCDxSdxCkUP9rDoGDVOAatWYoENGXnmLg2hhJXPWpi8u6OZD+Mm8/1MMFTdNEPjyItJgsiNAy9DwBt37ooJKPMKF1nED3MDIZ+3v7JOee0V6SyjqRqxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P4igUcGBXORv/1NSWMlpdMTglxw+/wVxFLUnKYeXsPI=;
+ b=hr6F0d2z3D8PxFIF8USDl+yzeVOKf4beZ60neyOlpETPfBX0Pn4rM2z8MDNO2LCEIqZALVtyeQjr1Bo8hpm6v4Yu6/eu5ZM4LpnUqbWVnT+WOdp2FmcS6/vqGr/KND/kJZfYEYqrcUwrHML6stKYPFpnn8L1/siRZe8MWgF5HrHg8YCdlIV8uRf0gghtGNBlYDLB2Xg07f0BRt0a+kdYr0W4c0An5xlKJSSIJ/Wfxh5EoTO+KnYD6mthDNJoUHFOH/60dCmcDKA6ie6/lghSxPA6xY4K6Gamq8Wx7eBrwRz8iJF8ipSXEIRGNWd/srq81w1B/xFSapv4Nlv2cclu2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by DM4PR11MB7375.namprd11.prod.outlook.com (2603:10b6:8:101::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 23:25:02 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b%7]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 23:25:02 +0000
+Date:   Thu, 5 Jan 2023 15:24:58 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+CC:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: ips: Replace kmap_atomic() with kmap_local_page()
+Message-ID: <Y7dcSswZppY4hn3H@iweiny-desk3>
+References: <20230103173131.21259-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230103173131.21259-1-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: BYAPR11CA0093.namprd11.prod.outlook.com
+ (2603:10b6:a03:f4::34) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2016; h=from:subject:message-id; bh=KtszOhTtBHOJMBXcCf68gEIjIaPlW6ySs3tOC7kDi+Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1u072FInbSWvkK9ROyDtbUdMqOT90bc67eQi6SZ JhBI0k6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dbtAAKCRCJcvTf3G3AJkbqD/ 9m8DMcoU3/EnqRmO+0JA6ww4B2FpQawFlaOMIre43dMKbaCRiqdqo5mTurO6wxot9WWkwOz7p0V524 wQj9tp7YVXDHj1Vdk6H+fgpw9bDzfaL0JxFuEJrMDNEYpqjI4XrlYZ90En5XBYsqNgBKcHQG+MlkED z4EUXUh6WxBjC4vsXGgD5rNylMDn9jvNkgEUOyy+ljjyuPmxEmRSkyRsyqSAq+Ie+fJTNx/B5GHF55 8VDyc8ambbbn4eGqINNZUW1EdMQDQsi5b8EAfQMVX8B9bcppv8q0javJO4paFRlxNhjx3M6+reDLc+ rEuHeB2cbQRDYE8GEINDJGGkunoSezzKZ2wYZOPx1B6fIEfPrAj9duIdV0NaZkEHqCfAmzTP+B/VYm lQK+kfHYHDsE08/FGRx15VbQrkuSKioY0X0ZPp6MlQyGjRyXOu2qXjFYexxEjftQY4I6ru4I8XILVd KrcmpcXTyPP3R9+3Eu91oH2MaSABeg2pdLpyc57/8r2RBXza4nvGdJTqB/Kb9yL8Zb289T4nz6Gzfi h4QNCEaKdl2lSkkzZ9AxZ2z+dNtAqz5UmjUW4gahE179cK0HlakAUOCjohizdYsAW/7uW9g4Zaeq5x bPrnxgQaH51LS9qtvUrVbNbVSjQlqGOtxFMnDAZWd4qJPyE0Ba3kbJYzmP0g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|DM4PR11MB7375:EE_
+X-MS-Office365-Filtering-Correlation-Id: d44ea8b0-74fe-4ebc-82bc-08daef7411a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zaSciA6KWdXGcR40aiDrYb9z5Vj7vm4STrFAooerVG8YYTlZvjG89GavCzwixPwrn/I3rB3KeDvdjFevin0BZd3M8KmPSNBlNpaxgjyRVYCyznMhXUS8RQCkBnaHnxws9fZDyrJvXtYWuVE9QCN1qRvHSnY16z0h2jAVm0D5ptk9hQ/U4y/Lxdizc+IlTHoouyYtGN0qaK66EfFF6Jv0QPhgl6R99pXXFOLpzcSxWy2x+fLcX/3JyfkC2ih5IsEr+6AooXNtKNr91E5pWB80m5ivuZl0/NmHFssEm1ZdKrkkA73PCRTQdoBw0vSnSIoy/Rv4QHZH5+Yx7oteuynYgXNKtej3QjeYjz8iO+ki1WLe/sN42kzwkYRoNLssdgzj9a+cjMHxRMverpe85Qoshjf3ViQAPnQoYro+lt12OlEWrCH4e6IU6g0OctvvJ0RORY7hDyOfiMm3PtCn9mzeMUX8yj4WTEey7PXoTnpFWGov7KzCSi8SKxqoOdEjc+CgooUyd55prqkH8GgmoxUBdmrK0vKKpA2BwSbIrKf1Zex3Y34YCii2OCpuUHSRgxllbvdNHHQTsQgwBmQND9FauFo12Zn/Y4xa6lSvbA+M/e6daF7iXaDAhJZIAAMmyFxDmQVRjJa5B0pw1+ZR8U6APg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199015)(6916009)(478600001)(33716001)(86362001)(82960400001)(316002)(54906003)(2906002)(38100700002)(6486002)(6506007)(44832011)(8936002)(5660300002)(8676002)(66476007)(4326008)(26005)(6666004)(66946007)(41300700001)(66556008)(6512007)(186003)(83380400001)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EpTqEmeRL/VdsDB+MhRJgY8w9N2SlfkShxL9OvgI9sK9eFLe/jEtRSa+y4bq?=
+ =?us-ascii?Q?J0IRtOi4TKbPGTpD0Q2zB6DFF1fmqywkRXr8lRq5Y+7MtgSgkgc+BMo8xGHf?=
+ =?us-ascii?Q?09Q9AHZI6eE2u6K2xAW6tQJutVr42qCPbdOw72RI/gMIVeW2TrjNuGvvI5Cs?=
+ =?us-ascii?Q?VN6QCGTCEXUVBch0Qir7HoFPXaIVT/Ch4fqOJpxPrC3zmxpNah0DZ2t9Cb4p?=
+ =?us-ascii?Q?BhJAzvEb6dKNXu9vdFGnf+j7KyDpx1LnAYp0k7UzLiHYfVTkWje3Qr4V4Ev2?=
+ =?us-ascii?Q?SLZOL05r0eHrynyTgnzh6CC6Kr2ujwzqOYiopTev9Uvjr4dV78X16t6PVvmn?=
+ =?us-ascii?Q?7cw+v4jewaEVBRLt16/vjmmqj9oQmKtQxZofr4rbYaz5Mm9KL4ztB11xijPW?=
+ =?us-ascii?Q?YXxJEgRk5ktBw8EYT/HcNuQ31B8N1ZZduT8vbDJDlF9j4Xriyg3crEjx2z92?=
+ =?us-ascii?Q?NrrAmgSR+gizjqwXeslphGFKOuvqvkyeggaHeJNHVrv6aqyBiSivwm2/9rJi?=
+ =?us-ascii?Q?ZkNcB5zEgRucNKGnZ8GAjwAz8jWCH8yeod79djD1sLkhXk38Z2e64F2zY/Vg?=
+ =?us-ascii?Q?dUWCh+hIFfyaWp/r9aK0dpir2g/10sgKmeSsDmSH99/BoHFSECU2FvWYlVRS?=
+ =?us-ascii?Q?/sCLaxLrb7bHehv1ZaM8n2+tWN5+yv6p0WqWC2EhndG2I7ANjZyFAytIVGrd?=
+ =?us-ascii?Q?qvqkMKNDzQLS05bcHwVWVfS9X6ZgqbQZy3e0OrmZAOxykIGczGBiJ5n1ARsN?=
+ =?us-ascii?Q?ZkqxzBBZrPV3X9LD9VLB1LQ1Yu52Iqi1Cg6WT9atCvgzNHRbBRfS3gjEA/5s?=
+ =?us-ascii?Q?w1EyEK2jOFoD2HwlPnemTzi/gsJ9QHVS8HYVYyeUCXAFQpXBj9DOpPiqONeO?=
+ =?us-ascii?Q?B/u/ZfD9gI7J0rISX5zfL0WEKNVFtUIfiAOWJ3bZc0NHIk5th3svODIn981J?=
+ =?us-ascii?Q?7bJUbED4NQW4hFv7dWdxaRCaUUocslH9QcV3vyoVpxWuRSufDJeQVUbu1o/e?=
+ =?us-ascii?Q?L7ymTvsTr7qoqow6zGOajhhkmsXK2YwsD4gbEdsg33mV8hPxXJ8WkSH2NiI6?=
+ =?us-ascii?Q?4YGFbda5JF1xvl4268FX6c7GoUidhYrNqg8fRCiOvuWBLfCxcx9LuRn2jSu9?=
+ =?us-ascii?Q?gi5gDBKKdMxmhIOj4eQK7xWSkTQOE5j/Je7cY+b29iSAWbTeDAPZfkEQUEfh?=
+ =?us-ascii?Q?TxYvGaxHc8urHf/m6JZhUvLfF2Py7tgibjWj2yrUr0q5pHocwuBvIKV84NYT?=
+ =?us-ascii?Q?u7RD70/Lwg4oyLcc1nRc5d2Jak4gBwqhSguye2wRbueNh90MpHU71T9J2fzS?=
+ =?us-ascii?Q?1/6IQmq9yAojUzKUX4gk9c7/mMhHTqPvR+/MHesqSV+40JkHUS4ru0z8KGDU?=
+ =?us-ascii?Q?g5UyqF048EuKPR1VFIkf4IRme/aSXXVrEMhsAXsaEMql8xwsNXWiuAmfXWiX?=
+ =?us-ascii?Q?Pq5JIQNwgyA/Q7Bxcr48Yl9vVEntb3DBqypm0VX7FAztLspl5OLJaGAZLx9x?=
+ =?us-ascii?Q?RLIoA2liYVQEPu9uKQQvsjE26PdSz7ERAykV1ZxQGQ53pLa3EkwqBkyNb4rV?=
+ =?us-ascii?Q?XHM3HZyXWKK84VeARPrFdA5VONL2O70OOU78n5latkqjQ6yywwxRFRe8r9ej?=
+ =?us-ascii?Q?GQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d44ea8b0-74fe-4ebc-82bc-08daef7411a1
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 23:25:01.9732
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yQES8KeOVZpKNfcD+ZAHFQBykro+DACJVWBhKe5wd6WDn6IF3mBRNT9btCqjzrzmC4/k1G6xcXX2AgoGlO55ZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7375
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct
-mlxsw_sp_nexthop_group_info's "nexthops" 0-length array with a flexible
-array. Detected with GCC 13, using -fstrict-flex-arrays=3:
+On Tue, Jan 03, 2023 at 06:31:31PM +0100, Fabio M. De Francesco wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_page(). Therefore,
+> replace kmap_atomic() with kmap_local_page() in ips_is_passthru(). In
+> the meantime remove an unnecessary comment soon before local mapping,
+> align code and remove spaces (the function is short, therefore the
+> reviewers job won't be over-complicated by these logically unrelated
+> clean-ups).
+> 
+> kmap_atomic() is implemented like a kmap_local_page() which also disables
+> page-faults and preemption (the latter only for !PREEMPT_RT kernels).
+> The code within the mapping/unmapping in ips_is_passthru() is already
+> in atomic context because of a call to local_irq_save() and
+> kmap_local_page() can be called in atomic context too (including
+> interrupts).
+> 
+> Therefore, a mere replacement of the old API with the new one is all it
+> is required (i.e., there is no need to explicitly add any calls to
+> pagefault_disable() and/or preempt_disable()).
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
 
-drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c: In function 'mlxsw_sp_nexthop_group_hash_obj':
-drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:3278:38: warning: array subscript i is outside array bounds of 'struct mlxsw_sp_nexthop[0]' [-Warray-bounds=]
- 3278 |                         val ^= jhash(&nh->ifindex, sizeof(nh->ifindex), seed);
-      |                                      ^~~~~~~~~~~~
-drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:2954:33: note: while referencing 'nexthops'
- 2954 |         struct mlxsw_sp_nexthop nexthops[0];
-      |                                 ^~~~~~~~
+The discussion about preemption is irrelevant AFAICS.  But what you say above
+is not wrong and the code looks right.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-Cc: Ido Schimmel <idosch@nvidia.com>
-Cc: Petr Machata <petrm@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-index c22c3ac4e2a1..09e32778b012 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -2951,7 +2951,7 @@ struct mlxsw_sp_nexthop_group_info {
- 	   gateway:1, /* routes using the group use a gateway */
- 	   is_resilient:1;
- 	struct list_head list; /* member in nh_res_grp_list */
--	struct mlxsw_sp_nexthop nexthops[0];
-+	struct mlxsw_sp_nexthop nexthops[];
- #define nh_rif	nexthops[0].rif
- };
- 
--- 
-2.34.1
-
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  drivers/scsi/ips.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+> index 16419aeec02d..bb206509265e 100644
+> --- a/drivers/scsi/ips.c
+> +++ b/drivers/scsi/ips.c
+> @@ -1499,17 +1499,16 @@ static int ips_is_passthru(struct scsi_cmnd *SC)
+>                  struct scatterlist *sg = scsi_sglist(SC);
+>                  char  *buffer;
+>  
+> -                /* kmap_atomic() ensures addressability of the user buffer.*/
+>                  /* local_irq_save() protects the KM_IRQ0 address slot.     */
+>                  local_irq_save(flags);
+> -                buffer = kmap_atomic(sg_page(sg)) + sg->offset;
+> -                if (buffer && buffer[0] == 'C' && buffer[1] == 'O' &&
+> -                    buffer[2] == 'P' && buffer[3] == 'P') {
+> -                        kunmap_atomic(buffer - sg->offset);
+> +		buffer = kmap_local_page(sg_page(sg)) + sg->offset;
+> +		if (buffer && buffer[0] == 'C' && buffer[1] == 'O' &&
+> +		    buffer[2] == 'P' && buffer[3] == 'P') {
+> +			kunmap_local(buffer);
+>                          local_irq_restore(flags);
+>                          return 1;
+>                  }
+> -                kunmap_atomic(buffer - sg->offset);
+> +		kunmap_local(buffer);
+>                  local_irq_restore(flags);
+>  	}
+>  	return 0;
+> -- 
+> 2.39.0
+> 
