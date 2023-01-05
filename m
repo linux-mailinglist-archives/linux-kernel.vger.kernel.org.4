@@ -2,108 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439EC65EEAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF2C65EEAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbjAEOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S233429AbjAEOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbjAEOYi (ORCPT
+        with ESMTP id S233385AbjAEOZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:24:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34C94C706;
-        Thu,  5 Jan 2023 06:24:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 061C2CE1AEB;
-        Thu,  5 Jan 2023 14:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C8B7C433D2;
-        Thu,  5 Jan 2023 14:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672928673;
-        bh=+OBsYkn+1kFqvpmNNMYmPkwpjcHgZc/XdBy9tYzmGnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lhFOKuJLdai+4RDkr+cnfk5WxhplfJmxdqAKAJcoZ207bnDR+73ybRA15RtqnDcQj
-         YsSgBSXJRRhvVyS4e5ZwCjPjop8hKEkpZ0+IIvV1geelsim+eeFJyIuWkQ+vioBVNs
-         zuXcXoJbX47aPQUOLA85zX+9P9ZkindaAGGDqi/ToFXAVTigyXOa09bQyylYNKzpZU
-         0xkMP9Vqu8Wcb0t6rUJpxWJAUmY2bEo1Y+DvDjcsbUPTaAZBQi8lo+DrkgqLMSVmON
-         4DNb7yuz/DP/wdA9cAaHLtS4oL/+yzFKPTxEGA3YZaxXJJ/m5copkNVf3i4Mqr3IYN
-         gangprpYofjfw==
-Date:   Thu, 5 Jan 2023 14:24:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Mark Hasemeyer <markhas@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Raul Rangel <rrangel@chromium.org>,
-        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
-Subject: Re: [PATCH v10 2/3] dt-bindings: mfd: Add compatible string for UART
- support
-Message-ID: <Y7bdmiZ9lqKZXCfq@google.com>
-References: <20221207104005.v10.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
- <20221207104005.v10.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
- <Y7WkeCi7/x/t37JM@google.com>
- <Y7YjmtwByTR+8tbZ@google.com>
+        Thu, 5 Jan 2023 09:25:06 -0500
+Received: from 163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2665F559C3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=3GW9Z5cfgz8pMeZ04XtLdblMO6HBSQ4K2QmhpdPFwtI=; b=i
+        JDbvGMtGWRwMnS4DfkqFXRRnTNRQSv5Bs7neods8M3lbHIf2rrGdlaKKWh6e68w0
+        ofNeh3J9acWZ540IuKOqXJvHLj7k7w4CVs6iGvXy9NT2xQJLokwEtVUF1v6Rf924
+        VfVGQWza33XgLDRL+qKZuuBq2lhf17dahL9oaeVfNg=
+Received: from 00107082$163.com ( [222.64.110.75] ) by ajax-webmail-wmsvr57
+ (Coremail) ; Thu, 5 Jan 2023 22:24:55 +0800 (CST)
+X-Originating-IP: [222.64.110.75]
+Date:   Thu, 5 Jan 2023 22:24:55 +0800 (CST)
+From:   "David Wang" <00107082@163.com>
+To:     linux-kernel@vger.kernel.org
+Subject: [proc/vmstat]set nr_kernel_stack in vmstat to nr_threads
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220708(c4627114)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+X-NTES-SC: AL_QuycAPWZt04i4ymZZekZnEoUjug3W8K5v/kk3Y9VOp80uSrB3DkQRmFEH2bS4cijKz+2rga6dTpM48dRVJlcTa41Z5AdEw8Ny3ZhjGVrE2Ww
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7YjmtwByTR+8tbZ@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <41beab3a.4f68.1858252166b.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: _____wBnasq43bZjeo4CAA--.15258W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbivBftqmASalA6wwAAsd
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 Jan 2023, Tzung-Bi Shih wrote:
-
-> On Wed, Jan 04, 2023 at 04:08:24PM +0000, Lee Jones wrote:
-> > On Wed, 07 Dec 2022, Mark Hasemeyer wrote:
-> > 
-> > > From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
-> > > 
-> > > Add a compatible string to support the UART implementation of the cros
-> > > ec interface. The driver does not support the reg and interrupt
-> > > properties, so exempt them from being required for UART compatible nodes.
-> > > 
-> > > Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
-> > > Co-developed-by: Mark Hasemeyer <markhas@chromium.org>
-> > > Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
-> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > ---
-> > > 
-> > > Changes in v10:
-> > > - No change
-> > > 
-> [...]
-> > 
-> > I changed the subject line and applied the patch, thanks.
-> 
-> Pardon me.  I didn't know you would pick the patch so that I have queued it
-> into chrome-platform[1].  Would you like me to drop the commit?
-
-Yes, please do.
-
-You should gain permission from the maintainer before you apply patches.
-
-  % scripts/get_maintainer.pl -f Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-     Lee Jones <lee@kernel.org> (supporter:MULTIFUNCTION DEVICES (MFD))
-     Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-     Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
- 
- Why do I get the feeling we've had this conversation before?
-
--- 
-Lee Jones [李琼斯]
+bnJfa2VybmVsX3N0YWNrIGluIC9wcm9jL3Ztc3RhdCBpcyB2ZXJ5IGNvbmZ1c2luZywgaXRzIHZh
+bHVlIGlzIG5vdyB0aGUgc2FtZSBhcyBLZXJuZWxTdGFjayBpbiAvcHJvYy9tZW1pbmZvLAppbmRp
+Y2F0aW5nIGtlcm5lbCBzdGFjayBtZW1vcnkgdXNhZ2UgaW4gS0IuICBJdCB3b3VsZCBiZSBoZWxw
+ZnVsIHRvIGV4cG9zZSBhIHN0YXQgYWJvdXQgdGhlIG51bWJlciBvZiBrZXJuZWwgdGhyZWFkLAoo
+dGhlIHN5c2luZm8gc3lzY2FsbCByZXR1cm4gYSBwcm9jIG51bWJlciB3aXRoIHR5cGUgVTE2LCBv
+dmVyZmxvdyB3b3VsZCBoYXBwZW4pLiBUaGlzIHBhdGNoIHNldCBucl9rZXJuZWxfc3RhY2sgaW4g
+L3Byb2Mvdm1zdGF0CnRvIGEgdmFsdWUgZGVmaW5lZCBieSBhIGdsb2JhbCB2YXJpYWJsZSBucl90
+aHJlYWRzLgoKLS0KZGlmZiAtLWdpdCBhL21tL3Ztc3RhdC5jIGIvbW0vdm1zdGF0LmMKaW5kZXgg
+MWVhNmE1Y2UxYzQxLi4wMDQwYmVhYTFiMjQgMTAwNjQ0Ci0tLSBhL21tL3Ztc3RhdC5jCisrKyBi
+L21tL3Ztc3RhdC5jCkBAIC0yOCw2ICsyOCw3IEBACiAjaW5jbHVkZSA8bGludXgvbW1faW5saW5l
+Lmg+CiAjaW5jbHVkZSA8bGludXgvcGFnZV9leHQuaD4KICNpbmNsdWRlIDxsaW51eC9wYWdlX293
+bmVyLmg+CisjaW5jbHVkZSA8bGludXgvc2NoZWQvc3RhdC5oPgogCiAjaW5jbHVkZSAiaW50ZXJu
+YWwuaCIKIApAQCAtMTgzMSw5ICsxODMyLDIwIEBAIHN0YXRpYyBpbnQgdm1zdGF0X3Nob3coc3Ry
+dWN0IHNlcV9maWxlICptLCB2b2lkICphcmcpCiB7CiAgICAgICAgdW5zaWduZWQgbG9uZyAqbCA9
+IGFyZzsKICAgICAgICB1bnNpZ25lZCBsb25nIG9mZiA9IGwgLSAodW5zaWduZWQgbG9uZyAqKW0t
+PnByaXZhdGU7Ci0KKyAgICBzdGF0aWMgbG9uZyBua3NfaSA9IC0xOyAvLyBpbmRleCBmb3IgbnJf
+a2VybmVsX3N0YWNrCisgICAgaWYgKG5rc19pIDwgMCAmJiBua3NfaSA+IC0xMjgpIHsKKyAgICAg
+ICAgaWYgKHN0cmNtcCgibnJfa2VybmVsX3N0YWNrIiwgdm1zdGF0X3RleHRbb2ZmXSkgPT0gMCkg
+eworICAgICAgICAgICAgbmtzX2kgPSBvZmY7CisgICAgICAgIH0gZWxzZSB7CisgICAgICAgICAg
+ICBua3NfaS0tOworICAgICAgICB9CisgICAgfQogICAgICAgIHNlcV9wdXRzKG0sIHZtc3RhdF90
+ZXh0W29mZl0pOwotICAgICAgIHNlcV9wdXRfZGVjaW1hbF91bGwobSwgIiAiLCAqbCk7CisgICAg
+aWYgKG5rc19pID09IG9mZikgeworICAgICAgICBzZXFfcHV0X2RlY2ltYWxfdWxsKG0sICIgIiwg
+bnJfdGhyZWFkcyk7CisgICAgfSBlbHNlIHsKKyAgICAgICAgc2VxX3B1dF9kZWNpbWFsX3VsbCht
+LCAiICIsICpsKTsKKyAgICB9CiAgICAgICAgc2VxX3B1dGMobSwgJ1xuJyk7CiAKICAgICAgICBp
+ZiAob2ZmID09IE5SX1ZNU1RBVF9JVEVNUyAtIDEpIHsKCi0tCgoKRGF2aWQKCg==
