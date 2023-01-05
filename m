@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D089265F3E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854AD65F3EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjAESoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S234900AbjAESpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:45:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbjAESoH (ORCPT
+        with ESMTP id S234467AbjAESpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:44:07 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154221054D;
-        Thu,  5 Jan 2023 10:44:06 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id az7so12627175wrb.5;
-        Thu, 05 Jan 2023 10:44:06 -0800 (PST)
+        Thu, 5 Jan 2023 13:45:01 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7062BFC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:44:59 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id fc4so91995309ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:44:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R5VFmITpcq980NC7BHDSxAFwvqy7pS4EajnFTTRxXo8=;
-        b=KwmlitPYUG0nvLmz8rNf3rqtW8HM76f8nSBVunCIkaSBPwbAvZxYZzHGK3PwNwR7aP
-         fXmL4M+I2ETLzUWtEaUP9ZgpU40ro0a++SN8LS/D/grUAMzOWx6pMpjTO2xBTma+fF+p
-         8Z3nxBZ+cC1pRdAij++ZrS7CSicWYw5vryfLTNzHWibH4C2JwL/mO05ngE6FAeKFTJPp
-         7117FL10SSEFxQmIZmC6nSjOs4c24ZGqcR7nqVsYXQU9BeeIsdoNF9Bm4KRUmUoNNXC8
-         SmTSY6Ry8x2RKUASJo4qsQmKlVlyA07StKm5osrTpfbX+VlP9JLQW2BgFMmSPB+jWHEV
-         wp5A==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojaUANg6489F6UhekwXZgoRInAu5mt099cKH9PNdGSE=;
+        b=ZlI5Vuj2TBGXPpsGgWMlVWG4ukkh8Jncr3YY+gT6T8/0Ia8rxK390imIHfsK/Gd3qn
+         +3rIcWuMxjcCVp0gYX6JnKb8OBnVxfnCaB6tG+wMoNWbZ6Ue3xfy7GBTHagFOSp9aHfH
+         0m8bS3J1r9EghcBzNAV3DXtlfuVXZWUkP03Ho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=R5VFmITpcq980NC7BHDSxAFwvqy7pS4EajnFTTRxXo8=;
-        b=bU649uZNiyAxsI/wt+12O4I2nDUwEnAruxKftYohPFRZMkUJL8ywPAK7GktKWRa7kj
-         TGMYvZ4Wlde637ne3+UEHZv/4Uy0cRkJuEhHE78NDhsT+q2hZ2GL/LOLh3N/CtYp+R/j
-         m1OFGA+XLapQ7d/M1KKCTvq4o5OM2YyfFOfFnVEquzzn8sSeAspsxNAvfFnbPAQQya9I
-         IXdW28bRy/OOE1N57eErb13iawlpmP6BrxMUKLfDHW3Rz3OFvX8H32VTCimgRtcNiM2n
-         Ty3HqcWjgXNXKnMQ8HWs0nU7JHmQ9VXFDI9cAJXhOXJTYejZ53WRee130AGrgJvK3m3P
-         5QAA==
-X-Gm-Message-State: AFqh2kqBfzirxGPXOdYrQWfGOT+HZumjgZdo4wPRJxiyo1+7UpcdD9pQ
-        WlPovBXrGypbMZ5IazZokyg=
-X-Google-Smtp-Source: AMrXdXupHpSiCAPJMry8NhE3IeKFncHiPo3XY0ysiysKAVmAVt/UICl6Oja6cqmdM/4eTxSax6ktpw==
-X-Received: by 2002:adf:db11:0:b0:242:6055:dee3 with SMTP id s17-20020adfdb11000000b002426055dee3mr31114213wri.63.1672944244668;
-        Thu, 05 Jan 2023 10:44:04 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b14-20020a05600010ce00b0023c8026841csm37004971wrx.23.2023.01.05.10.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 10:44:04 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] media: rkisp1: make a few const arrays static
-Date:   Thu,  5 Jan 2023 18:44:03 +0000
-Message-Id: <20230105184403.63419-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=ojaUANg6489F6UhekwXZgoRInAu5mt099cKH9PNdGSE=;
+        b=tGojxAZYOQqN1yFnoiF6crNi+060nAY2S1wDlHJTm94XdACt0J+U0uni7t+WmSznI/
+         cz43sW8TtBleNif7fO2nP50ZOljQGPsU52znVQlSWkvxAKABlNY7IengNmV8cjiy3JF5
+         OnBHHUpAh0lzqcDAKzWqwvdAmzdxsumTHhRBi5/hu4PvpwOLkmOgOremln3KhWpkjHfF
+         e6NWXqIrLOQhIG8qZ1J8e2adVRtfg2P7cH/6mg9HA2CGjiEmQd0E9CZcovk2AFRt0iKC
+         htYrS0vurJGlSFccIJgzxrBbQSJn4k6ob9YQd6/D9GbG1w3EY997ClYawk9hfEF0sA7M
+         5bpQ==
+X-Gm-Message-State: AFqh2krcuFA7R2bK4Bm/HAVj+Azu9bYs0g27CfFd4Gyy/yCxvUs8+OP9
+        JW9KWgpZMB0sCG7jxp535y2nnIi0pcAuGSwcCLBayg==
+X-Google-Smtp-Source: AMrXdXuZaTwSwLvO6Evn4zHTCe1NYcoZ2XwUQT8vG4f12cSnl//oOaHYwI30X/CqN6x9x7eUZLgaMpZZ+5liuVOyY5s=
+X-Received: by 2002:a17:907:2be3:b0:7c0:cd95:bbaf with SMTP id
+ gv35-20020a1709072be300b007c0cd95bbafmr4687962ejc.460.1672944297682; Thu, 05
+ Jan 2023 10:44:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230104060846.112216-1-pmalani@chromium.org>
+In-Reply-To: <20230104060846.112216-1-pmalani@chromium.org>
+From:   Benson Leung <bleung@chromium.org>
+Date:   Thu, 5 Jan 2023 10:44:41 -0800
+Message-ID: <CANLzEkuV3r6hQeB_e5qHm7eWLF2VftH-U9sbED30wWmu29UEyg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform/chrome: cros_typec_switch: Use fwnode* prop check
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the const arrays on the stack, instead make them
-static. Also makes the object code smaller.
+Hi Prashant,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- .../platform/rockchip/rkisp1/rkisp1-capture.c     | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+On Tue, Jan 3, 2023 at 10:09 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Using device_property_present() multiple times on an ACPI device
+> leads to kernel panics on Chromebook systems. This happens when there
+> is > 1 boolean property in an ACPI device which is created dynamically
+> by the BIOS as part of SSDT[1] on Chromebook systems
+>
+> Since fwnode_* can handle simple device tree properties equally
+> well, switch to using the fwnode_property_present() function
+> version. This will avoid panics and make the usage consistent
+> when we introduce a check for the 2nd property in a subsequent patch.
+>
+> [1] https://wiki.osdev.org/SSDT
+>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-index d4540684ea9a..d1d1fdce03e3 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-@@ -1131,10 +1131,12 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
- 	const struct rkisp1_capture_config *config = cap->config;
- 	const struct rkisp1_capture_fmt_cfg *fmt;
- 	const struct v4l2_format_info *info;
--	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
--					    RKISP1_RSZ_SP_SRC_MAX_WIDTH };
--	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
--					     RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
-+	static const unsigned int max_widths[] = {
-+		RKISP1_RSZ_MP_SRC_MAX_WIDTH, RKISP1_RSZ_SP_SRC_MAX_WIDTH
-+	};
-+	static const unsigned int max_heights[] = {
-+		RKISP1_RSZ_MP_SRC_MAX_HEIGHT, RKISP1_RSZ_SP_SRC_MAX_HEIGHT
-+	};
- 
- 	fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
- 	if (!fmt) {
-@@ -1336,8 +1338,9 @@ void rkisp1_capture_devs_unregister(struct rkisp1_device *rkisp1)
- 
- static int rkisp1_register_capture(struct rkisp1_capture *cap)
- {
--	const char * const dev_names[] = {RKISP1_MP_DEV_NAME,
--					  RKISP1_SP_DEV_NAME};
-+	static const char * const dev_names[] = {
-+		RKISP1_MP_DEV_NAME, RKISP1_SP_DEV_NAME
-+	};
- 	struct v4l2_device *v4l2_dev = &cap->rkisp1->v4l2_dev;
- 	struct video_device *vdev = &cap->vnode.vdev;
- 	struct rkisp1_vdev_node *node;
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+Thanks,
+Benson
+
+> ---
+>  drivers/platform/chrome/cros_typec_switch.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform/chrome/cros_typec_switch.c
+> index a26219e97c93..2536bda03bf3 100644
+> --- a/drivers/platform/chrome/cros_typec_switch.c
+> +++ b/drivers/platform/chrome/cros_typec_switch.c
+> @@ -254,7 +254,7 @@ static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
+>
+>                 dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
+>
+> -               if (!device_property_present(fwnode->dev, "mode-switch"))
+> +               if (!fwnode_property_present(fwnode, "mode-switch"))
+>                         continue;
+>
+>                 ret = cros_typec_register_mode_switch(port, fwnode);
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
+>
+
+
 -- 
-2.30.2
-
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
