@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3E265F678
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A9865F67E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235478AbjAEWJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S235701AbjAEWKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbjAEWJB (ORCPT
+        with ESMTP id S235512AbjAEWJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:09:01 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB869525
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:08:59 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id d127so31791982oif.12
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:08:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bn7Z6oDABvJGYJVlfHzj/OFR2MilP9KE/xPylqtRaI8=;
-        b=LPsmEqdAF17ASsCpSdQFeo9d4yZM+w20RGOPe9inlsD+sZCird0lne6ib9WTiUsoq6
-         2YgzaklAwt7/d/G7TwXebs7qINP7lo6g4gokBAoTDbEuLNRCPOur2bdGaSB5436CIeQq
-         ow56Fuel0bIs5L34wyTU1If5GO/VcfHRlBWxOg8w8qsR3+7n9GR21BPqtWii9RShhyO4
-         sK4o0wllJQDfn0fBTBRKdj+90uTkehVGEmVCx2XkcMotlGcWsc49QFRAovOssriMnEgU
-         2rvFg916i1tZO2H3RWKP5p1gJ4gYmWV4zvrIbxxpj3BvvCGMhW7SujCWmA146HEcnYhg
-         iNbg==
+        Thu, 5 Jan 2023 17:09:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB0169534
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672956548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=idk7zwMeN8Ms5ELQH7d2B6f/MLuOIPR3AtkkFMxBOP4=;
+        b=WxsdcKEzoRuvf4DRT79vN2pF0Mp4E1Y47672tB95E4Dut0Tp9JW4OaXFOKCk3U1T4G2rBb
+        MOORUvmk9k35z9vnJTIiUNUlf+7zYNXD/NvUoEJfTmCV1HS+bnsKRgTRexDcRl84IEsWDy
+        pOr45HI+F2tP74UjVyKGfwNuKEMOSP0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-116-nZfwCQtLPguWxazHK1lLig-1; Thu, 05 Jan 2023 17:09:07 -0500
+X-MC-Unique: nZfwCQtLPguWxazHK1lLig-1
+Received: by mail-qk1-f198.google.com with SMTP id v7-20020a05620a0f0700b006faffce43b2so25692709qkl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:09:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bn7Z6oDABvJGYJVlfHzj/OFR2MilP9KE/xPylqtRaI8=;
-        b=7psEtBM/jgbKaeGh2NM/y+CTvMvaQ0TTFX90dS19bZikyQYrsmqxFYeTAaG81DVWSx
-         rt5tZMWljW4uCHs7nkDh8sCoCBPPJfNzEDr8Q8dbYh1kdJ8ZYfcilIUuLQL1UReWn+im
-         kyiP1BM7H/mx/G7JEWQisEiwE7ajofUm36NS+rG7XqyWKx9cnJbUKMiIhbBes5oo7L8k
-         G7UpRueP0607LFpK59093T3siiRgxuRKGfjjZGiGwic/7dn/YhugXrYmUULQuFAX0iAo
-         x3K962+DIQL2d2X9LvtKZ2sEBMDHGd+ig80Ixr8ycTzMKEns/XVAh11tfUyJcazahTop
-         Jcdw==
-X-Gm-Message-State: AFqh2koJjGwXLjb0g25Xr99C4hq6tZWSYQnYY6lqrdv/CJJI1418kQDK
-        UM6jHF3NwYiIIrJVe2H2vVGtKQ5xYXckvcE32nFg2g==
-X-Google-Smtp-Source: AMrXdXuxkMBtlIcBn4GdWW98m54t/OKdTbEuF+GncEMuoeBfYSSzt5Own7F/lydDPhj0/ruVF7sknqqThK7mIt4x8Js=
-X-Received: by 2002:a05:6808:3947:b0:354:7fd4:f17b with SMTP id
- en7-20020a056808394700b003547fd4f17bmr2403497oib.221.1672956538794; Thu, 05
- Jan 2023 14:08:58 -0800 (PST)
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=idk7zwMeN8Ms5ELQH7d2B6f/MLuOIPR3AtkkFMxBOP4=;
+        b=QfGk2sCN+yRIWoXBw0gXktOgxOXtzWdpMB7t1lpYpulMDSGcFwyMj0ZmaMm/84Q/HK
+         H95OUcmVI9yEXZoc2Yf+qmn+sNHXzeKBXQXu+jqLolZHT01ymJczwSPcmGcD4M5PMARg
+         Fl5l8ghw2YwwR9qk7Tkn/70VjbfWxV03kyoIknX9PhlgdzQDTmmwrDBUAo9f4qRBzyWd
+         gpAqf6zQ561SemiPR7rDSozuk8CR0dYQE1KAtzp5VpkS03MVtvtocTypfrLxvxDReLT2
+         ZYrGRZUawpQSttsUVSOcU3ERu6PtSuE3DG26QJbiX014vbtTBvUXc/EF3Cox0rrBeo2X
+         5RcQ==
+X-Gm-Message-State: AFqh2koD5Q2ABHSHwbutILw0ExV+v3ef9uMejsR1vMQdwkuH4YYQroiA
+        TR7yZTyG8IxqjY5Ls84oQQSF8X4paAJebTQ+TQy7Aio6c9Le9jNmZgZneiRGfDYB1zQx8jFcIMZ
+        tsAtYQjEe3TxqNRyVKkBCg8cG
+X-Received: by 2002:a05:6214:2e81:b0:4b8:8a31:5741 with SMTP id oc1-20020a0562142e8100b004b88a315741mr71801198qvb.15.1672956547037;
+        Thu, 05 Jan 2023 14:09:07 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXughyad3qrXR+35kG38zogh8DNxPC/6FgPkh/1kss3XlBPgAaxGNhEBt42C/e4ZtH94rv6pbA==
+X-Received: by 2002:a05:6214:2e81:b0:4b8:8a31:5741 with SMTP id oc1-20020a0562142e8100b004b88a315741mr71801183qvb.15.1672956546809;
+        Thu, 05 Jan 2023 14:09:06 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id pj8-20020a05620a1d8800b006cfc7f9eea0sm25787894qkn.122.2023.01.05.14.09.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 14:09:06 -0800 (PST)
+Subject: Re: [PATCH] ASoC: amd: Return ENODEV if acp63 is not found.
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, ndesaulniers@google.com, Vijendar.Mukunda@amd.com,
+        Syed.SabaKareem@amd.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230105211912.824250-1-trix@redhat.com>
+ <Y7dF3VvQs6l7rr3p@dev-arch.thelio-3990X>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <3921856d-7843-4206-f888-4ac48cdc97e4@redhat.com>
+Date:   Thu, 5 Jan 2023 14:09:03 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
- <YuFvbm/Zck9Tr5pq@zn.tnic> <20221219150026.bltiyk72pmdc2ic3@amd.com>
- <Y6DEv4QuvIfwWlCW@zn.tnic> <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
-In-Reply-To: <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Thu, 5 Jan 2023 14:08:47 -0800
-Message-ID: <CAA03e5GKCcevo7goyyRqWrgk3KeFPTddb-E2pRmgDmyPSNxDvA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
- when adding it to RMP table
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y7dF3VvQs6l7rr3p@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 1:49 PM Kalra, Ashish <ashish.kalra@amd.com> wrote:
->
-> Hello Boris,
->
-> On 12/19/2022 2:08 PM, Borislav Petkov wrote:
-> > On Mon, Dec 19, 2022 at 09:00:26AM -0600, Michael Roth wrote:
-> >> We implemented this approach for v7, but it causes a fairly significant
-> >> performance regression, particularly for the case for npages > 1 which
-> >> this change was meant to optimize.
-> >>
-> >> I still need to dig in a big but I'm guessing it's related to flushing
-> >> behavior.
-> >
-> > Well, AFAICT, change_page_attr_set_clr() flushes once at the end.
-> >
-> > Don't you need to flush when you modify the direct map?
-> >
->
-> Milan onward, there is H/W support for coherency between mappings of the
-> same physical page with different encryption keys, so AFAIK, there
-> should be no need to flush during page state transitions, where we
-> invoke these direct map interface functions for re-mapping/invalidating
-> pages.
->
-> I don't know if there is any other reason to flush after modifying
-> the direct map ?
 
-Isn't the Milan coherence feature (SME_COHERENT?) about the caches --
-not the TLBs? And isn't the flushing being discussed here about the
-TLBs?
+On 1/5/23 1:49 PM, Nathan Chancellor wrote:
+> Hi Tom,
+>
+> On Thu, Jan 05, 2023 at 04:19:12PM -0500, Tom Rix wrote:
+>> The clang build fails with
+>> sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used
+>>    uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>>          default:
+>>          ^~~~~~~
+>>
+>> When no device is found -ENODEV should be returned.
+>> A switch with a single case is overkill, change to if-else.
+>>
+>> Fixes: 1d325cdaf7a2 ("ASoC: amd: ps: refactor platform device creation logic")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> Thanks for the patch! I sent basically the same thing earlier today
+> (sorry for forgetting to Cc you directly) and was told it was not
+> correct:
+>
+> https://lore.kernel.org/6bb126b7-1cb4-0c4c-d357-fadc3ffdd3f9@amd.com/
+>
+> I am just waiting for some feedback before sending a v2.
 
-Also, I thought that Mingwei Zhang <mizhang@google.com> found that the
-Milan SEV coherence feature was basically unusable in Linux because it
-only works across CPUs. It does not extend to IO (e.g., CPU caches
-need to be flushed prior to free'ing a SEV VM's private address and
-reallocating that location to a device driver to be used for IO). My
-understanding of this feature and its limitations may be too coarse.
-But I think we should be very careful about relying on this feature as
-it is implemented in Milan.
+Looking closer, the pdev_mask is only set to ACP63_PDM_DEV_MASK so the 
+case statement can be folded into the above if-check of pdev_mask.
 
-That being said, I guess I could see an argument to rely on the
-feature here, since we're not deallocating the memory and reallocating
-it to a device. But again, I thought the feature was about cache
-coherence -- not TLB coherence.
+And the default: dropped,  it looks like dead code.
+
+Please cc me on the v2,
+
+Tom
+
+>
+>> ---
+>>   sound/soc/amd/ps/pci-ps.c | 7 +++----
+>>   1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+>> index 401cfd0036be..cba8800ab4ea 100644
+>> --- a/sound/soc/amd/ps/pci-ps.c
+>> +++ b/sound/soc/amd/ps/pci-ps.c
+>> @@ -205,8 +205,7 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
+>>   		memset(&pdevinfo, 0, sizeof(pdevinfo));
+>>   	}
+>>   
+>> -	switch (adata->pdev_mask) {
+>> -	case ACP63_PDM_DEV_MASK:
+>> +	if (adata->pdev_mask == ACP63_PDM_DEV_MASK) {
+>>   		adata->pdm_dev_index  = 0;
+>>   		acp63_fill_platform_dev_info(&pdevinfo[0], parent, NULL, "acp_ps_pdm_dma",
+>>   					     0, adata->res, 1, NULL, 0);
+>> @@ -214,8 +213,8 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
+>>   					     0, NULL, 0, NULL, 0);
+>>   		acp63_fill_platform_dev_info(&pdevinfo[2], parent, NULL, "acp_ps_mach",
+>>   					     0, NULL, 0, NULL, 0);
+>> -		break;
+>> -	default:
+>> +	} else {
+>> +		ret = -ENODEV;
+>>   		dev_dbg(&pci->dev, "No PDM devices found\n");
+>>   		goto de_init;
+>>   	}
+>> -- 
+>> 2.27.0
+>>
+>>
+
