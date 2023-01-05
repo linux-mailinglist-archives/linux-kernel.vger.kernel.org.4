@@ -2,86 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E3965F309
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A9865F30D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbjAERmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S235195AbjAERny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235045AbjAERmV (ORCPT
+        with ESMTP id S235452AbjAERnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:42:21 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64B41032;
-        Thu,  5 Jan 2023 09:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672940536; x=1704476536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/nm8XN5UrQy4aa6gZCYXxJPwD8gab0pZ5U+FjFjFY3A=;
-  b=JIggYTErMBW4+slXT4ELGqNB1yrPXJ2yMH2aTgiaXdmzdtbtH9EZ5Hxk
-   aWDvBOaEcfEBBRzX0OH2wR/Vqq3aps+4MuDpWEUimSgpryqDNAOJ55ZjP
-   npp3OemKUe6iKnWACDopFRlWu9yo6PFlCZWgQFpknG0bymtOW6fwM7bwU
-   CaxOU2vJeZokLDfp5THOWdi2ZyJa6rpsaCnnFWNM4XOsqg4/traZh7+8m
-   RAeRM6b0q85IiYHgjNYc88baENHQST4qZTl7LrwdO4uYHBIFL7wUGMilg
-   3TfSsh7RQeVjHM4QxEt7BIGI1+XCRBKjF3BClryzywjFKeTxHYIv9juP2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="408524632"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="408524632"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 09:42:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="718900072"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="718900072"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 09:42:11 -0800
-Date:   Thu, 5 Jan 2023 09:42:10 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, bhelgaas@google.com,
-        hdegoede@redhat.com, kernelorg@undead.fr, kjhambrick@gmail.com,
-        2lprbe78@duck.com, nicholas.johnson-opensource@outlook.com.au,
-        benoitg@coeus.ca, mika.westerberg@linux.intel.com,
-        wse@tuxedocomputers.com, mumblingdrunkard@protonmail.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        david.e.box@intel.com, yunying.sun@intel.com
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <Y7cL8pIqLrwv2z7+@agluck-desk3.sc.intel.com>
-References: <20230104145032.GA1069244@bhelgaas>
- <20230104154511.GA1071195@bhelgaas>
+        Thu, 5 Jan 2023 12:43:47 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7593DBD0;
+        Thu,  5 Jan 2023 09:43:46 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id u28so48965617edd.10;
+        Thu, 05 Jan 2023 09:43:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mc995RQU5XcVA3doI/OYoladX0qBn8UtEeewhcjwF34=;
+        b=BhREoBZ1b6ppPpjxkXwzDaeJK9Iom+vVDVR77VSEet7vQ8flZBR0/S4xAq2JexcreY
+         eNuhC3y/IgtM7FEw2ildDeuSwsltSOaDnZbCD1c8uMlb0jz5tVkjSsGroOmxY0S8KuUw
+         uqjnpSCUvmeA6gb5nNwEbE21/l5AGowd9FGBKUNyzcIIeyBGst/oplbZDyG30DkJpBp/
+         IWwL/PUhTkGPppPZhBZzYxo+RLKHyeSNckMCTiEJEPBrwnGcX9m4tLhSAyTOr0jLTEvk
+         vCgHeNrMeic6au8VuBKMcBq/c5e69Rorxx46fBNj0gUgKTRer4QPS9Ii3fbE5A2vwte4
+         4pSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mc995RQU5XcVA3doI/OYoladX0qBn8UtEeewhcjwF34=;
+        b=y8+SeaIPlc6VFTKM+lARGYmAIXy12iDXZkurv+MyA0cwxboejk0tIyn8n/102jSXNq
+         mt1uFsdjTDCJfnTHigiiM3ZLounq0yjRWHG6nKUaYsOjyJYdltEtXL/lKZUvTH3QnOO2
+         15G+YdoUDzJFfiMShGyAD5AfxRxzhSHiVPkcWThQ2Lx3CVcjqNZmWLV520jGTW/7LrlJ
+         WAew9ydyW7RDYnktdsTLOWQo1T4sLGTIanaLqtd6y/yZxHUcsBrOpPH1Ew4RB9PD63gI
+         OtYeD6Yljk+5hgnDSpq3QqsVHJ1+yxXifeaAdyXRaPevg0Enh0Rcjh2IGzjYewfWVcLG
+         y6jw==
+X-Gm-Message-State: AFqh2kqdGjZ3FkGMD0+R2yI31neoU3ADB4uKRsRMs4LPh71HN9ZnyrTJ
+        eQPC1vOjLxlCOOsYkg96tkY=
+X-Google-Smtp-Source: AMrXdXv+5cK8BNgrptRcJ95PrbdA/CwlWZJli9CYIhw65uTWfZG/FKbj71UxraHme/ipAtoI00yj7A==
+X-Received: by 2002:aa7:cf94:0:b0:45c:834b:eb59 with SMTP id z20-20020aa7cf94000000b0045c834beb59mr55828713edx.36.1672940625319;
+        Thu, 05 Jan 2023 09:43:45 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id m2-20020aa7d342000000b00488117821ffsm10379593edr.31.2023.01.05.09.43.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 09:43:45 -0800 (PST)
+Date:   Thu, 5 Jan 2023 19:43:42 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <20230105174342.jldjjisgzs6dmcpd@skbuf>
+References: <20230103220511.3378316-1-sean.anderson@seco.com>
+ <20230103220511.3378316-5-sean.anderson@seco.com>
+ <20230105140421.bqd2aed6du5mtxn4@skbuf>
+ <Y7bhctPZoyNnw1ay@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104154511.GA1071195@bhelgaas>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7bhctPZoyNnw1ay@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:45:11AM -0600, Bjorn Helgaas wrote:
-> My understanding is that EfiMemoryMappedIO tells the OS to map the
-> area for use by runtime services, but is not intended to prevent the
-> OS from using the area.  Some platforms use EfiMemoryMappedIO for PCI
-> host bridge apertures, and of course the OS needs to use those.
+On Thu, Jan 05, 2023 at 02:40:50PM +0000, Russell King (Oracle) wrote:
+> > If the PHY firmware uses a combination like this: 10GBASE-R/XFI for
+> > media speeds of 10G, 5G, 2.5G (rate adapted), and SGMII for 1G, 100M
+> > and 10M, a call to your implementation of
+> > aqr107_get_rate_matching(PHY_INTERFACE_MODE_10GBASER) would return
+> > RATE_MATCH_NONE, right? So only ETHTOOL_LINK_MODE_10000baseT_Full_BIT
+> > would be advertised on the media side?
 > 
-> If your firmware folks disagree and think Linux should be able to
-> figure this out differently, I would love to have a conversation about
-> how to do this.
+> No, beause of the special condition in phylink that if it's a clause 45
+> PHY and we use something like 10GBASE-R, we don't limit to just 10G
+> speed, but try all interface modes - on the assumption that the PHY
+> will switch its host interface.
+> 
+> RATE_MATCH_NONE doesn't state anything about whether the PHY operates
+> in a single interface mode or not - with 10G PHYs (and thus clause 45
+> PHYs) it seems very common from current observations for
+> implementations to do this kind of host-interface switching.
 
-It seems that 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
-is also the cause of breakage for drivers/edac/sb_edac.c. It is broken
-in v6.2-rc2 and reverting this commit makes it work again.
+So you mention commits
+7642cc28fd37 ("net: phylink: fix PHY validation with rate adaption") and
+df3f57ac9605 ("net: phylink: extend clause 45 PHY validation workaround").
 
-This ancient driver probably plays fast and loose with how it ought to
-access extended PCIe config space ... but it needs to do this to read various
-memory controller configuration registers to do address translation from
-a system physical address to a DIMM address.
+IIUC, these allow the advertised capabilities to be more than 10G (based
+on supported_interfaces), on the premise that it's possible for the PHY
+to switch SERDES protocol to achieve lower speeds.
 
--Tony
+This does partly correct the last part of my question, but I believe
+that the essence of it still remains. We won't make use of PAUSE rate
+adaptation to support the speeds which aren't directly covered by the
+supported_interfaces. Aren't we interpreting the PHY provisioning somewhat
+too conservatively in this case, or do you believe that this is just an
+academic concern?
