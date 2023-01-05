@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859EF65F3B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B22365F3B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbjAES35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S234866AbjAESbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbjAES3y (ORCPT
+        with ESMTP id S234420AbjAESbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:29:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4429E564DC;
-        Thu,  5 Jan 2023 10:29:53 -0800 (PST)
+        Thu, 5 Jan 2023 13:31:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FDC13F6F;
+        Thu,  5 Jan 2023 10:31:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D4361BD1;
-        Thu,  5 Jan 2023 18:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBBCC433EF;
-        Thu,  5 Jan 2023 18:29:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6A2FB81BA8;
+        Thu,  5 Jan 2023 18:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539EDC433EF;
+        Thu,  5 Jan 2023 18:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672943392;
-        bh=iHaiS0GM2MGSXZ+IjKPLHBtGHmeOC5SlrukdUXCOrQE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bnoWIP/vPhtNJvTZctVf/Jup3ayusP8RlZZ3dRmqzKU/OBPf9pChxfMr9wF6qrwX5
-         ddZ7YQjRS+/9y3oHZ6wuJY51WeTjArJ49sP+hwIL5UtvlOpeZQkPE/vzTuYL/mDcRB
-         niERtYU7lSU1o7g6TsxNA13B6V5Q73SFNJs3gNf+qSkECyf8qO/7sVlVPpiuau7haQ
-         Ukc8Kk40QZyQgRw/bAZbjdZ6Tvd828talbNp847Ce2SRAQrgLNMC1MqT+Qm+CYNnaJ
-         haZarSCy5BT7j7Ycnt/KBr3PjJhWJtlL57pFUeaj7qe2kzwh6Duyp0fOZiMFbK/IoP
-         CrBsJr501lHCw==
-Date:   Thu, 5 Jan 2023 12:29:50 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105182950.GA1158496@bhelgaas>
+        s=k20201202; t=1672943475;
+        bh=SaK0AUs4XAKJbwfwZCnBEO5FT2cIQoQ9UJE/COaeysA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D7aCWR5FN4ts4HSYWLzf419F5pAgvEBPLTYsdSHTeIyFM/jj8jvY38rMfggFwFWD5
+         F+XlR3au8wusLhwuSu5RGlvycUBhiWsIi3I01wQ9tA/bNM/HVrOp0KPwUclTzt2uGV
+         ttgEY9bIV9oHmBBysHcDywV4fqYHZZITJ/chdYwh8+tzFjfayP1QUdiAOVSpdELwYV
+         rrRU07RxFHdH77GO8QDGFJvdKkXobDLLX8b3sGtXR3aVuDYmCgborg8d44N2nA7HWC
+         LDB5QRON0lSicHId0wNyupeXWRE5Ee0K7LckPNfAzN5W2OfjeTf3MZaULLjacdw8Af
+         uTyLnTO3onj/Q==
+Date:   Thu, 5 Jan 2023 10:31:14 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] ezchip: Switch to some devm_ function to
+ simplify code
+Message-ID: <20230105103114.6c1ee8ec@kernel.org>
+In-Reply-To: <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
+References: <cover.1672865629.git.christophe.jaillet@wanadoo.fr>
+        <e1fd0cc1fd865e58af713c92f09251e6180c1636.1672865629.git.christophe.jaillet@wanadoo.fr>
+        <20230104205438.61a7dc20@kernel.org>
+        <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083C504335B2DE1B31C440CFCFA9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,32 +59,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 06:04:52PM +0000, Luck, Tony wrote:
-> > Hi Tony, can you share a dmesg log?  Does it look like the same thing
-> > Kan reported, where the ECAM space is reported only via an
-> > EfiMemoryMappedIO region and is not otherwise reserved by firmware?
-> 
-> Attached are serial logs. "broken" is the one from v6.2-rc2, "revert" is the
-> one with your commit reverted.
-> 
-> I don't see the string "ECAM" in either of them.
+On Thu, 5 Jan 2023 07:27:00 +0100 Christophe JAILLET wrote:
+> My main point is in the cover letter. I look for feed-back to know if 
+> patches like that are welcomed. Only the first, Only the second, Both or 
+> None.
 
-Yeah, "ECAM" is what the PCIe spec calls it, but Linux logging uses
-"MMCONFIG".  Probably should change that.
+Sorry, missed that.
 
-Anyway, your dmesg log shows the same problem:
+> These patches (at least 1 and 2) can be seen as an RFC for net 
+> MAINTAINERS, to see if there is any interest in:
+>    - axing useless netif_napi_del() calls, when free_netdev() is called 
+> just after. (patch 1)
 
-  DMI: Intel Corporation BRICKLAND/BRICKLAND, BIOS BRBDXSD1.86B.0338.V01.1603162127 03/16/2016
-  efi: Remove mem48: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
-  PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
-  [Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
-  PCI: not using MMCONFIG
-  acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+I think it'd be too much noise. I'd vote no.
 
-Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
-firmware/kernel interface is as an EfiMemoryMappedIO region.
+>    - simplifying code with axing the error handling path of the probe 
+> and the remove function in favor of using devm_ functions (patch 2)
 
-I think this is a firmware bug, but obviously we're going to have to
-figure out a way around it.
-
-Bjorn
+I believe DaveM was historically opposed to those helpers in general.
+I think we should avoid pure conversions, unless they are part of
+development of new features or fix bugs.
