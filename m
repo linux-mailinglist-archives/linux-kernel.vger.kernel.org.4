@@ -2,106 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9600E65F37F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821DE65F382
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbjAESJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S235180AbjAESKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235566AbjAESJn (ORCPT
+        with ESMTP id S235333AbjAESKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:09:43 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C104D289
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:09:42 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t15so28067003wro.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:09:42 -0800 (PST)
+        Thu, 5 Jan 2023 13:10:03 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C99391
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:10:02 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id 17so40195897pll.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:10:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aCNkMnPSRswrB4/cN/tNytIZs+wuZf7VPA/RAMeEvis=;
-        b=BUgdp574Abl4d6f7mAU7ICKWQyO3CKfC1WalR3KSuX6qMylVBgHByF66a/g6HUBtTT
-         M0kOyHyE+AMKAJa+TTNk08cczF6ITHY7X9oSXM729aCP5Z5sgaCxVPXsQOmqhtJVJ1Pu
-         59KE00iEKTALzNVm9hZNxAWBnKdVWUYceEx48OaTukjFwMRF4F6jAP6z9QNol4Zgg0Dj
-         YeoRl9IcNv6S/nPITHSQPTRhQ7E31zmKrDi8uBPlt+svHf14gkKn2ag61jrai3bWQ9WO
-         ueLCGDsaBLAhJEwCb9JD0yFtciHOwtnT5GlwWp6CJN0TwEuFBZHrmxonPXg53suffGS2
-         bbIg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hci7kuPmp0G+r8pqabU4lcvicEVVbwT1Q+T1O/951Ik=;
+        b=aTE8qGtOVzAikGJA9toY6kjjg2uoj06K5DnWBCQhRXgtn60cD8mJHx8PxBXYEiHmGO
+         zWoHWI+04AnGc1rHfoUVUL8N0fiJInDMHJqnrthvewFe5zJO63jB6bPlO6vW/jbAfW+T
+         22GVVoBYFCeskjVZtGDwzqhU8RaPnPmkctUjSEJzvZLEZR67HOa2BGdu0aM2osyX7HK1
+         R/RHrLrGQ0kY1xgKreeCjZehRMNjdBHx6Uuy8pgNHmYmJETn9V4X/ium2fBexm3zbzZx
+         Ouc3wb3a6eS6ZXdhKQZ3Li7muv0FKFmXbwxNRAyaOFPeFHMXSYfBoimA7cv2V+pjj4RY
+         4YJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aCNkMnPSRswrB4/cN/tNytIZs+wuZf7VPA/RAMeEvis=;
-        b=lE11M0ScdeOz8pfcbZtAPeIY7jzb6zyKYnuBudXYDPv5IJvEva3HrfWcJu7lRjuoz3
-         e5kAdZCUEbzEzdXHd6PTyHppg1x+9GE4rJDQEv4mEyYyxfO8MXqQ2RHS3A8nnlF9WLkx
-         JvV7nSXLEjBDRS+70vmQqrvcpdE2O/KivFSuHTvw5W3iY5aaiL8wRC82O+cmdWhTBMZE
-         ctJQhJgzesiUDjESRcFQQKoDv9zhWOBe5mWMEW2U4XUCDk19ccbtJ/wXpLh1U2Ukp4a2
-         AFf9ndeZNkzSbCk+hUxPtICVrKhdVEiXfXPUPb0hwHnJMnzUfsjzgxARv8pTqH7exG2b
-         pjZA==
-X-Gm-Message-State: AFqh2koGEzYIj3NrfYJCWsokAsmPZwozyaW7IF8NMM2aXRC06MUbrj4K
-        7sMN1lTkyZkFX2N1+lXa5rukAA==
-X-Google-Smtp-Source: AMrXdXuKJS4KYFfBIofRQW2C+0hVHSnszXj4FBaa7hFjC+VGRdw29Xt18QQAGVNmA1dTF+5JauVMlA==
-X-Received: by 2002:a5d:58fa:0:b0:28e:46bc:3256 with SMTP id f26-20020a5d58fa000000b0028e46bc3256mr14579011wrd.8.1672942181384;
-        Thu, 05 Jan 2023 10:09:41 -0800 (PST)
-Received: from [192.168.1.100] ([178.197.217.234])
-        by smtp.gmail.com with ESMTPSA id bt15-20020a056000080f00b00297dcfdc90fsm12714459wrb.24.2023.01.05.10.09.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 10:09:40 -0800 (PST)
-Message-ID: <afde9ca3-40e2-4332-fc8e-41a1176cd37e@linaro.org>
-Date:   Thu, 5 Jan 2023 19:09:37 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hci7kuPmp0G+r8pqabU4lcvicEVVbwT1Q+T1O/951Ik=;
+        b=jYJXX9yntt2ea3m85heZLuG+1GmNZMFgtlO1sGARz9PNAIRvAGQqif+oy6ZB4jX4A6
+         06Lfwxc65vhIKKuBFxkzBBB+a4cWsOqs2oUCtUnWO6pHyUWkK5Om6j2jrZa1yGLUgMeB
+         tSzps9OMqFcA5pMqUW+MT/ma1Le/QwSfelGX0R0k0kCsHXg2JgZesQ9M9TPnGReaxeao
+         77EgxHqdmXQF17cJrGn8Id3e+HsjLhTNTby439baDTh9YIAuLaeBicgubgp4hxOWDiiw
+         ART7ubFgJ8Lpp+vJcUAWAXgYiNz4X35Dae3eOQR2XHqGqikVCjptLqtMCxnpMR/2lsi1
+         yQpQ==
+X-Gm-Message-State: AFqh2krDfaaAr8ZtmPdAomEqc7VdRqjnh5uKv4lrVAv4yrq0lrB8BJOj
+        q6JgmDhTtgo63hIFh+Ya+MHlwA==
+X-Google-Smtp-Source: AMrXdXvGLvHWpmbZbBkUu0IqU9CeD0PZablWiW3ohh1nTJfCtiAOgsk0DPUFxWhP5FUEx8AsYHdYxw==
+X-Received: by 2002:a17:902:c385:b0:192:8a1e:9bc7 with SMTP id g5-20020a170902c38500b001928a1e9bc7mr3874plg.0.1672942201683;
+        Thu, 05 Jan 2023 10:10:01 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j7-20020a170902da8700b0018980f14940sm26262102plx.178.2023.01.05.10.10.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 10:10:01 -0800 (PST)
+Date:   Thu, 5 Jan 2023 18:09:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paul Durrant <xadimgnik@gmail.com>
+Cc:     Paul Durrant <pdurrant@amazon.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v6 1/2] KVM: x86/cpuid: generalize
+ kvm_update_kvm_cpuid_base() and also capture limit
+Message-ID: <Y7cSdYWX8e3FqlrO@google.com>
+References: <20221220134053.15591-1-pdurrant@amazon.com>
+ <20221220134053.15591-2-pdurrant@amazon.com>
+ <Y7XU2R0f3pCYF9uz@google.com>
+ <82fbc53e-be3e-b516-2420-dc27e5b811e8@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 14/14] ASoC: dt-bindings: Update example for enabling
- USB offload on SM8250
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-15-quic_wcheng@quicinc.com>
- <f57d8d44-651e-b51d-dd72-bdf15801958f@linaro.org>
- <Y7RqEM+GvBQbmBTb@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7RqEM+GvBQbmBTb@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82fbc53e-be3e-b516-2420-dc27e5b811e8@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 18:46, Mark Brown wrote:
-> On Mon, Dec 26, 2022 at 01:27:21PM +0100, Krzysztof Kozlowski wrote:
->> On 24/12/2022 00:32, Wesley Cheng wrote:
+On Thu, Jan 05, 2023, Paul Durrant wrote:
+> On 04/01/2023 19:34, Sean Christopherson wrote:
+> > Since the struct is a 64-bit value, what about making this a pure getter that
+> > returns a copy?
+> > 
+> > static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
+> > 							    const char *sig)
+> > {
+> > 	struct kvm_hypervisor_cpuid cpuid = {};
+> > 	struct kvm_cpuid_entry2 *entry;
+> > 	u32 function;
+> > 
+> > 	for_each_possible_hypervisor_cpuid_base(cpuid.base) {
+> > 		entry = kvm_find_cpuid_entry(vcpu, function);
+> > 
+> > 		if (entry) {
+> > 			u32 signature[3];
+> > 
+> > 			signature[0] = entry->ebx;
+> > 			signature[1] = entry->ecx;
+> > 			signature[2] = entry->edx;
+> > 
+> > 			if (!memcmp(signature, sig, sizeof(signature))) {
+> > 				cpuid.base = function;
+> > 				cpuid.limit = entry->eax;
+> > 				break;
+> > 			}
+> > 		}
+> > 	}
+> > 
+> > 	return cpuid;
+> > }
+> > 
+> > 
+> > 	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
+> > 	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
 > 
->>> +            link-name = "USB Playback";
->>> +            cpu {
->>> +                sound-dai = <&q6afedai USB_RX>;
-> 
->> Hmm, that makes me wonder if you really tested the bindings before
->> sending? If yes, where is the USB_RX defined?
-> 
-> It was added in patch 2, it's in include/dt-bindings.
+> Yes, if that's preferable then no problem.
 
-Thanks, indeed, I was looking for another bindings patch but this was
-squashed with a driver.
-
-Best regards,
-Krzysztof
-
+I like it (obviously), but it's probably worth waiting a few days to see what
+others think before posting a new version.
