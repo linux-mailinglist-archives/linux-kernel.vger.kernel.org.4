@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E301C65EED0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C2D65EEA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjAEOeq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 Jan 2023 09:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S233076AbjAEOVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbjAEOU0 (ORCPT
+        with ESMTP id S231644AbjAEOU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:20:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45A25C90B
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:20:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 Jan 2023 09:20:59 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77698313
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:20:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672928457; x=1704464457;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5NSOtoeMbNg7K9lSDnR+3y2JY7MECEcqj20jo+eSw7k=;
+  b=H7U8yGQ+7lzB/4ayW/GQ9cqHx8UXuEYnafdza/0Epy7eLkx3LJCh0/4W
+   oGP/vkOBVjp2Psb3zxY1DbeGDLUM8y8HN/RI+rusYyw2zUr0y8nbAFK0I
+   WkKu1stXA020Exks7Q5jKkUOvZBUUMxeF6zln+z50adaPargRA6uvpboX
+   AH50/llDHPJwwcwYlEdwmFU8EVq22sPt9rjF4uf0UAIrgu5cC1Eow/P3F
+   kgVKAmARpMaiSIlvHnzJnPq1KJIrAkc14gSHQQOUaxqgyZKgA67P3AA4m
+   62iP5oLDBs2Ycq6uWlkl2sdIrSLyKYivNgBKzKhXXkQhD/FpyX0iv++Yy
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,303,1665439200"; 
+   d="scan'208";a="28261937"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 05 Jan 2023 15:20:55 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 05 Jan 2023 15:20:55 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 05 Jan 2023 15:20:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672928455; x=1704464455;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5NSOtoeMbNg7K9lSDnR+3y2JY7MECEcqj20jo+eSw7k=;
+  b=mlikXSKuHyTwyxv2JRpkP5Gx++ghPNvohSG4XxMs1dcYIJ8O0K/paU9t
+   XbLVqBAforSNlFQLqAGMOe5zZ86Z5OaRaLojihGQ4l2yhXgZAOkX4USoO
+   a8XbMkjWoMsEGyJfFxAFm4bYjBZK2LzZIER4O/AT6eUkkA/7YLkbkmm59
+   5l/paPAL40FxSReBAa8aCxQHyZdhL5dRAvxqL+68DZxgsREA+IVV8HljM
+   HF0FQolZ0m/7XU4KNVGzagP2EX0fj9t1oUgvTBy5CMGyLnkfmOUivoaLK
+   kTuLLG1A9P70IJUCzgsXM6UQrmLRScO10MjDt6u9VteMsKrKTWoAARNuK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,303,1665439200"; 
+   d="scan'208";a="28261936"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 05 Jan 2023 15:20:55 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5452861AB6
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0856C433D2;
-        Thu,  5 Jan 2023 14:20:20 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 09:20:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>
-Subject: Re: [RFC PATCH 21/25] kvx: Add support for ftrace
-Message-ID: <20230105092019.4bc166b6@gandalf.local.home>
-In-Reply-To: <20230105135526.0fc5f250@fixe.home>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
-        <20230103164359.24347-22-ysionneau@kalray.eu>
-        <20230105135526.0fc5f250@fixe.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9C15A280056;
+        Thu,  5 Jan 2023 15:20:55 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Cc:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH] nvmem: core: return -ENOENT if nvmem cell is not found
+Date:   Thu, 05 Jan 2023 15:20:53 +0100
+Message-ID: <1888904.g5d078U9FE@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230105135931.2743351-1-michael@walle.cc>
+References: <20230105135931.2743351-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 13:55:26 +0100
-Clément Léger <clement.leger@bootlin.com> wrote:
-
-> > +/* The longest insns we check are for the far call: make + icall */
-> > +#define MAX_SYLLABLES_TO_CHECK (KVX_INSN_MAKE_IMM64_SIZE + INSN_ICALL_SYLLABLE_SIZE)
-> > +
-> > +static int read_insns_and_check(u32 *insns, u8 insns_len, u32 *addr)
-> > +{
-> > +	u32 insns_read[MAX_SYLLABLES_TO_CHECK];
-> > +	int syllables = insns_len / KVX_INSN_SYLLABLE_WIDTH;
-> > +	int i;
-> > +
-> > +	if (syllables > MAX_SYLLABLES_TO_CHECK) {
-> > +		pr_err("%s: shouldn't have more than %d syllables to check\n",
-> > +		       __func__, MAX_SYLLABLES_TO_CHECK);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (kvx_insns_read(insns_read, insns_len, addr)) {
-> > +		pr_err("%s: error when trying to read syllable\n", __func__);
-> > +		return -EFAULT;
-> > +	}
-> > +
-> > +	for (i = 0; i < syllables; i++) {
-> > +		if (insns[i] != insns_read[i]) {
-> > +			pr_err("%s: Instruction verification failed at PC 0x%lx\n",
-> > +			       __func__,
-> > +			       (unsigned long)addr + i * KVX_INSN_SYLLABLE_WIDTH);
-> > +			pr_err("%s: \tExpect  0x%x\n", __func__, insns[i]);
-> > +			pr_err("%s: \tRead    0x%x\n", __func__, insns_read[i]);
-> > +			return -EFAULT;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}  
+Am Donnerstag, 5. Januar 2023, 14:59:31 CET schrieb Michael Walle:
+> Prior to commit 3cb05fdbaed6 ("nvmem: core: add an index parameter to
+> the cell") of_nvmem_cell_get() would return -ENOENT if the cell wasn't
+> found. Particularly, if of_property_match_string() returned -EINVAL,
+> that return code was passed as the index to of_parse_phandle(), which
+> then detected it as invalid and returned NULL. That led to an return
+> code of -ENOENT.
 > 
-> Hi Yann,
+> With the new code, the negative index will lead to an -EINVAL of
+> of_parse_phandle_with_optional_args() which pass straight to the
+> caller and break those who expect an -ENOENT.
 > 
-> Is this still needed ? I'm guessing the instructions should always be
-> correctly written no ? If not, something probably went horribly wrong ;)
-
-I would definitely keep it. Code modifications can be quite fragile. Most
-of the time things don't go wrong, but when they do, having these checks
-makes it obvious to where the problem happened. Problems here is usually
-some code mapping that got incorrectly flagged to be traced, when it
-shouldn't be. Reporting these errors helps find what that was.
-
--- Steve
-
-
+> Fix it by always returning -ENOENT.
 > 
-> > +
-> > +static int write_insns_and_check(u32 *insns, u8 insns_len, u32 *insn_addr)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = kvx_insns_write_nostop(insns, insns_len, insn_addr);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Check that what have been written is correct. */
-> > +	return read_insns_and_check(insns, insns_len, insn_addr);
-> > +}
-> > +
+> Fixes: 3cb05fdbaed6 ("nvmem: core: add an index parameter to the cell")
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> 
+> Alexander, could you give this another try? I've changed it slightly,
+> so it's a better match with how the handling was before.
+> 
+> 
+>  drivers/nvmem/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 1b61c8bf0de4..cc885b602690 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -1343,7 +1343,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct
+> device_node *np, const char *id) "#nvmem-cell-cells",
+>  						  index, 
+&cell_spec);
+>  	if (ret)
+> -		return ERR_PTR(ret);
+> +		return ERR_PTR(-ENOENT);
+> 
+>  	if (cell_spec.args_count > 1)
+>  		return ERR_PTR(-EINVAL);
+
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+
+
