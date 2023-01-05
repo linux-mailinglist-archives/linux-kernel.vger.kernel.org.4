@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB27E65F389
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB47F65F38B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbjAESMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S235405AbjAESNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:13:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjAESL7 (ORCPT
+        with ESMTP id S235353AbjAESMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:11:59 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871A8DFA8;
-        Thu,  5 Jan 2023 10:11:56 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r26so48683691edc.5;
-        Thu, 05 Jan 2023 10:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaqEalELRRS60fT0pWhc7k/aSgD8gHCORo9MWkR6xC0=;
-        b=odUMUe6smwZCC13YCKCjGqjOp1KIz1/cqilutwBSkQOALe70TzZGxqpkzVGElKS2Q9
-         YihNj9xNJFGMnDJUlFCrCsGayDCbvgUFAfgAXRuApzdgpkhrugKjW4Ee2liVaIO8L9o4
-         aAvVAEWsIW7r+c3jxRwu6VJLJtLLSw12c4C2+BbQ0pu/9wmKqDz4lAo9buflzDlYoIW/
-         cUDkJ2T+89wUaj9C+DwgHbgTUXB2oJDi+Lkevh3495WDivLOqH80BeQMR829KL/WkdP1
-         6cqK/z1iw0ApvatIB0P13CNoOffoJ6jADJmg/icrzO6pZXHSntH7GGEQSEJYvbLcbj2J
-         MrSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VaqEalELRRS60fT0pWhc7k/aSgD8gHCORo9MWkR6xC0=;
-        b=A2ClHnh2PtzOMeIspj50gyQDHuzOzHXEfsJ3N6QrU8u0cQvJrOz9kZPkKI9GnrvaYJ
-         VhDeiA9ZgP7/gr7pGHm+5iS7ZLRJZPh/nF2pRiM0S2nl4hcTweyDB1oNaqcmKb20k/PY
-         3wwRUUoUV7Um0az8gwgf23iM3+rmTf/BCxC7rIX0BQI1ARUtsr/aJJBN9bPn4oacSP6j
-         oYWEhr1GQFhYZLxuueO5Epn6neizKg/ugYJEVr7Ln+9aSud7vaRwuaGk0/wEr8cuvSA4
-         XTtIiFFRJanVq4way42reaAamcGW7vWSv6iuJu0BiOZ6joWjeouyNEz4hz5UCJk2fItS
-         UJDg==
-X-Gm-Message-State: AFqh2kq0KEGsaHTHwKujXL9qnXFnFX6byk0zaPygPZFGUkZZf7hT3vVt
-        hGxeHNzzYYxcZTpWsr5qDd8=
-X-Google-Smtp-Source: AMrXdXtxAtNMZ5WBGXyAkwAAzZjuHx/oadPiev8Al70mmJrPZy95W+uDp+vj+iQxOfZznWc2oBeP+w==
-X-Received: by 2002:a05:6402:d5c:b0:46b:444b:ec40 with SMTP id ec28-20020a0564020d5c00b0046b444bec40mr42447438edb.15.1672942315139;
-        Thu, 05 Jan 2023 10:11:55 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id p15-20020a056402500f00b0047eeaae9558sm16074218eda.60.2023.01.05.10.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 10:11:54 -0800 (PST)
-Date:   Thu, 5 Jan 2023 20:11:52 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <20230105181152.ruzdv3iusvan4mek@skbuf>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
- <20230105175206.h3nmvccnzml2xa5d@skbuf>
- <20230105175542.ozqn67o3qmadnaph@skbuf>
- <39660d10-69b9-fa52-5a49-67d5f7e1acaf@seco.com>
+        Thu, 5 Jan 2023 13:12:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625D656C;
+        Thu,  5 Jan 2023 10:12:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A6F0B81B3E;
+        Thu,  5 Jan 2023 18:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DF1C433EF;
+        Thu,  5 Jan 2023 18:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672942353;
+        bh=t2Ard4AIZn0bA5uFWm/ttV/iCirtM24HVwYbrcC4K3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lrOfgsZMDbPRtl8slDBwDJZFOdlkc17CWZXXZsO3gihzjMvNtpEpTZUNPQgXSmnRW
+         AMo8wYCj5ZIOd/OMwz+6UDTA/VirogVeVdk2y0iJL5r2c1ButggZqcPWHCBpIEdtEf
+         Qz+yRG9lYKPgDDgwZfLEcqyhIYANjimi8InflhhxSNeLZNoSjei3T8z8biPItnc6hi
+         QTfRlbmqwYnLucUyFjNAHCM9LMcfiN2R98F7XwJ9SU/gMt+umplcZXPK8+KsN4s7b4
+         BPT0YhrJ85XoMPIWDJWcInppc5xnQ48DszfH5DSe4BCnWTe22EFYKw7deBEFCxtrIJ
+         Q0T5415rskytA==
+Date:   Thu, 5 Jan 2023 12:12:37 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: mvumi: Replace 1-element arrays with flexible
+ array members
+Message-ID: <Y7cTFfWzLeHKuGWC@work>
+References: <20230105011143.never.569-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <39660d10-69b9-fa52-5a49-67d5f7e1acaf@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230105011143.never.569-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:03:49PM -0500, Sean Anderson wrote:
-> IMO if we really want to support this, the easier way would be to teach
-> the phy driver how to change the rate adaptation mode. That way we could
-> always advertise rate adaptation, but if someone came along and
-> requested 10HD we could reconfigure the phy to support it. However, this
-> was deemed too risky in the discussion for v1, since we don't really
-> know how the firmware interacts with the registers.
+On Wed, Jan 04, 2023 at 05:11:50PM -0800, Kees Cook wrote:
+> One-element arrays (and multi-element arrays being treated as
+> dynamically sized) are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> 
+> Replace one-element arrays with flexible-array member in struct
+> mvumi_msg_frame, struct mvumi_rsp_frame, and struct mvumi_hs_header,
+> adjusting the explicit sizing calculations at the same time.
+> 
+> This results in no functional differences in binary output. An explicit
+> add is now folded into the size calculation:
+> 
+> │       mov    0x1070(%r14),%eax
+> │ -     add    $0x4,%eax
+> │ -     movabs $0xfffffffdc,%rbx
+> │ +     movabs $0xfffffffe0,%rbx
+> │       add    %rax,%rbx
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-scsi@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-I think I would prefer not exporting anything rate adaptation related to
-user space, at least until things clean up a little and we're confident
-that we don't need to radically change how it works.
+Wow, those "magical" 4s seem quite elusive. It's more common to see people
+using sizeof applied to the element type, like sizeof(u32).
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
+> ---
+>  drivers/scsi/mvumi.c | 4 ++--
+>  drivers/scsi/mvumi.h | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/mvumi.c b/drivers/scsi/mvumi.c
+> index b3dcb8918618..60c65586f30e 100644
+> --- a/drivers/scsi/mvumi.c
+> +++ b/drivers/scsi/mvumi.c
+> @@ -1841,7 +1841,7 @@ static enum mvumi_qc_result mvumi_send_command(struct mvumi_hba *mhba,
+>  	cmd->frame->request_id = mhba->io_seq++;
+>  	cmd->request_id = cmd->frame->request_id;
+>  	mhba->tag_cmd[cmd->frame->tag] = cmd;
+> -	frame_len = sizeof(*ib_frame) - 4 +
+> +	frame_len = sizeof(*ib_frame) +
+>  				ib_frame->sg_counts * sizeof(struct mvumi_sgl);
+>  	if (mhba->hba_capability & HS_CAPABILITY_SUPPORT_DYN_SRC) {
+>  		struct mvumi_dyn_list_entry *dle;
+> @@ -2387,7 +2387,7 @@ static int mvumi_io_attach(struct mvumi_hba *mhba)
+>  	struct Scsi_Host *host = mhba->shost;
+>  	struct scsi_device *sdev = NULL;
+>  	int ret;
+> -	unsigned int max_sg = (mhba->ib_max_size + 4 -
+> +	unsigned int max_sg = (mhba->ib_max_size -
+>  		sizeof(struct mvumi_msg_frame)) / sizeof(struct mvumi_sgl);
+>  
+>  	host->irq = mhba->pdev->irq;
+> diff --git a/drivers/scsi/mvumi.h b/drivers/scsi/mvumi.h
+> index a88c58787b68..1306a4abf19a 100644
+> --- a/drivers/scsi/mvumi.h
+> +++ b/drivers/scsi/mvumi.h
+> @@ -279,7 +279,7 @@ struct mvumi_msg_frame {
+>  	u16 request_id;
+>  	u16 reserved1;
+>  	u8 cdb[MAX_COMMAND_SIZE];
+> -	u32 payload[1];
+> +	u32 payload[];
+>  };
+>  
+>  /*
+> @@ -294,7 +294,7 @@ struct mvumi_rsp_frame {
+>  	u8 req_status;
+>  	u8 rsp_flag;	/* Indicates the type of Data_Payload.*/
+>  	u16 request_id;
+> -	u32 payload[1];
+> +	u32 payload[];
+>  };
+>  
+>  struct mvumi_ob_data {
+> @@ -380,7 +380,7 @@ struct mvumi_hs_header {
+>  	u8	page_code;
+>  	u8	checksum;
+>  	u16	frame_length;
+> -	u32	frame_content[1];
+> +	u32	frame_content[];
+>  };
+>  
+>  /*
+> -- 
+> 2.34.1
+> 
