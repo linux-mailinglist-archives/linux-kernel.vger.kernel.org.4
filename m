@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE48D65F4E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFF665F4E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbjAEUBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 15:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S235607AbjAEUBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 15:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235523AbjAEUBS (ORCPT
+        with ESMTP id S235616AbjAEUBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 15:01:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2EE637A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 12:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672948830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1AztRxqvsi6T4hudCdqABGgSTqQjaAiuEjAa9BRqIU4=;
-        b=MrsuVrTCtPuZP55P4/R+DhAcPO1PtUsYUhj7aqGxyjMvRuq+9XFukXMjLdr1C9cTfMaYno
-        NrB1mZiMJ6C3E1If6E898+OhMrMY+lvB+Bp3b3vvw3JpNifgd1BXj1+f+IkYXyAgSTp9+F
-        S6+qRiWsbTaRloZsHiQX4QlUcMRxmUI=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-391-p4XV1UuhPFmCmtwJTG40_A-1; Thu, 05 Jan 2023 15:00:26 -0500
-X-MC-Unique: p4XV1UuhPFmCmtwJTG40_A-1
-Received: by mail-qk1-f197.google.com with SMTP id o13-20020a05620a2a0d00b006cf9085682dso25726455qkp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 12:00:26 -0800 (PST)
+        Thu, 5 Jan 2023 15:01:35 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5123B1AA38
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 12:01:24 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o21so10859812pjw.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 12:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVxwqNbug9kzVKOL3oZqGnvdYf9glDYyhFwWJ28UE9c=;
+        b=GHsPtBur+p4pVrDOJtCpuXZtHd6ZyxGvlJhmjJ6qN6fHChX0vhJ2s8WI5qTqrb51LT
+         oGX+F4kCNJMT0IlQzaus2qSDSSZAH140BEMq76BpoNGFZn8LedpF6Khmidi1poaMxB7m
+         t/JU+z/2udLVgHEnc/WhZy8MsbfhX6DNst8pg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1AztRxqvsi6T4hudCdqABGgSTqQjaAiuEjAa9BRqIU4=;
-        b=NS9ZbD4UwwSV1g7PVU5Q62OPvEal8Gk6dZnVBhSd1T0wypR8suz/FFXAr2IlAOBSb2
-         r+qzxoURFKx0pRjyQ/fUylL56GCeXcsmRJ3GH2cer4lgcXtpfbuDzj+LUKtm04cuyb5d
-         WIGtlRu8U3dAkv+3ePvKFlXNMqEl2ZRBC3N3t0djTqJdQRC5jSy+lhNO8I1NiODZUeOt
-         c9eXoXWHvZEBb/tZSvIQ1kYK971s1aXCAkpi/hzqDCutqvyGPO0AkZgAfrIo6JZ1V+Hp
-         3TV6h5Aty50Aai5FqOjlvWUqyjxPshUKZYnT5HNJYnhwpQPjaP1xoBxgq8lNXdRXsG3a
-         Rcdg==
-X-Gm-Message-State: AFqh2krvodnLwMr9QDCFXD2K0soVCbaqyfIfvOonmWst+K+G4dp/43bv
-        7JLeIrpOQGebbtfMFXs+bHRfxF2++BIw2awWIyPfluvAg4PwqtCM0XRHGq/HKsfq0k1kKoVm72H
-        r0nCBJJQENNs/8nuoXF4s0Mpt
-X-Received: by 2002:a05:622a:59cb:b0:3a9:80b6:4c9c with SMTP id gc11-20020a05622a59cb00b003a980b64c9cmr74557601qtb.47.1672948826296;
-        Thu, 05 Jan 2023 12:00:26 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtgeFFHLUomTG9G/6VqLznisPrP0zOPi/grNJFxmDF8xFNkCPuz+CuJv2hfFsV3tDlrDlu3dg==
-X-Received: by 2002:a05:622a:59cb:b0:3a9:80b6:4c9c with SMTP id gc11-20020a05622a59cb00b003a980b64c9cmr74557563qtb.47.1672948825962;
-        Thu, 05 Jan 2023 12:00:25 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id gc11-20020a05622a59cb00b003a50d92f9b4sm22226580qtb.1.2023.01.05.12.00.23
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pVxwqNbug9kzVKOL3oZqGnvdYf9glDYyhFwWJ28UE9c=;
+        b=k5XTHxgf3+jfTcNfLOreIoNxJVUUWdnRO4SgeTxYQW+1AuImpBCX1EAJBGLE6Z4/pu
+         5zXgo64V1y5QizfmKjuYigdvc7TJMpaod0lFNI3ypT9W1YBIQfARc8qy2xfSfzWJwbPM
+         ulkkFtfzx/uxaUbd9UXYTWMsZ2pvlV05NsReDTsCbbdAHOWzPY9bic/R0lLssEOjWhDD
+         crEFpwbas3zUQrF2Cd2QMZ9Qevk4bRpwq7AcnY0nU/HB0sncteIAwXqr+jCBoYPpNEDI
+         xQwuxGcj+vIAciTPZzhELa8sdHxSy2ujye5Co0wat4LV05N0lGaoeK9/ouK0a6IIJKA2
+         u/CQ==
+X-Gm-Message-State: AFqh2kpzXq84GA/RYe9ecrMpQzEJnLkPbhdgH4RonalYCtif6hECfn3l
+        0lpHwMy/P5fqgGnqJO1GrzPILByZCZ1YNFcX
+X-Google-Smtp-Source: AMrXdXtiSYCndt8IrAXOQDq9FZ2AmUK0DrLHAa9LWFBHa5cn4ItMrAiA2RYWW90jFvgtGv8uMgl+YQ==
+X-Received: by 2002:a17:90a:acf:b0:226:ddf6:b7da with SMTP id r15-20020a17090a0acf00b00226ddf6b7damr370799pje.41.1672948884061;
+        Thu, 05 Jan 2023 12:01:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g6-20020a17090a640600b00225ffb9c43dsm1728484pjj.5.2023.01.05.12.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 12:00:25 -0800 (PST)
-Date:   Thu, 5 Jan 2023 15:00:23 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hugetlb: unshare some PMDs when splitting VMAs
-Message-ID: <Y7csV7ozB+5euKhR@x1n>
-References: <20230104231910.1464197-1-jthoughton@google.com>
+        Thu, 05 Jan 2023 12:01:23 -0800 (PST)
+Date:   Thu, 5 Jan 2023 12:01:22 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        stable@vger.kernel.org, io-uring@vger.kernel.org,
+        Dylan Yudaken <dylany@fb.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] io_uring: Replace 0-length array with flexible array
+Message-ID: <202301051159.9CBE8DE09@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104231910.1464197-1-jthoughton@google.com>
+In-Reply-To: <Y7cnGT0dK86BA4b7@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 11:19:10PM +0000, James Houghton wrote:
-> PMD sharing can only be done in PUD_SIZE-aligned pieces of VMAs;
-> however, it is possible that HugeTLB VMAs are split without unsharing
-> the PMDs first.
-> 
-> Without this fix, it is possible to hit the uffd-wp-related WARN_ON_ONCE
-> in hugetlb_change_protection [1]. The key there is that
-> hugetlb_unshare_all_pmds will not attempt to unshare PMDs in
-> non-PUD_SIZE-aligned sections of the VMA.
-> 
-> It might seem ideal to unshare in hugetlb_vm_op_open, but we need to
-> unshare in both the new and old VMAs, so unsharing in
-> hugetlb_vm_op_split seems natural.
-> 
-> [1]: https://lore.kernel.org/linux-mm/CADrL8HVeOkj0QH5VZZbRzybNE8CG-tEGFshnA+bG9nMgcWtBSg@mail.gmail.com/
-> 
-> Fixes: 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when register wp")
-> Signed-off-by: James Houghton <jthoughton@google.com>
+[resend -- I failed to CC the thread]
 
-Acked-by: Peter Xu <peterx@redhat.com>
+On Thu, Jan 05, 2023 at 08:38:01PM +0100, Greg KH wrote:
+> On Thu, Jan 05, 2023 at 10:04:19AM -0800, Kees Cook wrote:
+> > On Thu, Jan 05, 2023 at 08:39:48AM +0100, Greg KH wrote:
+> > > On Wed, Jan 04, 2023 at 07:37:48PM -0800, Kees Cook wrote:
+> > > > Zero-length arrays are deprecated[1]. Replace struct io_uring_buf_ring's
+> > > > "bufs" with a flexible array member. (How is the size of this array
+> > > > verified?) Detected with GCC 13, using -fstrict-flex-arrays=3:
+> > > > 
+> > > > In function 'io_ring_buffer_select',
+> > > >     inlined from 'io_buffer_select' at io_uring/kbuf.c:183:10:
+> > > > io_uring/kbuf.c:141:23: warning: array subscript 255 is outside the bounds of an interior zero-length array 'struct io_uring_buf[0]' [-Wzero-length-bounds]
+> > > >   141 |                 buf = &br->bufs[head];
+> > > >       |                       ^~~~~~~~~~~~~~~
+> > > > In file included from include/linux/io_uring.h:7,
+> > > >                  from io_uring/kbuf.c:10:
+> > > > include/uapi/linux/io_uring.h: In function 'io_buffer_select':
+> > > > include/uapi/linux/io_uring.h:628:41: note: while referencing 'bufs'
+> > > >   628 |                 struct io_uring_buf     bufs[0];
+> > > >       |                                         ^~~~
+> > > > 
+> > > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> > > > 
+> > > > Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
+> > > > Cc: Jens Axboe <axboe@kernel.dk>
+> > > > Cc: Pavel Begunkov <asml.silence@gmail.com>
+> > > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > > > Cc: stable@vger.kernel.org
+> > > 
+> > > Build problem aside, why is this a stable kernel issue?
+> > 
+> > My thinking was that since this is technically a UAPI change, it'd be
+> > best to get it changed as widely as possible.
+> 
+> You can't break the uapi, so it should be the same with or without your
+> change right?
+> 
+> confused,
 
-Thanks,
+Correct -- but we've had a hard time finding breakages (with extremely
+weird stuff like non-C .h file scrapers) due to the lag between making
+UAPI changes like this.
+
+Anyway, I can drop the CC stable if it's more sensible.
 
 -- 
-Peter Xu
-
+Kees Cook
