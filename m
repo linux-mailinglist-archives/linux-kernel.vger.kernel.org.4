@@ -2,170 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8D365E33B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A374A65E357
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjAEC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 21:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S229975AbjAEDR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 22:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjAEC6M (ORCPT
+        with ESMTP id S230200AbjAEDRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 21:58:12 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B8479E3;
-        Wed,  4 Jan 2023 18:58:10 -0800 (PST)
+        Wed, 4 Jan 2023 22:17:45 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2047.outbound.protection.outlook.com [40.107.101.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E55165F1
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 19:17:44 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NlONjvqkKQv8XY1CPN1tTyIyKagmniPof2bd78su6R5nDUxjqTz1QnTlU5O/4Mv7ziskgwnaf2LyUxrAJFAl4Am04I3q8zOyMJwyxzIahdAKc7xzx5ZdB4zqE/06Glwx1wQgR0NqblLJ48qc0rK75d+OPeVI6BGtPtLB/Ds0JScTsObhaxU4T7CrajMjboe0/SpnvCAMsdBlOzITGMGktOh4e8OLVJRlgfwet5g42rXA4HWGM8ZzKH4ZTedrOGGhiMPKFPKa+kb58f6Z+z28zhiTbhDs/kfqzXzdlLroJdvOrs0Q5YoUvKagRox0CSwRZ0Bvwyj4TETbZmS6xpD/WQ==
+ b=PI0gu3xN9iY8gFnKYB5J0YTzdZ5SqkXZn3FEP1rRtIH/IHXsKkpcpbMBIlbhdkGGkHLRas5aGx1eqmSk2duvY4J1ct1xspAIw2oujSMr4VkBv7rYmD33wMTrZULJ7FsdHribwcXclhXETMCK05jCn51wvg9RnP8sCmUaPmVgqoHmsTWPURhc8zvE1WCUkwphEaW9GMXbW38mHSme0uPeNM4DIy3evIPgOOyR//fiQLnsqDMQYCtJzndieXjGhmYrfFeg9VlfPFnKp8mGOlSjOaainnnKj4BLIime5CZ2XLt7O88puZ394gz4AmlEmWwcUTl8mp0dBo9BWV9B+lF5dw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fQIF1KE6BTUaMiGdzQysclvaDfnDaICkGTBIQBKa5ho=;
- b=WHGDx12VvoXNXSjrmpyiG0t/dtETe6Za1ZOJrg34BR42iC+XU0JEGFLIj8BEkC/GT/KaI4C14hRdcxnTUFqStOAkAAfLJJ1NYDQobym0RSsbCMPdv11dsGBXopclY/MsrrQq81Y7mNuIOImtRU/Z1zkWUcW8RVicOz+j77g3lr4uUmLmoUCtRL2TB7+dUCcMuPN+pTm4l++LHZc/kDffxK1xN5NpPgg6njcYHSDv4YZaKG5elUOQCwEc1SqBV4tM+agtt+3jbWJyMbun0Us+ProjtIIxRbRwE5ZH07KLrNjqQgJy0885CzO1W0T7o8hWXJGIvk1ud1YoH7Kvjt6u/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=5xS7u2JsI7nu/fTgiF+s8tH/r037JWRPiZk3hfcQtrY=;
+ b=jPbQ24G6+wgmEojAkQxkKAWLAKN1iioLw4/S9KLWUEENAWfO2NjIX+O28YFFsMD+0WkidbimsF+4GLL4Rh32rR3g5zdVm9vA/7CfDGLXRrXJ6HpJzkfbQuTVUVgXcJlJ5P3hbucUC1ImOl6FjkSRAdYz8HsJ183irINXBuTm6cNWpJbgnxa+tHP0uunWoDSq5ZCs+XTHO9IlJRGNsXAoPIn7xKfQl1l+3mJHkppmJ/fFO5IMZEClwL7igND152Nzy+DedeH6er0xfpIPxI99eOiW2MLVjjET5iXunYCmnuJOBdG9HevMOKtcdj32op5Mj5Giu+38K5I6iALk1/R12Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fQIF1KE6BTUaMiGdzQysclvaDfnDaICkGTBIQBKa5ho=;
- b=NJvKOGGNQKUqx1E1tDfRYxr1OwJViEU9rLWd5lE9+IEpoU4TUY9PujFsNq2XwP6Vm3C0U0IsOApscrPaIZ32H66p9vPYmXAgQKdmcMND8SCphRfuMNRI8ZrIB+jPLMabcVyW9fnWICRt4M+iTsjTlv8XuQhIaPR8j8w8MZJJNtY=
-Received: from DM6PR02CA0161.namprd02.prod.outlook.com (2603:10b6:5:332::28)
- by BY5PR12MB4035.namprd12.prod.outlook.com (2603:10b6:a03:206::15) with
+ bh=5xS7u2JsI7nu/fTgiF+s8tH/r037JWRPiZk3hfcQtrY=;
+ b=csjx4aIwKMuxCTPwkcoC4ifKwCUXkK43Jhn1u1wTDYxEst8K/Ahx2Vpym1ES6HWSq5PMPCFt4OopwYAl28L54i+hKzvPzlCMoDPpEL/zNYBymtUjjdbtaJQX1ojJ2GnTi+rrjlvvTKdji2NM9kOAoiR3xQgAKv6mP7hxp9LvvpwT8BBlQUWGtDutMZoWMcVeoDK6uLZQNysKnv9G4BEpskkzCi7LazoD8hlVrFJmIcbesowneO3IK624z1WkcTYHMrXmHGgnXaJyq4TSB1YkRdpPt9/2RHzxiTE5uiz2Tkmo09niq+5SDjiSx2NsRnOi3cFW8oSxhvjAu6vaLZCuNw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by SA1PR12MB7343.namprd12.prod.outlook.com (2603:10b6:806:2b5::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 02:58:08 +0000
-Received: from DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:332:cafe::4b) by DM6PR02CA0161.outlook.office365.com
- (2603:10b6:5:332::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Thu, 5 Jan 2023 02:58:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT015.mail.protection.outlook.com (10.13.172.133) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5986.14 via Frontend Transport; Thu, 5 Jan 2023 02:58:05 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 20:58:04 -0600
-Date:   Wed, 4 Jan 2023 11:47:21 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <vbabka@suse.cz>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <harald@profian.com>,
-        <chao.p.peng@linux.intel.com>
-Subject: Re: [PATCH RFC v7 02/64] KVM: x86: Add
- KVM_CAP_UNMAPPED_PRIVATE_MEMORY
-Message-ID: <20230104174721.wa4detzppqzvsgsy@amd.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-3-michael.roth@amd.com>
- <Y6RM8RRryLgK8KiB@zn.tnic>
+ 2023 03:17:42 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::ecfb:a3ad:3efa:9df8]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::ecfb:a3ad:3efa:9df8%3]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 03:17:42 +0000
+References: <20221227002859.27740-1-ying.huang@intel.com>
+ <20221227002859.27740-2-ying.huang@intel.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 1/8] migrate_pages: organize stats with struct
+ migrate_pages_stats
+Date:   Thu, 05 Jan 2023 14:02:12 +1100
+In-reply-to: <20221227002859.27740-2-ying.huang@intel.com>
+Message-ID: <87y1qhu0to.fsf@nvidia.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0208.namprd03.prod.outlook.com
+ (2603:10b6:a03:2ef::33) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y6RM8RRryLgK8KiB@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT015:EE_|BY5PR12MB4035:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47bdd82c-df2a-44f8-0a52-08daeec8ab2c
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|SA1PR12MB7343:EE_
+X-MS-Office365-Filtering-Correlation-Id: 678aa34c-268f-4cea-8e03-08daeecb686c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kCOQgjZDnQhfuwNkG9++PRDW42pQR8R5M6oLrjdn6wUUVXZPy+Wa5xpDmVXSwwNHBjbvv14drlr2kzFnUCYGSuv8aDik239qJ/OFxjCsCcrDq89bY5sGR3XlddI1DfsvTbGGFXeMsf93UacvBETQnKBBA3rhOS/+RuCd896tWg4FATLOUbSRgj8UFixu0GpU8jhFdMk1fjZM67HpLA00DbY7mBKbd7exz5SwSEm586bsSCbGFeIm5ltYQixirx55BUkIH3Z0X5zbgL/U1m9xf7oxfArL6dmu5XyJ+ds0HwU7T0B+gKYMXAMVsyWWu/0Xymt58+dhHSKeo0EAaUmeW4kEV3iQmNpkleCYMrTvAWzt4/UeHXIiSIc1Xz/+HIGUDnrZqQiYlu3lPqEMcgLzfzqNRDU+lWhdoaEuTtfKbOVKt1LTjsBlHa+PNwJD67P06tMUeLQheQJKRfm+qslz7T9PFKBS9Y/2EIwMG3KkJZE0cbPMrq5k1gqKscHpY84m8DeM/k8bjSNWLNdxRw6AV606kMkKBGW6P1essMFkM7t7LS6hgTi8HAhKJVziQ/ClZ0tXRKcy03NVZ2CbYXqznDO8xwLCOJeTNrQDbpfknuC7uS7SoDzlI1FJivMjF2Oh5JS4cdEyeJSwwA/+ZnGH8Ow0S83eySWY3kV7f61eyBdxLQjq1wOxEAnbZdcMpK54wN/E+PKk7SUwGAyOASVn4V8aRnzdwAm+02NCBzFL7cpYadI5jn+nCsVKMJYZXUDshdDYksKulhrpBN656cu8Zw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(136003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(7416002)(5660300002)(2906002)(7406005)(44832011)(8936002)(41300700001)(478600001)(4326008)(316002)(8676002)(66899015)(70206006)(6916009)(54906003)(70586007)(45080400002)(966005)(26005)(16526019)(6666004)(40480700001)(336012)(82310400005)(426003)(47076005)(1076003)(2616005)(82740400003)(356005)(186003)(81166007)(86362001)(40460700003)(36860700001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 02:58:05.8381
+X-Microsoft-Antispam-Message-Info: +sTWk+Ryi3xDpI48aKhGl6otG45o5YYTjg2z6Y7ahCHjNaSiHQ5xTloGDXQrDtOk6GWGDNIue+7G3drNq7uheCfpPedG83Vm7Es6HMvOAjX/cVc7okXYiw+Yeb/YpKaOAYuLIfW2Ra+YzEDK6uAIzUbp5qWg3PLqnxwnw9Lbw8zH2Ga6m4qkQ0Txh3BuOcC5KKwNdgLs0+FmZOQ4zj1C2dpBwJDtxz6HXE1YxG4ob2KZYwX6YnWMv2uJotzfqvacHvCyL/yKRkmc3hNGy56CzR+dVsNwf6sIa6Rjv+B2oJ+FPj0aKbHOAPSgCATSm9SGhLAD4vVU/8sFAKkSy4xZ3B3kaJmfd08mmKhPGwpQG00ywKBWtomo3/GrSquyjWINM69CcZpAKxPhBcBArfsGOfvfDJJHVNmQdBAxMqjOQTMgjxkyUL/P+aKoY4qPP+b97HaJJreEYh/LJL5u83mkjcuclCOOUpA0PCMfU9WLfEsEt7kq6eMYsOqxBCReq9ow+cSY9IcOv8wpomFpM6vigyZw3SmbF+djp0iBLaJyRAXMbEPZ4ahXyW5XKSA+GbPbZuaSgOdr8F4VZZ/sA+UqG4VdiWiHUfGFJLukjBRbapkG7vfrrLAygxz/7MDXvr3QCxttslWv7IPPahYDYx06ZQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(376002)(136003)(451199015)(66946007)(8676002)(4326008)(66556008)(5660300002)(66476007)(8936002)(316002)(6916009)(2906002)(7416002)(6666004)(6506007)(6486002)(478600001)(54906003)(41300700001)(6512007)(186003)(26005)(2616005)(83380400001)(36756003)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1SCxXP4n0tXgjK6ykbaE7eGBHRBHvseTnkka8Lu46G75Uf36HbHpKmB/aCli?=
+ =?us-ascii?Q?v0NVYGS0suJOy6YwbUZzkI/jjBfvLIPV7Xap7zduYkAC8HhTsYswUiry/uC6?=
+ =?us-ascii?Q?PD0rjimVwxboPaCnuJuSujLtgElaRs1ngdwKpNnxs9HzrsHYLpPzBW033iS+?=
+ =?us-ascii?Q?wUdzczfIxuk1AXM/xLKTDc0SN91iKb+YGATINFe3gPyNxh3McmBFiG4KhXyo?=
+ =?us-ascii?Q?hPmnmUZFTBFX+xgG0EEEIaoVc/i0DFzayRrEODpz+CqOa2BnWfdCiqb16zdd?=
+ =?us-ascii?Q?I82RuVQYxmnIkvcH+smtm+M4EFoFQ6uw3BDhajYlzzwwzNwXKNQU4C63ASBy?=
+ =?us-ascii?Q?j3rZ9+/mU7fBOM6/HDlGd4ipPQKdD9nNVYZol/L2tCcKqgExYyHAmuePmz4V?=
+ =?us-ascii?Q?hryEG5QEB3w5f7RebIfwDsEExOlSdVdbHk0395m9UUluIz1PERnv6+27zgmk?=
+ =?us-ascii?Q?OEJMDys6DQhrufNMVo0liU1zu7M53KD0wnDwMGmZmgyU7Bxs6Uwo3rorgySV?=
+ =?us-ascii?Q?u84hK42d/UbLsLwBZdSF1xzkj8Eaomcif0CvsnZa9j6yAzOjTtfZ3QW9r1Gh?=
+ =?us-ascii?Q?E+20oc98aqdUQBv55+GyKwApO03W75ggRJn/tsPivj1PX9ZhTBLgD9k4nger?=
+ =?us-ascii?Q?0CFOvokollmzuENvzPwweFZXOQcJfwnBjaHCJTHiWXOgRtwM4AAXVTddi9u/?=
+ =?us-ascii?Q?SWCERzWqYsGqZPgd+mIYRnC3BdLO4qdrX1QZ/MrZEhwTTsM4cL2yar+zYE4e?=
+ =?us-ascii?Q?G0m4F5swZiCsLkouqFIHD2A2Bv3+FLqjhszBssohBJHBSr0h9P/9cxOcvDIZ?=
+ =?us-ascii?Q?dMoxceFkCfLMr9ocFoBGhcwgT5ZkrTBOGSR6omqWk6xdIuJBzmHoYAU6+DYG?=
+ =?us-ascii?Q?OL6iXv/nAqaWZFRf/m420CMH6aruyKOCxPOLM88oupYJzCICZMjAK+hS2lFo?=
+ =?us-ascii?Q?+Ok0oR3CyBqSf4i18ENVbdSDRSd2K9UHtsCq9uGAloc+jhwk33ZX8yez24Mf?=
+ =?us-ascii?Q?PjzsjXxUmo3815h035ERJ+BUYvFqDYKmjCPAXNTmDqULsKHi5zDApQnSLM6M?=
+ =?us-ascii?Q?gX5SpD+plcc/StetlhhUNSE+izbC/BNXHEd7cVYuraFnC6IAST0iuKTF6sO+?=
+ =?us-ascii?Q?+Hw4CdDPrnc7AdsYlBEzd324ap19QZU+AlhAAfGBQJrJHI1uzeT+8IFyaQIk?=
+ =?us-ascii?Q?02irpdkqWJaKCLoDVql3aR5QPOOHH3kCYwMnGHrbCIaTcC6Bbf7+ZG0bGR8r?=
+ =?us-ascii?Q?prx28RWLdV5TLYOoLTRzaS/6ueFskHWDnizv+PvsZiswBRyjBH6nOZpsycBf?=
+ =?us-ascii?Q?G6rHBiGEhcZVOBf8X8Ws2vuG0CVqjW5bzRQ2arlgpIlhPXfct4+G+hLsEreO?=
+ =?us-ascii?Q?0gNuzXHHQ6I0IS9y/PC+SHkyedIybKzjDkWJyTJ4ttDLr34Xfi1TOR6jGP42?=
+ =?us-ascii?Q?vNN/6MuR862Y0BDYVrlDqsSWe0mwBhwnMt5IhsdWd8Ayfr27sBck8OwN5WPX?=
+ =?us-ascii?Q?oBVlR/1aBoRhvK5Q86+vkbC1xISgoPZo+tWsqTMpaaMkzB/k7iP6puBM6YBr?=
+ =?us-ascii?Q?+GuM6WQekKL4MkPwpC0YLkEm9jVblRPj6I1CwAIf?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 678aa34c-268f-4cea-8e03-08daeecb686c
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 03:17:42.5937
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47bdd82c-df2a-44f8-0a52-08daeec8ab2c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4035
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ta4N26hzuwEIgQZMtAcy20XXI1VnI/76v4tJSEgC/jZ+CGhxx0RGLLYUYGwFhnYzxBp1WGNGL88XroVdYZJguw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7343
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:26:25PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 14, 2022 at 01:39:54PM -0600, Michael Roth wrote:
-> > This mainly indicates to KVM that it should expect all private guest
-> > memory to be backed by private memslots. Ideally this would work
-> > similarly for others archs, give or take a few additional flags, but
-> > for now it's a simple boolean indicator for x86.
-> 
-> ...
-> 
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index c7e9d375a902..cc9424ccf9b2 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1219,6 +1219,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
-> >  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
-> >  #define KVM_CAP_MEMORY_ATTRIBUTES 225
-> > +#define KVM_CAP_UNMAPPED_PRIVATE_MEM 240
-> 
-> Isn't this new cap supposed to be documented somewhere in
-> Documentation/virt/kvm/api.rst ?
 
-It should, but this is sort of a placeholder for now. Ideally we'd
-re-use the capabilities introduced by UPM patchset rather than introduce
-a new one. Originally the UPM patchset had a KVM_CAP_PRIVATE_MEM which
-we planned to use to switch between legacy SEV and UPM-based SEV (for
-lazy-pinning support) by making it writeable, but that was removed in v10
-in favor of KVM_CAP_MEMORY_ATTRIBUTES, which is tied to the new
-KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES ioctls:
+Huang Ying <ying.huang@intel.com> writes:
 
-  https://lore.kernel.org/lkml/CA+EHjTxXOdzcP25F57Mtmnb1NWyG5DcyqeDPqzjEOzRUrqH8FQ@mail.gmail.com/
+> Define struct migrate_pages_stats to organize the various statistics
+> in migrate_pages().  This makes it easier to collect and consume the
+> statistics in multiple functions.  This will be needed in the
+> following patches in the series.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: haoxin <xhao@linux.alibaba.com>
+> ---
+>  mm/migrate.c | 58 +++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 32 insertions(+), 26 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index a4d3fc65085f..ec9263a33d38 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1396,6 +1396,14 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
+>  	return rc;
+>  }
+>  
+> +struct migrate_pages_stats {
+> +	int nr_succeeded;
+> +	int nr_failed_pages;
+> +	int nr_thp_succeeded;
+> +	int nr_thp_failed;
+> +	int nr_thp_split;
 
-It wasn't clear at the time if that was the right interface to use for
-this particular case, so we stuck with the more general
-'use-upm/dont-use-upm' semantics originally provided by making
-KVM_CAP_UNMAPPED_PRIVATE_MEM/KVM_CAP_PRIVATE_MEM writeable.
+I think some brief comments in the code for what each stat is tracking
+and their relationship to each other would be helpful (ie. does
+nr_succeeded include thp subpages, etc). Or at least a reference to
+where this is documented (ie. page_migration.rst) as I recall there has
+been some confusion in the past that has lead to bugs.
 
-But maybe it's okay to just make KVM_CAP_MEMORY_ATTRIBUTES writeable and
-require userspace to negotiate it rather than just tying it to
-CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES. Or maybe introducing a new
-KVM_SET_SUPPORTED_MEMORY_ATTRIBUTES ioctl to pair with
-KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES. It sort of makes sense, since userspace
-needs to be prepared to deal with KVM_EXIT_MEMORY_FAULTs relating to these
-attributes.
+Otherwise the patch looks good so:
 
--Mike
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
 
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&data=05%7C01%7Cmichael.roth%40amd.com%7Cb019ddcb34a74fae1e3e08dae417c322%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638073087997837943%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=QRyV96y3drt%2BqwxfifWzJ6UF6te8NOKWAFuGAYOdKcg%3D&reserved=0
+> +};
+> +
+>  /*
+>   * migrate_pages - migrate the folios specified in a list, to the free folios
+>   *		   supplied as the target for the page migration
+> @@ -1430,13 +1438,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  	int large_retry = 1;
+>  	int thp_retry = 1;
+>  	int nr_failed = 0;
+> -	int nr_failed_pages = 0;
+>  	int nr_retry_pages = 0;
+> -	int nr_succeeded = 0;
+> -	int nr_thp_succeeded = 0;
+>  	int nr_large_failed = 0;
+> -	int nr_thp_failed = 0;
+> -	int nr_thp_split = 0;
+>  	int pass = 0;
+>  	bool is_large = false;
+>  	bool is_thp = false;
+> @@ -1446,9 +1449,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  	LIST_HEAD(split_folios);
+>  	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>  	bool no_split_folio_counting = false;
+> +	struct migrate_pages_stats stats;
+>  
+>  	trace_mm_migrate_pages_start(mode, reason);
+>  
+> +	memset(&stats, 0, sizeof(stats));
+>  split_folio_migration:
+>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
+>  		retry = 0;
+> @@ -1502,9 +1507,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  				/* Large folio migration is unsupported */
+>  				if (is_large) {
+>  					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>  					if (!try_split_folio(folio, &split_folios)) {
+> -						nr_thp_split += is_thp;
+> +						stats.nr_thp_split += is_thp;
+>  						break;
+>  					}
+>  				/* Hugetlb migration is unsupported */
+> @@ -1512,7 +1517,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  					nr_failed++;
+>  				}
+>  
+> -				nr_failed_pages += nr_pages;
+> +				stats.nr_failed_pages += nr_pages;
+>  				list_move_tail(&folio->lru, &ret_folios);
+>  				break;
+>  			case -ENOMEM:
+> @@ -1522,13 +1527,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  				 */
+>  				if (is_large) {
+>  					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>  					/* Large folio NUMA faulting doesn't split to retry. */
+>  					if (!nosplit) {
+>  						int ret = try_split_folio(folio, &split_folios);
+>  
+>  						if (!ret) {
+> -							nr_thp_split += is_thp;
+> +							stats.nr_thp_split += is_thp;
+>  							break;
+>  						} else if (reason == MR_LONGTERM_PIN &&
+>  							   ret == -EAGAIN) {
+> @@ -1546,7 +1551,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  					nr_failed++;
+>  				}
+>  
+> -				nr_failed_pages += nr_pages + nr_retry_pages;
+> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
+>  				/*
+>  				 * There might be some split folios of fail-to-migrate large
+>  				 * folios left in split_folios list. Move them back to migration
+> @@ -1556,7 +1561,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  				list_splice_init(&split_folios, from);
+>  				/* nr_failed isn't updated for not used */
+>  				nr_large_failed += large_retry;
+> -				nr_thp_failed += thp_retry;
+> +				stats.nr_thp_failed += thp_retry;
+>  				goto out;
+>  			case -EAGAIN:
+>  				if (is_large) {
+> @@ -1568,8 +1573,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  				nr_retry_pages += nr_pages;
+>  				break;
+>  			case MIGRATEPAGE_SUCCESS:
+> -				nr_succeeded += nr_pages;
+> -				nr_thp_succeeded += is_thp;
+> +				stats.nr_succeeded += nr_pages;
+> +				stats.nr_thp_succeeded += is_thp;
+>  				break;
+>  			default:
+>  				/*
+> @@ -1580,20 +1585,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  				 */
+>  				if (is_large) {
+>  					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>  				} else if (!no_split_folio_counting) {
+>  					nr_failed++;
+>  				}
+>  
+> -				nr_failed_pages += nr_pages;
+> +				stats.nr_failed_pages += nr_pages;
+>  				break;
+>  			}
+>  		}
+>  	}
+>  	nr_failed += retry;
+>  	nr_large_failed += large_retry;
+> -	nr_thp_failed += thp_retry;
+> -	nr_failed_pages += nr_retry_pages;
+> +	stats.nr_thp_failed += thp_retry;
+> +	stats.nr_failed_pages += nr_retry_pages;
+>  	/*
+>  	 * Try to migrate split folios of fail-to-migrate large folios, no
+>  	 * nr_failed counting in this round, since all split folios of a
+> @@ -1626,16 +1631,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>  	if (list_empty(from))
+>  		rc = 0;
+>  
+> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
+> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
+> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
+> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
+> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
+> -			       nr_thp_failed, nr_thp_split, mode, reason);
+> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
+> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
+> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
+> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
+> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
+> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
+> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
+> +			       stats.nr_thp_split, mode, reason);
+>  
+>  	if (ret_succeeded)
+> -		*ret_succeeded = nr_succeeded;
+> +		*ret_succeeded = stats.nr_succeeded;
+>  
+>  	return rc;
+>  }
+
