@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DC465E8F5
+	by mail.lfdr.de (Postfix) with ESMTP id 6B56265E8F4
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbjAEKXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S233289AbjAEKXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbjAEKVy (ORCPT
+        with ESMTP id S233081AbjAEKVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:21:54 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306D24FD63
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:57 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso36883924ybp.20
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:57 -0800 (PST)
+        Thu, 5 Jan 2023 05:21:55 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ED14D485
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:59 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4700580ca98so305719667b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgIq+1+XdJ7ES1jkz4HOORu1ptYeWb67NT6vWcXFv0I=;
-        b=c7YTwst+CXQAde/EC4BKjPkQxQslDinc3BRCYCIN4Tt+2cEbTnwk0TU3bwgaP6mee9
-         kEFf2wTCzpL5xUl7MHVCSLefee0s5iUkXnq/BXDX7FnSsqYa/Xt+MvBh9hZyl95WL9rl
-         VzfwsERIDQ64g0aldVR7KIXBbKA6yB7hRzB4DLlyHtDcrEcwlH1V2Z30dYIICNHagJAF
-         qbjJhxKV7+3WFweiPZZyzSyK5XDS2kSEUb5iNNMFi6ZL9VpJlG160jKr5BCMmceiKdCo
-         7Po0f1f/HHNFQPSs5wgIOpRg/gJwmw4aukeHNgtzIRiDRL7lBaiZl3zRpKSymn7/ugDK
-         YcAw==
+        bh=rPcVmryUH+86L7TuxpN8GfuTRNIB++IYGz7ii/fh+60=;
+        b=kI4ZTRQe7Q0DNwU8Nd2EZKZhgCILp8F6DoLJQBQIeMmVpBPgy2nY9fRh+7WBj3mKcv
+         b3mHhtPqHKj27maMD9zcK0xNFg7ZH3P+7Zrl4zxFnCf7G/kUV7ygs9iJH6H3DPnwY+7v
+         pEVpy5jqUM6S9+jlWu94uWgwsLLyquWN42I/U3Mye5rfAyPIaLO+CcmOU47oPaODXHBZ
+         g6tTWmWkSREPHJl4j7JvfcfZmIeSW+FeLQ5bKfcMOb/+OzwicxRoFD6mPiFPk365Ae1D
+         C7W9a4QJVUB1YYOH+GqrZqYY061aZQSPOGcDY51qN61zXe8gTbgIaiQswond5R+j607U
+         +9Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgIq+1+XdJ7ES1jkz4HOORu1ptYeWb67NT6vWcXFv0I=;
-        b=GW19mtECeLCwwUkMK2+PLwq2ZwvlpNPRflD2FnrPsm9+Egg3ZSV67OAaLYTbSn3SXD
-         tzqDjzf4OuhMT8i2yRfCKZkA09p8DvQJM9r8HdF6XHSHbxYUNTS1GnMij9Tf6ATjzHHi
-         2p4AaFSJPr4RHqUsy19wWcJoqrTOKt9+NvL8ru/6vS6C2Mq6ug6aPX1QsOp9z/o3hCC9
-         y85M592N3pKZMg5Zmvz6YruzTvILIj0EaeXQCeR1lY4LA8AVHaDYMm0pHLwSSkkgYLw6
-         QjmPNNjrZo0tLKhQ2mjNhXNCnNJrqHRTsMb6rI06VxmkLcjrhT3wABOSqrt/LJ4yHcj4
-         GPBQ==
-X-Gm-Message-State: AFqh2krdFVnCwezt++MtpQ6ypsGHsydYTzxIM3AD6BUZHarzr1veO7q2
-        XL1Nw4TijIdQi4feGBqbeedWVpFp9ShDZoYY
-X-Google-Smtp-Source: AMrXdXubDVLgqn6t3MFjyOos5j8PLQg8z932QeBEdnknXJ+cAn7ASWClpeYwjz5bduTLnJufUdF/dV8Ta+ZRR9S8
+        bh=rPcVmryUH+86L7TuxpN8GfuTRNIB++IYGz7ii/fh+60=;
+        b=D4ESXZZPo+2MM7GUKFmn7uhMcesL4FpJMI+Rl/yTjt6bjW01QUEs8yP4Pmxj7+ibgE
+         ctvO1hyZn3+jCgG6cOMG8/he08vZHnXyLqVXWin6GjkIkQ3aextsKHx+xP/ElIzmq7C7
+         7eU0pAw3HPqu5WDHibAcOAcKsnxGWiNrDYwrXYJxtSuZr0cRiWMYIOQ+dcFFUe0EwRAo
+         QXrB+xlzfo7BMGsnmgy0WrypFA7xBf0KGys/jv5hoXTVTNNgNu+PmH0i/cBWFgI4e9ts
+         7Q9OaFexB7fNwHKCCyn5zh9bTGsr2b189kIPm/BjJdwYY5J9l7OkkL074OC1KH5cXzEQ
+         luVA==
+X-Gm-Message-State: AFqh2kq0kzu9wEJeoQGPvdmGlRY/PnKmdSocdwoGbTtr5B7v9I8bHO0W
+        B5E3wrYbhNtzzXm/LXjDLwXXPK93N8zY4D1d
+X-Google-Smtp-Source: AMrXdXtTdSV2u8sC9W2WJTx+X9U5bRZRCXSHwwKpc/aZe4u4qkoBDtjjb5Moax2r1vBZGfpJQ/5EU4hKV8ZnomEr
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:17d6:0:b0:3ea:9ce2:cd76 with SMTP
- id 205-20020a8117d6000000b003ea9ce2cd76mr93735ywx.217.1672913996509; Thu, 05
- Jan 2023 02:19:56 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:41 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:7c81:0:b0:727:e539:452f with SMTP
+ id x123-20020a257c81000000b00727e539452fmr5333597ybc.552.1672913999168; Thu,
+ 05 Jan 2023 02:19:59 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:42 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-44-jthoughton@google.com>
-Subject: [PATCH 43/46] selftests/kvm: add HugeTLB HGM to KVM demand paging selftest
+Message-ID: <20230105101844.1893104-45-jthoughton@google.com>
+Subject: [PATCH 44/46] selftests/vm: add anon and shared hugetlb to migration test
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,159 +84,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This test exercises the GUP paths for HGM. MADV_COLLAPSE is not tested.
+Shared HugeTLB mappings are migrated best-effort. Sometimes, due to
+being unable to grab the VMA lock for writing, migration may just
+randomly fail. To allow for that, we allow retries.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- tools/testing/selftests/kvm/demand_paging_test.c   |  2 +-
- tools/testing/selftests/kvm/include/test_util.h    |  2 ++
- .../selftests/kvm/include/userfaultfd_util.h       |  6 +++---
- tools/testing/selftests/kvm/lib/kvm_util.c         |  2 +-
- tools/testing/selftests/kvm/lib/test_util.c        | 14 ++++++++++++++
- tools/testing/selftests/kvm/lib/userfaultfd_util.c | 14 +++++++++++---
- 6 files changed, 32 insertions(+), 8 deletions(-)
+ tools/testing/selftests/vm/migration.c | 83 ++++++++++++++++++++++++--
+ 1 file changed, 79 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index b0e1fc4de9e2..e534f9c927bf 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -170,7 +170,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			uffd_descs[i] = uffd_setup_demand_paging(
- 				p->uffd_mode, p->uffd_delay, vcpu_hva,
- 				vcpu_args->pages * memstress_args.guest_page_size,
--				&handle_uffd_page_request);
-+				p->src_type, &handle_uffd_page_request);
- 		}
+diff --git a/tools/testing/selftests/vm/migration.c b/tools/testing/selftests/vm/migration.c
+index 1cec8425e3ca..21577a84d7e4 100644
+--- a/tools/testing/selftests/vm/migration.c
++++ b/tools/testing/selftests/vm/migration.c
+@@ -13,6 +13,7 @@
+ #include <sys/types.h>
+ #include <signal.h>
+ #include <time.h>
++#include <sys/statfs.h>
+ 
+ #define TWOMEG (2<<20)
+ #define RUNTIME (60)
+@@ -59,11 +60,12 @@ FIXTURE_TEARDOWN(migration)
+ 	free(self->pids);
+ }
+ 
+-int migrate(uint64_t *ptr, int n1, int n2)
++int migrate(uint64_t *ptr, int n1, int n2, int retries)
+ {
+ 	int ret, tmp;
+ 	int status = 0;
+ 	struct timespec ts1, ts2;
++	int failed = 0;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
+ 		return -1;
+@@ -78,6 +80,9 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
+ 				MPOL_MF_MOVE_ALL);
+ 		if (ret) {
++			if (++failed < retries)
++				continue;
++
+ 			if (ret > 0)
+ 				printf("Didn't migrate %d pages\n", ret);
+ 			else
+@@ -88,6 +93,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 		tmp = n2;
+ 		n2 = n1;
+ 		n1 = tmp;
++		failed = 0;
  	}
  
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 80d6416f3012..a2106c19a614 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -103,6 +103,7 @@ enum vm_mem_backing_src_type {
- 	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
- 	VM_MEM_SRC_SHMEM,
- 	VM_MEM_SRC_SHARED_HUGETLB,
-+	VM_MEM_SRC_SHARED_HUGETLB_HGM,
- 	NUM_SRC_TYPES,
- };
+ 	return 0;
+@@ -128,7 +134,7 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
  
-@@ -121,6 +122,7 @@ size_t get_def_hugetlb_pagesz(void);
- const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
- size_t get_backing_src_pagesz(uint32_t i);
- bool is_backing_src_hugetlb(uint32_t i);
-+bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type);
- void backing_src_help(const char *flag);
- enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
- long get_run_delay(void);
-diff --git a/tools/testing/selftests/kvm/include/userfaultfd_util.h b/tools/testing/selftests/kvm/include/userfaultfd_util.h
-index 877449c34592..d91528a58245 100644
---- a/tools/testing/selftests/kvm/include/userfaultfd_util.h
-+++ b/tools/testing/selftests/kvm/include/userfaultfd_util.h
-@@ -26,9 +26,9 @@ struct uffd_desc {
- 	pthread_t thread;
- };
- 
--struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
--					   void *hva, uint64_t len,
--					   uffd_handler_t handler);
-+struct uffd_desc *uffd_setup_demand_paging(
-+		int uffd_mode, useconds_t delay, void *hva, uint64_t len,
-+		enum vm_mem_backing_src_type src_type, uffd_handler_t handler);
- 
- void uffd_stop_demand_paging(struct uffd_desc *uffd);
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index c88c3ace16d2..67e7223f054b 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -972,7 +972,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->fd = -1;
- 	if (backing_src_is_shared(src_type))
- 		region->fd = kvm_memfd_alloc(region->mmap_size,
--					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
-+				is_backing_src_shared_hugetlb(src_type));
- 
- 	region->mmap_start = mmap(NULL, region->mmap_size,
- 				  PROT_READ | PROT_WRITE,
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 5c22fa4c2825..712a0878932e 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -271,6 +271,13 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
- 			 */
- 			.flag = MAP_SHARED,
- 		},
-+		[VM_MEM_SRC_SHARED_HUGETLB_HGM] = {
-+			/*
-+			 * Identical to shared_hugetlb except for the name.
-+			 */
-+			.name = "shared_hugetlb_hgm",
-+			.flag = MAP_SHARED,
-+		},
- 	};
- 	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
- 		       "Missing new backing src types?");
-@@ -289,6 +296,7 @@ size_t get_backing_src_pagesz(uint32_t i)
- 	switch (i) {
- 	case VM_MEM_SRC_ANONYMOUS:
- 	case VM_MEM_SRC_SHMEM:
-+	case VM_MEM_SRC_SHARED_HUGETLB_HGM:
- 		return getpagesize();
- 	case VM_MEM_SRC_ANONYMOUS_THP:
- 		return get_trans_hugepagesz();
-@@ -305,6 +313,12 @@ bool is_backing_src_hugetlb(uint32_t i)
- 	return !!(vm_mem_backing_src_alias(i)->flag & MAP_HUGETLB);
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
  }
+@@ -158,7 +164,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 			self->pids[i] = pid;
+ 	}
  
-+bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type)
-+{
-+	return src_type == VM_MEM_SRC_SHARED_HUGETLB ||
-+		src_type == VM_MEM_SRC_SHARED_HUGETLB_HGM;
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+ }
+@@ -185,9 +191,78 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
++	for (i = 0; i < self->nthreads - 1; i++)
++		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
 +}
 +
- static void print_available_backing_src_types(const char *prefix)
- {
- 	int i;
-diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-index 92cef20902f1..3c7178d6c4f4 100644
---- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-+++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-@@ -25,6 +25,10 @@
- 
- #ifdef __NR_userfaultfd
- 
-+#ifndef MADV_SPLIT
-+#define MADV_SPLIT 26
-+#endif
++/*
++ * Tests the anon hugetlb migration entry paths.
++ */
++TEST_F_TIMEOUT(migration, private_anon_hugetlb, 2*RUNTIME)
++{
++	uint64_t *ptr;
++	int i;
 +
- static void *uffd_handler_thread_fn(void *arg)
- {
- 	struct uffd_desc *uffd_desc = (struct uffd_desc *)arg;
-@@ -108,9 +112,9 @@ static void *uffd_handler_thread_fn(void *arg)
- 	return NULL;
++	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
++		SKIP(return, "Not enough threads or NUMA nodes available");
++
++	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
++		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
++	if (ptr == MAP_FAILED)
++		SKIP(return, "Could not allocate hugetlb pages");
++
++	memset(ptr, 0xde, TWOMEG);
++	for (i = 0; i < self->nthreads - 1; i++)
++		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
++			perror("Couldn't create thread");
++
++	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
  }
  
--struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
--					   void *hva, uint64_t len,
--					   uffd_handler_t handler)
-+struct uffd_desc *uffd_setup_demand_paging(
-+		int uffd_mode, useconds_t delay, void *hva, uint64_t len,
-+		enum vm_mem_backing_src_type src_type, uffd_handler_t handler)
- {
- 	struct uffd_desc *uffd_desc;
- 	bool is_minor = (uffd_mode == UFFDIO_REGISTER_MODE_MINOR);
-@@ -140,6 +144,10 @@ struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
- 		    "ioctl UFFDIO_API failed: %" PRIu64,
- 		    (uint64_t)uffdio_api.api);
- 
-+	if (src_type == VM_MEM_SRC_SHARED_HUGETLB_HGM)
-+		TEST_ASSERT(!madvise(hva, len, MADV_SPLIT),
-+				"Could not enable HGM");
++/*
++ * Tests the shared hugetlb migration entry paths.
++ */
++TEST_F_TIMEOUT(migration, shared_hugetlb, 2*RUNTIME)
++{
++	uint64_t *ptr;
++	int i;
++	int fd;
++	unsigned long sz;
++	struct statfs filestat;
 +
- 	uffdio_register.range.start = (uint64_t)hva;
- 	uffdio_register.range.len = len;
- 	uffdio_register.mode = uffd_mode;
++	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
++		SKIP(return, "Not enough threads or NUMA nodes available");
++
++	fd = memfd_create("tmp_hugetlb", MFD_HUGETLB);
++	if (fd < 0)
++		SKIP(return, "Couldn't create hugetlb memfd");
++
++	if (fstatfs(fd, &filestat) < 0)
++		SKIP(return, "Couldn't fstatfs hugetlb file");
++
++	sz = filestat.f_bsize;
++
++	if (ftruncate(fd, sz))
++		SKIP(return, "Couldn't allocate hugetlb pages");
++	ptr = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	if (ptr == MAP_FAILED)
++		SKIP(return, "Could not map hugetlb pages");
++
++	memset(ptr, 0xde, sz);
++	for (i = 0; i < self->nthreads - 1; i++)
++		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
++			perror("Couldn't create thread");
++
++	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 10), 0);
++	for (i = 0; i < self->nthreads - 1; i++) {
++		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
++		pthread_join(self->threads[i], NULL);
++	}
++	ftruncate(fd, 0);
++	close(fd);
++}
++
+ TEST_HARNESS_MAIN
 -- 
 2.39.0.314.g84b9a713c41-goog
 
