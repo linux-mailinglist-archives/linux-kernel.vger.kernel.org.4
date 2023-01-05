@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C1965F6CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 595A765F6D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbjAEWab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S236062AbjAEWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236046AbjAEWaD (ORCPT
+        with ESMTP id S236068AbjAEWcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:30:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D57910D6;
-        Thu,  5 Jan 2023 14:29:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4976B81C0A;
-        Thu,  5 Jan 2023 22:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0FDC433EF;
-        Thu,  5 Jan 2023 22:29:50 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QpBB4pwU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672957786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mMldSeIA7qWoDB1sx6P/v3uvnTNOCNV9Im/Ue9FmzFU=;
-        b=QpBB4pwU2wEZ2yl5XVSF8mYLnd3NmfAVe/m2DxszOjivDyR1t+oAmAjfXb9/LnZft8M8Sm
-        tfyMpwX8w1ub8ByD/S+prDNIPhgnJLkTf3MoS+QWRKds0cASzWvEhSX/Bk+RZunpaPP8+3
-        zaDdmKSp9EPrhaXg2F5QU1PKN05ae+s=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 843725ac (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 5 Jan 2023 22:29:46 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 23:29:43 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] tpm: Disable hwrng for TPM 1 if PM_SLEEP is enabled
-Message-ID: <Y7dPV5BK6jk1KvX+@zx2c4.com>
-References: <370a2808-a19b-b512-4cd3-72dc69dfe8b0@suse.cz>
- <20230105144742.3219571-1-Jason@zx2c4.com>
- <CAHk-=whxaSHcHeo10JGz3EMJZBfC1LarcrerLos7uHbE1URhtQ@mail.gmail.com>
+        Thu, 5 Jan 2023 17:32:02 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDCD15822
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:31:59 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-15085b8a2f7so19750844fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bzW/w/1hM8B3dAJhNRkp0Jphokn3JFk7Z5V07SJ3Qvg=;
+        b=irhVthMkbXMEX15iArMrcDY5gNuF5eBvK4eo1OtUylhsmE3IG9S+mrhZxQOiqFOCIp
+         B0NdfYGQgplol+qXFg23OWfulPwvSU6W3PDU1vto6PpvE0VAeFfNIFN4a8ZuHbQY9yux
+         PXeSKyeq3An9rFPoa3fVNGzGEqqWpmTNW/IhDMPZHTEGo5GXlC3tHCL+PpUMhytJ91mi
+         VnE7MFoMeikcgMvkL5CbthLdijfrodW+nJq5InxHQqUSFW5SY7wrPzcsnCf8IgP9ADVl
+         OSDDZsGxvXwBgux7z61kSSUwbOnmCiTQmx5XrBl1LtTxgEFPc4Tdi1LcRhBuf47g7+EW
+         8CKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bzW/w/1hM8B3dAJhNRkp0Jphokn3JFk7Z5V07SJ3Qvg=;
+        b=3yuNlRONY6Xg4dXUJhWJDLmmM8wHxSrNA6Rz7EpIR2djtjLW7GZRq59+eSwVrrbeis
+         pMIRFk1uYsEwkTO7VCNdeU4WPm+m9jWPLJ4YXAr288vYuhOSka/VO5OoXohiGOe8bZXF
+         felgGSKwh26CEEdiPZWtji9FHPf5DBx+9Xd9SucsZsGGEd+gvyYKc+HP0Tv3gkvu87pW
+         LCEekGqDfFoW7vq6rRTCO04ZtwEKu/Vyq777gLEycq5a99KAt0LBEueqOqMO6AhB5ONa
+         1PZwefFk8NCZh6ARCK6hDl/RpaMaW8K9W/HfWe9+7gMzfKdMBVXmJuEJQmuMB1qKE15b
+         vlIQ==
+X-Gm-Message-State: AFqh2ko5FZ4zFYcz6rjSgtyHzjhndV1rpBhzrfvSNWYWI7I7mafRn/1Q
+        jY2R4evfHJaP7fMIoh6VbGN+3GVtNT9NpUiebHCR1g==
+X-Google-Smtp-Source: AMrXdXuhK0FyKkeqVW5l22eKW+0UG+HL1l0rnz8gKZ4dAVgXGahu6I04Z2YvHkfHXjMPojl5mAzlig7pu90phEAYxnc=
+X-Received: by 2002:a05:6870:b020:b0:14f:9d87:3d58 with SMTP id
+ y32-20020a056870b02000b0014f9d873d58mr4259851oae.108.1672957918361; Thu, 05
+ Jan 2023 14:31:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whxaSHcHeo10JGz3EMJZBfC1LarcrerLos7uHbE1URhtQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cover.1655761627.git.ashish.kalra@amd.com> <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+ <YuFvbm/Zck9Tr5pq@zn.tnic> <20221219150026.bltiyk72pmdc2ic3@amd.com>
+ <Y6DEv4QuvIfwWlCW@zn.tnic> <ab96e918-c8b7-67d5-1dfd-320264858cec@amd.com>
+ <CAA03e5GKCcevo7goyyRqWrgk3KeFPTddb-E2pRmgDmyPSNxDvA@mail.gmail.com> <993e0896-cda6-5033-ad0e-e21508a58077@amd.com>
+In-Reply-To: <993e0896-cda6-5033-ad0e-e21508a58077@amd.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Thu, 5 Jan 2023 14:31:47 -0800
+Message-ID: <CAA03e5EZtTqNHOuKAPKpw0xJ_tSa4DYCAf-nSDqsjaSxbJZVkg@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
+ when adding it to RMP table
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-14.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,36 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:58:48PM -0800, Linus Torvalds wrote:
-> On Thu, Jan 5, 2023 at 6:48 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Thu, Jan 5, 2023 at 2:27 PM Kalra, Ashish <ashish.kalra@amd.com> wrote:
+>
+> Hello Marc,
+>
+> On 1/5/2023 4:08 PM, Marc Orr wrote:
+> > On Tue, Dec 27, 2022 at 1:49 PM Kalra, Ashish <ashish.kalra@amd.com> wrote:
+> >>
+> >> Hello Boris,
+> >>
+> >> On 12/19/2022 2:08 PM, Borislav Petkov wrote:
+> >>> On Mon, Dec 19, 2022 at 09:00:26AM -0600, Michael Roth wrote:
+> >>>> We implemented this approach for v7, but it causes a fairly significant
+> >>>> performance regression, particularly for the case for npages > 1 which
+> >>>> this change was meant to optimize.
+> >>>>
+> >>>> I still need to dig in a big but I'm guessing it's related to flushing
+> >>>> behavior.
+> >>>
+> >>> Well, AFAICT, change_page_attr_set_clr() flushes once at the end.
+> >>>
+> >>> Don't you need to flush when you modify the direct map?
+> >>>
+> >>
+> >> Milan onward, there is H/W support for coherency between mappings of the
+> >> same physical page with different encryption keys, so AFAIK, there
+> >> should be no need to flush during page state transitions, where we
+> >> invoke these direct map interface functions for re-mapping/invalidating
+> >> pages.
+> >>
+> >> I don't know if there is any other reason to flush after modifying
+> >> the direct map ?
 > >
-> > TPM 1's support for its hardware RNG is broken across system suspends,
-> > due to races or locking issues or something else that haven't been
-> > diagnosed or fixed yet. These issues prevent the system from actually
-> > suspending. So disable the driver in this case. Later, when this is
-> > fixed properly, we can remove this.
-> 
-> How about just keeping it enabled, but not making it a fatal error if
-> the TPM saving doesn't work? IOW, just print the warning, and then
-> "return 0" from the suspend function.
+> > Isn't the Milan coherence feature (SME_COHERENT?) about the caches --
+> > not the TLBs? And isn't the flushing being discussed here about the
+> > TLBs?
+>
+> Actually, the flush does both cache and TLB flushing.
+>
+> Both cpa_flush() and cpa_flush_all() will also do cache flushing if
+> cache argument is not NULL. As in this case, no page caching attributes
+> are being changed so there is no need to do cache flushing.
+>
+> But TLB flushing (as PTE is updated) is still required and will be done.
 
-You're right that returning 0 from the pm notifier would make the
-problem that users actually care about -- laptop doesn't sleep when you
-close the lid -- go away.
+Ah, got it now. Thanks for explaining. (I should've looked at the code
+a bit closer.)
 
-From a random.c perspective, the RNG is already initialized when the
-driver loads, which will be before suspend bricks the driver. So even if
-the behavior afterwards is a buggy driver handing all zeros to random.c,
-it won't really matter much; random.c can deal with that
-cryptographically. I have no idea if this is actually the case with the
-driver's error condition. But if it is, it's good that it doesn't
-matter.
+> > Also, I thought that Mingwei Zhang <mizhang@google.com> found that the
+> > Milan SEV coherence feature was basically unusable in Linux because it
+> > only works across CPUs. It does not extend to IO (e.g., CPU caches
+> > need to be flushed prior to free'ing a SEV VM's private address and
+> > reallocating that location to a device driver to be used for IO). My
+> > understanding of this feature and its limitations may be too coarse.
+> > But I think we should be very careful about relying on this feature as
+> > it is implemented in Milan.
+> >
+> > That being said, I guess I could see an argument to rely on the
+> > feature here, since we're not deallocating the memory and reallocating
+> > it to a device. But again, I thought the feature was about cache
+> > coherence -- not TLB coherence.
+>
+> Yes, this is just invalidating or re-mapping into the kernel direct map,
+> so we can rely on this feature for the use case here.
 
-So okay, I'll roll a patch to do that when I get home. I'm writing on my
-phone now, but from memory it's just changing a 'return rc;' into
-'return 0;'.
-
-Then the TPM folks can fix the underlying issue at their leisure
-whenever.
-
-Jason
+SGTM and that does make sense then. Thanks for confirming.
