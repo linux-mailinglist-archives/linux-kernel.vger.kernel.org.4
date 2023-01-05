@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA51865E75F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B0465E762
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjAEJJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S231952AbjAEJJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjAEJIm (ORCPT
+        with ESMTP id S232080AbjAEJJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:08:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D55114028
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:08:41 -0800 (PST)
+        Thu, 5 Jan 2023 04:09:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6997C5017D;
+        Thu,  5 Jan 2023 01:09:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCE07618DC
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:08:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A282C433EF;
-        Thu,  5 Jan 2023 09:08:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0905E61929;
+        Thu,  5 Jan 2023 09:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F44C433D2;
+        Thu,  5 Jan 2023 09:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672909720;
-        bh=dC2abtwgmwdN1tfArHQUKSGHFcouBA0RhxdxCoHf14o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o21dzTZ8EJP4ZuoTkTP617ILWOb9XMeQlZNs8yWVhxbzasyhgB+0x1FNEmdnaqgU/
-         KvohIPPBA1YXYZf+H24bytpa6uOxCsuHXr2m5nH/9V6iZ3biojC+ZseY82OiT7RJ32
-         87FCXPAGclmnok+JmMBJ6FHmDGI6jCtlx9K1dIHlezT8iekr5KT6u8QECfYAj2cNcH
-         PD05JJ6Fbxk+KPVo2yQHMAbKuV970X5dBgTflH0JYxIWcpDxUztBYGnt/xpcTBi4yv
-         lOJRLj+OcFT0mQhEFetAaXTj9dexmddS9MMdH8LGMfGipIn015AqHkznBBnxEY+NPu
-         oJrNycyIXhoIw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pDMEn-00Gx2C-Tn;
-        Thu, 05 Jan 2023 09:08:37 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Hector Martin <marcan@marcan.st>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Subject: [PATCH] firmware/psci: Don't register with debugfs if PSCI isn't available
-Date:   Thu,  5 Jan 2023 09:08:34 +0000
-Message-Id: <20230105090834.630238-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        s=k20201202; t=1672909760;
+        bh=Br5C/uDEZK1Yfd+HJpl97NIZZHEqGbxQ5YfknJjVjAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Txu4a/n2IHl5nt5WRP3pqB7IP4KyrZNf0l0ncRjbTsjYiQkIFxjMcPK4wNOXch7L3
+         yb6QtPrpGTg8QyWHDg2p2MGW+1dyxXejtSCJ0wKCGV09mHXSzLQeuBPF2m/FEoYBWf
+         MUwYMLp7EuLk+C7cE+ikg8VWLytjHOTHWVtVB2LozF5cN/oEevADVB+2jEOP+LLEAN
+         vz2uZ1shdVpSazzRSv+CCunu4VqzwKekxQjclZQuuMOhfmWngiN/yJ0lHL0m/BMNe7
+         sTb0R8VhZWNsO9ZnFzSdPGRX9ohZ8zR2H/i4Zg3EM43BMeB/279TKc1mxYrHiQ6m83
+         bd2sX4vJXW3kg==
+Date:   Thu, 5 Jan 2023 11:09:16 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     pkshih@realtek.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wifi: rtw89: Add missing check for alloc_workqueue
+Message-ID: <Y7aTvDWQnHQfN3su@unreal>
+References: <20230104142353.25093-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, marcan@marcan.st, dmitry.baryshkov@linaro.org, broonie@kernel.org, ulf.hansson@linaro.org, arnd@arndb.de, mark.rutland@arm.com, lpieralisi@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104142353.25093-1-jiasheng@iscas.ac.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,46 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Contrary to popular belief, PSCI is not a universal property of an
-ARM/arm64 system. There is a garden variety of systems out there
-that don't (or even cannot) implement it.
+On Wed, Jan 04, 2023 at 10:23:53PM +0800, Jiasheng Jiang wrote:
+> On Wed, Jan 04, 2023 at 07:41:36PM +0800, Leon Romanovsky wrote:
+> > On Wed, Jan 04, 2023 at 05:33:53PM +0800, Jiasheng Jiang wrote:
+> >> Add check for the return value of alloc_workqueue since it may return
+> >> NULL pointer.
+> >> 
+> >> Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
+> >> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> >> ---
+> >>  drivers/net/wireless/realtek/rtw89/core.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >> 
+> >> diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+> >> index 931aff8b5dc9..006fe0499f81 100644
+> >> --- a/drivers/net/wireless/realtek/rtw89/core.c
+> >> +++ b/drivers/net/wireless/realtek/rtw89/core.c
+> >> @@ -3124,6 +3124,8 @@ int rtw89_core_init(struct rtw89_dev *rtwdev)
+> >>  	INIT_DELAYED_WORK(&rtwdev->cfo_track_work, rtw89_phy_cfo_track_work);
+> >>  	INIT_DELAYED_WORK(&rtwdev->forbid_ba_work, rtw89_forbid_ba_work);
+> >>  	rtwdev->txq_wq = alloc_workqueue("rtw89_tx_wq", WQ_UNBOUND | WQ_HIGHPRI, 0);
+> >> +	if (!rtwdev->txq_wq)
+> >> +		return -ENOMEM;
+> > 
+> > While the change is fixing one issue, you are adding another one.
+> > There is no destroy of this workqueue if rtw89_load_firmware fails.
+> 
+> Actually, I do not think the missing of destroy_workqueue is introduced by me.
+> Even without my patch, the destroy_workqueue is still missing.
 
-I'm the first one deplore such a situation, but hey...
+Not really, without your change, rtw89_core_init() never failed.
 
-On such systems, a "cat /sys/kernel/debug/psci" results in
-fireworks, as no invocation callback is registered.
+> Anyway, I will submit a v2 that adds the missing destroy_workqueue.
 
-Check for the invoke_psci_fn and psci_ops.get_version pointers
-before registering with the debugfs subsystem, avoiding the
-issue altogether.
+Thanks
 
-Fixes: 3137f2e60098 ("firmware/psci: Add debugfs support to ease debugging")
-Reported-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
----
- drivers/firmware/psci/psci.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index e7bcfca4159f..447ee4ea5c90 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -440,6 +440,9 @@ static const struct file_operations psci_debugfs_ops = {
- 
- static int __init psci_debugfs_init(void)
- {
-+	if (!invoke_psci_fn || !psci_ops.get_version)
-+		return 0;
-+
- 	return PTR_ERR_OR_ZERO(debugfs_create_file("psci", 0444, NULL, NULL,
- 						   &psci_debugfs_ops));
- }
--- 
-2.34.1
-
+> 
+> Thanks,
+> Jiang
+> 
