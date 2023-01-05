@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA7565EDAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ECC65EDB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbjAENre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
+        id S233517AbjAENrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbjAENrK (ORCPT
+        with ESMTP id S233683AbjAENrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:47:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F83F100;
-        Thu,  5 Jan 2023 05:47:10 -0800 (PST)
+        Thu, 5 Jan 2023 08:47:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB69C3F10C;
+        Thu,  5 Jan 2023 05:47:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9755061A8E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B88EB81AD7;
+        Thu,  5 Jan 2023 13:47:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E9FC433D2;
         Thu,  5 Jan 2023 13:47:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6D9C43392;
-        Thu,  5 Jan 2023 13:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926429;
-        bh=MePNggNn2Sdy9A2QPxyvtHiIGVkS0Kpugps/y3JKzaU=;
+        s=k20201202; t=1672926431;
+        bh=py+J7Io7igGLkvTKhQuQwnmjg68rvRYi5ZkHo5Gcwck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIfFNq+TUc4bgKQDXZX7LJ+AsYv5L19C+b57kSP+WCWPDnV+66EVyavxyDdnjwa2L
-         m7JZmu95FeBZ7HP5WaYlNIWHpccm+ST8DcBStZW9hEuK+SjMaCL8c8ml4LeCuYwB8r
-         lqTZJzXfqZwq8HyPtBdhfBQIHyHwtyTfDS3z+A95BjcBJfPk0S6gvACvIUZ1+Sq0h/
-         1tknNa7twsy7amcBfF/+1PzsKpK78HVLpOwlxu/5TK7M9xsgb6N325k9s/fR212RKz
-         oUwHFGcll88yYP3SzeJk0IIBvi1H5s9E4W9Uyu29IiedhRxyBOwjieAyB9zW7yOk/0
-         if3kYzrG8RESA==
+        b=NNR50j4X56it5NK2HPfvo4WLzgECROMps0deXNlkrJctv0s5PCTpf3eLmbIxtaTLD
+         uloOhvOnkqHAAtK2sx4Rc8g6IOsyWVAi5XiOFF6neO9LqqAjZo92F0LGzbSufGRAqj
+         nY5fQlP/u5WiEgo6iFTuU/4qnySn8q7Pf6x3doe0f4UKB2obKxXi25qk/tL1tf/NM4
+         owV2kzbi9wlinVjGWF12sk8ZR8Gym5HyDNtHIe+nWQxhDxOKRFYF9cDoDuGfMhcrYZ
+         MmDrTAU32HyQCUTT6b57KPnV62yiePUmdQbytuj7IK/gUJV6oMMLPMkOp4k+Sf18Uy
+         RZ1wR4+XuCUHw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
@@ -40,9 +40,9 @@ Cc:     Daniel Mack <daniel@zonque.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         linux-input@vger.kernel.org
-Subject: [PATCH 10/27] input: remove pxa930_trkball driver
-Date:   Thu,  5 Jan 2023 14:46:05 +0100
-Message-Id: <20230105134622.254560-11-arnd@kernel.org>
+Subject: [PATCH 11/27] input: remove pxa930_rotary keyboard driver
+Date:   Thu,  5 Jan 2023 14:46:06 +0100
+Message-Id: <20230105134622.254560-12-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -59,57 +59,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The pxa930 SoC support is getting removed, and no upstream
-board ever provided the trkball device that this driver
-relies on.
+The pxa930 platform is getting removed and no upstream machine
+ever defined a rotary keyboard device.
 
 Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc: linux-input@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/input/mouse/Kconfig                   |   6 -
- drivers/input/mouse/Makefile                  |   1 -
- drivers/input/mouse/pxa930_trkball.c          | 250 ------------------
- .../platform_data/mouse-pxa930_trkball.h      |  11 -
- 4 files changed, 268 deletions(-)
- delete mode 100644 drivers/input/mouse/pxa930_trkball.c
- delete mode 100644 include/linux/platform_data/mouse-pxa930_trkball.h
+ drivers/input/keyboard/Kconfig                |   9 -
+ drivers/input/keyboard/Makefile               |   1 -
+ drivers/input/keyboard/pxa930_rotary.c        | 195 ------------------
+ .../platform_data/keyboard-pxa930_rotary.h    |  21 --
+ 4 files changed, 226 deletions(-)
+ delete mode 100644 drivers/input/keyboard/pxa930_rotary.c
+ delete mode 100644 include/linux/platform_data/keyboard-pxa930_rotary.h
 
-diff --git a/drivers/input/mouse/Kconfig b/drivers/input/mouse/Kconfig
-index 63c9cda555c3..32cc4c62a716 100644
---- a/drivers/input/mouse/Kconfig
-+++ b/drivers/input/mouse/Kconfig
-@@ -393,12 +393,6 @@ config MOUSE_GPIO
+diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+index 5d481847d718..d98650426dc2 100644
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -550,15 +550,6 @@ config KEYBOARD_PXA27x
  	  To compile this driver as a module, choose M here: the
- 	  module will be called gpio_mouse.
+ 	  module will be called pxa27x_keypad.
  
--config MOUSE_PXA930_TRKBALL
--	tristate "PXA930 Trackball mouse"
+-config KEYBOARD_PXA930_ROTARY
+-	tristate "PXA930/PXA935 Enhanced Rotary Controller Support"
 -	depends on CPU_PXA930 || CPU_PXA935
 -	help
--	  Say Y here to support PXA930 Trackball mouse.
+-	  Enable support for PXA930/PXA935 Enhanced Rotary Controller.
 -
- config MOUSE_MAPLE
- 	tristate "Maple mouse (for the Dreamcast)"
- 	depends on MAPLE
-diff --git a/drivers/input/mouse/Makefile b/drivers/input/mouse/Makefile
-index e49f08565076..92b3204ce84e 100644
---- a/drivers/input/mouse/Makefile
-+++ b/drivers/input/mouse/Makefile
-@@ -18,7 +18,6 @@ obj-$(CONFIG_MOUSE_MAPLE)		+= maplemouse.o
- obj-$(CONFIG_MOUSE_NAVPOINT_PXA27x)	+= navpoint.o
- obj-$(CONFIG_MOUSE_PC110PAD)		+= pc110pad.o
- obj-$(CONFIG_MOUSE_PS2)			+= psmouse.o
--obj-$(CONFIG_MOUSE_PXA930_TRKBALL)	+= pxa930_trkball.o
- obj-$(CONFIG_MOUSE_RISCPC)		+= rpcmouse.o
- obj-$(CONFIG_MOUSE_SERIAL)		+= sermouse.o
- obj-$(CONFIG_MOUSE_SYNAPTICS_I2C)	+= synaptics_i2c.o
-diff --git a/drivers/input/mouse/pxa930_trkball.c b/drivers/input/mouse/pxa930_trkball.c
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called pxa930_rotary.
+-
+ config KEYBOARD_PMIC8XXX
+ 	tristate "Qualcomm PMIC8XXX keypad support"
+ 	depends on MFD_PM8XXX
+diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
+index 5ccfdf5c0222..aecef00c5d09 100644
+--- a/drivers/input/keyboard/Makefile
++++ b/drivers/input/keyboard/Makefile
+@@ -54,7 +54,6 @@ obj-$(CONFIG_KEYBOARD_OPENCORES)	+= opencores-kbd.o
+ obj-$(CONFIG_KEYBOARD_PINEPHONE)	+= pinephone-keyboard.o
+ obj-$(CONFIG_KEYBOARD_PMIC8XXX)		+= pmic8xxx-keypad.o
+ obj-$(CONFIG_KEYBOARD_PXA27x)		+= pxa27x_keypad.o
+-obj-$(CONFIG_KEYBOARD_PXA930_ROTARY)	+= pxa930_rotary.o
+ obj-$(CONFIG_KEYBOARD_QT1050)           += qt1050.o
+ obj-$(CONFIG_KEYBOARD_QT1070)           += qt1070.o
+ obj-$(CONFIG_KEYBOARD_QT2160)		+= qt2160.o
+diff --git a/drivers/input/keyboard/pxa930_rotary.c b/drivers/input/keyboard/pxa930_rotary.c
 deleted file mode 100644
-index f04ba12dbfa8..000000000000
-diff --git a/include/linux/platform_data/mouse-pxa930_trkball.h b/include/linux/platform_data/mouse-pxa930_trkball.h
+index 2fe9dcfe0a6f..000000000000
+diff --git a/include/linux/platform_data/keyboard-pxa930_rotary.h b/include/linux/platform_data/keyboard-pxa930_rotary.h
 deleted file mode 100644
-index ba0ac7a30d8c..000000000000
+index 3271aa01cbe8..000000000000
 -- 
 2.39.0
 
