@@ -2,227 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EF065F3DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944D865F3E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbjAESio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S234968AbjAESjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbjAESil (ORCPT
+        with ESMTP id S235237AbjAESjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:38:41 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A6F5833D;
-        Thu,  5 Jan 2023 10:38:38 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305IT0pX006625;
-        Thu, 5 Jan 2023 18:37:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=KUWMGomMuXF9tI6SsY8poBzvu+IZTVGXBDR9YywW2oY=;
- b=K4Yx7HW5SJX239TYLjorMG+T4CqdkZ/zIgHxRhXdaXd/2ZteQ/cusAuITdeWoatzDXIp
- LFkqCA1PPct37Z1vAZgTAFDYXNjlu1qdpnJ/wHuT0abU9MQ8i3lGxhF3RHKTnEoYcmMd
- M4cxC0WPoC/ZpqTOFtPVdHl1pa2q0JQ4ZeK4M9pc02pFu25OaNkfwfMlb9gDk5xGSmvo
- Tyb4pHNUFemSKT9bido3Fb/tKE2UYj26iKE4WBnq5zSY7nQDrSW7nVxtee2eJASNCver
- ly39dzacCh2lzU0QXVOKTQ98D4SPJKFqCJG7HCFonaEVw5uqNoXt74EIY5bM2j2wrVZe PQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mtcpt9j50-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 Jan 2023 18:37:48 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 305ICxvX027986;
-        Thu, 5 Jan 2023 18:37:47 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3mwft02jr1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 Jan 2023 18:37:47 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X1ThhYeoydiisS4ho7xcUQw0jVrJfJm0O+RxGgA5nBWoK1BaVQ8S7hYv9GHrUCWiw0KBrXZ0fWPROkDTmEFKISFSrfRCmrtcu9nDMYAprDj5EzMwgK1OCGyVoMNUcFaPoI8KGLEvBH16+LEKpJPsW+eUAZ3sQmfcn6EnkQXmbMJknwX3GLneV3DE7gQpOBHuo3ekZz7mhxlPFp7Xc7HACsCP0ZJxnA8tN3abl7Ek9aqTvux+yt0OIfru0/CgirY17GC2Q0BM3w9NZ16cPv1hXHSEkiZilOwUKYiX7JQjSGedb33Da4jvsRcks0brbbgivRkGvb6T5CaMKoIsNPlu5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KUWMGomMuXF9tI6SsY8poBzvu+IZTVGXBDR9YywW2oY=;
- b=cgk96ExK/rh/iXyl5No8lF6EEkTb3dnlrTGszpTQCYbEpq2JNId/5ZXpnDA/4sFQ8SBwVLWiDs1cmtvGhFA42NJlssM2vBrksIca6v+uUVHnKFoBD3RhztJ/ulnYkHtXpU2hE578JlIN9VXY5f5nrUq3b44VT9KJkGtXk6wOb7mnAgFT5jTdsu2s1rY96FLhtSgf9JPujmtg+pz8Lx8ftBXqppfjqK+TFE7RAEVZMooEK+WJk2/pTCkkeTtQyvzZSRTCX6CBcq0LnUIAxL2aV+D0YfPik8gm0Ft8Q8cUDdex5J5PKx4avCtl1CFoMxv2421jIgDoLf9c3oXreKtEgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 5 Jan 2023 13:39:16 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E985F49E;
+        Thu,  5 Jan 2023 10:39:05 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-14fb7fdb977so37217913fac.12;
+        Thu, 05 Jan 2023 10:39:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KUWMGomMuXF9tI6SsY8poBzvu+IZTVGXBDR9YywW2oY=;
- b=xSkBwjsuEiihuIldnRhorMus50jqaLHHwGWJczDggbRhi3GscMCFLPnH0xvrwbBD/AfyWzicMKr1rrsYFXAHwn9VrdGwuo4FR2V0b95clKL9pi0QahHPvYl/1XeZRMwBFPGjifOkgaemtYhx5JUBS7qAgA8RKtImzpmKlxCjcns=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by CH2PR10MB4277.namprd10.prod.outlook.com (2603:10b6:610:7b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 18:37:45 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14%8]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 18:37:45 +0000
-Date:   Thu, 5 Jan 2023 10:37:41 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/3] mm/hugetlb: Pre-allocate pgtable pages for uffd
- wr-protects
-Message-ID: <Y7cY9XHStZv60P+z@monkey>
-References: <20230104225207.1066932-1-peterx@redhat.com>
- <20230104225207.1066932-2-peterx@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104225207.1066932-2-peterx@redhat.com>
-X-ClientProxiedBy: MW4PR04CA0364.namprd04.prod.outlook.com
- (2603:10b6:303:81::9) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N0AB2x4qCilYXNN66qpiEjklcJr+ewmZBA/9Mtvh7+Y=;
+        b=I4ymJC1LD9APlEXUMwtIT5TECUDlW7u6vpX4qge/EmRQCdkmAn1/3oUo+qWYty0Jl3
+         hpoVUsUfASLZibDOcVc3ATfFV6UXHb4bd8N2mplIrS2KAKUtiM/OHl1TGgaWwVCu7Ewo
+         E3thvCUbT5deEYkDzGiwVRnXFcJADeFJ6x6iRlyJ0DWFnjZiTuhOpVqSh3L7CbqeBcc9
+         AAP2lOCt2xwkPAa73EC5hAn64oI4y98ZRvAQtOCwUV8iS1wSTbjc5J1bWX3cWk1bWNrb
+         hZnrtafaaFAjqk5B+5WK9KePsCJjrB1q8wtPwu6y5U079El0JREX790ToHxPEaQvdLUC
+         hZKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N0AB2x4qCilYXNN66qpiEjklcJr+ewmZBA/9Mtvh7+Y=;
+        b=nOH1zMfbMcVX6bSC/HVmZU6TNgvO4YLdEqH2GepD+xGbVoY/Z+5Rympy22l5vJqVKD
+         4o6FUKmsgmqIbt9cwHjaQ5Nm7u7fVD4grudRm8UNh4iNKCOvF8hMCVPQQDZvXorbxwcp
+         PfxltPikrE9FB4SHoXL8a+j/thIHSLaSMaG4FCLG8Nbo7B1Ea2UwGGYIXSh9bNwMkepJ
+         mxSWWuKE+S455x2RyVMlonA2+c8iKGt90MiBJxbFGwvybH5ri8zOw1Kc70tL7HF+07ff
+         eYsy77/FhT7hvG487sUyMWePS8Gd82RHZcFL7MAYwpAakd/D7/jU3QkhsumFk2mMOfyk
+         E3SQ==
+X-Gm-Message-State: AFqh2kouzwqJpBjPoG2Xrc5gTXGa5LVTPkIQ2rHOv8gvg47I2ndCtOWm
+        KCL7TYeTkLxfJk4aj/fc9AMnPpNdumf2Cfzt2iU=
+X-Google-Smtp-Source: AMrXdXsdMfEt5J885g1j3Ot5GIl62/nRUiRrClg26yZH58s7d8RhcsuMZq2Q3v4IZVgAMMy7VsYYTksCGBjAyZF+/Gg=
+X-Received: by 2002:a05:6870:1706:b0:144:dffd:8302 with SMTP id
+ h6-20020a056870170600b00144dffd8302mr4104835oae.146.1672943945260; Thu, 05
+ Jan 2023 10:39:05 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|CH2PR10MB4277:EE_
-X-MS-Office365-Filtering-Correlation-Id: aff75cac-e10e-42a2-c3bd-08daef4befa9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dx/ZkUV98kYnSAc+fbtZVt3EJs0RZSFaucoqTseCeCMtKoDUaerlNVJCMUGHKLuD93gn0A4JQa2d8F1L1sfB8ZYWtsG5ZVgLTZstb2kHYBWen9bmsIdkJykk7QRw95jFb8hvRKQPDfrh5XA8FhgcvYqckvOcWlEx36zMtfwOHGpGhE5NMvjxuAMy6ufDHx+lZKHsERIVLzcljsWVpyEHHYlLDf86mi8jTy+YSz7kCLBicQf70Gpf1wkixniYgRVKaRtK3pV/zx+xRrddOHtvuUcyu6V58OPgsjMSwUAjaVuNMhsMezsJN6EKuE2aC7bqgTIn5M9MeTZsnhZes+k9TVWnBfbxGwTnfFAYNTkZmFiVqfE/X7EqexJpnz8ru2hjOLUbJn7jg2Doo4jLT57zUn2UXE+O46FPyxvlr7XkzDgtQoBrWanGTnVYmnP472QPbNR9ahXqYkmrndDrWheT4Qg8HyIpgwk31T4Spwj5FPzlwgi+S5qxv8WpjDvbMpLEWW07rvqXlt5QOnAs+wMGopb0s0YkdJx5OO+N4QT1g70CO/5IGqmIO9Od2epFFBOzenzhA+13sTQ8LtJg7JyggUijximAYeAfKws/Vr5CsBUsKIwLnIOvXf97/0qJj86yX6GqaKppmDoptOJrametkH67kdMjnMGdSBUMND3H/rYs7KdtjHwTCR7FXSrPYn6P
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(366004)(396003)(39860400002)(376002)(346002)(451199015)(6512007)(478600001)(44832011)(9686003)(6486002)(5660300002)(38100700002)(7416002)(8936002)(6506007)(66946007)(33716001)(41300700001)(66899015)(66476007)(4326008)(66556008)(8676002)(53546011)(6666004)(316002)(26005)(6916009)(86362001)(54906003)(83380400001)(2906002)(186003)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+bMAL7Xb7SIxOxttWc1TQ5XWwtlT9hg1VVB7EXxlhNcdGxCb8ikOPYuyWA8n?=
- =?us-ascii?Q?ULI+TbSSS9hqUKvMHq3StHjih4y+UHMrsPfTaQ95HVKWp1rpQa1uljxYJNXx?=
- =?us-ascii?Q?DHMk4qOIsGdUqFg3x31ld9PNwthgaKLnT+b0tXXIz0JyBliI4i1O1ofCnuSs?=
- =?us-ascii?Q?AAn6z5E3bBEwgCSPwVn9BX1WP6+dp9rO7OVBVFjXZC3h2O0IOiTup2dtQCCj?=
- =?us-ascii?Q?byNUjtGGEgI8NlUo9+Yi0lqEwsXTFzc9i8E4zRvYXo1pYngFdiAzgpeX9YDb?=
- =?us-ascii?Q?ggEPvzvUSe+eOYO7C6WzehXvhZ9UYODWOT9I+FS8LL/eLGnWf4FOCzqjb78f?=
- =?us-ascii?Q?aJ72J5qSvtzcpgwDjqiuPs+CON4+z4FcvpaoaJhjNLtwd8CNFk+7S/2p8ZlX?=
- =?us-ascii?Q?geTq1flyxZCS9gl0OqYGFwyKN5ohBYmZxzX9R+TI5LCd8C0FbYj22V+Z7K/j?=
- =?us-ascii?Q?N2XUfXC9lVlHnyTk+vk1zTpITnRQHbYT6daRI8EI+OyaKqe4UPlkb2TS+4HS?=
- =?us-ascii?Q?kJWTBd8MguwGEEoumsQ83KflHRgerxqJUSHDL+u4B6aK7QuqINz1CLg+Cmwq?=
- =?us-ascii?Q?vhJr3z8pv7fBIdHmcF9u1dEBJXr1+CAUt7BRlIaGfQCD7bcuRhBUO21Z7MSQ?=
- =?us-ascii?Q?vgw0FPKZmbnQ09RHPE4mvF+/FYlPpv9H6+kY1lZL3kxRuPgfhvgu2VvfZidt?=
- =?us-ascii?Q?0h49h1MVNUXSiDtOuGvpTW2xXNSBYlIepUwcc+VtXifUUpwb8vD+ER/CgNDH?=
- =?us-ascii?Q?zMuvzDxeSRB4MwI0H4+L+EJNGvENEUBrnwgAJ17YVZIcuJrEoma2U+QrCXlm?=
- =?us-ascii?Q?7afhOsD5kw4tCmaqhxk95VCJsYR2m96omtccyx+qGVobWm5eNogf9m93nawC?=
- =?us-ascii?Q?gqFooyn4c6YuHT3i+Coxb3cdhz6rtdkGJFldfaKSxqDIDyJJ/ihlacYXdeWL?=
- =?us-ascii?Q?+thbSOBs3WqQJ1RATxuCrJBUOE6MXdoyy5Yoctj7uXNYbwE6ekCDMawr6jo4?=
- =?us-ascii?Q?T1uWRmnIHasHQi7uPJm9tdI4XMMokOlegMw11J5+o4wzAljX5v0rvphhE6Ly?=
- =?us-ascii?Q?NkEWVvx+hdnEQfryoTtdMB62mEeXqIxvM2yVWxQPy9PkPZPhrqQle6A8Ea7K?=
- =?us-ascii?Q?Pcz6giDxy9E7MBl7RCb5auXGKLxOYU8ita5mDFOFQrbIFPoGoO5EibRJwW7+?=
- =?us-ascii?Q?A26sB2sU21TjCcq244lvWsBQjgIDzLuDFLHwygbgue5QFWqvqL2pqledP3O+?=
- =?us-ascii?Q?1tW8ve7WeElmADTEULHTmVc6VWuXm7Z06LI5s8Kn87dI2W5EAYfKL/Y2Oaa0?=
- =?us-ascii?Q?8aExaSPfv0szbQHYhF/bAsm8+wmxMDWjuIrtc01gXNjLgUlHGp5whhgmDBzQ?=
- =?us-ascii?Q?QuHINBRpGqZHKTIS+7YmlzqWfeOGCBH29/Ion+sgp6BsnkwWacApJaMnTnQT?=
- =?us-ascii?Q?khbW847SEP7DHdFSKZLmYDtjNDV6F8mLrSeOaH8tOi7z6C3M+p3cfs2X8RK9?=
- =?us-ascii?Q?xh73Jo8Dx8LOeGVow8Kn4HVlNIahxqBj/ntyRPk1hjpW8sJZYxGPM2yu10Od?=
- =?us-ascii?Q?q2xVGXz41+PavpBaRzx7oyBE/fUYQYg3waTTwJsidsaFgxBZdXAS68WxRc93?=
- =?us-ascii?Q?sA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?0aC7F4NxP8vLgu334HCPXAIkz2dJqnPo3oEw2wF2CKBNERNpPjaCh8UhWB2H?=
- =?us-ascii?Q?tKY5xUfFGw68IgbD0/sqSOZBnNJG1+zfD7ejF1ty2Uwr8s9nmqO+GpKSX9/e?=
- =?us-ascii?Q?R7NnzUxsMh+MqvsLpVms3wo0jaeYzCYNsMfu3RtmJRwZVamIA1x5rmG1SMk2?=
- =?us-ascii?Q?4t4qMD3JaoiSL6Pfx9mMXJC4bD5PVB2OWPG1KmX1vhYzwSyd4KVtxnka7MlL?=
- =?us-ascii?Q?1MPCbOKMp8blgkyao6jhPCtH6BqEp8Wq5UEEgRVT6bkk3pxF103JoFbdvLjW?=
- =?us-ascii?Q?lJcTIPDBT42DS5zwYtduUp7Zct9KSiVN4TvCCAd8LTyczYlegNWY1YWoNEp8?=
- =?us-ascii?Q?O6NNODnffWdtjMMDVeafxsg+uQoqB2MFR8QfwJk9AXhTzeFiYCxeJEFPQ4+z?=
- =?us-ascii?Q?Mc/e4CoLclregVwlCUYKj3zA6VrgBZx7JB0W+++ZJJLiciACsv0c1/D0MLmD?=
- =?us-ascii?Q?3/EI3Kttw4YkpsXRxVVxLKIxwXIYes/G0IRTlHC+Tco+yTBO782adzUfk3SU?=
- =?us-ascii?Q?noAKR18IBxexy0rMQiuTO++pBzxxOIFDxf8QCcrJUSb6d6afIxFXPcpnctIt?=
- =?us-ascii?Q?9TDec9RRmrlGUyR7x71QUqeo2zewsQ8smtvX63iZb9blvZQWr0m2TLsYKcg6?=
- =?us-ascii?Q?+DhznqrvKeYTu6rz1zgXFySAte1VFDzsvwdaoXyZa0oaxfnQOOU3cV7Nb/ys?=
- =?us-ascii?Q?bxQKX7AI3C37QEoTU3/1082GNANmtESWYuG2FwJnrM863EmDDZ4Jp4S0UB1v?=
- =?us-ascii?Q?ZCN+A/Y95nF8BMiwxBW9vOv0RYk60ya/lJcwGBVeiZ8kQo4W+6XGuxiac6Q9?=
- =?us-ascii?Q?lkPW40sesnHr9TZtkPsU5TUwipSIdaXMqTc+W8y0cLPwM6AGotQpp9Pt1+O6?=
- =?us-ascii?Q?zDluICvHpn1GJBzk4YsVQTI1ogtETztBiHL12yqXUwqMKXw/U+dgoRd7HSTA?=
- =?us-ascii?Q?6/0L6ZuVqcWifpt34my1e7fxAhzoWUwA6Qb+hZF7xgD8vSm++hYjog5V3TnP?=
- =?us-ascii?Q?196+sVlNQsWjONAC31R1tABdxLPq2iBERf61ZZMwIhMOl7RtHlftcHqKkyq0?=
- =?us-ascii?Q?4H37bENu6e3pDj5QBovnVj9T/aWa5Q=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aff75cac-e10e-42a2-c3bd-08daef4befa9
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 18:37:45.1780
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bRKnQWzgSsiMCQOslihvFNPukbJag8QQuPvXqydiha7FNcU8lvi2WIaYAjo8pPGh6OCsIf8i7XtEqIxD7BJsxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4277
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_10,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 adultscore=0
- spamscore=0 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301050146
-X-Proofpoint-ORIG-GUID: _EfQqk_SsORFK8a33fYErqCKVRojCABx
-X-Proofpoint-GUID: _EfQqk_SsORFK8a33fYErqCKVRojCABx
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221230063528.41037-1-zh.nvgt@gmail.com> <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
+ <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com> <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
+In-Reply-To: <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
+From:   Hang Zhang <zh.nvgt@gmail.com>
+Date:   Thu, 5 Jan 2023 13:38:54 -0500
+Message-ID: <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com>
+Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with console_lock()
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/23 17:52, Peter Xu wrote:
-> Userfaultfd-wp uses pte markers to mark wr-protected pages for both shmem
-> and hugetlb.  Shmem has pre-allocation ready for markers, but hugetlb path
-> was overlooked.
-> 
-> Doing so by calling huge_pte_alloc() if the initial pgtable walk fails to
-> find the huge ptep.  It's possible that huge_pte_alloc() can fail with high
-> memory pressure, in that case stop the loop immediately and fail silently.
-> This is not the most ideal solution but it matches with what we do with
-> shmem meanwhile it avoids the splat in dmesg.
-> 
-> Cc: linux-stable <stable@vger.kernel.org> # 5.19+
-> Fixes: 60dfaad65aa9 ("mm/hugetlb: allow uffd wr-protect none ptes")
-> Reported-by: James Houghton <jthoughton@google.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  mm/hugetlb.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+On Thu, Jan 5, 2023 at 5:25 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > Hi Helge
+> >
+> > On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
+> > >
+> > > On 12/30/22 07:35, Hang Zhang wrote:
+> > > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
+> > > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
+> > > > con2fb_release_oldinfo(), this free operation is protected by
+> > > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
+> > > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
+> > > > so that it can be checked to avoid use-after-free before the use sites
+> > > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
+> > > > the problem is that the use site is not protected by the same locks
+> > > > as for the free operation, e.g., "default" case in do_fb_ioctl()
+> > > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
+> > > > which can invalidate the aforementioned state set and check in a
+> > > > concurrent setting.
+> > > >
+> > > > Prevent the potential use-after-free issues by protecting the "default"
+> > > > case in do_fb_ioctl() with console_lock(), similarly as for many other
+> > > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
+> > > >
+> > > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> > >
+> > > applied to fbdev git tree.
+> >
+> > The patch above makes no sense at all to me:
+> >
+> > - fb_info is protected by lock_fb_info and
+> > - the lifetime of fb_info is protected by the get/put functions
+> > - yes there's the interaction with con2fb, which is protected by
+> > console_lock, but the lifetime guarantees are ensured by the device
+> > removal
+> > - which means any stuff happening in matroxfb_remove is also not a
+> > concern here (unless matroxfb completely gets all the device lifetime
+> > stuff wrong, but it doesn't look like it's any worse than any of the
+> > other fbdev drivers that we haven't recently fixed up due to the
+> > takeover issues with firmware drivers
+>
+> I have also a really hard timing finding the con2fb map use in the
+> matroxfb ioctl code, but that just might be that I didn't look
+> carefully enough. Maybe that would shed some light on this.
+> -Daniel
+>
+>
+> >
+> > On the very clear downside this now means we take console_lock for the
+> > vblank ioctl (which is a device driver extension for reasons, despite
+> > that it's a standard fbdev ioctl), which is no good at all given how
+> > console_lock() is a really expensive lock.
+> >
+> > Unless I'm massively missing something, can you pls push the revert
+> > before this lands in Linus' tree?
+> >
+> > Thanks, Daniel
 
-Thanks Peter and James!
+Hi, Daniel. Thank you for your feedback. We're not developers of the
+video subsystem and thus may be short in domain knowledge (e.g., the
+performance of console_lock() and the complex lifetime management).
+This patch initially intended to bring up the potential use-after-free
+issues here to the community - we have performed a best-effort code
+review and cannot exclude the possibility based on our understanding.
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
--- 
-Mike Kravetz
+What we have observed is that the call chain leading to the free site
+(do_fb_ioctl()->fbcon_set_con2fb_map_ioctl()->set_con2fb_map()->
+con2fb_release_oldinfo()-> ... ->matroxfb_remove()) is only protected
+by console_lock() but not lock_fb_info(), while the potential use
+site (call chain starts from the default case in do_fb_ioctl()) is
+only protected by lock_fb_info() but not console_lock().
+We thus propose to add this extra console_lock() to the default case,
+which is inspired by the lock protection of many other existing
+switch-case terms in the same function.
 
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index bf7a1f628357..017d9159cddf 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6649,8 +6649,17 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
->  		spinlock_t *ptl;
->  		ptep = hugetlb_walk(vma, address, psize);
->  		if (!ptep) {
-> -			address |= last_addr_mask;
-> -			continue;
-> +			if (!uffd_wp) {
-> +				address |= last_addr_mask;
-> +				continue;
-> +			}
-> +			/*
-> +			 * Userfaultfd wr-protect requires pgtable
-> +			 * pre-allocations to install pte markers.
-> +			 */
-> +			ptep = huge_pte_alloc(mm, vma, address, psize);
-> +			if (!ptep)
-> +				break;
->  		}
->  		ptl = huge_pte_lock(h, mm, ptep);
->  		if (huge_pmd_unshare(mm, vma, address, ptep)) {
-> -- 
-> 2.37.3
-> 
+Since we do not have deep domain knowledge of this subsystem, we will
+rely on the developers to make a decision regarding the patch. Thank
+you again for your review and help!
+
+Best,
+Hang
+
+> >
+> > > Thanks,
+> > > Helge
+> > >
+> > > > ---
+> > > >   drivers/video/fbdev/core/fbmem.c | 2 ++
+> > > >   1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+> > > > index 1e70d8c67653..8b1a1527d18a 100644
+> > > > --- a/drivers/video/fbdev/core/fbmem.c
+> > > > +++ b/drivers/video/fbdev/core/fbmem.c
+> > > > @@ -1182,6 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+> > > >               console_unlock();
+> > > >               break;
+> > > >       default:
+> > > > +             console_lock();
+> > > >               lock_fb_info(info);
+> > > >               fb = info->fbops;
+> > > >               if (fb->fb_ioctl)
+> > > > @@ -1189,6 +1190,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+> > > >               else
+> > > >                       ret = -ENOTTY;
+> > > >               unlock_fb_info(info);
+> > > > +             console_unlock();
+> > > >       }
+> > > >       return ret;
+> > > >   }
+> > >
+> >
+> >
+> > --
+> > Daniel Vetter
+> > Software Engineer, Intel Corporation
+> > http://blog.ffwll.ch
+>
+>
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
