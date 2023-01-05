@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6878E65E1B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A965E1D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjAEAh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S240663AbjAEAmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbjAEAhE (ORCPT
+        with ESMTP id S240655AbjAEAip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:37:04 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20539B80
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 16:37:03 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id i20so28789958qtw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 16:37:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h4eXR7+DTXCTaYZ/SdHjg2xu1hwBwg3cWqSb9OuDM9Y=;
-        b=RuWR1y5qjlv+GrqbkjNVxnJ1b79YNDxZsoLwsEER/oFFJBQm5x6N9YstduZzZTb6Rm
-         pGK1H1fm2x5F7gELgYGhzi7BuYAnEKvZrjR+ACIhtJ/5c45nyHeQ6tYXlnkNSPriDycX
-         xzWbn4hDyZ9glm+F30XNjlcnEFGnrD0VhhtIoMqJhOccznsqLSvEj58av5OuRCjiNKJa
-         i5fHnglchNjxLo+XCOSrsVIMEEcpgfQHaMEFVWYgZqSeGa7z1uToZeqW8E52S9DS2WjS
-         z5+gpoqxe0oxAbByAKWECScZ2UoJwiCZUsNRUarxMQQwG8fhfqnfmUtzUPD9veXfJnI0
-         bkrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h4eXR7+DTXCTaYZ/SdHjg2xu1hwBwg3cWqSb9OuDM9Y=;
-        b=jo9ketILEG5owl98JIavapqZEk68oPHHwOQVWNVbwYsXJbou66cx/t6JBeASQa2VT+
-         bQocqux6qklXmq53Ed0mN2DPnyEVTh9vHjPESMB7/iZ/wJcBPXc7OM74sGWuDIheyugs
-         qyF1+8tKcpfwV60z62Hsgd1vhABvQnbz7pH4MjDv8g1ESeolJDoaoFFI0JljZuk4XB6y
-         VlIayjs75xtKBYxQBuzQ4iwqYkf3j48yzHK1YTA0EoOcHUot8p/i+RTTPwHP/ZyReFky
-         wRBUFbE+o6u8yLGGCJ6YpQ14YyP0tOA09u26bwpjoFUFXasft4rTK7LI10cMlkJq2miN
-         pLlA==
-X-Gm-Message-State: AFqh2kodYTRFUipnSDqgrEBI9+7/KZVAyRVd/6xItTLl7/TOPE/1uris
-        huPdspLnU4ihnnrUzVf3uV4HLQ==
-X-Google-Smtp-Source: AMrXdXvZgQTTb4PUtMb76x1Pe4izfq9PQPMxvPuvugTAIW0gC2/RPdPwYROSYBilceCjmxuBfEoSag==
-X-Received: by 2002:ac8:7450:0:b0:3a7:e599:1ee0 with SMTP id h16-20020ac87450000000b003a7e5991ee0mr59001669qtr.63.1672879022216;
-        Wed, 04 Jan 2023 16:37:02 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87744000000b003a7f597dc60sm20987642qtu.72.2023.01.04.16.36.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Jan 2023 16:37:01 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
-Date:   Wed, 4 Jan 2023 16:36:51 -0800
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        christian.brauner@ubuntu.com,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-m68k@lists.linux-m68k.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2575F983-D170-4B79-A6BA-912D4ED2CC73@dubeyko.com>
-References: <000000000000dbce4e05f170f289@google.com>
- <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
- <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
- <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 19:38:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BAC327;
+        Wed,  4 Jan 2023 16:38:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A23C261886;
+        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B91FC433D2;
+        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672879095;
+        bh=Csa7ZOvocT4iHE2+eFHJkdwdqaRGDl3I3p+hry5hXgc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uQIDbChw8YO6o7XPlNJcgIE+x0DZX/DlurmnU8opQn7/BIOPNsCDUollJiqi4bc55
+         FUAUQqBDPi1gvF8QBqkZFaMxtinhx5MAqAXqXTpEYUr4z6pB0aopwLXBxpdevF3RW3
+         jrGk9OUAXy2NOoLkaYXy3LdJ3LfCxEIL+IRL2JMDu5Ygi9IQWVcnm7v8xHtYihzuaW
+         c7yoiYtYFTE7KJYPkpEPRWnOhdsZV3W6448meglV3pNnV9XLZQ4iBnJch8YSZ85PWK
+         jcJYS4wfOrvgIoTJ7X3VHrpRcLwRiYiT0jZzpnjX4JoN4h/hIF2Qd/a6/9T9Q5ede1
+         QB26Gbw1B5aoQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B54025C05CA; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH rcu 01/27] arch/x86: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:37:47 -0800
+Message-Id: <20230105003813.1770367-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Now that the SRCU Kconfig option is unconditionally selected, there is
+no longer any point in selecting it.  Therefore, remove the "select SRCU"
+Kconfig statements.
 
-> On Jan 4, 2023, at 2:33 PM, Arnd Bergmann <arnd@arndb.de> wrote:
->=20
-> On Wed, Jan 4, 2023, at 20:06, Linus Torvalds wrote:
->>=20
->> I suspect this code is basically all dead. =46rom what I can tell, =
-hfs
->> only gets updates for
->>=20
->> (a) syzbot reports
->>=20
->> (b) vfs interface changes
->=20
-> There is clearly no new work going into it, and most data exchange
-> with MacOS would use HFS+, but I think there are still some users.
->=20
->> and the last real changes seem to have been by Ernesto A. Fern=C3=A1nde=
-z
->> back in 2018.
->>=20
->> Hmm. Looking at that code, we have another bug in there, introduced =
-by
->> an earlier fix for a similar issue: commit 8d824e69d9f3 ("hfs: fix =
-OOB
->> Read in __hfs_brec_find") added
->>=20
->> +       if (HFS_I(main_inode)->cat_key.CName.len > HFS_NAMELEN)
->> +               return -EIO;
->>=20
->> but it's after hfs_find_init(), so it should actually have done a
->> hfs_find_exit() to not leak memory.
->>=20
->> So we should probably fix that too.
->>=20
->> Something like this ENTIRELY UNTESTED patch?
->>=20
->> Do we have anybody who looks at hfs?
->=20
-> Adding Viacheslav Dubeyko to Cc, he's at least been reviewing
-> patches for HFS and HFS+ somewhat recently. The linux-m68k
-> list may have some users dual-booting old MacOS.
->=20
-> Viacheslav, see the start of the thread at
-> https://lore.kernel.org/lkml/000000000000dbce4e05f170f289@google.com/
->=20
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: <x86@kernel.org>
+Cc: <kvm@vger.kernel.org>
+---
+ arch/x86/Kconfig     | 2 --
+ arch/x86/kvm/Kconfig | 1 -
+ 2 files changed, 3 deletions(-)
 
-Let me take a look into the issue.
-
-Thanks,
-Slava.
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074a878b8..4a9175fe7dd18 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -283,7 +283,6 @@ config X86
+ 	select RTC_LIB
+ 	select RTC_MC146818_LIB
+ 	select SPARSE_IRQ
+-	select SRCU
+ 	select SYSCTL_EXCEPTION_TRACE
+ 	select THREAD_INFO_IN_TASK
+ 	select TRACE_IRQFLAGS_SUPPORT
+@@ -1938,7 +1937,6 @@ config X86_SGX
+ 	depends on X86_64 && CPU_SUP_INTEL && X86_X2APIC
+ 	depends on CRYPTO=y
+ 	depends on CRYPTO_SHA256=y
+-	select SRCU
+ 	select MMU_NOTIFIER
+ 	select NUMA_KEEP_MEMINFO if NUMA
+ 	select XARRAY_MULTI
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index fbeaa9ddef598..9306d99585188 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -46,7 +46,6 @@ config KVM
+ 	select KVM_XFER_TO_GUEST_WORK
+ 	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+ 	select KVM_VFIO
+-	select SRCU
+ 	select INTERVAL_TREE
+ 	select HAVE_KVM_PM_NOTIFIER if PM
+ 	help
+-- 
+2.31.1.189.g2e36527f23
 
