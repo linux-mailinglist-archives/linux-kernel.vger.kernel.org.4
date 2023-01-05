@@ -2,75 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF2C65EEAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BEA65EEB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbjAEOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S233548AbjAEO0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbjAEOZG (ORCPT
+        with ESMTP id S231834AbjAEO0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:25:06 -0500
-Received: from 163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2665F559C3
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=3GW9Z5cfgz8pMeZ04XtLdblMO6HBSQ4K2QmhpdPFwtI=; b=i
-        JDbvGMtGWRwMnS4DfkqFXRRnTNRQSv5Bs7neods8M3lbHIf2rrGdlaKKWh6e68w0
-        ofNeh3J9acWZ540IuKOqXJvHLj7k7w4CVs6iGvXy9NT2xQJLokwEtVUF1v6Rf924
-        VfVGQWza33XgLDRL+qKZuuBq2lhf17dahL9oaeVfNg=
-Received: from 00107082$163.com ( [222.64.110.75] ) by ajax-webmail-wmsvr57
- (Coremail) ; Thu, 5 Jan 2023 22:24:55 +0800 (CST)
-X-Originating-IP: [222.64.110.75]
-Date:   Thu, 5 Jan 2023 22:24:55 +0800 (CST)
-From:   "David Wang" <00107082@163.com>
-To:     linux-kernel@vger.kernel.org
-Subject: [proc/vmstat]set nr_kernel_stack in vmstat to nr_threads
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220708(c4627114)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-X-NTES-SC: AL_QuycAPWZt04i4ymZZekZnEoUjug3W8K5v/kk3Y9VOp80uSrB3DkQRmFEH2bS4cijKz+2rga6dTpM48dRVJlcTa41Z5AdEw8Ny3ZhjGVrE2Ww
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Thu, 5 Jan 2023 09:26:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71E934762;
+        Thu,  5 Jan 2023 06:26:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7D29D2434D;
+        Thu,  5 Jan 2023 14:25:41 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4799C13338;
+        Thu,  5 Jan 2023 14:25:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J9S5EOXdtmMLCwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 05 Jan 2023 14:25:41 +0000
+Message-ID: <370a2808-a19b-b512-4cd3-72dc69dfe8b0@suse.cz>
+Date:   Thu, 5 Jan 2023 15:25:40 +0100
 MIME-Version: 1.0
-Message-ID: <41beab3a.4f68.1858252166b.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wBnasq43bZjeo4CAA--.15258W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbivBftqmASalA6wwAAsd
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Johannes Altmanninger <aclopte@gmail.com>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+ <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Authentication-Results: smtp-out2.suse.de;
+        none
+X-Spam-Level: 
+X-Spam-Score: -0.10
+X-Spamd-Result: default: False [-0.10 / 50.00];
+         ARC_NA(0.00)[];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
+         MIME_GOOD(-0.10)[text/plain];
+         RCPT_COUNT_TWELVE(0.00)[14];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         RCVD_TLS_ALL(0.00)[];
+         MID_RHS_MATCH_FROM(0.00)[];
+         FREEMAIL_CC(0.00)[gmx.de,kernel.org,ziepe.ca,semihalf.com,lists.linux.dev,vger.kernel.org,dominikbrodowski.net,gondor.apana.org.au,linux-foundation.org,zx2c4.com,gmail.com]
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bnJfa2VybmVsX3N0YWNrIGluIC9wcm9jL3Ztc3RhdCBpcyB2ZXJ5IGNvbmZ1c2luZywgaXRzIHZh
-bHVlIGlzIG5vdyB0aGUgc2FtZSBhcyBLZXJuZWxTdGFjayBpbiAvcHJvYy9tZW1pbmZvLAppbmRp
-Y2F0aW5nIGtlcm5lbCBzdGFjayBtZW1vcnkgdXNhZ2UgaW4gS0IuICBJdCB3b3VsZCBiZSBoZWxw
-ZnVsIHRvIGV4cG9zZSBhIHN0YXQgYWJvdXQgdGhlIG51bWJlciBvZiBrZXJuZWwgdGhyZWFkLAoo
-dGhlIHN5c2luZm8gc3lzY2FsbCByZXR1cm4gYSBwcm9jIG51bWJlciB3aXRoIHR5cGUgVTE2LCBv
-dmVyZmxvdyB3b3VsZCBoYXBwZW4pLiBUaGlzIHBhdGNoIHNldCBucl9rZXJuZWxfc3RhY2sgaW4g
-L3Byb2Mvdm1zdGF0CnRvIGEgdmFsdWUgZGVmaW5lZCBieSBhIGdsb2JhbCB2YXJpYWJsZSBucl90
-aHJlYWRzLgoKLS0KZGlmZiAtLWdpdCBhL21tL3Ztc3RhdC5jIGIvbW0vdm1zdGF0LmMKaW5kZXgg
-MWVhNmE1Y2UxYzQxLi4wMDQwYmVhYTFiMjQgMTAwNjQ0Ci0tLSBhL21tL3Ztc3RhdC5jCisrKyBi
-L21tL3Ztc3RhdC5jCkBAIC0yOCw2ICsyOCw3IEBACiAjaW5jbHVkZSA8bGludXgvbW1faW5saW5l
-Lmg+CiAjaW5jbHVkZSA8bGludXgvcGFnZV9leHQuaD4KICNpbmNsdWRlIDxsaW51eC9wYWdlX293
-bmVyLmg+CisjaW5jbHVkZSA8bGludXgvc2NoZWQvc3RhdC5oPgogCiAjaW5jbHVkZSAiaW50ZXJu
-YWwuaCIKIApAQCAtMTgzMSw5ICsxODMyLDIwIEBAIHN0YXRpYyBpbnQgdm1zdGF0X3Nob3coc3Ry
-dWN0IHNlcV9maWxlICptLCB2b2lkICphcmcpCiB7CiAgICAgICAgdW5zaWduZWQgbG9uZyAqbCA9
-IGFyZzsKICAgICAgICB1bnNpZ25lZCBsb25nIG9mZiA9IGwgLSAodW5zaWduZWQgbG9uZyAqKW0t
-PnByaXZhdGU7Ci0KKyAgICBzdGF0aWMgbG9uZyBua3NfaSA9IC0xOyAvLyBpbmRleCBmb3IgbnJf
-a2VybmVsX3N0YWNrCisgICAgaWYgKG5rc19pIDwgMCAmJiBua3NfaSA+IC0xMjgpIHsKKyAgICAg
-ICAgaWYgKHN0cmNtcCgibnJfa2VybmVsX3N0YWNrIiwgdm1zdGF0X3RleHRbb2ZmXSkgPT0gMCkg
-eworICAgICAgICAgICAgbmtzX2kgPSBvZmY7CisgICAgICAgIH0gZWxzZSB7CisgICAgICAgICAg
-ICBua3NfaS0tOworICAgICAgICB9CisgICAgfQogICAgICAgIHNlcV9wdXRzKG0sIHZtc3RhdF90
-ZXh0W29mZl0pOwotICAgICAgIHNlcV9wdXRfZGVjaW1hbF91bGwobSwgIiAiLCAqbCk7CisgICAg
-aWYgKG5rc19pID09IG9mZikgeworICAgICAgICBzZXFfcHV0X2RlY2ltYWxfdWxsKG0sICIgIiwg
-bnJfdGhyZWFkcyk7CisgICAgfSBlbHNlIHsKKyAgICAgICAgc2VxX3B1dF9kZWNpbWFsX3VsbCht
-LCAiICIsICpsKTsKKyAgICB9CiAgICAgICAgc2VxX3B1dGMobSwgJ1xuJyk7CiAKICAgICAgICBp
-ZiAob2ZmID09IE5SX1ZNU1RBVF9JVEVNUyAtIDEpIHsKCi0tCgoKRGF2aWQKCg==
+On 1/5/23 14:59, Thorsten Leemhuis wrote:
+> On 29.12.22 05:03, Jason A. Donenfeld wrote:
+>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
+>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
+>>>> "tpm_try_transmit" error this time. The first indication of a problem
+>>>> is this during a resume from suspend to ram:
+>>>>
+>>>> tpm tpm0: A TPM error (28) occurred continue selftest
+>>>>
+>>>> and then periodically 
+>>>>
+>>>> tpm tpm0: A TPM error (28) occurred attempting get random
+>>>
+>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
+>>> original problem was reported against TPM 2.0  because of a missing
+>>> try_get_ops().
+>> 
+>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
+>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
+>> considering it's the same hardware from Vlastimil causing this. I also
+>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
+>> that's not correct.
+> 
+> James, are you or some other TPM developer looking into this? Or is this
+> deadlocked now? And if so: how can we get this unstuck to get this
+> regression solved?
+> 
+> Side note: I wonder if the problem that Johannes reported yesterday in
+> this thread (
+> https://lore.kernel.org/all/Y7VCcgHUC6JtnO2b@gmail.com/
+> ) is related or something else, as it seems his issue happens with 6.1,
+> while Vlastimil's problems should be fixed there. Or am I missing something?
+
+Yaeh, as Jason noted, the fix in 6.1 probably covered only the most common
+race scenario, yet other(s) were still possible, just more rare. So most
+likely I just happened not to trigger it anymore with 6.1, only after
+switching to 6.2 - but it's not really a new bug in 6.2. And 6.1 also only
+started to exhibit it because hwrng started using the tpm, which would just
+sit unused before that.
+
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+
