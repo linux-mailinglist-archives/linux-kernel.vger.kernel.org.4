@@ -2,85 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B9265EA8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 542D865EA96
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbjAEMSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S233077AbjAEMTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbjAEMSE (ORCPT
+        with ESMTP id S232992AbjAEMT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:18:04 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5785C4FCE1;
-        Thu,  5 Jan 2023 04:18:03 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NnlqF4skCz6FK2Q;
-        Thu,  5 Jan 2023 20:18:01 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl2.zte.com.cn with SMTP id 305CHs0m064884;
-        Thu, 5 Jan 2023 20:17:54 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 5 Jan 2023 20:17:57 +0800 (CST)
-Date:   Thu, 5 Jan 2023 20:17:57 +0800 (CST)
-X-Zmail-TransId: 2b0363b6bff5ffffffff94a6df4f
-X-Mailer: Zmail v1.0
-Message-ID: <202301052017571305723@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <rostedt@goodmis.org>
-Cc:     <mhiramat@kernel.org>, <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHJjdS90cmFjZTogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 305CHs0m064884
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63B6BFF9.000 by FangMail milter!
-X-FangMail-Envelope: 1672921081/4NnlqF4skCz6FK2Q/63B6BFF9.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63B6BFF9.000/4NnlqF4skCz6FK2Q
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 5 Jan 2023 07:19:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A7D4FCFE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672921122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpuMYEsePXzx9kv6GFcWl6NcxTKfD6zAAzJE3ZeIEQU=;
+        b=K0YLJJupxBrAqJROa62g98AZ8E5BQjNnsQe/FAUCltcibStAtuWKlBhObPdn3rwN4gx0+w
+        R70lH5UZoIS/5Pev30WK6rP5KkY3p0u7stvWdlwxU7o/gISZfrtsMv9p0i9bAQ9plQjvEO
+        XlGOLJcibwkNCaxjn7OJd/r7t8dTySA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-63-uPn-WkMIMgiz3SZcR6MuXg-1; Thu, 05 Jan 2023 07:18:41 -0500
+X-MC-Unique: uPn-WkMIMgiz3SZcR6MuXg-1
+Received: by mail-wm1-f71.google.com with SMTP id j1-20020a05600c1c0100b003d99070f529so907166wms.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:18:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UpuMYEsePXzx9kv6GFcWl6NcxTKfD6zAAzJE3ZeIEQU=;
+        b=YFDVvzu300sEtuPr+4yH+AgoUzBuadRgqCgM2kn0ct7ZrryKnvNb7hbDv4OPPjJEoo
+         lRm/nSA9hFZKvT28cpGiDnRc3KiR/JlbKFjeTjwmr5aoBOHVBMHVf2MxIUXVinh0KEC2
+         XiNv4tXFXSSkvcJtTLcXJ6x8qgvA8zuf+iksD/+CevtRJzCZlkmtLqTxX7S6oQoAxfVL
+         J88Vpc6uPwkZ0h1ESbyRgC1f8uIRHb/Gn5uElA5Q5ufrd7ISGRge6HkeaHZfNpsb8Eh6
+         /BPiUPUqTVsiRis4kO36CSFW4UC0+1YLSIKYVAQWqLHKQMgflPorLyawBvkgQXAjMIsP
+         dtSA==
+X-Gm-Message-State: AFqh2krxzf1QnYg5u05YJFK7Dhh6giZisl9CrecdnclKR+Db2TUQQAFs
+        myKTdbbW6H7PbNN48yzSMWK3gZzTJBBddpn3YWLpb4EPU9pgj85oi382z3UB2QJEzUKZhUC/JpS
+        Gk5PAAUdO2wj69TpWMXMGN4v8
+X-Received: by 2002:adf:e19d:0:b0:28f:29b3:1a7f with SMTP id az29-20020adfe19d000000b0028f29b31a7fmr15595054wrb.36.1672921120493;
+        Thu, 05 Jan 2023 04:18:40 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvq09fSoIEeG5qGPLrKcrVN6jrNUhwHquWZJZyMNzUSQSucWjIritMW8MPP8tUoPSh+7mQ1vw==
+X-Received: by 2002:adf:e19d:0:b0:28f:29b3:1a7f with SMTP id az29-20020adfe19d000000b0028f29b31a7fmr15595018wrb.36.1672921120215;
+        Thu, 05 Jan 2023 04:18:40 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e? (p200300cbc7076e00ff02ec7aded5ec1e.dip0.t-ipconnect.de. [2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e])
+        by smtp.gmail.com with ESMTPSA id d14-20020adfa40e000000b0029d9ed7e707sm8462775wra.44.2023.01.05.04.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 04:18:39 -0800 (PST)
+Message-ID: <02312607-e399-b859-ffc8-ea65a560fe3f@redhat.com>
+Date:   Thu, 5 Jan 2023 13:18:38 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/1] mm: fix vma->anon_name memory leak for anonymous
+ shmem VMAs
+To:     =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     hughd@google.com, hannes@cmpxchg.org, vincent.whitchurch@axis.com,
+        seanjc@google.com, rppt@kernel.org, shy828301@gmail.com,
+        pasha.tatashin@soleen.com, paul.gortmaker@windriver.com,
+        peterx@redhat.com, vbabka@suse.cz, Liam.Howlett@oracle.com,
+        ccross@google.com, willy@infradead.org, arnd@arndb.de,
+        cgel.zte@gmail.com, yuzhao@google.com, bagasdotme@gmail.com,
+        suleiman@google.com, steven@liquorix.net, heftig@archlinux.org,
+        cuigaosheng1@huawei.com, kirill@shutemov.name,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org,
+        syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
+References: <20230105000241.1450843-1-surenb@google.com>
+ <20230104173855.48e8734a25c08d7d7587d508@linux-foundation.org>
+ <CAJuCfpGHMeWSSp+ge3pPppLrQ5BpGiga=fjKmDk65GTjFDV=3w@mail.gmail.com>
+ <ed9dc172-e519-3fd5-afa4-0089b083ee10@redhat.com>
+ <22aab888-75c1-ffad-d72b-f87c9d9d80c8@applied-asynchrony.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <22aab888-75c1-ffad-d72b-f87c9d9d80c8@applied-asynchrony.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On 05.01.23 13:07, Holger Hoffstätte wrote:
+> On 2023-01-05 10:03, David Hildenbrand wrote:
+>> On 05.01.23 03:39, Suren Baghdasaryan wrote:
+>>> On Wed, Jan 4, 2023 at 5:38 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>>>>
+>>>> On Wed,  4 Jan 2023 16:02:40 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+>>>>
+>>>>> free_anon_vma_name() is missing a check for anonymous shmem VMA which
+>>>>> leads to a memory leak due to refcount not being dropped.  Fix this by
+>>>>> calling anon_vma_name_put() unconditionally. It will free vma->anon_name
+>>>>> whenever it's non-NULL.
+>>>>>
+>>>>> Fixes: d09e8ca6cb93 ("mm: anonymous shared memory naming")
+>>>>
+>>>> A cc:stable is appropriate here, yes?
+>>>
+>>> Hmm. The patch we are fixing here was merged in 6.2-rc1. Should I CC
+>>> stable to fix the previous -rc branch?
+>>>
+>>
+>> No need for stable if it's not in a release kernel yet.
+> 
+> Commit d09e8ca6cb93 is in 6.1. The fix applies cleanly.
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL-terminated strings.
+$ git tag --contains d09e8ca6cb93 | grep "^v"
+v6.2-rc1
+v6.2-rc2
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
----
- include/trace/events/rcu.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Doesn't look like 6.1 to me.
 
-diff --git a/include/trace/events/rcu.h b/include/trace/events/rcu.h
-index 90b2fb0292cb..2703992edecd 100644
---- a/include/trace/events/rcu.h
-+++ b/include/trace/events/rcu.h
-@@ -776,9 +776,8 @@ TRACE_EVENT_RCU(rcu_torture_read,
- 	),
-
- 	TP_fast_assign(
--		strncpy(__entry->rcutorturename, rcutorturename,
-+		strscpy(__entry->rcutorturename, rcutorturename,
- 			RCUTORTURENAME_LEN);
--		__entry->rcutorturename[RCUTORTURENAME_LEN - 1] = 0;
- 		__entry->rhp = rhp;
- 		__entry->secs = secs;
- 		__entry->c_old = c_old;
 -- 
-2.15.2
+Thanks,
+
+David / dhildenb
+
