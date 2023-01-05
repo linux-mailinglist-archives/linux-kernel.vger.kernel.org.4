@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613A765F6E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6787565F6E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236128AbjAEWeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S236116AbjAEWgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236212AbjAEWeF (ORCPT
+        with ESMTP id S235681AbjAEWgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:34:05 -0500
-Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B376DF0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:34:05 -0800 (PST)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 8BD9A8032AEB
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:34:04 +0000 (UTC)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id C5D0810047A44
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:34:03 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id DYoFpvnpKtj39DYoFpgCaa; Thu, 05 Jan 2023 22:34:03 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Xr8/hXJ9 c=1 sm=1 tr=0 ts=63b7505b
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fsQ65eT743dOOGRGVPv8xbN2Nt3KGqP9KIv3GK1g+CA=; b=0qHHhi5bUYJyKS9qjXu0VjQ/HF
-        R0Kl0kF+v1+O8k+uGUocSk8kCZsjl0RI1LYRxPMhUz4zVe77ui7zoA0+6mFE7PLIc170+lc9snwTv
-        N9i2/NrcUptOdOve0B4o6CcLA1hPZnwiiDHuU4AJ0DAWsbY5vRDdFn6WQod/IiYlKkjZUFHvJkUzd
-        oFdZo3PPVNpacZuDIMXKrkTp1VPQdTdnsbjX9LTetoDSKBFxsIpxkly0Kzpxcn04dfJ66ZPYPPaEu
-        yoYzHUx3s3Yo8orRFjl23GqGDkFH+GykAvb7m8/lql1do6xBmGIroyAiVcAeo010Z8+86ul6YnhN5
-        M2x6kcRA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50738 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pDYoE-001XqO-6c;
-        Thu, 05 Jan 2023 15:34:02 -0700
-Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230104160507.635888536@linuxfoundation.org>
-In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <de87e848-7157-e119-cdf4-3cd9b3bbc5a2@w6rz.net>
-Date:   Thu, 5 Jan 2023 14:33:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 5 Jan 2023 17:36:42 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3C711A1A;
+        Thu,  5 Jan 2023 14:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672958194; bh=ukn1auDFnOTAdSQTXWGrQhun8HPJ+zFOlPpBVDKojko=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=U/s+uDCPsN1kxGle/rgyWmXFbonaWRppg9EmbzH23oUy2fSxDLGMNEDPYRxv3tr3q
+         T3GNM0gykKURTMG4t+/uXWRVuE10oXRyL0IPb5f1bIMEepihBqAtToO5avWf7OhhNy
+         JsKJLjbOL9/ETCpkwM/Mz8OKOWaIeKZCUY8bP0eehnGlKYBUcj++NQAr6xae5K1PUx
+         S3kCtQl6EeMlO569VrQVyaP1ZG19ul8sGHc8/U2iXJ6wG6n1BNHbvgLDg5Fpc+xPkZ
+         enF6uQmEZBQGloRumfI3nZXqR6irxHqzdfhv5jhDtiz6dToJjfCP5QuT4uWrVNbZPp
+         OIyT6AV8mLXpQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mi2Jn-1oZoFH1cX3-00e6qY; Thu, 05
+ Jan 2023 23:36:34 +0100
+Subject: Re: [PATCH 0/3] Convert to *_with_info() API
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230105141911.8040-1-W_Armin@gmx.de>
+ <20230105145757.GB2405273@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <e1d2e82f-05d2-bb8b-b6ab-b7d1d0657a12@gmx.de>
+Date:   Thu, 5 Jan 2023 23:36:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20230105145757.GB2405273@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pDYoE-001XqO-6c
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:50738
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:FlX/MIehNNE9xSDavkPRA9NxxuTOmPEZ14sqr3v6rS7Gg5byw8v
+ cwCfLwGLpJ5sjtdqbVO9jbAbCQa3QMPOBEn+2ylGes5O3C97ry5/BQOmeicMzKxU7hkBQ8G
+ IaDu0T0MYrwRpfMlllVoAiVvzLL1CbitnugFKmWPWhmLpLn12pH5UEsdop/BFfzKuePUFqB
+ P4/mDqUF36jouTU2lMJMA==
+UI-OutboundReport: notjunk:1;M01:P0:4VfXxxxxw34=;GoeJmzR7BB8k59++t4oIVa9bsYe
+ dWKZv5otulxPTePF5P6jgokBjRTf1EApVp+z/HaRJ38AXn18CJ4EoMOCzwkJbqjOvf8pey/8o
+ Pd+hlThNGDJSshVd1UNnjJjGoGQ0Gaj8z1dFcSuoIas1+/feMmFUsp73wcFogapg6/mFjCh8F
+ /NjSb/mGgrsGiPwPIFFpXq96P+K1qwH6oAjYk4zQ23+c6Bow/SVIIZBAu5ktjflJTLpemOb74
+ VExxP9dHUJotUxI/+TfFV/08FktFlM8jdcQhoRhtJqESqhtsubtkf1dK8ec0VAY8F7FpN77Mp
+ zV8pzmuVLVMgYydH8EvoBt8aTBsICFJKwNaFw+/NN8nXftTE5ppS46HGAj4tW1d2hzD1iqUxu
+ NFJxnDkheeC35dfMGBRW95dlflXu9NFr+01PT/arJW3bAP/xh1fOHQ3mT3cKWb3JmXXADRque
+ WEqdl85C94zzpnyHy9e0nS+t9+P4QNQc27ochd3QuL0N9i/vv2D2TKXXx3Whi/zohIVCPsGeH
+ HEKq82SCPwihWBWhBjYT+2hI2OmmOb4FRyHVa5Ub9fCYe7Ol6Ip0Red/FhK8gru2siMJ1lcw1
+ 9ZvHAHU56E3spElDmZ0j5DZzdbc3o1ezlCgRY6hHZ3MiqXB2DzpC2SwpW9kNgtzv2nxGSGea5
+ 9HEJ6BPYg5rvCO7kp84mZjgVr/c56O2sBI515c5XgtQDFc7d1hF03zG55r6i572T57rhIFLmw
+ 9gEPoaSTix3qBUMZIgbqrsAVmZATixIdyiTpPhmI66SCasJodL0lzLfhgGZLp+oMOEK/LN2Vh
+ 8C7Lsr0mr4yNdzqRajPjfCMzZxMAFTNFGZOkZoId7AcP7+zk1nRNHATcs+Ngj9v9Jh2/qTRSl
+ PnobWLEwM607f+4jN27BTWawLH8n2rKdXWOwIWgMz7IJM6oOVa/WRRZNq80Cv5Un67jc/vcWu
+ siRLxfkxt8GS1k/Ah9rt7X0btxQ=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/23 8:04 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.18 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.18-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Am 05.01.23 um 15:57 schrieb Guenter Roeck:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> On Thu, Jan 05, 2023 at 03:19:08PM +0100, Armin Wolf wrote:
+>> This patch series converts the ftsteutates driver to the *_with_info()
+>> API, reducing module size by ~30%.
+>> The first patch does the actual conversion, while the second patch deals
+>> with the nonstandard fanX_source attributes, which are being replaced
+>> with the standard pwmX_auto_channels_temp attributes. The last patch
+>> adds support for fanX_fault attributes.
+>>
+>> All patches where tested on a Fujitsu DS3401-B1.
+>>
+> This is the second time in less than two weeks that I get a follow-up
+> version of a patch series, unversioned and without change log.
+>
+> That makes me wonder - is that just coincidence or is someone promoting
+> that ?
+>
+> Guenter
 
-Tested-by: Ron Economos <re@w6rz.net>
+My fault, i thought that with all other patches of the previous series being merged
+and the single remaining patch being significantly changed, it would be more appropriate
+to create a new series.
 
+I will send the patches as a follow-up series of the previous patch series then.
+
+Armin Wolf
+
+>> Armin Wolf (3):
+>>    hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
+>>    hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
+>>    hwmon: (ftsteutates) Add support for fanX_fault attributes
+>>
+>>   Documentation/hwmon/ftsteutates.rst |   5 +
+>>   drivers/hwmon/ftsteutates.c         | 550 +++++++++++-----------------
+>>   2 files changed, 210 insertions(+), 345 deletions(-)
+>>
+>> --
+>> 2.30.2
+>>
