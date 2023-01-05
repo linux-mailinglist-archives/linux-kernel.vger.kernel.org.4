@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B40965E181
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4343965E17E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbjAEAXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S235732AbjAEAX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbjAEAXN (ORCPT
+        with ESMTP id S235470AbjAEAXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:23:13 -0500
+        Wed, 4 Jan 2023 19:23:12 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA4044375;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9A544374;
         Wed,  4 Jan 2023 16:23:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 281B6B81987;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CD61B81984;
         Thu,  5 Jan 2023 00:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0088C433F1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F92C433F0;
         Thu,  5 Jan 2023 00:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672878187;
-        bh=/ECD69jxcNYYwEATRT9YBzkdJrzTS32gHvcq9AJnndw=;
+        bh=ztl1EQiOdDcQZcotzokX82t3kWGoj7LXDHlcvmlwCU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpVqoG0SK7CXriUdM8F38SKoj35jgBFggQkLZaV6ufIyNqjzg43BGlmAO1vjkW3Xu
-         p6MDNItrdzIYkideWsLk8WNQnvME6pEvPFc48WeLg/a8BpwEj++b9zoYql7/8Y4p0P
-         KeJIOK2D7qRqMmsncrUmMlBFDlsKE+gP/KnpEsxsQAAgvqzGajZtPl0YRblraWwx5x
-         kfoduOq4aEAYOv3iNyWRySbznB4eGJTilik0beQPzXhXio78iuM7VxnSV2XN282fN0
-         li+3Ntqeo2uPkUJnLShuPPWyPfjfrE9hlsd2s30O6OFLurnP4ESyfD5js1LziGuD11
-         iKu/42ZLAC2EA==
+        b=sGVTI7Qg58lsUbW1BNkoKK45kvR4sdZ/a992D/99AGedvCnCZSIqHj4dbrB7gnw2l
+         wQSEtk02ZpdrfHG2cCe+xtrc2CxkeaWrNFn76ZXgMjlsjAMD7625j5J3Cs93HYMTf+
+         p1fXfTSkTccAHr/SeBda7YtysoiWMzbwV24TmBbB0rS/fuZSgelcByU7IhoZwjHy4L
+         aPQlcqJ/0fplKWR7RZaitdz806uNp3VcWLLkmb9S4D4xiCDY2uB8jFJAT35DJxD8TK
+         taQI2dt/DzcUdVu0P47i7F2WZKu0tWegdzU3+a16S55bvhK+SipdfWVQZu23w0x+AO
+         lJplReIpqI9yA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 779BB5C08E5; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
+        id 79AB35C1456; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 03/10] rcu: Throttle callback invocation based on number of ready callbacks
-Date:   Wed,  4 Jan 2023 16:22:58 -0800
-Message-Id: <20230105002305.1768591-3-paulmck@kernel.org>
+Subject: [PATCH rcu 04/10] rcu: Upgrade header comment for poll_state_synchronize_rcu()
+Date:   Wed,  4 Jan 2023 16:22:59 -0800
+Message-Id: <20230105002305.1768591-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
@@ -55,65 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, rcu_do_batch() sizes its batches based on the total number
-of callbacks in the callback list.  This can result in some strange
-choices, for example, if there was 12,800 callbacks in the list, but
-only 200 were ready to invoke, RCU would invoke 100 at a time (12,800
-shifted down by seven bits).
+This commit emphasizes the possibility of concurrent calls to
+synchronize_rcu() and synchronize_rcu_expedited() causing one or
+the other of the two grace periods being lost from the viewpoint of
+poll_state_synchronize_rcu().
 
-A more measured approach would use the number that were actually ready
-to invoke, an approach that has become feasible only recently given the
-per-segment ->seglen counts in ->cblist.
-
-This commit therefore bases the batch limit on the number of callbacks
-ready to invoke instead of on the total number of callbacks.
+If you cannot afford to lose grace periods this way, you should
+instead use the _full() variants of the polled RCU API, for
+example, poll_state_synchronize_rcu_full().
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcu_segcblist.c | 2 +-
- kernel/rcu/rcu_segcblist.h | 2 ++
- kernel/rcu/tree.c          | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ kernel/rcu/tree.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/rcu_segcblist.c b/kernel/rcu/rcu_segcblist.c
-index c54ea2b6a36bc..f71fac422c8f6 100644
---- a/kernel/rcu/rcu_segcblist.c
-+++ b/kernel/rcu/rcu_segcblist.c
-@@ -89,7 +89,7 @@ static void rcu_segcblist_set_len(struct rcu_segcblist *rsclp, long v)
- }
- 
- /* Get the length of a segment of the rcu_segcblist structure. */
--static long rcu_segcblist_get_seglen(struct rcu_segcblist *rsclp, int seg)
-+long rcu_segcblist_get_seglen(struct rcu_segcblist *rsclp, int seg)
- {
- 	return READ_ONCE(rsclp->seglen[seg]);
- }
-diff --git a/kernel/rcu/rcu_segcblist.h b/kernel/rcu/rcu_segcblist.h
-index 431cee212467d..4fe877f5f6540 100644
---- a/kernel/rcu/rcu_segcblist.h
-+++ b/kernel/rcu/rcu_segcblist.h
-@@ -15,6 +15,8 @@ static inline long rcu_cblist_n_cbs(struct rcu_cblist *rclp)
- 	return READ_ONCE(rclp->len);
- }
- 
-+long rcu_segcblist_get_seglen(struct rcu_segcblist *rsclp, int seg);
-+
- /* Return number of callbacks in segmented callback list by summing seglen. */
- long rcu_segcblist_n_segment_cbs(struct rcu_segcblist *rsclp);
- 
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index d3b082233b74b..7d3a59d4f37ef 100644
+index 7d3a59d4f37ef..0147e69ea85a9 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -2057,7 +2057,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 	 */
- 	rcu_nocb_lock_irqsave(rdp, flags);
- 	WARN_ON_ONCE(cpu_is_offline(smp_processor_id()));
--	pending = rcu_segcblist_n_cbs(&rdp->cblist);
-+	pending = rcu_segcblist_get_seglen(&rdp->cblist, RCU_DONE_TAIL);
- 	div = READ_ONCE(rcu_divisor);
- 	div = div < 0 ? 7 : div > sizeof(long) * 8 - 2 ? sizeof(long) * 8 - 2 : div;
- 	bl = max(rdp->blimit, pending >> div);
+@@ -3559,7 +3559,9 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu_full);
+  * If @false is returned, it is the caller's responsibility to invoke this
+  * function later on until it does return @true.  Alternatively, the caller
+  * can explicitly wait for a grace period, for example, by passing @oldstate
+- * to cond_synchronize_rcu() or by directly invoking synchronize_rcu().
++ * to either cond_synchronize_rcu() or cond_synchronize_rcu_expedited()
++ * on the one hand or by directly invoking either synchronize_rcu() or
++ * synchronize_rcu_expedited() on the other.
+  *
+  * Yes, this function does not take counter wrap into account.
+  * But counter wrap is harmless.  If the counter wraps, we have waited for
+@@ -3570,6 +3572,12 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu_full);
+  * completed.  Alternatively, they can use get_completed_synchronize_rcu()
+  * to get a guaranteed-completed grace-period state.
+  *
++ * In addition, because oldstate compresses the grace-period state for
++ * both normal and expedited grace periods into a single unsigned long,
++ * it can miss a grace period when synchronize_rcu() runs concurrently
++ * with synchronize_rcu_expedited().  If this is unacceptable, please
++ * instead use the _full() variant of these polling APIs.
++ *
+  * This function provides the same memory-ordering guarantees that
+  * would be provided by a synchronize_rcu() that was invoked at the call
+  * to the function that provided @oldstate, and that returned at the end
 -- 
 2.31.1.189.g2e36527f23
 
