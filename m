@@ -2,185 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20BA65E326
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979A565E2F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 03:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjAEC7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 21:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S229579AbjAECbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 21:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjAEC7Y (ORCPT
+        with ESMTP id S229441AbjAECbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 21:59:24 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2074.outbound.protection.outlook.com [40.107.100.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A1D48592;
-        Wed,  4 Jan 2023 18:59:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W7oiJ+WKU50PVygZq2ClcEPqweeC0z5objF2qLn3hXp0PshdZouaT5JVukdzyvgmCHVY13bHWWzhizDbaYv0+IyTBXmmU8btB0QmZ/vrS/Ff+7Hf2sbVh5Fo3KpEIV1Yx8wbHGmHCdJDgk4hhoaOmfQTJIyBFLe+OaBFxVUN2mFJ5C+hUwTEzK7LPqifTR5Pv9XnqEAXCClJWAcfrgjAxCtLLpibYp+bWsXrEHSUQNPonFTUjZUXdFWPfs21e/KJlxdP3HqWrwtb+G9PzZZkhEELcisy/6xRpXr4RyrqdwMhW2hq16WuzBmvmkR95s8qf56QA3ZrO0a0bso/6OxXCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f7y3u4FaSuWfbEjaZTQrA2ZIs7oP8Hf+prsDxnArvWw=;
- b=FnR+kC5W+pvWgzBNaImWghCUEJ58xDU1zDw7soWo6D61E8AA+RQGcukaVIPK21w0e3iRoeZdwIPmX0FX2QNDoJOZWpj2kcc/AL4mSenn+8h/si+KWwPtGpYK+xhH53UTJMBeyjnxuYPhjj1Bn3Si/DvkydBWp/WnkeFFlOy4H1EQSmpYWFw/Cz/dKsbX0vxdoqwYyYHlgM4++9JHkWwirXKSvp1mep/MX7CcIv4zdvp9tUeijZ8wwEVOdaVmdXINuZr16q9uW6L6F6jOPQWTRF5UT0/U3lE5DlziziRWRN/l6il2t/bOFOGtQnRhdjUBIgtovwdLFOMES6iQCtyKNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f7y3u4FaSuWfbEjaZTQrA2ZIs7oP8Hf+prsDxnArvWw=;
- b=lnk9Kw3hpWWEH7CCNNoT3j+dVP5BndeOFgz1NIVfiUYQsPf1n4tb1HSiNyXXopEu3JK96GjYLWs18u9ut/gcIMugXUfZB+auieRg30EBt0Zzezk2h3MAi4mbsD8X9lNGwUCUQMEOUJkaSK3M4kp7s8EwfZ9Fe7/VytBb37gIGHQ=
-Received: from DS7PR03CA0107.namprd03.prod.outlook.com (2603:10b6:5:3b7::22)
- by DS7PR12MB8348.namprd12.prod.outlook.com (2603:10b6:8:e5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 02:59:10 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::53) by DS7PR03CA0107.outlook.office365.com
- (2603:10b6:5:3b7::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Thu, 5 Jan 2023 02:59:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5966.17 via Frontend Transport; Thu, 5 Jan 2023 02:59:09 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 20:59:09 -0600
-Date:   Wed, 4 Jan 2023 20:27:14 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <vbabka@suse.cz>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <harald@profian.com>
-Subject: Re: [PATCH RFC v7 06/64] KVM: x86: Add platform hooks for private
- memory invalidations
-Message-ID: <20230105022714.kdpybcse24xi2lq6@amd.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-7-michael.roth@amd.com>
- <Y67RO+YnQYSX4mvN@zn.tnic>
+        Wed, 4 Jan 2023 21:31:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7C212AFA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 18:31:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A14C6010F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69531C43396
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672885896;
+        bh=XFa0qDGvl3SJvnLKs+mS95jGASNuLpjJhTDSQ9emNEM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rrXQT63Gy09Aa4zewLG9tXN6oN/qBVwvI06cW0HLhR7N09FyNwncn1hcRc0+FpBFo
+         HI6NBYzsxhsM0KZ/NQfFLkelLsvBp7P+qH0vKpp6SKrXCqEgk73Q2GVvbksPlwPkry
+         SpjOJmMVW+xGHnwe+7L5/dU8SkIDC8+MyChFr2zOmaQVz7TeBv0MzfNPOkpKvQhWY3
+         Rx8Zj7bhHbJKS7fVfdHPfDrOr130pmtWE5rYVri3V5zL08h0cGnxx1UpOyDr7lnddr
+         tLE2mRp7qjoXuNQfI1zjQi2UL65oo5dA2U1aPB02kIwdYNhd8dUT4Da7+9XSvz3Eqh
+         8jtz+RbORZYjA==
+Received: by mail-ej1-f48.google.com with SMTP id qk9so86895879ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 18:31:36 -0800 (PST)
+X-Gm-Message-State: AFqh2kpyWehNs7dmJcdz9nsMGFp3ild8FGcMpFLnsfGpfCIG7pCiYRU6
+        juacCesYhwFPJ737Rpvt3wWicApmu73c1CBD1E0=
+X-Google-Smtp-Source: AMrXdXsKA4ZSzJIdxfEJVSXgTHZOR3Ls/3lwt/gR8TgAbrjUaElQjqF7HVv6rhFK3xn4rwmrPU+6y3ZFB10iVzNXmaw=
+X-Received: by 2002:a17:907:8024:b0:84d:df2:81f5 with SMTP id
+ ft36-20020a170907802400b0084d0df281f5mr3015ejc.406.1672885894594; Wed, 04 Jan
+ 2023 18:31:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y67RO+YnQYSX4mvN@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT053:EE_|DS7PR12MB8348:EE_
-X-MS-Office365-Filtering-Correlation-Id: de074cc5-1f10-4934-8336-08daeec8d13a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 22mSseEs/AJTIcy/oUab6p5YwlO0w4LKCZNgsYBTImhEj6Q5oTxVW95CN/Qar5vpfOGUWgiIJrM819W/NSBLHpStUf1SCdo5BbmbldgOutXkzNykZMxbFv6pFWQ3Iiq5iNcJA9jdFzg4G2hCXtlcZV0li1u+td8e8WZbUYMEdTLCeZY5o+GHabtD72D1tzcMTkWNFCb4O5T3R1NMTh11WC55DQQKx/PIk99hhy8FeUEj1JM5rEXFNEERfpah+lbyrv3JOQoeJfZUt9ujam+WBL2k4IcXYLg8WKGgZsp+4yaLNcTOU8qdDbIhLjSD8B/By/ENx6NGRSVq8GsXNhW9oalsMTbU3HcI4Aup1+XEUvGwO49dk7bWcomKcpayygBie2zqc+XdW83w6VkcOTJl23p0N7wgF9zMtourk5GTKuLODPEavzj1xWlQUGpGozlXFuR419DHTVx3dpvP0qwIxRttLDVT63k6CuTV854/S32a4hy/MEj3BFHmjnJVwoM+Oy/JHUxKBxlLfYkZgg7Na3Ol7sSn35A1h9Nhhyl1SgpV6ZvzKu8a0O8zu/6cjFHs+evrOUyclyRGDVEeZ+wjDNpl5t8wNIzsogGe5EJD0rdEszi0r90PG65Cb9+Lpt0WmNNy6ton11d04yBqhGktDawnVEoWF/dfAJ0D1T5P8zP7PspfQ2hWKefJ/Y/fYWlBVQNVajOVvdi9A4aiZeRMWlt5Ciu/oK0FuW8oFeX/MSiBESsz/suQ/QGStsnY7fRX6PbTUGDR4ib8Q6tL/KhZQg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199015)(40470700004)(46966006)(36840700001)(47076005)(426003)(83380400001)(40480700001)(26005)(16526019)(2616005)(1076003)(336012)(6666004)(82310400005)(186003)(40460700003)(36756003)(36860700001)(86362001)(82740400003)(81166007)(356005)(8676002)(41300700001)(4326008)(2906002)(5660300002)(7406005)(8936002)(44832011)(7416002)(478600001)(966005)(316002)(70586007)(70206006)(6916009)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 02:59:09.6708
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de074cc5-1f10-4934-8336-08daeec8d13a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8348
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221224120545.262989-1-guoren@kernel.org> <08ce1ab6-4678-74ce-43cc-2d3f04d1525d@redhat.com>
+ <CAJF2gTS52jBm7_3c=9i1uPjmV90=42xs4dOs6woA4NnHf4RHgQ@mail.gmail.com>
+ <b01060ba-6069-d33e-5151-22a7d9577f13@redhat.com> <e30f671d-8e74-d5b9-cdba-472d7297f257@redhat.com>
+ <CAJF2gTTkLY+mUoG0oqw0mmJH0hK5bXYvrmYcLL1-zwNbzOb9TQ@mail.gmail.com> <Y7XfYPnQhLTcNZSh@gmail.com>
+In-Reply-To: <Y7XfYPnQhLTcNZSh@gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 5 Jan 2023 10:31:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT4yaH1i7zmKNwzt8OK1frFvre09wwNGABBo_3gC0pjBw@mail.gmail.com>
+Message-ID: <CAJF2gTT4yaH1i7zmKNwzt8OK1frFvre09wwNGABBo_3gC0pjBw@mail.gmail.com>
+Subject: Re: [PATCH] locking/qspinlock: Optimize pending state waiting for unlock
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 12:53:31PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 14, 2022 at 01:39:58PM -0600, Michael Roth wrote:
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index a0c41d391547..2713632e5061 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -7183,3 +7183,8 @@ void kvm_arch_set_memory_attributes(struct kvm *kvm,
-> >  		kvm_update_lpage_private_shared_mixed(kvm, slot, attrs,
-> >  						      start, end);
-> >  }
-> > +
-> > +void kvm_arch_invalidate_restricted_mem(struct kvm_memory_slot *slot, gfn_t start, gfn_t end)
-> > +{
-> > +	static_call_cond(kvm_x86_invalidate_restricted_mem)(slot, start, end);
-> 
-> Why _cond?
+On Thu, Jan 5, 2023 at 4:19 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Guo Ren <guoren@kernel.org> wrote:
+>
+> > > >> The situation is the SMT scenarios in the same core. Not an entering
+> > > >> low-power state situation. Of course, the granularity between cores is
+> > > >> "cacheline", but the granularity between SMT hw threads of the same
+> > > >> core could be "byte" which internal LSU handles. For example, when a
+> > > >> hw-thread yields the resources of the core to other hw-threads, this
+> > > >> patch could help the hw-thread stay in the sleep state and prevent it
+> > > >> from being woken up by other hw-threads xchg_tail.
+> > > >>
+> > > >> Finally, from the software semantic view, does the patch make it more
+> > > >> accurate? (We don't care about the tail here.)
+> > > >
+> > > > Thanks for the clarification.
+> > > >
+> > > > I am not arguing for the simplification part. I just want to clarify
+> > > > my limited understanding of how the CPU hardware are actually dealing
+> > > > with these conditions.
+> > > >
+> > > > With that, I am fine with this patch. It would be nice if you can
+> > > > elaborate a bit more in your commit log.
+> > > >
+> > > > Acked-by: Waiman Long <longman@redhat.com>
+> > > >
+> > > BTW, have you actually observe any performance improvement with this patch?
+> > Not yet. I'm researching how the hardware could satisfy qspinlock
+> > better. Here are three points I concluded:
+> >  1. Atomic forward progress guarantee: Prevent unnecessary LL/SC
+> > retry, which may cause expensive bus transactions when crossing the
+> > NUMA nodes.
+> >  2. Sub-word atomic primitive: Enable freedom from interference
+> > between locked, pending, and tail.
+> >  3. Load-cond primitive: Prevent processor from wasting loop
+> > operations for detection.
+>
+> As to this patch, please send a -v2 version of this patch that has this
+> discussion & explanation included in the changelog, as requested by Waiman.
+Done
 
-Since this hook is declared via KVM_X86_OP_OPTIONAL() (instead of
-KVM_X86_OP_OPTIONAL_RET0 like the previous hooks), the comment in kvm-x86-ops.h
-suggests this should be called via static_call_cond():
+https://lore.kernel.org/lkml/20230105021952.3090070-1-guoren@kernel.org/
 
-  /*
-   * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
-   * both DECLARE/DEFINE_STATIC_CALL() invocations and
-   * "static_call_update()" calls.
-   *
-   * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
-   * a NULL definition, for example if "static_call_cond()" will be used
-   * at the call sites.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
-   * to make a definition optional, but in this case the default will
-   * be __static_call_return0.
-   */
+>
+> Thanks,
+>
+>         Ingo
 
 
-> 
-> > @@ -258,6 +263,17 @@ void restrictedmem_unregister_notifier(struct file *file,
-> >  				       struct restrictedmem_notifier *notifier)
-> >  {
-> >  	struct restrictedmem_data *data = file->f_mapping->private_data;
-> > +	struct inode *inode = file_inode(data->memfd);
-> > +
-> > +	/* TODO: this will issue notifications to all registered notifiers,
-> 
-> First of all:
-> 
-> verify_comment_style: WARNING: Multi-line comment needs to start text on the second line:
->  [+     /* TODO: this will issue notifications to all registered notifiers,]
-> 
-> Then, if you only want to run the callbacks for the one going away only,
-> why don't you simply do:
-> 
->         mutex_lock(&data->lock);
->         notifier->ops->invalidate_start(notifier, 0, inode->i_size >> PAGE_SHIFT);
->         notifier->ops->invalidate_end(notifier, 0, inode->i_size >> PAGE_SHIFT);
->         list_del(&notifier->list);
->         mutex_unlock(&data->lock);
-> 
-> here?
 
-That should do the trick. Thanks for the suggestion.
-
--Mike
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+-- 
+Best Regards
+ Guo Ren
