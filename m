@@ -2,117 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66FA65E9F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D378365EA05
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbjAELd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 06:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S233023AbjAELfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 06:35:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbjAELdh (ORCPT
+        with ESMTP id S232667AbjAELfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 06:33:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF5011A27;
-        Thu,  5 Jan 2023 03:33:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC122619C9;
-        Thu,  5 Jan 2023 11:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE274C433D2;
-        Thu,  5 Jan 2023 11:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672918414;
-        bh=GZ/oxElBbGOcTDLAg4QnaapTHh9nj+beO5PtIB3KxK0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=uP45hb1MDd2Xiwn2n/0fQ6fDLt1SWtUHLBBCMAAOZIkwhpui/fNQoma//RC5zOh9s
-         QPTdx0+TOuRGLI3TgIf2P3m7delgJfMr+hgpKmTDozNMBw005PBU9QNTj1Nnonu/RO
-         mqTbUciS8tBHStdLY6MLVfqH3cVX+PeQY/u5pou1Ii8twEET1DdERG8oMlEYPcco7K
-         u+Q1gpRriUiKlZipx4CJwNyk2DL/BjQIHf4ffD16LSpjhwgcqDJbjBziFGvJ/uGHYw
-         WRYhVkDZ7rcovEAHnR4krtEzibu9JWGwqKnuj22DAuYA2T37CmgACn4EG/BhmJFoHt
-         /3HPtklGezGkQ==
-Message-ID: <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
-Date:   Thu, 5 Jan 2023 13:33:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: Add ICSSG Ethernet Driver
- bindings
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>, Md Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <t-kristo@ti.com>,
-        Suman Anna <s-anna@ti.com>, YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 5 Jan 2023 06:35:43 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B304C713;
+        Thu,  5 Jan 2023 03:35:40 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D884FE0002;
+        Thu,  5 Jan 2023 11:35:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672918539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P3hfoi/7J5CIyjBCsT+TUV6DEwamqcoR9VCTKwBJrmg=;
+        b=hsppRdJjuG5g9j+sYuy6WsOGIwlIs+4HO4DWCdjJXncW83/1btIOw+qUW73uWhLgjAOPGW
+        eb3q/nFosbt3NHTYnkXaup63uNmMPycnb/UaDgkvte60YOgpaYwfp2dARiTniY28MUG5Ba
+        rxAMj8jKtnG4PQz+z5T4bk2myQWwJ4/OJQcK9PW+XLtr25QmYKyQBLhQ2TlbnUCewG1tau
+        4ADrH4lvlATEjRdPDqRRjN/vamUugdk3UxOzp6wAIMpR/P02DCnUwA8l6rSq4/X3krSCxg
+        xStHQmidHMlF6PyorE+5NziSlASS6eC927LDkSJoUf+cHwZxuKUC6RydjbRoxQ==
+Date:   Thu, 5 Jan 2023 12:35:34 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
-        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221223110930.1337536-1-danishanwar@ti.com>
- <20221223110930.1337536-2-danishanwar@ti.com> <Y6W7FNzJEHYt6URg@lunn.ch>
- <620ce8e6-2b40-1322-364a-0099a6e2af26@kernel.org> <Y7Mjx8ZEVEcU2mK8@lunn.ch>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <Y7Mjx8ZEVEcU2mK8@lunn.ch>
+        Frank Rowand <frowand.list@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v5 00/21] nvmem: core: introduce NVMEM layouts
+Message-ID: <20230105123534.38a70640@xps-13>
+In-Reply-To: <2143916.GUh0CODmnK@steina-w>
+References: <20221206200740.3567551-1-michael@walle.cc>
+        <20230103163902.218cb5c7@xps-13>
+        <cf00e248-1f2c-d4ce-868d-9f77b2c9b76f@linaro.org>
+        <2143916.GUh0CODmnK@steina-w>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01/2023 20:34, Andrew Lunn wrote:
-> On Mon, Jan 02, 2023 at 03:04:19PM +0200, Roger Quadros wrote:
->>
->>
->> On 23/12/2022 16:28, Andrew Lunn wrote:
->>>> +        ethernet-ports {
->>>> +            #address-cells = <1>;
->>>> +            #size-cells = <0>;
->>>> +            pruss2_emac0: port@0 {
->>>> +                reg = <0>;
->>>> +                phy-handle = <&pruss2_eth0_phy>;
->>>> +                phy-mode = "rgmii-rxid";
->>>
->>> That is unusual. Where are the TX delays coming from?
->>
->> >From the below property
->>
->> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
->>
->> The TX delay can be enabled/disabled from within the ICSSG block.
->>
->> If this property exists and PHY mode is neither PHY_INTERFACE_MODE_RGMII_ID
->> nor PHY_INTERFACE_MODE_RGMII_TXID then the internal delay is enabled.
->>
->> This logic is in prueth_config_rgmiidelay() function in the introduced driver.
-> 
-> What nearly every other MAC driver does is pass the phy-mode to the
-> PHY and lets the PHY add the delays. I would recommend you do that,
-> rather than be special and different.
+Hello,
 
+alexander.stein@ew.tq-group.com wrote on Thu, 05 Jan 2023 12:04:52
++0100:
 
-If I remember right we couldn't disable MAC TX delay on some earlier silicon
-so had to take this route. I don't remember why we couldn't disable it though.
+> Am Dienstag, 3. Januar 2023, 16:51:31 CET schrieb Srinivas Kandagatla:
+> > Hi Miquel,
+> >=20
+> > On 03/01/2023 15:39, Miquel Raynal wrote: =20
+> > > Hi Srinivas,
+> > >=20
+> > > michael@walle.cc wrote on Tue,  6 Dec 2022 21:07:19 +0100: =20
+> > >> This is now the third attempt to fetch the MAC addresses from the VPD
+> > >> for the Kontron sl28 boards. Previous discussions can be found here:
+> > >> https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.=
+cc/
+> > >>=20
+> > >>=20
+> > >> NVMEM cells are typically added by board code or by the devicetree. =
+But
+> > >> as the cells get more complex, there is (valid) push back from the
+> > >> devicetree maintainers to not put that handling in the devicetree.
+> > >>=20
+> > >> Therefore, introduce NVMEM layouts. They operate on the NVMEM device=
+ and
+> > >> can add cells during runtime. That way it is possible to add more co=
+mplex
+> > >> cells than it is possible right now with the offset/length/bits
+> > >> description in the device tree. For example, you can have post proce=
+ssing
+> > >> for individual cells (think of endian swapping, or ethernet offset
+> > >> handling).
+> > >>=20
+> > >> The imx-ocotp driver is the only user of the global post processing =
+hook,
+> > >> convert it to nvmem layouts and drop the global post pocessing hook.
+> > >>=20
+> > >> For now, the layouts are selected by the device tree. But the idea is
+> > >> that also board files or other drivers could set a layout. Although =
+no
+> > >> code for that exists yet.
+> > >>=20
+> > >> Thanks to Miquel, the device tree bindings are already approved and
+> > >> merged.
+> > >>=20
+> > >> NVMEM layouts as modules?
+> > >> While possible in principle, it doesn't make any sense because the N=
+VMEM
+> > >> core can't be compiled as a module. The layouts needs to be availabl=
+e at
+> > >> probe time. (That is also the reason why they get registered with
+> > >> subsys_initcall().) So if the NVMEM core would be a module, the layo=
+uts
+> > >> could be modules, too. =20
+> > >=20
+> > > I believe this series still applies even though -rc1 (and -rc2) are o=
+ut
+> > > now, may we know if you consider merging it anytime soon or if there
+> > > are still discrepancies in the implementation you would like to
+> > > discuss? Otherwise I would really like to see this laying in -next a
+> > > few weeks before being sent out to Linus, just in case. =20
+> >=20
+> > Thanks for the work!
+> >=20
+> > Lets get some testing in -next. =20
+>=20
+> This causes the following errors on existing boards (imx8mq-tqma8mq-
+> mba8mx.dtb):
+> root@tqma8-common:~# uname -r
+> 6.2.0-rc2-next-20230105
+>=20
+> > OF: /soc@0: could not get #nvmem-cell-cells for /soc@0/bus@30000000/ =20
+> efuse@30350000/soc-uid@4
+> > OF: /soc@0/bus@30800000/ethernet@30be0000: could not get #nvmem-cell-ce=
+lls  =20
+> for /soc@0/bus@30000000/efuse@30350000/mac-address@90
+>=20
+> These are caused because '#nvmem-cell-cells =3D <0>;' is not explicitly s=
+et in=20
+> DT.
+>=20
+> > TI DP83867 30be0000.ethernet-1:0e: error -EINVAL: failed to get nvmem c=
+ell  =20
+> io_impedance_ctrl
+> > TI DP83867: probe of 30be0000.ethernet-1:0e failed with error -22 =20
+>=20
+> These are caused because of_nvmem_cell_get() now returns -EINVAL instead =
+of -
+> ENODEV if the requested nvmem cell is not available.
 
-In more recent Silicon Manuals I do see that MAC TX delay can be enabled/disabled.
-If this really is the case then we should change to
+Should we just assume #nvmem-cell-cells =3D <0> by default? I guess it's
+a safe assumption.
 
- phy-mode = "rgmii-id";
-
-And let PHY handle the TX+RX delays.
-
-Danish,
-could you please make the change and test if it works on current silicon?
-
-cheers,
--roger
+Thanks,
+Miqu=C3=A8l
