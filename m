@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E617C65EFA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1AA65EFA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjAEPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
+        id S233148AbjAEPGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjAEPGV (ORCPT
+        with ESMTP id S231978AbjAEPGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:06:21 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077584A941
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:06:21 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A2B8817403;
-        Thu,  5 Jan 2023 15:06:01 +0000 (UTC)
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 Jan 2023 10:06:16 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8534BD52
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:06:14 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6D6772C142;
-        Thu,  5 Jan 2023 15:06:01 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 16:06:01 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v4 4/8] printk: introduce struct printk_buffers
-Message-ID: <Y7bnWfC4eknXbuWl@alley>
-References: <20230105103735.880956-1-john.ogness@linutronix.de>
- <20230105103735.880956-5-john.ogness@linutronix.de>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 17F2075;
+        Thu,  5 Jan 2023 16:06:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672931172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EF2eIHMM0/bse1Ygy2mGPcB63S0svTOuyeNiDsJqQR0=;
+        b=AAhTa/FbXoBbqEkuWdx/tWRUaIz+T9vcRrK97PSApy0xwAuL8DOMyhlP7HbHm+9+9Oq3BV
+        kWMVPZAfP5a2lSuaLbjdmdGt/hbr7JdTfLtg1sIEqVx7uSfIPSHRlLTx0K7Qlm+lpiJnHA
+        EW/G5eNezqV9FatmpYoQ+6Jcy9UdE9NUDvrleL2sesw809zskILi/I36Knc84BrNeYx0pl
+        9TBdXLLMtP7re0uLzQ06Eh4R8OXXi0BHy7HIc7SSqWgsp8QZQmfvwK797IirshKZvDq+BY
+        Jtd1QF9mJj0G4KLzd3JyCVfmFfuHLIwILRQKjlbJ6lmfoKWbBG1lydl2W46qUg==
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH RESEND] gpio: regmap: use new regmap_might_sleep()
+Date:   Thu,  5 Jan 2023 16:06:03 +0100
+Message-Id: <20230105150603.2810510-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105103735.880956-5-john.ogness@linutronix.de>
-X-Spam-Level: 
-X-Spamd-Bar: /
-Authentication-Results: smtp-out1.suse.de;
-        none
-X-Rspamd-Server: rspamd2
-X-Spamd-Result: default: False [0.00 / 50.00]
-X-Spam-Score: 0.00
-X-Rspamd-Queue-Id: A2B8817403
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-01-05 11:43:31, John Ogness wrote:
-> Introduce a new struct printk_buffers to contain all the buffers
-> needed to read and format a printk message for output. Putting the
-> buffers inside a struct reduces the number of buffer pointers that
-> need to be tracked. Also, it allows usage of the sizeof() macro for
-> the buffer sizes, rather than expecting certain sized buffers being
-> passed in.
-> 
-> Note that since the output buffer for normal consoles is now
-> CONSOLE_EXT_LOG_MAX instead of CONSOLE_LOG_MAX, multi-line
-> messages that may have been previously truncated will now be
-> printed in full. This should be considered a feature and not a bug
-> since the CONSOLE_LOG_MAX restriction was about limiting static
-> buffer usage rather than limiting printed text.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Now that the regmap can be queried whether it might sleep, we can get
+rid of the conservative setting "can_sleep = true". New drivers which
+want to use gpio-regmap and can access the registers memory-mapped won't
+have the restriction that their consumers have to use the
+gpiod_*cansleep() variants anymore.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/gpio/gpio-regmap.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-Best Regards,
-Petr
+diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+index f907c9c19fce..fca17d478984 100644
+--- a/drivers/gpio/gpio-regmap.c
++++ b/drivers/gpio/gpio-regmap.c
+@@ -254,15 +254,7 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
+ 	chip->ngpio = config->ngpio;
+ 	chip->names = config->names;
+ 	chip->label = config->label ?: dev_name(config->parent);
+-
+-	/*
+-	 * If our regmap is fast_io we should probably set can_sleep to false.
+-	 * Right now, the regmap doesn't save this property, nor is there any
+-	 * access function for it.
+-	 * The only regmap type which uses fast_io is regmap-mmio. For now,
+-	 * assume a safe default of true here.
+-	 */
+-	chip->can_sleep = true;
++	chip->can_sleep = regmap_might_sleep(config->regmap);
+ 
+ 	chip->get = gpio_regmap_get;
+ 	if (gpio->reg_set_base && gpio->reg_clr_base)
+-- 
+2.30.2
+
