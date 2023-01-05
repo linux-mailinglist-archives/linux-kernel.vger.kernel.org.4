@@ -2,561 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BC465EE91
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E53E65EE97
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjAEOQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
+        id S231431AbjAEOTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbjAEOP4 (ORCPT
+        with ESMTP id S229530AbjAEOTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:15:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8707ED2D7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:15:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92D8D61AC1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:15:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51094C433EF;
-        Thu,  5 Jan 2023 14:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672928154;
-        bh=oltoueV2WmsiDDFVbBxAW/mk2iBVI7EW4JdZzofKxX0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ADbbR65MSnYhhGWnP9OVG+gG5L9nS9tidEVMFgKG4YIbYs2b353Jl473p4I/CyEjw
-         dMSxaML+ngM0smNuJrQDsSyzEDeB9UUMNcPG7Iluxz1+lvX/Cj/5HRz941A2Z1UBa0
-         ZrytHkY+bmkarxgONS2fcAWi9+Btv4mp2YCZ+jRBS1WNpfvVgy/6d1Pylv1QcfaOXQ
-         lVnLxswYEgT16NKyVKKEXmO2hHSyAQ6iHcVuKjR7lU5Aw8dPgEtt4zZK1p8VjEuRTv
-         XqEPw5vTPQFRFSLfhLNBmPMueh7k0u7JZDpMXwyJ9QUbdjn0yi/hRgACHILD4x6Fv4
-         1xheZIPi8Z2Vg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-parport@lists.infradead.org,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] parport: remove ax88796 driver
-Date:   Thu,  5 Jan 2023 15:15:35 +0100
-Message-Id: <20230105141549.2252550-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Thu, 5 Jan 2023 09:19:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80DD2D7;
+        Thu,  5 Jan 2023 06:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672928358; bh=wIz0BoSUc31ugcqNmIKcIFhbT2sYdHTdsIFwKNmgt3c=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=RME5plFvOeHxkPSPC8NUcEWmioeYrtEvMDw1dUjVf5BhO+rEboJlr6WqVZodpvWW/
+         Ipdu6eGvVU2ic7snqC4PPd7oqkO0YYctlJfIZwsM0nYnUJSRUOB0apyKEF7r9zugkQ
+         OcOWQGizmLnj5Kt4EyxEwUuN+YbVghpJ8qVjFeWfKRfAynl81/J5yNuXtvZUM+g8Ez
+         k7G3ZKkZxic7d+dcIpXLde9TM1M1xq7RmWY9fXnrjLQQeXHD9j545Bp9EMYyWi+veO
+         wsMBHvZw1mjfnK5jB0Iw8Ur7h02vQ7Edkz6rRCABGldAYZbDavLvRfkc0iEVeoD17y
+         75aFUVvlyAWtw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MWRVb-1pJhfC3df9-00XqJR; Thu, 05 Jan 2023 15:19:18 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Convert to *_with_info() API
+Date:   Thu,  5 Jan 2023 15:19:08 +0100
+Message-Id: <20230105141911.8040-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P+VnuccQuxbVylJ/aoMnO10jH2ggKviSZwlBemNMjXUK0KVPsJI
+ jIbaRZJ0o4NMYkbOxYV33FqCy86KGTO3ugcyVzlNT0hVWVqSNLHo+yhVfoMZ2ahcsCBK8ld
+ xQOnuKqiBCAzpFypwBBs5O/4k6twep6p9bByQ+tzoMlVhJlYhKuew4yX00LG6lJ1o5Ve+PS
+ 9w2CFuO83v30vnsceKRlw==
+UI-OutboundReport: notjunk:1;M01:P0:Jm7Ns/0S2/M=;vF7aIa4EFgNX/fnazeAaBFWdVBO
+ yHy81OZK/1ONCKlCIm12TpgRdkU6+Kf616DXfOVuHGy/zEp7dYRW6yoyl3QsQq3Lb/JKr0Fab
+ mkCWf9psv/pWsHxBkcU/isjn3Q3I1dcLhy31RGZBcu+8P3gCfdV4WbfPhz4OPkD5MVwcowxXD
+ vrLK145wNHkjHJiK6UkgkpSd6UWOqmZf1mb+GNZY8RWL+xVWuLgKCEGQiSqQwsurwYE/c2LVA
+ eSc1yLs6NkU+nBMS6qKfCVNAnArIlHjdf6zwXJzPe2Igtaxb1KvWzPUpDSAcE2lOf+Sd5b9IC
+ y9KXYuoY0S+SMIIo8HUAMvgmHN4TQcV3p2PMP0Ubxs88G5e7bt3OgLT8bjbEkmQiL175E3fdj
+ yPUxzhWqQ5hTJRhPjqAzK89Jr1x8Ooe1tIS67hhu0VoLeo3JRR+Cjnw3YCD/fy8BiWSUu7ygX
+ +otiZx/pI1vBLpM2aTZyQMZGOzedVBD425WI3J5vwXyLntc1aEo4vonN+pdt+OUJqsqhLudmo
+ pwNEd+3nmRRxmM1ib/yIvxcP2cHwpXkKTUv9NvIbG3cZ2RlDzOPmzdAy+QYwpFEkD1IYxAXyj
+ AJPvhQv3FfeH5ro1eIlGRsJVcGqEY5b/1JDVAJrEpjJ741s4uonpfs2tSu5/CKC6gdyMk9dun
+ 5wFXw8l+9XqFlWRq6v4mREzeN4oHHf4/ZWSFBS670HDpioI7EtZnio79P1tOZCVlxJji4/eId
+ clRbu4U6qbUoLsXrV+YpXffyUO+9YoZ1/uU8VOdkia6VHrH2X2cZWPSmibhqB5CyzjYoFZzvt
+ hRr/yeKMuVRuWYNagi3kT7qgM4yY1jX822WbalPxBxJOAxxFmNw2XjjSAtMplUczDUBgv2fMy
+ +Dl3R51DqnmMRtVKtNk0gXPkpwoJS3FMOKDVDkaNW/iYFS6Uk07J4xbn0wfJEhVMmaaX/YXjl
+ Pa3P6MUOO4WDHPhlA5VANpMN2ZE=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+This patch series converts the ftsteutates driver to the *_with_info()
+API, reducing module size by ~30%.
+The first patch does the actual conversion, while the second patch deals
+with the nonstandard fanX_source attributes, which are being replaced
+with the standard pwmX_auto_channels_temp attributes. The last patch
+adds support for fanX_fault attributes.
 
-The s3c24xx bast platform was removed, so this driver has no
-users any more and can be removed as well.
+All patches where tested on a Fujitsu DS3401-B1.
 
-Cc: linux-parport@lists.infradead.org
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I have a series for removing the s3c24xx platform to be queued for
-6.3. This patch was missing when I originally posted it, and it can
-either go through the same branch, or get merged seperately through
-the parport tree, as there are no direct dependencies.
+Armin Wolf (3):
+  hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
+  hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
+  hwmon: (ftsteutates) Add support for fanX_fault attributes
 
+ Documentation/hwmon/ftsteutates.rst |   5 +
+ drivers/hwmon/ftsteutates.c         | 550 +++++++++++-----------------
+ 2 files changed, 210 insertions(+), 345 deletions(-)
 
- drivers/parport/Kconfig           |  11 -
- drivers/parport/Makefile          |   1 -
- drivers/parport/parport_ax88796.c | 418 ------------------------------
- include/linux/parport.h           |   5 -
- 4 files changed, 435 deletions(-)
- delete mode 100644 drivers/parport/parport_ax88796.c
-
-diff --git a/drivers/parport/Kconfig b/drivers/parport/Kconfig
-index 68a4fe4cd60b..5561362224e2 100644
---- a/drivers/parport/Kconfig
-+++ b/drivers/parport/Kconfig
-@@ -140,17 +140,6 @@ config PARPORT_SUNBPP
- 	  found on many Sun machines. Note that many of the newer Ultras
- 	  actually have pc style hardware instead.
- 
--config PARPORT_AX88796
--	tristate "AX88796 Parallel Port"
--	select PARPORT_NOT_PC
--	help
--	  Say Y here if you need support for the parallel port hardware on
--	  the AX88796 network controller chip. This code is also available
--	  as a module (say M), called parport_ax88796.
--
--	  The driver is not dependent on the AX88796 network driver, and
--	  should not interfere with the networking functions of the chip.
--
- config PARPORT_1284
- 	bool "IEEE 1284 transfer modes"
- 	help
-diff --git a/drivers/parport/Makefile b/drivers/parport/Makefile
-index 022c566c0f32..d4a6b890852d 100644
---- a/drivers/parport/Makefile
-+++ b/drivers/parport/Makefile
-@@ -18,5 +18,4 @@ obj-$(CONFIG_PARPORT_MFC3)	+= parport_mfc3.o
- obj-$(CONFIG_PARPORT_ATARI)	+= parport_atari.o
- obj-$(CONFIG_PARPORT_SUNBPP)	+= parport_sunbpp.o
- obj-$(CONFIG_PARPORT_GSC)	+= parport_gsc.o
--obj-$(CONFIG_PARPORT_AX88796)	+= parport_ax88796.o
- obj-$(CONFIG_PARPORT_IP32)	+= parport_ip32.o
-diff --git a/drivers/parport/parport_ax88796.c b/drivers/parport/parport_ax88796.c
-deleted file mode 100644
-index 54b539809673..000000000000
---- a/drivers/parport/parport_ax88796.c
-+++ /dev/null
-@@ -1,418 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* linux/drivers/parport/parport_ax88796.c
-- *
-- * (c) 2005,2006 Simtec Electronics
-- *	Ben Dooks <ben@simtec.co.uk>
--*/
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/parport.h>
--#include <linux/interrupt.h>
--#include <linux/errno.h>
--#include <linux/platform_device.h>
--#include <linux/slab.h>
--
--#include <asm/io.h>
--#include <asm/irq.h>
--
--#define AX_SPR_BUSY		(1<<7)
--#define AX_SPR_ACK		(1<<6)
--#define AX_SPR_PE		(1<<5)
--#define AX_SPR_SLCT		(1<<4)
--#define AX_SPR_ERR		(1<<3)
--
--#define AX_CPR_nDOE		(1<<5)
--#define AX_CPR_SLCTIN		(1<<3)
--#define AX_CPR_nINIT		(1<<2)
--#define AX_CPR_ATFD		(1<<1)
--#define AX_CPR_STRB		(1<<0)
--
--struct ax_drvdata {
--	struct parport		*parport;
--	struct parport_state	 suspend;
--
--	struct device		*dev;
--	struct resource		*io;
--
--	unsigned char		 irq_enabled;
--
--	void __iomem		*base;
--	void __iomem		*spp_data;
--	void __iomem		*spp_spr;
--	void __iomem		*spp_cpr;
--};
--
--static inline struct ax_drvdata *pp_to_drv(struct parport *p)
--{
--	return p->private_data;
--}
--
--static unsigned char
--parport_ax88796_read_data(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	return readb(dd->spp_data);
--}
--
--static void
--parport_ax88796_write_data(struct parport *p, unsigned char data)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	writeb(data, dd->spp_data);
--}
--
--static unsigned char
--parport_ax88796_read_control(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned int cpr = readb(dd->spp_cpr);
--	unsigned int ret = 0;
--
--	if (!(cpr & AX_CPR_STRB))
--		ret |= PARPORT_CONTROL_STROBE;
--
--	if (!(cpr & AX_CPR_ATFD))
--		ret |= PARPORT_CONTROL_AUTOFD;
--
--	if (cpr & AX_CPR_nINIT)
--		ret |= PARPORT_CONTROL_INIT;
--
--	if (!(cpr & AX_CPR_SLCTIN))
--		ret |= PARPORT_CONTROL_SELECT;
--
--	return ret;
--}
--
--static void
--parport_ax88796_write_control(struct parport *p, unsigned char control)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned int cpr = readb(dd->spp_cpr);
--
--	cpr &= AX_CPR_nDOE;
--
--	if (!(control & PARPORT_CONTROL_STROBE))
--		cpr |= AX_CPR_STRB;
--
--	if (!(control & PARPORT_CONTROL_AUTOFD))
--		cpr |= AX_CPR_ATFD;
--
--	if (control & PARPORT_CONTROL_INIT)
--		cpr |= AX_CPR_nINIT;
--
--	if (!(control & PARPORT_CONTROL_SELECT))
--		cpr |= AX_CPR_SLCTIN;
--
--	dev_dbg(dd->dev, "write_control: ctrl=%02x, cpr=%02x\n", control, cpr);
--	writeb(cpr, dd->spp_cpr);
--
--	if (parport_ax88796_read_control(p) != control) {
--		dev_err(dd->dev, "write_control: read != set (%02x, %02x)\n",
--			parport_ax88796_read_control(p), control);
--	}
--}
--
--static unsigned char
--parport_ax88796_read_status(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned int status = readb(dd->spp_spr);
--	unsigned int ret = 0;
--
--	if (status & AX_SPR_BUSY)
--		ret |= PARPORT_STATUS_BUSY;
--
--	if (status & AX_SPR_ACK)
--		ret |= PARPORT_STATUS_ACK;
--
--	if (status & AX_SPR_ERR)
--		ret |= PARPORT_STATUS_ERROR;
--
--	if (status & AX_SPR_SLCT)
--		ret |= PARPORT_STATUS_SELECT;
--
--	if (status & AX_SPR_PE)
--		ret |= PARPORT_STATUS_PAPEROUT;
--
--	return ret;
--}
--
--static unsigned char
--parport_ax88796_frob_control(struct parport *p, unsigned char mask,
--			     unsigned char val)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned char old = parport_ax88796_read_control(p);
--
--	dev_dbg(dd->dev, "frob: mask=%02x, val=%02x, old=%02x\n",
--		mask, val, old);
--
--	parport_ax88796_write_control(p, (old & ~mask) | val);
--	return old;
--}
--
--static void
--parport_ax88796_enable_irq(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned long flags;
--
--	local_irq_save(flags);
--	if (!dd->irq_enabled) {
--		enable_irq(p->irq);
--		dd->irq_enabled = 1;
--	}
--	local_irq_restore(flags);
--}
--
--static void
--parport_ax88796_disable_irq(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	unsigned long flags;
--
--	local_irq_save(flags);
--	if (dd->irq_enabled) {
--		disable_irq(p->irq);
--		dd->irq_enabled = 0;
--	}
--	local_irq_restore(flags);
--}
--
--static void
--parport_ax88796_data_forward(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	void __iomem *cpr = dd->spp_cpr;
--
--	writeb((readb(cpr) & ~AX_CPR_nDOE), cpr);
--}
--
--static void
--parport_ax88796_data_reverse(struct parport *p)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--	void __iomem *cpr = dd->spp_cpr;
--
--	writeb(readb(cpr) | AX_CPR_nDOE, cpr);
--}
--
--static void
--parport_ax88796_init_state(struct pardevice *d, struct parport_state *s)
--{
--	struct ax_drvdata *dd = pp_to_drv(d->port);
--
--	memset(s, 0, sizeof(struct parport_state));
--
--	dev_dbg(dd->dev, "init_state: %p: state=%p\n", d, s);
--	s->u.ax88796.cpr = readb(dd->spp_cpr);
--}
--
--static void
--parport_ax88796_save_state(struct parport *p, struct parport_state *s)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	dev_dbg(dd->dev, "save_state: %p: state=%p\n", p, s);
--	s->u.ax88796.cpr = readb(dd->spp_cpr);
--}
--
--static void
--parport_ax88796_restore_state(struct parport *p, struct parport_state *s)
--{
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	dev_dbg(dd->dev, "restore_state: %p: state=%p\n", p, s);
--	writeb(s->u.ax88796.cpr, dd->spp_cpr);
--}
--
--static struct parport_operations parport_ax88796_ops = {
--	.write_data	= parport_ax88796_write_data,
--	.read_data	= parport_ax88796_read_data,
--
--	.write_control	= parport_ax88796_write_control,
--	.read_control	= parport_ax88796_read_control,
--	.frob_control	= parport_ax88796_frob_control,
--
--	.read_status	= parport_ax88796_read_status,
--
--	.enable_irq	= parport_ax88796_enable_irq,
--	.disable_irq	= parport_ax88796_disable_irq,
--
--	.data_forward	= parport_ax88796_data_forward,
--	.data_reverse	= parport_ax88796_data_reverse,
--
--	.init_state	= parport_ax88796_init_state,
--	.save_state	= parport_ax88796_save_state,
--	.restore_state	= parport_ax88796_restore_state,
--
--	.epp_write_data	= parport_ieee1284_epp_write_data,
--	.epp_read_data	= parport_ieee1284_epp_read_data,
--	.epp_write_addr	= parport_ieee1284_epp_write_addr,
--	.epp_read_addr	= parport_ieee1284_epp_read_addr,
--
--	.ecp_write_data	= parport_ieee1284_ecp_write_data,
--	.ecp_read_data	= parport_ieee1284_ecp_read_data,
--	.ecp_write_addr	= parport_ieee1284_ecp_write_addr,
--
--	.compat_write_data	= parport_ieee1284_write_compat,
--	.nibble_read_data	= parport_ieee1284_read_nibble,
--	.byte_read_data		= parport_ieee1284_read_byte,
--
--	.owner		= THIS_MODULE,
--};
--
--static int parport_ax88796_probe(struct platform_device *pdev)
--{
--	struct device *_dev = &pdev->dev;
--	struct ax_drvdata *dd;
--	struct parport *pp;
--	struct resource *res;
--	unsigned long size;
--	int spacing;
--	int irq;
--	int ret;
--
--	dd = kzalloc(sizeof(*dd), GFP_KERNEL);
--	if (!dd)
--		return -ENOMEM;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (res == NULL) {
--		dev_err(_dev, "no MEM specified\n");
--		ret = -ENXIO;
--		goto exit_mem;
--	}
--
--	size = resource_size(res);
--	spacing = size / 3;
--
--	dd->io = request_mem_region(res->start, size, pdev->name);
--	if (dd->io == NULL) {
--		dev_err(_dev, "cannot reserve memory\n");
--		ret = -ENXIO;
--		goto exit_mem;
--	}
--
--	dd->base = ioremap(res->start, size);
--	if (dd->base == NULL) {
--		dev_err(_dev, "cannot ioremap region\n");
--		ret = -ENXIO;
--		goto exit_res;
--	}
--
--	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0)
--		irq = PARPORT_IRQ_NONE;
--
--	pp = parport_register_port((unsigned long)dd->base, irq,
--				   PARPORT_DMA_NONE,
--				   &parport_ax88796_ops);
--
--	if (pp == NULL) {
--		dev_err(_dev, "failed to register parallel port\n");
--		ret = -ENOMEM;
--		goto exit_unmap;
--	}
--
--	pp->private_data = dd;
--	dd->parport = pp;
--	dd->dev = _dev;
--
--	dd->spp_data = dd->base;
--	dd->spp_spr  = dd->base + (spacing * 1);
--	dd->spp_cpr  = dd->base + (spacing * 2);
--
--	/* initialise the port controls */
--	writeb(AX_CPR_STRB, dd->spp_cpr);
--
--	if (irq >= 0) {
--		/* request irq */
--		ret = request_irq(irq, parport_irq_handler,
--				  IRQF_TRIGGER_FALLING, pdev->name, pp);
--
--		if (ret < 0)
--			goto exit_port;
--
--		dd->irq_enabled = 1;
--	}
--
--	platform_set_drvdata(pdev, pp);
--
--	dev_info(_dev, "attached parallel port driver\n");
--	parport_announce_port(pp);
--
--	return 0;
--
-- exit_port:
--	parport_remove_port(pp);
-- exit_unmap:
--	iounmap(dd->base);
-- exit_res:
--	release_mem_region(dd->io->start, size);
-- exit_mem:
--	kfree(dd);
--	return ret;
--}
--
--static int parport_ax88796_remove(struct platform_device *pdev)
--{
--	struct parport *p = platform_get_drvdata(pdev);
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	free_irq(p->irq, p);
--	parport_remove_port(p);
--	iounmap(dd->base);
--	release_mem_region(dd->io->start, resource_size(dd->io));
--	kfree(dd);
--
--	return 0;
--}
--
--#ifdef CONFIG_PM
--
--static int parport_ax88796_suspend(struct platform_device *dev,
--				   pm_message_t state)
--{
--	struct parport *p = platform_get_drvdata(dev);
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	parport_ax88796_save_state(p, &dd->suspend);
--	writeb(AX_CPR_nDOE | AX_CPR_STRB, dd->spp_cpr);
--	return 0;
--}
--
--static int parport_ax88796_resume(struct platform_device *dev)
--{
--	struct parport *p = platform_get_drvdata(dev);
--	struct ax_drvdata *dd = pp_to_drv(p);
--
--	parport_ax88796_restore_state(p, &dd->suspend);
--	return 0;
--}
--
--#else
--#define parport_ax88796_suspend NULL
--#define parport_ax88796_resume  NULL
--#endif
--
--MODULE_ALIAS("platform:ax88796-pp");
--
--static struct platform_driver axdrv = {
--	.driver		= {
--		.name	= "ax88796-pp",
--	},
--	.probe		= parport_ax88796_probe,
--	.remove		= parport_ax88796_remove,
--	.suspend	= parport_ax88796_suspend,
--	.resume		= parport_ax88796_resume,
--};
--
--module_platform_driver(axdrv);
--
--MODULE_AUTHOR("Ben Dooks <ben@simtec.co.uk>");
--MODULE_DESCRIPTION("AX88796 Parport parallel port driver");
--MODULE_LICENSE("GPL");
-diff --git a/include/linux/parport.h b/include/linux/parport.h
-index 1c16ffb8b908..a0bc9e0267b7 100644
---- a/include/linux/parport.h
-+++ b/include/linux/parport.h
-@@ -40,10 +40,6 @@ struct amiga_parport_state {
-        unsigned char statusdir;/* ciab.ddrb & 7 */
- };
- 
--struct ax88796_parport_state {
--	unsigned char cpr;
--};
--
- struct ip32_parport_state {
- 	unsigned int dcr;
- 	unsigned int ecr;
-@@ -55,7 +51,6 @@ struct parport_state {
- 		/* ARC has no state. */
- 		struct ax_parport_state ax;
- 		struct amiga_parport_state amiga;
--		struct ax88796_parport_state ax88796;
- 		/* Atari has not state. */
- 		struct ip32_parport_state ip32;
- 		void *misc; 
--- 
-2.39.0
+=2D-
+2.30.2
 
