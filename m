@@ -2,128 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0910965E647
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0C965E652
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjAEHwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S230163AbjAEH6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjAEHwW (ORCPT
+        with ESMTP id S231202AbjAEH55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:52:22 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D2114028;
-        Wed,  4 Jan 2023 23:52:21 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:ead5:88fc:cd91:c042] (unknown [IPv6:2a01:e0a:120:3210:ead5:88fc:cd91:c042])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE3B96602D29;
-        Thu,  5 Jan 2023 07:52:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672905139;
-        bh=I9+kXg3GpKIbjc5YSQXZHG/6U6cH7e+ZQgdfpA18EMM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ADMxEGvXipnJKcNj5GP8AvdiMDBFxRXT0YpNOYNJa6CJrbl5t8ZhHfXTnCnwQMKS8
-         kLfG9Uzw3qA6trfC776ndavgII8win/f4eE7Y2jmBP1Gd/OqWLhOMgLl67mMZzv3um
-         uCAxkniZaXgx4Vgq4v7MeRUz1QemNSASGs4f5T9A4s9lfzgkc8/ib1Vc7SSnbN3dON
-         joXSvfmO2qBdpt6GaZRNE4FuHtThJ7vprYUIWrgsNQieZaS7VL2UOmu2gHv11xpEs/
-         Md92k1tfQYJQJWigRxJDVAQyqWq7cVh/Abyb7rbK0M9vg1b56+01ZgbbQa4MBKWow9
-         aH7V00V9V5giw==
-Message-ID: <20ff6ebe-7469-444a-f9f4-cb8b38e31538@collabora.com>
-Date:   Thu, 5 Jan 2023 08:52:15 +0100
+        Thu, 5 Jan 2023 02:57:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE77479E7;
+        Wed,  4 Jan 2023 23:57:56 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3057kFpV005404;
+        Thu, 5 Jan 2023 07:57:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=leoUKZpjBHE4UPcagQvr1kAX5H/JI6p/RG60UJCclyY=;
+ b=IgqTN/kEfTI7+A7L5Ni6SoM3wyHh/SoDM7MZuFvaTui7AExDcmQM8ShIfks4dkSw1Kn3
+ SavU0leS0JioOtMzNHNgxqASkKcLr5roGdEUCnFKS7dWKyBRn6G/sFrEfrGKxW1Ra0ny
+ kDC+f++MCBNuw4nUaFFsesfnzK9I/LL4Roe2ZEjsfys2isF8yN+ChuEeRQYKRxZ2IGH8
+ TL0gatz/W+c9dKjugYwEKHjAofscNLjl1/W5/VanvF/uBnVvfyeic3hN9wUJcmeCcy+d
+ /q7QQc2xpZ8UA3yVieCLbm6kBx4V05gAGrkQ6K/WT6MLUO7Is5du17ku1UXyldQpHaGW 7Q== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtf186kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 07:57:36 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3054pLZu001428;
+        Thu, 5 Jan 2023 07:57:34 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfee38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 07:57:34 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3057vTph20906728
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Jan 2023 07:57:30 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E06712004E;
+        Thu,  5 Jan 2023 07:57:29 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DD7720040;
+        Thu,  5 Jan 2023 07:57:29 +0000 (GMT)
+Received: from osiris (unknown [9.171.68.186])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  5 Jan 2023 07:57:28 +0000 (GMT)
+Date:   Thu, 5 Jan 2023 08:57:27 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] s390: define RUNTIME_DISCARD_EXIT to fix link error with
+ GNU ld < 2.36
+Message-ID: <Y7aC50LZK1t8Eysg@osiris>
+References: <20230105031306.1455409-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105031306.1455409-1-masahiroy@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kCFQebmxhKqPUH_Qcm2PDBEL4M6DeUEX
+X-Proofpoint-ORIG-GUID: kCFQebmxhKqPUH_Qcm2PDBEL4M6DeUEX
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 07/13] media: verisilicon: Check AV1 bitstreams bit
- depth
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230103170058.810597-1-benjamin.gaignard@collabora.com>
- <20230103170058.810597-8-benjamin.gaignard@collabora.com>
- <CAAEAJfBpGwa-ZDFFCep8rk4+dgLrYOFdfyrqBZP68C+jkN0qMQ@mail.gmail.com>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAAEAJfBpGwa-ZDFFCep8rk4+dgLrYOFdfyrqBZP68C+jkN0qMQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_02,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 phishscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301050062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 05, 2023 at 12:13:06PM +0900, Masahiro Yamada wrote:
+> Nathan Chancellor reports that the s390 vmlinux fails to link with
+> GNU ld < 2.36 since commit 99cb0d917ffa ("arch: fix broken BuildID
+> for arm64 and riscv").
+> 
+> It happens for defconfig, or more specifically for CONFIG_EXPOLINE=y.
+> 
+>   $ s390x-linux-gnu-ld --version | head -n1
+>   GNU ld (GNU Binutils for Debian) 2.35.2
+>   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- allnoconfig
+>   $ ./scripts/config -e CONFIG_EXPOLINE
+>   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- olddefconfig
+>   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu-
+>   `.exit.text' referenced in section `.s390_return_reg' of drivers/base/dd.o: defined in discarded section `.exit.text' of drivers/base/dd.o
+>   make[1]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+>   make: *** [Makefile:1252: vmlinux] Error 2
+> 
+> arch/s390/kernel/vmlinux.lds.S wants to keep EXIT_TEXT:
+> 
+>         .exit.text : {
+>                 EXIT_TEXT
+>         }
+> 
+> But, at the same time, EXIT_TEXT is thrown away by DISCARD because
+> s390 does not define RUNTIME_DISCARD_EXIT.
+> 
+> I still do not understand why the latter wins after 99cb0d917ffa,
+> but defining RUNTIME_DISCARD_EXIT seems correct because the comment
+> line in arch/s390/kernel/vmlinux.lds.S says:
+> 
+>         /*
+>          * .exit.text is discarded at runtime, not link time,
+>          * to deal with references from __bug_table
+>          */
+> 
+> Nathan also found that binutils commit 21401fc7bf67 ("Duplicate output
+> sections in scripts") cured this issue, so we cannot reproduce it with
+> binutils 2.36+, but it is better to not rely on it.
+> 
+> Fixes: 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv")
+> Link: https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  arch/s390/kernel/vmlinux.lds.S | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Le 04/01/2023 à 20:33, Ezequiel Garcia a écrit :
-> Hi Benjamin,
->
-> Thanks for the patch.
->
-> On Tue, Jan 3, 2023 at 2:01 PM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->> The driver supports 8 and 10 bits bitstreams, make sure to discard
->> other cases.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/media/platform/verisilicon/hantro_drv.c | 14 +++++++++++++-
->>   1 file changed, 13 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
->> index 8e93710dcfed..16539e89935c 100644
->> --- a/drivers/media/platform/verisilicon/hantro_drv.c
->> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
->> @@ -282,7 +282,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->>                  /* We only support profile 0 */
->>                  if (dec_params->profile != 0)
->>                          return -EINVAL;
->> +       } else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
->> +               const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
->> +
->> +               if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
->> +                       return -EINVAL;
->>          }
->> +
->>          return 0;
->>   }
->>
->> @@ -333,7 +339,13 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
->>
->>          switch (ctrl->id) {
->>          case V4L2_CID_STATELESS_AV1_SEQUENCE:
->> -               ctx->bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
->> +               int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
->> +
->> +               if (vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)))
->> +                       if (ctx->bit_depth != bit_depth)
->> +                               return -EINVAL;
->> +
-> Please use the v4l2_ctrl_grab API. Can you send a separate series to address
-> this for the other codecs?
-
-I have tried to use v4l2_ctrl_grab API but when you grab a control you can set it anymore
-and V4L2_CID_STATELESS_AV1_SEQUENCE is send for each frame so it blocks everything.
-
-Benjamin
-
->
-> Thanks a lot!
-> Ezequiel
->
->> +               ctx->bit_depth = bit_depth;
->>                  break;
->>          default:
->>                  return -EINVAL;
->> --
->> 2.34.1
->>
+Applied, thanks!
