@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B4065E822
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E3A65E827
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAEJoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
+        id S231941AbjAEJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAEJox (ORCPT
+        with ESMTP id S231499AbjAEJp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:44:53 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268A551FC
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:44:51 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id h27so23840922vsq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 01:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3toQXUWWPCcvltIO7u9Wn10hSBHJoQ6TUMDeTDfT/fc=;
-        b=atep7uUtb+zxhTBJ+hGEP68PwdoXUqeZB4/OWzzhkITRaOAGHztYd/QfoWt4G3mMBj
-         9+vICojJnySUJ6qaCESiryRM6KhFqr6KD+SZKvCa25Lf8QBt1b5395RC98SeWEbmfGOH
-         8HNzrxcgYh+hyrvfSUN+sEAneaBosYOuk/x0vM5zsQOE7TN+XJgCYcPGHrkhO69sSmQH
-         eJfHhnc8xlXyqHjio6E1gPcS/koqkrqbAXj+wK0N9opPEB5L1/K+axw7O0NF81oCau+6
-         BPs6XcJR/qrbmMjs3zkQqVF8DL9PAMdXgkiKCIGSm14vGVm02IrR+51HSFMvCGwesOo0
-         mLSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3toQXUWWPCcvltIO7u9Wn10hSBHJoQ6TUMDeTDfT/fc=;
-        b=reAmGIrYqrIsqHeetTHPA+mnzafwhj4nfJw+ym+wDni21gPndGMwnJg51R+zd9/1iQ
-         lnbfbWst3RmQSw1gHrnWflcczMGkAMJo1XODxSXudsMqsNbxrVYWoS9E5IoaYJ+AGm0y
-         VmcCC6QTHFVPpH8/umGUGARWVFHnzzsAWD9D5oxKNqyUXlZMvUMZJJ26nnCt8aop7TBg
-         F9dAhQ6fsGz3Zf7MNYv5VF7jLTQm1ybzCBTmFg3zSUIpBbMP69x7VTRSphNmsIUe9pgu
-         RKwPi2SALHbdIuKOdYhWP57h3p2rH2aS7eFLKvUNoK8KMr84/ZF2NzJJjlb9j1IUkwQW
-         qolQ==
-X-Gm-Message-State: AFqh2koelGPx/gGSjnqZlT407nY2gaGcj3tA4TRRgb3fU0xMVkXTINgU
-        8Fy75d/dnWw4bwQrHmxUIKCqrx9Zd7DXGd0fK51AVQ==
-X-Google-Smtp-Source: AMrXdXt3n/sZhnaK52Jh5rEIWCW4sc9q839sYD5svAgMfQxgJC/9Tev5bANJTmfvz3NKHbT00zIOXp19WY5MVtAvpyY=
-X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
- y14-20020a0561020c4e00b003c8c5130197mr3877679vss.9.1672911890351; Thu, 05 Jan
- 2023 01:44:50 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 5 Jan 2023 15:14:39 +0530
-Message-ID: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
-Subject: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000 [#1]
- PREEMPT SMP
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Jeff Xu <jeffxu@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        David Herrmann <dh.herrmann@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 5 Jan 2023 04:45:57 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C614C72E;
+        Thu,  5 Jan 2023 01:45:55 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C8CAA3200A01;
+        Thu,  5 Jan 2023 04:45:51 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Thu, 05 Jan 2023 04:45:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1672911951; x=1672998351; bh=51
+        c0Ws4aE5zuhiM20BTPanynGNXeOuqkek9xxgYiHCQ=; b=UfFaFz9CVYAtKPPoaf
+        /dw9VFTAYq4Nc2ofPjWkN+xpYtuwA8K2b65XYmPfdpv1UGkdMx4yxhW6nui6BE2D
+        K4n2T/X9FWJO0G40gEMl7ysoA/86IUM8zByodQ2f58Z31CsARndka+mGpB98hk+u
+        rCRPAfPJ+YHoH9XzaGyb5W0tdJhrPmOIW/EMZ4EDpEhuOahvbkb02TXI6iIPBP3U
+        pDmiLboFvbSxMgdujGTCWRFLdENfHmkASdj4mln5XCgZO10sPEiuIp28P7UI3ALv
+        wljAyH7Q5zYMBcwsLRYu6VzELWxwNnSzvrLgkSOoiB3ZnxR96ghGw3MukpsCBbHU
+        /qEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672911951; x=1672998351; bh=51c0Ws4aE5zuhiM20BTPanynGNXe
+        Ouqkek9xxgYiHCQ=; b=qjQ+7c0EUdq9qlKGbTx5H+g6AHVyXjVrw+/ksGuW8pe9
+        JWbzVxfSMu4YWQpDfwnB3iod0cYZ8iWPe/aTyjO3Yjp2Oro51T7U9SfO63ak1tui
+        fUYD6yLe0Rr29xKZZJoSS5ZHuZBEGTWTf0Lev7w0w99VVDT2yc9B1WDcBwnSiKWV
+        bxaqOWRPu2yEMv3qrBSDU2Ef8Np9GwvNle8sYSX0SGhqayFkCB6di5DshTINQm1Z
+        V6bpLPybCVEUtMa8+dOJAcIPnqwJXJ23ujDEKlbn26nHLJj5BbtCo/xz/YSsztOv
+        gAU/vDqZlHrKs2UGviwyM65UH82gindlI+tjHLjsig==
+X-ME-Sender: <xms:Tpy2Y7TIiFieamIoccbfuxR-0mRf8GIxks2VA9izr0Yq-bYdwD1DVg>
+    <xme:Tpy2Y8xIdfxrB0_Ao0rqVCVeDXX0F8qi1VKIFgOkM0BDYYjx8CHOXaNxQ1lkKAp6K
+    18LhqQI4hDkNEipAmA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpedvkeehfeffudehtefftddtgefhjeehgffggffhueegiefhheeihfdvvdel
+    hfdtveenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgurghrthekuddutddrphihne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghn
+    sehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:Tpy2Yw2fx9ilqALzM2-4-l-b50SvpEqBtmQl5GkHok0_sZ87RmTeEQ>
+    <xmx:Tpy2Y7DSw9AVejI2WelEQM0kmtJ79iz2_m8Tz5Td79nOpJIx_ZQPSw>
+    <xmx:Tpy2Y0iZLumdlnfvhgeZ_0S6-fWJN7mKJw0g2zjPBYvr4X9xIMtTbA>
+    <xmx:T5y2Y5YNDpdUA1QOwdi85QAxxDHch6A38DPRqXM7Yr6AsNaZC_UmcQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3E249A6007C; Thu,  5 Jan 2023 04:45:50 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <bfee5a64-bb7c-43ee-a2ca-7e13421508f4@app.fastmail.com>
+In-Reply-To: <fd66fa48-8810-5b8b-c330-8456bdb9de9e@marcan.st>
+References: <20230104110013.24738-1-marcan@marcan.st>
+ <20230104110013.24738-8-marcan@marcan.st>
+ <bebc741d-bcbe-4449-9379-be70fd65b0f0@app.fastmail.com>
+ <fd66fa48-8810-5b8b-c330-8456bdb9de9e@marcan.st>
+Date:   Thu, 05 Jan 2023 10:45:29 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Janne Grunau" <j@jannau.net>, "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] iommu: dart: Add t8110 DART support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
-following invalid opcode was noticed on stable-rc 6.1 and  6.0.
+Hi,
 
-This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
-Build, config and test log details provided in the below links [1].
+On Thu, Jan 5, 2023, at 06:19, Hector Martin wrote:
+> On 2023/01/04 22:50, Sven Peter wrote:
+>> Do you have any more details on this registers? For the 8103 DART
+>> we called it _CONFIG but I assume for the t8110 DART it can
+>> actually lock different parts of the HW instead of just a global lock?
+>
+> This is based on R's reverse engineering here:
+>
+> https://github.com/AsahiLinux/m1n1/blob/main/proxyclient/m1n1/hw/dart8110.py#L87
+>
+> I don't think they ever fully nailed down exactly what the lock bit
+> behavior is, though.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Fair enough, I was mostly curious if it was actually _PROTECT and not just
+_CONFIG with different bit assignments. Sounds like it does mostly set up
+protections though.
 
-# selftests: memfd: run_hugetlbfs_test.sh
-[  111.866742] run_hugetlbfs_t (1023): drop_caches: 3
-[  111.892484] invalid opcode: 0000 [#1] PREEMPT SMP
-[  111.893089] CPU: 2 PID: 1026 Comm: memfd_test Tainted: G
-     N 6.1.4-rc1 #1
-[  111.894015] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[  111.895048] EIP: hugetlb_file_setup.cold+0x0/0x33
-[  111.895597] Code: ff e9 07 f3 26 ff 0f 0b c7 04 24 c8 ee dd c9 e8
-25 47 ff ff b8 ea ff ff ff e9 ac f8 26 ff 0f 0b 0f 0b 0f 0b 0f 0b 0f
-0b 0f 0b <0f> 0b 64 a1 98 48 3a ca c6 05 f3 42 22 ca 01 8b 90 d4 03 00
-00 05
-[  111.897716] EAX: c4957128 EBX: 00000000 ECX: 00000020 EDX: 00000000
-[  111.898431] ESI: 80000004 EDI: 00000005 EBP: c552bf04 ESP: c552bee4
-[  111.899218] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010212
-[  111.899991] CR0: 80050033 CR2: 00000000 CR3: 0528b000 CR4: 003506d0
-[  111.900774] Call Trace:
-[  111.901072]  __ia32_sys_memfd_create+0x196/0x220
-[  111.901616]  __do_fast_syscall_32+0x77/0xd0
-[  111.902119]  do_fast_syscall_32+0x32/0x70
-[  111.902620]  do_SYSENTER_32+0x15/0x20
-[  111.903134]  entry_SYSENTER_32+0x98/0xf6
-[  111.903701] EIP: 0xb7ef1549
-[  111.904034] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01
-10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f
-34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
-8d 76
-[  111.906124] EAX: ffffffda EBX: 0804b486 ECX: 80000004 EDX: 080493de
-[  111.906902] ESI: b7ccf220 EDI: b7dc58e0 EBP: bfe56cf8 ESP: bfe56c8c
-[  111.907637] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000292
-[  111.908502] Modules linked in: sch_fq_codel fuse configfs [last
-unloaded: test_strscpy(N)]
-[  111.909502] ---[ end trace 0000000000000000 ]---
-[  111.910064] EIP: hugetlb_file_setup.cold+0x0/0x33
-[  111.910638] Code: ff e9 07 f3 26 ff 0f 0b c7 04 24 c8 ee dd c9 e8
-25 47 ff ff b8 ea ff ff ff e9 ac f8 26 ff 0f 0b 0f 0b 0f 0b 0f 0b 0f
-0b 0f 0b <0f> 0b 64 a1 98 48 3a ca c6 05 f3 42 22 ca 01 8b 90 d4 03 00
-00 05
-[  111.912785] EAX: c4957128 EBX: 00000000 ECX: 00000020 EDX: 00000000
-[  111.913518] ESI: 80000004 EDI: 00000005 EBP: c552bf04 ESP: c552bee4
-[  111.914259] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010212
-[  111.915104] CR0: 80050033 CR2: 00000000 CR3: 0528b000 CR4: 003506d0
-# ./run_hugetlbfs_test.sh: line 60:  1026 Segmentation fault
-./memfd_test hugetlbfs
-# opening: ./mnt/memfd
-# fuse: DONE
-ok 3 selftests: memfd: run_hugetlbfs_test.sh
 
-[1]
-https://lkft.validation.linaro.org/scheduler/job/6022150#L2079
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.3-208-ga31425cbf493/testrun/13974189/suite/log-parser-test/tests/
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.3-208-ga31425cbf493/testrun/13974189/suite/log-parser-test/test/check-kernel-invalid-opcode/details/
-
-metadata:
-  git_ref: linux-6.1.y
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-  git_sha: a31425cbf493ef8bc7f7ce775a1028b1e0612f32
-  git_describe: v6.1.3-208-ga31425cbf493
-  kernel_version: 6.1.4-rc1
-  kernel-config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/738268273
-  artifact-location:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w
-  toolchain: gcc-11
-  vmlinux: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/vmlinux.xz
-  System.map: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JrzvZc223pctlAxVhCIebJ8q0w/System.map
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Sven
