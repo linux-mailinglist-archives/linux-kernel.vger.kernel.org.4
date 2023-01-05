@@ -2,146 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35F365E5CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5AC65E5CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjAEHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S230112AbjAEHHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjAEHER (ORCPT
+        with ESMTP id S229569AbjAEHHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:04:17 -0500
-Received: from outbound.mail.protection.outlook.com (mail-tyzapc01on2050.outbound.protection.outlook.com [40.107.117.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245548805;
-        Wed,  4 Jan 2023 23:04:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mw9ZFLeaPSbQK301zOuyJGd5KW/x5iLYjlc3cwdmRL8uyRIDjh+x6GA4+dQx33TyCrzVrfEI8kIQWGZyqoOmhkAH5Dx0FmhzOXzb0QfY3Z1QPvhgrL/xi8aYRjSj4Udb7UFTW/OPgtKA67ost8mFtpW47rK6yg4cncQXP3+Fu80VqQNg7zdKvm/vT5adWvjd2RFiOAkWQDvBm6hM0SicHusmYpXg/AeoIgvUlCZaK+2ZmwEfOMwA7sRZnRMKVzpVerPT1Mp9Vs2eqiyOZt/V/tgyNtuYR5IYeJ9FykNx8MIYfCX7zA4emtHrM7shOVwDAdj/ct16HIVcl4JXVD9PFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nf2+kPQlHRKB7B/O/OwtpAougFeZGusNvdexzj42HQY=;
- b=V1gb6cH3Uw+S1aIPiwdZNg9gEGjd4UERxQ7+ysckVvMiLWo0QVY5pHgqKZZTngVRkhAxZI4JUGSFZf4+DlaW3mYgyaD4r587vKCrnPdcJjNgEWLStb8WjLSkBsAMZcuq/jDDrYtXCTG9/qFDzRleVJOA+xrUfdsX1f7b9H1eb0Yl76q16I6k0iiuZCx3qwPVJDKQkKbDk4bBO+n4XIMBqRbYrMsDf/SZAtSbY5P5ZAMBaRVAQC0TB32E38XuPFTANVDtzmtsBwtF7Flqs6GDBVVN3OFu9SV/qZvQ81ujGsbI+gGugEwkKar+pHoWIf5VIMgx/2mKxDNdvi3tE7ozRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nf2+kPQlHRKB7B/O/OwtpAougFeZGusNvdexzj42HQY=;
- b=fd3uDxhqTS/2Vv0zH1rU1PHAZQsIfMKMQEsHCn6sO9WF/xFS0sxdWLu9912ur9ol36PVG1oNojx8hgkWx1TH6DRy7WJcZ0fSAyIXOIl69W28oSsrQN16CSdEA5OFLKe8qC9jErHOcZS4AgNsQ8ZPC2EDzsvaObCX1oAI4El2mekfCrWlyp0TwgYgoKTgakaomAtBuAkVlJRxwoQs0A2RkiDLv6eRR8E03jAcjDaYCbNjdzFWvER1a0ImwAGqXhjzPCVdWnNi/w5CjvIbNGMRtrBARJ1e3vP30xrrV/UzkRJi8J7q3SNWA+ZQiFayEndA6SiL6eNCndoIkY6CkD6KuQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-Received: from PSAPR06MB3942.apcprd06.prod.outlook.com (2603:1096:301:2b::5)
- by SI2PR06MB4489.apcprd06.prod.outlook.com (2603:1096:4:151::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 07:04:13 +0000
-Received: from PSAPR06MB3942.apcprd06.prod.outlook.com
- ([fe80::dbda:208a:7bdb:4edf]) by PSAPR06MB3942.apcprd06.prod.outlook.com
- ([fe80::dbda:208a:7bdb:4edf%5]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 07:04:13 +0000
-From:   liming.wu@jaguarmicro.com
-To:     "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        398776277@qq.com, Liming Wu <liming.wu@jaguarmicro.com>
-Subject: [PATCH] vhost-test: remove meaningless debug info
-Date:   Thu,  5 Jan 2023 15:03:56 +0800
-Message-Id: <20230105070357.274-1-liming.wu@jaguarmicro.com>
-X-Mailer: git-send-email 2.34.0.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0105.apcprd02.prod.outlook.com
- (2603:1096:4:92::21) To PSAPR06MB3942.apcprd06.prod.outlook.com
- (2603:1096:301:2b::5)
+        Thu, 5 Jan 2023 02:07:52 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F2051334
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:07:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672902470; x=1704438470;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=aDP+IGMLjZx3A3AwWc6RZJTNibITPhyuge/CSc9dDcc=;
+  b=kL91uflapZRn9YLiZELjZw3eFgXOxDj5WBEMYlrrhdBBs3rjePO5Sf3+
+   SQ6QDgOQ/yp03aNRWIMwZOKkB1ZOusAArKc440MCaqS6MYo3WkTx17fbY
+   LtrdVGdwr4tqFLEcD2GJo2n3CWDOEy9qaiO9655k/uOEKrS/ILcd0u0DN
+   sWZYn8lJCYEZzYuTESXVrnAfqX8gW7v5mywzOd22gFgDmUpbqCPhIW511
+   40YAAjCew2nVYthSMaRH95srvW8b8JifIrmHeaZoIHH58GGWvgfmLedK8
+   Ms+up5lIrD87PXhhPaCfbJolyyimtvByq4ihUYocZdRxZpIBasEfNy2m6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323365927"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="323365927"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:07:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="686000778"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="686000778"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:07:47 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 1/8] migrate_pages: organize stats with struct
+ migrate_pages_stats
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-2-ying.huang@intel.com>
+        <87y1qhu0to.fsf@nvidia.com>
+        <87lemheddk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <87358psc99.fsf@nvidia.com>
+Date:   Thu, 05 Jan 2023 15:06:53 +0800
+In-Reply-To: <87358psc99.fsf@nvidia.com> (Alistair Popple's message of "Thu,
+        05 Jan 2023 17:50:14 +1100")
+Message-ID: <87o7rdbgtu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PSAPR06MB3942:EE_|SI2PR06MB4489:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63332dec-2d3d-4313-d315-08daeeeb0d35
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Byoqfw2DYeX/nRfcVZSTnNiEoXJvXPWNsbN/sPif/TKyOE/kUSSQsNjzffXio1WD/+zFAvaCi5K/6xzT0qX+kTSyqxgyVvZtZBwvhJoHXrh6AmoZZoc8qhQsHMr+wS3ZGqst418XySaSbkhBOowoNGFTHvQadLG7GJfnQ318uap9PUlCFYV2mEyn5rb9CGxCnZ5ZXW6cWWTERJwaem3gaE94kEt0kjNKnCulSfscPuBwg7AGHwwIKJqRuW3OoMAITfddiR/P4rDIEK+9atIGkbtrHb+g1sJjwj+Nf/TVVvNRJ4TMxwBKVB6/v/7zkigQQ/Ft7n45Bm0NZaoAxJLhtvhsDAF7zA5GHELwmrg9N80RjraK1DZQYXwdB1vJro12iI4ifslGMH9x2heBM3mWDaxNYAQzCrono2aL40UFkySeWgfCuDrxxhvKrBMpOzpZx2/wT/cfk08FqnWK50Eh13Vz+ACzUy7A+xu8aV640e5fInl1TDU2yf29E9vorVo+mLBSUptf7XMCcDFf3Pl0Xg1KVV1OAz2Yyv/3LbqG3EjCq3SENhQ20QM63+evBnRrybtsDG9OsV+MlBcGwhUm7qqCnrbE23F1m7q8gzOIe4KpynyD7ZOfIWWyf5UcZULXkghN2Pr6Xh38aSclXHVs4GR3JINP1p/+TfxQ8L30lb2DuoRtduBSUxyAlDZnuVGHXdMNGhZ0eviUXdOTZp0A8Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB3942.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(39840400004)(366004)(396003)(451199015)(83380400001)(1076003)(26005)(186003)(6512007)(9686003)(107886003)(6666004)(6506007)(86362001)(36756003)(38350700002)(38100700002)(2616005)(4326008)(41300700001)(8676002)(6486002)(2906002)(5660300002)(4744005)(8936002)(52116002)(478600001)(66556008)(316002)(66946007)(6636002)(66476007)(110136005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LtSCy2qCmd5t3hPIuzGIg5i74q4qCUjvhnJANIsIX6j84VDEJ3YZM9FHhFeA?=
- =?us-ascii?Q?C+kaLB/UYpvJb+ZiX1T6RDTzhVJQ79YAAexHD73zTQo+X25tInjPOX28SJ7y?=
- =?us-ascii?Q?RQCfsyCFHtlwWCUP11HtCkpkeedgQuiPc3db5R0b1tpauFX1S9lWA0Az8068?=
- =?us-ascii?Q?AId6nOUvpDPud/gIP2WONDEygEs6rZDui5vb9MWN6jMfBmWhUtjisHiPFEkZ?=
- =?us-ascii?Q?UO28ZKHvRrSxNU9JDfawQWgzsmVCotJV0EoUWkOqH2In0t1+wDa6u5blALmw?=
- =?us-ascii?Q?i68X/Q0EDHTlSuzzq/CdiN/Dbgpy2InFByeor2t2aKmB2O5aGmPTqTsL7QP/?=
- =?us-ascii?Q?wXt68DVO33YFLSanEjiEj8CEnUTiHQcnS8BmmZqsFiUNdYOSaN2zjSW2eIID?=
- =?us-ascii?Q?MqZSSBC7tevc9sjxMqC/qiUNnkiTUXKikNFMDY5dNKCjDTjlePxYkJ0U8jzm?=
- =?us-ascii?Q?pNGgUSEUq6XAKM00+H8Q4tN6mVCk942KoA5iwfLr+rdle1zPNUF6ESoNzBJl?=
- =?us-ascii?Q?DsY6hrlqck9eItiYeLGoj1kiiAl97/zPSqu/IsGwe3NMXc5Yjdofdw3RfW5s?=
- =?us-ascii?Q?jt6kTpWEt4Gca0b+auZwcWwypwnQbvJMGRf9lrAIo0FtPaLsLd6HjWrQK/DD?=
- =?us-ascii?Q?GwfTaE4D8F83x8pLgMQEW7fqIRe2K+vUcLP2FhEIkw0TD6jJ5ZvBOrTlJwUl?=
- =?us-ascii?Q?G+868uB1oPLXuC8FaFMi8pVu61NJs7YbTcAiPHy22GPPbBvW+nAFUM/Gem9T?=
- =?us-ascii?Q?C3FOGGLdy5Oulwz1AJF9wLYGy1uegSpYuUFAkS+cw9yDPSbew7jljRoxSyt3?=
- =?us-ascii?Q?fs/gOTo3Nb83/E8uI1MQ2c8VeE1rbWtmkeyTTzCJXno+RQWVfjkjVddi/qsA?=
- =?us-ascii?Q?YrdcMpvVE8yR7a5hav8AMclpzT549az5NfEKNrBtcm/aOCoxpkFISEeaU+eN?=
- =?us-ascii?Q?ZZ+AxHUljFGjf+lGpKsq3Gbqg++UhU5TMBBXc6Ucq4HOSo8JkuzpisSNtYxC?=
- =?us-ascii?Q?uYqaWpmQDSpJQt2HfoCyXy+WrvO8CXowikfUWl6EwU+c/7bPgmsz7CA8LRXa?=
- =?us-ascii?Q?A7Yh8kInKSO0P9JgaJBvZFY3g16YojjD2eCERr5Cyy3W+chrCDnzanr6eIMF?=
- =?us-ascii?Q?MkNcnKlLIIDmTZr/yUTP9wxPojiOtiLoAy+9jKC+Gf5VN6QIoXFwuQI61msq?=
- =?us-ascii?Q?g5GkLI4mKdWz6ioBNnqNWt2pneS5Vtczb+rRy560pWwwsX3yBrF82beAZ8v9?=
- =?us-ascii?Q?UR3TSwAhQfOOQTapEGUSj5TM7/9gE5HfwDfTMC1fmFgx+71Ms8ZqQFopqsiV?=
- =?us-ascii?Q?aRoi420rUlV9Qo+H1EjfvY8hvdHx5l4l/hmTrgK04jwCgVy7xe+VeIC1Acr+?=
- =?us-ascii?Q?sPx3qPjt/TgZ8zsLipwWHr7R9BfMN6DcXxb4a5RRREmm2tgTHNAVW7r3CBkc?=
- =?us-ascii?Q?cdQnkLdHVwWmSd2O1MNvFANaQdtJYcDirDtot/1x6npTiIzAqkrTvxfFTJuO?=
- =?us-ascii?Q?5kpNW7x4dw7tbLt5QVXmMAL4r+RyBgzzn5Jak9dK+aOBrt2cFkjBel4kSCvY?=
- =?us-ascii?Q?/h/9IAUKxfQdHUE+LfKk8JhRnetUfx0XEy8wkE9TtwHAzplHWOUT0joWOepZ?=
- =?us-ascii?Q?mw=3D=3D?=
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63332dec-2d3d-4313-d315-08daeeeb0d35
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB3942.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 07:04:13.5046
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QJboL5JObrPd+PYRagE+hebN1ew+hqyUbP8Xq3QJ76Diq908GDLq4NC7EBT2/+UFPVEUiwC2b+gpOFuJRlIGfVJAbZD4rIT1mMk+2/IFu34=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4489
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liming Wu <liming.wu@jaguarmicro.com>
+Alistair Popple <apopple@nvidia.com> writes:
 
-remove printk as it is meaningless.
+> "Huang, Ying" <ying.huang@intel.com> writes:
+>
+>> Alistair Popple <apopple@nvidia.com> writes:
+>>
+>>> Huang Ying <ying.huang@intel.com> writes:
+>>>
+>>>> Define struct migrate_pages_stats to organize the various statistics
+>>>> in migrate_pages().  This makes it easier to collect and consume the
+>>>> statistics in multiple functions.  This will be needed in the
+>>>> following patches in the series.
+>>>>
+>>>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>>>> Cc: Zi Yan <ziy@nvidia.com>
+>>>> Cc: Yang Shi <shy828301@gmail.com>
+>>>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>> Cc: Oscar Salvador <osalvador@suse.de>
+>>>> Cc: Matthew Wilcox <willy@infradead.org>
+>>>> Cc: Bharata B Rao <bharata@amd.com>
+>>>> Cc: Alistair Popple <apopple@nvidia.com>
+>>>> Cc: haoxin <xhao@linux.alibaba.com>
+>>>> ---
+>>>>  mm/migrate.c | 58 +++++++++++++++++++++++++++++-----------------------
+>>>>  1 file changed, 32 insertions(+), 26 deletions(-)
+>>>>
+>>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>>> index a4d3fc65085f..ec9263a33d38 100644
+>>>> --- a/mm/migrate.c
+>>>> +++ b/mm/migrate.c
+>>>> @@ -1396,6 +1396,14 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
+>>>>  	return rc;
+>>>>  }
+>>>>  
+>>>> +struct migrate_pages_stats {
+>>>> +	int nr_succeeded;
+>>>> +	int nr_failed_pages;
+>>>> +	int nr_thp_succeeded;
+>>>> +	int nr_thp_failed;
+>>>> +	int nr_thp_split;
+>>>
+>>> I think some brief comments in the code for what each stat is tracking
+>>> and their relationship to each other would be helpful (ie. does
+>>> nr_succeeded include thp subpages, etc). Or at least a reference to
+>>> where this is documented (ie. page_migration.rst) as I recall there has
+>>> been some confusion in the past that has lead to bugs.
+>>
+>> OK, will do that in the next version.
+>
+> You should add that nr_failed_pages doesn't count failures of migrations
+> that weren't attempted because eg. allocation failure as that was a
+> surprising detail to me at least. Unless of course you decide to fix
+> that :-)
 
-Signed-off-by: Liming Wu <liming.wu@jaguarmicro.com>
----
- drivers/vhost/test.c | 3 ---
- 1 file changed, 3 deletions(-)
+nr_failed_pages are used for /proc/vmstat.  Syscall move_pages() cares
+about how many pages requested but not tried.  But the system wide
+statistics doesn't care about it.  I think that is the appropriate.
 
-diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
-index bc8e7fb1e635..42c955a5b211 100644
---- a/drivers/vhost/test.c
-+++ b/drivers/vhost/test.c
-@@ -333,13 +333,10 @@ static long vhost_test_ioctl(struct file *f, unsigned int ioctl,
- 			return -EFAULT;
- 		return 0;
- 	case VHOST_SET_FEATURES:
--		printk(KERN_ERR "1\n");
- 		if (copy_from_user(&features, featurep, sizeof features))
- 			return -EFAULT;
--		printk(KERN_ERR "2\n");
- 		if (features & ~VHOST_FEATURES)
- 			return -EOPNOTSUPP;
--		printk(KERN_ERR "3\n");
- 		return vhost_test_set_features(n, features);
- 	case VHOST_RESET_OWNER:
- 		return vhost_test_reset_owner(n);
--- 
-2.25.1
+Best Regards,
+Huang, Ying
 
+>>> Otherwise the patch looks good so:
+>>>
+>>> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+>>
+>> Thanks!
+>>
+>> Best Regards,
+>> Huang, Ying
+>>
+>>>> +};
+>>>> +
+>>>>  /*
+>>>>   * migrate_pages - migrate the folios specified in a list, to the free folios
+>>>>   *		   supplied as the target for the page migration
+>>>> @@ -1430,13 +1438,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  	int large_retry = 1;
+>>>>  	int thp_retry = 1;
+>>>>  	int nr_failed = 0;
+>>>> -	int nr_failed_pages = 0;
+>>>>  	int nr_retry_pages = 0;
+>>>> -	int nr_succeeded = 0;
+>>>> -	int nr_thp_succeeded = 0;
+>>>>  	int nr_large_failed = 0;
+>>>> -	int nr_thp_failed = 0;
+>>>> -	int nr_thp_split = 0;
+>>>>  	int pass = 0;
+>>>>  	bool is_large = false;
+>>>>  	bool is_thp = false;
+>>>> @@ -1446,9 +1449,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  	LIST_HEAD(split_folios);
+>>>>  	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>>>>  	bool no_split_folio_counting = false;
+>>>> +	struct migrate_pages_stats stats;
+>>>>  
+>>>>  	trace_mm_migrate_pages_start(mode, reason);
+>>>>  
+>>>> +	memset(&stats, 0, sizeof(stats));
+>>>>  split_folio_migration:
+>>>>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
+>>>>  		retry = 0;
+>>>> @@ -1502,9 +1507,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  				/* Large folio migration is unsupported */
+>>>>  				if (is_large) {
+>>>>  					nr_large_failed++;
+>>>> -					nr_thp_failed += is_thp;
+>>>> +					stats.nr_thp_failed += is_thp;
+>>>>  					if (!try_split_folio(folio, &split_folios)) {
+>>>> -						nr_thp_split += is_thp;
+>>>> +						stats.nr_thp_split += is_thp;
+>>>>  						break;
+>>>>  					}
+>>>>  				/* Hugetlb migration is unsupported */
+>>>> @@ -1512,7 +1517,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  					nr_failed++;
+>>>>  				}
+>>>>  
+>>>> -				nr_failed_pages += nr_pages;
+>>>> +				stats.nr_failed_pages += nr_pages;
+>>>>  				list_move_tail(&folio->lru, &ret_folios);
+>>>>  				break;
+>>>>  			case -ENOMEM:
+>>>> @@ -1522,13 +1527,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  				 */
+>>>>  				if (is_large) {
+>>>>  					nr_large_failed++;
+>>>> -					nr_thp_failed += is_thp;
+>>>> +					stats.nr_thp_failed += is_thp;
+>>>>  					/* Large folio NUMA faulting doesn't split to retry. */
+>>>>  					if (!nosplit) {
+>>>>  						int ret = try_split_folio(folio, &split_folios);
+>>>>  
+>>>>  						if (!ret) {
+>>>> -							nr_thp_split += is_thp;
+>>>> +							stats.nr_thp_split += is_thp;
+>>>>  							break;
+>>>>  						} else if (reason == MR_LONGTERM_PIN &&
+>>>>  							   ret == -EAGAIN) {
+>>>> @@ -1546,7 +1551,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  					nr_failed++;
+>>>>  				}
+>>>>  
+>>>> -				nr_failed_pages += nr_pages + nr_retry_pages;
+>>>> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
+>>>>  				/*
+>>>>  				 * There might be some split folios of fail-to-migrate large
+>>>>  				 * folios left in split_folios list. Move them back to migration
+>>>> @@ -1556,7 +1561,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  				list_splice_init(&split_folios, from);
+>>>>  				/* nr_failed isn't updated for not used */
+>>>>  				nr_large_failed += large_retry;
+>>>> -				nr_thp_failed += thp_retry;
+>>>> +				stats.nr_thp_failed += thp_retry;
+>>>>  				goto out;
+>>>>  			case -EAGAIN:
+>>>>  				if (is_large) {
+>>>> @@ -1568,8 +1573,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  				nr_retry_pages += nr_pages;
+>>>>  				break;
+>>>>  			case MIGRATEPAGE_SUCCESS:
+>>>> -				nr_succeeded += nr_pages;
+>>>> -				nr_thp_succeeded += is_thp;
+>>>> +				stats.nr_succeeded += nr_pages;
+>>>> +				stats.nr_thp_succeeded += is_thp;
+>>>>  				break;
+>>>>  			default:
+>>>>  				/*
+>>>> @@ -1580,20 +1585,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  				 */
+>>>>  				if (is_large) {
+>>>>  					nr_large_failed++;
+>>>> -					nr_thp_failed += is_thp;
+>>>> +					stats.nr_thp_failed += is_thp;
+>>>>  				} else if (!no_split_folio_counting) {
+>>>>  					nr_failed++;
+>>>>  				}
+>>>>  
+>>>> -				nr_failed_pages += nr_pages;
+>>>> +				stats.nr_failed_pages += nr_pages;
+>>>>  				break;
+>>>>  			}
+>>>>  		}
+>>>>  	}
+>>>>  	nr_failed += retry;
+>>>>  	nr_large_failed += large_retry;
+>>>> -	nr_thp_failed += thp_retry;
+>>>> -	nr_failed_pages += nr_retry_pages;
+>>>> +	stats.nr_thp_failed += thp_retry;
+>>>> +	stats.nr_failed_pages += nr_retry_pages;
+>>>>  	/*
+>>>>  	 * Try to migrate split folios of fail-to-migrate large folios, no
+>>>>  	 * nr_failed counting in this round, since all split folios of a
+>>>> @@ -1626,16 +1631,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  	if (list_empty(from))
+>>>>  		rc = 0;
+>>>>  
+>>>> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
+>>>> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
+>>>> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+>>>> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
+>>>> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
+>>>> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
+>>>> -			       nr_thp_failed, nr_thp_split, mode, reason);
+>>>> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
+>>>> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
+>>>> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
+>>>> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
+>>>> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
+>>>> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
+>>>> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
+>>>> +			       stats.nr_thp_split, mode, reason);
+>>>>  
+>>>>  	if (ret_succeeded)
+>>>> -		*ret_succeeded = nr_succeeded;
+>>>> +		*ret_succeeded = stats.nr_succeeded;
+>>>>  
+>>>>  	return rc;
+>>>>  }
