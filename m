@@ -2,118 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF13365F684
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5A265F686
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbjAEWKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S234881AbjAEWM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235815AbjAEWKb (ORCPT
+        with ESMTP id S236176AbjAEWLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:10:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B2A6950D
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:09:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672956577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FHRon4iazglsqJx0za5dkKZ1ECmTBS5D3uCSiao/wBQ=;
-        b=UfaX5UpseIUGtu5RP8qjR0f7Bbm2PeiP0jBhECU5KHdaWTu3IX71womENc+lE+Nyw1Xxls
-        c1K8PY9VSMYC6Xv1tVD9b024nokR5ZGhT/AOJlfDQrVw4XfWfsZOo7yZ9V2xzlu44PTz7j
-        QFzugBAq4FWJIuLJ5R8HBNNzNZjJUzM=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-614-foaa4ylmMIuwR0Mp-0GZKA-1; Thu, 05 Jan 2023 17:09:33 -0500
-X-MC-Unique: foaa4ylmMIuwR0Mp-0GZKA-1
-Received: by mail-io1-f72.google.com with SMTP id e15-20020a056602158f00b006e01d8fa493so11486436iow.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:09:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FHRon4iazglsqJx0za5dkKZ1ECmTBS5D3uCSiao/wBQ=;
-        b=wd9/QoQIc2Mr0w6NjWW1qCpuuC5sq4h04HTcMxp2KtCdfJM651wheJWeQDGLW8vFbv
-         6GM4EGftYeM8Miq5mE6rA+chRn488E7XUPCOVI7qArObv/wzrsxLz0zKTLYNU6NbW3S+
-         bECshICqNKtGfy+J9DXe7alUKk64zNZkMkibVW+KpDUO1wu6m7ptdz5fKlPTOOZGESMn
-         5yGamlOAEhsq0JFOtXn+4i9glj9TGvIju1yI213atDgmGt0/jvfwGA/+U9k2Or7sCAlx
-         8mG9/a5YRHqbY324rAMXvvgS1GsiMTxoG9HvSIsOvOc2mQbC+fgNAcbcKOp7OGyaKHCM
-         H8FQ==
-X-Gm-Message-State: AFqh2koyUq5aFwXjOglZZDPJArabyKJ1McbK9P252udVTblELYiZvytU
-        O+I1GKPtSsw7YT3MHMgalsxkAYx8vt/9BWP/FbeLISi5JFVcd4I84GlDIZDAYynYtN+L30RiAZr
-        +q++fwuiHFgyl85m4DQca1XsG
-X-Received: by 2002:a5e:a609:0:b0:6e4:2893:2b33 with SMTP id q9-20020a5ea609000000b006e428932b33mr32962716ioi.14.1672956573186;
-        Thu, 05 Jan 2023 14:09:33 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs5yKX/wdLm9HEyg87onxVqgfS0N/eR1/PgmgN9uAH7OlTthfhrG0MhtGAnQyZQ6XYAeeVAMA==
-X-Received: by 2002:a5e:a609:0:b0:6e4:2893:2b33 with SMTP id q9-20020a5ea609000000b006e428932b33mr32962706ioi.14.1672956572929;
-        Thu, 05 Jan 2023 14:09:32 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id w12-20020a5e970c000000b006e3170eeee4sm13692498ioj.6.2023.01.05.14.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:09:32 -0800 (PST)
-Date:   Thu, 5 Jan 2023 15:09:30 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     jgg@nvidia.com, cohuck@redhat.com, borntraeger@linux.ibm.com,
-        jjherne@linux.ibm.com, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kevin Tian <kevin.tian@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v3 1/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
-Message-ID: <20230105150930.6ee65182.alex.williamson@redhat.com>
-In-Reply-To: <20220519183311.582380-2-mjrosato@linux.ibm.com>
-References: <20220519183311.582380-1-mjrosato@linux.ibm.com>
-        <20220519183311.582380-2-mjrosato@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 5 Jan 2023 17:11:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF0E5C93B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:11:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3746961C9A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:11:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3D4C433D2;
+        Thu,  5 Jan 2023 22:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672956672;
+        bh=redQC2w+sdVL4qAUPGunaamvsqLS1mVAo6Z+Uu9kFhI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=U6fReCGEHn/asDsMJd+J8VnfDj+kAXqHN/tMg90YeS7UWLccoMBBXWuA/vD+QsN5G
+         qCdBzUheHNsdur189fxTPFW27xSJxPDEkUT8G2qifUZxdLCTQ4zQyxx4fdwmlnCBQB
+         nykDKU31K+Wm+yP4+OHBAVq76AXYibyizWISNUZaKQa0f5p8fIG756AhVZm2XKlhdn
+         zZ7A0IxTVe2KygM8P+YWcYmZjS2te/yzVQuuHvFZShxhO9J7GIXwvJwRGBBLQIx+89
+         nxNAi5hACEoR0A9MVQMkKKb5HPXT6ApjPFH3oAM+W0Ru9ziXn+TAdQzOWvve2ME+DE
+         R3pHg5GIEUtyQ==
+From:   SeongJae Park <sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
+        Jonathan.Cameron@Huawei.com, amit@kernel.org,
+        benh@kernel.crashing.org, corbet@lwn.net, david@redhat.com,
+        dwmw@amazon.com, elver@google.com, foersleo@amazon.de,
+        gthelen@google.com, markubo@amazon.de, rientjes@google.com,
+        shakeelb@google.com, baolin.wang@linux.alibaba.com,
+        guoqing.jiang@linux.dev, xhao@linux.alibaba.com, hanyihao@vivo.com,
+        changbin.du@gmail.com, kuba@kernel.org,
+        rongwei.wang@linux.alibaba.com, rikard.falkeborn@gmail.com,
+        geert@linux-m68k.org, kilobyte@angband.pl, linux-damon@amazon.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        damon@lists.linux.dev
+Subject: Re: [RFC PLAN] Some humble ideas for DAMON future works
+Date:   Thu,  5 Jan 2023 22:11:09 +0000
+Message-Id: <20230105221109.53398-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220119133110.24901-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 14:33:11 -0400
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+Hello,
 
-> Rather than relying on a notifier for associating the KVM with
-> the group, let's assume that the association has already been
-> made prior to device_open.  The first time a device is opened
-> associate the group KVM with the device.
+
+On Wed, 19 Jan 2022 13:31:10 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> Hello,
 > 
-> This fixes a user-triggerable oops in GVT.
+> 
+> After the DAMON code is merged (kudos to the community for the great helps), a
+> few people asked me about my plan for DAMON future works, and if DAMON will be
+> somewhat usable for their use cases.  I indeed have some humble plans, though
+> those are only in rough brainsorming level at the moment. so I'd like to share
+> those here before going forward and start coding, so that I can get some
+> feedback to fail fast.
 
-It seems this has traded an oops for a deadlock, which still exists
-today in both GVT-g and vfio-ap.  These are the only vfio drivers that
-care about kvm, so they make use of kvm_{get,put}_kvm(), where the
-latter is called by their .close_device() callbacks.
+After sharing the summary of 2022 DAMON developments[1], I started thinking the
+DAMON development plans for 2023.  While doing that, I just remembered this
+DAMON future plans mail that I wrote at the beginning of 2022.  Checking the
+status of DAMON development based on the long term plan could be helpful for
+setting 2023 plan, so I'm gonna do it.
 
-.close_device() is called holding the group->group_lock, or at the time
-of this commit group->group_rwsem.  The remaining call chain looks like
-this:
+> 
+> User-space Policy or In-kernel Policy?  Both.
+> =============================================
+> 
+[...]
+> I'd like to help both.  For the reason, I made DAMON as an in-kernel mechanism
+> for both user and kernel-space policies.  It provides highly tunable general
+> user space interface to help the first party.  It also provides in-kernel
+> policies which built on top of DAMON using its kernel-space API for specific
+> common use cases with conservative default parameters that assumed to incur no
+> regression but some extent of benefits in most cases, namely DAMON-based
+> proactive reclamation.  I will continue pursuing the two ways.
 
-kvm_put_kvm
- -> kvm_destroy_vm
-  -> kvm_destroy_devices
-   -> kvm_vfio_destroy
-    -> kvm_vfio_file_set_kvm
-     -> vfio_file_set_kvm
-      -> group->group_lock/group_rwsem
+In 2023, we made some more user-space policies friendly knobs via DAMON sysfs
+interface, but also made some in-kernel policies including DAMON_LRU_SORT.  We
+may continue developing DAMON for two kind of policies.
 
-Any suggestions for a fix?  Thanks,
+> 
+> Imaginable DAMON-based Policies
+> ===============================
+> 
+[...]
+> 
+> DAMON-based Proactive LRU-pages (de)Activation
+> ----------------------------------------------
+> 
+> My idea for helping this situation is manipulating the orders of pages in LRU
+> lists using DAMON-provided monitoring results.  That is, making DAMON
+> proactively finds hot/cold memory regions and moves pages of the hot regions to
+> the head of the active list, while moving pages of the cold regions to the tail
+> of the inactive list.  This will help eventual reclamation under memory
+> pressure to evict cold pages first, so incur less additional page faults.
 
-Alex
+We did make this[1].  On our test, it reduced 20% of memory pressure stall.  It
+may have some more rooms of improvements, though.
 
+[1] https://lwn.net/Articles/905370/
+
+[...]
+> 
+> DAMON-based THP Coalesce/Split
+> ------------------------------
+> 
+> THP is know to significantly improve performance, but also increase memory
+> footprint[1].  We can minimize the memory overhead while preserving the
+> performance benefit by asking DAMON to provide MADV_HUGEPAGE-like hints for hot
+> memory regions of >= 2MiB size, and MADV_NOHUGEPAGE-like hints for cold memory
+> regions.  Our experimental user space policy implementation[2] of this idea
+> removes 76.15% of THP memory waste while preserving 51.25% of THP speedup in
+> total.
+> 
+> [1] https://www.usenix.org/conference/osdi16/technical-sessions/presentation/kwon
+> [2] https://damonitor.github.io/doc/html/v34/vm/damon/eval.html
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+> 
+> DAMON-based Tiered Memory (Pro|De)motion
+> ----------------------------------------
+> 
+> In tiered memory systems utilizing DRAM and PMEM[1], we can promote hot pages to
+> DRAM and demote cold pages to PMEM using DAMON.  A patch for allowing
+> access-aware demotion user space policy development is already submitted[2] by
+> Baolin.
+> 
+> [1] https://www.intel.com/content/www/us/en/products/details/memory-storage/optane-memory.html
+> [2] https://lore.kernel.org/linux-mm/cover.1640171137.git.baolin.wang@linux.alibaba.com/
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+> 
+> DAMON-based Proactive Compaction
+> --------------------------------
+> 
+> Compaction uses migration scanner to find migration source pages.  Hot pages
+> would be more likely to be unmovable compared to cold pages, so it would be
+> better to try migration of cold pages first.  DAMON could be used here.  That
+> is, proactively monitoring accesses via DAMON and start compaction so that the
+> migration scanner scan cold memory ranges first.  I should admit I'm not
+> familiar with compaction code and I have no PoC data for this but just the
+> groundless idea, though.
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+[...]
+> 
+> How DAMON Should Be Evolved For Supporting Those
+> ================================================
+> 
+> Let's discuss what kind of changes in DAMON will be needed to efficiently
+> support above mentioned policies.
+> 
+> Simultaneously Monitoring Different Types of Address Spaces
+> -----------------------------------------------------------
+> 
+> It would be better to run all the above mentioned policies simultaneously on
+> single system.  As some policies such as LRU-pages (de)activation would better
+> to run on physical address space while some policies such as THP coalesce/split
+> would need to run on virtual address spaces, DAMON should support concurrently
+> monitoring different address spaces.  We can always do this by creating one
+> DAMON context for each address space and running those.  However, as the
+> address spaces will conflict, each other will be interfered.  Current idea for
+> avoiding this is allowing multiple DAMON contexts to run on a single thread,
+> forcing them to have same monitoring contexts.
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+> 
+> Online Parameters Updates
+> -------------------------
+> 
+> Someone would also want to dynamically turn on/off and/or tune each policy.
+> This is impossible with current DAMON, because it prohibits updating any
+> parameter while it is running.  We disallow the online parameters update
+> mainly because we want to avoid doing additional synchronization between the
+> running kdamond and the parameters updater.  The idea for supporting the use
+> case while avoiding the additional synchronization is, allowing users to pause
+> DAMON and update parameters while it is paused.
+
+We did make this in 2022.  DAMON sysfs interface, DAMON_RECLAIM, and
+DAMON_LRU_SORT support online tuning.
+
+> 
+> A Better DAMON interface
+> ------------------------
+> 
+> DAMON is currently exposing its major functionality to the user space via the
+> debugfs.  After all, DAMON is not for only debugging.  Also, this makes the
+> interface depends on debugfs unnecessarily, and considered unreliable.  Also,
+> the interface is quite unflexible for future interface extension.  I admit it
+> was not a good choice.
+> 
+> It would be better to implement another reliable and easily extensible
+> interface, and deprecate the debugfs interface.  The idea is exposing the
+> interface via sysfs using hierarchical Kobjects under mm_kobject.  For example,
+> the usage would be something like below:
+> 
+>     # cd /sys/kernel/mm/damon
+>     # echo 1 > nr_kdamonds
+>     # echo 1 > kdamond_1/contexts/nr_contexts
+>     # echo va > kdamond_1/contexts/context_1/target_type
+>     # echo 1 > kdamond_1/contexts/context_1/targets/nr_targets
+>     # echo $(pidof <workload>) > \
+>                     kdamond_1/contexts/context_1/targets/target_1/pid
+>     # echo Y > monitor_on
+
+We did make this in 2022.  It makes extension of DAMON features easy.
+
+> 
+> More DAMON Future Works
+> =======================
+> 
+> In addition to above mentioned things, there are many works to do.  It would be
+> better to extend DAMON for more use cases and address spaces support, including
+> page granularity, idleness only, read/write only, page cache only, and cgroups
+> monitoring supports.
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+Nevertheless, DAMOS filters feature could be used for effective support of
+cgroups-based access-aware memory management.
+
+One interesting idea for cgroups and page granularity monitoring, which I
+shared during Kernel Summit'22 is using LRU-lists as a source of access
+information.  Need more time for designing, though.
+
+> 
+> Also it would be valuable to improve the accuracy of monitoring, using some
+> adaptive monitoring attributes tuning or some new fancy idea[1].
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.
+
+> 
+> DAMOS could also be improved by utilizing its own autotuning feature, for
+> example, by monitoring PSI and other metrics related to the given action.
+
+Transparent Memory Offloading, which was presented at ASPLOS'22 just after this
+posting, made me sure again the importance of adaptive auto tuning.
+
+We didn't make this in 2022, mainly due to lack of time.  This would still be
+in the TODO list.  I'm personally trying to make this a prioritized task of
+2023.
+
+So, some of the TODO tasks are done, and still we have many more interesting
+ideas to implement.  There will be some more new tasks, too.  I'm gonna think
+about it more and may share some revised future plans soon.  If you want to
+get the early version of the plan, or discuss and participate in the future
+planning, please feel free to post question or inputs via mailing list
+(damon@lists.linux.dev) or DAMON Beer/Coffee/Tea Chat series[1].  DAMON is
+planned, prioritized and developed by the community's real needs.
+
+[1] https://lore.kernel.org/damon/20220810225102.124459-1-sj@kernel.org/
+
+
+Thanks,
+SJ
+
+[...]
