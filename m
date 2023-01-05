@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FE965F00B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8757765F00E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbjAEP07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S232589AbjAEP1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjAEP0w (ORCPT
+        with ESMTP id S233945AbjAEP1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:26:52 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963AD4D4AA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:26:50 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id bp26so6486021ilb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 07:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=43r3XG35x8TuOlNBwQd5KHGMsSLbIwsfhtWUFSmc5OA=;
-        b=diotJBVK7NMlbSmSdSCmKyfaZfPF8YvxDR8dH7Ou023mIuU5AHrgOcWiZdoIpIaZSU
-         xU/IdAUjlsQQZxy0znR+YJU9AvADdnhiSkt8nCXqOi1NBeY6jlXdU/mE7/7TVfpyS0/F
-         pJ2OC6bWVKuGSg2TkwCyF6TdYpo1qpFVLNDK7PDc7KupQQDrUSPW2xyvWSLE8tB+yTF/
-         oIUoBmvm0hOGzkcWTcqx3bPabNIgdFNW4JuGK1zQ89wIVWJ5UBYSqYew6xKql/5SbjnK
-         mmBWRHpATFZ7Zex56kRUt5UmAmDj+M1P8NTa1F+9gi381wTk6pLlW0ZLQugLbCMA6qTA
-         /Mvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=43r3XG35x8TuOlNBwQd5KHGMsSLbIwsfhtWUFSmc5OA=;
-        b=qW6NUp+upIyTwsmY1bNN7+/nbLH2axgsYWRduBXbVG63Tm3ymHqNtDh33v/C4XnpC1
-         EHsDsg+1/hJMq7uXEBvfTwSVdajk+w0/9wWwe7ACSGHlSCk5WEXfjwhauuuzTbEj9Fvn
-         1obUnyGamN6Knh4GTtZiARpffl5UhdKyMn3X1AEnVUGLUZ5+YmcckvTDCK3QzrdZqU3M
-         +5XQmtkFoKD+RQtBSvjcmIBfCRC0GMcUyQxVNmx66TNEwveKz1CO0zGSLsZ8AGjJ5Ifa
-         XcLuSdFyNCUq8WSv7a15GR9V037wQrlcc7YVgUd8TH1PozsO3daYqx4mI78aokgX4wQi
-         XhiA==
-X-Gm-Message-State: AFqh2krjrvqyMXILFn5H2mpmP2EqOsCssq6gBbKfUa/tYiOH8DJ8SM7n
-        LUP92UL3XfaMT1jemit7qV/K1w==
-X-Google-Smtp-Source: AMrXdXuPmsX4v97PpUfNTa8Htffi6AbcU9sim/bgiAsqlqbSJO/0XRUe9GNB2nsoX+lVP2ujbRxhSQ==
-X-Received: by 2002:a05:6e02:d0d:b0:303:d8:f309 with SMTP id g13-20020a056e020d0d00b0030300d8f309mr6446357ilj.2.1672932409868;
-        Thu, 05 Jan 2023 07:26:49 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p5-20020a056638216500b00363dfbb145asm11180209jak.30.2023.01.05.07.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 07:26:49 -0800 (PST)
-Message-ID: <a5df61a3-d3d2-c0d5-37ee-d3417b53f2cf@kernel.dk>
-Date:   Thu, 5 Jan 2023 08:26:45 -0700
+        Thu, 5 Jan 2023 10:27:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4EC4D4AC;
+        Thu,  5 Jan 2023 07:27:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E46C561AF5;
+        Thu,  5 Jan 2023 15:27:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B099AC433F0;
+        Thu,  5 Jan 2023 15:27:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ugw0EnCF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672932425;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TncrA/pvVkIw+A2zNeeOTJM85e+imkBWpd4PkQKxlYY=;
+        b=Ugw0EnCFgVMi65ku0kaVTH1fPe3oUPvJwOyFqId4WhEiK6UdbDXkmitQM8GeCMaCvIh4J7
+        BSptIZAYhkdMfbgpxDRNuNRptnLBu8JOFv8jxwM8qi0zzeIy/6hilEZnnYGqr5aCpB1MNs
+        vRtDqX33rFPxXXtoESocKBpI4rvYtJQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d8131bf6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 5 Jan 2023 15:27:05 +0000 (UTC)
+Date:   Thu, 5 Jan 2023 16:27:02 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Altmanninger <aclopte@gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <Y7bsRufCECNoPW+T@zx2c4.com>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+ <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <2d07d185384ed444bef46648316354ef5afd481a.camel@HansenPartnership.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Linux 6.2-rc1
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20230104190115.ceglfefco475ev6c@pali>
- <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
- <20230104205640.o2uy2jk4v6yfm4w3@pali>
- <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
- <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk> <Y7aznc+/wm69554m@kroah.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y7aznc+/wm69554m@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2d07d185384ed444bef46648316354ef5afd481a.camel@HansenPartnership.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 4:25 AM, Greg Kroah-Hartman wrote:
-> On Wed, Jan 04, 2023 at 02:43:16PM -0700, Jens Axboe wrote:
->>> The removal seems to revert cleanly, although it does require
->>> reverting a few subsequent commits too (that removed code that only
->>> pktcdvd used):
->>>
->>>     git revert db1c7d779767 85d6ce58e493 f40eb99897af
->>>
->>> where we have
->>>
->>>     db1c7d779767 block: bio_copy_data_iter
->>>     85d6ce58e493 block: remove devnode callback from struct
->>> block_device_operations
->>>     f40eb99897af pktcdvd: remove driver.
->>
->> I'll queue this up - and unless I hear valid complaints to why we should
->> not just reinstate the driver for now, it'll go out with the next pull
->> request.
+On Thu, Jan 05, 2023 at 10:17:57AM -0500, James Bottomley wrote:
+> On Thu, 2023-01-05 at 14:59 +0100, Thorsten Leemhuis wrote:
+> > On 29.12.22 05:03, Jason A. Donenfeld wrote:
+> > > On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+> > > > On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> > > > > Ugh, while the problem [1] was fixed in 6.1, it's now happening
+> > > > > again on the T460 with 6.2-rc1. Except I didn't see any oops
+> > > > > message or "tpm_try_transmit" error this time. The first
+> > > > > indication of a problem is this during a resume from suspend to
+> > > > > ram:
+> > > > > 
+> > > > > tpm tpm0: A TPM error (28) occurred continue selftest
+> > > > > 
+> > > > > and then periodically 
+> > > > > 
+> > > > > tpm tpm0: A TPM error (28) occurred attempting get random
+> > > > 
+> > > > That's a TPM 1.2 error which means the TPM failed the selftest. 
+> > > > The original problem was reported against TPM 2.0  because of a
+> > > > missing try_get_ops().
+> > > 
+> > > No, I'm pretty sure the original bug, which was fixed by "char:
+> > > tpm: Protect tpm_pm_suspend with locks" regards 1.2 as well,
+> > > especially considering it's the same hardware from Vlastimil
+> > > causing this. I also recall seeing this in 1.2 when I ran this with
+> > > the TPM emulator. So that's not correct.
+> > 
+> > James, are you or some other TPM developer looking into this? Or is
+> > this deadlocked now?
 > 
-> If you do revert these, watch out for a build warning from the driver
-> core when you revert this, I think there's a 'const' missing from
-> somewhere that you might have to add back in due to other driver core
-> changes.
+> Not really: TPM 1.2 way predates my interest in the TPM subsystem, and
+> I've only ever done patches to 2.0.  I can look at the paths
+> theoretically, but I don't have any hardware.  Self Test failures tend
+> to be hardware specific, so even poking around in the emulator is
+> unlikely to give what might be the cause.
+> 
+> >  And if so: how can we get this unstuck to get this regression
+> > solved?
+> 
+> One of the TPM maintainers with hardware (possibly the specific TPM ...
+> what is it, by the way?) needs to get involved.
 
-The revert compiles cleanly, even merged with current master.
+I already wrote in my last email [1] that this simply isn't the case.
+The issue reproduces in QEMU + the emulator. It's far more likely to be
+a locking/race situation [2] than some kind of obscure hardware bug.
 
--- 
-Jens Axboe
+Jason
 
-
+[1] https://lore.kernel.org/lkml/Y60RoP77HnwaukEA@zx2c4.com/
+[2] https://lore.kernel.org/lkml/Y60Uu8HcGyXasnOO@zx2c4.com/
