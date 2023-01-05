@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E690265F0A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3353265F0A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234852AbjAEP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S234932AbjAEP7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234813AbjAEP54 (ORCPT
+        with ESMTP id S234692AbjAEP7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:57:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D77F66;
-        Thu,  5 Jan 2023 07:57:55 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305DtCqG025495;
-        Thu, 5 Jan 2023 15:57:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Xo83gKabN1O0R3UktLS+Q+GhShKE1s8GwQ3eMi8lJz4=;
- b=NbnolHFEWM3w95DY3Ud7bVyUCp7CeeoE7FTgNCjVcO7UhiS2r1nDuBYYvy3t2OvcEZcV
- uHNW9WFO60wcwMuf0kn/EWjXDxkTrmPRtXrWcPOwLZ+Az7Ft7kwWtF086kwTN1zpDVl0
- UxTxdabTaOtm4cxjLic/3KgPggkKstmrBO31EcPzMZAqb19ZaZSnAEgK/dQyZ71fSACG
- LFfM9P5qwgj2tYKvhg2E3iDq2bOt69KTDjB8SFNx/ziMU4whaTgAxRWjhb33iYu0+o9O
- RhEbLMVhupvT9puOVD07YBp1hjd2e1H+C/86Fb+fWesdgEeks8BkqYq0snu8PYcxVtuI Zw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwu4vrqaj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 15:57:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305FvoVx032293
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 15:57:50 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
- 07:57:50 -0800
-Message-ID: <4497ea5f-e255-12a3-78ca-7210d34e3762@quicinc.com>
-Date:   Thu, 5 Jan 2023 08:57:49 -0700
+        Thu, 5 Jan 2023 10:59:16 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00340F66
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:59:14 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYwMxZY_1672934349;
+Received: from 30.27.95.191(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VYwMxZY_1672934349)
+          by smtp.aliyun-inc.com;
+          Thu, 05 Jan 2023 23:59:11 +0800
+Message-ID: <03ada837-2504-9e69-5fec-0b7a7f186d90@linux.alibaba.com>
+Date:   Thu, 5 Jan 2023 23:59:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 6/6] bus: mhi: ep: Save channel state locally during
- suspend and resume
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <mhi@lists.linux.dev>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
- <20221228161704.255268-7-manivannan.sadhasivam@linaro.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221228161704.255268-7-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [syzbot] [erofs?] WARNING: CPU: NUM PID: NUM at
+ mm/page_alloc.c:LINE get_page_from_freeli
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     syzbot <syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, xiang@kernel.org
+References: <000000000000c0a08805f07291a0@google.com>
+ <f126fc95-fdbe-cc2e-5efb-ab704d13bd41@linux.alibaba.com>
+ <CANp29Y63rCdepVtantxdJEcvbRv0D61gfY_oGV7dgrmEGgPdLw@mail.gmail.com>
+From:   Xiang Gao <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CANp29Y63rCdepVtantxdJEcvbRv0D61gfY_oGV7dgrmEGgPdLw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bnNwF8f_R4Sa1sDzZ8yNUNgLm8zcM9pV
-X-Proofpoint-ORIG-GUID: bnNwF8f_R4Sa1sDzZ8yNUNgLm8zcM9pV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_06,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=889 phishscore=0 suspectscore=0
- impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0 adultscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050125
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/2022 9:17 AM, Manivannan Sadhasivam wrote:
-> During suspend and resume, the channel state needs to be saved locally.
-> Otherwise, the endpoint may access the channels while they were being
-> suspended and causing access violations.
-> 
-> Fix it by saving the channel state locally during suspend and resume.
-> 
-> Cc: <stable@vger.kernel.org> # 5.19
-> Fixes: e4b7b5f0f30a ("bus: mhi: ep: Add support for suspending and resuming channels")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com)
+Hi Aleksandr,
+
+On 2023/1/5 19:14, Aleksandr Nogikh wrote:
+> Hi,
+> 
+> On Thu, Jan 5, 2023 at 11:54 AM Xiang Gao <hsiangkao@linux.alibaba.com> wrote:
+> 
+>> I wasn't able to build the kernel with this kernel config, it shows:
+>> "...
+>> FATAL: modpost: vmlinux.o is truncated. sechdrs[i].sh_offset=1399394064 > sizeof(*hrd)=64
+>> make[2]: *** [Module.symvers] Error 1
+>> make[1]: *** [modpost] Error 2
+>> make: *** [__sub-make] Error 2
+>> "
+> 
+> Could you please tell, what exact compiler/linker version did you use?
+
+Thanks for your help.
+
+GCC 9.2.1 on my developping server.
+
+> 
+> 
+>>>
+>>> Downloadable assets:
+>>> disk image: https://storage.googleapis.com/syzbot-assets/0c8a5f06ceb3/disk-f9ff5644.raw.xz
+>>> vmlinux: https://storage.googleapis.com/syzbot-assets/be222e852ae2/vmlinux-f9ff5644.xz
+>>> kernel image: https://storage.googleapis.com/syzbot-assets/d9f42a53b05e/bzImage-f9ff5644.xz
+>>
+>> Finally I tried the original kernel image, and it printed some other
+>> random bug when booting system and then reboot, like:
+>>
+>> [   36.991123][    T1] ==================================================================
+>> [   36.991800][    T1] BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100
+>> [   36.992438][    T1] Write of size 32 at addr ffff888018c34640 by task systemd/1
+> < .. >
+> 
+> Interesting!
+> I've just tried to boot it with qemu and it was fine.
+> 
+> qemu-system-x86_64 -smp 2,sockets=2,cores=1 -m 4G -drive
+> file=disk-f9ff5644.raw,format=raw -snapshot -nographic -enable-kvm
+> 
+> So it looks like it's some difference between these VMMs that causes
+> that bug to fire.
+
+I think the problem is that the rootfs which I used has more complicated
+workload than the given one.
+
+> 
+>>
+>> May I ask it can be reproducable on the latest -rc kernel?
+> 
+> We can ask syzbot about v6.2-rc2:
+> 
+> #syz test git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> 88603b6dc419445847923fcb7fe5080067a30f98
+
+I think I know the root cause: It seems that kvcalloc doesn't support
+GFP_NOFAIL, I will use kcalloc directly instead.
+
+Thanks,
+Gao Xiang
+
+> 
+>>
+>> Thanks,
+>> Gao Xiang
+>>
+> 
+> --
+> Aleksandr
