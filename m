@@ -2,178 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EC65F6DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613A765F6E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbjAEWdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S236128AbjAEWeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236154AbjAEWdE (ORCPT
+        with ESMTP id S236212AbjAEWeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:33:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E801F1AD9F;
-        Thu,  5 Jan 2023 14:33:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CAC661C39;
-        Thu,  5 Jan 2023 22:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF87EC433D2;
-        Thu,  5 Jan 2023 22:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672957979;
-        bh=HcR7gX7Z25zEr4pomkEsYZ1F9HP2NRLj7CFnIeJEr08=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FPcO3gpWWfNAolLDBQvveUWU/aEbChbW95onX9goElI/kS8t1hTOgE90PxVbCEWeo
-         Lnzo/RUbiZtj1coHzP7Byq7mexbXYfLLQzfdexGFh304EuZNFjf5cOrYx9q1yJGTRa
-         RWGTMzE0sJayz/GqXwJ8csqs4LOo9/gu4ILcPspDnj71HlEpIT9po1cfccExQuuWYM
-         3jrloQWuzGW1W6zh5hdjU/TPZMSO0KHTp2+9/xgVMDoi/Uc0EFXW+MqNciHbaYHMae
-         VmURx0gdcGVxlh2/m095jZ9fBKgQQr0j8wVyqzrvPKGaXRbkLa4fsYOQwAZNTzdS37
-         fLkZ7Mdi/XRPA==
-Date:   Thu, 5 Jan 2023 16:32:57 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     bhelgaas@google.com, hdegoede@redhat.com, kernelorg@undead.fr,
-        kjhambrick@gmail.com, 2lprbe78@duck.com,
-        nicholas.johnson-opensource@outlook.com.au, benoitg@coeus.ca,
-        mika.westerberg@linux.intel.com, wse@tuxedocomputers.com,
-        mumblingdrunkard@protonmail.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.e.box@intel.com,
-        yunying.sun@intel.com, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105223257.GA1177387@bhelgaas>
+        Thu, 5 Jan 2023 17:34:05 -0500
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B376DF0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:34:05 -0800 (PST)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 8BD9A8032AEB
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:34:04 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id C5D0810047A44
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:34:03 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id DYoFpvnpKtj39DYoFpgCaa; Thu, 05 Jan 2023 22:34:03 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Xr8/hXJ9 c=1 sm=1 tr=0 ts=63b7505b
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fsQ65eT743dOOGRGVPv8xbN2Nt3KGqP9KIv3GK1g+CA=; b=0qHHhi5bUYJyKS9qjXu0VjQ/HF
+        R0Kl0kF+v1+O8k+uGUocSk8kCZsjl0RI1LYRxPMhUz4zVe77ui7zoA0+6mFE7PLIc170+lc9snwTv
+        N9i2/NrcUptOdOve0B4o6CcLA1hPZnwiiDHuU4AJ0DAWsbY5vRDdFn6WQod/IiYlKkjZUFHvJkUzd
+        oFdZo3PPVNpacZuDIMXKrkTp1VPQdTdnsbjX9LTetoDSKBFxsIpxkly0Kzpxcn04dfJ66ZPYPPaEu
+        yoYzHUx3s3Yo8orRFjl23GqGDkFH+GykAvb7m8/lql1do6xBmGIroyAiVcAeo010Z8+86ul6YnhN5
+        M2x6kcRA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50738 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pDYoE-001XqO-6c;
+        Thu, 05 Jan 2023 15:34:02 -0700
+Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230104160507.635888536@linuxfoundation.org>
+In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <de87e848-7157-e119-cdf4-3cd9b3bbc5a2@w6rz.net>
+Date:   Thu, 5 Jan 2023 14:33:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pDYoE-001XqO-6c
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:50738
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Tony, Dan]
+On 1/4/23 8:04 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.18 release.
+> There are 177 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.18-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Wed, Jan 04, 2023 at 09:39:56AM -0500, Liang, Kan wrote:
-> Hi Bjorn,
-> 
-> Happy new year!
-> 
-> We found some PCI issues with the latest 6.2-rc2.
-> 
-> - Using the lspci -xxxx, the extended PCI config space of all PCI
-> devices are missed with the latest 6.2-rc2. The system we used had 932
-> PCI devices, at least 800 which have extended space as seen when booted
-> into a 5.15 kernel. But none of them appeared in 6.2-rc2.
-> - The drivers which rely on the information in the extended PCI config
-> space don't work anymore. We have confirmed that the perf uncore driver
-> (uncore performance monitoring) and Intel VSEC driver (telemetry) don't
-> work in 6.2-rc2. There could be more drivers which are impacted.
-> 
-> After a bisect, we found the regression is caused by the below commit
-> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map").
-> After reverting the commit, the issues are gone.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Can you try this patch (based on v6.2-rc1):
+Tested-by: Ron Economos <re@w6rz.net>
 
-
-commit 89a0067217b0 ("x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space")
-parent 1b929c02afd3
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Thu Jan 5 16:02:58 2023 -0600
-
-    x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
-    
-    Normally we reject ECAM space unless it is reported as reserved in the E820
-    table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
-    means extended config space (offsets 0x100-0xfff) may not be accessible.
-    
-    Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
-    mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
-    normally converted to an E820 entry by a bootloader or EFI stub.
-    
-    07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
-    E820 entries that correspond to EfiMemoryMappedIO regions because some
-    other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
-    E820 entries prevent Linux from allocating BAR space for hot-added devices.
-    
-    Allow use of ECAM for extended config space when the region is covered by
-    an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
-    _CRS.
-    
-    Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
-    Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
-
-diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
-index 758cbfe55daa..4adc587a4c94 100644
---- a/arch/x86/pci/mmconfig-shared.c
-+++ b/arch/x86/pci/mmconfig-shared.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/efi.h>
- #include <linux/pci.h>
- #include <linux/init.h>
- #include <linux/bitmap.h>
-@@ -442,6 +443,25 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
- 	return mcfg_res.flags;
- }
- 
-+static bool is_efi_reserved(u64 start, u64 end, enum e820_type not_used)
-+{
-+	efi_memory_desc_t *md;
-+	u64 size, mmio_start, mmio_end;
-+
-+	for_each_efi_memory_desc(md) {
-+		if (md->type == EFI_MEMORY_MAPPED_IO) {
-+			size = md->num_pages << EFI_PAGE_SHIFT;
-+			mmio_start = md->phys_addr;
-+			mmio_end = mmio_start + size - 1;
-+
-+			if (mmio_start <= start && end <= mmio_end)
-+				return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- typedef bool (*check_reserved_t)(u64 start, u64 end, enum e820_type type);
- 
- static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
-@@ -452,7 +472,7 @@ static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
- 	u64 size = resource_size(&cfg->res);
- 	u64 old_size = size;
- 	int num_buses;
--	char *method = with_e820 ? "E820" : "ACPI motherboard resources";
-+	char *method = with_e820 ? "E820" : "ACPI motherboard resources or EFI";
- 
- 	while (!is_reserved(addr, addr + size, E820_TYPE_RESERVED)) {
- 		size >>= 1;
-@@ -502,15 +522,17 @@ pci_mmcfg_check_reserved(struct device *dev, struct pci_mmcfg_region *cfg, int e
- 	if (!early && !acpi_disabled) {
- 		if (is_mmconf_reserved(is_acpi_reserved, cfg, dev, 0))
- 			return true;
-+		if (is_mmconf_reserved(is_efi_reserved, cfg, dev, 0))
-+			return true;
- 
- 		if (dev)
- 			dev_info(dev, FW_INFO
--				 "MMCONFIG at %pR not reserved in "
-+				 "MMCONFIG at %pR not reserved in EFI "
- 				 "ACPI motherboard resources\n",
- 				 &cfg->res);
- 		else
- 			pr_info(FW_INFO PREFIX
--			       "MMCONFIG at %pR not reserved in "
-+			       "MMCONFIG at %pR not reserved in EFI or "
- 			       "ACPI motherboard resources\n",
- 			       &cfg->res);
- 	}
