@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3984465EEAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439EC65EEAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjAEOXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S233310AbjAEOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbjAEOX3 (ORCPT
+        with ESMTP id S233306AbjAEOYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:23:29 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC475551F9
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:23:26 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bk16so23074724wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:23:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2O8qAtal3UIh6dVVxKSeZtPNmNVJVzzTrbBSvkVmU/4=;
-        b=OnBXfld0yK17k8BzxzH6dsorYAl/PqiA2lMaWW8T656ZlzW8aUSwRpgLiNsGEwoMSf
-         WgTvcrFyjbBEXdpoXNYNVqT5BJyH6MNlLEHJjzF0FN9Lt/AHWz7hirl1C0m2NMVOkCiX
-         EwNGVSxmcxTRJwHiX1bM1sa8rV4rgJKt6y3h4muOSA0ghYIawn+Oxq8bOLTgU4iw4u83
-         VBFWNF4EJsCQGQMO0K2n3RWeR4FGMyQz9v+pVapkRfwXc46yjeBfPKvPe/HNhPCz9tok
-         d4UcHzX623NtPkDCjzr9ePPPSFiSjxKCUMJOAysfFjy3trEa2EmqAmU08hGxUvlTKgYF
-         ODXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2O8qAtal3UIh6dVVxKSeZtPNmNVJVzzTrbBSvkVmU/4=;
-        b=pAJRBtFSEhkRRuB+iTLAPifCdrNTTMq/FdWjFpQXJ8aykmvA3hUqSwc99EfjRfIr7X
-         D9sh5vtqU4hikJyxpXBiCaObxl0hEzKHOyCKsjw5C+FweelqyvJsvt7sXxhYJQRQlCAM
-         zEc60wE0mqGQaGd0IDacwicNsdWnZ7kcsFFNGOO03VmB9jQOC4Pvl4IBVx+wJVVHLfuq
-         RKvw/ZU6grvZyVKo9HBkbnifKkFYhTlG2RseAYoThh/yUWe/MSOWsusgkILZ/HWt/G11
-         d6l56PQ9Jnp8i71ucHtWDha+l3VEMYSU7mDh8Z0FIJEWMbyPdWzxRzizcTq8Qb7kiOMv
-         D2hw==
-X-Gm-Message-State: AFqh2krm3QLO/+RKRF53/HtlHHamv6gc7Y+7M2ZcvqEN4VqRIggKr7EK
-        K0bJifls/4AQaeEDaUJjVWQTy5u37rxwvgsEEW8=
-X-Google-Smtp-Source: AMrXdXuKaNUVjrQTANx/S3IuaYZuFDw62Vq63XtmQR6uWzRVkHezN/Wl0vZekaskc5e/xo+44czkqw==
-X-Received: by 2002:adf:e307:0:b0:2b6:8a41:a949 with SMTP id b7-20020adfe307000000b002b68a41a949mr721487wrj.46.1672928605403;
-        Thu, 05 Jan 2023 06:23:25 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id h7-20020a5d4307000000b002a64e575b4esm3922790wrq.47.2023.01.05.06.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 06:23:24 -0800 (PST)
-Date:   Thu, 5 Jan 2023 14:23:23 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 09/27] backlight: remove pxa tosa support
-Message-ID: <Y7bdW4maNBCZinLz@aspen.lan>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-10-arnd@kernel.org>
+        Thu, 5 Jan 2023 09:24:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34C94C706;
+        Thu,  5 Jan 2023 06:24:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 061C2CE1AEB;
+        Thu,  5 Jan 2023 14:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C8B7C433D2;
+        Thu,  5 Jan 2023 14:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672928673;
+        bh=+OBsYkn+1kFqvpmNNMYmPkwpjcHgZc/XdBy9tYzmGnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lhFOKuJLdai+4RDkr+cnfk5WxhplfJmxdqAKAJcoZ207bnDR+73ybRA15RtqnDcQj
+         YsSgBSXJRRhvVyS4e5ZwCjPjop8hKEkpZ0+IIvV1geelsim+eeFJyIuWkQ+vioBVNs
+         zuXcXoJbX47aPQUOLA85zX+9P9ZkindaAGGDqi/ToFXAVTigyXOa09bQyylYNKzpZU
+         0xkMP9Vqu8Wcb0t6rUJpxWJAUmY2bEo1Y+DvDjcsbUPTaAZBQi8lo+DrkgqLMSVmON
+         4DNb7yuz/DP/wdA9cAaHLtS4oL/+yzFKPTxEGA3YZaxXJJ/m5copkNVf3i4Mqr3IYN
+         gangprpYofjfw==
+Date:   Thu, 5 Jan 2023 14:24:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Mark Hasemeyer <markhas@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v10 2/3] dt-bindings: mfd: Add compatible string for UART
+ support
+Message-ID: <Y7bdmiZ9lqKZXCfq@google.com>
+References: <20221207104005.v10.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+ <20221207104005.v10.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
+ <Y7WkeCi7/x/t37JM@google.com>
+ <Y7YjmtwByTR+8tbZ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230105134622.254560-10-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y7YjmtwByTR+8tbZ@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 02:46:04PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The PXA tosa machine was removed, so this backlight driver is no
-> longer needed.
->
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Thu, 05 Jan 2023, Tzung-Bi Shih wrote:
 
-OK by me ;-).
+> On Wed, Jan 04, 2023 at 04:08:24PM +0000, Lee Jones wrote:
+> > On Wed, 07 Dec 2022, Mark Hasemeyer wrote:
+> > 
+> > > From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> > > 
+> > > Add a compatible string to support the UART implementation of the cros
+> > > ec interface. The driver does not support the reg and interrupt
+> > > properties, so exempt them from being required for UART compatible nodes.
+> > > 
+> > > Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> > > Co-developed-by: Mark Hasemeyer <markhas@chromium.org>
+> > > Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
+> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > ---
+> > > 
+> > > Changes in v10:
+> > > - No change
+> > > 
+> [...]
+> > 
+> > I changed the subject line and applied the patch, thanks.
+> 
+> Pardon me.  I didn't know you would pick the patch so that I have queued it
+> into chrome-platform[1].  Would you like me to drop the commit?
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Yes, please do.
 
+You should gain permission from the maintainer before you apply patches.
 
-Daniel.
+  % scripts/get_maintainer.pl -f Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+     Lee Jones <lee@kernel.org> (supporter:MULTIFUNCTION DEVICES (MFD))
+     Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+     Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
+ 
+ Why do I get the feeling we've had this conversation before?
+
+-- 
+Lee Jones [李琼斯]
