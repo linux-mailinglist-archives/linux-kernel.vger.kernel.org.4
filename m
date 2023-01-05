@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8AC65F780
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D3E65F789
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbjAEXOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S236293AbjAEXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 18:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjAEXOP (ORCPT
+        with ESMTP id S230402AbjAEXWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:14:15 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1673A676E3
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:14:15 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA1B31EC068E;
-        Fri,  6 Jan 2023 00:14:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672960453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MNSXfz4m5shOmHSh2WUVIS4WJOht1d11VQUN1BAQyAQ=;
-        b=Tj1AmzT6HkBmnWWY+h6OT0DBaVXA4PS7z1JyoElSP4qyy/LfF8MzT0xpGbJBQhDpEFlihE
-        4brdy9Bfoq9bC7IoMIocjbUPdTxbmKdoyRYL8lMYWtHK3age3EJETwOMSL65MsHc3kaMsU
-        kDMTdwIlS9aRSpMlWrIekJZgQ9jkUrc=
-Date:   Fri, 6 Jan 2023 00:14:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com
-Subject: Re: [BUG Report] undefined reference to `convert_to_fxsr'
-Message-ID: <Y7dZwWsiUfHKxN3S@zn.tnic>
-References: <50aa72a7-043d-8091-78de-458cbcc6c356@huawei.com>
- <Y6w49Y1d3lpv3KFn@zn.tnic>
- <23e2907c-5188-5ac6-3db8-1c5a12120bf2@huawei.com>
- <Y62vbjBzHF4rmh1V@zn.tnic>
- <e041533c-4005-b9bc-3985-02224985aa28@huawei.com>
- <Y67IlthBqaX69RwN@zn.tnic>
- <64fe1be4-954f-fe6f-44f0-59b572548663@huawei.com>
+        Thu, 5 Jan 2023 18:22:32 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053269516
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 15:22:31 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id o21so11348632pjw.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 15:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWqazbyRLoTC8Db/Whc37KnLoFkdsyWjRIzge1/UbpU=;
+        b=VnP0aHc4axpEKI97b+IZ6oWN+okfDvFssMTLbHzN1OGnrqMPIb5h1awy2f07zRIQ4C
+         icvlH9o1vRj7vrO9ELlRp1Xq0S33XjDuaBdRVjnqLg4SuSZuqU0V/qlkYFJQQstBeRRB
+         R8NVulvpT2OY9NfJ3exH2qhtJveVptIOOHduA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QWqazbyRLoTC8Db/Whc37KnLoFkdsyWjRIzge1/UbpU=;
+        b=qnhXZ6hHRKbpUBk5L2yWM7E5fxrfX/HH0Km89Im1nG5mOF/GY844VtRFBwNrwlUH0u
+         gdVJ3M7geFwZJuEs4aPNWXlgFkpQrzPtAYbLEsIqOYnExkO5OmbkgtaFpXPpUABbDUAZ
+         px2pfKP5oDZGu8u4+Eh2483JOCGKWTBrI38pnr5Yz5UJZN9C6VcfhMca8BXGfeALDVl0
+         S6JoZOZYlOKRAvIONK8E+PdEk2F+PzqLwrFJGOg9R1vOhHyaFY5CsaCmPxsuzx7WvwCL
+         +BugSV4e4RjEXUcxL+Vr55mYJ4b5Ll8a++HWMdfR4H8fg2urkuL1gukD628oZoZVT2x2
+         zXAA==
+X-Gm-Message-State: AFqh2kp08k5WYNrlwKx1MYPTH7prMLHk4HyYIS5QSehiADFf2rxjXXwY
+        UTk9rwUsRkHvL0+XTItMHC/vsQNzDhaIvNm9
+X-Google-Smtp-Source: AMrXdXs+zHy3f189mopMN53werK0+UClxehE+3BPUmiez17LUdiLIkzSI4JauiyJN33wESV5RRzVDQ==
+X-Received: by 2002:a17:902:e886:b0:192:fd24:8bb with SMTP id w6-20020a170902e88600b00192fd2408bbmr5499697plg.62.1672960951150;
+        Thu, 05 Jan 2023 15:22:31 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902b20c00b001801aec1f6bsm6793044plr.141.2023.01.05.15.22.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 15:22:30 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>, Petr Machata <petrm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] mlxsw: spectrum_router: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 15:22:29 -0800
+Message-Id: <20230105232224.never.150-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <64fe1be4-954f-fe6f-44f0-59b572548663@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2016; h=from:subject:message-id; bh=KtszOhTtBHOJMBXcCf68gEIjIaPlW6ySs3tOC7kDi+Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1u072FInbSWvkK9ROyDtbUdMqOT90bc67eQi6SZ JhBI0k6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dbtAAKCRCJcvTf3G3AJkbqD/ 9m8DMcoU3/EnqRmO+0JA6ww4B2FpQawFlaOMIre43dMKbaCRiqdqo5mTurO6wxot9WWkwOz7p0V524 wQj9tp7YVXDHj1Vdk6H+fgpw9bDzfaL0JxFuEJrMDNEYpqjI4XrlYZ90En5XBYsqNgBKcHQG+MlkED z4EUXUh6WxBjC4vsXGgD5rNylMDn9jvNkgEUOyy+ljjyuPmxEmRSkyRsyqSAq+Ie+fJTNx/B5GHF55 8VDyc8ambbbn4eGqINNZUW1EdMQDQsi5b8EAfQMVX8B9bcppv8q0javJO4paFRlxNhjx3M6+reDLc+ rEuHeB2cbQRDYE8GEINDJGGkunoSezzKZ2wYZOPx1B6fIEfPrAj9duIdV0NaZkEHqCfAmzTP+B/VYm lQK+kfHYHDsE08/FGRx15VbQrkuSKioY0X0ZPp6MlQyGjRyXOu2qXjFYexxEjftQY4I6ru4I8XILVd KrcmpcXTyPP3R9+3Eu91oH2MaSABeg2pdLpyc57/8r2RBXza4nvGdJTqB/Kb9yL8Zb289T4nz6Gzfi h4QNCEaKdl2lSkkzZ9AxZ2z+dNtAqz5UmjUW4gahE179cK0HlakAUOCjohizdYsAW/7uW9g4Zaeq5x bPrnxgQaH51LS9qtvUrVbNbVSjQlqGOtxFMnDAZWd4qJPyE0Ba3kbJYzmP0g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 11:05:01AM +0800, Miaohe Lin wrote:
-> Yes, it still reproduces in my working server. It might be the problem of gcc
-> version.
+Zero-length arrays are deprecated[1]. Replace struct
+mlxsw_sp_nexthop_group_info's "nexthops" 0-length array with a flexible
+array. Detected with GCC 13, using -fstrict-flex-arrays=3:
 
-What is that compiler you're using? Where did you get the package from? Does it
-have some out-of-tree patches in it?
+drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c: In function 'mlxsw_sp_nexthop_group_hash_obj':
+drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:3278:38: warning: array subscript i is outside array bounds of 'struct mlxsw_sp_nexthop[0]' [-Warray-bounds=]
+ 3278 |                         val ^= jhash(&nh->ifindex, sizeof(nh->ifindex), seed);
+      |                                      ^~~~~~~~~~~~
+drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:2954:33: note: while referencing 'nexthops'
+ 2954 |         struct mlxsw_sp_nexthop nexthops[0];
+      |                                 ^~~~~~~~
 
-> I think it's because convert_to_fxsr() is only defined when CONFIG_X86_32 or
-> CONFIG_IA32_EMULATION is enabled.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-No, convert_to_fxsr() is part of arch/x86/kernel/fpu/regset.c which is built-in
-unconditionally.
+Cc: Ido Schimmel <idosch@nvidia.com>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What happens is this here:
-
-bool fpu__restore_sig(void __user *buf, int ia32_frame)
-
-	...
-
-        } else {
-                success = __fpu_restore_sig(buf, buf_fx, ia32_fxstate);
-        }
-
-That ia32_fxstate is false because
-
-        ia32_frame &= (IS_ENABLED(CONFIG_X86_32) ||
-                       IS_ENABLED(CONFIG_IA32_EMULATION));
-
-
-neither of those config items are set...
-
-        /*
-         * Only FXSR enabled systems need the FX state quirk.
-         * FRSTOR does not need it and can use the fast path.
-         */
-        if (ia32_frame && use_fxsr()) {
-                buf_fx = buf + sizeof(struct fregs_state);
-                size += sizeof(struct fregs_state);
-                ia32_fxstate = true;
-		^^^^^^^^^^^^^^^^^^^
-
-... so this doesn't happen.
-
-        }
-
-Then, in __fpu_restore_sig() you have:
-
-        if (likely(!ia32_fxstate)) {
-                /* Restore the FPU registers directly from user memory. */
-                return restore_fpregs_from_user(buf_fx, user_xfeatures, fx_only,
-                                                state_size);
-        }
-
-and since ia32_fxstate is false, we return here, the compiler sees that
-everything behind that code is dead code and eliminates it.
-
-Your compiler doesn't, apparently.
-
-It does remove it from regset.c, though, as it sees it is an unused function,
-which leads to this undefined reference.
-
-So it looks like a funky compiler to me...
-
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index c22c3ac4e2a1..09e32778b012 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -2951,7 +2951,7 @@ struct mlxsw_sp_nexthop_group_info {
+ 	   gateway:1, /* routes using the group use a gateway */
+ 	   is_resilient:1;
+ 	struct list_head list; /* member in nh_res_grp_list */
+-	struct mlxsw_sp_nexthop nexthops[0];
++	struct mlxsw_sp_nexthop nexthops[];
+ #define nh_rif	nexthops[0].rif
+ };
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
