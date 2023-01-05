@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B4B65F69C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29A465F69E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbjAEWVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S235880AbjAEWWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAEWVU (ORCPT
+        with ESMTP id S235656AbjAEWVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:21:20 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B469528
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:21:20 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 124so26420797pfy.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/rwlFIn0hzbcNETA4wyU6wemvJ1Z4GiTdDdXZcLwaY=;
-        b=dkTzAk+1ntj0auXOIzhxwO3g6qxTLW5rcQufexl+8slQLretMtDK9f5HKR4Aliyo39
-         TBXDLPSZZ+cPoJEh5357XW2coZYeq+1e9MNXq7GSKaeRBrIVMhLdSL2gmSWInW2aRur7
-         qX5tn4dbTdyy53FZ/I69t664nI2sKKOffks2Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+/rwlFIn0hzbcNETA4wyU6wemvJ1Z4GiTdDdXZcLwaY=;
-        b=hJT/WBghWGdy5XdGnp0fEEXiU+PVXnnCM0zc0bXxoM+8g8Qf+6we0KLckxmkXNhwAN
-         K4V99F2sVX7Yy0mZu/cqKUA6eZ8GdbXQsD/y6B2EsEZxDRrLgqTlLgBD1WDGiOnODAiM
-         7P/5SZJ0aiSiaoHlKMhbcFhse1bXdi0c04V8OOadzerW4+oMq16YLA/ZHi8IcbCLy7y8
-         vxBuuqIEMhRkOZD79DujWGJR4MTSBqjcY7YJgYJjZKTMHpZ6uUTDhwDpgLw8gi3OKdjd
-         R/QUGS06zkiiQ0T6jl6TEnVgni/ugKl0Wfl3E2EFU6JV0DKgg10Ga/BVaIxYJOdhm5W9
-         e9YA==
-X-Gm-Message-State: AFqh2kqfVeMYSjUfh5Rg3ZgzM5GKjnSjQuSuDTltV4NcxKkt+zoNsVW1
-        II/M5Sn/dy9Qc/wa4lvjavNH5w==
-X-Google-Smtp-Source: AMrXdXvsbcCqthlgFG/jU8xpWagS4JweS/XnATbEg9XOc38bDAosUQDy6Y5JAAFYoWTkfmAnN6dDwA==
-X-Received: by 2002:a62:6d82:0:b0:580:da4d:d42a with SMTP id i124-20020a626d82000000b00580da4dd42amr41325570pfc.14.1672957279547;
-        Thu, 05 Jan 2023 14:21:19 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm21861943pfz.157.2023.01.05.14.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:21:19 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Justin Iurman <justin.iurman@uliege.be>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] ipv6: ioam: Replace 0-length array with flexible array
-Date:   Thu,  5 Jan 2023 14:21:16 -0800
-Message-Id: <20230105222115.never.661-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 5 Jan 2023 17:21:54 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473A76D50C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672957313; x=1704493313;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D8Ix+Zx4xFpBv4yFr2vC1BnVJEv2t0Aquo+iTVDziJs=;
+  b=W9ImeV6PSQ3btnnEgWoajbKQqLBNQZXq0yqmc5+EtaOfDq6AhLZTOh3K
+   pyY3aACakQb7bhZ5YPBmrhe/SBHaXONhyMl79YZvCCRHxYym5CCB4DJ6o
+   v+q47TXONHIkPisoN8BlB6ATb5TMi49xqxe5mGsNXNkigDDWNpJkKvTui
+   ZUQpNdVUSSikkwkqxiLhSl3xS1UKP/gyb/bqKYd9fvdZUywfBlRS6SjiK
+   CTlmEChzCA9ZM4G8jxijl2O1UTZ16I2aFtY07429traOM/t3qp/R+KJne
+   aFccYiQsVRko1o2xh4TT74R+ImsOOax+etXgf5SX+WKIweLMNdM86+kb+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="321048224"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="321048224"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 14:21:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="605698761"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="605698761"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 14:21:51 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDYcQ-0002bf-1Z;
+        Thu, 05 Jan 2023 22:21:50 +0000
+Date:   Fri, 6 Jan 2023 06:21:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: versioncheck: ./samples/trace_events/trace_custom_sched.c: 11
+ linux/version.h not needed.
+Message-ID: <202301060633.wn8oYDMx-lkp@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1685; h=from:subject:message-id; bh=8PkLlA/lLOXSW+eJB32T+aG9Kn60zUa4hKXC+rzMGLs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt01cz7/LecK3nXxfm63JdHDplN1K4Q+y5tGGGSPM pUHKzwGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dNXAAKCRCJcvTf3G3AJvCJD/ 9dtKcuau0YnqLh8x7WrForeOZfMnYtRszMXUYKVft4FOrOsQ1BAzfridH4lEFedSI0AKz34hSCQxNI 9pU9cHvUjhC/gCo/ssOAQl9wJJ4HZhUqFWjzKpAHuaHE3e1VRoOJYt6L/RoF0EjE0XlVCLMZ9x1Vqs r+Le39VVbucfueuZyrYi9EzDHAw3zF46MNjMcq+m/FWvq4/n+g79tmQRJqEmUeLr2eHVdXqu+AI39R /t6xkHYShlreOKfsg4+qeySTppv/Go0fNAkVuU6ExrA/f6uWBZUQxb8NhSgRcR7U9RF1O3YydmqOFN cqzv7/8m6aUw9mxIojwCPpM+cn1jvTR13BLgwVYe5m+RW4LxUceL04xi/L1YZEhALEWzDXj+gWxotQ GVhwpNAPpztHLjX8fY0Jdzu3Pk8iAPFfqQkl1YNz89kk2bPNyuCDKjBPyGHzeK4x6GNgbKkQZ68Ilm TroxxrefIN30wEIhaLki1WABr+rZs0neuiRFkMMtfZAkA9PbdO1iIb260Ei+FbNutOcTYx1AZR6v7b Mcm1Dx0wF27u+OS0E6bME4TPp/JN3R6YpcsFNUa37xsXm/z7wfsjF10gPcUaMWTHbKaGIXG4X4Z+dc nPIUp2LUnE7439+DrZRdr9Nc/UhV8/G+2Hu+dkW97XuczBseF8nZVsKhlUvQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct ioam6_trace_hdr's
-"data" 0-length array with a flexible array. Detected with GCC 13,
-using -fstrict-flex-arrays=3:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5e9af4b42660b2a8db067db8ff03db8a268d6a95
+commit: 953c2f052112a857c00058a641dc0c58ec7551d4 tracing: Add sample code for custom trace events
+date:   10 months ago
+reproduce:
+        make versioncheck
 
-net/ipv6/ioam6_iptunnel.c: In function 'ioam6_build_state':
-net/ipv6/ioam6_iptunnel.c:194:37: warning: array subscript <unknown> is outside array bounds of '__u8[0]' {aka 'unsigned char[]'} [-Warray-bounds=]
-  194 |                 tuninfo->traceh.data[trace->remlen * 4] = IPV6_TLV_PADN;
-      |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-In file included from include/linux/ioam6.h:11,
-                 from net/ipv6/ioam6_iptunnel.c:13:
-include/uapi/linux/ioam6.h:130:17: note: while referencing 'data'
-  130 |         __u8    data[0];
-      |                 ^~~~
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./arch/csky/include/asm/io.h: 8 linux/version.h not needed.
+   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
+   ./arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./init/version.c: 17 linux/version.h not needed.
+>> ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 262: need linux/version.h
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Justin Iurman <justin.iurman@uliege.be>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/ioam6.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/ioam6.h b/include/uapi/linux/ioam6.h
-index ac4de376f0ce..8f72b24fefb3 100644
---- a/include/uapi/linux/ioam6.h
-+++ b/include/uapi/linux/ioam6.h
-@@ -127,7 +127,7 @@ struct ioam6_trace_hdr {
- #endif
- 
- #define IOAM6_TRACE_DATA_SIZE_MAX 244
--	__u8	data[0];
-+	__u8	data[];
- } __attribute__((packed));
- 
- #endif /* _UAPI_LINUX_IOAM6_H */
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
