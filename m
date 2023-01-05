@@ -2,193 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7C365EC93
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EDA65EC98
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjAENLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S230306AbjAENNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjAENLS (ORCPT
+        with ESMTP id S230195AbjAENMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:11:18 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C92F7B6
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:11:16 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ja17so27969418wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 05:11:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=epo4NuCr+R0WCc3ZS+TmM2VQF2a+mloAFRnhMBihugE=;
-        b=duzWfuiaiDnHSzdqXc0CHu1JETDMs23u6PwEyxrReeZ2pcHD7wg36yyPob3yPiqF79
-         p54dRd8VgvKhNpXBOqzbFJi/g/7LyHax6lWVK1NSkr/W7Ij8PDWdyUJy/MzUqA5quR/p
-         C2lyEJ1rIOxvNJHCw636pxMWbETY1v5kfnHM8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=epo4NuCr+R0WCc3ZS+TmM2VQF2a+mloAFRnhMBihugE=;
-        b=0L+o0amQziTIb8/lrvPWbYgWgfPq/FCJd2H4ZV6hGZ5yHO6PSQtT/38LXkaPcXN2cw
-         6R2yQqA44LB5HqqPiooaDrQph/qMh/qYKCH3T4ZDUf3OTJNrkscRG0yIcO1Lk+0KxFjp
-         wUNayTMx2S92/Zx/6qv8zdro6jP/EWVdeSceHCQO4jX8DycRP+xvWmficBpxNXfdvkrE
-         CW8mr5s6tYBTHIeIU0WcO0pxACuVriYPcQFqB0HS1/p2zEaKuH3WX+6u0vxnDJlNRUw8
-         OVFT1kDDjcCn2jSJ6GbMysiE4CF4xglEkqBTGCYP1D8UMMU4RpmVi94Pp2sQcc+M+xk8
-         C8wA==
-X-Gm-Message-State: AFqh2kpSWEAVxjzE37L/8T62s3FwFUXHmSque6OI4lQw6XGekSZRK3k2
-        6ePFJrgX1dS2tPYZyHjPTiFgYA==
-X-Google-Smtp-Source: AMrXdXv/jh051xUt17UFK3vfd0Ya/xZZjvYng3OETahVuoWkb274Fuqt6WI0eN29vKK3LjAETkh/8g==
-X-Received: by 2002:a05:600c:1f0e:b0:3cf:497c:c59e with SMTP id bd14-20020a05600c1f0e00b003cf497cc59emr37030168wmb.6.1672924275463;
-        Thu, 05 Jan 2023 05:11:15 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05600c358300b003d1f2c3e571sm2634955wmq.33.2023.01.05.05.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 05:11:14 -0800 (PST)
-Date:   Thu, 5 Jan 2023 14:11:12 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com,
-        quic_bjorande@quicinc.com, quic_abhinavk@quicinc.com,
-        quic_vproddut@quicinc.com, quic_khsieh@quicinc.com,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, quic_aravindh@quicinc.com,
-        swboyd@chromium.org
-Subject: Re: [PATCH v9 08/15] drm/bridge: add psr support for panel bridge
- callbacks
-Message-ID: <Y7bMcLHr79uhfJv2@phenom.ffwll.local>
-Mail-Followup-To: Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com,
-        quic_bjorande@quicinc.com, quic_abhinavk@quicinc.com,
-        quic_vproddut@quicinc.com, quic_khsieh@quicinc.com,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, quic_aravindh@quicinc.com,
-        swboyd@chromium.org
-References: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
- <1671012352-1825-9-git-send-email-quic_vpolimer@quicinc.com>
+        Thu, 5 Jan 2023 08:12:42 -0500
+Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62D15A8B0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:12:38 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx403.security-mail.net (Postfix) with ESMTP id 86F9614E6BA
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:12:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1672924356;
+        bh=9WB6GmoBK+yOkgiR2vt2Yu8QcJKamwH/vIHlzkk4Rzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=vlU5EiAuyEWHI6EkyVsPeSzl9lQE9y9u8SM7mc2ZIRjugtTh2cksdv030hPszxd3R
+         NeAto+K7HetdXMCqiYW8LdVEUWcoF1mA9tUWhdEJFtWzYQOprxtfzKPXkPK2bJ/Y2r
+         1heqnNM/m4OG8SQNfueeoGyecKvL73C1artfbN2U=
+Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
+ (Postfix) with ESMTP id 5F69B14F501; Thu,  5 Jan 2023 14:12:36 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx403.security-mail.net (Postfix) with ESMTPS id 8423914F0B8; Thu,  5 Jan
+ 2023 14:12:35 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 5A8A027E02AC; Thu,  5 Jan 2023
+ 14:12:35 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id 3E54427E02E4; Thu,  5 Jan 2023 14:12:35 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ BmaMETebmHmr; Thu,  5 Jan 2023 14:12:35 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 1F31A27E02AC; Thu,  5 Jan 2023
+ 14:12:35 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <10e54.63b6ccc3.8318d.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 3E54427E02E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672924355;
+ bh=Os7yBdjKEQxwrmBBrz6wLHlejfUcsBUSLT+/ykjGvF4=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=FJnGh7d1QCfwodQuuNjrITZHsSDpLie1/NM/tCPWUZ2LOk1CRvaGZQPmBrheWmJNn
+ /LJGvRTjbhzYzIHoTblCA8wmgn+zJ23kmjxcPYSDfaKLfVFWL/gVG98jaxgz5KoMtK
+ nP9QEFhDUEl7wFVgP7FwBYqwbJxfCvUXMHLJw3ys=
+Date:   Thu, 5 Jan 2023 14:12:34 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 03/25] kvx: Add build infrastructure
+Message-ID: <20230105131233.GB7446@tellis.lin.mbt.kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <20230103164359.24347-4-ysionneau@kalray.eu>
+ <b27e6aa6-5560-e509-a1fd-21807dd5b23e@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1671012352-1825-9-git-send-email-quic_vpolimer@quicinc.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b27e6aa6-5560-e509-a1fd-21807dd5b23e@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 03:35:45PM +0530, Vinod Polimera wrote:
-> This change will handle the psr entry exit cases in the panel
-> bridge atomic callback functions. For example, the panel power
-> should not turn off if the panel is entering psr.
+Hi,
+
+On Tue, Jan 03, 2023 at 09:29:21AM -0800, Randy Dunlap wrote:
+> Hi,
 > 
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-
-I think this is all a nice integration of the sr helpers and bridge stuff
-and makes sense to me. For the 2 bridge patches and the drm core atomic
-patch:
-
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-
-> ---
->  drivers/gpu/drm/bridge/panel.c | 48 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
+-- snip snip
+> > +config ARCH_MMAP_RND_BITS_MAX
+> > +	default 24
+> > +
 > 
-> diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
-> index 3558cbf..5e77e38 100644
-> --- a/drivers/gpu/drm/bridge/panel.c
-> +++ b/drivers/gpu/drm/bridge/panel.c
-> @@ -113,6 +113,18 @@ static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge,
->  				struct drm_bridge_state *old_bridge_state)
->  {
->  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> +	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
-> +	struct drm_encoder *encoder = bridge->encoder;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *old_crtc_state;
-> +
-> +	crtc = drm_atomic_get_new_crtc_for_encoder(atomic_state, encoder);
-> +	if (!crtc)
-> +		return;
-> +
-> +	old_crtc_state = drm_atomic_get_old_crtc_state(atomic_state, crtc);
-> +	if (old_crtc_state && old_crtc_state->self_refresh_active)
-> +		return;
->  
->  	drm_panel_prepare(panel_bridge->panel);
->  }
-> @@ -121,6 +133,18 @@ static void panel_bridge_atomic_enable(struct drm_bridge *bridge,
->  				struct drm_bridge_state *old_bridge_state)
->  {
->  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> +	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
-> +	struct drm_encoder *encoder = bridge->encoder;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *old_crtc_state;
-> +
-> +	crtc = drm_atomic_get_new_crtc_for_encoder(atomic_state, encoder);
-> +	if (!crtc)
-> +		return;
-> +
-> +	old_crtc_state = drm_atomic_get_old_crtc_state(atomic_state, crtc);
-> +	if (old_crtc_state && old_crtc_state->self_refresh_active)
-> +		return;
->  
->  	drm_panel_enable(panel_bridge->panel);
->  }
-> @@ -129,6 +153,18 @@ static void panel_bridge_atomic_disable(struct drm_bridge *bridge,
->  				struct drm_bridge_state *old_bridge_state)
->  {
->  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> +	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
-> +	struct drm_encoder *encoder = bridge->encoder;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *new_crtc_state;
-> +
-> +	crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state, encoder);
-> +	if (!crtc)
-> +		return;
-> +
-> +	new_crtc_state = drm_atomic_get_new_crtc_state(atomic_state, crtc);
-> +	if (new_crtc_state && new_crtc_state->self_refresh_active)
-> +		return;
->  
->  	drm_panel_disable(panel_bridge->panel);
->  }
-> @@ -137,6 +173,18 @@ static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge,
->  				struct drm_bridge_state *old_bridge_state)
->  {
->  	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> +	struct drm_atomic_state *atomic_state = old_bridge_state->base.state;
-> +	struct drm_encoder *encoder = bridge->encoder;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *new_crtc_state;
-> +
-> +	crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state, encoder);
-> +	if (!crtc)
-> +		return;
-> +
-> +	new_crtc_state = drm_atomic_get_new_crtc_state(atomic_state, crtc);
-> +	if (new_crtc_state && new_crtc_state->self_refresh_active)
-> +		return;
->  
->  	drm_panel_unprepare(panel_bridge->panel);
->  }
-> -- 
-> 2.7.4
+> Do the above and below configs need an "int" line for their type?
+> I notice that the patch does that below for PGTABLE_LEVELS.
 > 
+I don't think it needs an "int" line, it is added in arch/Kconfig
+(which includes arch/kvx/Kconfig)
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> > +config ARCH_MMAP_RND_BITS_MIN
+> > +	default 18
+> > +
+> > +config STACKTRACE_SUPPORT
+> > +	def_bool y
+> > +
+> > +config LOCKDEP_SUPPORT
+> > +	def_bool y
+> > +
+> > +config GENERIC_BUG
+> > +	def_bool y
+> > +	depends on BUG
+> > +
+> > +config KVX_4K_PAGES
+> > +	def_bool y
+> > +
+> > +config KVX
+> > +	def_bool y
+> [deletes]
+> > +
+> > +config PGTABLE_LEVELS
+> > +	int
+> > +	default 3
+> ^^^^^^^^^^^^^^^^^^^^^^^^
+I think the "int" here can be removed, as done for
+ARCH_MMAP_RND_BITS_MAX and ARCH_MMAP_RND_BITS_MIN
+
+> > +
+> > +config HAVE_KPROBES
+> > +	def_bool n
+> > +
+> > +menu "System setup"
+> > +
+> > +config POISON_INITMEM
+> > +	bool "Enable to poison freed initmem"
+> > +	default y
+> > +	help
+> > +	  In order to debug initmem, using poison allows to verify if
+> > +	  some data/code is stille using them. Enable this for debug
+> 
+> 	                    still
+> 
+> > +	  purposes
+> 
+> 	  purposes.
+> 
+> > +
+> > +config KVX_PHYS_OFFSET
+> > +	hex "RAM address of memory base"
+> > +	default 0x100000000
+> > +
+> > +config KVX_PAGE_OFFSET
+> > +	hex "kernel virtual address of memory base"
+> > +	default 0xFFFFFF8000000000
+> > +
+> > +config ARCH_FLATMEM_ENABLE
+> > +	def_bool y
+> > +
+> > +config ARCH_SPARSEMEM_ENABLE
+> > +	def_bool y
+> > +
+> > +config ARCH_SPARSEMEM_DEFAULT
+> > +	def_bool ARCH_SPARSEMEM_ENABLE
+> > +
+> > +config ARCH_SELECT_MEMORY_MODEL
+> > +	def_bool ARCH_SPARSEMEM_ENABLE
+> > +
+> > +config STACK_MAX_DEPTH_TO_PRINT
+> > +	int "Maximum depth of stack to print"
+> > +	range 1 128
+> > +	default "24"
+> > +
+> > +config L2_CACHE
+> > +	bool "Enable l2 cache driver"
+> 
+> 	             L2
+> 
+> > +	default y
+> > +	help
+> > +	  Enable L2 cache driver in order to handle it. This driver can be
+> > +	  disabled to eliminate any overhead related to L2 cache
+> > +	  inval/writeback. Note that L2 cache is mandatory for SMP in order
+> > +	  to maintain coherency on DDR between all PEs.
+> > +
+> > +config SECURE_DAME_HANDLING
+> > +	bool "Secure DAME handling"
+> > +	default y
+> > +	help
+> > +	  In order to securely handle Data Asynchronous Memory Errors, we need
+> > +	  to do a barrier upon kernel entry when coming from userspace. This
+> > +	  barrier guarantee us that any pending DAME will be serviced right
+> 
+> 	          guarantees
+> 
+> > +	  away. We also need to do a barrier when returning from kernel to user.
+> > +	  This way, if the kernel or the user triggered a DAME, it will be
+> > +	  serviced by knowing we are coming from kernel or user and avoid
+> > +	  pulling the wrong lever (panic for kernel or sigfault for user).
+> > +	  This can be costly but ensure that user cannot interfere with kernel.
+> 
+> 	                         ensures
+> 
+> > +	  /!\ Do not disable unless you want to open a giant breach between
+> > +	  user and kernel /!\
+> > +
+> > +config CACHECTL_UNSAFE_PHYS_OPERATIONS
+> > +	bool "Enable cachectl syscall unsafe physical operations"
+> > +	default n
+> > +	help
+> > +	  Enable cachectl syscall to allow writebacking/invalidating ranges
+> > +	  based on physical addresses. These operations requires the
+> > +	  CAP_SYS_ADMIN capability
+> 
+> 	                capability.
+> 
+> > +
+> > +config ENABLE_TCA
+> > +	bool "Enable TCA coprocessor support"
+> > +	default y
+> > +	help
+> > +	  This option enables TCA coprocessor support. It will allow the user to
+> > +	  use the coprocessor and save registers on context switch if used.
+> > +	  Registers content will also be cleared when switching.
+> > +
+> > +config SMP
+> > +	bool "Symmetric multi-processing support"
+> > +	default n
+> > +	select GENERIC_SMP_IDLE_THREAD
+> > +	select GENERIC_IRQ_IPI
+> > +	select IRQ_DOMAIN_HIERARCHY
+> > +	select IRQ_DOMAIN
+> > +	select L2_CACHE
+> > +	help
+> > +	  This enables support for systems with more than one CPU. If you have
+> > +	  a system with only one CPU, say N. If you have a system with more
+> > +	  than one CPU, say Y.
+> > +
+> > +	  If you say N here, the kernel will run on uni- and multiprocessor
+> > +	  machines, but will use only one CPU of a multiprocessor machine. If
+> > +	  you say Y here, the kernel will run on many, but not all,
+> > +	  uniprocessor machines. On a uniprocessor machine, the kernel
+> > +	  will run faster if you say N here.
+> > +
+> > +config NR_CPUS
+> > +	int "Maximum number of CPUs"
+> > +	range 1 16
+> > +	default "16"
+> > +	depends on SMP
+> > +	help
+> > +	  Kalray support can handle a maximum of 16 CPUs.
+> > +
+> > +config KVX_PAGE_SHIFT
+> > +	int
+> > +	default 12
+> > +
+> > +config CMDLINE
+> > +	string "Default kernel command string"
+> > +	default ""
+> > +	help
+> > +	  On some architectures there is currently no way for the boot loader
+> > +	  to pass arguments to the kernel. For these architectures, you should
+> > +	  supply some command-line options at build time by entering them
+> > +	  here.
+> > +
+> > +endmenu
+> > +
+> > +menu "Kernel Features"
+> > +source "kernel/Kconfig.hz"
+> > +endmenu
+> > diff --git a/arch/kvx/Kconfig.debug b/arch/kvx/Kconfig.debug
+> > new file mode 100644
+> > index 000000000000..027e919a1e14
+> > --- /dev/null
+> > +++ b/arch/kvx/Kconfig.debug
+> > @@ -0,0 +1,70 @@
+> > +menu "KVX debugging"
+> > +
+> > +config KVX_DEBUG_ASN
+> > +	bool "Check ASN before writing TLB entry"
+> > +	default n
+> > +	help
+> > +	  This option allows to check if the ASN of the current
+> > +	  process is matching the ASN found in MMC. If it is not the
+> 
+> 	s/is matching/matches/
+> 
+> > +	  case an error will be printed.
+> > +
+> > +config KVX_DEBUG_TLB_WRITE
+> > +	bool "Enable TLBs write checks"
+> > +	default n
+> > +	help
+> > +	  Enabling this option will enable TLB access checks. This is
+> > +	  particularly helpful when modifying the assembly code responsible
+> > +	  of TLB refill. If set, mmc.e will be checked each time the tlb are
+> 
+> 	  for TLB refill.                                            TLB
+> 
+> > +	  written and a panic will be thrown on error.
+> > +
+> > +config KVX_DEBUG_TLB_ACCESS
+> > +	bool "Enable TLBs accesses logging"
+> > +	default n
+> > +	help
+> > +	  Enabling this option will enable TLB entry manipulation logging.
+> > +	  Each time an entry will be added to the TLBs, it will be logged in
+> 
+> 	                    s/will be/is/               s/will be/is/
+> 
+> > +	  an array readable via gdb scripts. This can be useful to understand
+> > +	  strange crashes related to suspicious virtual/physical addresses.
+> > +
+> > +config KVX_DEBUG_TLB_ACCESS_BITS
+> > +	int "Number of bits used as index of entries in log table"
+> > +	default 12
+> > +	depends on KVX_DEBUG_TLB_ACCESS
+> > +	help
+> > +	  Set the number of bits used as index of entries that will be logged
+> > +	  in a ring buffer called kvx_tlb_access. One entry in the table
+> > +	  contains registers TEL, TEH and MMC. It also logs the type of the
+> > +	  operations (0:read, 1:write, 2:probe). Buffer is per CPU. For one
+> > +	  entry 24 bytes are used. So by default it uses 96Ko of memory per
+> 
+> What does "Ko" mean?
+
+Ko stands for kilo-octet which is the french equivalent for kilo byte.
+I've found more typos like this in the documentation and they will be
+corrected as well.
+
+> > +	  CPU to store 2^12 (4096) entries.
+> > +
+> > +config KVX_MMU_STATS
+> > +	bool "Register mmu stats debugfs entries"
+> 
+> Preferably             MMU
+> 
+> > +	default n
+> > +	select DEBUG_FS
+> 
+> Preferably:
+> 	depends on DEBUG_FS
+ack
+
+> > +	help
+> > +	  Enable debugfs attribute which will allow inspecting various metric
+> 
+> 	                                                               metrics
+> 
+> > +	  regarding MMU:
+> > +	  - Number of nomapping traps handled
+> > +	  - avg/min/max time for nomapping refill (user/kernel)
+> > +
+> > +config DEBUG_EXCEPTION_STACK
+> > +	bool "Enable exception stack debugging"
+> > +	default n
+> > +	help
+> > +	  Enable stack check debugging when entering/exiting
+> > +	  exception handlers.
+> > +	  This can be particularly helpful after modifying stack
+> > +	  handling to see if stack when exiting is the same as the one
+> > +	  when entering exception handler.
+> > +
+> > +config DEBUG_SFR_SET_MASK
+> > +	bool "Enable sfr set_mask debugging"
+> > +	default n
+> > +	help
+> > +	  Verify that values written using kvx_sfr_set_mask are matching the
+> 
+> 	  s/are matching/match/
+> 
+> > +	  mask. This ensure that no extra bits of sfr will be overridden by some
+> 
+> 	             ensures
+> 
+> and preferably s/sfr/SFR/ in 2 places (not in kvx_sfr_set_mask).
+> 
+> > +	  incorrectly truncated values. This can lead to huge problems by
+> > +	  modifying important bits in system registers.
+> > +
+> > +endmenu
+
+Thanks, all the typos will be corrected :)
+
+  Jules
+
+
+
+
