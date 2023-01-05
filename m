@@ -2,131 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9982E65F419
+	by mail.lfdr.de (Postfix) with ESMTP id E4F0465F41A
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbjAETG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S235346AbjAETG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235316AbjAETFw (ORCPT
+        with ESMTP id S235437AbjAETGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:05:52 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36EB1B1F4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:05:51 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d15so40314602pls.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQYkxUoH0Um5KU/sL31ODM/gQ64ye5V0yfhxxDU8Y1A=;
-        b=O0xTzOir3dNuuKC6s1mEf6Ob11VoHPlW40KeegEoFCywOUJtRYTTSjThD0TeGAVwlU
-         pmchoonifNXQ/m2+MoEJbsCywF8LiHyaaDqMawZezaUjSsjpqzMmKtlhk5FNNBYy8CzW
-         kUDJ7nAekO5aDSyy9M4JC8+4H/8ggZfQ/miiQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hQYkxUoH0Um5KU/sL31ODM/gQ64ye5V0yfhxxDU8Y1A=;
-        b=nNNWKbkjZAcU3QdrafTFMue5DYDS1R/DNFVGx/rYzw/I6gR338w0Dsj3M047gR2IrS
-         qEdtlkGoOboas+N1so1CTphv5+f/fcpa0xpQc8inGO/YTV/bBKrFWi57xWtWnSjwJz5b
-         RXgN/0iPsft/QeTE4v/z2ZWwrUI7k+67MgAOEZTNcFEGp7J1ZRbPJClSzKzoAHBBnTdN
-         2Ls6veC46Lv40/ctECxXR8NWRPD5rkO+duLjdCIdlRCsokaJWnbq5orWWUyuz5rZonCs
-         99yycZK2fnvs0szcJdDUC+k16uTazU+FozlEGtjfXW7Gw5DxZ/kajrNunWVMIr+kPbA5
-         BVTg==
-X-Gm-Message-State: AFqh2kqcjThLnEXE5LDb1tu9x4ZaJ0Ovjtq26UqCHHJMJsSRvWR8KIsl
-        vDiqrlMhHRM9Vl9o9r2uS7qgiA==
-X-Google-Smtp-Source: AMrXdXstxZXSmTD2kLZ1gMKouy6MVGflapLT0FWXVd6PBcZqQLA8iipPIAAflGCg8uRkX2vpKXA1Iw==
-X-Received: by 2002:a17:90a:eb03:b0:225:b9df:c4a3 with SMTP id j3-20020a17090aeb0300b00225b9dfc4a3mr50832489pjz.3.1672945551335;
-        Thu, 05 Jan 2023 11:05:51 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x5-20020a17090aa38500b00219cf5c3829sm1658597pjp.57.2023.01.05.11.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 11:05:50 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] KVM: x86: Replace 0-length arrays with flexible arrays
-Date:   Thu,  5 Jan 2023 11:05:49 -0800
-Message-Id: <20230105190548.never.323-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 5 Jan 2023 14:06:23 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D4311B;
+        Thu,  5 Jan 2023 11:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ixGY7io/rE5K6EAUf3CTJ6PelTCXFqcbJYe+h11qlvs=; b=HX8w/kUto03BZlvL5JJrZfMEVo
+        PW0Hpcy/xdauC8tMOg2C9pcBM1XxQDdf5CWRQhrEn0o9q6NY9CYhWHH17IuOyQSROIs76ZgDCt0TI
+        vOPnL5BUXO4XqtS4Y8SzLqz6gUtzgvXTHmTZV7pjOGL8JiNgmuNjJAwr26iRbqRWD96mDGa7GQMes
+        tSlmJs52ReE8yfjCP4bd+hysHn5WRTUbkyjPvNNetEH97zvalJHE1nJMj0zH251DNjzlfSLvAincy
+        GvppPWra6aXfhu19vCQgZsSy7qCnI4U0PX/cZEoCXQX5WCQbjui2qAoWBgnBWYm5mXtLCgLEYVgtp
+        rxjRwVeA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35992)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pDVZD-0007TX-Ou; Thu, 05 Jan 2023 19:06:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pDVZB-0004DV-VE; Thu, 05 Jan 2023 19:06:17 +0000
+Date:   Thu, 5 Jan 2023 19:06:17 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <Y7cfqdVzrCNX6VqE@shell.armlinux.org.uk>
+References: <20230103220511.3378316-1-sean.anderson@seco.com>
+ <20230103220511.3378316-5-sean.anderson@seco.com>
+ <20230105140421.bqd2aed6du5mtxn4@skbuf>
+ <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
+ <20230105173445.72rvdt4etvteageq@skbuf>
+ <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
+ <20230105175206.h3nmvccnzml2xa5d@skbuf>
+ <Y7cdMyxap2hdPTec@shell.armlinux.org.uk>
+ <18453c4e-484d-5131-36fe-77d3e55d6ac7@seco.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2361; h=from:subject:message-id; bh=4Cc5ATtGGJ62WdR/RRtEjd3vcbEKzg9EcvjLs50yP4M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjtx+Mrzj8257RzFFkg/QcFRjziiNI/h5hA61oodCI Vw30ef6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7cfjAAKCRCJcvTf3G3AJhZJEA CY04hWGr+64pn8pHkpIMM8qmZt2aB4+QuzuYa8dsIb5raXrCgCp1UpUfMiptB8MLEpv1H2YploSa0e H6KMgqEDSkpuqO73fM8QyWWWNxmljXMCXEq+Ya1FWzdHSBTaqI1SHWrrogWGrrjCvkh+vXfnBzbUto +Raa3tL/ME4x20W4QyCxP6bXJ0mby6HKC1l8rSNRJMGjW4nvD82e4E1XquDk6zM6jXfgGC/lDi4B8a 6FNrTOEjG4Lk9UX8UhU5Qayt9SWDoP5YcwUyEQnzxv0N5ACTZmV5fO4PTZFG3t7k6G19aKbknxzDe9 7M8NHS26L+kk5zqfLHhXMpHBzxvsn28PiShxfbBcKSBt4usMLaqLSs2t4LdHYujcFEZMPN2+K7mPjq lOzJCSnCHj2GAf6ZnSldlsXzzCADUi2W0XfgH+obT5xBfpwVRiVYDUFEDhdA3jyNczFc17+oG7Xi+m ZiLH0nSOVB4c0eTX/RNOkdIaZtBZaNHnGtgz6Sa1oDCNQG+txyWgdtbDSAi71EOIdcHgpV5lGNeQgp R/zMzFDNUC9oM4Paci2nfc+5ABN3b9NRLto1HiLQ3X8acOGnQi/NfL2UPWdT3uw48FbvPsgQgyE+p3 3qVYoWllPMvdNy88+wtjoYN+QivCmDaG1y7CfcpApnvI0i1oSP2MZqIXStgg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18453c4e-484d-5131-36fe-77d3e55d6ac7@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct kvm_nested_state's
-"data" union 0-length arrays with flexible arrays. (How are the
-sizes of these arrays verified?) Detected with GCC 13, using
--fstrict-flex-arrays=3:
+On Thu, Jan 05, 2023 at 01:59:27PM -0500, Sean Anderson wrote:
+> On 1/5/23 13:55, Russell King (Oracle) wrote:
+> > On Thu, Jan 05, 2023 at 07:52:06PM +0200, Vladimir Oltean wrote:
+> >> On Thu, Jan 05, 2023 at 12:43:47PM -0500, Sean Anderson wrote:
+> >> > Again, this is to comply with the existing API assumptions. The current
+> >> > code is buggy. Of course, another way around this is to modify the API.
+> >> > I have chosen this route because I don't have a situation like you
+> >> > described. But if support for that is important to you, I encourage you
+> >> > to refactor things.
+> >> 
+> >> I don't think I'm aware of a practical situation like that either.
+> >> I remember seeing some S32G boards with Aquantia PHYs which use 2500BASE-X
+> >> for 2.5G and SGMII for <=1G, but that's about it in terms of protocol switching.
+> > 
+> > 88x3310 can dynamically switch between 10GBASE-R, 5GBASE-R, 2500BASE-X
+> > and SGMII if rate adaption is not being used (and the rate adaption
+> > method it supports in non-MACSEC PHYs is only via increasing the IPG on
+> > the MAC... which currently no MAC driver supports.)
+> > 
+> 
+> As an aside, do you know of any MACs which support open-loop rate
+> matching to below ~95% of the line rate (the amount necessary for
+> 10GBASE-W)?
 
-arch/x86/kvm/svm/nested.c: In function 'svm_get_nested_state':
-arch/x86/kvm/svm/nested.c:1536:17: error: array subscript 0 is outside array bounds of 'struct kvm_svm_nested_state_data[0]' [-Werror=array-bounds=]
- 1536 |                 &user_kvm_nested_state->data.svm[0];
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/uapi/linux/kvm.h:15,
-                 from include/linux/kvm_host.h:40,
-                 from arch/x86/kvm/svm/nested.c:18:
-arch/x86/include/uapi/asm/kvm.h:511:50: note: while referencing 'svm'
-  511 |                 struct kvm_svm_nested_state_data svm[0];
-      |                                                  ^~~
+I'm afraid I haven't paid too much attention to BASE-W, and I'm not
+aware of anything within the realms of phylink/phylib supporting MAC
+drivers having anything for it. I don't even remember mention of it
+in any SoC datasheets.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+Are you aware of a 10GBASE-W setup?
 
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: kvm@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/include/uapi/asm/kvm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index e48deab8901d..8ec3dfd641b0 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -502,13 +502,13 @@ struct kvm_nested_state {
- 	} hdr;
- 
- 	/*
--	 * Define data region as 0 bytes to preserve backwards-compatability
-+	 * Define union of flexible arrays to preserve backwards-compatability
- 	 * to old definition of kvm_nested_state in order to avoid changing
- 	 * KVM_{GET,PUT}_NESTED_STATE ioctl values.
- 	 */
- 	union {
--		struct kvm_vmx_nested_state_data vmx[0];
--		struct kvm_svm_nested_state_data svm[0];
-+		__DECLARE_FLEX_ARRAY(struct kvm_vmx_nested_state_data, vmx);
-+		__DECLARE_FLEX_ARRAY(struct kvm_svm_nested_state_data, svm);
- 	} data;
- };
- 
 -- 
-2.34.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
