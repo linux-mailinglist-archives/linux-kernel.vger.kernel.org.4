@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A383C65F156
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57DA65F15C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbjAEQnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 11:43:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S234372AbjAEQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjAEQng (ORCPT
+        with ESMTP id S233788AbjAEQph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:43:36 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F8544C41
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:43:35 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so10981520iog.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 08:43:35 -0800 (PST)
+        Thu, 5 Jan 2023 11:45:37 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA4359334
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:45:35 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id x11so30336758qtv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 08:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6arApO6IYFcLwiEx1xQQun777cX20MCWlNjtRHJ5Clg=;
+        b=uepsKThOle1iENJ7DV2TsYHwy/gOQiuTQF0fNpBMQRR8+VabvCU10BPMzbZh1ORZXg
+         3MkOl+1WmB/YOuAUHwDScjl7S9g8SKYkBR9BtOnrgK+DaApmIuxT+midA2oFCc1pshKL
+         /LBLrpF4wfUe3LCYZ7865wvKxInxFvIKQ/5OPQHJQMMcUP8NglSZDL1il/jyHarz2MTy
+         XUdQQGjOApmZcO4QeaaRW+nU0FJEWSCPAfKDCbDjx0aXkWjegpdTqb6mEVNEZ52MqR0u
+         IgC6ByABNBVj0lsR0KV++Fraa0FUxauGp1jP7KbvQz/h6DzdeffDZgyw2iGNH2NkrW6k
+         SfRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jNTz1hkBS1l8MvXBQfTTOWlvzPcDywW7mv6gEQd1HTQ=;
-        b=TKenySqt298p01STzPoitHI4+IfCsuQ9lMtZsgLvlRS+yifTv7Msrh6PqpxEjChlfn
-         HamYVWEog++ZjunJagYI/d6CrHRri7Fxq+nGZwz+0FgETnWr+VGrJOCEp+S3D+rSzRsX
-         +zPQbtTKD8hbgLxKLaN8wNGhS16dWCLID07WYAqQBkB07nLmMgrOGT9FHmq6wizpGNqj
-         +qlqHGKbgnjMIN1mB53MhgV9GFlnWzuamsAZ5/Br383KueFrdvjm/wOdTvJ2tkwOT1Yg
-         G1W8fOTMA5BxHG1s7gLQIoJi+V1fUtkq0vb6vBS/9mEqTl9t6ZipgJ/uLmCcBbC6qMRK
-         E66Q==
-X-Gm-Message-State: AFqh2koh8dQsKyqSl2ELmMix1iEM6zTDeuy0Vpre5Jie8JEKsYJ1fL02
-        goLyf0gikFWIxkvzsSL9A/z7lv9QnFGAzHZ1sJOuyJyQOTWQ
-X-Google-Smtp-Source: AMrXdXsx8X7qj/Ibya7mq7Ee1wAykpVkPg4g7GkP5M15CMiQiGAQ3c2zK+tlsfCsXtrr6zZo+Fh04DVRl84I6vpjXVSz3bdAbn/G
-MIME-Version: 1.0
-X-Received: by 2002:a5d:89d9:0:b0:6ec:f32a:ee58 with SMTP id
- a25-20020a5d89d9000000b006ecf32aee58mr3391984iot.65.1672937014625; Thu, 05
- Jan 2023 08:43:34 -0800 (PST)
-Date:   Thu, 05 Jan 2023 08:43:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d126605f187002a@google.com>
-Subject: [syzbot] [udf?] KASAN: null-ptr-deref Write in udf_fiiter_add_entry
-From:   syzbot <syzbot+b1b66db80fe98b733c58@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, gorcunov@gmail.com, jack@suse.com,
-        jack@suse.cz, linux-kernel@vger.kernel.org, penberg@cs.helsinki.fi,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6arApO6IYFcLwiEx1xQQun777cX20MCWlNjtRHJ5Clg=;
+        b=uQoSl9cmpArcSHcF5bu5KMmSlAijnDWOAH0n1BmMe45TriatDg4Knv+Qu6oYK92uMA
+         95iGzUb/GpLsMwDsXnxc/Vz2erXNqy+kMmpusQ33K1eUduMjwHSw7jz16ilmhFTusuDG
+         qKKixt18EJFv5H9GPPPtJ3Fn8ij13Cd9RA9+xiUmRuK66y6lgDyTjKRh1qfQLtD+51UU
+         XT15W4ZXEzjbWE7Vy6DJy++OS6mGyK7w0NdopSuAaL2pf2uzql/DjRdb8/8++yg/sk2y
+         fDYu5Yk3+bzsREwvzZCFmav/mz0ljggWtxp2mCp9dB0wqmyq5p8tczQ27j12pX0sYwCL
+         +p6Q==
+X-Gm-Message-State: AFqh2kojoiHnZa+BALwRvStjrgvsIVsnGKvAh+prmm2CG/nrQ/F31Ffo
+        tF1v7OKt+mN6y/Sjf9Fy9/iNKw==
+X-Google-Smtp-Source: AMrXdXsbTE4sJrzTmujne/EY/Ou99CTR4ifsI+W8HXA5+B6VmowpRpm7dSy8aUe89IRj2jXJHMV1KA==
+X-Received: by 2002:ac8:44b2:0:b0:3a9:89f1:82a with SMTP id a18-20020ac844b2000000b003a989f1082amr69143771qto.61.1672937134671;
+        Thu, 05 Jan 2023 08:45:34 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id c9-20020ac85189000000b003a54a19c550sm21840745qtn.57.2023.01.05.08.45.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Jan 2023 08:45:33 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <Y7bw7X1Y5KtmPF5s@casper.infradead.org>
+Date:   Thu, 5 Jan 2023 08:45:31 -0800
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        christian.brauner@ubuntu.com,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-m68k@lists.linux-m68k.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <50D6A66B-D994-48F4-9EBA-360E57A37BBE@dubeyko.com>
+References: <000000000000dbce4e05f170f289@google.com>
+ <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
+ <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
+ <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
+ <2575F983-D170-4B79-A6BA-912D4ED2CC73@dubeyko.com>
+ <46F233BB-E587-4F2B-AA62-898EB46C9DCE@dubeyko.com>
+ <Y7bw7X1Y5KtmPF5s@casper.infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    c76083fac3ba Add linux-next specific files for 20221226
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=104afeb2480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c217c755f1884ab6
-dashboard link: https://syzkaller.appspot.com/bug?extid=b1b66db80fe98b733c58
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136ca714480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16fcd5da480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e388f26357fd/disk-c76083fa.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e24f0bae36d5/vmlinux-c76083fa.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5a69a059716/bzImage-c76083fa.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bb457662f7c3/mount_0.gz
-
-The issue was bisected to:
-
-commit 869e9be21b1c67010d215c83c38b32f6cbd080cc
-Author: Jan Kara <jack@suse.cz>
-Date:   Tue Dec 20 11:38:45 2022 +0000
-
-    udf: Allocate name buffer in directory iterator on heap
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15ce5eb2480000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17ce5eb2480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ce5eb2480000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b1b66db80fe98b733c58@syzkaller.appspotmail.com
-Fixes: 869e9be21b1c ("udf: Allocate name buffer in directory iterator on heap")
-
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcd6a74ea39
-RDX: 0000000000000000 RSI: 0000000000141043 RDI: 00000000200000c0
-RBP: 00007ffc262fb620 R08: 0000000000000002 R09: 00007ffc262fb630
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 00007ffc262fb660 R14: 00007ffc262fb640 R15: 0000000000000008
- </TASK>
-==================================================================
-BUG: KASAN: null-ptr-deref in udf_fiiter_add_entry+0x75b/0x10d0 fs/udf/namei.c:316
-Write of size 4 at addr 0000000000000000 by task syz-executor153/5085
-
-CPU: 0 PID: 5085 Comm: syz-executor153 Not tainted 6.2.0-rc1-next-20221226-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
- memcpy+0x3d/0x60 mm/kasan/shadow.c:66
- udf_fiiter_add_entry+0x75b/0x10d0 fs/udf/namei.c:316
- udf_add_nondir+0xda/0x360 fs/udf/namei.c:349
- udf_create+0x12c/0x180 fs/udf/namei.c:384
- lookup_open.isra.0+0xee7/0x1270 fs/namei.c:3413
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x975/0x2a50 fs/namei.c:3711
- do_filp_open+0x1ba/0x410 fs/namei.c:3741
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x11d/0x1c0 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcd6a74ea39
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc262fb5f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcd6a74ea39
-RDX: 0000000000000000 RSI: 0000000000141043 RDI: 00000000200000c0
-RBP: 00007ffc262fb620 R08: 0000000000000002 R09: 00007ffc262fb630
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 00007ffc262fb660 R14: 00007ffc262fb640 R15: 0000000000000008
- </TASK>
-==================================================================
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> On Jan 5, 2023, at 7:46 AM, Matthew Wilcox <willy@infradead.org> =
+wrote:
+>=20
+> On Wed, Jan 04, 2023 at 08:37:16PM -0800, Viacheslav Dubeyko wrote:
+>> Also, as far as I can see, available volume in report (mount_0.gz) =
+somehow corrupted already:
+>=20
+> Syzbot generates deliberately-corrupted (aka fuzzed) filesystem =
+images.
+> So basically, you can't trust anything you read from the disc.
+>=20
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+If the volume has been deliberately corrupted, then no guarantee that =
+file system
+driver will behave nicely. Technically speaking, inode write operation =
+should never
+happened for corrupted volume because the corruption should be detected =
+during
+b-tree node initialization time. If we would like to achieve such nice =
+state of HFS/HFS+
+drivers, then it requires a lot of refactoring/implementation efforts. I =
+am not sure that
+it is worth to do because not so many guys really use HFS/HFS+ as the =
+main file
+system under Linux.
+
+Thanks,
+Slava.
+
