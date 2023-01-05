@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69FF65E82A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B039765E82D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjAEJqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S231977AbjAEJsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbjAEJqq (ORCPT
+        with ESMTP id S231429AbjAEJsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:46:46 -0500
+        Thu, 5 Jan 2023 04:48:12 -0500
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A14568A7;
-        Thu,  5 Jan 2023 01:46:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A265254726;
+        Thu,  5 Jan 2023 01:48:11 -0800 (PST)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 1680332009EC;
-        Thu,  5 Jan 2023 04:46:30 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 1ED213200A49;
+        Thu,  5 Jan 2023 04:48:10 -0500 (EST)
 Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Thu, 05 Jan 2023 04:46:31 -0500
+  by compute5.internal (MEProxy); Thu, 05 Jan 2023 04:48:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1672911989; x=1672998389; bh=Re
-        eVYXXoQmzg71a3dadwFOkrgyrpB9RqBRBioW6WdJs=; b=I2317b/qhr65GwM/6z
-        vChVLjQhL10Ejzw8xfejgdexJTug92mRZ+vsQwnQv3r3NDYRM41y3Dwg/WCa3vPv
-        b1hofr6VFaQQBuQbXkc4WMuEGrcwSOoC8iItbsisxPzjMSXvzsJoAbpayTzjU/Su
-        JBnnOXkjiFvjbnDYtarqMLzWG6dmZWprYg325fR8v8WDfdbqmaOrGLOdJb+YU2Kb
-        cH5GpG8dLJh9YaG8VaLrCXA2pMQmo04n10q4mDd3xRojSpvSVmuUjPFhWUq9gr0D
-        MEcI6i+FLTNlPwI97rzZWLjzZMs4SwPtWweBBILP3a/eutnD02fkbdz17DHEPFzZ
-        djCw==
+        :subject:subject:to:to; s=fm2; t=1672912089; x=1672998489; bh=fx
+        RgFMFJkcfqXAuf9yZKddG/6gTkmyvw+JYOIZcIs6Y=; b=HUzOxVzi8SPiFZ+jm4
+        ZPDcF9rrI5dUTEUDRToWj4YCk/L3GWo5Kiel48b0qHBa4wHEXFRN05qIYhIQg4Sv
+        KkgQoU43LDTrvPsvRfY0bkMSaoVjHtQyEH+wuZcKtrAOvqWiY9FVM/SmpzEl7kqW
+        tlxMXZg2nuSZ2EPCV5oDWCYnQrzMCAuISfe+w4CvPDsr9jf1YOB4t7eSsuCB1/KT
+        vwFs0Z/rZUNLGvDYvn072/IottGCP941pTrVhqcksymhPB14Xyzwq4uhDd3xfzpL
+        HfKPvjC5cOHUtKgHC2dhvhiGFmdiW7M3wJLhBdvrz7dLPxMyMG9zkBADvmagsAPx
+        rTkA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672911989; x=1672998389; bh=ReeVYXXoQmzg71a3dadwFOkrgyrp
-        B9RqBRBioW6WdJs=; b=XEck3zsX/E54i904WdfhmloqKiUKZ33P8zLL0aMEDui4
-        Yf6RRO1E/c6etJ+W6CwPrLvEoeHJ1zCgdKMTqluhi6r2L/Iv8pnaJDY03zH6WcnG
-        tmvSnZHlGkI5BIzVh3L54Pm099Veo1b4qG5OLX3wCevlC9LpWkXy/E9edgfalZTu
-        oTSdCEq9wQdX+OLytu4TwiMUNU2kdwQH90w6pfFXmA3168m3teyr4lQN9JZzdMOk
-        PHwWHglh4KL2kn2ctt1L7kJr8L+YHygdKxYJP5YZGGTZEApnggqUA6wqijGi+mFU
-        r6XuP+KsQr7DE5QSDIBw2gRqjf9103HIly7HB1Fhvg==
-X-ME-Sender: <xms:dZy2Y2yU4yQ52ytV8RCTZRNnk5tLzFz17ix6yp6wVI_vjsKjxmOJQA>
-    <xme:dZy2YyRWxe8OkPOBmQ0iskudIE1deB0CeqCpVTUncRCL2Ki69sH4C0P7JZAqhGF8j
-    H8xiwuBWdXCvQM6JAY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgddtjecutefuodetggdotefrodftvf
+        fm2; t=1672912089; x=1672998489; bh=fxRgFMFJkcfqXAuf9yZKddG/6gTk
+        myvw+JYOIZcIs6Y=; b=PuNY1tKr2WSwgtb7gL5tb1jgzhb2sarZFEBSzF5ZgcjV
+        lkVRDU4tD/ZYO3E/nBYiRqW0znTxcDTHd33xjclOZ2AiAEOPon411jk2o1xzEnOo
+        Nfx03L3zhS0Lwm/DY8kF26DjYWXgDSxafHacSOHcbT1LPSlMO1zvvq1f4zTbDeon
+        hJudUmDC030QeHk9OXnYvuwCWpQ9T5ntkiZJKPxZ6LpwvuQ5QKytea6boBr5/dra
+        PvltiSSz4iWIXKSxW2tootZOa7UGh/fMBLk/A9kozpf9/qm0w73z7hV3PMWAFNRQ
+        0BAJ1vwzR6LnohcTOAOQsfS7XMzdA9LxIQxW4BP/+g==
+X-ME-Sender: <xms:2Zy2Y2_M2zTPFrMVkpbYo0qFBp-nw2-iL4Si5hA3oe2utbATArjSWA>
+    <xme:2Zy2Y2vhi_ue9B7cd_G0XTeVCo9N0KpR-sY02ulJ5Rd3Rm-OB5JkcTZdAjROJP1Js
+    5d3W_jVzIFbJ_YBgmo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgddtkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
@@ -54,23 +54,23 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgddtjecutefuodetggdote
     htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
     veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:dZy2Y4Vd-voPtt_MrRPdEWGzvuVY9Ii7FK8Xk5mdFfygC5MVG-1p6w>
-    <xmx:dZy2Y8i7Hp7ZWPK4IX40Le0Y3byTtcb2BKbF8R2mwozKfz0j9__wFA>
-    <xmx:dZy2Y4Bob7iVlpOfi5sOUZ8eHeB958WeStsmfFZwrqeennA2BgcHaw>
-    <xmx:dZy2Y84agZ0du63ri5bZfV7GunpI3wZ-IdTYzFQkajevOqUb5f3T5A>
+X-ME-Proxy: <xmx:2Zy2Y8B0GVdM-I5_Pt17r-NbiZu3419bgodhUWNxLWUOxUtUk9qHkw>
+    <xmx:2Zy2Y-ehnlope9GIwkuPDbZ7yBMPpCL5qHCyADT0dgiQtMAXXvXs6Q>
+    <xmx:2Zy2Y7M9OOpJd9q9BlYaXT7O3I0nPNJ7XrZo-mhz1lTkDfXx5sX8GQ>
+    <xmx:2Zy2Y8GiRY4wnx9jtsWQI3Opwmtbt_xhN_FjhnMaV3GnpwEectSUZg>
 Feedback-ID: i51094778:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6F1C3A6007C; Thu,  5 Jan 2023 04:46:29 -0500 (EST)
+        id 41F2EA6007C; Thu,  5 Jan 2023 04:48:09 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
 Mime-Version: 1.0
-Message-Id: <2267ef84-a167-4cd6-86fd-725e064eae62@app.fastmail.com>
-In-Reply-To: <57a52e19-e121-6082-a4d8-f58ade353782@marcan.st>
+Message-Id: <7ecde27b-05e9-4727-8441-e17916df237a@app.fastmail.com>
+In-Reply-To: <3af091e9-09b4-53a0-da2d-5b2640040b9d@marcan.st>
 References: <20230104110013.24738-1-marcan@marcan.st>
- <20230104110013.24738-7-marcan@marcan.st>
- <228a80d4-752b-42ae-84b4-47197ec82c24@app.fastmail.com>
- <57a52e19-e121-6082-a4d8-f58ade353782@marcan.st>
-Date:   Thu, 05 Jan 2023 10:46:09 +0100
+ <20230104110013.24738-4-marcan@marcan.st>
+ <71bffbd4-f8b0-4201-b2eb-7a15847ac2c6@app.fastmail.com>
+ <3af091e9-09b4-53a0-da2d-5b2640040b9d@marcan.st>
+Date:   Thu, 05 Jan 2023 10:47:39 +0100
 From:   "Sven Peter" <sven@svenpeter.dev>
 To:     "Hector Martin" <marcan@marcan.st>,
         "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
@@ -81,8 +81,7 @@ Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
         devicetree@vger.kernel.org, iommu@lists.linux.dev,
         asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] iommu: dart: Support different variants with different
- registers
+Subject: Re: [PATCH 3/7] iommu: dart: Support >64 stream IDs
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -95,28 +94,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Thu, Jan 5, 2023, at 06:16, Hector Martin wrote:
-> On 2023/01/04 22:43, Sven Peter wrote:
->> On Wed, Jan 4, 2023, at 12:00, Hector Martin wrote:
->>> +	u64 enable_streams;
->>> +	u64 disable_streams;
->> I don't think disable_streams is used anywhere. I assume you just left it in
->> here to document it?
->
-> Yeah, we don't use this field ever, so we might as well drop it. I'll
-> leave the #define for T8110 in though, as documentation.
->
->>> +	u64 ttbr;
->>> +	u64 ttbr_valid;
->>> +	u64 ttbr_addr_off;
+On Thu, Jan 5, 2023, at 05:43, Hector Martin wrote:
+> On 2023/01/04 22:37, Sven Peter wrote:
+>>>  #include "dma-iommu.h"
+>>>
+>>> -#define DART_MAX_STREAMS 16
+>>> +#define DART_MAX_STREAMS 256
 >> 
->> This name confused me a bit since off sounds like offset to me while
->> this is actually another shift. Can't really think of a better name
->> right now though. I'd at least a comment here to describe it.
+>> Feels a bit wasteful to allocate 256-wide sid2group and save_{tcr,ttbr}
+>> arrays even for the M1 where 16 are enough. But then again, that's still <100 KiB
+>> for all DARTs combined and these machine have >8 GiB of RAM so it probably won't
+>> make a difference
 >
-> How about `ttbr_addr_field_shift`?
+> Yeah, I don't think this is worth the extra fumbling around with dynamic
+> allocation.
+>
+>>>  	/* enable all streams globally since TCR is used to control isolation */
+>>> -	writel(DART_STREAM_ALL, dart->regs + DART_STREAMS_ENABLE);
+>>> +	for (i = 0; i < BITS_TO_U32(dart->num_streams); i++)
+>>> +		writel(U32_MAX, dart->regs + DART_STREAMS_ENABLE);
+>> 
+>> This seems weird: this code writes U32_MAX to the same register
+>> again and again. 
+>
+> Whoops, that was supposed to have a `+ 4 * i` in there. Fixed for v2.
 
-Sounds good to me!
+Great! Feel free to also add
 
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
+then.
+
+
+Best,
 
 Sven
