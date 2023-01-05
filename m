@@ -2,185 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA8565E918
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E1765E91F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbjAEKhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S232186AbjAEKin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbjAEKh0 (ORCPT
+        with ESMTP id S233052AbjAEKiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:37:26 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DA444C4F;
-        Thu,  5 Jan 2023 02:37:22 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A0BBA8531D;
-        Thu,  5 Jan 2023 11:37:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1672915040;
-        bh=N6yv+vVaCjEH/Vdac9ex4yjrrpuU16UbKkONhTmDbDs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PhSTmdky8PEq2J+EHeqsR8AGUd63hwnvcv5HioA+RxvNMt/D86NEciPzRXHy9biFg
-         eujD8P/NPvLgj8oqweMJyRc4GrnKnQfSFwIKiyf/u1aLPqKQQdw+1yAOqS41mk1UU1
-         qE52rNtXNGJlGbhPBt9A1P6vVlNy+s0NrorVCZ83NNN6/36kHyi3eP1hRo27ewrMb1
-         D2F7xGigKvNFugRctEbJfYCPTerdlfmwraigjZN8b8LaR7lFBv4tJmVm3m/i0Cn49m
-         I0iZ3yvtjQ8xn1+BwsOEdR6tD+lhYFHBFusxDS1SF2kkODr+78nE+CAN6qv3u3Y1BD
-         qg8jHd5Hy5IbA==
-Date:   Thu, 5 Jan 2023 11:37:12 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20230105113712.2bf0d37b@wsk>
-In-Reply-To: <20230103100251.08a5db46@wsk>
-References: <20230102150209.985419-1-lukma@denx.de>
-        <Y7M+mWMU+DJPYubp@lunn.ch>
-        <20230103100251.08a5db46@wsk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 5 Jan 2023 05:38:17 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A33395DF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:38:16 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672915095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MdjBBReZIfmoiufuLij38tBr00juxvxCP4KNiop85+Q=;
+        b=lranmi2OrApPXfpJ5WnnZ/2MIDjwCOJ6mZ5/h9LsvNkvISYyHiL5vBJd+kTh5MLNVkvHsC
+        fObg2bS8ligwD2ER0fGnCWzd2xE7ir3gqSoqXGQObU3HZtPdFu3iTykj8RQ1J5GPN+r+KX
+        q2Wg/pu9JOjLef7+dexBL2wZKvS6wIE1pkwDVelepjAB180w9S9vvUph7X0SqWBO7XjQuw
+        0pJQdqkdItv0rreJVdSj4Ut9Utt9Sy5mOw64EOCzrjKOGsQ8dMbMlks+tCRitIvqifc2zy
+        ldxMQuvN9G0DlqMseIBZjZAr23Ohr3c5yO3ulwjLlKikarFx+0oXMOUt9hPOXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672915095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MdjBBReZIfmoiufuLij38tBr00juxvxCP4KNiop85+Q=;
+        b=8F4zIxJ1e6LpR6bzNMw8AlxZgBK2vc32t6oVcOEwyH7SsByOnZLXOQTq1xVGaZEr1wqmRe
+        4vxjqVfPtS8zpoBw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH printk v4 0/8] printk: cleanup buffer handling
+Date:   Thu,  5 Jan 2023 11:43:27 +0106
+Message-Id: <20230105103735.880956-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6ww_7R43XAgS8UoX0pNf3AM";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6ww_7R43XAgS8UoX0pNf3AM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi Andrew, Alexander,
+This is v4 of a series to cleanup console buffer handling and
+prepare for code sharing with the upcoming threaded/atomic
+consoles. v3 is here [0].
 
-> Hi Andrew,
->=20
-> > > @@ -3548,7 +3548,9 @@ static int mv88e6xxx_get_max_mtu(struct
-> > > dsa_switch *ds, int port) if
-> > > (chip->info->ops->port_set_jumbo_size) return 10240 -
-> > > VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN; else if
-> > > (chip->info->ops->set_max_frame_size)
-> > > -		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
-> > > ETH_FCS_LEN;
-> > > +		return (max_t(int, chip->info->max_frame_size,
-> > > 1632)
-> > > +			- VLAN_ETH_HLEN - EDSA_HLEN -
-> > > ETH_FCS_LEN); +
-> > >  	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
-> > > =20
-> >=20
-> > I would also prefer if all this if/else logic is removed, and the
-> > code simply returned chip->info->max_frame_size - VLAN_ETH_HLEN -
-> > EDSA_HLEN - ETH_FCS_LEN;
-> >  =20
->=20
-> So then the mv88e6xxx_get_max_mtu shall look like:
->=20
-> WARN_ON_ONCE(!chip->info->max_frame_size)
->=20
-> if (chip->info->ops->port_set_jumbo_size)
-> ...
-> else=20
->     return chip->info->max_frame_size - VLAN_ETH_HLEN -
-> 	EDSA_HLEN - ETH_FCS_LEN;
->=20
->=20
-> Or shall I put WARN_ON_ONCE to the mv88e6xxx_probe() function?
->=20
->=20
-> The above approach is contrary to one proposed by Alexander, who
-> wanted to improve the defensive approach in this driver (to avoid
-> situation where the max_frame_size callback is not defined and
-> max_frame_size member of *_info struct is not added by developer).
->=20
-> Which approach is the recommended one for this driver?
+The main purpose of the series is to introduce two new lockless
+functions to handle reading and formatting of printk messages. These
+functions can then be used from any context, which is important for
+the upcoming threaded/atomic consoles. The series also helps to
+cleanup some of the internal printk interfaces and cleanly separate
+formatting code from outputting code.
 
-Is there any decision regarding the preferred approach to rewrite this
-code?
+Some changes in this version were not part of the feedback. However,
+from the discussions and examples I decided that some of the names
+I had previously chosen were not appropriate. Particularly, structs,
+variables, and functions should only use the "console_" prefix if it
+is console-specific. Things that are used for general printk
+processing should use a "printk_" prefix. This makes the diff to v3
+rather large, even though the "real code" has only minor changes.
 
->=20
-> > > +++ b/drivers/net/dsa/mv88e6xxx/chip.h
-> > > @@ -132,6 +132,7 @@ struct mv88e6xxx_info {
-> > >  	unsigned int num_gpio;
-> > >  	unsigned int max_vid;
-> > >  	unsigned int max_sid;
-> > > +	unsigned int max_frame_size;   =20
-> >=20
-> > It might be worth adding a comment here what this value actually
-> > represents. =20
->=20
-> Ok. I will add proper comment.
->=20
-> > We don't want any mixups where the value already has the
-> > frame checksum removed for example. =20
->=20
-> Could you be more specific here about this use case?
->=20
-> The max_frame_size is the maximal size of the ethernet frame for which
-> the IC designer provided specified amount of RAM (it is a different
-> value for different SoCs in the Link Street family).
->=20
-> >=20
-> >       Andrew =20
->=20
->=20
-> Best regards,
->=20
-> Lukasz Majewski
->=20
-> --
->=20
-> DENX Software Engineering GmbH,      Managing Director: Erika Unter
-> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-> Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email:
-> lukma@denx.de
+@Petr: Like with v3, this version uses a wrapper struct for the
+message metadata to avoid clobbering. Making the message formatting
+code robust enough to handle metadata clobbering was too complex
+(particularly with the dropped tracking).
+
+Changes since v3:
+
+- Provide a detailed explanation in the commit message about why
+  message metadata is put into a wrapper struct instead of the
+  buffer struct.
+
+- Reorder stack variable definitions so that static variables are at
+  the top and separated from non-static variables. IMHO it is
+  important to clearly see which of the variables are static.
+
+- Drop a previous coding-style change from a line not related to
+  this series.
+
+- In console_prepend_dropped() make sure the buffer is large enough
+  for the dropped message and at least PREFIX_MAX of the current
+  message.
+
+- Define the PREFIX_MAX macro for !CONFIG_PRINTK in internal.h
+  because console_prepend_dropped() now needs it.
+
+- Rename various functions, structs, fields, and macros:
+
+    console_get_next_message()  ->  printk_get_next_message()
+
+    struct console_buffers      ->  struct printk_buffers
+
+    struct console_message      ->  struct printk_message
+
+    console_message.cbufs       ->  printk_message.pbufs
+
+    console_message.outbuf_seq  ->  printk_message.seq
+
+    LOG_LINE_MAX                ->  PRINTKRB_RECORD_MAX
+
+    PREFIX_MAX                  ->  PRINTK_PREFIX_MAX
+
+    CONSOLE_LOG_MAX and
+    CONSOLE_EXT_LOG_MAX         ->  PRINTK_MESSAGE_MAX
+
+- Adjust the values of string limit macros. This is explained in
+  detail in the commit message.
+
+- Replace @buf and @text_buf in struct devkmsg_user with struct
+  printk_buffers.
+
+- Replace message formatting code in devkmsg_read() with
+  printk_get_next_message().
+
+- Define all printk_message structs on the stack.
+
+John Ogness
+
+[0] https://lore.kernel.org/lkml/20221221202704.857925-1-john.ogness@linutronix.de
+
+John Ogness (6):
+  printk: move size limit macros into internal.h
+  printk: introduce struct printk_buffers
+  printk: introduce printk_get_next_message() and printk_message
+  printk: introduce console_prepend_dropped() for dropped messages
+  printk: use printk_buffers for devkmsg
+  printk: adjust string limit macros
+
+Thomas Gleixner (2):
+  console: Use BIT() macros for @flags values
+  console: Document struct console
+
+ include/linux/console.h  | 100 +++++++++----
+ include/linux/printk.h   |   2 -
+ kernel/printk/internal.h |  45 ++++++
+ kernel/printk/printk.c   | 293 +++++++++++++++++++++++----------------
+ 4 files changed, 288 insertions(+), 152 deletions(-)
 
 
+base-commit: 6b2b0d839acaa84f05a77184370f793752e786e9
+-- 
+2.30.2
 
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/6ww_7R43XAgS8UoX0pNf3AM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmO2qFgACgkQAR8vZIA0
-zr1r9wgAys1TrWSHvZUhjo0hrnAaM6SRfe7OiUa9FMrGJeQvyJ9CwoN0iU6NcdHd
-PeNmg3VZ5mF9M32g+GbMjgMQLlHXiq7jc0qXpKUGxDhw6oO98z9knkuIor9IfNKm
-sP2cjb/8hWMh+YjLR7h2Olj98QnkMGnbG6U7o4vfKzdcvpENxptzi0LxCELD/P2E
-SUXg1L4US1ur7KSkNGT1M9FBXhGefTU38Knj2baKcVbfI6Q8z5t4GGUippqAyHhv
-rn36AexE3cg+0Kp1byPzn+/atox4Pj1IbMutKVFxaYiUxt8fHhBt734MSyhZ4w9v
-wyyfrK6mB08heO3nVnmYqOfV3A9vrQ==
-=dqKk
------END PGP SIGNATURE-----
-
---Sig_/6ww_7R43XAgS8UoX0pNf3AM--
