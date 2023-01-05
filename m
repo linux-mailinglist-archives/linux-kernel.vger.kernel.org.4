@@ -2,138 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E9A65E267
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DA265E277
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjAEBQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 20:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S229975AbjAEBWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 20:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjAEBPq (ORCPT
+        with ESMTP id S229535AbjAEBWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 20:15:46 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA7630579
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 17:15:44 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so10344544iog.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 17:15:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4XwA2WIOMhHxfPunRfxDwfkdvR24Gn3rMnr/1ezfYk=;
-        b=dwZrtedHlP7f134L0CSnGFTITtSgFFA0NRMeZM/sIoSthH+t792Y/NEdMAkxXDNNPv
-         2PaYxhgP15mrQWtPtqjWKDjlw4VDpHMFhXrGDQTtO66a1M07k23kXriNKb2kSnUHAuds
-         F6+7omjkTeyVLGCs2HPzpRxDiDd13qXHhb5vmW+MujLNX2ybRBBfcPSNeEybtP9lTJ7e
-         4ZL+Ww7v3w0XqFPVnFOvBvwm2BL0j4GbZdRXAm/yfOFUGSFz+wzdFUShiaQgcatxJgFn
-         vhjEzf/W7AL7vAB1bGqtPBVjVd+BE/x80uTfd76Gds1kZUysMno2tusJ3YxXzUoD6VWt
-         gkpw==
-X-Gm-Message-State: AFqh2kpgSeGrfpZN6S3Unc9fc0Z3m+4ICLFbPgoQ8RjjsnOyOLYxaurs
-        i/E1ieOrcgOByO+LjRtkpw78AlQjonPL556EAcW5IQQzWvsO
-X-Google-Smtp-Source: AMrXdXt1O0jsfhplciVZiLxUAY18ZG46Dpsl/NyiTpPavbg7IT/AlXwqYIpS0cyAxOktV7GGDkVAWBiKcz/7gBm0F9KO/hTjEd6f
-MIME-Version: 1.0
-X-Received: by 2002:a02:a59a:0:b0:38a:b88c:7caa with SMTP id
- b26-20020a02a59a000000b0038ab88c7caamr4563338jam.10.1672881343829; Wed, 04
- Jan 2023 17:15:43 -0800 (PST)
-Date:   Wed, 04 Jan 2023 17:15:43 -0800
-In-Reply-To: <000000000000e5454b05f065a803@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000401c5105f17a0ac1@google.com>
-Subject: Re: [syzbot] [btrfs?] general protection fault in start_transaction
-From:   syzbot <syzbot+96977faa68092ad382c4@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 20:22:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B442F783;
+        Wed,  4 Jan 2023 17:22:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EAA38CE193C;
+        Thu,  5 Jan 2023 01:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08456C433EF;
+        Thu,  5 Jan 2023 01:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672881763;
+        bh=ExpxEIguBmVK6mxVxd9YEswT2YfPe7zBo9G4esPP838=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gB2WDuUS6KfnjtiNTPNPRUmG7LTic9mE03cppW5NPP7t0t9t+u0GUaulFtbsBOxF5
+         5XNUk7b41IY8FT4LCmSZ4RXd4Wb2AAJjc46tBcGlaZ9jY7CNjvyVhwo7u5SFa+Lqub
+         l0Evofho7p9aeXb89IXIyVlCwB/+hdM6az/Qdsx81px8S6ON12J+VwJSWK6RzIvQq7
+         9bNjQz5Bv8YHpEQNtJoNDD8DAzGWXvU6Q9fcrdoKd3teJuMECR/9VUCJ1IwbroM3yx
+         cLuUFfL9KBkwJawIdgpQSJpSpOObUvt+w+zuTVD5Aq/xf/6OqxDzIzGK/fLar6AZ/H
+         Qwnjxb/zz8D6g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6A2FE57249;
+        Thu,  5 Jan 2023 01:22:42 +0000 (UTC)
+Subject: Re: [GIT PULL v2] virtio,vhost,vdpa: fixes, cleanups
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230103104946-mutt-send-email-mst@kernel.org>
+References: <20230103104946-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230103104946-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+X-PR-Tracked-Commit-Id: a26116c1e74028914f281851488546c91cbae57d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 41c03ba9beea760bd2d2ac9250b09a2e192da2dc
+Message-Id: <167288176293.29184.569668467593245088.pr-tracker-bot@kernel.org>
+Date:   Thu, 05 Jan 2023 01:22:42 +0000
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        angus.chen@jaguarmicro.com, colin.i.king@gmail.com,
+        dave@stgolabs.net, dengshaomin@cdjrlc.com, dmitry.fomichev@wdc.com,
+        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
+        harshit.m.mogalapalli@oracle.com, jasowang@redhat.com,
+        lulu@redhat.com, mst@redhat.com, pizhenwei@bytedance.com,
+        rafaelmendsr@gmail.com, ricardo.canuelo@collabora.com,
+        ruanjinjie@huawei.com, set_pte_at@outlook.com, sgarzare@redhat.com,
+        shaoqin.huang@intel.com, si-wei.liu@oracle.com,
+        stable@vger.kernel.org, sunnanyong@huawei.com,
+        wangjianli@cdjrlc.com, wangrong68@huawei.com,
+        weiyongjun1@huawei.com, yuancan@huawei.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+The pull request you sent on Tue, 3 Jan 2023 10:49:46 -0500:
 
-HEAD commit:    69b41ac87e4a Merge tag 'for-6.2-rc2-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=143721cc480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=96977faa68092ad382c4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1382a02a480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c7f2c2480000
+> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d3aac1573b20/disk-69b41ac8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/31f5a860f3b3/vmlinux-69b41ac8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d4a7091814ba/bzImage-69b41ac8.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/48b08567f044/mount_0.gz
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/41c03ba9beea760bd2d2ac9250b09a2e192da2dc
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+96977faa68092ad382c4@syzkaller.appspotmail.com
+Thank you!
 
-BTRFS info (device loop3): qgroup scan completed (inconsistency flag cleared)
-general protection fault, probably for non-canonical address 0xdffffc0000000041: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000208-0x000000000000020f]
-CPU: 0 PID: 33 Comm: kworker/u4:2 Not tainted 6.2.0-rc2-syzkaller-00010-g69b41ac87e4a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: btrfs-qgroup-rescan btrfs_work_helper
-RIP: 0010:start_transaction+0x48/0x10f0 fs/btrfs/transaction.c:564
-Code: 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 b0 72 00 fe 48 89 5c 24 38 48 81 c3 08 02 00 00 48 89 d8 48 c1 e8 03 48 89 44 24 70 <80> 3c 28 00 74 08 48 89 df e8 7a 1c 56 fe 48 89 5c 24 60 48 8b 03
-RSP: 0018:ffffc90000aa7ab0 EFLAGS: 00010206
-
-RAX: 0000000000000041 RBX: 0000000000000208 RCX: ffff888012a98000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000001 R09: fffff52000154f5d
-R10: fffff52000154f5d R11: 1ffff92000154f5c R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000001 R15: 0000000000000003
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc4b7306e68 CR3: 000000007c876000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_qgroup_rescan_worker+0x3bb/0x6a0 fs/btrfs/qgroup.c:3403
- btrfs_work_helper+0x312/0x850 fs/btrfs/async-thread.c:280
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:start_transaction+0x48/0x10f0 fs/btrfs/transaction.c:564
-Code: 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 b0 72 00 fe 48 89 5c 24 38 48 81 c3 08 02 00 00 48 89 d8 48 c1 e8 03 48 89 44 24 70 <80> 3c 28 00 74 08 48 89 df e8 7a 1c 56 fe 48 89 5c 24 60 48 8b 03
-RSP: 0018:ffffc90000aa7ab0 EFLAGS: 00010206
-RAX: 0000000000000041 RBX: 0000000000000208 RCX: ffff888012a98000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000001 R09: fffff52000154f5d
-R10: fffff52000154f5d R11: 1ffff92000154f5c R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000001 R15: 0000000000000003
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffdbdc81068 CR3: 000000007e8b3000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 89 fb             	mov    %rdi,%rbx
-   3:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
-   a:	fc ff df
-   d:	e8 b0 72 00 fe       	callq  0xfe0072c2
-  12:	48 89 5c 24 38       	mov    %rbx,0x38(%rsp)
-  17:	48 81 c3 08 02 00 00 	add    $0x208,%rbx
-  1e:	48 89 d8             	mov    %rbx,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-  25:	48 89 44 24 70       	mov    %rax,0x70(%rsp)
-* 2a:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	48 89 df             	mov    %rbx,%rdi
-  33:	e8 7a 1c 56 fe       	callq  0xfe561cb2
-  38:	48 89 5c 24 60       	mov    %rbx,0x60(%rsp)
-  3d:	48 8b 03             	mov    (%rbx),%rax
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
