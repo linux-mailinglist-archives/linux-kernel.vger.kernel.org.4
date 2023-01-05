@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9FB65F51F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D985F65F522
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235383AbjAEUVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 15:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S234720AbjAEUXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 15:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjAEUVs (ORCPT
+        with ESMTP id S235286AbjAEUX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 15:21:48 -0500
+        Thu, 5 Jan 2023 15:23:28 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A9427D;
-        Thu,  5 Jan 2023 12:21:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B84C6338A;
+        Thu,  5 Jan 2023 12:23:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4599661C14;
-        Thu,  5 Jan 2023 20:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDB5BC433D2;
-        Thu,  5 Jan 2023 20:21:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0824361C21;
+        Thu,  5 Jan 2023 20:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411B3C433F0;
+        Thu,  5 Jan 2023 20:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672950106;
-        bh=ilMX5v3ZE/EhwtB5jOfYPI8G8uBMESmE0BRULcNsyjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dBfuqzFnZoDzXlpxBLXV6lk805Xi8ih1YVM0W7jkCx6q5Y81tK/AsPId5dUbkeNA/
-         17EzsVUkR1c1CfOmrKrngR435LUUyGsNLf2T2GEkSDCQP5S5x87ffjPB3Mm/C4Qg70
-         pr4sPnSMS+4U/vh+LBiYdUS05IY0xFK519e+bKQ4moC7pCHk5e5uFwyJEdzv9yZ4qG
-         C9KKQqFNGPXLY0ugloNE/S9nB+lT4RJPKjAE3eg/7MbIN0yg8mf6Z2uew1SgJDRuhQ
-         X2I5wuZbfE22/q7UVUCynyMdfhnOCC3WVhmw+80v8jebMPWSUZyACzW42WgtFqRUiF
-         WHiuJvCXfeK2w==
-Date:   Thu, 5 Jan 2023 13:21:43 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Yishai Hadas <yishaih@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org, axboe@kernel.dk,
-        logang@deltatee.com, hch@lst.de, alex.williamson@redhat.com,
-        leonro@nvidia.com, maorg@nvidia.com
-Subject: Re: [PATCH] lib/scatterlist: Fix to merge contiguous pages into the
- last SG properly
-Message-ID: <Y7cxVx3qGShReJAZ@kbusch-mbp.dhcp.thefacebook.com>
-References: <20230105112339.107969-1-yishaih@nvidia.com>
- <Y7ctsw8ffhSsBZ4v@nvidia.com>
+        s=k20201202; t=1672950206;
+        bh=FIfxMl/MEG5bk0JUtoAVlSmA7pBb8INFQCFomPkOSgU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jviNP1dRQ/Boul30ZlWwseIubbN//VU9CL5VMazCkB6Uh1DGfBZVzWHZSIffQSnkG
+         sa/RHpzAGfA3GN3h+nSpOKBs2qirSbOPywsPebSX9Tcn7czTcvmRpVyrrRdo45kU0H
+         r3hxrpYGvKUd/2T+7IeYiFa9l5ghfQiQG+77KZx1++gG1uWC1pYU6IrmQAUdnU1p7o
+         8CP54tlKt98pmkk/ZwYS8P3e4sSt9mVEDlSwCkU3R9+iMInt+ve0/WNlKnjhtihnza
+         WE3ZWON21/S3ZHWsf7CzB67tJ4HG3+jqRDzKkq5PaEUdcxl4yWNZFuO7S5/AGYBv7G
+         kKnGXoJlGl++g==
+Date:   Thu, 5 Jan 2023 14:23:24 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "Liang, Kan" <kan.liang@linux.intel.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "kernelorg@undead.fr" <kernelorg@undead.fr>,
+        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
+        "2lprbe78@duck.com" <2lprbe78@duck.com>,
+        "nicholas.johnson-opensource@outlook.com.au" 
+        <nicholas.johnson-opensource@outlook.com.au>,
+        "benoitg@coeus.ca" <benoitg@coeus.ca>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
+        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Box, David E" <david.e.box@intel.com>,
+        "Sun, Yunying" <yunying.sun@intel.com>
+Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
+Message-ID: <20230105202324.GA1165237@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7ctsw8ffhSsBZ4v@nvidia.com>
+In-Reply-To: <63b7289cb7439_5174129445@dwillia2-xfh.jf.intel.com.notmuch>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,33 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:06:11PM -0400, Jason Gunthorpe wrote:
-> On Thu, Jan 05, 2023 at 01:23:39PM +0200, Yishai Hadas wrote:
-> > When sg_alloc_append_table_from_pages() calls to pages_are_mergeable()
-> > in its 'sgt_append->prv' flow to check whether it can merge contiguous
-> > pages into the last SG, it passes the page arguments in the wrong order.
-> > 
-> > The first parameter should be the next candidate page to be merged to
-> > the last page and not the opposite.
-> > 
-> > The current code leads to a corrupted SG which resulted in OOPs and
-> > unexpected errors when non-contiguous pages are merged wrongly.
-> > 
-> > Fix to pass the page parameters in the right order.
-> > 
-> > Fixes: 1567b49d1a40 ("lib/scatterlist: add check when merging zone device pages")
-> > Signed-off-by: Yishai Hadas <yishaih@nvidia.com>
-> > ---
-> >  lib/scatterlist.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> rdma is pretty much the only user of this API and this bug is causing
-> bad data corruption, so I'm going to take it to the rdma tree and send
-> it tomorrow.
-> 
-> Which raises the question why the original patch was done at all,
-> nothing ever inputs pgmap pages into this function?
+On Thu, Jan 05, 2023 at 11:44:28AM -0800, Dan Williams wrote:
+> Bjorn Helgaas wrote:
 
-This just takes any arbitrary user addresses, right? The user could
-provide addresses from mmap'ing pci resource files that resolve to pgmap
-pages.
+> > Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
+> > firmware/kernel interface is as an EfiMemoryMappedIO region.
+> > 
+> > I think this is a firmware bug, but obviously we're going to have to
+> > figure out a way around it.
+> 
+> Definitely an ambiguity / conflict, but not sure it is a bug when you
+> look at from the perspective of how would an EFI runtime service use
+> ECAM/MMCONFIG space? 
+
+I think it's perfectly fine for firmware to advertise ECAM space as an
+EfiMemoryMappedIO region via EFI GetMemoryMap() because it certainly
+makes sense that EFI runtime services would use config space.
+
+My understanding is that the OS should learn about device address
+space via ACPI _CRS, not GetMemoryMap().  The MCFG spec (PCI Firmware
+Spec, r3.3, sec 4.1.2) requires ECAM space to be reserved via a
+PNP0C02 motherboard device _CRS.
+
+So what I think *is* a bug is that this firmware doesn't report the
+ECAM space via PNP0C02 _CRS.
+
+If somebody thinks the lack of this reservation is not a bug, I would
+love to hear ideas about how Linux *should* be handling this.  There
+are many variations on how firmware does things like this, and it's
+been a nightmare trying to figure out something that works with all of
+them.
+
+> Would it be enough to add this clarification in "EFI 2.9 Table 7-6
+> Memory Type Usage after ExitBootServices()"?
+> 
+> s/This memory is not used by the OS./This memory is not used by the OS,
+> unless ACPI declares it for another purpose./
+
+I guess the idea is that MCFG is a form of "ACPI declaring it"?  I
+don't have an explicit citation for it, but I infer at [1] that ACPI
+static tables are second-class citizens and not intended as a way of
+reserving address space because that would lead to problems booting
+old OSes on firmware that provides new tables unknown to the OS.
+
+Bjorn
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/PCI/acpi-info.rst?id=v6.1#n32
