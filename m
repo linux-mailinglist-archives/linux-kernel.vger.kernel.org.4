@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C3C65E3A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC83B65E397
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjAEDl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S230159AbjAEDh5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 4 Jan 2023 22:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjAEDl1 (ORCPT
+        with ESMTP id S229793AbjAEDhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:41:27 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BB6B4AA;
-        Wed,  4 Jan 2023 19:41:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672890086; x=1704426086;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=jhdOYu/i/WR/3sag1mrvD/fdCUONvVid9L0DwaMBfmI=;
-  b=bkM1tiySFA9OMfIBUtIVHdfN/bVtDcbSN63uy7cqgomsx0JAYuSnI0fZ
-   2jFIm/Xn4LWd3sELTBEwqkmo1GbsgFuVa744XvlEZrRm0wtgcS8SKYIQh
-   cmoei4hMof4vTd50e6yiRSxMJbWwkmWAla+WslzlI5nixAZXzAVMS2QZn
-   bFHRORpPo80udqS835GbB/IT9UD86KHLZB5JTeFS9oS2Ad3avgV5RnQkA
-   IqntWPPtvULPE22CTpmV7lbajhzrIU3rTUZWSPXhAJYT6CgsPgt3Ku1iB
-   EsciH//o6/i14fgGeHR4f5IoGnk6igc93WgiKVFP3pE/1kiH+5sG7jY97
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="384401926"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="384401926"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 19:41:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="829395002"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="829395002"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga005.jf.intel.com with ESMTP; 04 Jan 2023 19:41:13 -0800
-Date:   Thu, 5 Jan 2023 11:37:00 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com,
-        Nikunj A Dadhania <nikunj@amd.com>
-Subject: Re: [PATCH RFC v7 01/64] KVM: Fix memslot boundary condition for
- large page
-Message-ID: <20230105033700.GB2251521@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-2-michael.roth@amd.com>
- <Y6RKhDVaeqVZwMCZ@zn.tnic>
+        Wed, 4 Jan 2023 22:37:23 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D45A42E35
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 19:37:19 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 98BFE24E1E1;
+        Thu,  5 Jan 2023 11:37:17 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 5 Jan
+ 2023 11:37:17 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 5 Jan
+ 2023 11:37:14 +0800
+From:   Ley Foon Tan <leyfoon.tan@starfivetech.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Ley Foon Tan" <lftan.linux@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH v2] riscv: Move call to init_cpu_topology() to later initialization stage
+Date:   Thu, 5 Jan 2023 11:37:05 +0800
+Message-ID: <20230105033705.3946130-1-leyfoon.tan@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gb2312
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6RKhDVaeqVZwMCZ@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [202.188.176.82]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
+ (172.16.6.71)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:16:04PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 14, 2022 at 01:39:53PM -0600, Michael Roth wrote:
-> > From: Nikunj A Dadhania <nikunj@amd.com>
-> > 
-> > Aligned end boundary causes a kvm crash, handle the case.
-> > 
-> > Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index b1953ebc012e..b3ffc61c668c 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -7159,6 +7159,9 @@ static void kvm_update_lpage_private_shared_mixed(struct kvm *kvm,
-> >  		for (gfn = first + pages; gfn < last; gfn += pages)
-> >  			linfo_set_mixed(gfn, slot, level, false);
-> >  
-> > +		if (gfn == last)
-> > +			goto out;
-> 
-> I'm guessing this was supposed to be "return;" here:
+If "capacity-dmips-mhz" is present in a CPU DT node,
+topology_parse_cpu_capacity() will fail to allocate memory.
+ARM64, with which this code path is shared, does not call
+topology_parse_cpu_capacity() until later in boot where memory allocation
+is available.
 
-If we finally need this, this should be "continue;", we can't skip the
-remaining huge page levels.
+Move init_cpu_topology(), which calls topology_parse_cpu_capacity(), to a
+later initialization stage, to match ARM64.
 
-Thanks,
-Chao
-> 
-> arch/x86/kvm/mmu/mmu.c: In function ¡®kvm_update_lpage_private_shared_mixed¡¯:
-> arch/x86/kvm/mmu/mmu.c:7090:25: error: label ¡®out¡¯ used but not defined
->  7090 |                         goto out;
->       |                         ^~~~
-> 
-> /me goes and digs deeper.
-> 
-> Aha, it was a "return" but you reordered the patches and the one adding
-> the out label:
-> 
-> KVM: x86: Add 'update_mem_attr' x86 op
-> 
-> went further down and this became the first but it didn't have the label
-> anymore.
-> 
-> Yeah, each patch needs to build successfully for bisection reasons, ofc.
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+Tested on Qemu platform.
+
+Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+
+---
+Changes:
+v2:
+- Update commit description with suggestion from Conor.
+- Added Reviewed-by.
+- Added Fixes.
+
+History:
+[v1]: https://patchwork.kernel.org/project/linux-riscv/patch/20230103035316.3841303-1-leyfoon.tan@starfivetech.com/
+
+Conor also submitted patches in [1] to add "capacity-dmips-mhz" DT
+parameter for RISC-V platform:
+
+https://patchwork.kernel.org/project/linux-riscv/cover/20230104180513.1379453-1-conor@kernel.org/
+---
+ arch/riscv/kernel/smpboot.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index 3373df413c88..ddb2afba6d25 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -39,7 +39,6 @@ static DECLARE_COMPLETION(cpu_running);
+ 
+ void __init smp_prepare_boot_cpu(void)
+ {
+-	init_cpu_topology();
+ }
+ 
+ void __init smp_prepare_cpus(unsigned int max_cpus)
+@@ -48,6 +47,8 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ 	int ret;
+ 	unsigned int curr_cpuid;
+ 
++	init_cpu_topology();
++
+ 	curr_cpuid = smp_processor_id();
+ 	store_cpu_topology(curr_cpuid);
+ 	numa_store_cpu_info(curr_cpuid);
+-- 
+2.25.1
+
