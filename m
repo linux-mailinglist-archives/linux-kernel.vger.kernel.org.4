@@ -2,85 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DA265E277
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F337E65E279
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjAEBWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 20:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S230126AbjAEBXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 20:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjAEBWr (ORCPT
+        with ESMTP id S230342AbjAEBXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 20:22:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B442F783;
-        Wed,  4 Jan 2023 17:22:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EAA38CE193C;
-        Thu,  5 Jan 2023 01:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08456C433EF;
-        Thu,  5 Jan 2023 01:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672881763;
-        bh=ExpxEIguBmVK6mxVxd9YEswT2YfPe7zBo9G4esPP838=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gB2WDuUS6KfnjtiNTPNPRUmG7LTic9mE03cppW5NPP7t0t9t+u0GUaulFtbsBOxF5
-         5XNUk7b41IY8FT4LCmSZ4RXd4Wb2AAJjc46tBcGlaZ9jY7CNjvyVhwo7u5SFa+Lqub
-         l0Evofho7p9aeXb89IXIyVlCwB/+hdM6az/Qdsx81px8S6ON12J+VwJSWK6RzIvQq7
-         9bNjQz5Bv8YHpEQNtJoNDD8DAzGWXvU6Q9fcrdoKd3teJuMECR/9VUCJ1IwbroM3yx
-         cLuUFfL9KBkwJawIdgpQSJpSpOObUvt+w+zuTVD5Aq/xf/6OqxDzIzGK/fLar6AZ/H
-         Qwnjxb/zz8D6g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6A2FE57249;
-        Thu,  5 Jan 2023 01:22:42 +0000 (UTC)
-Subject: Re: [GIT PULL v2] virtio,vhost,vdpa: fixes, cleanups
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230103104946-mutt-send-email-mst@kernel.org>
-References: <20230103104946-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230103104946-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: a26116c1e74028914f281851488546c91cbae57d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 41c03ba9beea760bd2d2ac9250b09a2e192da2dc
-Message-Id: <167288176293.29184.569668467593245088.pr-tracker-bot@kernel.org>
-Date:   Thu, 05 Jan 2023 01:22:42 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        angus.chen@jaguarmicro.com, colin.i.king@gmail.com,
-        dave@stgolabs.net, dengshaomin@cdjrlc.com, dmitry.fomichev@wdc.com,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
-        harshit.m.mogalapalli@oracle.com, jasowang@redhat.com,
-        lulu@redhat.com, mst@redhat.com, pizhenwei@bytedance.com,
-        rafaelmendsr@gmail.com, ricardo.canuelo@collabora.com,
-        ruanjinjie@huawei.com, set_pte_at@outlook.com, sgarzare@redhat.com,
-        shaoqin.huang@intel.com, si-wei.liu@oracle.com,
-        stable@vger.kernel.org, sunnanyong@huawei.com,
-        wangjianli@cdjrlc.com, wangrong68@huawei.com,
-        weiyongjun1@huawei.com, yuancan@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 20:23:30 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29623F11E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 17:23:29 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so21549843wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 17:23:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iT+lTm4nI7audT05NuAnB4AV4C6eHB3o7/YvWGrh+hA=;
+        b=I78A5qcp7WeJPpPbuyAINFilNEdW+GYeP/LiK0lPPlAr02nSoaPMbXu/0lTPQJPdPc
+         3vtZz4sEla5pQEjQUFxxxB8UH4tUnhx0Gimo/Mon0vJ3hv6AaNpIzwT0/WXz1Ik832j1
+         ti++CmRF2I74vS8eW0Shuz6UQefUROY5wYOc8BO6QK9LObYHxwLMCsLNhgRQghBPPUDT
+         bHa6E7ta7Yt5/MDGAYFYP+6A0C1Q7DcFghSIfKTqh/EBOrayq3JqWrP08peDM+n14Uzp
+         oCow0HtpTCCFud1Ku9T/SjRiXN0LkPdOQSN65iznIapMxGAffV78lhpYUsFbGHoqqHjp
+         kTbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iT+lTm4nI7audT05NuAnB4AV4C6eHB3o7/YvWGrh+hA=;
+        b=oo3JLm6aVFD+oElLmv6tWSjQl1bzZe/8KLu7UNxrtqyHf4pxkMypUB4/oEH/s6rLsD
+         2Fvz+ayUQhnfol0ooo9rw/mUvx4Ylid+6WZ0yKaIE+xt6FmeiGQYhyHYQZyOqIMQwoAL
+         BucxzN+XoE2nfAjRfnzXGXsm0erdAKs5brkiqk1wXaQGbrcyMMyGZx8zrr2Qq/sZ9/Wx
+         FcxNoKOkC2/hvC6Jd7Sj25goFwEZk6Ut56nP/VWxx5qP863EVCHNwVnCOlte7d+y9nUZ
+         uLrbmH0R/8uLB2XXuwrErySUgAS+o980ISq8AE4KgrpupE5Mt8NRF4aBZVGCCoHMm3ns
+         KhvQ==
+X-Gm-Message-State: AFqh2kqh+ftuA2OXd9PsWpEXsmH0nEc+mVQf9CaR66LoIqtazhTTCDqU
+        zkXLdBGBDdUsxbobkajOMYxcuxRK799pC6JA6/ewVw==
+X-Google-Smtp-Source: AMrXdXuCjJh1DhnSeqZjJt2mEorQUVq6WEpzHulaujU5eZ9DJhXGbNqIdpb0w3oOAgcstdnm2/RsVQATjWwZrcuCfYc=
+X-Received: by 2002:a5d:640b:0:b0:290:ef26:df02 with SMTP id
+ z11-20020a5d640b000000b00290ef26df02mr957635wru.664.1672881808043; Wed, 04
+ Jan 2023 17:23:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-13-jthoughton@google.com> <d5760f7f-5985-1962-1c89-f32eb743985c@oracle.com>
+In-Reply-To: <d5760f7f-5985-1962-1c89-f32eb743985c@oracle.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 5 Jan 2023 01:23:15 +0000
+Message-ID: <CADrL8HXUo-vTL5vH7=fMVPoE0+epdmGbQT=3FXq7C2gwoPWaAQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 12/47] hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 3 Jan 2023 10:49:46 -0500:
+On Thu, Jan 5, 2023 at 12:58 AM Jane Chu <jane.chu@oracle.com> wrote:
+>
+> > + * @stop_at_none determines what we do when we encounter an empty PTE. If true,
+> > + * we return that PTE. If false and @sz is less than the current PTE's size,
+> > + * we make that PTE point to the next level down, going until @sz is the same
+> > + * as our current PTE.
+> [..]
+> > +int hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
+> > +                  struct hugetlb_pte *hpte, unsigned long addr,
+> > +                  unsigned long sz, bool stop_at_none)
+> > +{
+> [..]
+> > +     while (hugetlb_pte_size(hpte) > sz && !ret) {
+> > +             pte = huge_ptep_get(hpte->ptep);
+> > +             if (!pte_present(pte)) {
+> > +                     if (stop_at_none)
+> > +                             return 0;
+> > +                     if (unlikely(!huge_pte_none(pte)))
+> > +                             return -EEXIST;
+>
+> If 'stop_at_none' means settling down on the just encountered empty PTE,
+> should the above two "if" clauses switch order?  I thought Peter has
+> raised this question too, but I'm not seeing a response.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+A better name for "stop_at_none" would be "dont_allocate"; it will be
+changed in the next version. The idea is that "stop_at_none" would
+simply do a walk, and the caller will deal with what it finds. If we
+can't continue the walk for any reason, just return 0. So in this
+case, if we land on a non-present, non-none PTE, we can't continue the
+walk, so just return 0.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/41c03ba9beea760bd2d2ac9250b09a2e192da2dc
+Another way to justify this order: we want to ensure that calls to
+this function with stop_at_none=1 and sz=PAGE_SIZE will never fail,
+and that gives us the order that you see. (This requirement is
+documented in the comment above the definition of hugetlb_hgm_walk().
+This guarantee makes it easier to write code that uses HGM walks.)
 
-Thank you!
+> Also here below, the way 'stop_at_none' is used when HGM isn't enabled
+> is puzzling.  Could you elaborate please?
+>
+> > +       if (!hugetlb_hgm_enabled(vma)) {
+> > +               if (stop_at_none)
+> > +                       return 0;
+> > +               return sz == huge_page_size(hstate_vma(vma)) ? 0 : -EINVAL;
+> > +       }
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This is for the same reason; if "stop_at_none" is provided, we need to
+guarantee that this function won't fail. If "stop_at_none" is false
+and sz != huge_page_size(), then the caller is attempting to use HGM
+without having enabled it, hence -EINVAL.
+
+Both of these bits will be cleaned up with the next version of this series. :)
+
+Thanks!
+
+- James
