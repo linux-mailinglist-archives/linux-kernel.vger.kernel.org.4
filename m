@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C8A65F02D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382EE65F030
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234187AbjAEPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S234307AbjAEPfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbjAEPfG (ORCPT
+        with ESMTP id S234250AbjAEPfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:35:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20BADB1;
-        Thu,  5 Jan 2023 07:35:05 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305EKhcZ009738;
-        Thu, 5 Jan 2023 15:35:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=zHgdmc8R8jI/qiIFlZ6//cyCAK8Vu6Sc0RFgg6cOmTk=;
- b=S1r6wEfEUqYz0cj1QSrpsuXDkyX/WvtjLhLw9axqpJjLWN4kf1cnou1humdZ6XEQr66g
- TC2uyFp/MyOJwdyKihk6OSODiEM9PbK8EaCYOw4p4648DhLIrjQnKfY5mEeJH9glScK/
- Xj0WAb3vA5eacwqzu2labj5K85+FYi9wpdiIMAsboeiCWAZYizstaAwUYSnQ7xJJn4rq
- PKmApC2ltrpZr/JD+Oj/ASzpzplayRz89YDhWLmwZv7JIT58Kf7TDM6pzv3cR9k3GYV1
- fWBEBHElwXojlNsM3+8SAJgCto4FLYx9G/T/1/EkAPQuHaBZr409TuR0V8cSDj4UJfOl UQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mx07wswey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 15:35:04 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3059IZSX026929;
-        Thu, 5 Jan 2023 15:35:02 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6n43h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 15:35:02 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 305FYwe145023622
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Jan 2023 15:34:58 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB93120049;
-        Thu,  5 Jan 2023 15:34:58 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42E7F20040;
-        Thu,  5 Jan 2023 15:34:58 +0000 (GMT)
-Received: from osiris (unknown [9.171.8.98])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu,  5 Jan 2023 15:34:58 +0000 (GMT)
-Date:   Thu, 5 Jan 2023 16:34:56 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     yang.yang29@zte.com.cn
-Cc:     freude@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Subject: Re: [PATCH linux-next v3] s390/zcrypt: use strscpy() to instead of
- strncpy()
-Message-ID: <Y7buIA1uVCa/Y1K+@osiris>
-References: <202301052024349365834@zte.com.cn>
+        Thu, 5 Jan 2023 10:35:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD154FCF7;
+        Thu,  5 Jan 2023 07:35:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF86C61B09;
+        Thu,  5 Jan 2023 15:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6B1C433D2;
+        Thu,  5 Jan 2023 15:35:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672932949;
+        bh=ThmFFaZuCBtx/iElSZZQ9UwcS0gzAPFIR0kFShc3cE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gYC0X7VI8uLnqA67MJt7HRmvO5d2u2apyUE+Xl98mvYFlBBc8NiufSlJvgbDg7KAk
+         54dyeLtNK8kkrTFfKr3J/fk0cqxmjm9DcZgCSqIPhjSVUxMamNunLQA6RaVNN+E2QQ
+         toKsIfj0HG8Fbf8fVrLQTvPYLnE94lC3dGMx92YjniNUT84dPgTfAV2cfhipxBioC2
+         Ty8JA2rFW2EoNqSkOa9BDiVBJ2RWHf2KVgcsf/vW8ZK5LuSr3K0la3cKDljfrlN6Qa
+         K57yMP4AI+1thH8bxQ3edJFLKMo36HYq75TDj/STxga2yJcZjieiyPerWsTXndgB96
+         99XxEr8WxleSA==
+Date:   Thu, 5 Jan 2023 23:35:45 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Mark Hasemeyer <markhas@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v10 2/3] dt-bindings: mfd: Add compatible string for UART
+ support
+Message-ID: <Y7buUdgLfnQqnG+x@google.com>
+References: <20221207104005.v10.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+ <20221207104005.v10.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
+ <Y7WkeCi7/x/t37JM@google.com>
+ <Y7YjmtwByTR+8tbZ@google.com>
+ <Y7bdmiZ9lqKZXCfq@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202301052024349365834@zte.com.cn>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1CmTSdpNNZcQciAoBo1n7FZZ5zm_wDoB
-X-Proofpoint-ORIG-GUID: 1CmTSdpNNZcQciAoBo1n7FZZ5zm_wDoB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_06,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=608 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301050122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y7bdmiZ9lqKZXCfq@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 08:24:34PM +0800, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+On Thu, Jan 05, 2023 at 02:24:26PM +0000, Lee Jones wrote:
+> On Thu, 05 Jan 2023, Tzung-Bi Shih wrote:
 > 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
+> > On Wed, Jan 04, 2023 at 04:08:24PM +0000, Lee Jones wrote:
+> > > On Wed, 07 Dec 2022, Mark Hasemeyer wrote:
+> > > 
+> > > > From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> > > > 
+> > > > Add a compatible string to support the UART implementation of the cros
+> > > > ec interface. The driver does not support the reg and interrupt
+> > > > properties, so exempt them from being required for UART compatible nodes.
+> > > > 
+> > > > Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> > > > Co-developed-by: Mark Hasemeyer <markhas@chromium.org>
+> > > > Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
+> > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > ---
+> > > > 
+> > > > Changes in v10:
+> > > > - No change
+> > > > 
+> > [...]
+> > > 
+> > > I changed the subject line and applied the patch, thanks.
+> > 
+> > Pardon me.  I didn't know you would pick the patch so that I have queued it
+> > into chrome-platform[1].  Would you like me to drop the commit?
 > 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-> ---
-> chang for v3
->  - fix the sign-off Email address
-> chang for v2
->  - match the FROM with the Email
-> ---
->  drivers/s390/crypto/zcrypt_api.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> Yes, please do.
 
-Applied, thanks.
+Dropped in chrome-platform.
+
+> You should gain permission from the maintainer before you apply patches.
+> 
+>   % scripts/get_maintainer.pl -f Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+>      Lee Jones <lee@kernel.org> (supporter:MULTIFUNCTION DEVICES (MFD))
+>      Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+>      Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+>      Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
+
+I see.  I guess for the case, I should get both MFD and DT bindings
+maintainers' Acks before applying the patch.
