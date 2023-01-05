@@ -2,276 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764CD65E924
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0D165E91B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbjAEKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S232635AbjAEKi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjAEKiU (ORCPT
+        with ESMTP id S232673AbjAEKh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:38:20 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7DC40846
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:38:19 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672915097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r6fU919/gET/vGibIv6edf0LDl2+gGzKkiU558NElZ0=;
-        b=QWr1NTFqqoK8H8SNd8zDx09Alfb7iPeu62vbjxkNwlGz24feHXaFo16wfOeNxiEsK65ayo
-        rbov407F8aKEQIHMNBKpxN1NE75D9LcvZtsgG+H8nexyTlkNyvefVB0zaJXoqN+1yBhBEu
-        dfF03GtNfn8QtESq9LSdp0xSrvw69I2dmyvkvR6RUsJrUoUKpw/aoPSvqIvXB4FgdO8Wzp
-        V8e0fX8KoqM4biorJj0rO+R0Npn/ujoVZBzWu6slQbwfWReQaLngI3rkad+up5b0uceCcP
-        zC3djQLa6KZVSJU6djLJ4zXAL5cP+lMPpyC/afHbEIgSu9Xr2fKw3MkIyL0WMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672915097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r6fU919/gET/vGibIv6edf0LDl2+gGzKkiU558NElZ0=;
-        b=XE1jMAwVLdFp6mPih+UmQEQOWl7EaUZpkXO+r8giGp5N6K/mzyQwzNHL1P/4IOWaThva/B
-        ZjCcTn8feTphocAg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v4 8/8] printk: adjust string limit macros
-Date:   Thu,  5 Jan 2023 11:43:35 +0106
-Message-Id: <20230105103735.880956-9-john.ogness@linutronix.de>
-In-Reply-To: <20230105103735.880956-1-john.ogness@linutronix.de>
-References: <20230105103735.880956-1-john.ogness@linutronix.de>
+        Thu, 5 Jan 2023 05:37:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2F240846;
+        Thu,  5 Jan 2023 02:37:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672915076; x=1704451076;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gjl8ZM8i09/OJywBgKdXkKMYg3xJWeKujz7bT+uBzmg=;
+  b=S04rYYAtV4pD2z2/LbeNS3Zskuif3GqUoeMXfNv//Bg+AvEOaXIu9k3X
+   dnsWHTwmBNHI0xM6b7YRS5Din+LI8JOAIEdw5GCoKEXGu50CG+x2rh0eL
+   Dt9kXB7tvbcaD3owyCbg+g3FBxJ7Wh4CkQjkCE02//opVhpUW65rhJk+7
+   GjYdE5vlMyU2+jWZbomiXnKFo9vS3Gt5kPNYZVhwlfnG9CU8gWIdPea27
+   s4WYJqdE+9izbVex4ozobJUb/tdb61bwd+RjzI30BXOVfhaBJMYiWskgB
+   7MUlxnGuMx21kqBTCibW+TwlYGCA4TePAAFbYC5L41V11abV4wg4FQj1i
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323403225"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="323403225"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 02:37:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="686069531"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="686069531"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.211.114]) ([10.254.211.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 02:37:53 -0800
+Message-ID: <6b5baa30-c218-0845-d6c2-32ac21ed6a6d@linux.intel.com>
+Date:   Thu, 5 Jan 2023 18:37:51 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
+ =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
+ =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
+To:     Vasant Hegde <vasant.hegde@amd.com>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
+ <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
+ <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
+ <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
+ <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+ <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The various internal size limit macros have names and/or values that
-do not fit well to their current usage.
+On 2023/1/5 18:27, Vasant Hegde wrote:
+> On 1/5/2023 6:39 AM, Matt Fagnani wrote:
+>> I built 6.2-rc2 with the patch applied. The same black screen problem happened
+>> with 6.2-rc2 with the patch. I tried to use early kdump with 6.2-rc2 with the
+>> patch twice by panicking the kernel with sysrq+alt+c after the black screen
+>> happened. The system rebooted after about 10-20 seconds both times, but no kdump
+>> and dmesg files were saved in /var/crash. I'm attaching the lspci -vvv output as
+>> requested.
+>>
+> Thanks for testing. As mentioned earlier I was not expecting this patch to fix
+> the black screen issue. It should fix kernel warnings and IOMMU page fault
+> related call traces. By any chance do you have the kernel boot logs?
+> 
+> 
+> @Baolu,
+>    Looking into lspci output, it doesn't list ACS feature for Graphics card. So
+> with your fix it didn't enable PASID and hence it failed to boot.
 
-Rename the macros so that their purpose is clear and, if needed,
-provide a more appropriate value. In general, the new macros and
-values will lead to less memory usage. The new macros are...
+So do you mind telling why does the PASID need to be enabled for the
+graphic device? Or in another word, what does the graphic driver use the
+PASID for?
 
-PRINTK_MESSAGE_MAX:
-
-This is the maximum size for a formatted message on a console,
-devkmsg, or syslog. It does not matter which format the message has
-(normal or extended). It replaces the use of CONSOLE_EXT_LOG_MAX for
-console and devkmsg. It replaces the use of CONSOLE_LOG_MAX for
-syslog.
-
-Historically, normal messages have been allowed to print up to 1kB,
-whereas extended messages have been allowed to print up to 8kB.
-However, the difference in lengths of these message types is not
-significant and in multi-line records, normal messages are probably
-larger. Also, because 1kB is only slightly above the allowed record
-size, multi-line normal messages could be easily truncated during
-formatting.
-
-This new macro should be significantly larger than the allowed
-record size to allow sufficient space for extended or multi-line
-prefix text. A value of 2kB should be plenty of space. For normal
-messages this represents a doubling of the historically allowed
-amount. For extended messages it reduces the excessive 8kB size,
-thus reducing memory usage needed for message formatting.
-
-PRINTK_PREFIX_MAX:
-
-This is the maximum size allowed for a record prefix (used by
-console and syslog). It replaces PREFIX_MAX. The value is left
-unchanged.
-
-PRINTKRB_RECORD_MAX:
-
-This is the maximum size allowed to be reserved for a record in the
-ringbuffer. It is used by all readers and writers with the printk
-ringbuffer. It replaces LOG_LINE_MAX.
-
-Previously this was set to "1kB - PREFIX_MAX", which makes some
-sense if 1kB is the limit for normal message output and prefixes are
-enabled. However, with the allowance of larger output and the
-existence of multi-line records, the value is rather bizarre.
-
-Round the value up to 1kB.
-
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- kernel/printk/internal.h | 27 +++++++++++++--------------
- kernel/printk/printk.c   | 24 ++++++++++++------------
- 2 files changed, 25 insertions(+), 26 deletions(-)
-
-diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
-index 72df730597f1..2a17704136f1 100644
---- a/kernel/printk/internal.h
-+++ b/kernel/printk/internal.h
-@@ -15,19 +15,19 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
- #ifdef CONFIG_PRINTK
- 
- #ifdef CONFIG_PRINTK_CALLER
--#define PREFIX_MAX		48
-+#define PRINTK_PREFIX_MAX	48
- #else
--#define PREFIX_MAX		32
-+#define PRINTK_PREFIX_MAX	32
- #endif
- 
--/* the maximum size of a formatted record (i.e. with prefix added per line) */
--#define CONSOLE_LOG_MAX		1024
--
--/* the maximum size of a formatted extended record */
--#define CONSOLE_EXT_LOG_MAX	8192
-+/*
-+ * the maximum size of a formatted record (i.e. with prefix added
-+ * per line and dropped messages or in extended message format)
-+ */
-+#define PRINTK_MESSAGE_MAX	2048
- 
- /* the maximum size allowed to be reserved for a record */
--#define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
-+#define PRINTKRB_RECORD_MAX	1024
- 
- /* Flags for a single printk record. */
- enum printk_info_flags {
-@@ -63,10 +63,9 @@ u16 printk_parse_prefix(const char *text, int *level,
- 			enum printk_info_flags *flags);
- #else
- 
--#define PREFIX_MAX		0
--#define CONSOLE_LOG_MAX		0
--#define CONSOLE_EXT_LOG_MAX	0
--#define LOG_LINE_MAX		0
-+#define PRINTK_PREFIX_MAX	0
-+#define PRINTK_MESSAGE_MAX	0
-+#define PRINTKRB_RECORD_MAX	0
- 
- /*
-  * In !PRINTK builds we still export console_sem
-@@ -85,8 +84,8 @@ static inline bool printk_percpu_data_ready(void) { return false; }
-  * @scratchbuf:	Used as temporary ringbuffer reading and string-print space.
-  */
- struct printk_buffers {
--	char	outbuf[CONSOLE_EXT_LOG_MAX];
--	char	scratchbuf[LOG_LINE_MAX];
-+	char	outbuf[PRINTK_MESSAGE_MAX];
-+	char	scratchbuf[PRINTKRB_RECORD_MAX];
- };
- 
- /**
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index e28a3736a399..e21bfcd1b1ef 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -731,7 +731,7 @@ static ssize_t devkmsg_write(struct kiocb *iocb, struct iov_iter *from)
- 	size_t len = iov_iter_count(from);
- 	ssize_t ret = len;
- 
--	if (!user || len > LOG_LINE_MAX)
-+	if (!user || len > PRINTKRB_RECORD_MAX)
- 		return -EINVAL;
- 
- 	/* Ignore when user logging is disabled. */
-@@ -1130,7 +1130,7 @@ static unsigned int __init add_to_rb(struct printk_ringbuffer *rb,
- 	return prb_record_text_space(&e);
- }
- 
--static char setup_text_buf[LOG_LINE_MAX] __initdata;
-+static char setup_text_buf[PRINTKRB_RECORD_MAX] __initdata;
- 
- void __init setup_log_buf(int early)
- {
-@@ -1396,7 +1396,7 @@ static size_t record_print_text(struct printk_record *r, bool syslog,
- 	size_t text_len = r->info->text_len;
- 	size_t buf_size = r->text_buf_size;
- 	char *text = r->text_buf;
--	char prefix[PREFIX_MAX];
-+	char prefix[PRINTK_PREFIX_MAX];
- 	bool truncated = false;
- 	size_t prefix_len;
- 	size_t line_len;
-@@ -1495,7 +1495,7 @@ static size_t get_record_print_text_size(struct printk_info *info,
- 					 unsigned int line_count,
- 					 bool syslog, bool time)
- {
--	char prefix[PREFIX_MAX];
-+	char prefix[PRINTK_PREFIX_MAX];
- 	size_t prefix_len;
- 
- 	prefix_len = info_print_prefix(info, syslog, time, prefix);
-@@ -1561,11 +1561,11 @@ static int syslog_print(char __user *buf, int size)
- 	int len = 0;
- 	u64 seq;
- 
--	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
-+	text = kmalloc(PRINTK_MESSAGE_MAX, GFP_KERNEL);
- 	if (!text)
- 		return -ENOMEM;
- 
--	prb_rec_init_rd(&r, &info, text, CONSOLE_LOG_MAX);
-+	prb_rec_init_rd(&r, &info, text, PRINTK_MESSAGE_MAX);
- 
- 	mutex_lock(&syslog_lock);
- 
-@@ -1666,7 +1666,7 @@ static int syslog_print_all(char __user *buf, int size, bool clear)
- 	u64 seq;
- 	bool time;
- 
--	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
-+	text = kmalloc(PRINTK_MESSAGE_MAX, GFP_KERNEL);
- 	if (!text)
- 		return -ENOMEM;
- 
-@@ -1678,7 +1678,7 @@ static int syslog_print_all(char __user *buf, int size, bool clear)
- 	seq = find_first_fitting_seq(latched_seq_read_nolock(&clear_seq), -1,
- 				     size, true, time);
- 
--	prb_rec_init_rd(&r, &info, text, CONSOLE_LOG_MAX);
-+	prb_rec_init_rd(&r, &info, text, PRINTK_MESSAGE_MAX);
- 
- 	len = 0;
- 	prb_for_each_record(seq, prb, seq, &r) {
-@@ -2201,8 +2201,8 @@ int vprintk_store(int facility, int level,
- 	reserve_size = vsnprintf(&prefix_buf[0], sizeof(prefix_buf), fmt, args2) + 1;
- 	va_end(args2);
- 
--	if (reserve_size > LOG_LINE_MAX)
--		reserve_size = LOG_LINE_MAX;
-+	if (reserve_size > PRINTKRB_RECORD_MAX)
-+		reserve_size = PRINTKRB_RECORD_MAX;
- 
- 	/* Extract log level or control flags. */
- 	if (facility == 0)
-@@ -2216,7 +2216,7 @@ int vprintk_store(int facility, int level,
- 
- 	if (flags & LOG_CONT) {
- 		prb_rec_init_wr(&r, reserve_size);
--		if (prb_reserve_in_last(&e, prb, &r, caller_id, LOG_LINE_MAX)) {
-+		if (prb_reserve_in_last(&e, prb, &r, caller_id, PRINTKRB_RECORD_MAX)) {
- 			text_len = printk_sprint(&r.text_buf[r.info->text_len], reserve_size,
- 						 facility, &flags, fmt, args);
- 			r.info->text_len += text_len;
-@@ -2727,7 +2727,7 @@ static void console_prepend_dropped(struct printk_message *pmsg, unsigned long d
- 	 * It is a rather theoretical problem when someone tries to
- 	 * use a minimalist buffer.
- 	 */
--	if (WARN_ON_ONCE(len + PREFIX_MAX >= outbuf_sz))
-+	if (WARN_ON_ONCE(len + PRINTK_PREFIX_MAX >= outbuf_sz))
- 		return;
- 
- 	if (pmsg->outbuf_len + len >= outbuf_sz) {
--- 
-2.30.2
-
+--
+Best regards,
+baolu
