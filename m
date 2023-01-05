@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C4365EDA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABAF65EDA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjAENrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S233732AbjAENrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjAENq6 (ORCPT
+        with ESMTP id S232404AbjAENrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:46:58 -0500
+        Thu, 5 Jan 2023 08:47:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343173D9FA;
-        Thu,  5 Jan 2023 05:46:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E17D634B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:46:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5707B81AD7;
-        Thu,  5 Jan 2023 13:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E88C433F1;
-        Thu,  5 Jan 2023 13:46:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97100B81AD0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D867FC43392;
+        Thu,  5 Jan 2023 13:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926414;
-        bh=hDZVtcujKWtYdndI0ba6f6HB7HdfrT4YcZAnQccoayk=;
+        s=k20201202; t=1672926416;
+        bh=/YTFxMpRgty9v/I0GLC8pgjg57PL6GmuZISrLWV/U8I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOFoWAlDkvszr2Z9eXXqIFC8gOTs7I37sRn3nu8apjX/TkKYTAPrYcDIzcob28eaS
-         SeyWfKycLybcABQHQPKx5Y6+yKe+rl632JOj6VAeujuekGIM1xfT7Yl37eWUPIDQ3A
-         TXUjc4y42lLafyUY5hB4erUixdsqFoSYLX7OK0623wp096hPzQrHTllwIsSBoPY5ti
-         JrJMtyRiMGR2tLK1U6d/Yu2/NLi7XucsmlqJEZC+I4n/MQ+ABVv1TzyedcJ821uh00
-         bLond2MHPo/9+POwA4LJa2AGEthZSIU1ZsUw+xsCp95eyUHhIpp34Hrmit5od6w4id
-         50btfknoOraqw==
+        b=FTrAw01gPlVtEIq/fuN0vW9LwVxjqjgQKoItBFhaR93V6EvYMsTYUBnlRecNp0aee
+         4arwb4iNCtOGM1ZKJrg/Tf+V83Em+Xt7XgP0GE63qoTr81me/cepRQp/eRcx7Ho4uw
+         rMhqsziF9t+ub+MeX/J9enVq8xNr6LBSUWpn2oMMPTRCcK6JCARVC8FkbIN6cZzmdw
+         KuzCdhlluOLAT06bOBrYyxsAN+qIP+yhxtRIqFBjz9fEwWHpyTyW5HleMdd+KH2h1T
+         gGVePhCAg88Y4rNy3tVQEQzpOeYtQCK2KV+OR74ezi520NV9zoIvXnNqIPyW3sd5OQ
+         mYf9mCJg+dEmA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
-Date:   Thu,  5 Jan 2023 14:45:59 +0100
-Message-Id: <20230105134622.254560-5-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 05/27] ARM: pxa: prune unused device support
+Date:   Thu,  5 Jan 2023 14:46:00 +0100
+Message-Id: <20230105134622.254560-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -65,428 +57,719 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-There is currently no devicetree support for any of these three
-SoCs, and no board files remain. As it seems unlikely that anyone
-is going to add DT support soon, let's drop the SoC specific code
-now.
+pxa3xx is now DT-only, and the remaining pxa2xx board files
+only use a subset of the possible devices, so remove all
+definitions that are not referenced any more.
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-mmc@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-pxa/devices.h      |   1 -
- arch/arm/mach-pxa/mfp-pxa300.h   |  52 ----
- arch/arm/mach-pxa/mfp-pxa930.h   | 495 -------------------------------
- arch/arm/mach-pxa/pxa300.c       |  17 +-
- arch/arm/mach-pxa/pxa3xx.c       |   4 +-
- drivers/clk/pxa/clk-pxa3xx.c     |  22 +-
- drivers/cpufreq/pxa3xx-cpufreq.c |  21 +-
- drivers/mmc/host/pxamci.c        |   3 +-
- drivers/pcmcia/pxa2xx_base.c     |   6 -
- include/linux/soc/pxa/cpu.h      |  93 +-----
- 10 files changed, 9 insertions(+), 705 deletions(-)
- delete mode 100644 arch/arm/mach-pxa/mfp-pxa930.h
+ arch/arm/mach-pxa/devices.c    | 338 ---------------------------------
+ arch/arm/mach-pxa/mfp-pxa25x.h |  33 ----
+ arch/arm/mach-pxa/mfp-pxa2xx.c |   4 -
+ arch/arm/mach-pxa/pm.c         |   2 -
+ arch/arm/mach-pxa/pm.h         |  10 -
+ arch/arm/mach-pxa/pxa25x.c     |   7 -
+ arch/arm/mach-pxa/pxa27x.c     |  18 +-
+ arch/arm/mach-pxa/pxa27x.h     |   3 -
+ arch/arm/mach-pxa/pxa3xx.c     |  89 ---------
+ 9 files changed, 3 insertions(+), 501 deletions(-)
 
-diff --git a/arch/arm/mach-pxa/devices.h b/arch/arm/mach-pxa/devices.h
-index 82c83939017a..1c252eca39c1 100644
---- a/arch/arm/mach-pxa/devices.h
-+++ b/arch/arm/mach-pxa/devices.h
-@@ -54,7 +54,6 @@ extern struct platform_device pxa_device_asoc_ssp4;
- extern struct platform_device pxa25x_device_gpio;
- extern struct platform_device pxa27x_device_gpio;
- extern struct platform_device pxa3xx_device_gpio;
--extern struct platform_device pxa93x_device_gpio;
+diff --git a/arch/arm/mach-pxa/devices.c b/arch/arm/mach-pxa/devices.c
+index 8e3bc56d2044..661b3fc43275 100644
+--- a/arch/arm/mach-pxa/devices.c
++++ b/arch/arm/mach-pxa/devices.c
+@@ -16,11 +16,7 @@
+ #include <linux/platform_data/mmc-pxamci.h>
+ #include "irqs.h"
+ #include <linux/platform_data/usb-ohci-pxa27x.h>
+-#include <linux/platform_data/keypad-pxa27x.h>
+-#include <linux/platform_data/media/camera-pxa.h>
+-#include <linux/platform_data/asoc-pxa.h>
+ #include <linux/platform_data/mmp_dma.h>
+-#include <linux/platform_data/mtd-nand-pxa3xx.h>
  
- void __init pxa_register_device(struct platform_device *dev, void *data);
- void __init pxa2xx_set_dmac_info(struct mmp_dma_platdata *dma_pdata);
-diff --git a/arch/arm/mach-pxa/mfp-pxa300.h b/arch/arm/mach-pxa/mfp-pxa300.h
-index 1223e350cea0..058698e7e513 100644
---- a/arch/arm/mach-pxa/mfp-pxa300.h
-+++ b/arch/arm/mach-pxa/mfp-pxa300.h
-@@ -27,15 +27,6 @@
- #define GPIO61_GPIO		MFP_CFG(GPIO61, AF0)
- #define GPIO62_GPIO		MFP_CFG(GPIO62, AF0)
- 
--#ifdef CONFIG_CPU_PXA310
--#define GPIO7_2_GPIO		MFP_CFG(GPIO7_2, AF0)
--#define GPIO8_2_GPIO		MFP_CFG(GPIO8_2, AF0)
--#define GPIO9_2_GPIO		MFP_CFG(GPIO9_2, AF0)
--#define GPIO10_2_GPIO		MFP_CFG(GPIO10_2, AF0)
--#define GPIO11_2_GPIO		MFP_CFG(GPIO11_2, AF0)
--#define GPIO12_2_GPIO		MFP_CFG(GPIO12_2, AF0)
--#endif
--
- /* Chip Select */
- #define GPIO1_nCS2		MFP_CFG(GPIO1,	AF1)
- #define GPIO2_nCS3		MFP_CFG(GPIO2,  AF1)
-@@ -526,47 +517,4 @@
- #define GPIO46_UTM_PHYDATA_7	MFP_CFG(GPIO46,  AF3)
- #endif /* CONFIG_CPU_PXA300 */
- 
--/*
-- * PXA310 specific MFP configurations
-- */
--#ifdef CONFIG_CPU_PXA310
--/* USB P2 */
--#define GPIO36_USB_P2_1		MFP_CFG(GPIO36, AF1)
--#define GPIO30_USB_P2_2		MFP_CFG(GPIO30, AF1)
--#define GPIO35_USB_P2_3		MFP_CFG(GPIO35, AF1)
--#define GPIO32_USB_P2_4		MFP_CFG(GPIO32, AF1)
--#define GPIO34_USB_P2_5		MFP_CFG(GPIO34, AF1)
--#define GPIO31_USB_P2_6		MFP_CFG(GPIO31, AF1)
--
--/* MMC1 */
--#define GPIO24_MMC1_CMD		MFP_CFG(GPIO24, AF3)
--#define GPIO29_MMC1_DAT0	MFP_CFG(GPIO29, AF3)
--
--/* MMC3 */
--#define GPIO103_MMC3_CLK	MFP_CFG(GPIO103, AF2)
--#define GPIO105_MMC3_CMD	MFP_CFG(GPIO105, AF2)
--#define GPIO11_2_MMC3_CLK	MFP_CFG(GPIO11_2, AF1)
--#define GPIO12_2_MMC3_CMD	MFP_CFG(GPIO12_2, AF1)
--#define GPIO7_2_MMC3_DAT0	MFP_CFG(GPIO7_2, AF1)
--#define GPIO8_2_MMC3_DAT1	MFP_CFG(GPIO8_2, AF1)
--#define GPIO9_2_MMC3_DAT2	MFP_CFG(GPIO9_2, AF1)
--#define GPIO10_2_MMC3_DAT3	MFP_CFG(GPIO10_2, AF1)
--
--/* ULPI */
--#define GPIO38_ULPI_CLK		MFP_CFG(GPIO38, AF1)
--#define GPIO30_ULPI_DATA_OUT_0	MFP_CFG(GPIO30, AF3)
--#define GPIO31_ULPI_DATA_OUT_1	MFP_CFG(GPIO31, AF3)
--#define GPIO32_ULPI_DATA_OUT_2	MFP_CFG(GPIO32, AF3)
--#define GPIO33_ULPI_DATA_OUT_3	MFP_CFG(GPIO33, AF3)
--#define GPIO34_ULPI_DATA_OUT_4	MFP_CFG(GPIO34, AF3)
--#define GPIO35_ULPI_DATA_OUT_5	MFP_CFG(GPIO35, AF3)
--#define GPIO36_ULPI_DATA_OUT_6	MFP_CFG(GPIO36, AF3)
--#define GPIO37_ULPI_DATA_OUT_7	MFP_CFG(GPIO37, AF3)
--#define GPIO33_ULPI_OTG_INTR	MFP_CFG(GPIO33, AF1)
--
--#define ULPI_DIR	MFP_CFG_DRV(ULPI_DIR, AF0, DS01X)
--#define ULPI_NXT	MFP_CFG_DRV(ULPI_NXT, AF0, DS01X)
--#define ULPI_STP	MFP_CFG_DRV(ULPI_STP, AF0, DS01X)
--#endif /* CONFIG_CPU_PXA310 */
--
- #endif /* __ASM_ARCH_MFP_PXA300_H */
-diff --git a/arch/arm/mach-pxa/mfp-pxa930.h b/arch/arm/mach-pxa/mfp-pxa930.h
-deleted file mode 100644
-index 0d195d3a8c61..000000000000
-diff --git a/arch/arm/mach-pxa/pxa300.c b/arch/arm/mach-pxa/pxa300.c
-index f77ec118d5b9..accd270ff8e2 100644
---- a/arch/arm/mach-pxa/pxa300.c
-+++ b/arch/arm/mach-pxa/pxa300.c
-@@ -69,28 +69,13 @@ static struct mfp_addr_map pxa300_mfp_addr_map[] __initdata = {
- 	MFP_ADDR_END,
- };
- 
--/* override pxa300 MFP register addresses */
--static struct mfp_addr_map pxa310_mfp_addr_map[] __initdata = {
--	MFP_ADDR_X(GPIO30,  GPIO98,   0x0418),
--	MFP_ADDR_X(GPIO7_2, GPIO12_2, 0x052C),
--
--	MFP_ADDR(ULPI_STP, 0x040C),
--	MFP_ADDR(ULPI_NXT, 0x0410),
--	MFP_ADDR(ULPI_DIR, 0x0414),
--
--	MFP_ADDR_END,
--};
--
- static int __init pxa300_init(void)
- {
--	if (cpu_is_pxa300() || cpu_is_pxa310()) {
-+	if (cpu_is_pxa300()) {
- 		mfp_init_base(io_p2v(MFPR_BASE));
- 		mfp_init_addr(pxa300_mfp_addr_map);
- 	}
- 
--	if (cpu_is_pxa310())
--		mfp_init_addr(pxa310_mfp_addr_map);
--
- 	return 0;
+ #include "regs-ost.h"
+ #include "reset.h"
+@@ -82,16 +78,10 @@ void __init pxa_set_mci_info(struct pxamci_platform_data *info)
+ 	pxa_register_device(&pxa_device_mci, info);
  }
  
+-
+ static struct pxa2xx_udc_mach_info pxa_udc_info = {
+ 	.gpio_pullup = -1,
+ };
+ 
+-void __init pxa_set_udc_info(struct pxa2xx_udc_mach_info *info)
+-{
+-	memcpy(&pxa_udc_info, info, sizeof *info);
+-}
+-
+ static struct resource pxa2xx_udc_resources[] = {
+ 	[0] = {
+ 		.start	= 0x40600000,
+@@ -383,49 +373,6 @@ struct platform_device sa1100_device_rtc = {
+ 	.resource       = pxa_rtc_resources,
+ };
+ 
+-static struct resource pxa_ac97_resources[] = {
+-	[0] = {
+-		.start  = 0x40500000,
+-		.end	= 0x40500000 + 0xfff,
+-		.flags  = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start  = IRQ_AC97,
+-		.end    = IRQ_AC97,
+-		.flags  = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 pxa_ac97_dmamask = 0xffffffffUL;
+-
+-struct platform_device pxa_device_ac97 = {
+-	.name           = "pxa2xx-ac97",
+-	.id             = -1,
+-	.dev            = {
+-		.dma_mask = &pxa_ac97_dmamask,
+-		.coherent_dma_mask = 0xffffffff,
+-	},
+-	.num_resources  = ARRAY_SIZE(pxa_ac97_resources),
+-	.resource       = pxa_ac97_resources,
+-};
+-
+-void __init pxa_set_ac97_info(pxa2xx_audio_ops_t *ops)
+-{
+-	int ret;
+-
+-	ret = clk_add_alias("ac97_clk", "pxa2xx-ac97:0", "AC97CLK",
+-			   &pxa_device_ac97.dev);
+-	if (ret)
+-		pr_err("PXA AC97 clock1 alias error: %d\n", ret);
+-
+-	ret = clk_add_alias("ac97_clk", "pxa2xx-ac97:1", "AC97CLK",
+-			    &pxa_device_ac97.dev);
+-	if (ret)
+-		pr_err("PXA AC97 clock2 alias error: %d\n", ret);
+-
+-	pxa_register_device(&pxa_device_ac97, ops);
+-}
+-
+ #ifdef CONFIG_PXA25x
+ 
+ static struct resource pxa25x_resource_pwm0[] = {
+@@ -539,44 +486,6 @@ struct platform_device pxa25x_device_assp = {
+ #endif /* CONFIG_PXA25x */
+ 
+ #if defined(CONFIG_PXA27x) || defined(CONFIG_PXA3xx)
+-static struct resource pxa27x_resource_camera[] = {
+-	[0] = {
+-		.start	= 0x50000000,
+-		.end	= 0x50000fff,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_CAMERA,
+-		.end	= IRQ_CAMERA,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 pxa27x_dma_mask_camera = DMA_BIT_MASK(32);
+-
+-static struct platform_device pxa27x_device_camera = {
+-	.name		= "pxa27x-camera",
+-	.id		= 0, /* This is used to put cameras on this interface */
+-	.dev		= {
+-		.dma_mask      		= &pxa27x_dma_mask_camera,
+-		.coherent_dma_mask	= 0xffffffff,
+-	},
+-	.num_resources	= ARRAY_SIZE(pxa27x_resource_camera),
+-	.resource	= pxa27x_resource_camera,
+-};
+-
+-void __init pxa_set_camera_info(struct pxacamera_platform_data *info)
+-{
+-	struct clk *mclk;
+-
+-	/* Register a fixed-rate clock for camera sensors. */
+-	mclk = clk_register_fixed_rate(NULL, "pxa_camera_clk", NULL, 0,
+-					     info->mclk_10khz * 10000);
+-	if (!IS_ERR(mclk))
+-		clkdev_create(mclk, "mclk", NULL);
+-	pxa_register_device(&pxa27x_device_camera, info);
+-}
+-
+ static u64 pxa27x_ohci_dma_mask = DMA_BIT_MASK(32);
+ 
+ static struct resource pxa27x_resource_ohci[] = {
+@@ -610,31 +519,6 @@ void __init pxa_set_ohci_info(struct pxaohci_platform_data *info)
+ #endif /* CONFIG_PXA27x || CONFIG_PXA3xx */
+ 
+ #if defined(CONFIG_PXA27x) || defined(CONFIG_PXA3xx)
+-static struct resource pxa27x_resource_keypad[] = {
+-	[0] = {
+-		.start	= 0x41500000,
+-		.end	= 0x4150004c,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_KEYPAD,
+-		.end	= IRQ_KEYPAD,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-struct platform_device pxa27x_device_keypad = {
+-	.name		= "pxa27x-keypad",
+-	.id		= -1,
+-	.resource	= pxa27x_resource_keypad,
+-	.num_resources	= ARRAY_SIZE(pxa27x_resource_keypad),
+-};
+-
+-void __init pxa_set_keypad_info(struct pxa27x_keypad_platform_data *info)
+-{
+-	pxa_register_device(&pxa27x_device_keypad, info);
+-}
+-
+ static u64 pxa27x_ssp1_dma_mask = DMA_BIT_MASK(32);
+ 
+ static struct resource pxa27x_resource_ssp1[] = {
+@@ -744,210 +628,6 @@ struct platform_device pxa27x_device_pwm1 = {
+ };
+ #endif /* CONFIG_PXA27x || CONFIG_PXA3xx */
+ 
+-#ifdef CONFIG_PXA3xx
+-static struct resource pxa3xx_resources_mci2[] = {
+-	[0] = {
+-		.start	= 0x42000000,
+-		.end	= 0x42000fff,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_MMC2,
+-		.end	= IRQ_MMC2,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-struct platform_device pxa3xx_device_mci2 = {
+-	.name		= "pxa2xx-mci",
+-	.id		= 1,
+-	.dev		= {
+-		.dma_mask = &pxamci_dmamask,
+-		.coherent_dma_mask =	0xffffffff,
+-	},
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resources_mci2),
+-	.resource	= pxa3xx_resources_mci2,
+-};
+-
+-void __init pxa3xx_set_mci2_info(struct pxamci_platform_data *info)
+-{
+-	pxa_register_device(&pxa3xx_device_mci2, info);
+-}
+-
+-static struct resource pxa3xx_resources_mci3[] = {
+-	[0] = {
+-		.start	= 0x42500000,
+-		.end	= 0x42500fff,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_MMC3,
+-		.end	= IRQ_MMC3,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-struct platform_device pxa3xx_device_mci3 = {
+-	.name		= "pxa2xx-mci",
+-	.id		= 2,
+-	.dev		= {
+-		.dma_mask = &pxamci_dmamask,
+-		.coherent_dma_mask = 0xffffffff,
+-	},
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resources_mci3),
+-	.resource	= pxa3xx_resources_mci3,
+-};
+-
+-void __init pxa3xx_set_mci3_info(struct pxamci_platform_data *info)
+-{
+-	pxa_register_device(&pxa3xx_device_mci3, info);
+-}
+-
+-static struct resource pxa3xx_resources_gcu[] = {
+-	{
+-		.start	= 0x54000000,
+-		.end	= 0x54000fff,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= IRQ_GCU,
+-		.end	= IRQ_GCU,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 pxa3xx_gcu_dmamask = DMA_BIT_MASK(32);
+-
+-struct platform_device pxa3xx_device_gcu = {
+-	.name		= "pxa3xx-gcu",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resources_gcu),
+-	.resource	= pxa3xx_resources_gcu,
+-	.dev		= {
+-		.dma_mask = &pxa3xx_gcu_dmamask,
+-		.coherent_dma_mask = 0xffffffff,
+-	},
+-};
+-
+-#endif /* CONFIG_PXA3xx */
+-
+-#if defined(CONFIG_PXA3xx)
+-static struct resource pxa3xx_resources_i2c_power[] = {
+-	{
+-		.start  = 0x40f500c0,
+-		.end    = 0x40f500d3,
+-		.flags	= IORESOURCE_MEM,
+-	}, {
+-		.start	= IRQ_PWRI2C,
+-		.end	= IRQ_PWRI2C,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-struct platform_device pxa3xx_device_i2c_power = {
+-	.name		= "pxa3xx-pwri2c",
+-	.id		= 1,
+-	.resource	= pxa3xx_resources_i2c_power,
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resources_i2c_power),
+-};
+-
+-static struct resource pxa3xx_resources_nand[] = {
+-	[0] = {
+-		.start	= 0x43100000,
+-		.end	= 0x43100053,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_NAND,
+-		.end	= IRQ_NAND,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 pxa3xx_nand_dma_mask = DMA_BIT_MASK(32);
+-
+-struct platform_device pxa3xx_device_nand = {
+-	.name		= "pxa3xx-nand",
+-	.id		= -1,
+-	.dev		= {
+-		.dma_mask = &pxa3xx_nand_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resources_nand),
+-	.resource	= pxa3xx_resources_nand,
+-};
+-
+-void __init pxa3xx_set_nand_info(struct pxa3xx_nand_platform_data *info)
+-{
+-	pxa_register_device(&pxa3xx_device_nand, info);
+-}
+-
+-static u64 pxa3xx_ssp4_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct resource pxa3xx_resource_ssp4[] = {
+-	[0] = {
+-		.start	= 0x41a00000,
+-		.end	= 0x41a0003f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_SSP4,
+-		.end	= IRQ_SSP4,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-/*
+- * PXA3xx SSP is basically equivalent to PXA27x.
+- * However, we need to register the device by the correct name in order to
+- * make the driver set the correct internal type, hence we provide specific
+- * platform_devices for each of them.
+- */
+-struct platform_device pxa3xx_device_ssp1 = {
+-	.name		= "pxa3xx-ssp",
+-	.id		= 0,
+-	.dev		= {
+-		.dma_mask = &pxa27x_ssp1_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.resource	= pxa27x_resource_ssp1,
+-	.num_resources	= ARRAY_SIZE(pxa27x_resource_ssp1),
+-};
+-
+-struct platform_device pxa3xx_device_ssp2 = {
+-	.name		= "pxa3xx-ssp",
+-	.id		= 1,
+-	.dev		= {
+-		.dma_mask = &pxa27x_ssp2_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.resource	= pxa27x_resource_ssp2,
+-	.num_resources	= ARRAY_SIZE(pxa27x_resource_ssp2),
+-};
+-
+-struct platform_device pxa3xx_device_ssp3 = {
+-	.name		= "pxa3xx-ssp",
+-	.id		= 2,
+-	.dev		= {
+-		.dma_mask = &pxa27x_ssp3_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.resource	= pxa27x_resource_ssp3,
+-	.num_resources	= ARRAY_SIZE(pxa27x_resource_ssp3),
+-};
+-
+-struct platform_device pxa3xx_device_ssp4 = {
+-	.name		= "pxa3xx-ssp",
+-	.id		= 3,
+-	.dev		= {
+-		.dma_mask = &pxa3xx_ssp4_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.resource	= pxa3xx_resource_ssp4,
+-	.num_resources	= ARRAY_SIZE(pxa3xx_resource_ssp4),
+-};
+-#endif /* CONFIG_PXA3xx */
+-
+ struct resource pxa_resource_gpio[] = {
+ 	{
+ 		.start	= 0x40e00000,
+@@ -972,11 +652,7 @@ struct resource pxa_resource_gpio[] = {
+ };
+ 
+ struct platform_device pxa25x_device_gpio = {
+-#ifdef CONFIG_CPU_PXA26x
+-	.name		= "pxa26x-gpio",
+-#else
+ 	.name		= "pxa25x-gpio",
+-#endif
+ 	.id		= -1,
+ 	.num_resources	= ARRAY_SIZE(pxa_resource_gpio),
+ 	.resource	= pxa_resource_gpio,
+@@ -989,20 +665,6 @@ struct platform_device pxa27x_device_gpio = {
+ 	.resource	= pxa_resource_gpio,
+ };
+ 
+-struct platform_device pxa3xx_device_gpio = {
+-	.name		= "pxa3xx-gpio",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(pxa_resource_gpio),
+-	.resource	= pxa_resource_gpio,
+-};
+-
+-struct platform_device pxa93x_device_gpio = {
+-	.name		= "pxa93x-gpio",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(pxa_resource_gpio),
+-	.resource	= pxa_resource_gpio,
+-};
+-
+ /* pxa2xx-spi platform-device ID equals respective SSP platform-device ID + 1.
+  * See comment in arch/arm/mach-pxa/ssp.c::ssp_probe() */
+ void __init pxa2xx_set_spi_info(unsigned id, struct pxa2xx_spi_controller *info)
+diff --git a/arch/arm/mach-pxa/mfp-pxa25x.h b/arch/arm/mach-pxa/mfp-pxa25x.h
+index d0ebb2154503..3dc5c833e28f 100644
+--- a/arch/arm/mach-pxa/mfp-pxa25x.h
++++ b/arch/arm/mach-pxa/mfp-pxa25x.h
+@@ -158,39 +158,6 @@
+ #define GPIO76_LCD_PCLK		MFP_CFG_OUT(GPIO76, AF2, DRIVE_LOW)
+ #define GPIO77_LCD_BIAS		MFP_CFG_OUT(GPIO77, AF2, DRIVE_LOW)
+ 
+-#ifdef CONFIG_CPU_PXA26x
+-/* GPIO */
+-#define GPIO85_GPIO		MFP_CFG_IN(GPIO85, AF0)
+-#define GPIO86_GPIO		MFP_CFG_IN(GPIO86, AF1)
+-#define GPIO87_GPIO		MFP_CFG_IN(GPIO87, AF1)
+-#define GPIO88_GPIO		MFP_CFG_IN(GPIO88, AF1)
+-#define GPIO89_GPIO		MFP_CFG_IN(GPIO89, AF1)
+-
+-/* SDRAM */
+-#define GPIO86_nSDCS2		MFP_CFG_OUT(GPIO86, AF0, DRIVE_HIGH)
+-#define GPIO87_nSDCS3		MFP_CFG_OUT(GPIO87, AF0, DRIVE_HIGH)
+-#define GPIO88_RDnWR		MFP_CFG_OUT(GPIO88, AF0, DRIVE_HIGH)
+-
+-/* USB */
+-#define GPIO9_USB_RCV		MFP_CFG_IN(GPIO9, AF1)
+-#define GPIO32_USB_VP		MFP_CFG_IN(GPIO32, AF2)
+-#define GPIO34_USB_VM		MFP_CFG_IN(GPIO34, AF2)
+-#define GPIO39_USB_VPO		MFP_CFG_OUT(GPIO39, AF3, DRIVE_LOW)
+-#define GPIO56_USB_VMO		MFP_CFG_OUT(GPIO56, AF1, DRIVE_LOW)
+-#define GPIO57_USB_nOE		MFP_CFG_OUT(GPIO57, AF1, DRIVE_HIGH)
+-
+-/* ASSP */
+-#define GPIO28_ASSP_BITCLK_IN	MFP_CFG_IN(GPIO28, AF3)
+-#define GPIO28_ASSP_BITCLK_OUT	MFP_CFG_OUT(GPIO28, AF3, DRIVE_LOW)
+-#define GPIO29_ASSP_RXD		MFP_CFG_IN(GPIO29, AF3)
+-#define GPIO30_ASSP_TXD		MFP_CFG_OUT(GPIO30, AF3, DRIVE_LOW)
+-#define GPIO31_ASSP_SFRM_IN	MFP_CFG_IN(GPIO31, AF1)
+-#define GPIO31_ASSP_SFRM_OUT	MFP_CFG_OUT(GPIO31, AF3, DRIVE_LOW)
+-
+-/* AC97 */
+-#define GPIO89_AC97_nRESET	MFP_CFG_OUT(GPIO89, AF0, DRIVE_HIGH)
+-#endif	/* CONFIG_CPU_PXA26x */
+-
+ /* commonly used pin configurations */
+ #define GPIOxx_LCD_16BPP	\
+ 	GPIO58_LCD_LDD_0,	\
+diff --git a/arch/arm/mach-pxa/mfp-pxa2xx.c b/arch/arm/mach-pxa/mfp-pxa2xx.c
+index 57b0782880de..b556452dfcf9 100644
+--- a/arch/arm/mach-pxa/mfp-pxa2xx.c
++++ b/arch/arm/mach-pxa/mfp-pxa2xx.c
+@@ -226,11 +226,7 @@ static void __init pxa25x_mfp_init(void)
+ 	int i;
+ 
+ 	/* running before pxa_gpio_probe() */
+-#ifdef CONFIG_CPU_PXA26x
+-	pxa_last_gpio = 89;
+-#else
+ 	pxa_last_gpio = 84;
+-#endif
+ 	for (i = 0; i <= pxa_last_gpio; i++)
+ 		gpio_desc[i].valid = 1;
+ 
+diff --git a/arch/arm/mach-pxa/pm.c b/arch/arm/mach-pxa/pm.c
+index f2237f471750..c63e854921ea 100644
+--- a/arch/arm/mach-pxa/pm.c
++++ b/arch/arm/mach-pxa/pm.c
+@@ -51,8 +51,6 @@ int pxa_pm_enter(suspend_state_t state)
+ 		/* if invalid, display message and wait for a hardware reset */
+ 		if (checksum != sleep_save_checksum) {
+ 
+-			lubbock_set_hexled(0xbadbadc5);
+-
+ 			while (1)
+ 				pxa_cpu_pm_fns->enter(state);
+ 		}
+diff --git a/arch/arm/mach-pxa/pm.h b/arch/arm/mach-pxa/pm.h
+index 00ea3529e30e..a16fa140883c 100644
+--- a/arch/arm/mach-pxa/pm.h
++++ b/arch/arm/mach-pxa/pm.h
+@@ -27,13 +27,3 @@ extern void pxa_pm_finish(void);
+ 
+ extern const char pm_enter_standby_start[], pm_enter_standby_end[];
+ extern int pxa3xx_finish_suspend(unsigned long);
+-
+-/* NOTE: this is for PM debugging on Lubbock,  it's really a big
+- * ugly, but let's keep the crap minimum here, instead of direct
+- * accessing the LUBBOCK CPLD registers in arch/arm/mach-pxa/pm.c
+- */
+-#ifdef CONFIG_ARCH_LUBBOCK
+-extern void lubbock_set_hexled(uint32_t value);
+-#else
+-#define lubbock_set_hexled(x)
+-#endif
+diff --git a/arch/arm/mach-pxa/pxa25x.c b/arch/arm/mach-pxa/pxa25x.c
+index 6b34d7c169ea..1b83be181bab 100644
+--- a/arch/arm/mach-pxa/pxa25x.c
++++ b/arch/arm/mach-pxa/pxa25x.c
+@@ -145,13 +145,6 @@ void __init pxa25x_init_irq(void)
+ 	pxa_init_irq(32, pxa25x_set_wake);
+ }
+ 
+-#ifdef CONFIG_CPU_PXA26x
+-void __init pxa26x_init_irq(void)
+-{
+-	pxa_init_irq(32, pxa25x_set_wake);
+-}
+-#endif
+-
+ static int __init __init
+ pxa25x_dt_init_irq(struct device_node *node, struct device_node *parent)
+ {
+diff --git a/arch/arm/mach-pxa/pxa27x.c b/arch/arm/mach-pxa/pxa27x.c
+index eea507fd5095..4135ba2877c4 100644
+--- a/arch/arm/mach-pxa/pxa27x.c
++++ b/arch/arm/mach-pxa/pxa27x.c
+@@ -85,18 +85,6 @@ EXPORT_SYMBOL_GPL(pxa27x_configure_ac97reset);
+  */
+ static unsigned int pwrmode = PWRMODE_SLEEP;
+ 
+-int pxa27x_set_pwrmode(unsigned int mode)
+-{
+-	switch (mode) {
+-	case PWRMODE_SLEEP:
+-	case PWRMODE_DEEPSLEEP:
+-		pwrmode = mode;
+-		return 0;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+ /*
+  * List of global PXA peripheral registers to preserve.
+  * More ones like CP and general purpose register values are preserved
+@@ -109,7 +97,7 @@ enum {
+ 	SLEEP_SAVE_COUNT
+ };
+ 
+-void pxa27x_cpu_pm_save(unsigned long *sleep_save)
++static void pxa27x_cpu_pm_save(unsigned long *sleep_save)
+ {
+ 	sleep_save[SLEEP_SAVE_MDREFR] = __raw_readl(MDREFR);
+ 	SAVE(PCFR);
+@@ -117,7 +105,7 @@ void pxa27x_cpu_pm_save(unsigned long *sleep_save)
+ 	SAVE(PSTR);
+ }
+ 
+-void pxa27x_cpu_pm_restore(unsigned long *sleep_save)
++static void pxa27x_cpu_pm_restore(unsigned long *sleep_save)
+ {
+ 	__raw_writel(sleep_save[SLEEP_SAVE_MDREFR], MDREFR);
+ 	RESTORE(PCFR);
+@@ -127,7 +115,7 @@ void pxa27x_cpu_pm_restore(unsigned long *sleep_save)
+ 	RESTORE(PSTR);
+ }
+ 
+-void pxa27x_cpu_pm_enter(suspend_state_t state)
++static void pxa27x_cpu_pm_enter(suspend_state_t state)
+ {
+ 	extern void pxa_cpu_standby(void);
+ #ifndef CONFIG_IWMMXT
+diff --git a/arch/arm/mach-pxa/pxa27x.h b/arch/arm/mach-pxa/pxa27x.h
+index ede96f3f7214..c9d9948ae7d1 100644
+--- a/arch/arm/mach-pxa/pxa27x.h
++++ b/arch/arm/mach-pxa/pxa27x.h
+@@ -20,7 +20,4 @@
+ #define ARB_CORE_PARK		(1<<24)	   /* Be parked with core when idle */
+ #define ARB_LOCK_FLAG		(1<<23)	   /* Only Locking masters gain access to the bus */
+ 
+-extern int pxa27x_set_pwrmode(unsigned int mode);
+-extern void pxa27x_cpu_pm_enter(suspend_state_t state);
+-
+ #endif /* __MACH_PXA27x_H */
 diff --git a/arch/arm/mach-pxa/pxa3xx.c b/arch/arm/mach-pxa/pxa3xx.c
-index b26f00fc75d5..7a02ddb30969 100644
+index 7a02ddb30969..5441b778a081 100644
 --- a/arch/arm/mach-pxa/pxa3xx.c
 +++ b/arch/arm/mach-pxa/pxa3xx.c
-@@ -496,8 +496,6 @@ static int __init pxa3xx_init(void)
- 		pxa3xx_init_pm();
+@@ -363,13 +363,6 @@ static void __init __pxa3xx_init_irq(void)
+ 	pxa_init_ext_wakeup_irq(pxa3xx_set_wake);
+ }
  
- 		enable_irq_wake(IRQ_WAKEUP0);
--		if (cpu_is_pxa320())
--			enable_irq_wake(IRQ_WAKEUP1);
+-void __init pxa3xx_init_irq(void)
+-{
+-	__pxa3xx_init_irq();
+-	pxa_init_irq(56, pxa3xx_set_wake);
+-}
+-
+-#ifdef CONFIG_OF
+ static int __init __init
+ pxa3xx_dt_init_irq(struct device_node *node, struct device_node *parent)
+ {
+@@ -380,7 +373,6 @@ pxa3xx_dt_init_irq(struct device_node *node, struct device_node *parent)
+ 	return 0;
+ }
+ IRQCHIP_DECLARE(pxa3xx_intc, "marvell,pxa-intc", pxa3xx_dt_init_irq);
+-#endif	/* CONFIG_OF */
+ 
+ static struct map_desc pxa3xx_io_desc[] __initdata = {
+ 	{	/* Mem Ctl */
+@@ -403,73 +395,6 @@ void __init pxa3xx_map_io(void)
+ 	pxa3xx_get_clk_frequency_khz(1);
+ }
+ 
+-/*
+- * device registration specific to PXA3xx.
+- */
+-
+-void __init pxa3xx_set_i2c_power_info(struct i2c_pxa_platform_data *info)
+-{
+-	pxa_register_device(&pxa3xx_device_i2c_power, info);
+-}
+-
+-static struct pxa_gpio_platform_data pxa3xx_gpio_pdata = {
+-	.irq_base	= PXA_GPIO_TO_IRQ(0),
+-};
+-
+-static struct platform_device *devices[] __initdata = {
+-	&pxa27x_device_udc,
+-	&pxa_device_pmu,
+-	&pxa_device_i2s,
+-	&pxa_device_asoc_ssp1,
+-	&pxa_device_asoc_ssp2,
+-	&pxa_device_asoc_ssp3,
+-	&pxa_device_asoc_ssp4,
+-	&pxa_device_asoc_platform,
+-	&pxa_device_rtc,
+-	&pxa3xx_device_ssp1,
+-	&pxa3xx_device_ssp2,
+-	&pxa3xx_device_ssp3,
+-	&pxa3xx_device_ssp4,
+-	&pxa27x_device_pwm0,
+-	&pxa27x_device_pwm1,
+-};
+-
+-static const struct dma_slave_map pxa3xx_slave_map[] = {
+-	/* PXA25x, PXA27x and PXA3xx common entries */
+-	{ "pxa2xx-ac97", "pcm_pcm_mic_mono", PDMA_FILTER_PARAM(LOWEST, 8) },
+-	{ "pxa2xx-ac97", "pcm_pcm_aux_mono_in", PDMA_FILTER_PARAM(LOWEST, 9) },
+-	{ "pxa2xx-ac97", "pcm_pcm_aux_mono_out",
+-	  PDMA_FILTER_PARAM(LOWEST, 10) },
+-	{ "pxa2xx-ac97", "pcm_pcm_stereo_in", PDMA_FILTER_PARAM(LOWEST, 11) },
+-	{ "pxa2xx-ac97", "pcm_pcm_stereo_out", PDMA_FILTER_PARAM(LOWEST, 12) },
+-	{ "pxa-ssp-dai.0", "rx", PDMA_FILTER_PARAM(LOWEST, 13) },
+-	{ "pxa-ssp-dai.0", "tx", PDMA_FILTER_PARAM(LOWEST, 14) },
+-	{ "pxa-ssp-dai.1", "rx", PDMA_FILTER_PARAM(LOWEST, 15) },
+-	{ "pxa-ssp-dai.1", "tx", PDMA_FILTER_PARAM(LOWEST, 16) },
+-	{ "pxa2xx-ir", "rx", PDMA_FILTER_PARAM(LOWEST, 17) },
+-	{ "pxa2xx-ir", "tx", PDMA_FILTER_PARAM(LOWEST, 18) },
+-	{ "pxa2xx-mci.0", "rx", PDMA_FILTER_PARAM(LOWEST, 21) },
+-	{ "pxa2xx-mci.0", "tx", PDMA_FILTER_PARAM(LOWEST, 22) },
+-	{ "pxa-ssp-dai.2", "rx", PDMA_FILTER_PARAM(LOWEST, 66) },
+-	{ "pxa-ssp-dai.2", "tx", PDMA_FILTER_PARAM(LOWEST, 67) },
+-
+-	/* PXA3xx specific map */
+-	{ "pxa-ssp-dai.3", "rx", PDMA_FILTER_PARAM(LOWEST, 2) },
+-	{ "pxa-ssp-dai.3", "tx", PDMA_FILTER_PARAM(LOWEST, 3) },
+-	{ "pxa2xx-mci.1", "rx", PDMA_FILTER_PARAM(LOWEST, 93) },
+-	{ "pxa2xx-mci.1", "tx", PDMA_FILTER_PARAM(LOWEST, 94) },
+-	{ "pxa3xx-nand", "data", PDMA_FILTER_PARAM(LOWEST, 97) },
+-	{ "pxa2xx-mci.2", "rx", PDMA_FILTER_PARAM(LOWEST, 100) },
+-	{ "pxa2xx-mci.2", "tx", PDMA_FILTER_PARAM(LOWEST, 101) },
+-};
+-
+-static struct mmp_dma_platdata pxa3xx_dma_pdata = {
+-	.dma_channels	= 32,
+-	.nb_requestors	= 100,
+-	.slave_map	= pxa3xx_slave_map,
+-	.slave_map_cnt	= ARRAY_SIZE(pxa3xx_slave_map),
+-};
+-
+ static int __init pxa3xx_init(void)
+ {
+ 	int ret = 0;
+@@ -499,20 +424,6 @@ static int __init pxa3xx_init(void)
  
  		register_syscore_ops(&pxa_irq_syscore_ops);
  		register_syscore_ops(&pxa3xx_mfp_syscore_ops);
-@@ -509,7 +507,7 @@ static int __init pxa3xx_init(void)
- 		ret = platform_add_devices(devices, ARRAY_SIZE(devices));
- 		if (ret)
- 			return ret;
--		if (cpu_is_pxa300() || cpu_is_pxa310() || cpu_is_pxa320()) {
-+		if (cpu_is_pxa300()) {
- 			platform_device_add_data(&pxa3xx_device_gpio,
- 						 &pxa3xx_gpio_pdata,
- 						 sizeof(pxa3xx_gpio_pdata));
-diff --git a/drivers/clk/pxa/clk-pxa3xx.c b/drivers/clk/pxa/clk-pxa3xx.c
-index 42958a542662..9b45dc297b22 100644
---- a/drivers/clk/pxa/clk-pxa3xx.c
-+++ b/drivers/clk/pxa/clk-pxa3xx.c
-@@ -269,19 +269,6 @@ static struct desc_clk_cken pxa300_310_clocks[] __initdata = {
- 	PXA3XX_CKEN_1RATE("pxa3xx-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
- };
- 
--static struct desc_clk_cken pxa320_clocks[] __initdata = {
--	PXA3XX_PBUS_CKEN("pxa3xx-nand", NULL, NAND, 1, 2, 1, 6, 0),
--	PXA3XX_PBUS_CKEN("pxa3xx-gcu", NULL, PXA320_GCU, 1, 1, 1, 1, 0),
--	PXA3XX_CKEN_1RATE("pxa3xx-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
--};
 -
--static struct desc_clk_cken pxa93x_clocks[] __initdata = {
+-		if (of_have_populated_dt())
+-			return 0;
 -
--	PXA3XX_PBUS_CKEN("pxa3xx-gcu", NULL, PXA300_GCU, 1, 1, 1, 1, 0),
--	PXA3XX_PBUS_CKEN("pxa3xx-nand", NULL, NAND, 1, 2, 1, 4, 0),
--	PXA3XX_CKEN_1RATE("pxa93x-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
--};
--
- static unsigned long clk_pxa3xx_system_bus_get_rate(struct clk_hw *hw,
- 					    unsigned long parent_rate)
- {
-@@ -446,13 +433,8 @@ int __init pxa3xx_clocks_init(void __iomem *regs, void __iomem *oscc_reg)
- 	ret = clk_pxa_cken_init(pxa3xx_clocks, ARRAY_SIZE(pxa3xx_clocks), regs);
- 	if (ret)
- 		return ret;
--	if (cpu_is_pxa320())
--		return clk_pxa_cken_init(pxa320_clocks,
--					 ARRAY_SIZE(pxa320_clocks), regs);
--	if (cpu_is_pxa300() || cpu_is_pxa310())
--		return clk_pxa_cken_init(pxa300_310_clocks,
--					 ARRAY_SIZE(pxa300_310_clocks), regs);
--	return clk_pxa_cken_init(pxa93x_clocks, ARRAY_SIZE(pxa93x_clocks), regs);
-+	return clk_pxa_cken_init(pxa300_310_clocks,
-+				 ARRAY_SIZE(pxa300_310_clocks), regs);
- }
- 
- static void __init pxa3xx_dt_clocks_init(struct device_node *np)
-diff --git a/drivers/cpufreq/pxa3xx-cpufreq.c b/drivers/cpufreq/pxa3xx-cpufreq.c
-index 4afa48d172db..23bc3c7a6288 100644
---- a/drivers/cpufreq/pxa3xx-cpufreq.c
-+++ b/drivers/cpufreq/pxa3xx-cpufreq.c
-@@ -91,15 +91,6 @@ static struct pxa3xx_freq_info pxa300_freqs[] = {
- 	OP(624, 24, 2, 208, 260, 208, 312, 3, 1375, 1400), /* 624MHz */
- };
- 
--static struct pxa3xx_freq_info pxa320_freqs[] = {
--	/*  CPU XL XN  HSS DMEM SMEM SRAM DFI VCC_CORE VCC_SRAM */
--	OP(104,  8, 1, 104, 260,  78, 104, 3, 1000, 1100), /* 104MHz */
--	OP(208, 16, 1, 104, 260, 104, 156, 2, 1000, 1100), /* 208MHz */
--	OP(416, 16, 2, 156, 260, 104, 208, 2, 1100, 1200), /* 416MHz */
--	OP(624, 24, 2, 208, 260, 208, 312, 3, 1375, 1400), /* 624MHz */
--	OP(806, 31, 2, 208, 260, 208, 312, 3, 1400, 1400), /* 806MHz */
--};
--
- static unsigned int pxa3xx_freqs_num;
- static struct pxa3xx_freq_info *pxa3xx_freqs;
- static struct cpufreq_frequency_table *pxa3xx_freqs_table;
-@@ -186,17 +177,11 @@ static int pxa3xx_cpufreq_init(struct cpufreq_policy *policy)
- 
- 	/* set default policy and cpuinfo */
- 	policy->min = policy->cpuinfo.min_freq = 104000;
--	policy->max = policy->cpuinfo.max_freq =
--		(cpu_is_pxa320()) ? 806000 : 624000;
-+	policy->max = policy->cpuinfo.max_freq = 624000;
- 	policy->cpuinfo.transition_latency = 1000; /* FIXME: 1 ms, assumed */
- 
--	if (cpu_is_pxa300() || cpu_is_pxa310())
--		ret = setup_freqs_table(policy, pxa300_freqs,
--					ARRAY_SIZE(pxa300_freqs));
--
--	if (cpu_is_pxa320())
--		ret = setup_freqs_table(policy, pxa320_freqs,
--					ARRAY_SIZE(pxa320_freqs));
-+	ret = setup_freqs_table(policy, pxa300_freqs,
-+				ARRAY_SIZE(pxa300_freqs));
- 
- 	if (ret) {
- 		pr_err("failed to setup frequency table\n");
-diff --git a/drivers/mmc/host/pxamci.c b/drivers/mmc/host/pxamci.c
-index 2a988f942b6c..60bdd691c391 100644
---- a/drivers/mmc/host/pxamci.c
-+++ b/drivers/mmc/host/pxamci.c
-@@ -44,8 +44,7 @@
- #define NR_SG	1
- #define CLKRT_OFF	(~0)
- 
--#define mmc_has_26MHz()		(cpu_is_pxa300() || cpu_is_pxa310() \
--				|| cpu_is_pxa935())
-+#define mmc_has_26MHz()		(cpu_is_pxa300())
- 
- struct pxamci_host {
- 	struct mmc_host		*mmc;
-diff --git a/drivers/pcmcia/pxa2xx_base.c b/drivers/pcmcia/pxa2xx_base.c
-index 5254028354f4..a6c6ee034582 100644
---- a/drivers/pcmcia/pxa2xx_base.c
-+++ b/drivers/pcmcia/pxa2xx_base.c
-@@ -268,12 +268,6 @@ static int pxa2xx_drv_pcmcia_probe(struct platform_device *dev)
- 		goto err0;
+-		pxa2xx_set_dmac_info(&pxa3xx_dma_pdata);
+-		ret = platform_add_devices(devices, ARRAY_SIZE(devices));
+-		if (ret)
+-			return ret;
+-		if (cpu_is_pxa300()) {
+-			platform_device_add_data(&pxa3xx_device_gpio,
+-						 &pxa3xx_gpio_pdata,
+-						 sizeof(pxa3xx_gpio_pdata));
+-			ret = platform_device_register(&pxa3xx_device_gpio);
+-		}
  	}
  
--	if (cpu_is_pxa320() && ops->nr > 1) {
--		dev_err(&dev->dev, "pxa320 supports only one pcmcia slot");
--		ret = -EINVAL;
--		goto err0;
--	}
--
- 	clk = devm_clk_get(&dev->dev, NULL);
- 	if (IS_ERR(clk))
- 		return -ENODEV;
-diff --git a/include/linux/soc/pxa/cpu.h b/include/linux/soc/pxa/cpu.h
-index 5782450ee45c..0f894d12fe1d 100644
---- a/include/linux/soc/pxa/cpu.h
-+++ b/include/linux/soc/pxa/cpu.h
-@@ -56,12 +56,6 @@
-  *  PXA935	B1	0x56056938	0x8E653013
-  */
- #ifdef CONFIG_PXA25x
--#define __cpu_is_pxa210(id)				\
--	({						\
--		unsigned int _id = (id) & 0xf3f0;	\
--		_id == 0x2120;				\
--	})
--
- #define __cpu_is_pxa250(id)				\
- 	({						\
- 		unsigned int _id = (id) & 0xf3ff;	\
-@@ -80,7 +74,6 @@
- 		_id == 0x2100;				\
- 	})
- #else
--#define __cpu_is_pxa210(id)	(0)
- #define __cpu_is_pxa250(id)	(0)
- #define __cpu_is_pxa255(id)	(0)
- #define __cpu_is_pxa25x(id)	(0)
-@@ -106,51 +99,6 @@
- #define __cpu_is_pxa300(id)	(0)
- #endif
- 
--#ifdef CONFIG_CPU_PXA310
--#define __cpu_is_pxa310(id)				\
--	({						\
--		unsigned int _id = (id) >> 4 & 0xfff;	\
--		_id == 0x689;				\
--	 })
--#else
--#define __cpu_is_pxa310(id)	(0)
--#endif
--
--#ifdef CONFIG_CPU_PXA320
--#define __cpu_is_pxa320(id)				\
--	({						\
--		unsigned int _id = (id) >> 4 & 0xfff;	\
--		_id == 0x603 || _id == 0x682;		\
--	 })
--#else
--#define __cpu_is_pxa320(id)	(0)
--#endif
--
--#ifdef CONFIG_CPU_PXA930
--#define __cpu_is_pxa930(id)				\
--	({						\
--		unsigned int _id = (id) >> 4 & 0xfff;	\
--		_id == 0x683;				\
--	 })
--#else
--#define __cpu_is_pxa930(id)	(0)
--#endif
--
--#ifdef CONFIG_CPU_PXA935
--#define __cpu_is_pxa935(id)				\
--	({						\
--		unsigned int _id = (id) >> 4 & 0xfff;	\
--		_id == 0x693;				\
--	 })
--#else
--#define __cpu_is_pxa935(id)	(0)
--#endif
--
--#define cpu_is_pxa210()					\
--	({						\
--		__cpu_is_pxa210(read_cpuid_id());	\
--	})
--
- #define cpu_is_pxa250()					\
- 	({						\
- 		__cpu_is_pxa250(read_cpuid_id());	\
-@@ -176,27 +124,6 @@
- 		__cpu_is_pxa300(read_cpuid_id());	\
- 	 })
- 
--#define cpu_is_pxa310()					\
--	({						\
--		__cpu_is_pxa310(read_cpuid_id());	\
--	 })
--
--#define cpu_is_pxa320()					\
--	({						\
--		__cpu_is_pxa320(read_cpuid_id());	\
--	 })
--
--#define cpu_is_pxa930()					\
--	({						\
--		__cpu_is_pxa930(read_cpuid_id());	\
--	 })
--
--#define cpu_is_pxa935()					\
--	({						\
--		__cpu_is_pxa935(read_cpuid_id());	\
--	 })
--
--
- 
- /*
-  * CPUID Core Generation Bit
-@@ -215,25 +142,12 @@
- #ifdef CONFIG_PXA3xx
- #define __cpu_is_pxa3xx(id)				\
- 	({						\
--		__cpu_is_pxa300(id)			\
--			|| __cpu_is_pxa310(id)		\
--			|| __cpu_is_pxa320(id)		\
--			|| __cpu_is_pxa93x(id);		\
-+		__cpu_is_pxa300(id);			\
- 	 })
- #else
- #define __cpu_is_pxa3xx(id)	(0)
- #endif
- 
--#if defined(CONFIG_CPU_PXA930) || defined(CONFIG_CPU_PXA935)
--#define __cpu_is_pxa93x(id)				\
--	({						\
--		__cpu_is_pxa930(id)			\
--			|| __cpu_is_pxa935(id);		\
--	 })
--#else
--#define __cpu_is_pxa93x(id)	(0)
--#endif
--
- #define cpu_is_pxa2xx()					\
- 	({						\
- 		__cpu_is_pxa2xx(read_cpuid_id());	\
-@@ -244,9 +158,4 @@
- 		__cpu_is_pxa3xx(read_cpuid_id());	\
- 	 })
- 
--#define cpu_is_pxa93x()					\
--	({						\
--		__cpu_is_pxa93x(read_cpuid_id());	\
--	 })
--
- #endif
+ 	return ret;
 -- 
 2.39.0
 
