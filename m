@@ -2,133 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A04165F7D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F32665F7E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235835AbjAEXqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S235745AbjAEXuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 18:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbjAEXqR (ORCPT
+        with ESMTP id S235045AbjAEXux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:46:17 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539EE1B9C2;
-        Thu,  5 Jan 2023 15:46:15 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3642614pjt.0;
-        Thu, 05 Jan 2023 15:46:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
-         :message-id:from:cc:references:to:subject:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wcNYdCkU7Ye6vOpPqW6hRFnDiMLJqgUtfa+zzQzXpcQ=;
-        b=pgMpjIhnYxA6n/oE+DSs8NDG7njrcPJ97sbQX4mfyTzi3uxgHwGBBg5ZL6Of+Vt5yw
-         KMbZidTCpxRjaW7XYnxY1yrgftHZLrKSXjkzmvl9t77ixdnjoSNA9YjuHW6roIjtZlbj
-         dlgcA6yMTV5Fup62i05KwyqCau0YbmX9lqvbUqQzKyUga58wfaRODs+DkcslHVr8Z7jE
-         zrNOt2kaFfNjrsaJo9n8KpmyZQM7XtBrTlJPChUum1hGWymrRe6Ea//oP9JGRc6Ejoap
-         42bbQ+TPcewFJs8b6TYYpa1WM5ho4Nfgwoec81gZS+HyUFG21SfNGbCIq1hY3ynJb40L
-         COFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
-         :message-id:from:cc:references:to:subject:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wcNYdCkU7Ye6vOpPqW6hRFnDiMLJqgUtfa+zzQzXpcQ=;
-        b=kk5eRRnmsIbW5bTrISktX0h7JyVUeIogx348Jb+ppgYSfKUDxZd2aUJuwZ9l1YYUGo
-         eu73JQnpNETGexzFA4v5rJiTFsS7GtMbSBBr9EmnMofZ2B9nLcabO9tT55qPQ5syj2VC
-         cUGrevEDbxjxoQQ6/yJ6nDdKjL/uavA46RC24wHto4GA7XOXC/1Fh65oBQqR0W0Y0NTp
-         QHwd0PO2hFNSDR8gjWmfC42Sni0tk13iyB85EynLp1w6wW5K20y21Ee/fn7KIOL2sU2R
-         XhjGHn3rLUGC2RnK4jAdH7JfZ6h5m6BNmetZmAuQTYf52i5QYny2Na9YFqXlaFQk+Sup
-         CE9Q==
-X-Gm-Message-State: AFqh2kr/AcZnAsMers0ZbRGmC/jqLh0Ew3lhwC+HIkVurLbft4YJ0zK5
-        +0c7PdjlpGmgOUWgzKSa5no=
-X-Google-Smtp-Source: AMrXdXv/i9dJqSDbNXzw+daBW5ItM89T3EH1o2eCjRXa1NcdhmjS8GEEjrDIBWC6CrD8BG+O+Hs/kA==
-X-Received: by 2002:a05:6a20:289f:b0:a7:8b5e:af77 with SMTP id q31-20020a056a20289f00b000a78b5eaf77mr57960590pzf.36.1672962374811;
-        Thu, 05 Jan 2023 15:46:14 -0800 (PST)
-Received: from [10.1.1.24] (122-62-142-61-fibre.sparkbb.co.nz. [122.62.142.61])
-        by smtp.gmail.com with ESMTPSA id l10-20020a63f30a000000b00496317241f9sm21364289pgh.51.2023.01.05.15.46.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Jan 2023 15:46:14 -0800 (PST)
-Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-References: <000000000000dbce4e05f170f289@google.com>
- <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
- <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
- <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
- <1bd49fc0-d64f-4eb8-841a-4b09e178b5fd@gmail.com>
- <CAHk-=wg3U3Y6eaura=xQzTsktpEOMETYYnue+_KSbQmpg7vZ0Q@mail.gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        christian.brauner@ubuntu.com,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        jlayton@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        linux-m68k@lists.linux-m68k.org, flar@allandria.com
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <1a3d07bf-16f5-71a8-6500-7d37802dbadd@gmail.com>
-Date:   Fri, 6 Jan 2023 12:46:04 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        Thu, 5 Jan 2023 18:50:53 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DF03C0C6;
+        Thu,  5 Jan 2023 15:50:50 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np3BX0dFyz4xyp;
+        Fri,  6 Jan 2023 10:50:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672962645;
+        bh=gBdBSj5Iy4byy5P3B7qjh7Q4ryrNCeA8npWOwiFvaL0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MNBjSVtvnV1NkMBbtX5EF1PA0V363PEJGPOXNW+uUM8ciQsZumNnB+iGIjVugpWnV
+         0WktG4s/WjW85fj8W2QB47l08IWqLNm2ZzVN1CvRZVKMNiK3OorjzPzkx5nYYn+pvG
+         DL3tqC+uuG7TVeDFDnzhN4KDYNExI4u+r+OntTCiqnZp3YiS13raK7Lem+LqLM2mRx
+         LszvPVcE1Oz2f0gcuRMvNeAPz7TbzkdF7owEFVYnnpMHWXzin26Yi8NPgBHBSebqwk
+         AbvrAoz1AsqGi9P7pPlWWAYAoo9WQ2RIHUZ7Gd2Sr/jIwlNYgRN9HXNsst+IF4Mxs2
+         5aF6tiXT/Mrsw==
+Date:   Fri, 6 Jan 2023 10:50:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20230106105042.6d7ccb97@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wg3U3Y6eaura=xQzTsktpEOMETYYnue+_KSbQmpg7vZ0Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QAyr59Alq2_HP3mLSseczH.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--Sig_/QAyr59Alq2_HP3mLSseczH.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Am 06.01.2023 um 10:53 schrieb Linus Torvalds:
-> On Thu, Jan 5, 2023 at 1:35 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
->>
->> Looking at Linus' patch, I wonder whether the missing fd.entrylength
->> size test in the HFS_IS_RSRC(inode) case was due to the fact that a
->> file's resource fork may be empty?
->
-> But if that is the case, then the subsequent hfs_bnode_read would
-> return garbage, no? And then writing it back after the update would be
-> even worse.
->
-> So adding that
->
-> +               if (fd.entrylength < sizeof(struct hfs_cat_file))
-> +                       goto out;
->
-> would seem to be the right thing anyway. No?
+Hi all,
 
-Yes, it would seem to be the right thing (in order to avoid further 
-corrupting HFS data structures). Returning -EIO might cause a regression 
-though.
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-> But I really don't know the code, so this is all from just looking at
-> it and going "that makes no sense". Maybe it _does_ make sense to
-> people who have more background on it.
+  drivers/gpu/drm/tests/drm_format_helper_test.c
 
-What had me wondering is that the 'panic?' comment was only present in 
-the directory and regular file data cased but not in the resource fork 
-case.
+between commit:
 
-But I don't really understand the code too well either. I'll have to see 
-for myself whether or not your patch does cause a regression on HFS 
-filesystems such as the OF bootstrap partition used on PowerPC Macs.
+  a52a5451f43b ("kunit: Use KUNIT_EXPECT_MEMEQ macro")
 
+from Linus' tree and commits:
+
+  f21d62c9ce3d ("drm/format-helper: Store RGB565 in little-endian order")
+  175073d694cd ("drm/format-helper: Add conversion from XRGB8888 to ARGB888=
+8")
+  56119bfb3914 ("drm/format-helper: Add conversion from XRGB8888 to ARGB210=
+1010")
+  10cd592e639e ("drm/format-helper: Add conversion from XRGB8888 to 15-bit =
+RGB555 formats")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-	Michael
+diff --cc drivers/gpu/drm/tests/drm_format_helper_test.c
+index 567c71f95edc,f71dc0fe08a1..000000000000
+--- a/drivers/gpu/drm/tests/drm_format_helper_test.c
++++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
+@@@ -375,12 -560,108 +560,108 @@@ static void drm_test_fb_xrgb8888_to_rgb
+  	iosys_map_set_vaddr(&src, xrgb8888);
+ =20
+  	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->=
+clip, false);
++ 	buf =3D le16buf_to_cpu(test, (__force const __le16 *)buf, dst_size / siz=
+eof(__le16));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+ +	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
+ =20
++ 	buf =3D dst.vaddr; /* restore original value of buf */
+  	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->=
+clip, true);
++ 	buf =3D le16buf_to_cpu(test, (__force const __le16 *)buf, dst_size / siz=
+eof(__le16));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected_swab, dst_size), 0);
+ +	KUNIT_EXPECT_MEMEQ(test, buf, result->expected_swab, dst_size);
+  }
+ =20
++ static void drm_test_fb_xrgb8888_to_xrgb1555(struct kunit *test)
++ {
++ 	const struct convert_xrgb8888_case *params =3D test->param_value;
++ 	const struct convert_to_xrgb1555_result *result =3D &params->xrgb1555_re=
+sult;
++ 	size_t dst_size;
++ 	u16 *buf =3D NULL;
++ 	__le32 *xrgb8888 =3D NULL;
++ 	struct iosys_map dst, src;
++=20
++ 	struct drm_framebuffer fb =3D {
++ 		.format =3D drm_format_info(DRM_FORMAT_XRGB8888),
++ 		.pitches =3D { params->pitch, 0, 0 },
++ 	};
++=20
++ 	dst_size =3D conversion_buf_size(DRM_FORMAT_XRGB1555, result->dst_pitch,
++ 				       &params->clip);
++ 	KUNIT_ASSERT_GT(test, dst_size, 0);
++=20
++ 	buf =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
++ 	iosys_map_set_vaddr(&dst, buf);
++=20
++ 	xrgb8888 =3D cpubuf_to_le32(test, params->xrgb8888, TEST_BUF_SIZE);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
++ 	iosys_map_set_vaddr(&src, xrgb8888);
++=20
++ 	drm_fb_xrgb8888_to_xrgb1555(&dst, &result->dst_pitch, &src, &fb, &params=
+->clip);
++ 	buf =3D le16buf_to_cpu(test, (__force const __le16 *)buf, dst_size / siz=
+eof(__le16));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+++	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
++ }
++=20
++ static void drm_test_fb_xrgb8888_to_argb1555(struct kunit *test)
++ {
++ 	const struct convert_xrgb8888_case *params =3D test->param_value;
++ 	const struct convert_to_argb1555_result *result =3D &params->argb1555_re=
+sult;
++ 	size_t dst_size;
++ 	u16 *buf =3D NULL;
++ 	__le32 *xrgb8888 =3D NULL;
++ 	struct iosys_map dst, src;
++=20
++ 	struct drm_framebuffer fb =3D {
++ 		.format =3D drm_format_info(DRM_FORMAT_XRGB8888),
++ 		.pitches =3D { params->pitch, 0, 0 },
++ 	};
++=20
++ 	dst_size =3D conversion_buf_size(DRM_FORMAT_ARGB1555, result->dst_pitch,
++ 				       &params->clip);
++ 	KUNIT_ASSERT_GT(test, dst_size, 0);
++=20
++ 	buf =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
++ 	iosys_map_set_vaddr(&dst, buf);
++=20
++ 	xrgb8888 =3D cpubuf_to_le32(test, params->xrgb8888, TEST_BUF_SIZE);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
++ 	iosys_map_set_vaddr(&src, xrgb8888);
++=20
++ 	drm_fb_xrgb8888_to_argb1555(&dst, &result->dst_pitch, &src, &fb, &params=
+->clip);
++ 	buf =3D le16buf_to_cpu(test, (__force const __le16 *)buf, dst_size / siz=
+eof(__le16));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+++	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
++ }
++=20
++ static void drm_test_fb_xrgb8888_to_rgba5551(struct kunit *test)
++ {
++ 	const struct convert_xrgb8888_case *params =3D test->param_value;
++ 	const struct convert_to_rgba5551_result *result =3D &params->rgba5551_re=
+sult;
++ 	size_t dst_size;
++ 	u16 *buf =3D NULL;
++ 	__le32 *xrgb8888 =3D NULL;
++ 	struct iosys_map dst, src;
++=20
++ 	struct drm_framebuffer fb =3D {
++ 		.format =3D drm_format_info(DRM_FORMAT_XRGB8888),
++ 		.pitches =3D { params->pitch, 0, 0 },
++ 	};
++=20
++ 	dst_size =3D conversion_buf_size(DRM_FORMAT_RGBA5551, result->dst_pitch,
++ 				       &params->clip);
++ 	KUNIT_ASSERT_GT(test, dst_size, 0);
++=20
++ 	buf =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
++ 	iosys_map_set_vaddr(&dst, buf);
++=20
++ 	xrgb8888 =3D cpubuf_to_le32(test, params->xrgb8888, TEST_BUF_SIZE);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
++ 	iosys_map_set_vaddr(&src, xrgb8888);
++=20
++ 	drm_fb_xrgb8888_to_rgba5551(&dst, &result->dst_pitch, &src, &fb, &params=
+->clip);
++ 	buf =3D le16buf_to_cpu(test, (__force const __le16 *)buf, dst_size / siz=
+eof(__le16));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+++	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
++ }
++=20
+  static void drm_test_fb_xrgb8888_to_rgb888(struct kunit *test)
+  {
+  	const struct convert_xrgb8888_case *params =3D test->param_value;
+@@@ -407,10 -688,45 +688,45 @@@
+  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
+  	iosys_map_set_vaddr(&src, xrgb8888);
+ =20
++ 	/*
++ 	 * RGB888 expected results are already in little-endian
++ 	 * order, so there's no need to convert the test output.
++ 	 */
+  	drm_fb_xrgb8888_to_rgb888(&dst, &result->dst_pitch, &src, &fb, &params->=
+clip);
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+ +	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
+  }
+ =20
++ static void drm_test_fb_xrgb8888_to_argb8888(struct kunit *test)
++ {
++ 	const struct convert_xrgb8888_case *params =3D test->param_value;
++ 	const struct convert_to_argb8888_result *result =3D &params->argb8888_re=
+sult;
++ 	size_t dst_size;
++ 	u32 *buf =3D NULL;
++ 	__le32 *xrgb8888 =3D NULL;
++ 	struct iosys_map dst, src;
++=20
++ 	struct drm_framebuffer fb =3D {
++ 		.format =3D drm_format_info(DRM_FORMAT_XRGB8888),
++ 		.pitches =3D { params->pitch, 0, 0 },
++ 	};
++=20
++ 	dst_size =3D conversion_buf_size(DRM_FORMAT_ARGB8888,
++ 				       result->dst_pitch, &params->clip);
++ 	KUNIT_ASSERT_GT(test, dst_size, 0);
++=20
++ 	buf =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
++ 	iosys_map_set_vaddr(&dst, buf);
++=20
++ 	xrgb8888 =3D cpubuf_to_le32(test, params->xrgb8888, TEST_BUF_SIZE);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
++ 	iosys_map_set_vaddr(&src, xrgb8888);
++=20
++ 	drm_fb_xrgb8888_to_argb8888(&dst, &result->dst_pitch, &src, &fb, &params=
+->clip);
++ 	buf =3D le32buf_to_cpu(test, (__force const __le32 *)buf, dst_size / siz=
+eof(u32));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+++	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
++ }
++=20
+  static void drm_test_fb_xrgb8888_to_xrgb2101010(struct kunit *test)
+  {
+  	const struct convert_xrgb8888_case *params =3D test->param_value;
+@@@ -438,8 -754,39 +754,39 @@@
+  	iosys_map_set_vaddr(&src, xrgb8888);
+ =20
+  	drm_fb_xrgb8888_to_xrgb2101010(&dst, &result->dst_pitch, &src, &fb, &par=
+ams->clip);
+- 	buf =3D le32buf_to_cpu(test, buf, dst_size / sizeof(u32));
++ 	buf =3D le32buf_to_cpu(test, (__force const __le32 *)buf, dst_size / siz=
+eof(u32));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+++	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
++ }
++=20
++ static void drm_test_fb_xrgb8888_to_argb2101010(struct kunit *test)
++ {
++ 	const struct convert_xrgb8888_case *params =3D test->param_value;
++ 	const struct convert_to_argb2101010_result *result =3D &params->argb2101=
+010_result;
++ 	size_t dst_size;
++ 	u32 *buf =3D NULL;
++ 	__le32 *xrgb8888 =3D NULL;
++ 	struct iosys_map dst, src;
++=20
++ 	struct drm_framebuffer fb =3D {
++ 		.format =3D drm_format_info(DRM_FORMAT_XRGB8888),
++ 		.pitches =3D { params->pitch, 0, 0 },
++ 	};
++=20
++ 	dst_size =3D conversion_buf_size(DRM_FORMAT_ARGB2101010,
++ 				       result->dst_pitch, &params->clip);
++ 	KUNIT_ASSERT_GT(test, dst_size, 0);
++=20
++ 	buf =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
++ 	iosys_map_set_vaddr(&dst, buf);
++=20
++ 	xrgb8888 =3D cpubuf_to_le32(test, params->xrgb8888, TEST_BUF_SIZE);
++ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
++ 	iosys_map_set_vaddr(&src, xrgb8888);
++=20
++ 	drm_fb_xrgb8888_to_argb2101010(&dst, &result->dst_pitch, &src, &fb, &par=
+ams->clip);
++ 	buf =3D le32buf_to_cpu(test, (__force const __le32 *)buf, dst_size / siz=
+eof(u32));
+ -	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
+ +	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
+  }
+ =20
+  static struct kunit_case drm_format_helper_test_cases[] =3D {
 
+--Sig_/QAyr59Alq2_HP3mLSseczH.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->
->              Linus
->
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3YlIACgkQAVBC80lX
+0GwVgwf/Ze6gESdVkvgyFPq02EkSHntBrugZJkS+l24mxqMYW564sK0sDBlWKW7B
+nfn7F0apo+ZmlGbfHY38kGBmpkvGqQKs4ptpCbwfA2KrbL4UtUIfG0k1groCqlse
+IL32B1P3F3+uoYISCUxN28UXK6O9RjvtPJ5DbajSMrrB4Dm79U1drU5+zFtPhvXP
+hZ1XKmaPaf8V0Uu0Dkfpjmc7Vo7lKHHj24ivi1Cw7mxGjUMtLVGOoI3Lrm1txbwV
+Ng68PSjBV++1qkGDsbkROPsbVxL2fhN+JjqEAQvNMmg/FNxt9jumUM/2WBMKjTea
+ztmLpKuBaAi8Hc/MFvJDjt/sXEqPUA==
+=pF8E
+-----END PGP SIGNATURE-----
+
+--Sig_/QAyr59Alq2_HP3mLSseczH.--
