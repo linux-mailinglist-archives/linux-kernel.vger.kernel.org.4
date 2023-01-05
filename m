@@ -2,141 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5E765ED20
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C2465ED22
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbjAENdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S231659AbjAENe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjAENda (ORCPT
+        with ESMTP id S229441AbjAENe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:33:30 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A1F2F79C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:33:29 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso2007900pjp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 05:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P1XTYzDF9NJQbx4B1YsRwvEAHgL0fcQoxLMdSzR8vZs=;
-        b=GuqmWhu4ipfzeo5HktK3MzfCI/ZrekXDMAJgFC9c4nrIwWfyXY+Uj+c8C1a0QpbPts
-         I6r+gXYIsnRn5VBxpIEbULISKk0yzbDAZP256LblS1+FoPQ+AUBq5UHZOf2jgLsXwnAG
-         wU04oqcQJl9qK4PLmpdssHxZ3v2Erc0ALQjV7UgAuuEslPWCanymTxqZt+cCWCpK9Ay8
-         Wxq4HYWn4ClKswVoz3kBso7kwOgoE0OhxeA6KN1BOpBIxCY1xGFsxXIS9DnggygelAy1
-         8tfqUvZR6VMSgCd3KgXQqggX+PFonQqLWKYd9yMGhUagvAUTb4NDwghLV8rGrBBJyeS2
-         UsxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1XTYzDF9NJQbx4B1YsRwvEAHgL0fcQoxLMdSzR8vZs=;
-        b=r4ndTF3zt/SbAqh3sTzynznx85gsWbZEKM9VsOG3hh99IXnuu+ubl2bN5aZjb3ZYan
-         954klv9nBf3ccAQ8qBbWJncrJx7rP23kORgEJe42Hu4MeAsyZLrRpQDHnXsKeRa0u0hx
-         g+C4HrO1CIU0tiXxBnKA+K4rk3my0pQEibFXhxcdxR1/zZpfc2EWlxetgiqgCpS8IaT0
-         2tL7sck0a0wimQ8wf5HqyOFxmmDv34Wg3W8ZsQmgSCRZBCZ7FsqinlxhwpLMIFLqwRJY
-         Sp3dk5ZLPWCinSYZyhbPaYL6QTrTI7iE2vqoWWCqQaPvtVNVR/qz0KDPfrQD5KsU2+H0
-         /pag==
-X-Gm-Message-State: AFqh2kpse/YXCKIS55P5l6ZvSRZWIAEQmGUr81rhwjPvVCNunosSDY2o
-        +FcvLdOx7aUhq4AtHEJJBQQY
-X-Google-Smtp-Source: AMrXdXtpjWCms1lufElm6OEGP5Qs4jSawz8d0bczXV7qXGNcgQsg/SWKwxSPduTYO6qBfTVjO/5lJg==
-X-Received: by 2002:a05:6a21:3583:b0:9d:efc0:62 with SMTP id az3-20020a056a21358300b0009defc00062mr62581142pzc.10.1672925608376;
-        Thu, 05 Jan 2023 05:33:28 -0800 (PST)
-Received: from thinkpad ([27.111.75.153])
-        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b00576f7bd92cdsm14807409pfj.14.2023.01.05.05.33.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 05:33:27 -0800 (PST)
-Date:   Thu, 5 Jan 2023 19:03:21 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_krichai@quicinc.com,
-        johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH 1/1] PCI: qcom: Add support for system suspend and resume
-Message-ID: <20230105133321.GB4463@thinkpad>
-References: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
- <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
- <Y7Qqv+kyREvXdRu1@hovoldconsulting.com>
+        Thu, 5 Jan 2023 08:34:26 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF96E0E8;
+        Thu,  5 Jan 2023 05:34:23 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305DMIPp009470;
+        Thu, 5 Jan 2023 13:33:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=bqhjKXWKyHijmV8LaHTMo0tL+cv5DyiB3FVwxZGHLYg=;
+ b=lgIMqUQ0KE+I+s0vNGlER1Tgl2vp3rNgclOK36qugyH7YFBIIbCRQeAqiNMQpZnaO92j
+ fIRv/fid9cU3DUMjycBxDC6TLJrbmDbEWz4JUHfSse8BFdvCo79MjtVAhQTlQdePWPEM
+ jCZvXADITkM5a7yfx4VFHoa5wQy7qLAB/i1xVcSjnJcik9jO9wQ8lz4r8pciMa98o1a/
+ kjg4geyvtB3KTQWtRKUN/aCZ+PjPRT9cxFgVvn8tdaCltcsSWl5oo8h6M6EwGdopuCZt
+ FFZVMNwVtCl/eXqGRWrHUFckmni8yDF0Xu9op1+4oYjIZzhQX0OL3eNEToQHmtP30Mom 0Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwwfs86gq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 13:33:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305DXsXo017809
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 5 Jan 2023 13:33:54 GMT
+Received: from [10.216.49.11] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
+ 05:33:52 -0800
+Message-ID: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+Date:   Thu, 5 Jan 2023 19:03:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     <mark.rutland@arm.com>, <maz@kernel.org>,
+        <daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+From:   Yogesh Lal <quic_ylal@quicinc.com>
+Subject: ERRATUM_858921 is broken on 5.15 kernel
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7Qqv+kyREvXdRu1@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7gqCZw4S5KBnqGMkmDzqjI6F0tvDSx-s
+X-Proofpoint-ORIG-GUID: 7gqCZw4S5KBnqGMkmDzqjI6F0tvDSx-s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_04,2023-01-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301050107
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 02:16:47PM +0100, Johan Hovold wrote:
-> On Tue, Jan 03, 2023 at 01:19:07PM +0530, Manivannan Sadhasivam wrote:
-> > During the system suspend, vote for minimal interconnect bandwidth and
-> > also turn OFF the resources like clock and PHY if there are no active
-> > devices connected to the controller. For the controllers with active
-> > devices, the resources are kept ON as removing the resources will
-> > trigger access violation during the late end of suspend cycle as kernel
-> > tries to access the config space of PCIe devices to mask the MSIs.
-> > 
-> > Also, it is not desirable to put the link into L2/L3 state as that
-> > implies VDD supply will be removed and the devices may go into powerdown
-> > state. This will affect the lifetime of storage devices like NVMe.
-> > 
-> > And finally, during resume, turn ON the resources if the controller was
-> > truly suspended (resources OFF) and update the interconnect bandwidth
-> > based on PCIe Gen speed.
-> > 
-> > Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> 
-> I just gave this a quick spin on the sc8280xp-crd, and unfortunately
-> this change appears to break suspend (e.g. hangs during suspend or
-> resume). Setting a non-zero (250 MBps) peak bandwidth during suspend
-> makes things work again.
-> 
-> Presumably something is relying on these interconnect clocks to remain
-> enabled. And isn't that expected as we need to set a non-zero icc bw to
-> enable the interconnect clocks during probe?
-> 
+Hi,
 
-After suspend, I assumed that there won't be any access to the controller
-specific registers, so thought it should be fine. And it works on X13s too.
-Maybe, the access to device config space is triggering issues on CRD? I will
-check with Qcom.
+We are observing issue on A73 core where ERRATUM_858921 is broken.
 
-> I'm afraid I won't have time to look into this for a while myself, but
-> have you tried this on the CRD, Mani? 
-> 
+On 5.15 kernel arch_timer_enable_workaround is set by reading 
+arm64_858921_read_cntpct_el0 and arm64_858921_read_cntvct_el0 during 
+timer register using following path.
 
-Thanks for testing, Johan!
+arch_timer_enable_workaround->atomic_set(&timer_unstable_counter_workaround_in_use, 
+1);
 
-I did not test this on CRD. Since both X13s and CRD are sharing the same
-SoC, I thought it would work on CRD too. But since you have tested and
-reported the issue, I will look into it.
+[code snap]
+564 static
+565 void arch_timer_enable_workaround(const struct 
+arch_timer_erratum_workaround *wa,
+566                               bool local)
+567 {
+568     int i;
+569
+570     if (local) {
+571 __this_cpu_write(timer_unstable_counter_workaround, wa);
+572     } else {
+573             for_each_possible_cpu(i)
+574                     per_cpu(timer_unstable_counter_workaround, i) = wa;
+575     }
+576
+577     if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
+578 atomic_set(&timer_unstable_counter_workaround_in_use, 1);
 
-> One obvious difference is the modem on the CRD which I believe neither
-> of our X13s have, but this seems like more of a general problem.
-> 
 
-Yeah, this seems to be a platform issue. I will check on this behaviour and
-report back.
+and based on above workaround enablement , appropriate function to get 
+counter is used.
 
-Thanks,
-Mani
+1008 static void __init arch_counter_register(unsigned type)
+1009 {
+1010     u64 start_count;
+1011
+1012     /* Register the CP15 based counter if we have one */
+1013     if (type & ARCH_TIMER_TYPE_CP15) {
+1014         u64 (*rd)(void);
+1015
+1016         if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+1017             arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+1018             if (arch_timer_counter_has_wa())
+1019                 rd = arch_counter_get_cntvct_stable;
+1020             else
+1021                 rd = arch_counter_get_cntvct;
+1022         } else {
+1023             if (arch_timer_counter_has_wa())
+1024                 rd = arch_counter_get_cntpct_stable;
+1025             else
+1026                 rd = arch_counter_get_cntpct;
+1027         }
+[snap]
+1043     /* 56 bits minimum, so we assume worst case rollover */
+1044     sched_clock_register(arch_timer_read_counter, 56, arch_timer_rate);
 
-> Johan
 
--- 
-மணிவண்ணன் சதாசிவம்
+As our boot cores are not impacted by errata sched_clock_register() will 
+register !arch_timer_counter_has_wa() callback.
+
+Now when errata impacted core boots up and sched_clock_register already 
+register will !arch_timer_counter_has_wa() path.
+As sched_clock_register is not per_cpu bases so arch_timer_read_counter 
+will always point to !arch_timer_counter_has_wa() function calls.
+
+
+Looks like this bug is side effect of following patch:
+
+commit 0ea415390cd345b7d09e8c9ebd4b68adfe873043
+Author: Marc Zyngier <marc.zyngier@arm.com>
+Date:   Mon Apr 8 16:49:07 2019 +0100
+
+     clocksource/arm_arch_timer: Use arch_timer_read_counter to access 
+stable counters
+
+     Instead of always going via arch_counter_get_cntvct_stable to 
+access the
+     counter workaround, let's have arch_timer_read_counter point to the
+     right method.
+
+     For that, we need to track whether any CPU in the system has a
+     workaround for the counter. This is done by having an atomic variable
+     tracking this.
+
+     Acked-by: Mark Rutland <mark.rutland@arm.com>
+     Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
+     Signed-off-by: Will Deacon <will.deacon@arm.com>
+
+
+Thanks
+
+Yogesh Lal
+
+
