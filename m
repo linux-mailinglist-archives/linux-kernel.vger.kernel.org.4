@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1646165E5D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2399065E5F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjAEHPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S230319AbjAEHUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:20:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAEHPc (ORCPT
+        with ESMTP id S229554AbjAEHUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:15:32 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C23C5276E;
-        Wed,  4 Jan 2023 23:15:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672902928; x=1704438928;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FBUtjr95t8Agi5j8hAHBpZDM7ThY2F/mQgfHkWT2GB4=;
-  b=D64iTKeuqGq740uUx4IcYoU8EBrxRhq3meARSTWN1sn5KNJbg2ePVHs1
-   ShcDkbKsOiJb0ydERN2yUgTMT8obFr1aeLl38Tl6SDdan3DAkA9LTJjfs
-   e2Puhc5k0k2kLezDRHxgjyahQdjmGMmDv+5ec0LnK83qfcJ3aMloLBvO0
-   nRKBkhuAWu5yfl223VWbVvDN8FwjdK7q34dMNqlzXW5Z0w72HQhSaVkeg
-   opgHzbc5OlzPVDTkX6RHyBKN+fZoyje4pU3LI/egRF87HJuJX73BDjwAS
-   FqtqJlzEQblhetgM/qcq+J5KuRRLcv1QlvVs+qxjBbeH1BNlHfrIJlaGP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301831439"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="301831439"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:15:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="797815544"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="797815544"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.211.114]) ([10.254.211.114])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:15:23 -0800
-Message-ID: <1b01a5ba-3cfa-c968-59d1-1399c1b8cc1d@linux.intel.com>
-Date:   Thu, 5 Jan 2023 15:15:19 +0800
+        Thu, 5 Jan 2023 02:20:01 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980FF53734;
+        Wed,  4 Jan 2023 23:20:00 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id jl4so32261802plb.8;
+        Wed, 04 Jan 2023 23:20:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyXX4AyxJZrvIDihBdy9D1ggQzDWOCcjYGCt8mZqSWA=;
+        b=DDyHJVnR3HxxlByRFbSSoJ8B5ebjtQ47R17SzoTbu2gAipqHLH3lfPsjScpXihkUpO
+         gETDqZ/rhsHhcM3k4SRkskkzl4ExhXu/lNJS/IaPDUlHt8UCdv72gXCVKbGFuO0rLpwQ
+         jX06F4FhngqfR1Laa8n02zVicTR9dF8FbCdeyHEmh45qDme6xrYZ7zOQPQzcYI/JSA1I
+         /HNdT8cZZde1vO4aTEyiwczpBDTAB9jHjXpJsQZy6q5U/kn25KiZMsvj3ea5WPanyYZZ
+         /Z10MG6x8FtYBsm8sBKx6TmNPeE67g3d6ifwvWZkVT6VMoV8zP6foXFxkodxDUFUggb3
+         MSQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tyXX4AyxJZrvIDihBdy9D1ggQzDWOCcjYGCt8mZqSWA=;
+        b=3+9DFaH9FkHiazBx12Tx6UajFaO13RSpeZxKRUUHcO7QXahiycx7jv8KdyvESdntSq
+         ZNgMoZUcjCNF2+vAuwEJDTNtYdwNgJaDqocC4r7QIG9C/1fRS/sMtz3ecjbVKn3eFXXA
+         Kn1rHxFnVdS0LBVGgEovrVXWUVMCFuW9kXqCqU8ggR4jO1+hYvCQhVUGFIreIqVcYOSV
+         wsBCBMDvUzVgK31LO9sa1oG/Y7Hos6TaEO9ql1zbcCy/slqeMIpiZyffaL2oq+8qnzSU
+         uTmGuCYBg3SD7wzySTp9QyhfiVAfx+fu30V9nWpaP1LHmpsYzjmRXZgDV3oCpICisxdR
+         m6HQ==
+X-Gm-Message-State: AFqh2kqdoBbDZVYzdCBK8DhlxhcAOYzHuYrOozIvWLPScskLTcOPuGvu
+        q8kRFpkdaL55UDwg+sBeDP8=
+X-Google-Smtp-Source: AMrXdXumSr3epY+JKvm8FYT11rokQY1R1ynYbKzq8lbzaCzja9Pq+fQ1SrPliQt90YA6szOn7fJ63A==
+X-Received: by 2002:a17:902:ce82:b0:192:fb92:327 with SMTP id f2-20020a170902ce8200b00192fb920327mr3559951plg.58.1672903200047;
+        Wed, 04 Jan 2023 23:20:00 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-80.three.co.id. [180.214.233.80])
+        by smtp.gmail.com with ESMTPSA id g1-20020a1709026b4100b0018853dd8832sm25223853plt.4.2023.01.04.23.19.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 23:19:59 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id A95F4100910; Thu,  5 Jan 2023 14:19:56 +0700 (WIB)
+Date:   Thu, 5 Jan 2023 14:19:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/207] 6.1.4-rc1 review
+Message-ID: <Y7Z6HG7Ev5TdjGQ9@debian.me>
+References: <20230104160511.905925875@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: Re: [PATCH v4 2/7] iommu: Allow .iotlb_sync_map to fail and handle
- s390's -ENOMEM return
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-References: <20230104120543.308933-1-schnelle@linux.ibm.com>
- <20230104120543.308933-3-schnelle@linux.ibm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230104120543.308933-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9eRmogAvGQCRaEtI"
+Content-Disposition: inline
+In-Reply-To: <20230104160511.905925875@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/4 20:05, Niklas Schnelle wrote:
-> On s390 when using a paging hypervisor, .iotlb_sync_map is used to sync
-> mappings by letting the hypervisor inspect the synced IOVA range and
-> updating a shadow table. This however means that .iotlb_sync_map can
-> fail as the hypervisor may run out of resources while doing the sync.
-> This can be due to the hypervisor being unable to pin guest pages, due
-> to a limit on mapped addresses such as vfio_iommu_type1.dma_entry_limit
-> or lack of other resources. Either way such a failure to sync a mapping
-> should result in a DMA_MAPPING_ERROR.
-> 
-> Now especially when running with batched IOTLB flushes for unmap it may
-> be that some IOVAs have already been invalidated but not yet synced via
-> .iotlb_sync_map. Thus if the hypervisor indicates running out of
-> resources, first do a global flush allowing the hypervisor to free
-> resources associated with these mappings as well a retry creating the
-> new mappings and only if that also fails report this error to callers.
-> 
-> Signed-off-by: Niklas Schnelle<schnelle@linux.ibm.com>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+--9eRmogAvGQCRaEtI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---
-Best regards,
-baolu
+On Wed, Jan 04, 2023 at 05:04:18PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.4 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--9eRmogAvGQCRaEtI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY7Z6GAAKCRD2uYlJVVFO
+o3BFAPsFn14C9cx+c9DC9DFQxGXyxDSZjtgy9Tx70BMTitxcqgD/f3qh7VKE4ek4
+KuTw+wZh38hmXjysWUd/xEIm2A/eWg4=
+=xoAs
+-----END PGP SIGNATURE-----
+
+--9eRmogAvGQCRaEtI--
