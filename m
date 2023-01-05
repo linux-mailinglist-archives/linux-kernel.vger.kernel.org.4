@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD1D65E1FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5F265E20F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjAEAt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S229595AbjAEAzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjAEAtN (ORCPT
+        with ESMTP id S229812AbjAEAx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:49:13 -0500
+        Wed, 4 Jan 2023 19:53:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEBD53702;
-        Wed,  4 Jan 2023 16:45:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BF4915B;
+        Wed,  4 Jan 2023 16:50:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2830DB8199A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A74EB81996;
         Thu,  5 Jan 2023 00:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84100C433AA;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F5EC433A8;
         Thu,  5 Jan 2023 00:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672879503;
-        bh=GkMvou9LWTPYdZckr57QSN+yE5nVrUCbMx7MJAU8/Ko=;
+        bh=TPAQ6ZqA8AKGeWwHJCciCg8+xPBM5tfIbW3yIZTNF8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/BHuEXCfnXFPrkASVpDASAU+6pQ8/TrrSBBx4uS0EiIgH2kJU72s9W3h51/XS75l
-         DfCE5Qm102E3BMfqoO0wE3ze0hkg8vHLL/VM/pg+8R1MrIWblTRhStxzLOWauI3Nau
-         HdzEE1rYEJIMF2ovM/071ukZSj+/Jai6Zi+fZa+qxZVgDwgsAZRmd3FbNIg73N7zN5
-         3qTncCoHYovlXr/TSRdo9WZ3py5TQvvfnPZ3hxFHGO9qhzlZUJLCNYvmpcFxIDFH6k
-         J4VbOD4huc3CPiYRH4l8B9NA/N9c6oJIZGxC6oECJrdx5BKLaClnopvZWRJLMfhsIO
-         gSsphY/BrW7eA==
+        b=JZVdhZwGDXiTgwp6lBIaW2hNJdO2qbd7rOpBQFgxNcHLcaw+creIRGj4crtBXMVj4
+         HTbzutBqtMHaC3ESP5KBkfUOVLElGN2Tq6HzSCyY+kDCH1c2kvTRAzzKcUkSjSxLrH
+         5b4BB4MIOOR4PYuyqucb7VdLkrNhOxlS+zVizT8bjofZWLCOHJjNWELhwn49PDv6za
+         sS9a4/bqRV7yAfDPVcgQQxuMiMKRaCND8GmK0d2IyDMfI1/H++OwPHyMCsbBFskejA
+         Ph289S3Meogiy5MXicqDbaXyDOZZuFwH7qsKZQ/78r5395iHLTi7C0AY4CEd3+w3XO
+         aI9O/pAvPz9ZQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EAFA55C1C64; Wed,  4 Jan 2023 16:45:02 -0800 (PST)
+        id ECBA65C1C77; Wed,  4 Jan 2023 16:45:02 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 5/6] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
-Date:   Wed,  4 Jan 2023 16:44:58 -0800
-Message-Id: <20230105004501.1771332-10-paulmck@kernel.org>
+Subject: [PATCH rcu 6/6] rcu-tasks: Handle queue-shrink/callback-enqueue race condition
+Date:   Wed,  4 Jan 2023 16:44:59 -0800
+Message-Id: <20230105004501.1771332-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105004454.GA1771168@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105004454.GA1771168@paulmck-ThinkPad-P17-Gen-1>
@@ -58,101 +58,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zqiang <qiang1.zhang@intel.com>
 
-The synchronize_rcu_tasks_rude() function invokes rcu_tasks_rude_wait_gp()
-to wait one rude RCU-tasks grace period.  The rcu_tasks_rude_wait_gp()
-function in turn checks if there is only a single online CPU.  If so, it
-will immediately return, because a call to synchronize_rcu_tasks_rude()
-is by definition a grace period on a single-CPU system.  (We could
-have blocked!)
+The rcu_tasks_need_gpcb() determines whether or not: (1) There are
+callbacks needing another grace period, (2) There are callbacks ready
+to be invoked, and (3) It would be a good time to shrink back down to a
+single-CPU callback list.  This third case is interesting because some
+other CPU might be adding new callbacks, which might suddenly make this
+a very bad time to be shrinking.
 
-Unfortunately, this check uses num_online_cpus() without synchronization,
-which can result in too-short grace periods.  To see this, consider the
-following scenario:
+This is currently handled by requiring call_rcu_tasks_generic() to
+enqueue callbacks under the protection of rcu_read_lock() and requiring
+rcu_tasks_need_gpcb() to wait for an RCU grace period to elapse before
+finalizing the transition.  This works well in practice.
 
-        CPU0                                   CPU1 (going offline)
-                                          migration/1 task:
-                                      cpu_stopper_thread
-                                       -> take_cpu_down
-                                          -> _cpu_disable
-                                           (dec __num_online_cpus)
-                                          ->cpuhp_invoke_callback
-                                                preempt_disable
-                                                access old_data0
-           task1
- del old_data0                                  .....
- synchronize_rcu_tasks_rude()
- task1 schedule out
- ....
- task2 schedule in
- rcu_tasks_rude_wait_gp()
-     ->__num_online_cpus == 1
-       ->return
- ....
- task1 schedule in
- ->free old_data0
-                                                preempt_enable
+Unfortunately, the current code assumes that a grace period whose end is
+detected by the poll_state_synchronize_rcu() in the second "if" condition
+actually ended before the earlier code counted the callbacks queued on
+CPUs other than CPU 0 (local variable "ncbsnz").  Given the current code,
+it is possible that a long-delayed call_rcu_tasks_generic() invocation
+will queue a callback on a non-zero CPU after these CPUs have had their
+callbacks counted and zero has been stored to ncbsnz.  Such a callback
+would trigger the WARN_ON_ONCE() in the second "if" statement.
 
-When CPU1 decrements __num_online_cpus, its value becomes 1.  However,
-CPU1 has not finished going offline, and will take one last trip through
-the scheduler and the idle loop before it actually stops executing
-instructions.  Because synchronize_rcu_tasks_rude() is mostly used for
-tracing, and because both the scheduler and the idle loop can be traced,
-this means that CPU0's prematurely ended grace period might disrupt the
-tracing on CPU1.  Given that this disruption might include CPU1 executing
-instructions in memory that was just now freed (and maybe reallocated),
-this is a matter of some concern.
+To see this, consider the following sequence of events:
 
-This commit therefore removes that problematic single-CPU check from the
-rcu_tasks_rude_wait_gp() function.  This dispenses with the single-CPU
-optimization, but there is no evidence indicating that this optimization
-is important.  In addition, synchronize_rcu_tasks_generic() contains a
-similar optimization (albeit only for early boot), which also splats.
-(As in exactly why are you invoking synchronize_rcu_tasks_rude() so
-early in boot, anyway???)
+o	CPU 0 invokes rcu_tasks_one_gp(), and counts fewer than
+	rcu_task_collapse_lim callbacks.  It sees at least one
+	callback queued on some other CPU, thus setting ncbsnz
+	to a non-zero value.
 
-It is OK for the synchronize_rcu_tasks_rude() function's check to be
-unsynchronized because the only times that this check can evaluate to
-true is when there is only a single CPU running with preemption
-disabled.
+o	CPU 1 invokes call_rcu_tasks_generic() and loads 42 from
+	->percpu_enqueue_lim.  It therefore decides to enqueue its
+	callback onto CPU 1's callback list, but is delayed.
 
-While in the area, this commit also fixes a minor bug in which a
-call to synchronize_rcu_tasks_rude() would instead be attributed to
-synchronize_rcu_tasks().
+o	CPU 0 sees the rcu_task_cb_adjust is non-zero and that the number
+	of callbacks does not exceed rcu_task_collapse_lim.  It therefore
+	checks percpu_enqueue_lim, and sees that its value is greater
+	than the value one.  CPU 0 therefore  starts the shift back
+	to a single callback list.  It sets ->percpu_enqueue_lim to 1,
+	but CPU 1 has already read the old value of 42.  It also gets
+	a grace-period state value from get_state_synchronize_rcu().
 
-[ paulmck: Add "synchronize_" prefix and "()" suffix. ]
+o	CPU 0 sees that ncbsnz is non-zero in its second "if" statement,
+	so it declines to finalize the shrink operation.
+
+o	CPU 0 again invokes rcu_tasks_one_gp(), and counts fewer than
+	rcu_task_collapse_lim callbacks.  It also sees that there are
+	no callback queued on any other CPU, and thus sets ncbsnz to zero.
+
+o	CPU 1 resumes execution and enqueues its callback onto its own
+	list.  This invalidates the value of ncbsnz.
+
+o	CPU 0 sees the rcu_task_cb_adjust is non-zero and that the number
+	of callbacks does not exceed rcu_task_collapse_lim.  It therefore
+	checks percpu_enqueue_lim, but sees that its value is already
+	unity.	It therefore does not get a new grace-period state value.
+
+o	CPU 0 sees that rcu_task_cb_adjust is non-zero, ncbsnz is zero,
+	and that poll_state_synchronize_rcu() says that the grace period
+	has completed.  it therefore finalizes the shrink operation,
+	setting ->percpu_dequeue_lim to the value one.
+
+o	CPU 0 does a debug check, scanning the other CPUs' callback lists.
+	It sees that CPU 1's list has a callback, so it (rightly)
+	triggers the WARN_ON_ONCE().  After all, the new value of
+	->percpu_dequeue_lim says to not bother looking at CPU 1's
+	callback list, which means that this callback will never be
+	invoked.  This can result in hangs and maybe even OOMs.
+
+Based on long experience with rcutorture, this is an extremely
+low-probability race condition, but it really can happen, especially in
+preemptible kernels or within guest OSes.
+
+This commit therefore checks for completion of the grace period
+before counting callbacks.  With this change, in the above failure
+scenario CPU 0 would know not to prematurely end the shrink operation
+because the grace period would not have completed before the count
+operation started.
+
+[ paulmck: Adjust grace-period end rather than adding RCU reader. ]
+[ paulmck: Avoid spurious WARN_ON_ONCE() with ->percpu_dequeue_lim check. ]
 
 Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tasks.h | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ kernel/rcu/tasks.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 5de61f12a1645..eee38b0d362a8 100644
+index eee38b0d362a8..bfb5e1549f2b2 100644
 --- a/kernel/rcu/tasks.h
 +++ b/kernel/rcu/tasks.h
-@@ -560,8 +560,9 @@ static int __noreturn rcu_tasks_kthread(void *arg)
- static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)
+@@ -384,6 +384,7 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
  {
- 	/* Complain if the scheduler has not started.  */
--	WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
--			 "synchronize_rcu_tasks called too soon");
-+	if (WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
-+			 "synchronize_%s() called too soon", rtp->name))
-+		return;
+ 	int cpu;
+ 	unsigned long flags;
++	bool gpdone = poll_state_synchronize_rcu(rtp->percpu_dequeue_gpseq);
+ 	long n;
+ 	long ncbs = 0;
+ 	long ncbsnz = 0;
+@@ -425,21 +426,23 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
+ 			WRITE_ONCE(rtp->percpu_enqueue_shift, order_base_2(nr_cpu_ids));
+ 			smp_store_release(&rtp->percpu_enqueue_lim, 1);
+ 			rtp->percpu_dequeue_gpseq = get_state_synchronize_rcu();
++			gpdone = false;
+ 			pr_info("Starting switch %s to CPU-0 callback queuing.\n", rtp->name);
+ 		}
+ 		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+ 	}
+-	if (rcu_task_cb_adjust && !ncbsnz &&
+-	    poll_state_synchronize_rcu(rtp->percpu_dequeue_gpseq)) {
++	if (rcu_task_cb_adjust && !ncbsnz && gpdone) {
+ 		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
+ 		if (rtp->percpu_enqueue_lim < rtp->percpu_dequeue_lim) {
+ 			WRITE_ONCE(rtp->percpu_dequeue_lim, 1);
+ 			pr_info("Completing switch %s to CPU-0 callback queuing.\n", rtp->name);
+ 		}
+-		for (cpu = rtp->percpu_dequeue_lim; cpu < nr_cpu_ids; cpu++) {
+-			struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
++		if (rtp->percpu_dequeue_lim == 1) {
++			for (cpu = rtp->percpu_dequeue_lim; cpu < nr_cpu_ids; cpu++) {
++				struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
  
- 	// If the grace-period kthread is running, use it.
- 	if (READ_ONCE(rtp->kthread_ptr)) {
-@@ -1064,9 +1065,6 @@ static void rcu_tasks_be_rude(struct work_struct *work)
- // Wait for one rude RCU-tasks grace period.
- static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
- {
--	if (num_online_cpus() <= 1)
--		return;	// Fastpath for only one CPU.
--
- 	rtp->n_ipis += cpumask_weight(cpu_online_mask);
- 	schedule_on_each_cpu(rcu_tasks_be_rude);
- }
+-			WARN_ON_ONCE(rcu_segcblist_n_cbs(&rtpcp->cblist));
++				WARN_ON_ONCE(rcu_segcblist_n_cbs(&rtpcp->cblist));
++			}
+ 		}
+ 		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+ 	}
 -- 
 2.31.1.189.g2e36527f23
 
