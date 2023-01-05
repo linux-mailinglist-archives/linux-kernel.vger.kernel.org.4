@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4EF65E183
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E402B65E180
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240301AbjAEAXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S235573AbjAEAXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbjAEAXP (ORCPT
+        with ESMTP id S235064AbjAEAXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:23:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE25D4435A;
-        Wed,  4 Jan 2023 16:23:13 -0800 (PST)
+        Wed, 4 Jan 2023 19:23:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E06A43A2E;
+        Wed,  4 Jan 2023 16:23:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE8AB81982;
-        Thu,  5 Jan 2023 00:23:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E02FC433A4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE8036189A;
+        Thu,  5 Jan 2023 00:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C74C433AA;
         Thu,  5 Jan 2023 00:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672878188;
-        bh=2WSJ8n/mVkUaqRO+2OU4uVBj5A9i4K7XPBfFkEnpujQ=;
+        bh=cQj+0MvK2dvCMDfEUq3ufEL/MhEK6ftbDWfUx6TMnEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GPKGOamfbyj/w6a6jbRFZwcg+TgZGWBmQ0+ZtF5mmm9iETuuYIIXFn89wPPPupKtV
-         A/KwX+0ZZCcRtmqQi2QN/WjEkyAqCwkMxnd/jDwdo9mkAJlK/YBPH8t+xhaAiK2tIL
-         HGLaWf+om9DQsYS1jREDI2jqwkZX8YcV9tucW61XOq2RvCZz7eAK+XDE+yfkBFG5rQ
-         B3PzYb/nsPPDop+EZ+DR5+Y7T9MQmWAye2coVn+SrNELR7O5ebEOQhKS4f0vy5q70U
-         4fbvSSxTtmFu27iqzWxQrhG7Qg5bT41Kg3l+cYL6nYe028t/yjWIVKccq3zECCjubv
-         ygU8w6/RzQdTw==
+        b=FQS48QKDf2Lpmmy3HwQPQyH0ez2nI90pzgXA2IgpC2we2flhJ64kQbkiKafaxswN6
+         PK5RUgoFwh26PWhWgqg2pFpPqDrMnOse8qPffSTUox8YCJ/pPLNzu2y4iRkO7eGwAc
+         APXTqmI9J3IcjmoQkN2ofiUz3bgGmFwSSGbCi+Yaa1slUFQXEtDL+GRgSwlZYwiGCA
+         qXKgxhtKd4fm+MAJbZbOsQVbJJC39h2IDrVww6Hkf0ubqsAxucBhh6jLyhrdc9O9JO
+         XL8SNCExQiBgCbrnqZMx6u3ZQxZreuv4K7xY1RKEkkGy2njbVC9nj6CMzQo8FmUjWt
+         pQL8dnm0J8Y3A==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7F4CE5C1AE0; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
+        id 811CF5C1C5B; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 07/10] rcu: Make rcu_blocking_is_gp() stop early-boot might_sleep()
-Date:   Wed,  4 Jan 2023 16:23:02 -0800
-Message-Id: <20230105002305.1768591-7-paulmck@kernel.org>
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 08/10] rcu: Test synchronous RCU grace periods at the end of rcu_init()
+Date:   Wed,  4 Jan 2023 16:23:03 -0800
+Message-Id: <20230105002305.1768591-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
@@ -56,38 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+This commit tests synchronize_rcu() and synchronize_rcu_expedited()
+at the end of rcu_init(), in addition to the test already at the
+beginning of that function.  These tests are run only in kernels built
+with CONFIG_PROVE_RCU=y.
 
-Currently, rcu_blocking_is_gp() invokes might_sleep() even during early
-boot when interrupts are disabled and before the scheduler is scheduling.
-This is at best an accident waiting to happen.  Therefore, this commit
-moves that might_sleep() under an rcu_scheduler_active check in order
-to ensure that might_sleep() is not invoked unless sleeping might actually
-happen.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/rcu/tree.c   | 2 ++
+ kernel/rcu/update.c | 1 +
+ 2 files changed, 3 insertions(+)
 
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 0147e69ea85a9..15f9765064727 100644
+index 15f9765064727..80b84ae285b41 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -3333,9 +3333,10 @@ void __init kfree_rcu_scheduler_running(void)
-  */
- static int rcu_blocking_is_gp(void)
- {
--	if (rcu_scheduler_active != RCU_SCHEDULER_INACTIVE)
-+	if (rcu_scheduler_active != RCU_SCHEDULER_INACTIVE) {
-+		might_sleep();
- 		return false;
--	might_sleep();  /* Check for RCU read-side critical section. */
-+	}
- 	return true;
+@@ -4849,6 +4849,8 @@ void __init rcu_init(void)
+ 	// Kick-start any polled grace periods that started early.
+ 	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
+ 		(void)start_poll_synchronize_rcu_expedited();
++
++	rcu_test_sync_prims();
  }
  
+ #include "tree_stall.h"
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index f5e6a2f95a2a0..587b97c401914 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -220,6 +220,7 @@ void rcu_test_sync_prims(void)
+ {
+ 	if (!IS_ENABLED(CONFIG_PROVE_RCU))
+ 		return;
++	pr_info("Running RCU synchronous self tests\n");
+ 	synchronize_rcu();
+ 	synchronize_rcu_expedited();
+ }
 -- 
 2.31.1.189.g2e36527f23
 
