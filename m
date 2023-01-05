@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0D165E91B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F93565E91C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbjAEKi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S232601AbjAEKid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232673AbjAEKh6 (ORCPT
+        with ESMTP id S232846AbjAEKiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:37:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2F240846;
-        Thu,  5 Jan 2023 02:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672915076; x=1704451076;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gjl8ZM8i09/OJywBgKdXkKMYg3xJWeKujz7bT+uBzmg=;
-  b=S04rYYAtV4pD2z2/LbeNS3Zskuif3GqUoeMXfNv//Bg+AvEOaXIu9k3X
-   dnsWHTwmBNHI0xM6b7YRS5Din+LI8JOAIEdw5GCoKEXGu50CG+x2rh0eL
-   Dt9kXB7tvbcaD3owyCbg+g3FBxJ7Wh4CkQjkCE02//opVhpUW65rhJk+7
-   GjYdE5vlMyU2+jWZbomiXnKFo9vS3Gt5kPNYZVhwlfnG9CU8gWIdPea27
-   s4WYJqdE+9izbVex4ozobJUb/tdb61bwd+RjzI30BXOVfhaBJMYiWskgB
-   7MUlxnGuMx21kqBTCibW+TwlYGCA4TePAAFbYC5L41V11abV4wg4FQj1i
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323403225"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="323403225"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 02:37:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="686069531"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="686069531"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.211.114]) ([10.254.211.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 02:37:53 -0800
-Message-ID: <6b5baa30-c218-0845-d6c2-32ac21ed6a6d@linux.intel.com>
-Date:   Thu, 5 Jan 2023 18:37:51 +0800
+        Thu, 5 Jan 2023 05:38:14 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F49395DF;
+        Thu,  5 Jan 2023 02:38:12 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d4so27695320wrw.6;
+        Thu, 05 Jan 2023 02:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CW10rsYbYXdLKIgJ082Jp7J1CjAJchYjHoksJUpD20M=;
+        b=bgdiXrwUjzknqntCCXHH54/YPHqNV4l/VUPOpQEg/UEzwmZhtsftHO8GMM9ah6lh5D
+         /cQmaWMyTt6j0VBnqIXDIRNbfB4iN8hT6aEfF0TVa7CtW93p+wY32vgtm+eizOULhCS7
+         u1LwTDBLiKCLy44GwKQ/hbUSwTvIsxZgTG7Xu+sMbFvWo6/7D2zzu3WetJIXMr+07hGA
+         emzFpzI4IJFNsrcpv+HsZSgfS7qJXYitMECzpjlcRHZSKQ9b2CSZ4sOon4fqeVN2G0p5
+         bvwGB6m84twjuHX27+31tLUcKW08hvgtwrM8GdoxooMDQBGVuhwzLKB6oPslECcs+FGG
+         9yKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CW10rsYbYXdLKIgJ082Jp7J1CjAJchYjHoksJUpD20M=;
+        b=RDxweRmtB4BhZ1hKipg8JA9iA3MgBDZsHB+xQHUN2C0ZDugVKqROyaEBAOlgyH1/mJ
+         X8Z1i7xh/wyODfwLy4W4pFZGaU+JBUiy1JKzmAG0Z/QKCp2dY7y3cLs7grDu8zW+18el
+         7G+HPgOdAmZssDa31IWQvSxgKq7Mh2hlzz95V7SsXGnquBY/Y6d4Lj3hdxeov4dpXpwd
+         rJ8iD1WABGt2zskkc0rN9Hc3Hl0RHVcunGyU08MWQCNxk72P+ciq4+1/9imvK+doMW9U
+         DUSsQoVZUfp40hOKRRP0W+CkLOE4vtYAtT38tUBlNVLR+ZHsTXLNs65nMrNlnxCq1lgl
+         gZUQ==
+X-Gm-Message-State: AFqh2krUwSoJDavFv7GeQHdFwG7h+VUBXXj18ZwpWf9v9zb1GFXbYQp5
+        /OlAbd1Y5Uta/ItOm19WOoY=
+X-Google-Smtp-Source: AMrXdXtBYsecr590alx5BnHooWMq9Q7/VNrR1KlOpdJzkFdVT7xcAfrvr08CIgfPq+kmLlZ6zph0Iw==
+X-Received: by 2002:adf:e449:0:b0:27c:fdb:cfef with SMTP id t9-20020adfe449000000b0027c0fdbcfefmr21829988wrm.49.1672915091252;
+        Thu, 05 Jan 2023 02:38:11 -0800 (PST)
+Received: from [10.95.148.22] (54-240-197-226.amazon.com. [54.240.197.226])
+        by smtp.gmail.com with ESMTPSA id i13-20020a5d438d000000b0029e1aa67fd2sm7583342wrq.115.2023.01.05.02.38.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 02:38:09 -0800 (PST)
+Message-ID: <82fbc53e-be3e-b516-2420-dc27e5b811e8@gmail.com>
+Date:   Thu, 5 Jan 2023 10:38:08 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
- =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
- =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
-To:     Vasant Hegde <vasant.hegde@amd.com>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
- <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
- <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
- <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
- <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
- <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+Subject: Re: [PATCH v6 1/2] KVM: x86/cpuid: generalize
+ kvm_update_kvm_cpuid_base() and also capture limit
+To:     Sean Christopherson <seanjc@google.com>,
+        Paul Durrant <pdurrant@amazon.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>
+References: <20221220134053.15591-1-pdurrant@amazon.com>
+ <20221220134053.15591-2-pdurrant@amazon.com> <Y7XU2R0f3pCYF9uz@google.com>
 Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+From:   Paul Durrant <xadimgnik@gmail.com>
+In-Reply-To: <Y7XU2R0f3pCYF9uz@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/5 18:27, Vasant Hegde wrote:
-> On 1/5/2023 6:39 AM, Matt Fagnani wrote:
->> I built 6.2-rc2 with the patch applied. The same black screen problem happened
->> with 6.2-rc2 with the patch. I tried to use early kdump with 6.2-rc2 with the
->> patch twice by panicking the kernel with sysrq+alt+c after the black screen
->> happened. The system rebooted after about 10-20 seconds both times, but no kdump
->> and dmesg files were saved in /var/crash. I'm attaching the lspci -vvv output as
->> requested.
+On 04/01/2023 19:34, Sean Christopherson wrote:
+> On Tue, Dec 20, 2022, Paul Durrant wrote:
+>> A sunsequent patch will need to acquire the CPUID leaf range for emulated
+>> Xen so explicitly pass the signature of the hypervisor we're interested in
+>> to the new function. Also introduce a new kvm_hypervisor_cpuid structure
+>> so we can neatly store both the base and limit leaf indices.
 >>
-> Thanks for testing. As mentioned earlier I was not expecting this patch to fix
-> the black screen issue. It should fix kernel warnings and IOMMU page fault
-> related call traces. By any chance do you have the kernel boot logs?
+>> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+>> ---
+>> Cc: Sean Christopherson <seanjc@google.com>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>> Cc: David Woodhouse <dwmw2@infradead.org>
+>>
+>> v6:
+>>   - New in this version
+>> ---
+>>   arch/x86/include/asm/kvm_host.h |  7 ++++++-
+>>   arch/x86/kvm/cpuid.c            | 15 ++++++++-------
+>>   2 files changed, 14 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index f35f1ff4427b..ff201ad35551 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -710,6 +710,11 @@ struct kvm_queued_exception {
+>>   	bool has_payload;
+>>   };
+>>   
+>> +struct kvm_hypervisor_cpuid {
+>> +	u32 base;
+>> +	u32 limit;
+>> +};
+> 
+> Probably makes sense to place this above "struct kvm_vcpu_xen" right away to
+> avoid the (very minor) churn.
+> 
+
+Sure.
+
+>>   struct kvm_vcpu_arch {
+>>   	/*
+>>   	 * rip and regs accesses must go through
+>> @@ -826,7 +831,7 @@ struct kvm_vcpu_arch {
+>>   
+>>   	int cpuid_nent;
+>>   	struct kvm_cpuid_entry2 *cpuid_entries;
+>> -	u32 kvm_cpuid_base;
+>> +	struct kvm_hypervisor_cpuid kvm_cpuid;
+>>   
+>>   	u64 reserved_gpa_bits;
+>>   	int maxphyaddr;
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 0b5bf013fcb8..2468720f8d84 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -180,12 +180,13 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
+>>   	return 0;
+>>   }
+>>   
+>> -static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
+>> +static void kvm_update_hypervisor_cpuid(struct kvm_vcpu *vcpu, const char *hypervisor_signature,
+> 
+> Please wrap.  The 80 char limit is a soft limit, but should still be honored unless
+> there's a good reason to run over.
+
+Ok.
+
+> 
+> I also vote to name the param "sig" to keep line lengths short.
+> 
+>> +					struct kvm_hypervisor_cpuid *hypervisor_cpuid)
+> 
+> Since the struct is a 64-bit value, what about making this a pure getter that
+> returns a copy?
+> 
+> static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
+> 							    const char *sig)
+> {
+> 	struct kvm_hypervisor_cpuid cpuid = {};
+> 	struct kvm_cpuid_entry2 *entry;
+> 	u32 function;
+> 
+> 	for_each_possible_hypervisor_cpuid_base(cpuid.base) {
+> 		entry = kvm_find_cpuid_entry(vcpu, function);
+> 
+> 		if (entry) {
+> 			u32 signature[3];
+> 
+> 			signature[0] = entry->ebx;
+> 			signature[1] = entry->ecx;
+> 			signature[2] = entry->edx;
+> 
+> 			if (!memcmp(signature, sig, sizeof(signature))) {
+> 				cpuid.base = function;
+> 				cpuid.limit = entry->eax;
+> 				break;
+> 			}
+> 		}
+> 	}
+> 
+> 	return cpuid;
+> }
 > 
 > 
-> @Baolu,
->    Looking into lspci output, it doesn't list ACS feature for Graphics card. So
-> with your fix it didn't enable PASID and hence it failed to boot.
+> 	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
+> 	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
 
-So do you mind telling why does the PASID need to be enabled for the
-graphic device? Or in another word, what does the graphic driver use the
-PASID for?
+Yes, if that's preferable then no problem.
 
---
-Best regards,
-baolu
+   Paul
+
