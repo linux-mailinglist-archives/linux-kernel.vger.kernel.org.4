@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E094B65F0B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2EF65F0BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjAEQBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 11:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S234942AbjAEQEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234692AbjAEQBt (ORCPT
+        with ESMTP id S234844AbjAEQEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:01:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268291B9ED;
-        Thu,  5 Jan 2023 08:01:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 Jan 2023 11:04:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A695D15FC1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672934608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YAHujtIgou+yxpHIZcMXPlMxGP+Z+5EYAM8734Wjbms=;
+        b=AXegrNROv2GUKN+T16H9GJXKGfUYfqJ7TWLYIg1e79dXXCFK0hym2jdgP0kNI8Fe6VIuUx
+        N76Bj0GgRXNPkH4rjZ2GYkUri7gdukhvWOrpMlOXwdLLE7G+DSKFhizvbS+GZpNKin2DP3
+        s4U+qiOsN7Tvswgu9OMaTmL38ZwasVU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-8yrrrmubM_udV3Kg3kVagg-1; Thu, 05 Jan 2023 11:03:27 -0500
+X-MC-Unique: 8yrrrmubM_udV3Kg3kVagg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE524B81B31;
-        Thu,  5 Jan 2023 16:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86758C433D2;
-        Thu,  5 Jan 2023 16:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672934505;
-        bh=dqzzCpQpScLvEkchsLcOAdymPX5QNqFLx6G6sOzZM0E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iAjbkeOPjmzPX0/bDAcJh89SdWtd5/OYBg5UtkPeh+3O/1tp6k7Y8PYWBKhwTsTM7
-         FcOtSvPBc3PTGeSV+DkgGQWozm1oPe3uopd2xHemSmXYqvaFYs89cIMg/V+uwBhdbE
-         MgsnzC12O0lffUMceqc16NGSKFGxa9lfDe0P4h2ss9xZw0hYnjFYHl3k+/3KDrhCUZ
-         pxlioZV44gCHF69SLBprLPALSrkTrOgGI2o3uioQ8C7sJXkSF/WoDifQAxRlFJiH4y
-         B8xkxG8d1llk8BnWLKkgVCQZgT/IcALR06cQw3CSKPeyW2BV8u9PwkMslhxPxM/Svu
-         MZVe+OeHPqIHA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 21BF95C029A; Thu,  5 Jan 2023 08:01:45 -0800 (PST)
-Date:   Thu, 5 Jan 2023 08:01:45 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org
-Subject: Re: (subset) [PATCH rcu 0/27] Unconditionally enable SRCU
-Message-ID: <20230105160145.GY4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <167293383749.9409.12809142428621928168.b4-ty@kernel.dk>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71A5D1875042;
+        Thu,  5 Jan 2023 16:03:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 34DF9483EC0;
+        Thu,  5 Jan 2023 16:03:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <0000000000002b4a9f05ef2b616f@google.com>
+References: <0000000000002b4a9f05ef2b616f@google.com>
+To:     syzbot <syzbot+c22650d2844392afdcfd@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in rxrpc_put_peer
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167293383749.9409.12809142428621928168.b4-ty@kernel.dk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <594703.1672934598.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 05 Jan 2023 16:03:18 +0000
+Message-ID: <594704.1672934598@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 08:50:37AM -0700, Jens Axboe wrote:
-> 
-> On Wed, 04 Jan 2023 16:37:59 -0800, Paul E. McKenney wrote:
-> > This series removes Kconfig "select" clauses and #ifdef directives that
-> > are no longer necessary give that SRCU is now unconditionally enabled,
-> > courtesy of new-age printk() requirements.  Finally, the SRCU Kconfig
-> > option is removed entirely.
-> > 
-> > 1.	arch/x86: Remove "select SRCU".
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [07/27] block: Remove "select SRCU"
->         commit: b2b50d572135c5c6e10c2ff79cd828d5a8141ef6
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-=
+fs.git/ a5852d9046053fc64eb250c1c07e49162de616ab
 
-Thank you, Jens!  I will drop this one on my next rebase.
-
-							Thanx, Paul
