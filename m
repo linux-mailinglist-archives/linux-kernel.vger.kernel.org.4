@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716F565E1C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBE065E1E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240309AbjAEAlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S229574AbjAEAoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240728AbjAEAix (ORCPT
+        with ESMTP id S240797AbjAEAjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:38:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C45DE3;
-        Wed,  4 Jan 2023 16:38:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0169618B9;
-        Thu,  5 Jan 2023 00:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEC5C43339;
-        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672879095;
-        bh=9ltLnmPueyNAThHqCnMBk2/jo7HOn9NSQikvjiJ8fT0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bpbiHeVxHb1z++NPrcNY8YC7ux8CBWGapwm3Cdo9I1onoMWT3TpKY3DEpEl2HpuAd
-         FJfasS/kV/CL3uWODdyThwoYPhsLjQX61lVXkw/MRHAKfhN9X2IV4AA4bmDh/6WbvM
-         jx/ddyNNbTzlTHruR8B0oHLBdKisKaIFZ7b72LLDFKFX9l7DBuOJzuB/H1oZbgGe6l
-         uKmFt5YFpA9YXrm/fBOaL1npNhxhHRgx2pFv7TtmKnnAuXple2mx1IhnMVxN5Nt08P
-         6qgdu22rI828gX6qsXzNaT4gqHQ6jNG5zHqYO/OqqM5DbemEaTLjlhgVsFPgsS7UzO
-         +kmZiuiIfwgWQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E7F0E5C1CE5; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH rcu 27/27] rcu: Remove CONFIG_SRCU
-Date:   Wed,  4 Jan 2023 16:38:13 -0800
-Message-Id: <20230105003813.1770367-27-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 4 Jan 2023 19:39:07 -0500
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A160EFCF8
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 16:39:03 -0800 (PST)
+Received: by mail-qv1-xf42.google.com with SMTP id h10so24586781qvq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 16:39:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y6exoao3P9DQTx94Z+U4h6spplMgDSe4humG8QLTgJk=;
+        b=LR84OLP79Rv94AgbZ0vYzZddMUAs/Tu3PfocFmm7C159WM4clDX0DqImdmNhp6Ur9x
+         FhvKGrzLEVReiUZ0xIMoptnznWwi1na2HCyofmdDnhpfz4wXzIHIrJbqpGF9FEUrXdWl
+         y7ZnuRoSkHq2hNo0Jt54733xWsZ03vAlgQ9jb5PKNj1iZTu/ZsBIBKPh0Xcipb7Anzm4
+         h47+HPSFLmSEsA+iRCwRTKq3Ot7+YaHCx8honYhgFlhQgffRtl7h4i/XgYZc2RPg4kD5
+         RGn2YP9CKYF7Re5cMipY+LSFSGkayCkHCsouzG9L/KwD6tDJ6l5u/+w5S2UbvBEPDw4b
+         tyMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y6exoao3P9DQTx94Z+U4h6spplMgDSe4humG8QLTgJk=;
+        b=baWUfG/fPwQZnHClNWZYLiE8WYQiM/mWR4UP8CxRK0i+SwQIEgXJaaf2YgU6ruByVd
+         +cYow7qrMQjCNKD9TGoqJGRcaPhCGfYcgmlYWBj4xb1C4/wnfKe/FLEH7HcRpBvWyxgT
+         BYMmldKxfGeDGcL+6azqqztBS3YMZgTi+oRh9rZnMFF7b72rCzG1d2WHNEtYinjkNrO3
+         3GmQ7X4YMgQUljVz6jmRpN86syuMg6Bk2SoUb7o2m7rNRliyjbgbJOu1HdtNGsqZfyKp
+         f0GlFUZeYXRUx5Q2TvFVFMMqvXm+3MlMCub0GLoMjvHiu6Lv0HCvZ7u4f46I57H+3rBf
+         MK7w==
+X-Gm-Message-State: AFqh2kpaPWbXftkNClsACGZjzznCKq+qf5DppDzs48CDqhF/nYtqm4l+
+        lIPpgQXJEiKBMK1x4nRe2kV0Oe/DZiaqOdT/lQ==
+X-Google-Smtp-Source: AMrXdXsMLxih0cy2/7LYs/haUXfIZJSTgnVmFG2c0cumQbqc2H/R94VQ5EA9YRxAY4G1hA43/cMo26/GfvzAS2Bc+5Y=
+X-Received: by 2002:ad4:4f32:0:b0:4ef:3185:f6a3 with SMTP id
+ fc18-20020ad44f32000000b004ef3185f6a3mr2209549qvb.26.1672879142582; Wed, 04
+ Jan 2023 16:39:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: lw716547@gmail.com
+Received: by 2002:a05:6214:4b99:b0:4c7:6264:66a7 with HTTP; Wed, 4 Jan 2023
+ 16:39:01 -0800 (PST)
+From:   "Mr. Daniel Kafando" <daniekafando001@gmail.com>
+Date:   Thu, 5 Jan 2023 00:39:01 +0000
+X-Google-Sender-Auth: 9TZv6SdyOfGPGvE-aaJuKdbBT0A
+Message-ID: <CAM4b7K=FcVsDCVXV0QDa4XJmzV9wxv-S9ywQOq_eHdemqAqCHw@mail.gmail.com>
+Subject: Am expecting your response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_3,NA_DOLLARS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f42 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6349]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [lw716547[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lw716547[at]gmail.com]
+        *  0.0 NA_DOLLARS BODY: Talks about a million North American dollars
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.5 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all references to CONFIG_SRCU have been removed, it is time to
-remove CONFIG_SRCU itself.
+Goodday Friend, I am Mr.Daniel kafando.and I work with UNITED BANK OF
+AFRICA. Can you use ATM Visa card to withdraw money at ATM cash
+machine in your country? I want to transfer money to you from my
+country; it=E2=80=99s part of money taken by some old politician that was
+forced out of power.
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Petr Mladek <pmladek@suse.com>
----
- kernel/rcu/Kconfig                                          | 3 ---
- tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt | 4 ----
- 2 files changed, 7 deletions(-)
+I will change the account details to yours, and apply for a visa card
+with your details in our bank, they will send the visa card to you and
+you will be withdrawing money with it and always send my own
+percentage of the money, and the money we are talking about is
+$4.2Million us dollars.
 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index ab62074174c32..9071182b1284b 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -53,9 +53,6 @@ config RCU_EXPERT
- 
- 	  Say N if you are unsure.
- 
--config SRCU
--	def_bool y
--
- config TINY_SRCU
- 	bool
- 	default y if TINY_RCU
-diff --git a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
-index 42acb1a64ce10..3f5fb66f16df7 100644
---- a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
-+++ b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
-@@ -71,9 +71,5 @@ CONFIG_TASKS_RCU
- 
- 	These are controlled by CONFIG_PREEMPT and/or CONFIG_SMP.
- 
--CONFIG_SRCU
--
--	Selected by CONFIG_RCU_TORTURE_TEST, so cannot disable.
--
- 
- boot parameters ignored: TBD
--- 
-2.31.1.189.g2e36527f23
-
+Whatever amount you withdraw daily, you will send 50% to me and you
+will take 50%, the visa card and the bank account will be on your
+name,I expect your response. promptly so that I will give you further
+details.
+Mr.Daniel kafando.
