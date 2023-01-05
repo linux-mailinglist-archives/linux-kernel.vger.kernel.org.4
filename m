@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B909065E1CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9EB65E1B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240524AbjAEAl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S231443AbjAEAlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240694AbjAEAis (ORCPT
+        with ESMTP id S240697AbjAEAis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 19:38:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975F9C27;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D9AC2D;
         Wed,  4 Jan 2023 16:38:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 702AE618A8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7669B618AC;
         Thu,  5 Jan 2023 00:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF58FC43392;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D78C4332B;
         Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672879095;
-        bh=uNGdCXg8tvhFdD75cJKP+MAi0FVpcft3pRlEy5ToqTM=;
+        bh=CNDCwOrRVxUy3ujKbfGE7sGTvn3Vq+9DqFQxAJ7ZB+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kZK17cdKWfyVtVbBELFi9PU3XxQufZKvLED9pEgVpPrNMvnpDMWnsBYHi7ynpV/aO
-         +F1WRjWAH3B4lFWJ9xzguuL+NSeLcGmx0+79sbBbhwiJP7THgQIbF8jyGiZBGMo4vb
-         RcDKz8ZE5vxNCVtUW3ynX7IN7KObRCV9/T6VFdbUJ7raVEo2Sqvar9SIoxf4jWnMRC
-         c9BRbkwgJPLOexgZPo1+cRQK8ZegZBMrwgERaxVCUSgtDjlwBh48lrxapLRSpVK4Rs
-         njuuVU843Vj60lInbU92N+cMN3nVlTaPbZp2gfeU4eAz6I4ujjghZRqIU1SpJtjDqZ
-         3y4si+uPWMhsA==
+        b=SMaaDhhKZ0MrSTVLCvLXZQMerWIWXg9Cmx8ITsLfD7eS/7W0ZL/uYWoRg4DJoYrA2
+         BSeXZ76gZTElV/Z3NAhtMpVAZbpadsQIs9o3D9EvZd9gnpTxWTjJWfVPtMNsvGydvZ
+         SXWQo/mM+DQ1epJyiNoY85T6V0sAGb7Th9TKEYyR0sP9M6H/sIAGPpG/ZQqzTF/mNg
+         p5tS/v/17Qd8tNkfl1GwoII/gpiTGJGH/GaQ6VM3CKRvzanZjFOPLKg08URm5NBWc5
+         43zER5ex/EwPEy6+/ot1ZSkb6Pkfjzu8CrsbxJLbZt3/+BGrMvex2cC+EyHu67EpfY
+         mEOr3RN5u0erA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D65C05C1C9D; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+        id D83965C1C9E; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Subject: [PATCH rcu 18/27] fs/btrfs: Remove "select SRCU"
-Date:   Wed,  4 Jan 2023 16:38:04 -0800
-Message-Id: <20230105003813.1770367-18-paulmck@kernel.org>
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com
+Subject: [PATCH rcu 19/27] fs/dlm: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:38:05 -0800
+Message-Id: <20230105003813.1770367-19-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
@@ -62,26 +62,25 @@ no longer any point in selecting it.  Therefore, remove the "select SRCU"
 Kconfig statements.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
-Cc: <linux-btrfs@vger.kernel.org>
+Cc: Christine Caulfield <ccaulfie@redhat.com>
+Cc: David Teigland <teigland@redhat.com>
+Cc: <cluster-devel@redhat.com>
 ---
- fs/btrfs/Kconfig | 1 -
+ fs/dlm/Kconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
-index 183e5c4aed348..37b6bab90c835 100644
---- a/fs/btrfs/Kconfig
-+++ b/fs/btrfs/Kconfig
-@@ -17,7 +17,6 @@ config BTRFS_FS
- 	select FS_IOMAP
- 	select RAID6_PQ
- 	select XOR_BLOCKS
+diff --git a/fs/dlm/Kconfig b/fs/dlm/Kconfig
+index 1105ce3c80cbd..b3b86dbdc1878 100644
+--- a/fs/dlm/Kconfig
++++ b/fs/dlm/Kconfig
+@@ -4,7 +4,6 @@ menuconfig DLM
+ 	depends on INET
+ 	depends on SYSFS && CONFIGFS_FS && (IPV6 || IPV6=n)
+ 	select IP_SCTP
 -	select SRCU
- 	depends on PAGE_SIZE_LESS_THAN_256KB
- 
  	help
+ 	A general purpose distributed lock manager for kernel or userspace
+ 	applications.
 -- 
 2.31.1.189.g2e36527f23
 
