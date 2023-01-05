@@ -2,114 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6787565F6E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E1D65F6E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbjAEWgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S236157AbjAEWgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbjAEWgm (ORCPT
+        with ESMTP id S236145AbjAEWgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:36:42 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3C711A1A;
-        Thu,  5 Jan 2023 14:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672958194; bh=ukn1auDFnOTAdSQTXWGrQhun8HPJ+zFOlPpBVDKojko=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=U/s+uDCPsN1kxGle/rgyWmXFbonaWRppg9EmbzH23oUy2fSxDLGMNEDPYRxv3tr3q
-         T3GNM0gykKURTMG4t+/uXWRVuE10oXRyL0IPb5f1bIMEepihBqAtToO5avWf7OhhNy
-         JsKJLjbOL9/ETCpkwM/Mz8OKOWaIeKZCUY8bP0eehnGlKYBUcj++NQAr6xae5K1PUx
-         S3kCtQl6EeMlO569VrQVyaP1ZG19ul8sGHc8/U2iXJ6wG6n1BNHbvgLDg5Fpc+xPkZ
-         enF6uQmEZBQGloRumfI3nZXqR6irxHqzdfhv5jhDtiz6dToJjfCP5QuT4uWrVNbZPp
-         OIyT6AV8mLXpQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mi2Jn-1oZoFH1cX3-00e6qY; Thu, 05
- Jan 2023 23:36:34 +0100
-Subject: Re: [PATCH 0/3] Convert to *_with_info() API
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230105141911.8040-1-W_Armin@gmx.de>
- <20230105145757.GB2405273@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <e1d2e82f-05d2-bb8b-b6ab-b7d1d0657a12@gmx.de>
-Date:   Thu, 5 Jan 2023 23:36:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 5 Jan 2023 17:36:46 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC71B1CE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:36:45 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id jl4so34577977plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:36:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTnS8YGkz+TFlaH5VylWTT81FwP8SacJ4LHArMeisg0=;
+        b=Od3RSE6LiX0RDr6NqBn7rCVN/9DDDXs0q+tdT8jFQncP6Urx8T2WMJHv89zDyEDp7O
+         4gyuEjWhxh3h7/iqTPH5ceEQX64JBhrM5b5kHvdfaEVQ9hRdLJRNOppjlomjTaI3BIGf
+         w+3D8bNOlw2KFUDHvYyOVXVe4LphI3IDQbgjc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vTnS8YGkz+TFlaH5VylWTT81FwP8SacJ4LHArMeisg0=;
+        b=oKoSAKy+On2YJDwImIUNt6NxacpQ64Teci4ndoUEPXVzG9PeI+Fniwge09p9yPkgGc
+         djVVdg2TOb7tpBa2rbBo9hfySrKRK3ao9W0NPGgdOxh9DJlvFkIetwIX1y7LKqGyx0hL
+         abR5OBEUDN77lw8inaAhGJqcTYHR3Soy1MCQv/mKdlAYpw84BVwHq0QH1UAKamd627YI
+         sryP8ZfrjWV7AK6v7ikhLyB8n8J9z3FPmYl9sewdQrKrAcmSk/OIiOXhDkLqyVVwJYru
+         L5aruvFo40WbgEAf8G6mURFHwjgivvsJQu98EdyV3goy4RM4bC+qwMSHG3mQqLdfUoZy
+         1KCg==
+X-Gm-Message-State: AFqh2krq4eDa5JFbHvrHhNxua6qAx5NajPfW1enXFkYdXArJbcB0wsuA
+        3OSb0vMk8UgET4qHh/gAQA0Gbg==
+X-Google-Smtp-Source: AMrXdXux9e5NuZPpnskqtYB+XoAQpaU8Ilr5HfAMj1CxdM9IDVskpvaO076O8SqFOoZhA8EsUBypdw==
+X-Received: by 2002:a17:902:f08a:b0:189:efe8:1e with SMTP id p10-20020a170902f08a00b00189efe8001emr51337863pla.68.1672958205276;
+        Thu, 05 Jan 2023 14:36:45 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a11-20020a63e40b000000b00478ca052819sm22392159pgi.47.2023.01.05.14.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 14:36:44 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] net/mlx5e: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 14:36:43 -0800
+Message-Id: <20230105223642.never.980-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20230105145757.GB2405273@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:FlX/MIehNNE9xSDavkPRA9NxxuTOmPEZ14sqr3v6rS7Gg5byw8v
- cwCfLwGLpJ5sjtdqbVO9jbAbCQa3QMPOBEn+2ylGes5O3C97ry5/BQOmeicMzKxU7hkBQ8G
- IaDu0T0MYrwRpfMlllVoAiVvzLL1CbitnugFKmWPWhmLpLn12pH5UEsdop/BFfzKuePUFqB
- P4/mDqUF36jouTU2lMJMA==
-UI-OutboundReport: notjunk:1;M01:P0:4VfXxxxxw34=;GoeJmzR7BB8k59++t4oIVa9bsYe
- dWKZv5otulxPTePF5P6jgokBjRTf1EApVp+z/HaRJ38AXn18CJ4EoMOCzwkJbqjOvf8pey/8o
- Pd+hlThNGDJSshVd1UNnjJjGoGQ0Gaj8z1dFcSuoIas1+/feMmFUsp73wcFogapg6/mFjCh8F
- /NjSb/mGgrsGiPwPIFFpXq96P+K1qwH6oAjYk4zQ23+c6Bow/SVIIZBAu5ktjflJTLpemOb74
- VExxP9dHUJotUxI/+TfFV/08FktFlM8jdcQhoRhtJqESqhtsubtkf1dK8ec0VAY8F7FpN77Mp
- zV8pzmuVLVMgYydH8EvoBt8aTBsICFJKwNaFw+/NN8nXftTE5ppS46HGAj4tW1d2hzD1iqUxu
- NFJxnDkheeC35dfMGBRW95dlflXu9NFr+01PT/arJW3bAP/xh1fOHQ3mT3cKWb3JmXXADRque
- WEqdl85C94zzpnyHy9e0nS+t9+P4QNQc27ochd3QuL0N9i/vv2D2TKXXx3Whi/zohIVCPsGeH
- HEKq82SCPwihWBWhBjYT+2hI2OmmOb4FRyHVa5Ub9fCYe7Ol6Ip0Red/FhK8gru2siMJ1lcw1
- 9ZvHAHU56E3spElDmZ0j5DZzdbc3o1ezlCgRY6hHZ3MiqXB2DzpC2SwpW9kNgtzv2nxGSGea5
- 9HEJ6BPYg5rvCO7kp84mZjgVr/c56O2sBI515c5XgtQDFc7d1hF03zG55r6i572T57rhIFLmw
- 9gEPoaSTix3qBUMZIgbqrsAVmZATixIdyiTpPhmI66SCasJodL0lzLfhgGZLp+oMOEK/LN2Vh
- 8C7Lsr0mr4yNdzqRajPjfCMzZxMAFTNFGZOkZoId7AcP7+zk1nRNHATcs+Ngj9v9Jh2/qTRSl
- PnobWLEwM607f+4jN27BTWawLH8n2rKdXWOwIWgMz7IJM6oOVa/WRRZNq80Cv5Un67jc/vcWu
- siRLxfkxt8GS1k/Ah9rt7X0btxQ=
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2058; h=from:subject:message-id; bh=z9zLbe924cMlc9bCRVzAk3TMTpuiLHM3ITNjTKxLEL0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt1D68KpUigmLbVjgVr7qwolklCRIkWm8FyY1lEal zrIwQ0OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dQ+gAKCRCJcvTf3G3AJszwD/ 40sd9lxHmJk2Jotmcy0c7sImQsz4M/iSxCz1Jpo1Acu/9tBXHYG1WSg/JM6HXMs25zbP83WqwZz0ta ScdPosftzA9wgmMXb8/vXf5cULI/T6DCXW0ZjMmLqmCK/rwtV3r7z6oheW3142vbpRV16KcUPEG3cd I4F56O0hNGAOds3VxCtoqEVp7piVlUf8dB0bVyBEmFpdaXdPqRdyAOwEq3YODbu6OA/FoiGnHHpg3I ydu80/WoZOPdRL6PkOS3k+bHThq6R5S3STEcXo1ZzL3p9pg5gO2oD73XIWp+O+5oEdQ44XJ5IeQlRB C83oU0jwWetg8xUaErm2gxRVENDxW7kkm3f9H5ua/0O0HqjXbIWmIGe/IW/U7zAS7n0LJihh/aarM5 eBN190UCobxYYRfBwBgDKNaOhyVpdGloA2ctVsKl73uBOYVh22Uiyxdf1kTHlq8jdZXHY4F7c3lcnx V3hmmqzjd9J5X1mX2UixvWWgYi2tElBFI6QWnp826wGAbGWWmo2k/Az3EuzS6KU9Zigo49zT2DPfV2 pCcEPuUsbIXEii75tbJ+5iL0Drqc9BeOHZengIsBO37yKw0hkbNI8ICcqNhFpUR2Y7lvFAOQ2eJy9+ TWP/koLD8R1zAvnL6ic+lKbJeF13un/q+KpvgSiiUvs1+7ynM31ceE79ROkg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 05.01.23 um 15:57 schrieb Guenter Roeck:
+Zero-length arrays are deprecated[1]. Replace struct mlx5e_rx_wqe_cyc's
+"data" 0-length array with a flexible array. Detected with GCC 13,
+using -fstrict-flex-arrays=3:
 
-> On Thu, Jan 05, 2023 at 03:19:08PM +0100, Armin Wolf wrote:
->> This patch series converts the ftsteutates driver to the *_with_info()
->> API, reducing module size by ~30%.
->> The first patch does the actual conversion, while the second patch deals
->> with the nonstandard fanX_source attributes, which are being replaced
->> with the standard pwmX_auto_channels_temp attributes. The last patch
->> adds support for fanX_fault attributes.
->>
->> All patches where tested on a Fujitsu DS3401-B1.
->>
-> This is the second time in less than two weeks that I get a follow-up
-> version of a patch series, unversioned and without change log.
->
-> That makes me wonder - is that just coincidence or is someone promoting
-> that ?
->
-> Guenter
+drivers/net/ethernet/mellanox/mlx5/core/en_main.c: In function 'mlx5e_alloc_rq':
+drivers/net/ethernet/mellanox/mlx5/core/en_main.c:827:42: warning: array subscript f is outside array bounds of 'struct mlx5_wqe_data_seg[0]' [-Warray-bounds=]
+  827 |                                 wqe->data[f].byte_count = 0;
+      |                                 ~~~~~~~~~^~~
+In file included from drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.h:11,
+                 from drivers/net/ethernet/mellanox/mlx5/core/eswitch.h:48,
+                 from drivers/net/ethernet/mellanox/mlx5/core/en_main.c:42:
+drivers/net/ethernet/mellanox/mlx5/core/en.h:250:39: note: while referencing 'data'
+  250 |         struct mlx5_wqe_data_seg      data[0];
+      |                                       ^~~~
 
-My fault, i thought that with all other patches of the previous series being merged
-and the single remaining patch being significantly changed, it would be more appropriate
-to create a new series.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-I will send the patches as a follow-up series of the previous patch series then.
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Armin Wolf
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 2d77fb8a8a01..37cf3b1bb144 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -247,7 +247,7 @@ struct mlx5e_rx_wqe_ll {
+ };
+ 
+ struct mlx5e_rx_wqe_cyc {
+-	struct mlx5_wqe_data_seg      data[0];
++	DECLARE_FLEX_ARRAY(struct mlx5_wqe_data_seg, data);
+ };
+ 
+ struct mlx5e_umr_wqe {
+-- 
+2.34.1
 
->> Armin Wolf (3):
->>    hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
->>    hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
->>    hwmon: (ftsteutates) Add support for fanX_fault attributes
->>
->>   Documentation/hwmon/ftsteutates.rst |   5 +
->>   drivers/hwmon/ftsteutates.c         | 550 +++++++++++-----------------
->>   2 files changed, 210 insertions(+), 345 deletions(-)
->>
->> --
->> 2.30.2
->>
