@@ -2,150 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7956A65F53F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DDE65F543
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbjAEUdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 15:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S235407AbjAEUeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 15:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjAEUdR (ORCPT
+        with ESMTP id S232222AbjAEUem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 15:33:17 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790B63D2A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 12:33:13 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id r72so20121643iod.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 12:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oWK2+LLnEEkZxuCUep1sREpc2yMexGKInZH9UGn1wUs=;
-        b=keFu6AWqGbKqmjzWAPYIGm7rqVuxQmO3o/WPZxlSAQgQ86slUKhtRuvKgwzCNUjRLx
-         7JYR1gYiEde27yz3Kupun0Md0YTOeIidhYmbDeLb2RiLUGXwotuYlWseCFNewHNTrpE0
-         +MHte3JRFEuVIW9IAlbF8IO3xSt762/bpfrnHPkXBl1sQ9td4qVHntmOF7ZbNkrdta5z
-         vSEv2EIB8ufpKwOxvHPHjv/cPlWogXctThbKc7muVHEsZ+hGrlpLx+ss/u5duSQ8nUVC
-         B48Y5jDSK4XMKJolIyeMCnKF3gPoR/jqXjoe5v/FtYlaerD1LG/AILNKQI6CPGv59YoX
-         5KXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oWK2+LLnEEkZxuCUep1sREpc2yMexGKInZH9UGn1wUs=;
-        b=A0abrT/fNi0aauh/4YQMHYlcn5c+hB6S/wicjpqv60j6riV/vA5vh63xJEIB6U/b5k
-         8UG/yAXPN9jRhDyBH91AKFm5Q4AKi4MNa9UmDKzmQKE+cZ7pPZfLAlYqHwLDvWU6qV/k
-         T6HlgsuhpPHaEDus6Pf7BT0JNSmyooH7++dZgR+QOZuXO7n/e7cuuSZDnrds5g2n1JbT
-         qe7Rzi+TlFAE7OyPimkcB2vUVhZH4W0eSV2oxnHM77qwfLXHggoWCRsAjfrhAkV3FlMK
-         VqB31AtmUWLoVXdfBH/mSXyvTo7hdNnCs8JAgKdRHh9ghJU/Y/qXMdDHOUz35NjLcSJh
-         rRGA==
-X-Gm-Message-State: AFqh2kodXzpe1/zBm0H8j+sJH3tOs8vaA2mTKNTTOnoSnOqt/TPhdX/T
-        L/gdnLJCs0EEQ5pWBmpuT5AleQ==
-X-Google-Smtp-Source: AMrXdXs9yi0hb5zO5K5aKPvuP0NwAoUpU9XAzSkNQvQuKKZ3Tw7FQMBC5SjP1tjLuaOkjJcK4eW4cg==
-X-Received: by 2002:a05:6602:2439:b0:6dd:7096:d9bc with SMTP id g25-20020a056602243900b006dd7096d9bcmr7038389iob.2.1672950793244;
-        Thu, 05 Jan 2023 12:33:13 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id l15-20020a0566022dcf00b006eba8966048sm13520336iow.54.2023.01.05.12.33.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 12:33:12 -0800 (PST)
-Message-ID: <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk>
-Date:   Thu, 5 Jan 2023 13:33:11 -0700
+        Thu, 5 Jan 2023 15:34:42 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B904163D16
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 12:34:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k2OEKleDsgWliDxgmFtlJKb1TVhhXY1mjLpjiW9k/JlEWQ3QRDaOUiS/Ueepbr6M7yneTqjdaeNh/7q1wWW2P1D4eax5mUFqT+cUS5P7ks1eTmPgPioHms5PKukI0z13PcEsjAnnlAR+HAK+WA4JbJQ2BwnPRil7mu029CplB4/UnXvcZ8XGIoooCeSwG3X2jy07GS8G7V6sIXDVR5NsGcD582Kv4KBMZ3BJRAvki+EgUxKVFY6e0uPCNBsazUHGU/ETuSYoHJ8WYMzhg5YXMFrNg39ezJtA5N98G4ajLuopYrMPoWKKtqaRpbKTstoheeMMvTEs+rympOkj9m/OBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7BhHmMprS3cHj6RuoN2L9pvN1wQhd3ChfSV3QwcCl3A=;
+ b=ARPqHY4XKcS5O9r+Le0VhEy1z3mJylqY+oKy0/i3mZBmYWdE14PUje9CXT1BelzURPIhFZ3DI5t58+vGLbn/9PS1T63Es2vHVU6ciL32Wqgm+WMJ5L19ck3Sk6qv16LQZsM3G+k4hON3VkXC5E+jSQGF6GxM3u9rR6NXUwueTDFEbQXRepH7iOQPjmw49uH/swdSECGgrkfxgnz1XnF6/4AIUNfZz7W0zBmxYDHOKROXnc0pb1IFboRIYqy7zmbZ9vdYYYEO0Mf3TEb16aNr0+F5q812NckP9dyY/ctddX7eKo3UnMK1x6/iwpsmzpt09a9WV89Z4mzhw0UB0Z2weQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7BhHmMprS3cHj6RuoN2L9pvN1wQhd3ChfSV3QwcCl3A=;
+ b=GNIkCUKYz6c16aUlPz80ZC2i5JksC179AOmug0UuAPCCi6ulT/HVIEZpu/T4LwPaqsJCkn2jLuYgxBqKbfuirb4NSX7CakAgqW18bnu3bfLZIC3DbMrGfhx8J0fS1qvmmi2DSZftWlRA8qeQ2P1a52hfLc4nDSMMTbik4xVccWQ=
+Received: from MW4PR02CA0014.namprd02.prod.outlook.com (2603:10b6:303:16d::29)
+ by PH0PR12MB7790.namprd12.prod.outlook.com (2603:10b6:510:289::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 20:34:37 +0000
+Received: from CO1NAM11FT108.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:16d:cafe::dc) by MW4PR02CA0014.outlook.office365.com
+ (2603:10b6:303:16d::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
+ Transport; Thu, 5 Jan 2023 20:34:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT108.mail.protection.outlook.com (10.13.175.226) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5966.18 via Frontend Transport; Thu, 5 Jan 2023 20:34:37 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 5 Jan
+ 2023 14:34:34 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        David Zhang <dingchen.zhang@amd.com>,
+        Po Ting Chen <robin.chen@amd.com>,
+        "Nicholas Kazlauskas" <nicholas.kazlauskas@amd.com>,
+        Shirish S <shirish.s@amd.com>, "Alex Hung" <alex.hung@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Robin Chen <po-tchen@amd.com>,
+        Camille Cho <Camille.Cho@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] drm/amd/display: fix PSR-SU/DSC interoperability support
+Date:   Thu, 5 Jan 2023 15:33:52 -0500
+Message-ID: <20230105203353.378805-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Linux 6.2-rc1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20230104190115.ceglfefco475ev6c@pali>
- <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
- <20230104205640.o2uy2jk4v6yfm4w3@pali>
- <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
- <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
- <20230105174210.jbjoqelllcrd57q6@pali>
- <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk>
- <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
- <1933bddd-42d7-d92b-974f-f26c46c01547@kernel.dk>
- <CAHk-=wjJ=wD5D80hkWNCjJqS+djckAL+nXhXaHaiFzMAMve3rA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjJ=wD5D80hkWNCjJqS+djckAL+nXhXaHaiFzMAMve3rA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT108:EE_|PH0PR12MB7790:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f27c48a-5d28-4aa6-f1fb-08daef5c4362
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8btZJwoDoVlahqgOmjFm78YEYn9Vbtc/OEAMop+8SHyag3CyT6pm/1qY0HarId0BxERhvtOc23PXun18CCXCRI0rK6itjcRTWs3wTZ9HzL4UhnpxLDDd6M6xng8hz67sfoBitMhwjCgcJAS6gSt5Qzc2DBRpZUQQBn108F6T6/4zF24a+oCkOjyHPTEyRvr7F4GruP7NUehbK1QAnLiynnvf/JmIG3Yhyi3zHbOfHf0nM6eKBSE+2M5sYh/DkFG6RpYOdxZVcQVecKWqee0EPi4kYRrsBEcl/bTxg45z9i131/+kOYk9nA4DwJuNC0/szmO79boudsLFqi5x5uoAAza/bnrOSFWkHhb4DlPe2qgoigc5b858WSotcUebwJF1pY8Zt/ijOad7AK7Q8ljo+UZWefdhAGyKyujv1RDzlNPadTItTgeKMgCyp5tt+D5qVzsqPvlLs/l8w7QstiqYrbqSnE6Mt8+V5/40UxqaFE1Js4GBSdLj2YwRhDvRo30Zeq/gwnAngHKgsV7EurWcgApcaM6w+1mDAJ2PflySYR5MuFMialjEUTFxcr21JPfXnWe95Y1Yq7azI9gRoJMq9KNhHHKK0kE2zvEAiQo8Wo1x4NlHN/Nmmhq/1ShMLIxd8sn2ouPqGyWXgIw8qZuddo0kaKq+3h0DgsyqDDnKWBYgB+9ET6Le/yvs8+UoaGs0o9OqW5QLgjYMEDtgw7pfnDEzrkOQcRG3Z1N+yoxj9YcSVcD/s3b9ODTmW9eMOvxISgWqGCCPXtvnBB/3hgeLeA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(47076005)(8936002)(44832011)(426003)(83380400001)(6666004)(41300700001)(2906002)(336012)(70586007)(1076003)(36860700001)(70206006)(4326008)(5660300002)(82740400003)(8676002)(186003)(6916009)(2616005)(478600001)(356005)(16526019)(26005)(40480700001)(81166007)(316002)(54906003)(36756003)(40460700003)(82310400005)(86362001)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 20:34:37.1215
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f27c48a-5d28-4aa6-f1fb-08daef5c4362
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT108.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7790
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 1:03?PM, Linus Torvalds wrote:
-> On Thu, Jan 5, 2023 at 11:40 AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Or even implement it in UDF itself somehow. But yes, ideally we'd punt all
->> of this data gathering to userspace and just leave the trivial init/stop
->> atapi/scsi commands to cdrom/sr.
-> 
-> I wonder how much of that could be done by just having a different
-> elevator algorithm for cdrw devices..
-> 
-> Anyway, realistically I suspect the real answer is that "nobody cares
-> enough any more". I suspect most people haven't used RW optical media
-> in over a decade, and we're talking about an increasingly dwindling
-> niche use.
+Currently, there are issues with enabling PSR-SU + DSC. This stems from
+the fact that DSC imposes a slice height on transmitted video data and
+we are not conforming to that slice height in PSR-SU regions. So, pass
+slice_height into su_y_granularity to feed the DSC slice height into
+PSR-SU code.
 
-While there's some overlap with IO scheduling, I don't think that'd be a
-good layer to solve it at. And since this isn't exactly up-and-coming
-technology that we expect to proliferate, that makes me especially
-hesitant to invest any time in that particular direction.
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+v2: move code to modules/power.
+v3: use ASSERT() instead of WARN() and add a condition that clarifies
+    that PSR-SU + DSC can only be enabled on an eDP connection.
+---
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c |  3 ++
+ .../amd/display/modules/power/power_helpers.c | 31 +++++++++++++++++++
+ .../amd/display/modules/power/power_helpers.h |  3 ++
+ 3 files changed, 37 insertions(+)
 
-I still think that doing something with ublk would be the best approach,
-and push the data gathering and fixed sized write bits in userspace.
-That would still allow arbitrary filesystem usage for these kinds of
-devices.
-
-> Optical media may still make sense for backup, but probably not the
-> "filesystem" kind.
-
-I don't think it ever made sense, except from a convenience point of
-view. And that's most likely what drove the adoption there. It is way
-easier to mount a cdrw read/write and copy files there, even if it's
-slower than burning an iso image...
-
-> So nobody is going to be motivated to do any development in this area,
-> and the best we can do is probably to just keep it limping along.
-
-Indeed...
-
-> Now, it's a bit sad how pktcdvd is the only user of that 'struct
-> block_device_operations' devnode thing, and I liked how that went away
-> after the removal of this driver.
-> 
-> And I'm not sure why pktcdvd needs it, everybody else seems to be
-> happy with gendisk->disk_name.
-
-Let me look into that, I actually don't know. Would be nice if we could
-fix that up and re-instate that particular patch.
-
-> There's probably other cruft in pktcdvd that could be removed without
-> removing the whole driver, but I do get the feeling that it's just
-> less pain to keep the status quo, and that there isn't really much
-> motivation for anybody to do anything else.
-
-I'm reluctant to touch it outside of changes that are driven by core
-changes, and of course the motivation to remove it was driven by not
-wanting to do that either. Any kind of re-architecting of how it works I
-would not advocate for. It supposedly works well enough that none of the
-(few) users are reporting issues with it, best to just let it remain
-like that imho.
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+index 26291db0a3cf..872d06fe1436 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+@@ -122,6 +122,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
+ 		psr_config.allow_multi_disp_optimizations =
+ 			(amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
+ 
++		if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
++			return false;
++
+ 		ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
+ 
+ 	}
+diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+index 9b5d9b2c9a6a..381f708ef756 100644
+--- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
++++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+@@ -916,3 +916,34 @@ bool mod_power_only_edp(const struct dc_state *context, const struct dc_stream_s
+ {
+ 	return context && context->stream_count == 1 && dc_is_embedded_signal(stream->signal);
+ }
++
++bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
++			      struct dc_stream_state *stream,
++			      struct psr_config *config)
++{
++	uint16_t pic_height;
++	uint8_t slice_height;
++
++	if (!dc->caps.edp_dsc_support ||
++	    link->panel_config.dsc.disable_dsc_edp ||
++	    !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
++	    !(link->connector_signal & SIGNAL_TYPE_EDP) ||
++	    !stream->timing.dsc_cfg.num_slices_v)
++		return true;
++
++	pic_height = stream->timing.v_addressable +
++		stream->timing.v_border_top + stream->timing.v_border_bottom;
++	slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
++
++	if (slice_height) {
++		if (config->su_y_granularity &&
++		    (slice_height % config->su_y_granularity)) {
++			ASSERT(0);
++			return false;
++		}
++
++		config->su_y_granularity = slice_height;
++	}
++
++	return true;
++}
+diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+index 316452e9dbc9..bb16b37b83da 100644
+--- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
++++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+@@ -59,4 +59,7 @@ void mod_power_calc_psr_configs(struct psr_config *psr_config,
+ 		const struct dc_stream_state *stream);
+ bool mod_power_only_edp(const struct dc_state *context,
+ 		const struct dc_stream_state *stream);
++bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
++			      struct dc_stream_state *stream,
++			      struct psr_config *config);
+ #endif /* MODULES_POWER_POWER_HELPERS_H_ */
 -- 
-Jens Axboe
+2.38.1
 
