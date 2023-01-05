@@ -2,117 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D22C65E929
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE99E65E92B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbjAEKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S232298AbjAEKn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbjAEKl6 (ORCPT
+        with ESMTP id S231453AbjAEKnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:41:58 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDF34E43A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:40:34 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i9so52268734edj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ElgoEYYX4w2FGSSWb3yGwVmH3jRp5HCgJlvFyQc3564=;
-        b=NOH89IwkBkrax5AB2S/wEli+A1tRI6lpy+rMrHZZUQ5JMiqZsNJkYRQOqNZuwwiiLk
-         zxRqXHfBlKNPQoj+faAWwfrP7JXubSQYCM/xQN9XoVXThqRPTYege5hNx0etcaYgIlnM
-         migZOMw051FTvj76yghnktRo/02OZsxzwDmBlsEt17+BaMT6YXAM7N+D963SWUhdjY4C
-         3jVmLozeME+ESEMOEBEUSonsczvaxMWDW+fAEIBlCP7SjlPw3OqrD8BFdZkA+ZMZS+vf
-         aMrHR14zKZrZZm4YzDq7BEUqWBC96ynvtFoV696zu8eg6s4hPG7adU9RuWlAFNyZlEnO
-         q3eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ElgoEYYX4w2FGSSWb3yGwVmH3jRp5HCgJlvFyQc3564=;
-        b=UbFNTKjIRStZsA/WYyujhlk14vplP9Cva9k23osyETq7hgQsCvSFCL1akQhZ8Dc36r
-         7pdPPR9OcEZsQFSVN99X2VEFbOF8CwXwLpQHnKSbi7zdStQnJe0P2sdijQE6vlqh0sy7
-         9fgnkFbjIPAtZZz48Qx8SLaRC+CBvFp6W7yt4cBmlfH3dp9Oke1NwglnDUehTxnp3LGZ
-         iERTnWHtidKVz9sEafg+MSKuD4V8ch4cHFcDsdpzJlM2co0eOrRDIlC3fGZMwDgFR+wL
-         naupELQcbJIT65zf71ELBwT4ijy10KAXWHOGvi3cT3bQf3w/KCVJQgUMmd4yOk3R9yXG
-         ZGbg==
-X-Gm-Message-State: AFqh2kqCzT2WP5AHMxM6hrg2f+JhDgjITfUbo8CPeXLDMPQjZbaMnQjH
-        fr0A1CxoeCepo0NGXC0YgE0=
-X-Google-Smtp-Source: AMrXdXvl1OPabSqDu3RApJGBzvFED86Syh/1rXdtYWecHC6Dvklm/8iMK+F9gV76hI0QEVPowFymVQ==
-X-Received: by 2002:aa7:cf94:0:b0:47b:16f5:61dc with SMTP id z20-20020aa7cf94000000b0047b16f561dcmr45010171edx.37.1672915232787;
-        Thu, 05 Jan 2023 02:40:32 -0800 (PST)
-Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
-        by smtp.gmail.com with ESMTPSA id u1-20020aa7d541000000b0046951b43e84sm15959447edr.55.2023.01.05.02.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 02:40:32 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 5 Jan 2023 11:40:30 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: Re: [PATCH x86/nmi 2/2] x86/nmi: Print reasons why backtrace NMIs
- are ignored
-Message-ID: <Y7apHi9A0i63X4Me@gmail.com>
-References: <20230105011537.1774941-1-paulmck@kernel.org>
- <20230105011537.1774941-2-paulmck@kernel.org>
+        Thu, 5 Jan 2023 05:43:23 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE84395E2;
+        Thu,  5 Jan 2023 02:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1672915401; x=1704451401;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=D09wia/xBIh5VPDEISOZsQ1nVpd1S2d7Q+SDHIXy+OU=;
+  b=DTcinu5dXraAtwKpje0KKhTnOeVg/Z1/A47l/+T7Tt9usKSsiQmG5/pi
+   SJ9Pi5Dno/NuPeioEU4CjkgDBBGcVwZiqnyQ7ndoZNDQ2tPllSBrfrS7v
+   hWxFMg6xcWurWGWnUInGq8cs+iKsAGzKvz12YzeyKd50fnkUnXWmJJsig
+   1+EZElyv4HQZPC7k+KlWnz2IB0cCiJFYtPFBHhKUgcPYFNyqr1kBD0zgl
+   WH2dv2k681itZfdTPppF0/hf/cJg9HbaMfKGZAg7XanggmGkC5YIynhhH
+   UrhMes/fCVCtem2lC2X/Unpkj0fZrN1WepdM+RO3J/6neEqxbylZbI1IT
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="206513514"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jan 2023 03:43:21 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 5 Jan 2023 03:43:20 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 03:43:17 -0700
+Message-ID: <7fa8ea30beffcb9256422f7a474a8be7d5791f5a.camel@microchip.com>
+Subject: Re: [PATCH net-next 2/8] net: microchip: sparx5: Reset VCAP counter
+ for new rules
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Dan Carpenter <error27@gmail.com>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Date:   Thu, 5 Jan 2023 11:43:17 +0100
+In-Reply-To: <Y7aT8xGOCfvC/U0a@kadam>
+References: <20230105081335.1261636-1-steen.hegelund@microchip.com>
+         <20230105081335.1261636-3-steen.hegelund@microchip.com>
+         <Y7aT8xGOCfvC/U0a@kadam>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105011537.1774941-2-paulmck@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dan,
 
-* Paul E. McKenney <paulmck@kernel.org> wrote:
+On Thu, 2023-01-05 at 12:10 +0300, Dan Carpenter wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> On Thu, Jan 05, 2023 at 09:13:29AM +0100, Steen Hegelund wrote:
+> > When a rule counter is external to the VCAP such as the Sparx5 IS2 coun=
+ters
+> > are, then this counter must be reset when a new rule is created.
+> >=20
+> > Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+> > ---
+> > =C2=A0drivers/net/ethernet/microchip/vcap/vcap_api.c=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 3 +++
+> > =C2=A0drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c | 4 ++--
+> > =C2=A02 files changed, 5 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> > b/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> > index b9b6432f4094..67e0a3d9103a 100644
+> > --- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> > +++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> > @@ -1808,6 +1808,7 @@ int vcap_add_rule(struct vcap_rule *rule)
+> > =C2=A0{
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vcap_rule_internal *ri =3D to_int=
+rule(rule);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vcap_rule_move move =3D {0};
+> > +=C2=A0=C2=A0=C2=A0=C2=A0 struct vcap_counter ctr =3D {0};
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D vcap_api_check(ri->vctrl);
+> > @@ -1833,6 +1834,8 @@ int vcap_add_rule(struct vcap_rule *rule)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D vcap_write_rule(ri);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 pr_err("%s:%d: rule write error: %d\n", __func__, __LINE__,
+> > ret);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0 /* Set the counter to zero */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D vcap_write_counter(ri, &ctr);
+> > =C2=A0out:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_unlock(&ri->admin->lock);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
+>=20
+> I feel like you intended to send a v2 series but accidentally resent
+> the v1 series.=C2=A0 Otherwise I guess I have the same question as before=
+.
 
-> +#ifdef CONFIG_NMI_CHECK_CPU
-> +
-> +static char *nmi_check_stall_msg[] = {
-> +/*									*/
-> +/* +--------- nsp->idt_seq_snap & 0x1: CPU is in NMI handler.		*/
-> +/* | +------ cpu_is_offline(cpu)					*/
-> +/* | | +--- nsp->idt_calls_snap != atomic_long_read(&nsp->idt_calls):	*/
-> +/* | | |	NMI handler has been invoked.				*/
-> +/* | | |								*/
-> +/* V V V								*/
-> +/* 0 0 0 */ "NMIs are not reaching exc_nmi handler",
-> +/* 0 0 1 */ "exc_nmi handler is ignoring NMIs",
-> +/* 0 1 0 */ "CPU is offline and NMIs are not reaching exc_nmi handler",
-> +/* 0 1 1 */ "CPU is offline and exc_nmi handler is legitimately ignoring NMIs",
-> +/* 1 0 0 */ "CPU is in exc_nmi handler and no further NMIs are reaching handler",
-> +/* 1 0 1 */ "CPU is in exc_nmi handler which is legitimately ignoring NMIs",
-> +/* 1 1 0 */ "CPU is offline in exc_nmi handler and no further NMIs are reaching exc_nmi handler",
-> +/* 1 1 1 */ "CPU is offline in exc_nmi handler which is legitimately ignoring NMIs",
+This series was first sent to net, but the response was that I should go in=
+to
+net-next instead, so it is really a first version in net-next.
 
-That kind of disambiguation of why a CPU is stuck looks really useful:
+What was your question?  I was not able to find it...
 
-   Reviewed-by: Ingo Molnar <mingo@kernel.org>
+BR
+Steen
 
-One small suggestion would be to do this in the messages:
+>=20
+> regards,
+> dan carpenter
+>=20
 
-   s/exc_nmi handler
-    /exc_nmi() handler
-
-... to make it clear that it's a regular kernel function [well, hw entry 
-handler], not a function pointer or some other indirection? No strong 
-feelings though.
-
-Thanks,
-
-	Ingo
