@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C009765E8F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C51E65E8F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbjAEKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S233090AbjAEKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbjAEKVv (ORCPT
+        with ESMTP id S233049AbjAEKVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:21:51 -0500
+        Thu, 5 Jan 2023 05:21:52 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62C58D1C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:53 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-460ab8a327eso378504857b3.23
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564658D23
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:54 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4528903f275so370835987b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ksh61HdFJKW5FzhQ3xBVqQbws7N9eS43eLhKNpPeqew=;
-        b=MCxyEzTTO0yqg91shqPo6Ni+5EFzxsgTqYc3+pyMOGf0oatdr3BfMXYm2vwczO7xxN
-         6eXisofnTjW6ihZw5N2TmlX/02IpUvl2Obfz7KJBIRlML8eUYj2RVscTVOTPLqUOfEUl
-         7ALcPn6iafF/zuFvLcOWLr1Ggm27nMtZb4wuXZmie98LQOT+8Oo6f9LCBYicU9kTcsva
-         a2UPiZZmZL+sjQYo2rL2gE+wftIxhHkEnB5vkmujJzydzSbw5WDTc7LnG3S0nQMS6Apd
-         oD0DG4TxblVTSmtrDjw3jcw1qYcj6bz1oBV8ULyJY3Xpek6MnVH6iGGXHSiY51d0n8u/
-         xlOw==
+        bh=99zyT64KwIVcKcOLonOKX5TPwNAFDbPGP6/roR2wJeg=;
+        b=BGsOO1Xac220ouarsldL8eKmYhPBMh3Wgm0XdhF2qRYBawDIEYWKUm1fx3k2kI0tO3
+         6haBYEyU52usmxK/1mMxlgVirWHauUoqjfTmpqfD8C4NnA9XgvhoFikpqHngC1fco9V7
+         S+UlF+nVqFxP0rGL7Ey8oAS/AXZi5EU2c143l7lqDwLU7BB+WKAdEjqfM7TPqkG2EeyJ
+         uasY9UGaoogWW9/VJti+da2o1nbNCj584CdLWxHWuI/cw3xKS8dYTTiOo6VECuB/GmOW
+         1BhWMy0g/FBHeLD+VAxCyqfvElw8RGe86lYpIg6QfrQJ1bwD+NpCsEMEh5dkAuTWPcaJ
+         K9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ksh61HdFJKW5FzhQ3xBVqQbws7N9eS43eLhKNpPeqew=;
-        b=6tZ+z8JBShw/JQJtKaxOK6DrsJqczZOUOe4P2D/WFv9ViqRG8E25m/v4aySebX4rF5
-         SFCzTh5VqRHy4Xq17CHRk7Emklkc/99kEPOu9efDPQSktxtfM7yLWOcNHc52NfkQ2PhV
-         QK1emZZLKLpP+2IsfAo9wxBjIQ1rcCu6YiPQmr5gOtcckoUs2PgtIStKoeR95vvQ6SBs
-         gLYniUqkcT40oR1L9qZLE0CoD6ryAX81FiIiGb3EfYdIHLeS8cGCt3RrqvXK9YZm06X2
-         BSjNso+VvF4oN8m4pTTZFwyAzkYV3APK2wN3XQ7gQg0WQn5iDSiCOeKMfsgE9nAOHFUo
-         88yQ==
-X-Gm-Message-State: AFqh2kruN8NiX7rPCIcOKZOYJjaXzAChHHjFv3KTj+c3NiY7gj3J4uQ2
-        I+Xj+R3AJB6aiSfQB+fMujz6lPDqSp7pVZzP
-X-Google-Smtp-Source: AMrXdXuUdtLbHKVzfYol7vn49W5JNTDiD617kfFDgxP5DZEb9ADfn2YrSfngVZdq4KyN5rcGwmq3pEoz4PydDJ4S
+        bh=99zyT64KwIVcKcOLonOKX5TPwNAFDbPGP6/roR2wJeg=;
+        b=EJikxhHm4HhLDHl09ThbXkuMOs/TZp8+nFApVYemYvhnWryG0Z4+TZxF88JhUYyvBP
+         oqLBejfYcsC02TmJ4z9hNPBzB299Z0HBjCC3nrNyZjewlxocJx3ZLh2mAlaK0cXXNz1i
+         vGUJUCu3fEB0ZgHr4rzK10QEC8aceyfqu3bWCniil3qobX4BD4vwqMQwvasNJQ2jekbN
+         6WAcA3vkZDZQppNxiAh7+jTEFD1U+uOvWIjXRHXMUhs2DIoDmhMtC6evPb5yOszBDdP0
+         7Nxi3kQU+g3bBVfcI/ESpXLkXQNqJ6NdRNu0U6Ez++3dXmyU8nlnWeak98JIfg9P5IRs
+         O2sA==
+X-Gm-Message-State: AFqh2koiIqBJTzhWquFMGKhdxA34AuAdqwQkUGrg8F3EXt1fYVXZ5lIA
+        +7XqgWiJavzWzBpXAamyj7Q/BUcf1Bq0WFJX
+X-Google-Smtp-Source: AMrXdXvsBqG28GRMWBm56GtDbnxmt0iS/OB8Uv+tWQOADD6vpQwS1iuiPqZuiNCSbnQC4jMgqN7qExiWxrGFRxIC
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:1c17:0:b0:475:7911:2119 with SMTP
- id c23-20020a811c17000000b0047579112119mr5474920ywc.359.1672913992847; Thu,
- 05 Jan 2023 02:19:52 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:38 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:3146:0:b0:6fb:80c:fe0f with SMTP id
+ x67-20020a253146000000b006fb080cfe0fmr4203995ybx.25.1672913993943; Thu, 05
+ Jan 2023 02:19:53 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:39 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-41-jthoughton@google.com>
-Subject: [PATCH 40/46] docs: hugetlb: update hugetlb and userfaultfd
- admin-guides with HGM info
+Message-ID: <20230105101844.1893104-42-jthoughton@google.com>
+Subject: [PATCH 41/46] docs: proc: include information about HugeTLB HGM
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -85,64 +84,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This includes information about how UFFD_FEATURE_MINOR_HUGETLBFS_HGM
-should be used and when MADV_COLLAPSE should be used with it.
+This includes the updates that have been made to smaps, specifically,
+the addition of Hugetlb[Pud,Pmd,Pte]Mapped.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- Documentation/admin-guide/mm/hugetlbpage.rst |  4 ++++
- Documentation/admin-guide/mm/userfaultfd.rst | 16 +++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ Documentation/filesystems/proc.rst | 56 +++++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/admin-guide/mm/hugetlbpage.rst b/Documentation/admin-guide/mm/hugetlbpage.rst
-index 19f27c0d92e0..ca7db15ae768 100644
---- a/Documentation/admin-guide/mm/hugetlbpage.rst
-+++ b/Documentation/admin-guide/mm/hugetlbpage.rst
-@@ -454,6 +454,10 @@ errno set to EINVAL or exclude hugetlb pages that extend beyond the length if
- not hugepage aligned.  For example, munmap(2) will fail if memory is backed by
- a hugetlb page and the length is smaller than the hugepage size.
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index e224b6d5b642..1fbb1310cea1 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -447,29 +447,32 @@ Memory Area, or VMA) there is a series of lines such as the following::
  
-+It is possible for users to map HugeTLB pages at a higher granularity than
-+normal using HugeTLB high-granularity mapping (HGM). For example, when using 1G
-+pages on x86, a user could map that page with 4K PTEs, 2M PMDs, a combination of
-+the two. See Documentation/admin-guide/mm/userfaultfd.rst.
+     08048000-080bc000 r-xp 00000000 03:02 13130      /bin/bash
  
- Examples
- ========
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 83f31919ebb3..19877aaad61b 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -115,6 +115,14 @@ events, except page fault notifications, may be generated:
-   areas. ``UFFD_FEATURE_MINOR_SHMEM`` is the analogous feature indicating
-   support for shmem virtual memory areas.
+-    Size:               1084 kB
+-    KernelPageSize:        4 kB
+-    MMUPageSize:           4 kB
+-    Rss:                 892 kB
+-    Pss:                 374 kB
+-    Pss_Dirty:             0 kB
+-    Shared_Clean:        892 kB
+-    Shared_Dirty:          0 kB
+-    Private_Clean:         0 kB
+-    Private_Dirty:         0 kB
+-    Referenced:          892 kB
+-    Anonymous:             0 kB
+-    LazyFree:              0 kB
+-    AnonHugePages:         0 kB
+-    ShmemPmdMapped:        0 kB
+-    Shared_Hugetlb:        0 kB
+-    Private_Hugetlb:       0 kB
+-    Swap:                  0 kB
+-    SwapPss:               0 kB
+-    KernelPageSize:        4 kB
+-    MMUPageSize:           4 kB
+-    Locked:                0 kB
+-    THPeligible:           0
++    Size:                 1084 kB
++    KernelPageSize:          4 kB
++    MMUPageSize:             4 kB
++    Rss:                   892 kB
++    Pss:                   374 kB
++    Pss_Dirty:               0 kB
++    Shared_Clean:          892 kB
++    Shared_Dirty:            0 kB
++    Private_Clean:           0 kB
++    Private_Dirty:           0 kB
++    Referenced:            892 kB
++    Anonymous:               0 kB
++    LazyFree:                0 kB
++    AnonHugePages:           0 kB
++    ShmemPmdMapped:          0 kB
++    Shared_Hugetlb:          0 kB
++    Private_Hugetlb:         0 kB
++    HugetlbPudMapped:        0 kB
++    HugetlbPmdMapped:        0 kB
++    HugetlbPteMapped:        0 kB
++    Swap:                    0 kB
++    SwapPss:                 0 kB
++    KernelPageSize:          4 kB
++    MMUPageSize:             4 kB
++    Locked:                  0 kB
++    THPeligible:             0
+     VmFlags: rd ex mr mw me dw
  
-+- ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` indicates that the kernel supports
-+  small-page-aligned regions for ``UFFDIO_CONTINUE`` in HugeTLB-backed
-+  virtual memory areas. ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` and
-+  ``UFFD_FEATURE_EXACT_ADDRESS`` must both be specified explicitly to enable
-+  this behavior. If ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM`` is specified but
-+  ``UFFD_FEATURE_EXACT_ADDRESS`` is not, then ``UFFDIO_API`` will fail with
-+  ``EINVAL``.
+ The first of these lines shows the same information as is displayed for the
+@@ -510,10 +513,15 @@ implementation. If this is not desirable please file a bug report.
+ "ShmemPmdMapped" shows the ammount of shared (shmem/tmpfs) memory backed by
+ huge pages.
+ 
+-"Shared_Hugetlb" and "Private_Hugetlb" show the ammounts of memory backed by
++"Shared_Hugetlb" and "Private_Hugetlb" show the amounts of memory backed by
+ hugetlbfs page which is *not* counted in "RSS" or "PSS" field for historical
+ reasons. And these are not included in {Shared,Private}_{Clean,Dirty} field.
+ 
++If the kernel was compiled with ``CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING``,
++"HugetlbPudMapped", "HugetlbPmdMapped", and "HugetlbPteMapped" will appear and
++show the amount of HugeTLB memory mapped with PUDs, PMDs, and PTEs respectively.
++See Documentation/admin-guide/mm/hugetlbpage.rst.
 +
- The userland application should set the feature flags it intends to use
- when invoking the ``UFFDIO_API`` ioctl, to request that those features be
- enabled if supported.
-@@ -169,7 +177,13 @@ like to do to resolve it:
-   the page cache). Userspace has the option of modifying the page's
-   contents before resolving the fault. Once the contents are correct
-   (modified or not), userspace asks the kernel to map the page and let the
--  faulting thread continue with ``UFFDIO_CONTINUE``.
-+  faulting thread continue with ``UFFDIO_CONTINUE``. If this is done at the
-+  base-page size in a transparent-hugepage-eligible VMA or in a HugeTLB VMA
-+  (requires ``UFFD_FEATURE_MINOR_HUGETLBFS_HGM``), then userspace may want to
-+  use ``MADV_COLLAPSE`` when a hugepage is fully populated to inform the kernel
-+  that it may be able to collapse the mapping. ``MADV_COLLAPSE`` will may undo
-+  the effect of any ``UFFDIO_WRITEPROTECT`` calls on the collapsed address
-+  range.
+ "Swap" shows how much would-be-anonymous memory is also used, but out on swap.
  
- Notes:
- 
+ For shmem mappings, "Swap" includes also the size of the mapped (and not
 -- 
 2.39.0.314.g84b9a713c41-goog
 
