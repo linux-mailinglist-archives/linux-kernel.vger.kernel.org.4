@@ -2,82 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9292165E765
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C25865E76E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjAEJKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S231735AbjAEJNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjAEJKR (ORCPT
+        with ESMTP id S231213AbjAEJNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:10:17 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9306A33D64;
-        Thu,  5 Jan 2023 01:10:16 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id z16so18974779wrw.1;
-        Thu, 05 Jan 2023 01:10:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJHxOQO4N1hVQlNWLaYS7uiORL25B97K1+y7ilH6tPU=;
-        b=n9S9mo7pTHK6PFhYNyqFdfYI/hxcvdrzmCyv2sR4gGv/AnFmiMJss9H3ptXwDDgyDB
-         Zncv6CusCIlB5ujjFfPsxHRp/fKZlGt2ek6DUED2fEIgvJGvJuaZcq9B5QigGYruQ3eq
-         gGqqd3yY9IkQugrAr0QvNdg/kg286thMXHOIx80mTxA89EqgpsIOHnmqkKGzqdmUZveI
-         s9rA1FnBCNQM+kPUpui7AEXKnQCkbtv7BgIL974Z66cHg64jzv7xOqhMj15QB/7han48
-         W84qR9jZOWjenZvhWS2Xiaw5BIWXgJrIcab3r8z7M0Ylp04xDmdUihs8TPthSKntx80T
-         xarg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hJHxOQO4N1hVQlNWLaYS7uiORL25B97K1+y7ilH6tPU=;
-        b=EcDpjosry5GXNFFmnPxlVnafsxeE79Ws6uFOcciDtii4wQ+7qktSNVfzKRe99z+QGD
-         iYV5X/334Vm4ZxfX35yiuL3JJq1PZMLY6gfeEa93x4gmqpijyA3hW5eoWHl4jDdlQYMU
-         E5Twqm7uz6bQYB7j7nlpTZ0qzL20Qab146Cxm3xXMSC7wlkBk6I6fdeK2aE9DoNpfPL3
-         C8wmtjZIhq09MlOnIM7ZRvQnGP0ulw575jaod42qH+/aL9VZxm7rDdUZOsMo28PmPGU9
-         LTq1Y6rzTgHymyOP1vekF4lBQ3Xrr85gIteU0oBoKt8sXUP4j36wM120ch2SvPe5QBP0
-         XvEA==
-X-Gm-Message-State: AFqh2koU33ZiJTcbKPW1KFBCqbU9zQ9wR2c0rClaHIFFycFmpDQEN7+v
-        Fizll2nzXTiIgK4qcWvwL54=
-X-Google-Smtp-Source: AMrXdXtoohBaSHmotbz3uUa0FhQA5zbqAVQQxrdH/tcyN1e8HeYQ6144fHvEno7hcOoG0xG80IaglQ==
-X-Received: by 2002:a5d:45d2:0:b0:27a:d81:112e with SMTP id b18-20020a5d45d2000000b0027a0d81112emr24370123wrs.15.1672909815083;
-        Thu, 05 Jan 2023 01:10:15 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i13-20020a5d438d000000b0029e1aa67fd2sm7373174wrq.115.2023.01.05.01.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 01:10:14 -0800 (PST)
-Date:   Thu, 5 Jan 2023 12:10:11 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: Re: [PATCH net-next 2/8] net: microchip: sparx5: Reset VCAP counter
- for new rules
-Message-ID: <Y7aT8xGOCfvC/U0a@kadam>
-References: <20230105081335.1261636-1-steen.hegelund@microchip.com>
- <20230105081335.1261636-3-steen.hegelund@microchip.com>
+        Thu, 5 Jan 2023 04:13:01 -0500
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 01:12:57 PST
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0136B5015E
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:12:56 -0800 (PST)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id DMHvpvDoUfraoDMHvpSmyW; Thu, 05 Jan 2023 10:11:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1672909912; bh=+XW3CL00tj+fe55KGNLVJ9XLABIjy2ulWPGGl8Tamdg=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=LWPhJJbuy+S43nfxcJ/MMN4+SNI/f/lN3yLbTqBl5WYZQycdBkI+myI9YMIrpofPA
+         zOZx6qYsgXGyjnznreYTg5pVNgbFtKr2DkTSqiPKMdgzsErHuJZ3IO7r49ruiIHW/M
+         aBrq/i6IrpKKk2DrTlHFmnP/c10Z3ihe6lb9DlpRsGr+p31n0XbyvUob+SG2T5cVEK
+         KhxCuSTtzJKoxn5RjPVqaKM4ptp+Yq4R4Nz99avKW7d78oPW+Q+hkuFmA3UcaIbeRu
+         NxgX/ErMjP6kQXte/BMYbB9SY8E8jmRzXf3OStSh+cwarfLponiS7cmradCPtmT2pL
+         h0WWuVWZu0oGQ==
+Message-ID: <a0bf4ed2-bf68-ff9c-41d1-6fa4634b6911@enneenne.com>
+Date:   Thu, 5 Jan 2023 10:11:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105081335.1261636-3-steen.hegelund@microchip.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 08/10] tty/serial: Make
+ ->dcd_change()+uart_handle_dcd_change() status bool
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
+ <20230104151531.73994-9-ilpo.jarvinen@linux.intel.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <20230104151531.73994-9-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGsllanyz1tqYaA47eoQvw8rULIQX0Nnk8AVK9S3VkkeK8U9G/b4+EdHcRA10Jfj8HervvBJ3coUI6AeSJvoiOs129wXh4LAbWCRARepGQYA78X97/Cv
+ CkI2kaUH3IMSQizdJfNc4t+DDNlYt7p7n+Jgp2ZyZzI1OMPvsh+BcVK34q6QyOhWYToklEJa9eGL83GDoN5IDeD0Pg/d6cqrW70dIGjCb7MWEKtiXWNc1hz5
+ 7oxsPH/9k0uoOUv0XexaTq9TlCWI1E4q+JZa3cQwiJF2ENp5J5t5bBkapi/tNRkzjCQrnp8HelpPpKVrzYB7ymQaf3jeGrOom9zmNQPG5MzARa8j3KrMCQ7C
+ yNFkG4zuUYv0+yrZsCApSQohDHqR8qMEoeTLVDBj9bhhCIue1d5QXmgosUzxrTwgVj5rluMKh78v/OaFyPN7xG/QnhwuAuBpsDEOb9vyvKAya6IHSJ5nV+zn
+ Gzr3JAe60TiFtMuh0UoOZNu9TZz3kfknUfPGDg==
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,41 +64,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:13:29AM +0100, Steen Hegelund wrote:
-> When a rule counter is external to the VCAP such as the Sparx5 IS2 counters
-> are, then this counter must be reset when a new rule is created.
+On 04/01/23 16:15, Ilpo Järvinen wrote:
+> Convert status parameter for ->dcd_change() and
+> uart_handle_dcd_change() to bool which matches to how the parameter is
+> used.
 > 
-> Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  drivers/net/ethernet/microchip/vcap/vcap_api.c       | 3 +++
->  drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c | 4 ++--
->  2 files changed, 5 insertions(+), 2 deletions(-)
+>   drivers/pps/clients/pps-ldisc.c  | 2 +-
+
+Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+
+>   drivers/tty/serial/serial_core.c | 4 ++--
+>   drivers/tty/serial/sunhv.c       | 8 ++++----
+>   drivers/usb/serial/generic.c     | 2 +-
+>   include/linux/serial_core.h      | 3 +--
+>   include/linux/tty_ldisc.h        | 4 ++--
+>   include/linux/usb/serial.h       | 2 +-
+>   7 files changed, 12 insertions(+), 13 deletions(-)
 > 
-> diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> index b9b6432f4094..67e0a3d9103a 100644
-> --- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> +++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> @@ -1808,6 +1808,7 @@ int vcap_add_rule(struct vcap_rule *rule)
->  {
->  	struct vcap_rule_internal *ri = to_intrule(rule);
->  	struct vcap_rule_move move = {0};
-> +	struct vcap_counter ctr = {0};
->  	int ret;
->  
->  	ret = vcap_api_check(ri->vctrl);
-> @@ -1833,6 +1834,8 @@ int vcap_add_rule(struct vcap_rule *rule)
->  	ret = vcap_write_rule(ri);
->  	if (ret)
->  		pr_err("%s:%d: rule write error: %d\n", __func__, __LINE__, ret);
-> +	/* Set the counter to zero */
-> +	ret = vcap_write_counter(ri, &ctr);
->  out:
->  	mutex_unlock(&ri->admin->lock);
->  	return ret;
+> diff --git a/drivers/pps/clients/pps-ldisc.c b/drivers/pps/clients/pps-ldisc.c
+> index d73c4c2ed4e1..67aee758ac1d 100644
+> --- a/drivers/pps/clients/pps-ldisc.c
+> +++ b/drivers/pps/clients/pps-ldisc.c
+> @@ -13,7 +13,7 @@
+>   #include <linux/pps_kernel.h>
+>   #include <linux/bug.h>
+>   
+> -static void pps_tty_dcd_change(struct tty_struct *tty, unsigned int status)
+> +static void pps_tty_dcd_change(struct tty_struct *tty, bool status)
+>   {
+>   	struct pps_device *pps;
+>   	struct pps_event_time ts;
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 07b4af10a7e9..76536c74e907 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -3250,11 +3250,11 @@ EXPORT_SYMBOL(uart_match_port);
+>   /**
+>    * uart_handle_dcd_change - handle a change of carrier detect state
+>    * @uport: uart_port structure for the open port
+> - * @status: new carrier detect status, nonzero if active
+> + * @status: new carrier detect status, true if active
+>    *
+>    * Caller must hold uport->lock.
+>    */
+> -void uart_handle_dcd_change(struct uart_port *uport, unsigned int status)
+> +void uart_handle_dcd_change(struct uart_port *uport, bool status)
+>   {
+>   	struct tty_port *port = &uport->state->port;
+>   	struct tty_struct *tty = port->tty;
+> diff --git a/drivers/tty/serial/sunhv.c b/drivers/tty/serial/sunhv.c
+> index 16c746a63258..7d38c33ef506 100644
+> --- a/drivers/tty/serial/sunhv.c
+> +++ b/drivers/tty/serial/sunhv.c
+> @@ -87,10 +87,10 @@ static int receive_chars_getchar(struct uart_port *port)
+>   
+>   		if (c == CON_HUP) {
+>   			hung_up = 1;
+> -			uart_handle_dcd_change(port, 0);
+> +			uart_handle_dcd_change(port, false);
+>   		} else if (hung_up) {
+>   			hung_up = 0;
+> -			uart_handle_dcd_change(port, 1);
+> +			uart_handle_dcd_change(port, true);
+>   		}
+>   
+>   		if (port->state == NULL) {
+> @@ -133,7 +133,7 @@ static int receive_chars_read(struct uart_port *port)
+>   				bytes_read = 1;
+>   			} else if (stat == CON_HUP) {
+>   				hung_up = 1;
+> -				uart_handle_dcd_change(port, 0);
+> +				uart_handle_dcd_change(port, false);
+>   				continue;
+>   			} else {
+>   				/* HV_EWOULDBLOCK, etc.  */
+> @@ -143,7 +143,7 @@ static int receive_chars_read(struct uart_port *port)
+>   
+>   		if (hung_up) {
+>   			hung_up = 0;
+> -			uart_handle_dcd_change(port, 1);
+> +			uart_handle_dcd_change(port, true);
+>   		}
+>   
+>   		if (port->sysrq != 0 &&  *con_read_page) {
+> diff --git a/drivers/usb/serial/generic.c b/drivers/usb/serial/generic.c
+> index 15b6dee3a8e5..50016ee1026a 100644
+> --- a/drivers/usb/serial/generic.c
+> +++ b/drivers/usb/serial/generic.c
+> @@ -608,7 +608,7 @@ EXPORT_SYMBOL_GPL(usb_serial_handle_break);
+>    * @status: new carrier detect status, nonzero if active
+>    */
+>   void usb_serial_handle_dcd_change(struct usb_serial_port *port,
+> -				struct tty_struct *tty, unsigned int status)
+> +				struct tty_struct *tty, bool status)
+>   {
+>   	dev_dbg(&port->dev, "%s - status %d\n", __func__, status);
+>   
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index fd59f600094a..f1b69a36bb2b 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -896,8 +896,7 @@ static inline bool uart_softcts_mode(struct uart_port *uport)
+>    * The following are helper functions for the low level drivers.
+>    */
+>   
+> -extern void uart_handle_dcd_change(struct uart_port *uport,
+> -		unsigned int status);
+> +extern void uart_handle_dcd_change(struct uart_port *uport, bool status);
+>   extern void uart_handle_cts_change(struct uart_port *uport,
+>   		unsigned int status);
+>   
+> diff --git a/include/linux/tty_ldisc.h b/include/linux/tty_ldisc.h
+> index dcb61ec11424..8f4a684973c9 100644
+> --- a/include/linux/tty_ldisc.h
+> +++ b/include/linux/tty_ldisc.h
+> @@ -170,7 +170,7 @@ int ldsem_down_write_nested(struct ld_semaphore *sem, int subclass,
+>    *	send, please arise a tasklet or workqueue to do the real data transfer.
+>    *	Do not send data in this hook, it may lead to a deadlock.
+>    *
+> - * @dcd_change: [DRV] ``void ()(struct tty_struct *tty, unsigned int status)``
+> + * @dcd_change: [DRV] ``void ()(struct tty_struct *tty, bool status)``
+>    *
+>    *	Tells the discipline that the DCD pin has changed its status. Used
+>    *	exclusively by the %N_PPS (Pulse-Per-Second) line discipline.
+> @@ -238,7 +238,7 @@ struct tty_ldisc_ops {
+>   	void	(*receive_buf)(struct tty_struct *tty, const unsigned char *cp,
+>   			       const char *fp, int count);
+>   	void	(*write_wakeup)(struct tty_struct *tty);
+> -	void	(*dcd_change)(struct tty_struct *tty, unsigned int status);
+> +	void	(*dcd_change)(struct tty_struct *tty, bool status);
+>   	int	(*receive_buf2)(struct tty_struct *tty, const unsigned char *cp,
+>   				const char *fp, int count);
+>   	void	(*lookahead_buf)(struct tty_struct *tty, const unsigned char *cp,
+> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
+> index c597357853d9..6fa608cb4d98 100644
+> --- a/include/linux/usb/serial.h
+> +++ b/include/linux/usb/serial.h
+> @@ -372,7 +372,7 @@ static inline int usb_serial_handle_break(struct usb_serial_port *port)
+>   #endif
+>   
+>   void usb_serial_handle_dcd_change(struct usb_serial_port *usb_port,
+> -		struct tty_struct *tty, unsigned int status);
+> +				  struct tty_struct *tty, bool status);
+>   
+>   
+>   int usb_serial_bus_register(struct usb_serial_driver *device);
 
-I feel like you intended to send a v2 series but accidentally resent
-the v1 series.  Otherwise I guess I have the same question as before.
-
-regards,
-dan carpenter
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
 
