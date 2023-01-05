@@ -2,189 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224CB65F343
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46FE65F354
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbjAESCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S235465AbjAESD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjAESCA (ORCPT
+        with ESMTP id S234968AbjAESDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:02:00 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878C0564C9
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:01:59 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso2775785pjc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vHWW7d/4nqIg9XiaDgLSDFBBLIaN1Qv+J6JoH4V8xI0=;
-        b=ehw+5NEfopQ51aIgxvnYdxIqE7BXm0GnFy5XaoDN5Yo3F2NxAP0e/Rb6R5LHRPXkCT
-         E6Qx4l1M3VSpwmdFXhdQTxuMiUNGJJZ59F1Hmop1hF3ZFd4aoQrctvt/mmyMb8XY/OYf
-         gqGGskp8O7dsjo+U6og9Auo9Rzk8MPVpTD1KanPZDjtfcNmIOFc0HEPTnezO0bcZD91D
-         ebrCa8IlkfL6bRYpFtsotZrcmokDrExIyc0keCqk0IWNHb8iw4bIhdIldYZ4doX+b/Im
-         1M+MvgPm7GlNEycWC2EzBmS79n+ixQpLfnsrXJUpIKM6Tm7lp/CNCfgkDayEdlSd0K8g
-         iW1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vHWW7d/4nqIg9XiaDgLSDFBBLIaN1Qv+J6JoH4V8xI0=;
-        b=Ou4hLKdpOJgloaf/7Q8+Tp6Igxxn7RYgQZ765J+eLzsh9CoyHJbk7vI10UG6uVg712
-         ynws2hRT/dv5JccpnmAN/sErWLenqECT1vJsZuYfUGqiBL+dOTIZO9dMkPG8E1Qf9H/n
-         ybvzNolXdCoKT6pBJ2LobqEQMArvn/wjsIKG96k30G5mPFwH9/rE7XkcR+y6jrWLYpGz
-         uRb+Y9bywHxCGIAUGvly3dw5XCytgiTqZgkkjjpZ9BCOgyExSxuUhVCCxSG2TQJQxXc4
-         eXDTxWW8nz9G370OzLYNw94g7Ijre7f1qF/LNOqvyRgQP5eVlek17u9ZRbdoou75XdFf
-         kwoA==
-X-Gm-Message-State: AFqh2kofVw37fwF9Ey8wkwLawJqj7fZpNTS3s8kYYNnjHllbxHMotfDF
-        E+dexSNp41xiFzEUC/KPVK8=
-X-Google-Smtp-Source: AMrXdXsbKedjpEK50cNVsdWSFaM53QBXKTEA0m1PziGD3cm+l0oqn0g/2lhfInkIx1RbGWVu2Gihuw==
-X-Received: by 2002:a17:902:d4ce:b0:191:770:328d with SMTP id o14-20020a170902d4ce00b001910770328dmr97098018plg.46.1672941718815;
-        Thu, 05 Jan 2023 10:01:58 -0800 (PST)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902e5c600b00172fad607b3sm26371773plf.207.2023.01.05.10.01.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Jan 2023 10:01:58 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH 3/3] mm/uffd: Detect pgtable allocation failures
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <cc6e17ad-1afd-5c52-a06e-1d89d1978368@redhat.com>
-Date:   Thu, 5 Jan 2023 10:01:46 -0800
-Cc:     Peter Xu <peterx@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B38AB79D-51D7-4F1A-A5CB-A60A46A3E27F@gmail.com>
-References: <20230104225207.1066932-1-peterx@redhat.com>
- <20230104225207.1066932-4-peterx@redhat.com>
- <AF984D5D-DC66-4FD3-A749-5AF6B7289E0D@gmail.com>
- <cc6e17ad-1afd-5c52-a06e-1d89d1978368@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
+        Thu, 5 Jan 2023 13:03:49 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43710564D6;
+        Thu,  5 Jan 2023 10:03:47 -0800 (PST)
+Received: from jupiter.universe (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 63AF46602D30;
+        Thu,  5 Jan 2023 18:03:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672941825;
+        bh=AjVkCvwd25Eqi7gunh0LzeJ3T0+2xIcK9Yge17EECto=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k7KvuEVUCQtkqfAG0xuCFEC3PeX7vNU5bpGhKoYkQ99j186WwTVMrPgUPAQXdTCZf
+         1zNGnMUa7ArMRvuF3mXKKMosiAA3d5rr4H3J7nsL0LifQT7IT9Nqw1TdUkvUcEbGtp
+         7WhqYp5ShPNKZO3ipEj4ZDeh0eYAYFC+aCGxoJGvGqREoMtmt+7emgWST+6B396cOs
+         2gqCKN+ZLPtj4IEhWpkiWNo+FaXxpX1jqiH64JTBKlyNUZ39Ew3yUnpOWoIVzF/BcH
+         EeEjHFZDgjVdfDm3PgzavyQLUtsfoRQ+TAxUUCvRXitdo5oKSzDhp8zPQtRpumXDpL
+         P83Xl722q7kyw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id A1E21480117; Thu,  5 Jan 2023 19:03:42 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv3 0/7] RK3588 Thermal Support
+Date:   Thu,  5 Jan 2023 19:03:33 +0100
+Message-Id: <20230105180340.29140-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+This adds thermal support for the new RK3588(s) SoC series. The
+series has been tested on the RK3588 EVB1 board.
 
-> On Jan 5, 2023, at 12:59 AM, David Hildenbrand <david@redhat.com> =
-wrote:
->=20
-> On 05.01.23 04:10, Nadav Amit wrote:
->>> On Jan 4, 2023, at 2:52 PM, Peter Xu <peterx@redhat.com> wrote:
->>>=20
->>> Before this patch, when there's any pgtable allocation issues =
-happened
->>> during change_protection(), the error will be ignored from the =
-syscall.
->>> For shmem, there will be an error dumped into the host dmesg.  Two =
-issues
->>> with that:
->>>=20
->>>  (1) Doing a trace dump when allocation fails is not anything close =
-to
->>>      grace..
->>>=20
->>>  (2) The user should be notified with any kind of such error, so the =
-user
->>>      can trap it and decide what to do next, either by retrying, or =
-stop
->>>      the process properly, or anything else.
->>>=20
->>> For userfault users, this will change the API of UFFDIO_WRITEPROTECT =
-when
->>> pgtable allocation failure happened.  It should not normally break =
-anyone,
->>> though.  If it breaks, then in good ways.
->>>=20
->>> One man-page update will be on the way to introduce the new -ENOMEM =
-for
->>> UFFDIO_WRITEPROTECT.  Not marking stable so we keep the old behavior =
-on the
->>> 5.19-till-now kernels.
->> I understand that the current assumption is that change_protection() =
-should
->> fully succeed or fail, and I guess this is the current behavior.
->> However, to be more =E2=80=9Cfuture-proof=E2=80=9D perhaps this needs =
-to be revisited.
->> For instance, UFFDIO_WRITEPROTECT can benefit from the ability to =
-(based on
->> userspace request) prevent write-protection of pages that are pinned. =
-This is
->> necessary to allow userspace uffd monitor to avoid write-protection =
-of
->> O_DIRECT=E2=80=99d memory, for instance, that might change even if a =
-uffd monitor
->> considers it write-protected.
->=20
-> Just a note that this is pretty tricky IMHO, because:
->=20
-> a) We cannot distinguished "pinned readable" from "pinned writable"
-> b) We can have false positives ("pinned") even for compound pages due =
-to
->   concurrent GUP-fast.
-> c) Synchronizing against GUP-fast is pretty tricky ... as we learned.
->   Concurrent pinning is usually problematic.
-> d) O_DIRECT still uses FOLL_GET and we cannot identify that. (at least
->   that should be figured out at one point)
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20221031175058.175698-1-sebastian.reichel@collabora.com/
+ * rebased against v6.2-rc1
+ * drop useless cast from patch 1
+ * add Heiko's reviewed-by to patches 1-3 & 5
+ * The discussion around patch 4 died, so I kept it unchanged
 
-My prototype used the page-count IIRC, so it had false-positives (but
-addressed O_DIRECT). And yes, precise refinement is complicated. =
-However,
-if you need to uffd-wp memory, then without such a mechanism you need to
-ensure no kerenl/DMA write to these pages is possible. The only other
-option I can think of is interposing/seccomp on a variety of syscalls,
-to prevent uffd-wp of such memory.
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20221021174721.92468-1-sebastian.reichel@collabora.com/
+ * Collect Reviewed-by/Acked-by
+ * Use TRM channel info in commit message (Daniel Lezcano)
+ * Add patch removing channel id lookup table (Daniel Lezcano)
+ * Add patch allocating sensors array dynamiccaly (Daniel Lezcano)
+ * I also added patches simplifying up the probe routine a bit
 
->=20
-> I have a patch lying around for a very long time that removes that =
-special-pinned handling from softdirty code, because of the above =
-reasons (and because it forgets THP). For now I didn't send it because =
-for softdirty, it's acceptable to over-indicate and it hasn't been =
-reported to be an actual problem so far.
->=20
-> For existing UFFDIO_WRITEPROTECT users, however, it might be very =
-harmful (especially for existing users) to get false protection errors. =
-Failing due to ENOMEM is different to failing due to some temporary =
-concurrency issues.
+-- Sebastian
 
-Yes, I propose it as an optional flag for UFFD-WP. Anyhow, I believe
-the UFFD-WP as implemented now is not efficient and should=E2=80=99ve =
-been
-vectored to allow one TLB shootdown for many non-consecutive pages.=20
+Finley Xiao (1):
+  thermal: rockchip: Support RK3588 SoC in the thermal driver
 
->=20
-> Having that said, I started thinking about alternative ways of =
-detecting that in that past, without much outcome so far: that latest =
-idea was indicating "this MM has had pinned pages at one point, be =
-careful because any techniques that use write-protection (softdirty, =
-mprotect, uffd-wp) won't be able to catch writes via pinned pages =
-reliably".
+Sebastian Reichel (6):
+  thermal: rockchip: Simplify getting match data
+  thermal: rockchip: Simplify clock logic
+  thermal: rockchip: Use dev_err_probe
+  thermal: rockchip: Simplify channel id logic
+  thermal: rockchip: Support dynamic sized sensor array
+  dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
 
-I am not sure what the best way to detect that a page is write-pinned
-reliably. My point was that if a change is already carried to
-write-protect mechanisms, then this issue should be considered. Because
-otherwise, many use-cases of uffd-wp would encounter implementation
-issues.
+ .../bindings/thermal/rockchip-thermal.yaml    |   1 +
+ drivers/thermal/rockchip_thermal.c            | 322 ++++++++++++------
+ 2 files changed, 226 insertions(+), 97 deletions(-)
 
-I will not =E2=80=9Ckill=E2=80=9D myself over it now, but I think it =
-worth consideration.
+-- 
+2.39.0
 
