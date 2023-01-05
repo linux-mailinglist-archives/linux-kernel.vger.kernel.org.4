@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475A965E8C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAA265E8CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjAEKTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S232709AbjAEKTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbjAEKTG (ORCPT
+        with ESMTP id S232598AbjAEKTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:19:06 -0500
+        Thu, 5 Jan 2023 05:19:13 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4784FD69
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:18:58 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id w9-20020a05690210c900b007b20e8d0c99so4516353ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:18:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8234A50156
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:00 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso36882267ybp.20
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fBYHLCr9oSB4M/a/ngoaaKhcuSrl4k3J29XD8vYb2Q=;
-        b=NmgS3tlh8WUTbw91DNXzILqULTbddBWnPQn0Wz57ppipw1WObH6FkSpTww6yztM+jA
-         6e8g5ZzoA5lVCAREHkwcp9nrWOI+Q0S0zYB3GUuo7cG78xBZHsz/CSyv57wBUHMoyAZn
-         uMRawDWwRYn9gVztU7/tvicjuzxjqEUsaG6Q2Nh3CiNSMC3lromhxCi7P1Rw/hwbHL1F
-         YmJbdMcEkKBiPCX4t46+UvV1gVJE1sWQPNJLWRGQKmx7VESDn0Z4IGBEAOvcilWvJwx0
-         097HlvspkiuYJIAb7OcrrOPaSLfJxD3uYwyJHjA4LcqVHz5gZ4GhB3QpiX2mLa2tpK7P
-         fY/Q==
+        bh=QisuvGCTCnQrC46aY73QASoWAbEZFo7ff5Vj8AOV5D4=;
+        b=D05RGKnu5npzQ4+IoIOCUoopJdHBZlGdmzR7wKgjiYJ7fpsPJXuc7/AVMHrkDHqo2o
+         RNix7ExBJuxdhCqhn48A5PCySgryuQc3GCHIVd9cC5LTv0Q9aGo5YYJG8Ce+XT9OpeXk
+         M3IL0FBVE2YUx+rEwav3paVke2g6M0EhpZNkkEWcM4bLj0uxgg8utb4DdIrHzftCy4tA
+         Kij4pO4w0SwaaYqXSHOVWmgJ+wQsZ23Y9Y/ujE19y5mdHZG78XAtWGKWdrNVRkm9Nl44
+         elMxTtHTuRQV91u0RG0dTfAvGUJKSIuBA+Spih8dBWhAl2BkcB0t7zcxNmwHvfL9sk81
+         3ptA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fBYHLCr9oSB4M/a/ngoaaKhcuSrl4k3J29XD8vYb2Q=;
-        b=wnmt2Kv9a9scTwKcMWBV9N6HLMXJDPxH6gUzS0IZe7ed7HwUOXbuQ2ugjsY7Dlqza+
-         PE2OmeTptEQoFyzrWUaMXohnfVXvCB724Ke3caaEnSRnaf+J0rIDXrttE0byjJqdcSDx
-         ju/+qxEy/POEfI+VIxKSBik8spJHW3bLNL4dShNIPXov6zsA/bAraTU8x1FF9Q9XYR9k
-         7BsjlUtclgFGKm4z7igklXTaHomLmTSYWke82aFWtVrCBaZMoSayO+qh00pTwbuvAYLR
-         Enh3M8Om+76+dWSj5jWhg5s+9G/pyzoDiJNmiEgzsVwCGS2tL+RRIWQU0PZIZukpXR4D
-         bfUw==
-X-Gm-Message-State: AFqh2kqKWT7mpbsj7iaYrWMoMdlDLlRR9qeZHUyYQrgKeH0CNnpn7LDc
-        FvAzonvRCw2KGLLKNj7QupofZGkrMcXVgQWo
-X-Google-Smtp-Source: AMrXdXtKSspcz64KdJshT2Zl/+9+WpY5XaxA4H4cZjlRHhAILIZdFfHdFt4D44YNQqdRUNZd3I9uCvlbO/Onyj2D
+        bh=QisuvGCTCnQrC46aY73QASoWAbEZFo7ff5Vj8AOV5D4=;
+        b=bI+UbhFoZYNZW+Fsd1qnpMj342fV5eDzP/Z5NXBwfIF6ZQtDmnJsukLUDfydugn0aA
+         4K4XEhs0LXWcdVYqQH0ZX5VBhH2QPY9oLjUxdzGgtfxwJtKjVd/feTrMayvGAbqSlQuP
+         pqJ4cO6zl0PHCLAX4hxGwPhQssmoAY+KAsweVxF3h80N20L49IZIV657JfZT0/pzSXfT
+         sBJwSTmNS07Pz4HlxT9P9eAGdz8EHSAcuxI6K0XwI0fWFGefRbPvW6NKhLjDfmd13Pwp
+         dBQ7+uwPXPZUlNPnurp7sUKFHn6lvaSl0mQArMF9UOnEKicvRRPLGvQzYQEu2WB/2g8j
+         MBGA==
+X-Gm-Message-State: AFqh2kp4ho5J2pAWpkNV04/1FYjW3H7EokoUeZc9H8kGX9AL1po6uCMr
+        yCpU0li2doWLLQyQNm4a6ZAkCrDmQjyPczaY
+X-Google-Smtp-Source: AMrXdXuNwgkkz9NCdvDombHELm4ryvn27Y2ZeR0xTnznCwFeZu8QafDmhNLkdStzMtbGd0AFx5F58froof/Omrr/
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a25:f311:0:b0:6ff:84be:717 with SMTP id
- c17-20020a25f311000000b006ff84be0717mr5385597ybs.314.1672913937929; Thu, 05
- Jan 2023 02:18:57 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:02 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:ab4a:0:b0:7b4:df57:d887 with SMTP
+ id u68-20020a25ab4a000000b007b4df57d887mr131335ybi.601.1672913939807; Thu, 05
+ Jan 2023 02:18:59 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:03 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-5-jthoughton@google.com>
-Subject: [PATCH 04/46] hugetlb: only adjust address ranges when VMAs want PMD sharing
+Message-ID: <20230105101844.1893104-6-jthoughton@google.com>
+Subject: [PATCH 05/46] hugetlb: add CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,71 +84,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently this check is overly aggressive. For some userfaultfd VMAs,
-VMA sharing is disabled, yet we still widen the address range, which is
-used for flushing TLBs and sending MMU notifiers.
+This adds the Kconfig to enable or disable high-granularity mapping.
+Each architecture must explicitly opt-in to it (via
+ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING), but when opted in, HGM will
+be enabled by default if HUGETLB_PAGE is enabled.
 
-This is done now, as HGM VMAs also have sharing disabled, yet would
-still have flush ranges adjusted. Overaggressively flushing TLBs and
-triggering MMU notifiers is particularly harmful with lots of
-high-granularity operations.
-
-Acked-by: Peter Xu <peterx@redhat.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ fs/Kconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 7e9793b602ac..99fadd7680ec 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6961,22 +6961,31 @@ static unsigned long page_table_shareable(struct vm_area_struct *svma,
- 	return saddr;
- }
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 2685a4d0d353..ce2567946016 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -267,6 +267,13 @@ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
+ 	  enable HVO by default. It can be disabled via hugetlb_free_vmemmap=off
+ 	  (boot command line) or hugetlb_optimize_vmemmap (sysctl).
  
--bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
-+static bool pmd_sharing_possible(struct vm_area_struct *vma)
- {
--	unsigned long start = addr & PUD_MASK;
--	unsigned long end = start + PUD_SIZE;
--
- #ifdef CONFIG_USERFAULTFD
- 	if (uffd_disable_huge_pmd_share(vma))
- 		return false;
- #endif
- 	/*
--	 * check on proper vm_flags and page table alignment
-+	 * Only shared VMAs can share PMDs.
- 	 */
- 	if (!(vma->vm_flags & VM_MAYSHARE))
- 		return false;
- 	if (!vma->vm_private_data)	/* vma lock required for sharing */
- 		return false;
-+	return true;
-+}
++config ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
++	bool
 +
-+bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
-+{
-+	unsigned long start = addr & PUD_MASK;
-+	unsigned long end = start + PUD_SIZE;
-+	/*
-+	 * check on proper vm_flags and page table alignment
-+	 */
-+	if (!pmd_sharing_possible(vma))
-+		return false;
- 	if (!range_in_vma(vma, start, end))
- 		return false;
- 	return true;
-@@ -6997,7 +7006,7 @@ void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
- 	 * vma needs to span at least one aligned PUD size, and the range
- 	 * must be at least partially within in.
- 	 */
--	if (!(vma->vm_flags & VM_MAYSHARE) || !(v_end > v_start) ||
-+	if (!pmd_sharing_possible(vma) || !(v_end > v_start) ||
- 		(*end <= v_start) || (*start >= v_end))
- 		return;
++config HUGETLB_HIGH_GRANULARITY_MAPPING
++	def_bool HUGETLB_PAGE
++	depends on ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
++
+ config MEMFD_CREATE
+ 	def_bool TMPFS || HUGETLBFS
  
 -- 
 2.39.0.314.g84b9a713c41-goog
