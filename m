@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65C465E439
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E60C65E434
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 04:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjAEDrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 22:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S231349AbjAEDrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 22:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjAEDpo (ORCPT
+        with ESMTP id S230452AbjAEDpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 22:45:44 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C07F4F100
+        Wed, 4 Jan 2023 22:45:43 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538554D732
         for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 19:45:10 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cFx/a+59RVDaAstVrUDy12p/NMAPssmNoRR0JB40TqvHH+dAxNzZA+dH7J+sMb5S5rFixSTpCfiXMp1iD9kVv78O8CXUYoilyE9jynGcazJdFDZat/oi1cSl4HhIi5Bb+scHwOgmXrumT35sMZ3ROIUMf01ms4pdhBj4gwNPTdyqRCPRgjK7A68aNCR6c5ZkYZCw52qp6rrrBty8/eVYWpaFlsZ/aTwazlIa9+ifVVPBjCiTAyhhW3gn0Jbg03YgPhEfpCRb7QGOZGRBfx1hA+AVkzb46zMxacr2A+i60VLav6+CJY7Vt/eLKG7Djc3opiH4v+mFr4lyB9jV6NVPKA==
+ b=nilPqSG2eMKXgX0EKlzhMoGdwLrFnlM3zw+EqUfjBOeQAg7HA8a6vRilv6NnOHumVxOOVRklLe7/qQxGQkRLU/O9QapgPGuZhqJljqCfydL1owOSDjNGeyjdmZCKUBSQBwE4+foAMc6MRFZd6aaOYjwqCPlV68qL+EOZ4PA5BWeDLgnJuVS77JMpnGX0zhMQ7F1/SilLVTqjTPHy1WI7eWYIsljveiC3wDWDuQ7ZUSuGEuPaPNx6sHtgl6o85kaDXAZxnmWUzwF/kSEJ88d8ExlGw2w2jHB3Hg077UkdnNOQeHlPDcmRAOW/t8HUvOXBSBuzrcxRKHhTGrqLmO0i8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L//ZsFpgQOYsSDONnOnKRjWrLXjvRmDRSiW54sB0xRk=;
- b=C3PSUxC3CnwIPY5HBY6ao+v3Lxv0pCSz/4FFeqwe3Zkg2/TeIc6Ujd7pkaXk+ZIxkepI8mI2BjBuCmPgPMXkSs98HXsy4fU5VLsUmMtOkpTqwAtKasrjKHUFw3z4+BpWomTv11ORd60+A5sgrJuSwdM3/f2QEcpc8IsYsyC0TWeRZwztLASi/bkciWCFYgVLExahVLUUTcF/lw09HA8SuPrlyn1Kl4zsPeU6X9lb5X4TZCCFQtZI3aMYJBx04VFLorrXXzPEX1SJM9ImF7wmm93KK0FTor8b4FVhbiDPmTnpkwGhTQnJLab3ZAZCHl/p0oUi7sfLaRwcUyJtgSwONw==
+ bh=Ie7CJsESTUZS8l1QSP/Xr3uAc0A81zgCBeTSmNAnf4A=;
+ b=eVizgtgU+rT0xmAMwF7PO/E6FjZwPBQIrcKv4krIZzmVfpHjJIULZuX1ApxBwi/ubCn0W85xseZokg3fT5+/KlSaKC/Qc2UkdtmHhUJTkEtMFOOE3/lb4EvRkDNNRRAiTnK6jETpJfgBVImkwDbbCrusZkATMQHAgtX1EBV5H4q5uq3sxu62eS3h+A+WJYOB2G93MalFh/ZXgEqKFXhmqLTuYnm7zyQvcaDKqpU93A8UZrTiyDCnI76Zi9YceJN2jy4OBu4HUL4hNN26Y9URllmedme88XAbVHdnFc+8vgk6TfosGEa1oyMk+HaRwvOBFs2DnBnZR1z2gO/MibN6IQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L//ZsFpgQOYsSDONnOnKRjWrLXjvRmDRSiW54sB0xRk=;
- b=Z+uYcZewGN37e3yLeOJWVS4Tp/ocIR0+W/sqnHx5FtvrOiva/asHwvGAiH/zq7dJLmrEEP3HRYNxSkgt6i27jpARvek6vAPCjezU945Y0UHzRuD892OWXW4HaY4gnO93D6j8iNaG0u32DumOnLLLB7VxOf8g0a/rQaCl4UNdxnk=
-Received: from BN9PR03CA0554.namprd03.prod.outlook.com (2603:10b6:408:138::19)
- by SJ0PR12MB6965.namprd12.prod.outlook.com (2603:10b6:a03:448::18) with
+ bh=Ie7CJsESTUZS8l1QSP/Xr3uAc0A81zgCBeTSmNAnf4A=;
+ b=kPSd+cot+F75bS7RE6ygjVJiUeBq8oQryHttNulHkXcfwG0RjjY2yWr5hEoN9Wir9xNDnF+6Ne0daHe77lbHJG8X5hM82NXOXwf1k3Gsnm5OiiWSd5I7rpaksyzpcyMpwV/rtfSy+Uyc282T7WUigL13PEfk9iY4vAcQ+1hr2t8=
+Received: from BN9PR03CA0551.namprd03.prod.outlook.com (2603:10b6:408:138::16)
+ by DM4PR12MB7599.namprd12.prod.outlook.com (2603:10b6:8:109::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
  2023 03:45:08 +0000
 Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:138:cafe::4e) by BN9PR03CA0554.outlook.office365.com
- (2603:10b6:408:138::19) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:138:cafe::41) by BN9PR03CA0551.outlook.office365.com
+ (2603:10b6:408:138::16) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
  Transport; Thu, 5 Jan 2023 03:45:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5944.17 via Frontend Transport; Thu, 5 Jan 2023 03:45:07 +0000
+ 15.20.5944.17 via Frontend Transport; Thu, 5 Jan 2023 03:45:08 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 21:45:01 -0600
+ 2023 21:45:03 -0600
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Alex Deucher <alexander.deucher@amd.com>,
         <linux-kernel@vger.kernel.org>
@@ -65,9 +65,9 @@ CC:     Javier Martinez Canillas <javierm@redhat.com>,
         Lazar Lijo <Lijo.Lazar@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH v6 38/45] drm/amd: Use `amdgpu_ucode_*` helpers for UVD
-Date:   Wed, 4 Jan 2023 21:43:12 -0600
-Message-ID: <20230105034327.1439-39-mario.limonciello@amd.com>
+Subject: [PATCH v6 39/45] drm/amd: Use `amdgpu_ucode_*` helpers for VCE
+Date:   Wed, 4 Jan 2023 21:43:13 -0600
+Message-ID: <20230105034327.1439-40-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230105034327.1439-1-mario.limonciello@amd.com>
 References: <20230105034327.1439-1-mario.limonciello@amd.com>
@@ -79,23 +79,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|SJ0PR12MB6965:EE_
-X-MS-Office365-Filtering-Correlation-Id: cef281ce-4341-4af6-418a-08daeecf3d43
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|DM4PR12MB7599:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce19720a-2f58-4075-8b51-08daeecf3d8f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h3jTE+f8qRwYTrwXI+SrQi8HtGatYnS5BFtrfhgKdjMRrsBpPjYU8xMW8rvp7WcBi7SndKwm+0wgl5JFKcoqah5cDELRCBess7WFA5RLnx+nog3Juh+jnZXsvcqPQTsLjvHGVzKmY9vl5rmwyBHRQ9lOYFadAqQzAYppAbkozT2bT2S4ln4An+SjJIqlUIGtit32cyiAq8gecjes9d31D+g8x2VKRlpIKCGrmLJXUNK4lgTGAlgvUYi3+3rQ7hYLxC4iYCn3Vx68NYJCFLw2zmtKUBSOQw9QefBz/AOQ3Lh+8Y+TNY69yWxucS5VQzwp7ugf2/cB1Tb/4F+NdENdRxrFkvHTa8WrggMtckP6aPMq7HUZKubP2nhmd2vhygzT/fFQUV4Lcx43uSyCmUZTY8T6tK2X5A2B22VhOKBfZyul7dv1dbA1wmn01YeOb+idgbU6PrHD79jjswNFs3/s8jGpOBxg92vI0uteV1Q1oionYW8jOQsMF56ZrYyeeSEutWDon7njPTlnclNFNRqUdQ3eFDgYLXwfxGRgyCHfdUI8Unk9zAAnoBl37hudcGbSeaQYxgVQPcF7amZa4maznTMErbxo8nFyzHINr34HGFW92Ytbu9MASdSEqupcMChzor6PmC10MOH65IgOVZF0I+8v+00O2HNIvxFEFLwMyhE28hzvCZhcx6/GZgzYNmndJs1Yr7pK6tYCzt6X5WxlriTLGlZ7K5dJ6hKO1Lswurvh7qXWzZ5VMvT0E44Ka5cY+56sZ34qpz6JsikBFCJrwA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(46966006)(40470700004)(36840700001)(47076005)(83380400001)(426003)(82310400005)(16526019)(26005)(336012)(2616005)(186003)(6666004)(1076003)(40480700001)(7696005)(86362001)(40460700003)(36860700001)(36756003)(82740400003)(356005)(81166007)(41300700001)(4326008)(8676002)(2906002)(5660300002)(44832011)(8936002)(478600001)(70206006)(70586007)(316002)(54906003)(110136005)(81973001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7kJ1QyhTjKK0UJ8BAkkVvThcHT0Ymr0L5RooiQ2wgcNO0NL/7CaKqCF2Hdhh8KIKG9FWEpEz53uZNXzKGbYnhFMSsDnpFEo5BzojfTJWjVw/FUXHbTmwr5syNHqzq2En/fAiadmhKaBJ36ESuC4XcchiE3K4T/UhqItnXJBqRf8uZwurdgCRO37KzE5X7GJmipIgkGdkPmOipbmZy6wAY4p3IRJXJh5zB/ZFygYaQPIrCHBsrtyAKoqmtY6B6uZWDPjOmfTYeGcRBYrq7hdVQr4I82rMk4M7m4hIxQVNW6quiS4eXFWNJclC3OOg74jIYDzxHC5hkgCo60/S3Nfjp91dyqsnLpd/+LIrxktGwPCcuHlRZevl/2/nqW52fnkf2Xp0PbxM0S0UXlVmRZoXum+lHehYlXBvJwIKzj8qsavboom3L/u23gR3FrNFOCoD1Djdj9VvyFe8rkKelsp/XA3KYwEtTZyaRwFNoC6S9jVSXMBSbOhRB3GJL1k81iTcOVs63Ck3JNYBg3OekPi8aPbg2SdGSp+ieDmV3jvtikOVGmBnEWmQ2O04Qc+UpetDpmj/W5hrcgmSekhcEAX4fvnpbT0TlBA4n5vGt5mnrG95kuUg0OyJ/sOjBcGsHNBEvecCsVVDcdbekUKlHVuqY4D5fPBnYP8H1BUEO5xuVBeZpxSFgOCLmFD+EBe2HBzEG7et4QB5jfRJUMmw0aqRH+fmHRsLWiqPozEA9wrA3v5A9Vz2AfqOYgzivScn7kdeLdBeOKSRRtf2Xl5raYeccA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199015)(46966006)(36840700001)(40470700004)(47076005)(83380400001)(426003)(2616005)(26005)(186003)(82310400005)(16526019)(40480700001)(336012)(6666004)(7696005)(40460700003)(86362001)(36860700001)(36756003)(81166007)(356005)(82740400003)(1076003)(41300700001)(4326008)(8676002)(2906002)(5660300002)(8936002)(44832011)(316002)(478600001)(70206006)(110136005)(54906003)(70586007)(81973001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 03:45:07.9336
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 03:45:08.4179
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cef281ce-4341-4af6-418a-08daeecf3d43
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce19720a-2f58-4075-8b51-08daeecf3d8f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6965
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7599
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -117,44 +117,44 @@ Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 v5->v6:
  * Adjust for amdgpu_ucode_release argument change
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 14 +++-----------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c | 14 +++-----------
  1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-index 6eac649499d3..482fcf71d1c1 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-@@ -260,19 +260,11 @@ int amdgpu_uvd_sw_init(struct amdgpu_device *adev)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+index 02cb3a12dd76..ea78b7513182 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+@@ -158,19 +158,11 @@ int amdgpu_vce_sw_init(struct amdgpu_device *adev, unsigned long size)
  		return -EINVAL;
  	}
  
--	r = request_firmware(&adev->uvd.fw, fw_name, adev->dev);
+-	r = request_firmware(&adev->vce.fw, fw_name, adev->dev);
 -	if (r) {
--		dev_err(adev->dev, "amdgpu_uvd: Can't load firmware \"%s\"\n",
+-		dev_err(adev->dev, "amdgpu_vce: Can't load firmware \"%s\"\n",
 -			fw_name);
 -		return r;
 -	}
 -
--	r = amdgpu_ucode_validate(adev->uvd.fw);
-+	r = amdgpu_ucode_request(adev, &adev->uvd.fw, fw_name);
+-	r = amdgpu_ucode_validate(adev->vce.fw);
++	r = amdgpu_ucode_request(adev, &adev->vce.fw, fw_name);
  	if (r) {
- 		dev_err(adev->dev, "amdgpu_uvd: Can't validate firmware \"%s\"\n",
+ 		dev_err(adev->dev, "amdgpu_vce: Can't validate firmware \"%s\"\n",
  			fw_name);
--		release_firmware(adev->uvd.fw);
--		adev->uvd.fw = NULL;
-+		amdgpu_ucode_release(&adev->uvd.fw);
+-		release_firmware(adev->vce.fw);
+-		adev->vce.fw = NULL;
++		amdgpu_ucode_release(&adev->vce.fw);
  		return r;
  	}
  
-@@ -394,7 +386,7 @@ int amdgpu_uvd_sw_fini(struct amdgpu_device *adev)
- 			amdgpu_ring_fini(&adev->uvd.inst[j].ring_enc[i]);
- 	}
- 	amdgpu_bo_free_kernel(&adev->uvd.ib_bo, NULL, &addr);
--	release_firmware(adev->uvd.fw);
-+	amdgpu_ucode_release(&adev->uvd.fw);
+@@ -226,7 +218,7 @@ int amdgpu_vce_sw_fini(struct amdgpu_device *adev)
+ 	for (i = 0; i < adev->vce.num_rings; i++)
+ 		amdgpu_ring_fini(&adev->vce.ring[i]);
+ 
+-	release_firmware(adev->vce.fw);
++	amdgpu_ucode_release(&adev->vce.fw);
+ 	mutex_destroy(&adev->vce.idle_mutex);
  
  	return 0;
- }
 -- 
 2.34.1
 
