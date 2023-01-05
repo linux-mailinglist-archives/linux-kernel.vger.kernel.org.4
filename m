@@ -2,184 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80BD65EACC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58E365EAD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjAEMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S232373AbjAEMkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjAEMh6 (ORCPT
+        with ESMTP id S232319AbjAEMk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:37:58 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4124E409
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:37:57 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1919537pjd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:37:57 -0800 (PST)
+        Thu, 5 Jan 2023 07:40:28 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9640E4103B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:40:26 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso1191467wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:40:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CxPAWPdLx+AnYDGFecYmtGAl8s4Zh03V0RGOIrw0ZtU=;
-        b=bgNiT8l+AWP2NRTl3vL/pq+86ILh2xabfb8ijK9XbEU0gp5PE4RBQk5l11i5HuYK9P
-         36YyMLlLxTu6q6luLfvpI5h53x7FLoJt+v6mte0L+Qmst5YEue8ZTdJ0806Rm0wz/JRs
-         Qgv52Lv9htyBXg/jghsfZ1beJ34JkSH1D52ZE=
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u72AB24+qa4e+mmlqHTng43rKK5tJgT0XJ4X1hFnOZY=;
+        b=PQxfCtFMvTLRPftYbZmPlE8qhfBja8J3rxwqwsvaMY6MYMkhXLA8MdRbStUcxPiSfx
+         aOn87eQmEvxv9cfm0z5Og6/KFKLOgXJUK64eWvMnzoQgQH0AUsefRfMqKrz5uzGBZ3pM
+         4Rw8y2KgDs9h5GqjY0vXK866VcaannZlZS7Ak=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CxPAWPdLx+AnYDGFecYmtGAl8s4Zh03V0RGOIrw0ZtU=;
-        b=Cx/kPbJgdTlNoDiekAk/WxMChpEcu8KY/4w7nNwYnWT9sQsXSsCsk3TJZ4s1JkxDlc
-         W0q2LVxvJjeB5uk4hBI3478w3NsV+3wBwlpoYwX0UWX5PTBJYiV3fLtzZNVjUaC4CMJ3
-         T4dxhLyCcQ/EvrXy4n0kny6xh29NXg62PDe9MGqdsIBVtToEcqnTo/dECNfmLaSFmGNX
-         qSXkWS9SniMJaKt94R1kpjITQVLfIeTy9FIGUO5i/qTJnmQ/oP2RDZoZb1KvnKcNLLyj
-         VdxWt7R6VxLr70dEQLpzTx0pILZ9zT/vuDHT3mk7MOgEX0ykW1ZpW5grUBFZBV76OA2I
-         0l4A==
-X-Gm-Message-State: AFqh2koirCawCgv+iLeCAuhsJ47sMZJtG0tTfnQbexZsTn37QuVzXTqV
-        S2xunYkD0PdLm0Fb4ukSEp8qj4a2PmQ82YK9Glc=
-X-Google-Smtp-Source: AMrXdXvqt+CArgMj4CD4dL9iOCxLiZml8mECdxeSLVym6vWJGdbQD+va27oMqlOjhbKxA9eHhPXMgQ==
-X-Received: by 2002:a17:903:3289:b0:192:8c20:444c with SMTP id jh9-20020a170903328900b001928c20444cmr32675090plb.12.1672922276315;
-        Thu, 05 Jan 2023 04:37:56 -0800 (PST)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com. [209.85.214.178])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b001871acf245csm25978213plg.37.2023.01.05.04.37.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 04:37:55 -0800 (PST)
-Received: by mail-pl1-f178.google.com with SMTP id b2so39201835pld.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:37:55 -0800 (PST)
-X-Received: by 2002:a17:90a:c984:b0:219:8132:70db with SMTP id
- w4-20020a17090ac98400b00219813270dbmr4884596pjt.183.1672922274966; Thu, 05
- Jan 2023 04:37:54 -0800 (PST)
+        bh=u72AB24+qa4e+mmlqHTng43rKK5tJgT0XJ4X1hFnOZY=;
+        b=wzRGpc7BhvvcGL9j7tMy8of6kUTjqw/R3ntU8iBGAqNWhYfUetla7H8vKxq1Addpkp
+         2bQQY5yBw06P8TWD2Kj5w4ogjc+vg3UDYvb0Rdv6t1O5jsL1p42fkjoAGcz1eByKF0WE
+         FDxQPuGL6wnBEEHSzo/kphSvr00WhvFHn42SL6rF1lBmd6e27+o60zqXmH4Hum0qHRQw
+         KHkF+93Hkw9S31dAO/IecLyLBFpsnezv7fAq+Gj/4zjzWskXR1ExzmFM+JsW9cSSCC9C
+         044JUP3bY2Opq0Gnxsf0qza3IGIppiRBa8R1UVviQlo+9WZ757/zXYEVlwQJFvGLTE2z
+         3QFQ==
+X-Gm-Message-State: AFqh2kroBnRw/dKc9tdkU4BADGblolSTYHacykzr7IQb2NyOpcnFO53P
+        N4AGMTcsB8LYjYiMp99DeutLCA==
+X-Google-Smtp-Source: AMrXdXsu5VxnTPAKKJBYcokTLsPEF/4yGSQsqnxh/kx+LZL+INiQeTim0IqPUr5XsEi9jpjChc526A==
+X-Received: by 2002:a05:600c:3d91:b0:3d9:103d:9078 with SMTP id bi17-20020a05600c3d9100b003d9103d9078mr35017703wmb.22.1672922425144;
+        Thu, 05 Jan 2023 04:40:25 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id l10-20020a05600c1d0a00b003d9862ec435sm2466122wms.20.2023.01.05.04.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 04:40:24 -0800 (PST)
+Date:   Thu, 5 Jan 2023 13:40:21 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     tzimmermann@suse.de,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
+ drivers(tdfx, mga, i810, savage, r128, sis, via)
+Message-ID: <Y7bFNQ5a+qAcxWj+@phenom.ffwll.local>
+Mail-Followup-To: Cai Huoqing <cai.huoqing@linux.dev>, tzimmermann@suse.de,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Danilo Krummrich <dakr@redhat.com>, Sam Ravnborg <sam@ravnborg.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221203102502.3185-1-cai.huoqing@linux.dev>
+ <20221208124207.GA7628@chq-T47>
 MIME-Version: 1.0
-References: <20230105-uvc-gcc5-v1-0-8550de720e82@chromium.org> <20230105-uvc-gcc5-v1-6-8550de720e82@chromium.org>
-In-Reply-To: <20230105-uvc-gcc5-v1-6-8550de720e82@chromium.org>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 5 Jan 2023 13:37:43 +0100
-X-Gmail-Original-Message-ID: <CANiDSCuA-3Yedrtx-hBHUDCsahQCy898zONzOM=oJWQo0zndCA@mail.gmail.com>
-Message-ID: <CANiDSCuA-3Yedrtx-hBHUDCsahQCy898zONzOM=oJWQo0zndCA@mail.gmail.com>
-Subject: Re: [PATCH 6/6] media: uvcvideo: Fix power line control for Lenovo
- Integrated Camera
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yunke Cao <yunkec@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJECT_DRUG_GAP_L autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221208124207.GA7628@chq-T47>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+On Thu, Dec 08, 2022 at 08:42:07PM +0800, Cai Huoqing wrote:
+> On 03 12月 22 18:22:51, Cai Huoqing wrote:
+> > Commit 399516ab0fee ("MAINTAINERS: Add a bunch of legacy (UMS) DRM drivers")
+> > marked these drivers obsolete 7 years ago.
+> > And the mesa UMD of these drm drivers already in deprecated list
+> > in the link: https://docs.mesa3d.org/systems.html
+> > 
+> > 3dfx Glide-->driver/gpu/drm/tdfx
+> > Matrox-->driver/gpu/drm/mga
+> > Intel i810-->driver/gpu/drm/i810
+> > S3 Savage-->drivers/gpu/drm/savage
+> > ATI Rage 128->drivers/gpu/drm/r128
+> > Silicon Integrated Systems->drivers/gpu/drm/sis
+> > VIA Unichrome->drivers/gpu/drm/via
+> > 
+> > v1->v2:
+> > 1.Add drm via driver to the patchset.
+> > 2.Remove related drm_pciids.
+> > 3.Remove related drm uapi header files.
+> > 4.split to series avoid large patch email.
+> Just ping these patch series.
+> The v1 comments here,
+> https://lore.kernel.org/lkml/39d8ac1a-d92f-7cdc-14cd-944342f78c1a@suse.de/
 
-On Thu, 5 Jan 2023 at 13:33, Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> The device does not implement the power line control correctly. It is
-> a UVC 1.5 device, but implements the PLC control as a UVC 1.1 device.
->
-> Add the corresponding control mapping override.
->
-> Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.01
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0        64
->   idVendor           0x30c9
->   idProduct          0x0093
->   bcdDevice            0.07
->   iManufacturer           3 Lenovo
->   iProduct                1 Integrated Camera
->   iSerial                 2 8SSC21J75356V1SR2830069
->   bNumConfigurations      1
->
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-I deleted the wrong singed-off-by, This should say
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Are we really sure that all users of these are gone? Also, I'm not really
+seeing the benefit of this, we've managed to split out the legacy code
+quite well, so carrying around isn't hurting anything afaics?
+-Daniel
 
-If I need to send a new version it will be fixed accordingly.
-
-Thanks!
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c   |  2 +-
->  drivers/media/usb/uvc/uvc_driver.c | 16 ++++++++++++++++
->  drivers/media/usb/uvc/uvcvideo.h   |  1 +
->  3 files changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index f559a1ac6e3c..28ef9b2024a1 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -736,7 +736,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
->                                   V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
->  };
->
-> -static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
-> +const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
->         .id             = V4L2_CID_POWER_LINE_FREQUENCY,
->         .entity         = UVC_GUID_UVC_PROCESSING,
->         .selector       = UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 37d2b08bc8b2..57c948d47bbf 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2385,6 +2385,13 @@ static const struct uvc_device_info uvc_ctrl_power_line_limited = {
->         },
->  };
->
-> +static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
-> +       .mappings = (const struct uvc_control_mapping *[]) {
-> +               &uvc_ctrl_power_line_mapping_uvc11,
-> +               NULL, /* Sentinel */
-> +       },
-> +};
-> +
->  static const struct uvc_device_info uvc_quirk_probe_minmax = {
->         .quirks = UVC_QUIRK_PROBE_MINMAX,
->  };
-> @@ -2964,6 +2971,15 @@ static const struct usb_device_id uvc_ids[] = {
->           .bInterfaceSubClass   = 1,
->           .bInterfaceProtocol   = 0,
->           .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
-> +       /* Lenovo Integrated Camera */
-> +       { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
-> +                               | USB_DEVICE_ID_MATCH_INT_INFO,
-> +         .idVendor             = 0x30c9,
-> +         .idProduct            = 0x0093,
-> +         .bInterfaceClass      = USB_CLASS_VIDEO,
-> +         .bInterfaceSubClass   = 1,
-> +         .bInterfaceProtocol   = UVC_PC_PROTOCOL_15,
-> +         .driver_info          = (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
->         /* Sonix Technology USB 2.0 Camera */
->         { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
->                                 | USB_DEVICE_ID_MATCH_INT_INFO,
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 1b2d9f327583..31c33eb0edf5 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -748,6 +748,7 @@ void uvc_status_stop(struct uvc_device *dev);
->
->  /* Controls */
->  extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
-> +extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
->  extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
->
->  int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->
-> --
-> 2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
-
-
+> 
+> Thanks,
+> Cai
+> > 
+> > Cai Huoqing (10):
+> >   drm: Remove the obsolete driver-i810
+> >   drm: Remove the obsolete driver-mga
+> >   drm: Remove the obsolete driver-r128
+> >   drm: Remove the obsolete driver-savage
+> >   drm: Remove the obsolete driver-sis
+> >   drm: Remove the obsolete driver-tdfx
+> >   drm: Remove the obsolete driver-via
+> >   drm: Add comments to Kconfig
+> >   drm: Remove some obsolete drm pciids(tdfx, mga, i810, savage, r128,
+> >     sis, via)
+> >   MAINTAINERS: Remove some obsolete drivers info(tdfx, mga, i810,
+> >     savage, r128, sis)
+> > 
+> >  MAINTAINERS                           |   29 -
+> >  drivers/gpu/drm/Kconfig               |   59 +-
+> >  drivers/gpu/drm/Makefile              |    7 -
+> >  drivers/gpu/drm/i810/Makefile         |    8 -
+> >  drivers/gpu/drm/i810/i810_dma.c       | 1266 ---------
+> >  drivers/gpu/drm/i810/i810_drv.c       |  101 -
+> >  drivers/gpu/drm/i810/i810_drv.h       |  246 --
+> >  drivers/gpu/drm/mga/Makefile          |   11 -
+> >  drivers/gpu/drm/mga/mga_dma.c         | 1168 --------
+> >  drivers/gpu/drm/mga/mga_drv.c         |  104 -
+> >  drivers/gpu/drm/mga/mga_drv.h         |  685 -----
+> >  drivers/gpu/drm/mga/mga_ioc32.c       |  197 --
+> >  drivers/gpu/drm/mga/mga_irq.c         |  169 --
+> >  drivers/gpu/drm/mga/mga_state.c       | 1099 --------
+> >  drivers/gpu/drm/mga/mga_warp.c        |  167 --
+> >  drivers/gpu/drm/r128/Makefile         |   10 -
+> >  drivers/gpu/drm/r128/ati_pcigart.c    |  228 --
+> >  drivers/gpu/drm/r128/ati_pcigart.h    |   31 -
+> >  drivers/gpu/drm/r128/r128_cce.c       |  944 -------
+> >  drivers/gpu/drm/r128/r128_drv.c       |  116 -
+> >  drivers/gpu/drm/r128/r128_drv.h       |  544 ----
+> >  drivers/gpu/drm/r128/r128_ioc32.c     |  199 --
+> >  drivers/gpu/drm/r128/r128_irq.c       |  118 -
+> >  drivers/gpu/drm/r128/r128_state.c     | 1641 -----------
+> >  drivers/gpu/drm/savage/Makefile       |    9 -
+> >  drivers/gpu/drm/savage/savage_bci.c   | 1082 --------
+> >  drivers/gpu/drm/savage/savage_drv.c   |   91 -
+> >  drivers/gpu/drm/savage/savage_drv.h   |  580 ----
+> >  drivers/gpu/drm/savage/savage_state.c | 1169 --------
+> >  drivers/gpu/drm/sis/Makefile          |   10 -
+> >  drivers/gpu/drm/sis/sis_drv.c         |  143 -
+> >  drivers/gpu/drm/sis/sis_drv.h         |   80 -
+> >  drivers/gpu/drm/sis/sis_mm.c          |  363 ---
+> >  drivers/gpu/drm/tdfx/Makefile         |    8 -
+> >  drivers/gpu/drm/tdfx/tdfx_drv.c       |   90 -
+> >  drivers/gpu/drm/tdfx/tdfx_drv.h       |   47 -
+> >  drivers/gpu/drm/via/Makefile          |    8 -
+> >  drivers/gpu/drm/via/via_3d_reg.h      | 1771 ------------
+> >  drivers/gpu/drm/via/via_dri1.c        | 3630 -------------------------
+> >  include/drm/drm_pciids.h              |  112 -
+> >  include/uapi/drm/i810_drm.h           |  292 --
+> >  include/uapi/drm/mga_drm.h            |  429 ---
+> >  include/uapi/drm/r128_drm.h           |  336 ---
+> >  include/uapi/drm/savage_drm.h         |  220 --
+> >  include/uapi/drm/sis_drm.h            |   77 -
+> >  include/uapi/drm/via_drm.h            |  282 --
+> >  46 files changed, 1 insertion(+), 19975 deletions(-)
+> >  delete mode 100644 drivers/gpu/drm/i810/Makefile
+> >  delete mode 100644 drivers/gpu/drm/i810/i810_dma.c
+> >  delete mode 100644 drivers/gpu/drm/i810/i810_drv.c
+> >  delete mode 100644 drivers/gpu/drm/i810/i810_drv.h
+> >  delete mode 100644 drivers/gpu/drm/mga/Makefile
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_dma.c
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_drv.c
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_drv.h
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_ioc32.c
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_irq.c
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_state.c
+> >  delete mode 100644 drivers/gpu/drm/mga/mga_warp.c
+> >  delete mode 100644 drivers/gpu/drm/r128/Makefile
+> >  delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.c
+> >  delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.h
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_cce.c
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_drv.c
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_drv.h
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_ioc32.c
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_irq.c
+> >  delete mode 100644 drivers/gpu/drm/r128/r128_state.c
+> >  delete mode 100644 drivers/gpu/drm/savage/Makefile
+> >  delete mode 100644 drivers/gpu/drm/savage/savage_bci.c
+> >  delete mode 100644 drivers/gpu/drm/savage/savage_drv.c
+> >  delete mode 100644 drivers/gpu/drm/savage/savage_drv.h
+> >  delete mode 100644 drivers/gpu/drm/savage/savage_state.c
+> >  delete mode 100644 drivers/gpu/drm/sis/Makefile
+> >  delete mode 100644 drivers/gpu/drm/sis/sis_drv.c
+> >  delete mode 100644 drivers/gpu/drm/sis/sis_drv.h
+> >  delete mode 100644 drivers/gpu/drm/sis/sis_mm.c
+> >  delete mode 100644 drivers/gpu/drm/tdfx/Makefile
+> >  delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.c
+> >  delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.h
+> >  delete mode 100644 drivers/gpu/drm/via/Makefile
+> >  delete mode 100644 drivers/gpu/drm/via/via_3d_reg.h
+> >  delete mode 100644 drivers/gpu/drm/via/via_dri1.c
+> >  delete mode 100644 include/uapi/drm/i810_drm.h
+> >  delete mode 100644 include/uapi/drm/mga_drm.h
+> >  delete mode 100644 include/uapi/drm/r128_drm.h
+> >  delete mode 100644 include/uapi/drm/savage_drm.h
+> >  delete mode 100644 include/uapi/drm/sis_drm.h
+> >  delete mode 100644 include/uapi/drm/via_drm.h
+> > 
+> > -- 
+> > 2.25.1
+> > 
 
 -- 
-Ricardo Ribalda
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
