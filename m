@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6222C65EAD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F86C65EAD8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjAEMle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S233256AbjAEMnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbjAEMlM (ORCPT
+        with ESMTP id S231863AbjAEMn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:41:12 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281A532E8F
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:41:09 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so1210669wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 04:41:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8mYBOZhut1McL5t8U9bUpMD48gPtdONvdoyZEUsQo0o=;
-        b=Dlp6rSddGlTIAmt3GjVdQUjqvXqHbbIQ0Z6RpA/KuOjU8qPQC7bM+7h/KMe5zPJUqJ
-         9YM8XL/y6FGIAwWXjo+1x12QcywGZ2U4GotPozZ+GshXAFQjeWdGZmGFqRnLjaxgTKgL
-         MxKtflXIebEXsjwadfP3APnkiJSyzJfZqfpMKXk+F4IiJ1wAWM17yrH/39EW3u5OJGMp
-         UIGV2bJ7JrG+QgMkE+D5hS4FBxjagbznbfry/SG8c0cNLhMBy3JUC/TFHC+73g3SsVei
-         m0R68KIaUbYhb+xTfIw/Y6rFGKYJ+WheQewYrxPEqhkli4qCMK0nq+hFy4lzXaHushal
-         NisQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8mYBOZhut1McL5t8U9bUpMD48gPtdONvdoyZEUsQo0o=;
-        b=pPbl9L7z/JbUJywks8UfQLuPwnDdx+Tr1TuVycK7Q8SBw49qqsdlDqos91nCZH/dXF
-         DY64IwfA/m8/bpkP/v+Z4SqB5ZJHWscOnEx0V1ND1/7vruvuDU3hqiNYr6BytjRijc+k
-         f5TbmVbc79UxPeqPakKjkKQenbKZsbofrOlt3ApIG/ndkvd9zsmiwDQ+hhvAA0rg9rIH
-         YP8Gouv1eHUVzYySTYoYHHbJwy682G+4JweWAIFZp2tZRLAPryGGGOD9KOBQFQ3HOgMm
-         9+iJzTT1Xc5Vrw56TYy5cBAEFufLbuMsadLoK2/g1Fwz+u91/zFeqg0qPXCYjEzw3gMo
-         ZC9g==
-X-Gm-Message-State: AFqh2kqw6Cada9Ehn3EI1AQeLDapSZW+tB6HYi5OITsHDf1Dzhs4NdiQ
-        GR7P2jRMD+hbQgWvIy3zjZ1UIFLhuDZR3xmW
-X-Google-Smtp-Source: AMrXdXuq1HF7/uhu/I0YpqGMQ8foibyaZRFMZfOLIr0fYPMW1O1rUDo7v6FWfImNpze9+pjju43llg==
-X-Received: by 2002:a05:600c:a4d:b0:3cf:6e78:e2ca with SMTP id c13-20020a05600c0a4d00b003cf6e78e2camr39888024wmq.5.1672922467613;
-        Thu, 05 Jan 2023 04:41:07 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:101:3196:3a40:6416])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b003b47e75b401sm2338153wmm.37.2023.01.05.04.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 04:41:07 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 2/2] spi: spidev: remove debug messages that access spidev->spi without locking
-Date:   Thu,  5 Jan 2023 13:41:00 +0100
-Message-Id: <20230105124100.185542-2-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230105124100.185542-1-brgl@bgdev.pl>
-References: <20230105124100.185542-1-brgl@bgdev.pl>
+        Thu, 5 Jan 2023 07:43:27 -0500
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CD330A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:43:24 -0800 (PST)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 8199EA0046;
+        Thu,  5 Jan 2023 13:43:21 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 8199EA0046
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1672922601; bh=HPxVdaGm3p7dRKMlhONBaN84Inmu1RDW/L/BoIC8/iI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vwdFDrk8fgYYJLRFP5PICpuUdOuHtOU2b9kx+eRT/h80iu3rUtpAnb4V4JCLmMydh
+         y75F/1z3RiU9SeY3raDq/q5TKPCagw10YjSOvS9jS+0IxPylCW2jmyNYOBfiXTBhhu
+         zSkWvu+yceph7TzTUaA39TAGUwKBmjclCTiqUdmE=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Thu,  5 Jan 2023 13:43:15 +0100 (CET)
+Message-ID: <144a8a27-ac7a-6d3b-1744-26fe0806deee@perex.cz>
+Date:   Thu, 5 Jan 2023 13:43:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ALSA: hda: Skip creating captures in SOF context
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     tiwai@suse.com, Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220719144753.252231-1-kai.heng.feng@canonical.com>
+ <bd59b06a-de49-2a1a-d2a2-351957fec6d0@perex.cz>
+ <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
+ <34bddb2f-dc57-c08c-358e-26cf7824c203@perex.cz>
+ <514f0fda-9475-e163-fd64-0bc675dd3447@linux.intel.com>
+ <CAAd53p5xkjKkpvZu2nNu5EaJC9d060g5GAhV_gRD2ouGjKY9AQ@mail.gmail.com>
+ <CAAd53p4Jcfo1_jsCd98_HxzkfqhUxS_7h7vM5a2dcK4fRYS1RA@mail.gmail.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <CAAd53p4Jcfo1_jsCd98_HxzkfqhUxS_7h7vM5a2dcK4fRYS1RA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 05. 01. 23 13:36, Kai-Heng Feng wrote:
+> On Mon, Aug 15, 2022 at 3:55 PM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+>>
+>> On Wed, Jul 20, 2022 at 9:31 PM Pierre-Louis Bossart
+>> <pierre-louis.bossart@linux.intel.com> wrote:
+>>>
+>>>
+>>>
+>>> On 7/20/22 02:52, Jaroslav Kysela wrote:
+>>>> Dne 20. 07. 22 v 3:45 Kai-Heng Feng napsal(a):
+>>>>> On Tue, Jul 19, 2022 at 11:41 PM Jaroslav Kysela <perex@perex.cz> wrote:
+>>>>>>
+>>>>>> Dne 19. 07. 22 v 16:47 Kai-Heng Feng napsal(a):
+>>>>>>> On HP laptops that use SOF driver for DMIC, the micmute LED doesn't
+>>>>>>> light up when mic is muted after commit 9b014266ef8a ("ASoC: SOF:
+>>>>>>> topology: use new sound control LED layer").
+>>>>>>>
+>>>>>>> The micmute LED itself is still working via sysfs, but it doesn't follow
+>>>>>>> mute anymore. That's because unlike vendors like Dell and Lenovo, HP
+>>>>>>> laptops use HDA codec to control mute LEDs instead of ACPI. So on HP
+>>>>>>> laptops, both SOF and HDA create captures with
+>>>>>>> SNDRV_CTL_ELEM_ACCESS_MIC_LED access, snd_ctl_led_set_state() considers
+>>>>>>> there are two different kcontrols and one of them is not muted.
+>>>>>>
+>>>>>> It does not mean that it's a wrong behavior. When both controls are muted, the
+>>>>>> LED should be turned on. It just requires that all inputs are off (and it may
+>>>>>> be the default - probably we can set in UCM or so). If you turn the "Capture
+>>>>>> Switch" off in amixer / alsamixer, do things work as expected ?
+>>>>>
+>>>>> Yes. When all captures are muted the micmute LED is on.
+>>>>>
+>>>>>>
+>>>>>>> So skip creating captures for HDA when it's called from SOF, the
+>>>>>>> captures are already handled by SOF.
+>>>>>>
+>>>>>> The capture controls are for other inputs like external analog microphone. If
+>>>>>> it is required to suppress the MIC LED for some hardware, just skip the
+>>>>>> "spec->mic_mute_led = 1" assignment in hda_generic.c . Also, the check
+>>>>>> "codec->core.type != HDA_DEV_ASOC" is not sufficient, because you don't know,
+>>>>>> if the topology really sets the MIC LED flag.
+>>>>>
+>>>>> AFAIK the external analog microphone on DMIC laptop is driven by SOF driver too.
+>>>>> If those capture controls are indeed needed for external analog mics,
+>>>>> use UCM to mute them by default won't work either.
+>>>>
+>>>> Could you describe this ? I though that only DMIC is handled by SOF when HDA
+>>>> codec is in the system. There is a separate analog codec for external analog
+>>>> microphone or the HDA codec is somehow connected to SOF/DSP ? If so, how ?
+>>>
+>>> The HDA codec is connected in the same way in all cases, there's no
+>>> hardware/electrical/routing difference.
+>>>
+>>> When used, the SOF driver will handle ALL links, be they DMIC or
+>>> HDAudio. The difference for HDaudio is that instead of a single DMA
+>>> transfer (DDR->FIFO), we have a first 'Host' DMA into the DSP SRAM, some
+>>> processing and a second 'Link' DMA from DSP SRAM to the HDaudio FIFO
+>>> (reversed flow for capture).
+>>
+>> So is this approach sufficient for this issue? Or should I explore
+>> other possibilities?
+> 
+> A gentle ping...
 
-The two debug messages in spidev_open() dereference spidev->spi without
-taking the semaphore and without checking if it's not null. This can
-lead to a crash. Drop the messages as they're not needed - the user-space
-will get informed about ENOMEM with the syscall return value.
+This Mic LED problem was resolved through UCM for the moment:
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/spi/spidev.c | 2 --
- 1 file changed, 2 deletions(-)
+https://github.com/alsa-project/alsa-ucm-conf/commit/79a8ec44d3dcf097f4a4492c506cbcf338324175
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index b71620f64ec9..29c6344ee8e8 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -604,7 +604,6 @@ static int spidev_open(struct inode *inode, struct file *filp)
- 	if (!spidev->tx_buffer) {
- 		spidev->tx_buffer = kmalloc(bufsiz, GFP_KERNEL);
- 		if (!spidev->tx_buffer) {
--			dev_dbg(&spidev->spi->dev, "open/ENOMEM\n");
- 			status = -ENOMEM;
- 			goto err_find_dev;
- 		}
-@@ -613,7 +612,6 @@ static int spidev_open(struct inode *inode, struct file *filp)
- 	if (!spidev->rx_buffer) {
- 		spidev->rx_buffer = kmalloc(bufsiz, GFP_KERNEL);
- 		if (!spidev->rx_buffer) {
--			dev_dbg(&spidev->spi->dev, "open/ENOMEM\n");
- 			status = -ENOMEM;
- 			goto err_alloc_rx_buf;
- 		}
+More discussion:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2134824
+
+					Jaroslav
+
 -- 
-2.37.2
-
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
