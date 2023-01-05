@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4351965F0F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9C765F0FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbjAEQTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 11:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S234947AbjAEQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAEQTG (ORCPT
+        with ESMTP id S234918AbjAEQTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:19:06 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B514E42F;
-        Thu,  5 Jan 2023 08:19:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 59D3F17846;
-        Thu,  5 Jan 2023 16:18:56 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 271F213338;
-        Thu,  5 Jan 2023 16:18:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bxuMCHD4tmM3QwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 05 Jan 2023 16:18:56 +0000
-Date:   Thu, 5 Jan 2023 17:18:54 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com, jack@suse.cz
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <20230105161854.GA1259@blackbody.suse.cz>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+        Thu, 5 Jan 2023 11:19:46 -0500
+Received: from albireo.enyo.de (albireo.enyo.de [37.24.231.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5825652756;
+        Thu,  5 Jan 2023 08:19:43 -0800 (PST)
+Received: from [172.17.203.2] (port=58125 helo=deneb.enyo.de)
+        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        id 1pDSxr-009StN-7D; Thu, 05 Jan 2023 16:19:35 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.94.2)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1pDSxq-000GBT-P4; Thu, 05 Jan 2023 17:19:34 +0100
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+Subject: Re: [PATCH 05/30] selftests/rseq: Use ELF auxiliary vector for
+ extensible rseq
+References: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
+        <20221122203932.231377-6-mathieu.desnoyers@efficios.com>
+        <87a62yun6l.fsf@mid.deneb.enyo.de>
+        <cce499bf-6083-558d-5431-9ceab05a98d6@efficios.com>
+Date:   Thu, 05 Jan 2023 17:19:34 +0100
+In-Reply-To: <cce499bf-6083-558d-5431-9ceab05a98d6@efficios.com> (Mathieu
+        Desnoyers's message of "Wed, 4 Jan 2023 14:51:22 -0500")
+Message-ID: <87tu15rm21.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
-Content-Disposition: inline
-In-Reply-To: <20221226130505.7186-1-hanjinke.666@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Authentication-Results: smtp-out1.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: -2.20
-X-Spamd-Result: default: False [-2.20 / 50.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.20)[multipart/signed,text/plain];
-         RCPT_COUNT_SEVEN(0.00)[9];
-         SIGNED_PGP(-2.00)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+,1:+,2:~];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCVD_TLS_ALL(0.00)[]
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,60 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Mathieu Desnoyers:
 
---9jxsPFA5p3P2qPhR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> 2- Now about applications (and libc) use of rseq fields:
+>
+> Using both __rseq_size (from libc) and the result of
+> getauxval(AT_RSEQ_FEATURE_SIZE), a rseq user can figure which rseq
+> fields can indeed be used. The important part is how
+> get_rseq_feature_size() is called in the rseq selftests:
+>
+>
+>                  rseq_feature_size = get_rseq_feature_size();
+>                  if (rseq_feature_size > rseq_size)
+>                          rseq_feature_size = rseq_size;
+>
+> which basically sets rseq_feature_size to the feature size exposed
+> by the kernel, except if libc's __rseq_size is smaller than the
+> feature size exposed by the kernel, in which case it will truncate
+> the rseq_feature_size to __rseq_size.
 
-Hello Jinke.
+Ahh, this happens to work because we pass 32 today from glibc, and
+there is nothing left to do in glibc to enable these new fields.
 
-On Mon, Dec 26, 2022 at 09:05:05PM +0800, Jinke Han <hanjinke.666@bytedance.com> wrote:
-> In our test, fio writes a 100g file in sequential 4k blocksize in
-> a container with low bps limit configured (wbps=10M).
-> [...]
-> At the same time, the operation of saving a small file by vim will be
-> blocked amolst 140s.
+If true, that really argues in favor of this approach.
 
-Could you please elaborate why is this specific to blk-throtl?
+>> Maybe we should just skip the existing padding and use it only for
+>> some vaguely kernel-internal purpose (say through a vDSO helper), so
+>> that it is less of an issue how to communicate the presence of these
+>> fields to userspace.
+>
+> The fact that libc's __rseq_size is included the original struct
+> rseq padding is unfortunate, but I really see this as a purely
+> userspace ABI concern, which should not dictate the layout of the
+> kernel ABI exposed to user-space, especially given that all the
+> information required to allow rseq users to know which fields can be
+> used is readily available by combining the value loaded from
+> __rseq_size and the result of getauxval(AT_RSEQ_FEATURE_SIZE).
 
-I guess similar problem would arise for devices that are "naturally"
-slow.
-Then:
-a) it must have been solved elsewhere in the block layer (but it's
-   broken),
-b) it should be solved generically in the block layer (thus this is only
-   a partial solution).
-
-Alternatively, I imagine your problem could be reduced with
-corresponding memory limits on IO-constrained cgroups. (The memory limit
-would increase cgwb's dirty throttling and consequently leaves more
-IO bandwidth for sync IOs.)
-
-Could you describe how the submitted solution compares to memory
-limiting?
-
-> This patch splits bio queue into sync and async queues for blk-throtl
-> and gives a huge priority to sync write ios.
-
-The "huge priority" corresponds to the THROTL_SYNC_FACTOR, right?
-I'm slightly concerned about the introduction of the magical value.
-What is the reasoning behind this? (E.g. I'd expect 1:1 could work as
-well, while 1:4 suggests this is somehow better (empirically?).)
-
-Thanks,
-Michal
-
-
---9jxsPFA5p3P2qPhR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY7b4bAAKCRAkDQmsBEOq
-uQrgAQDs2aA08ChLFwdUU9xtUvTksAkbg4kIOJ6eonBHzYLMmQD9Eku/xsu7q+JO
-bkt+bgPn6r1by/lxIByZFdvliq70/g0=
-=VUBu
------END PGP SIGNATURE-----
-
---9jxsPFA5p3P2qPhR--
+But we must pass size 32 to the kernel today, otherwise rseq
+registration fails.  It's a kernel-mandated value, not something
+that's purely a userspace concern.
