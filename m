@@ -2,185 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0078465E6A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20DE65E6BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjAEISN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 03:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S231474AbjAEITf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjAEIRb (ORCPT
+        with ESMTP id S231875AbjAEISb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 03:17:31 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E425A8A8;
-        Thu,  5 Jan 2023 00:16:42 -0800 (PST)
-X-UUID: f4f9066a7ec245ddba5728d816831496-20230105
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=OiHpouo8paE/ryLEO7IwUWgZkFbg6K8fZ6A4yrPxUTc=;
-        b=lS5nggqzp3qbC5Bu94lEeubXdKYSNGysy8ExYWObUR9Ibe2FgZerpYQ4LM0XYaorawZWsgbeO/kQNeJVubLVc1vsQ0U+55+oIwF0HRwLAf5SkFqL+ioFPG5JFDJL4vtHl5zd2HME0zGS/JEvpK0R+I9IFxDOrt1t82g2kqdIOec=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:e92704b4-3934-447e-8fb7-c4efe2b1b3f4,IP:0,U
-        RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:25
-X-CID-META: VersionHash:543e81c,CLOUDID:fc2eb953-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: f4f9066a7ec245ddba5728d816831496-20230105
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1904520810; Thu, 05 Jan 2023 16:16:18 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 5 Jan 2023 16:16:16 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 5 Jan 2023 16:16:16 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <p.zabel@pengutronix.de>
-CC:     <trevor.wu@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v5 13/13] ASoC: dt-bindings: mediatek,mt8188-mt6359: add mt8188-mt6359 document
-Date:   Thu, 5 Jan 2023 16:16:06 +0800
-Message-ID: <20230105081606.6582-14-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230105081606.6582-1-trevor.wu@mediatek.com>
-References: <20230105081606.6582-1-trevor.wu@mediatek.com>
+        Thu, 5 Jan 2023 03:18:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1F15A8A3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 00:16:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672906608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7rG4uCX9wvgLxa5VSSu2Sj8AAkcwgQ3HOlO0JMkfC8U=;
+        b=BMhimpWOxC97bgDSjrxBvgPlteb9k3BGgn0l4VybrhHySb7HnKWBR8wZZon9TiNAeWdLqx
+        Y7/vjrEYVjqI4qP3xXYDvi8+SThF32lBVyIHHt5DLKTWcaIQYoNU1q0PBnm0ssN/aYz8zU
+        xhW5J+ZNhW3BSAUt/pQC3IKMRu6U19M=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-621-Fcdupt6iNpC8v26d-a9SVA-1; Thu, 05 Jan 2023 03:16:46 -0500
+X-MC-Unique: Fcdupt6iNpC8v26d-a9SVA-1
+Received: by mail-wm1-f72.google.com with SMTP id k20-20020a05600c1c9400b003d9717c8b11so17411737wms.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 00:16:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7rG4uCX9wvgLxa5VSSu2Sj8AAkcwgQ3HOlO0JMkfC8U=;
+        b=Tcm1ZD57iXDNUb17BLoDhdRyvhBLK9pKhEuUp5oU8GNlABMJ1Hepo3Dx4QHIXddZkw
+         PemEe0sYqKe4xqQzpSbe+wSjxw6xN72F2xiUJSQ507u5gsQfeWm6iq6J9cBwQn7UyG5G
+         /f7kadvNPx+bxxqmUJwMmru4w3hJwcbdQSmu0fW/IdSw7dH6RSEib8Edq+ZguXmbM0oF
+         0ff9E3DnJM2XSsJYqGmaq3/mHC4WI+L0ljWWPn9/UtxoEd9DFSh46AY0fPQj7n6S7Z8Q
+         yCr1RUubxhFMYCpN8ZOYHNBXFC48tL1Q8YvtN+kYIka65GIWFXeCR6o7yV6XsBao+AO7
+         gytg==
+X-Gm-Message-State: AFqh2kqdAIfNmlejlpv2izvzDuXL+ToI7rZNioN81UEEBYwVcVNOXyD9
+        DrEh8LwqbrSbvQEgeDzfuxKWbsTchDkqAskNMYjrBqVHbmxSIHIMvVTX7qbN4abBAYAynVhTShc
+        HlHRepDdC1LBtCwoDTaBcl4bV
+X-Received: by 2002:a05:600c:3ba4:b0:3cf:d428:21d6 with SMTP id n36-20020a05600c3ba400b003cfd42821d6mr34338873wms.3.1672906605577;
+        Thu, 05 Jan 2023 00:16:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsdMMXGP2JQgYjKQ1XLsBqX51+fK0JSBhRIo6tH/6CRGw6g3PfIyAM2+k/1yNSYK6NhIaDcIw==
+X-Received: by 2002:a05:600c:3ba4:b0:3cf:d428:21d6 with SMTP id n36-20020a05600c3ba400b003cfd42821d6mr34338855wms.3.1672906605283;
+        Thu, 05 Jan 2023 00:16:45 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e? (p200300cbc7076e00ff02ec7aded5ec1e.dip0.t-ipconnect.de. [2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e])
+        by smtp.gmail.com with ESMTPSA id fj15-20020a05600c0c8f00b003cf894dbc4fsm1534778wmb.25.2023.01.05.00.16.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 00:16:44 -0800 (PST)
+Message-ID: <b6b428a9-f411-a813-0f9f-11b7b57f64c1@redhat.com>
+Date:   Thu, 5 Jan 2023 09:16:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/3] mm/uffd: Fix missing markers on hugetlb
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230104225207.1066932-1-peterx@redhat.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230104225207.1066932-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8188 board with mt6359.
+On 04.01.23 23:52, Peter Xu wrote:
+> When James was developing the vma split fix for hugetlb pmd sharing, he
+> found that hugetlb uffd-wp is broken with the test case he developed [1]:
+> 
+> https://lore.kernel.org/r/CADrL8HWSym93=yNpTUdWebOEzUOTR2ffbfUk04XdK6O+PNJNoA@mail.gmail.com
+> 
+> Missing hugetlb pgtable pages caused uffd-wp to lose message when vma split
+> happens to be across a shared huge pmd range in the test.
+> 
+> The issue is pgtable pre-allocation on hugetlb path was overlooked.  That
+> was fixed in patch 1.
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- .../sound/mediatek,mt8188-mt6359.yaml         | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+Nice timing, I stumbled over that while adjusting background snapshot 
+code in QEMU and wondered why we are not allocating page tables in that 
+case -- and wanted to ask you why :)
 
-diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-new file mode 100644
-index 000000000000..6640272b3f4f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-@@ -0,0 +1,97 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mediatek,mt8188-mt6359.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek MT8188 ASoC sound card
-+
-+maintainers:
-+  - Trevor Wu <trevor.wu@mediatek.com>
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8188-mt6359-evb
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User specified audio sound card name
-+
-+  audio-routing:
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+    description:
-+      A list of the connections between audio components. Each entry is a
-+      sink/source pair of strings. Valid names could be the input or output
-+      widgets of audio components, power supplies, MicBias of codec and the
-+      software switch.
-+
-+  mediatek,platform:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of MT8188 ASoC platform.
-+
-+patternProperties:
-+  "^dai-link-[0-9]+$":
-+    type: object
-+    description:
-+      Container for dai-link level properties and CODEC sub-nodes.
-+
-+    properties:
-+      link-name:
-+        description:
-+          This property corresponds to the name of the BE dai-link to which
-+          we are going to update parameters in this node.
-+        items:
-+          enum:
-+            - ADDA_BE
-+            - DPTX_BE
-+            - ETDM1_IN_BE
-+            - ETDM2_IN_BE
-+            - ETDM1_OUT_BE
-+            - ETDM2_OUT_BE
-+            - ETDM3_OUT_BE
-+            - PCM1_BE
-+
-+      codec:
-+        description: Holds subnode which indicates codec dai.
-+        type: object
-+        additionalProperties: false
-+        properties:
-+          sound-dai:
-+            minItems: 1
-+            maxItems: 2
-+        required:
-+          - sound-dai
-+
-+    additionalProperties: false
-+
-+    required:
-+      - link-name
-+      - codec
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+
-+examples:
-+  - |
-+    sound {
-+        compatible = "mediatek,mt8188-mt6359-evb";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&aud_pins_default>;
-+        audio-routing =
-+            "Headphone", "Headphone L",
-+            "Headphone", "Headphone R",
-+            "AIN1", "Headset Mic";
-+        dai-link-0 {
-+            link-name = "ETDM3_OUT_BE";
-+
-+            codec {
-+                sound-dai = <&hdmi0>;
-+            };
-+        };
-+    };
-+
-+...
 -- 
-2.18.0
+Thanks,
+
+David / dhildenb
 
