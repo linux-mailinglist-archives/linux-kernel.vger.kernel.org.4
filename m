@@ -2,244 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CFD65F538
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C2E65F53D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 21:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbjAEU3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 15:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S234584AbjAEUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 15:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbjAEU3j (ORCPT
+        with ESMTP id S235124AbjAEUch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 15:29:39 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2105.outbound.protection.outlook.com [40.107.94.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684B763F57;
-        Thu,  5 Jan 2023 12:29:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I418xVgW9Ts0/uWNrdC2Pts+waJnwEC3g0iqbpWgFQu0zxiHKX4UabooRKIfrqaAyAw6qdbNZc5lehrEbjyPWx9PGO6pCPqsMNTBS4BIc4CRo5z5FbgBfjtZDyDiC9ohDOU0CU3T7DfWRCICJ1cA8Jucr6yU9GFHJ8HumhJDCtx159R8ZGUqmytXD2mHDMb3Yxizc3amdZ8b5V7sbLBzNt33kTsOUjvPP0Aze+dxYDKzS3xBHCPGOzDJa/EyD7KyStQ3rDcDl9mRrcT0/NfgCA61cyFMA4oBJ4zElmRDLHnA4uP/YMSUyr+ZdcrNSEdXf7R/MY/ztORKeQw1xPLDQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U3ja1Or1b9Hb2M0hBV1D0PlVnfRbSdz/T/1fIqkgS84=;
- b=D02TJ/5rCraIJ6/Qq66hgUhGERjHP1z80srOPWA904cDabi599u5CLTr5O3/6vpKlnQ6nLzmZc4gT8rT9wlGhmPKuPn49zFfB0DI6Fqr0P9F8jDL1yif47VrsxvTruC0LPr0W4k8tRRFKWOk0SwAWjT2ESjaSUzFbVh4WXFFOpnz67R5oWIk/jHtysrcb0aDyt/yISdeQnmqqvc0GTPTpxEb5moZZX/zmHAvGJMc8fSowGe97IrJZxMVPb2+1ZnuXp9f0uLpu/OBMkX55XFU4vil0YgoAPSnMIlefliwU99JChB20zlBk8SmCuLBAs1EKF7a2q18tRpvwWRxafYpgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U3ja1Or1b9Hb2M0hBV1D0PlVnfRbSdz/T/1fIqkgS84=;
- b=c9pRF1IKfRZIAkzHharssDePrkIJNP4PDyxEh10wh8rPHleABmwplrO1xvjawDajsTStmhPWxwaBWighYmBqa8RaKcvXGra9NywaU7iBHOuTgSa1LNYwmLlC96XOkJ1BrxeBQYFcHlcg88ystrbvL0+e0PAprtWN0BQBFH6EuH4=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by MN2PR21MB1439.namprd21.prod.outlook.com (2603:10b6:208:20a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.5; Thu, 5 Jan
- 2023 20:29:25 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::9244:f714:3c6d:ba37]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::9244:f714:3c6d:ba37%5]) with mapi id 15.20.6002.004; Thu, 5 Jan 2023
- 20:29:25 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
-Subject: RE: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Thread-Topic: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Thread-Index: AQHZIOpXAghmsq3xdEqAL1zty4oDaa6QFLQAgAALbQCAACLkQA==
-Date:   Thu, 5 Jan 2023 20:29:25 +0000
-Message-ID: <SA1PR21MB133576523E55BBC7300DE2B1BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
-        <20221207003325.21503-3-decui@microsoft.com>
-        <20230105114435.000078e4@gmail.com>
-        <SA1PR21MB133560538DDD7006CCB36E30BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20230105201024.00001ea0@gmail.com>
-In-Reply-To: <20230105201024.00001ea0@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=b5ba56a2-4979-462a-b4da-a1f2a8c75097;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-05T20:15:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MN2PR21MB1439:EE_
-x-ms-office365-filtering-correlation-id: 0501313b-cdde-4e11-b7db-08daef5b894b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xPP5QSLTzzKF+qQfVf5wPGWJWbRBJ2NZDAgcz93g4K2dw3UOftFPLneYIAtwRseQnGm2yjMo5oq5VgfaunjSa6LRN5v/kgSOx2HwRilx62ZKzqqEYlr8uR8djCY2QGmdtHg+zba5A5Y3a23EyMeN/AIwYhZyubob1+bqmDjDnk2aChsfVNFmOyPmtUbjPTtg19+vvAirXvP2hvShvxM8SGwIENcS/B/lXgsK6vtf2SWESqqiR+MrgKeQRmlcTojf2gjJ/LkzPtose0n+ncW9mPrwLjzd3aJV1oL4PjlGP+JuaQ3+BohkvIHqrxcEOnIFbYo5WuYGD0z/VFPN9tT1ci+UcVdkuiiKJBa5J+Pl9ikR8vJJCoRpPW29gcw/+GrEnye9bjZdy3ag4BPRH7tDr2MrjXhm2YLRFSiWu5a1+pR+s4S/j/oPtK7nLAhHE01z5WZ3d4NFVuzAAxsoe40ybzpLrOqXgW7jg1iL+0+Pn7cxTLH6nRfgWbRwxz7ArJHQwxhu/O2gnMmI3YgNvhLoTlJXkPI+t5eB/uwq87nC9znl2AN+beknt+VccbEs10DGk6bN12zV3wjRi+tyYYV93/d35lSH6JhYSNmf94oqm2BZfT6rx32WBax+QMy2e1gktE2gbxWvAkzuPmwgFDgozTQPJbKwWESs1/EpH2nUPkVCe0aKSM7m1VyzdyZE+X4jQZctz3e0E6dVaRrOpo9M0MZAZ/pyOS1Adl0qW5AJT3Vbn7ukI19/ua0xiSanL7/M6ozkejDbC72B3ko74JqquWqB7bqZbBNrOcShlY3B8CJgt+m83mOsSSdPkAcUH8Jr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199015)(55016003)(38070700005)(6916009)(86362001)(33656002)(316002)(10290500003)(478600001)(54906003)(7696005)(7416002)(966005)(66946007)(2906002)(5660300002)(52536014)(76116006)(66476007)(66556008)(8676002)(8936002)(66446008)(41300700001)(64756008)(4326008)(82960400001)(38100700002)(122000001)(71200400001)(26005)(82950400001)(9686003)(8990500004)(186003)(83380400001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?36Jkr7Sc3EgQfmRRzc3tQI0PiyYihc6nBBUurAlzZ+HBZK+VhbtZNmvIS90m?=
- =?us-ascii?Q?olmbptTj99RweMnozl5/peC25cy7NntJ3fNMF4QzSi6zlx6K/2LaEMFchaXZ?=
- =?us-ascii?Q?gOYBZRWYuK0jm7MNUvOOV5Ai6UX55wPyQ3txih1RWTTK1+MckQQ8ADHJXNIw?=
- =?us-ascii?Q?I0ZVhEscH5zMnYghVhvODq9WmqZuP1jtSw8t/n2eMpp6m68kMNdlu1SdKqW/?=
- =?us-ascii?Q?q/993ajDgzDhiuHSbMaeXKUvJzJIKn0PGFRZ7LdRXSb//rXt3Z8UdHBg7Wh+?=
- =?us-ascii?Q?aXUwQk418AiemBSqMAX4lmSf9nUtX9sa1haQF6g2lMQrYVpd0Sp5+ZahLWCx?=
- =?us-ascii?Q?CSpWqh0Xyv4wNXZnZyuU0NS6SDQ7hShzC5YnI3QuuYvCDeUfmIXheuXifo5E?=
- =?us-ascii?Q?9ZRzfSNoEwHoNsMEdJvtxe4JBtjDsPXxckcYJ9sbDW5xrAssccBIp18NnSRw?=
- =?us-ascii?Q?an0LQ4vyCaIuiXnM4xV8ii+DYerNLfgpIedXA143BmNuYKMLFXl+ZRykzITb?=
- =?us-ascii?Q?LZP4SWbsle88J6KCAGUN8bGldh/P+DTbo+3uoer8ajQac5IQPz5+6VdcDEXv?=
- =?us-ascii?Q?D7AWLjkXf8gfm90Ey1F1ZNIcGzoYXKcsbPGOHBXVEZLsS8LthhBZgSe81XF6?=
- =?us-ascii?Q?owIW29MzrNH2IV6WltEEn3FvdUtELYh5RSRS8ySzEPErKNHHx/3nL8imMw/s?=
- =?us-ascii?Q?OfajSVFe/W6Ox+2JtC4K1idPEarU/EfEU8+T/EeEv6EuWHmcqnsPrF7xUETN?=
- =?us-ascii?Q?EjbEUFBfnTRChcNFajJB1BHFVtETI55NuXZdF6YNHrHRn6KVyHsIZ7I3bg29?=
- =?us-ascii?Q?dAuDY6EdlCNIbRLjbDKi8AeeWlLwS8U7LeZpWJLghd43rJMUP2CP38dayzs+?=
- =?us-ascii?Q?fHDdTy91dOZHeKlcpuqrWMVmsD8vAe6Uj4294hnXHl7X4qP3btH/6owimXM1?=
- =?us-ascii?Q?CK5FnKk4ALMlhkxY2YtRYBXAbsG38IvwzQah4dccq8JaUTaGrruu/l9WzoKZ?=
- =?us-ascii?Q?J5D4MeWaIe4TeapLkZ8dfmsiRAF7x4NwESSAH3AeV7WKLyH0sxJCz8FaPY/Z?=
- =?us-ascii?Q?KHBtOpirQKDXY9rjQaVcWpSUVcKNr+rJdn+XYWll31cFlxwW3ENG6JvRKntf?=
- =?us-ascii?Q?UJilE8AkexTVNL7hq2rodH5/5bDel+FT3C9Q/CUf6fVDGja6rTgXqFdyIFtS?=
- =?us-ascii?Q?gfAl5hIGSMDe0es49KtHlG6a6lfxIxrbd+SRmUNut2W0k0Gp0C27ZWF9K9LJ?=
- =?us-ascii?Q?vKem4JkFK+rjBE3+HD4cXI6oyx1vryNXMI5Vfqs8pRAqM/J/hguIyrDeLsvt?=
- =?us-ascii?Q?MtQbUJDH8fOtU08OYhSzOvVMCRwsLbMtJnCCQNKfMYEisoF5c4Jqj9qkSAEz?=
- =?us-ascii?Q?zagXbu7uzSsQ6RiXYL+v0edevu/Go8JKG6wtgh2T1Wy0ZnxkL9X5Y15aYQg5?=
- =?us-ascii?Q?4f+IFkQZmfyOzebgqo0ahCGkGjWnPdIc15jL/jOz/4wj96CTJ5GA1VzDoUFE?=
- =?us-ascii?Q?5BwKiN7L2HzRVgkv0vaD4IypcGuGCXvouSkc2nFuNx826PfDe81SMMNRjyaW?=
- =?us-ascii?Q?NgKm/YVY4ZHFohgTPWYkfk4KOJVk7OzLA5HsZP9O?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 5 Jan 2023 15:32:37 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682A2633AB;
+        Thu,  5 Jan 2023 12:32:35 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d3so40527651plr.10;
+        Thu, 05 Jan 2023 12:32:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yH3Tvl5j/auFs5EofkFFwMToGeamd+cjbW01wMv5dGs=;
+        b=cry0C1whjkisdOk3goZdLucvhl5tO/pQzF+Yraax/vP8nDaaoelHcvOQiPgPS8TFh7
+         zWNML6l/V3XxkzB9bhC+AaW7nQYgn/OghhSDZpGRLUKjU7j0Nd9F2Hwgf3MNsoAXiTlb
+         7I1KkoMqmf2yMmFcLkctjJNW55exKk9trG6ISmYXyVKEQlgVKolyDswfDSynBzX593jJ
+         XRDHtEG+fRoIVUXD40H7MPK6fcRE195XY2Xr/1YoX/qq66mDmqNkjD4ZnKgfmtUrTwrw
+         g4Ht3Luo/OzbL+3bX3tX1C/jfna17wFwq4VGn7gbom4FBDiyEK7buNJgNBHSvYpzy1Iw
+         PGBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yH3Tvl5j/auFs5EofkFFwMToGeamd+cjbW01wMv5dGs=;
+        b=OyapNw3QKrEEILixcCBPoWcZTT2KnGkuUPsrKk4vhaW/XOWLLU1sm7xSMbvTcs1rsr
+         k7jxWJQHGewNAaeXQVP/qkaGk5ujIsZsc2DaEkUSAXW6+Jtyn+Gaqe3Pys8BUwc6km+i
+         Axm9t3XvLgqP0QZxMr5eOjRZqDCKazRD7I6Lpk1nKbV0c87YqnuHtc2mIR3AIuoBwQpC
+         OGLU4XzA65dFrQYxFgI89dmnRpT0iD6DuQYXdgvRz6761SkC2W54muY/XTl75FOOMKQD
+         kIH0HbSmNgKPYtTJKA4+QkXflqjfSa+oN34R7ESgD+1kwYnhP05WGevOX6Nb+SaKjQEM
+         ND5Q==
+X-Gm-Message-State: AFqh2kr41tBzuWzT9W4Oc3xlv9163AkiZu3CdBwkPxXMxNTnbTzFwCKD
+        h7G/j0r1L4WLnDN0ozPSOkg=
+X-Google-Smtp-Source: AMrXdXu2htccKOQkQSbjhkFZJSnA30FLOkc3qVPLsq3xQff3Ppes6xhZJdwwEe9J6wWkMLg856aWJw==
+X-Received: by 2002:a17:902:8f86:b0:191:282:5d6c with SMTP id z6-20020a1709028f8600b0019102825d6cmr60710749plo.61.1672950754627;
+        Thu, 05 Jan 2023 12:32:34 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:5bea:f9dc:5991:f6e6])
+        by smtp.gmail.com with ESMTPSA id s1-20020a170902ea0100b00178143a728esm26559841plg.275.2023.01.05.12.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 12:32:33 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>, bpf@vger.kernel.org
+Subject: [RFC/PATCH] perf lock contention: Add -o/--lock-owner option
+Date:   Thu,  5 Jan 2023 12:32:31 -0800
+Message-Id: <20230105203231.1598936-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0501313b-cdde-4e11-b7db-08daef5b894b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2023 20:29:25.0693
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NXN0ZMT/nEPr46A2+QthBE0k6zTvvTAK7T8AawmTKH2/0HJvuNsD5kPK9MWKDhSdgRCE0nbTRUl+WaXnQmOzjg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1439
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Zhi Wang <zhi.wang.linux@gmail.com>
-> Sent: Thursday, January 5, 2023 10:10 AM
-> [...]
-> I see. Then do we still need the hv_map_memory()in the following
-> code piece in netvsc.c after {set_memoery_encrypted, decrypted}()
-> supporting memory from vmalloc()?
+When there're many lock contentions in the system, people sometimes
+want to know who caused the contention, IOW who's the owner of the
+locks.
 
-For SNP, set_memory_decrypted() is already able to support memory
-from vmalloc().
+The -o/--lock-owner option tries to follow the lock owners for the
+contended mutexes and rwsems from BPF, and then attributes the
+contention time to the owner instead of the waiter.  It's a best
+effort approach to get the owner info at the time of the contention
+and doesn't guarantee to have the precise tracking of owners if it's
+changing over time.
 
-For TDX, currently set_memory_decrypted()() is unable to support
-memory from vmalloc().
+Currently it only handles mutex and rwsem that have owner field in
+their struct and it basically points to a task_struct that owns the
+lock at the moment.
 
->         /* set_memory_decrypted() is called here. */
->         ret =3D vmbus_establish_gpadl(device->channel,
-> net_device->recv_buf, buf_size,=20
-> &net_device->recv_buf_gpadl_handle);
->         if (ret !=3D 0) {
->                 netdev_err(ndev,
->                         "unable to establish receive buffer's gpadl\n");
->                 goto cleanup;
->         }
->=20
->         /* Should we remove this? */
+Technically its type is atomic_long_t and it comes with some LSB bits
+used for other meaninigs.  So it needs to clear them when casting it
+to a pointer to task_struct.
 
-The below block of code is for SNP rather than TDX, so it has nothing to do
-with the patch here. BTW, the code is ineeded removed in Michael's patchset=
-,
-which is for device assignment support for SNP guests on Hyper-V:
-https://lwn.net/ml/linux-kernel/1669951831-4180-11-git-send-email-mikelley@=
-microsoft.com/
-and I'm happy with the removal of the code.
+Also the atomic_long_t is a typedef of the atomic 32 or 64 bit types
+depending on arch which is a wrapper struct for the counter value.
+I'm not aware of proper ways to access those kernel atomic types from
+BPF so I just read the internal counter value directly.  Please let me
+know if there's a better way.
 
->         if (hv_isolation_type_snp()) {
->                 vaddr =3D hv_map_memory(net_device->recv_buf, buf_size);
->                 if (!vaddr) {
->                         ret =3D -ENOMEM;
->                         goto cleanup;
->                 }
->=20
->                 net_device->recv_original_buf =3D net_device->recv_buf;
->                 net_device->recv_buf =3D vaddr;
->         }
->=20
-> I assume that we need an VA mapped to a shared GPA here.
+When -o/--lock-owner option is used, it goes to the task aggregation
+mode like -t/--threads option does.  However it cannot get the owner
+for other lock types like spinlock and sometimes even for mutex.
 
-Yes.
+  $ sudo ./perf lock con -abo -- ./perf bench sched pipe
+  # Running 'sched/pipe' benchmark:
+  # Executed 1000000 pipe operations between two processes
 
-> The VA(net_device->recv_buf) has been associated with a shared GPA in
-> set_memory_decrypted() by adjusting the kernel page table.
+       Total time: 4.766 [sec]
 
-For a SNP guest with pavavisor on Hyper-V, this is not true in the current
-mainline kernel: see set_memory_decrypted() -> __set_memory_enc_dec():
+         4.766540 usecs/op
+           209795 ops/sec
+   contended   total wait     max wait     avg wait          pid   owner
 
-static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
-{
-		//Dexuan: For a SNP guest with paravisor on Hyper-V, currently we
-        // only call hv_set_mem_host_visibility(), i.e. the page tabe is no=
-t
-        // updated. This is being changed by Michael's patchset, e.g.,
-https://lwn.net/ml/linux-kernel/1669951831-4180-7-git-send-email-mikelley@m=
-icrosoft.com/
-       =20
-        if (hv_is_isolation_supported())
-                return hv_set_mem_host_visibility(addr, numpages, !enc);
+         403    565.32 us     26.81 us      1.40 us           -1   Unknown
+           4     27.99 us      8.57 us      7.00 us      1583145   sched-pipe
+           1      8.25 us      8.25 us      8.25 us      1583144   sched-pipe
+           1      2.03 us      2.03 us      2.03 us         5068   chrome
 
-        if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-                return __set_memory_enc_pgtable(addr, numpages, enc);
+As you can see, the owner is unknown for the most cases.  But if we
+filter only for the mutex locks, it'd more likely get the onwers.
 
-        return 0;
-}
+  $ sudo ./perf lock con -abo -Y mutex -- ./perf bench sched pipe
+  # Running 'sched/pipe' benchmark:
+  # Executed 1000000 pipe operations between two processes
 
-> hv_map_memory()
-> is with similar purpose but just a different way:
->=20
-> void *hv_map_memory(void *addr, unsigned long size)
-> {
->         unsigned long *pfns =3D kcalloc(size / PAGE_SIZE,
->                                       sizeof(unsigned long),
-> GFP_KERNEL);
->         void *vaddr;
->         int i;
->=20
->         if (!pfns)
->                 return NULL;
->=20
->         for (i =3D 0; i < size / PAGE_SIZE; i++)
->                 pfns[i] =3D vmalloc_to_pfn(addr + i * PAGE_SIZE) +
->                         (ms_hyperv.shared_gpa_boundary >>
-> PAGE_SHIFT);
->=20
->         vaddr =3D vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
->         kfree(pfns);
->=20
->         return vaddr;
-> }
+       Total time: 4.910 [sec]
+
+         4.910435 usecs/op
+           203647 ops/sec
+   contended   total wait     max wait     avg wait          pid   owner
+
+           2     15.50 us      8.29 us      7.75 us      1582852   sched-pipe
+           7      7.20 us      2.47 us      1.03 us           -1   Unknown
+           1      6.74 us      6.74 us      6.74 us      1582851   sched-pipe
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/Documentation/perf-lock.txt        |  5 ++
+ tools/perf/builtin-lock.c                     | 49 ++++++++++++---
+ tools/perf/util/bpf_lock_contention.c         |  1 +
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 60 +++++++++++++++++--
+ tools/perf/util/lock-contention.h             |  1 +
+ 5 files changed, 102 insertions(+), 14 deletions(-)
+
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 0f9f720e599d..a41c8acc7002 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -172,6 +172,11 @@ CONTENTION OPTIONS
+ --lock-addr::
+ 	Show lock contention stat by address
+ 
++-o::
++--lock-owner::
++	Show lock contention stat by owners.  Implies --threads and
++	requires --use-bpf.
++
+ -Y::
+ --type-filter=<value>::
+ 	Show lock contention only for given lock types (comma separated list).
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 718b82bfcdff..5a3ed5a2bd3d 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -58,6 +58,7 @@ static struct rb_root		thread_stats;
+ static bool combine_locks;
+ static bool show_thread_stats;
+ static bool show_lock_addrs;
++static bool show_lock_owner;
+ static bool use_bpf;
+ static unsigned long bpf_map_entries = 10240;
+ static int max_stack_depth = CONTENTION_STACK_DEPTH;
+@@ -1567,7 +1568,8 @@ static void print_contention_result(struct lock_contention *con)
+ 
+ 		switch (aggr_mode) {
+ 		case LOCK_AGGR_TASK:
+-			pr_info("  %10s   %s\n\n", "pid", "comm");
++			pr_info("  %10s   %s\n\n", "pid",
++				show_lock_owner ? "owner" : "comm");
+ 			break;
+ 		case LOCK_AGGR_CALLER:
+ 			pr_info("  %10s   %s\n\n", "type", "caller");
+@@ -1607,7 +1609,8 @@ static void print_contention_result(struct lock_contention *con)
+ 		case LOCK_AGGR_TASK:
+ 			pid = st->addr;
+ 			t = perf_session__findnew(session, pid);
+-			pr_info("  %10d   %s\n", pid, thread__comm_str(t));
++			pr_info("  %10d   %s\n",
++				pid, pid == -1 ? "Unknown" : thread__comm_str(t));
+ 			break;
+ 		case LOCK_AGGR_ADDR:
+ 			pr_info("  %016llx   %s\n", (unsigned long long)st->addr,
+@@ -1718,6 +1721,37 @@ static void sighandler(int sig __maybe_unused)
+ {
+ }
+ 
++static int check_lock_contention_options(const struct option *options,
++					 const char * const *usage)
++
++{
++	if (show_thread_stats && show_lock_addrs) {
++		pr_err("Cannot use thread and addr mode together\n");
++		parse_options_usage(usage, options, "threads", 0);
++		parse_options_usage(NULL, options, "lock-addr", 0);
++		return -1;
++	}
++
++	if (show_lock_owner && !use_bpf) {
++		pr_err("Lock owners are available only with BPF\n");
++		parse_options_usage(usage, options, "lock-owner", 0);
++		parse_options_usage(NULL, options, "use-bpf", 0);
++		return -1;
++	}
++
++	if (show_lock_owner && show_lock_addrs) {
++		pr_err("Cannot use owner and addr mode together\n");
++		parse_options_usage(usage, options, "lock-owner", 0);
++		parse_options_usage(NULL, options, "lock-addr", 0);
++		return -1;
++	}
++
++	if (show_lock_owner)
++		show_thread_stats = true;
++
++	return 0;
++}
++
+ static int __cmd_contention(int argc, const char **argv)
+ {
+ 	int err = -EINVAL;
+@@ -1742,6 +1776,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 		.max_stack = max_stack_depth,
+ 		.stack_skip = stack_skip,
+ 		.filters = &filters,
++		.owner = show_lock_owner,
+ 	};
+ 
+ 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
+@@ -2188,6 +2223,7 @@ int cmd_lock(int argc, const char **argv)
+ 		     "Filter specific type of locks", parse_lock_type),
+ 	OPT_CALLBACK('L', "lock-filter", NULL, "ADDRS/NAMES",
+ 		     "Filter specific address/symbol of locks", parse_lock_addr),
++	OPT_BOOLEAN('o', "lock-owner", &show_lock_owner, "show lock owners instead of waiters"),
+ 	OPT_PARENT(lock_options)
+ 	};
+ 
+@@ -2258,14 +2294,9 @@ int cmd_lock(int argc, const char **argv)
+ 					     contention_usage, 0);
+ 		}
+ 
+-		if (show_thread_stats && show_lock_addrs) {
+-			pr_err("Cannot use thread and addr mode together\n");
+-			parse_options_usage(contention_usage, contention_options,
+-					    "threads", 0);
+-			parse_options_usage(NULL, contention_options,
+-					    "lock-addr", 0);
++		if (check_lock_contention_options(contention_options,
++						  contention_usage) < 0)
+ 			return -1;
+-		}
+ 
+ 		rc = __cmd_contention(argc, argv);
+ 	} else {
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index 0236334fd69b..709d418be873 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -146,6 +146,7 @@ int lock_contention_prepare(struct lock_contention *con)
+ 	/* these don't work well if in the rodata section */
+ 	skel->bss->stack_skip = con->stack_skip;
+ 	skel->bss->aggr_mode = con->aggr_mode;
++	skel->bss->lock_owner = con->owner;
+ 
+ 	lock_contention_bpf__attach(skel);
+ 	return 0;
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index ad0ca5d50557..a035a267b08e 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -10,6 +10,14 @@
+ /* default buffer size */
+ #define MAX_ENTRIES  10240
+ 
++/* lock contention flags from include/trace/events/lock.h */
++#define LCB_F_SPIN	(1U << 0)
++#define LCB_F_READ	(1U << 1)
++#define LCB_F_WRITE	(1U << 2)
++#define LCB_F_RT	(1U << 3)
++#define LCB_F_PERCPU	(1U << 4)
++#define LCB_F_MUTEX	(1U << 5)
++
+ struct tstamp_data {
+ 	__u64 timestamp;
+ 	__u64 lock;
+@@ -83,6 +91,7 @@ int has_task;
+ int has_type;
+ int has_addr;
+ int stack_skip;
++int lock_owner;
+ 
+ /* determine the key of lock stat */
+ int aggr_mode;
+@@ -131,17 +140,24 @@ static inline int can_record(u64 *ctx)
+ 	return 1;
+ }
+ 
+-static inline void update_task_data(__u32 pid)
++static inline int update_task_data(struct task_struct *task)
+ {
+ 	struct contention_task_data *p;
++	int pid, err;
++
++	err = bpf_core_read(&pid, sizeof(pid), &task->pid);
++	if (err)
++		return -1;
+ 
+ 	p = bpf_map_lookup_elem(&task_data, &pid);
+ 	if (p == NULL) {
+-		struct contention_task_data data;
++		struct contention_task_data data = {};
+ 
+-		bpf_get_current_comm(data.comm, sizeof(data.comm));
++		BPF_CORE_READ_STR_INTO(&data.comm, task, comm);
+ 		bpf_map_update_elem(&task_data, &pid, &data, BPF_NOEXIST);
+ 	}
++
++	return 0;
+ }
+ 
+ SEC("tp_btf/contention_begin")
+@@ -178,6 +194,38 @@ int contention_begin(u64 *ctx)
+ 						  BPF_F_FAST_STACK_CMP | stack_skip);
+ 		if (pelem->stack_id < 0)
+ 			lost++;
++	} else if (aggr_mode == LOCK_AGGR_TASK) {
++		struct task_struct *task;
++
++		if (lock_owner) {
++			if (pelem->flags & LCB_F_MUTEX) {
++				struct mutex *lock = (void *)pelem->lock;
++				unsigned long owner = BPF_CORE_READ(lock, owner.counter);
++
++				task = (void *)(owner & ~7UL);
++			} else if (pelem->flags == LCB_F_READ || pelem->flags == LCB_F_WRITE) {
++				struct rw_semaphore *lock = (void *)pelem->lock;
++				unsigned long owner = BPF_CORE_READ(lock, owner.counter);
++
++				task = (void *)(owner & ~7UL);
++			} else {
++				task = NULL;
++			}
++
++			/* The flags is not used anymore.  Pass the owner pid. */
++			if (task)
++				pelem->flags = BPF_CORE_READ(task, pid);
++			else
++				pelem->flags = -1U;
++
++		} else {
++			task = bpf_get_current_task_btf();
++		}
++
++		if (task) {
++			if (update_task_data(task) < 0 && lock_owner)
++				pelem->flags = -1U;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -207,8 +255,10 @@ int contention_end(u64 *ctx)
+ 		key.aggr_key = pelem->stack_id;
+ 		break;
+ 	case LOCK_AGGR_TASK:
+-		key.aggr_key = pid;
+-		update_task_data(pid);
++		if (lock_owner)
++			key.aggr_key = pelem->flags;
++		else
++			key.aggr_key = pid;
+ 		break;
+ 	case LOCK_AGGR_ADDR:
+ 		key.aggr_key = pelem->lock;
+diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+index b99e83fccf5c..862b0617698a 100644
+--- a/tools/perf/util/lock-contention.h
++++ b/tools/perf/util/lock-contention.h
+@@ -128,6 +128,7 @@ struct lock_contention {
+ 	int max_stack;
+ 	int stack_skip;
+ 	int aggr_mode;
++	int owner;
+ };
+ 
+ #ifdef HAVE_BPF_SKEL
+-- 
+2.39.0.314.g84b9a713c41-goog
+
