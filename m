@@ -2,97 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F6065F138
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2FF65F13C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbjAEQav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 11:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S233820AbjAEQc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbjAEQaS (ORCPT
+        with ESMTP id S231889AbjAEQcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:30:18 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C4558304;
-        Thu,  5 Jan 2023 08:30:14 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id co23so36693724wrb.4;
-        Thu, 05 Jan 2023 08:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y3EejsfMRPYJ8twdYT45Z3uPua4+S1LNtd+Q+9tbauc=;
-        b=M17tidvmkWkYuFrf1Lwzlgp3oUKnmbk9v/FsptibpHce4ZAqpmIKX+7+UW6AAVTjks
-         wRgopWPda293hciGNXg+8XT/sDP3ZgOuBT/PW5758mCviTDFDzxNKspr6lwpDvotggrJ
-         9M5hg6/2Jgwf/JwvkipKBdIVdeT26Am3kAQSP4W1Q1fAyu8xOsyvWjC0OgLejsjghfI1
-         vHOJdXdJE2vAXeo5CK4lPNmHhtGNU/X+DS6RTLNSke5C/CebnaLmUaRuMAhsIe+rSI5S
-         pENvk5AB6SJAzxX7T8monl32sXTL+JYWbAVRIBc/DEFTpkqdCVmPl+sNV32PXh8DunrE
-         VusQ==
+        Thu, 5 Jan 2023 11:32:22 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B991718B1F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 08:32:21 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so22853404ill.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 08:32:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y3EejsfMRPYJ8twdYT45Z3uPua4+S1LNtd+Q+9tbauc=;
-        b=7I3MsvhSPevoKOYjWZL3nAifZbcp8z4/r3jgYE//egjiCYLClJsHgheJxH+o8hr0m5
-         mupL54jhDa0QWQWNAzJsO0F6chSonjHTfccE2ryD4N93zTubpXo4uv1nsYwo1G2C0sLo
-         mVe92ZGp6UM04mtMbUBye3zco2ZyihBmP99stLA9T1oOkiZLO8PyaWSq1jCz26VKo24+
-         MLxd89tK/wWULYuZEZBhznQ2dbAiYhD6P5BDzavR11rX7MdPM2av7aHExQ04olX8nOkJ
-         re68W+mSWwwL7ibrnJFDt7KQ8BdbWW9YoMv0OLc2GlyETHDxKers0rDWxxgNrdpFlysp
-         mOjw==
-X-Gm-Message-State: AFqh2koIEkAImkheK9ifEPGl7DIjzvy21vaAmLX80mlBFj8PFtwDT+nh
-        FDH3jcfx0faB4X1G9H2OX+w=
-X-Google-Smtp-Source: AMrXdXszLZ9BZFqJxfINjbGbG4pDRYZ8kDGOk2JHXjZcf5Xgus/zLO7jwULs6trog6IRkMTs0W2P3w==
-X-Received: by 2002:adf:f183:0:b0:255:96ed:950b with SMTP id h3-20020adff183000000b0025596ed950bmr30694484wro.60.1672936212723;
-        Thu, 05 Jan 2023 08:30:12 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id w17-20020a5d5451000000b0023662d97130sm37280824wrv.20.2023.01.05.08.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 08:30:12 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] riscv: dts: allwinner: d1: Add crypto engine node
-Date:   Thu, 05 Jan 2023 17:30:10 +0100
-Message-ID: <10201998.nUPlyArG6x@jernej-laptop>
-In-Reply-To: <20221231220146.646-4-samuel@sholland.org>
-References: <20221231220146.646-1-samuel@sholland.org>
- <20221231220146.646-4-samuel@sholland.org>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9UZRTW63lyBpIsMbIymTiTuR3DtdqS+1wAO4zv1bzA=;
+        b=nSyeAkKDvNDXU94PlNU+hfctAYz+E5ZJsEpppPiysvTRPX5+wQ9LIh9yb3UK2AheCC
+         6rfZNYd328VthCMCouLOtrq9OkwjSjc12PQwVY3rp6l+ZOac698s9pwX62EG7e0IkpdK
+         19RNF+y7BrhYt1cc5vrsJdkx2E57ZdhB0s57D0uaE+uKlTfZXacoeoyx4S6SW9q4j3ly
+         yl3f0YYDBwFYw6GPgaske+I3dGsZpZ6+RYGltEUFs+GW87TYWD1toV61cXhijrH4aYFr
+         QaE76v+BEmGcEZoy5inqx/eXMk4wcZ7KBzuqHiS9puNA1PKw+xZu8E++hLb6n8rz5GkP
+         cfIQ==
+X-Gm-Message-State: AFqh2koaDUql0n6i+bHD94d1kF+tWZ5JuYd1KN6byaUzljMq4+mL8uJv
+        2fQpUgn+aTO2xPOiVIxEqld1Q2DJQog6QR2AbZR9jFR1OmrO
+X-Google-Smtp-Source: AMrXdXtlM6VyGycOdbOg1yBWuqAd36l5/buD3Qu67mKOwbzYX00LMjt9rBA8FAKiKO2tQKi11yNFO+ng8L9YtxCkwUfDzFU7Yk1X
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:4a06:0:b0:6bf:e923:388b with SMTP id
+ w6-20020a6b4a06000000b006bfe923388bmr4098019iob.105.1672936341080; Thu, 05
+ Jan 2023 08:32:21 -0800 (PST)
+Date:   Thu, 05 Jan 2023 08:32:21 -0800
+In-Reply-To: <594704.1672934598@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000057916a05f186d851@google.com>
+Subject: Re: [syzbot] kernel BUG in rxrpc_put_peer
+From:   syzbot <syzbot+c22650d2844392afdcfd@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 31. december 2022 ob 23:01:45 CET je Samuel Holland napisal(a):
-> D1 contains a crypto engine which is supported by the sun8i-ce driver.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+Hello,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Best regards,
-Jernej
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5529 } 2650 jiffies s: 2809 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
 
+Tested on:
+
+commit:         a5852d90 rxrpc: Move client call connection to the I/O..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=13297ee6480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90282e312d5fd612
+dashboard link: https://syzkaller.appspot.com/bug?extid=c22650d2844392afdcfd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
