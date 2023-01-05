@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B847965F475
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69AE65F47F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbjAETaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S234263AbjAETbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235722AbjAET3t (ORCPT
+        with ESMTP id S235877AbjAETaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:29:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD056DF0B
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672946574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ADW1K4PuhFmDUthAnWNZLxX9smSORrKhgThxl96aaHM=;
-        b=RVQ8BzL8WFiVfQvdJzNF118wu9XzSD8DtgzNzzMSH6MGeexwSjCVkDwnKEayiA3LurQ45q
-        oP2JUw2dotvO3B2StrvsEJnI+jE9Nt/ED3PXN6kSBJtuGNBlXqwQVSRyQ6QWoqb5I42/Ag
-        59jJ7dSqxdA+PNlT0AMcCwHkBtFKXF0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-310-TQiLpZ97Mz63R68oqcD32Q-1; Thu, 05 Jan 2023 14:22:53 -0500
-X-MC-Unique: TQiLpZ97Mz63R68oqcD32Q-1
-Received: by mail-qk1-f199.google.com with SMTP id f13-20020a05620a408d00b006fc740f837eso25936617qko.20
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:22:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ADW1K4PuhFmDUthAnWNZLxX9smSORrKhgThxl96aaHM=;
-        b=BTUaNHOinhdjIB66SChKf0vUEEZ0GGjBebhzgVnd/yOsfBfoEr4LiueofD7BnpJUBW
-         5sK4DUUJL373GaPUOIlvzIjJNf0I6tlq17fgDDnQRGhmJ2WcW5ra/aBcPpnp/t2SLt+r
-         sHeef1C4ATLxyJLRsnPdD4bsGBmpAy5WLGcM6+I9ttDug3+C/kpo5Q8+ZH2MI5T8iHTS
-         m0bHT+18HwEyPzST6MaiAC+4Coci8t6zmDTy51eeoJSsNASUNZ53ln2271DpK9WU0Hjx
-         wm5BGixeddlOy+O2vSpMhkpjv4GjNJ2P2bvPn0I9vUiTJqQN5OJ4f4SFJFwr4/H8OyTJ
-         RvOw==
-X-Gm-Message-State: AFqh2koIl7yCLJE/x9YXDW+E0VNqyAK9vI1t1jPpR4uM79UVI6M6KMaK
-        T3AeebzrHVMJgdbJunofTFUrAUiTnOcSZkefyo6cogWPnSPH0cye9hYps4E/oRS5I+guXklz02R
-        eHrYeAoapcWJi62sKQgpA6yFN
-X-Received: by 2002:ac8:7c81:0:b0:3a8:11d6:2d0d with SMTP id y1-20020ac87c81000000b003a811d62d0dmr72093652qtv.43.1672946572436;
-        Thu, 05 Jan 2023 11:22:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsM2kmIU2DF0AgxYxehxHQzuVMOGJNoeeqcpmHVgrPJwS2pHkY2LK4czHY0M2F7U0Ty7ZCcaw==
-X-Received: by 2002:ac8:7c81:0:b0:3a8:11d6:2d0d with SMTP id y1-20020ac87c81000000b003a811d62d0dmr72093634qtv.43.1672946572234;
-        Thu, 05 Jan 2023 11:22:52 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id n23-20020ac86757000000b003a826e25bc4sm21893373qtp.64.2023.01.05.11.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 11:22:51 -0800 (PST)
-Date:   Thu, 5 Jan 2023 14:22:50 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 2/3] mm/mprotect: Use long for page accountings and retval
-Message-ID: <Y7cjir3+MpT8XqJT@x1n>
-References: <20230104225207.1066932-1-peterx@redhat.com>
- <20230104225207.1066932-3-peterx@redhat.com>
- <aabd4bb8-560b-10b0-9837-b656e1a0a9e1@redhat.com>
+        Thu, 5 Jan 2023 14:30:39 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D786B1AD;
+        Thu,  5 Jan 2023 11:25:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672946719; x=1704482719;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=17ds322DZ1gBtrZfbyVCluaxkZsYnqX1QIiiGQuNQm4=;
+  b=ZNDM4eNWMgsmEm1DuKClShIaWmfxETQMhhxNGqFBtpQplfTE1e81NfOP
+   UIQ9JBFo6ON42xu6P4pFSkzigkxVtP51lqD/aB/O+5KVscFQ3Bw95W3/3
+   nfPFOrZ1JJtXJCpOit1zEul4gZ74Mf3e69UYDwN3b38Ix7mYXCAvrI94L
+   sED2ayX15QUg7A8JdY3FRG/yMIT5etjPCd5dOH+XdYFmqMSy8OIu+iBEf
+   IaNBo2aCZrm5WyNnDFn15c9pfV1HUoDccld7Zxp/yhGGnK97qUqNalAx5
+   PiPhynhYWPDuM+L3f0MFFb8ITpY/2xBcJlH5U+J0UKmTEfCZZtJ6Ry0iW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="386754163"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="386754163"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 11:23:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="724179316"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="724179316"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 11:23:49 -0800
+Received: from [10.252.211.52] (kliang2-mobl1.ccr.corp.intel.com [10.252.211.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 91F3A580BE0;
+        Thu,  5 Jan 2023 11:23:46 -0800 (PST)
+Message-ID: <36dab127-93f9-ad87-26be-cb406fed6212@linux.intel.com>
+Date:   Thu, 5 Jan 2023 14:23:45 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aabd4bb8-560b-10b0-9837-b656e1a0a9e1@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "kernelorg@undead.fr" <kernelorg@undead.fr>,
+        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
+        "2lprbe78@duck.com" <2lprbe78@duck.com>,
+        "nicholas.johnson-opensource@outlook.com.au" 
+        <nicholas.johnson-opensource@outlook.com.au>,
+        "benoitg@coeus.ca" <benoitg@coeus.ca>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
+        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Box, David E" <david.e.box@intel.com>,
+        "Sun, Yunying" <yunying.sun@intel.com>
+References: <20230105182950.GA1158496@bhelgaas>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230105182950.GA1158496@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:44:16AM +0100, David Hildenbrand wrote:
-> I'm wondering if we should just return the number of changed pages via a
-> separate pointer and later using an int for returning errors -- when
-> touching this interface already.
-> 
-> Only who's actually interested in the number of pages would pass a pointer
-> to an unsigned long (NUMA).
-> 
-> And code that expects that there never ever are failures (mprotect, NUMA)
-> could simply check for WARN_ON_ONCE(ret).
-> 
-> I assume you evaluated that option as well, what was your conclusion?
 
-Since a single long can cover both things as retval, it's better to keep it
-simple?  Thanks,
 
--- 
-Peter Xu
+On 2023-01-05 1:29 p.m., Bjorn Helgaas wrote:
+> On Thu, Jan 05, 2023 at 06:04:52PM +0000, Luck, Tony wrote:
+>>> Hi Tony, can you share a dmesg log?  Does it look like the same thing
+>>> Kan reported, where the ECAM space is reported only via an
+>>> EfiMemoryMappedIO region and is not otherwise reserved by firmware?
+>>
+>> Attached are serial logs. "broken" is the one from v6.2-rc2, "revert" is the
+>> one with your commit reverted.
+>>
+>> I don't see the string "ECAM" in either of them.
+> 
+> Yeah, "ECAM" is what the PCIe spec calls it, but Linux logging uses
+> "MMCONFIG".  Probably should change that.
+> 
+> Anyway, your dmesg log shows the same problem:
+> 
+>   DMI: Intel Corporation BRICKLAND/BRICKLAND, BIOS BRBDXSD1.86B.0338.V01.1603162127 03/16/2016
+>   efi: Remove mem48: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
+>   PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+>   [Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
+>   PCI: not using MMCONFIG
+>   acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+> 
+> Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
+> firmware/kernel interface is as an EfiMemoryMappedIO region.
+> 
+> I think this is a firmware bug, but obviously we're going to have to
+> figure out a way around it.
+> 
 
+I just want to share that I did more tests on an Ice Lake server (a
+different generation from my original report and Tony's machine).
+
+The same problem can be found as well.
+
+[    0.000000] DMI: Intel Corporation M50CYP2SB2U/M50CYP2SB2U, BIOS
+SE5C6200.86B.4018.D65.2010201151 10/20/2020
+[    0.000000] efi: Remove mem375: MMIO range=[0x80000000-0x8fffffff]
+(256MB) from e820 map
+[    0.000000] e820: remove [mem 0x80000000-0x8fffffff] reserved
+
+[    1.528341] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem
+0x80000000-0x8fffffff] (base 0x80000000)
+[    1.566605] [Firmware Info]: PCI: MMCONFIG at [mem
+0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
+[    1.566611] PCI: not using MMCONFIG
+
+This firmware implementation should exist on the existing platforms for
+a long time.
+
+Thanks,
+Kan
