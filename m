@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BE565EDC0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DC565EDBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbjAENsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S230493AbjAENr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjAENrE (ORCPT
+        with ESMTP id S233329AbjAENrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:47:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6C73D9DF;
-        Thu,  5 Jan 2023 05:47:03 -0800 (PST)
+        Thu, 5 Jan 2023 08:47:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA583F13B;
+        Thu,  5 Jan 2023 05:47:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 812EFB81ADD;
-        Thu,  5 Jan 2023 13:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FD3C433EF;
-        Thu,  5 Jan 2023 13:46:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A455B81AD7;
+        Thu,  5 Jan 2023 13:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15C1C433F0;
+        Thu,  5 Jan 2023 13:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926421;
-        bh=dEuDRHQ7Sm3N5Gxt4MXi3ZvxmHYSAXFo1vd8BJvQn2w=;
+        s=k20201202; t=1672926424;
+        bh=Yiulr7Sl0+EFOJK9Ppots4MUfhCrrD1tUceLFrFQBAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OchErH5pzoqwPQBxaeD1KmpvM0Qf2mQyORTo8uiK9ZSVEqrBoYdnvxeA9fgltxI2w
-         K+lt7wSpOAQhtFngzLS1YPMeDa7u8YyYfUQzWhLEXx//v+NcMwVVGMZ14j5B4yYwtc
-         Gz2llC+hREtLN7T2j8TJhoapsu4Tvl9H9Ea4U+iywIe1WfdqiSsa91X/PN/QU6vkOj
-         vpceBO4bgkeM8GC/d+9oF8hnTDs4VEmb/5XPegk8IVnpcFPmYY/oaZHAn80aeJ5bzl
-         P3e/3RKK1j7yO5jllOrMfT/qGfdO1mmg+SQO7/JuMeTPBucaMAGW81RqdaLxPIKrsw
-         0Y6heMtAHqsQg==
+        b=Au29traIASfq9dNyl8+ZbpOYCSGvTUHA36hQmRXoeSdhcuZNHgxROKVUPJcimuE1n
+         wTEbQgbBcTh9IKa30BBGzEEizNTCmerQLas4A01ekpZ58esEAO/+Rde/Vg27XOVo9b
+         bZNnVdGZ93ajq5l4ODUBGX0WnM68txXrJsYBDAwyEidQ9mf8CIKrOVXYFYQWaPEn+O
+         SZjSn6y6w3oUdaUw+CnGpaDlHsnD5C4XYBSugOjNdoXwB2Q3c/7/PEbf9fq/02yvJT
+         D7aT/kVmyHHz6NK7VOyLFzbHEYox6ou3pPktli0m8tKNR2Nmx/a9L3hF3PeLfot47M
+         iz0s6LCgloHbQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 07/27] power: remove tosa_battery driver
-Date:   Thu,  5 Jan 2023 14:46:02 +0100
-Message-Id: <20230105134622.254560-8-arnd@kernel.org>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org
+Subject: [PATCH 08/27] ata: remove palmld pata driver
+Date:   Thu,  5 Jan 2023 14:46:03 +0100
+Message-Id: <20230105134622.254560-9-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
@@ -58,52 +61,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The PXA tosa machine is removed, so this driver is no longer
-in use.
+The PXA palmld machine was removed, so the pata driver is no
+longer used and can be removed. There is a chance that some of
+this code might be useful for turning some of the other PXA
+PCMCIA host drivers into PATA drivers, but it's clear that
+it would not work unmodified, and it seems unlikely that
+someone would do this work.
 
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Marek Vasut <marek.vasut@gmail.com>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/power/supply/Kconfig        |   7 -
- drivers/power/supply/Makefile       |   1 -
- drivers/power/supply/tosa_battery.c | 512 ----------------------------
- 3 files changed, 520 deletions(-)
- delete mode 100644 drivers/power/supply/tosa_battery.c
+ drivers/ata/Kconfig       |   9 ---
+ drivers/ata/Makefile      |   1 -
+ drivers/ata/pata_palmld.c | 137 --------------------------------------
+ 3 files changed, 147 deletions(-)
+ delete mode 100644 drivers/ata/pata_palmld.c
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index b7fdcfd5d4e7..3c37f3a6431c 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -195,13 +195,6 @@ config BATTERY_SAMSUNG_SDI
- 	  Say Y to enable support for Samsung SDI battery data.
- 	  These batteries are used in Samsung mobile phones.
+diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+index e4d9e39b08dd..4aafb75bf0c3 100644
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+@@ -1082,15 +1082,6 @@ config PATA_OPTI
  
--config BATTERY_TOSA
--	tristate "Sharp SL-6000 (tosa) battery"
--	depends on MACH_TOSA && MFD_TC6393XB && TOUCHSCREEN_WM97XX
+ 	  If unsure, say N.
+ 
+-config PATA_PALMLD
+-	tristate "Palm LifeDrive PATA support"
+-	depends on MACH_PALMLD
 -	help
--	  Say Y to enable support for the battery on the Sharp Zaurus
--	  SL-6000 (tosa) models.
+-	  This option enables support for Palm LifeDrive's internal ATA
+-	  port via the new ATA layer.
 -
- config BATTERY_COLLIE
- 	tristate "Sharp SL-5500 (collie) battery"
- 	depends on SA1100_COLLIE && MCP_UCB1200
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 38737ea9b9d5..55c1aae91d1d 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -36,7 +36,6 @@ obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
- obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
- obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
- obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+= samsung-sdi-battery.o
--obj-$(CONFIG_BATTERY_TOSA)	+= tosa_battery.o
- obj-$(CONFIG_BATTERY_COLLIE)	+= collie_battery.o
- obj-$(CONFIG_BATTERY_INGENIC)	+= ingenic-battery.o
- obj-$(CONFIG_BATTERY_IPAQ_MICRO) += ipaq_micro_battery.o
-diff --git a/drivers/power/supply/tosa_battery.c b/drivers/power/supply/tosa_battery.c
+-	  If unsure, say N.
+-
+ config PATA_PCMCIA
+ 	tristate "PCMCIA PATA support"
+ 	depends on PCMCIA
+diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
+index 0a863e7f3c60..4ee5c0761d90 100644
+--- a/drivers/ata/Makefile
++++ b/drivers/ata/Makefile
+@@ -105,7 +105,6 @@ obj-$(CONFIG_PATA_MPIIX)	+= pata_mpiix.o
+ obj-$(CONFIG_PATA_NS87410)	+= pata_ns87410.o
+ obj-$(CONFIG_PATA_OPTI)		+= pata_opti.o
+ obj-$(CONFIG_PATA_PCMCIA)	+= pata_pcmcia.o
+-obj-$(CONFIG_PATA_PALMLD)	+= pata_palmld.o
+ obj-$(CONFIG_PATA_PLATFORM)	+= pata_platform.o
+ obj-$(CONFIG_PATA_OF_PLATFORM)	+= pata_of_platform.o
+ obj-$(CONFIG_PATA_RB532)	+= pata_rb532_cf.o
+diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
 deleted file mode 100644
-index 73d4aca4c386..000000000000
+index 51caa2a427dd..000000000000
 -- 
 2.39.0
 
