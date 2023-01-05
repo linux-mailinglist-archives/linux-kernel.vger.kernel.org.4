@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD2265F5E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C24F65F5EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbjAEVft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S235703AbjAEVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbjAEVfr (ORCPT
+        with ESMTP id S230402AbjAEVjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:35:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645BD63F7F;
-        Thu,  5 Jan 2023 13:35:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17639B81BDF;
-        Thu,  5 Jan 2023 21:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF86C433F0;
-        Thu,  5 Jan 2023 21:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672954543;
-        bh=J1jmUwTH6dincuSOTR/OwUfYpuEsFtTrqbv5U3W9pYc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JPNdeFZCCvikdHla0ZygAa51wkbMeDXnfzt+HFZgVweaZx8TXyidw1l5pt9Q6/oU8
-         SMxfSdEkna+XLuaBmYOCTznqkug73bStiu+U2W4lBmQumbSb0B0AqgiYtOAEE/hmaL
-         3Y4DNHhVjJL6xGCCjfHZoleDGwaUnZfzNKGw7mqB2ZNgOdQVgm8zzmf/V2LaqyH4mR
-         hTcW0TUDs9xOIwK4mKIm5qkbKmfEu83nNtuEw6tjOOaSOWf1ZCCJTog89uyE53BRqz
-         yIFgwk18LGbh3jBFIpMkNsn6itojvS78za+Orjl2PI2SNvZqBIOje/oCMuDBO2AQ5y
-         dBazfx/xVNuFw==
-Date:   Thu, 5 Jan 2023 15:35:41 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105213541.GA1171476@bhelgaas>
+        Thu, 5 Jan 2023 16:39:24 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06023671BC;
+        Thu,  5 Jan 2023 13:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=AhH6eLvFTyTXzefYJDRhSSM1c636n8NUP2ghngWh9B4=; b=TJE+5zRtvlUdOanWiqGg8fa+aL
+        VOYQjIk3sHp76KJSCjmZUwbfy71hJ1PYXBO3gTEuIMWYKWet2B1Yi/J4gr0cPylEPDrhNO2WLy7bp
+        m9EYIOD6xZvCJ/rOvdCFK746juuU3vZx03HSVSMdy+JBLFBoR8YeyTxMPCv025ALgM0nWhKMNhPjJ
+        yVsRsNSI2jVldje1EEJZ3VqPIlLeWhl1qLA+Rh+Vdqptz/CGXklILXIH6xX5JJ5MXBtNpBsfpVskh
+        4rJCcPTz3sQu9cV0nd4uMxchq1DAq5H501fIBsPEEkP7ecdly3qjiQkVc9QUFaPHiBuUERwcyT3R1
+        3xBG7Hbg==;
+Received: from p200300ccff1194001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff11:9400:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pDXx1-0001Ks-B1; Thu, 05 Jan 2023 22:39:03 +0100
+Received: from andi by aktux with local (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pDXx0-007ffw-NW; Thu, 05 Jan 2023 22:39:02 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible combinations
+Date:   Thu,  5 Jan 2023 22:38:56 +0100
+Message-Id: <20230105213856.1828360-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63b73f24c1a_517412943a@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:20:36PM -0800, Dan Williams wrote:
-> Bjorn Helgaas wrote:
-> > On Thu, Jan 05, 2023 at 11:44:28AM -0800, Dan Williams wrote:
-> > > Bjorn Helgaas wrote:
-> > 
-> > > > Apparently the only mention of [mem 0x80000000-0x8fffffff] in the
-> > > > firmware/kernel interface is as an EfiMemoryMappedIO region.
-> > > > 
-> > > > I think this is a firmware bug, but obviously we're going to have to
-> > > > figure out a way around it.
-> > > 
-> > > Definitely an ambiguity / conflict, but not sure it is a bug when you
-> > > look at from the perspective of how would an EFI runtime service use
-> > > ECAM/MMCONFIG space? 
-> > 
-> > I think it's perfectly fine for firmware to advertise ECAM space as an
-> > EfiMemoryMappedIO region via EFI GetMemoryMap() because it certainly
-> > makes sense that EFI runtime services would use config space.
-> > 
-> > My understanding is that the OS should learn about device address
-> > space via ACPI _CRS, not GetMemoryMap().  The MCFG spec (PCI Firmware
-> > Spec, r3.3, sec 4.1.2) requires ECAM space to be reserved via a
-> > PNP0C02 motherboard device _CRS.
-> > 
-> > So what I think *is* a bug is that this firmware doesn't report the
-> > ECAM space via PNP0C02 _CRS.
-> > 
-> > If somebody thinks the lack of this reservation is not a bug, I would
-> > love to hear ideas about how Linux *should* be handling this.  There
-> > are many variations on how firmware does things like this, and it's
-> > been a nightmare trying to figure out something that works with all of
-> > them.
-> 
-> I am trying to get a statement from a BIOS person, but in the meantime I
-> am confused by this lead in sentence of Note 2 in "PCI Firmware Spec
-> v3.2 Table 4-2: MCFG Table to Support Enhanced Configuration Space
-> Access":
-> 
->     If the operating system does not natively comprehend reserving the MMCFG
->     region, the MMCFG region must be reserved by firmware. The address range
->     reported in the MCFG table or by _CBA method (see Section 4.1.3) must be
->     reserved by declaring a motherboard resource...
-> 
-> Which seems to say it is ok for the OS to treat MMCFG space as reserved
-> by default. It certainly fails the Robustness Principle for the BIOS to
-> *assume* that the OS can natively comprehend that reservation, but it
-> seems Linux is in its rights to make that assumption.
+Currently make dtbs_check shows lots of errors because imx*.dtsi does
+not use single compatibles but combinations of them.
+Allow all the combinations used there.
 
-I read "OS natively comprehends MMCFG space" as meaning "the OS has
-device-specific knowledge of the PCI host bridge and the associated
-MMCFG space." But in that case, the OS wouldn't need MCFG at all, so
-maybe I'm not reading it right.
+Patches fixing the dtsi files according to binding documentation were
+submitted multiple times and are commonly rejected, so relax the rules.
+Example:
+https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
 
-There must have been some reason for that sentence, e.g., some system
-that didn't or couldn't report MMCFG via PNP0C02 _CBA, but it sure
-makes a mess of what could have been a simple "range must be reserved"
-statement.
+Reason: compatibility of new dtbs with old kernels or bootloaders.
 
-> > > Would it be enough to add this clarification in "EFI 2.9 Table 7-6
-> > > Memory Type Usage after ExitBootServices()"?
-> > > 
-> > > s/This memory is not used by the OS./This memory is not used by the OS,
-> > > unless ACPI declares it for another purpose./
-> > 
-> > I guess the idea is that MCFG is a form of "ACPI declaring it"?  I
-> > don't have an explicit citation for it, but I infer at [1] that ACPI
-> > static tables are second-class citizens and not intended as a way of
-> > reserving address space because that would lead to problems booting
-> > old OSes on firmware that provides new tables unknown to the OS.
-> 
-> Ah, true, certainly for new stuff, but what about MCFG specifically?
-> What harm is there an assuming that MMCONFIG intersecting with
-> EfiMemoryMappedIO shall be treated as reserved for MMCONFIG usage.
+This will significantly reduce noise on make dtbs_check.
 
-Probably none, and I think that's what we'll have to do.  Ugh.
-Another random special-case rule.
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ .../bindings/mmc/fsl-imx-esdhc.yaml           | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/PCI/acpi-info.rst?id=v6.1#n32
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index dc6256f04b42..118ebb75f136 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -37,6 +37,30 @@ properties:
+           - fsl,imx8mm-usdhc
+           - fsl,imxrt1050-usdhc
+           - nxp,s32g2-usdhc
++      - items:
++          - const: fsl,imx50-esdhc
++          - const: fsl,imx53-esdhc
++      - items:
++          - const: fsl,imx6sl-usdhc
++          - const: fsl,imx6q-usdhc
++      - items:
++          - const: fsl,imx6sll-usdhc
++          - const: fsl,imx6sx-usdhc
++      - items:
++          - const: fsl,imx6sx-usdhc
++          - const: fsl,imx6sl-usdhc
++      - items:
++          - const: fsl,imx6ul-usdhc
++          - const: fsl,imx6sx-usdhc
++      - items:
++          - const: fsl,imx6ull-usdhc
++          - const: fsl,imx6sx-usdhc
++      - items:
++          - const: fsl,imx7d-usdhc
++          - const: fsl,imx6sl-usdhc
++      - items:
++          - const: fsl,imx7ulp-usdhc
++          - const: fsl,imx6sx-usdhc
+       - items:
+           - enum:
+               - fsl,imx8mq-usdhc
+-- 
+2.30.2
+
