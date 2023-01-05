@@ -2,116 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3074165E74E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5FE65E753
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbjAEJGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S231518AbjAEJGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjAEJFH (ORCPT
+        with ESMTP id S232239AbjAEJFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:05:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FB15007F
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:04:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672909461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 5 Jan 2023 04:05:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F75B50E4C;
+        Thu,  5 Jan 2023 01:05:15 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 45D526BB8B;
+        Thu,  5 Jan 2023 09:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672909514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Gex+QnT4hwAgx1h+eIu+UAUxgiKZCLZj1HYsXCJOojw=;
-        b=cgC0nni0XH772NNNUeYmGTKP64KSxj3RZRNqgJXjthVi5ZMefx9RI+bcgAi9kUDUAXNI7E
-        EFVGZCc1qxcrWt5jPtA9Yf77fT4x7jBiCtR4rTaFQjKz8I/p6HZUUH/SnTmd/nyRC0n9Jm
-        xuAj1WBofAW5BNkMa0HaQZ/S5j8KR9Y=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-530-X3jpMMtzMU6iX1HPFCRUNg-1; Thu, 05 Jan 2023 04:04:17 -0500
-X-MC-Unique: X3jpMMtzMU6iX1HPFCRUNg-1
-Received: by mail-wm1-f70.google.com with SMTP id c7-20020a1c3507000000b003d355c13ba8so19425763wma.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 01:04:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gex+QnT4hwAgx1h+eIu+UAUxgiKZCLZj1HYsXCJOojw=;
-        b=EJvtgH0BmVL8SodLpAPg5dRKc4WZz2mj64d55sb/MxWcN+/oy+6mZUh8MC5MMcAGlo
-         CTPG4hUuy1+XHrtgWUNUiiwiJxkulMgimtCjEE6gba3SmtxyJym7D1oYlS+6qcv9nHCL
-         iDEJWhOuYY6lVDhMPoAiwNcwiAfzWDxLN+F11O6PrXQ0/6DkQuU96vhdcVyATj3zEosF
-         7nwp+dt/93PD+USDo5fBgx8YfacHQrgHT8ueuvNybri/rd/0LrULU2iScLMlWZcd7LRj
-         0LIw3885Ivl8lV6OWYHbA+JAA/8zYEjurdLKrw7NKx61SbW4l9P/xaNPdPH0Igi77mFV
-         Kb7A==
-X-Gm-Message-State: AFqh2kqr8ZU6vdS4HRlFXSKR8ZnNZ8ojD7+WYT6ahQl2tajePvlMGjKZ
-        7I05hzEoVxP3kPzaNHsEbxNEeubxLA68KWzcRJniWfOjfbWZ3QOgpSaEhm/gHmi1tnZ8EwAnWxN
-        q1x/iFGY47gOhiefLtL3QwuKl
-X-Received: by 2002:a05:600c:3d11:b0:3cf:8b22:76b3 with SMTP id bh17-20020a05600c3d1100b003cf8b2276b3mr36164745wmb.0.1672909456589;
-        Thu, 05 Jan 2023 01:04:16 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvE4YV6gmwoMdYh7/YQCeNZ3S6PGe2qC4e43M/dqNDy8OkC6hj8sgg2g/J5YgDEpskNAkF9hw==
-X-Received: by 2002:a05:600c:3d11:b0:3cf:8b22:76b3 with SMTP id bh17-20020a05600c3d1100b003cf8b2276b3mr36164714wmb.0.1672909456272;
-        Thu, 05 Jan 2023 01:04:16 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e? (p200300cbc7076e00ff02ec7aded5ec1e.dip0.t-ipconnect.de. [2003:cb:c707:6e00:ff02:ec7a:ded5:ec1e])
-        by smtp.gmail.com with ESMTPSA id n126-20020a1ca484000000b003d21759db42sm1717113wme.5.2023.01.05.01.04.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 01:04:15 -0800 (PST)
-Message-ID: <ccbd7330-b7d7-9048-b49a-80f904353c21@redhat.com>
-Date:   Thu, 5 Jan 2023 10:04:14 +0100
+        bh=KjEYGtXHIvu5hfDTBI8PtDhvnl4Ui5seQm0BK9rUcK8=;
+        b=oT4Pi+UDQ61FFQ2pvNpb5HDPBMOdDXl/+KeEPQdLvXx8DTxCNt1kvcn7EvJbYumniXfSXP
+        UFEZtFAR/xYctcYWIXlevMJxR4zs8vDY9ADm64BI0B1lSG0yW96MGLJ3+zvorUgj3gnkoP
+        dtVt4S6G1Oti9+JKmMwbfp4d2TYtUEk=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A8CFD2C17B;
+        Thu,  5 Jan 2023 09:05:13 +0000 (UTC)
+Date:   Thu, 5 Jan 2023 10:05:13 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+Message-ID: <Y7aSyb0n4B2aCRZH@alley>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com>
+ <Y7WoZARt37xGpjXD@alley>
+ <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 1/1] mm: fix vma->anon_name memory leak for anonymous
- shmem VMAs
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     hughd@google.com, hannes@cmpxchg.org, vincent.whitchurch@axis.com,
-        seanjc@google.com, rppt@kernel.org, shy828301@gmail.com,
-        pasha.tatashin@soleen.com, paul.gortmaker@windriver.com,
-        peterx@redhat.com, vbabka@suse.cz, Liam.Howlett@Oracle.com,
-        ccross@google.com, willy@infradead.org, arnd@arndb.de,
-        cgel.zte@gmail.com, yuzhao@google.com, bagasdotme@gmail.com,
-        suleiman@google.com, steven@liquorix.net, heftig@archlinux.org,
-        cuigaosheng1@huawei.com, kirill@shutemov.name,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org,
-        syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
-References: <20230105000241.1450843-1-surenb@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230105000241.1450843-1-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.01.23 01:02, Suren Baghdasaryan wrote:
-> free_anon_vma_name() is missing a check for anonymous shmem VMA which
-> leads to a memory leak due to refcount not being dropped.  Fix this by
-> calling anon_vma_name_put() unconditionally. It will free vma->anon_name
-> whenever it's non-NULL.
+On Wed 2023-01-04 09:07:02, Song Liu wrote:
+> On Wed, Jan 4, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+> > > Function __module_address() can quickly return the pointer of the module
+> > > to which an address belongs. We do not need to traverse the symbols of all
+> > > modules to check whether each address in addrs[] is the start address of
+> > > the corresponding symbol, because register_fprobe_ips() will do this check
+> > > later.
+> > >
+> > > Assuming that there are m modules, each module has n symbols on average,
+> > > and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+> > > complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+> > > and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+> > > (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+> > > the ratio is still greater than 1. Therefore, the new method will
+> > > generally have better performance.
+> > >
+> > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > > ---
+> > >  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+> > >  1 file changed, 40 insertions(+), 61 deletions(-)
+> > >
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index 5f3be4bc16403a5..0ff9037098bd241 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+> > >       }
+> > >  }
+> > >
+> > > -struct module_addr_args {
+> > > -     unsigned long *addrs;
+> > > -     u32 addrs_cnt;
+> > > -     struct module **mods;
+> > > -     int mods_cnt;
+> > > -     int mods_cap;
+> > > -};
+> > > -
+> > > -static int module_callback(void *data, const char *name,
+> > > -                        struct module *mod, unsigned long addr)
+> > > +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+> > >  {
+> > > -     struct module_addr_args *args = data;
+> > > -     struct module **mods;
+> > > -
+> > > -     /* We iterate all modules symbols and for each we:
+> > > -      * - search for it in provided addresses array
+> > > -      * - if found we check if we already have the module pointer stored
+> > > -      *   (we iterate modules sequentially, so we can check just the last
+> > > -      *   module pointer)
+> > > -      * - take module reference and store it
+> > > -      */
+> > > -     if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+> > > -                    bpf_kprobe_multi_addrs_cmp))
+> > > -             return 0;
+> > > +     int i, j, err;
+> > > +     int mods_cnt = 0;
+> > > +     int mods_cap = 0;
+> > > +     struct module *mod;
+> > > +     struct module **mods = NULL;
+> > >
+> > > -     if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+> > > -             return 0;
+> > > +     for (i = 0; i < addrs_cnt; i++) {
+> > > +             mod = __module_address(addrs[i]);
+> >
+> > This must be called under module_mutex to make sure that the module
+> > would not disappear.
 > 
-> Fixes: d09e8ca6cb93 ("mm: anonymous shared memory naming")
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Reported-by: syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> module_mutex is not available outside kernel/module/. The common
+> practice is to disable preempt before calling __module_address().
+> CONFIG_LOCKDEP should catch this.
 
+I see. Sigh, it is always better to take mutex than disable
+preemption. But it might be acceptable in this case. We just need
+to be careful.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+First, the preemption must stay disabled all the time until
+try_module_get(). Otherwise the returned struct module could
+disappear in the meantime.
 
--- 
-Thanks,
+Second, krealloc_array() has to be called with preemption
+enabled. It is perfectly fine to do it after try_module_get().
 
-David / dhildenb
-
+Best Regards,
+Petr
