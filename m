@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854AD65F3EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728865F3F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbjAESpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S235088AbjAESrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbjAESpB (ORCPT
+        with ESMTP id S234467AbjAESrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:45:01 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7062BFC
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:44:59 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id fc4so91995309ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:44:59 -0800 (PST)
+        Thu, 5 Jan 2023 13:47:17 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1433E0E1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 10:47:15 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v30so2666562edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 10:47:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojaUANg6489F6UhekwXZgoRInAu5mt099cKH9PNdGSE=;
-        b=ZlI5Vuj2TBGXPpsGgWMlVWG4ukkh8Jncr3YY+gT6T8/0Ia8rxK390imIHfsK/Gd3qn
-         +3rIcWuMxjcCVp0gYX6JnKb8OBnVxfnCaB6tG+wMoNWbZ6Ue3xfy7GBTHagFOSp9aHfH
-         0m8bS3J1r9EghcBzNAV3DXtlfuVXZWUkP03Ho=
+        bh=Kgw8ytZ8qgDy6GzZF1ryroLO4GjbQhKhTHuYH5QueqQ=;
+        b=d4xQW7aOqawwrqQ+Q+tdvQn2OItCU6t0Hz/kCQHrlQwBzfrFOZf00OWnnUp8NDcXse
+         Gg4YLx0q41tNcLQFxYmTlq8LiiPDPw5awK6PTxoyYmyt2R9nGczDfnim45oqqSlwH1ku
+         +A2oP7dYjAfTqmAUCDoI375sLGHDgzCW1Qz/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ojaUANg6489F6UhekwXZgoRInAu5mt099cKH9PNdGSE=;
-        b=tGojxAZYOQqN1yFnoiF6crNi+060nAY2S1wDlHJTm94XdACt0J+U0uni7t+WmSznI/
-         cz43sW8TtBleNif7fO2nP50ZOljQGPsU52znVQlSWkvxAKABlNY7IengNmV8cjiy3JF5
-         OnBHHUpAh0lzqcDAKzWqwvdAmzdxsumTHhRBi5/hu4PvpwOLkmOgOremln3KhWpkjHfF
-         e6NWXqIrLOQhIG8qZ1J8e2adVRtfg2P7cH/6mg9HA2CGjiEmQd0E9CZcovk2AFRt0iKC
-         htYrS0vurJGlSFccIJgzxrBbQSJn4k6ob9YQd6/D9GbG1w3EY997ClYawk9hfEF0sA7M
-         5bpQ==
-X-Gm-Message-State: AFqh2krcuFA7R2bK4Bm/HAVj+Azu9bYs0g27CfFd4Gyy/yCxvUs8+OP9
-        JW9KWgpZMB0sCG7jxp535y2nnIi0pcAuGSwcCLBayg==
-X-Google-Smtp-Source: AMrXdXuZaTwSwLvO6Evn4zHTCe1NYcoZ2XwUQT8vG4f12cSnl//oOaHYwI30X/CqN6x9x7eUZLgaMpZZ+5liuVOyY5s=
-X-Received: by 2002:a17:907:2be3:b0:7c0:cd95:bbaf with SMTP id
- gv35-20020a1709072be300b007c0cd95bbafmr4687962ejc.460.1672944297682; Thu, 05
- Jan 2023 10:44:57 -0800 (PST)
+        bh=Kgw8ytZ8qgDy6GzZF1ryroLO4GjbQhKhTHuYH5QueqQ=;
+        b=3+Cw/gTX53knm5f+g+zUAQtdOG49Nhu99Z1wvn+Ja9s8MTVx65JKanQXsO4aCm6W6V
+         Zc6wRw06sNxKwH+ubHAIum1VMzOS14ADphW2Igae3yT1cobbJMErjZkCpi+NogXbJYaP
+         GIhEFC94Zbx3uqa8hVPRslMaDuOnszZLshbTgzHDwGXdTQzI8yAAeQGcD9prWF25Wv9L
+         T6jtQ8KueI9f8uaRSkHaAA/i8BzvtiCNTG245777Vykg04GKE+X9GJjJMd72vsBxk6t7
+         qtO1wKcqX3bRVV+OFfVl88WFCqW/3XSue4+hL5xgDOC7JZjCYCUFOHUIX9nj00brw/Df
+         +bpg==
+X-Gm-Message-State: AFqh2kpIENFEsByGaoJavQ/YoDoQMNj4lfmCOYyGnmnhFiSDpicJTMJI
+        h+8u3Qx2MaQOUDSiu+qlDu+4ItI27lSHLuSMQWvtyA==
+X-Google-Smtp-Source: AMrXdXt0rB7h75RQCatj+bf0XdBiLgg9pvTKdsd4RrtVWZ6bj/PPRJBXCJfr4/DyqsPu8Mf+F4TBvcqf3H1BjTJKV4k=
+X-Received: by 2002:a05:6402:516b:b0:47e:1b4a:5489 with SMTP id
+ d11-20020a056402516b00b0047e1b4a5489mr6363589ede.262.1672944433616; Thu, 05
+ Jan 2023 10:47:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20230104060846.112216-1-pmalani@chromium.org>
-In-Reply-To: <20230104060846.112216-1-pmalani@chromium.org>
+References: <20230104060846.112216-1-pmalani@chromium.org> <20230104060846.112216-2-pmalani@chromium.org>
+In-Reply-To: <20230104060846.112216-2-pmalani@chromium.org>
 From:   Benson Leung <bleung@chromium.org>
-Date:   Thu, 5 Jan 2023 10:44:41 -0800
-Message-ID: <CANLzEkuV3r6hQeB_e5qHm7eWLF2VftH-U9sbED30wWmu29UEyg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform/chrome: cros_typec_switch: Use fwnode* prop check
+Date:   Thu, 5 Jan 2023 10:46:57 -0800
+Message-ID: <CANLzEkvqOvbSqtxG+YZoTmU=xH3ZZzbLEND7RQQH7pVPEY1hQg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] platform/chrome: cros_typec_switch: Check for retimer flag
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
@@ -67,17 +67,9 @@ Hi Prashant,
 
 On Tue, Jan 3, 2023 at 10:09 PM Prashant Malani <pmalani@chromium.org> wrote:
 >
-> Using device_property_present() multiple times on an ACPI device
-> leads to kernel panics on Chromebook systems. This happens when there
-> is > 1 boolean property in an ACPI device which is created dynamically
-> by the BIOS as part of SSDT[1] on Chromebook systems
->
-> Since fwnode_* can handle simple device tree properties equally
-> well, switch to using the fwnode_property_present() function
-> version. This will avoid panics and make the usage consistent
-> when we introduce a check for the 2nd property in a subsequent patch.
->
-> [1] https://wiki.osdev.org/SSDT
+> Not all ports have retimers. Only register a retimer switch if the
+> "retimer-switch" property is present for that port's mux
+> device.
 >
 > Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
@@ -87,25 +79,38 @@ Thanks,
 Benson
 
 > ---
->  drivers/platform/chrome/cros_typec_switch.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/platform/chrome/cros_typec_switch.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 >
 > diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform/chrome/cros_typec_switch.c
-> index a26219e97c93..2536bda03bf3 100644
+> index 2536bda03bf3..9ed1605f4071 100644
 > --- a/drivers/platform/chrome/cros_typec_switch.c
 > +++ b/drivers/platform/chrome/cros_typec_switch.c
-> @@ -254,7 +254,7 @@ static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
+> @@ -246,14 +246,16 @@ static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
+>                 port->port_num = index;
+>                 sdata->ports[index] = port;
 >
->                 dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
+> -               ret = cros_typec_register_retimer(port, fwnode);
+> -               if (ret) {
+> -                       dev_err(dev, "Retimer switch register failed\n");
+> -                       goto err_switch;
+> +               if (fwnode_property_present(fwnode, "retimer-switch")) {
+> +                       ret = cros_typec_register_retimer(port, fwnode);
+> +                       if (ret) {
+> +                               dev_err(dev, "Retimer switch register failed\n");
+> +                               goto err_switch;
+> +                       }
+> +
+> +                       dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
+>                 }
 >
-> -               if (!device_property_present(fwnode->dev, "mode-switch"))
-> +               if (!fwnode_property_present(fwnode, "mode-switch"))
+> -               dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
+> -
+>                 if (!fwnode_property_present(fwnode, "mode-switch"))
 >                         continue;
 >
->                 ret = cros_typec_register_mode_switch(port, fwnode);
 > --
 > 2.39.0.314.g84b9a713c41-goog
->
 >
 
 
