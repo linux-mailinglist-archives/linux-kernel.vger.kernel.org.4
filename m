@@ -2,191 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EA265E808
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CF065E7E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjAEJkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S231514AbjAEJf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjAEJkN (ORCPT
+        with ESMTP id S230479AbjAEJfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:40:13 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464A9544E1;
-        Thu,  5 Jan 2023 01:40:12 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C97806BCE9;
-        Thu,  5 Jan 2023 09:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672911154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfrBRkojWZ5wSAZVEYUzeElYRu2x1ZaqlGLpQM2iEDg=;
-        b=eJ9EewVVG17Zq1paOFU+Vxn1uYwM+B3pteGCxVy2WDcALlOBGhnSTbR3GqbQ97m9Spqdnf
-        Cr/0sZlPnsEW+W4uakHaFRcBJ+XRd/giFZhLF5b42ID3orqUXqNZDCe4LQrlGvsJpMQxYu
-        srnPtSlsEDFGzX7MrqGO5EOEiM67ew4=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 639952C16E;
-        Thu,  5 Jan 2023 09:32:34 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 10:32:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
-Message-ID: <Y7aZMkgVgl28Jgmv@alley>
-References: <20221230112729.351-1-thunder.leizhen@huawei.com>
- <20221230112729.351-3-thunder.leizhen@huawei.com>
- <Y7WoZARt37xGpjXD@alley>
+        Thu, 5 Jan 2023 04:35:53 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EE54C72C;
+        Thu,  5 Jan 2023 01:35:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672911352; x=1704447352;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kkHuRRG9KBM8yFvsN3QAm76ykshPmwlBpfFrGtmd/04=;
+  b=bo7iwZ4ZyWLRfRTL6P0bfdtvi44RDdrvVXQc5hdFQaI9/7zXNAtLswkg
+   7jx55CwHZAN1ucdAxTuCl1VHkgkPGCm6pDr6FMCFL1aYBJi0l4exjQ2JO
+   czoKJ23VHe3f7jP+rz+QOsa665e2uCGgC393qwro0Lbvv3LJZKG70vVLq
+   sRjBdyP6SI7JU4SsDX1nHQKljGOcKIxWVO5kgBOy98tIZRP4cPUZQxfeP
+   h3lk6tzXuMJ127132WiWRHewRxnJE6kR5gnO+PJsJCUkY+OrJE48ALwKN
+   mo3+LAZAuHYayys5Hko5KGMX2/mW0ZJt5ZCGauMfj0tn1qdS/mWuvVfyi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349380928"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="349380928"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 01:35:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="724007263"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="724007263"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 01:35:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pDMf6-004i5u-39;
+        Thu, 05 Jan 2023 11:35:48 +0200
+Date:   Thu, 5 Jan 2023 11:35:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <Y7aZ9Mmm16HVUnnu@smile.fi.intel.com>
+References: <20221007153323.1326-1-henning.schild@siemens.com>
+ <Y6WX1Y9GZmvxqlCc@google.com>
+ <20230102162227.523d2a73@md1za8fc.ad001.siemens.net>
+ <20230103212059.5c80fecb@md1za8fc.ad001.siemens.net>
+ <Y7WMHl1Mv1alXadG@google.com>
+ <20230104153924.0b92c52c@md1za8fc.ad001.siemens.net>
+ <Y7WghcaWPpCHh6Wz@smile.fi.intel.com>
+ <20230104203005.5654f3bc@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7WoZARt37xGpjXD@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230104203005.5654f3bc@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-01-04 17:25:08, Petr Mladek wrote:
-> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
-> > Function __module_address() can quickly return the pointer of the module
-> > to which an address belongs. We do not need to traverse the symbols of all
-> > modules to check whether each address in addrs[] is the start address of
-> > the corresponding symbol, because register_fprobe_ips() will do this check
-> > later.
+On Wed, Jan 04, 2023 at 08:30:05PM +0100, Henning Schild wrote:
+> Am Wed, 4 Jan 2023 17:51:33 +0200
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> > On Wed, Jan 04, 2023 at 03:39:24PM +0100, Henning Schild wrote:
+> > > Am Wed, 4 Jan 2023 14:24:30 +0000
+> > > schrieb Lee Jones <lee@kernel.org>:  
+
+...
+
+> > > As we speak i already have the third box to eventually support,
+> > > which will likely be similar but this time around with
+> > > PINCTRL_ELKHARTLAKE  
 > > 
-> > Assuming that there are m modules, each module has n symbols on average,
-> > and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
-> > complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
-> > and the time complexity of current method is O(K * (log(m) + M)), M <= m.
-> > (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
-> > the ratio is still greater than 1. Therefore, the new method will
-> > generally have better performance.
+> > A bit of offtopic here.
 > > 
-> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > ---
-> >  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
-> >  1 file changed, 40 insertions(+), 61 deletions(-)
+> > Are you able to get / fix / ... the firmware to work with the
+> > upstreamed version of pin control driver for Intel Elkhart Lake?
 > > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 5f3be4bc16403a5..0ff9037098bd241 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
-> >  	}
-> >  }
-> >  
-> > -struct module_addr_args {
-> > -	unsigned long *addrs;
-> > -	u32 addrs_cnt;
-> > -	struct module **mods;
-> > -	int mods_cnt;
-> > -	int mods_cap;
-> > -};
-> > -
-> > -static int module_callback(void *data, const char *name,
-> > -			   struct module *mod, unsigned long addr)
-> > +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
-> >  {
-> > -	struct module_addr_args *args = data;
-> > -	struct module **mods;
-> > -
-> > -	/* We iterate all modules symbols and for each we:
-> > -	 * - search for it in provided addresses array
-> > -	 * - if found we check if we already have the module pointer stored
-> > -	 *   (we iterate modules sequentially, so we can check just the last
-> > -	 *   module pointer)
-> > -	 * - take module reference and store it
-> > -	 */
-> > -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
-> > -		       bpf_kprobe_multi_addrs_cmp))
-> > -		return 0;
-> > +	int i, j, err;
-> > +	int mods_cnt = 0;
-> > +	int mods_cap = 0;
-> > +	struct module *mod;
-> > +	struct module **mods = NULL;
-> >  
-> > -	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
-> > -		return 0;
-> > +	for (i = 0; i < addrs_cnt; i++) {
-> > +		mod = __module_address(addrs[i]);
+> > (I'm asking this in terms of the
+> > https://bugzilla.kernel.org/show_bug.cgi?id=213365)
+> > 
 > 
-> This must be called under module_mutex to make sure that the module
-> would not disappear.
+> I can not tell. At the moment i am in a Siemens internal review where i
+> see code that is not even close to being ready for upstream. Somewhat
+> open-coded again from what it looks like.
 > 
-> > +		if (!mod)
-> > +			continue;
-> >  
-> > -	if (args->mods_cnt == args->mods_cap) {
-> > -		args->mods_cap = max(16, args->mods_cap * 3 / 2);
-> > -		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
-> > -		if (!mods)
-> > -			return -ENOMEM;
-> > -		args->mods = mods;
-> > -	}
-> > +		/* check if we already have the module pointer stored */
-> > +		for (j = 0; j < mods_cnt; j++) {
-> > +			if (mods[j] == mod)
-> > +				break;
-> > +		}
+> And i do not have the machine the code is for.
 > 
-> This might get optimized like the original code.
-> 
-> My understanding is that the addresses are sorted in "addrs" array.
-> So, the address is either part of the last found module or it belongs
-> to a completely new module.
+> Let me say "it is complicated" but some point in time a device with
+> LEDs attached to PINCTRL_ELKHARTLAKE will be proposed. Likely by me,
+> when i hopefully have such a device on my desk.
 
-I thought more about it and I think that I was wrong, see below.
+Thanks for the information.
 
-> 	for (i = 0; i < addrs_cnt; i++) {
-> 		/*
-> 		 * The adresses are sorted. The adress either belongs
-> 		 * to the last found module or a new one.
-> 		 *
-> 		 * This is safe because we already have reference
-> 		 * on the found modules.
-> 		 */
-> 		 if (mods_cnt && within_module(addrs[i], mods[mods_cnt - 1]))
-> 			continue;
+Consider above just as a point to be aware of when you come to
+the productization, so we won't need another pin control driver for
+the same chip.
 
-within_module() checks two sections (init and core). They are
-allocated separately, see module_alloc() called in move_module().
+-- 
+With Best Regards,
+Andy Shevchenko
 
-There might be a section from another modules between the init
-and core section of a module.
 
-The optimization worked in the original code because
-module_kallsyms_on_each_symbol() always iterated over all
-symbols from a module.
-
-That said, I am not sure if bpf trace might be added for
-symbols in the module init section. But it might be
-better to stay on the safe side.
-
-Best Regards,
-Petr
