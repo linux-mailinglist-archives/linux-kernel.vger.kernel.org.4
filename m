@@ -2,120 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B3765F142
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BAE65F147
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 17:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbjAEQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 11:34:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S233386AbjAEQgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 11:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjAEQew (ORCPT
+        with ESMTP id S232270AbjAEQgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:34:52 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDA418B1F;
-        Thu,  5 Jan 2023 08:34:49 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h16so36629633wrz.12;
-        Thu, 05 Jan 2023 08:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0lAIo3spWClLaTdCHxySX0ouHrSXLWypZM77NTYweN4=;
-        b=eBDP8rvyt7dl//bCEO8LrldKofxFCS2KF4Gz8zBBX2kN4AQ2DAyM5YtayeT/dDYKMg
-         X0Qp+gHtvnsVqnvSh9SD/U926xqPOw3bgmfAF0B/I4fUm+eTNalEO6RSdX/2Vc1y6PmY
-         2woD/uit8a55nMlZlxXtbdL9+J9wxo8KzddOkDuHrFBwRc31dZCT3LTIxdf1f3kIoIIi
-         No3OceHFZJWaJc9wj9QuvxRrsQUItTOk3vS6FIMBWL+dBJ8nyNvfXhO+pvMa0m4w3LIF
-         7f2XQhQswdzkH7Z/6s7q4fOaDvzs0pjAz0n4OMOKCGJ3VtxZICs/9YUCTYxjePtFm/tb
-         RSUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0lAIo3spWClLaTdCHxySX0ouHrSXLWypZM77NTYweN4=;
-        b=l4gt88WMWkxsbVVzrafmr8eyZ4PDTArme0EJcxdXiAqUOMapocdw5QHiLGDE5sitEW
-         7Z91jEqL372ixpdk/XqmSL0Tht1T2JVQCeOeKa7b1fs0GTcpUQE+XuYgl7ymgQr0HQLv
-         8BKkNPyXdGuB0+9h62IoxgkOoL0TNAd/IVpJ4tqssSwolWfSo69rRtGOKSfUj5KilkVT
-         2WGbNo8K9t4RQh/Z4qoshnyz/mSpOnDJCHDwHloI0hCdQwV0JfQZ218n2nq1rZt4Furj
-         jrunx7i7vk06ENiUkmsWGxh34Df4qfOjR2iN4B8GVuK0QoZqAkRooGxu/QFvck9zpc+4
-         S5NQ==
-X-Gm-Message-State: AFqh2koghBee4WgFDV+G3KF6MVhcS6o5+0NpfMP5R4A9nmbpNla2EtvM
-        JYousHJF0PzmamcHK6lXxAw=
-X-Google-Smtp-Source: AMrXdXu+KA2fB53cJsZQeu9XcWeoxFE9i61XhKCbJ/q9IJZHzllc3rqNHO8IHGwyEIhC6Mu/EMwedQ==
-X-Received: by 2002:a5d:6e8f:0:b0:276:473f:7120 with SMTP id k15-20020a5d6e8f000000b00276473f7120mr32573146wrz.26.1672936487924;
-        Thu, 05 Jan 2023 08:34:47 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id s18-20020adfdb12000000b00241fde8fe04sm37319469wri.7.2023.01.05.08.34.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 08:34:47 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 0/2] Allwinner power domain support
-Date:   Thu, 05 Jan 2023 17:34:46 +0100
-Message-ID: <1915282.PYKUYFuaPT@jernej-laptop>
-In-Reply-To: <20221231160402.16157-1-samuel@sholland.org>
-References: <20221231160402.16157-1-samuel@sholland.org>
+        Thu, 5 Jan 2023 11:36:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECED5C1F5;
+        Thu,  5 Jan 2023 08:36:02 -0800 (PST)
+Received: from mercury (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8CB856602D05;
+        Thu,  5 Jan 2023 16:36:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672936560;
+        bh=MnPwaUoQ0C35/ls1pQRopCEmVNldekDhFBc4/K3a63M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MIVk0nC0fhdlpYVwVdFKP6GsCvnu2MD4i17ThhL6mjqgCBcqBZp3DG+zSNgNo/X2Q
+         hUkiQwIzq4700Um86Q4d9BcFs2R/2mcbnXCfBdLfMMx+1pxzLpZWkM2YLjzfuytPfG
+         wwhOrbUO/DHrKjcrfhsBgwsPd4n4H5jbfpsnPloVVla4AeqXxsRzPnr/D7mTGw/eBz
+         /5L1jqxUBmLJ3Ol19fDcGVKtnCrAOdVDmuD16mRqM9WPdoQb3Tx2/4DoUdJCWL6Pr0
+         FQPOIYvVLpHOHwQeBGy0ZPpLwRhwAbAg8WeAfv6mzPDxh6xSGyPex2SAEiC6wv8BWB
+         tagVxMwSVBFTw==
+Received: by mercury (Postfix, from userid 1000)
+        id 00DCF1060772; Thu,  5 Jan 2023 17:35:57 +0100 (CET)
+Date:   Thu, 5 Jan 2023 17:35:57 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        Peter Edwards <sweetlilmre@gmail.com>
+Subject: Re: [PATCH 06/27] power: remove z2_battery driver
+Message-ID: <20230105163557.waq3ckjshtkzu357@mercury.elektranox.org>
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-7-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5scsoqmnkympzuvc"
+Content-Disposition: inline
+In-Reply-To: <20230105134622.254560-7-arnd@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 31. december 2022 ob 17:04:00 CET je Samuel Holland napisal(a):
-> This series adds support for the power controller found in D1 and other
-> recent Allwinner SoCs. There is no first-party documentation, but there
-> are a couple of vendor drivers for different hardware revisions[1][2],
-> and the register definitions were easy to verify empirically.
-> 
-> I have tested this driver on D1 with the video engine. There is no DT
-> update patch here to avoid dependencies between series. The example in
-> the binding is what will go in the D1 DT.
 
-So such driver is needed for H616 for GPU? Or is power domain handling 
-different there?
+--5scsoqmnkympzuvc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Jernej
+Hi,
 
-> 
-> [1]:
-> https://github.com/mangopi-sbc/tina-linux-5.4/blob/main/drivers/soc/sunxi/g
-> pu_domain.c [1]:
-> https://github.com/mangopi-sbc/tina-linux-5.4/blob/main/drivers/soc/sunxi/p
-> m_domains.c
-> 
-> 
-> Samuel Holland (2):
->   dt-bindings: power: Add Allwinner D1 PPU
->   soc: sunxi: Add Allwinner D1 PPU driver
-> 
->  .../power/allwinner,sun20i-d1-ppu.yaml        |  54 +++++
->  drivers/soc/sunxi/Kconfig                     |   9 +
->  drivers/soc/sunxi/Makefile                    |   1 +
->  drivers/soc/sunxi/sun20i-ppu.c                | 207 ++++++++++++++++++
->  .../power/allwinner,sun20i-d1-ppu.h           |  10 +
->  5 files changed, 281 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/power/allwinner,sun20i-d1-ppu.yaml create
-> mode 100644 drivers/soc/sunxi/sun20i-ppu.c
->  create mode 100644 include/dt-bindings/power/allwinner,sun20i-d1-ppu.h
+On Thu, Jan 05, 2023 at 02:46:01PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The PXA z2 platform is gone, and this driver is now orphaned.
+>=20
+> Cc: linux-pm@vger.kernel.org
+> Cc: Peter Edwards <sweetlilmre@gmail.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
+This should go through the same tree as the patch removing
+arch/arm/mach-pxa/z2.c, which includes z2_battery.h removed
+by this patch, so:
 
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
+-- Sebastian
 
+>  drivers/power/supply/Kconfig      |   6 -
+>  drivers/power/supply/Makefile     |   1 -
+>  drivers/power/supply/z2_battery.c | 318 ------------------------------
+>  include/linux/z2_battery.h        |  17 --
+>  4 files changed, 342 deletions(-)
+>  delete mode 100644 drivers/power/supply/z2_battery.c
+>  delete mode 100644 include/linux/z2_battery.h
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 98d4e9364606..b7fdcfd5d4e7 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -422,12 +422,6 @@ config BATTERY_MAX1721X
+>  	  Say Y here to enable support for the MAX17211/MAX17215 standalone
+>  	  battery gas-gauge.
+> =20
+> -config BATTERY_Z2
+> -	tristate "Z2 battery driver"
+> -	depends on I2C && MACH_ZIPIT2
+> -	help
+> -	  Say Y to include support for the battery on the Zipit Z2.
+> -
+>  config BATTERY_TWL4030_MADC
+>  	tristate "TWL4030 MADC battery driver"
+>  	depends on TWL4030_MADC
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 2fb02f19a9e0..38737ea9b9d5 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-fg.o
+>  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
+>  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
+>  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
+> -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
+>  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
+>  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
+>  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
+> diff --git a/drivers/power/supply/z2_battery.c b/drivers/power/supply/z2_=
+battery.c
+> deleted file mode 100644
+> index 0ba4a590a0a5..000000000000
+> diff --git a/include/linux/z2_battery.h b/include/linux/z2_battery.h
+> deleted file mode 100644
+> index 9e8be7a7cd25..000000000000
+> --=20
+> 2.39.0
+>=20
+
+--5scsoqmnkympzuvc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO2/GkACgkQ2O7X88g7
++ppsfg/+LK69xDiO3ua++NzncMxGfJn1kFs4h46Nsekit7Kr90tHmoz/cbe1bLJ/
+4BcasBHgOaSxtjZhs5gfRczdoMVK8dlzH0ghAMbxton0jvFch4FvqlqmLqWYbxJZ
+n2rRgaLWSk+3zysi9efnLr7IB2Z8YaWakI2OGSPkPd94kmZt8QZ9x7gpb3Zhn8Nc
+Yhinw92K3Mbtai1+SWYroeXasw/H0ilqOfd9Pb3NCnLjqaY3ynA2UXcgqubuRpLM
+qAbSP7rFfbCYeqGzRxUg/HpDrg34WvqfSE5lqzru47Q6yP2gkwQAS/rR35wa1/Yx
+JVdJg1C7maLe7lpCI1At2V0RkYdGgg5+5cHD24KgDPCr6IubFUCrU+ixAKcoY9f5
+qSa0tbh5kfBF0u4jFGMtjcJ7f7/G7pKPcNWFnlJeqTXHik9Oo+fOZJCwp4t0PApY
+Yj4OUcP18QXHH1lF0yDzTN0bwKRRE+iM+Yl97e6+4TV8msYrOCOhgLL6jvFtqw0l
+A4dN57nQvvKFcJyf7M1r3p7J7EUYyLupDZFQv7r/TCtpL2MLWl8giRBXhaT6UnJE
+WP8KhOAkSyBFXZJieTed5fPmFKITtoAvyfESXb7onQCQ8aEaT1po5yhFiP+GfXow
+CaJNAuHrlb1x2sxxNg7O8HolsL0VUWGqYLFX854FBNUFnypWoKs=
+=cFGK
+-----END PGP SIGNATURE-----
+
+--5scsoqmnkympzuvc--
