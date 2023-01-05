@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF96565E52A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2842B65E50B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjAEFgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 00:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S230180AbjAEFYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 00:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjAEFf4 (ORCPT
+        with ESMTP id S229702AbjAEFYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 00:35:56 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB6B5131A;
-        Wed,  4 Jan 2023 21:35:50 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3054sjnr013420;
-        Thu, 5 Jan 2023 05:06:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gWnhZ1G48hLuLE7lUYmRytEXz6CP0hOeaqLWQIgEeIQ=;
- b=fG1Kv3Vz7YjeR2E2ZHeHBMGciC7xKDb1PIwgAzu/x+8msBDeGmCBiarNAzcHHKPjgto/
- It2zLhCovo/TRoY3sl17lpRCtnFXKu/DWienszyUzXG06wJx4XmbJy9ACLertuS3BaTd
- 0zzXqmXH/n/PC+i4ZmBJv1us51JxQlUD3AL+WQv/efbUcXgHgjBVhTAJMgGuf26ejKXH
- kQuOoHWyHZjStnJaovpuTMArXfn03bTFNDAU4jI3Ul69YEKyqlc5W+Da21RJxzvSgCjr
- WGEvQMG9WPTykVmmkQiDcbcSUc5iWi6BZpBHYbSqRGCZCSt4pxkaFuw7GshFt1B1MeoB wQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwj1rrmh3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 05:06:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 305561Bo027164
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Jan 2023 05:06:01 GMT
-Received: from [10.50.40.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 4 Jan 2023
- 21:05:55 -0800
-Message-ID: <311fe310-d43c-cf5f-623d-6f747bc2f2a5@quicinc.com>
-Date:   Thu, 5 Jan 2023 10:34:57 +0530
-MIME-Version: 1.0
+        Thu, 5 Jan 2023 00:24:38 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB83F108
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 21:24:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iKkHQlWIQQ/Eb7WgWv5JXTI2Nr3S75+zIJCvWpiP0JKdN2Vr2OZz/CKhyERL9Ql4BFo7Pfz52ijKI6WZpDe8w7/IN+z1NrCHGU4t0jRzPxHx1J7vdB084SnOQ6NcHhRNqIdHBqoTs38vG93doT+HTi+9fAI4Xq4xxSNC1HJ3sSU9Pmr8svS+hqihPEO46pA20MkaS5YjjvAbbMOvG71MwKrwRVbehe4xncfQ6CRG9YVJ3o4N1H8IHx3veN1GNNpYzprPVHNPgh6ej9hOLgzKJPVLgAR8e8/DMYW/SrNYf55pjc3/sbflVyFZdZ/sf70mBTLQqXHdyz2tadzA8R3yeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nk5Gjwc7P9fo3qNfMVN8ZS7RfC1BrMlF2fJOokOAUSw=;
+ b=Nhokek/IevG5nZAoGx+i3cTt3g2xTs8C1cjb1bwF00fSL3v4iP1Yiy4MtcqfwUWMymmx4Jx+s3MsxIVKMONdq6N/nFFZ50b2b+mcxqOcg27MhctcY2QZCe5sSSy00EuWwtf/MjdNsdlp/YWdRMIIJ7FBZcLmV9frLRemEsjnaicLNT5GuregrAdofeRdM513XYlPWXCSPLSYIaH47et26O0UXiDKiThX3QbQqb3vrTapgwznE2XdqcvhZLn/p+An1xga1cel7teBG5Qnq0PnhJr0jK9oMtjUT+T8nsnVMDKImJNCUkhV6RQEjYxrLmq68Nk8Gty+rSF/VQMgNNwmLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nk5Gjwc7P9fo3qNfMVN8ZS7RfC1BrMlF2fJOokOAUSw=;
+ b=Hs+d2XhX26MhCyjsMaNnm4WEib7NZ3vRzl13k4pGHw/mc0IgUvns5dSzhYRDzJ+w3Wj1wAMh69IaUyCxJoSBTNnEm3BkaoFyyEFL8Tyrjzz2rZQZdPiSzAr+RNWwFyzIXyTzlbP7tMrY3q1cLlc87FpMpbGAq/xSeTWiWqI5IuI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB4614.namprd12.prod.outlook.com (2603:10b6:a03:a6::22)
+ by BL1PR12MB5852.namprd12.prod.outlook.com (2603:10b6:208:397::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 05:07:52 +0000
+Received: from BYAPR12MB4614.namprd12.prod.outlook.com
+ ([fe80::457b:5c58:8ad2:40fa]) by BYAPR12MB4614.namprd12.prod.outlook.com
+ ([fe80::457b:5c58:8ad2:40fa%6]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 05:07:52 +0000
+Message-ID: <804491f0-6e83-dae5-f108-f80950838a52@amd.com>
+Date:   Thu, 5 Jan 2023 10:37:39 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] soc: qcom: dcc: Fix examples list on
- /sys/kernel/debug/dcc/.../[list-number]/config documentation
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v6 05/45] drm/amd: Add a new helper for loading/validating
+ microcode
 Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Devicetree <devicetree@vger.kernel.org>
-CC:     Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        "Sibi Sankar" <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20221230135030.17002-1-bagasdotme@gmail.com>
- <20221230135030.17002-2-bagasdotme@gmail.com>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <20221230135030.17002-2-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, christian.koenig@amd.com,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+References: <20230105034327.1439-1-mario.limonciello@amd.com>
+ <20230105034327.1439-6-mario.limonciello@amd.com>
+From:   "Lazar, Lijo" <lijo.lazar@amd.com>
+In-Reply-To: <20230105034327.1439-6-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6Hq9MFPcxPOu8LHBchXP5ZxzE4UT20xQ
-X-Proofpoint-GUID: 6Hq9MFPcxPOu8LHBchXP5ZxzE4UT20xQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_01,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1011 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301050041
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN2PR01CA0113.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::28) To BYAPR12MB4614.namprd12.prod.outlook.com
+ (2603:10b6:a03:a6::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4614:EE_|BL1PR12MB5852:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e8daef5-58e4-4aaf-25eb-08daeedacc08
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i9W1M9vhCpS9FcaVaiY9wjwBq8ore3AIlm3EyzJfeWTc0rxGduDttyRjjb1Uc30zujInbxoYlGHoQotDR3KnngRVZXjFKgMxj14qfTZWCNimkwJTtbfAV6PHrnBU6TSghH1m08jPvi/sIPoSFeX86EvUWkxG7a3KgNLI9Y0Dt50hzAW7IIX35Mtx8oO455PWJMpZeUieeHjd/szNmTeWbAX3uLWk70yEnZIyKhtG8zCW4o37m8Sd1k46/pEr9LB4T2os4jX3ySJjbpWbMqmIKqRppUlQQloTLdb19s2jEJGxRboVeUgeHKlelM8v7WCc9NyswwK4G7IHqCoJBLoylaiaTqUGLOMzql1yDwogp30WsV0f3I4jif2qCZQoU1BaN6ZYgpAj3Ffxl9zZ9drLhR45vOFSKdsn09noxwWvov7luVnAh8cCd9CrpTt6sxY7xzSNpzOHKuvtbR3wl7w+eVf016diZCrF6ooSn95ecnOK1jO5ljSF4ZgICERyOI1ogjZW/JEjV431H53uGFWihbtp77MzkGd00EGQTZSfGOQth9WJY8JsZGjkUNDsSh8sV5fKK6WYwCLZEfE4J/Tw0/UnfY+eMLFC6nyUVr9ry+QrceXSPlShPsZ0diSggUym9YQ18yAXdXKtz1eSgvvTkDfUjQaVjpXRzj7VV5xeu12M3jZ1wKPTk0Mgn/ZdSohnMaaRbPAnCxTTJJuxMbIc7yz0mX71y1uu+c8zBMp2Ppg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4614.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(451199015)(5660300002)(2906002)(8936002)(41300700001)(478600001)(4326008)(316002)(8676002)(54906003)(66556008)(66476007)(110136005)(66946007)(31686004)(6486002)(6666004)(6512007)(26005)(6506007)(83380400001)(2616005)(53546011)(38100700002)(186003)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2lwMHpUTG5sOVZGUG5JRERsOWdPU3lxVGVocCtQcEQ0Y3pxaGhmNTkrSVkw?=
+ =?utf-8?B?WU5vUE1lZTliSTluRWZVVCt6anBEcDEwRmIzLzlDNkdsdmN0OUthWUlVTHFS?=
+ =?utf-8?B?OWhraEw3K043VUhjS2NVbEE0eXNzbDJVRUc1dWsrRWRpcWpPa1NlTk45Wjc0?=
+ =?utf-8?B?SHpsby9ubWNhd1dOVXBhUzNJR0ZSZDQxb0w4REM1ZkpwR293Yzlwd1VvdmZI?=
+ =?utf-8?B?NEhEUTk5VVBCNDRaUng5cXZGK21mTVA4bGd1ZkxMbitpbEpJQzJuV2d0aFpH?=
+ =?utf-8?B?ZkpKNGF1K1lHZ29UeWo5QzdPUEZ0WWptVjBtZURJSTNzdGJYd0RjNzZMNGlT?=
+ =?utf-8?B?akdzc2w1RC8zVnRWUVdQaHZBLzRJbS9jbGNhczJ3QmhsSGxhWEZHUVdNdCtz?=
+ =?utf-8?B?VTlZbzVtTzhWWjVmaE85YzJQa0drZUprNFg2dlkzOFlsNWNSUzRuMlYxQWgw?=
+ =?utf-8?B?dHM0bWpXNzNUTVRxdEZ6Q21NaFhPeEpVYzd3dVVjU0NvcFptMmh0N202RWhm?=
+ =?utf-8?B?RFk4bkx4NkRoWWVIS3Mxd1N2Syt3NGJVeC96WS9WNk1uTHBFY0k0UXF4QjJB?=
+ =?utf-8?B?WUlmWkNhRnEzQldUeTJUcWQvL21MSTgxc1RKU3BVZDBxK09pdDBMTmM3UmhD?=
+ =?utf-8?B?ZVN4Z2V0azBUOUErQjRya2dCV1pFT3JIZGRYejROaU81VFExM05STldCV3Qy?=
+ =?utf-8?B?R3lDcWxobDV4UDE0RWNlVHl0cDNlTmxlNXkyVEZNTmV4ZXZiQmcrMEloL1pQ?=
+ =?utf-8?B?dlZyZVg0TjRUaGlDWWxaSDdqUXh4eWJEVDdKanB3YnpmQ0xkOFV1bmhGYU1K?=
+ =?utf-8?B?QUw1WWhPeXNOam1XbmdGSWJWbXgzRjYrZm5IN3QvNEw1cTRXZDVDdHlUUk5u?=
+ =?utf-8?B?eXZMTUhOR2ZEdlVtd0I3bk9hZXdWUzNvM0tRclFqUGppRXY4b3NpS0RmQUhM?=
+ =?utf-8?B?STVxNTliZVlLYy9jUUZndFB2VHFCQWNoa2theVhpeW14eUZQbG5VaFFRQ0JR?=
+ =?utf-8?B?Y21YYk5RQTJ3SVpYTzAwRHo5QjBPZ1o0a2ZUWi9scHJraTBDd1ZiR0dUUlFo?=
+ =?utf-8?B?UTkzTTlVTFEwVkRXUVBWblhsY1diRkczKzVzQ080dk01RlRiclp0aGVqemFV?=
+ =?utf-8?B?LzdGNW4vNlhqY1UvbFpYWG9JdmJxQzh3a0lWMmt2Um1RNWRJY0tXMnNBT21X?=
+ =?utf-8?B?ZUZuVVRvY2Z5WXV4RWtJNHBxbTFTUmR4VG5vWlhBb3hIam9KN1cyRW8wV21s?=
+ =?utf-8?B?TVNBWXZiMld3Y25DM1Uyc0xnWUgyR2habE8vTTFjTGJQbnd4eFdhbmZSVmNN?=
+ =?utf-8?B?dHcyM1hWTTNSSS84RUJvMnhoTmdJUjJYdXc3VnlGNHZ2a3M2ejljQXFJOE5w?=
+ =?utf-8?B?TmFvU0p1Ym1rOTRrNnZXTzNiZEdCanh3aEU1VEU4WmVQWUtrZnBHVENoSVNn?=
+ =?utf-8?B?ckhYTHQvL3pvWXlvTHY5bENOT1NRK1VFSC9STU5uVy8rdGJVc2xnRlQxQUNs?=
+ =?utf-8?B?RWxRUTk1ektCRzYvb3RTZUQzSzFIaUtxb0MvSFYxcXJDNmJoSk1ZMnVES0lk?=
+ =?utf-8?B?Z1B3MTNVWVhrK0E1MlRKcnZMRXQ4R2l3bEFXTDhqUUZmNGcvejZzOW4vcDBv?=
+ =?utf-8?B?elgrWUg0SHJrYzlnK3haaFowMEkwbkIxUVlNVVN4SGJka1BTOW5wZTg3Nngr?=
+ =?utf-8?B?RytVQzZUM1l3T3B1TTAzQllQL25UdndFQXJNTUErcUZQbVgrQW1zR3hPSjRI?=
+ =?utf-8?B?V0o0aU1KRVhFUzk5c1VJbExwejAzdFhEUjFDMmN0d0Z3eVlZczJIVXdGUFp4?=
+ =?utf-8?B?aEhQT0xHNVBKWE5hQnVBYnRwdFZwOHNCY29iZlBycEhmSUNTVGFxQWc5TXRO?=
+ =?utf-8?B?S0Vpa053dGgwb1lRQnVacXk3dklqT3dRWGY3WVZjd2E0eHRndU9GNjBPWW9V?=
+ =?utf-8?B?eUpLV0NrNFBZK3lEd0ZuVCtxUHFHV2FmWmdVamg0bEwrWGQ1MENSU0NobDZK?=
+ =?utf-8?B?eDRNa0ttS2o0eHBWUkJ2MThyc2hDWTVHYU1yZ1lnQWRuTDhLVnBrQUdZNXBL?=
+ =?utf-8?B?K2UwWlc2TkpiOWI0cGJPSVE3NGZOOCtBZWRwaG45ZHRGYUZVQWgrK3FKb3Rr?=
+ =?utf-8?Q?PBBJUs3Wfnpl4qlYfyWZg0Pgl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e8daef5-58e4-4aaf-25eb-08daeedacc08
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4614.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 05:07:52.3463
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JJnB555tDxep/PgmhzET1S+DhMsUnhs89fyq22EUz7cYAf5fGfCKpiVNHeOvwW+L
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5852
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,104 +134,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12/30/2022 7:20 PM, Bagas Sanjaya wrote:
-> kernel test robot reported htmldocs warnings:
+On 1/5/2023 9:12 AM, Mario Limonciello wrote:
+> All microcode runs a basic validation after it's been loaded. Each
+> IP block as part of init will run both.
 > 
-> Documentation/ABI/testing/debugfs-driver-dcc:34: WARNING: Unexpected indentation.
-> Documentation/ABI/testing/debugfs-driver-dcc:34: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Introduce a wrapper for request_firmware and amdgpu_ucode_validate.
+> This wrapper will also remap any error codes from request_firmware
+> to -ENODEV.  This is so that early_init will fail if firmware couldn't
+> be loaded instead of the IP block being disabled.
 > 
-> Fix these by fixing numbered list syntax on description of
-> /sys/kernel/debug/dcc/.../[list-number]/config, including adding blank line
-> separators as appropriate.
-> 
-> Link: https://lore.kernel.org/linux-doc/202212300426.eMLsZsvA-lkp@intel.com/
-> Fixes: 4cbe60cf5ad622 ("soc: qcom: dcc: Add driver support for Data Capture and Compare unit(DCC)")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->   Documentation/ABI/testing/debugfs-driver-dcc | 63 +++++++++++++-------
->   1 file changed, 41 insertions(+), 22 deletions(-)
+> v5->v6:
+>   * Fix argument to be ** not *
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 36 +++++++++++++++++++++++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h |  3 ++
+>   2 files changed, 39 insertions(+)
 > 
-> diff --git a/Documentation/ABI/testing/debugfs-driver-dcc b/Documentation/ABI/testing/debugfs-driver-dcc
-> index a4680950205931..a00f4502885b58 100644
-> --- a/Documentation/ABI/testing/debugfs-driver-dcc
-> +++ b/Documentation/ABI/testing/debugfs-driver-dcc
-> @@ -44,35 +44,54 @@ Description:
->   		example user can jump to list x only after list y is
->   		configured and enabled. The format for entering all
->   		types of instructions are explained in examples as
-> -		follows.
-> -		Example:
-> -	         i)Read Type Instruction
-> +		follows:
-> +
-> +	        i) Read Type Instruction
-> +
->   		   echo R <1> <2> <3> >/sys/kernel/debug/dcc/../[list-number]/config
-> +
->   		   1->Address to be considered for reading the value.
-> +
->   		   2->The word count of the addresses, read n words
->   		      starting from address <1>. Each word is of 32 bits.
->   		      If not entered 1 is considered.
-> +
->   		   3->Can be 'apb' or 'ahb' which indicates if it is apb or ahb
->   		      bus respectively. If not entered ahb is considered.
-> -		ii)Write Type Instruction
-> -		   echo W <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> -		   1->Address to be considered for writing the value.
-> -		   2->The value that needs to be written at the location.
-> -		   3->Can be a 'apb' or 'ahb' which indicates if it is apb or ahb
-> -		      but respectively.
-> -	       iii)Read Modify Write type instruction
-> -		   echo RW <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> -		   1->The address which needs to be considered for read then write.
-> -		   2->The value that needs to be written on the address.
-> -		   3->The mask of the value to be written.
-> -		iv)Loop Type Instruction
-> -		   echo L <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> -		   1->The loop count, the number of times the value of the addresses will be
-> -		      captured.
-> -		   2->The address count, total number of addresses to be entered in this
-> -		      instruction.
-> -		   3->The series of addresses to be entered separated by a space like <addr1>
-> -		      <addr2>... and so on.
-> +
-> +		ii) Write Type Instruction
-> +
-> +		    echo W <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> +
-> +		    1->Address to be considered for writing the value.
-> +
-> +		    2->The value that needs to be written at the location.
-> +
-> +		    3->Can be a 'apb' or 'ahb' which indicates if it is apb or ahb
-> +		       but respectively.
-> +
-> +	        iii) Read Modify Write type instruction
-> +
-> +		     echo RW <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> +
-> +		     1->The address which needs to be considered for read then write.
-> +
-> +		     2->The value that needs to be written on the address.
-> +
-> +		     3->The mask of the value to be written.
-> +
-> +		iv) Loop Type Instruction
-> +
-> +		    echo L <1> <2> <3> > /sys/kernel/debug/dcc/../[list-number]/config
-> +
-> +		    1->The loop count, the number of times the value of the addresses will be
-> +		       captured.
-> +
-> +		    2->The address count, total number of addresses to be entered in this
-> +		       instruction.
-> +
-> +		    3->The series of addresses to be entered separated by a space like <addr1>
-> +		       <addr2>... and so on.
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> index eafcddce58d3..8ebfec12da87 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> @@ -1312,3 +1312,39 @@ void amdgpu_ucode_ip_version_decode(struct amdgpu_device *adev, int block_type,
 >   
->   What:           /sys/kernel/debug/dcc/.../[list-number]/enable
->   Date:           December 2022
+>   	snprintf(ucode_prefix, len, "%s_%d_%d_%d", ip_name, maj, min, rev);
+>   }
+> +
+> +/*
+> + * amdgpu_ucode_request - Fetch and validate amdgpu microcode
+> + *
+> + * @adev: amdgpu device
+> + * @fw: pointer to load firmware to
+> + * @fw_name: firmware to load
+> + *
+> + * This is a helper that will use request_firmware and amdgpu_ucode_validate
+> + * to load and run basic validation on firmware. If the load fails, remap
+> + * the error code to -ENODEV, so that early_init functions will fail to load.
+> + */
+> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
+> +			 const char *fw_name)
+> +{
+> +	int err = request_firmware(fw, fw_name, adev->dev);
+> +
+> +	if (err)
+> +		return -ENODEV;
+> +	err = amdgpu_ucode_validate(*fw);
+> +	if (err)
+> +		dev_dbg(adev->dev, "\"%s\" failed to validate\n", fw_name);
+> +
 
-Acked-by:Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Missed this earlier. If validate fails, shouldn't this undo the request 
+operation by calling release?
+
+Thanks,
+Lijo
+
+> +	return err;
+> +}
+> +
+> +/*
+> + * amdgpu_ucode_release - Release firmware microcode
+> + *
+> + * @fw: pointer to firmware to release
+> + */
+> +void amdgpu_ucode_release(const struct firmware **fw)
+> +{
+> +	release_firmware(*fw);
+> +	*fw = NULL;
+> +}
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> index 552e06929229..848579d4988b 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
+> @@ -544,6 +544,9 @@ void amdgpu_ucode_print_sdma_hdr(const struct common_firmware_header *hdr);
+>   void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header *hdr);
+>   void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr);
+>   int amdgpu_ucode_validate(const struct firmware *fw);
+> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
+> +			 const char *fw_name);
+> +void amdgpu_ucode_release(const struct firmware **fw);
+>   bool amdgpu_ucode_hdr_version(union amdgpu_firmware_header *hdr,
+>   				uint16_t hdr_major, uint16_t hdr_minor);
+>   
