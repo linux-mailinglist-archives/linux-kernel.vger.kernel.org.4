@@ -2,230 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F04E65F2FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B89165F30A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbjAERko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S234861AbjAERmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAERkl (ORCPT
+        with ESMTP id S235053AbjAERmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:40:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF51EAC6
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:40:40 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id c6so6838057pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 09:40:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0kbXgKOJsS8Z+jbEn56fulyxmGj5FZh1oxId45OhR8M=;
-        b=N8XIhK045MkkRIiP6O5EdZ7OigBujdKSVRsliZrO2igyKTDNqw+6zG4NuTIjXnrm9n
-         /aENa52CaJYwGt45hRQMIHj3cF7y6pgc4/fZAC8RLOcwl610aBTkiQlsDwrap/yJtFMz
-         YvcNKNGhnbLHKd9jpzfUewGfN8u470pWga6OUDWMj264VwXQdqtfv3m8B9G+NXr1mMh+
-         lIapdYshhh4t4u4bZMAMiCsKc16p+Xqn5rduSXP6ThQc0n86DYpFgfc9oARWSesGmQKL
-         Igg1CRErPZLx16gHnRbE9DCGaFKzrrtmEw4/8vHok1Yn7Ox+Z1urn7Q8xJMA1ODmTrRH
-         4A2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0kbXgKOJsS8Z+jbEn56fulyxmGj5FZh1oxId45OhR8M=;
-        b=pTVnJo+zT1l9GR8gJrl1aXPFsuysWutXGvkxaLmJS8KWjVg+Gh5X3pIuli+tMN1LQ8
-         mwaPAZZe7qQ37XhIIqreIl75Ca/bZVbBzZ+nTsA4Ca5/4JOOUaWvRgVAdwUgLxKz2mk5
-         C7typK+slTbafPXWzs4sxOYR/8yCsyFtY0cWkPp93t/8EoW/fQXr37erVMJTxozVxDi+
-         u7FtKunw7AlidYsJVB5GNaFzz/97AxJS4Bc8We7ti1XZR0U3L5ZyOHyUD8nbfvcr/DH8
-         tiA0/Ejdu/CMZVJTG7WpeGfZwMqI7U5GZto3zeLg48uUj01/SCK8atCZsC5ErdA2TC4D
-         j6Qg==
-X-Gm-Message-State: AFqh2krdi8lflqIm5cBMitRZiRyAdWp8++qsYLA5ZWbqgwMy3sVwq3lY
-        UtkbGK1dny7/jEzMQTZPCKPVKQ==
-X-Google-Smtp-Source: AMrXdXvePNSVad+Quj8sWC2rRAHirPmdt1mq9PKarW0GCZMUR3HO7TrM/aj7vHPEwJOF/+hzfbe9Qg==
-X-Received: by 2002:a05:6a20:9e49:b0:a3:49d2:9504 with SMTP id mt9-20020a056a209e4900b000a349d29504mr250818pzb.3.1672940439549;
-        Thu, 05 Jan 2023 09:40:39 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i12-20020a63584c000000b004785a63b44bsm21924802pgm.43.2023.01.05.09.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 09:40:37 -0800 (PST)
-Date:   Thu, 5 Jan 2023 17:40:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 03/27] drm/i915/gvt: Incorporate KVM memslot info into
- check for 2MiB GTT entry
-Message-ID: <Y7cLkLUMCy+XLRwm@google.com>
-References: <20221223005739.1295925-1-seanjc@google.com>
- <20221223005739.1295925-4-seanjc@google.com>
- <Y6vXTcxDNovrmeVB@yzhao56-desk.sh.intel.com>
- <Y7SaklDQD0EoIs8l@google.com>
- <Y7Y+759IN2DH5h3h@yzhao56-desk.sh.intel.com>
+        Thu, 5 Jan 2023 12:42:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E663DBEC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:42:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1599B61BB0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EEBEC433D2;
+        Thu,  5 Jan 2023 17:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672940533;
+        bh=a61KkIePdXlYGDag8VaLi1SSd+gN9exN7x8rEnDhhZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eXjGS9OtwvQcP9O3OIa0l9g8LrBaQy+nYS688Qah1j7pLXN16gaaJ5SNSaLuG3syy
+         l8ZggK2srDEWdrLV9puJtd9h649v2AVocniXs5RRQbHe/o5Shba8P3HVj8eB6QjnXm
+         bPzOs9FknSzvjjPwyjOR7Zwcy0ftiyRRyxOirgzhF0A72AYK3JQs7COrcpxZVKFFTo
+         0M9WlKIWkfb1pchUktEo3RNrRsPDPZVa26vCrw/ArMR4H3JRT52Bawu/ijZJ/M1MxE
+         KKTUL41pp3e5LKQY1tlgDrgKIpDkb1HbgBAT8y2gUvCNI4l041WVLO4rHGZCLfEeB3
+         UMTD3DgWYXpFA==
+Received: by pali.im (Postfix)
+        id 5A6DAAC9; Thu,  5 Jan 2023 18:42:10 +0100 (CET)
+Date:   Thu, 5 Jan 2023 18:42:10 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.2-rc1
+Message-ID: <20230105174210.jbjoqelllcrd57q6@pali>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali>
+ <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali>
+ <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+ <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7Y+759IN2DH5h3h@yzhao56-desk.sh.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023, Yan Zhao wrote:
-> On Tue, Jan 03, 2023 at 09:13:54PM +0000, Sean Christopherson wrote:
-> > On Wed, Dec 28, 2022, Yan Zhao wrote:
-> > > On Fri, Dec 23, 2022 at 12:57:15AM +0000, Sean Christopherson wrote:
-> > > > Honor KVM's max allowed page size when determining whether or not a 2MiB
-> > > > GTT shadow page can be created for the guest.  Querying KVM's max allowed
-> > > > size is somewhat odd as there's no strict requirement that KVM's memslots
-> > > > and VFIO's mappings are configured with the same gfn=>hva mapping, but
-> > > Without vIOMMU, VFIO's mapping is configured with the same as KVM's
-> > > memslots, i.e. with the same gfn==>HVA mapping
+On Wednesday 04 January 2023 14:43:16 Jens Axboe wrote:
+> On 1/4/23 2:32?PM, Linus Torvalds wrote:
+> >> But here it is CD-RW media in read-write mode with kernel udf
+> >> filesystem driver without any userspace involved (after proper
+> >> formatting).
 > > 
-> > But that's controlled by userspace, correct?
-> 
-> Yes, controlled by QEMU.
-
-...
-
-> > Strictly speaking, no.  E.g. if a 2MiB region is covered with multiple memslots
-> > and the memslots have different properties.
+> > ... but I'm not sure about direct writeable mount support.
 > > 
-> > > If for some reason, KVM maps a 2MiB range in 4K sizes, KVMGT can still map
-> > > it in IOMMU size in 2MiB size as long as the PFNs are continous and the
-> > > whole range is all exposed to guest.
+> > That may indeed be an area that only pktcdvd ended up doing. I've
+> > never used it myself, even historically.
 > > 
-> > I agree that practically speaking this will hold true, but if KVMGT wants to honor
-> > KVM's memslots then checking that KVM allows a hugepage is correct.  Hrm, but on
-> > the flip side, KVMGT ignores read-only memslot flags, so KVMGT is already ignoring
-> > pieces of KVM's memslots.
-> KVMGT calls dma_map_page() with DMA_BIDIRECTIONAL after checking gvt_pin_guest_page().
-> Though for a read-only memslot, DMA_TO_DEVICE should be used instead
-> (see dma_info_to_prot()),
-> as gvt_pin_guest_page() checks (IOMMU_READ | IOMMU_WRITE) permission for each page,
-> it actually ensures that the pinned GFN is not in a read-only memslot.
-> So, it should be fine.
+> > Let's bring in more people. Because they may not have thought about
+> > some RW UDF case.
 > 
+> We did think about it, since that's the only reason for pktcdvd to
+> exist. Basically what the driver does is ensure that any write is 32K in
+> size, which is the size which can be written to media. It'll gather data
+> as needed to make that happen. Thats it. Outside of that, it's just some
+> setup and closing code.
+> 
+> This obviously would be better to handle in userspace, all of it. Back
+> when I wrote this driver, we didn't have a lot of the fancier stuff we
+> have today. It could be done via ublk, for example, or something like
+> that.
+> 
+> The surprising bit here is:
+> 
+> 1) Someone is still using this driver, and
+> 2) It actually works!
+
+Yes, there are still users and userspace tools (cdrwtool / pktsetup) are
+still receiving either small patches or issue reports. I think that it
+was two years ago when cdrwtool received big fixups to support
+formatting CD-RW discs on new CD/DVD drives.
+
+> While I'd love to nudge folks in other directions for this use case, and
+> I strongly think that we should, it also doesn't seem fair to just yank
+> it while folks are using it... But I'd like to VERY strongly encourage
+> folks to come up with a new solution for this use case. It really isn't
+> a solution that belongs in the kernel today.
+
+Linus in previous email wrote that he did "make SCSI commands generic"
+work in past so direct usage of /dev/cdrom device works for CD-R burning
+and read-only mounting.
+
+So could not be (for example sr.c) driver extended to directly do
+pktcdvd's work? So when somebody opens /dev/cdrom device in O_RDWR mode
+and CD-RW medium is present then it would behave like pktcdvd device...
+To have /dev/cdrom generic also for CD-RW write access.
+
+> > The removal seems to revert cleanly, although it does require
+> > reverting a few subsequent commits too (that removed code that only
+> > pktcdvd used):
 > > 
-> > I have no objection to KVMGT defining its ABI such that KVMGT is allowed to create
-> > 2MiB so long as (a) the GFN is contiguous according to VFIO, and (b) that the entire
-> > 2MiB range is exposed to the guest.
+> >     git revert db1c7d779767 85d6ce58e493 f40eb99897af
 > > 
-> sorry. I may not put it clearly enough.
-> for a normal device pass-through via VFIO-PCI, VFIO maps IOMMU mappings in this way:
+> > where we have
+> > 
+> >     db1c7d779767 block: bio_copy_data_iter
+> >     85d6ce58e493 block: remove devnode callback from struct
+> > block_device_operations
+> >     f40eb99897af pktcdvd: remove driver.
 > 
-> (a) fault in PFNs in a GFN range within the same memslot (VFIO saves dma_list, which is
-> the same as memslot list when vIOMMU is not on or not in shadow mode).
-> (b) map continuous PFNs into iommu driver (honour ro attribute and can > 2MiB as long as
-> PFNs are continuous).
-> (c) IOMMU driver decides to map in 2MiB or in 4KiB according to its setting.
+> I'll queue this up - and unless I hear valid complaints to why we should
+> not just reinstate the driver for now, it'll go out with the next pull
+> request.
 > 
-> For KVMGT, gvt_dma_map_page() first calls gvt_pin_guest_page() which
-> (a) calls vfio_pin_pages() to check each GFN is within allowed dma_list with
-> (IOMMU_READ | IOMMU_WRITE) permission and fault-in page. 
-> (b) checks PFNs are continuous in 2MiB,
+> -- 
+> Jens Axboe
 > 
-> Though checking kvm_page_track_max_mapping_level() is also fine, it makes DMA
-> mapping size unnecessarily smaller.
-
-Yeah, I got all that.  What I'm trying to say, and why I asked about whether or
-not userspace controls the mappings, is that AFAIK there is nothing in the kernel
-that coordinates mappings between VFIO and KVM.  So, very technically, userspace
-could map a 2MiB range contiguous in VFIO but not in KVM, or RW in VFIO but RO in KVM.
-
-I can't imagine there's a real use case for doing so, and arguably there's no
-requirement that KVMGT honor KVM's memslot.  But because KVMGT taps into KVM's
-page-tracking, KVMGT _does_ honor KVM's memslots to some extent because KVMGT
-needs to know whether or not a given GFN can be write-protected.
-
-I'm totally fine if KVMGT's ABI is that VFIO is the source of truth for mappings
-and permissions, and that the only requirement for KVM memslots is that GTT page
-tables need to be visible in KVM's memslots.  But if that's the ABI, then
-intel_gvt_is_valid_gfn() should be probing VFIO, not KVM (commit cc753fbe1ac4
-("drm/i915/gvt: validate gfn before set shadow page entry").
-
-In other words, pick either VFIO or KVM.  Checking that X is valid according to
-KVM and then mapping X through VFIO is confusing and makes assumptions about how
-userspace configures KVM and VFIO.  It works because QEMU always configures KVM
-and VFIO as expected, but IMO it's unnecessarily fragile and again confusing for
-unaware readers because the code is technically flawed.
-
-On a related topic, ppgtt_populate_shadow_entry() should check the validity of the
-gfn.  If I'm reading the code correctly, checking only in ppgtt_populate_spt() fails
-to handle the case where the guest creates a bogus mapping when writing an existing
-GTT PT.
-
-Combing all my trains of thought, what about this as an end state for this series?
-(completely untested at this point).  Get rid of the KVM mapping size checks,
-verify the validity of the entire range being mapped, and add a FIXME to complain
-about using KVM instead of VFIO to determine the validity of ranges.
-
-static bool intel_gvt_is_valid_gfn(struct intel_vgpu *vgpu, unsigned long gfn,
-				   enum intel_gvt_gtt_type type)
-{
-	unsigned long nr_pages;
-
-	if (!vgpu->attached)
-		return false;
-
-	if (type == GTT_TYPE_PPGTT_PTE_64K_ENTRY)
-		nr_pages = I915_GTT_PAGE_SIZE_64K >> PAGE_SHIFT;
-	else if (type == GTT_TYPE_PPGTT_PTE_2M_ENTRY)
-		nr_pages = I915_GTT_PAGE_SIZE_2M >> PAGE_SHIFT;
-	else
-		nr_pages = 1;
-
-	/*
-	 * FIXME: Probe VFIO, not KVM.  VFIO is the source of truth for KVMGT
-	 * mappings and permissions, KVM's involvement is purely to handle
-	 * write-tracking of GTT page tables.
-	 */
-	return kvm_page_track_is_contiguous_gfn_range(vgpu->vfio_device.kvm,
-						      gfn, nr_pages);
-}
-
-static int try_map_2MB_gtt_entry(struct intel_vgpu *vgpu, unsigned long gfn,
-				 dma_addr_t *dma_addr)
-{
-	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
-		return 0;
-
-	return intel_gvt_dma_map_guest_page(vgpu, gfn,
-					    I915_GTT_PAGE_SIZE_2M, dma_addr);
-}
-
-static int ppgtt_populate_shadow_entry(struct intel_vgpu *vgpu,
-	struct intel_vgpu_ppgtt_spt *spt, unsigned long index,
-	struct intel_gvt_gtt_entry *ge)
-{
-	const struct intel_gvt_gtt_pte_ops *pte_ops = vgpu->gvt->gtt.pte_ops;
-	dma_addr_t dma_addr = vgpu->gvt->gtt.scratch_mfn << PAGE_SHIFT;
-	struct intel_gvt_gtt_entry se = *ge;
-	unsigned long gfn;
-	int ret;
-
-	if (!pte_ops->test_present(ge))
-		goto set_shadow_entry;
-
-	gfn = pte_ops->get_pfn(ge);
-	if (!intel_gvt_is_valid_gfn(vgpu, gfn, ge->type))
-		goto set_shadow_entry;
-
-	...
-
-
-set_shadow_entry:
-	pte_ops->set_pfn(&se, dma_addr >> PAGE_SHIFT);
-	ppgtt_set_shadow_entry(spt, &se, index);
-	return 0;
-}
