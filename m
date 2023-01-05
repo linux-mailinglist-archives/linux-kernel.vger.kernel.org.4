@@ -2,218 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2842B65E50B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7940C65E521
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 06:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjAEFYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 00:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S229914AbjAEFfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 00:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjAEFYi (ORCPT
+        with ESMTP id S229441AbjAEFfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 00:24:38 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB83F108
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 21:24:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iKkHQlWIQQ/Eb7WgWv5JXTI2Nr3S75+zIJCvWpiP0JKdN2Vr2OZz/CKhyERL9Ql4BFo7Pfz52ijKI6WZpDe8w7/IN+z1NrCHGU4t0jRzPxHx1J7vdB084SnOQ6NcHhRNqIdHBqoTs38vG93doT+HTi+9fAI4Xq4xxSNC1HJ3sSU9Pmr8svS+hqihPEO46pA20MkaS5YjjvAbbMOvG71MwKrwRVbehe4xncfQ6CRG9YVJ3o4N1H8IHx3veN1GNNpYzprPVHNPgh6ej9hOLgzKJPVLgAR8e8/DMYW/SrNYf55pjc3/sbflVyFZdZ/sf70mBTLQqXHdyz2tadzA8R3yeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nk5Gjwc7P9fo3qNfMVN8ZS7RfC1BrMlF2fJOokOAUSw=;
- b=Nhokek/IevG5nZAoGx+i3cTt3g2xTs8C1cjb1bwF00fSL3v4iP1Yiy4MtcqfwUWMymmx4Jx+s3MsxIVKMONdq6N/nFFZ50b2b+mcxqOcg27MhctcY2QZCe5sSSy00EuWwtf/MjdNsdlp/YWdRMIIJ7FBZcLmV9frLRemEsjnaicLNT5GuregrAdofeRdM513XYlPWXCSPLSYIaH47et26O0UXiDKiThX3QbQqb3vrTapgwznE2XdqcvhZLn/p+An1xga1cel7teBG5Qnq0PnhJr0jK9oMtjUT+T8nsnVMDKImJNCUkhV6RQEjYxrLmq68Nk8Gty+rSF/VQMgNNwmLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nk5Gjwc7P9fo3qNfMVN8ZS7RfC1BrMlF2fJOokOAUSw=;
- b=Hs+d2XhX26MhCyjsMaNnm4WEib7NZ3vRzl13k4pGHw/mc0IgUvns5dSzhYRDzJ+w3Wj1wAMh69IaUyCxJoSBTNnEm3BkaoFyyEFL8Tyrjzz2rZQZdPiSzAr+RNWwFyzIXyTzlbP7tMrY3q1cLlc87FpMpbGAq/xSeTWiWqI5IuI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com (2603:10b6:a03:a6::22)
- by BL1PR12MB5852.namprd12.prod.outlook.com (2603:10b6:208:397::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 05:07:52 +0000
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::457b:5c58:8ad2:40fa]) by BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::457b:5c58:8ad2:40fa%6]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 05:07:52 +0000
-Message-ID: <804491f0-6e83-dae5-f108-f80950838a52@amd.com>
-Date:   Thu, 5 Jan 2023 10:37:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v6 05/45] drm/amd: Add a new helper for loading/validating
- microcode
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        Thu, 5 Jan 2023 00:35:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA8F37265;
+        Wed,  4 Jan 2023 21:35:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B1C56163B;
+        Thu,  5 Jan 2023 05:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F65C433EF;
+        Thu,  5 Jan 2023 05:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672895506;
+        bh=/42NPCYs4D9ce+al7eJYFUYxfGp0bcl2LbZGaPT23iA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nr+zsmbjsSPBMk/r4N7/mRqGYaCikKrOThHMxinF3pDA9biN3lK5VdjTt92+tZwC2
+         ROIXi8LO6tcH/uzkyHPuaq2XZ7AM+fJQZaQnVUDNvac0OJly5U0Qafa4pVsA7mxnWV
+         xhh/8wFF1JH/iBKc037MhDMpxm9jfyVgnnKOZffTXI3uMAmEbM2eGg4GamusWupqu0
+         NinemtR05zZJ3dLsnTGwO3kLCO2GRZz+IjPeqNwosVddy7iLTJKdxdAdLpYAC1MR/q
+         vB9dHzJ4Mc7uoCtlBMR4ykKh+ujF9DIZH44yMwI5FJZU9aPKjWEtvrEamVm4/xLzf+
+         uUaVAEiwFw01w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 09B845C05CA; Wed,  4 Jan 2023 21:11:46 -0800 (PST)
+Date:   Wed, 4 Jan 2023 21:11:46 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, christian.koenig@amd.com,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-References: <20230105034327.1439-1-mario.limonciello@amd.com>
- <20230105034327.1439-6-mario.limonciello@amd.com>
-From:   "Lazar, Lijo" <lijo.lazar@amd.com>
-In-Reply-To: <20230105034327.1439-6-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0113.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::28) To BYAPR12MB4614.namprd12.prod.outlook.com
- (2603:10b6:a03:a6::22)
+Subject: Re: [PATCH v2] rcu: Rework tick dependency setting into
+ rcu_exp_handler()
+Message-ID: <20230105051146.GN4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105034000.971748-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4614:EE_|BL1PR12MB5852:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e8daef5-58e4-4aaf-25eb-08daeedacc08
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i9W1M9vhCpS9FcaVaiY9wjwBq8ore3AIlm3EyzJfeWTc0rxGduDttyRjjb1Uc30zujInbxoYlGHoQotDR3KnngRVZXjFKgMxj14qfTZWCNimkwJTtbfAV6PHrnBU6TSghH1m08jPvi/sIPoSFeX86EvUWkxG7a3KgNLI9Y0Dt50hzAW7IIX35Mtx8oO455PWJMpZeUieeHjd/szNmTeWbAX3uLWk70yEnZIyKhtG8zCW4o37m8Sd1k46/pEr9LB4T2os4jX3ySJjbpWbMqmIKqRppUlQQloTLdb19s2jEJGxRboVeUgeHKlelM8v7WCc9NyswwK4G7IHqCoJBLoylaiaTqUGLOMzql1yDwogp30WsV0f3I4jif2qCZQoU1BaN6ZYgpAj3Ffxl9zZ9drLhR45vOFSKdsn09noxwWvov7luVnAh8cCd9CrpTt6sxY7xzSNpzOHKuvtbR3wl7w+eVf016diZCrF6ooSn95ecnOK1jO5ljSF4ZgICERyOI1ogjZW/JEjV431H53uGFWihbtp77MzkGd00EGQTZSfGOQth9WJY8JsZGjkUNDsSh8sV5fKK6WYwCLZEfE4J/Tw0/UnfY+eMLFC6nyUVr9ry+QrceXSPlShPsZ0diSggUym9YQ18yAXdXKtz1eSgvvTkDfUjQaVjpXRzj7VV5xeu12M3jZ1wKPTk0Mgn/ZdSohnMaaRbPAnCxTTJJuxMbIc7yz0mX71y1uu+c8zBMp2Ppg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4614.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(451199015)(5660300002)(2906002)(8936002)(41300700001)(478600001)(4326008)(316002)(8676002)(54906003)(66556008)(66476007)(110136005)(66946007)(31686004)(6486002)(6666004)(6512007)(26005)(6506007)(83380400001)(2616005)(53546011)(38100700002)(186003)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2lwMHpUTG5sOVZGUG5JRERsOWdPU3lxVGVocCtQcEQ0Y3pxaGhmNTkrSVkw?=
- =?utf-8?B?WU5vUE1lZTliSTluRWZVVCt6anBEcDEwRmIzLzlDNkdsdmN0OUthWUlVTHFS?=
- =?utf-8?B?OWhraEw3K043VUhjS2NVbEE0eXNzbDJVRUc1dWsrRWRpcWpPa1NlTk45Wjc0?=
- =?utf-8?B?SHpsby9ubWNhd1dOVXBhUzNJR0ZSZDQxb0w4REM1ZkpwR293Yzlwd1VvdmZI?=
- =?utf-8?B?NEhEUTk5VVBCNDRaUng5cXZGK21mTVA4bGd1ZkxMbitpbEpJQzJuV2d0aFpH?=
- =?utf-8?B?ZkpKNGF1K1lHZ29UeWo5QzdPUEZ0WWptVjBtZURJSTNzdGJYd0RjNzZMNGlT?=
- =?utf-8?B?akdzc2w1RC8zVnRWUVdQaHZBLzRJbS9jbGNhczJ3QmhsSGxhWEZHUVdNdCtz?=
- =?utf-8?B?VTlZbzVtTzhWWjVmaE85YzJQa0drZUprNFg2dlkzOFlsNWNSUzRuMlYxQWgw?=
- =?utf-8?B?dHM0bWpXNzNUTVRxdEZ6Q21NaFhPeEpVYzd3dVVjU0NvcFptMmh0N202RWhm?=
- =?utf-8?B?RFk4bkx4NkRoWWVIS3Mxd1N2Syt3NGJVeC96WS9WNk1uTHBFY0k0UXF4QjJB?=
- =?utf-8?B?WUlmWkNhRnEzQldUeTJUcWQvL21MSTgxc1RKU3BVZDBxK09pdDBMTmM3UmhD?=
- =?utf-8?B?ZVN4Z2V0azBUOUErQjRya2dCV1pFT3JIZGRYejROaU81VFExM05STldCV3Qy?=
- =?utf-8?B?R3lDcWxobDV4UDE0RWNlVHl0cDNlTmxlNXkyVEZNTmV4ZXZiQmcrMEloL1pQ?=
- =?utf-8?B?dlZyZVg0TjRUaGlDWWxaSDdqUXh4eWJEVDdKanB3YnpmQ0xkOFV1bmhGYU1K?=
- =?utf-8?B?QUw1WWhPeXNOam1XbmdGSWJWbXgzRjYrZm5IN3QvNEw1cTRXZDVDdHlUUk5u?=
- =?utf-8?B?eXZMTUhOR2ZEdlVtd0I3bk9hZXdWUzNvM0tRclFqUGppRXY4b3NpS0RmQUhM?=
- =?utf-8?B?STVxNTliZVlLYy9jUUZndFB2VHFCQWNoa2theVhpeW14eUZQbG5VaFFRQ0JR?=
- =?utf-8?B?Y21YYk5RQTJ3SVpYTzAwRHo5QjBPZ1o0a2ZUWi9scHJraTBDd1ZiR0dUUlFo?=
- =?utf-8?B?UTkzTTlVTFEwVkRXUVBWblhsY1diRkczKzVzQ080dk01RlRiclp0aGVqemFV?=
- =?utf-8?B?LzdGNW4vNlhqY1UvbFpYWG9JdmJxQzh3a0lWMmt2Um1RNWRJY0tXMnNBT21X?=
- =?utf-8?B?ZUZuVVRvY2Z5WXV4RWtJNHBxbTFTUmR4VG5vWlhBb3hIam9KN1cyRW8wV21s?=
- =?utf-8?B?TVNBWXZiMld3Y25DM1Uyc0xnWUgyR2habE8vTTFjTGJQbnd4eFdhbmZSVmNN?=
- =?utf-8?B?dHcyM1hWTTNSSS84RUJvMnhoTmdJUjJYdXc3VnlGNHZ2a3M2ejljQXFJOE5w?=
- =?utf-8?B?TmFvU0p1Ym1rOTRrNnZXTzNiZEdCanh3aEU1VEU4WmVQWUtrZnBHVENoSVNn?=
- =?utf-8?B?ckhYTHQvL3pvWXlvTHY5bENOT1NRK1VFSC9STU5uVy8rdGJVc2xnRlQxQUNs?=
- =?utf-8?B?RWxRUTk1ektCRzYvb3RTZUQzSzFIaUtxb0MvSFYxcXJDNmJoSk1ZMnVES0lk?=
- =?utf-8?B?Z1B3MTNVWVhrK0E1MlRKcnZMRXQ4R2l3bEFXTDhqUUZmNGcvejZzOW4vcDBv?=
- =?utf-8?B?elgrWUg0SHJrYzlnK3haaFowMEkwbkIxUVlNVVN4SGJka1BTOW5wZTg3Nngr?=
- =?utf-8?B?RytVQzZUM1l3T3B1TTAzQllQL25UdndFQXJNTUErcUZQbVgrQW1zR3hPSjRI?=
- =?utf-8?B?V0o0aU1KRVhFUzk5c1VJbExwejAzdFhEUjFDMmN0d0Z3eVlZczJIVXdGUFp4?=
- =?utf-8?B?aEhQT0xHNVBKWE5hQnVBYnRwdFZwOHNCY29iZlBycEhmSUNTVGFxQWc5TXRO?=
- =?utf-8?B?S0Vpa053dGgwb1lRQnVacXk3dklqT3dRWGY3WVZjd2E0eHRndU9GNjBPWW9V?=
- =?utf-8?B?eUpLV0NrNFBZK3lEd0ZuVCtxUHFHV2FmWmdVamg0bEwrWGQ1MENSU0NobDZK?=
- =?utf-8?B?eDRNa0ttS2o0eHBWUkJ2MThyc2hDWTVHYU1yZ1lnQWRuTDhLVnBrQUdZNXBL?=
- =?utf-8?B?K2UwWlc2TkpiOWI0cGJPSVE3NGZOOCtBZWRwaG45ZHRGYUZVQWgrK3FKb3Rr?=
- =?utf-8?Q?PBBJUs3Wfnpl4qlYfyWZg0Pgl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e8daef5-58e4-4aaf-25eb-08daeedacc08
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4614.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 05:07:52.3463
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JJnB555tDxep/PgmhzET1S+DhMsUnhs89fyq22EUz7cYAf5fGfCKpiVNHeOvwW+L
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5852
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105034000.971748-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 05, 2023 at 11:40:00AM +0800, Zqiang wrote:
+> Currently, when first find out the expedited grace period is not end
+> and timeout occurred, we set tick dependency for CPUs that have not
+> yet reported the quiescent state in the rcu_node structure's->expmask
+> but need to eliminate races between set and clear tick dependency, setting
+> CPU tick dependency need to hold rcu_node structure's->lock.
+> 
+> This commit move tick dependency setting into rcu_exp_handler(), set tick
+> dependency when fail to report a quiescent state and clear tick dependency
+> in rcu_report_exp_rdp(). [from Frederic Weisbecker suggestion]
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
+First, a big "thank you" to you an Frederic for investigating this
+approach!
 
-On 1/5/2023 9:12 AM, Mario Limonciello wrote:
-> All microcode runs a basic validation after it's been loaded. Each
-> IP block as part of init will run both.
-> 
-> Introduce a wrapper for request_firmware and amdgpu_ucode_validate.
-> This wrapper will also remap any error codes from request_firmware
-> to -ENODEV.  This is so that early_init will fail if firmware couldn't
-> be loaded instead of the IP block being disabled.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+So which is better, this patch or the one that I already have queued?
+
+The advantage of the patch of yours that I already have queued is that
+CPUs that respond in some other way within a millisecond do not get hit
+with an additional scheduling-clock interrupt.
+
+On the other hand, if the CPU goes through a quiescent state before the
+next scheduling-clock interrupt arrives, rcu_report_exp_cpu_mult() will
+shut down the tick before it happens.  Plus if the CPU waits a full tick
+before reaching a quiescent state, then the tick_dep_set_cpu() called from
+synchronize_rcu_expedited_wait() is going to send along an IPI anyway.
+
+Except that invoking tick_dep_set_cpu() on the CPU itself will also
+do an IPI from tick_dep_set_cpu() because of IRQ_WORK_INIT_HARD(), right?
+Which means that the patch below gets us an extra self-IPI, right?
+Or am I misreading the code?
+
+In addition, doesn't tick_dep_clear_cpu() just clear a bit?  Won't that
+mean that the next scheduling-clock interrupt will happen, just that the
+one after that won't?  (Give or take kernel-to-user or kernel-to-idle
+transitions that might happen in the meantime.)
+
+Am I missing something in my attempts to model the costs?
+
+							Thanx, Paul
+
 > ---
-> v5->v6:
->   * Fix argument to be ** not *
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 36 +++++++++++++++++++++++
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h |  3 ++
->   2 files changed, 39 insertions(+)
+>  kernel/rcu/tree_exp.h | 43 ++++++++++++++++++++-----------------------
+>  1 file changed, 20 insertions(+), 23 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> index eafcddce58d3..8ebfec12da87 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-> @@ -1312,3 +1312,39 @@ void amdgpu_ucode_ip_version_decode(struct amdgpu_device *adev, int block_type,
->   
->   	snprintf(ucode_prefix, len, "%s_%d_%d_%d", ip_name, maj, min, rev);
->   }
-> +
-> +/*
-> + * amdgpu_ucode_request - Fetch and validate amdgpu microcode
-> + *
-> + * @adev: amdgpu device
-> + * @fw: pointer to load firmware to
-> + * @fw_name: firmware to load
-> + *
-> + * This is a helper that will use request_firmware and amdgpu_ucode_validate
-> + * to load and run basic validation on firmware. If the load fails, remap
-> + * the error code to -ENODEV, so that early_init functions will fail to load.
-> + */
-> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
-> +			 const char *fw_name)
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index 7cc4856da081..f1e947675727 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -586,39 +586,16 @@ static bool synchronize_rcu_expedited_wait_once(long tlimit)
+>  static void synchronize_rcu_expedited_wait(void)
+>  {
+>  	int cpu;
+> -	unsigned long j;
+>  	unsigned long jiffies_stall;
+>  	unsigned long jiffies_start;
+>  	unsigned long mask;
+>  	int ndetected;
+> -	struct rcu_data *rdp;
+>  	struct rcu_node *rnp;
+>  	struct rcu_node *rnp_root = rcu_get_root();
+> -	unsigned long flags;
+>  
+>  	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
+>  	jiffies_stall = rcu_exp_jiffies_till_stall_check();
+>  	jiffies_start = jiffies;
+> -	if (tick_nohz_full_enabled() && rcu_inkernel_boot_has_ended()) {
+> -		if (synchronize_rcu_expedited_wait_once(1))
+> -			return;
+> -		rcu_for_each_leaf_node(rnp) {
+> -			raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> -			mask = READ_ONCE(rnp->expmask);
+> -			for_each_leaf_node_cpu_mask(rnp, cpu, mask) {
+> -				rdp = per_cpu_ptr(&rcu_data, cpu);
+> -				if (rdp->rcu_forced_tick_exp)
+> -					continue;
+> -				rdp->rcu_forced_tick_exp = true;
+> -				if (cpu_online(cpu))
+> -					tick_dep_set_cpu(cpu, TICK_DEP_BIT_RCU_EXP);
+> -			}
+> -			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> -		}
+> -		j = READ_ONCE(jiffies_till_first_fqs);
+> -		if (synchronize_rcu_expedited_wait_once(j + HZ))
+> -			return;
+> -	}
+>  
+>  	for (;;) {
+>  		if (synchronize_rcu_expedited_wait_once(jiffies_stall))
+> @@ -729,6 +706,24 @@ static void rcu_exp_sel_wait_wake(unsigned long s)
+>  
+>  #ifdef CONFIG_PREEMPT_RCU
+>  
+> +static void rcu_exp_set_tickdep(struct rcu_data *rdp)
 > +{
-> +	int err = request_firmware(fw, fw_name, adev->dev);
+> +	int cpu = rdp->cpu;
 > +
-> +	if (err)
-> +		return -ENODEV;
-> +	err = amdgpu_ucode_validate(*fw);
-> +	if (err)
-> +		dev_dbg(adev->dev, "\"%s\" failed to validate\n", fw_name);
-> +
-
-Missed this earlier. If validate fails, shouldn't this undo the request 
-operation by calling release?
-
-Thanks,
-Lijo
-
-> +	return err;
+> +	if (tick_nohz_full_cpu(cpu) && rcu_inkernel_boot_has_ended() &&
+> +						cpu_online(cpu)) {
+> +		/*
+> +		 * The rcu_exp_handler() can be invoked from stop machine,
+> +		 * at this time CPU has disabled all interrupts and offline,
+> +		 * in which case, we don't need requeue IPI or irq work.
+> +		 * which is not a problem since rcu_report_dead() does the
+> +		 * QS report.
+> +		 */
+> +		rdp->rcu_forced_tick_exp = true;
+> +		tick_dep_set_cpu(cpu, TICK_DEP_BIT_RCU_EXP);
+> +	}
 > +}
 > +
-> +/*
-> + * amdgpu_ucode_release - Release firmware microcode
-> + *
-> + * @fw: pointer to firmware to release
-> + */
-> +void amdgpu_ucode_release(const struct firmware **fw)
-> +{
-> +	release_firmware(*fw);
-> +	*fw = NULL;
-> +}
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> index 552e06929229..848579d4988b 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.h
-> @@ -544,6 +544,9 @@ void amdgpu_ucode_print_sdma_hdr(const struct common_firmware_header *hdr);
->   void amdgpu_ucode_print_psp_hdr(const struct common_firmware_header *hdr);
->   void amdgpu_ucode_print_gpu_info_hdr(const struct common_firmware_header *hdr);
->   int amdgpu_ucode_validate(const struct firmware *fw);
-> +int amdgpu_ucode_request(struct amdgpu_device *adev, const struct firmware **fw,
-> +			 const char *fw_name);
-> +void amdgpu_ucode_release(const struct firmware **fw);
->   bool amdgpu_ucode_hdr_version(union amdgpu_firmware_header *hdr,
->   				uint16_t hdr_major, uint16_t hdr_minor);
->   
+>  /*
+>   * Remote handler for smp_call_function_single().  If there is an
+>   * RCU read-side critical section in effect, request that the
+> @@ -757,6 +752,7 @@ static void rcu_exp_handler(void *unused)
+>  			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+>  			set_tsk_need_resched(t);
+>  			set_preempt_need_resched();
+> +			rcu_exp_set_tickdep(rdp);
+>  		}
+>  		return;
+>  	}
+> @@ -778,6 +774,7 @@ static void rcu_exp_handler(void *unused)
+>  		if (rnp->expmask & rdp->grpmask) {
+>  			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+>  			t->rcu_read_unlock_special.b.exp_hint = true;
+> +			rcu_exp_set_tickdep(rdp);
+>  		}
+>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  		return;
+> -- 
+> 2.25.1
+> 
