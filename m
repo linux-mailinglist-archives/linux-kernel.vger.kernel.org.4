@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6579565E1CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693C065E1DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbjAEAlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S240703AbjAEAnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbjAEAiw (ORCPT
+        with ESMTP id S240692AbjAEAis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:38:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F829C4B;
-        Wed,  4 Jan 2023 16:38:23 -0800 (PST)
+        Wed, 4 Jan 2023 19:38:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974BBC25;
+        Wed,  4 Jan 2023 16:38:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86BD5618B8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8289E618A2;
         Thu,  5 Jan 2023 00:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C90C4332F;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0887C43330;
         Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672879095;
-        bh=h6bjYJAJ6MmX8IBKY+t7pThy5+DMPKWOhSwAgfRS86w=;
+        bh=gga//6dn2CIxYDjd4uFuwFdmdAYgvyqFrWt6xDOyEao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qd+GXxMIVHrrf8spj28vw7je+1WS+GM/SBz1383t3dCPs/i7wIqL58W5cPSqE3Q+o
-         Lz5wpGscM9DjTt2af9TwLhzceYBoSy4jhpJuYtMmRejxAn2mSWkXRNSwSwzzE41E7I
-         EfQ5gmSn+D9+cn+zWx2LKe4K0Osz6Jf0ouMkyqYMrX6vrOm08uex03FzZxvMUOAQaS
-         lG3JeECS6w4F5fHLcDDYZXLCxXm3x+J03xWCDUh5qZiJCJwSKVEJ8g2d0DgcTeR47x
-         LTtfz6qXhDek/q0g1xssFYa2QjJzxHFiKLKvkONf1YLup5vIpcEey6g/epOXmgw3Hf
-         VUGNtnWdCPWdg==
+        b=muaya0j7eLdCrveK++V8rYMeNoBFu+tZoUI/MPGQjjsqfFzZL2EkWp0cFvT9f4mxs
+         E+ZAPUeno25HNWkHOpZMgZYAM1It5Kzys+JHw/dymgJ3AecWNjpcsKjyExR+57SeiG
+         kMHbtGBXQUtc5E48W0VjdLbayGgpQP6FyXZU1WJicBzPPlaORiXwbqBQbSfsd/d987
+         nrR+3FerRuKC7M7fn9kV5rnjLMyCtIMZpOoKGduC+emL0ob4UyZpq+XJu6kVCbegLe
+         hXgfe581uSK9qVnopyz/odYTfBUdLdgth2D9AXUyo0KNATqksL0QC1Lg+Pst9dZfYf
+         viP4SHZm0GsnQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DE76F5C1CAE; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+        id E05CF5C1CAF; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH rcu 22/27] init: Remove "select SRCU"
-Date:   Wed,  4 Jan 2023 16:38:08 -0800
-Message-Id: <20230105003813.1770367-22-paulmck@kernel.org>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH rcu 23/27] kernel/power: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:38:09 -0800
+Message-Id: <20230105003813.1770367-23-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
@@ -71,35 +63,26 @@ no longer any point in selecting it.  Therefore, remove the "select SRCU"
 Kconfig statements.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Aaron Tomlin <atomlin@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: <linux-pm@vger.kernel.org>
 ---
- init/Kconfig | 1 -
+ kernel/power/Kconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 7e5c3ddc341de..af511c726d695 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1865,7 +1865,6 @@ config PERF_EVENTS
- 	default y if PROFILING
- 	depends on HAVE_PERF_EVENTS
- 	select IRQ_WORK
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 60a1d3051cc79..4b31629c5be4b 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -118,7 +118,6 @@ config PM_SLEEP
+ 	def_bool y
+ 	depends on SUSPEND || HIBERNATE_CALLBACKS
+ 	select PM
 -	select SRCU
- 	help
- 	  Enable kernel support for various performance events provided
- 	  by software and hardware.
+ 
+ config PM_SLEEP_SMP
+ 	def_bool y
 -- 
 2.31.1.189.g2e36527f23
 
