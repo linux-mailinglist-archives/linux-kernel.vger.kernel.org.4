@@ -2,95 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C738365F387
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB27E65F389
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235290AbjAESKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S235486AbjAESMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbjAESK3 (ORCPT
+        with ESMTP id S234720AbjAESL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:10:29 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67734289;
-        Thu,  5 Jan 2023 10:10:28 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id x37so32552329ljq.1;
-        Thu, 05 Jan 2023 10:10:28 -0800 (PST)
+        Thu, 5 Jan 2023 13:11:59 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871A8DFA8;
+        Thu,  5 Jan 2023 10:11:56 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id r26so48683691edc.5;
+        Thu, 05 Jan 2023 10:11:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9f7l4j2UrPllEPm8+N2nXwOp9iXAGfz91k1xXgPf6Kk=;
-        b=mSMnFW6xoZovdcX7os6aKr731GddHQa6xuVIe1FgODpLpgTUsxpmRkrkzLsO394xNB
-         SwpWUYEV4FZbJmJnis5ViGM4no3lRAcPkhB+FKtSHwF4SGzVT7VgRgdi+8w09kyG+a0A
-         UUqDobo4tCUWHDxZAXMjc3C+EFKQsnHZnCm2JPReMpCUHOtFMW3Zaie7MU3kbcq6ih4G
-         KX9z2BT1H64wTFAkkNCc8yYufJ6J1LnSlDxmmPaMFhFNQa17f57c6vMXbG2QIpBump6/
-         ghtPtOfX64MYueZwJypTGXO8197r9AhPlz7M4we+Er8uvOFfZer+j/4EttaCmkgltyuy
-         dubQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VaqEalELRRS60fT0pWhc7k/aSgD8gHCORo9MWkR6xC0=;
+        b=odUMUe6smwZCC13YCKCjGqjOp1KIz1/cqilutwBSkQOALe70TzZGxqpkzVGElKS2Q9
+         YihNj9xNJFGMnDJUlFCrCsGayDCbvgUFAfgAXRuApzdgpkhrugKjW4Ee2liVaIO8L9o4
+         aAvVAEWsIW7r+c3jxRwu6VJLJtLLSw12c4C2+BbQ0pu/9wmKqDz4lAo9buflzDlYoIW/
+         cUDkJ2T+89wUaj9C+DwgHbgTUXB2oJDi+Lkevh3495WDivLOqH80BeQMR829KL/WkdP1
+         6cqK/z1iw0ApvatIB0P13CNoOffoJ6jADJmg/icrzO6pZXHSntH7GGEQSEJYvbLcbj2J
+         MrSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9f7l4j2UrPllEPm8+N2nXwOp9iXAGfz91k1xXgPf6Kk=;
-        b=BgfcRmyNBmPckHwwKHl7tbIeMOwJmXUhK66KyoIEtudBKowi+Cf6urS9iM3Ws60liD
-         ES9keqz97ScwbGIK7zYoxOqrYvG8rPG6jHhZl0f6zh52x6aE5ONV6Slv6jrvI25/no5o
-         v3jrxxzv2jiQnSF6XBau9QoDhSSafGDUMmKWy1hKIznrGyjhS2IlstUyowSldkDJTDqF
-         S/tUFQ+srWoR/spOVLi3o3njENG6Vp3rrGKDLQaj+arAgc9Y/BCToptF9UuDoyGXFukL
-         8ycsV8H9JZjqiFcRVOuGnZCF9KkveUluW7LLKaTwp6kuum/RCbvvnHVxxvwJ0rNepO9G
-         MvMQ==
-X-Gm-Message-State: AFqh2kqQ5/jeuK0eqgmODGYDhvCbrgop/WpRD36VDDt4oMXtLS3pAQxN
-        N1Ml1ND0W3x7lgUduxVXY9w=
-X-Google-Smtp-Source: AMrXdXtT+HwQHyFsEtfj1vuIuO9LhJP8T6Ca+qbI9B91foM4ykB3ysSwqn+wyeegawwQcPhIgrdhKA==
-X-Received: by 2002:a05:651c:1593:b0:277:a4b:56c9 with SMTP id h19-20020a05651c159300b002770a4b56c9mr3407707ljq.0.1672942226284;
-        Thu, 05 Jan 2023 10:10:26 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id f2-20020a05651c02c200b0027fc4f018a8sm2852020ljo.5.2023.01.05.10.10.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VaqEalELRRS60fT0pWhc7k/aSgD8gHCORo9MWkR6xC0=;
+        b=A2ClHnh2PtzOMeIspj50gyQDHuzOzHXEfsJ3N6QrU8u0cQvJrOz9kZPkKI9GnrvaYJ
+         VhDeiA9ZgP7/gr7pGHm+5iS7ZLRJZPh/nF2pRiM0S2nl4hcTweyDB1oNaqcmKb20k/PY
+         3wwRUUoUV7Um0az8gwgf23iM3+rmTf/BCxC7rIX0BQI1ARUtsr/aJJBN9bPn4oacSP6j
+         oYWEhr1GQFhYZLxuueO5Epn6neizKg/ugYJEVr7Ln+9aSud7vaRwuaGk0/wEr8cuvSA4
+         XTtIiFFRJanVq4way42reaAamcGW7vWSv6iuJu0BiOZ6joWjeouyNEz4hz5UCJk2fItS
+         UJDg==
+X-Gm-Message-State: AFqh2kq0KEGsaHTHwKujXL9qnXFnFX6byk0zaPygPZFGUkZZf7hT3vVt
+        hGxeHNzzYYxcZTpWsr5qDd8=
+X-Google-Smtp-Source: AMrXdXtxAtNMZ5WBGXyAkwAAzZjuHx/oadPiev8Al70mmJrPZy95W+uDp+vj+iQxOfZznWc2oBeP+w==
+X-Received: by 2002:a05:6402:d5c:b0:46b:444b:ec40 with SMTP id ec28-20020a0564020d5c00b0046b444bec40mr42447438edb.15.1672942315139;
+        Thu, 05 Jan 2023 10:11:55 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056402500f00b0047eeaae9558sm16074218eda.60.2023.01.05.10.11.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 10:10:26 -0800 (PST)
-Date:   Thu, 5 Jan 2023 20:10:24 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
-Subject: Re: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20230105201024.00001ea0@gmail.com>
-In-Reply-To: <SA1PR21MB133560538DDD7006CCB36E30BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
-        <20221207003325.21503-3-decui@microsoft.com>
-        <20230105114435.000078e4@gmail.com>
-        <SA1PR21MB133560538DDD7006CCB36E30BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 05 Jan 2023 10:11:54 -0800 (PST)
+Date:   Thu, 5 Jan 2023 20:11:52 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <20230105181152.ruzdv3iusvan4mek@skbuf>
+References: <20230103220511.3378316-1-sean.anderson@seco.com>
+ <20230103220511.3378316-5-sean.anderson@seco.com>
+ <20230105140421.bqd2aed6du5mtxn4@skbuf>
+ <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
+ <20230105173445.72rvdt4etvteageq@skbuf>
+ <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
+ <20230105175206.h3nmvccnzml2xa5d@skbuf>
+ <20230105175542.ozqn67o3qmadnaph@skbuf>
+ <39660d10-69b9-fa52-5a49-67d5f7e1acaf@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39660d10-69b9-fa52-5a49-67d5f7e1acaf@seco.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -101,84 +86,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 17:33:16 +0000
-Dexuan Cui <decui@microsoft.com> wrote:
+On Thu, Jan 05, 2023 at 01:03:49PM -0500, Sean Anderson wrote:
+> IMO if we really want to support this, the easier way would be to teach
+> the phy driver how to change the rate adaptation mode. That way we could
+> always advertise rate adaptation, but if someone came along and
+> requested 10HD we could reconfigure the phy to support it. However, this
+> was deemed too risky in the discussion for v1, since we don't really
+> know how the firmware interacts with the registers.
 
-> > From: Zhi Wang <zhi.wang.linux@gmail.com>
-> > Sent: Thursday, January 5, 2023 1:45 AM
-> >  [...]
-> > On Tue,  6 Dec 2022 16:33:21 -0800
-> > Dexuan Cui <decui@microsoft.com> wrote:
-> > 
-> > > When a TDX guest runs on Hyper-V, the hv_netvsc driver's
-> > > netvsc_init_buf() allocates buffers using vzalloc(), and needs to
-> > > share the buffers with the host OS by calling
-> > > set_memory_decrypted(), which is not working for vmalloc() yet. Add
-> > > the support by handling the pages one by one.
-> > 
-> > It seems calling set_memory_decrypted() in netvsc_init_buf() is
-> > missing in this patch series. I guess there should be another one
-> > extra patch to cover that.
-> 
-> set_memory_decrypted() is not missing here. In netvsc_init_buf(), after
-> the line "net_device->recv_buf = vzalloc(buf_size);", we have 
-> 
-> vmbus_establish_gpadl(device->channel, net_device->recv_buf, ...), which
-> 
-> calls __vmbus_establish_gpadl(), which calls 
-> 
-> set_memory_decrypted((unsigned long)kbuffer, ...)
-> 
-
-I see. Then do we still need the hv_map_memory()in the following
-code piece in netvsc.c after {set_memoery_encrypted, decrypted}()
-supporting memory from vmalloc()?
-
-	/* set_memory_decrypted() is called here. */
-
-        ret = vmbus_establish_gpadl(device->channel, net_device->recv_buf,
-                                    buf_size,
-                                    &net_device->recv_buf_gpadl_handle);
-        if (ret != 0) {
-                netdev_err(ndev,
-                        "unable to establish receive buffer's gpadl\n");
-                goto cleanup;
-        }
-	
-	/* Should we remove this? */
-        if (hv_isolation_type_snp()) {
-                vaddr = hv_map_memory(net_device->recv_buf, buf_size);
-                if (!vaddr) {
-                        ret = -ENOMEM;
-                        goto cleanup;
-                }
-
-                net_device->recv_original_buf = net_device->recv_buf;
-                net_device->recv_buf = vaddr;
-        }
-
-I assume that we need an VA mapped to a shared GPA here.
-
-The VA(net_device->recv_buf) has been associated with a shared GPA in
-set_memory_decrypted() by adjusting the kernel page table. hv_map_memory()
-is with similar purpose but just a different way:
-
-void *hv_map_memory(void *addr, unsigned long size)
-{
-        unsigned long *pfns = kcalloc(size / PAGE_SIZE,
-                                      sizeof(unsigned long), GFP_KERNEL);
-        void *vaddr;
-        int i;
-
-        if (!pfns)
-                return NULL;
-
-        for (i = 0; i < size / PAGE_SIZE; i++)
-                pfns[i] = vmalloc_to_pfn(addr + i * PAGE_SIZE) +
-                        (ms_hyperv.shared_gpa_boundary >> PAGE_SHIFT);
-
-        vaddr = vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
-        kfree(pfns);
-
-        return vaddr;
-}
+I think I would prefer not exporting anything rate adaptation related to
+user space, at least until things clean up a little and we're confident
+that we don't need to radically change how it works.
