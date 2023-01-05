@@ -2,141 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA5865F5ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1686C65F5EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235793AbjAEVjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S235537AbjAEVkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235729AbjAEVjd (ORCPT
+        with ESMTP id S235600AbjAEVkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:39:33 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E51676C6;
-        Thu,  5 Jan 2023 13:39:30 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso3434960pjf.1;
-        Thu, 05 Jan 2023 13:39:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2B/6xg54aJ7idENEindVKE0XwrAKLTxScGdP8EUbfT4=;
-        b=ZkNdyUzEpnyBd0OlCkttYyZAG/3I+W6QG3eMejUnJp8CrNHDsyjvOt9clDf0vayE2i
-         r6lkarY5scvvcjm/rCs+97/cb8gqnaQAyMmK3VSY0WyGE8IlHrmP+m2hv6sg2w9Hc7Fj
-         oYJ+KVy30yL4L97vccgDToFnVKpG2sQ9Ip0kAUHayWMzIMzCVKcCkw/30gSAWKVx/ibj
-         VQPPP3O/BeKowqjHlsVjOEGUI1eb+l6qP37gQQoSu+PFjSgNwn7pF8Nk2hVOW4m+375W
-         JFPztt3e6nOUrCAXynvNsPVdzbNfSJw4YG57GZ8mO8YbvQ343sLQ7vMFYumsPmD5GZfz
-         ZXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2B/6xg54aJ7idENEindVKE0XwrAKLTxScGdP8EUbfT4=;
-        b=EZNx0srpG5vSZRg1JsK8/gd6qHWOvnz15IYzZkcsPSHqKf+EAvLATZoWz6o1qTPna9
-         0l52ybsN18UfzdHA5srBUEOLhfo6M4uvJM9fbMZzsXWXUqx3pihpHDD+x5y9MTm14mbK
-         QmhYLLvlXMIh1hHmvtg777rYHL9pLAPJDeR4OlXIDyrBNrR7JiIE4UZkKkEMmrw4Sgza
-         CXUmVFi+fEKVvbIx3PFo4YrHvfVOOv9/lt9qNF9eZmivf/7tb5Tga2zbNhnrQB6S2hxN
-         rlu+q6nW9HXyE6zwUTnSV9CMT+Bywcsja6O6+kFuD3Ey2LyWWvBbgOFQJ42UXY/PucOF
-         HI8Q==
-X-Gm-Message-State: AFqh2krCGTZcNef4OH+FhoD9GAOAm80ifwwlTbdEXc+Qn5QlQRExTc8L
-        40hVddHlckCQZJPM1Jn7nzwVZmPIY+M=
-X-Google-Smtp-Source: AMrXdXvOKSzzM60MzcrxrGTOI1KuEb5c6Cr23VJevx4+hCvku1p09/yos5Tpv8O6ZF7fXbWnpFdzgw==
-X-Received: by 2002:a05:6a21:999d:b0:9e:9685:f15e with SMTP id ve29-20020a056a21999d00b0009e9685f15emr81430335pzb.0.1672954769421;
-        Thu, 05 Jan 2023 13:39:29 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 128-20020a630086000000b004a099a12937sm9627542pga.84.2023.01.05.13.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 13:39:28 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 5 Jan 2023 11:39:27 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jack@suse.cz
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <Y7dDjyT1Gl5Mt3fl@slm.duckdns.org>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <Y7cKf7IH+FJ/6IyV@slm.duckdns.org>
- <20230105192247.GB16920@blackbody.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Thu, 5 Jan 2023 16:40:15 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2082.outbound.protection.outlook.com [40.107.95.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACFE676C6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:40:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fhqynrg4zhKSVIjrciO4mabHdvtUsGbyWB4ZAfrkomTfaOn3bI2AvDZDeNjd6kF+WAfpgfb5LoLwS6lShz2qOG0oaI+4+k9/h668bi3AruMWiKSsrhC38qkwNAcdTpWQGJuiTPnkMs3BuKDDZ57HhAevwGkXnoFcOe8CCLH0c8StIcyGkp92taE3r4AAZAi7+1QXSWKQIjlX3xdDU3TTn3PlXHbA+7RUQ7uKgPC51U/dQkR0EDlIUS482KwxStdZHNlEI9Bme4Rvi0BzciJvVs27QFfy7Vij6t5M8qKMRLQgS8vZ96pa6cIfxV/A/cPxzPz30OD/RyxJWag/NsmQUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=raLBF4dr7K0nAgjKU/y0oSclEEt2UWZ6bbJxQdHQ9d4=;
+ b=Wf1/5qBZD8xVHamKOyIuYBsJwcLqYJIL3ZfzOOHkDWPANjFnc1RvfxuEuSn/lfEaEv/8IdplKuUhg/M9HOkXeEMjC34GgYW9DOpRhj0ji5uBPp0V0SRFEn6VOaRrUK2hyIoid3ut1pAD6uaHrmAN6/a9WQWfvfZH9FFtbGGifDZxoibAOgDTcpBUTZeGzGoyuTOF7aOatCQNjxUw20r2dwqtwTaQMJdhm8q5Pj2ctd/wAcJAuP+qthRK4VBG6EkMDMrgjU12yb/jmw6VSlByDYLNsFS4xjCRo6IBKz6YEHWRYUqQTXzKo0qQCKk+F/s6T5yY2lzE8wRAXqnI4qgERA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=raLBF4dr7K0nAgjKU/y0oSclEEt2UWZ6bbJxQdHQ9d4=;
+ b=haqWRdTkSe+NOz0ULPmOhYL3o0IszP/hlUuq2/yNGLM2gYNYRG2hZiTX1hOiEW9EyqEYTdihohVIyoQXLpAsYkc60TWvDUbWwObrw2apd/Zf71ypEDOxezT9Yivrg1onKjGm190cfmMSQQ/5gOl09D95ukbl0yeCfvHnjKW5kNw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by SA0PR12MB4509.namprd12.prod.outlook.com (2603:10b6:806:9e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 21:40:10 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 21:40:10 +0000
+Message-ID: <88110320-6ff8-5287-0474-60afedd70996@amd.com>
+Date:   Thu, 5 Jan 2023 16:40:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] drm/amd/display: fix PSR-SU/DSC interoperability
+ support
+Content-Language: en-US
+To:     Leo Li <sunpeng.li@amd.com>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Zhang <dingchen.zhang@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Po Ting Chen <robin.chen@amd.com>,
+        Shirish S <shirish.s@amd.com>, Robin Chen <po-tchen@amd.com>,
+        Brian Chang <Brian.Chang@amd.com>,
+        Camille Cho <Camille.Cho@amd.com>,
+        Tom Chung <chiahsuan.chung@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230105173809.289367-1-hamza.mahfooz@amd.com>
+ <161a2a64-6bdc-c896-1e3f-56da76f03b21@amd.com>
+ <7f7177c3-c6e1-81b8-2599-0d24245b416d@amd.com>
+ <f320ae29-5dbe-cfd8-0a05-de2e841d231c@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <f320ae29-5dbe-cfd8-0a05-de2e841d231c@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105192247.GB16920@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT1PR01CA0084.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2d::23) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|SA0PR12MB4509:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5cf3567f-61c0-4db3-3360-08daef656b76
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IKBQgTLqSYedt1x/N4mCg7htwNGfpbhHe9HMZA4pW/NB+1yj95/sgbuif5gefNt4c5VzzCKbqH9biBQZAKEq1ILqCti/p2koMSNKf9e0mCarDF8angFlpq97bhzopLVkDky3AJVP3LjPocRLyMX/+O+0fO6+pzSPnAUphDOR1vsXuvGMEg04S8FMcEDbe1Qq7xr1mj5lLEaBDl2YIPaLf5+8PoHtWuz+zOv8hDeEdr3AP3+xOhBv3rP1lfRibU5C/rO4pavhsdAg65dO01zDyMSNjlwT4RTrn2ZrMTCGiJoRUEjeSN0FzvyjVaosZjQW8F493HdAvQds/WbQnPepVcfXxAVCXELKgasrwv5LBkhZM6+9LdF7Gwq7heZ82wed1KN73YoTHaVfSVkQ58fcqKnJw7GCNk4pFju6ltK1lwUQh0IRFY+2bRe8rz1SzIijtKwopSBR2SGRvGjk9UmLzbYCRp9rFkhHxm6zyHiYYUIld5dM1mzfpqxX94xYRQs874BO62BpkL/QNrXau1ZxVQ1UuJXGA9vTYTTijtt58jOcJCsRwlJOMz1G2r5YKJztsB2/EJak3u5vsqYPQB07SXl8r5QvqHvtZ/TAuntLD+6hblCAIJCyGyKHVUDU9tVjpL9HwNLNh4AUlcstG7aezUFw5MQtr2Nmq0SEOMXIL1vdOcbNStRGB6w8XcEdreXj0cIbCAzwfgoH8QrQfa4B9DTGbhHNd+MTHppG89+8qSzyo/N7lNvzMBT6geq6N8HPIg2YFoPU9X/Voe76nZQPfQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(316002)(186003)(6486002)(26005)(2616005)(6512007)(478600001)(86362001)(6506007)(54906003)(53546011)(36756003)(31696002)(110136005)(41300700001)(6666004)(2906002)(8936002)(83380400001)(44832011)(66556008)(8676002)(66476007)(4326008)(31686004)(5660300002)(66946007)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXZFK29NOHNZUTJJRTAyUHZsU0lkSDRLcDM2UVgyRmI1QWhzLzVFQjB4RkFW?=
+ =?utf-8?B?Tlc1UktQeG84T040S0YrRGdCd1RXS0VvZk0zYXlPWGpwZHR6WjBwczBaeVRB?=
+ =?utf-8?B?eHFUdnYzLzNmS2hINUVlR1VhVVJrTTBLMUMwV1BXTStlT1FnTHR0L3krblgv?=
+ =?utf-8?B?TVljOGxGNWxRL0tNWm5UYStxSkY1UHRPUitiOWsrVm1hRGRmckxDc3E5VUc0?=
+ =?utf-8?B?L0hNVkVGSlJPTUVRU2dQUHNuOXEreHlsUXVocmZ6YU9BRzBoZTNUblFXaHZT?=
+ =?utf-8?B?M3NVN1pGdmJZdFdxOHV5YWZKTWZSRTY2QlRlelF2WjVpdUJTbnNMejd3WStt?=
+ =?utf-8?B?QXIwUElkc0djTmFhaE5uM2xqRVFBR3RJUEZaWVBUNDYzWDNTTTVNUlFWR1Y3?=
+ =?utf-8?B?dWVacGR0TEpUMlIvb0ZkSVdJbnVqbUp1b2E5Qk5HUXZqc2RXNWFPUWZFR0FJ?=
+ =?utf-8?B?eDlmaFVHc3BUaFZiS20xcGRoMCtYTzA5N2J4aVNRMTFqYmxRbUJQNkNHcFVD?=
+ =?utf-8?B?emhaZXlVTHh0Y2xxNnpPVTJsVW10MURSdGI2TGhJMUlNdEhnWlQ2ZU8rdFRs?=
+ =?utf-8?B?UXliWlZWRXBJN0wrSnlGSXpDVlFtaEVnZzRCc2xHemRjTTNzdTI4TFRhci92?=
+ =?utf-8?B?YVE0M0c3ekJEVktBZXp2RzdWd0FxY0FGME1kdFE3QkVxKzVYRG90dlNUTlgw?=
+ =?utf-8?B?TzJhTU1ObzNwOWJHd1BCclh2eWQ2cDR2YWF3UkVRbTEwNS9ZRitHdU9obFlN?=
+ =?utf-8?B?TTR2ek9IZVRqTnBBUjIwZXBPL3JrcytwNXV5Tjk5WnZHWjNrWFJVR2JuMC9L?=
+ =?utf-8?B?QTAwL2ZYQjI5czZ6Q00rRy9UQmNpcVM0ZDNhK1R1SGpQM2dXMGhBZW0zVnEx?=
+ =?utf-8?B?SWpMMHFGMzhoZCt2NU9RV1dQemRzcEdQVms0QzUvMEtHMEZvRjN2bWlEUk8r?=
+ =?utf-8?B?YUVkeVIvRGxPKzRzdlZIRFNnMGdaUWR2TEM0dHRkZGs2ejE1NTFadURNVDNO?=
+ =?utf-8?B?T1c1ZjUxT3pXUUNjQ2NRMHg1d2RTRW9kcWMxVFhiRjEzelNSM05BTHZlaXBj?=
+ =?utf-8?B?eVZRVG1jU2pTNUVpREV4bUpvNmNOM3ZTK3FxUysvd0E0eDhsQXpCOHlBZUNi?=
+ =?utf-8?B?ZXI0SHNaT0txMUxUb1k1SWR2OEtYTEJYS2pxZnF4K0d1RWRxNnhZcVNoT1hK?=
+ =?utf-8?B?cFJzZjA1RUJBVFp2bmZBOEduVlg0OGZwaGFicnBwdldzckFKcklxQ1lSVkt6?=
+ =?utf-8?B?bS9JcGdvcUJ3anJnVzIxWjZBV0dOWmhCaU56WjEzaUJmNnNOclFadEhabTlL?=
+ =?utf-8?B?MkQ0WlV5R0lCMXljOGZYb3BmSUFraDJRaW1jVWEyVFJIdk9uRmN0dm5QRUIz?=
+ =?utf-8?B?TVB1dDh2dVRvMFFWeDlmT2JuaXAwRy9ycmxDL2V2RHJwcGs1ekh6b0l0eUp0?=
+ =?utf-8?B?ZndScEk2bFVUSVAyREp6ZjRzejhRb1RLOGRRc2xyVVdWRmFRUU1leWpZQ3VK?=
+ =?utf-8?B?K2lZZWVyZ2lzalR2aEJwVUZDY0JuMThPNzJNUWhOdmJzbkFmeXhNdTN6eVBw?=
+ =?utf-8?B?Mk4zanNtQU5rSk1SR3JJWkZEK0Z2Z0hrWFhJblFVNTdNRWlMTEZ6bXZGanBT?=
+ =?utf-8?B?VUhFUmo4UVd5ODB4YXpPMGdrN0hMYlVkZ00ybURHZ01kdUcrc3NIWTBUTGJN?=
+ =?utf-8?B?S3EzMkVpNVJMQnNibEJBcEdBVjFISk4zQ0RuaGRweVd3SFdUa0JlSEI5L2xu?=
+ =?utf-8?B?eGNhNmYzajlXQ0hoYUFEWHdheUhXNTYzcXptTkRaOWQ2RzBHU1JxZWhxVDE0?=
+ =?utf-8?B?cmhweVJFZlBQZUFkcEU1ZGx5UHlkTzNWanZJQUxOcEk3VGEwbFo3aXB4ZGdO?=
+ =?utf-8?B?Y3Azck9aeHloTElER3hncFhOOXhXWEU1TlFNRkovRlRTWHRBelVEdEwwWDAx?=
+ =?utf-8?B?dXJnSHRVYXhnU2drRGczWHVud0pBVXZXRFU3V2ZBRUJYVUhZUDlienhvSWYx?=
+ =?utf-8?B?clkrTzIwTEgvWDFJR0NlUXYrMW4zMkJnNk90K1dqdG5WbFhqUFQxVU1ua0x2?=
+ =?utf-8?B?bld0MGVGK3YrMG9ReFNRNnlueVJQTHBzclFJVDhKRzZpQ0FWb2RkUlZXTThr?=
+ =?utf-8?Q?8AT8RiFBgh7JCrTaqgarsQeoN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cf3567f-61c0-4db3-3360-08daef656b76
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 21:40:10.2177
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zWQj2MBC6IuDqHsnoE+pHg7LtdP1E4R9SYuh72MUrap7PnGoCG5oC4/QB6a+z8BKZJMbeX/CLcTnZX8kZOCknQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4509
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Michal.
 
-On Thu, Jan 05, 2023 at 08:22:47PM +0100, Michal Koutn� wrote:
-> On Thu, Jan 05, 2023 at 07:35:59AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> > Hard limits tend to make this sort of problems a lot more pronounced because
-> > the existing mechanisms tend to break down for the users which are severely
-> > throttled down even while the device as a whole is fairly idle. cpu.max
-> > often triggers severe priority inversions too, so it isn't too surprising
-> > that people hit severe priority inversion issues w/ io.max.
+
+On 1/5/23 15:12, Leo Li wrote:
 > 
-> To be on the same page:
-> 1) severe PI == priority inversion across cgroups (progated e.g. via
->    global locks (as with cpu.max) or FS journal (as with io.max)),
-
-Another important inversion vector is memory reclaim as writeback operations
-get trapped in blk-throttle and the system can pile on waiting for clean
-pages.
-
-> 2) ordinary PI == priority inversion contained within a single cgroup,
->    i.e. no different from an under-provisioned system.
-
-I didn't use the term in a precise manner but yeah both can be problematic.
-The former a lot more so.
-
-> The reported issue sounds like 2) but even with the separated queues 1)
-> is still possible :-/
-
-Yeah, definitely.
-
-> > Another problem with blk-throttle is that it doesn't prioritize shared IOs
-> > identified by bio_issue_as_root_blkg() like iolatency and iocost do, so
-> > there can be very severe priority inversions when e.g. journal commit gets
-> > trapped in a low priority cgroup further exacerbating issues like this.
 > 
-> Thanks for the broader view. So the separated queues are certainly an
-> improvement but ultimately a mechanism based on bio_issue_as_root_blkg()
-> predicate and deferred throttling would be better? Or is permanent limit
-> enforcement more important?
+> 
+> On 1/5/23 15:07, Hamza Mahfooz wrote:
+>> On 1/5/23 13:29, Harry Wentland wrote:
+>>>
+>>>
+>>> On 1/5/23 12:38, Hamza Mahfooz wrote:
+>>>> Currently, there are issues with enabling PSR-SU + DSC. This stems from
+>>>> the fact that DSC imposes a slice height on transmitted video data and
+>>>> we are not conforming to that slice height in PSR-SU regions. So, pass
+>>>> slice_height into su_y_granularity to feed the DSC slice height into
+>>>> PSR-SU code.
+>>>>
+>>>> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+>>>> ---
+>>>> v2: move code to modules/power.
+>>>> ---
+>>>>   .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c |  3 ++
+>>>>   .../amd/display/modules/power/power_helpers.c | 35 +++++++++++++++++++
+>>>>   .../amd/display/modules/power/power_helpers.h |  3 ++
+>>>>   3 files changed, 41 insertions(+)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+>>>> index 26291db0a3cf..872d06fe1436 100644
+>>>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+>>>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+>>>> @@ -122,6 +122,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
+>>>>           psr_config.allow_multi_disp_optimizations =
+>>>>               (amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
+>>>> +        if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
+>>>> +            return false;
+>>>> +
+>>>>           ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
+>>>>       }
+>>>> diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+>>>> index 9b5d9b2c9a6a..4d27ad9f7370 100644
+>>>> --- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+>>>> +++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
+>>>> @@ -916,3 +916,38 @@ bool mod_power_only_edp(const struct dc_state *context, const struct dc_stream_s
+>>>>   {
+>>>>       return context && context->stream_count == 1 && dc_is_embedded_signal(stream->signal);
+>>>>   }
+>>>> +
+>>>> +bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
+>>>> +                  struct dc_stream_state *stream,
+>>>> +                  struct psr_config *config)
+>>>> +{
+>>>> +    uint16_t pic_height;
+>>>> +    uint8_t slice_height;
+>>>> +
+>>>> +    if (!dc->caps.edp_dsc_support ||
+>>>> +        link->panel_config.dsc.disable_dsc_edp ||
+>>>> +        !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
+>>>> +        !stream->timing.dsc_cfg.num_slices_v)
+>>>
+>>> I'm not sure this condition is correct. We can have DSC but not eDP DSC
+>>> support.
+>>>
+>>
+>> AFAIK PSR-SU displays use eDP exclusively, so we shouldn't have to worry about this case.
+> 
+> Right, the dc_link here should only be eDP. I suppose that isn't quite
+> clear.
+>
 
-Generally true but the specific scenario raised by Jinke is rather unusual
-and isn't covered by issue_as_root mechanism as it doesn't promote REQ_SYNC
-data writes. Then again, this usually isn't a problem as in most cases dirty
-throttling through writeback should stave off severe starvations.
+Right, I was thinking of DSC but PSR-SU is eDP only.
 
-blk-throttle is pretty outdated and kinda broken and separating out sync
-writes isn't gonna solve most of its problems. However, it will help in some
-cases like the one described by Jinke and can sometimes lessen wider scope
-inversions too. Given the partial nature, I don't feel too enthusiastic but
-at the same time can't find good reasons to reject either. I don't know. I
-don't feel too strong either way.
+Harry
+ 
+> Maybe add this as part of the condition?
+> 
+> if (!(link->connector_signal & SIGNAL_TYPE_EDP))
+>     return true;
+> 
+> Thanks,
+> Leo
+> 
+>>
+>>>> +        return true;
+>>>> +
+>>>> +    pic_height = stream->timing.v_addressable +
+>>>> +        stream->timing.v_border_top + stream->timing.v_border_bottom;
+>>>> +    slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
+>>>> +
+>>>> +    if (slice_height) {
+>>>> +        if (config->su_y_granularity &&
+>>>> +            (slice_height % config->su_y_granularity)) {
+>>>> +            WARN(1,
+>>>
+>>> We don't use WARN in display/dc or display/modules. DC_LOG_WARNING
+>>> might be better, or log it in the caller.
+>>>
+>>> Harry
+>>>
+>>>> +                 "%s: dsc: %d, slice_height: %d, num_slices_v: %d\n",
+>>>> +                 __func__,
+>>>> +                 stream->sink->dsc_caps.dsc_dec_caps.is_dsc_supported,
+>>>> +                 slice_height,
+>>>> +                 stream->timing.dsc_cfg.num_slices_v);
+>>>> +            return false;
+>>>> +        }
+>>>> +
+>>>> +        config->su_y_granularity = slice_height;
+>>>> +    }
+>>>> +
+>>>> +    return true;
+>>>> +}
+>>>> diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+>>>> index 316452e9dbc9..bb16b37b83da 100644
+>>>> --- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+>>>> +++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
+>>>> @@ -59,4 +59,7 @@ void mod_power_calc_psr_configs(struct psr_config *psr_config,
+>>>>           const struct dc_stream_state *stream);
+>>>>   bool mod_power_only_edp(const struct dc_state *context,
+>>>>           const struct dc_stream_state *stream);
+>>>> +bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
+>>>> +                  struct dc_stream_state *stream,
+>>>> +                  struct psr_config *config);
+>>>>   #endif /* MODULES_POWER_POWER_HELPERS_H_ */
+>>>
+>>
 
-On a tangential note, I've been thinking about implementing io.max on top of
-iocost so that each cgroup can just configure the max % of total device IO
-capacity that's allowed for it, which should be a lot easier to use and has
-many of the problems already solved.
-
-Thanks.
-
--- 
-tejun
