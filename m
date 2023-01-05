@@ -2,84 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91BF65EA88
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ADF65EA8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjAEMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S232298AbjAEMRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbjAEMQ1 (ORCPT
+        with ESMTP id S231646AbjAEMRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:16:27 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F6C44C5B;
-        Thu,  5 Jan 2023 04:16:24 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NnlnK6gRTz501Qw;
-        Thu,  5 Jan 2023 20:16:21 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl2.zte.com.cn with SMTP id 305CGAi6064280;
-        Thu, 5 Jan 2023 20:16:10 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 5 Jan 2023 20:16:13 +0800 (CST)
-Date:   Thu, 5 Jan 2023 20:16:13 +0800 (CST)
-X-Zmail-TransId: 2b0363b6bf8dffffffffd846a38d
-X-Mailer: Zmail v1.0
-Message-ID: <202301052016131375697@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <axboe@kernel.dk>
-Cc:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGJsa3RyYWNlOiB1c2Ugc3Ryc2NweSgpIHRvIGluc3RlYWQgb2Ygc3RybmNweSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 305CGAi6064280
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63B6BF95.000 by FangMail milter!
-X-FangMail-Envelope: 1672920981/4NnlnK6gRTz501Qw/63B6BF95.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63B6BF95.000/4NnlnK6gRTz501Qw
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 5 Jan 2023 07:17:01 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9170CBC87
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 04:17:00 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672921016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Xh0ofBqr/gGj4H4UF96ZzPTChHhGf7far4SpDmNAdA=;
+        b=LyFkvnan5JmFgaO9HtdeolaPWE1BRvcuxzyvr9aleZQaDG+WQFKvXHrisuhywbSyAypOV6
+        jhiXPHr984EpDg8vBJCSiKJ5DlqDtv8929zFHuuju1OcPXOmSH9lytjwKgCN7KQxQEXq+L
+        nqBtW34kEoFMHPO4MOKDOqcucJPU5Sm5RdrOREALOnso4NPW2P5o20GW/W1Cm7aPV81EWl
+        KT73W+0IsA3EKe0dfhuqOopVR/llmSnmtphZamKk2zWvbwcgtvmWJgzjR9gah4UuymntGA
+        6e0TBfTVpPbzowyLHom9dsPmZ4OAvq/qLgfckpnmc5U3ZL5IQf6D/B72Vnelrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672921016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Xh0ofBqr/gGj4H4UF96ZzPTChHhGf7far4SpDmNAdA=;
+        b=VoUI18fQzb/C9y7fXtAxTfnVEjZK/2+EzjZysUpkX/Iz1kel5HN7qz9i2aFWqJ332LaLUf
+        nnkyq9eI2u0fbVAQ==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v4 7/8 v2] printk: use printk_buffers for devkmsg
+In-Reply-To: <87fscpch67.fsf@jogness.linutronix.de>
+References: <20230105103735.880956-1-john.ogness@linutronix.de>
+ <20230105103735.880956-8-john.ogness@linutronix.de>
+ <87fscpch67.fsf@jogness.linutronix.de>
+Date:   Thu, 05 Jan 2023 13:22:16 +0106
+Message-ID: <87cz7tch2n.fsf@jogness.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Replace the buffers in struct devkmsg_user with a struct
+printk_buffers. This reduces the number of buffers to track.
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL-terminated strings.
+As a side-effect, @text_buf was 8kB large, even though it only
+needed to be the max size of a ringbuffer record. By switching to
+struct printk_buffers, ~7kB less memory is allocated when opening
+/dev/kmsg.
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+And since struct printk_buffers will be used now, reduce duplicate
+code by calling printk_get_next_message() to handle the record
+reading and formatting.
+
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/trace/blktrace.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/printk/printk.c | 40 ++++++++++++++++------------------------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
-diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
-index 918a7d12df8f..ff0cc68d7667 100644
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -524,8 +524,7 @@ static int do_blk_trace_setup(struct request_queue *q, char *name, dev_t dev,
- 	if (!buts->buf_size || !buts->buf_nr)
- 		return -EINVAL;
-
--	strncpy(buts->name, name, BLKTRACE_BDEV_SIZE);
--	buts->name[BLKTRACE_BDEV_SIZE - 1] = '\0';
-+	strscpy(buts->name, name, BLKTRACE_BDEV_SIZE);
-
- 	/*
- 	 * some device names have larger paths - convert the slashes
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 4fb7d29fb05d..32996b0c5d03 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -695,16 +695,14 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
+ 	return len;
+ }
+ 
++static bool printk_get_next_message(struct printk_message *pmsg, u64 seq, bool is_extended);
++
+ /* /dev/kmsg - userspace message inject/listen interface */
+ struct devkmsg_user {
+ 	atomic64_t seq;
+ 	struct ratelimit_state rs;
+ 	struct mutex lock;
+-	char buf[CONSOLE_EXT_LOG_MAX];
+-
+-	struct printk_info info;
+-	char text_buf[CONSOLE_EXT_LOG_MAX];
+-	struct printk_record record;
++	struct printk_buffers pbufs;
+ };
+ 
+ static __printf(3, 4) __cold
+@@ -786,8 +784,10 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 			    size_t count, loff_t *ppos)
+ {
+ 	struct devkmsg_user *user = file->private_data;
+-	struct printk_record *r = &user->record;
+-	size_t len;
++	char *outbuf = &user->pbufs.outbuf[0];
++	struct printk_message pmsg = {
++		.pbufs = &user->pbufs,
++	};
+ 	ssize_t ret;
+ 
+ 	if (!user)
+@@ -797,7 +797,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!prb_read_valid(prb, atomic64_read(&user->seq), r)) {
++	while (!printk_get_next_message(&pmsg, atomic64_read(&user->seq), true)) {
+ 		if (file->f_flags & O_NONBLOCK) {
+ 			ret = -EAGAIN;
+ 			goto out;
+@@ -814,36 +814,31 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		ret = wait_event_interruptible(log_wait,
+-				prb_read_valid(prb,
+-					atomic64_read(&user->seq), r)); /* LMM(devkmsg_read:A) */
++					       prb_read_valid(prb, atomic64_read(&user->seq),
++							      NULL)); /* LMM(devkmsg_read:A) */
+ 		if (ret)
+ 			goto out;
+ 	}
+ 
+-	if (r->info->seq != atomic64_read(&user->seq)) {
++	if (pmsg.dropped) {
+ 		/* our last seen message is gone, return error and reset */
+-		atomic64_set(&user->seq, r->info->seq);
++		atomic64_set(&user->seq, pmsg.seq);
+ 		ret = -EPIPE;
+ 		goto out;
+ 	}
+ 
+-	len = info_print_ext_header(user->buf, sizeof(user->buf), r->info);
+-	len += msg_print_ext_body(user->buf + len, sizeof(user->buf) - len,
+-				  &r->text_buf[0], r->info->text_len,
+-				  &r->info->dev_info);
++	atomic64_set(&user->seq, pmsg.seq + 1);
+ 
+-	atomic64_set(&user->seq, r->info->seq + 1);
+-
+-	if (len > count) {
++	if (pmsg.outbuf_len > count) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	if (copy_to_user(buf, user->buf, len)) {
++	if (copy_to_user(buf, outbuf, pmsg.outbuf_len)) {
+ 		ret = -EFAULT;
+ 		goto out;
+ 	}
+-	ret = len;
++	ret = pmsg.outbuf_len;
+ out:
+ 	mutex_unlock(&user->lock);
+ 	return ret;
+@@ -937,9 +932,6 @@ static int devkmsg_open(struct inode *inode, struct file *file)
+ 
+ 	mutex_init(&user->lock);
+ 
+-	prb_rec_init_rd(&user->record, &user->info,
+-			&user->text_buf[0], sizeof(user->text_buf));
+-
+ 	atomic64_set(&user->seq, prb_first_valid_seq(prb));
+ 
+ 	file->private_data = user;
 -- 
-2.15.2
+2.30.2
