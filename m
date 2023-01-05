@@ -2,522 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BCF65E570
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5934365E572
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 07:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjAEGNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 01:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S230010AbjAEGOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 01:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjAEGNQ (ORCPT
+        with ESMTP id S229579AbjAEGOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 01:13:16 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D803751325;
-        Wed,  4 Jan 2023 22:13:10 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id fc4so87753868ejc.12;
-        Wed, 04 Jan 2023 22:13:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hqDh2Xim+tTDH75JTENXdECaatY8kGHcxbqvmsRA3E=;
-        b=AZ/xqhT/M10u60SohsULnjUa2vH9KgadT8BWjPB+7FUAVKJvI/s7R7FGCyD3SREzfl
-         CitAg6bIbPLZIAj0WDl+JyadYc2AscolZ//fvssT6pS8kgeEe0Snh3bOTxeVMr9TrHBU
-         5BBBlf6M0mgwFym7xYo3GVdaCGc/XU3XcxU59zGoRVr7XAuhdDdjeuAomfLZgWrCuD9s
-         83SfKaVBRfbXtkUn4JMVlbopipMnNYabfcfsuaLyQroVtz7oHqVDGegM43pWR5R6wU12
-         4ATV/7+Sp9yXNWRE4fQMV8VGv34W8g0H12nEoUIZbeCFS73d0IKjnlmg7Nw4Q2n/QjWw
-         72EA==
-X-Gm-Message-State: AFqh2krxS5QPo2TLr9De5fBJEuBPCASO0JkYG9VSd/mbpK/Xb3MDHG6T
-        nc1bzsb/utTRP9DJkjb/MyA=
-X-Google-Smtp-Source: AMrXdXsKlRVn0RJBi17w2liEz4+CZ0KHwnMKR5bmUqdPZM/IvBJ/fkif9boqK4X7TOaFGYDo3SSuVA==
-X-Received: by 2002:a17:907:3888:b0:83f:757e:f182 with SMTP id sq8-20020a170907388800b0083f757ef182mr41761314ejc.65.1672899189152;
-        Wed, 04 Jan 2023 22:13:09 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id fy10-20020a1709069f0a00b007bd7178d311sm16375349ejc.51.2023.01.04.22.13.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 22:13:08 -0800 (PST)
-Message-ID: <f4016bf5-6377-170d-dd76-8f01ff6cb7da@kernel.org>
-Date:   Thu, 5 Jan 2023 07:13:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 06/10] tty: Convert ->carrier_raised() and callchains to
- bool
+        Thu, 5 Jan 2023 01:14:37 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4412451325;
+        Wed,  4 Jan 2023 22:14:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TsxA+oKW5P5CgvlOypNEZRnTkjDvSICCvOGfVjcVsjZiHX/3J7W0GOJT4XX4FGo+d7t/MLlbKu2qtaXpzQ/xd5khI6Us30k94D3UiwstKlbUDfi/ndksaIkwDVAK38CxYl4rIcWj8i208SnE5IFF3cPlmASED+nz0FR68BL2neete/kIAjG/sVjZXC/6qpwFLwHSzEX1hjoZ1kr6jKbYXnObqjduILMHmG/1C9j5SnlCb4dboNFnTg4dXoMeTOGqPDGWK+IdgziKlX6jlVXN9XlGevF7e9eD5FfO2IhJqS7wWmsBshIRS6E3N4/ee1DnN65+odhsSucuml2ghbOGgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0vPH9hXkm2ILsmGhlSS6Ozxlq2bacGaW9jlu48zWAbw=;
+ b=g7ya5dBGlnw3AWwbFYjvKwH420RXOj/9rfKHUkn1DCtQlIOsZfDjj37O0D6U1m1/kJyQVN9wYSaCh2csFH/5P0ywuQAdP0H/Fm7Xnm+2G+zmuytxPFkYNLTwZtdXA6LLUIh2dqhmeEa0fXzEUyb4zbyRFVd04XGY0a2oflvqjdCWTjUSTqm6hGqqkVwGoAQsUeF9T5ZqMiia3owZVfe64gjNsrN/EyuR6JlTjJtJ0KVGbcwwUcsVxDPj7HdFfU1XtyfFUqFBhXLFT3Ge/cVZjMR7onKuMiWMt9QTs+dRmBg/sSC6NEiTV3FFb3i7C8j4Q7DL6H7tcO+BCiaEW3TMJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0vPH9hXkm2ILsmGhlSS6Ozxlq2bacGaW9jlu48zWAbw=;
+ b=J1n0OOIr+v+qA7zTRur0p0Sz/ffmilzjebk+7bSGNw2aZqyiirqGWqkelgM8icd5CQCzawr02NkkvWqbMfI1f6TQzQzAsRxP3wXZfiZM7/MvpAjReW53Mf8zUsMz8kRdUNrAHSuf8PPQ2E00H34vccZx2OtnuS+li1N5NU3gnag=
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
+ by DM4PR12MB8500.namprd12.prod.outlook.com (2603:10b6:8:190::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 06:14:33 +0000
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::960b:6963:b27e:f9ed]) by DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::960b:6963:b27e:f9ed%8]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 06:14:31 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
+CC:     "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v9 03/13] cpufreq: intel_pstate: use common macro
+ definition for Energy Preference Performance(EPP)
+Thread-Topic: [PATCH v9 03/13] cpufreq: intel_pstate: use common macro
+ definition for Energy Preference Performance(EPP)
+Thread-Index: AQHZGH7vDlYW86zG/kOXbWfPNoGdH66NdsQAgAHCISCAACruAIAAAeaQ
+Date:   Thu, 5 Jan 2023 06:14:31 +0000
+Message-ID: <DM4PR12MB527815452A4BD57C19462C6A9CFA9@DM4PR12MB5278.namprd12.prod.outlook.com>
+References: <20221225163442.2205660-1-perry.yuan@amd.com>
+ <20221225163442.2205660-4-perry.yuan@amd.com>
+ <700d3351-1a52-5362-d22d-9326ad1220e5@amd.com>
+ <DM4PR12MB5278F31C41AA3DFD5569FEB89CFA9@DM4PR12MB5278.namprd12.prod.outlook.com>
+ <60ba1e38-d196-6b38-7c34-cd94daf50f81@amd.com>
+In-Reply-To: <60ba1e38-d196-6b38-7c34-cd94daf50f81@amd.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Johan Hovold <johan@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
- <20230104151531.73994-7-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230104151531.73994-7-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-05T06:14:28Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=e049fcd7-6aa5-47e3-9b2f-803c3e7ce6b9;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-01-05T06:14:28Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 8442fe5f-a7ea-4550-811f-651659865075
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|DM4PR12MB8500:EE_
+x-ms-office365-filtering-correlation-id: bede6568-628c-40f9-4d65-08daeee41c03
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1W1ogkKqlXb9C1SH6UVPQe7h+MmTq/QWT9nFDYiVINpeDRhGyhtHLYHL1p+64Rwyts5fQGh+qpf/BgYy7JX5bP0OQf7FSzRkJOWOq5WLG0eRIKCOIc/sJ4v+OaqK3G3dzSqBKgai5kuR49cyz56Q4bGuPscNdSkbxZaGRKo4NP4ZLvXRSspTRyEdMgLv3CNPa13viEv+a8EapKC+Gr2NkC5tarY94f9cosYxO0JxyuqSSjoqz8gEX91fPQUcmWCPEGCtg7x4fW/e1G/cZYyOHOBnlKCsjTnPMTMEKVMVryJnmxa1qMbAqqkls7Jpw56tuRE9A5dKmZs/abVzRWPnn6rA/e/NYHFUFVt0UQaBHJiYvAuTk7HVBI0O6Nb6faViObtoCbjb+VEoFwGPA4DcuKiUjJf6dbcdFgseJyZ2K2lYdl312XOHvjqjj8k+BdAu7BYiuk/JBhh3RPQN0m5f6gHPv4dUIKuwGR4vpUVdi6d+mlH5CwiF4fxj6GYUy/EWgoOXs9mFP+LSxE/XG6PPaC8q6mCB24PB0iBgvf9uwkq+rgP/aawi9Aw5zRAC9TardwO7DVHGeB4soapmYVGwg795u7HIIcnnKC8j+IelloPkUeydz+E/i/eaKZsjuLlCXzuOeBIZl6eDq6S8KVKIKVbZK4s9t3bHFsm5iQlpUT9Ktr1RKzVErDiivzsRn7yxlkWskE92xA6ueW0oZNiGaA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(376002)(136003)(451199015)(64756008)(8676002)(8936002)(4326008)(66556008)(66446008)(52536014)(66476007)(66946007)(2906002)(54906003)(5660300002)(316002)(110136005)(76116006)(6506007)(7696005)(478600001)(71200400001)(41300700001)(9686003)(53546011)(186003)(26005)(83380400001)(33656002)(38100700002)(122000001)(38070700005)(86362001)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TjV4SzFDbExPZG83SHZab0R0S05ZZEhLZ2piQW1oRlVSMHhRTlBGWXZKUjQw?=
+ =?utf-8?B?bTgrY3UzN3BEcVR6cWxuK1ZFM2JGY05VZHREVjFleGFUdjNYdjFpVGJ1RzZN?=
+ =?utf-8?B?UUtZWXpnb1UxMHYrV1BQMURnUlZ5ZnFrMWxTVkxBUnc0azNUSmZkZDNLN1No?=
+ =?utf-8?B?b0k1NDRnUEswTXp3a3dnOEd2SW1wajh1d0MwYXNySmI0OE9NTmMvbzZCQ1o1?=
+ =?utf-8?B?MWFNdk1LRTFERzV1SGQvVVY1K1ExU0NFUzZGanBwN2tpdyt4SXE4MlNSYjRh?=
+ =?utf-8?B?NGhqZ0tid0FqNjdpN09vK1FHanIrUm01Y0NZL0RIQTEwdjBERStQZ09mb0hV?=
+ =?utf-8?B?eGNMZ2h0aDNqWGZLM2UwMmF0SVdjdHp3K25yRXM0TWorSEI2cXVIcVhHZ05T?=
+ =?utf-8?B?YmkwSnpJZTJESTh1bDJFWGNuUE0rV3lyNlJCOW1qWG05MXBBSXdSdnM5ZTZW?=
+ =?utf-8?B?ZmtMMXMyK1lXNE9pRVpyRlpVU1VnUXE5b2o4aStDY2ZpNjVuc2FwMUZRV0RF?=
+ =?utf-8?B?T3VHdC9Dc0srM3BHbncvWGlLM01rdTVzNGZnMm9GU2FITUJ5NXFuV01OcVBH?=
+ =?utf-8?B?bnRpbWN2ZE8weUNqL2Q1UmhoeFdOblErWENaZjhKQVJKUU0yK1BabUs0TElS?=
+ =?utf-8?B?VVpkSVYrYkdYTDhuZVByeWt5ZkVkSExxL3NHTVlIRXBMVk9YcmdnVUQ4dWRv?=
+ =?utf-8?B?VjA0dElxeHF2QXgzR0dyVXdzMEVDS1RNOU45Y0RScnN5aWs2TGFZbEtqaEcr?=
+ =?utf-8?B?ZnJqUzRTZkZVY1lvenJ0a3F3WlVCWElPQ253WEQ2SFZuNWFRUjZzL3JuMksx?=
+ =?utf-8?B?YzZNTWtNZ1UxNEtrZFdja2JHMG1zaTFLOC9BWFNwYmNMRmhza1EyVjBtT3hI?=
+ =?utf-8?B?MXBZOUZvU1ZvZ3V4WHk3Q3ZNSTFTVWNZcEx6a21UQmNNM010M01HY2xOd0hz?=
+ =?utf-8?B?cExFSzNMcXVYeEJLVWtSUE5OWFdBQ2E0WnlwZmxBQldQV2g5SXU0T3dFREtQ?=
+ =?utf-8?B?SFJobjB4MGgrR0NHeVVVRDRJSWFBMmE5WmJUNWxqaXdoaU82T2VpbzljVi82?=
+ =?utf-8?B?V0N1MzNUWUlGWmZHTFJBRWt1WlgzQVhDM29PV1RLbURCWW0yaVZkMUtmbm9E?=
+ =?utf-8?B?ZTRSWHF6TlpQbjBid1Bxd0g5ZXMxbFMzVXljTG96d2NlWDBJQ1lqSWJmeXlX?=
+ =?utf-8?B?aGZyNHV3OWxGVk5GWndOQkN0cEtMeVhROVRyMTA4MVlQVDlBa0dERUUrQzNO?=
+ =?utf-8?B?Y3ZTemtyNU5IQTV5RExPaDBKY1gzdE55SklRODluQldvWkFMMDdmSXVBNHlR?=
+ =?utf-8?B?NVVGUDRYRi93b0wxWUx0c1VwR20wNkx1VkRNd2QreWVBZnFtWllSMFgxdUxP?=
+ =?utf-8?B?aDlQcGxoN0hJVytyamVtd0NlU0tob21SejBNUVZkc21BaXZxVjhWamxiRG9N?=
+ =?utf-8?B?WHlTaFc5WGwxNXZkRDluNHUxQXJZbmNQZWtzckxRdWZrT3I0UC80MHphRDVX?=
+ =?utf-8?B?bGlSdG95YXl4c0J4cm42VFlKZi95Ly9YcHkyRXNETjBTNzdtTWFWWWRqN0xN?=
+ =?utf-8?B?UWZ1UHJObjRCbTZxbmgrdmExRjl0eEpjcHJES3g0NTVFa1YybU8zYkpUdVI0?=
+ =?utf-8?B?WUFvN0RvUnVwVnFmU3RPY3VEdmFkTStnd1RlWEZZRC94RjQvV2xDYUdhQjNv?=
+ =?utf-8?B?U3AwakdiZlUrMHBaczZYNG1UME8xOG5lRjRHUlBTWVdFcmFpaW1MeGRqUysw?=
+ =?utf-8?B?S0tHZ0Z3TUlBd2pUbTlvS1BTNENla1dZdHh5amwvMlM1cmh4SFJKZ1BlTndy?=
+ =?utf-8?B?Y2pIaitpUmVBZW95UzcwR3hINUdMTm8yYm1DdEVyb1hVM24xTlNvaVRsWWdr?=
+ =?utf-8?B?NGNKRTlocitRK0I1d25aLzJHWjZMaVpSSnNGN0hERUdyK3I1cldwTjFMSEdn?=
+ =?utf-8?B?bVc3N1BtRHdHUUtSOUc0Wk9uT3diWSttcEtITDhlT29iV05WWVVqb2g0dGox?=
+ =?utf-8?B?RW03dWdWTWxZSHdhWFZVeWZEY1FFM2RXQ2tpWCtVZHk2MDFjMVoyYVFRYnNB?=
+ =?utf-8?B?U1U4eXRmbmZIRitrRG4wcTBVcGtPU21FS3lCb21JTlByZVNyemMxWVpJb0hK?=
+ =?utf-8?Q?LF59x3leCJ9l46UtWVD8RMOW0?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bede6568-628c-40f9-4d65-08daeee41c03
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2023 06:14:31.6122
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nZjjjQ+vIHjeV3+9dAVjbOgBpvqfniTYR1dWihNERiREQqs09tUfAUOCIHQkHusFMg3P7NRN6weuwXkNpodX5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8500
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 01. 23, 16:15, Ilpo Järvinen wrote:
-> Return boolean from ->carrier_raised() instead of 0 and 1. Make the
-> return type change also to tty_port_carrier_raised() that makes the
-> ->carrier_raised() call (+ cd variable in moxa into which its return
-> value is stored).
-> 
-> Also cleans up a few unnecessary constructs related to this change:
-> 
-> 	return xx ? 1 : 0;
-> 	-> return xx;
-> 
-> 	if (xx)
-> 		return 1;
-> 	return 0;
-> 	-> return xx;
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-
-> ---
->   drivers/char/pcmcia/synclink_cs.c | 8 +++-----
->   drivers/mmc/core/sdio_uart.c      | 7 +++----
->   drivers/tty/amiserial.c           | 2 +-
->   drivers/tty/moxa.c                | 4 ++--
->   drivers/tty/mxser.c               | 5 +++--
->   drivers/tty/n_gsm.c               | 8 ++++----
->   drivers/tty/serial/serial_core.c  | 9 ++++-----
->   drivers/tty/synclink_gt.c         | 7 ++++---
->   drivers/tty/tty_port.c            | 4 ++--
->   drivers/usb/serial/ch341.c        | 7 +++----
->   drivers/usb/serial/f81232.c       | 6 ++----
->   drivers/usb/serial/pl2303.c       | 7 ++-----
->   drivers/usb/serial/spcp8x5.c      | 7 ++-----
->   drivers/usb/serial/usb-serial.c   | 4 ++--
->   include/linux/tty_port.h          | 6 +++---
->   include/linux/usb/serial.h        | 2 +-
->   net/bluetooth/rfcomm/tty.c        | 2 +-
->   17 files changed, 42 insertions(+), 53 deletions(-)
-> 
-> diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-> index baa46e8a094b..4391138e1b8a 100644
-> --- a/drivers/char/pcmcia/synclink_cs.c
-> +++ b/drivers/char/pcmcia/synclink_cs.c
-> @@ -377,7 +377,7 @@ static void async_mode(MGSLPC_INFO *info);
->   
->   static void tx_timeout(struct timer_list *t);
->   
-> -static int carrier_raised(struct tty_port *port);
-> +static bool carrier_raised(struct tty_port *port);
->   static void dtr_rts(struct tty_port *port, int onoff);
->   
->   #if SYNCLINK_GENERIC_HDLC
-> @@ -2430,7 +2430,7 @@ static void mgslpc_hangup(struct tty_struct *tty)
->   	tty_port_hangup(&info->port);
->   }
->   
-> -static int carrier_raised(struct tty_port *port)
-> +static bool carrier_raised(struct tty_port *port)
->   {
->   	MGSLPC_INFO *info = container_of(port, MGSLPC_INFO, port);
->   	unsigned long flags;
-> @@ -2439,9 +2439,7 @@ static int carrier_raised(struct tty_port *port)
->   	get_signals(info);
->   	spin_unlock_irqrestore(&info->lock, flags);
->   
-> -	if (info->serial_signals & SerialSignal_DCD)
-> -		return 1;
-> -	return 0;
-> +	return info->serial_signals & SerialSignal_DCD;
->   }
->   
->   static void dtr_rts(struct tty_port *port, int onoff)
-> diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
-> index ae7ef2e038be..47f58258d8ff 100644
-> --- a/drivers/mmc/core/sdio_uart.c
-> +++ b/drivers/mmc/core/sdio_uart.c
-> @@ -526,7 +526,7 @@ static void sdio_uart_irq(struct sdio_func *func)
->   	port->in_sdio_uart_irq = NULL;
->   }
->   
-> -static int uart_carrier_raised(struct tty_port *tport)
-> +static bool uart_carrier_raised(struct tty_port *tport)
->   {
->   	struct sdio_uart_port *port =
->   			container_of(tport, struct sdio_uart_port, port);
-> @@ -535,9 +535,8 @@ static int uart_carrier_raised(struct tty_port *tport)
->   		return 1;
->   	ret = sdio_uart_get_mctrl(port);
->   	sdio_uart_release_func(port);
-> -	if (ret & TIOCM_CAR)
-> -		return 1;
-> -	return 0;
-> +
-> +	return ret & TIOCM_CAR;
->   }
->   
->   /**
-> diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-> index 460d33a1e70b..01c4fd3ce7c8 100644
-> --- a/drivers/tty/amiserial.c
-> +++ b/drivers/tty/amiserial.c
-> @@ -1454,7 +1454,7 @@ static const struct tty_operations serial_ops = {
->   	.proc_show = rs_proc_show,
->   };
->   
-> -static int amiga_carrier_raised(struct tty_port *port)
-> +static bool amiga_carrier_raised(struct tty_port *port)
->   {
->   	return !(ciab.pra & SER_DCD);
->   }
-> diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
-> index 2d9635e14ded..6a1e78e33a2c 100644
-> --- a/drivers/tty/moxa.c
-> +++ b/drivers/tty/moxa.c
-> @@ -501,7 +501,7 @@ static int moxa_tiocmset(struct tty_struct *tty,
->   static void moxa_poll(struct timer_list *);
->   static void moxa_set_tty_param(struct tty_struct *, const struct ktermios *);
->   static void moxa_shutdown(struct tty_port *);
-> -static int moxa_carrier_raised(struct tty_port *);
-> +static bool moxa_carrier_raised(struct tty_port *);
->   static void moxa_dtr_rts(struct tty_port *, int);
->   /*
->    * moxa board interface functions:
-> @@ -1432,7 +1432,7 @@ static void moxa_shutdown(struct tty_port *port)
->   	MoxaPortFlushData(ch, 2);
->   }
->   
-> -static int moxa_carrier_raised(struct tty_port *port)
-> +static bool moxa_carrier_raised(struct tty_port *port)
->   {
->   	struct moxa_port *ch = container_of(port, struct moxa_port, port);
->   	int dcd;
-> diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-> index 2926a831727d..96c72e691cd7 100644
-> --- a/drivers/tty/mxser.c
-> +++ b/drivers/tty/mxser.c
-> @@ -458,10 +458,11 @@ static void __mxser_stop_tx(struct mxser_port *info)
->   	outb(info->IER, info->ioaddr + UART_IER);
->   }
->   
-> -static int mxser_carrier_raised(struct tty_port *port)
-> +static bool mxser_carrier_raised(struct tty_port *port)
->   {
->   	struct mxser_port *mp = container_of(port, struct mxser_port, port);
-> -	return (inb(mp->ioaddr + UART_MSR) & UART_MSR_DCD)?1:0;
-> +
-> +	return inb(mp->ioaddr + UART_MSR) & UART_MSR_DCD;
->   }
->   
->   static void mxser_dtr_rts(struct tty_port *port, int on)
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index 631539c17d85..81fc2ec3693f 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -3770,16 +3770,16 @@ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk)
->   	return -EPROTONOSUPPORT;
->   }
->   
-> -static int gsm_carrier_raised(struct tty_port *port)
-> +static bool gsm_carrier_raised(struct tty_port *port)
->   {
->   	struct gsm_dlci *dlci = container_of(port, struct gsm_dlci, port);
->   	struct gsm_mux *gsm = dlci->gsm;
->   
->   	/* Not yet open so no carrier info */
->   	if (dlci->state != DLCI_OPEN)
-> -		return 0;
-> +		return false;
->   	if (debug & DBG_CD_ON)
-> -		return 1;
-> +		return true;
->   
->   	/*
->   	 * Basic mode with control channel in ADM mode may not respond
-> @@ -3787,7 +3787,7 @@ static int gsm_carrier_raised(struct tty_port *port)
->   	 */
->   	if (gsm->encoding == GSM_BASIC_OPT &&
->   	    gsm->dlci[0]->mode == DLCI_MODE_ADM && !dlci->modem_rx)
-> -		return 1;
-> +		return true;
->   
->   	return dlci->modem_rx & TIOCM_CD;
->   }
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index a0260a40bdb9..f91b27e2058a 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -1859,7 +1859,7 @@ static void uart_port_shutdown(struct tty_port *port)
->   	}
->   }
->   
-> -static int uart_carrier_raised(struct tty_port *port)
-> +static bool uart_carrier_raised(struct tty_port *port)
->   {
->   	struct uart_state *state = container_of(port, struct uart_state, port);
->   	struct uart_port *uport;
-> @@ -1873,15 +1873,14 @@ static int uart_carrier_raised(struct tty_port *port)
->   	 * continue and not sleep
->   	 */
->   	if (WARN_ON(!uport))
-> -		return 1;
-> +		return true;
->   	spin_lock_irq(&uport->lock);
->   	uart_enable_ms(uport);
->   	mctrl = uport->ops->get_mctrl(uport);
->   	spin_unlock_irq(&uport->lock);
->   	uart_port_deref(uport);
-> -	if (mctrl & TIOCM_CAR)
-> -		return 1;
-> -	return 0;
-> +
-> +	return mctrl & TIOCM_CAR;
->   }
->   
->   static void uart_dtr_rts(struct tty_port *port, int raise)
-> diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-> index 81c94906f06e..4ba71ec764f7 100644
-> --- a/drivers/tty/synclink_gt.c
-> +++ b/drivers/tty/synclink_gt.c
-> @@ -3126,7 +3126,7 @@ static int tiocmset(struct tty_struct *tty,
->   	return 0;
->   }
->   
-> -static int carrier_raised(struct tty_port *port)
-> +static bool carrier_raised(struct tty_port *port)
->   {
->   	unsigned long flags;
->   	struct slgt_info *info = container_of(port, struct slgt_info, port);
-> @@ -3134,7 +3134,8 @@ static int carrier_raised(struct tty_port *port)
->   	spin_lock_irqsave(&info->lock,flags);
->   	get_gtsignals(info);
->   	spin_unlock_irqrestore(&info->lock,flags);
-> -	return (info->signals & SerialSignal_DCD) ? 1 : 0;
-> +
-> +	return info->signals & SerialSignal_DCD;
->   }
->   
->   static void dtr_rts(struct tty_port *port, int on)
-> @@ -3162,7 +3163,7 @@ static int block_til_ready(struct tty_struct *tty, struct file *filp,
->   	int		retval;
->   	bool		do_clocal = false;
->   	unsigned long	flags;
-> -	int		cd;
-> +	bool		cd;
->   	struct tty_port *port = &info->port;
->   
->   	DBGINFO(("%s block_til_ready\n", tty->driver->name));
-> diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
-> index 469de3c010b8..a573c500f95b 100644
-> --- a/drivers/tty/tty_port.c
-> +++ b/drivers/tty/tty_port.c
-> @@ -444,10 +444,10 @@ EXPORT_SYMBOL_GPL(tty_port_tty_wakeup);
->    * to hide some internal details. This will eventually become entirely
->    * internal to the tty port.
->    */
-> -int tty_port_carrier_raised(struct tty_port *port)
-> +bool tty_port_carrier_raised(struct tty_port *port)
->   {
->   	if (port->ops->carrier_raised == NULL)
-> -		return 1;
-> +		return true;
->   	return port->ops->carrier_raised(port);
->   }
->   EXPORT_SYMBOL(tty_port_carrier_raised);
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index 6e1b87e67304..792f01a4ed22 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -413,12 +413,11 @@ static void ch341_port_remove(struct usb_serial_port *port)
->   	kfree(priv);
->   }
->   
-> -static int ch341_carrier_raised(struct usb_serial_port *port)
-> +static bool ch341_carrier_raised(struct usb_serial_port *port)
->   {
->   	struct ch341_private *priv = usb_get_serial_port_data(port);
-> -	if (priv->msr & CH341_BIT_DCD)
-> -		return 1;
-> -	return 0;
-> +
-> +	return priv->msr & CH341_BIT_DCD;
->   }
->   
->   static void ch341_dtr_rts(struct usb_serial_port *port, int on)
-> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-> index 891fb1fe69df..1a8c2925c26f 100644
-> --- a/drivers/usb/serial/f81232.c
-> +++ b/drivers/usb/serial/f81232.c
-> @@ -774,7 +774,7 @@ static bool f81232_tx_empty(struct usb_serial_port *port)
->   	return true;
->   }
->   
-> -static int f81232_carrier_raised(struct usb_serial_port *port)
-> +static bool f81232_carrier_raised(struct usb_serial_port *port)
->   {
->   	u8 msr;
->   	struct f81232_private *priv = usb_get_serial_port_data(port);
-> @@ -783,9 +783,7 @@ static int f81232_carrier_raised(struct usb_serial_port *port)
->   	msr = priv->modem_status;
->   	mutex_unlock(&priv->lock);
->   
-> -	if (msr & UART_MSR_DCD)
-> -		return 1;
-> -	return 0;
-> +	return msr & UART_MSR_DCD;
->   }
->   
->   static void f81232_get_serial(struct tty_struct *tty, struct serial_struct *ss)
-> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-> index 8949c1891164..4cb81746a149 100644
-> --- a/drivers/usb/serial/pl2303.c
-> +++ b/drivers/usb/serial/pl2303.c
-> @@ -1050,14 +1050,11 @@ static int pl2303_tiocmget(struct tty_struct *tty)
->   	return result;
->   }
->   
-> -static int pl2303_carrier_raised(struct usb_serial_port *port)
-> +static bool pl2303_carrier_raised(struct usb_serial_port *port)
->   {
->   	struct pl2303_private *priv = usb_get_serial_port_data(port);
->   
-> -	if (priv->line_status & UART_DCD)
-> -		return 1;
-> -
-> -	return 0;
-> +	return priv->line_status & UART_DCD;
->   }
->   
->   static void pl2303_set_break(struct usb_serial_port *port, bool enable)
-> diff --git a/drivers/usb/serial/spcp8x5.c b/drivers/usb/serial/spcp8x5.c
-> index 09a972a838ee..8175db6c4554 100644
-> --- a/drivers/usb/serial/spcp8x5.c
-> +++ b/drivers/usb/serial/spcp8x5.c
-> @@ -247,16 +247,13 @@ static void spcp8x5_set_work_mode(struct usb_serial_port *port, u16 value,
->   		dev_err(&port->dev, "failed to set work mode: %d\n", ret);
->   }
->   
-> -static int spcp8x5_carrier_raised(struct usb_serial_port *port)
-> +static bool spcp8x5_carrier_raised(struct usb_serial_port *port)
->   {
->   	u8 msr;
->   	int ret;
->   
->   	ret = spcp8x5_get_msr(port, &msr);
-> -	if (ret || msr & MSR_STATUS_LINE_DCD)
-> -		return 1;
-> -
-> -	return 0;
-> +	return ret || msr & MSR_STATUS_LINE_DCD;
->   }
->   
->   static void spcp8x5_dtr_rts(struct usb_serial_port *port, int on)
-> diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-> index 164521ee10c6..019720a63fac 100644
-> --- a/drivers/usb/serial/usb-serial.c
-> +++ b/drivers/usb/serial/usb-serial.c
-> @@ -754,7 +754,7 @@ static struct usb_serial_driver *search_serial_device(
->   	return NULL;
->   }
->   
-> -static int serial_port_carrier_raised(struct tty_port *port)
-> +static bool serial_port_carrier_raised(struct tty_port *port)
->   {
->   	struct usb_serial_port *p = container_of(port, struct usb_serial_port, port);
->   	struct usb_serial_driver *drv = p->serial->type;
-> @@ -762,7 +762,7 @@ static int serial_port_carrier_raised(struct tty_port *port)
->   	if (drv->carrier_raised)
->   		return drv->carrier_raised(p);
->   	/* No carrier control - don't block */
-> -	return 1;
-> +	return true;
->   }
->   
->   static void serial_port_dtr_rts(struct tty_port *port, int on)
-> diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
-> index fa3c3bdaa234..cf098459cb01 100644
-> --- a/include/linux/tty_port.h
-> +++ b/include/linux/tty_port.h
-> @@ -15,7 +15,7 @@ struct tty_struct;
->   
->   /**
->    * struct tty_port_operations -- operations on tty_port
-> - * @carrier_raised: return 1 if the carrier is raised on @port
-> + * @carrier_raised: return true if the carrier is raised on @port
->    * @dtr_rts: raise the DTR line if @raise is nonzero, otherwise lower DTR
->    * @shutdown: called when the last close completes or a hangup finishes IFF the
->    *	port was initialized. Do not use to free resources. Turn off the device
-> @@ -31,7 +31,7 @@ struct tty_struct;
->    *	the port itself.
->    */
->   struct tty_port_operations {
-> -	int (*carrier_raised)(struct tty_port *port);
-> +	bool (*carrier_raised)(struct tty_port *port);
->   	void (*dtr_rts)(struct tty_port *port, int raise);
->   	void (*shutdown)(struct tty_port *port);
->   	int (*activate)(struct tty_port *port, struct tty_struct *tty);
-> @@ -230,7 +230,7 @@ static inline void tty_port_set_kopened(struct tty_port *port, bool val)
->   
->   struct tty_struct *tty_port_tty_get(struct tty_port *port);
->   void tty_port_tty_set(struct tty_port *port, struct tty_struct *tty);
-> -int tty_port_carrier_raised(struct tty_port *port);
-> +bool tty_port_carrier_raised(struct tty_port *port);
->   void tty_port_raise_dtr_rts(struct tty_port *port);
->   void tty_port_lower_dtr_rts(struct tty_port *port);
->   void tty_port_hangup(struct tty_port *port);
-> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-> index f7bfedb740f5..dc7f90522b42 100644
-> --- a/include/linux/usb/serial.h
-> +++ b/include/linux/usb/serial.h
-> @@ -293,7 +293,7 @@ struct usb_serial_driver {
->   	/* Called by the tty layer for port level work. There may or may not
->   	   be an attached tty at this point */
->   	void (*dtr_rts)(struct usb_serial_port *port, int on);
-> -	int  (*carrier_raised)(struct usb_serial_port *port);
-> +	bool (*carrier_raised)(struct usb_serial_port *port);
->   	/* Called by the usb serial hooks to allow the user to rework the
->   	   termios state */
->   	void (*init_termios)(struct tty_struct *tty);
-> diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
-> index 8009e0e93216..5697df9d4394 100644
-> --- a/net/bluetooth/rfcomm/tty.c
-> +++ b/net/bluetooth/rfcomm/tty.c
-> @@ -119,7 +119,7 @@ static int rfcomm_dev_activate(struct tty_port *port, struct tty_struct *tty)
->   }
->   
->   /* we block the open until the dlc->state becomes BT_CONNECTED */
-> -static int rfcomm_dev_carrier_raised(struct tty_port *port)
-> +static bool rfcomm_dev_carrier_raised(struct tty_port *port)
->   {
->   	struct rfcomm_dev *dev = container_of(port, struct rfcomm_dev, port);
->   
-
--- 
-js
-suse labs
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIE1hcmlvLiANCg0KPiAtLS0t
+LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMaW1vbmNpZWxsbywgTWFyaW8gPE1hcmlv
+LkxpbW9uY2llbGxvQGFtZC5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBKYW51YXJ5IDUsIDIwMjMg
+MTo1NiBQTQ0KPiBUbzogWXVhbiwgUGVycnkgPFBlcnJ5Lll1YW5AYW1kLmNvbT47IHJhZmFlbC5q
+Lnd5c29ja2lAaW50ZWwuY29tOyBIdWFuZywNCj4gUmF5IDxSYXkuSHVhbmdAYW1kLmNvbT47IHZp
+cmVzaC5rdW1hckBsaW5hcm8ub3JnDQo+IENjOiBTaGFybWEsIERlZXBhayA8RGVlcGFrLlNoYXJt
+YUBhbWQuY29tPjsgRm9udGVub3QsIE5hdGhhbg0KPiA8TmF0aGFuLkZvbnRlbm90QGFtZC5jb20+
+OyBEZXVjaGVyLCBBbGV4YW5kZXINCj4gPEFsZXhhbmRlci5EZXVjaGVyQGFtZC5jb20+OyBIdWFu
+ZywgU2hpbW1lcg0KPiA8U2hpbW1lci5IdWFuZ0BhbWQuY29tPjsgRHUsIFhpYW9qaWFuIDxYaWFv
+amlhbi5EdUBhbWQuY29tPjsgTWVuZywNCj4gTGkgKEphc3NtaW5lKSA8TGkuTWVuZ0BhbWQuY29t
+PjsgS2FybnksIFd5ZXMgPFd5ZXMuS2FybnlAYW1kLmNvbT47DQo+IGxpbnV4LXBtQHZnZXIua2Vy
+bmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BB
+VENIIHY5IDAzLzEzXSBjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IHVzZSBjb21tb24gbWFjcm8NCj4g
+ZGVmaW5pdGlvbiBmb3IgRW5lcmd5IFByZWZlcmVuY2UgUGVyZm9ybWFuY2UoRVBQKQ0KPiANCj4g
+T24gMS80LzIzIDIzOjQ5LCBZdWFuLCBQZXJyeSB3cm90ZToNCj4gPiBbQU1EIE9mZmljaWFsIFVz
+ZSBPbmx5IC0gR2VuZXJhbF0NCj4gPg0KPiA+IEhpIE1hcmlvDQo+ID4NCj4gPj4gLS0tLS1Pcmln
+aW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJvbTogTGltb25jaWVsbG8sIE1hcmlvIDxNYXJpby5M
+aW1vbmNpZWxsb0BhbWQuY29tPg0KPiA+PiBTZW50OiBXZWRuZXNkYXksIEphbnVhcnkgNCwgMjAy
+MyA4OjMxIEFNDQo+ID4+IFRvOiBZdWFuLCBQZXJyeSA8UGVycnkuWXVhbkBhbWQuY29tPjsgcmFm
+YWVsLmoud3lzb2NraUBpbnRlbC5jb207DQo+ID4+IEh1YW5nLCBSYXkgPFJheS5IdWFuZ0BhbWQu
+Y29tPjsgdmlyZXNoLmt1bWFyQGxpbmFyby5vcmcNCj4gPj4gQ2M6IFNoYXJtYSwgRGVlcGFrIDxE
+ZWVwYWsuU2hhcm1hQGFtZC5jb20+OyBGb250ZW5vdCwgTmF0aGFuDQo+ID4+IDxOYXRoYW4uRm9u
+dGVub3RAYW1kLmNvbT47IERldWNoZXIsIEFsZXhhbmRlcg0KPiA+PiA8QWxleGFuZGVyLkRldWNo
+ZXJAYW1kLmNvbT47IEh1YW5nLCBTaGltbWVyDQo+IDxTaGltbWVyLkh1YW5nQGFtZC5jb20+Ow0K
+PiA+PiBEdSwgWGlhb2ppYW4gPFhpYW9qaWFuLkR1QGFtZC5jb20+OyBNZW5nLCBMaSAoSmFzc21p
+bmUpDQo+ID4+IDxMaS5NZW5nQGFtZC5jb20+OyBLYXJueSwgV3llcyA8V3llcy5LYXJueUBhbWQu
+Y29tPjsNCj4gPj4gbGludXgtcG1Admdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnDQo+ID4+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjkgMDMvMTNdIGNwdWZyZXE6IGlu
+dGVsX3BzdGF0ZTogdXNlIGNvbW1vbiBtYWNybw0KPiA+PiBkZWZpbml0aW9uIGZvciBFbmVyZ3kg
+UHJlZmVyZW5jZSBQZXJmb3JtYW5jZShFUFApDQo+ID4+DQo+ID4+IE9uIDEyLzI1LzIwMjIgMTA6
+MzQsIFBlcnJ5IFl1YW4gd3JvdGU6DQo+ID4+PiBtYWtlIHRoZSBlbmVyZ3kgcHJlZmVyZW5jZSBw
+ZXJmb3JtYW5jZSBzdHJpbmdzIGFuZCBwcm9maWxlcyB1c2luZw0KPiA+Pj4gb25lIGNvbW1vbiBo
+ZWFkZXIgZm9yIGludGVsX3BzdGF0ZSBkcml2ZXIsIHRoZW4gdGhlIGFtZF9wc3RhdGUgZXBwDQo+
+ID4+PiBkcml2ZXIgY2FuIHVzZSB0aGUgY29tbW9uIGhlYWRlciBhcyB3ZWxsLiBUaGlzIHdpbGwg
+c2ltcGlmeSB0aGUNCj4gPj4+IGludGVsX3BzdGF0ZSBhbmQgYW1kX3BzdGF0ZSBkcml2ZXIuDQo+
+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1ieTogUGVycnkgWXVhbiA8cGVycnkueXVhbkBhbWQuY29t
+Pg0KPiA+Pj4gLS0tDQo+ID4+PiAgICBkcml2ZXJzL2NwdWZyZXEvS2NvbmZpZy54ODYgICAgfCAg
+MiArLQ0KPiA+Pj4gICAgZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jIHwgMTMgKysrLS0t
+LS0tLS0tLQ0KPiA+Pj4gICAgaW5jbHVkZS9saW51eC9jcHVmcmVxLmggICAgICAgIHwgMTAgKysr
+KysrKysrKw0KPiA+Pj4gICAgMyBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxMSBk
+ZWxldGlvbnMoLSkNCj4gPj4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVmcmVxL0tj
+b25maWcueDg2DQo+ID4+PiBiL2RyaXZlcnMvY3B1ZnJlcS9LY29uZmlnLng4NiBpbmRleCAwMDQ3
+NmU5NGRiOTAuLmY2NGFlZjFlMDkzZA0KPiA+Pj4gMTAwNjQ0DQo+ID4+PiAtLS0gYS9kcml2ZXJz
+L2NwdWZyZXEvS2NvbmZpZy54ODYNCj4gPj4+ICsrKyBiL2RyaXZlcnMvY3B1ZnJlcS9LY29uZmln
+Lng4Ng0KPiA+Pj4gQEAgLTM2LDcgKzM2LDcgQEAgY29uZmlnIFg4Nl9QQ0NfQ1BVRlJFUQ0KPiA+
+Pj4NCj4gPj4+ICAgIGNvbmZpZyBYODZfQU1EX1BTVEFURQ0KPiA+Pj4gICAgCWJvb2wgIkFNRCBQ
+cm9jZXNzb3IgUC1TdGF0ZSBkcml2ZXIiDQo+ID4+PiAtCWRlcGVuZHMgb24gWDg2ICYmIEFDUEkN
+Cj4gPj4+ICsJZGVwZW5kcyBvbiBYODYgJiYgQUNQSSAmJiBYODZfSU5URUxfUFNUQVRFDQo+ID4+
+DQo+ID4+IFRoaXMgZG9lc24ndCBzZWVtIHJpZ2h0IHRvIG1lLiAgV2hhdCBpZiBzb21lb25lIGRp
+ZG4ndCBjb21waWxlIGluDQo+ID4+IEludGVsDQo+ID4+IHg4NiBzdXBwb3J0IGZvciB0aGVpciBr
+ZXJuZWw/ICBUaGV5IHdvdWxkbid0IGJlIGFibGUgdG8gcGljaw0KPiA+PiBYODZfQU1EX1BTVEFU
+RS4NCj4gPg0KPiA+IEhvdyBhYm91dCBjaGFuZ2VkIGxpa2UgdGhpcyA/IHdoZW4gYW1kIHBzdGF0
+ZSBlbmFibGVkLCBpdCB3aWxsIGJ1aWxkIGludGVsLQ0KPiBwc3RhdGUuYyBhcyB3ZWxsLg0KPiA+
+DQo+ID4gICAgIGRlcGVuZHMgb24gWDg2ICYmIEFDUEkNCj4gPiArIHNlbGVjdCBYODZfSU5URUxf
+UFNUQVRFDQo+IA0KPiBJIHN0aWxsIGRvbid0IHRoaW5rIHRoYXQncyB0aGUgcmlnaHQgd2F5IHRv
+IGRvIHRoaXMuICBXaHkgbm90IG1vdmUgdGhlIHZhcmlhYmxlcw0KPiB0byB0aGUgY3BwYyBsaWJy
+YXJ5IGZpbGU/ICBCb3RoIGludGVsIGFuZCBhbWQgcHN0YXRlIGRyaXZlcnMgc2VsZWN0IGl0LCBz
+byBpdCBjYW4NCj4gYmUgYSBjb21tb24gcGxhY2UgYm90aCB3aWwgdXNlLg0KPiANClRoYXQgd2ls
+bCBiZSBnb29kIHRoZW4uIA0KUmF5IHN1Z2dlc3RlZCB0byBwdXQgdGhlIGNvZGUgdG8gY3B1ZnJl
+cS5oICwgSSB3aWxsIG1vdmUgdGhlIGNvZGUgdG8gY3BwYyBsaWJyYXJ5IGluIHYxMCBpZiBoZSBo
+YXMgbm8gb2JqZWN0aW9uLiANCg0KUGVycnkuDQoNCj4gDQo+ID4NCj4gPg0KPiA+DQo+ID4+DQo+
+ID4+PiAgICAJc2VsZWN0IEFDUElfUFJPQ0VTU09SDQo+ID4+PiAgICAJc2VsZWN0IEFDUElfQ1BQ
+Q19MSUIgaWYgWDg2XzY0DQo+ID4+PiAgICAJc2VsZWN0IENQVV9GUkVRX0dPVl9TQ0hFRFVUSUwg
+aWYgU01QIGRpZmYgLS1naXQNCj4gPj4+IGEvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5j
+IGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jDQo+ID4+PiBpbmRleCBhZDliZTMxNzUz
+YjYuLjkzYTYwZmRhYzBmYyAxMDA2NDQNCj4gPj4+IC0tLSBhL2RyaXZlcnMvY3B1ZnJlcS9pbnRl
+bF9wc3RhdGUuYw0KPiA+Pj4gKysrIGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jDQo+
+ID4+PiBAQCAtNjQwLDE1ICs2NDAsNyBAQCBzdGF0aWMgaW50IGludGVsX3BzdGF0ZV9zZXRfZXBi
+KGludCBjcHUsIHMxNiBwcmVmKQ0KPiA+Pj4gICAgICoJNAkJcG93ZXINCj4gPj4+ICAgICAqLw0K
+PiA+Pj4NCj4gPj4+IC1lbnVtIGVuZXJneV9wZXJmX3ZhbHVlX2luZGV4IHsNCj4gPj4+IC0JRVBQ
+X0lOREVYX0RFRkFVTFQgPSAwLA0KPiA+Pj4gLQlFUFBfSU5ERVhfUEVSRk9STUFOQ0UsDQo+ID4+
+PiAtCUVQUF9JTkRFWF9CQUxBTkNFX1BFUkZPUk1BTkNFLA0KPiA+Pj4gLQlFUFBfSU5ERVhfQkFM
+QU5DRV9QT1dFUlNBVkUsDQo+ID4+PiAtCUVQUF9JTkRFWF9QT1dFUlNBVkUsDQo+ID4+PiAtfTsN
+Cj4gPj4+IC0NCj4gPj4+IC1zdGF0aWMgY29uc3QgY2hhciAqIGNvbnN0IGVuZXJneV9wZXJmX3N0
+cmluZ3NbXSA9IHsNCj4gPj4+ICtjb25zdCBjaGFyICogY29uc3QgZW5lcmd5X3BlcmZfc3RyaW5n
+c1tdID0gew0KPiA+Pj4gICAgCVtFUFBfSU5ERVhfREVGQVVMVF0gPSAiZGVmYXVsdCIsDQo+ID4+
+PiAgICAJW0VQUF9JTkRFWF9QRVJGT1JNQU5DRV0gPSAicGVyZm9ybWFuY2UiLA0KPiA+Pj4gICAg
+CVtFUFBfSU5ERVhfQkFMQU5DRV9QRVJGT1JNQU5DRV0gPSAiYmFsYW5jZV9wZXJmb3JtYW5jZSIs
+DQo+ID4+IEBAIC02NTYsNw0KPiA+Pj4gKzY0OCw4IEBAIHN0YXRpYyBjb25zdCBjaGFyICogY29u
+c3QgZW5lcmd5X3BlcmZfc3RyaW5nc1tdID0gew0KPiA+Pj4gICAgCVtFUFBfSU5ERVhfUE9XRVJT
+QVZFXSA9ICJwb3dlciIsDQo+ID4+PiAgICAJTlVMTA0KPiA+Pj4gICAgfTsNCj4gPj4+IC1zdGF0
+aWMgdW5zaWduZWQgaW50IGVwcF92YWx1ZXNbXSA9IHsNCj4gPj4+ICsNCj4gPj4+ICt1bnNpZ25l
+ZCBpbnQgZXBwX3ZhbHVlc1tdID0gew0KPiA+Pj4gICAgCVtFUFBfSU5ERVhfREVGQVVMVF0gPSAw
+LCAvKiBVbnVzZWQgaW5kZXggKi8NCj4gPj4+ICAgIAlbRVBQX0lOREVYX1BFUkZPUk1BTkNFXSA9
+IEhXUF9FUFBfUEVSRk9STUFOQ0UsDQo+ID4+PiAgICAJW0VQUF9JTkRFWF9CQUxBTkNFX1BFUkZP
+Uk1BTkNFXSA9DQo+ID4+IEhXUF9FUFBfQkFMQU5DRV9QRVJGT1JNQU5DRSwgZGlmZg0KPiA+Pj4g
+LS1naXQgYS9pbmNsdWRlL2xpbnV4L2NwdWZyZXEuaCBiL2luY2x1ZGUvbGludXgvY3B1ZnJlcS5o
+IGluZGV4DQo+ID4+PiBkNTU5NWQ1N2Y0ZTUuLjA2OTMyNjlmYjc3NSAxMDA2NDQNCj4gPj4+IC0t
+LSBhL2luY2x1ZGUvbGludXgvY3B1ZnJlcS5oDQo+ID4+PiArKysgYi9pbmNsdWRlL2xpbnV4L2Nw
+dWZyZXEuaA0KPiA+Pj4gQEAgLTE4NSw2ICsxODUsMTYgQEAgc3RydWN0IGNwdWZyZXFfZnJlcXMg
+ew0KPiA+Pj4gICAgCXU4IGZsYWdzOwkJLyogZmxhZ3Mgb2YgY3B1ZnJlcV9kcml2ZXIsIHNlZSBi
+ZWxvdy4gKi8NCj4gPj4+ICAgIH07DQo+ID4+Pg0KPiA+Pj4gK2VudW0gZW5lcmd5X3BlcmZfdmFs
+dWVfaW5kZXggew0KPiA+Pj4gKwlFUFBfSU5ERVhfREVGQVVMVCA9IDAsDQo+ID4+PiArCUVQUF9J
+TkRFWF9QRVJGT1JNQU5DRSwNCj4gPj4+ICsJRVBQX0lOREVYX0JBTEFOQ0VfUEVSRk9STUFOQ0Us
+DQo+ID4+PiArCUVQUF9JTkRFWF9CQUxBTkNFX1BPV0VSU0FWRSwNCj4gPj4+ICsJRVBQX0lOREVY
+X1BPV0VSU0FWRSwNCj4gPj4+ICt9Ow0KPiA+Pj4gK2V4dGVybiBjb25zdCBjaGFyICogY29uc3Qg
+ZW5lcmd5X3BlcmZfc3RyaW5nc1tdOyBleHRlcm4gdW5zaWduZWQNCj4gPj4+ICtpbnQgZXBwX3Zh
+bHVlc1tdOw0KPiA+Pj4gKw0KPiA+Pj4gICAgLyogT25seSBmb3IgQUNQSSAqLw0KPiA+Pj4gICAg
+I2RlZmluZSBDUFVGUkVRX1NIQVJFRF9UWVBFX05PTkUgKDApIC8qIE5vbmUgKi8NCj4gPj4+ICAg
+ICNkZWZpbmUgQ1BVRlJFUV9TSEFSRURfVFlQRV9IVwkgKDEpIC8qIEhXIGRvZXMgbmVlZGVkDQo+
+ID4+IGNvb3JkaW5hdGlvbiAqLw0KPiA+Pg0KPiA+PiBJIHRoaW5rIHRoZSByaWdodCBwbGFjZSBm
+b3IgdGhlc2UgdmFyaWFibGVzIGFuZCBzdHJpbmdzIGlzIGluIHRoZQ0KPiA+PiBjcHBjIGxpYnJh
+cnkgc291cmNlIGZpbGUgdGhhdCBpcyBjb21tb24gYWNyb3NzIENQUEMgaW1wbGVtZW50YXRpb25z
+Lg0K
