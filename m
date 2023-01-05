@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE3165F00A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FE965F00B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjAEP0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S233545AbjAEP07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 10:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234586AbjAEP0T (ORCPT
+        with ESMTP id S230261AbjAEP0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:26:19 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1275C933;
-        Thu,  5 Jan 2023 07:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672932374; x=1704468374;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OksWkIg+xvN3WL7qYD7ek/Aze8kUo+Yfw829bn01Z/0=;
-  b=nZrTdHbnwPLhTs/usRXzb8nZJKnziBCjnqcvnZ5GJFU6OV1l7jiuc01X
-   A8JVr+kfOcRJ/yduzVkrlprKYz6a7uAPKxOmOE3hI5YaZWgM2T3LcBIe6
-   tzDFmqHMm8Ye70Dyzi4XTVhOzCR5jhffy0kLrBQS3o234vDcx0E+oyAPb
-   HTMCYZhdTzlmBq1K2ZiXSqEFJr80DAeiHrbjA+je6AITdzphPbprKqM0U
-   zbBnDm5H1GXZwewn/oZDa4W/T19J6GP9zo9gBadWE/0k3wNDq8s3zRIoY
-   NmqoZiyrtbvLTpRoXYYqAAwrWx8Z43PDHFxlIVp/QdLyS7BQJJb2DHHCh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="320939480"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="320939480"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 07:26:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="648967330"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="648967330"
-Received: from sbakshi-mobl1.amr.corp.intel.com (HELO [10.212.128.57]) ([10.212.128.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 07:26:13 -0800
-Message-ID: <8bbc881b-15ea-1c8a-43ad-423f5a014c99@intel.com>
-Date:   Thu, 5 Jan 2023 07:26:13 -0800
+        Thu, 5 Jan 2023 10:26:52 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963AD4D4AA
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 07:26:50 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id bp26so6486021ilb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 07:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=43r3XG35x8TuOlNBwQd5KHGMsSLbIwsfhtWUFSmc5OA=;
+        b=diotJBVK7NMlbSmSdSCmKyfaZfPF8YvxDR8dH7Ou023mIuU5AHrgOcWiZdoIpIaZSU
+         xU/IdAUjlsQQZxy0znR+YJU9AvADdnhiSkt8nCXqOi1NBeY6jlXdU/mE7/7TVfpyS0/F
+         pJ2OC6bWVKuGSg2TkwCyF6TdYpo1qpFVLNDK7PDc7KupQQDrUSPW2xyvWSLE8tB+yTF/
+         oIUoBmvm0hOGzkcWTcqx3bPabNIgdFNW4JuGK1zQ89wIVWJ5UBYSqYew6xKql/5SbjnK
+         mmBWRHpATFZ7Zex56kRUt5UmAmDj+M1P8NTa1F+9gi381wTk6pLlW0ZLQugLbCMA6qTA
+         /Mvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=43r3XG35x8TuOlNBwQd5KHGMsSLbIwsfhtWUFSmc5OA=;
+        b=qW6NUp+upIyTwsmY1bNN7+/nbLH2axgsYWRduBXbVG63Tm3ymHqNtDh33v/C4XnpC1
+         EHsDsg+1/hJMq7uXEBvfTwSVdajk+w0/9wWwe7ACSGHlSCk5WEXfjwhauuuzTbEj9Fvn
+         1obUnyGamN6Knh4GTtZiARpffl5UhdKyMn3X1AEnVUGLUZ5+YmcckvTDCK3QzrdZqU3M
+         +5XQmtkFoKD+RQtBSvjcmIBfCRC0GMcUyQxVNmx66TNEwveKz1CO0zGSLsZ8AGjJ5Ifa
+         XcLuSdFyNCUq8WSv7a15GR9V037wQrlcc7YVgUd8TH1PozsO3daYqx4mI78aokgX4wQi
+         XhiA==
+X-Gm-Message-State: AFqh2krjrvqyMXILFn5H2mpmP2EqOsCssq6gBbKfUa/tYiOH8DJ8SM7n
+        LUP92UL3XfaMT1jemit7qV/K1w==
+X-Google-Smtp-Source: AMrXdXuPmsX4v97PpUfNTa8Htffi6AbcU9sim/bgiAsqlqbSJO/0XRUe9GNB2nsoX+lVP2ujbRxhSQ==
+X-Received: by 2002:a05:6e02:d0d:b0:303:d8:f309 with SMTP id g13-20020a056e020d0d00b0030300d8f309mr6446357ilj.2.1672932409868;
+        Thu, 05 Jan 2023 07:26:49 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id p5-20020a056638216500b00363dfbb145asm11180209jak.30.2023.01.05.07.26.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 07:26:49 -0800 (PST)
+Message-ID: <a5df61a3-d3d2-c0d5-37ee-d3417b53f2cf@kernel.dk>
+Date:   Thu, 5 Jan 2023 08:26:45 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Linux 6.2-rc1
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20230104190115.ceglfefco475ev6c@pali>
+ <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali>
+ <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+ <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk> <Y7aznc+/wm69554m@kroah.com>
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Raphael S. Carvalho" <raphaelsc@scylladb.com>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Pavel Boldin <pboldin@cloudlinux.com>,
-        Pavel Boldin <boldin.pavel@gmail.com>,
-        Moritz Lipp <github@mlq.me>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Michael Schwarz <michael.schwarz91@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1> <Y7bT0OL8RAWkCu0Z@kroah.com>
- <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
- <Y7bg5sxEZDIaGoXK@kroah.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y7bg5sxEZDIaGoXK@kroah.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y7aznc+/wm69554m@kroah.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 06:38, Greg KH wrote:
-> But hey, what do I know, I'm not a lawyer which is why I keep insisting
-> that one from Intel actually read over this submission and sign-off on
-> it to verify that they agree with all of this.
+On 1/5/23 4:25 AM, Greg Kroah-Hartman wrote:
+> On Wed, Jan 04, 2023 at 02:43:16PM -0700, Jens Axboe wrote:
+>>> The removal seems to revert cleanly, although it does require
+>>> reverting a few subsequent commits too (that removed code that only
+>>> pktcdvd used):
+>>>
+>>>     git revert db1c7d779767 85d6ce58e493 f40eb99897af
+>>>
+>>> where we have
+>>>
+>>>     db1c7d779767 block: bio_copy_data_iter
+>>>     85d6ce58e493 block: remove devnode callback from struct
+>>> block_device_operations
+>>>     f40eb99897af pktcdvd: remove driver.
+>>
+>> I'll queue this up - and unless I hear valid complaints to why we should
+>> not just reinstate the driver for now, it'll go out with the next pull
+>> request.
+> 
+> If you do revert these, watch out for a build warning from the driver
+> core when you revert this, I think there's a 'const' missing from
+> somewhere that you might have to add back in due to other driver core
+> changes.
 
-I guess I'm still confused what is triggering the lawyer requirement.
-Last time, you asked:
+The revert compiles cleanly, even merged with current master.
 
-> You are taking source from a non-Intel developer under a different
-> license and adding copyright and different license information to it.
-> Because of all of that, I have the requirement that I want to know that
-> Intel legal has vetted all of this and agrees with the conclusions that
-> you all are stating.
+-- 
+Jens Axboe
 
-To break that down, the earlier submission[1] had:
 
- * Original developer from a different company
- * Non-GPL original license
- * Relicensing
- * Addition of a new copyright
-
-I can see all of those thing adding up together to trigger the higher
-bar of having a lawyer sign off.  It looks like Aaron took that issue
-list and tried to improve on it.  This new submission has:
-
- * Original developer from a different company
-
-Is there anything else in this submission which is triggering the lawyer
-review requirement?
-
-If not, I'd be happy to hack up a Documentation patch to describe this
-review requirement and make it clear to everyone.  I've gotten traction
-with my colleagues in the past once things were fully and clearly
-documented.  I'm hoping history repeats itself here.
-
-1. https://lore.kernel.org/all/Y3L2Jx3Kx9q8Dv55@ziqianlu-desk1/
