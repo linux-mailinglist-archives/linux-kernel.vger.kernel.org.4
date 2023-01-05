@@ -2,144 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0C965E652
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D399C65E65D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 09:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjAEH6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S230423AbjAEIBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 03:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjAEH55 (ORCPT
+        with ESMTP id S229527AbjAEIBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:57:57 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE77479E7;
-        Wed,  4 Jan 2023 23:57:56 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3057kFpV005404;
-        Thu, 5 Jan 2023 07:57:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=leoUKZpjBHE4UPcagQvr1kAX5H/JI6p/RG60UJCclyY=;
- b=IgqTN/kEfTI7+A7L5Ni6SoM3wyHh/SoDM7MZuFvaTui7AExDcmQM8ShIfks4dkSw1Kn3
- SavU0leS0JioOtMzNHNgxqASkKcLr5roGdEUCnFKS7dWKyBRn6G/sFrEfrGKxW1Ra0ny
- kDC+f++MCBNuw4nUaFFsesfnzK9I/LL4Roe2ZEjsfys2isF8yN+ChuEeRQYKRxZ2IGH8
- TL0gatz/W+c9dKjugYwEKHjAofscNLjl1/W5/VanvF/uBnVvfyeic3hN9wUJcmeCcy+d
- /q7QQc2xpZ8UA3yVieCLbm6kBx4V05gAGrkQ6K/WT6MLUO7Is5du17ku1UXyldQpHaGW 7Q== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtf186kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 07:57:36 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3054pLZu001428;
-        Thu, 5 Jan 2023 07:57:34 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mtcbfee38-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 07:57:34 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3057vTph20906728
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Jan 2023 07:57:30 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E06712004E;
-        Thu,  5 Jan 2023 07:57:29 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DD7720040;
-        Thu,  5 Jan 2023 07:57:29 +0000 (GMT)
-Received: from osiris (unknown [9.171.68.186])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu,  5 Jan 2023 07:57:28 +0000 (GMT)
-Date:   Thu, 5 Jan 2023 08:57:27 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] s390: define RUNTIME_DISCARD_EXIT to fix link error with
- GNU ld < 2.36
-Message-ID: <Y7aC50LZK1t8Eysg@osiris>
-References: <20230105031306.1455409-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105031306.1455409-1-masahiroy@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kCFQebmxhKqPUH_Qcm2PDBEL4M6DeUEX
-X-Proofpoint-ORIG-GUID: kCFQebmxhKqPUH_Qcm2PDBEL4M6DeUEX
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 5 Jan 2023 03:01:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D32101C8;
+        Thu,  5 Jan 2023 00:01:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BB9D6190B;
+        Thu,  5 Jan 2023 08:01:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642C0C433D2;
+        Thu,  5 Jan 2023 08:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672905693;
+        bh=LVyg+cyK1Nc4wdQGz1UH28N+2JKAjcGMMQTRSam2CZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RdxU6w79YsogRTknVUR0WvT/1ZXI3HgeJ9+xsx/kuqWWYbqR13bKZ/aFCwdMi4hW+
+         bosdR/Envtwv+qzgqmbsrCdoL1KI9WFwXKutMu9JO0rQz+VA9R9a9KqV+UOV9SROjv
+         YaA1ytlYVWQwpCSjgvFjjQnIBXP9DqRHyB2xyWwk=
+Date:   Thu, 5 Jan 2023 09:01:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        David Zhou <David1.Zhou@amd.com>,
+        amd-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH 4.19 1/1] drm/amdkfd: Check for null pointer after
+ calling kmemdup
+Message-ID: <Y7aD2zJq6jBWUxbO@kroah.com>
+References: <20230103184308.511448-1-dragos.panait@windriver.com>
+ <20230103184308.511448-2-dragos.panait@windriver.com>
+ <Y7Vz8mm0X+1h844b@kroah.com>
+ <a8c6859f-5876-08cf-5949-ecf88e6bb528@amd.com>
+ <CADnq5_Ons+yMyGxcSaFaOb5uNXooHgH_4N=ThHOGYaW9Pb_Q8A@mail.gmail.com>
+ <Y7WRq7MaFaIJ2uGF@kroah.com>
+ <7c0cb998-d714-235e-8c2b-efe0315eed7f@windriver.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_02,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 phishscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7c0cb998-d714-235e-8c2b-efe0315eed7f@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 12:13:06PM +0900, Masahiro Yamada wrote:
-> Nathan Chancellor reports that the s390 vmlinux fails to link with
-> GNU ld < 2.36 since commit 99cb0d917ffa ("arch: fix broken BuildID
-> for arm64 and riscv").
+On Wed, Jan 04, 2023 at 08:05:57PM +0200, Dragos-Marian Panait wrote:
 > 
-> It happens for defconfig, or more specifically for CONFIG_EXPOLINE=y.
-> 
->   $ s390x-linux-gnu-ld --version | head -n1
->   GNU ld (GNU Binutils for Debian) 2.35.2
->   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- allnoconfig
->   $ ./scripts/config -e CONFIG_EXPOLINE
->   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- olddefconfig
->   $ make -s ARCH=s390 CROSS_COMPILE=s390x-linux-gnu-
->   `.exit.text' referenced in section `.s390_return_reg' of drivers/base/dd.o: defined in discarded section `.exit.text' of drivers/base/dd.o
->   make[1]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
->   make: *** [Makefile:1252: vmlinux] Error 2
-> 
-> arch/s390/kernel/vmlinux.lds.S wants to keep EXIT_TEXT:
-> 
->         .exit.text : {
->                 EXIT_TEXT
->         }
-> 
-> But, at the same time, EXIT_TEXT is thrown away by DISCARD because
-> s390 does not define RUNTIME_DISCARD_EXIT.
-> 
-> I still do not understand why the latter wins after 99cb0d917ffa,
-> but defining RUNTIME_DISCARD_EXIT seems correct because the comment
-> line in arch/s390/kernel/vmlinux.lds.S says:
-> 
->         /*
->          * .exit.text is discarded at runtime, not link time,
->          * to deal with references from __bug_table
->          */
-> 
-> Nathan also found that binutils commit 21401fc7bf67 ("Duplicate output
-> sections in scripts") cured this issue, so we cannot reproduce it with
-> binutils 2.36+, but it is better to not rely on it.
-> 
-> Fixes: 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv")
-> Link: https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  arch/s390/kernel/vmlinux.lds.S | 2 ++
->  1 file changed, 2 insertions(+)
+> On 04.01.2023 16:48, Greg KH wrote:
+> > On Wed, Jan 04, 2023 at 09:35:03AM -0500, Alex Deucher wrote:
+> > > On Wed, Jan 4, 2023 at 8:23 AM Christian König <christian.koenig@amd.com> wrote:
+> > > > Am 04.01.23 um 13:41 schrieb Greg KH:
+> > > > > On Tue, Jan 03, 2023 at 08:43:08PM +0200, Dragos-Marian Panait wrote:
+> > > > > > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> > > > > > 
+> > > > > > [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
+> > > > > > 
+> > > > > > As the possible failure of the allocation, kmemdup() may return NULL
+> > > > > > pointer.
+> > > > > > Therefore, it should be better to check the 'props2' in order to prevent
+> > > > > > the dereference of NULL pointer.
+> > > > > > 
+> > > > > > Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+> > > > > > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> > > > > > Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> > > > > > Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> > > > > > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> > > > > > Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+> > > > > > ---
+> > > > > >    drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+> > > > > >    1 file changed, 3 insertions(+)
+> > > > > For obvious reasons, I can't take a patch for 4.19.y and not newer
+> > > > > kernel releases, right?
+> > > > > 
+> > > > > Please provide backports for all kernels if you really need to see this
+> > > > > merged.  And note, it's not a real bug at all, and given that a CVE was
+> > > > > allocated for it that makes me want to even more reject it to show the
+> > > > > whole folly of that mess.
+> > > > Well as far as I can see this is nonsense to back port.
+> > > > 
+> > > > The code in question is only used only once during driver load and then
+> > > > never again, that exactly this allocation fails while tons of other are
+> > > > made before and after is extremely unlikely.
+> > > > 
+> > > > It's nice to have it fixed in newer kernels, but not worth a backport
+> > > > and certainly not stuff for a CVE.
+> > > It's already fixed in Linus' tree:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=abfaf0eee97925905e742aa3b0b72e04a918fa9e
+> > Yes, that's what the above commit shows...
+> > 
+> > confused,
+> > 
+> > greg k-h
+> Just for completeness, I also sent out patches for 5.4 and 5.10 stable
+> branches.
+> 5.15 stable branch already has this change: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y&id=5609b7803947eea1711516dd8659c7ed39f5a868
 
-Applied, thanks!
+Again, this is not a real bug and someone needs to go and invalidate
+that CVE so you don't have to worry about it anymore.  I suggest that
+you do that if your company cares about tracking CVEs.
+
+thanks,
+
+greg k-h
