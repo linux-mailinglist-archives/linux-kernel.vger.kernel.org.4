@@ -2,158 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149C265E9E6
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE6A65E9E7
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbjAEL2j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 Jan 2023 06:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S233204AbjAEL2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 06:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbjAEL2H (ORCPT
+        with ESMTP id S233166AbjAEL2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 06:28:07 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEABB4AD;
-        Thu,  5 Jan 2023 03:27:41 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 70ECB23442;
-        Thu,  5 Jan 2023 11:27:35 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31CEE13338;
-        Thu,  5 Jan 2023 11:27:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ck/WCie0tmO8LwAAMHmgww
-        (envelope-from <nstange@suse.de>); Thu, 05 Jan 2023 11:27:35 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Vladis Dronov <vdronov@redhat.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Nicolai Stange <nstange@suse.de>,
-        Elliott Robert <elliott@hpe.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] crypto: xts - drop xts_check_key()
-References: <20221229211710.14912-1-vdronov@redhat.com>
-        <20221229211710.14912-3-vdronov@redhat.com>
-Date:   Thu, 05 Jan 2023 12:27:34 +0100
-In-Reply-To: <20221229211710.14912-3-vdronov@redhat.com> (Vladis Dronov's
-        message of "Thu, 29 Dec 2022 22:17:06 +0100")
-Message-ID: <87bkndb4rd.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Thu, 5 Jan 2023 06:28:14 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2913C3B5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 03:28:11 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-482363a1232so359072337b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 03:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YW0JmDgfbaKWv4q9TiEyTj0eCQFFREQC3a91rJG1Kwc=;
+        b=ooLD+ubOG6z6J4wyjnsLBLgF3YYcls6L8UKEgAVzc2pFxSD093eLNwRxjxNHiIEpOD
+         QxBRsBpWVJxp955i8W4eSNFlXnOJgpYGwDDWvwWp9BY38P8lI2pT7H05YewwvCeuTgld
+         VqA2l7VMUy1U61FxldWu6wNbTWYwPo4sfYbm/mwOJ0tADta3tbRF1oMr7eViMohjvupE
+         yGFTpH1bXwWcnDb6oaY/6jikaCBw0lKkmpQddvUlUsKMpMcbqEsmmsOxap//u81rC7OJ
+         Y9tWQ3VrGh0UYWG/WsuLJyIAlYSz5/IqYqqE8dZ3Q4SXNw17J9C0T7wsnMkN78bq5pX3
+         VzRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YW0JmDgfbaKWv4q9TiEyTj0eCQFFREQC3a91rJG1Kwc=;
+        b=20kMAuXcJgYroxhMO78OduqTR+IjEbJtxj8+e26RUZgzX8RGFj9CI+8w2eaUFh2MbQ
+         LeUJO1P/IGieiaW1HJND1WoZdiCB0/P8Ie+JyY5GMBXUtnvfiZswy04aPVrgCpIClh+c
+         iyyTyJItiuqSslxw2P+aHTLlPfpGfVH3/gtL7LuIN7sbn8FSDXMyY2n1kSwqHHN4rigk
+         Z0BpXDuEttP9AqUv+bxKeclCANepcD4MMOf/BX/PTvRHoNzfX0kK/lftLqcnCHNtfm45
+         /To8QLKEp6pKi0euMOklifhIXKNC9mFbqi2OEhvDi5DhHSv+Ly4coSIA1vZwVl64aAZk
+         cQLg==
+X-Gm-Message-State: AFqh2krkXrBryOWygI9bN0JmG1U80ce1mUQ8leC7zDw0AzKYVSJFLUcK
+        J7fXMELgyYf2O3omO7A1tHKwhq9nioI/m6rRrgRgvg==
+X-Google-Smtp-Source: AMrXdXu/SUNwck2pv14UPcQwtHCrCsIQcVzQAFKAkJohCuxUJiUlydk8M6HGX4drW/uenXHK3G1qLcuav4Mpm62S2Bk=
+X-Received: by 2002:a81:1a08:0:b0:46b:c07c:c1d5 with SMTP id
+ a8-20020a811a08000000b0046bc07cc1d5mr4661928ywa.55.1672918090632; Thu, 05 Jan
+ 2023 03:28:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Authentication-Results: smtp-out2.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: -0.10
-X-Spamd-Result: default: False [-0.10 / 50.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[9];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCVD_TLS_ALL(0.00)[];
-         MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104084316.4281-1-arun.ramadoss@microchip.com>
+ <20230104084316.4281-7-arun.ramadoss@microchip.com> <27e0335f6ed15722feff27c17428410982a02e3c.camel@redhat.com>
+In-Reply-To: <27e0335f6ed15722feff27c17428410982a02e3c.camel@redhat.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 5 Jan 2023 12:27:59 +0100
+Message-ID: <CANn89i+XJzpXycUE_iiyRYQ-f-EkkBCD5FtdvbYfBy8pvOZ5qw@mail.gmail.com>
+Subject: Re: [Patch net-next v7 06/13] net: ptp: add helper for one-step P2P clocks
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Arun Ramadoss <arun.ramadoss@microchip.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
+        richardcochran@gmail.com, ceggers@arri.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladis,
+On Thu, Jan 5, 2023 at 11:09 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> Hi,
+>
+> On Wed, 2023-01-04 at 14:13 +0530, Arun Ramadoss wrote:
+> > From: Christian Eggers <ceggers@arri.de>
+> >
+> > For P2P delay measurement, the ingress time stamp of the PDelay_Req is
+> > required for the correction field of the PDelay_Resp. The application
+> > echoes back the correction field of the PDelay_Req when sending the
+> > PDelay_Resp.
+> >
+> > Some hardware (like the ZHAW InES PTP time stamping IP core) subtracts
+> > the ingress timestamp autonomously from the correction field, so that
+> > the hardware only needs to add the egress timestamp on tx. Other
+> > hardware (like the Microchip KSZ9563) reports the ingress time stamp via
+> > an interrupt and requires that the software provides this time stamp via
+> > tail-tag on tx.
+> >
+> > In order to avoid introducing a further application interface for this,
+> > the driver can simply emulate the behavior of the InES device and
+> > subtract the ingress time stamp in software from the correction field.
+> >
+> > On egress, the correction field can either be kept as it is (and the
+> > time stamp field in the tail-tag is set to zero) or move the value from
+> > the correction field back to the tail-tag.
+> >
+> > Changing the correction field requires updating the UDP checksum (if UDP
+> > is used as transport).
+> >
+> > Signed-off-by: Christian Eggers <ceggers@arri.de>
+> > Co-developed-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> > Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> > ---
+> > v1 -> v2
+> > - Fixed compilation issue when PTP_CLASSIFY not selected in menuconfig
+> > as reported by kernel test robot <lkp@intel.com>
+> > ---
+> >  include/linux/ptp_classify.h | 71 ++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 71 insertions(+)
+> >
+> > diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+> > index 2b6ea36ad162..6e5869c2504c 100644
+> > --- a/include/linux/ptp_classify.h
+> > +++ b/include/linux/ptp_classify.h
+> > @@ -10,8 +10,12 @@
+> >  #ifndef _PTP_CLASSIFY_H_
+> >  #define _PTP_CLASSIFY_H_
+> >
+> > +#include <asm/unaligned.h>
+> >  #include <linux/ip.h>
+> > +#include <linux/ktime.h>
+> >  #include <linux/skbuff.h>
+> > +#include <linux/udp.h>
+> > +#include <net/checksum.h>
+> >
+> >  #define PTP_CLASS_NONE  0x00 /* not a PTP event message */
+> >  #define PTP_CLASS_V1    0x01 /* protocol version 1 */
+> > @@ -129,6 +133,67 @@ static inline u8 ptp_get_msgtype(const struct ptp_header *hdr,
+> >       return msgtype;
+> >  }
+> >
+> > +/**
+> > + * ptp_check_diff8 - Computes new checksum (when altering a 64-bit field)
+> > + * @old: old field value
+> > + * @new: new field value
+> > + * @oldsum: previous checksum
+> > + *
+> > + * This function can be used to calculate a new checksum when only a single
+> > + * field is changed. Similar as ip_vs_check_diff*() in ip_vs.h.
+> > + *
+> > + * Return: Updated checksum
+> > + */
+> > +static inline __wsum ptp_check_diff8(__be64 old, __be64 new, __wsum oldsum)
+> > +{
+> > +     __be64 diff[2] = { ~old, new };
+> > +
+> > +     return csum_partial(diff, sizeof(diff), oldsum);
+> > +}
+> > +
+> > +/**
+> > + * ptp_header_update_correction - Update PTP header's correction field
+> > + * @skb: packet buffer
+> > + * @type: type of the packet (see ptp_classify_raw())
+> > + * @hdr: ptp header
+> > + * @correction: new correction value
+> > + *
+> > + * This updates the correction field of a PTP header and updates the UDP
+> > + * checksum (if UDP is used as transport). It is needed for hardware capable of
+> > + * one-step P2P that does not already modify the correction field of Pdelay_Req
+> > + * event messages on ingress.
+> > + */
+> > +static inline
+> > +void ptp_header_update_correction(struct sk_buff *skb, unsigned int type,
+> > +                               struct ptp_header *hdr, s64 correction)
+> > +{
+> > +     __be64 correction_old;
+> > +     struct udphdr *uhdr;
+> > +
+> > +     /* previous correction value is required for checksum update. */
+> > +     memcpy(&correction_old,  &hdr->correction, sizeof(correction_old));
+> > +
+> > +     /* write new correction value */
+> > +     put_unaligned_be64((u64)correction, &hdr->correction);
+> > +
+> > +     switch (type & PTP_CLASS_PMASK) {
+> > +     case PTP_CLASS_IPV4:
+> > +     case PTP_CLASS_IPV6:
+> > +             /* locate udp header */
+> > +             uhdr = (struct udphdr *)((char *)hdr - sizeof(struct udphdr));
+> > +             break;
+> > +     default:
+> > +             return;
+> > +     }
+> > +
+> > +     /* update checksum */
+> > +     uhdr->check = csum_fold(ptp_check_diff8(correction_old,
+> > +                                             hdr->correction,
+> > +                                             ~csum_unfold(uhdr->check)));
+> > +     if (!uhdr->check)
+> > +             uhdr->check = CSUM_MANGLED_0;
+>
+> AFAICS the above works under the assumption that skb->ip_summed !=
+> CHECKSUM_COMPLETE, and such assumption is true for the existing DSA
+> devices.
 
-Vladis Dronov <vdronov@redhat.com> writes:
+Presumably skb->ip_summed could be forced to CHECKSUM_NONE
 
-> xts_check_key() is obsoleted by xts_verify_key(). Over time XTS crypto
-> drivers adopted the newer xts_verify_key() variant, but xts_check_key()
-> is still used by a number of drivers. Switch drivers to use the newer
-> xts_verify_key() and make a couple of cleanups. This allows us to drop
-> xts_check_key() completely and avoid redundancy.
+Note: if IPV4 UDP checksum is zero, we are not supposed to change it.
 
-nice work, thanks a lot for doing it!
-
-There are two (obviously correct) cleanups which seem unrelated to
-xts_verify_key(), namely in cvm_setkey() and
-nitrox_aes_ctr_rfc3686_setkey(), see below.
-
-But the commit message does say "and make a couple of cleanups" and
-these changes certainly qualify as such. I just wanted to have it
-mentioned.
-
-Reviewed-by: Nicolai Stange <nstange@suse.de>
-
-Thanks!
-
-Nicolai
-
+(Not sure if this point is already checked in caller)
 
 >
-> Signed-off-by: Vladis Dronov <vdronov@redhat.com>
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-> ---
-
-<snip>
-
-> diff --git a/drivers/crypto/cavium/cpt/cptvf_algs.c b/drivers/crypto/cavium/cpt/cptvf_algs.c
-> index 9eca0c302186..0b38c2600b86 100644
-> --- a/drivers/crypto/cavium/cpt/cptvf_algs.c
-> +++ b/drivers/crypto/cavium/cpt/cptvf_algs.c
-
-<snip>
-
-> @@ -289,8 +288,7 @@ static int cvm_validate_keylen(struct cvm_enc_ctx *ctx, u32 keylen)
->  static int cvm_setkey(struct crypto_skcipher *cipher, const u8 *key,
->  		      u32 keylen, u8 cipher_type)
->  {
-> -	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
-> -	struct cvm_enc_ctx *ctx = crypto_tfm_ctx(tfm);
-> +	struct cvm_enc_ctx *ctx = crypto_skcipher_ctx(cipher);
->  
->  	ctx->cipher_type = cipher_type;
->  	if (!cvm_validate_keylen(ctx, keylen)) {
-
-This change here and ...
-
-
-> diff --git a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-> index 248b4fff1c72..138261dcd032 100644
-> --- a/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-> +++ b/drivers/crypto/cavium/nitrox/nitrox_skcipher.c
-
-<snip>
-
-> @@ -362,8 +361,7 @@ static int nitrox_aes_xts_setkey(struct crypto_skcipher *cipher,
->  static int nitrox_aes_ctr_rfc3686_setkey(struct crypto_skcipher *cipher,
->  					 const u8 *key, unsigned int keylen)
->  {
-> -	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
-> -	struct nitrox_crypto_ctx *nctx = crypto_tfm_ctx(tfm);
-> +	struct nitrox_crypto_ctx *nctx = crypto_skcipher_ctx(cipher);
->  	struct flexi_crypto_context *fctx;
->  	int aes_keylen;
+> Still the new helper is a generic one, so perhaps it should take care
+> of CHECKSUM_COMPLETE, too? Or at least add a big fat warning in the
+> helper documentation and/or a warn_on_once(CHECKSUM_COMPLETE).
 >
-
-this one are not strictly related to xts_verify_key() AFAICS, but it's
-fine to have them included nonetheless, IMO.
-
-
--- 
-SUSE Software Solutions Germany GmbH, Frankenstraße 146, 90461 Nürnberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-(HRB 36809, AG Nürnberg)
+> Thanks!
+>
+> Paolo
+>
