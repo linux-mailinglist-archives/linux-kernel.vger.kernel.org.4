@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E1B65F696
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D0065F699
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjAEWTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S234866AbjAEWUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAEWS7 (ORCPT
+        with ESMTP id S229694AbjAEWUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:18:59 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F0967BFF;
-        Thu,  5 Jan 2023 14:18:58 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DEFA132007CF;
-        Thu,  5 Jan 2023 17:18:56 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 05 Jan 2023 17:18:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1672957136; x=1673043536; bh=TCaP7y5pzb
-        RmEVCDjX4if25GDRs9o9AP2CCvuXdY0Rc=; b=PIcSr8fYa2Ax3wFTq+g4lz8Egp
-        wYqg/YGdva+cVwXt9uZTfsZxQ27iGq06akBW3eOl9ixhfehTWB3WrkYUFvKlqjGX
-        fkDHxuUKwRqhFU1fJZSEY72aKgS7wK2oGkZR7hPZvBR0TXrRwI0DErsLhfuXL+wq
-        1LLFWpIgTcG0jicVeuyuEbB1QIEb5MjM9WGhT/ubOkKMCkLH0Ecwpw4LJeu0yVym
-        8hYV59utE/civUmOmUnpquSOzbUyoK9wysJUWv9vnspWvw5sfzU5Ag4wm6ReiNln
-        hAHk2M9XwcRNPpdW5VxqeC2pxe4BoWnEcm5XB9ErG77SnAx9MeaFEfDCqnIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672957136; x=1673043536; bh=TCaP7y5pzbRmEVCDjX4if25GDRs9
-        o9AP2CCvuXdY0Rc=; b=KMsvE1ioZEJTW+IdbA+3wGtpwUfjL4X5vYLLsXNwgRnF
-        kJNW9lSFH1mTj5y2b1o0Pf7/+uQWyAWHH6Tt3czXMXjWK5TPdyOUBX3D1X2xuLah
-        VoopmZ/WCRH2kgGIVVD8aF3Wtz2E1wtxUtfdwq/Ls6K5VKY5EnInSGSxnQhHrZKj
-        Njf8/2KyYFpkQooJ/i7iA4cPqzLRHOkl3u4tqFogRRJPF9lA9ecv/v7+MTio1Lh0
-        9qrlhlSkboVbAeyPPCvPquI0nycez6ygf4E3uP0mHa4LqxzGu0XMO10xmMwYihJE
-        /oTmRbH/NzOFpIh+ovc2x83PqXBVKej9uuxjxn4sAg==
-X-ME-Sender: <xms:0Ey3Y-N9OIa30Ll-O0fn6BQt1edYAiQecStmo9eRbf_bE0ocd_Tpaw>
-    <xme:0Ey3Y8-nYRa5KFIlQKnDj11hBYzEX2cbhtnVcgKH88s73q_5vcRzZMHV920RPpAK0
-    zCC3CIafHqmLRWOldI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgdduiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepudeiffeghfdtueeigeeljedvfeeludffkedtkeeuvdeifeefudeiteefffev
-    gfeunecuffhomhgrihhnpehgihhtqdhstghmrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:0Ey3Y1TFjHCzrZ2JaGGMwVbtgyXn7sd4iaiuXTWXh5qFZMUTRdMWcw>
-    <xmx:0Ey3Y-vojGuC9-6fZRpSlURSXNeCG0jVb64p7noARUjoj6nrMK4aeg>
-    <xmx:0Ey3Y2cSKiNDTsmyL3QQIXUndMdjQUSDDWXZW7HyP2T7YVnjjFE7mg>
-    <xmx:0Ey3Y81ofk1jtNnS7fQq4IK9qdJxpsx_hJ3kTP1jYmHzhwlQlYJZlA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B0ECB60086; Thu,  5 Jan 2023 17:18:55 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <8b50ce1d-59d8-44b6-b330-d2ab56fb85a7@app.fastmail.com>
-In-Reply-To: <202301060326.qh0NHlzm-lkp@intel.com>
-References: <20230105141231.2006353-1-arnd@kernel.org>
- <202301060326.qh0NHlzm-lkp@intel.com>
-Date:   Thu, 05 Jan 2023 23:18:36 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        "Tomasz Figa" <tomasz.figa@gmail.com>,
-        "Chanwoo Choi" <cw00.choi@samsung.com>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        "Ajay Kumar" <ajaykumar.rs@samsung.com>,
-        "Pankaj Dubey" <pankaj.dubey@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: samsung: remove s3c24xx specific pll bits
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 17:20:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E4267BFF;
+        Thu,  5 Jan 2023 14:20:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D93A61C39;
+        Thu,  5 Jan 2023 22:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1396C433EF;
+        Thu,  5 Jan 2023 22:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672957233;
+        bh=wFsjpVh3IkDmL+Utxx+F+EeOCJi8KbNIByUbOF9OlAk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bl4maVmL8WVazXiY1F4XvKQmhwaB5YBcUiFS2s31mdvm8a1ZZn/Hx49BfQ/XYT+2m
+         YeqtLdjYUydFElqyULMAnZKpFwCClpWNRqTcNuUl+j4ckAlIZ+m6ltXms9VWMUFqMd
+         hIwBaDWpHxeIBiE4dEQzBNil5NCL+5dz41FOJeHBR394j8G5RTDXwQnYlv12YS/TFB
+         kPIUH6P8kIVxY+Ro/RQMIFc9bEOgfbe0WMdX0Mi0Exvewjb9E63X0m6vjRyLCYZOOD
+         6beeQmfQybHtimNh92uaCN64BE0+CNmtKtAAUgByvvBFUZXPzMpo0osAMV1UJqotEQ
+         R+gdDRAfjTwXg==
+Date:   Thu, 5 Jan 2023 16:20:31 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Liang, Kan" <kan.liang@linux.intel.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "kernelorg@undead.fr" <kernelorg@undead.fr>,
+        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
+        "2lprbe78@duck.com" <2lprbe78@duck.com>,
+        "nicholas.johnson-opensource@outlook.com.au" 
+        <nicholas.johnson-opensource@outlook.com.au>,
+        "benoitg@coeus.ca" <benoitg@coeus.ca>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
+        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Box, David E" <david.e.box@intel.com>,
+        "Sun, Yunying" <yunying.sun@intel.com>
+Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
+Message-ID: <20230105222031.GA1175847@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB608376AF8369BE02661C48D7FCFA9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023, at 20:49, kernel test robot wrote:
-> Hi Arnd,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on krzk/for-next]
-> [also build test ERROR on linus/master v6.2-rc2 next-20230105]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
->
->>> drivers/clk/samsung/clk-s3c2410.c:123:9: error: implicit declaration of function 'PLL_S3C2410_MPLL_RATE' [-Werror=implicit-function-declaration]
->      123 |         PLL_S3C2410_MPLL_RATE(12 * MHZ, 270000000, 127, 1, 1),
->          |         ^~~~~~~~~~~~~~~~~~~~~
+On Thu, Jan 05, 2023 at 09:49:44PM +0000, Luck, Tony wrote:
+> > The EDAC driver wouldn't have any ACPI stuff in it; it's just that
+> > Linux is looking for ACPI info about the ECAM area.
+> 
+> Is there some way for a driver to know that pci_read_config_dword()
+> is going to fail for offsets in extended PCIe config space?
 
-For clarification, the order in the patch series puts this
-patch after the one that removes clk-s3c2410.c, so there should
-be no bisection problem.
+There's no nice way to know ahead of time.  "raw_pci_ext_ops ==
+&pci_mmcfg" means it should work.  It looks like pci_direct_conf1 and
+pci_mmcfg_numachip would also work, but it's all pretty ugly.
 
-    Arnd
+You could check the result for PCI_POSSIBLE_ERROR(), since reads
+should return ~0 (PCI_ERROR_RESPONSE) if they fail either because we
+can't access extended config space or because there was some PCI
+error.
+
+Bjorn
