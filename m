@@ -2,109 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E3765F2E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2D765F2ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjAERh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S231858AbjAERjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbjAERhw (ORCPT
+        with ESMTP id S229551AbjAERix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:37:52 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705F2AE5C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:37:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=josQhijl3eh9kqSq44Gmb88SVuijyV+diV1kCXMMweceCMjFEshaKhNWOf8Wae3xmyHNxc6Ztui7kytwq0ul1Iea2zZ2wY6lN0o5y+8dIFrmX5Lg2DtTu3uCTEaWzhOU/W9kFhoQAi1v76vnWX/b3xJG013lhuWiGWR/CCTz1E6DguSGSKf0h0rYjTP5AubGpNuTQjUq1bo+J2D3iWM0lppoVLPKCYhEhh5A81Y+EP7jKYPHdxJkodXJ1pKS1JKMYRGcXue8sASFryB0dMXUqmBQozsN/xL7w6mLyJ1Yj+M32NhFuqQNRtUR/1245/pHQ0kF5etCjG4RWGt9NLDHZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U6eClMa1RZ8Dg5HqK82s80FlONIdb3tIvyiNypRO25Y=;
- b=V0wZVvYnieqJ2jPYQJwvgEoQNOCFSOysrWHlAhQIewEWrDNepJS03z4p2Unnu35wuJ/5ihkM0xKRJpvryT6ZAKgbBQ1dEkD5BkmWjQSqzBUV5vWF2cH7jho6xg+XsnYc4p09uhQyd2j0KUjoknV1Qjwg+KuuHrQwcU0g5JFNboRdIlDYHtVMXYYHe/Fqu6E9spqx7Szh/6npPe1MBWBlRbeW2WGm9iMbenS0+ndOxIRjeVIeb5yKQxqcNki/6RfLAWCRsZQXtsO2yf2Ri47qs9VFz/+nid7E/HqMcl8l+wJ0e4WZz6jQd/AVZczj0fsByEpAYC3ZdfpmRn6MqBKUEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U6eClMa1RZ8Dg5HqK82s80FlONIdb3tIvyiNypRO25Y=;
- b=vh7RWkrN9/9r97xNlVVV1D0oxyq3mXUBxYgWd/Rve3BPCdpuczUSKKf40phtuqfSfad+3tFdXqKH9lC2vNl1luoqMMO9Zc1NqtvyVtvXQQGj48i53of/9sQWREgahHFMGPrsSlbhmgG78zeEqaIGqdibrJjTcJ4KlUxt9zocWGs=
-Received: from MN2PR16CA0038.namprd16.prod.outlook.com (2603:10b6:208:234::7)
- by DM8PR12MB5397.namprd12.prod.outlook.com (2603:10b6:8:38::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Thu, 5 Jan 2023 17:37:46 +0000
-Received: from BL02EPF0000EE3F.namprd05.prod.outlook.com
- (2603:10b6:208:234:cafe::2d) by MN2PR16CA0038.outlook.office365.com
- (2603:10b6:208:234::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
- Transport; Thu, 5 Jan 2023 17:37:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000EE3F.mail.protection.outlook.com (10.167.241.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5944.10 via Frontend Transport; Thu, 5 Jan 2023 17:37:44 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 5 Jan
- 2023 11:37:42 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Zhang <dingchen.zhang@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        Po Ting Chen <robin.chen@amd.com>,
-        Shirish S <shirish.s@amd.com>, Robin Chen <po-tchen@amd.com>,
-        Brian Chang <Brian.Chang@amd.com>,
-        Camille Cho <Camille.Cho@amd.com>,
-        Tom Chung <chiahsuan.chung@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/amd/display: fix PSR-SU/DSC interoperability support
-Date:   Thu, 5 Jan 2023 12:38:08 -0500
-Message-ID: <20230105173809.289367-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 5 Jan 2023 12:38:53 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADD813D58;
+        Thu,  5 Jan 2023 09:38:50 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso1858397wmb.3;
+        Thu, 05 Jan 2023 09:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UR/KDXuUo5YIEtVXsXMb3LWhd+Yxtb+GyvMBlCijR10=;
+        b=er9v9hhe/qn74vOMX9ZXbYvGKSGpK46MoXmIXY6ouWT+u/uaASAVE5/nx7zliLGcwD
+         Y+zqmnmDyyBEPVuIEi3qRHTExB+cR8eXYp3oDDE0IxxLeN5OrhfMWbF3Gp9Q59hbLG65
+         TbekHTkD/7lBUCoEtDkm+P+a32ftTCKSe/2gdHsQAxG8Hpjz30ZyPDU2+Y5LmDj1U822
+         KSNhpSGxQLA5AKXgNPMlw8ShcA1m24x1T5/f1Wo9sXqSCpqSmn7LNs9Vm1spT5w8No+3
+         yIYKP5g2dlzYK7H3cHXRzvC/kXK5cjyl7k1CXb43E8hxCUD1NxJgEKvy3gab6oA39T/I
+         hCxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UR/KDXuUo5YIEtVXsXMb3LWhd+Yxtb+GyvMBlCijR10=;
+        b=oimiJCkgBTHmAUQAmlZknKrwDy9lXZUljwOz3yBaoMqyO83vLCcqfWQiMI70eAg1Fu
+         a6kzwuP9W22CXi+ZLlVjEffhB+9cVfSiKdR8ydZS/DA/jagvZMoPdvPMBD3zRRl/g4Lb
+         r8dtrn1ALjG0p406MjjevTCIvNrjCn5M9sP7EfuAD/PyuFgTPSDZ0NUWAYxtShQByY1e
+         rA42zwOx+60+m0kK5uHzyoQHL8S15VhVHD0UJX6cujHWEX6xjQrK4ozZ3B8EiFhzBLZy
+         62ezLe9PFMCUQCIYpNDqymBRv7JYfXxpsdZMWgm/NCsgi2jS5Pm/1+ILxh2hy+oAh8bz
+         QH/w==
+X-Gm-Message-State: AFqh2kqbzFCtYOtw+rsCFkcLTnkqOl2btNOlsyh3GwTC+ZprfJ7LECJB
+        k+W8QimMFdluB76kZsC4Mwcm2sE/n6I=
+X-Google-Smtp-Source: AMrXdXtrqZwnns/fuTfhJAXEgXMF0gkvuzFQPMRaw0fbpopr/7iQG4+pjIGl+ufrQAJQpPgpZFgVEw==
+X-Received: by 2002:a05:600c:4e51:b0:3cf:7b8b:6521 with SMTP id e17-20020a05600c4e5100b003cf7b8b6521mr36301703wmq.32.1672940329131;
+        Thu, 05 Jan 2023 09:38:49 -0800 (PST)
+Received: from fedora ([94.73.32.212])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b003d99a39b846sm4384945wmq.5.2023.01.05.09.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 09:38:48 -0800 (PST)
+Date:   Thu, 5 Jan 2023 18:38:46 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Joshua Goins <josh@redstrate.com>
+Cc:     linux-input@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Artist 22R Pro
+Message-ID: <Y7cLJpgnP50JzHps@fedora>
+References: <2068502.VLH7GnMWUR@adrastea>
+ <20230102194911.56083-1-josh@redstrate.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3F:EE_|DM8PR12MB5397:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35837f35-03bb-4d7a-5f34-08daef438d8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fA23wUPRiReVAluhlS7ks0WrACFNg7bnCwqnkyXq1We9ZWzV0COdMd8BoQGZ3pG/sXOISZ7ZJtT2616oHk4GvAqhYoBilgk1V+Zuy0+V+my1yzUEGIdAugt5trYkPSeLAvzVggl0+vRE+2q75F0ykX41KxJr3I6Lb+yzOqkpzkDRNDVMyKd0n78pqnXi7WrmO0FrerXjsxgYmyyis1z0nmQ/hb6yNchD2XejE1wcxnnOe9U65dwDiEm4qgnjJoQEedtJg1d040fHaavwSjtEZyNDAFMn9jJGCLrD7fhXiR/Vk7Y9d1Y50+qfTX5HKWnlUhNZvTMS8Ak3MiQ3m+1xKsRHEuMDl6sb9xKsPOHeL3K5MfOAunjdEBgBPoX75eJnbpfZCpd8ESgUGFYG+3PYEHWYNQbiftH5WCG/Pq+dogIl1pyRN9oB9mo4klno9ldArchVZ4pS4g7VFwzwMBYjtzbtcMIODbVHEPt1B+CSeGCykOheVDPEXf7hM4YKu0wgN3PN7hdlZORDiew2ZFpdQvr7TyJ4gmyd/sPHP8Uv+KtPdGcMuiWcPP6RYb1CmIb0YDE6f65pMIcqgIOiR8OSOSjRe+dzY1Y8OXnSrl/b4OsZz0Iy8v4A0HzaGbeNopluwEMrZOeAafMQRKRVAp/ywW7M6O0GZpdfBXmshJLLV7P1a9EcM/7H/tAUcmohMkbDL0bCR7zp/ZrImzA2xgnaoRsiSMZtjb5KCCk1AbqKRYd0kcBif74+qFtIL/+tDd1jcdIJw0iHj/yX+v+C4PO0Sg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(70586007)(5660300002)(44832011)(8936002)(41300700001)(8676002)(4326008)(2906002)(70206006)(316002)(54906003)(6916009)(478600001)(2616005)(336012)(26005)(186003)(82310400005)(40480700001)(6666004)(16526019)(83380400001)(426003)(1076003)(47076005)(82740400003)(356005)(81166007)(86362001)(40460700003)(36756003)(36860700001)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:37:44.2668
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35837f35-03bb-4d7a-5f34-08daef438d8c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3F.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5397
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <20230102194911.56083-1-josh@redstrate.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,90 +77,540 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, there are issues with enabling PSR-SU + DSC. This stems from
-the fact that DSC imposes a slice height on transmitted video data and
-we are not conforming to that slice height in PSR-SU regions. So, pass
-slice_height into su_y_granularity to feed the DSC slice height into
-PSR-SU code.
+On Mon, Jan 02, 2023 at 02:49:10PM -0500, Joshua Goins wrote:
+> Adds support for the XP-PEN Artist 22R Pro, including stylus, tablet frame
+> and pen pressure.
+> 
+> The tablet has 20 buttons, but need to be remapped in order since the
+> device reports invalid keycodes. Existing tablet functionality should
+> not be inhibited, as BTN0-8 is still used.
+> 
+> New initialization functions are added since the device differs slightly
+> from other UGEE v2 devices.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Reported-by: José Expósito <jose.exposito89@gmail.com>
+> Signed-off-by: Joshua Goins <josh@redstrate.com>
+> ---
+> v2 changes:
+>   - rewrote initialization code to be more concise, and less error-prone, thanks
+>   Dan Carpenter & José Expósito for pointers!
+>   - less struct duplication, it now uses compatiable UGEE v2 ones.
+>   - uclogic_extra_input_mapping is now static, thanks José again!
+>   - straightened out dial transformation, now there's just the two cases and
+>   they're decimal.
+>   - fixed the patch formatting, it should be easier to apply now.
+>   - rebased onto 6.2-rc2
+> 
+> I kept the new initialization functions seperate, please review and tell me if
+> they are better suited being merged into their UGEE v2 counterparts (which would
+> involve a lot of branching). I don't have another UGEE v2 tablet to test, so I
+> won't be able to test for regressions for those devices myself, so I refrained
+> from those changes in this patch.
+> 
+> Original message:
+> I did not do the research for this hardware, or the original patch - that work
+> has been done by Aren Villanueva. For some reason they decided not to merge
+> it. My changes include remapping the stupid amount of tablet frame buttons,
+> cleaning up the code to match kernel style, and other small stuff.
+> 
+> The tablet is (almost) fully functional even when uclogic doesn't handle it.
+> Without initialization, the tablet has some sort of "basic driverless mode"
+> that allows the tablet frame buttons to have some default keys associated with
+> them (CTRL-S, CTRL-Z, that kind of stuff), but unfortunately the stylus pen
+> semi-works. While pressure sensitivity works, only one stylus button functions
+> correctly. Since the initialization process differs for Pro series tablets, the
+> new function uclogic_params_init_ugee_xppen_pro had to be introduced. I also
+> added USB HID IDs for this tablet too, but it's classified under the UGEE
+> vendor ID.
+> 
+> One of the more strange things I had to do is figure out a way to remap the
+> buttons since there are 20 of them in total, and of course there are more
+> buttons than there are BTN constants defined for us. When running without
+> uclogic, it starts at BTN_0, ends at BTN_8 and the tablet starts reporting
+> nonsensical keycodes so just leaving it alone isn't an option. I'm testing
+> this under a libinput system, which has a list of buttons it considers "tablet
+> pad buttons" which are notably BTN_0, BTN_1, so on and some
+> gamepad/joystick buttons. So I created a new array called
+> uclogic_extra_input_mapping for 20 working inputs.
+> 
+> Another weird feature of this tablet is the second dial, which the original
+> patchset introduced a new uclogic_frame param to handle since it seems it
+> throws both dials values into one byte. The left wheel is considered EV_WHEEL
+> and the other, EV_HWHEEL which seems fine to me. I also added the new param to
+> the debug messages too.
+> 
+> 
+>  drivers/hid/hid-ids.h            |   1 +
+>  drivers/hid/hid-uclogic-core.c   |  66 +++++++++++-
+>  drivers/hid/hid-uclogic-params.c | 180 +++++++++++++++++++++++++++++++
+>  drivers/hid/hid-uclogic-params.h |   5 +
+>  drivers/hid/hid-uclogic-rdesc.c  |  50 +++++++++
+>  drivers/hid/hid-uclogic-rdesc.h  |   9 ++
+>  6 files changed, 307 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 82713ef3aaa6..81d04054229a 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -1298,6 +1298,7 @@
+>  #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L	0x0935
+>  #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S	0x0909
+>  #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06	0x0078
+> +#define USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO	0x091b
+>  #define USB_DEVICE_ID_UGEE_TABLET_G5		0x0074
+>  #define USB_DEVICE_ID_UGEE_TABLET_EX07S		0x0071
+>  #define USB_DEVICE_ID_UGEE_TABLET_RAINBOW_CV720	0x0055
+> diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
+> index 7fa6fe04f1b2..8d92e984f984 100644
+> --- a/drivers/hid/hid-uclogic-core.c
+> +++ b/drivers/hid/hid-uclogic-core.c
+> @@ -81,6 +81,30 @@ static __u8 *uclogic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+>  	return rdesc;
+>  }
+>  
+> +/* Buttons considered valid tablet pad inputs. */
+> +static const unsigned int uclogic_extra_input_mapping[] = {
+> +	BTN_0,
+> +	BTN_1,
+> +	BTN_2,
+> +	BTN_3,
+> +	BTN_4,
+> +	BTN_5,
+> +	BTN_6,
+> +	BTN_7,
+> +	BTN_8,
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
-v2: move code to modules/power.
----
- .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c |  3 ++
- .../amd/display/modules/power/power_helpers.c | 35 +++++++++++++++++++
- .../amd/display/modules/power/power_helpers.h |  3 ++
- 3 files changed, 41 insertions(+)
+I see this event codes in a test device mock in libinput, but I wonder
+if we could/should use BTN_9 instead of skiping a few IDs here.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
-index 26291db0a3cf..872d06fe1436 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
-@@ -122,6 +122,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
- 		psr_config.allow_multi_disp_optimizations =
- 			(amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
- 
-+		if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
-+			return false;
-+
- 		ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
- 
- 	}
-diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
-index 9b5d9b2c9a6a..4d27ad9f7370 100644
---- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
-+++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.c
-@@ -916,3 +916,38 @@ bool mod_power_only_edp(const struct dc_state *context, const struct dc_stream_s
- {
- 	return context && context->stream_count == 1 && dc_is_embedded_signal(stream->signal);
- }
-+
-+bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
-+			      struct dc_stream_state *stream,
-+			      struct psr_config *config)
-+{
-+	uint16_t pic_height;
-+	uint8_t slice_height;
-+
-+	if (!dc->caps.edp_dsc_support ||
-+	    link->panel_config.dsc.disable_dsc_edp ||
-+	    !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
-+	    !stream->timing.dsc_cfg.num_slices_v)
-+		return true;
-+
-+	pic_height = stream->timing.v_addressable +
-+		stream->timing.v_border_top + stream->timing.v_border_bottom;
-+	slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
-+
-+	if (slice_height) {
-+		if (config->su_y_granularity &&
-+		    (slice_height % config->su_y_granularity)) {
-+			WARN(1,
-+			     "%s: dsc: %d, slice_height: %d, num_slices_v: %d\n",
-+			     __func__,
-+			     stream->sink->dsc_caps.dsc_dec_caps.is_dsc_supported,
-+			     slice_height,
-+			     stream->timing.dsc_cfg.num_slices_v);
-+			return false;
-+		}
-+
-+		config->su_y_granularity = slice_height;
-+	}
-+
-+	return true;
-+}
-diff --git a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
-index 316452e9dbc9..bb16b37b83da 100644
---- a/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
-+++ b/drivers/gpu/drm/amd/display/modules/power/power_helpers.h
-@@ -59,4 +59,7 @@ void mod_power_calc_psr_configs(struct psr_config *psr_config,
- 		const struct dc_stream_state *stream);
- bool mod_power_only_edp(const struct dc_state *context,
- 		const struct dc_stream_state *stream);
-+bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
-+			      struct dc_stream_state *stream,
-+			      struct psr_config *config);
- #endif /* MODULES_POWER_POWER_HELPERS_H_ */
--- 
-2.38.1
+Honestly, I don't now what should be the right approach in this case,
+let's see if someone else comments on this topic.
 
+> +	BTN_RIGHT,
+> +	BTN_MIDDLE,
+> +	BTN_SIDE,
+> +	BTN_EXTRA,
+> +	BTN_FORWARD,
+> +	BTN_BACK,
+> +	BTN_B,
+> +	BTN_A,
+> +	BTN_BASE,
+> +	BTN_BASE2,
+> +	BTN_X
+> +};
+> +
+>  static int uclogic_input_mapping(struct hid_device *hdev,
+>  				 struct hid_input *hi,
+>  				 struct hid_field *field,
+> @@ -91,9 +115,27 @@ static int uclogic_input_mapping(struct hid_device *hdev,
+>  	struct uclogic_drvdata *drvdata = hid_get_drvdata(hdev);
+>  	struct uclogic_params *params = &drvdata->params;
+>  
+> -	/* Discard invalid pen usages */
+> -	if (params->pen.usage_invalid && (field->application == HID_DG_PEN))
+> -		return -1;
+> +	if (field->application == HID_GD_KEYPAD) {
+> +		/*
+> +		 * Remap input buttons to sensible ones that are not invalid.
+> +		 * This only affects previous behavior for devices with more than ten or so buttons.
+> +		 */
+> +		const int key = (usage->hid & HID_USAGE) - 1;
+> +
+> +		if (key > 0 && key < ARRAY_SIZE(uclogic_extra_input_mapping)) {
+> +			hid_map_usage(hi,
+> +				      usage,
+> +				      bit,
+> +				      max,
+> +				      EV_KEY,
+> +				      uclogic_extra_input_mapping[key]);
+> +			return 1;
+> +		}
+> +	} else if (field->application == HID_DG_PEN) {
+> +		/* Discard invalid pen usages */
+> +		if (params->pen.usage_invalid)
+> +			return -1;
+> +	}
+>  
+>  	/* Let hid-core decide what to do */
+>  	return 0;
+> @@ -403,8 +445,22 @@ static int uclogic_raw_event_frame(
+>  
+>  	/* If need to, and can, transform the bitmap dial reports */
+>  	if (frame->bitmap_dial_byte > 0 && frame->bitmap_dial_byte < size) {
+> -		if (data[frame->bitmap_dial_byte] == 2)
+> +		switch (data[frame->bitmap_dial_byte]) {
+> +		case 2:
+>  			data[frame->bitmap_dial_byte] = -1;
+> +			break;
+> +
+> +		/* Everything below here is for tablets that shove multiple dials into 1 byte */
+> +		case 16:
+> +			data[frame->bitmap_dial_byte] = 0;
+> +			data[frame->bitmap_second_dial_destination_byte] = 1;
+> +			break;
+> +
+> +		case 32:
+> +			data[frame->bitmap_dial_byte] = 0;
+> +			data[frame->bitmap_second_dial_destination_byte] = -1;
+> +			break;
+> +		}
+>  	}
+>  
+>  	return 0;
+> @@ -531,6 +587,8 @@ static const struct hid_device_id uclogic_devices[] = {
+>  				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
+>  				USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
+> +				USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO) },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(hid, uclogic_devices);
+> diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+> index cd1233d7e253..d53c464a1b15 100644
+> --- a/drivers/hid/hid-uclogic-params.c
+> +++ b/drivers/hid/hid-uclogic-params.c
+> @@ -103,6 +103,8 @@ static void uclogic_params_frame_hid_dbg(
+>  		frame->touch_flip_at);
+>  	hid_dbg(hdev, "\t\t.bitmap_dial_byte = %u\n",
+>  		frame->bitmap_dial_byte);
+> +	hid_dbg(hdev, "\t\t.bitmap_second_dial_destination_byte = %u\n",
+> +			frame->bitmap_second_dial_destination_byte);
+>  }
+>  
+>  /**
+> @@ -1418,6 +1420,174 @@ static int uclogic_params_ugee_v2_init(struct uclogic_params *params,
+>  	return rc;
+>  }
+>  
+> +/**
+> + * uclogic_params_parse_ugee_xppen_pro_desc - parse the string descriptor
+> + * containing pen and frame parameters returned by XP-PEN Pro devices.
+> + *
+> + * @str_desc:		String descriptor, cannot be NULL.
+> + * @str_desc_size:	Size of the string descriptor.
+> + * @desc_params:	Output description params list.
+> + * @desc_params_size:	Size of the output description params list.
+> + *
+> + * Returns:
+> + *	Zero, if successful. A negative errno code on error.
+> + */
+> +static int uclogic_params_parse_ugee_xppen_pro_desc(const __u8 *str_desc,
+
+I think that you could use uclogic_params_parse_ugee_v2_desc() and
+change the number of buttons in the template afterwards. It'd avoid
+some code duplication.
+
+> +					     size_t str_desc_size,
+> +					     s32 *desc_params,
+> +					     size_t desc_params_size)
+> +{
+> +	s32 pen_x_lm, pen_y_lm;
+> +	s32 pen_x_pm, pen_y_pm;
+> +	s32 pen_pressure_lm;
+> +	s32 resolution;
+> +
+> +	/* Minimum descriptor length required, maximum seen so far is 14 */
+> +	const int min_str_desc_size = 12;
+> +
+> +	if (!str_desc || str_desc_size < min_str_desc_size)
+> +		return -EINVAL;
+> +
+> +	if (desc_params_size != UCLOGIC_RDESC_PH_ID_NUM)
+> +		return -EINVAL;
+> +
+> +	pen_x_lm = get_unaligned_le16(str_desc + 2);
+> +	pen_y_lm = get_unaligned_le16(str_desc + 4);
+> +	pen_pressure_lm = get_unaligned_le16(str_desc + 8);
+> +
+> +	resolution = get_unaligned_le16(str_desc + 10);
+> +	if (resolution == 0) {
+> +		pen_x_pm = 0;
+> +		pen_y_pm = 0;
+> +	} else {
+> +		pen_x_pm = pen_x_lm * 1000 / resolution;
+> +		pen_y_pm = pen_y_lm * 1000 / resolution;
+> +	}
+> +
+> +	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = pen_x_lm;
+> +	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = pen_x_pm;
+> +	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = pen_y_lm;
+> +	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = pen_y_pm;
+> +	desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = pen_pressure_lm;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * uclogic_params_init_ugee_xppen_pro() - Initializes a UGEE XP-Pen Pro tablet device.
+> + *
+> + * @hdev:	The HID device of the tablet interface to initialize and get
+> + *		parameters from. Cannot be NULL.
+> + * @params:	Parameters to fill in (to be cleaned with
+> + *		uclogic_params_cleanup()). Not modified in case of error.
+> + *		Cannot be NULL.
+> + *
+> + * Returns:
+> + *	Zero, if successful. A negative errno code on error.
+> + */
+> +static int uclogic_params_init_ugee_xppen_pro(struct uclogic_params *params,
+
+There are some XP-Pen PRO devices handled by the other init function.
+Maybe we could rename this function to something more specific to your
+device.
+
+> +					      struct hid_device *hdev,
+> +					      const u8 rdesc_frame_arr[],
+> +					      const size_t rdesc_frame_size)
+> +{
+> +	int rc = 0;
+> +	struct usb_interface *iface;
+> +	__u8 bInterfaceNumber;
+> +	const int str_desc_len = 12;
+> +	u8 *str_desc = NULL;
+> +	__u8 *rdesc_pen = NULL;
+> +	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
+> +	/* The resulting parameters (noop) */
+> +	struct uclogic_params p = {0, };
+> +
+> +	if (!hdev || !params) {
+> +		rc = -EINVAL;
+> +		goto cleanup;
+> +	}
+> +
+> +	iface = to_usb_interface(hdev->dev.parent);
+> +	bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
+> +
+> +	/* Ignore non-pen interfaces */
+> +	if (bInterfaceNumber != 2) {
+> +		uclogic_params_init_invalid(&p);
+> +		goto output;
+> +	}
+> +
+> +	/*
+> +	 * Initialize the interface by sending magic data.
+> +	 * This magic data is the same as other UGEE v2 tablets.
+> +	 */
+> +	rc = uclogic_probe_interface(hdev,
+> +				     uclogic_ugee_v2_probe_arr,
+> +				     uclogic_ugee_v2_probe_size,
+> +				     0x03);
+
+You can use "uclogic_ugee_v2_probe_endpoint" here.
+
+> +	if (rc) {
+> +		uclogic_params_init_invalid(&p);
+> +		goto output;
+> +	}
+> +
+> +	/**
+> +	 * Read the string descriptor containing pen and frame parameters.
+> +	 * These are slightly different than typical UGEE v2 devices.
+> +	 */
+> +	rc = uclogic_params_get_str_desc(&str_desc, hdev, 100, str_desc_len);
+> +	if (rc != str_desc_len) {
+> +		hid_err(hdev, "failed retrieving pen and frame parameters: %d\n", rc);
+> +		uclogic_params_init_invalid(&p);
+> +		goto output;
+> +	}
+> +
+> +	rc = uclogic_params_parse_ugee_xppen_pro_desc(str_desc, str_desc_len,
+> +						      desc_params,
+> +						      ARRAY_SIZE(desc_params));
+> +	if (rc)
+> +		goto cleanup;
+> +
+> +	kfree(str_desc);
+> +	str_desc = NULL;
+> +
+> +	/* Initialize the pen interface */
+> +	rdesc_pen = uclogic_rdesc_template_apply(
+> +				uclogic_rdesc_ugee_v2_pen_template_arr,
+> +				uclogic_rdesc_ugee_v2_pen_template_size,
+> +				desc_params, ARRAY_SIZE(desc_params));
+> +	if (!rdesc_pen) {
+> +		rc = -ENOMEM;
+> +		goto cleanup;
+> +	}
+> +
+> +	p.pen.desc_ptr = rdesc_pen;
+> +	p.pen.desc_size = uclogic_rdesc_ugee_v2_pen_template_size;
+> +	p.pen.id = 0x02;
+> +	p.pen.subreport_list[0].value = 0xf0;
+> +	p.pen.subreport_list[0].id = UCLOGIC_RDESC_V1_FRAME_ID;
+> +
+> +	/* Initialize the frame interface */
+> +	rc = uclogic_params_frame_init_with_desc(
+> +		&p.frame_list[0],
+> +		rdesc_frame_arr,
+> +		rdesc_frame_size,
+> +		UCLOGIC_RDESC_V1_FRAME_ID);
+> +	if (rc < 0) {
+> +		hid_err(hdev, "initializing frame params failed: %d\n", rc);
+> +		goto output;
+> +	}
+> +
+> +	p.frame_list[0].bitmap_dial_byte = 7;
+> +	p.frame_list[0].bitmap_second_dial_destination_byte = 8;
+> +
+> +output:
+> +	/* Output parameters */
+> +	memcpy(params, &p, sizeof(*params));
+> +	memset(&p, 0, sizeof(p));
+> +	rc = 0;
+> +cleanup:
+> +	kfree(str_desc);
+> +	uclogic_params_cleanup(&p);
+> +	return rc;
+> +}
+> +
+>  /**
+>   * uclogic_params_init() - initialize a tablet interface and discover its
+>   * parameters.
+> @@ -1728,6 +1898,16 @@ int uclogic_params_init(struct uclogic_params *params,
+>  			uclogic_params_init_invalid(&p);
+>  		}
+>  
+> +		break;
+> +	case VID_PID(USB_VENDOR_ID_UGEE,
+> +			USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO):
+> +		rc = uclogic_params_init_ugee_xppen_pro(&p,
+> +			hdev,
+> +			uclogic_rdesc_xppen_artist_22r_pro_frame_arr,
+> +			uclogic_rdesc_xppen_artist_22r_pro_frame_size);
+> +		if (rc != 0)
+> +			goto cleanup;
+> +
+>  		break;
+>  	}
+>  
+> diff --git a/drivers/hid/hid-uclogic-params.h b/drivers/hid/hid-uclogic-params.h
+> index a97477c02ff8..6621a75a4b1a 100644
+> --- a/drivers/hid/hid-uclogic-params.h
+> +++ b/drivers/hid/hid-uclogic-params.h
+> @@ -171,6 +171,11 @@ struct uclogic_params_frame {
+>  	 * counterclockwise, as opposed to the normal 1 and -1.
+>  	 */
+>  	unsigned int bitmap_dial_byte;
+> +	/*
+> +	 * Destination offset for the second bitmap dial byte, if the tablet
+> +	 * supports a second dial at all.
+> +	 */
+> +	unsigned int bitmap_second_dial_destination_byte;
+>  };
+>  
+>  /*
+> diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
+> index fb40775f5f5b..86293ae8c995 100644
+> --- a/drivers/hid/hid-uclogic-rdesc.c
+> +++ b/drivers/hid/hid-uclogic-rdesc.c
+> @@ -859,6 +859,12 @@ const __u8 uclogic_rdesc_v2_frame_dial_arr[] = {
+>  const size_t uclogic_rdesc_v2_frame_dial_size =
+>  			sizeof(uclogic_rdesc_v2_frame_dial_arr);
+>  
+> +const __u8 uclogic_ugee_v2_probe_arr[] = {
+> +	0x02, 0xb0, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+> +};
+> +const size_t uclogic_ugee_v2_probe_size = sizeof(uclogic_ugee_v2_probe_arr);
+> +const int uclogic_ugee_v2_probe_endpoint = 0x03;
+> +
+>  /* Fixed report descriptor template for UGEE v2 pen reports */
+>  const __u8 uclogic_rdesc_ugee_v2_pen_template_arr[] = {
+>  	0x05, 0x0d,         /*  Usage Page (Digitizers),                */
+> @@ -1185,6 +1191,50 @@ const __u8 uclogic_rdesc_xppen_deco01_frame_arr[] = {
+>  const size_t uclogic_rdesc_xppen_deco01_frame_size =
+>  			sizeof(uclogic_rdesc_xppen_deco01_frame_arr);
+>  
+> +/* Fixed report descriptor for XP-Pen Arist 22R Pro frame */
+> +const __u8 uclogic_rdesc_xppen_artist_22r_pro_frame_arr[] = {
+
+User-space lacks support for dials, but, with this descriptor, would it
+be possible to differenciate between the 2 dials to, for example,
+assign them different actions? Or would them be exposed as the same
+dial?
+
+I have no idea how would user-space see this, but it'd interesting to
+see how libinput handles it.
+
+> +	0x05, 0x01,         /*  Usage Page (Desktop),                       */
+> +	0x09, 0x07,         /*  Usage (Keypad),                             */
+> +	0xA1, 0x01,         /*  Collection (Application),                   */
+> +	0x85, UCLOGIC_RDESC_V1_FRAME_ID,
+> +	/*      Report ID (Virtual report),             */
+> +	0x05, 0x0D,         /*     Usage Page (Digitizer),                  */
+> +	0x09, 0x39,         /*      Usage (Tablet Function Keys),           */
+> +	0xA0,               /*      Collection (Physical),                  */
+> +	0x14,               /*          Logical Minimum (0),                */
+> +	0x25, 0x01,         /*          Logical Maximum (1),                */
+> +	0x75, 0x01,         /*          Report Size (1),                    */
+> +	0x95, 0x08,         /*          Report Count (8),                   */
+> +	0x81, 0x01,         /*          Input (Constant),                   */
+> +	0x05, 0x09,         /*          Usage Page (Button),                */
+> +	0x19, 0x01,         /*          Usage Minimum (01h),                */
+> +	0x29, 0x14,         /*          Usage Maximum (14h),                */
+> +	0x95, 0x14,         /*          Report Count (20),                  */
+> +	0x81, 0x02,         /*          Input (Variable),                   */
+> +	0x95, 0x14,         /*          Report Count (20),                  */
+> +	0x81, 0x01,         /*          Input (Constant),                   */
+> +	0x05, 0x01,         /*          Usage Page (Desktop),               */
+> +	0x09, 0x38,         /*          Usage (Wheel),                      */
+> +	0x75, 0x08,         /*          Report Size (8),                    */
+> +	0x95, 0x01,         /*          Report Count (1),                   */
+> +	0x15, 0xFF,         /*          Logical Minimum (-1),               */
+> +	0x25, 0x08,         /*          Logical Maximum (8),                */
+> +	0x81, 0x06,         /*          Input (Variable, Relative),         */
+> +	0x05, 0x0C,         /*          Usage Page (Consumer Devices),      */
+> +	0x0A, 0x38, 0x02,   /*          Usage (AC PAN),                     */
+> +	0x95, 0x01,         /*          Report Count (1),                   */
+> +	0x81, 0x06,         /*          Input (Variable, Relative),         */
+> +	0x26, 0xFF, 0x00,   /*          Logical Maximum (255),              */
+> +	0x75, 0x08,         /*          Report Size (8),                    */
+> +	0x95, 0x01,         /*          Report Count (1),                   */
+> +	0x81, 0x02,         /*          Input (Variable),                   */
+> +	0xC0,               /*      End Collection                          */
+> +	0xC0,               /*  End Collection                              */
+> +};
+> +
+> +const size_t uclogic_rdesc_xppen_artist_22r_pro_frame_size =
+> +				sizeof(uclogic_rdesc_xppen_artist_22r_pro_frame_arr);
+> +
+>  /**
+>   * uclogic_rdesc_template_apply() - apply report descriptor parameters to a
+>   * report descriptor template, creating a report descriptor. Copies the
+> diff --git a/drivers/hid/hid-uclogic-rdesc.h b/drivers/hid/hid-uclogic-rdesc.h
+> index a1f78c07293f..c3cb2c75dda5 100644
+> --- a/drivers/hid/hid-uclogic-rdesc.h
+> +++ b/drivers/hid/hid-uclogic-rdesc.h
+> @@ -164,6 +164,11 @@ extern const size_t uclogic_rdesc_v2_frame_dial_size;
+>  /* Report ID for tweaked UGEE v2 battery reports */
+>  #define UCLOGIC_RDESC_UGEE_V2_BATTERY_ID 0xba
+>  
+> +/* Magic data expected by UGEEv2 devices on probe */
+> +extern const __u8 uclogic_ugee_v2_probe_arr[];
+> +extern const size_t uclogic_ugee_v2_probe_size;
+> +extern const int uclogic_ugee_v2_probe_endpoint;
+> +
+
+You can cherry-pick my patch refactoring this variables and send it as
+part of your series. I think that it might help maintainers with the
+merge and it'd also fix the problem reported by the test robot.
+
+>  /* Fixed report descriptor template for UGEE v2 pen reports */
+>  extern const __u8 uclogic_rdesc_ugee_v2_pen_template_arr[];
+>  extern const size_t uclogic_rdesc_ugee_v2_pen_template_size;
+> @@ -205,4 +210,8 @@ extern const size_t uclogic_rdesc_ugee_g5_frame_size;
+>  /* Least-significant bit of Ugee G5 frame rotary encoder state */
+>  #define UCLOGIC_RDESC_UGEE_G5_FRAME_RE_LSB 38
+>  
+> +/* Fixed report descriptor for XP-Pen Arist 22R Pro frame */
+> +extern const __u8 uclogic_rdesc_xppen_artist_22r_pro_frame_arr[];
+> +extern const size_t uclogic_rdesc_xppen_artist_22r_pro_frame_size;
+> +
+>  #endif /* _HID_UCLOGIC_RDESC_H */
+> 
+> base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
+> -- 
+> 2.38.2
+> 
