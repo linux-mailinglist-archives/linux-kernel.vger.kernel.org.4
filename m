@@ -2,138 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D8E65F68E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FBA65F690
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjAEWPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S235754AbjAEWQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235754AbjAEWPo (ORCPT
+        with ESMTP id S235656AbjAEWQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:15:44 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739AE67BF9
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:15:43 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so3557005pjd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gsh4Qgz0dAZX19NkyGAdNILAtOkB8coB2LmFm1qOWdc=;
-        b=oV/ftWoXv3dRTiE6dX1WBD6eNfMMqiCELaUuBnjdijiIdoiYax+ur+M02gXCd6s4yk
-         6tTWQm2p6KjtpIjdMLUnJeDQNOG5cCb9JMVL/n0ZN/4qyOnnNXvLlqNIF7OsexeBaFfk
-         Qb9sVm1R4H9FDfZGo3RVLTklAb49inuJOUdiw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gsh4Qgz0dAZX19NkyGAdNILAtOkB8coB2LmFm1qOWdc=;
-        b=1K64qfutfMVzzHR8Xmuu8Lk7F1tVAgsw7JeINvQFhh9zuCO3vjqOGHMiEJ/a7EGQyk
-         rjPgC3qv6MXucBpY3GTJZ40nbsun3do4kJcRgLK1fJjlsXU1ZjXzuFza51c6idTc7nQC
-         fN/KvMGz2dXa/VaId3rm4gF8bmdnx5eQQtyLLCWoZXWR6vYNw636q3dA7TjYBo29FU8G
-         q1oFeletfzkmYFM8GXTNEHSCLnskffLCm7A0XSOs+NhFBQEByBz26oVoEKpGph2/Ni3i
-         DhLc5aVb1U2iTcNmg8D5y9wIOc7YNE/1cQFh6iEsegI/6fqV/PvcAyitQzf5vwhfkSlY
-         CwGQ==
-X-Gm-Message-State: AFqh2kpGj7KmfUpSOObWX956q6Crz05P4jkJDYuXwFylDesJ+ftEYdYX
-        H9dm+pGkYA1PAMjIbBG9tOSlCQ==
-X-Google-Smtp-Source: AMrXdXux4oWjJWim2VKtmkR/9QYi8fOUmvxp7vlXY4l+TZt19eWfsPAKmaCwaszvHrEZr4tLotPtMw==
-X-Received: by 2002:a17:902:a5c1:b0:189:62fd:140e with SMTP id t1-20020a170902a5c100b0018962fd140emr53604813plq.29.1672956942951;
-        Thu, 05 Jan 2023 14:15:42 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j9-20020a170902758900b00189c9f7fac1sm26604098pll.62.2023.01.05.14.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 14:15:42 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] net: ipv6: rpl_iptunnel: Replace 0-length arrays with flexible arrays
-Date:   Thu,  5 Jan 2023 14:15:37 -0800
-Message-Id: <20230105221533.never.711-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2310; h=from:subject:message-id; bh=3B/MOywRgENsLrzur8E2ezmoeoBZ65hD9wrNoefThRA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt0wI3l8J5ra3VVkkOUG6RTpzyYkw1RR7xoKFAzYa p0Tz86CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dMCAAKCRCJcvTf3G3AJtwIEA CYkkz4J2J4QmdXbnf9Fo8pZkJLgIDDofSjQQ9NE1J99qMUqlm8WGrBlWXyM4o7ODi57/x0BtIE4fO9 HPrHoYVhIEGkJjAGu+cbZ8PgBGUiV5mEUMtE57mKb8MeK7ZsX9AW7ylG6p9rpVDUtWsZA8fl2Jv8XU SVi5k2/nJC0db2Te/FC7E2y5kL1eFElzP5ehag7rghhrE6U+wNcddOFyBSEsJNota3Nj77SdndPNyP dWB5P06hMy4m/b7yeL99T4fhVhLrV2COVyPmUkHZMnTqY0p86u6DFIhNQEDxkolFDRW6wzZm9ywEgT TosmoI0UEAZrMZ+SopFduZvo4rqIg7tXjzqtBcrcb0Rre1Kv+wVaFEJePRGOJThiXbTfJvx7fyULp8 qwqedHcengFduTM4ue5yNPgDJy7Qh7Sm+AhPlffpeyoyB1regG53jgHNKYvjN65/ddW/W1DVrxPPWP woTJ2ETuPrUCF7qf24ZOSl4T71Fuf0tFmUuaelJWUuXd3b7+0BoxPvCQyF4zS5awcaTt91NdV/U8Qf bDR4RH/3QxYveZKZGFqj9cq1+G/vuNb+9I2Qv4ooIIcL3HTmN56jCZ+t2rbx528HNBF8Tmu/jhMdmR kYdbWVz4h9hYNEAFf0RfvSmdObGWQe6DolgRLrFvUvkpTBYwhhT82rDt1G/A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 17:16:41 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D77FD07
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:16:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6B9C732004ED;
+        Thu,  5 Jan 2023 17:16:36 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 05 Jan 2023 17:16:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672956995; x=
+        1673043395; bh=vVO/D8xGiDzrKrNIV5CkxTBZbQ2bOm94JRvfupvfVjk=; b=M
+        v3Wz1UsnDegQ7wIykoD6UunAhvQKgYIp65iI9scpSgEJgvf6QOZv50q88ACmDvvr
+        JhWjsc38OxwsakCtDKEK5tGt8/kJ4w9dXNFQd/CtJslcTMKLYFXZjCNOBCJV4ERT
+        eLeKIT+n67TWd5T2AK5k9qX13bC6IGx6EMXQPBrdfHnjbXYK8OFj1Hk4K2n1hYiI
+        ZTuhklx0B7p12SydD+hjyW05lmk0GT0w/51aYzLOF5GVxXsW9BK1vMSH1WEnWUfY
+        7V/xt2D6E48cc7jdU1ecKjpBXDUYGpIbpaeQi+iQBvFnW5g+iT+h6BQt4DCJZHxL
+        REKgF35jYgUqYBPmRUCgw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672956995; x=
+        1673043395; bh=vVO/D8xGiDzrKrNIV5CkxTBZbQ2bOm94JRvfupvfVjk=; b=Z
+        rBT0aplkavSRcsQCaQvNx9y05Eapi6FJb40BnP8WsvbF4ihvz3SS2Ekgglgw1AJK
+        vNBQihGdQ6JYmE9qjk/2l9YS3gGtAdtSCdRSZSCsA/nya6uifdF8gtSC9CANskcc
+        vRCFFg5eoCyj8zV/fzGnKuipFki8svBIB+qmWc1aoN0WdUc4ApOf+LODt3zynVCR
+        7M7NvRzpHGqsukevTQYzkRwgTZwQ5syFMzEOh/bnhWhG7VC9mPg36+JUko2q8iOu
+        o0YcdTXQSVejA7AO4s772d/AB/TZa4eGZ9nBB6uP9w4GpZD0OeqSZAuFzdMIqcNF
+        D9Qpo7fpEc8IC9xMnqEXw==
+X-ME-Sender: <xms:QUy3Y7wUrHlDOTPKQHnnmc0ES4_yIjTXEkakkEtNcY_kWkSxxM4n3g>
+    <xme:QUy3YzTYK9Z8dBeYmS_V2UdJYjvJWbD_VY8qrD0v4qPh7FBx4fgeBu6j59fsDnwfW
+    lrwM-tV4qsGD_1DqiM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgdduiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:QUy3Y1UeOvQ5IyfuuldsMLzCMFm-rHOUIoGHwRyjxoxleneQOloMDA>
+    <xmx:QUy3Y1i0PiUOF3RU3SllbULKCTpxGGA0uPuf-jnrBNwtbC-7fTzvyw>
+    <xmx:QUy3Y9CdHf-SRoWUf_aXPD9gFginqdpZ9uB9g4PJ7l3WnxE-fnc02g>
+    <xmx:Q0y3Y8WQ6_XzWInlftCu1v0Ngn8LQrGxdHU5TOjzoFk1VHO1qdO_nw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 33F87B60086; Thu,  5 Jan 2023 17:16:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
+In-Reply-To: <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-2-arnd@kernel.org>
+ <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
+ <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
+Date:   Thu, 05 Jan 2023 23:16:10 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Richard Purdie" <richard.purdie@linuxfoundation.org>,
+        "Dmitry Baryshkov" <dbaryshkov@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Daniel Mack" <daniel@zonque.org>,
+        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Ales Bardorfer" <ales@i-tech.si>,
+        "Ales Snuparek" <snuparek@atlas.cz>,
+        "Alex Osborne" <ato@meshy.org>,
+        "Alex Osborne" <bobofdoom@gmail.com>,
+        "Dirk Opfer" <dirk@opfer-online.de>, "Ian Molton" <spyro@f2s.com>,
+        "Lennert Buytenhek" <kernel@wantstofly.org>,
+        "Marek Vasut" <marek.vasut@gmail.com>,
+        "Michael Petchkovsky" <mkpetch@internode.on.net>,
+        "Nick Bane" <nick@cecomputing.co.uk>,
+        "Paul Parsons" <lost.distance@yahoo.com>,
+        "Philipp Zabel" <philipp.zabel@gmail.com>,
+        "Sergey Lapin" <slapin@ossfans.org>,
+        "Tomas Cech" <sleep_walker@suse.cz>
+Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1]. Replace struct ipv6_rpl_sr_hdr's
-"segments" union of 0-length arrays with flexible arrays. Detected with
-GCC 13, using -fstrict-flex-arrays=3:
+On Thu, Jan 5, 2023, at 18:05, Richard Purdie wrote:
+> On Thu, 2023-01-05 at 17:50 +0200, Dmitry Baryshkov wrote:
+>> =D1=87=D1=82, 5 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 15:46, Arnd B=
+ergmann <arnd@kernel.org>:
+>> >=20
+>> > From: Arnd Bergmann <arnd@arndb.de>
+>> >=20
+>> > The majority of all pxa board files has not been touched in a long =
+time,
+>> > and no users have spoken up in favor of keeping them around. This l=
+eaves
+>> > only support for the platforms that were already converted to DT, as
+>> > well as the gumstix and spitz/akita/borzoi machines that work in qe=
+mu
+>> > and can still be converted to DT later.
+>>=20
+>> Well, tosa also works in qemu.
+>> Nevertheless:
+>> Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>
+> I'm kind of sad to see corgi at this point but it isn't really
+> surprising. The hardware is old/slow and likely not used by many
+> anymore, things have moved on and the systems ended up being heavily
+> kernel size footprint limited.
+>
+> I'd just note that corgi (and shepherd/husky) are strongly related to
+> spitz/akita/borzoi, the difference is basically pxa25x vs pxa27x
+> processor and pin changes. We chose just to emulate one set in qemu but
+> the others would be relatively trivial.
+>
+> tosa and poodle have much less in common with the other Zaurus devices.
+>
+> I guess what I'm saying is that if spitz is remaining it might make
+> sense to have corgi with it.
 
-In function 'rpl_validate_srh',
-    inlined from 'rpl_build_state' at ../net/ipv6/rpl_iptunnel.c:96:7:
-../net/ipv6/rpl_iptunnel.c:60:28: warning: array subscript <unknown> is outside array bounds of 'struct in6_addr[0]' [-Warray-bounds=]
-   60 |         if (ipv6_addr_type(&srh->rpl_segaddr[srh->segments_left - 1]) &
-      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from ../include/net/rpl.h:12,
-                 from ../net/ipv6/rpl_iptunnel.c:13:
-../include/uapi/linux/rpl.h: In function 'rpl_build_state':
-../include/uapi/linux/rpl.h:40:33: note: while referencing 'addr'
-   40 |                 struct in6_addr addr[0];
-      |                                 ^~~~
+Ok, good to know, thanks for the background.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+The way we came up with the list of unused boards is to
+assume they are all unused unless someone asked for it
+to be kept around for this time, for pretty much any reason.
+I probably forgot to have you on the Cc list when we discussed
+this in the past.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/rpl.h | 4 ++--
- net/ipv6/rpl_iptunnel.c  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+IIRC, nobody specifically asked about keeping either
+the corgi or the spitz series, the reason for keeping it
+was to have at least one handheld platform with qemu
+support remain for testing, but I don't see a reason
+for keeping more than one of them.
 
-diff --git a/include/uapi/linux/rpl.h b/include/uapi/linux/rpl.h
-index 708adddf9f13..7c8970e5b84b 100644
---- a/include/uapi/linux/rpl.h
-+++ b/include/uapi/linux/rpl.h
-@@ -37,8 +37,8 @@ struct ipv6_rpl_sr_hdr {
- #endif
- 
- 	union {
--		struct in6_addr addr[0];
--		__u8 data[0];
-+		__DECLARE_FLEX_ARRAY(struct in6_addr, addr);
-+		__DECLARE_FLEX_ARRAY(__u8, data);
- 	} segments;
- } __attribute__((packed));
- 
-diff --git a/net/ipv6/rpl_iptunnel.c b/net/ipv6/rpl_iptunnel.c
-index ff691d9f4a04..b1c028df686e 100644
---- a/net/ipv6/rpl_iptunnel.c
-+++ b/net/ipv6/rpl_iptunnel.c
-@@ -13,7 +13,7 @@
- #include <net/rpl.h>
- 
- struct rpl_iptunnel_encap {
--	struct ipv6_rpl_sr_hdr srh[0];
-+	DECLARE_FLEX_ARRAY(struct ipv6_rpl_sr_hdr, srh);
- };
- 
- struct rpl_lwt {
--- 
-2.34.1
+If you feel like we should keep tosa or corgi and ask
+again next year, we could do that, but reworking the series
+to keep tosa around would have additional side-effects
+on the tmio-mmc driver that can otherwise get cleaned
+up quite a bit.
 
+In the long run, I expect we will remove all the remaining
+legacy boardfiles and only keep the DT support. Ideally
+if someone is motivated to convert spitz to DT, supporting
+corgi the same way is also easy.
+
+      Arnd
