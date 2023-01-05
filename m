@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51F365F5C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1897565F5CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbjAEV3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
+        id S235860AbjAEVar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbjAEV3g (ORCPT
+        with ESMTP id S235876AbjAEVaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:29:36 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E4E631BD;
-        Thu,  5 Jan 2023 13:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672954169; x=1704490169;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=3wU6x90ba/ia1u6uNLXApEw/RYizM5t2kudzaW2OW2s=;
-  b=YHVEdAf4vt3j4ceDXK9MkuwsxuKKn9K5sx+JbgTpUZETUPQOshcVf62D
-   U2Sz56Oos6uacwr3qYPS64/V82L8OxmHWYY2E0gPbVVjbjvQchDA2C/2/
-   rC18lcZxwGnW8NxheK4zbCYtfBkN0MZLnLjLVLIbOsySnQ7MFsfO211SF
-   en3DCVo3SFb1p3noeuVOdqNneqxXEuC+v6BkMcJ6w2M5SzVTbB9Rpiaxl
-   cEPKsw+rNf4A7PBfMMw01MKWRe8NhVRFy7aSGafR6iMQoKIHiWFZEd4HZ
-   pcXoIxSzrYmwMRX5nw/WH0M6lspHKCZ/8lCwdv3TAt2STrrEV1Xivb7pH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="408583482"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="408583482"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:29:29 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="744403563"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="744403563"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.42.126])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 13:29:25 -0800
-Message-ID: <ef458f9f-5557-43d0-1c4a-51b87a666e21@intel.com>
-Date:   Thu, 5 Jan 2023 23:29:21 +0200
+        Thu, 5 Jan 2023 16:30:25 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D7A671AC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:30:20 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id gh17so93116327ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 13:30:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FRP/mX962STUK321mpeU50nn6oPw08vUlbjW7zSBJUo=;
+        b=H8+sEkzDmA7mHmQvUl3Hf0o0FAopE7JrCKUhAI7mmyVqUTUV3yh4eWYHNLrMLVIJ01
+         s2veyj/WiqI/rAbBfKFD41jlEVPXQC19DmJq095jltPT6bz1GV7BqKmUIay4r3IfPD+1
+         ElaFz+Mwb7xSwXikGQyq8R53kcKQfQSKwDlUoO73PGDRIy5vi+AVhVKQ09ww16OMG41D
+         odffVnwpqhwcZhL0W9nxRNWOocPmJBYp8Z+r3gJ2+43aXNYUrInC+s7QMU8riXVC+YWN
+         RONnR+cFa/4V+7C4p7vRQobTfggZSkgJYBWMJHqtujm+4eiQ3amYnFtuWqDN2fFHJ2N7
+         CXOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FRP/mX962STUK321mpeU50nn6oPw08vUlbjW7zSBJUo=;
+        b=lHr6gs1eqAsBw7J5Me5qSGlYk+PtIPNiMcR6Z1dqqYyAMfLoLNHPzqRSOwKF01k5nQ
+         DYIp7Sds4eGo9fo0BoVjBC/mi4asXalAQGkgaEXYuqHfOXJHeeg09xUZEeMoRiCETPnd
+         tJS+WHoA+Cmdov3vi7kiryS3zv/VUeKP87uFtLoPrkSzstnSRKS4PDMFDdBHTueQ6xDh
+         qJlHNojYhjAEW05q+1GtaI2yGEsD5d5TK49dXdpG8p8rbfErg6cMgTs6VV8So55r3Ubd
+         4PqN5imOsP9E0FLLhzcBDWHtK8sYdAjnO/D/TR4ADBG1jnH4yZEC3flN1ELIOO3Td3qW
+         JkuA==
+X-Gm-Message-State: AFqh2kpa4WyD+Jm42XzZg79APtufR7MHQAW/2QxgFe7Eie1YbafUpkX6
+        nVj0KEkEbVhmxSyka4Sny6+BFUfw0tEXeniQCTzGgQ==
+X-Google-Smtp-Source: AMrXdXs0t11iLYiYEHSCL6QU9tLJ3ykx0zU9z0O6SERSQWARYTBayiBvmx61EHHb7VREcTWjhSDMGBT0hP3G/FEWrrY=
+X-Received: by 2002:a17:906:4e98:b0:82d:e2a6:b04 with SMTP id
+ v24-20020a1709064e9800b0082de2a60b04mr6597531eju.748.1672954219280; Thu, 05
+ Jan 2023 13:30:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.1
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH V6 18/24] mmc: sdhci-uhs2: add request() and others
-To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
-        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
-        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>
-References: <20221213090047.3805-1-victor.shih@genesyslogic.com.tw>
- <20221213090047.3805-19-victor.shih@genesyslogic.com.tw>
-Content-Language: en-US
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221213090047.3805-19-victor.shih@genesyslogic.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <b740c9fb-edba-92ba-59fb-7a5592e5dfc@google.com>
+ <dc9f7bb0-77d4-8b0e-c6b6-ece3f77ed326@redhat.com> <32be06f-f64-6632-4c36-bed7c0695a3b@google.com>
+ <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com> <CAHbLzkqjooxnAwqK7vZoJpP2bSUTCUgv3UtWsZgo444jpGSfoA@mail.gmail.com>
+ <86d5f618-800d-9672-56c4-9309ef222a39@redhat.com>
+In-Reply-To: <86d5f618-800d-9672-56c4-9309ef222a39@redhat.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Thu, 5 Jan 2023 13:29:42 -0800
+Message-ID: <CAAa6QmSByYrWkp+8K0NK+pocKT0CVj83RaVUB1VqMPvuPHnpNQ@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>, Song Liu <songliubraving@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,784 +73,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/22 11:00, Victor Shih wrote:
-> This is a sdhci version of mmc's request operation.
-> It covers both UHS-I and UHS-II.
-> 
-> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
-> ---
->  drivers/mmc/host/sdhci-uhs2.c | 418 ++++++++++++++++++++++++++++++++++
->  drivers/mmc/host/sdhci.c      |  78 ++++---
->  drivers/mmc/host/sdhci.h      |  14 ++
->  3 files changed, 481 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-> index de15a6559702..7a34f66c4215 100644
-> --- a/drivers/mmc/host/sdhci-uhs2.c
-> +++ b/drivers/mmc/host/sdhci-uhs2.c
-> @@ -15,6 +15,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/bitfield.h>
->  #include <linux/ktime.h>
-> +#include <linux/mmc/mmc.h>
->  
->  #include "sdhci.h"
->  #include "sdhci-uhs2.h"
-> @@ -25,6 +26,8 @@
->  #define SDHCI_UHS2_DUMP(f, x...) \
->  	pr_err("%s: " DRIVER_NAME ": " f, mmc_hostname(host->mmc), ## x)
->  
-> +#define UHS2_ARG_IOADR_MASK 0xfff
-> +
->  void sdhci_uhs2_dump_regs(struct sdhci_host *host)
->  {
->  	if (!(host->mmc->flags & MMC_UHS2_SUPPORT))
-> @@ -59,6 +62,11 @@ EXPORT_SYMBOL_GPL(sdhci_uhs2_dump_regs);
->   *                                                                           *
->  \*****************************************************************************/
->  
-> +static inline u16 uhs2_dev_cmd(struct mmc_command *cmd)
-> +{
-> +	return be16_to_cpu((__be16)cmd->uhs2_cmd->arg) & UHS2_ARG_IOADR_MASK;
-> +}
-> +
->  static inline int mmc_opt_regulator_set_ocr(struct mmc_host *mmc,
->  					    struct regulator *supply,
->  					    unsigned short vdd_bit)
-> @@ -452,6 +460,415 @@ static int sdhci_uhs2_control(struct mmc_host *mmc, enum sd_uhs2_operation op)
->  	return err;
->  }
->  
-> +/*****************************************************************************\
-> + *                                                                           *
-> + * Core functions                                                            *
-> + *                                                                           *
-> +\*****************************************************************************/
-> +
-> +static void sdhci_uhs2_prepare_data(struct sdhci_host *host,
-> +				    struct mmc_command *cmd)
-> +{
-> +	struct mmc_data *data = cmd->data;
-> +
-> +	sdhci_initialize_data(host, data);
-> +
-> +	sdhci_prepare_dma(host, data);
-> +
-> +	sdhci_writew(host, data->blksz, SDHCI_UHS2_BLOCK_SIZE);
-> +	sdhci_writew(host, data->blocks, SDHCI_UHS2_BLOCK_COUNT);
-> +}
-> +
-> +static void sdhci_uhs2_finish_data(struct sdhci_host *host)
-> +{
-> +	struct mmc_data *data = host->data;
-> +
-> +	__sdhci_finish_data_common(host);
-> +
-> +	__sdhci_finish_mrq(host, data->mrq);
-> +}
-> +
-> +static void sdhci_uhs2_set_transfer_mode(struct sdhci_host *host,
-> +					 struct mmc_command *cmd)
-> +{
-> +	u16 mode;
-> +	struct mmc_data *data = cmd->data;
-> +
-> +	if (!data) {
-> +		/* clear Auto CMD settings for no data CMDs */
-> +		if (uhs2_dev_cmd(cmd) == UHS2_DEV_CMD_TRANS_ABORT) {
-> +			mode =  0;
-> +		} else {
-> +			mode = sdhci_readw(host, SDHCI_UHS2_TRANS_MODE);
-> +			if (cmd->opcode == MMC_STOP_TRANSMISSION || cmd->opcode == MMC_ERASE)
-> +				mode |= SDHCI_UHS2_TRNS_WAIT_EBSY;
-> +			else
-> +				/* send status mode */
-> +				if (cmd->opcode == MMC_SEND_STATUS)
-> +					mode = 0;
-> +		}
-> +
-> +		DBG("UHS2 no data trans mode is 0x%x.\n", mode);
-> +
-> +		sdhci_writew(host, mode, SDHCI_UHS2_TRANS_MODE);
-> +		return;
-> +	}
-> +
-> +	WARN_ON(!host->data);
-> +
-> +	mode = SDHCI_UHS2_TRNS_BLK_CNT_EN | SDHCI_UHS2_TRNS_WAIT_EBSY;
-> +	if (data->flags & MMC_DATA_WRITE)
-> +		mode |= SDHCI_UHS2_TRNS_DATA_TRNS_WRT;
-> +
-> +	if (data->blocks == 1 &&
-> +	    data->blksz != 512 &&
-> +	    cmd->opcode != MMC_READ_SINGLE_BLOCK &&
-> +	    cmd->opcode != MMC_WRITE_BLOCK) {
-> +		mode &= ~SDHCI_UHS2_TRNS_BLK_CNT_EN;
-> +		mode |= SDHCI_UHS2_TRNS_BLK_BYTE_MODE;
-> +	}
-> +
-> +	if (host->flags & SDHCI_REQ_USE_DMA)
-> +		mode |= SDHCI_UHS2_TRNS_DMA;
-> +
-> +	if ((host->mmc->uhs2_ios.is_2L_HD_mode) && !cmd->uhs2_tmode0_flag)
-> +		mode |= SDHCI_UHS2_TRNS_2L_HD;
-> +
-> +	sdhci_writew(host, mode, SDHCI_UHS2_TRANS_MODE);
-> +
-> +	DBG("UHS2 trans mode is 0x%x.\n", mode);
-> +}
-> +
-> +static void __sdhci_uhs2_send_command(struct sdhci_host *host,
-> +				      struct mmc_command *cmd)
-> +{
-> +	int i, j;
-> +	int cmd_reg;
-> +
-> +	i = 0;
-> +	sdhci_writel(host,
-> +		     ((u32)cmd->uhs2_cmd->arg << 16) |
-> +				(u32)cmd->uhs2_cmd->header,
-> +		     SDHCI_UHS2_CMD_PACKET + i);
-> +	i += 4;
-> +
-> +	/*
-> +	 * Per spec, playload (config) should be MSB before sending out.
-> +	 * But we don't need convert here because had set payload as
-> +	 * MSB when preparing config read/write commands.
-> +	 */
-> +	for (j = 0; j < cmd->uhs2_cmd->payload_len / sizeof(u32); j++) {
-> +		sdhci_writel(host, *(cmd->uhs2_cmd->payload + j), SDHCI_UHS2_CMD_PACKET + i);
-> +		i += 4;
-> +	}
-> +
-> +	for ( ; i < SDHCI_UHS2_CMD_PACK_MAX_LEN; i += 4)
-> +		sdhci_writel(host, 0, SDHCI_UHS2_CMD_PACKET + i);
-> +
-> +	DBG("UHS2 CMD packet_len = %d.\n", cmd->uhs2_cmd->packet_len);
-> +	for (i = 0; i < cmd->uhs2_cmd->packet_len; i++)
-> +		DBG("UHS2 CMD_PACKET[%d] = 0x%x.\n", i,
-> +		    sdhci_readb(host, SDHCI_UHS2_CMD_PACKET + i));
-> +
-> +	cmd_reg = FIELD_PREP(SDHCI_UHS2_CMD_PACK_LEN_MASK, cmd->uhs2_cmd->packet_len);
-> +	if ((cmd->flags & MMC_CMD_MASK) == MMC_CMD_ADTC)
-> +		cmd_reg |= SDHCI_UHS2_CMD_DATA;
-> +	if (cmd->opcode == MMC_STOP_TRANSMISSION)
-> +		cmd_reg |= SDHCI_UHS2_CMD_CMD12;
-> +
-> +	/* UHS2 Native ABORT */
-> +	if ((cmd->uhs2_cmd->header & UHS2_NATIVE_PACKET) &&
-> +	    (uhs2_dev_cmd(cmd) == UHS2_DEV_CMD_TRANS_ABORT))
-> +		cmd_reg |= SDHCI_UHS2_CMD_TRNS_ABORT;
-> +
-> +	/* UHS2 Native DORMANT */
-> +	if ((cmd->uhs2_cmd->header & UHS2_NATIVE_PACKET) &&
-> +	    (uhs2_dev_cmd(cmd) == UHS2_DEV_CMD_GO_DORMANT_STATE))
-> +		cmd_reg |= SDHCI_UHS2_CMD_DORMANT;
-> +
-> +	DBG("0x%x is set to UHS2 CMD register.\n", cmd_reg);
-> +
-> +	sdhci_writew(host, cmd_reg, SDHCI_UHS2_CMD);
-> +}
-> +
-> +static bool sdhci_uhs2_send_command(struct sdhci_host *host,
-> +				    struct mmc_command *cmd)
-> +{
-> +	int flags;
-> +	u32 mask;
-> +	unsigned long timeout;
-> +
-> +	WARN_ON(host->cmd);
-> +
-> +	/* Initially, a command has no error */
-> +	cmd->error = 0;
-> +
-> +	if (cmd->opcode == MMC_STOP_TRANSMISSION)
-> +		cmd->flags |= MMC_RSP_BUSY;
-> +
-> +	mask = SDHCI_CMD_INHIBIT;
-> +
-> +	if (sdhci_readl(host, SDHCI_PRESENT_STATE) & mask)
-> +		return false;
-> +
-> +	host->cmd = cmd;
-> +	host->data_timeout = 0;
-> +	if (sdhci_data_line_cmd(cmd)) {
-> +		WARN_ON(host->data_cmd);
-> +		host->data_cmd = cmd;
-> +		__sdhci_uhs2_set_timeout(host);
-> +	}
-> +
-> +	if (cmd->data)
-> +		sdhci_uhs2_prepare_data(host, cmd);
-> +
-> +	sdhci_uhs2_set_transfer_mode(host, cmd);
-> +
-> +	if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
-> +		WARN_ONCE(1, "Unsupported response type!\n");
-> +		/*
-> +		 * This does not happen in practice because 136-bit response
-> +		 * commands never have busy waiting, so rather than complicate
-> +		 * the error path, just remove busy waiting and continue.
-> +		 */
-> +		cmd->flags &= ~MMC_RSP_BUSY;
-> +	}
-> +
-> +	if (!(cmd->flags & MMC_RSP_PRESENT))
-> +		flags = SDHCI_CMD_RESP_NONE;
-> +	else if (cmd->flags & MMC_RSP_136)
-> +		flags = SDHCI_CMD_RESP_LONG;
-> +	else if (cmd->flags & MMC_RSP_BUSY)
-> +		flags = SDHCI_CMD_RESP_SHORT_BUSY;
-> +	else
-> +		flags = SDHCI_CMD_RESP_SHORT;
-> +
-> +	if (cmd->flags & MMC_RSP_CRC)
-> +		flags |= SDHCI_CMD_CRC;
-> +	if (cmd->flags & MMC_RSP_OPCODE)
-> +		flags |= SDHCI_CMD_INDEX;
-> +
-> +	timeout = jiffies;
-> +	if (host->data_timeout)
-> +		timeout += nsecs_to_jiffies(host->data_timeout);
-> +	else if (!cmd->data && cmd->busy_timeout > 9000)
-> +		timeout += DIV_ROUND_UP(cmd->busy_timeout, 1000) * HZ + HZ;
-> +	else
-> +		timeout += 10 * HZ;
-> +	sdhci_mod_timer(host, cmd->mrq, timeout);
-> +
-> +	__sdhci_uhs2_send_command(host, cmd);
-> +
-> +	return true;
-> +}
-> +
-> +static bool sdhci_uhs2_send_command_retry(struct sdhci_host *host,
-> +				     struct mmc_command *cmd,
-> +				     unsigned long flags)
-> +	__releases(host->lock)
-> +	__acquires(host->lock)
-> +{
-> +	struct mmc_command *deferred_cmd = host->deferred_cmd;
-> +	int timeout = 10; /* Approx. 10 ms */
-> +	bool present;
-> +
-> +	while (!sdhci_uhs2_send_command(host, cmd)) {
-> +		if (!timeout--) {
-> +			pr_err("%s: Controller never released inhibit bit(s).\n",
-> +			       mmc_hostname(host->mmc));
-> +			sdhci_dumpregs(host);
-> +			cmd->error = -EIO;
-> +			return false;
-> +		}
-> +
-> +		spin_unlock_irqrestore(&host->lock, flags);
-> +
-> +		usleep_range(1000, 1250);
-> +
-> +		present = host->mmc->ops->get_cd(host->mmc);
-> +
-> +		spin_lock_irqsave(&host->lock, flags);
-> +
-> +		/* A deferred command might disappear, handle that */
-> +		if (cmd == deferred_cmd && cmd != host->deferred_cmd)
-> +			return true;
-> +
-> +		if (sdhci_present_error(host, cmd, present))
-> +			return false;
-> +	}
-> +
-> +	if (cmd == host->deferred_cmd)
-> +		host->deferred_cmd = NULL;
-> +
-> +	return true;
-> +}
-> +
-> +static void __sdhci_uhs2_finish_command(struct sdhci_host *host)
-> +{
-> +	struct mmc_command *cmd = host->cmd;
-> +	u8 resp;
-> +	u8 ecode;
-> +	bool bReadA0 = 0;
-> +	int i;
-> +
-> +	if (host->mmc->card) {
-> +		if (host->mmc->card->uhs2_state & MMC_UHS2_INITIALIZED) {
-> +			resp = sdhci_readb(host, SDHCI_UHS2_RESPONSE + 2);
-> +			if (resp & UHS2_RES_NACK_MASK) {
-> +				ecode = (resp >> UHS2_RES_ECODE_POS) & UHS2_RES_ECODE_MASK;
-> +				pr_err("%s: NACK is got, ECODE=0x%x.\n",
-> +				mmc_hostname(host->mmc), ecode);
-> +			}
-> +			bReadA0 = 1;
-> +		}
-> +	}
-> +
-> +	if (cmd->uhs2_resp &&
-> +	    cmd->uhs2_resp_len && cmd->uhs2_resp_len <= 20) {
-> +		/* Get whole response of some native CCMD, like
-> +		 * DEVICE_INIT, ENUMERATE.
-> +		 */
-> +		for (i = 0; i < cmd->uhs2_resp_len; i++)
-> +			cmd->uhs2_resp[i] = sdhci_readb(host, SDHCI_UHS2_RESPONSE + i);
-> +	} else {
-> +		/* Get SD CMD response and Payload for some read
-> +		 * CCMD, like INQUIRY_CFG.
-> +		 */
-> +		/* Per spec (p136), payload field is divided into
-> +		 * a unit of DWORD and transmission order within
-> +		 * a DWORD is big endian.
-> +		 */
-> +		if (!bReadA0)
-> +			sdhci_readl(host, SDHCI_UHS2_RESPONSE);
-> +		for (i = 4; i < 20; i += 4) {
-> +			cmd->resp[i / 4 - 1] =
-> +				(sdhci_readb(host,
-> +					     SDHCI_UHS2_RESPONSE + i) << 24) |
-> +				(sdhci_readb(host,
-> +					     SDHCI_UHS2_RESPONSE + i + 1)
-> +					<< 16) |
-> +				(sdhci_readb(host,
-> +					     SDHCI_UHS2_RESPONSE + i + 2)
-> +					<< 8) |
-> +				sdhci_readb(host, SDHCI_UHS2_RESPONSE + i + 3);
-> +		}
-> +	}
-> +}
-> +
-> +static void sdhci_uhs2_finish_command(struct sdhci_host *host)
-> +{
-> +	struct mmc_command *cmd = host->cmd;
-> +
-> +	__sdhci_uhs2_finish_command(host);
-> +
-> +	host->cmd = NULL;
-> +
-> +	if (cmd->mrq->cap_cmd_during_tfr && cmd == cmd->mrq->cmd)
-> +		mmc_command_done(host->mmc, cmd->mrq);
-> +
-> +	/*
-> +	 * The host can send and interrupt when the busy state has
-> +	 * ended, allowing us to wait without wasting CPU cycles.
-> +	 * The busy signal uses DAT0 so this is similar to waiting
-> +	 * for data to complete.
-> +	 *
-> +	 * Note: The 1.0 specification is a bit ambiguous about this
-> +	 *       feature so there might be some problems with older
-> +	 *       controllers.
-> +	 */
-> +	if (cmd->flags & MMC_RSP_BUSY) {
-> +		if (cmd->data) {
-> +			DBG("Cannot wait for busy signal when also doing a data transfer");
-> +		} else if (!(host->quirks & SDHCI_QUIRK_NO_BUSY_IRQ) &&
-> +			   cmd == host->data_cmd) {
-> +			/* Command complete before busy is ended */
-> +			return;
-> +		}
-> +	}
-> +
-> +	/* Processed actual command. */
-> +	if (host->data && host->data_early)
-> +		sdhci_uhs2_finish_data(host);
-> +
-> +	if (!cmd->data)
-> +		__sdhci_finish_mrq(host, cmd->mrq);
-> +}
-> +
-> +void sdhci_uhs2_request(struct mmc_host *mmc, struct mmc_request *mrq)
-> +{
-> +	struct sdhci_host *host = mmc_priv(mmc);
-> +	struct mmc_command *cmd;
-> +	unsigned long flags;
-> +	bool present;
-> +
-> +	if (!(sdhci_uhs2_mode(host))) {
-> +		sdhci_request(mmc, mrq);
-> +		return;
-> +	}
-> +
-> +	mrq->stop = NULL;
-> +	mrq->sbc = NULL;
-> +	if (mrq->data)
-> +		mrq->data->stop = NULL;
-> +
-> +	/* Firstly check card presence */
-> +	present = mmc->ops->get_cd(mmc);
-> +
-> +	spin_lock_irqsave(&host->lock, flags);
-> +
-> +	if (sdhci_present_error(host, mrq->cmd, present))
-> +		goto out_finish;
-> +
-> +	cmd = mrq->cmd;
-> +
-> +	if (!sdhci_uhs2_send_command(host, cmd))
-> +		goto out_finish;
-> +
-> +	spin_unlock_irqrestore(&host->lock, flags);
-> +
-> +	return;
-> +
-> +out_finish:
-> +	sdhci_finish_mrq(host, mrq);
-> +	spin_unlock_irqrestore(&host->lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(sdhci_uhs2_request);
-> +
-> +int sdhci_uhs2_request_atomic(struct mmc_host *mmc, struct mmc_request *mrq)
-> +{
-> +	struct sdhci_host *host = mmc_priv(mmc);
-> +	struct mmc_command *cmd;
-> +	unsigned long flags;
-> +	int ret = 0;
-> +
-> +	if (!host->mmc->flags & MMC_UHS2_SUPPORT)
-> +		return sdhci_request_atomic(mmc, mrq);
-> +
-> +	spin_lock_irqsave(&host->lock, flags);
-> +
-> +	if (sdhci_present_error(host, mrq->cmd, true)) {
-> +		sdhci_finish_mrq(host, mrq);
-> +		goto out_finish;
-> +	}
-> +
-> +	cmd = mrq->cmd;
-> +
-> +	/*
-> +	 * The HSQ may send a command in interrupt context without polling
-> +	 * the busy signaling, which means we should return BUSY if controller
-> +	 * has not released inhibit bits to allow HSQ trying to send request
-> +	 * again in non-atomic context. So we should not finish this request
-> +	 * here.
-> +	 */
-> +	if (!sdhci_uhs2_send_command(host, cmd))
-> +		ret = -EBUSY;
-> +
-> +out_finish:
-> +	spin_unlock_irqrestore(&host->lock, flags);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(sdhci_uhs2_request_atomic);
-> +
->  /*****************************************************************************\
->   *                                                                           *
->   * Driver init/exit                                                          *
-> @@ -581,6 +998,7 @@ static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
->  		sdhci_uhs2_start_signal_voltage_switch;
->  	host->mmc_host_ops.uhs2_set_ios = sdhci_uhs2_set_ios;
->  	host->mmc_host_ops.uhs2_control = sdhci_uhs2_control;
-> +	host->mmc_host_ops.request = sdhci_uhs2_request;
->  
->  	return 0;
->  }
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 3656e66fcca7..c547fc3b8b47 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -47,8 +47,6 @@
->  static unsigned int debug_quirks = 0;
->  static unsigned int debug_quirks2;
->  
-> -static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd);
-> -
->  void sdhci_dumpregs(struct sdhci_host *host)
->  {
->  	SDHCI_DUMP("============ SDHCI REGISTER DUMP ===========\n");
-> @@ -147,10 +145,11 @@ void sdhci_enable_v4_mode(struct sdhci_host *host)
->  }
->  EXPORT_SYMBOL_GPL(sdhci_enable_v4_mode);
->  
-> -static inline bool sdhci_data_line_cmd(struct mmc_command *cmd)
-> +bool sdhci_data_line_cmd(struct mmc_command *cmd)
->  {
->  	return cmd->data || cmd->flags & MMC_RSP_BUSY;
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_data_line_cmd);
->  
->  static void sdhci_set_card_detection(struct sdhci_host *host, bool enable)
->  {
-> @@ -424,7 +423,7 @@ static void __sdhci_led_activate(struct sdhci_host *host)
->  	sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
->  }
->  
-> -static void __sdhci_led_deactivate(struct sdhci_host *host)
-> +void __sdhci_led_deactivate(struct sdhci_host *host)
->  {
->  	u8 ctrl;
->  
-> @@ -435,6 +434,7 @@ static void __sdhci_led_deactivate(struct sdhci_host *host)
->  	ctrl &= ~SDHCI_CTRL_LED;
->  	sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
->  }
-> +EXPORT_SYMBOL_GPL(__sdhci_led_deactivate);
+On Thu, Jan 5, 2023 at 2:44 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 05.01.23 01:03, Yang Shi wrote:
+> > On Wed, Jan 4, 2023 at 1:20 AM David Hildenbrand <david@redhat.com> wrote:
+> >>
+> >>>> Or am I wrong?
+> >>>>
+> >>>>> Is anon_vma lock required?  Almost not: if any page other than expected
+> >>>>> subpage of the non-anon huge page is found in the page table, collapse is
+> >>>>> aborted without making any change.  However, it is possible that an anon
+> >>>>> page was CoWed from this extent in another mm or vma, in which case a
+> >>>>> concurrent lookup might look here: so keep it away while clearing pmd
+> >>>>> (but perhaps we shall go back to using pmd_lock() there in future).
+> >>>>>
+> >>>>> Note that collapse_pte_mapped_thp() is exceptional in freeing a page table
+> >>>>> without having cleared its ptes: I'm uneasy about that, and had thought
+> >>>>> pte_clear()ing appropriate; but exclusive i_mmap lock does fix the problem,
+> >>>>> and we would have to move the mmu_notification if clearing those ptes.
+> >>>>>
+> >>>>> Fixes: 8d3c106e19e8 ("mm/khugepaged: take the right locks for page table
+> >>>>> retraction")
+> >>>>> Signed-off-by: Hugh Dickins <hughd@google.com>
+> >>>>> Cc: Jann Horn <jannh@google.com>
+> >>>>> Cc: Yang Shi <shy828301@gmail.com>
+> >>>>> Cc: David Hildenbrand <david@redhat.com>
+> >>>>> Cc: Zach O'Keefe <zokeefe@google.com>
+> >>>>> Cc: Song Liu <songliubraving@fb.com>
+> >>>>> Cc: <stable@vger.kernel.org>    [5.4+]
+> >>>>> ---
+> >>>>> What this fixes is not a dangerous instability!  But I suggest Cc stable
+> >>>>> because uprobes "healing" has regressed in that way, so this should follow
+> >>>>> 8d3c106e19e8 into those stable releases where it was backported (and may
+> >>>>> want adjustment there - I'll supply backports as needed).
+> >>>>
+> >>>> If it's really something that doesn't matter in practice (e.g., -1%
+> >>>> performance while debugging :) ), I guess no CC is needed. If there are real
+> >>>> production workloads that suffer, I guess ccing stable is fine.
+> >>>
+> >>> It's about recovering performance *after* debugging.  It is not something
+> >>> that is of any value to me personally, nor (so far as I know) to anyone
+> >>> whom I work with.  But it is something which Song Liu went to the trouble
+> >>> to make possible in his "THP aware uprobe" series three years ago, and it
+> >>> is something which Jann unintentionally regressed in his recent commit:
+> >>> so I thought it proper to reinstate where regressed.
+> >>
+> >> Right, although I wonder if that original series fixed a real
+> >> performance issue or was more a "this makes sense, let's just optimize
+> >> this corner case by some serious complexity". I hope it's not the latter :)
+> >>
+> >>>
+> >>> (What I do have more of an investment in, is for MADV_COLLAPSE to be able
+> >>> to collapse some extents in a large vma where some other extent got CoWed,
+> >>> so giving the whole vma an anon_vma.  But that's not an issue for -stable,
+> >>> and I cannot tell you offhand whether undoing this anon_vma exclusion is
+> >>> enough to enable that or not - I suspect not, I suspect a result code or
+> >>> switch statement needs to be adjusted too.)
+> >>
+> >> Yeah, having a single COWed page in a large MAP_PRIVATE file/shmem
+> >> mapping would disable collapse, so it's the right thing to do.
+> >>
+> >> Thinking about it some more, and the effective code change, stable
+> >> doesn't sound wrong.
+> >>
+> >>>>
+> >>>>
+> >>>> Side note: set_huge_pmd() wins the award of "ugliest mm function of early
+> >>>> 2023". I was briefly concerned how do_set_pmd() decides whether the PMD can be
+> >>>> writable or not. Turns out it's communicated via vm_fault->flags. Just
+> >>>> horrible.
 
-Do not need to export __sdhci_led_deactivate
+My first Linux award! :) At least it's not "worst mm security issue of
+early 2023". I'll take it!
 
->  
->  #if IS_REACHABLE(CONFIG_LEDS_CLASS)
->  static void sdhci_led_control(struct led_classdev *led,
-> @@ -513,14 +513,15 @@ static inline void sdhci_led_deactivate(struct sdhci_host *host)
->  
->  #endif
->  
-> -static void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq,
-> -			    unsigned long timeout)
-> +void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq,
-> +		     unsigned long timeout)
->  {
->  	if (sdhci_data_line_cmd(mrq->cmd))
->  		mod_timer(&host->data_timer, timeout);
->  	else
->  		mod_timer(&host->timer, timeout);
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_mod_timer);
->  
->  static void sdhci_del_timer(struct sdhci_host *host, struct mmc_request *mrq)
->  {
-> @@ -1087,8 +1088,7 @@ static void sdhci_set_timeout(struct sdhci_host *host, struct mmc_command *cmd)
->  		__sdhci_set_timeout(host, cmd);
->  }
->  
-> -static void sdhci_initialize_data(struct sdhci_host *host,
-> -				  struct mmc_data *data)
-> +void sdhci_initialize_data(struct sdhci_host *host, struct mmc_data *data)
->  {
->  	WARN_ON(host->data);
->  
-> @@ -1101,6 +1101,7 @@ static void sdhci_initialize_data(struct sdhci_host *host,
->  	host->data_early = 0;
->  	host->data->bytes_xfered = 0;
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_initialize_data);
->  
->  static inline void sdhci_set_block_info(struct sdhci_host *host,
->  					struct mmc_data *data)
-> @@ -1123,12 +1124,8 @@ static inline void sdhci_set_block_info(struct sdhci_host *host,
->  	}
->  }
->  
-> -static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
-> +void sdhci_prepare_dma(struct sdhci_host *host, struct mmc_data *data)
->  {
-> -	struct mmc_data *data = cmd->data;
-> -
-> -	sdhci_initialize_data(host, data);
-> -
->  	if (host->flags & (SDHCI_USE_SDMA | SDHCI_USE_ADMA)) {
->  		struct scatterlist *sg;
->  		unsigned int length_mask, offset_mask;
-> @@ -1213,6 +1210,16 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
->  	}
->  
->  	sdhci_set_transfer_irqs(host);
-> +}
-> +EXPORT_SYMBOL_GPL(sdhci_prepare_dma);
-> +
-> +static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
-> +{
-> +	struct mmc_data *data = cmd->data;
-> +
-> +	sdhci_initialize_data(host, data);
-> +
-> +	sdhci_prepare_dma(host, data);
->  
->  	sdhci_set_block_info(host, data);
->  }
-> @@ -1255,8 +1262,7 @@ static struct dma_chan *sdhci_external_dma_channel(struct sdhci_host *host,
->  	return data->flags & MMC_DATA_WRITE ? host->tx_chan : host->rx_chan;
->  }
->  
-> -static int sdhci_external_dma_setup(struct sdhci_host *host,
-> -				    struct mmc_command *cmd)
-> +int sdhci_external_dma_setup(struct sdhci_host *host, struct mmc_command *cmd)
->  {
->  	int ret, i;
->  	enum dma_transfer_direction dir;
-> @@ -1309,8 +1315,9 @@ static int sdhci_external_dma_setup(struct sdhci_host *host,
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_external_dma_setup);
+> >>>
+> >>> I firmly disagree - it's from 2022! and much too small to be ugliest;
+> >>> but I haven't thought about the aspect that is bothering you there.
+> >>
+> >> The ugliest I stumbled over in early 2023 -- until January 2nd :D
+> >>
+> >>>
+> >>> What's bothered me most about it, is the way its name, and the naming of
+> >>> the do_set_pmd() it interfaces with, give no hint that they are entirely
+> >>> about file (or shmem) vmas, and would not work right on anon vmas
+> >>> (I forget whether it's just a matter of which stats updated, or more).
+> >>
+> >> Yes. I dug very deep into in-place collapse yesterday because I was
+> >> briefly concerned about anon THP, and it took me longer to understand
+> >> that whole machinery than it should (and that anon THP never ever
+> >> collapse in-place).
+> >>
+> >> Some of that khugepaged stuff needs some *serious* cleanups and
+> >> refactoring. do_set_pmd() is not an exception.
+> >>
+> >>
+> >> Some more examples:
+> >>
+> >> if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
+> >>          ...
+> >>          hpage_collapse_scan_file()
+> >> } else {
+> >>          hpage_collapse_scan_pmd()
+> >>          ...
+> >> }
+> >>
+> >>
+> >> 1) hpage_collapse_scan_pmd() is only for anon memory. Totally obvious
+> >>      from the name. But why are we potentially calling it for VMAs that
+> >>      are not applicable? For maximum David confusion?
+> >
+> > IIRC the VMAs are checked before, what do you mean about "not
+> > applicable"? But anyway khugepaged/MADV_COLLAPSE does release and
+>
+> I assume when CONFIG_SHMEM=n with ordinary file-thp we'll end up calling it.
+>
+> > reacquire mmap_lock multiple times, so there are multiple places to
+> > check VMAs validity.
+> >
+>
+> hpage_collapse_scan_pmd() should be renamed to something like
+> hpage_collapse_scan_an/on() and the duplicate code in
+> khugepaged_scan_mm_slot() and madvise_collapse() should be factored out
+> into something like:
+>
+> hpage_collapse_scan(vma, addr, cc)
+> {
+>         if (vma->vm_file) {
+>                 ...
+>                 hpage_collapse_scan_file()
+>                 ...
+>         } else if (vma_is_anonymous(vma)) {
+>                 hpage_collapse_scan_anon()
+>         } else {
+>                 WARN_ON_ONCE();
+>         }
+> }
+>
+> Any CONFIG_SHMEM etc. optimizations to compile that code out should go
+> into hpage_collapse_scan_file() IMHO. ... also properly checking for
+> ordinary file THP support.
+>
+> ... and we'd really decide on a terminology "transhuge", "hugepage",
+> "hpage", it's a mess. hpage might be easiest, or simply "thp". We just
+> need a way to distinguish all that stuff from hugetlb.
+>
+> >>
+> >> 2) "IS_ENABLED(CONFIG_SHMEM) && vma->vm_file" is also supposed to cover
+> >>      ordinary file-thp. Totally obvious from the IS_ENABLED(CONFIG_SHMEM)
+> >>      ... I probably spent 30minutes understanding what's happening here.
+> >>      Just misleading and wrong without CONFIG_SHMEM.
+> >>
+> >>
+> >> ... and what's easier to get than this magic set of boolean flags:
+> >>
+> >>          hugepage_vma_check(vma, vma->vm_flags, false, false, true)
+> >
+> > This is not perfect. I was thinking about changing them to one flag,
+> > just like TTU_ flags used by try_to_unmap(). That may make things
+> > cleaner.
+> >
+>
+> We should provide similar flags to hugepage_vma_revalidate() and just
+> replace the "cc" parameter by a way to indicate is_khugepaged. Passing
+> in cc is just overkill.
+>
+> We'd name the functions thp_vma_validate() and thp_vma_revalidate() or
+> sth. like that.
+>
+> >>
+> >> ... and obviously
+> >>          hugepage_vma_revalidate()
+> >> is supposed to be a follow up to a previous
+> >>          hugepage_vma_check()
+> >> and totally different from
+> >>          transhuge_vma_suitable()
+> >>
+> >> Hard to make it even less consistent.
+> >
+> > This was after my cleanup, it was much messier before. And I did add
+> > comments to make them more understandable, but anyway better naming is
+> > definitely welcome.
+>
+> Yeah, I appreciate any previous and any future cleanups in that area.
 
-Do not need to export sdhci_external_dma_setup
+Likewise. I think there's definitely some work that can be done
+(though things are actually much better now than they were before
+Yang's last cleanup series). One of the issues is that anon and
+file/shmem pathways are largely independent here, with very little
+overlap, and if you just look at some function in isolation (e.g.
+hugepage_vma_revalidate()) it's not clear this is a anon/file-only
+function. Renaming with consistent prefixes would help -- among other
+things.
 
->  
-> -static void sdhci_external_dma_release(struct sdhci_host *host)
-> +void sdhci_external_dma_release(struct sdhci_host *host)
->  {
->  	if (host->tx_chan) {
->  		dma_release_channel(host->tx_chan);
-> @@ -1324,9 +1331,10 @@ static void sdhci_external_dma_release(struct sdhci_host *host)
->  
->  	sdhci_switch_external_dma(host, false);
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_external_dma_release);
+> For example: why even *care* about the complexity of installing a PMD in
+> collapse_pte_mapped_thp() using set_huge_pmd() just for MADV_COLLAPSE?
+>
+> Sure, we avoid a single page fault afterwards, but is this *really*
+> worth the extra code here? I mean, after we installed the PMD, the page
+> could just get reclaimed either way, so there is no guarantee that we
+> have a PMD mapped once we return to user space IIUC.
 
-Do not need to export sdhci_external_dma_release
+A valid question. The first reason is just semantic symmetry for
+MADV_COLLAPSE called on anon vs file/shmem memory. It would be nice to
+say that "on success, the memory range provided will be backed by
+PMD-mapped hugepages", rather than special-casing file/shmem.
 
->  
-> -static void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
-> -					      struct mmc_command *cmd)
-> +void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
-> +				       struct mmc_command *cmd)
->  {
->  	struct mmc_data *data = cmd->data;
->  
-> @@ -1337,6 +1345,7 @@ static void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
->  
->  	sdhci_set_block_info(host, data);
->  }
-> +EXPORT_SYMBOL(__sdhci_external_dma_prepare_data);
+The second reason has a more practical use case. In userfaultfd-based
+live migration (using  UFFDIO_REGISTER_MODE_MINOR) pages are migrated
+at 4KiB granularity, and it may take a long (O(many minutes)) for the
+transfer of all pages to complete. To avoid severe performance
+degradation on the target guest, the vmm wants to MADV_COLLAPSE
+hugepage-sized regions as they fill up. Since the guest memory is
+still uffd-registered, requiring refault post-MADV_COLLAPSE won't
+work, since the uffd machinery will intercept the fault, and no PMD
+will be mapped. As such, either uffd needs to be taught to install PMD
+mappings, or the PMD mapping already must be in-place.
 
-Do not need to export __sdhci_external_dma_prepare_data
+Thanks,
+Zach
 
->  
->  static void sdhci_external_dma_prepare_data(struct sdhci_host *host,
->  					    struct mmc_command *cmd)
-> @@ -1351,8 +1360,8 @@ static void sdhci_external_dma_prepare_data(struct sdhci_host *host,
->  	}
->  }
->  
-> -static void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
-> -					    struct mmc_command *cmd)
-> +void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
-> +				     struct mmc_command *cmd)
->  {
->  	struct dma_chan *chan;
->  
-> @@ -1363,6 +1372,7 @@ static void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
->  	if (chan)
->  		dma_async_issue_pending(chan);
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_external_dma_pre_transfer);
-
-Do not need to export sdhci_external_dma_pre_transfer
-
->  
->  #else
->  
-> @@ -1414,8 +1424,7 @@ static inline bool sdhci_auto_cmd23(struct sdhci_host *host,
->  	return mrq->sbc && (host->flags & SDHCI_AUTO_CMD23);
->  }
->  
-> -static inline bool sdhci_manual_cmd23(struct sdhci_host *host,
-> -				      struct mmc_request *mrq)
-> +static inline bool sdhci_manual_cmd23(struct sdhci_host *host, struct mmc_request *mrq)
-
-Please do not make whitespace changes if nothing else changes
-
->  {
->  	return mrq->sbc && !(host->flags & SDHCI_AUTO_CMD23);
->  }
-> @@ -1530,7 +1539,7 @@ static void sdhci_set_mrq_done(struct sdhci_host *host, struct mmc_request *mrq)
->  	WARN_ON(i >= SDHCI_MAX_MRQS);
->  }
->  
-> -static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
-> +void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
->  {
->  	if (host->cmd && host->cmd->mrq == mrq)
->  		host->cmd = NULL;
-> @@ -1554,15 +1563,17 @@ static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
->  	if (!sdhci_has_requests(host))
->  		sdhci_led_deactivate(host);
->  }
-> +EXPORT_SYMBOL_GPL(__sdhci_finish_mrq);
->  
-> -static void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
-> +void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
->  {
->  	__sdhci_finish_mrq(host, mrq);
->  
->  	queue_work(host->complete_wq, &host->complete_work);
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_finish_mrq);
->  
-> -static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
-> +void __sdhci_finish_data_common(struct sdhci_host *host)
->  {
->  	struct mmc_command *data_cmd = host->data_cmd;
->  	struct mmc_data *data = host->data;
-> @@ -1596,6 +1607,14 @@ static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
->  		data->bytes_xfered = 0;
->  	else
->  		data->bytes_xfered = data->blksz * data->blocks;
-> +}
-> +EXPORT_SYMBOL_GPL(__sdhci_finish_data_common);
-> +
-> +static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
-> +{
-> +	struct mmc_data *data = host->data;
-> +
-> +	__sdhci_finish_data_common(host);
->  
->  	/*
->  	 * Need to send CMD12 if -
-> @@ -1681,8 +1700,6 @@ static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
->  			sdhci_prepare_data(host, cmd);
->  	}
->  
-> -	sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT);
-> -
->  	sdhci_set_transfer_mode(host, cmd);
->  
->  	if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
-> @@ -1725,13 +1742,15 @@ static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
->  	if (host->use_external_dma)
->  		sdhci_external_dma_pre_transfer(host, cmd);
->  
-> +	sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT);
-
-If this move of "sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT)"
-is intentional, it should be a separate patch.
-
-> +
->  	sdhci_writew(host, SDHCI_MAKE_CMD(cmd->opcode, flags), SDHCI_COMMAND);
->  
->  	return true;
->  }
->  
-> -static bool sdhci_present_error(struct sdhci_host *host,
-> -				struct mmc_command *cmd, bool present)
-> +bool sdhci_present_error(struct sdhci_host *host,
-> +			 struct mmc_command *cmd, bool present)
->  {
->  	if (!present || host->flags & SDHCI_DEVICE_DEAD) {
->  		cmd->error = -ENOMEDIUM;
-> @@ -1740,6 +1759,7 @@ static bool sdhci_present_error(struct sdhci_host *host,
->  
->  	return false;
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_present_error);
->  
->  static bool sdhci_send_command_retry(struct sdhci_host *host,
->  				     struct mmc_command *cmd,
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index c2f989dc2361..3b87fcae1294 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -831,6 +831,20 @@ static inline void sdhci_read_caps(struct sdhci_host *host)
->  	__sdhci_read_caps(host, NULL, NULL, NULL);
->  }
->  
-> +bool sdhci_data_line_cmd(struct mmc_command *cmd);
-> +void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq, unsigned long timeout);
-> +void sdhci_initialize_data(struct sdhci_host *host, struct mmc_data *data);
-> +void sdhci_prepare_dma(struct sdhci_host *host, struct mmc_data *data);
-> +#if IS_ENABLED(CONFIG_MMC_SDHCI_EXTERNAL_DMA)
-> +int sdhci_external_dma_setup(struct sdhci_host *host, struct mmc_command *cmd);
-> +void sdhci_external_dma_release(struct sdhci_host *host);
-> +void __sdhci_external_dma_prepare_data(struct sdhci_host *host, struct mmc_command *cmd);
-> +void sdhci_external_dma_pre_transfer(struct sdhci_host *host, struct mmc_command *cmd);
-> +#endif
-
-external_dma fns do not need export
-
-> +void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq);
-> +void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq);
-> +void __sdhci_finish_data_common(struct sdhci_host *host);
-> +bool sdhci_present_error(struct sdhci_host *host, struct mmc_command *cmd, bool present);
->  u16 sdhci_calc_clk(struct sdhci_host *host, unsigned int clock,
->  		   unsigned int *actual_clock);
->  void sdhci_set_clock(struct sdhci_host *host, unsigned int clock);
-
+>
+> Anyhow, don't want to hijack this thread. I was just forced to
+> understand  that code and a lot jumped at me :)
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
