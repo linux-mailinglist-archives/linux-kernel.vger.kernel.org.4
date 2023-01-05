@@ -2,88 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD5265F7EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 00:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD6965F7F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbjAEX6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 18:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S235942AbjAFAAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 19:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjAEX6w (ORCPT
+        with ESMTP id S232449AbjAFAAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 18:58:52 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5BB392C3;
-        Thu,  5 Jan 2023 15:58:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np3Ms21Yvz4xyp;
-        Fri,  6 Jan 2023 10:58:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672963129;
-        bh=GY8Cz0dVwN/ETvKSCKlGagBcxImrn29hV5zlOpm7tD8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vFz6n+Lmp/iPO0hXrKPY4T75RP7/z4600bALQ3gl9x6T2jJUvXnW69xU+73HDDfXZ
-         boPGntfEvPVhjxEBQUmNxgYD1ZDEaIDOyHm3b2MMI+MzVbryyd/Qlgs7N6D6hKhacV
-         +9sBuM0Xhz6EMl5GgvKO1ESceG35h46otp16vO2ZgBJSbL1UywXJmE3FZF2w7NuNg9
-         mwuA59FV23av/DwyiNXugO5kGlPyGcaGYbqdmHJW+4BNvkEGvUNe3JAtsPBGrm9ArF
-         ZVeo+LnfBUrBNyyqFuHFbabqyrXwBZ0QWT4zYOwzJl0qMXsEdVKlVyaKnAWcCl0FPs
-         KW0xBjH2f6l/Q==
-Date:   Fri, 6 Jan 2023 10:58:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the amdgpu tree
-Message-ID: <20230106105848.44323715@canb.auug.org.au>
+        Thu, 5 Jan 2023 19:00:01 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8AC392C3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 16:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672963200; x=1704499200;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4+dfeziYsgvDulB276KwQutSbBlQJNSxzUmj6LOzsVU=;
+  b=bVESVuw2KdEAUOb00qGM/HxfuAjOu+vMfMOpTTvLwg+jHgrZKEzoeSHb
+   yJFZsFhKy0j2ireOj7n9Y4TLLPuQzDmyA+Q9Rh5C3FocUh77pPKHkfSMp
+   LStWkWx6OTQIK9Lz6SzPOqgUoD1RZOazFZ47m63pmuGD7M4jfRBeIql6Q
+   x7yGvYoA7TFJyNNu4R67RvmMSrKpXGI4J+z9XfjVwLj0GkFXGY34TShdi
+   mNSByTHrKsL/TyIuTE3mMTyJqtIIFKAthf/nDUZs7MB7oKg5Vb8aa5PLh
+   D0H216gW3zu/KCCYyn9Y9H/8X0war8IIIS0HESd5mcCB9L3vqo11KkQ+h
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="408610407"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="408610407"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:00:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="657715612"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="657715612"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Jan 2023 15:59:59 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDa9O-0002j5-0g;
+        Thu, 05 Jan 2023 23:59:58 +0000
+Date:   Fri, 06 Jan 2023 07:59:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/alternatives] BUILD SUCCESS
+ 5d1dd961e74334a2178264193ea813d44ce5e725
+Message-ID: <63b7644d.+aS8YKFfBAOFvlLO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A8DC7Gz+2dIM9tfYSZPaJSp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/A8DC7Gz+2dIM9tfYSZPaJSp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
+branch HEAD: 5d1dd961e74334a2178264193ea813d44ce5e725  x86/alternatives: Add alt_instr.flags
 
-Hi all,
+elapsed time: 721m
 
-The following commits are also in the drm-fixes tree as a different
-commits (but the same patches):
+configs tested: 72
+configs skipped: 2
 
-  878a3c004c0e ("drm/amd/display: Uninitialized variables causing 4k60 UCLK=
- to stay at DPM1 and not DPM0")
-  4243c84aa082 ("Revert "drm/amd/display: Enable Freesync Video Mode by def=
-ault"")
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---=20
-Cheers,
-Stephen Rothwell
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+powerpc                           allnoconfig
+um                             i386_defconfig
+alpha                            allyesconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-bpf
+arc                              allyesconfig
+x86_64                           rhel-8.3-syz
+sh                               allmodconfig
+x86_64                         rhel-8.3-kunit
+m68k                             allyesconfig
+s390                                defconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                             allyesconfig
+arm                                 defconfig
+arc                  randconfig-r043-20230105
+mips                             allyesconfig
+s390                 randconfig-r044-20230105
+ia64                             allmodconfig
+i386                          randconfig-a001
+i386                                defconfig
+x86_64                              defconfig
+riscv                randconfig-r042-20230105
+arm                              allyesconfig
+x86_64                        randconfig-a004
+i386                          randconfig-a003
+arm64                            allyesconfig
+x86_64                        randconfig-a002
+i386                          randconfig-a014
+i386                          randconfig-a005
+i386                          randconfig-a012
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a016
+x86_64                        randconfig-a013
+x86_64                               rhel-8.3
+x86_64                        randconfig-a011
+x86_64                           allyesconfig
+x86_64                        randconfig-a015
+i386                             allyesconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
 
---Sig_/A8DC7Gz+2dIM9tfYSZPaJSp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+clang tested configs:
+x86_64                          rhel-8.3-rust
+arm                  randconfig-r046-20230105
+hexagon              randconfig-r041-20230105
+hexagon              randconfig-r045-20230105
+i386                          randconfig-a013
+i386                          randconfig-a002
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+i386                          randconfig-a015
+i386                          randconfig-a004
+x86_64                        randconfig-a003
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+x86_64                        randconfig-k001
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3ZDgACgkQAVBC80lX
-0GwZYwf6AsswaR37yco292WIG0aho0Yini96g5sdLG8CBpEtv3R4ffXhYh0W88U2
-SzrggtCzfZgoeWJaHDPLEfRtKWFeclYQEQEDyJlMmDAtWXFIIUOxF6IgaDQmBjNm
-YWwmJwwP1x+tbyqkq3eEj2B15+PQEPnBOcVKNt/PtWXrw5WezQais+rst9tdVo+n
-LdHflLdxGcjIUm1a5NfvEJEIl6+86OClmZESeJKwU+/R9mzILwmoSD+msLJ7riWL
-DTdToj3xU3eWu7LalEaOxPGY7I4vHf9i73T3VCPkIz09Kgmmgv3BBiri6U+TVE+Y
-xCrQarkn7sEh9tgo247mgffLNlZz1A==
-=gh15
------END PGP SIGNATURE-----
-
---Sig_/A8DC7Gz+2dIM9tfYSZPaJSp--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
