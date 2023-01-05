@@ -2,133 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F0065F48B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E88065F48D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235806AbjAETd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S235827AbjAETeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbjAETde (ORCPT
+        with ESMTP id S235926AbjAETdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:33:34 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C97A5FC2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=1HKiKe9373ka0mN6FKm4s+rwzUKEimlYW6GYpQhj2R0=; b=BP1CBMV6B67FIuqRybXYKOA2B+
-        ukIVpCrzPqF55wKxlPxuZVlPMtVL75I18T3ifxC4IVzFi8RB0jd+XwvBnLU9OQOGas67ACHz79RRd
-        WEiLzTZWTiP82i9293zQ3NDHbNo2AQbWYvZ9doknOM2OutUvtqn9RHmCbIpO1tCBHhaSEwq7OP7pK
-        LYYo+C/K+Jg80OTA675SJ2PjIYFaoPql2tZFETHAN8Xybq+cOJKoWuX8o/yhxqFGgx8o0t3dUvjMp
-        bFFaf9yj+kjcg1GnPgR1KP9Hj2a2OeCdm9u3LAEJer6GZy5GYAb8H80gEg/ENEa73QjuVK/SkuqxK
-        9fSdN8kg==;
-Received: from [187.36.234.139] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1pDVx4-000Kcs-UY; Thu, 05 Jan 2023 20:30:59 +0100
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH 2/2] drm/debugfs: add descriptions to struct parameters
-Date:   Thu,  5 Jan 2023 16:30:39 -0300
-Message-Id: <20230105193039.287677-2-mcanal@igalia.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105193039.287677-1-mcanal@igalia.com>
-References: <20230105193039.287677-1-mcanal@igalia.com>
+        Thu, 5 Jan 2023 14:33:35 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2B60D3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:31:20 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso23374704ilu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:31:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bHitcvZ97hShjTanm2Z1738H5JrjpQR9jWA6jzfw080=;
+        b=xSNzEzZdIVBQMpZfuTf7AQjxfhVU80VKGBjOy2NlM0U0dgFQNQNFNioRyOXzVbizCa
+         vDLWx4IVTc+8U530wWeaC7G7MxK9CrjQRR1L8/WEBYS+g4LXBESfJAlhsuTs1oVshMAT
+         yJMVcC+qT7Ty/ZG3jNXXbeSqdLLIdjW9xaitbOyzB6erDPRNvEyLJGebBg+VWoJXLmLe
+         pAALzJcEVL1SoXz4nxWT/J5t6nxgMs0ABxqFvehITWJbC6VN0Emd61ZMK5RX0WRXY3b9
+         86590YSkn8ER7rg4H86Dj8LresiD7/ND48yS754bPqflV7pxNNm8WfbFcvLmQS6HOs+K
+         IRpg==
+X-Gm-Message-State: AFqh2kohuwI0vHJLQu+VVFl4O2uTFQEpIsMBJeqU9hiWmgWVkAug4+DS
+        oiPOipe8+Hlk0aBqYW1u6LFhUksCYapNDbvmvx/5UOxRzApX
+X-Google-Smtp-Source: AMrXdXsmzWZjH2qNr3kPWcUgcVDuVtjE/cdxWStjZYrlgBwEYkDkujVcC9u6HELosFV92GLRuU7BnAbsCB1X0znqsIu3ssBk32sH
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:238c:0:b0:363:b2f7:64d9 with SMTP id
+ u134-20020a02238c000000b00363b2f764d9mr4162831jau.211.1672947079603; Thu, 05
+ Jan 2023 11:31:19 -0800 (PST)
+Date:   Thu, 05 Jan 2023 11:31:19 -0800
+In-Reply-To: <000000000000a2432a05eea26be6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000686d3405f1895819@google.com>
+Subject: Re: [syzbot] [btrfs?] kernel BUG in insert_state_fast
+From:   syzbot <syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com>
+To:     clm@fb.com, djwong@kernel.org, dsterba@suse.com, fdmanana@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The structs drm_debugfs_info and drm_debugfs_entry don't have
-descriptions for their parameters, which is causing the following warnings:
+syzbot has bisected this issue to:
 
-include/drm/drm_debugfs.h:93: warning: Function parameter or member
-'name' not described in 'drm_debugfs_info'
-include/drm/drm_debugfs.h:93: warning: Function parameter or member
-'show' not described in 'drm_debugfs_info'
-include/drm/drm_debugfs.h:93: warning: Function parameter or member
-'driver_features' not described in 'drm_debugfs_info'
-include/drm/drm_debugfs.h:93: warning: Function parameter or member
-'data' not described in 'drm_debugfs_info'
-include/drm/drm_debugfs.h:105: warning: Function parameter or member
-'dev' not described in 'drm_debugfs_entry'
-include/drm/drm_debugfs.h:105: warning: Function parameter or member
-'file' not described in 'drm_debugfs_entry'
-include/drm/drm_debugfs.h:105: warning: Function parameter or member
-'list' not described in 'drm_debugfs_entry'
+commit 05fd9564e9faf0f23b4676385e27d9405cef6637
+Author: Darrick J. Wong <djwong@kernel.org>
+Date:   Mon Mar 14 17:55:32 2022 +0000
 
-Therefore, fix the warnings by adding descriptions to all struct
-parameters.
+    btrfs: fix fallocate to use file_modified to update permissions consistently
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
- include/drm/drm_debugfs.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14ef1870480000
+start commit:   644e9524388a Merge tag 'for-v6.1-rc' of git://git.kernel.o..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16ef1870480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ef1870480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ce4a36127ca92b59677
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12806381880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127f33c5880000
 
-diff --git a/include/drm/drm_debugfs.h b/include/drm/drm_debugfs.h
-index 53b7297260a5..7616f457ce70 100644
---- a/include/drm/drm_debugfs.h
-+++ b/include/drm/drm_debugfs.h
-@@ -86,9 +86,22 @@ struct drm_info_node {
-  * core.
-  */
- struct drm_debugfs_info {
-+	/** @name: File name */
- 	const char *name;
-+
-+	/**
-+	 * @show:
-+	 *
-+	 * Show callback. &seq_file->private will be set to the &struct
-+	 * drm_debugfs_entry corresponding to the instance of this info
-+	 * on a given &struct drm_device.
-+	 */
- 	int (*show)(struct seq_file*, void*);
-+
-+	/** @driver_features: Required driver features for this entry. */
- 	u32 driver_features;
-+
-+	/** @data: Driver-private data, should not be device-specific. */
- 	void *data;
- };
- 
-@@ -99,8 +112,13 @@ struct drm_debugfs_info {
-  * drm_debugfs_info on a &struct drm_device.
-  */
- struct drm_debugfs_entry {
-+	/** @dev: &struct drm_device for this node. */
- 	struct drm_device *dev;
-+
-+	/** @file: Template for this node. */
- 	struct drm_debugfs_info file;
-+
-+	/** @list: Linked list of all device nodes. */
- 	struct list_head list;
- };
- 
--- 
-2.39.0
+Reported-by: syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com
+Fixes: 05fd9564e9fa ("btrfs: fix fallocate to use file_modified to update permissions consistently")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
