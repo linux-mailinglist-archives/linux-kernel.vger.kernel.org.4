@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B98765E626
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F028465E625
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjAEHcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S231361AbjAEHcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjAEHcH (ORCPT
+        with ESMTP id S231171AbjAEHcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 02:32:07 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59504544FA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:32:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672903921; x=1704439921;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=ypUCWeLyZTiSpVtwCmCkkmx5F06n0mwIxits+2J+LcA=;
-  b=BYjYqKvPWz4Jo1JGSVmHBpCdsYSriGHFgL4PsRF62rFPqANhgGkhYSrM
-   rM188CFZpXh5r3zR2jVVyV18QD69TDyhm2N2sfxwJTulD4GHcHjtdHmLy
-   FdlnxuOy4wKF5Z3eV//OrclJUG/ZkOCvWTwda08MIRpOcirOhF6D6/CjE
-   foeiaqyIuarWxQn9+kT4MqVj9q1WMYsfpwGr/qv59JyRHyBv8JRTEP1eS
-   +yadaPJuBXiRdInpGVmwwBBmHHhdXuCtd4hu7uvR02tz6x32ytuo4+fQl
-   Z3BgOdW8NKQFjuFm85nBzzSqf2othzcRW7V+B1iGme/cs98HtAmLoBBVw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="384432193"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="384432193"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:32:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="984191588"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="984191588"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:31:57 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 2/8] migrate_pages: separate hugetlb folios migration
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-3-ying.huang@intel.com>
-        <87pmbttxmj.fsf@nvidia.com>
-        <87pmbtedfp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <877cy1scg5.fsf@nvidia.com>
-Date:   Thu, 05 Jan 2023 15:31:04 +0800
-In-Reply-To: <877cy1scg5.fsf@nvidia.com> (Alistair Popple's message of "Thu,
-        05 Jan 2023 17:43:05 +1100")
-Message-ID: <87k021bfpj.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E033544DD;
+        Wed,  4 Jan 2023 23:32:00 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NndMn2yjxzqTbx;
+        Thu,  5 Jan 2023 15:27:17 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 5 Jan 2023 15:31:56 +0800
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+To:     Song Liu <song@kernel.org>, Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+ <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <9be7a6a9-9290-5410-0ed7-f48ef3dea285@huawei.com>
+Date:   Thu, 5 Jan 2023 15:31:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,72 +71,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-[snip]
 
->
->>>> @@ -1462,30 +1549,28 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  		nr_retry_pages = 0;
->>>>  
->>>>  		list_for_each_entry_safe(folio, folio2, from, lru) {
->>>> +			if (folio_test_hugetlb(folio)) {
->>>
->>> How do we hit this case? Shouldn't migrate_hugetlbs() have already moved
->>> any hugetlb folios off the from list?
+On 2023/1/5 1:07, Song Liu wrote:
+> On Wed, Jan 4, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
 >>
->> Retried hugetlb folios will be kept in from list.
->
-> Couldn't migrate_hugetlbs() remove the failing retried pages from the
-> list on the final pass? That seems cleaner to me.
+>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+>>> Function __module_address() can quickly return the pointer of the module
+>>> to which an address belongs. We do not need to traverse the symbols of all
+>>> modules to check whether each address in addrs[] is the start address of
+>>> the corresponding symbol, because register_fprobe_ips() will do this check
+>>> later.
+>>>
+>>> Assuming that there are m modules, each module has n symbols on average,
+>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+>>> the ratio is still greater than 1. Therefore, the new method will
+>>> generally have better performance.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+>>>  1 file changed, 40 insertions(+), 61 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>> index 5f3be4bc16403a5..0ff9037098bd241 100644
+>>> --- a/kernel/trace/bpf_trace.c
+>>> +++ b/kernel/trace/bpf_trace.c
+>>> @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+>>>       }
+>>>  }
+>>>
+>>> -struct module_addr_args {
+>>> -     unsigned long *addrs;
+>>> -     u32 addrs_cnt;
+>>> -     struct module **mods;
+>>> -     int mods_cnt;
+>>> -     int mods_cap;
+>>> -};
+>>> -
+>>> -static int module_callback(void *data, const char *name,
+>>> -                        struct module *mod, unsigned long addr)
+>>> +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+>>>  {
+>>> -     struct module_addr_args *args = data;
+>>> -     struct module **mods;
+>>> -
+>>> -     /* We iterate all modules symbols and for each we:
+>>> -      * - search for it in provided addresses array
+>>> -      * - if found we check if we already have the module pointer stored
+>>> -      *   (we iterate modules sequentially, so we can check just the last
+>>> -      *   module pointer)
+>>> -      * - take module reference and store it
+>>> -      */
+>>> -     if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+>>> -                    bpf_kprobe_multi_addrs_cmp))
+>>> -             return 0;
+>>> +     int i, j, err;
+>>> +     int mods_cnt = 0;
+>>> +     int mods_cap = 0;
+>>> +     struct module *mod;
+>>> +     struct module **mods = NULL;
+>>>
+>>> -     if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+>>> -             return 0;
+>>> +     for (i = 0; i < addrs_cnt; i++) {
+>>> +             mod = __module_address(addrs[i]);
+>>
+>> This must be called under module_mutex to make sure that the module
+>> would not disappear.
 
-To do that, we need to go through the folio list again to remove all
-hugetlb pages.  It could be time-consuming in some cases.  So I think
-that it's better to keep this.
+Yes, mod needs to be protected, thanks.
 
-Best Regards,
-Huang, Ying
+> 
+> module_mutex is not available outside kernel/module/. The common
+> practice is to disable preempt before calling __module_address().
 
->>>> +				list_move_tail(&folio->lru, &ret_folios);
->>>> +				continue;
->>>> +			}
->>>> +
->>>>  			/*
->>>>  			 * Large folio statistics is based on the source large
->>>>  			 * folio. Capture required information that might get
->>>>  			 * lost during migration.
->>>>  			 */
->>>> -			is_large = folio_test_large(folio) && !folio_test_hugetlb(folio);
->>>> +			is_large = folio_test_large(folio);
->>>>  			is_thp = is_large && folio_test_pmd_mappable(folio);
->>>>  			nr_pages = folio_nr_pages(folio);
->>>> +
->>>>  			cond_resched();
->>>>  
->>>> -			if (folio_test_hugetlb(folio))
->>>> -				rc = unmap_and_move_huge_page(get_new_page,
->>>> -						put_new_page, private,
->>>> -						&folio->page, pass > 2, mode,
->>>> -						reason,
->>>> -						&ret_folios);
->>>> -			else
->>>> -				rc = unmap_and_move(get_new_page, put_new_page,
->>>> -						private, folio, pass > 2, mode,
->>>> -						reason, &ret_folios);
->>>> +			rc = unmap_and_move(get_new_page, put_new_page,
->>>> +					    private, folio, pass > 2, mode,
->>>> +					    reason, &ret_folios);
->>>>  			/*
->>>>  			 * The rules are:
->>>> -			 *	Success: non hugetlb folio will be freed, hugetlb
->>>> -			 *		 folio will be put back
->>>> +			 *	Success: folio will be freed
->>>>  			 *	-EAGAIN: stay on the from list
->>>>  			 *	-ENOMEM: stay on the from list
->>>>  			 *	-ENOSYS: stay on the from list
->>>> @@ -1512,7 +1597,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  						stats.nr_thp_split += is_thp;
->>>>  						break;
->>>>  					}
->>>> -				/* Hugetlb migration is unsupported */
->>>>  				} else if (!no_split_folio_counting) {
->>>>  					nr_failed++;
->>>>  				}
+Yes, I've looked elsewhere, and all calling preempt_disable() for
+RCU read protection. I will fix it.
+
+> CONFIG_LOCKDEP should catch this.
+> 
+> Thanks,
+> Song
+> 
+> [...]
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
