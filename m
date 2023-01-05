@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8A165E8E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B0265E8E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbjAEKWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S232558AbjAEKWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbjAEKUF (ORCPT
+        with ESMTP id S232507AbjAEKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:20:05 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD85559F8
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:33 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id n190-20020a25dac7000000b007447d7a25e4so35872606ybf.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:33 -0800 (PST)
+        Thu, 5 Jan 2023 05:20:42 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE38574D2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:34 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-46eb8a5a713so313721737b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zYgA7vTy+UiW0jcHBjsT9jPj1JCczIw3Dv3/VC3unlc=;
-        b=aZrPoex/pVw6R2bZjUd0s/eQeCQD6Z+ZR1pwJBBdpF4+ODpwC87+571DSmG52tQd2A
-         huBv6LZpBuHxyiw0O3CiSCiBc811ySkiBmjVOpz7sDguClfGeqjOyal8IA+Ji11V8jkN
-         bEFusYMrdUdHMUBqX7dtj5Cx+qMWmrKu+iN47FofwRZruFCBAY5cfV+BlJmz8ohPVsX3
-         hreD3U4vshXW0/FmhhWMhII3bpHEdeySPmB3+xk2RkaW9C04IumqG5jIlCikAQysXd4v
-         Ip9f+khY1/cJbjOG79FTa5wulnPT7jLwfHVYArewSw1+oGaupqCkA/OQmR8a7Mqa+kJj
-         +N4g==
+        bh=NW6wHLpIenfZ4H83ugQ2cvHsKjvU5VzZf+cgjAGHY40=;
+        b=rEGgdMvuu+27Ici8qii/KRILsHn9RlUYSO9K/TJzur40T3t5kesN5ok/NY1HloAU4L
+         Z7iSC9U8uLAkzjnzBDCE6RwQaxIdaGRfRBI7Ay4/uqsXEpMpfJH5fXmrdGe8jBMdebhB
+         PTfqNSSWxeBYlcJ/n89QdrXzg+3piVs9cMRx16JezvMUtD4M+SLYVIhAlR6VJsoaz/0q
+         LIveRtwE+XWa1auke1aNsrJsM9rgwGQVMhxbEoL1PGm2s5/+Us9MZpK3VqY68e/ucGb6
+         rLqEJyLAlrwQyolGVPX3aLH9GGNSXJQpX581J5jygzsuQLpiwPMUgm2Gwf8Q06CukAiZ
+         8Rdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zYgA7vTy+UiW0jcHBjsT9jPj1JCczIw3Dv3/VC3unlc=;
-        b=F0Om2jCRxZo/VppyAFG9F1Oo5Ba6TmrOHMQl00tPo3DhUnSb7S4SJkgV18rCXWncvm
-         R9Yprnsj5NB6DQe5NUJxa5lUUx/s3xApa/kbviDVeXD2PcYGs/il7w72LHuP2HgZQ6yy
-         2w4eOitr7BYec/XUWeF7luANM2QuaRat6MBsdd9djLwghbdw7qwccqL+ABn5qA8Yq2GV
-         d7s4qTPmsDdWkpGSGKWnkVkKWi5vfN5uckiIc9CAD74EJYoRcauKii2vtg1K5CVd0bjQ
-         o2sAdDoJZxPYwIkv+IMQi+66Q3OdiqBj2CZGIWGfxU3rMCxX1mcqEisWmdFHfuqwCcYF
-         bQsw==
-X-Gm-Message-State: AFqh2kq7qhxDaS+sAR+5klDgB//wEFvTjfwoQTtQ8Jn/9AZHxpSyyicy
-        lHLU+O80M3pWzxtou1vyVko0hJ0PHYLFHKiY
-X-Google-Smtp-Source: AMrXdXuxfUQNLilPrRGqsslWu2QZEFsqppw9mENfwOLUFmAwgaOYPQkWmXE3a1h40OvKVj2fDKV0vtvou6nlsSLw
+        bh=NW6wHLpIenfZ4H83ugQ2cvHsKjvU5VzZf+cgjAGHY40=;
+        b=RTR6GN1vHS4yjBFCnzr9Jp9uOh4VNwNaOKJqAP75vAh1UefWCUvZkUj6xDe1Zqy2Jx
+         H0PGcxUif1TmhW6PYspoAVZKwFKIhYb9Q0ARxazraQth9lRfLL8zmylcy//heoCt6rnD
+         jAg1d7jPZmShUPJ9HRv5Zjz5RCSEgBuDwARTcrL3MHnLmFJZuLo4MDAK73Yv0Untz4Wk
+         OR5RM/z4lvVQ1qEG4ENCG3er2gBYY3HL4XJpb/rMKAMiLzsCPdnoKKyZk3ku6yINlDnF
+         FOVC8clLSvRH46IOmnQqmx0VfOBmyayeVkdZCSgU/s0v1f/gtFyec4Bz0w7w2BGrwy+B
+         V3Qg==
+X-Gm-Message-State: AFqh2koqaXJB4+piqBAFA9t096yI8hRaYY2ZM17ScIWkM2KN2bSsTXr3
+        Kk0E/Yr09GCsD4cD2rXl4050PnaQKAW9xC/i
+X-Google-Smtp-Source: AMrXdXsgAfnLGLH/tQnO5IQRR4cK4f4YIvu7i1V91wP/6Pz7HgI4U5X4q/x6mDIyEA8c+u2ZnwHVp4g63zKjZ7Sk
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a0d:d454:0:b0:482:a03a:3fcd with SMTP
- id w81-20020a0dd454000000b00482a03a3fcdmr3459124ywd.99.1672913972517; Thu, 05
- Jan 2023 02:19:32 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:24 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:4bc4:0:b0:794:4ff7:1111 with SMTP
+ id y187-20020a254bc4000000b007944ff71111mr1789851yba.603.1672913973763; Thu,
+ 05 Jan 2023 02:19:33 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:25 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-27-jthoughton@google.com>
-Subject: [PATCH 26/46] hugetlb: add HGM support for copy_hugetlb_page_range
+Message-ID: <20230105101844.1893104-28-jthoughton@google.com>
+Subject: [PATCH 27/46] hugetlb: add HGM support for move_hugetlb_page_tables
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,177 +84,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows fork() to work with high-granularity mappings. The page
-table structure is copied such that partially mapped regions will remain
-partially mapped in the same way for the new process.
-
-A page's reference count is incremented for *each* portion of it that is
-mapped in the page table. For example, if you have a PMD-mapped 1G page,
-the reference count and mapcount will be incremented by 512.
+This is very similar to the support that was added to
+copy_hugetlb_page_range. We simply do a high-granularity walk now, and
+most of the rest of the code stays the same.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 75 ++++++++++++++++++++++++++++++++++------------------
- 1 file changed, 50 insertions(+), 25 deletions(-)
+ mm/hugetlb.c | 47 +++++++++++++++++++++++++++--------------------
+ 1 file changed, 27 insertions(+), 20 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 718572444a73..21a5116f509b 100644
+index 21a5116f509b..582d14a206b5 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5106,7 +5106,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			    struct vm_area_struct *src_vma)
+@@ -5313,16 +5313,16 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 	return ret;
+ }
+ 
+-static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
+-			  unsigned long new_addr, pte_t *src_pte, pte_t *dst_pte)
++static void move_hugetlb_pte(struct vm_area_struct *vma, unsigned long old_addr,
++			     unsigned long new_addr, struct hugetlb_pte *src_hpte,
++			     struct hugetlb_pte *dst_hpte)
  {
- 	pte_t *src_pte, *dst_pte, entry;
--	struct page *ptepage;
-+	struct hugetlb_pte src_hpte, dst_hpte;
-+	struct page *ptepage, *hpage;
- 	unsigned long addr;
- 	bool cow = is_cow_mapping(src_vma->vm_flags);
- 	struct hstate *h = hstate_vma(src_vma);
-@@ -5126,26 +5127,34 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 	} else {
- 		/*
- 		 * For shared mappings the vma lock must be held before
--		 * calling hugetlb_walk() in the src vma. Otherwise, the
--		 * returned ptep could go away if part of a shared pmd and
--		 * another thread calls huge_pmd_unshare.
-+		 * calling hugetlb_full_walk() in the src vma. Otherwise, the
-+		 * returned hpte could go away if
-+		 *  - part of a shared pmd and another thread calls
-+		 *  - huge_pmd_unshare, or
-+		 *  - another thread collapses a high-granularity mapping.
- 		 */
- 		hugetlb_vma_lock_read(src_vma);
- 	}
+-	struct hstate *h = hstate_vma(vma);
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	spinlock_t *src_ptl, *dst_ptl;
+ 	pte_t pte;
  
- 	last_addr_mask = hugetlb_mask_last_page(h);
--	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
-+	addr = src_vma->vm_start;
-+	while (addr < src_vma->vm_end) {
- 		spinlock_t *src_ptl, *dst_ptl;
--		src_pte = hugetlb_walk(src_vma, addr, sz);
--		if (!src_pte) {
--			addr |= last_addr_mask;
-+		unsigned long hpte_sz;
-+
-+		if (hugetlb_full_walk(&src_hpte, src_vma, addr)) {
-+			addr = (addr | last_addr_mask) + sz;
- 			continue;
- 		}
--		dst_pte = huge_pte_alloc(dst, dst_vma, addr, sz);
--		if (!dst_pte) {
--			ret = -ENOMEM;
-+		ret = hugetlb_full_walk_alloc(&dst_hpte, dst_vma, addr,
-+				hugetlb_pte_size(&src_hpte));
-+		if (ret)
- 			break;
--		}
-+
-+		src_pte = src_hpte.ptep;
-+		dst_pte = dst_hpte.ptep;
-+
-+		hpte_sz = hugetlb_pte_size(&src_hpte);
+-	dst_ptl = huge_pte_lock(h, mm, dst_pte);
+-	src_ptl = huge_pte_lockptr(huge_page_shift(h), mm, src_pte);
++	dst_ptl = hugetlb_pte_lock(dst_hpte);
++	src_ptl = hugetlb_pte_lockptr(src_hpte);
  
- 		/*
- 		 * If the pagetables are shared don't copy or take references.
-@@ -5155,13 +5164,14 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		 * another vma. So page_count of ptep page is checked instead
- 		 * to reliably determine whether pte is shared.
- 		 */
--		if (page_count(virt_to_page(dst_pte)) > 1) {
--			addr |= last_addr_mask;
-+		if (hugetlb_pte_size(&dst_hpte) == sz &&
-+		    page_count(virt_to_page(dst_pte)) > 1) {
-+			addr = (addr | last_addr_mask) + sz;
- 			continue;
- 		}
- 
--		dst_ptl = huge_pte_lock(h, dst, dst_pte);
--		src_ptl = huge_pte_lockptr(huge_page_shift(h), src, src_pte);
-+		dst_ptl = hugetlb_pte_lock(&dst_hpte);
-+		src_ptl = hugetlb_pte_lockptr(&src_hpte);
+ 	/*
+ 	 * We don't have to worry about the ordering of src and dst ptlocks
+@@ -5331,8 +5331,8 @@ static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
+ 	if (src_ptl != dst_ptl)
  		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
- 		entry = huge_ptep_get(src_pte);
- again:
-@@ -5205,10 +5215,15 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 */
- 			if (userfaultfd_wp(dst_vma))
- 				set_huge_pte_at(dst, addr, dst_pte, entry);
-+		} else if (!hugetlb_pte_present_leaf(&src_hpte, entry)) {
-+			/* Retry the walk. */
-+			spin_unlock(src_ptl);
-+			spin_unlock(dst_ptl);
-+			continue;
- 		} else {
--			entry = huge_ptep_get(src_pte);
- 			ptepage = pte_page(entry);
--			get_page(ptepage);
-+			hpage = compound_head(ptepage);
-+			get_page(hpage);
  
- 			/*
- 			 * Failing to duplicate the anon rmap is a rare case
-@@ -5220,25 +5235,31 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 * need to be without the pgtable locks since we could
- 			 * sleep during the process.
- 			 */
--			if (!PageAnon(ptepage)) {
--				page_dup_file_rmap(ptepage, true);
--			} else if (page_try_dup_anon_rmap(ptepage, true,
-+			if (!PageAnon(hpage)) {
-+				page_dup_file_rmap(hpage, true);
-+			} else if (page_try_dup_anon_rmap(hpage, true,
- 							  src_vma)) {
- 				pte_t src_pte_old = entry;
- 				struct page *new;
+-	pte = huge_ptep_get_and_clear(mm, old_addr, src_pte);
+-	set_huge_pte_at(mm, new_addr, dst_pte, pte);
++	pte = huge_ptep_get_and_clear(mm, old_addr, src_hpte->ptep);
++	set_huge_pte_at(mm, new_addr, dst_hpte->ptep, pte);
  
-+				if (hugetlb_pte_size(&src_hpte) != sz) {
-+					put_page(hpage);
-+					ret = -EINVAL;
-+					break;
-+				}
-+
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
- 				/* Do not use reserve as it's private owned */
- 				new = alloc_huge_page(dst_vma, addr, 1);
- 				if (IS_ERR(new)) {
--					put_page(ptepage);
-+					put_page(hpage);
- 					ret = PTR_ERR(new);
- 					break;
- 				}
--				copy_user_huge_page(new, ptepage, addr, dst_vma,
-+				copy_user_huge_page(new, hpage, addr, dst_vma,
- 						    npages);
--				put_page(ptepage);
-+				put_page(hpage);
- 
- 				/* Install the new huge page if src pte stable */
- 				dst_ptl = huge_pte_lock(h, dst, dst_pte);
-@@ -5256,6 +5277,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				hugetlb_install_page(dst_vma, dst_pte, addr, new);
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
-+				addr += hugetlb_pte_size(&src_hpte);
- 				continue;
- 			}
- 
-@@ -5272,10 +5294,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			}
- 
- 			set_huge_pte_at(dst, addr, dst_pte, entry);
--			hugetlb_count_add(npages, dst);
-+			hugetlb_count_add(
-+					hugetlb_pte_size(&dst_hpte) / PAGE_SIZE,
-+					dst);
- 		}
+ 	if (src_ptl != dst_ptl)
  		spin_unlock(src_ptl);
- 		spin_unlock(dst_ptl);
-+		addr += hugetlb_pte_size(&src_hpte);
+@@ -5350,9 +5350,9 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	unsigned long old_end = old_addr + len;
+ 	unsigned long last_addr_mask;
+-	pte_t *src_pte, *dst_pte;
+ 	struct mmu_notifier_range range;
+ 	bool shared_pmd = false;
++	struct hugetlb_pte src_hpte, dst_hpte;
+ 
+ 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, mm, old_addr,
+ 				old_end);
+@@ -5368,28 +5368,35 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 	/* Prevent race with file truncation */
+ 	hugetlb_vma_lock_write(vma);
+ 	i_mmap_lock_write(mapping);
+-	for (; old_addr < old_end; old_addr += sz, new_addr += sz) {
+-		src_pte = hugetlb_walk(vma, old_addr, sz);
+-		if (!src_pte) {
+-			old_addr |= last_addr_mask;
+-			new_addr |= last_addr_mask;
++	while (old_addr < old_end) {
++		if (hugetlb_full_walk(&src_hpte, vma, old_addr)) {
++			/* The hstate-level PTE wasn't allocated. */
++			old_addr = (old_addr | last_addr_mask) + sz;
++			new_addr = (new_addr | last_addr_mask) + sz;
+ 			continue;
+ 		}
+-		if (huge_pte_none(huge_ptep_get(src_pte)))
++
++		if (huge_pte_none(huge_ptep_get(src_hpte.ptep))) {
++			old_addr += hugetlb_pte_size(&src_hpte);
++			new_addr += hugetlb_pte_size(&src_hpte);
+ 			continue;
++		}
+ 
+-		if (huge_pmd_unshare(mm, vma, old_addr, src_pte)) {
++		if (hugetlb_pte_size(&src_hpte) == sz &&
++		    huge_pmd_unshare(mm, vma, old_addr, src_hpte.ptep)) {
+ 			shared_pmd = true;
+-			old_addr |= last_addr_mask;
+-			new_addr |= last_addr_mask;
++			old_addr = (old_addr | last_addr_mask) + sz;
++			new_addr = (new_addr | last_addr_mask) + sz;
+ 			continue;
+ 		}
+ 
+-		dst_pte = huge_pte_alloc(mm, new_vma, new_addr, sz);
+-		if (!dst_pte)
++		if (hugetlb_full_walk_alloc(&dst_hpte, new_vma, new_addr,
++					hugetlb_pte_size(&src_hpte)))
+ 			break;
+ 
+-		move_huge_pte(vma, old_addr, new_addr, src_pte, dst_pte);
++		move_hugetlb_pte(vma, old_addr, new_addr, &src_hpte, &dst_hpte);
++		old_addr += hugetlb_pte_size(&src_hpte);
++		new_addr += hugetlb_pte_size(&src_hpte);
  	}
  
- 	if (cow) {
+ 	if (shared_pmd)
 -- 
 2.39.0.314.g84b9a713c41-goog
 
