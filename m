@@ -2,155 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2B765F399
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85C165F39E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbjAESSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S234545AbjAESTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjAESR6 (ORCPT
+        with ESMTP id S235635AbjAESSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:17:58 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2080.outbound.protection.outlook.com [40.107.8.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D413DCF;
-        Thu,  5 Jan 2023 10:17:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iK3Ig0TwIx4Eq3Ndz/woWrYRfy2fZLiODi8/F0F3afdTcy7C+hbPfbjX05flByIrQeMBGpoht+8gLDHnGocgl8PnyCPvh8Mf2wWQG7V+knUllY5goIr1kwdRtlBKhQu0d2rTYQMI8AKS56hmMaLyEc69PuD6rDka5rt84njxr5N2h/cY5jkFKuRLv6fdx3/kFgArlir981dbA9mhd8SNmdzn7uIy/6athdFOgzu08hu6UDCb2j+O9eTS7FEescfeyqEPMgNokngFYdYV/tKYGblBl8zfmAuYEs/yVWdFs2XOp3UxxIR/n2XJRXSlBqVZ8L33qC4YH/oz2uJJpNbdUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3dWiHzHgn5E3TOK2RRpIo9YK8qVjpOuA9DnEky/7Wco=;
- b=Uxl5QMbkgL6o8YEXOZpDwhx5KmF6s+hqEnY3iXr5ZJ+HgbcnE++X+doeAClnvCS2040zy3gbLnVHeIIYQ1oQ4d+DUQ6ZGYkF8BoXsqrAm8zWO2vMNMLO1ceCRsnw0XOsqzud0fc3zba9f38IRTE+JzOowUYCxTdPkO5QPsS5coCzQ8TvqceXzow/daYzfu2GOm3Zrqv10XLX3nJOiaXXgAU9t77OKQcjg29v4A1iDFJzzak5MxauF5LZBUuZXCelm+fcDqkFGduqg04iO9iLg37Ai3ldB+cs9gzbL8/K/igJoQXVufhzi03eIiLPHrdXC+Nv9HmOzdoOKrjIKHUzuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3dWiHzHgn5E3TOK2RRpIo9YK8qVjpOuA9DnEky/7Wco=;
- b=KeHUNuoe9kcFBK/bNoBwwGvYwV70qXjNaja7O84wWoeV66penM7cAEkTBaYjHxoLg/KTiyxdaRFvztYtC6JNrQr53Z1dt4yQNmJgzshoqWdM0B6OQIWknCSVcKih81IZRc/cSW0ti3ilmNJth2dR/HsCYD8HDoDqwzbkvZGdXGhJlGdKjqLgdeT9LHfVsGNRXafh9m3E/nsDExHQREb1DGasOBEs2/VMiVzCk/YNziDyrRI64icKeFrKNLO8V1oYoHqkMmq1w2piXisfxfZwLbQC/Rx6dpLfgNX72BiFZ2oPzByfNW25146weUTBvd3miGdmMVATV/WlB4ujY9RB7A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by PAXPR03MB7699.eurprd03.prod.outlook.com (2603:10a6:102:205::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 18:17:53 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%8]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 18:17:53 +0000
-Message-ID: <3cab152b-ce5a-70c6-a8cf-8537faff5ab8@seco.com>
-Date:   Thu, 5 Jan 2023 13:17:48 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <3919acb9-04bb-0ca0-07b9-45e96c4dad10@seco.com>
- <20230105175206.h3nmvccnzml2xa5d@skbuf>
- <20230105175542.ozqn67o3qmadnaph@skbuf>
- <39660d10-69b9-fa52-5a49-67d5f7e1acaf@seco.com>
- <20230105181152.ruzdv3iusvan4mek@skbuf>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20230105181152.ruzdv3iusvan4mek@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR12CA0023.namprd12.prod.outlook.com
- (2603:10b6:208:a8::36) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Thu, 5 Jan 2023 13:18:38 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D8958807;
+        Thu,  5 Jan 2023 10:18:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672942715; x=1704478715;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QfhBN3v0+LdRNnoxTKN3PyhPs6swcsnVUDzQa6v+kMo=;
+  b=PYwdcKPDoEFeXoG+TQYsn6KKPmcs+Hg5XbBJ5LJKhILco3L7lKlszwYt
+   l8oyVL9m804mhmpaeNh5ZxqLdp4QyHRXpISwuFkERjkPccRnPw2vUngAK
+   NhblnTympO32HnEnbdO+mxn4xHgn9hnYIDhXf6B3FE9jzEBTv22IGg/HX
+   m9h9k8gkRxw1olmMtfzEmWK8WyzxMwuKkYwI/Lux2xAO2PJlSVWOOrkDN
+   MPAqWE86LdGu1bTffc520xVJX0XccgVB4w52OFEyu8/N+9dhmPMxhly6c
+   WU7FqWyvAgRz3Z0aFYbA4Zy+t7EIHniAuwQEKZXxXQCsYr+NyAfGDUPIQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="324305332"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="324305332"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 10:18:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="605641050"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="605641050"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 10:18:34 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDUoz-0002Fr-1F;
+        Thu, 05 Jan 2023 18:18:33 +0000
+Date:   Fri, 6 Jan 2023 02:18:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: versioncheck:
+ ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h
+ not needed.
+Message-ID: <202301060202.QYQl9Uej-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PAXPR03MB7699:EE_
-X-MS-Office365-Filtering-Correlation-Id: 878c9733-6add-41d2-494e-08daef492924
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +VzlDGxsnBKM1H9qjLZMFLzRYUn660X3w3pfuDEnLeVrhqj3XhcIu9MDOcBv3xus2/30aUoSS8XQBQ3ZYilD1bQXYRrA/ENPem7UyyPlMRdwe7SVZzApkPP+QsIM753L5lqpdGNmfc3qi0Yos/grEc3H8BlC1La28bbGYaPdbVu+tagIP/hNdrS7Tpq+PRrSnybXlOXbYa1tXxxYPc2nSt7MoOLgbGE2/Uloc4i5JRxbbdreu2U+rPQDkZeY2agPtiIG3csc0fWqg3fI+apsYcMyp72RSLnRD6sNu7aY0ohGBxhnSDUOW0IinQ0rMqVS5zgl9YwYMILIO1xs9IyvD6oQtaJ+Ix0OLjDejYrVc29r41qK5ok5yTHx/xXRh0rilk2yBeN5aAQvv6AV8b6e5aXgvP4AL2mNqZWLZRrxdGeyMRjLOjEoLgJmt1bhI17Ljg47BbJIODOBPFgATKz8H1Rsz6QHgtmrA9OUPZuilQgHZdCFBNsvlvlLcP4mC7XU1sA+cYGpS8ZVjxxCG2vOIqkvT9FwdI2t30qFTHQkclr+Gf4wF3ecMq55GVBwosKzK6M1y+/sDYwITtkiEiQ5ALbzjsoDiZoHCy6Vlv8IRfhDgjo+WQETP7hvxFsdFcTJkmcwpWQJgvN1qptE7CnJm1+gJNvHYNc0m71sIUcINUhZblTyH+Qlt1KkOuqKc25yJPOpM5LacOLnAKM45gi/08ZR7pYbUgYeZB/x466qeA/Htlu+O7oiQJVzKYdMcjrrcfZE8+8r/bpgNbgsd6Emlw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39850400004)(376002)(396003)(136003)(346002)(451199015)(86362001)(31696002)(6666004)(53546011)(6486002)(26005)(41300700001)(38100700002)(38350700002)(52116002)(6512007)(186003)(6506007)(478600001)(4744005)(7416002)(8936002)(5660300002)(66476007)(66556008)(8676002)(2906002)(66946007)(4326008)(2616005)(44832011)(31686004)(6916009)(316002)(54906003)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OU5tOFdnUU9YS3NmcXVXL0k3QTIzczR5QnpNVk9VNnZFNUxLakxTYmcwT3dj?=
- =?utf-8?B?dlgrOER1SWxTNmsxdHhHbVJ0RWJXS0FTOGYxZ2h2cGQ5ZnhIb1dhNkFPemJD?=
- =?utf-8?B?ZkMvblJGL3hGYzhOWlphTHVUc1ZCWWFDOWg1bkZPTmtGMUUyY3paYTIwQWlk?=
- =?utf-8?B?Wm9LMWg0S1lmdWVYUWM3T1hPanphL0cyT3pqdjlyalNBTGhkOEpod3cxZFky?=
- =?utf-8?B?bUZNaXRoSExBempZNHBYVVk0SnVvUmJMVmo4azVkS0N3NW1nUkdOTjlsempn?=
- =?utf-8?B?TnFmYTZoeGtEU2pRZldaYlcrWWlWMERxbnhjeHlLWlhpRHJUaFpMb3dyenhE?=
- =?utf-8?B?blFGdXJmNzNNenB4elFzL0NUdDFyeGdid0ZBMnVzdjFQQW9DNU8xQnBCSC8z?=
- =?utf-8?B?ZUNsSTFpU3c0MXhuY251TUV2OFVzaUo0SnA3WHRwMFRHOUVqODU4OWx4ZTR0?=
- =?utf-8?B?Z0U5WkVtODVWT2x4T0FUTWwwaWUyVDRvZmVXa08ra2VVYTZZVTRuMVlubU04?=
- =?utf-8?B?VHBLbnIxVUorL0hGTnNQTkNiWTdnTzVDVFJRcDM4R00yNUsvUU5QYlhJWHBN?=
- =?utf-8?B?VmNIY1JHWStwNXN5WUUwOWlnMTExaGNBdVNCVWYxU3gyZ2pWcG5QbVVRbHo1?=
- =?utf-8?B?bUN5SkNOczVhUDhZUUpEbVZJUEc0MWtRb1N6c21qVU1RVWpaUHlMWWVtYU1M?=
- =?utf-8?B?aWJRK2RwMklOYlh5dHJZY2wvaHZlZTh1L3hTb2pVZDFOQVVjbzdxbE5sMjNx?=
- =?utf-8?B?SWVuK3pLTVhuWTUwMkJUMVJlQWxlT3g0aVhSSUxSMDl1YXNpbTIzT1FJcXBR?=
- =?utf-8?B?NkdyWHpPanVLZ056UlI2ejBiL1hkbUpnNWN6aGJxK0lLTFNtTm9BeUJGWDdL?=
- =?utf-8?B?VzMycDhvUENoM1gvb0FJZFJSNGoxdnAwNEJtWUI0OTZSZ0F1d09YT0NlL2ZJ?=
- =?utf-8?B?ME9BYzRyM0YveE1MZDRISnVzY05MRmJGaDJLbzFhT3JZa0FYMm5URkE4VnFZ?=
- =?utf-8?B?a1pWam84OXgyaEJhN0VtT3k5WTRZZnJWS2xZZFdRUmJhZUVaOExkRERKY1dL?=
- =?utf-8?B?dG5EOEszQm5mVVErd0tONHkxb0QxYXNWeGZHTjBqVTBkcXJpK252VGxZVWdi?=
- =?utf-8?B?ZjFQLzd1eXB5TzVrY0FEblVDT2xLZmZNQW84QjAyNlRCVlMyVFIvUHpXWFpj?=
- =?utf-8?B?RWxzbVErUyswbEVhY1pZVnE2dmJUM2lRSzN2VERqd3pCelFnRHdEWnJpSjI0?=
- =?utf-8?B?QmFaM1dPVm1EU2oyQnd3WFJVT1lWbGd3Rk83cjJPQmtXNDZvZC93MXpSNkRl?=
- =?utf-8?B?OFlJc09LaUhtTis3UFJielM3dmdJMlIxVnl2emlNMEFSbU52UEZNcXovYmYv?=
- =?utf-8?B?VlM3eGlEUW1pUmxJbkd6ZmNrcFpmS3dQL2VFUHRrRWsvN2JCT3MyN2ZnSGt5?=
- =?utf-8?B?ajNXZkVZcHRmb1dJdko0elZmZWFRYVl3T3k5ZTg1TTlpc2JVV0NEL2lMUVdt?=
- =?utf-8?B?ZTEvTXVZcjczWGFNSDVER2lXaWZvbnZLTnFNRk9SVTI3Ni9qbjVhTXcycDB2?=
- =?utf-8?B?WWJiUkFwdVlDa2NPWkQ3Yms0Q2VGeXhlVEZsaWZLZ0dTajVTRm02Tms3eWpG?=
- =?utf-8?B?Y09zM1ZrWlh4Y0FjMk5uNEp3QWZyQU80TGV5NjVhMTlzTW1Ec2xpUy9zVDB6?=
- =?utf-8?B?ekRmcHBXK2paWTQ4cC9GOXFaVHphaHdJT1F2YUhXWTUreWRQUS9zOExyc0JZ?=
- =?utf-8?B?RWVHckpCUC9rMTdrcDg3aDRjbDNueTYvUE1JcUphYzB4K2dOUGIwUmpWZHZM?=
- =?utf-8?B?Ui9qM0dvYTgrNUM1N2tvWENBRVJPdm8zbW0wZnJUUnp6T2RndUJRckV4NmNG?=
- =?utf-8?B?MDZRUXpSZXdidTBZQzNGTWZqbmFaVVQ0Mis5L3YxNy9GeUpHeUVXNk1tc3V4?=
- =?utf-8?B?Nm5qVGtSNWNsajU5SnpTU3NJTWtrSnQ3dVpiY09VcmVWeEVUOHM5OEJIK01T?=
- =?utf-8?B?L21ERTFKWlA1eTd2MmFhd1U3bmpURjJ3SHFIa2NEWElDdGVNU1JIcEhBTkcz?=
- =?utf-8?B?MFNKQ0M0V0dRWldCaWFKWXFOc2IzYStDR2FQRDBsWE9wYnRiaXFBckFXdUVC?=
- =?utf-8?B?VU1sQzh3Um5yN0psZTBVQmw0R3hvaTdJemZINVZoR0t0WnpKc0g4UHpUUHdZ?=
- =?utf-8?B?K3c9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 878c9733-6add-41d2-494e-08daef492924
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 18:17:52.9803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k4MypROgAVjOQZAR4BXUH4Z4lSINy+VAD2O4Os6hfsxFaz56dCjMvH14PKvmieiQiPYLgSaH6v8Q4JivcZSlAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR03MB7699
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 13:11, Vladimir Oltean wrote:
-> I think I would prefer not exporting anything rate adaptation related to
-> user space, at least until things clean up a little and we're confident
-> that we don't need to radically change how it works.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   41c03ba9beea760bd2d2ac9250b09a2e192da2dc
+commit: ad85094b293e40e7a2f831b0311a389d952ebd5e Revert "media: staging: atomisp: Remove driver"
+date:   2 years, 8 months ago
+reproduce:
+        make versioncheck
 
-Currently, we have a rate adaptation field for get_ksettings, which
-indicates whether rate adaptation is occurring. To really support the
-above case, we'd probably want a way for userspace to express a
-preference for e.g. rate-adapted 10M over "native" 10M. I agree that we
-should hold off on this until we're more confident in the
-implementation.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
---Sean
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./arch/arm64/kernel/hibernate.c: 24 linux/version.h not needed.
+   ./arch/csky/include/asm/atomic.h: 6 linux/version.h not needed.
+   ./arch/csky/include/asm/io.h: 9 linux/version.h not needed.
+   ./arch/csky/include/asm/thread_info.h: 9 linux/version.h not needed.
+   ./arch/csky/include/asm/uaccess.h: 15 linux/version.h not needed.
+   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
+   ./arch/csky/mm/dma-mapping.c: 14 linux/version.h not needed.
+   ./arch/csky/mm/fault.c: 16 linux/version.h not needed.
+   ./arch/s390/include/asm/setup.h: 182: need linux/version.h
+   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
+   ./drivers/block/rsxx/rsxx_priv.h: 14 linux/version.h not needed.
+   ./drivers/block/skd_main.c: 28 linux/version.h not needed.
+   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
+   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
+   ./drivers/crypto/ccree/cc_driver.h: 25 linux/version.h not needed.
+   ./drivers/gpio/gpio-mlxbf2.c: 17 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c: 62 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c: 28 linux/version.h not needed.
+   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c: 26 linux/version.h not needed.
+   ./drivers/gpu/drm/pl111/pl111_display.c: 15 linux/version.h not needed.
+   ./drivers/gpu/drm/pl111/pl111_drv.c: 58 linux/version.h not needed.
+   ./drivers/gpu/drm/tve200/tve200_display.c: 14 linux/version.h not needed.
+   ./drivers/gpu/drm/tve200/tve200_drv.c: 38 linux/version.h not needed.
+   ./drivers/hv/hv.c: 16 linux/version.h not needed.
+   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
+   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
+   ./drivers/media/dvb-frontends/mxl5xx.c: 30 linux/version.h not needed.
+   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
+   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
+   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
+   ./drivers/media/usb/uvc/uvc_driver.c: 18 linux/version.h not needed.
+   ./drivers/mtd/nand/raw/brcmnand/brcmnand.c: 7 linux/version.h not needed.
+   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 35 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 32 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 34 linux/version.h not needed.
+   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
+   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/qedf/qedf.h: 15 linux/version.h not needed.
+   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
+>> ./drivers/staging/media/atomisp/include/linux/atomisp.h: 25 linux/version.h not needed.
+   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
+   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
+   ./drivers/usb/early/xhci-dbc.c: 21 linux/version.h not needed.
+   ./drivers/watchdog/ziirave_wdt.c: 21 linux/version.h not needed.
+   ./fs/ext4/ext4.h: 30 linux/version.h not needed.
+   ./include/linux/qed/qed_ll2_if.h: 41 linux/version.h not needed.
+   ./kernel/bpf/syscall.c: 19 linux/version.h not needed.
+   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
+   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
+   ./samples/mic/mpssd/mpssd.c: 29 linux/version.h not needed.
+   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
