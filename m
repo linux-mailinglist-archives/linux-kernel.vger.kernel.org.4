@@ -2,149 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE0665F296
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE5E65F293
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbjAERZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S235308AbjAERZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbjAERYc (ORCPT
+        with ESMTP id S235356AbjAERYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:24:32 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416AE192AF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672939111; x=1704475111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wjF12/qBWfh0quo0dPEEssXgv8f/fHCI+bK1JA1iddE=;
-  b=PHOvwh4y+PscsSFagpuqgR6iRXRTnILmZhAGb+MuSWq24zYcSFhRJiuE
-   7wH6ht6vfewp4t2TEAeAQlwpQuqFm++gaq5N1chJ7oCkOOY7I+rqEfgf5
-   b93vKuy9V/fABUi3W2LET7ul5HrZNBr3JTJ8rThCLlXDsObGndkTIYxwA
-   Pg2dbE2wUzC1O14Q1BgajR17bTwnvQwC1o8IJZsmU2ermZKxEZphIsIIk
-   DyQSZ1i6PeN1HO16ypYdKPQZ9Zibf28fMzl0ggW1JsvqsMRJCszfGbZ56
-   NW7B2aV/Fmm5JI6DoCFcN9MvAjLGP5OZXPgW+Nn8d7Y2PZuiQ9msxW0VK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="324285562"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="324285562"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 09:18:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="655659243"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="655659243"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2023 09:18:28 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDTsp-00029J-2n;
-        Thu, 05 Jan 2023 17:18:27 +0000
-Date:   Fri, 6 Jan 2023 01:17:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: versioncheck: ./tools/testing/selftests/wireguard/qemu/init.c: 25
- linux/version.h not needed.
-Message-ID: <202301060156.IlDjHiMs-lkp@intel.com>
+        Thu, 5 Jan 2023 12:24:11 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E8458807
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:18:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kTDE0MHMt699lwATJqLb6AW/Sc9bpc7P8V86/pUw+7yf5MSxYwwTnJs00fQIBkkgDayu6ZK8xZWGjA3DIG7K/7ZAx5H2kXmmCk7o4neMvKvTe5y4Clegd18WfHhRSDDgTi4ts4il1n0WWWFSzgMG6QCwYEWbl3arieL/fHCHfx+pIHpZJHPrTE+vRQjNZRpI7JWv3q/nJRoeN50h25XAO+EyhKtZ36ZzwODg/CTStbUzXPjDLQZ5odpnKMXCv5R/tf3V4tZ1PzMvOvJ7NinbEM2hVsdZcQFBNBkN1ILdimQEHg46aozw4wJ//pmZxhQuh12zF2+rPyVTLogr3HKO2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kTC07nsprUnfBL+6fk6afNRndjlI8cn5CLrvO3lqnLw=;
+ b=Vxm4rjWuE4dWLTidQYkFrJzNm0MNdWtNFnq6XhVPwUKCEzTlpZKT06SUDWYDHH7jbN4mGBwiAWRTlKZDfknRTwLQt/R4iM+VN55hmHR6mdJ8I2lIo4xsfeDshY46KTMBEmZnP73tMvQ18NsU72/r5n4xMLvf0VU5pwfG5iQxEsYe5PqAT3SoxxHxeKqmvwDGOfpQGR2voAU+MTw+IP2/M/mNK4YJ5b+Oh/7N0CIR/hB3vPcB6UWo8END6SWpeycAFI356CpMyoezgOcDuCSopFVnE3eawxLIaLPPCXatZtePq5a4+HCkeflJSXp37mlj/+6+CGoVO299gvfi2rMP8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kTC07nsprUnfBL+6fk6afNRndjlI8cn5CLrvO3lqnLw=;
+ b=EiPLvUqCrCBOLDbG+wizLKHFF4ruAEQK2XGHFOnAwuCliS0DfTzl6Rlar9UHgxCPs0IffagjIPweg6VCEUlFVIhQfZ7ktfaDS0mT4AYrwVouTqc3XMhoZW8TI9e4hih+rOJsikj5fbe9cj+lIXBmTI2Jo0mzGF0IPhcLZpqIaoM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by PH7PR12MB7966.namprd12.prod.outlook.com (2603:10b6:510:274::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 17:17:59 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 17:17:59 +0000
+Message-ID: <96d3a15e-cc34-50d4-93b3-5d5c59e6f40d@amd.com>
+Date:   Thu, 5 Jan 2023 12:17:55 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 25/45] drm/amd: Use `amdgpu_ucode_release` helper for
+ DMUB
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, christian.koenig@amd.com,
+        Lazar Lijo <Lijo.Lazar@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+References: <20230105034327.1439-1-mario.limonciello@amd.com>
+ <20230105034327.1439-26-mario.limonciello@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230105034327.1439-26-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4P288CA0057.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d2::14) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH7PR12MB7966:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30d63e4a-b962-4877-b1ba-08daef40cb40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fmfZzv/rEDzFzY83qpbj6+pVUTsxPGTE1q/UwsEVtyyxgcDzYiIVuUtS3YqNfR67jp6apAmJRIOWTGMAFTlYyYrJelUJKOjty3ByoDRf/8cb7wVNsTBtDuRTWseR05Ivleuv0n9QWyx+6NlrJcdCIzZiY5jOuUbnHUZDe8Z+1W/bYhmNG5CVAOr24cjQLlthafIAs9j3B4erJ0/gh/knkh3GZQIw6/poAHZGTt4R1YSLW3B6sbNX5cPfoqYI0af6hBBUMZEZF64QwqforFDuRDpjKGYeTWzjzquQQ0fsLeYu4a6u7+22iSxe48279BLylz24uBrbwDG2c3S6ZyxY3d4zkmEaXn+nUoIpnTi+nyR5x+idml8vGSHd/8cikQ8Hm57bZQeNiI1C+X8TxfcnNJWz6gQW+C3UBnGcHMnFtzQu3M1VQ9s1s3DJwNKcxo++H1Gu6FyMIwfIgBs41nL/oxWDwD8JDekyytgwz85WddaHfpq5Uj3N8slSfoKnQP0X+MczceV6f/SGPoQ6kttwg4YIpk+aS25XOkZ0LPZFelNq7wY7UrLk0ijBjPgGp+N1HZWkSAQUU8yL/jSXbBscJpCIx91mc0Iq0qIdXRsH300B4Q1ghhUJIDWs8p45r3oDFj2cWtNCYO2WfTY2M87k+KDlWpBUv5SlnlbEpE1iO8104FYYSgcn90RKgvRD1t7Hro1xBmIAutrtiDlz9cwfCUQsDrMvE8izFi+N+QnUtUI6cdtXVQHfxKm+BidMbeXa
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199015)(2906002)(8936002)(66476007)(44832011)(6666004)(41300700001)(38100700002)(4326008)(83380400001)(8676002)(66946007)(31686004)(5660300002)(66556008)(186003)(478600001)(6512007)(26005)(6486002)(316002)(2616005)(31696002)(53546011)(110136005)(54906003)(36756003)(86362001)(6506007)(81973001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TFo1UWdGK0trd0RkNlVSTkpNMFdBckN3QS9zQVhmMWlvOTNkc2YydG1EeklD?=
+ =?utf-8?B?TERmUzdGVjM4UnBMZXNvYzVvR21oUGlPR1FvZ1JNVzhiY0FiVFNDS2VHODYy?=
+ =?utf-8?B?WUtEWWxPYy9xVXp0S1o2V2hla3dMSWJiRFI0UThiVE9wSm1lNTF4aStXQWNw?=
+ =?utf-8?B?QTBKaEYyc3d4cnM1NUJ3QUw2cnM5d0RDUjg2QjBDQXluSnNaL2JtZlZlRGRH?=
+ =?utf-8?B?L3UvczJ3bjN4b1pUQ25IbU5tNnNLcHRBZWN2SnF0aXBPSy9yeHltN3pYODZq?=
+ =?utf-8?B?OXNIclJxSUNCb3h2QnQvbGVZd0lmQk5sWEFJZkp3dkswODlPU1pqNXhPaVEr?=
+ =?utf-8?B?RExBQy9WZjVuckNZanVscWJITFVKbnlVeDR2dFMreEV1NWd0VEUxY2ZLak9y?=
+ =?utf-8?B?bjRJbHV5TU5tWEhNblhmcXY2VmN3NmV2ZEx2cVhhUVFBMVNtMkVGQ0tLYXRz?=
+ =?utf-8?B?dlBRSTNhaHprTjNDUmNKV3kySXBMUkkvdndmN2s2Tk4xSjdyR3hKOUNseVdO?=
+ =?utf-8?B?d3VBVTFlOTNpNkxnZnBCRjNLSzBXVFVmM2ZYdDBKTjNTZ2VmVE9BdlZCWGFD?=
+ =?utf-8?B?MlFlUVBKNHVWVDArN0haeVYvV1BLM25xOXM1UDU4Sk1NOFZ2dkFGZzFSL1dF?=
+ =?utf-8?B?UjRnZU5ubHV5U1dwQWo0MHlmQWxKVU1qajh3dUFBUkRMMlp6eGp4WUVEbDVZ?=
+ =?utf-8?B?b0Q0WEl4anh3NnY1TS9mZTQ4ZGxYT2VvSmVBTjJobHZXWnVkY1l2Q0R2TmlO?=
+ =?utf-8?B?MlpJeTExTEQ5dEloK0VGNGxwQlFvaHZxZ1JwNkRCdzdEL2NZYUlQMVBoNHp2?=
+ =?utf-8?B?V3Vaa29uRXU5d3ZQRnkyemtNWDY0N3lBQWhGVWluVy9aVEhKVE41djNJbktF?=
+ =?utf-8?B?MnM5QXNUbS90UHlLL3JjRWh5QlFHN1VTRjllTS81OVM4bXk0Z0tjN1c3ZExj?=
+ =?utf-8?B?UjNjaVBIZ1BaZW9VVEtXakVNL2FzdU5BQXVFZEFSUTgxT09lMjgveHpOMUdV?=
+ =?utf-8?B?SlZGWjdrWjR2ajV0Ykt1anpzNCtBNmNrd3JNamtlSFdJUUJXSGY2cUFuRUFM?=
+ =?utf-8?B?WGhVQ2Rac1BCQm8vR0hmNlY5NjNSYlhhSVVBMjdCcjVxMElKcFc0QldRcmNv?=
+ =?utf-8?B?SHRyY3NlR1VkSmZzZ3RLV01wSERlcWFKcWRlSHdIZW4vVGZpb1FXVW1lMW5X?=
+ =?utf-8?B?YTJNMk5zSzF6UjhnV0RSZDhQb1ozcDRHTFhLME5TRTBlVG5BY0hIWXR5WjZ3?=
+ =?utf-8?B?b1FLRGlnNFhQMkZBdnBnQ2hzNUluWWM0R2tRM2dkd29JSEFzTEFsYUtOM1JY?=
+ =?utf-8?B?MUdweGlPb1FtNVdlNk5weUxoSmQ1WE4rUlFFSG1qTjlIWCtBTHNiYk51eTZY?=
+ =?utf-8?B?L1FEYjhwS1Vtd3NkdTltRUdFZmhJNHBmK0Jka1JGaXdpUGJoUVdiTUFPaGpv?=
+ =?utf-8?B?VFBUQjlQVTJpcVNFL3ZxMDFWd0h2c0ZINU16OGNuQS9HM1NNYnBCSGlJZ1JS?=
+ =?utf-8?B?UUdmSUxNWUFQSHhHYWJLVW9weXArQmxuT1JGYllTQlhVZVNnaUd4RGZLbmxU?=
+ =?utf-8?B?TkcrUENMR1pSc3ZHd09mOEp5dE0zWjM1NWF5R0tOR0JFc1JLOWJ3N002UGZT?=
+ =?utf-8?B?UldPY3krY21mbmo1OVpIZmtSRmZxeFFRblcvWDc1NTdlNEp6TVltWHd1UW1q?=
+ =?utf-8?B?elVVWHZlNU5lbHVkM0FFZDJVWVlUanlsTkQ1eC9handNc0o0RHFuSm9nWkZj?=
+ =?utf-8?B?eThTOHdIMk90cVVMOEplUXZQb2cyNDZsQk9BNTBoMnMrWTI1U3IzSURPRkVu?=
+ =?utf-8?B?aW9uaDcvVmdDSVhQOEhybU44dHM4eW5UQjZEZEJNeldWMk95aVA3OVZCdG05?=
+ =?utf-8?B?SE5QdzAvbDZuSFBUZ1RnTS96ZTMzb2dFV0ZWdWc3S2VkUEZPU3c0Z3pNbVMr?=
+ =?utf-8?B?MnZBV1NXeE5DS0dSemRTbjBwa3JDRWRQNzZJbEc5eVB0OURFZTY0T2xndE0y?=
+ =?utf-8?B?KzRLUFU3VWdYM0lWOVhjVExGU2xDSTEzQVl1aU84bWFoMGh3YkRNdzhkQkRC?=
+ =?utf-8?B?YUFYTFRRSGlpTEswaWxGSTN6TXFzRlNRRE1MRHpvNktqaVdXZTBHRlZmZytt?=
+ =?utf-8?Q?DM457GdOfjW2rW5dkQVF8EJ3s?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30d63e4a-b962-4877-b1ba-08daef40cb40
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:17:59.5493
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Hm62LGRHPB62XmNwGFOfmcIi8Kg/Ecv/RbxuVI+enWnRRyhHsCxDJS7yNbpSfhO02OIt0FFS9dwTNOJnS0QVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7966
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   41c03ba9beea760bd2d2ac9250b09a2e192da2dc
-commit: 65d88d04114bca7d85faebd5fed61069cb2b632c wireguard: selftests: import harness makefile for test suite
-date:   3 years, 1 month ago
-reproduce:
-        make versioncheck
+On 1/4/23 22:42, Mario Limonciello wrote:
+> The `amdgpu_ucode_release` helper is for symmetry on unloading.
+> 
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./arch/arm64/kernel/hibernate.c: 24 linux/version.h not needed.
-   ./arch/csky/include/asm/atomic.h: 6 linux/version.h not needed.
-   ./arch/csky/include/asm/io.h: 9 linux/version.h not needed.
-   ./arch/csky/include/asm/thread_info.h: 9 linux/version.h not needed.
-   ./arch/csky/include/asm/uaccess.h: 16 linux/version.h not needed.
-   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
-   ./arch/csky/mm/dma-mapping.c: 14 linux/version.h not needed.
-   ./arch/csky/mm/fault.c: 16 linux/version.h not needed.
-   ./arch/s390/include/asm/setup.h: 170: need linux/version.h
-   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
-   ./drivers/block/rsxx/rsxx_priv.h: 14 linux/version.h not needed.
-   ./drivers/block/skd_main.c: 28 linux/version.h not needed.
-   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
-   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
-   ./drivers/crypto/ccree/cc_driver.h: 25 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c: 57 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c: 28 linux/version.h not needed.
-   ./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c: 26 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_display.c: 15 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_drv.c: 58 linux/version.h not needed.
-   ./drivers/gpu/drm/tve200/tve200_display.c: 14 linux/version.h not needed.
-   ./drivers/gpu/drm/tve200/tve200_drv.c: 38 linux/version.h not needed.
-   ./drivers/hv/hv.c: 16 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
-   ./drivers/media/dvb-frontends/mxl5xx.c: 30 linux/version.h not needed.
-   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
-   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
-   ./drivers/media/usb/uvc/uvc_driver.c: 18 linux/version.h not needed.
-   ./drivers/mtd/nand/raw/brcmnand/brcmnand.c: 7 linux/version.h not needed.
-   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 35 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 32 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 34 linux/version.h not needed.
-   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
-   ./drivers/net/wireguard/main.c: 15 linux/version.h not needed.
-   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf.h: 15 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
-   ./drivers/usb/early/xhci-dbc.c: 21 linux/version.h not needed.
-   ./drivers/watchdog/ziirave_wdt.c: 21 linux/version.h not needed.
-   ./fs/ext4/ext4.h: 30 linux/version.h not needed.
-   ./include/linux/qed/qed_ll2_if.h: 41 linux/version.h not needed.
-   ./kernel/bpf/syscall.c: 19 linux/version.h not needed.
-   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
-   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
-   ./samples/mic/mpssd/mpssd.c: 29 linux/version.h not needed.
-   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
->> ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
+Harry
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+> v5->v6:
+>  * Adjust for amdgpu_ucode_release argument change
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index c8c5d37c8b3a..61c192ead62f 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -1898,8 +1898,7 @@ static int load_dmcu_fw(struct amdgpu_device *adev)
+>  	if (r) {
+>  		dev_err(adev->dev, "amdgpu_dm: Can't validate firmware \"%s\"\n",
+>  			fw_name_dmcu);
+> -		release_firmware(adev->dm.fw_dmcu);
+> -		adev->dm.fw_dmcu = NULL;
+> +		amdgpu_ucode_release(&adev->dm.fw_dmcu);
+>  		return r;
+>  	}
+>  
+> @@ -2113,11 +2112,8 @@ static int dm_sw_fini(void *handle)
+>  		adev->dm.dmub_srv = NULL;
+>  	}
+>  
+> -	release_firmware(adev->dm.dmub_fw);
+> -	adev->dm.dmub_fw = NULL;
+> -
+> -	release_firmware(adev->dm.fw_dmcu);
+> -	adev->dm.fw_dmcu = NULL;
+> +	amdgpu_ucode_release(&adev->dm.dmub_fw);
+> +	amdgpu_ucode_release(&adev->dm.fw_dmcu);
+>  
+>  	return 0;
+>  }
+
