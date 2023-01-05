@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D0065F699
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B4B65F69C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjAEWUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S235816AbjAEWVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAEWUe (ORCPT
+        with ESMTP id S229694AbjAEWVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:20:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E4267BFF;
-        Thu,  5 Jan 2023 14:20:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D93A61C39;
-        Thu,  5 Jan 2023 22:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1396C433EF;
-        Thu,  5 Jan 2023 22:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672957233;
-        bh=wFsjpVh3IkDmL+Utxx+F+EeOCJi8KbNIByUbOF9OlAk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bl4maVmL8WVazXiY1F4XvKQmhwaB5YBcUiFS2s31mdvm8a1ZZn/Hx49BfQ/XYT+2m
-         YeqtLdjYUydFElqyULMAnZKpFwCClpWNRqTcNuUl+j4ckAlIZ+m6ltXms9VWMUFqMd
-         hIwBaDWpHxeIBiE4dEQzBNil5NCL+5dz41FOJeHBR394j8G5RTDXwQnYlv12YS/TFB
-         kPIUH6P8kIVxY+Ro/RQMIFc9bEOgfbe0WMdX0Mi0Exvewjb9E63X0m6vjRyLCYZOOD
-         6beeQmfQybHtimNh92uaCN64BE0+CNmtKtAAUgByvvBFUZXPzMpo0osAMV1UJqotEQ
-         R+gdDRAfjTwXg==
-Date:   Thu, 5 Jan 2023 16:20:31 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105222031.GA1175847@bhelgaas>
+        Thu, 5 Jan 2023 17:21:20 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B469528
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:21:20 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 124so26420797pfy.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+/rwlFIn0hzbcNETA4wyU6wemvJ1Z4GiTdDdXZcLwaY=;
+        b=dkTzAk+1ntj0auXOIzhxwO3g6qxTLW5rcQufexl+8slQLretMtDK9f5HKR4Aliyo39
+         TBXDLPSZZ+cPoJEh5357XW2coZYeq+1e9MNXq7GSKaeRBrIVMhLdSL2gmSWInW2aRur7
+         qX5tn4dbTdyy53FZ/I69t664nI2sKKOffks2Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/rwlFIn0hzbcNETA4wyU6wemvJ1Z4GiTdDdXZcLwaY=;
+        b=hJT/WBghWGdy5XdGnp0fEEXiU+PVXnnCM0zc0bXxoM+8g8Qf+6we0KLckxmkXNhwAN
+         K4V99F2sVX7Yy0mZu/cqKUA6eZ8GdbXQsD/y6B2EsEZxDRrLgqTlLgBD1WDGiOnODAiM
+         7P/5SZJ0aiSiaoHlKMhbcFhse1bXdi0c04V8OOadzerW4+oMq16YLA/ZHi8IcbCLy7y8
+         vxBuuqIEMhRkOZD79DujWGJR4MTSBqjcY7YJgYJjZKTMHpZ6uUTDhwDpgLw8gi3OKdjd
+         R/QUGS06zkiiQ0T6jl6TEnVgni/ugKl0Wfl3E2EFU6JV0DKgg10Ga/BVaIxYJOdhm5W9
+         e9YA==
+X-Gm-Message-State: AFqh2kqfVeMYSjUfh5Rg3ZgzM5GKjnSjQuSuDTltV4NcxKkt+zoNsVW1
+        II/M5Sn/dy9Qc/wa4lvjavNH5w==
+X-Google-Smtp-Source: AMrXdXvsbcCqthlgFG/jU8xpWagS4JweS/XnATbEg9XOc38bDAosUQDy6Y5JAAFYoWTkfmAnN6dDwA==
+X-Received: by 2002:a62:6d82:0:b0:580:da4d:d42a with SMTP id i124-20020a626d82000000b00580da4dd42amr41325570pfc.14.1672957279547;
+        Thu, 05 Jan 2023 14:21:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm21861943pfz.157.2023.01.05.14.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 14:21:19 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Justin Iurman <justin.iurman@uliege.be>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] ipv6: ioam: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 14:21:16 -0800
+Message-Id: <20230105222115.never.661-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608376AF8369BE02661C48D7FCFA9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1685; h=from:subject:message-id; bh=8PkLlA/lLOXSW+eJB32T+aG9Kn60zUa4hKXC+rzMGLs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjt01cz7/LecK3nXxfm63JdHDplN1K4Q+y5tGGGSPM pUHKzwGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7dNXAAKCRCJcvTf3G3AJvCJD/ 9dtKcuau0YnqLh8x7WrForeOZfMnYtRszMXUYKVft4FOrOsQ1BAzfridH4lEFedSI0AKz34hSCQxNI 9pU9cHvUjhC/gCo/ssOAQl9wJJ4HZhUqFWjzKpAHuaHE3e1VRoOJYt6L/RoF0EjE0XlVCLMZ9x1Vqs r+Le39VVbucfueuZyrYi9EzDHAw3zF46MNjMcq+m/FWvq4/n+g79tmQRJqEmUeLr2eHVdXqu+AI39R /t6xkHYShlreOKfsg4+qeySTppv/Go0fNAkVuU6ExrA/f6uWBZUQxb8NhSgRcR7U9RF1O3YydmqOFN cqzv7/8m6aUw9mxIojwCPpM+cn1jvTR13BLgwVYe5m+RW4LxUceL04xi/L1YZEhALEWzDXj+gWxotQ GVhwpNAPpztHLjX8fY0Jdzu3Pk8iAPFfqQkl1YNz89kk2bPNyuCDKjBPyGHzeK4x6GNgbKkQZ68Ilm TroxxrefIN30wEIhaLki1WABr+rZs0neuiRFkMMtfZAkA9PbdO1iIb260Ei+FbNutOcTYx1AZR6v7b Mcm1Dx0wF27u+OS0E6bME4TPp/JN3R6YpcsFNUa37xsXm/z7wfsjF10gPcUaMWTHbKaGIXG4X4Z+dc nPIUp2LUnE7439+DrZRdr9Nc/UhV8/G+2Hu+dkW97XuczBseF8nZVsKhlUvQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,20 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:49:44PM +0000, Luck, Tony wrote:
-> > The EDAC driver wouldn't have any ACPI stuff in it; it's just that
-> > Linux is looking for ACPI info about the ECAM area.
-> 
-> Is there some way for a driver to know that pci_read_config_dword()
-> is going to fail for offsets in extended PCIe config space?
+Zero-length arrays are deprecated[1]. Replace struct ioam6_trace_hdr's
+"data" 0-length array with a flexible array. Detected with GCC 13,
+using -fstrict-flex-arrays=3:
 
-There's no nice way to know ahead of time.  "raw_pci_ext_ops ==
-&pci_mmcfg" means it should work.  It looks like pci_direct_conf1 and
-pci_mmcfg_numachip would also work, but it's all pretty ugly.
+net/ipv6/ioam6_iptunnel.c: In function 'ioam6_build_state':
+net/ipv6/ioam6_iptunnel.c:194:37: warning: array subscript <unknown> is outside array bounds of '__u8[0]' {aka 'unsigned char[]'} [-Warray-bounds=]
+  194 |                 tuninfo->traceh.data[trace->remlen * 4] = IPV6_TLV_PADN;
+      |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/ioam6.h:11,
+                 from net/ipv6/ioam6_iptunnel.c:13:
+include/uapi/linux/ioam6.h:130:17: note: while referencing 'data'
+  130 |         __u8    data[0];
+      |                 ^~~~
 
-You could check the result for PCI_POSSIBLE_ERROR(), since reads
-should return ~0 (PCI_ERROR_RESPONSE) if they fail either because we
-can't access extended config space or because there was some PCI
-error.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-Bjorn
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Justin Iurman <justin.iurman@uliege.be>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/uapi/linux/ioam6.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/ioam6.h b/include/uapi/linux/ioam6.h
+index ac4de376f0ce..8f72b24fefb3 100644
+--- a/include/uapi/linux/ioam6.h
++++ b/include/uapi/linux/ioam6.h
+@@ -127,7 +127,7 @@ struct ioam6_trace_hdr {
+ #endif
+ 
+ #define IOAM6_TRACE_DATA_SIZE_MAX 244
+-	__u8	data[0];
++	__u8	data[];
+ } __attribute__((packed));
+ 
+ #endif /* _UAPI_LINUX_IOAM6_H */
+-- 
+2.34.1
+
