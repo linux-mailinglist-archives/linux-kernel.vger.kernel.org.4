@@ -2,206 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D6565E16F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D0C65E169
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbjAEAUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S235330AbjAEAV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbjAEAU3 (ORCPT
+        with ESMTP id S235732AbjAEAVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:20:29 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8259143A3C;
-        Wed,  4 Jan 2023 16:20:22 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so331850pjg.5;
-        Wed, 04 Jan 2023 16:20:22 -0800 (PST)
+        Wed, 4 Jan 2023 19:21:34 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76C647331;
+        Wed,  4 Jan 2023 16:21:22 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-14ffd3c5b15so30084113fac.3;
+        Wed, 04 Jan 2023 16:21:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptP+TRS/lGASh4wVWy3dTAfwv7VhGgtUgLBdAb814ZI=;
-        b=dHNJ4c9N/rgKzU5mtTSooEkFrH5UUxnDD5nGsNE5EId51rvRAEFyfAhXtEHSuvkEKt
-         RQz0VvO9DgyXJyASACy+XR9jh21vRfPCoARuGggEn39kVznbeaIPpd6rMRw4tjNmUCYm
-         uBSmkRkD3cTjynubwMsNDNlz4T4XY46wAvHyPdrx9w42VdVsHJUc9afbLDTU0tQ9/GyG
-         uyRaYYarCYHh2NnTTqGV1R2DmL3a6E0Prs0NT6N59/co9PipQTULQbl7fzcdJoGH5VpW
-         dAjfqAdwLn8Rg8Cf4ug5jxxSD5fTa7wQnfSeB4fwd/CsfBd6LttTmZ7MDhjB0PJOagPf
-         BeKA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0bzxs8vT1edO2FJXRZYVsWw5T2NkBAzXWyaCPQ3eXQ=;
+        b=GXTugK2j/bMB/msseOunjbhl8k3GHOWmo8UlmNC7F3jNGVDXFQbCcn0h1zUKXzinQn
+         O56/w2TxzzYlu1CA72oTh5U9RzY3lUhA6KU2ylGQLt5om3F9yuZ+b9M8b0sQxdi5Ub+T
+         YwSJ6dApX+l8Cy506sgewXWw4OxoFNIPzusUUOe4ShOAfhpT+tIrjwd5zsc+rb9v5tmN
+         S2koTLYKjHfYl3lCflH8riMjBygKIsh9MYs3e1X4E7tE3L1WhiheGO6w2aLzTcSE5QQK
+         GyjSPb6F4A1s4RHpaTooc2yRGnQv/sU+nKMJiQrcNRvb8Fblf2OutmGiK/hQwmM221/l
+         wiGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ptP+TRS/lGASh4wVWy3dTAfwv7VhGgtUgLBdAb814ZI=;
-        b=rSHLgAHtkO4Mh9RiwECNtMG+X7GzrPCTea1fWs7CTTbpyeeuK9V2k71wSau1YxJRaL
-         XOQZ64nuswJFtPvqpXAEPASi93/uWBUB0FEwUmmMBFmwF/cW/CGlTH0WIg4E7mrZoDsR
-         5YZIuaLKIxLIUwnwYoy+UXaTpwp2k78BXAwaePncrBwpKVObmHTRiK3bqBgsWJ06TNMy
-         vONkf26pIPoKxQcxKo4DZYnHsYBTf27cEmwse+69pwKJsYC6WMnoVQt2XVfOQPSod8tW
-         saKDYjC3tVe0uPmMytVp2u4VLSavNUvs8SL4/XK9n7auy+qdvfi4RuTuq+e4/1+qv1Sw
-         ByfQ==
-X-Gm-Message-State: AFqh2kqfs5goS4qxRKTTvICYtXZg8jEcJDEM4o1TBIprvVjQj/3xQUKr
-        hAPm2uzfszTlOEsC4MpVDWE=
-X-Google-Smtp-Source: AMrXdXthf3BY6LGdsiU2Y84F3Su70EFygCAjFiOluzrSPRnj8T0e52EAujhenJDphU/3eUAoL6xaVw==
-X-Received: by 2002:a17:902:7d8e:b0:191:11ec:2028 with SMTP id a14-20020a1709027d8e00b0019111ec2028mr51457490plm.46.1672878021769;
-        Wed, 04 Jan 2023 16:20:21 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x22-20020a63db56000000b004a737a6e62fsm371525pgi.14.2023.01.04.16.20.20
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o0bzxs8vT1edO2FJXRZYVsWw5T2NkBAzXWyaCPQ3eXQ=;
+        b=4iMy7yrpfMdE10t2u705LAmy8RXeY/+ffNLsllKMGkdc+3ok/OkqZoOEpUfO/9x0gf
+         qI2Y1riPNQiTE6RxlXKrhXXoghpCnqZDcYrLsOVsMR5DV0liQHHgGiKjj8qz5RuXLSNL
+         dql8OxkgvKO6R/lsneExkjvHJYFc7nBsh1lXbGTeJ8qAe8QNpKQGR/uRD8Bvn4KazX1v
+         L/KhrFwXkCCVJoxp7s0PcmVwFCqqbRcxL/ADd7UpSYkhaFLe+rjaU76FyyifLX+ebTaR
+         Z89DDWuiTkS/rLESWIP0+3DKcxioZekReSbW3AwtaM8SZtAB7XZpML/ONxm2kk/n7+tI
+         +MGg==
+X-Gm-Message-State: AFqh2kpGQ0IoH5n4cpBoXzEdAhLacK4SNU7FCNlfDuMWx1hTA4m5rnh3
+        NgfDK0DW30WLw5CVVY9AlVE=
+X-Google-Smtp-Source: AMrXdXtqb60Qxb9YJksIcDr1nnNmGMH+8VQoS0u1d2uA1M3akETZT3pTpdG0hc9YF9bV/rThNEiDxg==
+X-Received: by 2002:a05:6870:e30a:b0:150:85b9:7943 with SMTP id z10-20020a056870e30a00b0015085b97943mr7589192oad.34.1672878081852;
+        Wed, 04 Jan 2023 16:21:21 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056830139400b0066db09fb1b5sm16634661otq.66.2023.01.04.16.21.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 16:20:21 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     axboe@kernel.dk, josef@toxicpanda.com, hch@lst.de
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 4/4] blk-iolatency: Make initialization lazy
-Date:   Wed,  4 Jan 2023 14:20:07 -1000
-Message-Id: <20230105002007.157497-5-tj@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105002007.157497-1-tj@kernel.org>
-References: <20230105002007.157497-1-tj@kernel.org>
+        Wed, 04 Jan 2023 16:21:21 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 4 Jan 2023 16:21:20 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/207] 6.1.4-rc1 review
+Message-ID: <20230105001720.GA2458003@roeck-us.net>
+References: <20230104160511.905925875@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104160511.905925875@linuxfoundation.org>
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other rq_qos policies such as wbt and iocost are lazy-initialized when they
-are configured for the first time for the device but iolatency is
-initialized unconditionally from blkcg_init_disk() during gendisk init. Lazy
-init is beneficial because rq_qos policies add runtime overhead when
-initialized as every IO has to walk all registered rq_qos callbacks.
+On Wed, Jan 04, 2023 at 05:04:18PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.4 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
+> Anything received after that time might be too late.
+> 
 
-This patch switches iolatency to lazy initialization too so that it only
-registered its rq_qos policy when it is first configured.
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
-Note that there is a known race condition between blkcg config file writes
-and del_gendisk() and this patch makes iolatency susceptible to it by
-exposing the init path to race against the deletion path. However, that
-problem already exists in iocost and is being worked on.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: Christoph Hellwig <hch@lst.de>
----
- block/blk-cgroup.c    |  8 --------
- block/blk-iolatency.c | 29 ++++++++++++++++++++++++++++-
- block/blk.h           |  6 ------
- 3 files changed, 28 insertions(+), 15 deletions(-)
-
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index d8e0625cd12d..844579aff363 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -33,7 +33,6 @@
- #include "blk-cgroup.h"
- #include "blk-ioprio.h"
- #include "blk-throttle.h"
--#include "blk-rq-qos.h"
- 
- /*
-  * blkcg_pol_mutex protects blkcg_policy[] and policy [de]activation.
-@@ -1322,14 +1321,8 @@ int blkcg_init_disk(struct gendisk *disk)
- 	if (ret)
- 		goto err_ioprio_exit;
- 
--	ret = blk_iolatency_init(disk);
--	if (ret)
--		goto err_throtl_exit;
--
- 	return 0;
- 
--err_throtl_exit:
--	blk_throtl_exit(disk);
- err_ioprio_exit:
- 	blk_ioprio_exit(disk);
- err_destroy_all:
-@@ -1345,7 +1338,6 @@ int blkcg_init_disk(struct gendisk *disk)
- void blkcg_exit_disk(struct gendisk *disk)
- {
- 	blkg_destroy_all(disk);
--	rq_qos_exit(disk->queue);
- 	blk_throtl_exit(disk);
- }
- 
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 3601345808d2..3484393dbc4a 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -755,7 +755,7 @@ static void blkiolatency_enable_work_fn(struct work_struct *work)
- 	}
- }
- 
--int blk_iolatency_init(struct gendisk *disk)
-+static int blk_iolatency_init(struct gendisk *disk)
- {
- 	struct request_queue *q = disk->queue;
- 	struct blk_iolatency *blkiolat;
-@@ -830,6 +830,29 @@ static void iolatency_clear_scaling(struct blkcg_gq *blkg)
- 	}
- }
- 
-+static int blk_iolatency_try_init(struct blkg_conf_ctx *ctx)
-+{
-+	static DEFINE_MUTEX(init_mutex);
-+	int ret;
-+
-+	ret = blkg_conf_open_bdev(ctx);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * blk_iolatency_init() may fail after rq_qos_add() succeeds which can
-+	 * confuse iolat_rq_qos() test. Make the test and init atomic.
-+	 */
-+	mutex_lock(&init_mutex);
-+
-+	if (!iolat_rq_qos(ctx->bdev->bd_queue))
-+		ret = blk_iolatency_init(ctx->bdev->bd_disk);
-+
-+	mutex_unlock(&init_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
- 			     size_t nbytes, loff_t off)
- {
-@@ -844,6 +867,10 @@ static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
- 
- 	blkg_conf_init(&ctx, buf);
- 
-+	ret = blk_iolatency_try_init(&ctx);
-+	if (ret)
-+		goto out;
-+
- 	ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, &ctx);
- 	if (ret)
- 		goto out;
-diff --git a/block/blk.h b/block/blk.h
-index 4c3b3325219a..78f1706cddca 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -392,12 +392,6 @@ static inline struct bio *blk_queue_bounce(struct bio *bio,
- 	return bio;
- }
- 
--#ifdef CONFIG_BLK_CGROUP_IOLATENCY
--int blk_iolatency_init(struct gendisk *disk);
--#else
--static inline int blk_iolatency_init(struct gendisk *disk) { return 0; };
--#endif
--
- #ifdef CONFIG_BLK_DEV_ZONED
- void disk_free_zone_bitmaps(struct gendisk *disk);
- void disk_clear_zone_settings(struct gendisk *disk);
--- 
-2.39.0
-
+Guenter
