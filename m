@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9621165E899
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C62365E89B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbjAEKEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S231444AbjAEKGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjAEKDq (ORCPT
+        with ESMTP id S231370AbjAEKGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:03:46 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F776D6E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:03:43 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id jo4so88943368ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:03:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NAx4sB8dmTRbcnxQDj1pOnj4ZyZCrQxhPS8VSinr3uw=;
-        b=ZT0sRSyyIJdlzxV0+bCYBKAk6pxMF5n0JRPazf8QA+sgb+iBYpyhPS0Io9YuLjMSlf
-         3qctE9rfcCIg598Crt15Jo4JO86mTIXaLGyu2PEa4ORWMGwYOmHrbSa11HkgJKNLVLR4
-         5KAh6H+x82PTreIIwxK7V3m1dqKa39Ay3+lhX/uwFkd8/uXpqdSsqB82zdHYILLc1w+H
-         ivEc37Mv5T/LupEahS/6yaxnT9/g3Ov0X7n0QB/HLO5kp3/1Rgw/Q08H6R5V+7Zn3Bjv
-         81G0MU2HZoiHyJw08HrIILLZO/vG2lIsG4XYJS3IA81osd3778tz0K6JcTJZ0qNfp1pK
-         JlNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NAx4sB8dmTRbcnxQDj1pOnj4ZyZCrQxhPS8VSinr3uw=;
-        b=SHEbR70MUHf1HuT6w+vShgLuvcRYCqAc7WZ3CpsRjxs9uxDcdvWDyBA4wA0CteWJqY
-         NluWSzuzHGU0szzQLNdXG9AIhb4ni6viRtps4dHEGQfYmPtgh53+2OVH2xkGpE8PXl0l
-         plWfB/cHAof4VUidXyUyUs3Rrts95PE0dLtCfsuDnT6QJwQylSqWGtXZAmyiXw9fFVxj
-         nojkE8OoSj4e5uDJe4HIz52SoIXyHHEMcTfa9zOvIpwKBJHShi/Q1rjxsfKwJzHSxeZi
-         Xpci5EIM4qmc6jD0l78t7UDWNLUOrgI0xJgKTChEf2/6f6Sehyt+35cbJ4qH7Jqtc6/i
-         1GhQ==
-X-Gm-Message-State: AFqh2krwhhe4Y5LBcyW7QB61jffITs84Bb8LtJIzq3xN2nKGV608qcOf
-        QU+MK8TU3Y3+8Y2uWQ/c110=
-X-Google-Smtp-Source: AMrXdXsGvLivzR5oNfqPEbJnu/3d9CJjI/HC1D0T15yjwj0xlBBbbXqr40u8ODXGOakRFwMIn8qCCQ==
-X-Received: by 2002:a17:907:a4c5:b0:84c:f9b0:b54a with SMTP id vq5-20020a170907a4c500b0084cf9b0b54amr3638243ejc.58.1672913022071;
-        Thu, 05 Jan 2023 02:03:42 -0800 (PST)
-Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
-        by smtp.gmail.com with ESMTPSA id r4-20020a17090638c400b007c16f120aacsm16191561ejd.121.2023.01.05.02.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 02:03:41 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 5 Jan 2023 11:03:37 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH] locking/qspinlock: Optimize pending state waiting for
- unlock
-Message-ID: <Y7agecsIPC0r/OXB@gmail.com>
-References: <20221224120545.262989-1-guoren@kernel.org>
- <08ce1ab6-4678-74ce-43cc-2d3f04d1525d@redhat.com>
- <CAJF2gTS52jBm7_3c=9i1uPjmV90=42xs4dOs6woA4NnHf4RHgQ@mail.gmail.com>
- <b01060ba-6069-d33e-5151-22a7d9577f13@redhat.com>
- <e30f671d-8e74-d5b9-cdba-472d7297f257@redhat.com>
- <CAJF2gTTkLY+mUoG0oqw0mmJH0hK5bXYvrmYcLL1-zwNbzOb9TQ@mail.gmail.com>
- <Y7XfYPnQhLTcNZSh@gmail.com>
- <CAJF2gTT4yaH1i7zmKNwzt8OK1frFvre09wwNGABBo_3gC0pjBw@mail.gmail.com>
+        Thu, 5 Jan 2023 05:06:07 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1AB2DC8;
+        Thu,  5 Jan 2023 02:06:05 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VYvkzZr_1672913159;
+Received: from 30.221.147.24(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VYvkzZr_1672913159)
+          by smtp.aliyun-inc.com;
+          Thu, 05 Jan 2023 18:06:01 +0800
+Message-ID: <d4d132d9-1513-6a4e-981f-aa4bc4ebbcbb@linux.alibaba.com>
+Date:   Thu, 5 Jan 2023 18:05:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTT4yaH1i7zmKNwzt8OK1frFvre09wwNGABBo_3gC0pjBw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/6] perf vendor events arm64: Add topdown L1 metrics
+ for neoverse-n2
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1672745976-2800146-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <5c5716e5-b2ff-67cd-b608-4eeffa7e04bc@oracle.com>
+ <1f3d53cb-4160-e29d-3934-d6a488d9fd49@linux.alibaba.com>
+ <7aa225df-af25-a6be-9bef-c965488ba43a@oracle.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <7aa225df-af25-a6be-9bef-c965488ba43a@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,52 +65,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-* Guo Ren <guoren@kernel.org> wrote:
 
-> On Thu, Jan 5, 2023 at 4:19 AM Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> >
-> > * Guo Ren <guoren@kernel.org> wrote:
-> >
-> > > > >> The situation is the SMT scenarios in the same core. Not an entering
-> > > > >> low-power state situation. Of course, the granularity between cores is
-> > > > >> "cacheline", but the granularity between SMT hw threads of the same
-> > > > >> core could be "byte" which internal LSU handles. For example, when a
-> > > > >> hw-thread yields the resources of the core to other hw-threads, this
-> > > > >> patch could help the hw-thread stay in the sleep state and prevent it
-> > > > >> from being woken up by other hw-threads xchg_tail.
-> > > > >>
-> > > > >> Finally, from the software semantic view, does the patch make it more
-> > > > >> accurate? (We don't care about the tail here.)
-> > > > >
-> > > > > Thanks for the clarification.
-> > > > >
-> > > > > I am not arguing for the simplification part. I just want to clarify
-> > > > > my limited understanding of how the CPU hardware are actually dealing
-> > > > > with these conditions.
-> > > > >
-> > > > > With that, I am fine with this patch. It would be nice if you can
-> > > > > elaborate a bit more in your commit log.
-> > > > >
-> > > > > Acked-by: Waiman Long <longman@redhat.com>
-> > > > >
-> > > > BTW, have you actually observe any performance improvement with this patch?
-> > > Not yet. I'm researching how the hardware could satisfy qspinlock
-> > > better. Here are three points I concluded:
-> > >  1. Atomic forward progress guarantee: Prevent unnecessary LL/SC
-> > > retry, which may cause expensive bus transactions when crossing the
-> > > NUMA nodes.
-> > >  2. Sub-word atomic primitive: Enable freedom from interference
-> > > between locked, pending, and tail.
-> > >  3. Load-cond primitive: Prevent processor from wasting loop
-> > > operations for detection.
-> >
-> > As to this patch, please send a -v2 version of this patch that has this
-> > discussion & explanation included in the changelog, as requested by Waiman.
-> Done
+在 2023/1/5 上午1:26, John Garry 写道:
+> On 04/01/2023 05:05, Jing Zhang wrote:
+>>
+>>
+>> 在 2023/1/3 下午7:52, John Garry 写道:
+>>> On 03/01/2023 11:39, Jing Zhang wrote:
+>>>> The formula of topdown L1 on neoverse-n2 is from ARM sbsa7.0 platform
+>>>> design document [0], D37-38.
+>>>
+>>> I think that I mentioned this before - if the these metrics are coming from an sbsa doc, then they are standard. As such, we can make them "arch std events" and put them in a common json such as sbsa.json, so that other cores may reuse.
+>>>
+>>> You don't strictly have to do do this now, but it would be better.
+>>>
+>>
+>> Hi John,
 > 
-> https://lore.kernel.org/lkml/20230105021952.3090070-1-guoren@kernel.org/
+> Hi Jing,
+> 
+>>
+>> I would really like to do this, but as discussed earlier, slot is different on each architectures.
+>> If I do not specify the value of the slot in sbsa.json, then in the json file of n2/v1, I need to
+>> overwrite each topdown "MetricExpr". In other words, the metrics placed in the sbsa.json file only
+>> reuse "BriefDescription", "MetricGroup" and "ScaleUnit". So I'm not sure if it's acceptable?
+> 
+> I don't see a lot of value in that really.
+> 
+> However, for this value of slot, isn't this discoverable from a system register per core? Quoting the sbsa: "The IMPLEMENTATION DEFINED constant SLOTS is discoverable from the system register PMMIR_EL1.SLOTS." Did you consider how this could be used?
+> 
 
-Applied to tip:locking/core for a v6.3 merge, thanks!
 
-	Ingo
+This may be a feasible idea. The value of slots comes from the register PMMIR_EL1, which I can read in
+/sys/bus/event_source/device/armv8_pmuv3_*/caps/slots. But how do I replace the slots in MetricExpr with the
+read slots values? Currently I understand that parameters in metricExpr only support events and constants.
+
