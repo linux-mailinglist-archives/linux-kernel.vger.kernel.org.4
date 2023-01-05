@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FB265F70C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEC765F713
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbjAEWvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S236311AbjAEWww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbjAEWvc (ORCPT
+        with ESMTP id S235947AbjAEWws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:51:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701CB58820;
-        Thu,  5 Jan 2023 14:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672959075; bh=jGqmtBpJFhDWl3+/3Q4iGUyNOyvE0pOn9VoLM3cxvNw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=SX+53odXcOSY/gg9DN4453hhebH3D8CpXdcsg1EoQesO8lVZFFw1MOlmxLfQnmS6S
-         9SKG/gIREabUvtxNbNzB6f4TOeKLuAMBxOiVr4pS1xtKLbdsdY49FaNSuV5QJViRYZ
-         EMRH2UH7mUZI5EQaOnNR2HM6ZqD5t0dysMc6Ut41f6XodFH3ft24G456S+n1rqotZ7
-         +zUAOJVnhJIXGLiHbGq2oyAlY+j8E8czcbJUepQr56GDCGRSUw3ljMLfSy2t3YmW6l
-         zwfXLV4Y4X1nEJwMXephrlCJXZzZRREceJWSl45IMYYUK7yQeXWWXFFyLpoL2GesEU
-         okwJmHUvEVStQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MD9XF-1p4WeY1ACP-0099E0; Thu, 05 Jan 2023 23:51:15 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (ftsteutates) Add support for fanX_fault attributes
-Date:   Thu,  5 Jan 2023 23:51:07 +0100
-Message-Id: <20230105225107.58308-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230105225107.58308-1-W_Armin@gmx.de>
-References: <20230105225107.58308-1-W_Armin@gmx.de>
+        Thu, 5 Jan 2023 17:52:48 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0DE58823
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 14:52:47 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v23so41406099pju.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 14:52:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t+1Y716yohfg2jJGDpC9Mm0+rOnzxTQAu/sHCuPL2KM=;
+        b=cSFo5FtDyzZrfSrtCo1vjOfuJZcmya6aX4EMIfNS1PiiCCw8R8o6I4HXTDYLIFPD7G
+         l6oqGMbt8PyZ6OwKyzxMZfbegOurfyE/nUvQwzhwpYrbXneMJHC7wMS6T688rCg3BHQq
+         ILn9lAG7Tl7mqlTkmwqzx0WU2uUPUWJRYYefxW3UqcEjt710QNf5GoYxx4Aj3sVlKihE
+         zSt5dylARz/0v5Cr4sZDwibB0ttSeZDIXpL9HhwsGN1TBaRbHC4AMOe6qpo7Ivgp29Mu
+         /zy4X3C2I8XT42IZoAOT57ZN9grxz3SLI/yK2+ksRsmHZiTSQqiYeqtIjmQMPsXN7CTa
+         Gspw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t+1Y716yohfg2jJGDpC9Mm0+rOnzxTQAu/sHCuPL2KM=;
+        b=od0+c75lQ9cLviYAz4tfHZV93FyjGt5gceVIezB1o/mzCqmXCC14tx5Hk7VU9CYErT
+         /2dzvaTIVxYTVQ0k+KuekKSY9x9sT1vLMiS8v3QeMT92OcOspPgayRtJuPR4CPCR4lcL
+         0jFzAtYp+dmQy2yLlhdQ575wd52wkYZ6yLO4VfvNghZhL17fblhN5D/dbrA8fTR337vn
+         2IFryCawuOND1Uo7T0cFw1JtNfP4ftXlyz9Pwrpeb2HS5wVnwZfg215SZen3IlobuERf
+         i7BI1kEGA8I5GJQHzfTsF0CRoDS6V67anuIvsU2t45kRDEmbQj1C5/JT9g57GONdNW62
+         GwoQ==
+X-Gm-Message-State: AFqh2kpZHvaRL1iolYNp3sYZBl8WbLbYxoQVzzSWYEFyZkzq/KAQmj5p
+        JEwqaUKPoGH/ZuqA4DuH4Q7Dkg==
+X-Google-Smtp-Source: AMrXdXsoKJStIchx2BZIfo8Eg67U5VNU3bl12wCIA53l5gcY0eYpsbkfTpGyQx0osjXFjVIhrppiVQ==
+X-Received: by 2002:a17:903:50e:b0:189:bda4:4a39 with SMTP id jn14-20020a170903050e00b00189bda44a39mr52342354plb.49.1672959166962;
+        Thu, 05 Jan 2023 14:52:46 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id j2-20020a170902758200b0019269969d14sm23675642pll.282.2023.01.05.14.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 14:52:46 -0800 (PST)
+In-Reply-To: <20221229170545.718264-1-ben-linux@fluff.org>
+References: <20221229170545.718264-1-ben-linux@fluff.org>
+Subject: Re: [PATCH] riscv: uaccess: fix type of 0 variable on error in get_user()
+Message-Id: <167295914585.11542.3959390296046499334.b4-ty@rivosinc.com>
+Date:   Thu, 05 Jan 2023 14:52:25 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1IbpAIpZxtlA3c3W6IInAlAIKGzqpBwvLzm1zc41/PnopcAoh8x
- miGWNOsjZS0vMQLkqnnwObDuIfs/eEts/k/PWIXx5Cis4X52iDH690+O8GAuDEA8sa/Oj6/
- ZZ+x3Abj9qDVnknFtlwx/jDx8Da4Rrp/1+SUFOsSn/b5Ra8sykx9q5y0rTBUlke+02kKQDP
- byOfk2kPpJaVrdQBM4t9g==
-UI-OutboundReport: notjunk:1;M01:P0:RrZhXS+p/QQ=;ff2fMn08FZn1+MKmcFLfPg+uqg4
- GBjmVOf+eRtK8a4sOry9wMNFsHKBVQVlnvsNhrUHVXUDEmQfjG/xnqXrdxUOBUxQbCd4OKvvt
- wcv685P8tJo1sCDlXNUk0SuGh/xlyjt9L/0WaS7xsUq9HIeqRqcbyTjf0B8FC4rzqvIzCjuSI
- sSpmYmP0BpVvixZ4MuLOHQU1LbSF4zZFYpXAv9tmzYK4k3vLhGImKxWRzLTUoiWIzuSp6SzJN
- zm6U0dsq1maUvnoi6v0NC5j1W4KVQOxyErTvSt/QBPLnsPFC1EqNVmRcIy69g6aLf4H5j5SpW
- C9i80frIG6pcwPn6p/FBwLzELQgS47/HPH64rf5j2/dkbzDg1Br05U/dD6pp6J+Dm9Y67Pjbw
- GhjwRfuM8e4fySNAS3Ri99hwsLSCLf3Sfi22Oabxh4NsuSpH4J3YU1rfgV+X/yF09PhG/qPYO
- q6qdAxHEJf2xnawmybTXDV6pJ3TOIulW3tKVULpnGO3xv19FsLDtOg7+pPel/vInfN/bkI8hl
- JxyrhF4QXnWvQCmgF06AbwN2mrlVfSl0t8yj1iOpbkJeN7QbNv5yC/3wv+GELW8oc0Och+hgu
- uhpuBW3TSa1Z05oCSD0nZFpaDPGbSd57p1Af0oslCukEzHvjJcoaPOnFxnPMpF8mAS8XNfs9U
- CJPBgSrNkZcFNL5HVBZt2wyMdNuKJawbkJSdRBUKsBwEILPdywyIavUWM2vuW2e67ZuaUtBvG
- VP/ImIhyO8yWO/HQ81AGvyPfwzZD3d7rqU2trHYylGADgr74mIsLy/jnpfsJbaAeNTNyw93dl
- 66H5v1EMXR0nKx4DZ2Q+5I4kBOMtBfjPyiLNCtyttJjOJP7CVg8l57jApGQa2tnLKKhutQ2am
- 4U2bpAxaAr2SbjP7PSMU4mt+CCuJQslt+pLLnl97PPlKfjfPdfYQaLa718RPzCc6SX+QLpm75
- vODjDTmiWF3iiwEdCUwhzmZTH9U=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-e660e
+Cc:     aou@eecs.berkeley.edu, Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     linux-riscv@lists.infradead.org, Ben Dooks <ben-linux@fluff.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,67 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver knows internally when a fan is not connected,
-but does not export this knowledge to userspace. Use the
-standard fanX_fault attributes to notify userspace if a
-fan is not connected.
+On Thu, 29 Dec 2022 17:05:45 +0000, Ben Dooks wrote:
+> If the get_user(x, ptr) has x as a pointer, then the setting
+> of (x) = 0 is going to produce the following sparse warning,
+> so fix this by forcing the type of 'x' when access_ok() fails.
+> 
+> fs/aio.c:2073:21: warning: Using plain integer as NULL pointer
+> 
+> 
+> [...]
 
-Tested on a Fujitsu DS3401-B1.
+Applied, thanks!
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/ftsteutates.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+[1/1] riscv: uaccess: fix type of 0 variable on error in get_user()
+      https://git.kernel.org/palmer/c/b9b916aee671
 
-diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 0d8ab94250a9..25afd9167a34 100644
-=2D-- a/drivers/hwmon/ftsteutates.c
-+++ b/drivers/hwmon/ftsteutates.c
-@@ -356,6 +356,7 @@ static umode_t fts_is_visible(const void *devdata, enu=
-m hwmon_sensor_types type,
- 	case hwmon_fan:
- 		switch (attr) {
- 		case hwmon_fan_input:
-+		case hwmon_fan_fault:
- 			return 0444;
- 		case hwmon_fan_alarm:
- 			return 0644;
-@@ -411,6 +412,10 @@ static int fts_read(struct device *dev, enum hwmon_se=
-nsor_types type, u32 attr,
- 		case hwmon_fan_alarm:
- 			*val =3D !!(data->fan_alarm & BIT(channel));
-
-+			return 0;
-+		case hwmon_fan_fault:
-+			*val =3D !(data->fan_present & BIT(channel));
-+
- 			return 0;
- 		default:
- 			break;
-@@ -536,14 +541,14 @@ static const struct hwmon_channel_info *fts_info[] =
-=3D {
- 			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-=2D-
-2.30.2
-
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
