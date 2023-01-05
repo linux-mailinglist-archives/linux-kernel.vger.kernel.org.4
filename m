@@ -2,82 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1774665F646
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C6965F63B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbjAEVyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S236052AbjAEVva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbjAEVyU (ORCPT
+        with ESMTP id S236117AbjAEVu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:54:20 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB04676DD
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:54:18 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id a16so31190080qtw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 13:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AiDogmSekfQ136iq07144KY/Kq2S6U3J1wMNG/6kVak=;
-        b=fMVHXBR9f8COfqWuTLGIOdUfjxsWONJHOpmAedSE6QNMQXzIKWtSIeEaIowL951f6a
-         v2/YTCyesQk0a+DcPRVmUX9F+EVNzVbxhY0/Wqa9dKGl36gIUUMd60gbkZsuFHkclYV3
-         Tw1uzLULJMgrKgxKfeXDnbaa5pFPV+dBFzP0A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AiDogmSekfQ136iq07144KY/Kq2S6U3J1wMNG/6kVak=;
-        b=YL1ezs0KnPtkyMfSsONI9OpfWAIA+OJU2zawGFMdDnljY8RDmLaopZQFAmnAM/x30y
-         7X+QXBO32WfluC6PxLIl/9KL7PkDdGD207EPDdH6+E1ZthrIW4QPuFS4yjr3qr6p6KIB
-         53avaVs6WVyr/i0m3RoHmFU2iVJo4klW/chrYwycIO7k5ibYdJQWgUs8diliX23YPQPj
-         /VpUyRNoOp6ZQK29m8oZslkBOS4OJ+PO/Nb6BQTiuayGi6qHBR4LD4/JVz+C1mF8ZuJl
-         jdzqSeZKQZXgZ0avp/jpNNgvMFQcf88LX8+hkmDFMwLfxDO4GezHXCnyFM4aIIOyt2f5
-         QLPA==
-X-Gm-Message-State: AFqh2kqUIpSFyd+j/HzajGnT6ddFQtxmM67X83nzasLyPxoUQ7qK4lbW
-        nwuD4H+8FkZ7BYemBMrZPWYB0HTCaSIM2xsa
-X-Google-Smtp-Source: AMrXdXvnyWbSpJSkBgOHfe0gjCix8KFgLOy7jpkvpF/0iQfS+hVZ4JECLXHsWIwmMMt9qsG7VPKe/w==
-X-Received: by 2002:ac8:4f53:0:b0:3a7:e02e:7cc4 with SMTP id i19-20020ac84f53000000b003a7e02e7cc4mr68170986qtw.32.1672955657432;
-        Thu, 05 Jan 2023 13:54:17 -0800 (PST)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com. [209.85.222.174])
-        by smtp.gmail.com with ESMTPSA id d136-20020ae9ef8e000000b006fae7e6204bsm25775391qkg.108.2023.01.05.13.54.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 13:54:15 -0800 (PST)
-Received: by mail-qk1-f174.google.com with SMTP id k3so18548961qki.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 13:54:15 -0800 (PST)
-X-Received: by 2002:a37:a93:0:b0:6ff:812e:a82f with SMTP id
- 141-20020a370a93000000b006ff812ea82fmr2294231qkk.336.1672955655473; Thu, 05
- Jan 2023 13:54:15 -0800 (PST)
+        Thu, 5 Jan 2023 16:50:59 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79FA63199;
+        Thu,  5 Jan 2023 13:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1672955395; x=1704491395;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GWLfTS968CloPMevtoM4MSviKK8lba7mNlv0zXAMW2M=;
+  b=l4Kacu2Xe5LHBsXCDWh6lINbxECnboldEbE/eyui48eD63Vj5s/jkUu7
+   rjb90Drb9FyUEwJ1NDXBLyV1J9oSWVpXj9p/6akWlg+rAHheNb1stX9F1
+   UgBLno5HuVDhjh63bePss5hF11q2eNwAty19JEsKmMqqQ980Ja/yfXQ5G
+   rvWQMSpFMZHOKTnMmXuRZPE5gqJi78CmG2yFKl+hUMUDYeEqjQGUQ3rdr
+   eKD+Ir+kITrPzI1HJ86EQ/TguB7YeFCWuYmwegruEvJiUHSwA6vikz734
+   vHv69FWoSL6AH+aIHSM1AtXajs0uYkXdCYJVyICZ/5GN8TMEE6pHrd8bS
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="194503577"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jan 2023 14:49:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 5 Jan 2023 14:49:53 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Thu, 5 Jan 2023 14:49:53 -0700
+Date:   Thu, 5 Jan 2023 22:55:12 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <daniel.machon@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <lars.povlsen@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <olteanv@gmail.com>, <pabeni@redhat.com>,
+        <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Message-ID: <20230105215512.uck2gy4hyd2z7hq4@soft-dev3-1>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+ <20221208092511.4122746-1-michael@walle.cc>
+ <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+ <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
+ <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+ <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+ <dff03705f3c81962246731ad188d9d3d@walle.cc>
 MIME-Version: 1.0
-References: <000000000000dbce4e05f170f289@google.com> <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
- <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
- <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com> <1bd49fc0-d64f-4eb8-841a-4b09e178b5fd@gmail.com>
-In-Reply-To: <1bd49fc0-d64f-4eb8-841a-4b09e178b5fd@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 5 Jan 2023 13:53:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg3U3Y6eaura=xQzTsktpEOMETYYnue+_KSbQmpg7vZ0Q@mail.gmail.com>
-Message-ID: <CAHk-=wg3U3Y6eaura=xQzTsktpEOMETYYnue+_KSbQmpg7vZ0Q@mail.gmail.com>
-Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        christian.brauner@ubuntu.com,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        jlayton@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        linux-m68k@lists.linux-m68k.org, flar@allandria.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <dff03705f3c81962246731ad188d9d3d@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,25 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 1:35 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
->
-> Looking at Linus' patch, I wonder whether the missing fd.entrylength
-> size test in the HFS_IS_RSRC(inode) case was due to the fact that a
-> file's resource fork may be empty?
+The 01/05/2023 16:09, Michael Walle wrote:
+> 
+> Hi,
 
-But if that is the case, then the subsequent hfs_bnode_read would
-return garbage, no? And then writing it back after the update would be
-even worse.
+Hi Michael,
 
-So adding that
+> 
+> > > Also, if the answer to my question above is yes, and ptp should
+> > > have worked on eth0 before, this is a regression then.
+> > 
+> > OK, I can see your point.
+> > With the following diff, you should see the same behaviour as before:
+> > ---
+> > diff --git
+> > a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+> > b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+> > index 904f5a3f636d3..538f4b76cf97a 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+> > @@ -91,8 +91,6 @@ lan966x_vcap_is2_get_port_keysets(struct net_device
+> > *dev, int lookup,
+> > 
+> >         /* Check if the port keyset selection is enabled */
+> >         val = lan_rd(lan966x, ANA_VCAP_S2_CFG(port->chip_port));
+> > -       if (!ANA_VCAP_S2_CFG_ENA_GET(val))
+> > -               return -ENOENT;
+> > 
+> >         /* Collect all keysets for the port in a list */
+> >         if (l3_proto == ETH_P_ALL)
+> 
+> Any news on this? Apart from the patches which would change the
+> need to use some tc magic, this should be a separate fixes patch,
+> right?
 
-+               if (fd.entrylength < sizeof(struct hfs_cat_file))
-+                       goto out;
+My colleague Steen, has sent a patch series here [1].
+This allows to PTP rules in HW without any tc commands.
 
-would seem to be the right thing anyway. No?
+[1] https://lore.kernel.org/lkml/20230105081335.1261636-1-steen.hegelund@microchip.com/T/
 
-But I really don't know the code, so this is all from just looking at
-it and going "that makes no sense". Maybe it _does_ make sense to
-people who have more background on it.
+> 
+> -michael
 
-             Linus
+-- 
+/Horatiu
