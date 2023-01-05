@@ -2,159 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D68465E90B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7736465E910
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjAEKdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:33:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S232499AbjAEKeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbjAEKdT (ORCPT
+        with ESMTP id S232164AbjAEKeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 05:33:19 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2088.outbound.protection.outlook.com [40.107.212.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505CC44C68;
-        Thu,  5 Jan 2023 02:27:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NQuKAZoSEA+EFuh6I8sszZm/BOBOrOtbEpmhgtjxvmsUcQP1bgejJvS3itYekav7/my6AKsvvnlenOK600SUL5OeCkDHrWKdzNT/tFy1aNyyRE1z0vu7+LEsb69kU0B3WQTVriayvxCXHwXQhp4BFWAh//6vQejInR+X4ca8rcTD7+0mDE3c2n/7RaSocPVKp6xp40c1VyDVvDDL+rrYIL2HsJUD7t+aOMNqGneTOzk6w4hTJBkArp6TRWu1fU5j68PaXbhoE36cBriVC5DBfPnFwvX0dRdv2h3CjVpPpP6w4IAjp5is5Riokemga+MHa0GfJjbmgHkUV3OKO6weRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hU47etcGxb2QomgoFACnAFsFxnqU7Rk0kq2MAtjR6Rc=;
- b=RN40WGJqWnZUnjuGinHiFtngFvHOGvB84rxuWygCmcCwEt38Fs8C/KB/7Fq2s4rKJV9o+nrDqUmvYtDnklq3JpY3EiaFkt9aQHlo+eRhgP+who2hu4+tWbCLyT4slHgvUnjAM2lVKTANPQ/8qTqNZot2c1xVieEBgsPDwoSg7DVisHjFOVWP+xwMzgyY/Gcwg+fnI/+4rZQ2HV83YMQ7iJ5lN5QDDrI50wIqhObdnIJMSjsO6vYEh4CJgzNEIX0jxRkjl+/0YYT/+rbsKAGMgPDIlNDeMRA6nNm0KWxASgYPiCi78iNQS9RInhOrX4t06OMT5batv7CySpdwuOwsvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hU47etcGxb2QomgoFACnAFsFxnqU7Rk0kq2MAtjR6Rc=;
- b=Tfpve/0moWk9Qa5nYIymkVb1nrtnAQBrKHkH6cqu2N8U+xog+4Q7FmHkh6a+pJmk9wFSCQ04mBEYp6PCGAl0WFbs7o7lXcUvvvsZvqtjZlevshBnQosxjVzBEG3HomdY1XPBM7CXkpcyPDQwOMLyrS2Sm7WU6/26YbqCkexMlVQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
- PH7PR12MB8040.namprd12.prod.outlook.com (2603:10b6:510:26b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 10:27:41 +0000
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::4014:79ea:392b:b4f6]) by DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::4014:79ea:392b:b4f6%5]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 10:27:41 +0000
-Message-ID: <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
-Date:   Thu, 5 Jan 2023 15:57:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
- =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
- =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
-Content-Language: en-US
-To:     Matt Fagnani <matt.fagnani@bell.net>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
- <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
- <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
- <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
- <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
-From:   Vasant Hegde <vasant.hegde@amd.com>
-In-Reply-To: <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0074.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9a::18) To DS7PR12MB6048.namprd12.prod.outlook.com
- (2603:10b6:8:9f::5)
+        Thu, 5 Jan 2023 05:34:16 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F1D2014;
+        Thu,  5 Jan 2023 02:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672914679; bh=HdTaM69YzlM7AWTFyHXLA1zjDBcCzf/dJ1df7pUtA/k=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=RXTvGhBnhOsZEJOiek0QbgAawv2ugUNvjAp/Y1+lP9ebOptf9YrENXHWSZQRoWiuN
+         DBgX/+oWDob8rhh1P7qLN16NE9s6xXS/sC7Rnd7QGk8qS5vKbY36ClWTiOwqvGIDUe
+         38PJGWl5xFCU4mDQVzHFuu07/GnG11zhF6fcg5LtB3qf6m8C0RisBPjIEpOSAtm36g
+         LlQ6nXOQRBeirG3OqBZoUDxAKm5cE/FZ5mx1o374j16yKl8OpH2tWEgQdiQTrp76eb
+         7mRwS4JR8io0jLdvDvSOMHwiOxAxu4bNqN3VMOacwcNCdY6LHWS5vxiAUBBaGbwZ88
+         mB6QnrOFQ82OA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.173.134]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M89Kr-1p8igv3HSV-005KA5; Thu, 05
+ Jan 2023 11:31:18 +0100
+Message-ID: <ed7a65bb-f521-e5a5-85eb-0f24b023421b@gmx.de>
+Date:   Thu, 5 Jan 2023 11:31:17 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|PH7PR12MB8040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 250e5b58-0402-4538-d5f1-08daef077974
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w0y5gR9hxXgSuTnlD4v/TdHyawUu1+bXvAxl0WOV5ezeSkIJaWqvXnl99UdpUhbGkXpFzGNZ+lgMWQDHIXEix48lTj3gCPuuvPVSjThUjgUHJaQNxg2J0FHYLWUcbSgViqsQxsGN0CGvbX76ullNZuJeqbxVY4uuFQ9oRvTBz+Hlv1fuf/7+69rRnhRMC/bc9tOPdzWMFdOGgVYCprf3WQScY5kLEqlx7c/bb9aYp5nMOWKvquNsd4BeCIsUIfmR6WCLWYtAs0CnGS/427tywwtakq7E0b/9d03vfI5rvzcosPZac13s5by4OEXGIfT63T9BF6vEJ+ZZouZPy7jUbEaNXUsJDLQ29GnVoOTJ9GTEMknf+mcGxxDA93uX9+WuFYMRxYso1Oepd3odu1QMAlpZI8QTZ7zgsh4z/ymdFv/N2UfgzcXM3IEadsOapYdh01q8Pq5vXaI0r8RytZ+1Lo1kiMmvMapGXj2RK9oU9S+hnBr8Ve/beDVotTXexskD4g3rxJT8R70xM+NZQfU/YfGYv+3vE189NCTLdKW7bdiw5TaBVaIZx8e8+3t6rOoiYot261aWRFFYRs1U15PuWxRr/ZnkpZYlcJBP38oIaMHAyp99vB0XZk6gT0iUPwBV7Mpib9x0EJePzSPersXLrxFZEyYGGr5RWgViLcYIRnu2l4ORpgPTv6GUqw0bZG5Y8ChJb6+QNVTNs02uSeYZgQWq0cfBBw6RWtteD5QLr0U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199015)(110136005)(6506007)(478600001)(6666004)(36756003)(53546011)(86362001)(38100700002)(31696002)(186003)(26005)(83380400001)(2616005)(6486002)(6512007)(8936002)(5660300002)(4744005)(44832011)(31686004)(66946007)(4326008)(66556008)(66476007)(316002)(54906003)(41300700001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzZtZE5ETENVd2hiOXg0N2NrNnZxaUMzQnNyQzgwdkFlZTFQZjNmZXlzd1dH?=
- =?utf-8?B?YUdBclVGZTRDdnJEdGhmZmczTDdJM1kwTWVJYzNmdi9CUHQrUEo5OURKdUcr?=
- =?utf-8?B?WFJnL29lVVNWbUJNVUhFWUNYN0dyblB6STkvR1lTUzQxRUlsSitFQmtVVG14?=
- =?utf-8?B?YUpaQmVDM2Yrc0pVUWY0NTU5aElqamJVQnZxb3NqQ21qR3hBcGsxTlIyUGNG?=
- =?utf-8?B?T21HemJyb0duNWFqTmJLSVhWVFFTVmcvRmVFK1NLenFPYmVRQmxrZGs4Q1ZU?=
- =?utf-8?B?OTI4TVJROGtPOGJjbmxKOHF3c2F0dzd1bXRMUFA2SURJNndoaUxZeUVZclpH?=
- =?utf-8?B?WGFIVWJVMDVobXhhYzlhMm9hSzkrKzdrNHJycjFkckFTMGVVM1N6RUZDK1Z6?=
- =?utf-8?B?NDJ2NkdwTzRWNTQ1emhmNkdmVERVMEJGOHdremJ3K3NmN2lkbERpNHRYL2kz?=
- =?utf-8?B?WXR1cm5XRDFnTkxFdEdZTWdiNlU0a1JSclhMTkROaTMvNE5DR3c2MWlidGc5?=
- =?utf-8?B?SlRmVEkzcTY2cU94WEc0SUJ0SjYxUjViL2RoTWlYcWJXbHRMa2xnSTdTU1Vn?=
- =?utf-8?B?Z1ZYQjBQdGZtRDl3OHQzVHVjZ0g4Vm90Y1VNdTVicUFKaitlbmxMWDlnSzAy?=
- =?utf-8?B?c3dFZWdLQ3R4R1FxWU9BU0YrYmtkOHBMcTJmR0dtK3dOUHJISUZsRFZKQW1a?=
- =?utf-8?B?L2lsQWZ0dHJ4QnBzMlV3TE1LWUhwOGR4c2hJOVQ5NStjcWlQU3grNHJDY0pp?=
- =?utf-8?B?MEgxeGg1Mk9ENkhHemcweG8xaHliTXo4djhoOWErazIrVTZId2xYUTEvVElF?=
- =?utf-8?B?a2ZFM2xaTk1QQ1YzQnYrWVpjd2g1VHVTeC9XcHZIQkY3WFFrYU1oa3RFL0pQ?=
- =?utf-8?B?Lytna0JJa1JDWmpwem1mbEFSY3ZBZHFqOC9UU1VhNktxbWVGaWQveU03eG51?=
- =?utf-8?B?UEdrRGRqcVoyWVhxdkZEclFXSzh2MnN0aStTTUVETHZia1JJYm1aY3NMOEFV?=
- =?utf-8?B?T3g4UzFNMm9rRmJ5N3ZTcVpiZ0tYanJ0NUNIREgrNnQrQ3V4Z0d5cW1jZ3lp?=
- =?utf-8?B?OUdXUTF0YTZQcjNZcXhFN0hkVTg3bjVLRlZXa2NhdksybWtYQXRNQU9DL29m?=
- =?utf-8?B?K200WTlTUzVYWnovaVNKZmJZcG9EK3IvRnNUbDlQdENsaHoxMGR4WHlPN3dh?=
- =?utf-8?B?S2d5V3dpa3RzdzczUEhzdkNtSDNpeFgvdld2NjNqNVU4ak1Bay90UjJWSkpT?=
- =?utf-8?B?c2owYlJ4Z2ZPZWlVVmQrT3loakpXUitrVHd0RlhraEdZa3lsS3UxZmtkbk14?=
- =?utf-8?B?RzIwck5tcmY4bXJFWGxQelFVN0ovNXQrazZvZ3NsMURlYW5QV3diaEdibWlK?=
- =?utf-8?B?QXlIdmVUSDRaT0JiN1d4Y2s1S1AvWnYwcVhvcFNuN2prWm9IVmY2QllhWGxL?=
- =?utf-8?B?Szc4OWk5dW5rdFBRVXFzeFJxN2liSzM3RTJpWlI0U0s0d1A5TXI2cXhxcEFr?=
- =?utf-8?B?M1pCaXMvai9rRGxDQUZrL0dvU0ZjUnllR1lsZS9UamFYdFRnM2tRL25pamFZ?=
- =?utf-8?B?ZmdVdmFTRXZVdEpKVVI2Sjc3SU4zT2tYR055aE1CK1VFUkxudktkMVJXQ3Vr?=
- =?utf-8?B?QXU2Zmtyay82Vmx3bjBuV2tNUkl5bzlQNHpjeGhsT0QxMnhCUFlDcDBxN2tE?=
- =?utf-8?B?WTByOHR2RTUyUFFqOVNFUzVjWU96RHVhbEVQZjhsd2xaRzR6OCtiaGFlR1dJ?=
- =?utf-8?B?VHU1YVpEa1Fxc0xjSTBVY295aWFKYm1uNUxBM3J1Uk0ySGxCTUp1dDBMdjNy?=
- =?utf-8?B?MFlXRXZnNFkydUJ4YlhMWDVLYlhnU1ZHREQ0TWY4b0pzMVpKM0lmKzlsc3VP?=
- =?utf-8?B?TVdUby8rWnZ1Wno0dWYvNWVWR0RLWFlOYVdseU1SdkhIOGpYenBSVDg4RW1s?=
- =?utf-8?B?cndKdXJVS3NGNTlWUU9IZlNHMnFLZHEyQmFXYVJyOWJndXMzck96bzZtU3dT?=
- =?utf-8?B?dFJnMzg0TnNBeUEyMStjWlY5U29ZeHJxRkNOd1NnS2pGbERtMjlEOVFXMTl1?=
- =?utf-8?B?UHhoUFJOelA2UXJZSmdBQXI1bTZOMk43WjhKQUhzQnFyZUhkdXYxSkRLQ3Rx?=
- =?utf-8?Q?DohgCYlPJedcwOk62bLUEQnej?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 250e5b58-0402-4538-d5f1-08daef077974
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 10:27:41.1449
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6q78C7QNTkn7N3qsWJwV8qPC1Fh2ahpakn6QTebZjeZ2q1MDhcSRYv/bCjzqCqaiXKlmynQ8sjzpuIdT6w2+pQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8040
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] fbdev fixes for v6.2-rc3
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <Y7aGw/irynC61O85@ls3530>
+ <CAKMK7uEnFBo_YfU8OTvMS8+YkoGS=vmpGQPMa9PKxGOB3pd7nA@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAKMK7uEnFBo_YfU8OTvMS8+YkoGS=vmpGQPMa9PKxGOB3pd7nA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:vP4qg4Ik2xnHi9jKgGd7IyG0tMSl/rKMrdlhpkkF4WKn94KVpl7
+ AidKo+tAbMC5shZXoITBMNCJ3aEWzPY0DEVApA6mj1lhpaDWgkeGdbz7PQ8R6z+jHK788qP
+ PUP5FpjrAFOksi6//oVXlUJUz7Pki4XBF7A4UjEk3O4yLmw1cf/4aUOI/iVZO+UNU3IfBj1
+ C/92kRV1UM+wW2+OtwGCg==
+UI-OutboundReport: notjunk:1;M01:P0:JKWTuPJdwUo=;76xy/qSTu3Q8WMlQ9AIUR0ckxBy
+ 1JvLVdlUcX2Tzq2k5NOvR6fKfIlbBlfTJ1vzpHAhpD6G2pC4MkBJfZw5HQj6jFLO8Wz60ctT3
+ 0E+SpPCC65G65hWl/k2roZ03uk7h+tfM8s0db8ynyrQ1F6vFR+SkQ0cK7wVgpSbMgsrDY5YpG
+ yz4xiEH6s51mq7jpJw743aQNk2LBMShrYSk8LhyzOTNJFoattXtVV6DkiapnoS6hI/sCBf/VD
+ 0Q1Nz2MqoKvmZ6OeEkkPH1WUL2SsmsojHevh3F0tbfjQcgvNSF+i6QyAC98AYmf62of1fwvrd
+ so8XE/tX6Ae6mm0xEoNvBW4UhbyF7vWloBEgzASFWA1ZzmaXNxfZSbxXw3nDoQd+Env+R9GdF
+ nZHsuTmJjcWPkMqBXgfDAG2AZsl4hgn6h+wBEGQwXpnwN1pkKWlEFCHWuP6CkQ3pGtwQQbZDU
+ /UMXw1ixmzkTxtpezMd3wfsBHXu3abfuVuKWPEUZnQ5VfCGQ4vEXDm5C2NPl4QWYJChOMCQaM
+ 2qcWTiSt5b0deo6MIVJ6M/l3gOjmh8DE7+4T/FmsqP0NKNK+CjkOxPY5NJb3I6xGKrUmhmnpL
+ vjCS2erU0RoYmF+xvQqzWOaC3ELnDdB/FBqHQUE8WKBSda1HPZSWaT+RZ7DPCfRVJFEWqsKTz
+ rcM7PTNgSv5jt+DidbgUF2KOOXDSzkQg0u419GMVR3VHXHM2qpNDHsHoTL19x2n+SbU5wxI9L
+ fppl2XVAD3+sNTdF9bW51RyUmHdI6Y+ERh6kpIWg+etNEk5IZssvje0nVYFAE9jFhIJrnJXeA
+ rxx0JxPLYyYBAwEt772EyMd6KTos7EfhgKjwTL2D+IbR+ZiIaAjKyPbgrbu2/U5TFZN1+uom9
+ 7M3TYZDyPXD2mkneLj+X0fl80uCERzaInhFfwcLuyv4QZs+FWGAHuxJUvArlaYFhgX0SVS2iu
+ i3oLFPcBYE4vunUEjepTHhmOC/s=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matt,
+On 1/5/23 11:22, Daniel Vetter wrote:
+> On Thu, 5 Jan 2023 at 09:14, Helge Deller <deller@gmx.de> wrote:
+>>
+>> Hi Linus,
+>>
+>> please pull the fbdev driver updates for 6.2-rc3, to receive
+>> fixes for matroxfb, offb, omapfb and fbmem.
+>>
+>> Thanks,
+>> Helge
+>>
+>> ----
+>>
+>> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e=
+71c2:
+>>
+>>    Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+>>
+>> are available in the Git repository at:
+>>
+>>    http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.gi=
+t tags/fbdev-for-6.2-rc3
+>>
+>> for you to fetch changes up to 764043cccd7232a783753a612d628fc0cb7854be=
+:
+>>
+>>    fbdev: omapfb: avoid stack overflow warning (2023-01-04 19:09:40 +01=
+00)
+>>
+>> ----------------------------------------------------------------
+>> fbdev updates for kernel 6.2-rc3:
+>>
+>> - Fix Matrox G200eW initialization failure
+>> - Fix build failure of offb driver when built as module
+>> - Optimize stack usage in omapfb
+>> - Prevent use-after-free in fbmem
+>>
+>> ----------------------------------------------------------------
+>> Arnd Bergmann (1):
+>>        fbdev: omapfb: avoid stack overflow warning
+>>
+>> Hang Zhang (1):
+>>        fbdev: fbmem: prevent potential use-after-free issues with conso=
+le_lock()
+>
+> I looked at this, and even by fbdev locking standards this makes
+> absolutely no sense to me. I think this should be dropped before we've
+> reached some sort of conclusion on what is going on, or whether this
+> is just pure static checker conjecture without fully understanding how
+> this is supposed to work really.
+> -Daniel
 
-On 1/5/2023 6:39 AM, Matt Fagnani wrote:
-> I built 6.2-rc2 with the patch applied. The same black screen problem happened
-> with 6.2-rc2 with the patch. I tried to use early kdump with 6.2-rc2 with the
-> patch twice by panicking the kernel with sysrq+alt+c after the black screen
-> happened. The system rebooted after about 10-20 seconds both times, but no kdump
-> and dmesg files were saved in /var/crash. I'm attaching the lspci -vvv output as
-> requested.
-> 
+Sure.
 
-Thanks for testing. As mentioned earlier I was not expecting this patch to fix
-the black screen issue. It should fix kernel warnings and IOMMU page fault
-related call traces. By any chance do you have the kernel boot logs?
+I'll send a new pull request where this patch is dropped.
+
+Thanks!
+Helge
 
 
-@Baolu,
-  Looking into lspci output, it doesn't list ACS feature for Graphics card. So
-with your fix it didn't enable PASID and hence it failed to boot.
-
--Vasant
+>
+>> Paul Menzel (1):
+>>        fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+>>
+>> Randy Dunlap (1):
+>>        fbdev: make offb driver tristate
+>>
+>> Xu Panda (2):
+>>        fbdev: omapfb: use strscpy() to instead of strncpy()
+>>        fbdev: atyfb: use strscpy() to instead of strncpy()
+>>
+>>   drivers/video/fbdev/Kconfig                |  4 ++--
+>>   drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
+>>   drivers/video/fbdev/core/fbmem.c           |  2 ++
+>>   drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
+>>   drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
+>>   drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++---=
+-------
+>>   6 files changed, 27 insertions(+), 19 deletions(-)
+>
+>
+>
 
