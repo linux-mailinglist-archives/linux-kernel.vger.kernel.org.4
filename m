@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B22365F3B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ACF65F3B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 19:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjAESbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 13:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S234942AbjAESdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 13:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbjAESbS (ORCPT
+        with ESMTP id S234934AbjAEScw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 13:31:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FDC13F6F;
-        Thu,  5 Jan 2023 10:31:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6A2FB81BA8;
-        Thu,  5 Jan 2023 18:31:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539EDC433EF;
-        Thu,  5 Jan 2023 18:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672943475;
-        bh=SaK0AUs4XAKJbwfwZCnBEO5FT2cIQoQ9UJE/COaeysA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D7aCWR5FN4ts4HSYWLzf419F5pAgvEBPLTYsdSHTeIyFM/jj8jvY38rMfggFwFWD5
-         F+XlR3au8wusLhwuSu5RGlvycUBhiWsIi3I01wQ9tA/bNM/HVrOp0KPwUclTzt2uGV
-         ttgEY9bIV9oHmBBysHcDywV4fqYHZZITJ/chdYwh8+tzFjfayP1QUdiAOVSpdELwYV
-         rrRU07RxFHdH77GO8QDGFJvdKkXobDLLX8b3sGtXR3aVuDYmCgborg8d44N2nA7HWC
-         LDB5QRON0lSicHId0wNyupeXWRE5Ee0K7LckPNfAzN5W2OfjeTf3MZaULLjacdw8Af
-         uTyLnTO3onj/Q==
-Date:   Thu, 5 Jan 2023 10:31:14 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] ezchip: Switch to some devm_ function to
- simplify code
-Message-ID: <20230105103114.6c1ee8ec@kernel.org>
-In-Reply-To: <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
-References: <cover.1672865629.git.christophe.jaillet@wanadoo.fr>
-        <e1fd0cc1fd865e58af713c92f09251e6180c1636.1672865629.git.christophe.jaillet@wanadoo.fr>
-        <20230104205438.61a7dc20@kernel.org>
-        <94876618-bc7c-dd42-6d41-eda80deb6f1d@wanadoo.fr>
+        Thu, 5 Jan 2023 13:32:52 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395B7564CE;
+        Thu,  5 Jan 2023 10:32:52 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 124so25988311pfy.0;
+        Thu, 05 Jan 2023 10:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3EeGNF5xHs7sa7n7ZiCZflKuJGwYRLGHpWxAaRy01+4=;
+        b=kUNN2cTNsj/b/55vlzGN+y0U6V9ZyiXDdNzPzxqqj9oo7Roqr6UEJ9qqTk4+6j9f6J
+         61L1iPQS88OfzaJZVuayJzm9pl15tC+jOmAMCU6JQ9HkKFBgNhmiUUk0uAShnufjANDU
+         h2oM3xF4cdvftyhjsNPxRRhbXwTgx2vG0CXsHgbL4vV0H1PdHs9WbBba1QEa2HgxZb+L
+         MhkW5xMVcx/d2Nd0jBJO7HWSNJrMEoRw2RurqciPBx+C5S58cfqdp5vONRlraL165Wnz
+         kerx6YfAoBdwHqJwzwtaqmeUfK8oupeAI/vT400AbrbpGSWyOqpGhTZUbbl5BxEhYV51
+         NlXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3EeGNF5xHs7sa7n7ZiCZflKuJGwYRLGHpWxAaRy01+4=;
+        b=beOcg/EGpprM7B4BSxfbTnGSwEzckk19Bq6Lb56m510rWmHFhxxqOHhUHIwdm7npp9
+         6NXb5TD8vf6o24i+/OlsIvpkYFHpPcpazILcSjCp/KGQREDY1tpqopxgEmzknBb4ydzU
+         ipBShUx4wvjYKyDXrGZ9kmNZgE1oa9h+uTtxO+jaWktwJmYsmo/vyY/cb9SsfQcqi+hh
+         f0xnTSDe6uzZ1O5i2qE41KORVBbPYm6J08ucOv8Qb9VAJFaS6STAgk8eBPDQmGiu5qct
+         JeQF6OmVZfAOw/tzyTFfbtxB7E5+BFBtkH6egRQRPI3nrb5gFx8PVTQGW27EpUoDmCt3
+         qE+w==
+X-Gm-Message-State: AFqh2kqiXbUNs2BAS0TUS40uS72LumqQtOxwOHqUjFeSvQ9luZEV1a6I
+        LDasKUqasbg1OuWf4CEntjw=
+X-Google-Smtp-Source: AMrXdXvpY+Q3vWOoS5G6f7NeF7ydpL/GRO+5dXR0bQpac8gQ8f78efxbU5ssTcyu6aGKcUzm1HnNEQ==
+X-Received: by 2002:a05:6a00:26e8:b0:583:3d0a:4c34 with SMTP id p40-20020a056a0026e800b005833d0a4c34mr624379pfw.4.1672943571536;
+        Thu, 05 Jan 2023 10:32:51 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b005832c23f33fsm1642897pfn.15.2023.01.05.10.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 10:32:51 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 5 Jan 2023 08:32:49 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
+Message-ID: <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
+References: <20221227125502.541931-1-yukuai1@huaweicloud.com>
+ <20221227125502.541931-2-yukuai1@huaweicloud.com>
+ <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
+ <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 07:27:00 +0100 Christophe JAILLET wrote:
-> My main point is in the cover letter. I look for feed-back to know if 
-> patches like that are welcomed. Only the first, Only the second, Both or 
-> None.
+On Thu, Jan 05, 2023 at 09:14:07AM +0800, Yu Kuai wrote:
+> 1) is related to blkg, while 2) is not, hence refcnting from blkg can't
+> fix the problem. refcnting from blkcg_policy_data should be ok, but I
+> see that bfq already has the similar refcnting, while other policy
+> doesn't require such refcnting.
 
-Sorry, missed that.
+Hmm... taking a step back, wouldn't this be solved by moving the first part
+of ioc_pd_free() to pd_offline_fn()? The ordering is strictly defined there,
+right?
 
-> These patches (at least 1 and 2) can be seen as an RFC for net 
-> MAINTAINERS, to see if there is any interest in:
->    - axing useless netif_napi_del() calls, when free_netdev() is called 
-> just after. (patch 1)
+Thanks.
 
-I think it'd be too much noise. I'd vote no.
-
->    - simplifying code with axing the error handling path of the probe 
-> and the remove function in favor of using devm_ functions (patch 2)
-
-I believe DaveM was historically opposed to those helpers in general.
-I think we should avoid pure conversions, unless they are part of
-development of new features or fix bugs.
+--
+tejun
