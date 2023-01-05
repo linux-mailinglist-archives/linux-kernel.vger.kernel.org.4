@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08AB65E140
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D26165E144
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbjAEAEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S231465AbjAEAGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjAEAEJ (ORCPT
+        with ESMTP id S229759AbjAEAGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:04:09 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A0324F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 16:04:08 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id e10so9534569pgc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 16:04:08 -0800 (PST)
+        Wed, 4 Jan 2023 19:06:40 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E3B43A0C
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 16:06:39 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4a2f8ad29d5so157022437b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 16:06:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xzo023694+wb/S1CfmbkiM0eJ0PtYfUNQ8L6gvd/+XM=;
-        b=ECoVNHQ9tvZ7sQeorEUOdiMYYtFLu8QWelJgUOnooA60Qz4p6taWU3HrqcLqbREAIF
-         STueb232p1T0VLqbkEo3/Fex4BkmArq2ZJ0cBvvOTv5UI+WFMlB8LRcp5SMQ0D5Q+xsC
-         jOdVGno5+5VkcPZuqos5V6+6m6UPKF0XksPm8enhwHqVKbhdBGxIcP8LbHK3T05MwIMt
-         DxCa3rqeU4IX8M4XjfFFzAT+BdP8wp7j7/M06rsaGtA+7Iaajh8FQMUHq+5x7XdL+P2a
-         JWkz8CAJHrWfSGEGNKP5EndFfFGtAuSZS2Wdgas9oor+4kv7dORz3AE2T6UYvzF8n5fA
-         hDLg==
+        bh=ugktJCe/HSjFId4CkvvJ5v4nvujpVuUxkVJVsSWOUE4=;
+        b=TKQFqzcmuwTVyi3fjqE0c6JtCZpLG69JEMvwQ6VAsL1vYaWS8jl8Ysb6ZsxhwK4DMG
+         DLtJmfrmqSb+cdaJSbcFxZB58lhBSf6ZDJcM4rhBHpZPZRNy6jPxx9LM28XFK590uVgS
+         VxOgvPfEVks3f11jgxvLz0zfljElFhSVgMbiawbY0+oetVr77HuynqiIDa2OJ8m49HJy
+         yR1PrjDL9tlL84h6s14i7dTGbiI23YdKK3m/ezLpMwmRerur7GGw13WD1pMz/TcNCCjx
+         Nmmdw1vWw+he73L7aPwbQqDb9gP+pba9Ydir8bWW/K7aodV3UnOz/RokArKRRp3JexgF
+         E8TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Xzo023694+wb/S1CfmbkiM0eJ0PtYfUNQ8L6gvd/+XM=;
-        b=SKOcb/Cmt/hhWQ10nIAy1Lv5DDOwDOfSW+fmgP2wX79TXnequQK3PK+i55jzAoQo6P
-         +PihZkEwro3EjpcIgY/IOFnPRwQlTdeDDMHAelGhsfPWXtwEB3/sonT9qsiQOzil9Kqk
-         WvuvIBZI8zKbzsvyoYwXFtsN0QAhYcRU9YzsRxYOaFqgUp7/QT10q0DhYLlUPzLVu1uQ
-         fsrQZX19I7uKySBwsO0oLrN7eFQk609/ZO60pCaDzL49qZNRbtQC8G7lnr4d0Sv8EnKB
-         gGMU78AGE7DSMCyOp4OhSzXq3/X4NaTPu90vIwRqQTPqk+2gpo4CXmrchzEJC4Xi4jxB
-         jjPA==
-X-Gm-Message-State: AFqh2kpe+6llOD4J0Kr5j8k3PL4phTbvOB37Da4LtI8shdEbdfa82god
-        /VlRFkhElRZ8W1b723X8AItT/mA0uIacQprlOeRfUcS9
-X-Google-Smtp-Source: AMrXdXtecdu7jIJp6vSbE9eunxWy6lBtBRMT1gi8Fv4EOrmHa1+mhG4L333Bxqqs5kiqTqJOgzHbNdxMhvEuz+TFG98=
-X-Received: by 2002:a63:1944:0:b0:492:50ad:d177 with SMTP id
- 4-20020a631944000000b0049250add177mr3722190pgz.310.1672877048085; Wed, 04 Jan
- 2023 16:04:08 -0800 (PST)
+        bh=ugktJCe/HSjFId4CkvvJ5v4nvujpVuUxkVJVsSWOUE4=;
+        b=J25yXH+Kj2oBFXNprGbR3svGXtsYylsDN+pyI1m8yAvcDFWPcY6SPef7yL9HVI3cJa
+         VMOiVoM4fAHUwZtlXdiZuotq7bZxlTiw8Vhl23v0fFNQXgsDGtW6sy4cKg+cm4icVZry
+         31Yip05rQ2UddSpPSCoAtgjodBBB3r2IPrJRAkUNSDlOh75IQK8PK1eRXTe/8p9QzcwS
+         A+GOB1ci43QMJ8fYAaJkHGaTqNuGoHYgLrcEW6QXoMaIdZ08KYBngaIgMzGSUt6Ml+KI
+         WWW46Fg32FT0nZfh624ktCYiCi04/6tkFyMXb5qRe4H8WmlZyX++JqJO023G1HA6bIm2
+         rw/A==
+X-Gm-Message-State: AFqh2kr2o0ORwXQ88nfeFBieenqjAibQ0MkR/dO5kG47DdpANoAlgP6c
+        eQuG/5MStbPlxslhWmhhT06HkrgUyIw+UVTz9Vr0hg==
+X-Google-Smtp-Source: AMrXdXv+nX87Qe/hYWQukdNnIqreUBCRunYKkfj5vDDQx2RKVFT5PrGFmLA/MfY9YJN1/ZjG81CVeT/yDqJFSHSUz+g=
+X-Received: by 2002:a81:9210:0:b0:3dc:fd91:ef89 with SMTP id
+ j16-20020a819210000000b003dcfd91ef89mr5295477ywg.347.1672877198588; Wed, 04
+ Jan 2023 16:06:38 -0800 (PST)
 MIME-Version: 1.0
-References: <b740c9fb-edba-92ba-59fb-7a5592e5dfc@google.com>
- <dc9f7bb0-77d4-8b0e-c6b6-ece3f77ed326@redhat.com> <32be06f-f64-6632-4c36-bed7c0695a3b@google.com>
- <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com>
-In-Reply-To: <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 4 Jan 2023 16:03:56 -0800
-Message-ID: <CAHbLzkqjooxnAwqK7vZoJpP2bSUTCUgv3UtWsZgo444jpGSfoA@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
+References: <20221228194249.170354-1-surenb@google.com> <6ddb468a-3771-92a1-deb1-b07a954293a3@redhat.com>
+ <CAJuCfpGUpPPoKjAAmV7UK2H2o2NqsSa+-_M6JwesCfc+VRY2vw@mail.gmail.com>
+ <b3aec4d4-737d-255a-d25e-451222fc9bb9@redhat.com> <CAJuCfpGBrAjjX9Otyn1vRKSVGL5uh=VOsEtM7-B6V4oT4ufSxw@mail.gmail.com>
+In-Reply-To: <CAJuCfpGBrAjjX9Otyn1vRKSVGL5uh=VOsEtM7-B6V4oT4ufSxw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 4 Jan 2023 16:06:27 -0800
+Message-ID: <CAJuCfpHp_rMUf6hjBH+aXjHbkBUhPLO9VFL+o8tfmHfRNPrzJg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: fix vma->anon_name memory leak for anonymous
+ shmem VMAs
 To:     David Hildenbrand <david@redhat.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, hughd@google.com, hannes@cmpxchg.org,
+        vincent.whitchurch@axis.com, seanjc@google.com, rppt@kernel.org,
+        shy828301@gmail.com, pasha.tatashin@soleen.com,
+        paul.gortmaker@windriver.com, peterx@redhat.com, vbabka@suse.cz,
+        Liam.Howlett@oracle.com, ccross@google.com, willy@infradead.org,
+        arnd@arndb.de, cgel.zte@gmail.com, yuzhao@google.com,
+        bagasdotme@gmail.com, suleiman@google.com, steven@liquorix.net,
+        heftig@archlinux.org, cuigaosheng1@huawei.com,
+        kirill@shutemov.name, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,148 +80,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 1:20 AM David Hildenbrand <david@redhat.com> wrote:
+On Wed, Jan 4, 2023 at 10:24 AM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> >> Or am I wrong?
-> >>
-> >>> Is anon_vma lock required?  Almost not: if any page other than expected
-> >>> subpage of the non-anon huge page is found in the page table, collapse is
-> >>> aborted without making any change.  However, it is possible that an anon
-> >>> page was CoWed from this extent in another mm or vma, in which case a
-> >>> concurrent lookup might look here: so keep it away while clearing pmd
-> >>> (but perhaps we shall go back to using pmd_lock() there in future).
-> >>>
-> >>> Note that collapse_pte_mapped_thp() is exceptional in freeing a page table
-> >>> without having cleared its ptes: I'm uneasy about that, and had thought
-> >>> pte_clear()ing appropriate; but exclusive i_mmap lock does fix the problem,
-> >>> and we would have to move the mmu_notification if clearing those ptes.
-> >>>
-> >>> Fixes: 8d3c106e19e8 ("mm/khugepaged: take the right locks for page table
-> >>> retraction")
-> >>> Signed-off-by: Hugh Dickins <hughd@google.com>
-> >>> Cc: Jann Horn <jannh@google.com>
-> >>> Cc: Yang Shi <shy828301@gmail.com>
-> >>> Cc: David Hildenbrand <david@redhat.com>
-> >>> Cc: Zach O'Keefe <zokeefe@google.com>
-> >>> Cc: Song Liu <songliubraving@fb.com>
-> >>> Cc: <stable@vger.kernel.org>    [5.4+]
-> >>> ---
-> >>> What this fixes is not a dangerous instability!  But I suggest Cc stable
-> >>> because uprobes "healing" has regressed in that way, so this should follow
-> >>> 8d3c106e19e8 into those stable releases where it was backported (and may
-> >>> want adjustment there - I'll supply backports as needed).
-> >>
-> >> If it's really something that doesn't matter in practice (e.g., -1%
-> >> performance while debugging :) ), I guess no CC is needed. If there are real
-> >> production workloads that suffer, I guess ccing stable is fine.
+> On Wed, Jan 4, 2023 at 1:04 AM David Hildenbrand <david@redhat.com> wrote:
 > >
-> > It's about recovering performance *after* debugging.  It is not something
-> > that is of any value to me personally, nor (so far as I know) to anyone
-> > whom I work with.  But it is something which Song Liu went to the trouble
-> > to make possible in his "THP aware uprobe" series three years ago, and it
-> > is something which Jann unintentionally regressed in his recent commit:
-> > so I thought it proper to reinstate where regressed.
->
-> Right, although I wonder if that original series fixed a real
-> performance issue or was more a "this makes sense, let's just optimize
-> this corner case by some serious complexity". I hope it's not the latter :)
->
+> > On 03.01.23 20:53, Suren Baghdasaryan wrote:
+> > > On Mon, Jan 2, 2023 at 4:00 AM David Hildenbrand <david@redhat.com> wrote:
+> > >>
+> > >> On 28.12.22 20:42, Suren Baghdasaryan wrote:
+> > >>> free_anon_vma_name() is missing a check for anonymous shmem VMA which
+> > >>> leads to a memory leak due to refcount not being dropped. Fix this by
+> > >>> adding the missing check.
+> > >>>
+> > >>> Fixes: d09e8ca6cb93 ("mm: anonymous shared memory naming")
+> > >>> Reported-by: syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
+> > >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > >>> ---
+> > >>>    include/linux/mm_inline.h | 2 +-
+> > >>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+> > >>> index e8ed225d8f7c..d650ca2c5d29 100644
+> > >>> --- a/include/linux/mm_inline.h
+> > >>> +++ b/include/linux/mm_inline.h
+> > >>> @@ -413,7 +413,7 @@ static inline void free_anon_vma_name(struct vm_area_struct *vma)
+> > >>>         * Not using anon_vma_name because it generates a warning if mmap_lock
+> > >>>         * is not held, which might be the case here.
+> > >>>         */
+> > >>> -     if (!vma->vm_file)
+> > >>> +     if (!vma->vm_file || vma_is_anon_shmem(vma))
+> > >>>                anon_vma_name_put(vma->anon_name);
+> > >>
+> > >> Wouldn't it be me more consistent to check for "vma->anon_name"?
+> > >>
+> > >> That's what dup_anon_vma_name() checks. And it's safe now because
+> > >> anon_name is no longer overloaded in vm_area_struct.
+> > >
+> > > Thanks for the suggestion, David. Yes, with the recent change that
+> > > does not overload anon_name, checking for "vma->anon_name" would be
+> > > simpler. I think we can also drop anon_vma_name() function now
+> > > (https://elixir.bootlin.com/linux/v6.2-rc2/source/mm/madvise.c#L94)
+> > > since vma->anon_name does not depend on vma->vm_file anymore, remove
+> > > the last part of this comment:
+> > > https://elixir.bootlin.com/linux/v6.2-rc2/source/include/linux/mm_types.h#L584
+> > > and use vma->anon_name directly going forward. If all that sounds
+> > > good, I'll post a separate patch implementing all these changes.
+> > > So, for this patch I would suggest keeping it as is because
+> > > functionally it is correct and will change this check along with other
+> > > corrections I mentioned above in a separate patch. Does that sound
+> > > good?
 > >
-> > (What I do have more of an investment in, is for MADV_COLLAPSE to be able
-> > to collapse some extents in a large vma where some other extent got CoWed,
-> > so giving the whole vma an anon_vma.  But that's not an issue for -stable,
-> > and I cannot tell you offhand whether undoing this anon_vma exclusion is
-> > enough to enable that or not - I suspect not, I suspect a result code or
-> > switch statement needs to be adjusted too.)
->
-> Yeah, having a single COWed page in a large MAP_PRIVATE file/shmem
-> mapping would disable collapse, so it's the right thing to do.
->
-> Thinking about it some more, and the effective code change, stable
-> doesn't sound wrong.
->
-> >>
-> >>
-> >> Side note: set_huge_pmd() wins the award of "ugliest mm function of early
-> >> 2023". I was briefly concerned how do_set_pmd() decides whether the PMD can be
-> >> writable or not. Turns out it's communicated via vm_fault->flags. Just
-> >> horrible.
+> > Works for me.
 > >
-> > I firmly disagree - it's from 2022! and much too small to be ugliest;
-> > but I haven't thought about the aspect that is bothering you there.
+> > Acked-by: David Hildenbrand <david@redhat.com>
 >
-> The ugliest I stumbled over in early 2023 -- until January 2nd :D
+> Thank you! Will post the followup cleanup patch shorly.
+
+Andrew, I posted v2 of this patch at
+https://lore.kernel.org/all/20230105000241.1450843-1-surenb@google.com/.
+Please replace the original one in your tree. I had to follow David's
+original suggestion instead of my planned cleanup because removing
+anon_vma_name() would require us to add #ifdef CONFIG_ANON_VMA_NAME
+everywhere we use vma->anon_name, which is quite ugly.
+Thanks,
+Suren.
+
 >
 > >
-> > What's bothered me most about it, is the way its name, and the naming of
-> > the do_set_pmd() it interfaces with, give no hint that they are entirely
-> > about file (or shmem) vmas, and would not work right on anon vmas
-> > (I forget whether it's just a matter of which stats updated, or more).
->
-> Yes. I dug very deep into in-place collapse yesterday because I was
-> briefly concerned about anon THP, and it took me longer to understand
-> that whole machinery than it should (and that anon THP never ever
-> collapse in-place).
->
-> Some of that khugepaged stuff needs some *serious* cleanups and
-> refactoring. do_set_pmd() is not an exception.
->
->
-> Some more examples:
->
-> if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
->         ...
->         hpage_collapse_scan_file()
-> } else {
->         hpage_collapse_scan_pmd()
->         ...
-> }
->
->
-> 1) hpage_collapse_scan_pmd() is only for anon memory. Totally obvious
->     from the name. But why are we potentially calling it for VMAs that
->     are not applicable? For maximum David confusion?
-
-IIRC the VMAs are checked before, what do you mean about "not
-applicable"? But anyway khugepaged/MADV_COLLAPSE does release and
-reacquire mmap_lock multiple times, so there are multiple places to
-check VMAs validity.
-
->
-> 2) "IS_ENABLED(CONFIG_SHMEM) && vma->vm_file" is also supposed to cover
->     ordinary file-thp. Totally obvious from the IS_ENABLED(CONFIG_SHMEM)
->     ... I probably spent 30minutes understanding what's happening here.
->     Just misleading and wrong without CONFIG_SHMEM.
->
->
-> ... and what's easier to get than this magic set of boolean flags:
->
->         hugepage_vma_check(vma, vma->vm_flags, false, false, true)
-
-This is not perfect. I was thinking about changing them to one flag,
-just like TTU_ flags used by try_to_unmap(). That may make things
-cleaner.
-
->
-> ... and obviously
->         hugepage_vma_revalidate()
-> is supposed to be a follow up to a previous
->         hugepage_vma_check()
-> and totally different from
->         transhuge_vma_suitable()
->
-> Hard to make it even less consistent.
-
-This was after my cleanup, it was much messier before. And I did add
-comments to make them more understandable, but anyway better naming is
-definitely welcome.
-
->
-> Also, it's very clear from the code that SCAN_PTE_MAPPED_HUGEPAGE only
-> applies to file-thp, right? No.
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+> > for this one, as it fixes the issue.
+> >
+> > --
+> > Thanks,
+> >
+> > David / dhildenb
+> >
