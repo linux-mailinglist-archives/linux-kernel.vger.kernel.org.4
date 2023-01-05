@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585B965F1B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90B265F1C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 18:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbjAERC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 12:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S234866AbjAERCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 12:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbjAERCE (ORCPT
+        with ESMTP id S234683AbjAERCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:02:04 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A990BE2D
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:02:02 -0800 (PST)
+        Thu, 5 Jan 2023 12:02:06 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C4714083
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:02:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oNyIkU2j/WvnS5zcQlPAdWWFibF5yGGcouqultfAoYelAJ80d8PU0TOKeGi6kgZLDm0rB5f7nqRGcdfS2L88E86Kt3T4/C8EeUGQdSsxCc2wOeJOu7HIGv1lqKVZMzu+LJZd0mcvPfvpi1cv1L/YAjQ+F08D1MabMZxBpG6mpmgHecy5qqrF0pyBWStybFdyLwic8D8ZK61WYtcKZ+khAZ+la9EKOtKYbw2sLVQ2C8S7HUQir91qwcRnnvefQODEbIZiIZH3uuaBTx5x9lf+VRtrhyw8/biFzPjw4V0+YFUxVtch5txgnlwX7CrcXBgxIMG5IZv3c+hvTd2jSAhFGQ==
+ b=ZPIhBpgbI5HO+Wo9r1hium58X1WU9Y7b3e3aM0n8vAJGaEYxAWrNBsHgUgUxys2/7nChaLfr7jEt+QzHsQj6RBOOzm/e7UYMYHgF/iaLDsjS0SivBQywP4xt7Pj//C0Ga4hTzNq5wZTCSwOBM2JGeomEqVU4+Px8J2oagRtLzjiSCSX9/7UahrwTYUQf0pPvsmsns5JElMw2N4tfi5ECOQfl4MOkwKAsJR/svqmcFC0fyQNyujf6BoqCNcXmr6E9OfVsgL0Q8yYRg5f76gg9nwHcIQYUXTIHgiVgF0BiGzsNxl5GppyncOYNy/TWXZCTMXFe5xW8aypndfY2tHdScg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4LxjqprPsdNO7TXS/dXkGsaSJsZ7Qug/Lv33+aLspIk=;
- b=ierZo2xT8MhDwfLxd7aJF/pVAJGinKt3PBMMhGqUQmtCZo1nNmbd7S6FrpxuZWfbpVpM4j0JYOBNdal+Z0CD/1mz+t9Xib2oPQTTOyuri+fHv1DBa16PRZr38rGTf1//MXlVyWILCOSJLzFIyE8oYOhpn4bbdfgLAIvcUx1ABsQGxj3up9paGGcTDS1afJ5jKQD1fGAZHfRjHOhziNc64eq27vMBf36V1gN5iOsE8dBUpBg29yqSXVkz/G6NhiYJbSRkfZ+W8s4F032RUFHmRVXu/USg31Ljzu3KVlmKBY5UyUVwDiVkYeZPEMXEm0CkzBJJHv5jM/p6mZak72Go8g==
+ bh=OVl5UPg0zyYuJL7fJjcYrfLpGIXCd8zRUXRNY13VG0k=;
+ b=YQmEFRgban2OpPQhHdWKOpFKkH1j/5SSfHt+jfpYdPq2eC0adtE+ZcHR3fPRpORJskb6DxIBU57Pb4vaoCtqTbpJBwHGRxFfk/OROeClu8o2vAoW20SxKJ+xIv+F8MA0X2k4rbFq+huOpXB8QcQx0CCMdmEbsK22tSTorpfVJh4GesaCx/5LvYcQEfhsbje1hKMpsLxDquAxATMaHDnXyZvBISQILp9EuTJsPeHCP3FDBtH8yfbZiUFb1BthTCEAEzIkWcBFGf3IH+IlY/grugnLTMYM0Re9t1RI/RaU0ZBkYMMjTV68k4cgSkA5nF1IZ7oErueLrBZ1Gh3WC9Ypiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4LxjqprPsdNO7TXS/dXkGsaSJsZ7Qug/Lv33+aLspIk=;
- b=eqKjO7xuXIcZSa7SP1HQVv3ox5hJuxi53oG5gJ2psnGKzx8MJRcIoyBKoHFQkNI5uSYQNVYxg/b+IAhDUynDt72uVk7H6+icJjSUw5mJewngGq7QI+EwTCox9t7VJHHlYoZ+PhGpKs3dxgGt4RVZgRI3qrFSE8DsYQmpp2GnRsk=
-Received: from BN0PR02CA0016.namprd02.prod.outlook.com (2603:10b6:408:e4::21)
- by SN7PR12MB8001.namprd12.prod.outlook.com (2603:10b6:806:340::5) with
+ bh=OVl5UPg0zyYuJL7fJjcYrfLpGIXCd8zRUXRNY13VG0k=;
+ b=FoghAdVjlyZgS3Kpt7pexbCNIPaErL6F3ViDRTfe5xX7T2QBiKjcaiGL9Z/uhCMLsNV7X7Jjmwk9pLjvo1gwd4QmGpxE3mxZGxJMUuMY3NAmZ80pPC8ZEP/ZuIxG8t1CfZ7U0cHSlOuhqkZ7X/uE0nudoK6wkhB7r2c3VQwF51s=
+Received: from BN0PR02CA0018.namprd02.prod.outlook.com (2603:10b6:408:e4::23)
+ by MW6PR12MB7072.namprd12.prod.outlook.com (2603:10b6:303:238::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 17:02:00 +0000
+ 2023 17:02:02 +0000
 Received: from BN8NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e4:cafe::52) by BN0PR02CA0016.outlook.office365.com
- (2603:10b6:408:e4::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.14 via Frontend
- Transport; Thu, 5 Jan 2023 17:02:00 +0000
+ (2603:10b6:408:e4:cafe::d6) by BN0PR02CA0018.outlook.office365.com
+ (2603:10b6:408:e4::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
+ Transport; Thu, 5 Jan 2023 17:02:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT107.mail.protection.outlook.com (10.13.176.149) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5966.18 via Frontend Transport; Thu, 5 Jan 2023 17:02:00 +0000
+ 15.20.5966.18 via Frontend Transport; Thu, 5 Jan 2023 17:02:01 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 5 Jan
- 2023 11:01:58 -0600
+ 2023 11:02:00 -0600
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Alex Deucher <alexander.deucher@amd.com>,
         <linux-kernel@vger.kernel.org>
@@ -66,9 +66,9 @@ CC:     Javier Martinez Canillas <javierm@redhat.com>,
         Mario Limonciello <mario.limonciello@amd.com>,
         "Lijo Lazar" <lijo.lazar@amd.com>, Evan Quan <evan.quan@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>
-Subject: [PATCH v7 03/45] drm/amd: Convert SMUv11 microcode to use `amdgpu_ucode_ip_version_decode`
-Date:   Thu, 5 Jan 2023 11:00:49 -0600
-Message-ID: <20230105170138.717-4-mario.limonciello@amd.com>
+Subject: [PATCH v7 04/45] drm/amd: Convert SMUv13 microcode to use `amdgpu_ucode_ip_version_decode`
+Date:   Thu, 5 Jan 2023 11:00:50 -0600
+Message-ID: <20230105170138.717-5-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230105170138.717-1-mario.limonciello@amd.com>
 References: <20230105170138.717-1-mario.limonciello@amd.com>
@@ -80,23 +80,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT107:EE_|SN7PR12MB8001:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bc78a42-9d45-4c36-bc7c-08daef3e8faa
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT107:EE_|MW6PR12MB7072:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1519901-e099-429c-127b-08daef3e9067
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fAA/98XarapfeKon5ivPt7BXjtrSoDviQJHhPLTsQJ6se5dZI2ru6EKQE8SPntbUgy8qubVwuLqAoUGRM8j5NUQsAmVretUhmK79YTaLlZvo5Ezd8pSqJjBOxG2q+2/4CDdgP5ivWTcr63+1p0QN7CwqHg03kvJNOipgJgAg8/SA5we+HnABM+HsOYenu+y3mVmYjDQdejNWBcMKpDOBO3aqeGsgXMjU5uUojA31Eyv797t0EIAedlFgHsxnfdVYCWtjlDNdztGQIRR6vNjA18krQvIIGtgebir4iI7pAd78aXWv9Bzb481iE7hcKFuWaZDjKUyIXEuTgfzTdIeRqYs+m6R7fBZrQ/XMMvRLbvePwReiZnCHvxEhcNINJr9qXG9IayFsskJQPzyvG4fTg3SAE/CfSXb3NhydYC4F7lnxnRVTc/yxDwNWiZ6SQevf/vwQmcHRz7Myq4yk+9XUXDNWjxnU+vlQKlWh40vWVwXP679gWUZ7/+ey48O9qtDMul4wS/4hZwY5CncaS7k6/Gy3BqcRJvwrV8SFNfMCZo9wBidnHtp/nXlC/nFX3jj2EvbmZu+qt1R4rL6O3AzP334F9bLNpypzMmRD2pVnXY22bgHBQLCmBVDNkiITu22BfjvAbNW8zu1Scr8iOBSyW+zPcsmd1jWo12vFs9/zU72zcT4eUh0Uv5i75IJ1CdkYTDwFKoXjdNAEwjZeajd8VYVMgrQBaZY124SQA2cHk2ekCbkDRfCB3YoHYtybYvvZxLl4O+Laf8pUyr33zNpK3g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199015)(46966006)(36840700001)(40470700004)(66574015)(426003)(47076005)(82310400005)(336012)(16526019)(186003)(2616005)(1076003)(26005)(6666004)(7696005)(40480700001)(83380400001)(86362001)(40460700003)(36756003)(36860700001)(356005)(82740400003)(81166007)(41300700001)(2906002)(4326008)(8676002)(70586007)(5660300002)(44832011)(8936002)(110136005)(478600001)(70206006)(316002)(54906003)(81973001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pBRAi6zuVH+Z1nOslfbyMixT0JCVfaX5WzXaf3MleyggvBSi/1ERM559Hf/s68e8JIWA5679fjno+54cfNY45b9c/oWS9t1X1nlFfxNGd6VMWnpTRIPV9z2nHjBX7k5QNZBIdpBSNrTVXHBx7WHhJ9b3drmgF+VZzKjaIfApp4whU5+B7zl6Ojy3XpGa2rnNq/uxn75VhuvvI4Ht4k38yo8LVWBo8Zk9ln9h1PGY08rtl0S88B1NeI3GswdcV4vxjlTaruSoxVoZKoyWOQcAQKTQ15+mPOL4FImOEG6VkjXha9DZDjkqokj08eSwS8k7pasQLpj3KFhneY6k6Qx6qwlJut+fVAH9SSAq4OvH+YJV+lfiiP0JFgNQhhuRpWG0e+wDSLryGyYGGtNlLsoMiWIKNBnqRwXGeqoRZyROi/KtYV7egNkW1MjVOIR/xdN5Xr+2uRSl+Kzcinuv06l14+fHIpp/Rz1NgS78tIpHt42kz1s+ue5q4uzjwzTHDTfA1p3Qwad/tOX5sI/xyNSff/s6d21OA8kbvnceEW5aYCqSpVRbOwAQC4Y/6s+8k47BS5IST2qnqjEEYKxfdDiDiOIu7U1UhNxCq/U+m0N3Iu8PDAgXV1HiNp728qB+55qtqsZzQ13Az6LftQMPV//Q0e5mqoj10gL0tUVmaefOR+NphAy76zFTMOla59NAj8neOoM509X9oBox4NTUOBPCn6h6j7Bb1V9QyMl5zFRdPuh3gbuwmGNjRcRi4ntUwfM61kMc5o8aI3tGnSGhYuyM8w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199015)(36840700001)(40470700004)(46966006)(41300700001)(5660300002)(70586007)(70206006)(8676002)(44832011)(2906002)(54906003)(110136005)(4326008)(8936002)(7696005)(186003)(16526019)(478600001)(6666004)(26005)(426003)(40480700001)(336012)(47076005)(86362001)(36860700001)(2616005)(83380400001)(66574015)(82740400003)(81166007)(36756003)(356005)(1076003)(316002)(82310400005)(40460700003)(81973001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:02:00.3219
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 17:02:01.5562
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bc78a42-9d45-4c36-bc7c-08daef3e8faa
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1519901-e099-429c-127b-08daef3e9067
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT107.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8001
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7072
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -107,67 +107,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the special casing from SMU v11 code. No intended functional
-changes.
+The special case for the one dGPU has been moved into
+`amdgpu_ucode_ip_version_decode`, so simplify this code.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Acked-by: Christian König <christian.koenig@amd.com>
 Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
 ---
- .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    | 35 ++-----------------
- 1 file changed, 3 insertions(+), 32 deletions(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index ad66d57aa102..d4756bd30830 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -93,7 +93,7 @@ static void smu_v11_0_poll_baco_exit(struct smu_context *smu)
- int smu_v11_0_init_microcode(struct smu_context *smu)
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+index 0ac9cac805f9..506a49a4b425 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+@@ -88,7 +88,6 @@ static const int link_speed[] = {25, 50, 80, 160};
+ int smu_v13_0_init_microcode(struct smu_context *smu)
  {
  	struct amdgpu_device *adev = smu->adev;
 -	const char *chip_name;
-+	char ucode_prefix[30];
- 	char fw_name[SMU_FW_NAME_LEN];
+ 	char fw_name[30];
+ 	char ucode_prefix[30];
  	int err = 0;
- 	const struct smc_firmware_header_v1_0 *hdr;
-@@ -105,38 +105,9 @@ int smu_v11_0_init_microcode(struct smu_context *smu)
- 	     (adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7))))
+@@ -100,16 +99,9 @@ int smu_v13_0_init_microcode(struct smu_context *smu)
+ 	if (amdgpu_sriov_vf(adev))
  		return 0;
  
 -	switch (adev->ip_versions[MP1_HWIP][0]) {
--	case IP_VERSION(11, 0, 0):
--		chip_name = "navi10";
--		break;
--	case IP_VERSION(11, 0, 5):
--		chip_name = "navi14";
--		break;
--	case IP_VERSION(11, 0, 9):
--		chip_name = "navi12";
--		break;
--	case IP_VERSION(11, 0, 7):
--		chip_name = "sienna_cichlid";
--		break;
--	case IP_VERSION(11, 0, 11):
--		chip_name = "navy_flounder";
--		break;
--	case IP_VERSION(11, 0, 12):
--		chip_name = "dimgrey_cavefish";
--		break;
--	case IP_VERSION(11, 0, 13):
--		chip_name = "beige_goby";
--		break;
--	case IP_VERSION(11, 0, 2):
--		chip_name = "arcturus";
+-	case IP_VERSION(13, 0, 2):
+-		chip_name = "aldebaran_smc";
 -		break;
 -	default:
--		dev_err(adev->dev, "Unsupported IP version 0x%x\n",
--			adev->ip_versions[MP1_HWIP][0]);
--		return -EINVAL;
+-		amdgpu_ucode_ip_version_decode(adev, MP1_HWIP, ucode_prefix, sizeof(ucode_prefix));
+-		chip_name = ucode_prefix;
 -	}
 +	amdgpu_ucode_ip_version_decode(adev, MP1_HWIP, ucode_prefix, sizeof(ucode_prefix));
  
--	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_smc.bin", chip_name);
+-	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", chip_name);
 +	snprintf(fw_name, sizeof(fw_name), "amdgpu/%s.bin", ucode_prefix);
  
  	err = request_firmware(&adev->pm.fw, fw_name, adev->dev);
