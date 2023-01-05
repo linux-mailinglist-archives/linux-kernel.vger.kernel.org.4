@@ -2,157 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9162865EC45
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6B565ECA5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 14:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjAENHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 08:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S232361AbjAENPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 08:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbjAENHJ (ORCPT
+        with ESMTP id S232153AbjAENPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 08:07:09 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515E84D4A3;
-        Thu,  5 Jan 2023 05:07:06 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3059sZMn024285;
-        Thu, 5 Jan 2023 14:06:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=7DNtAn5FSvBFs58HAuiuLotVK7ADNTWKpKT1zToNgew=;
- b=ZJpbS+iahkEvgrcpHDig50rDuYhsS1Y+spb3eO5PF2K2favjTaARGhzIdp4CeNjUQ2Kc
- I8GD4MhOXfPDFsEtXCF7aeATs6cvmltBrZfP+H9QcaH6vDUX2rRqR+pmRJqC77xoFGzV
- Hy6Kxm7O7ItUXFGd4aDteYeci5r+f+s7mj1SRK07PC4H+y8cPwsPhlgmWBsJdFsymOnX
- FcQgtctb5P6IAuQ+gsQfwLWj0H0Tih7+ZVTJCScOd2NyDHXw/O/TxNnL3mPw09MU+iw5
- YQG25eWJyk8JI29MlpTE2DWBBDMwN/7JNx35cHKHu7+k90Kzu1+LU0fKxPVu9QP8J5s9 ww== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mwuw299ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 14:06:56 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B007010002A;
-        Thu,  5 Jan 2023 14:06:55 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A9ABB23BDEB;
-        Thu,  5 Jan 2023 14:06:55 +0100 (CET)
-Received: from localhost (10.201.20.178) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 5 Jan
- 2023 14:06:55 +0100
-From:   Olivier Moysan <olivier.moysan@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] ARM: dts: stm32: add timers support on stm32mp135f-dk
-Date:   Thu, 5 Jan 2023 14:06:11 +0100
-Message-ID: <20230105130612.330155-4-olivier.moysan@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230105130612.330155-1-olivier.moysan@foss.st.com>
-References: <20230105130612.330155-1-olivier.moysan@foss.st.com>
+        Thu, 5 Jan 2023 08:15:51 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931931C3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 05:15:48 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vm8so83051868ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 05:15:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WGVyRhEAn0+TtSP18cnfFmSDtI8CvwxbXiFAMb3+l8=;
+        b=fO+NpLNKOGf6gW+JdDIhspBquPZyqThb+mhLqEmYRP1Mcx5skuDb1IQV9ap8g1UXD6
+         vTJJmRIn9JOWxf+mZqGIH1WdstfoBtN5lVc5IrBdfOXLM1gg7UoZen+sIMiL6BMF0BOd
+         zc2c3QyjVCEbzv4b9KPPcTyXjNLcf+GIZsmbY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WGVyRhEAn0+TtSP18cnfFmSDtI8CvwxbXiFAMb3+l8=;
+        b=aUc3kJTpHWxnJpU1+gkT9cIkghqeFCxrCOO507ElL5MlVrd6nCXbntp+QBOA3w//Eh
+         rJVqUhLI3W4Qj+mSjrdHYgQIgJToLwSt8BplbQnF7NfoJjEk6nAVAPDhbJZa9X/WcWxC
+         oIBKACUPvIbjbmRyrHHbjfI0nqZTscZliRLIIJv3LJlCORZ+QOgvE1aNWMhcARNUgkra
+         u0xjbL+VLASjsIEc8VcRoFKE+pbkpkOYN+NFxw6htape0tIkU0y58dGjRu6jVETyNNij
+         n2GqBEKOB6a+E8NRgZJRL5gAizob9hLfs858GhT9ghfM9jPW/DlkNInSWBT3toagAFcF
+         J91A==
+X-Gm-Message-State: AFqh2kq6mB88/XLsiuznUvOpiPgU16oxgmGu7RmUFvC8pMgex/0EJ9Ge
+        5l9NkRiETgDCad1oK9Eb8T6dmw==
+X-Google-Smtp-Source: AMrXdXtLWFktvz+MWgGmdL6vSICIed9bmIC9qpu0tXHodMUI377CG4pn47T771pHKChwTZBEElwCsA==
+X-Received: by 2002:a17:907:c242:b0:7c4:fc02:46a3 with SMTP id tj2-20020a170907c24200b007c4fc0246a3mr51359635ejc.30.1672924547140;
+        Thu, 05 Jan 2023 05:15:47 -0800 (PST)
+Received: from cloudflare.com (79.184.146.66.ipv4.supernova.orange.pl. [79.184.146.66])
+        by smtp.gmail.com with ESMTPSA id gf26-20020a170906e21a00b007c0b9500129sm16438182ejb.68.2023.01.05.05.15.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 05:15:45 -0800 (PST)
+References: <00000000000073b14905ef2e7401@google.com>
+ <639034dda7f92_bb36208f5@john.notmuch>
+ <CANn89iK2UN1FmdUcH12fv_xiZkv2G+Nskvmq7fG6aA_6VKRf6g@mail.gmail.com>
+ <6391a95864c5e_1ec2b208a@john.notmuch>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     syzbot <syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com>,
+        bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: stack guard page was hit in inet6_release
+Date:   Thu, 05 Jan 2023 14:07:11 +0100
+In-reply-to: <6391a95864c5e_1ec2b208a@john.notmuch>
+Message-ID: <87k021m8an.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.201.20.178]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_04,2023-01-04_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure timers support on stm32mp135f-dk.
-The timers TIM3, TIM4, TIM8 & TIM14 which can be used on
-expansion GPIO connector are disabled by default.
+On Thu, Dec 08, 2022 at 01:07 AM -08, John Fastabend wrote:
+> Eric Dumazet wrote:
+>> On Wed, Dec 7, 2022 at 7:38 AM John Fastabend <john.fastabend@gmail.com> wrote:
+>> >
+>> > syzbot wrote:
+>> > > Hello,
+>> > >
+>> > > syzbot found the following issue on:
+>> > >
+>> > > HEAD commit:    6a30d3e3491d selftests: net: Use "grep -E" instead of "egr..
+>> > > git tree:       net
+>> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1576b11d880000
+>> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
+>> > > dashboard link: https://syzkaller.appspot.com/bug?extid=04c21ed96d861dccc5cd
+>> > > compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for
+>> > > Debian) 2.35.2
+>> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e1656b880000
+>> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1077da23880000
+>> > >
+>> > > Downloadable assets:
+>> > > disk image:
+>> > > https://storage.googleapis.com/syzbot-assets/bbee3d5fc908/disk-6a30d3e3.raw.xz
+>> > > vmlinux: https://storage.googleapis.com/syzbot-assets/bf9e258de70e/vmlinux-6a30d3e3.xz
+>> > > kernel image:
+>> > > https://storage.googleapis.com/syzbot-assets/afaa6696b9e0/bzImage-6a30d3e3.xz
+>> > >
+>> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> > > Reported-by: syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com
+>> > >
+>> > > BUG: TASK stack guard page was hit at ffffc90003cd7fa8 (stack is
+>> > > ffffc90003cd8000..ffffc90003ce0000)
+>> > > stack guard page: 0000 [#1] PREEMPT SMP KASAN
+>> > > CPU: 0 PID: 3636 Comm: syz-executor238 Not tainted
+>> > > 6.1.0-rc7-syzkaller-00135-g6a30d3e3491d #0
+>> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+>> > > Google 10/26/2022
+>> > > RIP: 0010:mark_lock.part.0+0x26/0x1910 kernel/locking/lockdep.c:4593
+>> > > Code: 00 00 00 00 41 57 41 56 41 55 41 89 d5 48 ba 00 00 00 00 00 fc ff df
+>> > > 41 54 49 89 f4 55 53 48 81 ec 38 01 00 00 48 8d 5c 24 38 <48> 89 3c 24 48
+>> > > c7 44 24 38 b3 8a b5 41 48 c1 eb 03 48 c7 44 24 40
+>> > > RSP: 0018:ffffc90003cd7fb8 EFLAGS: 00010096
+>> > > RAX: 0000000000000004 RBX: ffffc90003cd7ff0 RCX: ffffffff8162a7bf
+>> > > RDX: dffffc0000000000 RSI: ffff88801f65e238 RDI: ffff88801f65d7c0
+>> > > RBP: ffff88801f65e25a R08: 0000000000000000 R09: ffffffff910f4aff
+>> > > R10: fffffbfff221e95f R11: 0000000000000000 R12: ffff88801f65e238
+>> > > R13: 0000000000000002 R14: 0000000000000000 R15: 0000000000040000
+>> > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+>> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> > > CR2: ffffc90003cd7fa8 CR3: 000000000c28e000 CR4: 00000000003506f0
+>> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> > > Call Trace:
+>> > >  <TASK>
+>> > >  mark_lock kernel/locking/lockdep.c:4598 [inline]
+>> > >  mark_usage kernel/locking/lockdep.c:4543 [inline]
+>> > >  __lock_acquire+0x847/0x56d0 kernel/locking/lockdep.c:5009
+>> > >  lock_acquire kernel/locking/lockdep.c:5668 [inline]
+>> > >  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+>> > >  lock_sock_nested+0x3a/0xf0 net/core/sock.c:3447
+>> > >  lock_sock include/net/sock.h:1721 [inline]
+>> > >  sock_map_close+0x75/0x7b0 net/core/sock_map.c:1610
+>> >
+>> > I'll take a look likely something recent.
+>> 
+>> Fact that sock_map_close  can call itself seems risky.
+>> We might issue a one time warning and keep the host alive.
+>
+> Agree seems better to check the condition than loop on close.
+> I still need to figure out the bug that got into this state
+> though. Thanks.
 
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
----
- arch/arm/boot/dts/stm32mp135f-dk.dts | 58 ++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+I know what is happening. We're not restoring sk_prot in the child
+socket on clone.
 
-diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 9ff5a3eaf55b..338b4f633ee3 100644
---- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-+++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -208,6 +208,64 @@ &spi5 {
- 	status = "disabled";
- };
- 
-+&timers3 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm3_pins_a>;
-+		pinctrl-1 = <&pwm3_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@2 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers4 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm4_pins_a>;
-+		pinctrl-1 = <&pwm4_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@3 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers8 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm8_pins_a>;
-+		pinctrl-1 = <&pwm8_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@7 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers14 {
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm14_pins_a>;
-+		pinctrl-1 = <&pwm14_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@13 {
-+		status = "okay";
-+	};
-+};
-+
- &uart4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart4_pins_a>;
--- 
-2.25.1
+tcp_bpf_clone() callback currently restores sk_prot only if the
+listener->sk_prot is &tcp_bpf_prots[*][TCP_BASE]. It should also check
+for TCP_BPF_RX/TXRX.
 
+It's a regression that slipped through with c5d2177a72a1 ("bpf, sockmap:
+Fix race in ingress receive verdict with redirect to self"). And we're
+clearly missing selftest coverage for this scenario.
+
+I can fix that.
