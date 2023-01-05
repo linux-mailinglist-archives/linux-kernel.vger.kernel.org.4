@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBAD65E9F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66FA65E9F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjAELd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 06:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S233310AbjAELd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 06:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjAELdX (ORCPT
+        with ESMTP id S233315AbjAELdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 06:33:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3C0D11A27
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 03:33:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0520815BF;
-        Thu,  5 Jan 2023 03:34:03 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B77283F663;
-        Thu,  5 Jan 2023 03:33:17 -0800 (PST)
-Message-ID: <82689dd6-9db1-dd00-069b-73a637a21126@arm.com>
-Date:   Thu, 5 Jan 2023 12:33:16 +0100
+        Thu, 5 Jan 2023 06:33:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF5011A27;
+        Thu,  5 Jan 2023 03:33:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC122619C9;
+        Thu,  5 Jan 2023 11:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE274C433D2;
+        Thu,  5 Jan 2023 11:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672918414;
+        bh=GZ/oxElBbGOcTDLAg4QnaapTHh9nj+beO5PtIB3KxK0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uP45hb1MDd2Xiwn2n/0fQ6fDLt1SWtUHLBBCMAAOZIkwhpui/fNQoma//RC5zOh9s
+         QPTdx0+TOuRGLI3TgIf2P3m7delgJfMr+hgpKmTDozNMBw005PBU9QNTj1Nnonu/RO
+         mqTbUciS8tBHStdLY6MLVfqH3cVX+PeQY/u5pou1Ii8twEET1DdERG8oMlEYPcco7K
+         u+Q1gpRriUiKlZipx4CJwNyk2DL/BjQIHf4ffD16LSpjhwgcqDJbjBziFGvJ/uGHYw
+         WRYhVkDZ7rcovEAHnR4krtEzibu9JWGwqKnuj22DAuYA2T37CmgACn4EG/BhmJFoHt
+         /3HPtklGezGkQ==
+Message-ID: <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
+Date:   Thu, 5 Jan 2023 13:33:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v4 1/2] sched/fair: Introduce short duration task
- check
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: Add ICSSG Ethernet Driver
+ bindings
 Content-Language: en-US
-To:     Chen Yu <yu.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org
-References: <cover.1671158588.git.yu.c.chen@intel.com>
- <ec049fd9b635f76a9e1d1ad380fd9184ebeeca53.1671158588.git.yu.c.chen@intel.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <ec049fd9b635f76a9e1d1ad380fd9184ebeeca53.1671158588.git.yu.c.chen@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>, Md Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <t-kristo@ti.com>,
+        Suman Anna <s-anna@ti.com>, YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221223110930.1337536-1-danishanwar@ti.com>
+ <20221223110930.1337536-2-danishanwar@ti.com> <Y6W7FNzJEHYt6URg@lunn.ch>
+ <620ce8e6-2b40-1322-364a-0099a6e2af26@kernel.org> <Y7Mjx8ZEVEcU2mK8@lunn.ch>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <Y7Mjx8ZEVEcU2mK8@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,37 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2022 07:11, Chen Yu wrote:
+On 02/01/2023 20:34, Andrew Lunn wrote:
+> On Mon, Jan 02, 2023 at 03:04:19PM +0200, Roger Quadros wrote:
+>>
+>>
+>> On 23/12/2022 16:28, Andrew Lunn wrote:
+>>>> +        ethernet-ports {
+>>>> +            #address-cells = <1>;
+>>>> +            #size-cells = <0>;
+>>>> +            pruss2_emac0: port@0 {
+>>>> +                reg = <0>;
+>>>> +                phy-handle = <&pruss2_eth0_phy>;
+>>>> +                phy-mode = "rgmii-rxid";
+>>>
+>>> That is unusual. Where are the TX delays coming from?
+>>
+>> >From the below property
+>>
+>> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
+>>
+>> The TX delay can be enabled/disabled from within the ICSSG block.
+>>
+>> If this property exists and PHY mode is neither PHY_INTERFACE_MODE_RGMII_ID
+>> nor PHY_INTERFACE_MODE_RGMII_TXID then the internal delay is enabled.
+>>
+>> This logic is in prueth_config_rgmiidelay() function in the introduced driver.
+> 
+> What nearly every other MAC driver does is pass the phy-mode to the
+> PHY and lets the PHY add the delays. I would recommend you do that,
+> rather than be special and different.
 
-[...]
 
-> @@ -5995,6 +6005,18 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->  
->  static void set_next_buddy(struct sched_entity *se);
->  
-> +static inline void dur_avg_update(struct task_struct *p, bool task_sleep)
-> +{
-> +	u64 dur;
-> +
-> +	if (!task_sleep)
-> +		return;
-> +
-> +	dur = p->se.sum_exec_runtime - p->se.prev_sum_exec_runtime_vol;
-> +	p->se.prev_sum_exec_runtime_vol = p->se.sum_exec_runtime;
+If I remember right we couldn't disable MAC TX delay on some earlier silicon
+so had to take this route. I don't remember why we couldn't disable it though.
 
-Shouldn't se->prev_sum_exec_runtime_vol be set in enqueue_task_fair()
-and not in dequeue_task_fair()->dur_avg_update()? Otherwise `dur` will
-contain sleep time.
+In more recent Silicon Manuals I do see that MAC TX delay can be enabled/disabled.
+If this really is the case then we should change to
 
-Like we do for se->prev_sum_exec_runtime in set_next_entity() but for
-one `set_next_entity()-put_prev_entity()` run section.
+ phy-mode = "rgmii-id";
 
-AFAICS, you want to measure the exec_runtime sum over all run sections
-between enqueue and dequeue.
+And let PHY handle the TX+RX delays.
 
-> +	update_avg(&p->se.dur_avg, dur);
-> +}
-> +
+Danish,
+could you please make the change and test if it works on current silicon?
 
-[...]
-
+cheers,
+-roger
