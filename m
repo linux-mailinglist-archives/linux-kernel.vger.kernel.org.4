@@ -2,148 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05A465EF99
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 16:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EA065EEE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbjAEPC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 10:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
+        id S233693AbjAEOit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbjAEOih (ORCPT
+        with ESMTP id S230475AbjAEOin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:38:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A14659331;
-        Thu,  5 Jan 2023 06:38:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE046B81AF8;
-        Thu,  5 Jan 2023 14:38:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF626C433EF;
-        Thu,  5 Jan 2023 14:38:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672929513;
-        bh=G5YNmA8ky3bK+urw6zEhSYdIXfh6FrcGi/1KX+rdWGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kWHP6ROg0Nu4Xd0xp5ri7h/b9Bo/9GbbKJJZMbaVpxT6mhqpUGovDYnqHKgClMOh3
-         OuOzM7RDmqzmPgev4zlXYBXr0fuRCb5/7n1bkmBN58NFTU4QixQFCXupvOQMTfA7YT
-         ZPHYSCAKK8B+Bjzux3Z7pyB2yiFeJXhj/KCvfvXc=
-Date:   Thu, 5 Jan 2023 15:38:30 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Raphael S. Carvalho" <raphaelsc@scylladb.com>
-Cc:     Aaron Lu <aaron.lu@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Pavel Boldin <pboldin@cloudlinux.com>,
-        Pavel Boldin <boldin.pavel@gmail.com>,
-        Moritz Lipp <github@mlq.me>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Michael Schwarz <michael.schwarz91@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
-Message-ID: <Y7bg5sxEZDIaGoXK@kroah.com>
-References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
- <Y7bT0OL8RAWkCu0Z@kroah.com>
- <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+        Thu, 5 Jan 2023 09:38:43 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF685933E;
+        Thu,  5 Jan 2023 06:38:42 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id B05A13200921;
+        Thu,  5 Jan 2023 09:38:40 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 05 Jan 2023 09:38:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672929520; x=
+        1673015920; bh=0tRpqumuzD4A8ScE1T7chaSBsFg3IHBj12rmSPS7UQk=; b=d
+        4XVP0hfu/F6/aqVt3l7KnXcKsYzGCyPkegPh5cMb6DGQjil4x5jP/7hc8l4l/ZYr
+        dmW6ZFITa0tZjR4/RMJk2iVJQ/CwzSINlKcXCmiXdin90n2cK8pnCanUi0MD24Be
+        zcl0lb4i82jOmJ3e85hZigrGZoBe+t5jwX33lNdmBA+YnzNufMNu7XmeIbGhYU0f
+        c/XinqxdlpWh5ln3p+G+ikkrZ5px+5fkskZ4yXSc/sCI3CLR1ZIvENpADgRXltBn
+        hLzwEaWUGw/lpLASPwL6GWgdsG0X6zodJ+DX4iBGKyCE0Zc1JTid/+VkP+KA5Xrk
+        9JZVID+ykBC4TgsdGk9qw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672929520; x=
+        1673015920; bh=0tRpqumuzD4A8ScE1T7chaSBsFg3IHBj12rmSPS7UQk=; b=Q
+        mQFZigQXsGb4r6btUJAczAkvrtBumokULURZYr9BGtsdKHGAhQuRmIsGKhhnbvC+
+        LjhBx/EnM5c1+Ov0HfGPAD2Mz8/6SPy0zV69+M7LDAr/n9H1dhINb5cQ5CrrL+4r
+        y1b+a8UCf/oFhnf832zSQcFvRKwGLXCjq9yi0vRlNA0IYVHfojbfw9DlqVO4b0SB
+        T6YI5eKHwcttLLGw6nIiT8JZ15cxtT4SgC32TXlFEU0lDlhb6BSWja79zAwMEqHe
+        gt9z8iWjSka1bTuLTQ8lk5aEQOd+ak+5EAaZBlEv3z6xka+1eGCOepNq+2ySMXLc
+        PIyaqHsm9Ss57ukPytCqw==
+X-ME-Sender: <xms:7-C2Y5pDpDdwzZ9i1c8ziDXeBnxnpPMJEv30DfLvp6tDjYJQIrNvQw>
+    <xme:7-C2Y7pAm2sM3PGdZZXvzn8WrKomMEc-zUSYuMvCvo4A9vc1OKr4HvfHTNfqNf4PC
+    1pUnki5hMqTbkAxEA>
+X-ME-Received: <xmr:7-C2Y2MDGjw_4EF4JjqLYeISZ9wH4Pz46PsKY12SANCHdYIiSDeZC45ei0IXcnNMzSoKN47vArjirjMi6kgFpv1Sw7iUUfh9KHGHC0GOleWUO0h1T2hrH8byEQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:7-C2Y07PRTSiCseNNHcdHN-fhBrwQUshcyconVZGhlx2XWYqiFxH8Q>
+    <xmx:7-C2Y44cJfaJdZEI7LHg5qIGEmGoOBe5DWlejR7aihYkkRlkrfS9GA>
+    <xmx:7-C2Y8hYQx225tPwiImxWhzHqlmVmoFMQ15_h04c-vsnwMmjY9xH-w>
+    <xmx:8OC2Y1O802ea8_p3G5yF6B-Pb7YVl7CFQQl1QE3UHG0IC2NxFoQd_g>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Jan 2023 09:38:37 -0500 (EST)
+Message-ID: <3b6ec431-70ac-cf68-6f46-9dc0affb1e68@sholland.org>
+Date:   Thu, 5 Jan 2023 08:38:36 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 4/4] riscv: dts: allwinner: d1: Add video engine node
+Content-Language: en-US
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-sunxi@lists.linux.dev
+References: <20221231164628.19688-1-samuel@sholland.org>
+ <20221231164628.19688-5-samuel@sholland.org> <Y7aiZdjI8L5h1Ca3@aptenodytes>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <Y7aiZdjI8L5h1Ca3@aptenodytes>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 11:11:15AM -0300, Raphael S. Carvalho wrote:
-> On Thu, Jan 5, 2023 at 10:42 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Jan 05, 2023 at 08:35:05PM +0800, Aaron Lu wrote:
-> > > To capture potential programming errors like mistakenly setting Global
-> > > bit on kernel page table entries, a selftest for meltdown is added.
-> > >
-> > > This selftest is based on Pavel Boldin's work at:
-> > > https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c
-> > >
-> > > In addition to the existing test of reading kernel variable
-> > > saved_command_line from user space, one more test of reading user local
-> > > variable through kernel direct map address is added. For the existing
-> > > test(reading saved_command_line) to report a failure, both the high kernel
-> > > mapping and low kernel mapping have to be in leaked state; For the added
-> > > test(read local var), only low kernel mapping leak is enough to trigger
-> > > a test fail, so both tests are useful.
-> > >
-> > > Test results of 10 runs:
-> > >
-> > > On v6.1-rc8 with nopti kernel cmdline option:
-> > >
-> > > host              test_out_rate_1    test_out_rate_2
-> > > lkp-bdw-de1            50%               100%
-> > > lkp-hsw-d01            70%               100%
-> > > lkp-hsw-d02             0%                80%
-> > > lkp-hsw-d03            60%               100%
-> > > lkp-hsw-d04            20%               100%
-> > > lkp-hsw-d05            60%               100%
-> > > lkp-ivb-d01             0%                70%
-> > > lkp-kbl-d01           100%               100%
-> > > lkp-skl-d02           100%                90%
-> > > lkp-skl-d03            90%               100%
-> > > lkp-skl-d05            60%               100%
-> > > kbl-vm                100%                80%
-> > > 2 other machines have 0% rate for both tests.
-> > >
-> > > bdw=broadwell, hsw=haswell, ivb=ivybridge, etc.
-> > >
-> > > test_out_rate_1: test reports fail rate for the test of reading
-> > > saved_command_line from user space;
-> > > test_out_rate_2: test reports fail rate for the test of reading user
-> > > local variable through kernel direct map address in user space.
-> > >
-> > > On v5.19 without nopti cmdline option:
-> > > host              test_out_rate_2
-> > > lkp-bdw-de1            80%
-> > > lkp-hsw-4ex1           50%
-> > > lkp-hsw-d01            30%
-> > > lkp-hsw-d03            10%
-> > > lkp-hsw-d04            10%
-> > > lkp-kbl-d01            10%
-> > > kbl-vm                 80%
-> > > 7 other machines have 0% rate for test2.
-> > >
-> > > Also tested on an i386 VM with 512M memory and the test out rate is 100%
-> > > when adding nopti to kernel cmdline with v6.1-rc8.
-> > >
-> > > Main changes I made from Pavel Boldin's meltdown test are:
-> > > - Replace rdtscll() and clflush() with kernel's implementation;
-> > > - Reimplement find_symbol_in_file() to avoid bringing in LTP's library
-> > >   functions;
-> > > - Coding style changes: placing the function return type in the same
-> > >   line of the function.
-> > >
-> > > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
-> > > ---
-> > > Notable changes from RFC v3:
-> > > - Drop RFC tag;
-> > > - Change the base code from zlib licensed one to GPL licensed one.
-> >
-> > Sorry, but this still gets my NAK for the issues raised in previous
-> > reviews that are not addressed here for some reason :(
+Hi Paul,
+
+On 1/5/23 04:11, Paul Kocialkowski wrote:
+> On Sat 31 Dec 22, 10:46, Samuel Holland wrote:
+>> D1 contains a video engine which is supported by the Cedrus driver.
 > 
-> Greg, the selftest is no longer based on
-> https://github.com/IAIK/meltdown/blob/master/LICENSE, which is
-> originally zlib licensed. In this version, Aaron is basing the test on
-> https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c,
-> which is indeed licensed with: GPL-2.0-or-later
+> Does it work "outside the box" without power domain management?
+> If not, it might be a bit confusing to add the node at this point.
 
-That's not what the submission looks like, it looks a lot like the last
-one from the first defines and variables...
+Yes, it does. All of the power domains are enabled by default. However,
+if the PPU series is merged first, I will respin this to include the
+power-domains property from the beginning.
 
-But hey, what do I know, I'm not a lawyer which is why I keep insisting
-that one from Intel actually read over this submission and sign-off on
-it to verify that they agree with all of this.
+Regards,
+Samuel
 
-thanks,
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+>> index dff363a3c934..4bd374279155 100644
+>> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+>> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+>> @@ -34,6 +34,17 @@ soc {
+>>  		#address-cells = <1>;
+>>  		#size-cells = <1>;
+>>  
+>> +		ve: video-codec@1c0e000 {
+>> +			compatible = "allwinner,sun20i-d1-video-engine";
+>> +			reg = <0x1c0e000 0x2000>;
+>> +			interrupts = <SOC_PERIPHERAL_IRQ(66) IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&ccu CLK_BUS_VE>,
+>> +				 <&ccu CLK_VE>,
+>> +				 <&ccu CLK_MBUS_VE>;
+>> +			clock-names = "ahb", "mod", "ram";
+>> +			resets = <&ccu RST_BUS_VE>;
+>> +		};
+>> +
+>>  		pio: pinctrl@2000000 {
+>>  			compatible = "allwinner,sun20i-d1-pinctrl";
+>>  			reg = <0x2000000 0x800>;
+>> -- 
+>> 2.37.4
+>>
+> 
 
-greg k-h
