@@ -2,594 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DAC65E84E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F4C65E852
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 10:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjAEJy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 04:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S231994AbjAEJzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 04:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjAEJyx (ORCPT
+        with ESMTP id S232195AbjAEJzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:54:53 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C8A544FA;
-        Thu,  5 Jan 2023 01:54:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672912491; x=1704448491;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lJo5PoRO4NvP4xl547UtSqV7TxmoMnXNcjA31BbiJYk=;
-  b=TneZzMYhxSal/GAGAxJ6IJJwPIdzrk6J+brSd7Ryo2PXpTvxKZ66q2aE
-   G4eRNj2PWXDMshGJbx6TVSrWlTPi38GF43sH849gAFOMO+3O2Xh8uis+W
-   Z1JRPKzUHCSnI7pKMDXiZjxrUNfWJHwxHP658S8ksqHdVHyse3krfuPrQ
-   nXPMN2IDTOPoIuYgmVqYUUU3Yv7f1Go+9yythyXEdRv1fNmjdtmU3yG6o
-   7WlKHDPGf33LwPC+N1CrdcGB0Cw6Uzumrs32C0O7Tg3dPrgVjAsAh4SoJ
-   mzoSuxGc809Rc4MTlERAEl4NQqvCuwYla8eK40/V4A69Ncebu1uNSCjp2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="309934451"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="309934451"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 01:54:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="648875662"
-X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="648875662"
-Received: from lab-ah.igk.intel.com ([10.91.215.196])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 01:54:42 -0800
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH v4] arch: rename all internal names __xchg to __arch_xchg
-Date:   Thu,  5 Jan 2023 10:54:26 +0100
-Message-Id: <20230105095426.2163354-1-andrzej.hajda@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y7P9IcR7/jgYWMcq@osiris>
-References: <Y7P9IcR7/jgYWMcq@osiris>
+        Thu, 5 Jan 2023 04:55:09 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A70574D5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:55:01 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230105095457epoutp02d3b517d5378afd306283d63356ea71da~3YQ2FMP9h2652626526epoutp02r
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 09:54:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230105095457epoutp02d3b517d5378afd306283d63356ea71da~3YQ2FMP9h2652626526epoutp02r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1672912497;
+        bh=W+SRy8MGtF/uWSoWNbLUIib5kCtd14JoSOOEgWQDy18=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=l3KOklbKgp3n+SFnu6cRDM337SwDOIpAwOFYV4+iNoLV0z4dhGciyJ1RwPtq5WiE0
+         ULTW77dtfKi1Ps60iRnFGsdB8oIJARaiuM1Zuq5d1Uzb+7kFjMO27s+4fHExnIwGBt
+         o635bfY/+eAG/ecZQxDwy0m/IfHclYRqLmIc+ofc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230105095456epcas2p16340531e042f370d2aa756b83cdec060~3YQ1hkGO-1593215932epcas2p1O;
+        Thu,  5 Jan 2023 09:54:56 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Nnhf81JjLz4x9Pr; Thu,  5 Jan
+        2023 09:54:56 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.53.03803.07E96B36; Thu,  5 Jan 2023 18:54:56 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230105095455epcas2p3a630ad70db8a4782197f97213baddc83~3YQ0hOOJm2873928739epcas2p3s;
+        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230105095455epsmtrp1174e9c159ded0a10a8545bf314dce47a~3YQ0gi4GQ1535715357epsmtrp1O;
+        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
+X-AuditID: b6c32a45-23ffd70000020edb-ae-63b69e70f074
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        16.4B.02211.F6E96B36; Thu,  5 Jan 2023 18:54:55 +0900 (KST)
+Received: from KORCO118605 (unknown [10.229.18.192]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230105095455epsmtip15434e8f2dd3621cc4b9920327759d604~3YQ0WNK822374523745epsmtip1S;
+        Thu,  5 Jan 2023 09:54:55 +0000 (GMT)
+From:   =?utf-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>
+To:     "'Linyu Yuan'" <quic_linyyuan@quicinc.com>,
+        "'Felipe Balbi'" <balbi@kernel.org>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Thinh Nguyen'" <Thinh.Nguyen@synopsys.com>
+Cc:     "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
+        "'open list'" <linux-kernel@vger.kernel.org>,
+        "'Seungchull Suh'" <sc.suh@samsung.com>,
+        "'Daehwan Jung'" <dh10.jung@samsung.com>
+In-Reply-To: <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
+Subject: RE: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
+Date:   Thu, 5 Jan 2023 18:54:55 +0900
+Message-ID: <000201d920eb$c3715c50$4a5414f0$@samsung.com>
 MIME-Version: 1.0
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQHoaYWzl+91vPuYA9QqPKuxNdj5mgIxEgVOAi/I+n8Cu+PL3q44GoEQ
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmhW7BvG3JBvvfslsca3vCbnFnwTQm
+        i+bF69ksLu+aw2axaFkrs8W665sYLbru3mC0WLXgALsDh8emVZ1sHvvnrmH3mLinzqNvyypG
+        jy37PzN6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk
+        4hOg65aZA3SPkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8v
+        tcTK0MDAyBSoMCE74+g564IzphX7uo4yNTBu0uxi5OSQEDCRmLvsJFMXIxeHkMAORomtV7+w
+        gCSEBD4xSjRv9oVIfGOUeL/nEDtMx4Orc9kgEnsZJd71PoVqf8kosfl+J2sXIwcHm4CFxNEZ
+        OiANIgK7gIq6vUFqmAUOMUqc/PmCESTBKWAv0d5yiBXEFhbwkFiycDWYzSKgIvG34TbYNl4B
+        S4kXzw4wQ9iCEidnPgE7j1lAW2LZwtfMEBcpSOz+dJQVYpmbRMv2LqgaEYnZnW3MIIslBBZy
+        SHyYfI0F5DgJAReJDRvjIXqFJV4d3wL1mZTEy/42KDtbYteGN1DzKyR6+pexQNjGErOetTOC
+        jGEW0JRYv0sfYqKyxJFbUFv5JDoO/2WHCPNKdLQJQTSqShxsvAk1RFriW+87xgmMSrOQ/DUL
+        yV+zkNw/C2HXAkaWVYxiqQXFuempxUYFhvCYTs7P3cQITqdarjsYJ7/9oHeIkYmDERjaHMxK
+        Irxl/duShXhTEiurUovy44tKc1KLDzGaAkN6IrOUaHI+MKHnlcQbmlgamJiZGZobmRqYK4nz
+        Bm2dnywkkJ5YkpqdmlqQWgTTx8TBKdXAJLR5hevpl7857t6wD5y13UtkyabLG98+v2Eg2lz1
+        7OCzGfvOGasGRVv8tFhtYzhtrd8MTXuJrZniameK5G+ohJwTnZlxW/F1vZ6pvLTtvY179W6K
+        bM7juDyRX63lW11q36vQmdKrK3Y83rl4c/yPfOHPgS8XRs1iuvVuhuPmFZtjz930mdYetodJ
+        qsJkr9XpyKwOQRvjzlU2d9vdXF55xgX96vrK81bLODVqYZmre+nNX/+jHBgjrkVwPtQrDTp4
+        b9rr9wwRfPIMXif+TZqRZ6n3KqDtan588OqIdQ9+xdaLb2ZlzIn3l5nHflt067aTwJz8hPfY
+        qr3rUyb2sW93mGiewpr3U2LrzoV71RMWKrEUZyQaajEXFScCAI9NpVYwBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTjd/3rZkg0VnFCyOtT1ht7izYBqT
+        RfPi9WwWl3fNYbNYtKyV2WLd9U2MFl13bzBarFpwgN2Bw2PTqk42j/1z17B7TNxT59G3ZRWj
+        x5b9nxk9Pm+SC2CL4rJJSc3JLEst0rdL4Mq4t2kRa8Es04qzFz4xNjD+0Ohi5OSQEDCReHB1
+        LlsXIxeHkMBuRolrva9ZIRLSEjs7pzJB2MIS91uOsEIUPWeUeDjrHVAHBwebgIXE0Rk6IHER
+        gT2MErtuPmAHcZgFjjBKHLszA2ySkMBXRomWv+wgNqeAvUR7yyGwuLCAh8SShavBbBYBFYm/
+        DbfBangFLCVePDvADGELSpyc+YQFxGYW0JZ4evMpnL1s4WtmiOsUJHZ/Ogo2R0TATaJlexdU
+        jYjE7M425gmMwrOQjJqFZNQsJKNmIWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/
+        dxMjOMa0NHcwbl/1Qe8QIxMH4yFGCQ5mJRHesv5tyUK8KYmVValF+fFFpTmpxYcYpTlYlMR5
+        L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwmZ5aInpVP9Pokn0ef8DXWe4Ls8oZrL4F3vmwed32
+        R9O6dhTYZhy7zmPt3HI5/6/F/mu16YsKnIJntSuyb5moKHhvrvjp1vgzMtU8HmY7T9c8Wn9e
+        8NautsAYq4iwDY7HxD9dXdv2/WZcyTIhk6/KN9jWPp06e/aUqd19aQfvzDssGHOoI2m69z9V
+        xT4Jk2q1OQp/nGvlW1PcZ7pxntx47duhGIYo4RuJD1m/vN51pNKo0WLu4puTbZhmP+bea/ji
+        /mVX9qrGG+/27PD9ojCxdfaUJbnei1e4rzteoNuysvfCT14FhTqRkImyvFpMXflOj1S3RnN0
+        Hc3Vf1KlUJj+7oEtj3Yzi+NkphyJxfy1SizFGYmGWsxFxYkAN1vcWiADAAA=
+X-CMS-MailID: 20230105095455epcas2p3a630ad70db8a4782197f97213baddc83
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3
+References: <CGME20230102050839epcas2p4b9d09d926f9a14c3b8e8df2574d334c3@epcas2p4.samsung.com>
+        <20230102050831.105499-1-jh0801.jung@samsung.com>
+        <af32e2f5-de45-38af-2b4f-47c1ac21ea9e@quicinc.com>
+        <c4e01a0a-1c98-3103-2b91-2fe0ba8c3118@quicinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PDS_BAD_THREAD_QP_64,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__xchg will be used for non-atomic xchg macro.
 
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: squashed all arch patches into one
-v3: fixed alpha/xchg_local, thx to lkp@intel.com
-v4: adjusted indentation (Heiko)
----
- arch/alpha/include/asm/cmpxchg.h     | 10 +++++-----
- arch/arc/include/asm/cmpxchg.h       |  4 ++--
- arch/arm/include/asm/cmpxchg.h       |  7 ++++---
- arch/arm64/include/asm/cmpxchg.h     |  7 +++----
- arch/hexagon/include/asm/cmpxchg.h   | 10 +++++-----
- arch/ia64/include/asm/cmpxchg.h      |  2 +-
- arch/ia64/include/uapi/asm/cmpxchg.h |  4 ++--
- arch/loongarch/include/asm/cmpxchg.h |  4 ++--
- arch/m68k/include/asm/cmpxchg.h      |  6 +++---
- arch/mips/include/asm/cmpxchg.h      |  4 ++--
- arch/openrisc/include/asm/cmpxchg.h  | 10 +++++-----
- arch/parisc/include/asm/cmpxchg.h    |  4 ++--
- arch/powerpc/include/asm/cmpxchg.h   |  4 ++--
- arch/riscv/include/asm/atomic.h      |  2 +-
- arch/riscv/include/asm/cmpxchg.h     |  4 ++--
- arch/s390/include/asm/cmpxchg.h      |  8 ++++----
- arch/sh/include/asm/cmpxchg.h        |  4 ++--
- arch/sparc/include/asm/cmpxchg_32.h  |  4 ++--
- arch/sparc/include/asm/cmpxchg_64.h  |  6 +++---
- arch/xtensa/include/asm/cmpxchg.h    |  4 ++--
- 20 files changed, 54 insertions(+), 54 deletions(-)
 
-diff --git a/arch/alpha/include/asm/cmpxchg.h b/arch/alpha/include/asm/cmpxchg.h
-index 6e0a850aa9d38c..91d4a4d9258cd2 100644
---- a/arch/alpha/include/asm/cmpxchg.h
-+++ b/arch/alpha/include/asm/cmpxchg.h
-@@ -6,15 +6,15 @@
-  * Atomic exchange routines.
-  */
- 
--#define ____xchg(type, args...)		__xchg ## type ## _local(args)
-+#define ____xchg(type, args...)		__arch_xchg ## type ## _local(args)
- #define ____cmpxchg(type, args...)	__cmpxchg ## type ## _local(args)
- #include <asm/xchg.h>
- 
- #define xchg_local(ptr, x)						\
- ({									\
- 	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_local((ptr), (unsigned long)_x_,	\
--				       sizeof(*(ptr)));			\
-+	(__typeof__(*(ptr))) __arch_xchg_local((ptr), (unsigned long)_x_,\
-+					       sizeof(*(ptr)));		\
- })
- 
- #define arch_cmpxchg_local(ptr, o, n)					\
-@@ -34,7 +34,7 @@
- 
- #undef ____xchg
- #undef ____cmpxchg
--#define ____xchg(type, args...)		__xchg ##type(args)
-+#define ____xchg(type, args...)		__arch_xchg ##type(args)
- #define ____cmpxchg(type, args...)	__cmpxchg ##type(args)
- #include <asm/xchg.h>
- 
-@@ -48,7 +48,7 @@
- 	__typeof__(*(ptr)) _x_ = (x);					\
- 	smp_mb();							\
- 	__ret = (__typeof__(*(ptr)))					\
--		__xchg((ptr), (unsigned long)_x_, sizeof(*(ptr)));	\
-+		__arch_xchg((ptr), (unsigned long)_x_, sizeof(*(ptr)));	\
- 	smp_mb();							\
- 	__ret;								\
- })
-diff --git a/arch/arc/include/asm/cmpxchg.h b/arch/arc/include/asm/cmpxchg.h
-index c5b544a5fe8106..e138fde067dea5 100644
---- a/arch/arc/include/asm/cmpxchg.h
-+++ b/arch/arc/include/asm/cmpxchg.h
-@@ -85,7 +85,7 @@
-  */
- #ifdef CONFIG_ARC_HAS_LLSC
- 
--#define __xchg(ptr, val)						\
-+#define __arch_xchg(ptr, val)						\
- ({									\
- 	__asm__ __volatile__(						\
- 	"	ex  %0, [%1]	\n"	/* set new value */	        \
-@@ -102,7 +102,7 @@
- 									\
- 	switch(sizeof(*(_p_))) {					\
- 	case 4:								\
--		_val_ = __xchg(_p_, _val_);				\
-+		_val_ = __arch_xchg(_p_, _val_);			\
- 		break;							\
- 	default:							\
- 		BUILD_BUG();						\
-diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
-index 4dfe538dfc689b..44667bdb4707a9 100644
---- a/arch/arm/include/asm/cmpxchg.h
-+++ b/arch/arm/include/asm/cmpxchg.h
-@@ -25,7 +25,8 @@
- #define swp_is_buggy
- #endif
- 
--static inline unsigned long __xchg(unsigned long x, volatile void *ptr, int size)
-+static inline unsigned long
-+__arch_xchg(unsigned long x, volatile void *ptr, int size)
- {
- 	extern void __bad_xchg(volatile void *, int);
- 	unsigned long ret;
-@@ -115,8 +116,8 @@ static inline unsigned long __xchg(unsigned long x, volatile void *ptr, int size
- }
- 
- #define arch_xchg_relaxed(ptr, x) ({					\
--	(__typeof__(*(ptr)))__xchg((unsigned long)(x), (ptr),		\
--				   sizeof(*(ptr)));			\
-+	(__typeof__(*(ptr)))__arch_xchg((unsigned long)(x), (ptr),	\
-+					sizeof(*(ptr)));		\
- })
- 
- #include <asm-generic/cmpxchg-local.h>
-diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
-index 497acf134d9923..c6bc5d8ec3ca41 100644
---- a/arch/arm64/include/asm/cmpxchg.h
-+++ b/arch/arm64/include/asm/cmpxchg.h
-@@ -62,9 +62,8 @@ __XCHG_CASE( ,  ,  mb_, 64, dmb ish, nop,  , a, l, "memory")
- #undef __XCHG_CASE
- 
- #define __XCHG_GEN(sfx)							\
--static __always_inline  unsigned long __xchg##sfx(unsigned long x,	\
--					volatile void *ptr,		\
--					int size)			\
-+static __always_inline unsigned long					\
-+__arch_xchg##sfx(unsigned long x, volatile void *ptr, int size)		\
- {									\
- 	switch (size) {							\
- 	case 1:								\
-@@ -93,7 +92,7 @@ __XCHG_GEN(_mb)
- ({									\
- 	__typeof__(*(ptr)) __ret;					\
- 	__ret = (__typeof__(*(ptr)))					\
--		__xchg##sfx((unsigned long)(x), (ptr), sizeof(*(ptr))); \
-+		__arch_xchg##sfx((unsigned long)(x), (ptr), sizeof(*(ptr))); \
- 	__ret;								\
- })
- 
-diff --git a/arch/hexagon/include/asm/cmpxchg.h b/arch/hexagon/include/asm/cmpxchg.h
-index cdb705e1496af8..bf6cf5579cf459 100644
---- a/arch/hexagon/include/asm/cmpxchg.h
-+++ b/arch/hexagon/include/asm/cmpxchg.h
-@@ -9,7 +9,7 @@
- #define _ASM_CMPXCHG_H
- 
- /*
-- * __xchg - atomically exchange a register and a memory location
-+ * __arch_xchg - atomically exchange a register and a memory location
-  * @x: value to swap
-  * @ptr: pointer to memory
-  * @size:  size of the value
-@@ -19,8 +19,8 @@
-  * Note:  there was an errata for V2 about .new's and memw_locked.
-  *
-  */
--static inline unsigned long __xchg(unsigned long x, volatile void *ptr,
--				   int size)
-+static inline unsigned long
-+__arch_xchg(unsigned long x, volatile void *ptr, int size)
- {
- 	unsigned long retval;
- 
-@@ -42,8 +42,8 @@ static inline unsigned long __xchg(unsigned long x, volatile void *ptr,
-  * Atomically swap the contents of a register with memory.  Should be atomic
-  * between multiple CPU's and within interrupts on the same CPU.
-  */
--#define arch_xchg(ptr, v) ((__typeof__(*(ptr)))__xchg((unsigned long)(v), (ptr), \
--	sizeof(*(ptr))))
-+#define arch_xchg(ptr, v) ((__typeof__(*(ptr)))__arch_xchg((unsigned long)(v), (ptr), \
-+							   sizeof(*(ptr))))
- 
- /*
-  *  see rt-mutex-design.txt; cmpxchg supposedly checks if *ptr == A and swaps.
-diff --git a/arch/ia64/include/asm/cmpxchg.h b/arch/ia64/include/asm/cmpxchg.h
-index 94ef844298431a..8b2e644ef6a14e 100644
---- a/arch/ia64/include/asm/cmpxchg.h
-+++ b/arch/ia64/include/asm/cmpxchg.h
-@@ -5,7 +5,7 @@
- #include <uapi/asm/cmpxchg.h>
- 
- #define arch_xchg(ptr, x)	\
--({(__typeof__(*(ptr))) __xchg((unsigned long) (x), (ptr), sizeof(*(ptr)));})
-+({(__typeof__(*(ptr))) __arch_xchg((unsigned long) (x), (ptr), sizeof(*(ptr)));})
- 
- #define arch_cmpxchg(ptr, o, n)		cmpxchg_acq((ptr), (o), (n))
- #define arch_cmpxchg64(ptr, o, n)	cmpxchg_acq((ptr), (o), (n))
-diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uapi/asm/cmpxchg.h
-index ca2e0268534384..3fec9b037051bb 100644
---- a/arch/ia64/include/uapi/asm/cmpxchg.h
-+++ b/arch/ia64/include/uapi/asm/cmpxchg.h
-@@ -27,7 +27,7 @@
-  */
- extern void ia64_xchg_called_with_bad_pointer(void);
- 
--#define __xchg(x, ptr, size)						\
-+#define __arch_xchg(x, ptr, size)					\
- ({									\
- 	unsigned long __xchg_result;					\
- 									\
-@@ -55,7 +55,7 @@ extern void ia64_xchg_called_with_bad_pointer(void);
- 
- #ifndef __KERNEL__
- #define xchg(ptr, x)							\
--({(__typeof__(*(ptr))) __xchg((unsigned long) (x), (ptr), sizeof(*(ptr)));})
-+({(__typeof__(*(ptr))) __arch_xchg((unsigned long) (x), (ptr), sizeof(*(ptr)));})
- #endif
- 
- /*
-diff --git a/arch/loongarch/include/asm/cmpxchg.h b/arch/loongarch/include/asm/cmpxchg.h
-index ecfa6cf79806e6..979fde61bba8a4 100644
---- a/arch/loongarch/include/asm/cmpxchg.h
-+++ b/arch/loongarch/include/asm/cmpxchg.h
-@@ -62,7 +62,7 @@ static inline unsigned int __xchg_small(volatile void *ptr, unsigned int val,
- }
- 
- static __always_inline unsigned long
--__xchg(volatile void *ptr, unsigned long x, int size)
-+__arch_xchg(volatile void *ptr, unsigned long x, int size)
- {
- 	switch (size) {
- 	case 1:
-@@ -87,7 +87,7 @@ __xchg(volatile void *ptr, unsigned long x, int size)
- 	__typeof__(*(ptr)) __res;					\
- 									\
- 	__res = (__typeof__(*(ptr)))					\
--		__xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
-+		__arch_xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
- 									\
- 	__res;								\
- })
-diff --git a/arch/m68k/include/asm/cmpxchg.h b/arch/m68k/include/asm/cmpxchg.h
-index 6cf464cdab067e..d7f3de9c5d6f79 100644
---- a/arch/m68k/include/asm/cmpxchg.h
-+++ b/arch/m68k/include/asm/cmpxchg.h
-@@ -9,7 +9,7 @@
- extern unsigned long __invalid_xchg_size(unsigned long, volatile void *, int);
- 
- #ifndef CONFIG_RMW_INSNS
--static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size)
-+static inline unsigned long __arch_xchg(unsigned long x, volatile void * ptr, int size)
- {
- 	unsigned long flags, tmp;
- 
-@@ -40,7 +40,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
- 	return x;
- }
- #else
--static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size)
-+static inline unsigned long __arch_xchg(unsigned long x, volatile void * ptr, int size)
- {
- 	switch (size) {
- 	case 1:
-@@ -75,7 +75,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
- }
- #endif
- 
--#define arch_xchg(ptr,x) ({(__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr)));})
-+#define arch_xchg(ptr,x) ({(__typeof__(*(ptr)))__arch_xchg((unsigned long)(x),(ptr),sizeof(*(ptr)));})
- 
- #include <asm-generic/cmpxchg-local.h>
- 
-diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
-index 7ec9493b28614f..feed343ad483a9 100644
---- a/arch/mips/include/asm/cmpxchg.h
-+++ b/arch/mips/include/asm/cmpxchg.h
-@@ -68,7 +68,7 @@ extern unsigned long __xchg_small(volatile void *ptr, unsigned long val,
- 				  unsigned int size);
- 
- static __always_inline
--unsigned long __xchg(volatile void *ptr, unsigned long x, int size)
-+unsigned long __arch_xchg(volatile void *ptr, unsigned long x, int size)
- {
- 	switch (size) {
- 	case 1:
-@@ -102,7 +102,7 @@ unsigned long __xchg(volatile void *ptr, unsigned long x, int size)
- 		smp_mb__before_llsc();					\
- 									\
- 	__res = (__typeof__(*(ptr)))					\
--		__xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
-+		__arch_xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
- 									\
- 	smp_llsc_mb();							\
- 									\
-diff --git a/arch/openrisc/include/asm/cmpxchg.h b/arch/openrisc/include/asm/cmpxchg.h
-index 79fd16162ccb6d..8ee151c072e414 100644
---- a/arch/openrisc/include/asm/cmpxchg.h
-+++ b/arch/openrisc/include/asm/cmpxchg.h
-@@ -147,8 +147,8 @@ static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
- extern unsigned long __xchg_called_with_bad_pointer(void)
- 	__compiletime_error("Bad argument size for xchg");
- 
--static inline unsigned long __xchg(volatile void *ptr, unsigned long with,
--		int size)
-+static inline unsigned long
-+__arch_xchg(volatile void *ptr, unsigned long with, int size)
- {
- 	switch (size) {
- 	case 1:
-@@ -163,9 +163,9 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long with,
- 
- #define arch_xchg(ptr, with) 						\
- 	({								\
--		(__typeof__(*(ptr))) __xchg((ptr),			\
--					    (unsigned long)(with),	\
--					    sizeof(*(ptr)));		\
-+		(__typeof__(*(ptr))) __arch_xchg((ptr),			\
-+						 (unsigned long)(with),	\
-+						 sizeof(*(ptr)));	\
- 	})
- 
- #endif /* __ASM_OPENRISC_CMPXCHG_H */
-diff --git a/arch/parisc/include/asm/cmpxchg.h b/arch/parisc/include/asm/cmpxchg.h
-index 5f274be105671e..c1d776bb16b4ed 100644
---- a/arch/parisc/include/asm/cmpxchg.h
-+++ b/arch/parisc/include/asm/cmpxchg.h
-@@ -22,7 +22,7 @@ extern unsigned long __xchg64(unsigned long, volatile unsigned long *);
- 
- /* optimizer better get rid of switch since size is a constant */
- static inline unsigned long
--__xchg(unsigned long x, volatile void *ptr, int size)
-+__arch_xchg(unsigned long x, volatile void *ptr, int size)
- {
- 	switch (size) {
- #ifdef CONFIG_64BIT
-@@ -49,7 +49,7 @@ __xchg(unsigned long x, volatile void *ptr, int size)
- 	__typeof__(*(ptr)) __ret;					\
- 	__typeof__(*(ptr)) _x_ = (x);					\
- 	__ret = (__typeof__(*(ptr)))					\
--		__xchg((unsigned long)_x_, (ptr), sizeof(*(ptr)));	\
-+		__arch_xchg((unsigned long)_x_, (ptr), sizeof(*(ptr)));	\
- 	__ret;								\
- })
- 
-diff --git a/arch/powerpc/include/asm/cmpxchg.h b/arch/powerpc/include/asm/cmpxchg.h
-index d0ea0571e79ab5..dbb50c06f0bf4d 100644
---- a/arch/powerpc/include/asm/cmpxchg.h
-+++ b/arch/powerpc/include/asm/cmpxchg.h
-@@ -229,7 +229,7 @@ __xchg_local(void *ptr, unsigned long x, unsigned int size)
- 		return __xchg_u64_local(ptr, x);
- #endif
- 	}
--	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg");
-+	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_local");
- 	return x;
- }
- 
-@@ -248,7 +248,7 @@ __xchg_relaxed(void *ptr, unsigned long x, unsigned int size)
- 		return __xchg_u64_relaxed(ptr, x);
- #endif
- 	}
--	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_local");
-+	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_relaxed");
- 	return x;
- }
- #define arch_xchg_local(ptr,x)						     \
-diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 0dfe9d857a762b..bba472928b5393 100644
---- a/arch/riscv/include/asm/atomic.h
-+++ b/arch/riscv/include/asm/atomic.h
-@@ -261,7 +261,7 @@ c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
- static __always_inline							\
- c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
- {									\
--	return __xchg(&(v->counter), n, size);				\
-+	return __arch_xchg(&(v->counter), n, size);			\
- }									\
- static __always_inline							\
- c_t arch_atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,	\
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 12debce235e52d..2f4726d3cfcc25 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -114,7 +114,7 @@
- 					    _x_, sizeof(*(ptr)));	\
- })
- 
--#define __xchg(ptr, new, size)						\
-+#define __arch_xchg(ptr, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
-@@ -143,7 +143,7 @@
- #define arch_xchg(ptr, x)						\
- ({									\
- 	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
-+	(__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));	\
- })
- 
- #define xchg32(ptr, x)							\
-diff --git a/arch/s390/include/asm/cmpxchg.h b/arch/s390/include/asm/cmpxchg.h
-index 84c3f0d576c5b1..ca32deff9880ea 100644
---- a/arch/s390/include/asm/cmpxchg.h
-+++ b/arch/s390/include/asm/cmpxchg.h
-@@ -14,8 +14,8 @@
- 
- void __xchg_called_with_bad_pointer(void);
- 
--static __always_inline unsigned long __xchg(unsigned long x,
--					    unsigned long address, int size)
-+static __always_inline unsigned long
-+__arch_xchg(unsigned long x, unsigned long address, int size)
- {
- 	unsigned long old;
- 	int shift;
-@@ -77,8 +77,8 @@ static __always_inline unsigned long __xchg(unsigned long x,
- 	__typeof__(*(ptr)) __ret;					\
- 									\
- 	__ret = (__typeof__(*(ptr)))					\
--		__xchg((unsigned long)(x), (unsigned long)(ptr),	\
--		       sizeof(*(ptr)));					\
-+		__arch_xchg((unsigned long)(x), (unsigned long)(ptr),	\
-+			    sizeof(*(ptr)));				\
- 	__ret;								\
- })
- 
-diff --git a/arch/sh/include/asm/cmpxchg.h b/arch/sh/include/asm/cmpxchg.h
-index 0ed9b3f4a57796..288f6f38d98fb4 100644
---- a/arch/sh/include/asm/cmpxchg.h
-+++ b/arch/sh/include/asm/cmpxchg.h
-@@ -22,7 +22,7 @@
- 
- extern void __xchg_called_with_bad_pointer(void);
- 
--#define __xchg(ptr, x, size)				\
-+#define __arch_xchg(ptr, x, size)				\
- ({							\
- 	unsigned long __xchg__res;			\
- 	volatile void *__xchg_ptr = (ptr);		\
-@@ -46,7 +46,7 @@ extern void __xchg_called_with_bad_pointer(void);
- })
- 
- #define arch_xchg(ptr,x)	\
--	((__typeof__(*(ptr)))__xchg((ptr),(unsigned long)(x), sizeof(*(ptr))))
-+	((__typeof__(*(ptr)))__arch_xchg((ptr),(unsigned long)(x), sizeof(*(ptr))))
- 
- /* This function doesn't exist, so you'll get a linker error
-  * if something tries to do an invalid cmpxchg(). */
-diff --git a/arch/sparc/include/asm/cmpxchg_32.h b/arch/sparc/include/asm/cmpxchg_32.h
-index 27a57a3a7597eb..7a1339533d1d7e 100644
---- a/arch/sparc/include/asm/cmpxchg_32.h
-+++ b/arch/sparc/include/asm/cmpxchg_32.h
-@@ -15,7 +15,7 @@
- unsigned long __xchg_u32(volatile u32 *m, u32 new);
- void __xchg_called_with_bad_pointer(void);
- 
--static inline unsigned long __xchg(unsigned long x, __volatile__ void * ptr, int size)
-+static inline unsigned long __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
- {
- 	switch (size) {
- 	case 4:
-@@ -25,7 +25,7 @@ static inline unsigned long __xchg(unsigned long x, __volatile__ void * ptr, int
- 	return x;
- }
- 
--#define arch_xchg(ptr,x) ({(__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr)));})
-+#define arch_xchg(ptr,x) ({(__typeof__(*(ptr)))__arch_xchg((unsigned long)(x),(ptr),sizeof(*(ptr)));})
- 
- /* Emulate cmpxchg() the same way we emulate atomics,
-  * by hashing the object address and indexing into an array
-diff --git a/arch/sparc/include/asm/cmpxchg_64.h b/arch/sparc/include/asm/cmpxchg_64.h
-index 12d00a42c0a3ed..66cd61dde9ec1f 100644
---- a/arch/sparc/include/asm/cmpxchg_64.h
-+++ b/arch/sparc/include/asm/cmpxchg_64.h
-@@ -55,7 +55,7 @@ static inline unsigned long xchg64(__volatile__ unsigned long *m, unsigned long
- #define arch_xchg(ptr,x)							\
- ({	__typeof__(*(ptr)) __ret;					\
- 	__ret = (__typeof__(*(ptr)))					\
--		__xchg((unsigned long)(x), (ptr), sizeof(*(ptr)));	\
-+		__arch_xchg((unsigned long)(x), (ptr), sizeof(*(ptr)));	\
- 	__ret;								\
- })
- 
-@@ -87,8 +87,8 @@ xchg16(__volatile__ unsigned short *m, unsigned short val)
- 	return (load32 & mask) >> bit_shift;
- }
- 
--static inline unsigned long __xchg(unsigned long x, __volatile__ void * ptr,
--				       int size)
-+static inline unsigned long
-+__arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
- {
- 	switch (size) {
- 	case 2:
-diff --git a/arch/xtensa/include/asm/cmpxchg.h b/arch/xtensa/include/asm/cmpxchg.h
-index eb87810357ad88..675a11ea8de76b 100644
---- a/arch/xtensa/include/asm/cmpxchg.h
-+++ b/arch/xtensa/include/asm/cmpxchg.h
-@@ -170,7 +170,7 @@ static inline unsigned long xchg_u32(volatile int * m, unsigned long val)
- }
- 
- #define arch_xchg(ptr,x) \
--	((__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
-+	((__typeof__(*(ptr)))__arch_xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
- 
- static inline u32 xchg_small(volatile void *ptr, u32 x, int size)
- {
-@@ -203,7 +203,7 @@ static inline u32 xchg_small(volatile void *ptr, u32 x, int size)
- extern void __xchg_called_with_bad_pointer(void);
- 
- static __inline__ unsigned long
--__xchg(unsigned long x, volatile void * ptr, int size)
-+__arch_xchg(unsigned long x, volatile void * ptr, int size)
- {
- 	switch (size) {
- 	case 1:
--- 
-2.34.1
+> -----Original Message-----
+> From: Linyu Yuan =5Bmailto:quic_linyyuan=40quicinc.com=5D
+> Sent: Thursday, January 5, 2023 12:35 PM
+> To: JaeHun Jung; Felipe Balbi; Greg Kroah-Hartman; Thinh Nguyen
+> Cc: open list:USB XHCI DRIVER; open list; Seungchull Suh; Daehwan Jung
+> Subject: Re: =5BPATCH=5D usb: dwc3: Clear DWC3_EVENT_PENDING when count i=
+s 0
+>=20
+>=20
+> On 1/5/2023 11:29 AM, Linyu Yuan wrote:
+> > On 1/2/2023 1:08 PM, JaeHun Jung wrote:
+> >> Sometimes very rarely, The count is 0 and the DWC3 flag is set has
+> >> status.
+> >> It must not have these status. Because, It can make happen interrupt
+> >> storming status.
+> >
+> > could you help explain without clear the flag, how interrupt storming
+> > happen ?
+> >
+> > as your change didn't touch any hardware register, i don't know how it
+> > fix storming.
+> >
+H/W interrupts are still occur on IP.
+But. ISR doesn't handle it. Because of this
+=22if (evt->flags & DWC3_EVENT_PENDING)=22
+
+This is event values.
+(struct dwc3_event_buffer *) ev_buf =3D 0xFFFFFF883DBF1180 =3D kernel_size_=
+le_lo32+0xFFFFFF883B391180 -> (
+        (void *) buf =3D 0xFFFFFFC00DBDD000 =3D end+0x337D000 -> ,
+        (void *) cache =3D 0xFFFFFF8839F54080 =3D kernel_size_le_lo32+0xFFF=
+FFF88376F4080 -> ,
+        (unsigned int) length =3D 0x1000,
+        (unsigned int) lpos =3D 0x0,
+        (unsigned int) count =3D 0x0,
+        (unsigned int) flags =3D 0x00100001,
+        (dma_addr_t) dma =3D 0x00000008BD7D7000,
+
+*((struct dwc3_event_type *) 0xFFFFFF8839F54080) =3D (
+    is_devspec =3D 1,
+    type =3D 0,
+    reserved8_31 =3D 774)
+
+*((struct dwc3_event_devt  *) 0xFFFFFF8839F54080) =3D (
+    one_bit =3D 1,
+    device_event =3D 0,
+    type =3D 6, << DWC3_DEVICE_EVENT_SUSPEND
+    reserved15_12 =3D 0,
+    event_info =3D 3,
+    reserved31_25 =3D 0)
+
+Occurred interrupts are =22DWC3_DEVICE_EVENT_SUSPEND=22.
+If when =22count has 0=22 and DWC3_EVENT_PENDING are set at the same time t=
+han
+ ISR and bottom thread couldn't handle next interrupt.
+We guessing connected with =22dwc3_gadget_process_pending_events()=22 funct=
+ion.
+But, We could not find reproduce way.
+
+
+> > storming from software layer ?
+> >
+> >> So, It have to clean up DWC3_EVENT_PENDING flags set when count is 0.
+> >> It means =22There are no interrupts to handle.=22.
+> >>
+> >> (struct dwc3_event_buffer *) ev_buf =3D 0xFFFFFF883DBF1180 (
+> >>     (void *) buf =3D 0xFFFFFFC00DBDD000 =3D end+0x337D000,
+> >>     (void *) cache =3D 0xFFFFFF8839F54080,
+> >>     (unsigned int) length =3D 0x1000,
+> >>     (unsigned int) lpos =3D 0x0,
+> >>     (unsigned int) count =3D 0x0,
+> >>     (unsigned int) flags =3D 0x00000001,
+> >>     (dma_addr_t) dma =3D 0x00000008BD7D7000,
+> >>     (struct dwc3 *) dwc =3D 0xFFFFFF8839CBC880,
+> >>     (u64) android_kabi_reserved1 =3D 0x0),
+> >>
+> >> (time =3D 47557628930999, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 1), (time =3D 47557628931268, irq =3D 165, fn =3D dwc3_interrup=
+t,
+> >> latency =3D 0, en =3D 3), (time =3D 47557628932383, irq =3D 165, fn =
+=3D
+> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628932652, ir=
+q =3D
+> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
+> >> 47557628933768, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
+=3D 1),
+> >> (time =3D 47557628934037, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 3), (time =3D 47557628935152, irq =3D 165, fn =3D dwc3_interrup=
+t,
+> >> latency =3D 0, en =3D 1), (time =3D 47557628935460, irq =3D 165, fn =
+=3D
+> >> dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D 47557628936575, ir=
+q =3D
+> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D
+> >> 47557628936845, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
+=3D 3),
+> >> (time =3D 47557628937960, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 1), (time =3D 47557628938229, irq =3D 165, fn =3D dwc3_interrup=
+t,
+> >> latency =3D 0, en =3D 3), (time =3D 47557628939345, irq =3D 165, fn =
+=3D
+> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628939652, ir=
+q =3D
+> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
+> >> 47557628940768, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
+=3D 1),
+> >> (time =3D 47557628941037, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 3), (time =3D 47557628942152, irq =3D 165, fn =3D dwc3_interrup=
+t,
+> >> latency =3D 0, en =3D 1), (time =3D 47557628942422, irq =3D 165, fn =
+=3D
+> >> dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D 47557628943537, ir=
+q =3D
+> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D
+> >> 47557628943806, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
+=3D 3),
+> >> (time =3D 47557628944922, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 1), (time =3D 47557628945229, irq =3D 165, fn =3D dwc3_interrup=
+t,
+> >> latency =3D 0, en =3D 3), (time =3D 47557628946345, irq =3D 165, fn =
+=3D
+> >> dwc3_interrupt, latency =3D 0, en =3D 1), (time =3D 47557628946614, ir=
+q =3D
+> >> 165, fn =3D dwc3_interrupt, latency =3D 0, en =3D 3), (time =3D
+> >> 47557628947729, irq =3D 165, fn =3D dwc3_interrupt, latency =3D 0, en =
+=3D 1),
+> >> (time =3D 47557628947999, irq =3D 165, fn =3D dwc3_interrupt, latency =
+=3D 0,
+> >> en =3D 3),
+> >>
+> >> Signed-off-by: JaeHun Jung <jh0801.jung=40samsung.com>
+> >> ---
+> >>   drivers/usb/dwc3/gadget.c =7C 5 ++++-
+> >>   1 file changed, 4 insertions(+), 1 deletion(-) diff --git
+> >> a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c index
+> >> 789976567f9f..5d2d5a9b9915 100644
+> >> --- a/drivers/usb/dwc3/gadget.c
+> >> +++ b/drivers/usb/dwc3/gadget.c
+> >> =40=40 -4355,8 +4355,11 =40=40 static irqreturn_t dwc3_check_event_buf=
+(struct
+> >> dwc3_event_buffer *evt)
+> >>        * irq event handler completes before caching new event to
+> >> prevent
+> >>        * losing events.
+> >>        */
+> >> -    if (evt->flags & DWC3_EVENT_PENDING)
+> >> +    if (evt->flags & DWC3_EVENT_PENDING) =7B
+> >> +        if (=21evt->count)
+> >> +            evt->flags &=3D =7EDWC3_EVENT_PENDING;
+> >>           return IRQ_HANDLED;
+> >> +    =7D
+> >>         count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+> >>       count &=3D DWC3_GEVNTCOUNT_MASK;
+> >
+> > how about below change ?
+> >
+> >         count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+> >         count &=3D DWC3_GEVNTCOUNT_MASK;
+> > -       if (=21count)
+> > +       if (=21count) =7B
+> > +               evt->flags &=3D =7EDWC3_EVENT_PENDING;
+> >                 return IRQ_NONE;
+> > +       =7D
+> ignore my suggestion, add Thinh to comment.
+> >
+> >         evt->count =3D count;
+> >         evt->flags =7C=3D DWC3_EVENT_PENDING;
+> >
 
