@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6781665F634
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01D865F635
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 22:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbjAEVuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 16:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S235860AbjAEVvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 16:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbjAEVuE (ORCPT
+        with ESMTP id S235793AbjAEVum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 16:50:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CCD6B19E;
-        Thu,  5 Jan 2023 13:48:50 -0800 (PST)
+        Thu, 5 Jan 2023 16:50:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB146E407
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 13:49:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3447B81C00;
-        Thu,  5 Jan 2023 21:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C859C433F0;
-        Thu,  5 Jan 2023 21:48:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CCB661C60
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 21:49:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1758C433F0;
+        Thu,  5 Jan 2023 21:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672955327;
-        bh=sSgZkpSSFeg7zF0fRltIEJtmUsyv/4eyDBWDrROqlI8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Gf2MG4EJlbiel0n4TeLgxm4XoOlPwFnEKKwbGG5++OwRVeZI25FYaYtRPUl2TaMNT
-         oC2WnzugCT7gLjx7HfrKvCskoP4N/EAy7T7FoYVMzSedyKULA+hHuTGpMTnjd9TEcw
-         h6vUdZ3kaooOqGIx7ldbY6JftMKWXSyz8lApHDw6JuEP2PH+2QL1tD54fa8CGCdVyv
-         VJv4cLAxIniPG9SeyBQQZlRXLyiBqekef7bZzRCffzSye8dxtv4sKrjnw1AC4fbm38
-         WtKIeHux1OuQTEzmzcOJuDFMn3Z2MkdWU2q1IlDtvUhDWr2L2ozI99mloi/uWEsqV5
-         9xGT4b5IXHeOw==
-Date:   Thu, 5 Jan 2023 15:48:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230105214845.GA1172859@bhelgaas>
+        s=k20201202; t=1672955359;
+        bh=uPhaNTNENZf5mGw9EH+DvbTe4+iskK+IX8fyXCEc/b8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k1vQhvrwks9De8sHyhAVIDK96HEI3Qp6V6J/94JngqUfbWfnIhx0UxaqicJ6hfvMk
+         6CjUqB4QjufqDBU2QaCZE22uIVoavl90IpYuTbynfhyv7/7wkt9Msv9yJ2x/1IoLdZ
+         mBJGTLs2MNdLKXL3kEm2sbtG4fzlOOoFm+EX0V/t3yB1/CumMZfn02p5ZQOaMrHf1T
+         nNIV2z3/Z1NcB53mCXZB7r1CsY83CJutYcLT7wyf+hEWvaplYYW89cWvvvju1Pbr5U
+         F7ZeKW9t745T3t3LFVdog+vp7wd79YtTcmhtFaxcunAL2XJKxfFAhqtKb/0h4r+CMS
+         EyFOXQpLG9b/w==
+Date:   Thu, 5 Jan 2023 14:49:17 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, ndesaulniers@google.com, Vijendar.Mukunda@amd.com,
+        Syed.SabaKareem@amd.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ASoC: amd: Return ENODEV if acp63 is not found.
+Message-ID: <Y7dF3VvQs6l7rr3p@dev-arch.thelio-3990X>
+References: <20230105211912.824250-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <63b7447883c75_51741294e5@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <20230105211912.824250-1-trix@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,43 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 01:43:20PM -0800, Dan Williams wrote:
-> Bjorn Helgaas wrote:
-> > On Thu, Jan 05, 2023 at 01:20:36PM -0800, Dan Williams wrote:
-> > > Bjorn Helgaas wrote:
-> > > > On Thu, Jan 05, 2023 at 11:44:28AM -0800, Dan Williams wrote:
+Hi Tom,
 
-> > > > > Would it be enough to add this clarification in "EFI 2.9 Table 7-6
-> > > > > Memory Type Usage after ExitBootServices()"?
-> > > > > 
-> > > > > s/This memory is not used by the OS./This memory is not used by the OS,
-> > > > > unless ACPI declares it for another purpose./
-> > > > 
-> > > > I guess the idea is that MCFG is a form of "ACPI declaring it"?  I
-> > > > don't have an explicit citation for it, but I infer at [1] that ACPI
-> > > > static tables are second-class citizens and not intended as a way of
-> > > > reserving address space because that would lead to problems booting
-> > > > old OSes on firmware that provides new tables unknown to the OS.
-> > > 
-> > > Ah, true, certainly for new stuff, but what about MCFG specifically?
-> > > What harm is there an assuming that MMCONFIG intersecting with
-> > > EfiMemoryMappedIO shall be treated as reserved for MMCONFIG usage.
-> > 
-> > Probably none, and I think that's what we'll have to do.  Ugh.
-> > Another random special-case rule.
-> > 
-> > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/PCI/acpi-info.rst?id=v6.1#n32
+On Thu, Jan 05, 2023 at 04:19:12PM -0500, Tom Rix wrote:
+> The clang build fails with
+> sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used
+>   uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>         default:
+>         ^~~~~~~
 > 
-> I am still holding out that a BIOS developer can either say "whoops,
-> populating MMCONFIG in _CRS was overlooked", or point out "if you take
-> the derivative of the PCI spec, multiply it be the inverse of the EFI
-> spec and then take the cross-product with the ACPI spec then the memory
-> type comes out as implicitly reserved".
+> When no device is found -ENODEV should be returned.
+> A switch with a single case is overkill, change to if-else.
+> 
+> Fixes: 1d325cdaf7a2 ("ASoC: amd: ps: refactor platform device creation logic")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Hahaha :)  Yep, but even if they change it, apparently there are lots
-of machines in the field that won't get updated, so we're stuck
-working around it.
+Thanks for the patch! I sent basically the same thing earlier today
+(sorry for forgetting to Cc you directly) and was told it was not
+correct:
 
-Or, I guess the best-case scenario would be that it's not actually a
-firmware bug, and there's some clean fix we can make to Linux.  But
-I'm not holding my breath.
+https://lore.kernel.org/6bb126b7-1cb4-0c4c-d357-fadc3ffdd3f9@amd.com/
+
+I am just waiting for some feedback before sending a v2.
+
+> ---
+>  sound/soc/amd/ps/pci-ps.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+> index 401cfd0036be..cba8800ab4ea 100644
+> --- a/sound/soc/amd/ps/pci-ps.c
+> +++ b/sound/soc/amd/ps/pci-ps.c
+> @@ -205,8 +205,7 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
+>  		memset(&pdevinfo, 0, sizeof(pdevinfo));
+>  	}
+>  
+> -	switch (adata->pdev_mask) {
+> -	case ACP63_PDM_DEV_MASK:
+> +	if (adata->pdev_mask == ACP63_PDM_DEV_MASK) {
+>  		adata->pdm_dev_index  = 0;
+>  		acp63_fill_platform_dev_info(&pdevinfo[0], parent, NULL, "acp_ps_pdm_dma",
+>  					     0, adata->res, 1, NULL, 0);
+> @@ -214,8 +213,8 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
+>  					     0, NULL, 0, NULL, 0);
+>  		acp63_fill_platform_dev_info(&pdevinfo[2], parent, NULL, "acp_ps_mach",
+>  					     0, NULL, 0, NULL, 0);
+> -		break;
+> -	default:
+> +	} else {
+> +		ret = -ENODEV;
+>  		dev_dbg(&pci->dev, "No PDM devices found\n");
+>  		goto de_init;
+>  	}
+> -- 
+> 2.27.0
+> 
+> 
