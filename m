@@ -2,168 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E607865F411
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAC365F416
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 20:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbjAETDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 14:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S235286AbjAETFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 14:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234805AbjAETDD (ORCPT
+        with ESMTP id S235284AbjAETFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:03:03 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA55F4BF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:03:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id l26so27132326wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:03:02 -0800 (PST)
+        Thu, 5 Jan 2023 14:05:19 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193F260843
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 11:05:18 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id y5so996769pfe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 11:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M3ywnK0Rwj44NUmEowj3uFpeqoi3dfNf/zj6axWlexI=;
-        b=GOodjTv4XXA0h7zfwxBAR+mgxcePBgkoSL1rN2OXga9+OyCkGuDbWRKhWN7EsNCAsl
-         nfjC8x5GiRxiOIcMrZRloa65u4rPYuSOTvs9Fpe2j3ZNMxQMJh/91HUUUUWEHHNkVOR7
-         clbW1fiA+YU3pRwo1bL8Zy0dLVFKNJQlX5nxtDjDjbkjq83y8xi/zkK7x5DvZ2IILMgJ
-         /XMmyuVpVjqp3lkW1nneMesHgFkTXv/AH2t8Ndup3fJQBgZXOLtJZ96rDKeDpm5Psa78
-         9zvKmJK52kmhNmtr9UdwuUBozaZ0yMK+B0V0QpYAksmGhN6iEwlQpHbtur0vbXYej3oF
-         4gPg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i2SehKkCBcqja+K3E3ORe72aONi2D9OxK5bIcUd12dM=;
+        b=awXTcU/LbB+ePHWF7idkRiNofo7lYdnPNZubDcIq8IyKIbBx4SHToTwvZ4OV6bt62I
+         0xkDJgInKm6CcvC0xZdUxeT8ck4FAr2l8s6IPAmGvBk4YxUO5+6wHmOL9R0/V/STgtZi
+         oD53HoCVjmTchna2qMebJgQvJHDgTo/GMr8q0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=M3ywnK0Rwj44NUmEowj3uFpeqoi3dfNf/zj6axWlexI=;
-        b=NhRUo8gD5bu2SdPUB5wCR/E/EYRFGf+uE54+FoCfFUohIHotM9VpmtxaQb+Y/UvT5I
-         Dh0prBzM05ZVSTuYG692K16kiskiOLfhQPYJTcjcQms7P2Ttw9lfm3Np9gZSeks2+pug
-         25MteAjWOxiQZXREDrpyxFE8OuDYQNGGJBQvxrYGEMG7s4YVIng9HWoxFQRCZtJiv+cu
-         DKq7EKkNY87VXVwCB9aw66azCqI2LMtTMu7qAzYze4xNpciUvt7iEA/l2V8E+K7EWwoP
-         NPlAaBIRnaVnwkDMF/RtBX1BrbROD7MrPOs8VTbUhJ0yaKnAQ8lGazHgP6JoCHhMnzgK
-         dGvQ==
-X-Gm-Message-State: AFqh2krQ6CzLp9jdDX9BFGSHIl5JKasGeLWDC0Cmb3FGZfju/paJGrVJ
-        hBGbLQ8z7a0/gN3bs87rAoJugeNq6nDHoSQFxrX8Yg==
-X-Google-Smtp-Source: AMrXdXszKVXQGCVA2N+u2+voiQh0jNEYJQJkgtP9T1vAZL4rMFn2cDbZZJqf84H6E8ijktUGriW7B1JNprdb0jEROtQ=
-X-Received: by 2002:a05:600c:3b04:b0:3d0:50c4:432c with SMTP id
- m4-20020a05600c3b0400b003d050c4432cmr2552732wms.67.1672945380644; Thu, 05 Jan
- 2023 11:03:00 -0800 (PST)
+        bh=i2SehKkCBcqja+K3E3ORe72aONi2D9OxK5bIcUd12dM=;
+        b=r87Uz0pSgzv/YfPR7I/usmauQCfUar96nNyiAklI7w1deFQet32G6TMNUlfR9woBUn
+         zUnEB43m+AosuI5jRyt4BtDkFks8IiwzS8Wtd7th4m604e3IXZiYIyPcV79mAIR0A7Xi
+         zkF2NeOGaAVDdwEUynCg4wQAMbCxrRJhSaia3r+anzVgO6cztvyo2mbOzbv753g35CMH
+         dDI16KCiOkCXNg64Y78DOZKdeCIdAzNsK+YhJPlHKvs24BjC4pD/QX9vi35bwE5lO0iO
+         2BJKvNOc2Z4fLRIB1PfQ3GNf8B8RvuRB2NPhx3bi/fMS9q0dWmPJUqvUPunN0oSmITwq
+         vHGw==
+X-Gm-Message-State: AFqh2kpniJdUTPURPgAcFIDQJwYCOqKSqzzu5M9aG5rh1AQZlb1Tts6n
+        LFSZOqPm4ibzkXdmfQOTq7CEHA==
+X-Google-Smtp-Source: AMrXdXtK4AY6OU0q3gvuV8uf6l3+SAQOjqiJHSlFSiROGKNvtDKWd9vlFkDVudKh7pEgLT1px+78TA==
+X-Received: by 2002:a05:6a00:1747:b0:582:7d41:c8a4 with SMTP id j7-20020a056a00174700b005827d41c8a4mr21331148pfc.15.1672945517261;
+        Thu, 05 Jan 2023 11:05:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f193-20020a6238ca000000b0058269b74da9sm9007525pfa.95.2023.01.05.11.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 11:05:16 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        stable@vger.kernel.org, io-uring@vger.kernel.org,
+        Dylan Yudaken <dylany@fb.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2] io_uring: Replace 0-length array with flexible array
+Date:   Thu,  5 Jan 2023 11:05:11 -0800
+Message-Id: <20230105190507.gonna.131-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230105172243.7238-1-mike.leach@linaro.org>
-In-Reply-To: <20230105172243.7238-1-mike.leach@linaro.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 Jan 2023 11:02:48 -0800
-Message-ID: <CAP-5=fVbPVE4rxJ2s8phhJ5RRH4EnKaWrF2kaT0oCmK6kvhP2g@mail.gmail.com>
-Subject: Re: [PATCH] perf build: Fix build error when NO_LIBBPF=1
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, acme@kernel.org, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1952; h=from:subject:message-id; bh=SWcBV/lk0yg6EOGEoIKozkewCZaGNeQRZtq6oIzzPPY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjtx9n4cZXq94FvnrGkXShFgmcog+jiuB2B/m25yUW xThqRSiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7cfZwAKCRCJcvTf3G3AJokvEA Ck4FZY8ra48dMW1t/xvAdzEHf3VLqCDOmJEJTLTkHW3PQYAo0qlzsytzi/4ZKIEcY2AkyW2nn4I/e+ nKckG2kSBcnfT6zXjVbpfr8rLmpV2zndLux7yq9fqqcZBr+EtIzmTNnprZ0RfkuvrSgyu/9hiTx4oy 6qItkMQHCUUxK/QQOyIiKVJHANzZr/FCvfG7EWVjNpCM/BjtdyBDwLfFAGgJqk7meXdJXkW4t55SUN ROHlaYDGSEhCCBzOws2QGDshmXpPuBeVcZqAyu/8wy/44SNlAA401xOQGVrWnFzW5a1pVppnwZZXkT RT2kw0uGFISD7lI5arKAVyYfa2go2+nLLyMnYSoQsljJ1BUnlLstXPKk5Q8wnDG7ffE9prj5mbpEXu o4XL+eUnU92nZKLl5HF2DIhFOlU4sGo7LhHfExEzSCDEgLM/FiLEZHUpkZX5egJb/EAlmz5IjxvyQ4 3AuQKG5wnvfs0VAN55jsv+xd2VifaCOQZpwteZdimwEYRdeUl2fQEuhEunkIEEfqcAVUJFCZjOIlLt SzXtMQPiEgRrcxuBvEhKuG2XzQa2+pYmDN7IoqEU3fJLcRYtE0SM375keiRvqL1OOhrMdad1uinIbY qRUpSu/yGoZPGi6saEr4fpsFHuMLhrSYz5hia2CmbnnRX5py3pXE6IvZYvGg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 9:22 AM Mike Leach <mike.leach@linaro.org> wrote:
->
-> Recent updates to perf build result in the following output when cross
-> compiling to aarch64, with libelf unavailable, and therefore
-> NO_LIBBPF=1 set.
->
-> ```
->   $make -C tools/perf
->
->   <cut>
->
->   Makefile.config:428: No libelf found. Disables 'probe' tool, jvmti
->   and BPF support in 'perf record'. Please install libelf-dev,
->   libelf-devel or elfutils-libelf-devel
->
->   <cut>
->
->   libbpf.c:46:10: fatal error: libelf.h: No such file or directory
->       46 | #include <libelf.h>
->          |          ^~~~~~~~~~
->   compilation terminated.
->
->   ./tools/build/Makefile.build:96: recipe for target
->   '.tools/perf/libbpf/staticobjs/libbpf.o' failed
->
-> ```
->
-> plus one other include error for <gelf.h>
+Zero-length arrays are deprecated[1]. Replace struct io_uring_buf_ring's
+"bufs" with a flexible array member. (How is the size of this array
+verified?) Detected with GCC 13, using -fstrict-flex-arrays=3:
 
-Ouch, apologies for the breakage. You wouldn't happen to have
-something like a way with say a docker image to repro the problem? The
-make line above is somewhat minimal.
+In function 'io_ring_buffer_select',
+    inlined from 'io_buffer_select' at io_uring/kbuf.c:183:10:
+io_uring/kbuf.c:141:23: warning: array subscript 255 is outside the bounds of an interior zero-length array 'struct io_uring_buf[0]' [-Wzero-length-bounds]
+  141 |                 buf = &br->bufs[head];
+      |                       ^~~~~~~~~~~~~~~
+In file included from include/linux/io_uring.h:7,
+                 from io_uring/kbuf.c:10:
+include/uapi/linux/io_uring.h: In function 'io_buffer_select':
+include/uapi/linux/io_uring.h:628:41: note: while referencing 'bufs'
+  628 |                 struct io_uring_buf     bufs[0];
+      |                                         ^~~~
 
-> The issue is that the commit noted below adds libbpf to the prepare:
-> target but no longer accounts for the NO_LIBBPF define. Additionally
-> changing the include directories means that even if the libbpf target
-> build is prevented, bpf headers are missing in other parts of the build.
->
-> This patch ensures that in the case of NO_LIBBPF=1, the build target is
-> changed to a header only target, and the headers are installed, without
-> attempting to build the libbpf.a target.
->
-> Applies to perf/core
->
-> Fixes: 746bd29e348f ("perf build: Use tools/lib headers from install path")
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->  tools/perf/Makefile.perf | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 13e7d26e77f0..ee08ecf469f6 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -305,7 +305,11 @@ else
->  endif
->  LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
->  LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-> +ifndef NO_LIBBPF
->  LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-> +else
-> +LIBBPF = $(LIBBPF_INCLUDE)/bpf/bpf.h
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-This seems strange, don't we want to avoid libbpf targets?
+Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: stable@vger.kernel.org
+Cc: io-uring@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: use helper since these flex arrays are in a union.
+v1: https://lore.kernel.org/lkml/20230105033743.never.628-kees@kernel.org
+---
+ include/uapi/linux/io_uring.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +endif
->  CFLAGS += -I$(LIBBPF_OUTPUT)/include
->
->  ifneq ($(OUTPUT),)
-> @@ -826,10 +830,16 @@ $(LIBAPI)-clean:
->         $(call QUIET_CLEAN, libapi)
->         $(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
->
-> +ifndef NO_LIBBPF
->  $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
->         $(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
->                 O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
->                 $@ install_headers
-> +else
-> +$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
-> +       $(Q)$(MAKE) -C $(LIBBPF_DIR) OUTPUT=$(LIBBPF_OUTPUT)/ \
-> +               DESTDIR=$(LIBBPF_DESTDIR) prefix= install_headers
-> +endif
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 2780bce62faf..434f62e0fb72 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -625,7 +625,7 @@ struct io_uring_buf_ring {
+ 			__u16	resv3;
+ 			__u16	tail;
+ 		};
+-		struct io_uring_buf	bufs[0];
++		__DECLARE_FLEX_ARRAY(struct io_uring_buf, bufs);
+ 	};
+ };
+ 
+-- 
+2.34.1
 
-Shouldn't we just be able to conditionalize having $(LIBBPF) as a
-dependency for the perf binary? If there is no dependency then the
-targets won't be built and we shouldn't need to conditionalize here.
-
-Thanks!
-Ian
-
->  $(LIBBPF)-clean:
->         $(call QUIET_CLEAN, libbpf)
-> --
-> 2.17.1
->
