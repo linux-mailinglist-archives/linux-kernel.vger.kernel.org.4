@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EFA65E2AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C676D65E2B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjAEBvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 20:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S229690AbjAEBxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 20:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjAEBvf (ORCPT
+        with ESMTP id S229481AbjAEBxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 20:51:35 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E045518B1D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 17:51:33 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l26so25397155wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 17:51:33 -0800 (PST)
+        Wed, 4 Jan 2023 20:53:11 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B371EC61
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 17:53:10 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id s9so2788203wru.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 Jan 2023 17:53:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IirUxu2i21YNeIdj8kf2wbOWwBWYoEk/wPemobzcaoI=;
-        b=BrMZFdTJFtdPzXCAO90mIl+fhIExYIjx1e642jyDfsvYssWic0/opcB8mUXWwNjQAd
-         KIhS/+5/IULJF3Vr0C64JxB+Utfle2LOubr+iwJQiiah4EQkiIjMWQjzb2Xx/RyQahu1
-         3FbHn0P7zVJmI0hKFEzRoa4fmM5coPjTO0+VNeuphABwuXH3qsUsZkZiJnwM2f6qXRPC
-         2xQB2YYo2xQDCktuQqRWejS5oFe5Jy1SemPmqeBu7bx5q/9pM56Fi6yMzBkpTevNWwb4
-         tSioHhj1AXjPlKjknGPR3S5tFYpzStKkqON5C/0HjxHK1TZmuW7b8d292pjVrdKL3tiE
-         5Cjw==
+        bh=ss9yhGcodWv1DQGxova2CHsdFFoeyn3lh8mVFJsJXkA=;
+        b=OE2yoCmNzsZVAQi3rSz26k+QZIZuIfQ3AtDLS5DmPR8LsvHBwOIf6ylf5Fjyc4e9S/
+         QIr5/QSpvQrWnmXSwlr4ezEc6i0j9x+6h6D5cS2fzrNm9fxmOgAGOvAYk2G064ZZBoNn
+         Pqfy1hdYxUXrLC3W2Zyqx0BkB9aGzGTtHrFJ91NkrZ641gCIR87oZwwEgO0fsUeSICTq
+         xewdniGh3QxOmySuXp4uFVHitTl2bGU7Cl054FzG+vjvEhxIdTHf4u0ISYrBRN6cioyb
+         4PFv4fMFbbYcYPIY7MwkHaspC4r4wsndN6wX54EmcwpU3tqy3AiJpkIHBJwwkTrUDujD
+         CepQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IirUxu2i21YNeIdj8kf2wbOWwBWYoEk/wPemobzcaoI=;
-        b=nW2Q3H3bLRW/8kfI0aGml2jbRerTBQJsORRfhpLyfDZUMD5g2k5ASzQj4xvDm3kwSx
-         W55savJG/U36TbhVdkpSPAbh5BMeNSJ+Pt+TjrRG810NMMf0t1dn/39O+k/Mx9W0a38z
-         dG441hU+D4DaPLzWkgFLajxfZswtWxH9gS5t0QQFKrkKIDLwc83EBYgpIXIQ6uaqHdtE
-         E13lj0EpFhNSuNNToo4b82ZCCwceUQxHdag1LTkCkU/Db6CBwjUwsG/9RktoMGWxEAov
-         f+J/RRRpAy4DIi9rNxOJtMdcvcaBNjUAebTv+YL5LrgV/yB17LBGQCHJr0KoeKra3P9T
-         8GRg==
-X-Gm-Message-State: AFqh2krdWlyaybiyc4BlEPo4IcjyMXitCgfvuxWS1+16w4Ag3Ug2SpxX
-        ljdv+2ebtJJJxFNLiZpU7LReRf/cujwvdft8y86wAg==
-X-Google-Smtp-Source: AMrXdXtFdsRL0O3hQoigjYTiizqcgIalrZKLHFGxzTBi7BlZo3345hGXF1Bv1RtfC0pRosDiC+nh07UNVc6Y3iEGpMA=
-X-Received: by 2002:a05:600c:3d95:b0:3d9:94fd:944f with SMTP id
- bi21-20020a05600c3d9500b003d994fd944fmr1855724wmb.38.1672883492400; Wed, 04
- Jan 2023 17:51:32 -0800 (PST)
+        bh=ss9yhGcodWv1DQGxova2CHsdFFoeyn3lh8mVFJsJXkA=;
+        b=lbGisGdOttrmIJIXcdOwaYDeYnkeFfBNIWnviX3EKvT2eXikYwYL2LcKpoJ2sMjCaI
+         FSj58ZlK39bHa6bYWIrfGe4SlkdSrwTzcdQOliyKI7mY1Z/4ySwGxCSWQKwks01Kw2+W
+         8+nyPnvHImYVsCoOOCEp4PmSx4tLWbHmH49wO7K7TEBL5b9cwPUZYty3j1ljCb+T76iC
+         rE7w4E/bmIFI5cOsVxcDcaDfatOj0mzSy5AyS08R38xpcxjd4Snv/s2tT5jl2OjdB0fV
+         /4XKwCTR1wovVt6uiTjxkvmF3U6UpcWNAA3BI2ukAfbCxyKdP7aorY9h4maxAL5r0VTI
+         7KgA==
+X-Gm-Message-State: AFqh2krTtVbOCH4IHByt20IOLb08Cp0D+kswx41BOHyGyzMxPSwOnCEu
+        820KasGqn+EV4ZvrEimNoo5l41IO7V1U/vxp5tGVzg==
+X-Google-Smtp-Source: AMrXdXvHftDidmOqzjrCPQSF/Gf47TdU8ko2g5NM1kxKona6P4fGn+QyxnKMu64Yd7SgiR6WS2L83XW7z2JNTR26u7E=
+X-Received: by 2002:a5d:6148:0:b0:280:91ea:29b7 with SMTP id
+ y8-20020a5d6148000000b0028091ea29b7mr1044383wrt.98.1672883588801; Wed, 04 Jan
+ 2023 17:53:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230104225207.1066932-1-peterx@redhat.com> <20230104225207.1066932-3-peterx@redhat.com>
-In-Reply-To: <20230104225207.1066932-3-peterx@redhat.com>
+References: <20230104225207.1066932-1-peterx@redhat.com> <20230104225207.1066932-4-peterx@redhat.com>
+In-Reply-To: <20230104225207.1066932-4-peterx@redhat.com>
 From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 5 Jan 2023 01:51:19 +0000
-Message-ID: <CADrL8HUmAuez9Zighe21DVB6KxvUMUx6ONvwEyxovOq0vMHeJw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm/mprotect: Use long for page accountings and retval
+Date:   Thu, 5 Jan 2023 01:52:56 +0000
+Message-ID: <CADrL8HVGNPWrhBNgpofgt1kpc5-rCm3GKAFwbupm6_3i6=OBaA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] mm/uffd: Detect pgtable allocation failures
 To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Mike Kravetz <mike.kravetz@oracle.com>,
@@ -76,33 +76,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Jan 4, 2023 at 10:52 PM Peter Xu <peterx@redhat.com> wrote:
 >
-> Switch to use type "long" for page accountings and retval across the whole
-> procedure of change_protection().
+> Before this patch, when there's any pgtable allocation issues happened
+> during change_protection(), the error will be ignored from the syscall.
+> For shmem, there will be an error dumped into the host dmesg.  Two issues
+> with that:
 >
-> The change should have shrinked the possible maximum page number to be half
-> comparing to previous (ULONG_MAX / 2), but it shouldn't overflow on any
-> system either because the maximum possible pages touched by change
-> protection should be ULONG_MAX / PAGE_SIZE.
+>   (1) Doing a trace dump when allocation fails is not anything close to
+>       grace..
 >
-> Two reasons to switch from "unsigned long" to "long":
+>   (2) The user should be notified with any kind of such error, so the user
+>       can trap it and decide what to do next, either by retrying, or stop
+>       the process properly, or anything else.
 >
->   1. It suites better on count_vm_numa_events(), whose 2nd parameter takes
->      a long type.
+> For userfault users, this will change the API of UFFDIO_WRITEPROTECT when
+> pgtable allocation failure happened.  It should not normally break anyone,
+> though.  If it breaks, then in good ways.
 >
->   2. It paves way for returning negative (error) values in the future.
+> One man-page update will be on the way to introduce the new -ENOMEM for
+> UFFDIO_WRITEPROTECT.  Not marking stable so we keep the old behavior on the
+> 5.19-till-now kernels.
 >
-> Currently the only caller that consumes this retval is change_prot_numa(),
-> where the unsigned long was converted to an int.  Since at it, touching up
-> the numa code to also take a long, so it'll avoid any possible overflow too
-> during the int-size convertion.
->
+> Reported-by: James Houghton <jthoughton@google.com>
 > Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  include/linux/hugetlb.h |  4 ++--
->  include/linux/mm.h      |  2 +-
->  mm/hugetlb.c            |  4 ++--
->  mm/mempolicy.c          |  2 +-
->  mm/mprotect.c           | 26 +++++++++++++-------------
->  5 files changed, 19 insertions(+), 19 deletions(-)
 
 Acked-by: James Houghton <jthoughton@google.com>
+
+Thanks Peter! :)
