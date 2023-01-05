@@ -2,290 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5AC65E5CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1646165E5D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjAEHHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S230274AbjAEHPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAEHHw (ORCPT
+        with ESMTP id S229569AbjAEHPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:07:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F2051334
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:07:50 -0800 (PST)
+        Thu, 5 Jan 2023 02:15:32 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C23C5276E;
+        Wed,  4 Jan 2023 23:15:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672902470; x=1704438470;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=aDP+IGMLjZx3A3AwWc6RZJTNibITPhyuge/CSc9dDcc=;
-  b=kL91uflapZRn9YLiZELjZw3eFgXOxDj5WBEMYlrrhdBBs3rjePO5Sf3+
-   SQ6QDgOQ/yp03aNRWIMwZOKkB1ZOusAArKc440MCaqS6MYo3WkTx17fbY
-   LtrdVGdwr4tqFLEcD2GJo2n3CWDOEy9qaiO9655k/uOEKrS/ILcd0u0DN
-   sWZYn8lJCYEZzYuTESXVrnAfqX8gW7v5mywzOd22gFgDmUpbqCPhIW511
-   40YAAjCew2nVYthSMaRH95srvW8b8JifIrmHeaZoIHH58GGWvgfmLedK8
-   Ms+up5lIrD87PXhhPaCfbJolyyimtvByq4ihUYocZdRxZpIBasEfNy2m6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="323365927"
+  t=1672902928; x=1704438928;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FBUtjr95t8Agi5j8hAHBpZDM7ThY2F/mQgfHkWT2GB4=;
+  b=D64iTKeuqGq740uUx4IcYoU8EBrxRhq3meARSTWN1sn5KNJbg2ePVHs1
+   ShcDkbKsOiJb0ydERN2yUgTMT8obFr1aeLl38Tl6SDdan3DAkA9LTJjfs
+   e2Puhc5k0k2kLezDRHxgjyahQdjmGMmDv+5ec0LnK83qfcJ3aMloLBvO0
+   nRKBkhuAWu5yfl223VWbVvDN8FwjdK7q34dMNqlzXW5Z0w72HQhSaVkeg
+   opgHzbc5OlzPVDTkX6RHyBKN+fZoyje4pU3LI/egRF87HJuJX73BDjwAS
+   FqtqJlzEQblhetgM/qcq+J5KuRRLcv1QlvVs+qxjBbeH1BNlHfrIJlaGP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301831439"
 X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="323365927"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:07:50 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="686000778"
+   d="scan'208";a="301831439"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:15:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="797815544"
 X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
-   d="scan'208";a="686000778"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:07:47 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH 1/8] migrate_pages: organize stats with struct
- migrate_pages_stats
-References: <20221227002859.27740-1-ying.huang@intel.com>
-        <20221227002859.27740-2-ying.huang@intel.com>
-        <87y1qhu0to.fsf@nvidia.com>
-        <87lemheddk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87358psc99.fsf@nvidia.com>
-Date:   Thu, 05 Jan 2023 15:06:53 +0800
-In-Reply-To: <87358psc99.fsf@nvidia.com> (Alistair Popple's message of "Thu,
-        05 Jan 2023 17:50:14 +1100")
-Message-ID: <87o7rdbgtu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="797815544"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.211.114]) ([10.254.211.114])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:15:23 -0800
+Message-ID: <1b01a5ba-3cfa-c968-59d1-1399c1b8cc1d@linux.intel.com>
+Date:   Thu, 5 Jan 2023 15:15:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Subject: Re: [PATCH v4 2/7] iommu: Allow .iotlb_sync_map to fail and handle
+ s390's -ENOMEM return
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+ <20230104120543.308933-3-schnelle@linux.ibm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230104120543.308933-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
+On 2023/1/4 20:05, Niklas Schnelle wrote:
+> On s390 when using a paging hypervisor, .iotlb_sync_map is used to sync
+> mappings by letting the hypervisor inspect the synced IOVA range and
+> updating a shadow table. This however means that .iotlb_sync_map can
+> fail as the hypervisor may run out of resources while doing the sync.
+> This can be due to the hypervisor being unable to pin guest pages, due
+> to a limit on mapped addresses such as vfio_iommu_type1.dma_entry_limit
+> or lack of other resources. Either way such a failure to sync a mapping
+> should result in a DMA_MAPPING_ERROR.
+> 
+> Now especially when running with batched IOTLB flushes for unmap it may
+> be that some IOVAs have already been invalidated but not yet synced via
+> .iotlb_sync_map. Thus if the hypervisor indicates running out of
+> resources, first do a global flush allowing the hypervisor to free
+> resources associated with these mappings as well a retry creating the
+> new mappings and only if that also fails report this error to callers.
+> 
+> Signed-off-by: Niklas Schnelle<schnelle@linux.ibm.com>
 
-> "Huang, Ying" <ying.huang@intel.com> writes:
->
->> Alistair Popple <apopple@nvidia.com> writes:
->>
->>> Huang Ying <ying.huang@intel.com> writes:
->>>
->>>> Define struct migrate_pages_stats to organize the various statistics
->>>> in migrate_pages().  This makes it easier to collect and consume the
->>>> statistics in multiple functions.  This will be needed in the
->>>> following patches in the series.
->>>>
->>>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->>>> Cc: Zi Yan <ziy@nvidia.com>
->>>> Cc: Yang Shi <shy828301@gmail.com>
->>>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> Cc: Oscar Salvador <osalvador@suse.de>
->>>> Cc: Matthew Wilcox <willy@infradead.org>
->>>> Cc: Bharata B Rao <bharata@amd.com>
->>>> Cc: Alistair Popple <apopple@nvidia.com>
->>>> Cc: haoxin <xhao@linux.alibaba.com>
->>>> ---
->>>>  mm/migrate.c | 58 +++++++++++++++++++++++++++++-----------------------
->>>>  1 file changed, 32 insertions(+), 26 deletions(-)
->>>>
->>>> diff --git a/mm/migrate.c b/mm/migrate.c
->>>> index a4d3fc65085f..ec9263a33d38 100644
->>>> --- a/mm/migrate.c
->>>> +++ b/mm/migrate.c
->>>> @@ -1396,6 +1396,14 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
->>>>  	return rc;
->>>>  }
->>>>  
->>>> +struct migrate_pages_stats {
->>>> +	int nr_succeeded;
->>>> +	int nr_failed_pages;
->>>> +	int nr_thp_succeeded;
->>>> +	int nr_thp_failed;
->>>> +	int nr_thp_split;
->>>
->>> I think some brief comments in the code for what each stat is tracking
->>> and their relationship to each other would be helpful (ie. does
->>> nr_succeeded include thp subpages, etc). Or at least a reference to
->>> where this is documented (ie. page_migration.rst) as I recall there has
->>> been some confusion in the past that has lead to bugs.
->>
->> OK, will do that in the next version.
->
-> You should add that nr_failed_pages doesn't count failures of migrations
-> that weren't attempted because eg. allocation failure as that was a
-> surprising detail to me at least. Unless of course you decide to fix
-> that :-)
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-nr_failed_pages are used for /proc/vmstat.  Syscall move_pages() cares
-about how many pages requested but not tried.  But the system wide
-statistics doesn't care about it.  I think that is the appropriate.
-
-Best Regards,
-Huang, Ying
-
->>> Otherwise the patch looks good so:
->>>
->>> Reviewed-by: Alistair Popple <apopple@nvidia.com>
->>
->> Thanks!
->>
->> Best Regards,
->> Huang, Ying
->>
->>>> +};
->>>> +
->>>>  /*
->>>>   * migrate_pages - migrate the folios specified in a list, to the free folios
->>>>   *		   supplied as the target for the page migration
->>>> @@ -1430,13 +1438,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  	int large_retry = 1;
->>>>  	int thp_retry = 1;
->>>>  	int nr_failed = 0;
->>>> -	int nr_failed_pages = 0;
->>>>  	int nr_retry_pages = 0;
->>>> -	int nr_succeeded = 0;
->>>> -	int nr_thp_succeeded = 0;
->>>>  	int nr_large_failed = 0;
->>>> -	int nr_thp_failed = 0;
->>>> -	int nr_thp_split = 0;
->>>>  	int pass = 0;
->>>>  	bool is_large = false;
->>>>  	bool is_thp = false;
->>>> @@ -1446,9 +1449,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  	LIST_HEAD(split_folios);
->>>>  	bool nosplit = (reason == MR_NUMA_MISPLACED);
->>>>  	bool no_split_folio_counting = false;
->>>> +	struct migrate_pages_stats stats;
->>>>  
->>>>  	trace_mm_migrate_pages_start(mode, reason);
->>>>  
->>>> +	memset(&stats, 0, sizeof(stats));
->>>>  split_folio_migration:
->>>>  	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
->>>>  		retry = 0;
->>>> @@ -1502,9 +1507,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  				/* Large folio migration is unsupported */
->>>>  				if (is_large) {
->>>>  					nr_large_failed++;
->>>> -					nr_thp_failed += is_thp;
->>>> +					stats.nr_thp_failed += is_thp;
->>>>  					if (!try_split_folio(folio, &split_folios)) {
->>>> -						nr_thp_split += is_thp;
->>>> +						stats.nr_thp_split += is_thp;
->>>>  						break;
->>>>  					}
->>>>  				/* Hugetlb migration is unsupported */
->>>> @@ -1512,7 +1517,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  					nr_failed++;
->>>>  				}
->>>>  
->>>> -				nr_failed_pages += nr_pages;
->>>> +				stats.nr_failed_pages += nr_pages;
->>>>  				list_move_tail(&folio->lru, &ret_folios);
->>>>  				break;
->>>>  			case -ENOMEM:
->>>> @@ -1522,13 +1527,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  				 */
->>>>  				if (is_large) {
->>>>  					nr_large_failed++;
->>>> -					nr_thp_failed += is_thp;
->>>> +					stats.nr_thp_failed += is_thp;
->>>>  					/* Large folio NUMA faulting doesn't split to retry. */
->>>>  					if (!nosplit) {
->>>>  						int ret = try_split_folio(folio, &split_folios);
->>>>  
->>>>  						if (!ret) {
->>>> -							nr_thp_split += is_thp;
->>>> +							stats.nr_thp_split += is_thp;
->>>>  							break;
->>>>  						} else if (reason == MR_LONGTERM_PIN &&
->>>>  							   ret == -EAGAIN) {
->>>> @@ -1546,7 +1551,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  					nr_failed++;
->>>>  				}
->>>>  
->>>> -				nr_failed_pages += nr_pages + nr_retry_pages;
->>>> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
->>>>  				/*
->>>>  				 * There might be some split folios of fail-to-migrate large
->>>>  				 * folios left in split_folios list. Move them back to migration
->>>> @@ -1556,7 +1561,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  				list_splice_init(&split_folios, from);
->>>>  				/* nr_failed isn't updated for not used */
->>>>  				nr_large_failed += large_retry;
->>>> -				nr_thp_failed += thp_retry;
->>>> +				stats.nr_thp_failed += thp_retry;
->>>>  				goto out;
->>>>  			case -EAGAIN:
->>>>  				if (is_large) {
->>>> @@ -1568,8 +1573,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  				nr_retry_pages += nr_pages;
->>>>  				break;
->>>>  			case MIGRATEPAGE_SUCCESS:
->>>> -				nr_succeeded += nr_pages;
->>>> -				nr_thp_succeeded += is_thp;
->>>> +				stats.nr_succeeded += nr_pages;
->>>> +				stats.nr_thp_succeeded += is_thp;
->>>>  				break;
->>>>  			default:
->>>>  				/*
->>>> @@ -1580,20 +1585,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  				 */
->>>>  				if (is_large) {
->>>>  					nr_large_failed++;
->>>> -					nr_thp_failed += is_thp;
->>>> +					stats.nr_thp_failed += is_thp;
->>>>  				} else if (!no_split_folio_counting) {
->>>>  					nr_failed++;
->>>>  				}
->>>>  
->>>> -				nr_failed_pages += nr_pages;
->>>> +				stats.nr_failed_pages += nr_pages;
->>>>  				break;
->>>>  			}
->>>>  		}
->>>>  	}
->>>>  	nr_failed += retry;
->>>>  	nr_large_failed += large_retry;
->>>> -	nr_thp_failed += thp_retry;
->>>> -	nr_failed_pages += nr_retry_pages;
->>>> +	stats.nr_thp_failed += thp_retry;
->>>> +	stats.nr_failed_pages += nr_retry_pages;
->>>>  	/*
->>>>  	 * Try to migrate split folios of fail-to-migrate large folios, no
->>>>  	 * nr_failed counting in this round, since all split folios of a
->>>> @@ -1626,16 +1631,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>  	if (list_empty(from))
->>>>  		rc = 0;
->>>>  
->>>> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
->>>> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
->>>> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
->>>> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
->>>> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
->>>> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
->>>> -			       nr_thp_failed, nr_thp_split, mode, reason);
->>>> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
->>>> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
->>>> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
->>>> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
->>>> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
->>>> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
->>>> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
->>>> +			       stats.nr_thp_split, mode, reason);
->>>>  
->>>>  	if (ret_succeeded)
->>>> -		*ret_succeeded = nr_succeeded;
->>>> +		*ret_succeeded = stats.nr_succeeded;
->>>>  
->>>>  	return rc;
->>>>  }
+--
+Best regards,
+baolu
