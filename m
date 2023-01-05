@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD4E65E8D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D1E65E8D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjAEKVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S232906AbjAEKVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjAEKT4 (ORCPT
+        with ESMTP id S232621AbjAEKT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 05:19:56 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E46E551F0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:19 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s6-20020a259006000000b00706c8bfd130so36459466ybl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:19 -0800 (PST)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4614B395E1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:21 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4700580ca98so305708967b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBa/YNOWHc8BdkByQMj3j16NgHnHDUWMHmpwThmwYW8=;
-        b=XMejQEid82qJD40DqqAVmKO7KaK2I6fqGVaQFn3qa+xsUhE5GeK5QsvXmIgXrlYAYp
-         ZglFLDAuM74Ul8HnkiBVKndyeFl7TfYD6lrTc+G+Y0y5590vBgUhLji2pkV/uo0dTtba
-         JOhfbgAT9W5Ih3mvcLPzzoGXyJzqEfRKoNqybN3iBy+HEU29ORkAZ56QrvlR8wMgJBPv
-         /fiJ3Qjur/kHePLpxQf6mexQ2zmKFEUxMYH6n8AvNHRLmu3tqS42gPfHnw2VZCW+sun6
-         KjrZlQt7j8nYKl5hgQmUrLHKrYGRJUYde6DMPUl9jm0rRYEyRoygWOPbOjS00/ls6W8J
-         sVQg==
+        bh=3kWM8DYu7DnV7Jv/QGJ6f3ppiIBnNL94nY50ZsYLZ48=;
+        b=L2aTbeQAeNJJeiUCuWw/dfwAL4UVIBqWGH55xL0ZJpLs3sGFv6hFcIvCc0Ga7d/ieX
+         hjmwK3ib7/cchvS/YNI5B2b8qO3orIA5BWZwCv046KSsSk68EciP1H12pdFZ0JnY3ID3
+         pYb07IsQSWYw/0QL7lCbsdokm5Jdl9QVO58MurdRYCOYSbQ0K1s+CTWgqBbCQMbN52p3
+         rBm+Mj78x+W8YyDclWaBCjNduKppB0sC5WajJ2RRtfrhbf2j86ceAoNxktgW6316luJG
+         DMu0s3GTU3x/vCtEgoRMt2pwviQKJhe3xm5AQwX5rbR/oBcVLAk0J73laj0wxnS/nDXd
+         glUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBa/YNOWHc8BdkByQMj3j16NgHnHDUWMHmpwThmwYW8=;
-        b=D4RD7j7Ekivsr4r2NsylfwUwbgTqsia9/1zw9jii9p+vvBfoJdqD5eb6SXHydy6FA/
-         vm5rbp0QsfLsoRmSIE20NoTmYBJQsgdDJkwU9Ib6n+VLFgaz8SQ6XVeGUK3ZslsoRWdX
-         BbGpoAMiudw93TRqnHfHkXkk+6UKHRCFJPVGW7jFHYU+Z/d4ddGXnj++8X9xsfMvOWmH
-         MXL+N2zdFbhpP6lYP3e2PXUclxVHYfqOlsN1GUW5D2kuXYb0USfbYe7CBZlAVN3QfPOO
-         vGCjUmmBgzKK214ZrLG+zYTD4oNiQkj3uoaFzVLfe30fmA87JTzwrs97VKEElHvAcRog
-         +kkQ==
-X-Gm-Message-State: AFqh2krUTD4u5LrTe0bAitJJIQkD6jmMvaxStRTPJlTPJDYTzJLB2J7h
-        hIPk1jwM/QMV0kCEPY9uF5znIXyruGT4OyTC
-X-Google-Smtp-Source: AMrXdXvV0r/wfkEbgjE+pvWMQzkSz+gLHIZu+cb6EHqmZiUJTMqvVQaEsHt/42vL01/hmp945pzEpgFSvftYQi7k
+        bh=3kWM8DYu7DnV7Jv/QGJ6f3ppiIBnNL94nY50ZsYLZ48=;
+        b=Up5cXJ2IgAH1VIX2OCrSLL2YhQW5d539HjgZaLQbzGeTX7ylaR2U4GaEaKncJl4j0V
+         goOP0P4kTeC2b9thtDwy6YnfysfQtBlhh26+ckaCIvchixchYDW5jt3jPURHH0UeP4B2
+         bs23mWissfy2zoTPePZp6ALMpRGIQj2zZcKYgxuY3lpqfzCgD6a6zhM1TaDBAxGVHLF9
+         +bbsKs8/7oBQGRteuIMmtxqgTw2y6EAlBWmnMKYyTtGJ4o1sHj8Cb0L6W0QhSyVHGHXz
+         jD9zEmaXFgmNEJBv9/OR3oLoUDOiA4UMON7zdC3Ha8TxUC2Z2Y0RyeMqdsrNvSjzzY8y
+         1eTQ==
+X-Gm-Message-State: AFqh2kph8w/cqC09MRs+/pnkfGbPntgGCZL0OrzZbfspElNwam3vm6gX
+        8kvza/ndK708SBAio5nv68GuDjSF5MF/s9Mc
+X-Google-Smtp-Source: AMrXdXvqOEL7ovL3FbMjk4okDrWCxN+YTjALnEUL0oRXnxb5KqHby493dqSvh11l+d52AF7sViTIqr3WdL+KcRjD
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:b14:b0:6fc:c88a:1c6d with SMTP
- id ch20-20020a0569020b1400b006fcc88a1c6dmr5728371ybb.486.1672913959168; Thu,
- 05 Jan 2023 02:19:19 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:14 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:aa4f:0:b0:717:e051:5d2d with SMTP
+ id s73-20020a25aa4f000000b00717e0515d2dmr5822098ybi.474.1672913960512; Thu,
+ 05 Jan 2023 02:19:20 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:15 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-17-jthoughton@google.com>
-Subject: [PATCH 16/46] hugetlbfs: do a full walk to check if vma maps a page
+Message-ID: <20230105101844.1893104-18-jthoughton@google.com>
+Subject: [PATCH 17/46] hugetlb: make unmapping compatible with
+ high-granularity mappings
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,52 +85,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because it is safe to do so, we can do a full high-granularity page
-table walk to check if the page is mapped.
+Enlighten __unmap_hugepage_range to deal with high-granularity mappings.
+This doesn't change its API; it still must be called with hugepage
+alignment, but it will correctly unmap hugepages that have been mapped
+at high granularity.
 
-If it were not safe to do so, we could bail out early in the case of a
-high-granularity mapped PTE, indicating that the page could have been
-mapped.
+The rules for mapcount and refcount here are:
+ 1. Refcount and mapcount are tracked on the head page.
+ 2. Each page table mapping into some of an hpage will increase that
+    hpage's mapcount and refcount by 1.
+
+Eventually, functionality here can be expanded to allow users to call
+MADV_DONTNEED on PAGE_SIZE-aligned sections of a hugepage, but that is
+not done here.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- fs/hugetlbfs/inode.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ include/asm-generic/tlb.h |  6 ++--
+ mm/hugetlb.c              | 74 ++++++++++++++++++++++++---------------
+ 2 files changed, 48 insertions(+), 32 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 48f1a8ad2243..d34ce79da595 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -386,17 +386,24 @@ static void hugetlb_delete_from_page_cache(struct folio *folio)
- static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
- 				unsigned long addr, struct page *page)
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index b46617207c93..31267471760e 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -598,9 +598,9 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
+ 		__tlb_remove_tlb_entry(tlb, ptep, address);	\
+ 	} while (0)
+ 
+-#define tlb_remove_huge_tlb_entry(h, tlb, ptep, address)	\
++#define tlb_remove_huge_tlb_entry(tlb, hpte, address)	\
+ 	do {							\
+-		unsigned long _sz = huge_page_size(h);		\
++		unsigned long _sz = hugetlb_pte_size(&hpte);	\
+ 		if (_sz >= P4D_SIZE)				\
+ 			tlb_flush_p4d_range(tlb, address, _sz);	\
+ 		else if (_sz >= PUD_SIZE)			\
+@@ -609,7 +609,7 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
+ 			tlb_flush_pmd_range(tlb, address, _sz);	\
+ 		else						\
+ 			tlb_flush_pte_range(tlb, address, _sz);	\
+-		__tlb_remove_tlb_entry(tlb, ptep, address);	\
++		__tlb_remove_tlb_entry(tlb, hpte.ptep, address);\
+ 	} while (0)
+ 
+ /**
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 3a75833d7aba..dfd6c1491ac3 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5384,10 +5384,10 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
  {
--	pte_t *ptep, pte;
-+	pte_t pte;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	unsigned long address;
+-	pte_t *ptep;
 +	struct hugetlb_pte hpte;
+ 	pte_t pte;
+ 	spinlock_t *ptl;
+-	struct page *page;
++	struct page *hpage, *subpage;
+ 	struct hstate *h = hstate_vma(vma);
+ 	unsigned long sz = huge_page_size(h);
+ 	unsigned long last_addr_mask;
+@@ -5397,35 +5397,33 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 	BUG_ON(start & ~huge_page_mask(h));
+ 	BUG_ON(end & ~huge_page_mask(h));
  
--	ptep = hugetlb_walk(vma, addr, huge_page_size(hstate_vma(vma)));
--	if (!ptep)
-+	if (hugetlb_full_walk(&hpte, vma, addr))
- 		return false;
+-	/*
+-	 * This is a hugetlb vma, all the pte entries should point
+-	 * to huge page.
+-	 */
+-	tlb_change_page_size(tlb, sz);
+ 	tlb_start_vma(tlb, vma);
  
--	pte = huge_ptep_get(ptep);
-+	pte = huge_ptep_get(hpte.ptep);
- 	if (huge_pte_none(pte) || !pte_present(pte))
- 		return false;
- 
--	if (pte_page(pte) == page)
-+	if (unlikely(!hugetlb_pte_present_leaf(&hpte, pte)))
-+		/*
-+		 * We raced with someone splitting us, and the only case
-+		 * where this is impossible is when the pte was none.
-+		 */
-+		return false;
+ 	last_addr_mask = hugetlb_mask_last_page(h);
+ 	address = start;
+-	for (; address < end; address += sz) {
+-		ptep = hugetlb_walk(vma, address, sz);
+-		if (!ptep) {
+-			address |= last_addr_mask;
 +
-+	if (compound_head(pte_page(pte)) == page)
- 		return true;
++	while (address < end) {
++		if (hugetlb_full_walk(&hpte, vma, address)) {
++			address = (address | last_addr_mask) + sz;
+ 			continue;
+ 		}
  
- 	return false;
+-		ptl = huge_pte_lock(h, mm, ptep);
+-		if (huge_pmd_unshare(mm, vma, address, ptep)) {
++		ptl = hugetlb_pte_lock(&hpte);
++		if (hugetlb_pte_size(&hpte) == sz &&
++		    huge_pmd_unshare(mm, vma, address, hpte.ptep)) {
+ 			spin_unlock(ptl);
+ 			tlb_flush_pmd_range(tlb, address & PUD_MASK, PUD_SIZE);
+ 			force_flush = true;
+ 			address |= last_addr_mask;
++			address += sz;
+ 			continue;
+ 		}
+ 
+-		pte = huge_ptep_get(ptep);
++		pte = huge_ptep_get(hpte.ptep);
++
+ 		if (huge_pte_none(pte)) {
+ 			spin_unlock(ptl);
+-			continue;
++			goto next_hpte;
+ 		}
+ 
+ 		/*
+@@ -5441,24 +5439,35 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 			 */
+ 			if (pte_swp_uffd_wp_any(pte) &&
+ 			    !(zap_flags & ZAP_FLAG_DROP_MARKER))
+-				set_huge_pte_at(mm, address, ptep,
++				set_huge_pte_at(mm, address, hpte.ptep,
+ 						make_pte_marker(PTE_MARKER_UFFD_WP));
+ 			else
+-				huge_pte_clear(mm, address, ptep, sz);
++				huge_pte_clear(mm, address, hpte.ptep,
++						hugetlb_pte_size(&hpte));
++			spin_unlock(ptl);
++			goto next_hpte;
++		}
++
++		if (unlikely(!hugetlb_pte_present_leaf(&hpte, pte))) {
++			/*
++			 * We raced with someone splitting out from under us.
++			 * Retry the walk.
++			 */
+ 			spin_unlock(ptl);
+ 			continue;
+ 		}
+ 
+-		page = pte_page(pte);
++		subpage = pte_page(pte);
++		hpage = compound_head(subpage);
+ 		/*
+ 		 * If a reference page is supplied, it is because a specific
+ 		 * page is being unmapped, not a range. Ensure the page we
+ 		 * are about to unmap is the actual page of interest.
+ 		 */
+ 		if (ref_page) {
+-			if (page != ref_page) {
++			if (hpage != ref_page) {
+ 				spin_unlock(ptl);
+-				continue;
++				goto next_hpte;
+ 			}
+ 			/*
+ 			 * Mark the VMA as having unmapped its page so that
+@@ -5468,25 +5477,32 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 			set_vma_resv_flags(vma, HPAGE_RESV_UNMAPPED);
+ 		}
+ 
+-		pte = huge_ptep_get_and_clear(mm, address, ptep);
+-		tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
++		pte = huge_ptep_get_and_clear(mm, address, hpte.ptep);
++		tlb_change_page_size(tlb, hugetlb_pte_size(&hpte));
++		tlb_remove_huge_tlb_entry(tlb, hpte, address);
+ 		if (huge_pte_dirty(pte))
+-			set_page_dirty(page);
++			set_page_dirty(hpage);
+ 		/* Leave a uffd-wp pte marker if needed */
+ 		if (huge_pte_uffd_wp(pte) &&
+ 		    !(zap_flags & ZAP_FLAG_DROP_MARKER))
+-			set_huge_pte_at(mm, address, ptep,
++			set_huge_pte_at(mm, address, hpte.ptep,
+ 					make_pte_marker(PTE_MARKER_UFFD_WP));
+-		hugetlb_count_sub(pages_per_huge_page(h), mm);
+-		page_remove_rmap(page, vma, true);
++		hugetlb_count_sub(hugetlb_pte_size(&hpte)/PAGE_SIZE, mm);
++		page_remove_rmap(hpage, vma, true);
+ 
+ 		spin_unlock(ptl);
+-		tlb_remove_page_size(tlb, page, huge_page_size(h));
+ 		/*
+-		 * Bail out after unmapping reference page if supplied
++		 * Lower the reference count on the head page.
++		 */
++		tlb_remove_page_size(tlb, hpage, sz);
++		/*
++		 * Bail out after unmapping reference page if supplied,
++		 * and there's only one PTE mapping this page.
+ 		 */
+-		if (ref_page)
++		if (ref_page && hugetlb_pte_size(&hpte) == sz)
+ 			break;
++next_hpte:
++		address += hugetlb_pte_size(&hpte);
+ 	}
+ 	tlb_end_vma(tlb, vma);
+ 
 -- 
 2.39.0.314.g84b9a713c41-goog
 
