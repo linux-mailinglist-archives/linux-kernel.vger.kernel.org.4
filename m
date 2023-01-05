@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD3265EF05
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECD265EF0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjAEOnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
+        id S232864AbjAEOnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbjAEOnH (ORCPT
+        with ESMTP id S233312AbjAEOna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:43:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE751B1D6
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672929738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wjyslnCj3ZEltR7C79+zwgm2T1VJBZSXYdTg0fe8CHE=;
-        b=Z7gAD9/g3QUBTBB1cOD+axkV4XTiKLpnBANoCE4AU2YmuWDEbdgisVzoEW5LDiIVKKhAxO
-        oitkhR9MuW6ZrW+xa4gcQdN44DVKpHL4SxaUJY2aQ7YWII2pV1H7bbGBm7hfq4zz71WNYf
-        ZempUB8YZaUqqRamDK1sdOwg2+GViYA=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-472-a5Pdh6d6P6qv9GosnAa2DA-1; Thu, 05 Jan 2023 09:42:17 -0500
-X-MC-Unique: a5Pdh6d6P6qv9GosnAa2DA-1
-Received: by mail-yb1-f199.google.com with SMTP id y66-20020a25c845000000b00733b5049b6fso36835995ybf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:42:16 -0800 (PST)
+        Thu, 5 Jan 2023 09:43:30 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03F91B1D6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:43:28 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id r11so32089981oie.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EdNIzr6K79WGrUyV+pZ/Ft7qJJmll5v3NGysEKK7sJ4=;
+        b=hV/gs6uGEhp2/BqwXHHWgvEpjroUzlbH5ZC972vJ/UcAIGkZD8KViT/iwG7m9ZfKVL
+         4p9k5lNOY3ZDmRf517hnQLx9WH5EIK2P2gDAOBbbOlFc04N54f2ZwtvGyUfWfQUcuyUc
+         lMnhJ/6husUN8ZqIPXO5e6DdPwmB40nz/jetw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjyslnCj3ZEltR7C79+zwgm2T1VJBZSXYdTg0fe8CHE=;
-        b=Rfr/d7fIDZciwXsRFq69AeuaHd9CJNTvNCVg3qFFxzt2jqAx7w2ysspAvfK/aCnH5W
-         mLnxe684dWpIdxqL1dtzxGu8fpb4kiNcVXffIPsIcVB6fhr5+qaOGnyS4pTpcF2WO/dB
-         21/JDzPwu3xtADOrCWbHjlB3i0WJ6f2OIe5ZNsvK0BKWQCeHTv2AD4npntbMUzfKp8UG
-         YYN69OJ+bqWUb5mdfT9msAcuvBJv4sd+vZHXGVU8M3HYlnAXR+Y57ASQQSjOLcGT1J5V
-         gSTk0ZqqO/hjLeuTe20+mRfn47CHTnDPxSAc1TdX+OjxgVhvfGYIi8NuWTJNvk3PYAHs
-         XvZA==
-X-Gm-Message-State: AFqh2kq0WWxc/3gU6FAKDzMK7nFDxx3mrm+HLtVHOdEU8hxLTCGqLd/b
-        AL8xsa7r8Zgch8LbDxi7cDAPY7luQQUkdPO1uPgKOypikB8RmYtqHy1l4mCasM/B0/jYUYtGHzv
-        ppt0OXmpwaE5XZFbxHiC06Biw
-X-Received: by 2002:a05:690c:d84:b0:4b5:c61:1c02 with SMTP id da4-20020a05690c0d8400b004b50c611c02mr9863333ywb.22.1672929736367;
-        Thu, 05 Jan 2023 06:42:16 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtgZGayMfn5T2A3YgNPQf9Hcxwo0jOEuaE/UPyg5j2hL0RrzHck6nvnDV5RBSK1tNEA18Dwmw==
-X-Received: by 2002:a05:690c:d84:b0:4b5:c61:1c02 with SMTP id da4-20020a05690c0d8400b004b50c611c02mr9863296ywb.22.1672929736089;
-        Thu, 05 Jan 2023 06:42:16 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id ay34-20020a05620a17a200b006b929a56a2bsm25634809qkb.3.2023.01.05.06.42.14
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EdNIzr6K79WGrUyV+pZ/Ft7qJJmll5v3NGysEKK7sJ4=;
+        b=jdoxGlwq+i2HaMxI7TMD8+l36jS4IBnz3uipUZgWiUO8Gv38OhAyYI/y1tYh3jawms
+         JMShjYAhP74v1Ui7ueKwzydjQZHfYFoLK36L1gTVXI26rlE0t6APZuymqkxq1tkrMRPP
+         IQOjoWD3QAx12P6g8RccYKqTsLgZVu5eQd8D30jCn1VZdZmmIhBy8pKm1sunH5cnkp0t
+         pOl9/UGvhTt7i98VQ707FcgV6OkQswL3M64wfyCxwaB6tOJKHCIt/T6nHUKrzq5Zi5qo
+         MN63tm8jRkCTV9gVlU2ulE0EYtYc7WF/GEuCD4w0Upr2RtoiJiN5fd+KFxZh3pZpB8pa
+         FAnQ==
+X-Gm-Message-State: AFqh2ko0dymfdDDpV3yygVzaAFWwPqhb+1KJrf6Za7b5xPYjH4OtaBHz
+        0Nh+9UilzJoxe56Kiz8Mp7TLog==
+X-Google-Smtp-Source: AMrXdXs6IuHALNc2iJnYamsaDTWMfvdsNhCSKvmYJvtEl5OJreiggIYBSep+IOTVbeYybTh5KI2NKw==
+X-Received: by 2002:a05:6808:309a:b0:363:aeff:9969 with SMTP id bl26-20020a056808309a00b00363aeff9969mr10397466oib.13.1672929808065;
+        Thu, 05 Jan 2023 06:43:28 -0800 (PST)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id n67-20020acabd46000000b0035b451d80afsm15375146oif.58.2023.01.05.06.43.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 06:42:15 -0800 (PST)
-Date:   Thu, 5 Jan 2023 09:43:13 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v2 2/7] dm: Add support for block provisioning
-Message-ID: <Y7biAQyLKJDjsAlz@bfoster>
-References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
- <20221229081252.452240-3-sarthakkukreti@chromium.org>
+        Thu, 05 Jan 2023 06:43:27 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Thu, 5 Jan 2023 08:43:25 -0600
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/207] 6.1.4-rc1 review
+Message-ID: <Y7biDVBJ9ZR8BSfk@fedora64.linuxtx.org>
+References: <20230104160511.905925875@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221229081252.452240-3-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230104160511.905925875@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,215 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 12:12:47AM -0800, Sarthak Kukreti wrote:
-> Add support to dm devices for REQ_OP_PROVISION. The default mode
-> is to pass through the request and dm-thin will utilize it to provision
-> blocks.
+On Wed, Jan 04, 2023 at 05:04:18PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.4 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> ---
->  drivers/md/dm-crypt.c         |  4 +-
->  drivers/md/dm-linear.c        |  1 +
->  drivers/md/dm-snap.c          |  7 +++
->  drivers/md/dm-table.c         | 25 ++++++++++
->  drivers/md/dm-thin.c          | 90 ++++++++++++++++++++++++++++++++++-
->  drivers/md/dm.c               |  4 ++
->  include/linux/device-mapper.h | 11 +++++
->  7 files changed, 139 insertions(+), 3 deletions(-)
+> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
+> Anything received after that time might be too late.
 > 
-...
-> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> index 64cfcf46881d..ab3f1abfabaf 100644
-> --- a/drivers/md/dm-thin.c
-> +++ b/drivers/md/dm-thin.c
-...
-> @@ -1980,6 +1992,70 @@ static void process_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
->  	}
->  }
->  
-> +static void process_provision_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
-> +{
-> +	int r;
-> +	struct pool *pool = tc->pool;
-> +	struct bio *bio = cell->holder;
-> +	dm_block_t begin, end;
-> +	struct dm_thin_lookup_result lookup_result;
-> +
-> +	if (tc->requeue_mode) {
-> +		cell_requeue(pool, cell);
-> +		return;
-> +	}
-> +
-> +	get_bio_block_range(tc, bio, &begin, &end);
-> +
-> +	while (begin != end) {
-> +		r = ensure_next_mapping(pool);
-> +		if (r)
-> +			/* we did our best */
-> +			return;
-> +
-> +		r = dm_thin_find_block(tc->td, begin, 1, &lookup_result);
-
-Hi Sarthak,
-
-I think we discussed this before.. but remind me if/how we wanted to
-handle the case if the thin blocks are shared..? Would a provision op
-carry enough information to distinguish an FALLOC_FL_UNSHARE_RANGE
-request from upper layers to conditionally provision in that case?
-
-Brian
-
-> +		switch (r) {
-> +		case 0:
-> +			begin++;
-> +			break;
-> +		case -ENODATA:
-> +			bio_inc_remaining(bio);
-> +			provision_block(tc, bio, begin, cell);
-> +			begin++;
-> +			break;
-> +		default:
-> +			DMERR_LIMIT(
-> +				"%s: dm_thin_find_block() failed: error = %d",
-> +				__func__, r);
-> +			cell_defer_no_holder(tc, cell);
-> +			bio_io_error(bio);
-> +			begin++;
-> +			break;
-> +		}
-> +	}
-> +	bio_endio(bio);
-> +	cell_defer_no_holder(tc, cell);
-> +}
-> +
-> +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
-> +{
-> +	dm_block_t begin, end;
-> +	struct dm_cell_key virt_key;
-> +	struct dm_bio_prison_cell *virt_cell;
-> +
-> +	get_bio_block_range(tc, bio, &begin, &end);
-> +	if (begin == end) {
-> +		bio_endio(bio);
-> +		return;
-> +	}
-> +
-> +	build_key(tc->td, VIRTUAL, begin, end, &virt_key);
-> +	if (bio_detain(tc->pool, &virt_key, bio, &virt_cell))
-> +		return;
-> +
-> +	process_provision_cell(tc, virt_cell);
-> +}
-> +
->  static void process_bio(struct thin_c *tc, struct bio *bio)
->  {
->  	struct pool *pool = tc->pool;
-> @@ -2200,6 +2276,8 @@ static void process_thin_deferred_bios(struct thin_c *tc)
->  
->  		if (bio_op(bio) == REQ_OP_DISCARD)
->  			pool->process_discard(tc, bio);
-> +		else if (bio_op(bio) == REQ_OP_PROVISION)
-> +			process_provision_bio(tc, bio);
->  		else
->  			pool->process_bio(tc, bio);
->  
-> @@ -2716,7 +2794,8 @@ static int thin_bio_map(struct dm_target *ti, struct bio *bio)
->  		return DM_MAPIO_SUBMITTED;
->  	}
->  
-> -	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD) {
-> +	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD ||
-> +	    bio_op(bio) == REQ_OP_PROVISION) {
->  		thin_defer_bio_with_throttle(tc, bio);
->  		return DM_MAPIO_SUBMITTED;
->  	}
-> @@ -3355,6 +3434,8 @@ static int pool_ctr(struct dm_target *ti, unsigned argc, char **argv)
->  	pt->low_water_blocks = low_water_blocks;
->  	pt->adjusted_pf = pt->requested_pf = pf;
->  	ti->num_flush_bios = 1;
-> +	ti->num_provision_bios = 1;
-> +	ti->provision_supported = true;
->  
->  	/*
->  	 * Only need to enable discards if the pool should pass
-> @@ -4053,6 +4134,7 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
->  		blk_limits_io_opt(limits, pool->sectors_per_block << SECTOR_SHIFT);
->  	}
->  
-> +
->  	/*
->  	 * pt->adjusted_pf is a staging area for the actual features to use.
->  	 * They get transferred to the live pool in bind_control_target()
-> @@ -4243,6 +4325,9 @@ static int thin_ctr(struct dm_target *ti, unsigned argc, char **argv)
->  		ti->num_discard_bios = 1;
->  	}
->  
-> +	ti->num_provision_bios = 1;
-> +	ti->provision_supported = true;
-> +
->  	mutex_unlock(&dm_thin_pool_table.mutex);
->  
->  	spin_lock_irq(&tc->pool->lock);
-> @@ -4457,6 +4542,7 @@ static void thin_io_hints(struct dm_target *ti, struct queue_limits *limits)
->  
->  	limits->discard_granularity = pool->sectors_per_block << SECTOR_SHIFT;
->  	limits->max_discard_sectors = 2048 * 1024 * 16; /* 16G */
-> +	limits->max_provision_sectors = 2048 * 1024 * 16; /* 16G */
->  }
->  
->  static struct target_type thin_target = {
-> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> index e1ea3a7bd9d9..4d19bae9da4a 100644
-> --- a/drivers/md/dm.c
-> +++ b/drivers/md/dm.c
-> @@ -1587,6 +1587,7 @@ static bool is_abnormal_io(struct bio *bio)
->  		case REQ_OP_DISCARD:
->  		case REQ_OP_SECURE_ERASE:
->  		case REQ_OP_WRITE_ZEROES:
-> +		case REQ_OP_PROVISION:
->  			return true;
->  		default:
->  			break;
-> @@ -1611,6 +1612,9 @@ static blk_status_t __process_abnormal_io(struct clone_info *ci,
->  	case REQ_OP_WRITE_ZEROES:
->  		num_bios = ti->num_write_zeroes_bios;
->  		break;
-> +	case REQ_OP_PROVISION:
-> +		num_bios = ti->num_provision_bios;
-> +		break;
->  	default:
->  		break;
->  	}
-> diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
-> index 04c6acf7faaa..b4d97d5d75b8 100644
-> --- a/include/linux/device-mapper.h
-> +++ b/include/linux/device-mapper.h
-> @@ -333,6 +333,12 @@ struct dm_target {
->  	 */
->  	unsigned num_write_zeroes_bios;
->  
-> +	/*
-> +	 * The number of PROVISION bios that will be submitted to the target.
-> +	 * The bio number can be accessed with dm_bio_get_target_bio_nr.
-> +	 */
-> +	unsigned num_provision_bios;
-> +
->  	/*
->  	 * The minimum number of extra bytes allocated in each io for the
->  	 * target to use.
-> @@ -357,6 +363,11 @@ struct dm_target {
->  	 */
->  	bool discards_supported:1;
->  
-> +	/* Set if this target needs to receive provision requests regardless of
-> +	 * whether or not its underlying devices have support.
-> +	 */
-> +	bool provision_supported:1;
-> +
->  	/*
->  	 * Set if we need to limit the number of in-flight bios when swapping.
->  	 */
-> -- 
-> 2.37.3
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
 
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
+
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
