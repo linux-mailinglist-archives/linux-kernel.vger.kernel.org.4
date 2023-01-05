@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EA065EEE9
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9C465EEE8
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbjAEOit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S233548AbjAEOiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjAEOin (ORCPT
+        with ESMTP id S229514AbjAEOin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 09:38:43 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF685933E;
-        Thu,  5 Jan 2023 06:38:42 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B05A13200921;
-        Thu,  5 Jan 2023 09:38:40 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 05 Jan 2023 09:38:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672929520; x=
-        1673015920; bh=0tRpqumuzD4A8ScE1T7chaSBsFg3IHBj12rmSPS7UQk=; b=d
-        4XVP0hfu/F6/aqVt3l7KnXcKsYzGCyPkegPh5cMb6DGQjil4x5jP/7hc8l4l/ZYr
-        dmW6ZFITa0tZjR4/RMJk2iVJQ/CwzSINlKcXCmiXdin90n2cK8pnCanUi0MD24Be
-        zcl0lb4i82jOmJ3e85hZigrGZoBe+t5jwX33lNdmBA+YnzNufMNu7XmeIbGhYU0f
-        c/XinqxdlpWh5ln3p+G+ikkrZ5px+5fkskZ4yXSc/sCI3CLR1ZIvENpADgRXltBn
-        hLzwEaWUGw/lpLASPwL6GWgdsG0X6zodJ+DX4iBGKyCE0Zc1JTid/+VkP+KA5Xrk
-        9JZVID+ykBC4TgsdGk9qw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672929520; x=
-        1673015920; bh=0tRpqumuzD4A8ScE1T7chaSBsFg3IHBj12rmSPS7UQk=; b=Q
-        mQFZigQXsGb4r6btUJAczAkvrtBumokULURZYr9BGtsdKHGAhQuRmIsGKhhnbvC+
-        LjhBx/EnM5c1+Ov0HfGPAD2Mz8/6SPy0zV69+M7LDAr/n9H1dhINb5cQ5CrrL+4r
-        y1b+a8UCf/oFhnf832zSQcFvRKwGLXCjq9yi0vRlNA0IYVHfojbfw9DlqVO4b0SB
-        T6YI5eKHwcttLLGw6nIiT8JZ15cxtT4SgC32TXlFEU0lDlhb6BSWja79zAwMEqHe
-        gt9z8iWjSka1bTuLTQ8lk5aEQOd+ak+5EAaZBlEv3z6xka+1eGCOepNq+2ySMXLc
-        PIyaqHsm9Ss57ukPytCqw==
-X-ME-Sender: <xms:7-C2Y5pDpDdwzZ9i1c8ziDXeBnxnpPMJEv30DfLvp6tDjYJQIrNvQw>
-    <xme:7-C2Y7pAm2sM3PGdZZXvzn8WrKomMEc-zUSYuMvCvo4A9vc1OKr4HvfHTNfqNf4PC
-    1pUnki5hMqTbkAxEA>
-X-ME-Received: <xmr:7-C2Y2MDGjw_4EF4JjqLYeISZ9wH4Pz46PsKY12SANCHdYIiSDeZC45ei0IXcnNMzSoKN47vArjirjMi6kgFpv1Sw7iUUfh9KHGHC0GOleWUO0h1T2hrH8byEQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeekgdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:7-C2Y07PRTSiCseNNHcdHN-fhBrwQUshcyconVZGhlx2XWYqiFxH8Q>
-    <xmx:7-C2Y44cJfaJdZEI7LHg5qIGEmGoOBe5DWlejR7aihYkkRlkrfS9GA>
-    <xmx:7-C2Y8hYQx225tPwiImxWhzHqlmVmoFMQ15_h04c-vsnwMmjY9xH-w>
-    <xmx:8OC2Y1O802ea8_p3G5yF6B-Pb7YVl7CFQQl1QE3UHG0IC2NxFoQd_g>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Jan 2023 09:38:37 -0500 (EST)
-Message-ID: <3b6ec431-70ac-cf68-6f46-9dc0affb1e68@sholland.org>
-Date:   Thu, 5 Jan 2023 08:38:36 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 4/4] riscv: dts: allwinner: d1: Add video engine node
-Content-Language: en-US
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192F35933D
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 06:38:42 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r2so1508932wrv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 06:38:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wVtkjpd1m5CHpqjkgjmo86bTVFs9jvutUQ4eD41Hm9g=;
+        b=NzuwNKy8Ow+MANdie+j+x4B9s960DR90E2MnehzGKe3PurQC2DCydzdAIfUDqpGSs8
+         ghkY3BWq8N1OxbwBNA0l5jg0cEfOf2IlVy/KNJ8Ymdmcjm4uM5AvP8Gv3Ad+TXbu+f9n
+         xBDs16qMuOMcjOle134JGGRL6rO19cf8k4xXM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wVtkjpd1m5CHpqjkgjmo86bTVFs9jvutUQ4eD41Hm9g=;
+        b=QdEMi/16FMSnkS/wY40j7VW9faGuxtqGKPkz1Yt2smzttGOO/93LeIkSPqdBBs8/lV
+         2BgKvgtsaO0hr4fBXsu9EHCD91SMHtjkftDEH8I89wbI/7yDSpSsYPr6HoqxwezR1GR5
+         2ClRy/x6GK/CYx9GNw/dLV6wC+qKP9B3i1xKXa6LNztqmn1EbKT5D0bJNkPIbkRAaSVp
+         ztmhH8iG6TzKwmhR05OEpagqwUEPiX7CUFUHDG8Eev9vvGm+JS9ebQl4MDc+o0ANsLIc
+         S07cvY6dzuVdNLZS/KgPW2HshWofMqLv/SvKzFlJqhg19Aj3Ae1SyqOtZHD3LWC62Hbn
+         Yv/Q==
+X-Gm-Message-State: AFqh2kqLdQW7/w6MHMyOBC0AlAUWOMAd9yKvQe/cLEvgv8tGhdV6VlJ9
+        hP5wtZMZAabppe5SGUl8A8pTeQ==
+X-Google-Smtp-Source: AMrXdXuSsMZhhd80+6OXhv75jCIyGLpgvyQQ+TVLgcPbSzqYqBhxo3s87MG+XFl/BzyUXYOexu5Z8Q==
+X-Received: by 2002:a05:6000:5c9:b0:2b0:bc05:b463 with SMTP id bh9-20020a05600005c900b002b0bc05b463mr1943816wrb.7.1672929520678;
+        Thu, 05 Jan 2023 06:38:40 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b003d99469ece1sm2845649wmo.24.2023.01.05.06.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 06:38:39 -0800 (PST)
+Date:   Thu, 5 Jan 2023 15:38:37 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Patrick Thompson <ptf@google.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-sunxi@lists.linux.dev
-References: <20221231164628.19688-1-samuel@sholland.org>
- <20221231164628.19688-5-samuel@sholland.org> <Y7aiZdjI8L5h1Ca3@aptenodytes>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <Y7aiZdjI8L5h1Ca3@aptenodytes>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: Add orientation quirk for Lenovo ideapad D330-10IGL
+Message-ID: <Y7bg7WQs0OtMLmAW@phenom.ffwll.local>
+Mail-Followup-To: Patrick Thompson <ptf@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221220205826.178008-1-ptf@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220205826.178008-1-ptf@google.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On 1/5/23 04:11, Paul Kocialkowski wrote:
-> On Sat 31 Dec 22, 10:46, Samuel Holland wrote:
->> D1 contains a video engine which is supported by the Cedrus driver.
+On Tue, Dec 20, 2022 at 03:58:26PM -0500, Patrick Thompson wrote:
+> Panel is 800x1280 but mounted on a detachable form factor sideways.
 > 
-> Does it work "outside the box" without power domain management?
-> If not, it might be a bit confusing to add the node at this point.
+> Signed-off-by: Patrick Thompson <ptf@google.com>
 
-Yes, it does. All of the power domains are enabled by default. However,
-if the PPU series is merged first, I will respin this to include the
-power-domains property from the beginning.
+Applied to drm-misc-fixes, thanks for your patch.
+-Daniel
 
-Regards,
-Samuel
-
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
->> index dff363a3c934..4bd374279155 100644
->> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
->> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
->> @@ -34,6 +34,17 @@ soc {
->>  		#address-cells = <1>;
->>  		#size-cells = <1>;
->>  
->> +		ve: video-codec@1c0e000 {
->> +			compatible = "allwinner,sun20i-d1-video-engine";
->> +			reg = <0x1c0e000 0x2000>;
->> +			interrupts = <SOC_PERIPHERAL_IRQ(66) IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&ccu CLK_BUS_VE>,
->> +				 <&ccu CLK_VE>,
->> +				 <&ccu CLK_MBUS_VE>;
->> +			clock-names = "ahb", "mod", "ram";
->> +			resets = <&ccu RST_BUS_VE>;
->> +		};
->> +
->>  		pio: pinctrl@2000000 {
->>  			compatible = "allwinner,sun20i-d1-pinctrl";
->>  			reg = <0x2000000 0x800>;
->> -- 
->> 2.37.4
->>
+> ---
+> 
+>  drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index 52d8800a8ab86..3659f0465a724 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -304,6 +304,12 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGM"),
+>  		},
+>  		.driver_data = (void *)&lcd1200x1920_rightside_up,
+> +	}, {	/* Lenovo Ideapad D330-10IGL (HD) */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad D330-10IGL"),
+> +		},
+> +		.driver_data = (void *)&lcd800x1280_rightside_up,
+>  	}, {	/* Lenovo Yoga Book X90F / X91F / X91L */
+>  		.matches = {
+>  		  /* Non exact match to match all versions */
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 > 
 
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
