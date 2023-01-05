@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC3F65E225
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD88465E22A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 02:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjAEBEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 20:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S229819AbjAEBGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 20:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjAEBEd (ORCPT
+        with ESMTP id S229581AbjAEBF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 20:04:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0F113DD1
-        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 17:04:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 Jan 2023 20:05:59 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC7E2F7B4;
+        Wed,  4 Jan 2023 17:05:57 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64B0BB81982
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 01:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B250C433D2;
-        Thu,  5 Jan 2023 01:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672880670;
-        bh=agBVmk3wvoAPWOGA1Lw/W0u63NCMhCs6RazubDz7nKE=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=FUZBwl+3o1t9C5xNDypnrz6EBHan7TfT8yY82kCR6jfXkGioWLzjNZNfJoJZd6QHS
-         obiQqTs/Z9U626pVPaS9K6L4P0fosf3Jr6w8nZ3eUtbxMVzPFcz6mBpO62WaIoSX5P
-         V1oitavz1qxHwrnhaGMN/b3FwlcWcKc6XCNxcaj9pGkg+tCLecWh4zV34Qkw/IGowu
-         lTcu8zIogMn0JYE2/jv2XxQYs9Qv+/wwufAMlPfudtzMrLP6gWnW4gbZpdNHoZ8HB1
-         lp6xYlHnC2S4RKsZPealxcRDqOt8KzurOtUBx0T3QsrOAQb+K7Z+Xmc6vtjaQ0yOuu
-         N8VLgB/2s9jfQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A18C75C05CA; Wed,  4 Jan 2023 17:04:29 -0800 (PST)
-Date:   Wed, 4 Jan 2023 17:04:29 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
-        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
-        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
-        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com
-Subject: [PATCH clocksource 0/6] Clocksource watchdog updates for v6.3
-Message-ID: <20230105010429.GA1773522@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnSvk6035z4xyY;
+        Thu,  5 Jan 2023 12:05:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672880755;
+        bh=2DlQM3PNbWfEbIMdLPJ6D4XabmS9FmziJAsp7+tKym0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BJB94/miDJVCAXxDboH8LeueeKSYXmzU+TioGau0u/r7t13VcZ8NKevIkPlo0UMOY
+         zKjVOqTQxbjk5vsznJ04cBgcXs0wldxaEqDzSWNUE6mnG7YXK7r+TWTEfephfc3ohg
+         /+WofWASuah5CH1yKrgpC+u7jmdttG+3OvWpCYWnIFyLWr6414dp/cQhPXCZVlZMLN
+         lsONDXcw0NXi0i2P9mqUAo7zG+Zr3RnSR8ogUAeWx3uJrBzc28qC4Tz011PI6LqQP/
+         NKG62U5vwskRErK6zx7XLpx57Y4HZlrzRVy1Z4PQR5J2nHpTFUkkbyKRce9DXdulHy
+         /2sWI7VM4OEsA==
+Date:   Thu, 5 Jan 2023 12:05:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the drm tree
+Message-ID: <20230105120552.77bcaceb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xAv5h+U54DYQAowicK6_TeW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+--Sig_/xAv5h+U54DYQAowicK6_TeW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This series contains clocksource-watchdog updates:
+Hi all,
 
-1.	Print clocksource name when clocksource is tested unstable,
-	courtesy of Yunying Sun.
+The following commits also exist in other trees in linux-next as different
+commits (but the same patch):
 
-2.	Loosen clocksource watchdog constraints.
+  9f1ecfc5dcb4 ("drm/scheduler: Fix lockup in drm_sched_entity_kill()")
+  4333472f8d7b ("drm/imx: ipuv3-plane: Fix overlay plane width")
 
-3.	Improve read-back-delay message.
+They are also in the drm-misc-fixes tree.
 
-4.	Improve "skew is too large" messages.
+--=20
+Cheers,
+Stephen Rothwell
 
-5.	Suspend the watchdog temporarily when high read latency detected,
-	courtesy of Feng Tang.
+--Sig_/xAv5h+U54DYQAowicK6_TeW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-6.	Verify HPET and PMTMR when TSC unverified.
+-----BEGIN PGP SIGNATURE-----
 
-						Thanx, Paul
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO2InAACgkQAVBC80lX
+0GyUowf/SY5F+tn+BCckr3tc4JOkakwv9nLCwyJ2kiF1o8/gYamIvbwdGn+A6mY6
+0RqS3AR2PLjRL/hoN2yFdA9VMz6eB9+xgT/IJkAny02TTvBqLueD4kCFeiht4iJQ
+LLz7Y5h3Fs6x/c1DoKg4lua555DBluWWccfqm+D9nqbfbXW87yIo+5UK4xiL5jjP
+tRa9GtO8X+pNZiq75C19cNso1/ZNto195rz3DM6zHk8bU56qOFxTZJeCYfUjDu7X
+Aa0ApGk5tiIlUwnW4x8iTUV3jEYeWPpwNE7BtLE1ck0owgt0UySZg3kHKQWzV+PO
+iF/ZP9YJittbWohjrPBOCKR6WrIvKQ==
+=9W1S
+-----END PGP SIGNATURE-----
 
-------------------------------------------------------------------------
-
- b/arch/x86/include/asm/time.h   |    1 
- b/arch/x86/kernel/hpet.c        |    2 +
- b/arch/x86/kernel/tsc.c         |    5 ++
- b/drivers/clocksource/acpi_pm.c |    6 ++-
- b/kernel/time/Kconfig           |    6 ++-
- b/kernel/time/clocksource.c     |    4 +-
- kernel/time/clocksource.c       |   72 ++++++++++++++++++++++++++++------------
- 7 files changed, 70 insertions(+), 26 deletions(-)
+--Sig_/xAv5h+U54DYQAowicK6_TeW--
