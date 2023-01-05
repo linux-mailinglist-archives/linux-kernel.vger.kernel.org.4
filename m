@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAA965F66A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697A465F679
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 23:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbjAEWHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 17:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S235605AbjAEWJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 17:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235947AbjAEWHt (ORCPT
+        with ESMTP id S236192AbjAEWIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 17:07:49 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFCD67BE4;
-        Thu,  5 Jan 2023 14:07:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np0vd0X02z4xyY;
-        Fri,  6 Jan 2023 09:07:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672956461;
-        bh=3g9cALt3rH0oMbViZng59jBHpUpw8NsCSYmFrfsjYb8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Mm+NiGmynJnlvwb011T9uYqG5YVihcsywZoTSI70f45gHdu5NNzoIHyQpJQX26YuD
-         SmvxJNUtdfQCOOZf4Ua7P6qtKNrIkL5OP4w7U8meFBjiyFHibsw3NBuJm+wM4/hC/W
-         dzN++X+fRs5p2EouWGh5P7ZQU36m6MM0nMynp0/Z813tRGVighZBhhHKW7w5DjLld/
-         uYqKbgZ1VjEuYdwASVqXzmxmqyMy7Z+NQB69XuFWbmdhZvMFXYEiklBrPtXYUF57FM
-         GXr6gRCgnjVOXct6iEYmhlqMRGNNBkfckH1ddl6mkJy8DCpEAAz5SgcVxuRxh3h0wt
-         4VaBqju5Uov9Q==
-Date:   Fri, 6 Jan 2023 09:07:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the drm-misc tree
-Message-ID: <20230106090740.49e98abe@canb.auug.org.au>
+        Thu, 5 Jan 2023 17:08:52 -0500
+Received: from ryne.moe (ryne.moe [157.90.134.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6E1A6E41B;
+        Thu,  5 Jan 2023 14:08:34 -0800 (PST)
+Received: from adrastea.localnet (unknown [170.55.83.2])
+        by ryne.moe (Postfix) with ESMTPSA id B45701900401;
+        Thu,  5 Jan 2023 22:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=redstrate.com;
+        s=default; t=1672956513;
+        bh=r6XnwZZkbxtki7WdFdm9xTSDHdb0DlUFmv8n6lO6Zl8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Iz43PPr2zlar4TgT0HB4dZeEI8/C8DlhXuMX/j0FHgY3owHVWpBQ3rDFalG0dgkrI
+         axgiJG+tjEHmeVQ5xKGPfHAgHyEFMsMEFLRFOOauE++bZ/DbneBB3O/j4q73GPyGFv
+         dwADVT1RrjC4VHi+Op0HY68nr/wp+tvvaB0Sw/W0=
+From:   redstrate <josh@redstrate.com>
+To:     =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Cc:     linux-input@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Artist 22R Pro
+Date:   Thu, 05 Jan 2023 17:08:29 -0500
+Message-ID: <4810275.31r3eYUQgx@adrastea>
+In-Reply-To: <Y7cLJpgnP50JzHps@fedora>
+References: <2068502.VLH7GnMWUR@adrastea> <20230102194911.56083-1-josh@redstrate.com>
+ <Y7cLJpgnP50JzHps@fedora>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lDdmJ0_m2WhJ8clp9S3Y86+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,40 +50,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/lDdmJ0_m2WhJ8clp9S3Y86+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+> I see this event codes in a test device mock in libinput, but I wonder
+> if we could/should use BTN_9 instead of skiping a few IDs here.
+> 
+> Honestly, I don't now what should be the right approach in this case,
+> let's see if someone else comments on this topic.
 
-Hi all,
+I forgot about BTN_9, that should be an easy change. I already merged changes 
+upstream in systemd/udev to mark devices with these buttons correctly - so, 
+sunken cost and all that :-)
 
-The following commits also exist in Linus Torvald's tree as different
-commits (but the same patches):
+> I think that you could use uclogic_params_parse_ugee_v2_desc() and
+> change the number of buttons in the template afterwards. It'd avoid
+> some code duplication.
 
-  a189b2ee938f ("fbdev: Make fb_modesetting_disabled() static inline")
-  7aa3d63e1ad5 ("Revert "drm/fb-helper: Remove damage worker"")
-  8b83e1a45538 ("Revert "drm/fb-helper: Schedule deferred-I/O worker after =
-writing to framebuffer"")
-  e3ddd2d25533 ("Revert "drm/fb-helper: Perform damage handling in deferred=
--I/O helper"")
+Yeah I think that's what I'll do, I was thinking of reusing it and just 
+overriding parameters if needed.
 
---=20
-Cheers,
-Stephen Rothwell
+> There are some XP-Pen PRO devices handled by the other init function.
+> Maybe we could rename this function to something more specific to your
+> device.
 
---Sig_/lDdmJ0_m2WhJ8clp9S3Y86+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Ah okay, it's pretty specific to this device anyway - so I'll rename the 
+function so it's clear what it's purpose is. I wasn't sure if future XP-PEN 
+Pro work was going to reuse this function, but I guess we'll rename it if that 
+happens!
 
------BEGIN PGP SIGNATURE-----
+> You can use "uclogic_ugee_v2_probe_endpoint" here.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3SiwACgkQAVBC80lX
-0Gx71wf/V0jEa3YFx+ZkVwrVu1aA5mHbBEUG53PenZwEjhFKLuJCS7o/Aysf4Qu6
-RFP5TGzC8U2bPY50Wc+I5BV5ai9ru1GS24Qunj5OPltwu7KM24ADt39AUZ8mrwZA
-e4Hx+Rq4Ddsid24g3hXoPbZWofuiuJu46+XjUTumMSc6JqtOkupWSiAM/COYStUL
-DqmaZ+T8khQdo6rGpz5Oif2HxfaYHluThXpqhnUTlqolIQzInKmPsFGRcsYAeaY/
-VEMOxSSNo5NF5tUjd/ZjdfffnXNngeSCyvOBnklSkmQuNnyy4YspexcWkujGba9/
-Kfb2kajlkCzoFF0+e2QU0riyabUCfw==
-=VWKa
------END PGP SIGNATURE-----
+Good catch! Will change.
 
---Sig_/lDdmJ0_m2WhJ8clp9S3Y86+--
+> User-space lacks support for dials, but, with this descriptor, would it
+> be possible to differenciate between the 2 dials to, for example,
+> assign them different actions? Or would them be exposed as the same
+> dial?
+> 
+> I have no idea how would user-space see this, but it'd interesting to
+> see how libinput handles it.
+
+Currently userspace sees this as REL_WHEEL and REL_HWHEEL, but like
+mentioned libinput currently rejects mouse wheel events from tablet pads.
+The fact that they previously worked before these patches is because udev
+misclassified the pad device as a mouse. I'm working upstream to expose dials 
+on tablet pads in libinput (I just got the green light so I'll be working on 
+that shortly!)
+
+> You can cherry-pick my patch refactoring this variables and send it as
+> part of your series. I think that it might help maintainers with the
+> merge and it'd also fix the problem reported by the test robot.
+
+Ooh good point, I didn't even consider doing that. Next version will have it 
+split up into two then.
+
+
+
+
