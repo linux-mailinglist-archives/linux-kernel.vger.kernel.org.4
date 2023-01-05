@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863FF65E182
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F18A65E17F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbjAEAX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S239087AbjAEAYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbjAEAXQ (ORCPT
+        with ESMTP id S235537AbjAEAXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 Jan 2023 19:23:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC6F44360;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2E74435E;
         Wed,  4 Jan 2023 16:23:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BEFFB81990;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A06EB8198A;
         Thu,  5 Jan 2023 00:23:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C11C433A8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A1CC433A7;
         Thu,  5 Jan 2023 00:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672878188;
-        bh=MI3c5QYGakL+wl+pPfIjyXc4qZP1Ce7fJ4Wh6kV0Nls=;
+        bh=Zj66HaKlbW7or4kBjbwXaM4/EWUfv7i59XPipGrmdK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FuMuwQZWImSI4uvXh25bZyrTECbTfsUQcHsxAcxzPyj5uDX3IUUIWSb0164looBl1
-         39qNBTnjnDgnu5ecFHmjdUsFNeG+ReoSu+1SsHtNCAODDaruP6e1BMYWbmdCQ505RP
-         uymMeJPCQe3nA/NWZaDRcsXgBucBJRmHO9a/l1YiZ5J0Z/6gBJR82FEJppHO5uYFDX
-         7yGYGPcYL8t/QNCJwBos7xi8WF72mo5Gdlq3x00ZR/Y94iuogFSRV+UxHsQstT0lw0
-         AyQ3DlebyRg61Vm6tw/YDCboAR8O1fcK8hFXc/ofMPLUUoQhznNA+ArtGCuelH5as4
-         GAVr2FwxoJEkw==
+        b=ulKYLo2ZelNq3JjSgOVb1UmueUei/z6vfdW5xa/K9HlH5Rsqxsctdb4/Tujqz4bh/
+         SLYLIFY/7LXH42rZs2DBm8dPtZ1qhcWCwxzBEygxCyfmvOdrUWWi0K5bldjYXGM4+E
+         A9qGjQEKRNTZ8DR0SNwMy2p6ZCtRikhj613LcOEgJZs0oF7I4zuX7AzlLz0qOQKgTv
+         HHus1peh8fjC+fXpJ/m3aPrcp1+8W+GvMdwq4JY1CdjHAejq388N7yzHmDMQp0FWMQ
+         poja+Oartem/2us8mYOzK07V7SCE79MquyoyOJ7/B4JcXdza+m7UNi7/wbrns8bgin
+         VY5gly0yNjKFw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 82E155C1C5D; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
+        id 84A6B5C1C64; Wed,  4 Jan 2023 16:23:07 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Subject: [PATCH rcu 09/10] rcu: Allow expedited RCU CPU stall warnings to dump task stacks
-Date:   Wed,  4 Jan 2023 16:23:04 -0800
-Message-Id: <20230105002305.1768591-9-paulmck@kernel.org>
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 10/10] rcu: Remove redundant call to rcu_boost_kthread_setaffinity()
+Date:   Wed,  4 Jan 2023 16:23:05 -0800
+Message-Id: <20230105002305.1768591-10-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105002257.GA1768487@paulmck-ThinkPad-P17-Gen-1>
@@ -56,133 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces the rcupdate.rcu_exp_stall_task_details kernel
-boot parameter, which cause expedited RCU CPU stall warnings to dump
-the stacks of any tasks blocking the current expedited grace period.
+From: Zqiang <qiang1.zhang@intel.com>
 
-Reported-by: David Howells <dhowells@redhat.com>
+The rcu_boost_kthread_setaffinity() function is invoked at
+rcutree_online_cpu() and rcutree_offline_cpu() time, early in the online
+timeline and late in the offline timeline, respectively.  It is also
+invoked from rcutree_dead_cpu(), however, in the absence of userspace
+manipulations (for which userspace must take responsibility), this call
+is redundant with that from rcutree_offline_cpu().  This redundancy can
+be demonstrated by printing out the relevant cpumasks
+
+This commit therefore removes the call to rcu_boost_kthread_setaffinity()
+from rcutree_dead_cpu().
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../admin-guide/kernel-parameters.txt         |  5 +++
- kernel/rcu/rcu.h                              |  1 +
- kernel/rcu/tree_exp.h                         | 41 +++++++++++++++++++
- kernel/rcu/update.c                           |  2 +
- 4 files changed, 49 insertions(+)
+ kernel/rcu/tree.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf7..aa453f9202d89 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5113,6 +5113,11 @@
- 			rcupdate.rcu_cpu_stall_timeout to be used (after
- 			conversion from seconds to milliseconds).
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 80b84ae285b41..89313c7c17b62 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4076,15 +4076,10 @@ static void rcu_cleanup_dead_rnp(struct rcu_node *rnp_leaf)
+  */
+ int rcutree_dead_cpu(unsigned int cpu)
+ {
+-	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+-	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
+-
+ 	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+ 		return 0;
  
-+	rcupdate.rcu_exp_stall_task_details= [KNL]
-+			Print stack dumps of any tasks blocking the
-+			current expedited RCU grace period during an
-+			expedited RCU CPU stall warning.
-+
- 	rcupdate.rcu_expedited= [KNL]
- 			Use expedited grace-period primitives, for
- 			example, synchronize_rcu_expedited() instead
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index c5aa934de59b0..fa640c45172e9 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -224,6 +224,7 @@ extern int rcu_cpu_stall_ftrace_dump;
- extern int rcu_cpu_stall_suppress;
- extern int rcu_cpu_stall_timeout;
- extern int rcu_exp_cpu_stall_timeout;
-+extern bool rcu_exp_stall_task_details __read_mostly;
- int rcu_jiffies_till_stall_check(void);
- int rcu_exp_jiffies_till_stall_check(void);
- 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 927abaf6c822e..249c2967d9e6c 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -11,6 +11,7 @@
- 
- static void rcu_exp_handler(void *unused);
- static int rcu_print_task_exp_stall(struct rcu_node *rnp);
-+static void rcu_exp_print_detail_task_stall_rnp(struct rcu_node *rnp);
- 
- /*
-  * Record the start of an expedited grace period.
-@@ -671,6 +672,7 @@ static void synchronize_rcu_expedited_wait(void)
- 				dump_cpu_task(cpu);
- 				preempt_enable();
- 			}
-+			rcu_exp_print_detail_task_stall_rnp(rnp);
- 		}
- 		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
- 		panic_on_rcu_stall();
-@@ -813,6 +815,36 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
- 	return ndetected;
- }
- 
-+/*
-+ * Scan the current list of tasks blocked within RCU read-side critical
-+ * sections, dumping the stack of each that is blocking the current
-+ * expedited grace period.
-+ */
-+static void rcu_exp_print_detail_task_stall_rnp(struct rcu_node *rnp)
-+{
-+	unsigned long flags;
-+	struct task_struct *t;
-+
-+	if (!rcu_exp_stall_task_details)
-+		return;
-+	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-+	if (!READ_ONCE(rnp->exp_tasks)) {
-+		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		return;
-+	}
-+	t = list_entry(rnp->exp_tasks->prev,
-+		       struct task_struct, rcu_node_entry);
-+	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
-+		/*
-+		 * We could be printing a lot while holding a spinlock.
-+		 * Avoid triggering hard lockup.
-+		 */
-+		touch_nmi_watchdog();
-+		sched_show_task(t);
-+	}
-+	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+}
-+
- #else /* #ifdef CONFIG_PREEMPT_RCU */
- 
- /* Request an expedited quiescent state. */
-@@ -885,6 +917,15 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+ 	WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus - 1);
+-	/* Adjust any no-longer-needed kthreads. */
+-	rcu_boost_kthread_setaffinity(rnp, -1);
+ 	// Stop-machine done, so allow nohz_full to disable tick.
+ 	tick_dep_clear(TICK_DEP_BIT_RCU);
  	return 0;
- }
- 
-+/*
-+ * Because preemptible RCU does not exist, we never have to print out
-+ * tasks blocked within RCU read-side critical sections that are blocking
-+ * the current expedited grace period.
-+ */
-+static void rcu_exp_print_detail_task_stall_rnp(struct rcu_node *rnp)
-+{
-+}
-+
- #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
- 
- /**
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 587b97c401914..6ed5020aee6d1 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -509,6 +509,8 @@ int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
- module_param(rcu_cpu_stall_timeout, int, 0644);
- int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
- module_param(rcu_exp_cpu_stall_timeout, int, 0644);
-+bool rcu_exp_stall_task_details __read_mostly;
-+module_param(rcu_exp_stall_task_details, bool, 0644);
- #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
- 
- // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
 -- 
 2.31.1.189.g2e36527f23
 
