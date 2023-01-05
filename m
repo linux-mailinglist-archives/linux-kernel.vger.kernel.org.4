@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB90965E8DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AAD65E8DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 11:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjAEKVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 05:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S232981AbjAEKVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 05:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbjAEKT7 (ORCPT
+        with ESMTP id S232670AbjAEKT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 Jan 2023 05:19:59 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725F5559E7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:29 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e12-20020a25500c000000b007b48c520262so1904388ybb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63722559F3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 02:19:30 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n203-20020a2572d4000000b0078f09db9888so19454996ybc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 02:19:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PQiqeYYa8WUfPyd+HQWnupwn9/KSP4leVRdHky4yOM=;
-        b=d8vpxkw4cTLgxinECDNkHM+FwEcUinhdEQd7152gUdKOFJEIQWa1NKtdQXLphkyKcT
-         bpdH2lMDTgH/beB2g0VRtLMbp+YcroXFdVWLsiB6oveY6i22u5iwTllcBXk4KZYEr5Lx
-         jObYGpas5lPGHqnShPWhNo4LAECP+oEcPhuNZUZ42WhflXI8bNSy0hV3UJuJvQz9gAgU
-         aaKzW0AsLx6ESc+6vZVPFmko4ZGS7CpMbtELN0GU2kUY+xSiGVcH6pE6avyLi3c5Nfa7
-         BUv7WnFzE7GEtpQgVFx2SZ3xKkQNMHAOjJODDJtAiHOnqYYOeN0dJ26YV8xiaDyNelrQ
-         A/ig==
+        bh=NiUhznaM6wSBHvFTCRNfcVBZtE9H57LW0vfZq/kiKq4=;
+        b=R0e0fs1qHnnMIp3WQSIqsS/oYtW5o+Yj7Qa36R5hH23w7ZdGxSpC7WlTWoe3UlQfRD
+         dGgTxvzDN/xImPp7YvQkVKm27XaeHjtfDYvAANhaT1tIjTWlY7bJyEtqoyb0eUUUqrU8
+         QXro3ShToMB2A8M5U7Ys2rZi65CcMRN/fFJOZAG6TsQBgyFYz/TZFDkv9hIUQiwwQiem
+         r9xHbnsfSv7cyl5PTzK6aFGrR3WmNbvqetolrPlO4hROQfy+iN7qwrrmjuqcIxUxBVSJ
+         t16F0RLTvqQFbGkRUXJ/5oh9tgpANRdg+EBmcNIs00ZH4Psbt9wmtDm5WNvKRja9aVfR
+         jqgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PQiqeYYa8WUfPyd+HQWnupwn9/KSP4leVRdHky4yOM=;
-        b=ai0elht5qYDCtIAyphQjSHum/aQ3uPL3cBT/cTQQs7w8pz+t5pJXXsXBzhc3a5WQH6
-         pqcmi2rPtAJQC9Duq98oTFdijlb9IVg7vP+m3Fc8Pp3wo5PEEJvBCa041nUYDZd+zDXv
-         /Q1vAQYWrid5s2D2Ik5it4ZsTVl4igBiWRAJ5JCbyf6CapSuljORMMMOmewoy3LB/xcl
-         9RLj5pxKdlITFHN7ANvjFpIzGWRtiGAyDBVH17WQPJCie5+XL7xvmygFyNglsHpVqOhe
-         cB5d16eu/mbgTsRcmokBrRyi/BHtyazZdu/n35EQiwpZZKjRl4W0dbRCrKAXIryyc5Hw
-         jn7A==
-X-Gm-Message-State: AFqh2ko2f8FURqgnw0/LxvONnffsEw3FH8vIc/OkKLFcUZ5WnDpCi049
-        LPI6wPf76VX+Y7YHoRjegWE2BMXlGbqNKx9Y
-X-Google-Smtp-Source: AMrXdXuHdxtCjAeXg0wpQsCwfeAOcMgREXgzkYqYmxQ5/aPde2G7xFjeSk9hNA3xk1wNawTqTTGKNIYZYTNmO/5v
+        bh=NiUhznaM6wSBHvFTCRNfcVBZtE9H57LW0vfZq/kiKq4=;
+        b=vHvJ8MyHyvWVdwTREtpZPBjHzuNKwNhQ34zN7JlxqlbvPrD4jIUqouu2ojx5WzmUoa
+         +D2Kkm6KjwxTVkV6DamCwAaBapTu8EwFXWpIZbOXtxWxJ3hiJ3twcc955C4/3feyEkF2
+         hTQj8w9KOEenPDnTUNBFaLJXuGsZulvq5G4e8M1dHmHBdGcn+O07Sel1gpVPBM5nyldp
+         1VNeg40r14DtMKNtSsNLiTdBSyv10A49IiSeREne5+7BqMlQkcP0FGLSQZSLnEe6yeK0
+         54COwIknJ2enVd7aGE9YR6JLb5s2QuS4r1YtkUDof/5+oUHzEe9WUMiumXZQaZogB0ps
+         4m4A==
+X-Gm-Message-State: AFqh2kp1DtFM8qCbrHBRp9FRCqg9Dv72yk80gs2JQ/zTez60mf/Pj01m
+        PdLETY/nAlDp+xwI+KQ0CfkmHzoi2y7Xav9d
+X-Google-Smtp-Source: AMrXdXs97hJ5UkX9w2wjCZam/ryTvIgotSl/r0iqjglatCp7QBztYQWA8nmijVJuzbrdnXpFOYzs+TfhnvrDByvB
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a25:ab26:0:b0:703:481:a16b with SMTP id
- u35-20020a25ab26000000b007030481a16bmr4722307ybi.301.1672913968726; Thu, 05
- Jan 2023 02:19:28 -0800 (PST)
-Date:   Thu,  5 Jan 2023 10:18:21 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:cf02:0:b0:7b4:fa63:5519 with SMTP
+ id f2-20020a25cf02000000b007b4fa635519mr198616ybg.270.1672913970030; Thu, 05
+ Jan 2023 02:19:30 -0800 (PST)
+Date:   Thu,  5 Jan 2023 10:18:22 +0000
 In-Reply-To: <20230105101844.1893104-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230105101844.1893104-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230105101844.1893104-24-jthoughton@google.com>
-Subject: [PATCH 23/46] mm: rmap: make page_vma_mapped_walk callers use pte_order
+Message-ID: <20230105101844.1893104-25-jthoughton@google.com>
+Subject: [PATCH 24/46] rmap: update hugetlb lock comment for HGM
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,84 +84,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This also updates the callers' hugetlb mapcounting code to handle
-mapcount properly for subpage-mapped hugetlb pages.
+The VMA lock is used to prevent high-granularity HugeTLB mappings from
+being collapsed while other threads are doing high-granularity page
+table walks.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/migrate.c |  2 +-
- mm/rmap.c    | 17 +++++++++++++----
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ include/linux/hugetlb.h | 12 ++++++++++++
+ mm/rmap.c               |  3 ++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 832f639fc49a..0062689f4878 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -244,7 +244,7 @@ static bool remove_migration_pte(struct folio *folio,
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index b7cf45535d64..daf993fdbc38 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -156,6 +156,18 @@ struct file_region {
+ #endif
+ };
  
- #ifdef CONFIG_HUGETLB_PAGE
- 		if (folio_test_hugetlb(folio)) {
--			unsigned int shift = huge_page_shift(hstate_vma(vma));
-+			unsigned int shift = pvmw.pte_order + PAGE_SHIFT;
- 
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			if (folio_test_anon(folio))
++/*
++ * The HugeTLB VMA lock is used to synchronize HugeTLB page table walks.
++ * Right now, it is only used for VM_SHARED mappings.
++ * - The read lock is held when we want to stabilize mappings (prevent PMD
++ *   unsharing or MADV_COLLAPSE for high-granularity mappings).
++ * - The write lock is held when we want to free mappings (PMD unsharing and
++ *   MADV_COLLAPSE for high-granularity mappings).
++ *
++ * Note: For PMD unsharing and MADV_COLLAPSE, the i_mmap_rwsem is held for
++ * writing as well, so page table walkers will also be safe if they hold
++ * i_mmap_rwsem for at least reading. See hugetlb_walk() for more information.
++ */
+ struct hugetlb_vma_lock {
+ 	struct kref refs;
+ 	struct rw_semaphore rw_sema;
 diff --git a/mm/rmap.c b/mm/rmap.c
-index 8a24b90d9531..ff7e6c770b0a 100644
+index ff7e6c770b0a..076ea77010e5 100644
 --- a/mm/rmap.c
 +++ b/mm/rmap.c
-@@ -1608,7 +1608,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 		if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
- 			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
- 			if (folio_test_hugetlb(folio)) {
--				hugetlb_count_sub(folio_nr_pages(folio), mm);
-+				hugetlb_count_sub(1UL << pvmw.pte_order, mm);
- 				set_huge_pte_at(mm, address, pvmw.pte, pteval);
- 			} else {
- 				dec_mm_counter(mm, mm_counter(&folio->page));
-@@ -1767,7 +1767,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 		 *
- 		 * See Documentation/mm/mmu_notifier.rst
- 		 */
--		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
-+		if (folio_test_hugetlb(folio))
-+			page_remove_rmap(&folio->page, vma, true);
-+		else
-+			page_remove_rmap(subpage, vma, false);
-+
- 		if (vma->vm_flags & VM_LOCKED)
- 			mlock_page_drain_local();
- 		folio_put(folio);
-@@ -2030,7 +2034,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 		} else if (PageHWPoison(subpage)) {
- 			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
- 			if (folio_test_hugetlb(folio)) {
--				hugetlb_count_sub(folio_nr_pages(folio), mm);
-+				hugetlb_count_sub(1L << pvmw.pte_order, mm);
- 				set_huge_pte_at(mm, address, pvmw.pte, pteval);
- 			} else {
- 				dec_mm_counter(mm, mm_counter(&folio->page));
-@@ -2122,7 +2126,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 		 *
- 		 * See Documentation/mm/mmu_notifier.rst
- 		 */
--		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
-+		if (folio_test_hugetlb(folio))
-+			page_remove_rmap(&folio->page, vma, true);
-+		else
-+			page_remove_rmap(subpage, vma, false);
- 		if (vma->vm_flags & VM_LOCKED)
- 			mlock_page_drain_local();
- 		folio_put(folio);
-@@ -2206,6 +2213,8 @@ static bool page_make_device_exclusive_one(struct folio *folio,
- 				      args->owner);
- 	mmu_notifier_invalidate_range_start(&range);
- 
-+	VM_BUG_ON_FOLIO(folio_test_hugetlb(folio), folio);
-+
- 	while (page_vma_mapped_walk(&pvmw)) {
- 		/* Unexpected PMD-mapped THP? */
- 		VM_BUG_ON_FOLIO(!pvmw.pte, folio);
+@@ -47,7 +47,8 @@
+  *
+  * hugetlbfs PageHuge() take locks in this order:
+  *   hugetlb_fault_mutex (hugetlbfs specific page fault mutex)
+- *     vma_lock (hugetlb specific lock for pmd_sharing)
++ *     vma_lock (hugetlb specific lock for pmd_sharing and high-granularity
++ *               mapping)
+  *       mapping->i_mmap_rwsem (also used for hugetlb pmd sharing)
+  *         page->flags PG_locked (lock_page)
+  */
 -- 
 2.39.0.314.g84b9a713c41-goog
 
