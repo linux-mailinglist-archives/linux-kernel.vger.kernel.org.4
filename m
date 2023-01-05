@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB3365E14E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB8965E14F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 01:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbjAEALI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 Jan 2023 19:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S240298AbjAEAK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 Jan 2023 19:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235356AbjAEAKE (ORCPT
+        with ESMTP id S235431AbjAEAKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 Jan 2023 19:10:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BB843A37;
-        Wed,  4 Jan 2023 16:10:00 -0800 (PST)
+        Wed, 4 Jan 2023 19:10:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0D144346;
+        Wed,  4 Jan 2023 16:10:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14DA7B81985;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27BB9B81987;
         Thu,  5 Jan 2023 00:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E43C433A1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC52C433A7;
         Thu,  5 Jan 2023 00:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672877397;
-        bh=IqhCvimGfZ6hCH77O9U7PJxJALGcr3RAART03cZb3mE=;
+        bh=47ZqK3G8Z6W2//45p9y8TR73Xz/Q6+3lfGpPEhloL98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jOJumSyHIUQLJHJH8yAGISoWY3aVL31iHDHdYPe1G5fcVVIkI+dmUweZGgjAqjTdM
-         l6oFc/DTvPx1DE1GszgTuRH2K2hLKgrCcxaUrRMJEngB3EWHS8eaF+/XhwR1WROQTB
-         wZ8LGjpDAEt9mg9VMq/I5gFlisDaxwMJCyaiIYaznH6n1sd8LDu09V9GT0gRXIc/jN
-         YLHseN62xSBFcJPu+D+XY4PBKSStSVPw+qzPR3ltzJNJp9h991yErAJYLs2AWYcagF
-         IAnj+5y8oKCJtDCkLWOOVNbtKS0h4mHViaTu/opXeH/H+BS0TkCipxU74y9O2QSy35
-         10IfXarPBv3Qg==
+        b=A4mDAd3/mCvN4bb3U6zGCAmbCT35ci9yivTiyU4IWLZHR++V9x5vUF1TzMPwm04Hs
+         LqLCOePs4eCqoysLoucwVPVjMps3iSG/Wg7YgFSV0i1VrD/xepa6gV+CGZ0jINaYbu
+         ETkdlOUblaghCxvdrYK4J8av/M/QP8wR6tjAs0EFDKkM/ON/zOK1oJW8EZr3LYF3iQ
+         H6yRIw8+kh7aqhO3yce+RohFzRYBAeBf0ucd5t8lvhrECU8BK/MTTB/wjpurfp34NO
+         bFTO0s2OI2adf9ZcIDNA9n2NlDP2ARBJTFsAvU6LBebyTVxDGdhfC10+Hj1miJDKBr
+         2im7TD7qFhRKA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CF7085C1AE0; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
+        id D135B5C1C5B; Wed,  4 Jan 2023 16:09:56 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 07/15] doc: Update stallwarn.rst
-Date:   Wed,  4 Jan 2023 16:09:47 -0800
-Message-Id: <20230105000955.1767218-7-paulmck@kernel.org>
+Subject: [PATCH rcu 08/15] doc: Update torture.rst
+Date:   Wed,  4 Jan 2023 16:09:48 -0800
+Message-Id: <20230105000955.1767218-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
 References: <20230105000945.GA1767128@paulmck-ThinkPad-P17-Gen-1>
@@ -55,96 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit updates stallwarn.rst to reflect RCU additions and changes
-over the past few years.
+This commit updates torture.rst with wordsmithing and the addition of a
+few more scripts.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/stallwarn.rst | 43 +++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+ Documentation/RCU/torture.rst | 89 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 85 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-index e38c587067fc8..dfa4db8c0931e 100644
---- a/Documentation/RCU/stallwarn.rst
-+++ b/Documentation/RCU/stallwarn.rst
-@@ -25,10 +25,10 @@ warnings:
+diff --git a/Documentation/RCU/torture.rst b/Documentation/RCU/torture.rst
+index a901477130629..0316ba0c69225 100644
+--- a/Documentation/RCU/torture.rst
++++ b/Documentation/RCU/torture.rst
+@@ -206,7 +206,11 @@ values for memory may require disabling the callback-flooding tests
+ using the --bootargs parameter discussed below.
  
- -	A CPU looping with bottom halves disabled.
+ Sometimes additional debugging is useful, and in such cases the --kconfig
+-parameter to kvm.sh may be used, for example, ``--kconfig 'CONFIG_KASAN=y'``.
++parameter to kvm.sh may be used, for example, ``--kconfig 'CONFIG_RCU_EQS_DEBUG=y'``.
++In addition, there are the --gdb, --kasan, and --kcsan parameters.
++Note that --gdb limits you to one scenario per kvm.sh run and requires
++that you have another window open from which to run ``gdb`` as instructed
++by the script.
  
---	For !CONFIG_PREEMPTION kernels, a CPU looping anywhere in the kernel
--	without invoking schedule().  If the looping in the kernel is
--	really expected and desirable behavior, you might need to add
--	some calls to cond_resched().
-+-	For !CONFIG_PREEMPTION kernels, a CPU looping anywhere in the
-+	kernel without potentially invoking schedule().  If the looping
-+	in the kernel is really expected and desirable behavior, you
-+	might need to add some calls to cond_resched().
+ Kernel boot arguments can also be supplied, for example, to control
+ rcutorture's module parameters.  For example, to test a change to RCU's
+@@ -219,10 +223,17 @@ require disabling rcutorture's callback-flooding tests::
+ 		--bootargs 'rcutorture.fwd_progress=0'
  
- -	Booting Linux using a console connection that is too slow to
- 	keep up with the boot-time console-message rate.  For example,
-@@ -108,16 +108,17 @@ warnings:
+ Sometimes all that is needed is a full set of kernel builds.  This is
+-what the --buildonly argument does.
++what the --buildonly parameter does.
  
- -	A bug in the RCU implementation.
- 
---	A hardware failure.  This is quite unlikely, but has occurred
--	at least once in real life.  A CPU failed in a running system,
--	becoming unresponsive, but not causing an immediate crash.
--	This resulted in a series of RCU CPU stall warnings, eventually
--	leading the realization that the CPU had failed.
-+-	A hardware failure.  This is quite unlikely, but is not at all
-+	uncommon in large datacenter.  In one memorable case some decades
-+	back, a CPU failed in a running system, becoming unresponsive,
-+	but not causing an immediate crash.  This resulted in a series
-+	of RCU CPU stall warnings, eventually leading the realization
-+	that the CPU had failed.
- 
--The RCU, RCU-sched, and RCU-tasks implementations have CPU stall warning.
--Note that SRCU does *not* have CPU stall warnings.  Please note that
--RCU only detects CPU stalls when there is a grace period in progress.
--No grace period, no CPU stall warnings.
-+The RCU, RCU-sched, RCU-tasks, and RCU-tasks-trace implementations have
-+CPU stall warning.  Note that SRCU does *not* have CPU stall warnings.
-+Please note that RCU only detects CPU stalls when there is a grace period
-+in progress.  No grace period, no CPU stall warnings.
- 
- To diagnose the cause of the stall, inspect the stack traces.
- The offending function will usually be near the top of the stack.
-@@ -205,16 +206,21 @@ RCU_STALL_RAT_DELAY
- rcupdate.rcu_task_stall_timeout
- -------------------------------
- 
--	This boot/sysfs parameter controls the RCU-tasks stall warning
--	interval.  A value of zero or less suppresses RCU-tasks stall
--	warnings.  A positive value sets the stall-warning interval
--	in seconds.  An RCU-tasks stall warning starts with the line:
-+	This boot/sysfs parameter controls the RCU-tasks and
-+	RCU-tasks-trace stall warning intervals.  A value of zero or less
-+	suppresses RCU-tasks stall warnings.  A positive value sets the
-+	stall-warning interval in seconds.  An RCU-tasks stall warning
-+	starts with the line:
- 
- 		INFO: rcu_tasks detected stalls on tasks:
- 
- 	And continues with the output of sched_show_task() for each
- 	task stalling the current RCU-tasks grace period.
- 
-+	An RCU-tasks-trace stall warning starts (and continues) similarly:
+-Finally, the --trust-make argument allows each kernel build to reuse what
+-it can from the previous kernel build.
++The --duration parameter can override the default run time of 30 minutes.
++For example, ``--duration 2d`` would run for two days, ``--duration 3h``
++would run for three hours, ``--duration 5m`` would run for five minutes,
++and ``--duration 45s`` would run for 45 seconds.  This last can be useful
++for tracking down rare boot-time failures.
 +
-+		INFO: rcu_tasks_trace detected stalls on tasks
++Finally, the --trust-make parameter allows each kernel build to reuse what
++it can from the previous kernel build.  Please note that without the
++--trust-make parameter, your tags files may be demolished.
+ 
+ There are additional more arcane arguments that are documented in the
+ source code of the kvm.sh script.
+@@ -291,3 +302,73 @@ the following summary at the end of the run on a 12-CPU system::
+     TREE07 ------- 167347 GPs (30.9902/s) [rcu: g1079021 f0x0 ] n_max_cbs: 478732
+     CPU count limited from 16 to 12
+     TREE09 ------- 752238 GPs (139.303/s) [rcu: g13075057 f0x0 ] n_max_cbs: 99011
 +
- 
- Interpreting RCU's CPU Stall-Detector "Splats"
- ==============================================
-@@ -248,7 +254,8 @@ dynticks counter, which will have an even-numbered value if the CPU
- is in dyntick-idle mode and an odd-numbered value otherwise.  The hex
- number between the two "/"s is the value of the nesting, which will be
- a small non-negative number if in the idle loop (as shown above) and a
--very large positive number otherwise.
-+very large positive number otherwise.  The number following the final
-+"/" is the NMI nesting, which will be a small non-negative number.
- 
- The "softirq=" portion of the message tracks the number of RCU softirq
- handlers that the stalled CPU has executed.  The number before the "/"
++
++Repeated Runs
++=============
++
++Suppose that you are chasing down a rare boot-time failure.  Although you
++could use kvm.sh, doing so will rebuild the kernel on each run.  If you
++need (say) 1,000 runs to have confidence that you have fixed the bug,
++these pointless rebuilds can become extremely annoying.
++
++This is why kvm-again.sh exists.
++
++Suppose that a previous kvm.sh run left its output in this directory::
++
++	tools/testing/selftests/rcutorture/res/2022.11.03-11.26.28
++
++Then this run can be re-run without rebuilding as follow:
++
++	kvm-again.sh tools/testing/selftests/rcutorture/res/2022.11.03-11.26.28
++
++A few of the original run's kvm.sh parameters may be overridden, perhaps
++most notably --duration and --bootargs.  For example::
++
++	kvm-again.sh tools/testing/selftests/rcutorture/res/2022.11.03-11.26.28 \
++		--duration 45s
++
++would re-run the previous test, but for only 45 seconds, thus facilitating
++tracking down the aforementioned rare boot-time failure.
++
++
++Distributed Runs
++================
++
++Although kvm.sh is quite useful, its testing is confined to a single
++system.  It is not all that hard to use your favorite framework to cause
++(say) 5 instances of kvm.sh to run on your 5 systems, but this will very
++likely unnecessarily rebuild kernels.  In addition, manually distributing
++the desired rcutorture scenarios across the available systems can be
++painstaking and error-prone.
++
++And this is why the kvm-remote.sh script exists.
++
++If you the following command works::
++
++	ssh system0 date
++
++and if it also works for system1, system2, system3, system4, and system5,
++and all of these systems have 64 CPUs, you can type::
++
++	kvm-remote.sh "system0 system1 system2 system3 system4 system5" \
++		--cpus 64 --duration 8h --configs "5*CFLIST"
++
++This will build each default scenario's kernel on the local system, then
++spread each of five instances of each scenario over the systems listed,
++running each scenario for eight hours.  At the end of the runs, the
++results will be gathered, recorded, and printed.  Most of the parameters
++that kvm.sh will accept can be passed to kvm-remote.sh, but the list of
++systems must come first.
++
++The kvm.sh ``--dryrun scenarios`` argument is useful for working out
++how many scenarios may be run in one batch across a group of systems.
++
++You can also re-run a previous remote run in a manner similar to kvm.sh:
++
++	kvm-remote.sh "system0 system1 system2 system3 system4 system5" \
++		tools/testing/selftests/rcutorture/res/2022.11.03-11.26.28-remote \
++		--duration 24h
++
++In this case, most of the kvm-again.sh parmeters may be supplied following
++the pathname of the old run-results directory.
 -- 
 2.31.1.189.g2e36527f23
 
