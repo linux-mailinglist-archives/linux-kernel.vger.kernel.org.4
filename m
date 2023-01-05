@@ -2,263 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF94D65E61E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B98765E626
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 08:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjAEHaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 02:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S229970AbjAEHcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 02:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjAEHaM (ORCPT
+        with ESMTP id S231201AbjAEHcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 02:30:12 -0500
-Received: from out29-126.mail.aliyun.com (out29-126.mail.aliyun.com [115.124.29.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D14BD59;
-        Wed,  4 Jan 2023 23:30:10 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07440397|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00960953-0.221312-0.769078;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=17;RT=17;SR=0;TI=SMTPD_---.QktmAx9_1672903805;
-Received: from sun-VirtualBox..(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.QktmAx9_1672903805)
-          by smtp.aliyun-inc.com;
-          Thu, 05 Jan 2023 15:30:06 +0800
-From:   Frank <Frank.Sae@motor-comm.com>
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>,
-        devicetree@vger.kernel.org
-Subject: [PATCH net-next v1 3/3] net: phy: Add driver for Motorcomm yt8531 gigabit ethernet phy
-Date:   Thu,  5 Jan 2023 15:30:24 +0800
-Message-Id: <20230105073024.8390-4-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
-References: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
+        Thu, 5 Jan 2023 02:32:07 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59504544FA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 Jan 2023 23:32:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672903921; x=1704439921;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=ypUCWeLyZTiSpVtwCmCkkmx5F06n0mwIxits+2J+LcA=;
+  b=BYjYqKvPWz4Jo1JGSVmHBpCdsYSriGHFgL4PsRF62rFPqANhgGkhYSrM
+   rM188CFZpXh5r3zR2jVVyV18QD69TDyhm2N2sfxwJTulD4GHcHjtdHmLy
+   FdlnxuOy4wKF5Z3eV//OrclJUG/ZkOCvWTwda08MIRpOcirOhF6D6/CjE
+   foeiaqyIuarWxQn9+kT4MqVj9q1WMYsfpwGr/qv59JyRHyBv8JRTEP1eS
+   +yadaPJuBXiRdInpGVmwwBBmHHhdXuCtd4hu7uvR02tz6x32ytuo4+fQl
+   Z3BgOdW8NKQFjuFm85nBzzSqf2othzcRW7V+B1iGme/cs98HtAmLoBBVw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="384432193"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="384432193"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:32:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="984191588"
+X-IronPort-AV: E=Sophos;i="5.96,302,1665471600"; 
+   d="scan'208";a="984191588"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 23:31:57 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Bharata B Rao" <bharata@amd.com>, haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 2/8] migrate_pages: separate hugetlb folios migration
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-3-ying.huang@intel.com>
+        <87pmbttxmj.fsf@nvidia.com>
+        <87pmbtedfp.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <877cy1scg5.fsf@nvidia.com>
+Date:   Thu, 05 Jan 2023 15:31:04 +0800
+In-Reply-To: <877cy1scg5.fsf@nvidia.com> (Alistair Popple's message of "Thu,
+        05 Jan 2023 17:43:05 +1100")
+Message-ID: <87k021bfpj.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for Motorcomm yt8531 gigabit ethernet phy. This patch has
-been tested on AM335x platform which has one YT8531 interface
-card and passed all test cases.
 
-Signed-off-by: Frank <Frank.Sae@motor-comm.com>
----
- drivers/net/phy/Kconfig     |   2 +-
- drivers/net/phy/motorcomm.c | 127 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 126 insertions(+), 3 deletions(-)
+[snip]
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index 1327290decab..e25c061e619a 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -257,7 +257,7 @@ config MOTORCOMM_PHY
- 	tristate "Motorcomm PHYs"
- 	help
- 	  Enables support for Motorcomm network PHYs.
--	  Currently supports the YT8511, YT8521, YT8531S Gigabit Ethernet PHYs.
-+	  Currently supports the YT8511, YT8521, YT8531, YT8531S Gigabit Ethernet PHYs.
- 
- config NATIONAL_PHY
- 	tristate "National Semiconductor PHYs"
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index 7ebcca374a67..23d7e48587cf 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Motorcomm 8511/8521/8531S PHY driver.
-+ * Motorcomm 8511/8521/8531/8531S PHY driver.
-  *
-  * Author: Peter Geis <pgwipeout@gmail.com>
-  * Author: Frank <Frank.Sae@motor-comm.com>
-@@ -14,6 +14,7 @@
- 
- #define PHY_ID_YT8511		0x0000010a
- #define PHY_ID_YT8521		0x0000011a
-+#define PHY_ID_YT8531		0x4f51e91b
- #define PHY_ID_YT8531S		0x4f51e91a
- 
- /* YT8521/YT8531S Register Overview
-@@ -542,6 +543,69 @@ static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_set_wol(struct phy_device *phydev,
-+			  struct ethtool_wolinfo *wol)
-+{
-+	struct net_device *p_attached_dev;
-+	const u16 mac_addr_reg[] = {
-+		YTPHY_WOL_MACADDR2_REG,
-+		YTPHY_WOL_MACADDR1_REG,
-+		YTPHY_WOL_MACADDR0_REG,
-+	};
-+	const u8 *mac_addr;
-+	u16 mask;
-+	u16 val;
-+	int ret;
-+	u8 i;
-+
-+	if (wol->wolopts & WAKE_MAGIC) {
-+		p_attached_dev = phydev->attached_dev;
-+		if (!p_attached_dev)
-+			return -ENODEV;
-+
-+		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-+		if (!is_valid_ether_addr(mac_addr))
-+			return -EINVAL;
-+
-+		/* Store the device address for the magic packet */
-+		for (i = 0; i < 3; i++) {
-+			ret = ytphy_write_ext_with_lock(phydev, mac_addr_reg[i],
-+							((mac_addr[i * 2] << 8)) |
-+							(mac_addr[i * 2 + 1]));
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+		/* Enable WOL feature */
-+		mask = YTPHY_WCR_PULSE_WIDTH_MASK | YTPHY_WCR_INTR_SEL;
-+		val = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		val |= YTPHY_WCR_TYPE_PULSE | YTPHY_WCR_PULSE_WIDTH_672MS;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Enable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG, 0,
-+				 YTPHY_IER_WOL);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		/* Disable WOL feature */
-+		mask = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, 0);
-+
-+		/* Disable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG,
-+				 YTPHY_IER_WOL, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -1032,6 +1096,11 @@ static int yt8521_probe(struct phy_device *phydev)
- 	return 0;
- }
- 
-+static int yt8531_probe(struct phy_device *phydev)
-+{
-+	return ytphy_probe_helper(phydev);
-+}
-+
- /**
-  * ytphy_utp_read_lpa() - read LPA then setup lp_advertising for utp
-  * @phydev: a pointer to a &struct phy_device
-@@ -1543,6 +1612,48 @@ static int yt8521_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_config_init(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = ytphy_config_init_helper(phydev);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+
-+static void yt8531_link_change_notify(struct phy_device *phydev)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	u16 val = 0;
-+
-+	if (!(priv->tx_clk_adj_enabled))
-+		return;
-+
-+	if (phydev->speed < 0)
-+		return;
-+
-+	switch (phydev->speed) {
-+	case SPEED_1000:
-+		if (priv->tx_clk_1000_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_100:
-+		if (priv->tx_clk_100_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_10:
-+		if (priv->tx_clk_10_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	default:
-+		return;
-+	}
-+	ytphy_modify_ext_with_lock(phydev, YT8521_RGMII_CONFIG1_REG,
-+				   YT8521_RC1R_TX_CLK_SEL_MASK, val);
-+}
-+
- /**
-  * yt8521_prepare_fiber_features() -  A small helper function that setup
-  * fiber's features.
-@@ -2125,6 +2236,17 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.suspend	= yt8521_suspend,
- 		.resume		= yt8521_resume,
- 	},
-+	{
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-+		.name		= "YT8531 Gigabit Ethernet",
-+		.probe		= yt8531_probe,
-+		.config_init	= yt8531_config_init,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.get_wol	= ytphy_get_wol,
-+		.set_wol	= yt8531_set_wol,
-+		.link_change_notify = yt8531_link_change_notify,
-+	},
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8531S),
- 		.name		= "YT8531S Gigabit Ethernet",
-@@ -2146,7 +2268,7 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 
- module_phy_driver(motorcomm_phy_drvs);
- 
--MODULE_DESCRIPTION("Motorcomm 8511/8521/8531S PHY driver");
-+MODULE_DESCRIPTION("Motorcomm 8511/8521/8531/8531S PHY driver");
- MODULE_AUTHOR("Peter Geis");
- MODULE_AUTHOR("Frank");
- MODULE_LICENSE("GPL");
-@@ -2154,6 +2276,7 @@ MODULE_LICENSE("GPL");
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531S) },
- 	{ /* sentinel */ }
- };
--- 
-2.34.1
+>
+>>>> @@ -1462,30 +1549,28 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  		nr_retry_pages = 0;
+>>>>  
+>>>>  		list_for_each_entry_safe(folio, folio2, from, lru) {
+>>>> +			if (folio_test_hugetlb(folio)) {
+>>>
+>>> How do we hit this case? Shouldn't migrate_hugetlbs() have already moved
+>>> any hugetlb folios off the from list?
+>>
+>> Retried hugetlb folios will be kept in from list.
+>
+> Couldn't migrate_hugetlbs() remove the failing retried pages from the
+> list on the final pass? That seems cleaner to me.
 
+To do that, we need to go through the folio list again to remove all
+hugetlb pages.  It could be time-consuming in some cases.  So I think
+that it's better to keep this.
+
+Best Regards,
+Huang, Ying
+
+>>>> +				list_move_tail(&folio->lru, &ret_folios);
+>>>> +				continue;
+>>>> +			}
+>>>> +
+>>>>  			/*
+>>>>  			 * Large folio statistics is based on the source large
+>>>>  			 * folio. Capture required information that might get
+>>>>  			 * lost during migration.
+>>>>  			 */
+>>>> -			is_large = folio_test_large(folio) && !folio_test_hugetlb(folio);
+>>>> +			is_large = folio_test_large(folio);
+>>>>  			is_thp = is_large && folio_test_pmd_mappable(folio);
+>>>>  			nr_pages = folio_nr_pages(folio);
+>>>> +
+>>>>  			cond_resched();
+>>>>  
+>>>> -			if (folio_test_hugetlb(folio))
+>>>> -				rc = unmap_and_move_huge_page(get_new_page,
+>>>> -						put_new_page, private,
+>>>> -						&folio->page, pass > 2, mode,
+>>>> -						reason,
+>>>> -						&ret_folios);
+>>>> -			else
+>>>> -				rc = unmap_and_move(get_new_page, put_new_page,
+>>>> -						private, folio, pass > 2, mode,
+>>>> -						reason, &ret_folios);
+>>>> +			rc = unmap_and_move(get_new_page, put_new_page,
+>>>> +					    private, folio, pass > 2, mode,
+>>>> +					    reason, &ret_folios);
+>>>>  			/*
+>>>>  			 * The rules are:
+>>>> -			 *	Success: non hugetlb folio will be freed, hugetlb
+>>>> -			 *		 folio will be put back
+>>>> +			 *	Success: folio will be freed
+>>>>  			 *	-EAGAIN: stay on the from list
+>>>>  			 *	-ENOMEM: stay on the from list
+>>>>  			 *	-ENOSYS: stay on the from list
+>>>> @@ -1512,7 +1597,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>  						stats.nr_thp_split += is_thp;
+>>>>  						break;
+>>>>  					}
+>>>> -				/* Hugetlb migration is unsupported */
+>>>>  				} else if (!no_split_folio_counting) {
+>>>>  					nr_failed++;
+>>>>  				}
