@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBAC65EB16
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C4165EB18
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 13:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjAEMvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 07:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S233358AbjAEMvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 07:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjAEMvY (ORCPT
+        with ESMTP id S232920AbjAEMv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 07:51:24 -0500
+        Thu, 5 Jan 2023 07:51:27 -0500
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DDB4C713;
-        Thu,  5 Jan 2023 04:51:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACDB48CD7;
+        Thu,  5 Jan 2023 04:51:26 -0800 (PST)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 3D75C420E6;
-        Thu,  5 Jan 2023 17:34:00 +0500 (+05)
+        by box.trvn.ru (Postfix) with ESMTPSA id 509D2420E9;
+        Thu,  5 Jan 2023 17:34:01 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1672922040; bh=nx/GvWswnauPtlRcTkUzfp1KQCpIEjRYLHbnYq0pPzQ=;
+        t=1672922041; bh=X/5AJksXQf17kf4+orqMNYWY3Pk7OE2P5lNRHc4uMus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rrBvPTL3SF0mjKJ694okNvj8K9aJlZmxxxaw/cKN2M1U07CDDExVKTbV1KRWKS3VQ
-         QbPLkGInisouQ2yGKseO7PJLWQjMvcF1B1z2L13JaLXsRgZImuBlzWyObEAIPCUPDU
-         EoPlG2PIvgpwDomaIRh2LylZzJAGlbyhh2LmGifngKkY8H+Lne3D2bsNNrQFzjK5ba
-         nQBxd6HpG0GyKN8BKYt8Dcn+fjbgc+5OCwKvU0BW2otgRoBwpM2R80/28+q8w03Hpw
-         UQe+seZaXlo8Y2AxIgGJkYq+FTGIXh67QHRkD4PDrOL4SsmGBmBDxVg1PJdpFrVyJa
-         NRZ5XkfaUEv9A==
+        b=KdHPXCU4DmUQaohQf+3WmjH7BUzIgX+SeiCg2HmlHBhw4WZq9VvvSDXGE4XMzo+vm
+         4vEIUckbcXq8uMCFngzqQXcCowhltz/K1Hj0nJIjJ/S5ETaOCSt2KiDs4oHyfSxOTw
+         Vp7vBXUAvKI+l7Y622KE0NN5omDtPrhwB+YzNYKAH6hxkeFBzjfWfzlIW63KXI6ipW
+         FtalGJwwl9ld+pfu5OTA8oSVcNYAhO1FdPVLQJEEDKI/D8VhLU1hGcGnA4JBnD2BJz
+         v6sxoELVq5QdkRgw70tTpNvq1EKK6Wrizrnb4AoOkCxmLdJ+HbxVjg+j8FkTWAHgxH
+         UwwVxNfMfdtDQ==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>
@@ -41,9 +41,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH 6/8] arm64: dts: qcom: msm8916-samsung-gt58: Add touchscreen
-Date:   Thu,  5 Jan 2023 17:32:38 +0500
-Message-Id: <20230105123240.1089375-7-nikita@trvn.ru>
+Subject: [PATCH 7/8] arm64: dts: qcom: msm8916-samsung-gt5-common: Add fuelgauge
+Date:   Thu,  5 Jan 2023 17:32:39 +0500
+Message-Id: <20230105123240.1089375-8-nikita@trvn.ru>
 In-Reply-To: <20230105123240.1089375-1-nikita@trvn.ru>
 References: <20230105123240.1089375-1-nikita@trvn.ru>
 MIME-Version: 1.0
@@ -57,84 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Manthan <siddharth.manthan@gmail.com>
+gt5 devices use additional MAX77849 MFD to handle battery, charging
+and usb switching. Fuel-gauge from this MFD has a separate i2c line.
 
-gt58 uses Zinitix bt532 touch controller.
-Add it to device tree.
-
-Signed-off-by: Siddharth Manthan <siddharth.manthan@gmail.com>
 Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
- .../boot/dts/qcom/msm8916-samsung-gt58.dts    | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ .../dts/qcom/msm8916-samsung-gt5-common.dtsi  | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-index 37140d041a22..fcf516888739 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-@@ -9,6 +9,19 @@ / {
- 	compatible = "samsung,gt58", "qcom,msm8916";
- 	chassis-type = "tablet";
- 
-+	reg_vdd_tsp: regulator-vdd-tsp {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_tsp";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&msmgpio 73 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-0 = <&reg_tsp_en_default>;
-+		pinctrl-names = "default";
-+	};
-+
- 	vibrator {
- 		compatible = "gpio-vibrator";
- 		enable-gpios = <&msmgpio 76 GPIO_ACTIVE_HIGH>;
-@@ -18,7 +31,43 @@ vibrator {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
+index 9cdb33247691..9f97a8129278 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
+@@ -63,6 +63,25 @@ hall-sensor-switch {
  	};
  };
  
-+&blsp_i2c5 {
++&blsp_i2c4 {
 +	status = "okay";
 +
-+	touchscreen@20 {
-+		compatible = "zinitix,bt532";
-+		reg = <0x20>;
++	fuelgauge@36 {
++		compatible = "maxim,max77849-battery";
++		reg = <0x36>;
++
++		maxim,rsns-microohm = <10000>;
++		maxim,over-heat-temp = <600>;
++		maxim,over-volt = <4400>;
++
 +		interrupt-parent = <&msmgpio>;
-+		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
++		interrupts = <121 IRQ_TYPE_EDGE_FALLING>;
 +
-+		touchscreen-size-x = <768>;
-+		touchscreen-size-y = <1024>;
-+
-+		vcca-supply = <&reg_vdd_tsp>;
-+		vdd-supply = <&pm8916_l6>;
-+
-+		pinctrl-0 = <&tsp_int_default>;
++		pinctrl-0 = <&fuelgauge_int_default>;
 +		pinctrl-names = "default";
 +	};
 +};
 +
+ &blsp1_uart2 {
+ 	status = "okay";
+ };
+@@ -218,6 +237,14 @@ l18 {
+ };
+ 
  &msmgpio {
-+	reg_tsp_en_default: reg-tsp-en-default-state {
-+		pins = "gpio73";
++	fuelgauge_int_default: fuelgauge-int-default-state {
++		pins = "gpio121";
 +		function = "gpio";
 +
 +		drive-strength = <2>;
 +		bias-disable;
 +	};
 +
-+	tsp_int_default: tsp-int-default-state {
-+		pins = "gpio13";
-+		function = "gpio";
-+
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	vibrator_en_default: vibrator-en-default-state {
- 		pins = "gpio76";
+ 	gpio_keys_default: gpio-keys-default-state {
+ 		pins = "gpio107", "gpio109";
  		function = "gpio";
 -- 
 2.38.1
