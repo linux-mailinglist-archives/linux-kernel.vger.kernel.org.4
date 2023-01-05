@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E85565E993
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA6A65E999
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 12:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjAELMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 06:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S231391AbjAELNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 06:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAELMD (ORCPT
+        with ESMTP id S231496AbjAELNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 06:12:03 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7831276D;
-        Thu,  5 Jan 2023 03:12:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672917115; bh=2psywJD0ltCCOMcTQ5gz0vvkjmYSTOoDVOv1QCwRRL4=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=D3AME5c5gVXMq+PRGRvsUC/4aU70O2Pgo1AHYSK1+CquJ47R9GorJU8EEbdBIutEE
-         7u1VK66glWAgsvKJO5ryU1KaEG9Jx2b10tUZCcYt2FfmHPXvGVQ5yFcCKhxZ7SnSS+
-         PuLZ4297wWm8lyCp7PibaiMVlLI7UrS4MsvAK0cktm5Nw4XiV1Dq8a7zDLVOYBmyqZ
-         0q14AZp8Z98/XF+MRilJCg/9P7OqbQdUcCcH7NoC9E0oFHm2pCa4MClE0qgoB8ySju
-         sOlRMAheHcxrsbIS6VL6b4U6eY4UtMW0VgRKatoXC73H6DKDajPbgCXUtuY0Ipy8F7
-         x7AcZ/Do8P4Jw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([92.116.173.134]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUXpQ-1pMDpj2ztg-00QP1Y; Thu, 05
- Jan 2023 12:11:55 +0100
-Date:   Thu, 5 Jan 2023 12:11:54 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [GIT PULL - v2] fbdev fixes for v6.2-rc3
-Message-ID: <Y7aweqyDS7EmnDj8@ls3530>
+        Thu, 5 Jan 2023 06:13:52 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85714E40E;
+        Thu,  5 Jan 2023 03:13:50 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bk16so22550735wrb.11;
+        Thu, 05 Jan 2023 03:13:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CwU6hcrvMI9c/5uFhbY17AhB0HFfRSXkAWCAbwJ1PdY=;
+        b=BJ5SzG5SArLNNG+L042aCBpgTUuo9+rEXqaXj/QbzBMUbkE64ZAPrUiX5iZZSjQxez
+         5JzTIe8sKRX/uAS4NTWQXCbVfQkX2UBiwTx5nCuTvhDlIZx3JBjRn2cGzGJhhy5F+NRk
+         qB4tDsKu0EO32evpGTq0wOQ9Gu4qY3TZolvDtakxI9QOvVxgsIzvyi6yINSv7RKrl5lK
+         uEwkXkIm9o0tNM8OynYKc8nHgNVJe0OcncN6coSbZyk/cVIrjrtkabRbq9EjIeMugD1u
+         9ZKK0dLFwaeWdlAeO9a4vla/NGR4ExYBfDqe7LZo6xoRfLhY+9QPHIRd0hPtallcXZuf
+         zRyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CwU6hcrvMI9c/5uFhbY17AhB0HFfRSXkAWCAbwJ1PdY=;
+        b=X+QXN4cEiZMrsdqkhxP/88uHhVjwdt4SBa8QgzwavaubqmgnC6zP/Qvjzmc3013ORn
+         rAKbxJXesnKVxX2TH5XtBtWUquY0yaKbjBqLlAT5Psn/Op4QH+vZaAjm9wJKSNNL/o2c
+         JF2iiuzp4GH7lLpm4qLRLPVtnQXAIurS39wyHNqTeBqbUFJ8zmqWBx2gBC6xaEzGskfF
+         pI3naG6LzZph3VzPNGh8ZjxpFPBX4sP+CgDeqeF56+Du0rBiq1S002zUS1NtvQblrNoJ
+         DTCH0CCk5kp238H7hGIA2dvAUT7NcQVTj7mXB6JkUWNyTe8ScMKcwrbAIME9iaxgOXzA
+         SZuA==
+X-Gm-Message-State: AFqh2koo1ZKiDLApjjYfsDreJCQHG01T++fs/U4HNTNn8Og/4G19SHRd
+        k88RmCu9dKbw52beTNkeJXU=
+X-Google-Smtp-Source: AMrXdXv2OMLOoFH577XI8/5JyhX9U8H8+pJrDVVL5GIsPmb8gn4xABX5y8ojS3EZOdDR4faSNkJbOg==
+X-Received: by 2002:a5d:43c7:0:b0:26b:c52e:f7c7 with SMTP id v7-20020a5d43c7000000b0026bc52ef7c7mr38143892wrr.29.1672917229418;
+        Thu, 05 Jan 2023 03:13:49 -0800 (PST)
+Received: from debian ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
+        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b002365730eae8sm36392915wrm.55.2023.01.05.03.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 03:13:49 -0800 (PST)
+Date:   Thu, 5 Jan 2023 11:13:41 +0000
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/207] 6.1.4-rc1 review
+Message-ID: <Y7aw5XsCzOTkVx4C@debian>
+References: <20230104160511.905925875@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Provags-ID: V03:K1:1b9F7qiDxRkYdivp9Jy0MSBAw5zWiAsLkwD6ftvjXO/Zhg0D/0s
- hO57KSotWfFo5krUQ05YCK251dQhC/5hBqWdRPsNaRHerSCmHdrdXAy4qC31zBhJlc6hMaJ
- ub8fQ8WbIdSCn24V1pOS4g1a0cpjQw+59nBxq5djnBnw5yUmO7EPy/ft82IRejd8y41KY0z
- dM4Ji8oxZimxhi4zKBVmA==
-UI-OutboundReport: notjunk:1;M01:P0:8afJu4KjM9w=;V7SliJC8gO4zW/U70BtuakVzi+I
- VY+H/k48646ruuGZB6I0+ZBsWxNiVHlOGT7wcrIukHhiQ41hwbvBlPMlMnMBadmNhlsEZyInw
- WK14+lrM0FFl26UKUn5UkUExFJjDRC4rAiG05ZqsWAbzdBbJnTwEsCd/V+5RdphsWMtVnGgmv
- Cma8ccEYftTgVnKyvpDYFjYBgzQmo8gyGmF1ZQBihjDgZXAStDZGUwpNgw3MWFOQo4R3elRjm
- Ec5MWifPP82s3OSPTtQNlqdrW3JVMOUu+SvfqpeTYXh0Q2GzW5FOIooIPGuW3GFC+nHTPDeff
- WYXM8K63IET1gCShiSRQoKajZl0hCLdXeVvbfl39OWPiztJDtQ8uTgMK8S/jCxT5Sj3qMMU/d
- btYgRsd/IWOkSKotjsEdMcq4NbYh2T5kMuRcMOfDALhvun+6OL7f0urWPlkV4XkRDtVNNB8Yj
- UyYMXZZG6zKpuJKdWupO5BZIkHgrJYhTcLy+DzVZ8SUKmnCY349cFUGzmbix+fBX5UhSh2se6
- dM/HuU1bfOOSd0mp1wX6uPj0bJ0F8nyngSE7yrkM1xTn+mmBMXIUNxu2JkFNkRB+7AHGjzKtn
- YWD2hJ32jeWarBP7gVFumIN/rTfdjm3aBWU1KNpWIUBS/rnkm3AiKfdfX+cy/F1/0dF7tRvp1
- ytsgHQ3utkiwruuLPoSv3KJ44xF76d15qAC40h1LviDBs0d6dPu+Hbta4fJLFe6QrQPJSAJ7Q
- A/jii9iE4WXxxRCYoXrcUAsJQOHRcvx0pl84qajc3pdXrHOVCna/0gur1lUSlmwyjkdxr1LB7
- eLVVtQjTKBXe6N1JHFpvTzt8JSjljAuW2jO5ZpGxj+2bpA9XNeHWKT2g6btcRLSveeID0vM1t
- 5I/yTYjzjXL4aKzGYiS8MkwiUVS8Cyfw8uKvSc3dYnrgXgmUWo7aWlr8r0Q23CMEnf+/p/Cf3
- yoVMmIET9FvkYXVsyYrl8EQeGAI=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230104160511.905925875@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,55 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Greg,
 
-please pull the fbdev driver updates for 6.2-rc3, to receive
-small fixes for matroxfb, offb and omapfb.
+On Wed, Jan 04, 2023 at 05:04:18PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.4 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
+> Anything received after that time might be too late.
 
-This is the v2 pull request, in which I dropped one fbmem patch for
-which Daniel had some concerns...
+Build test (gcc version 12.2.1 20221127):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Thanks,
-Helge
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-----
+[1]. https://openqa.qa.codethink.co.uk/tests/2556
+[2]. https://openqa.qa.codethink.co.uk/tests/2570
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.2-rc3
-
-for you to fetch changes up to 634cf6ead93988b0da9ac054521ab63a3ba189db:
-
-  fbdev: omapfb: avoid stack overflow warning (2023-01-05 11:43:27 +0100)
-
-----------------------------------------------------------------
-fbdev updates for kernel 6.2-rc3:
-
-- Fix Matrox G200eW initialization failure
-- Fix build failure of offb driver when built as module
-- Optimize stack usage in omapfb
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      fbdev: omapfb: avoid stack overflow warning
-
-Paul Menzel (1):
-      fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
-
-Randy Dunlap (1):
-      fbdev: make offb driver tristate
-
-Xu Panda (2):
-      fbdev: omapfb: use strscpy() to instead of strncpy()
-      fbdev: atyfb: use strscpy() to instead of strncpy()
-
- drivers/video/fbdev/Kconfig                |  4 ++--
- drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
- drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
- drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
- drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++----------
- 5 files changed, 25 insertions(+), 19 deletions(-)
+-- 
+Regards
+Sudip
