@@ -2,253 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7309C65EE9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE96765EE9D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 Jan 2023 15:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjAEOTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 09:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S232696AbjAEOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 09:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjAEOTi (ORCPT
+        with ESMTP id S231644AbjAEOTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:19:38 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ED0D2D7;
-        Thu,  5 Jan 2023 06:19:36 -0800 (PST)
+        Thu, 5 Jan 2023 09:19:39 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB55159309;
+        Thu,  5 Jan 2023 06:19:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672928361; bh=RjBrwrzDF0HUQvM108jehXVM85PyLM9sDZAL/eCo9+M=;
+        t=1672928363; bh=jGqmtBpJFhDWl3+/3Q4iGUyNOyvE0pOn9VoLM3cxvNw=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=dGdcS26gJuZZ2JM/TaqRQOhLZAgS1TuCf57XTUmX8pFkmv/FMWLqCntIG0gqsljr0
-         +CUM1VAN35giGtNP7GRLyuHqyrPc6dw4M4BI/bVLOj6WafjP1B0cEVcLwaMSdgee7s
-         kK1zZPS0RXIXzrLiNlT1FP/m/ewwaQwLchhQhiMn+y8xsH88MRMw6yPquz8r8oyLHS
-         VOibJwiOoqMw1SuVbHPO91hsToSWUn4lyAlnWL2lErsARXu09wD4ZINVMEJow97ScX
-         t5xId2KmWgwehzO+hdkAvGKOgNzA9XBYeY0F5YVXUfsAyc5Vsal0aMoJxNb5fEA/lt
-         bbhRz12AxklwQ==
+        b=aWJVKi4kKq3+bkujuqlXXDtH7qS4s3vkkFJEWa9769Jkh5Cf2ypqHSTrq/Pl6pJBl
+         atVy7ORdW45o2dl+uSRizAjHeoj7JlPKYcslC3XdyE8VY+Rwrm6BB0csraFjJLegbG
+         4RbwWSq/kEl2BnAMv1h27+2SuCVkpG34zHwscQYJjvbvV7CqbZVhF+agn7Ob+jmMr/
+         od29xWBwuxH2rgBdsTJIiTxr9xJ8UqvoRk/vb5puVxY+RA2t+Z7paGoJ55sajSxtAD
+         q465h8yKJstcaG0CvOV51DJWnWXm/Y9UXLxr+Sd92Til7sXtmqA05zAo0TzTcdtifJ
+         LoPDh1olt4s8Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MvK4f-1ovuIq1zWL-00rFUK; Thu, 05 Jan 2023 15:19:21 +0100
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MiacH-1oYJBN3kzn-00fjNy; Thu, 05 Jan 2023 15:19:22 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     jdelvare@suse.com, linux@roeck-us.net
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
-Date:   Thu,  5 Jan 2023 15:19:10 +0100
-Message-Id: <20230105141911.8040-3-W_Armin@gmx.de>
+Subject: [PATCH 3/3] hwmon: (ftsteutates) Add support for fanX_fault attributes
+Date:   Thu,  5 Jan 2023 15:19:11 +0100
+Message-Id: <20230105141911.8040-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230105141911.8040-1-W_Armin@gmx.de>
 References: <20230105141911.8040-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ru50W+qdfPb9At5rpiAcQ5PdK4qBfkTaf7yQw/v1zIQjyl4cADr
- amESEKh6KNh9AWnic4KBzSh/J0YYBr9YyUZNzSkt4jSxzwStaMrEfK6yAIzABnlrOPjydm4
- Xqeg2bbhvgIG6GFMlsY1UjJbzHvo2UtS3sOqySgPn8dIakPgAPfsRz9xoiB5q8mt/cAUPC/
- wKAYGdXOvQsFkR0AQSzWw==
-UI-OutboundReport: notjunk:1;M01:P0:PxaAWqHeM6g=;SWd6Qu6SZI1o6VOv1PHvjsrU6Eg
- h9BDAu0MIk5FkTqEjEQtzUz3Lb7+hqUvhLu+3VjhXMfbEYoo9TX/lB4Di2kb8a6y6IlWWE2M7
- lgiwJv+kw6PFDGucY8ZxBYEWoGxEzCasPHkP2NBO/IXD2YB9+8hqSnU3CnEDJ3VX1xl3Q0F40
- d6g/+afX2XZp6jHJDcmXDmXOTc2eYAw0+Edhy1M3vrWcAg4Kw23xu/XqR6JIMagB13VQXd4N4
- 6oYw5RSGrPnGt8MA2LUSNEUvEO+Pv/xH/ywXtNcxuKShZ7QDAhg/lFcvE9KGG1DV8C7JzjWTN
- 4gIdu+7qT6kJewHLppPZ2eKcDAetaA/yuXu47+GDlEynBeX71zZ5YYFOXPQ2fgUrw7+foK+CS
- eT3Vd6rW/j06fgc9XKMVMMQkw6HG6DkMtBlTqjJajnOtb+p7WNMRU9RsSxQ9EB9VNHzZip0lB
- heZIwtjKCsPyaKhtwNVVMlpC3ihHNBR8LiDSV4Gz4gUyLePHSy3Hg3NOBnpckdmWxC99VOeqU
- pyGdiuQKHV3imaoU5L7eZLGFGgvzMr5H1p4Ho1jf4d9UVJxYxz+BO8oMUfSKOB10MzYHjhvl0
- lY3H7CaqM4JzsurLEKDPpOcEnftMXMDJg6k1JY8HkLDvTydblYOr/1/fM1BAw7+tYj+BEqZXC
- +L0B8ir1NCtQXXFRc2pV9FPHs0CCI89cdpiJH6P6MhnUyxLDqB8JK82UPCc5furwUtyFoZvvQ
- tnMTB5GraZN+Gpcwm5MFakqmQF+vEsykSNH9gvl7OWKKAMA0LLHYDBKP70u0AdnzF4rU4ivGO
- h/bdTD7JzNM69/mHp39PJtczEOFfzDX7m7wJ8A0hNUXbbCpPbgVsvoGNO1bcaq/6nC/rNzdM5
- Pnk9HxJnYLnc+ALv6gbuy1wJpTIo8YNUYaOl3QZioLOWkFOls7WYCzUpNTdFAsZ+MZx688/ym
- tM/t0LO8bH8TIRl5rnPfqonr4MU=
+X-Provags-ID: V03:K1:Wr0zOroG7LIq3kzpUYWfHXGxFxEa/RaUBdqfrpGwrccgs0UGXXt
+ HDhhPIXJEACq3foul9FLFSqXgc9ValFo4665jsijaQrhIQbAxzhrVmEV4HetlcKIQJ6IMG7
+ G+6YJBULJ16KHXVvBZGdSNLRU2oZY3oYHVd7d/S4i6Wg2Rfj+JgMsC3m3GMWute19CVHBPC
+ XIJUTFWf/1z9qOoRxAWVA==
+UI-OutboundReport: notjunk:1;M01:P0:A1D8S5zeCd8=;lItq4H59LTBZ4+5unBI3q1Orly9
+ uYDYG1TVcmrTxWR7ISzl467UK+QTFN6F/98d4GOLq1//X9zfjdv9zX1QcCVVWKU9+aGwzmmxk
+ URbsY1oiMyAz+NVrGVFuhimRH0Ic43bgFmSERrtyVdvHPO+QNWBufquGtkRNkyppBd+dkmJFm
+ cUC1NFCXiVjuXyp9IItX5XWpRextp4qnjJiTJZUXPltMxMO72mYZKvbI8MzQ04YNdOwdOHLG8
+ OsGK0NiD1EZLof9MbqrZ6fE5uyD0LdA0UZwIK3w6YEnfVTvqsAghe3Bq4jplfX0CSR+/KXu+N
+ CehZiqP90vPK+qb6H3u/2dp3jfz66tZTqV9/rQ/QuMm3qLR0WrasqvvaVfA4FSU8Qj2arKcXI
+ xBO4DG3Lu26fJWfXDaJj2vWBIHtZYyq1M4lL3jXc4bJk82gmmpvGZF9DzGxON3HpXdAFdmGV+
+ Q2ZVJ6AC45AaVrO/k7uT3m0eAwTwPdKePZzV55043wU26bZYxE7lWl3Z94D/zVQHyP+aIO9kQ
+ n4nk4IEc3NGVIx2bAOYnxUQPQ2FJm6ia0A2WPu4j80El7UICwgDSJkMHORsaMoRDpGyi4PGV0
+ eBMg4rx1tZ3bmv3M29hJuE6mDqVKPlAB4FhzwSk9AaDwAPwLjfKL4Q70U6/8x5I1aHV7RY0hj
+ 6E8OBtAP7CWvnfCHhJ1tKbzO5EEkCyQsglo+V/3RBanv56351LTph2JV13rI7iRA7F1mW5rSO
+ nm9s3Rr8ieVI31dFfWaL3d6Y1pIsqAD17rKE0jvXv8NfaEWAzUYeABOH3szyfyhH/zGv1dyf4
+ xJ2fYIMrKfBAVBR5xaGj5FwwOIkdFm0s3s6GeVAwxRiTDQ44QRrsW/x0v7l17ZiR/gTXCXhjl
+ jpR++DFl+OQs0Vze12j7j4Rv0wTlPsxQYPg9xOldizTrZ4GtLl04PCyCH/K0UEHKiZCA1jaN8
+ Ue/reQKfj3mfH/MPt6e9XgQXcxA=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the nonstandard fanX_source attributes with the standardized
-pwmX_auto_channels_temp attributes and document the special behaviour
-associated with those attributes.
+The driver knows internally when a fan is not connected,
+but does not export this knowledge to userspace. Use the
+standard fanX_fault attributes to notify userspace if a
+fan is not connected.
 
 Tested on a Fujitsu DS3401-B1.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/hwmon/ftsteutates.rst |  5 ++
- drivers/hwmon/ftsteutates.c         | 77 +++++++++++------------------
- 2 files changed, 33 insertions(+), 49 deletions(-)
+ drivers/hwmon/ftsteutates.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/fts=
-teutates.rst
-index 198fa8e2819d..b3bfec36661d 100644
-=2D-- a/Documentation/hwmon/ftsteutates.rst
-+++ b/Documentation/hwmon/ftsteutates.rst
-@@ -22,6 +22,11 @@ enhancements. It can monitor up to 4 voltages, 16 tempe=
-ratures and
- 8 fans. It also contains an integrated watchdog which is currently
- implemented in this driver.
-
-+The ``pwmX_auto_channels_temp`` attributes show which temperature sensor
-+is currently driving which fan channel. This value might dynamically chan=
-ge
-+during runtime depending on the temperature sensor selected by
-+the fan control circuit.
-+
- The 4 voltages require a board-specific multiplier, since the BMC can
- only measure voltages up to 3.3V and thus relies on voltage dividers.
- Consult your motherboard manual for details.
 diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 23dc3a74f84b..0d8ab94250a9 100644
+index 0d8ab94250a9..25afd9167a34 100644
 =2D-- a/drivers/hwmon/ftsteutates.c
 +++ b/drivers/hwmon/ftsteutates.c
-@@ -6,9 +6,7 @@
-  *		  Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
-  */
- #include <linux/err.h>
--#include <linux/fs.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/jiffies.h>
-@@ -16,7 +14,6 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
--#include <linux/sysfs.h>
- #include <linux/watchdog.h>
-
- #define FTS_DEVICE_ID_REG		0x0000
-@@ -48,6 +45,8 @@
- #define FTS_NO_TEMP_SENSORS		0x10
- #define FTS_NO_VOLT_SENSORS		0x04
-
-+#define FTS_FAN_SOURCE_INVALID		0xff
-+
- static const unsigned short normal_i2c[] =3D { 0x73, I2C_CLIENT_END };
-
- static const struct i2c_device_id fts_id[] =3D {
-@@ -187,7 +186,7 @@ static int fts_update_device(struct fts_data *data)
- 			data->fan_source[i] =3D err;
- 		} else {
- 			data->fan_input[i] =3D 0;
--			data->fan_source[i] =3D 0;
-+			data->fan_source[i] =3D FTS_FAN_SOURCE_INVALID;
- 		}
- 	}
-
-@@ -339,50 +338,6 @@ static int fts_watchdog_init(struct fts_data *data)
- 	return devm_watchdog_register_device(&data->client->dev, &data->wdd);
- }
-
--static ssize_t fan_source_show(struct device *dev,
--			       struct device_attribute *devattr, char *buf)
--{
--	struct fts_data *data =3D dev_get_drvdata(dev);
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	int err;
--
--	err =3D fts_update_device(data);
--	if (err < 0)
--		return err;
--
--	return sprintf(buf, "%u\n", data->fan_source[index]);
--}
--
--static SENSOR_DEVICE_ATTR_RO(fan1_source, fan_source, 0);
--static SENSOR_DEVICE_ATTR_RO(fan2_source, fan_source, 1);
--static SENSOR_DEVICE_ATTR_RO(fan3_source, fan_source, 2);
--static SENSOR_DEVICE_ATTR_RO(fan4_source, fan_source, 3);
--static SENSOR_DEVICE_ATTR_RO(fan5_source, fan_source, 4);
--static SENSOR_DEVICE_ATTR_RO(fan6_source, fan_source, 5);
--static SENSOR_DEVICE_ATTR_RO(fan7_source, fan_source, 6);
--static SENSOR_DEVICE_ATTR_RO(fan8_source, fan_source, 7);
--
--static struct attribute *fts_fan_attrs[] =3D {
--	&sensor_dev_attr_fan1_source.dev_attr.attr,
--	&sensor_dev_attr_fan2_source.dev_attr.attr,
--	&sensor_dev_attr_fan3_source.dev_attr.attr,
--	&sensor_dev_attr_fan4_source.dev_attr.attr,
--	&sensor_dev_attr_fan5_source.dev_attr.attr,
--	&sensor_dev_attr_fan6_source.dev_attr.attr,
--	&sensor_dev_attr_fan7_source.dev_attr.attr,
--	&sensor_dev_attr_fan8_source.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group fts_attr_group =3D {
--	.attrs =3D fts_fan_attrs
--};
--
--static const struct attribute_group *fts_attr_groups[] =3D {
--	&fts_attr_group,
--	NULL
--};
--
- static umode_t fts_is_visible(const void *devdata, enum hwmon_sensor_type=
-s type, u32 attr,
- 			      int channel)
- {
-@@ -408,6 +363,7 @@ static umode_t fts_is_visible(const void *devdata, enu=
+@@ -356,6 +356,7 @@ static umode_t fts_is_visible(const void *devdata, enu=
 m hwmon_sensor_types type,
- 			break;
- 		}
- 		break;
-+	case hwmon_pwm:
- 	case hwmon_in:
- 		return 0444;
- 	default:
-@@ -460,6 +416,19 @@ static int fts_read(struct device *dev, enum hwmon_se=
-nsor_types type, u32 attr,
- 			break;
- 		}
- 		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_auto_channels_temp:
-+			if (data->fan_source[channel] =3D=3D FTS_FAN_SOURCE_INVALID)
-+				*val =3D 0;
-+			else
-+				*val =3D BIT(data->fan_source[channel]);
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
- 	case hwmon_in:
+ 	case hwmon_fan:
  		switch (attr) {
- 		case hwmon_in_input:
-@@ -576,6 +545,16 @@ static const struct hwmon_channel_info *fts_info[] =
+ 		case hwmon_fan_input:
++		case hwmon_fan_fault:
+ 			return 0444;
+ 		case hwmon_fan_alarm:
+ 			return 0644;
+@@ -411,6 +412,10 @@ static int fts_read(struct device *dev, enum hwmon_se=
+nsor_types type, u32 attr,
+ 		case hwmon_fan_alarm:
+ 			*val =3D !!(data->fan_alarm & BIT(channel));
+
++			return 0;
++		case hwmon_fan_fault:
++			*val =3D !(data->fan_present & BIT(channel));
++
+ 			return 0;
+ 		default:
+ 			break;
+@@ -536,14 +541,14 @@ static const struct hwmon_channel_info *fts_info[] =
 =3D {
- 			   HWMON_F_INPUT | HWMON_F_ALARM,
- 			   HWMON_F_INPUT | HWMON_F_ALARM
+ 			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_FAULT
  			   ),
-+	HWMON_CHANNEL_INFO(pwm,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-+			   HWMON_PWM_AUTO_CHANNELS_TEMP
-+			   ),
- 	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT,
- 			   HWMON_I_INPUT,
-@@ -672,7 +651,7 @@ static int fts_probe(struct i2c_client *client)
- 	revision =3D err;
-
- 	hwmon_dev =3D devm_hwmon_device_register_with_info(&client->dev, "ftsteu=
-tates", data,
--							 &fts_chip_info, fts_attr_groups);
-+							 &fts_chip_info, NULL);
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
-
+ 	HWMON_CHANNEL_INFO(fan,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM,
+-			   HWMON_F_INPUT | HWMON_F_ALARM
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
++			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT
+ 			   ),
+ 	HWMON_CHANNEL_INFO(pwm,
+ 			   HWMON_PWM_AUTO_CHANNELS_TEMP,
 =2D-
 2.30.2
 
