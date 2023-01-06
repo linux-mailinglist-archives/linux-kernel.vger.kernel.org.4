@@ -2,69 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15439660884
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDAB660889
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbjAFUyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S235695AbjAFU4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjAFUyE (ORCPT
+        with ESMTP id S230032AbjAFU4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:54:04 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840636346;
-        Fri,  6 Jan 2023 12:54:02 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 13A23604F1;
-        Fri,  6 Jan 2023 21:54:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673038440; bh=4B7Dno8dzYVBkBqZi8r1yzPqvxe7Jybj/unBxoBDiak=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PIkDEiVcCZ0uawbe4Qw0/NStd7NsNXvxzSQHnuHpjJg0OP4U9hYETIbJ2lf5tdGt8
-         ISZVUhZI9Dy/DE3TwAdjWwnVrmPCvifSkzhn9oENqlANKQHUkHy6Y9iWuIa9iWjHvT
-         gonyuxuHW1FECBCJ5wp3tb4OZ9tQQqPjMrFiLATzy7ZZnCq/v/sefJ+jThUmKsdAIG
-         Kh/l2ZPic7je4kX93QB04G6nY0nrkePRejFXL2kRb14xdeUUwXYv3qZBXlHABifZEP
-         kz7sVYYH5ul7Cb9Dsz/LLpmA7DEEvwG0FMN6V+s1QYzRQr8yg+/7wHlxxg348tLW3U
-         coJvHZxR3DR/g==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2tpAY67k4C_j; Fri,  6 Jan 2023 21:53:57 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id D0E27604F0;
-        Fri,  6 Jan 2023 21:53:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673038437; bh=4B7Dno8dzYVBkBqZi8r1yzPqvxe7Jybj/unBxoBDiak=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JR6K7+GJ/FFQJaxz8NysLlEfYIZe+57kT/Zk2LpSJxbJxmATikFdFIAu3y+D2/qL2
-         M4JIqn+SFahJ9xLH9JLUWTs74Yfzs1OtDlKVHRi1FNlAHnSaMAb9/q/qZxtNgiR55t
-         4nO/qn4WFYV5lUIAF6X+icadopeoFH6YuWXS8Ir00foJTM+ClMRm1e9uiU0EpMbHrf
-         DR2hf4srAJ7v3sCRtcpb1nG70T0iYA0qt2f/aDj5W8SW9aQEpcDNRtQO9/I7M0rG2T
-         +iBGcV9R+Nj4sCnCMC/l/6ZgjnGAmDzTltd1K4i84LBTi7v1qwyCvsRlAJ5/53GC1D
-         BX24LyPRVq8FQ==
-Message-ID: <cd0cbfc0-cf8a-c97a-d03f-016c8f9b9fa3@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 21:53:56 +0100
+        Fri, 6 Jan 2023 15:56:40 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECC673E16;
+        Fri,  6 Jan 2023 12:56:38 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 47CE44AE;
+        Fri,  6 Jan 2023 21:56:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673038597;
+        bh=O+lZRKGklAUbUOw3w+KFU1s2PzW+rjlH05aQR/JzUkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zx555jm9qXCpcaFXPEQkn73ZflaQTqSJoH3AsOI+z+FWSu6rKoUaLx37CAWeu9Ydx
+         qLTnTAq+ZZP81L8IQGlt/uJuprADj5l0Qgsg9Vz9KkFsmzi3Gp7PHSZlQQUcz0f/so
+         3aJH1AkVd+8445TUVxQl1AujGa/csxHhI/sB+Rr4=
+Date:   Fri, 6 Jan 2023 22:56:31 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 5/7] media: uvcvideo: Refactor
+ power_line_frequency_controls_limited
+Message-ID: <Y7iK/xuiSOsqBzqq@pendragon.ideasonboard.com>
+References: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
+ <20230105-uvc-gcc5-v2-5-2ba6c660d6f5@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] proc: fix PIE proc-empty-vm, proc-pid-vm tests
-Content-Language: en-US, hr
-To:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
- <Y7h2xvzKLg36DSq8@p183>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <Y7h2xvzKLg36DSq8@p183>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105-uvc-gcc5-v2-5-2ba6c660d6f5@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,128 +50,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Ricardo,
 
-On 06. 01. 2023. 20:30, Alexey Dobriyan wrote:
-> vsyscall detection code uses direct call to the beginning of
-> the vsyscall page:
+Thank you for the patch.
+
+On Thu, Jan 05, 2023 at 02:52:56PM +0100, Ricardo Ribalda wrote:
+> Move the control mapping to uvc_ctrl.c. This way we do not have
+> references to UVC controls or V4L2 controls in uvc_driver.c
 > 
-> 	asm ("call %P0" :: "i" (0xffffffffff600000))
-> 
-> It generates "call rel32" instruction but it is not relocated if binary
-> is PIE, so binary segfaults into random userspace address and vsyscall
-> page status is detected incorrectly.
-> 
-> Do more direct:
-> 
-> 	asm ("call *%rax")
-> 
-> which doesn't do need any relocaltions.
-> 
-> Mark g_vsyscall as volatile for a good measure, I didn't find instruction
-> setting it to 0. Now the code is obviously correct:
-> 
-> 	xor	eax, eax
-> 	mov	rdi, rbp
-> 	mov	rsi, rbp
-> 	mov	DWORD PTR [rip+0x2d15], eax      # g_vsyscall = 0
-> 	mov	rax, 0xffffffffff600000
-> 	call	rax
-> 	mov	DWORD PTR [rip+0x2d02], 1        # g_vsyscall = 1
-> 	mov	eax, DWORD PTR ds:0xffffffffff600000
-> 	mov	DWORD PTR [rip+0x2cf1], 2        # g_vsyscall = 2
-> 	mov	edi, [rip+0x2ceb]                # exit(g_vsyscall)
-> 	call	exit
-> 
-> Note: fixed proc-empty-vm test oopses 5.19.0-28-generic kernel
-> 	but this is separate story.
-> 
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
+>  drivers/media/usb/uvc/uvc_ctrl.c   | 13 +++++++++++++
+>  drivers/media/usb/uvc/uvc_driver.c | 18 ------------------
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  3 files changed, 14 insertions(+), 18 deletions(-)
 > 
->   tools/testing/selftests/proc/proc-empty-vm.c |   12 +++++++-----
->   tools/testing/selftests/proc/proc-pid-vm.c   |    9 +++++----
->   2 files changed, 12 insertions(+), 9 deletions(-)
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 9af64f7a23d3..f559a1ac6e3c 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -723,6 +723,19 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
+>  	},
+>  };
+>  
+> +const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
+> +	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+> +	.entity		= UVC_GUID_UVC_PROCESSING,
+> +	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> +	.size		= 2,
+> +	.offset		= 0,
+> +	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+> +	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+> +	.menu_info	= power_line_frequency_controls,
+> +	.menu_mask	= GENMASK(V4L2_CID_POWER_LINE_FREQUENCY_60HZ,
+> +				  V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
+
+This also fixes a bug introduced in commit 382075604a68 ("media:
+uvcvideo: Limit power line control for Quanta UVC Webcam"). The
+offending commit caused the power line control menu entries to have
+incorrect indices compared to the V4L2_CID_POWER_LINE_FREQUENCY_*
+enumeration. Now that the limited mapping reuses the correct menu_info
+array, the indices correctly map to the V4L2 control specification.
+
+I'll add the above paragraph to the commit message, along with a Fixes:
+line.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +};
+> +
+>  static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+>  	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+>  	.entity		= UVC_GUID_UVC_PROCESSING,
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index e659670ea2d8..37d2b08bc8b2 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2378,24 +2378,6 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
+>   * Driver initialization and cleanup
+>   */
+>  
+> -static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
+> -	{ 1, "50 Hz" },
+> -	{ 2, "60 Hz" },
+> -};
+> -
+> -static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
+> -	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+> -	.entity		= UVC_GUID_UVC_PROCESSING,
+> -	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> -	.size		= 2,
+> -	.offset		= 0,
+> -	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+> -	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+> -	.menu_info	= power_line_frequency_controls_limited,
+> -	.menu_mask	=
+> -		GENMASK(ARRAY_SIZE(power_line_frequency_controls_limited) - 1, 0),
+> -};
+> -
+>  static const struct uvc_device_info uvc_ctrl_power_line_limited = {
+>  	.mappings = (const struct uvc_control_mapping *[]) {
+>  		&uvc_ctrl_power_line_mapping_limited,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index a8eec43cd860..1b2d9f327583 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -747,6 +747,7 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags);
+>  void uvc_status_stop(struct uvc_device *dev);
+>  
+>  /* Controls */
+> +extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
+>  extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
+>  
+>  int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
 > 
-> --- a/tools/testing/selftests/proc/proc-empty-vm.c
-> +++ b/tools/testing/selftests/proc/proc-empty-vm.c
-> @@ -25,6 +25,7 @@
->   #undef NDEBUG
->   #include <assert.h>
->   #include <errno.h>
-> +#include <stdint.h>
->   #include <stdio.h>
->   #include <stdlib.h>
->   #include <string.h>
-> @@ -41,7 +42,7 @@
->    * 1: vsyscall VMA is --xp		vsyscall=xonly
->    * 2: vsyscall VMA is r-xp		vsyscall=emulate
->    */
-> -static int g_vsyscall;
-> +static volatile int g_vsyscall;
->   static const char *g_proc_pid_maps_vsyscall;
->   static const char *g_proc_pid_smaps_vsyscall;
->   
-> @@ -147,11 +148,12 @@ static void vsyscall(void)
->   
->   		g_vsyscall = 0;
->   		/* gettimeofday(NULL, NULL); */
-> +		uint64_t rax = 0xffffffffff600000;
->   		asm volatile (
-> -			"call %P0"
-> -			:
-> -			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
-nt> -			: "rax", "rcx", "r11"
-> +			"call *%[rax]"
-> +			: [rax] "+a" (rax)
-> +			: "D" (NULL), "S" (NULL)
-> +			: "rcx", "r11"
->   		);
->   
->   		g_vsyscall = 1;
-> --- a/tools/testing/selftests/proc/proc-pid-vm.c
-> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
-> @@ -257,11 +257,12 @@ static void vsyscall(void)
->   
->   		g_vsyscall = 0;
->   		/* gettimeofday(NULL, NULL); */
-> +		uint64_t rax = 0xffffffffff600000;
->   		asm volatile (
-> -			"call %P0"
-> -			:
-> -			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
-> -			: "rax", "rcx", "r11"
-> +			"call *%[rax]"
-> +			: [rax] "+a" (rax)
-> +			: "D" (NULL), "S" (NULL)
-> +			: "rcx", "r11"
->   		);
->   
->   		g_vsyscall = 1;
 
-I can confirm that the patch fixed the core dump in the exact environment that
-used to reproduce the bug.
-
-Apparently, it seems that gcc 12.2.0 -O2 optimiser on Ubuntu 22.10 kinetic kudu
-did some new creative stuff to Alexey's code. For someone interested, I have saved the
-assembly with and w/o -O2 ...
-
-However, I have just found some spurious bug in proc-uptime-001.
-
-But, this is another story ...
-
-Thanks,
-Mirsad
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
 -- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Regards,
 
+Laurent Pinchart
