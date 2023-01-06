@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F388965F893
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7526765F898
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbjAFBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S236635AbjAFBG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 20:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbjAFBGM (ORCPT
+        with ESMTP id S236570AbjAFBGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:06:12 -0500
+        Thu, 5 Jan 2023 20:06:51 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA36D51B;
-        Thu,  5 Jan 2023 17:06:11 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30609axQ028245;
-        Fri, 6 Jan 2023 01:05:46 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321EA6F95F;
+        Thu,  5 Jan 2023 17:06:44 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3060umjo032281;
+        Fri, 6 Jan 2023 01:05:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=kYVSJNudMGf4WCtGaw5oM38FQkHNvOOyFU+4JjDqiPY=;
- b=UFxCby15Y3IPMuaE99FpQHRUnwjgrM/kgruNJOgRaiNtAxAvnOgZ/aaiDxo/zPriGkz8
- dVO2xfvRob8VFUdvmjc0RrRuQ3o4L0pyHkrKI0tFQSsrlnJ+609PzYrQJJLkZ9OIPebA
- DXrLn8JE1CvAfLxf6V7T2R9Fiqvc6BX4g6CmAHNBB8O5rsGpCVWVGTfFDqULWGi85ZXp
- hE4wRdlyJO/VY/nwx9KHoZSMapkHM5xE3VxdQqOnze6gqKnTJ2B8uk37iPO+A4iXCqLc
- fQNk0IY5GeC8PPPluhdZNW15P+PnSFVeUauaXdpK4p3iQMbXncl8bPxCs/2GwjIfff7X NA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mwwfs9gh4-1
+ bh=yPDiABo7G5EPuLvcS5lxFAWTSB07/M1LZ5y70XE2u+U=;
+ b=ms3aCilvtoXrWVFcN/A7klQJHi9omIOliOfbR6PVCunNJKN6BqCKs5WuFY0tt24fWk+7
+ EmOtL1fGbeaOdQrvo8kAIkYKHK1aUnStyDVhY/0qcJPK69+bQvZ/YVCt5B32ZyMFCS4p
+ BxmZDTR/3bWdEFkgzn0SI1YiODaCrxPEo9QQwhEbZ011m2fx9Kq3JBdgbWf305f5MHz2
+ h6uc5j6mA1fvpLcsrpqBmiyRcWQAeDfsUYUd5gh5idLaAQ4YJAtYCIOA/7Asd/nxecK2
+ X38gBWKEX6zJNbjep0pVPjUgY+p1BPpiLdjySldqUiLyh53YX6jVQJihtO0j7lIZ32Yc og== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mx5b0gfbh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Jan 2023 01:05:46 +0000
+        Fri, 06 Jan 2023 01:05:53 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30615iL2023979
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30615qlZ028640
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 6 Jan 2023 01:05:44 GMT
+        Fri, 6 Jan 2023 01:05:52 GMT
 Received: from [10.110.47.113] (10.80.80.8) by nalasex01b.na.qualcomm.com
  (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 5 Jan 2023
- 17:05:44 -0800
-Message-ID: <178892ad-091e-1d95-d9d9-7270f19ef4ef@quicinc.com>
-Date:   Thu, 5 Jan 2023 17:05:43 -0800
+ 17:05:51 -0800
+Message-ID: <6e13521a-84bf-f8a6-e8cc-5b90ff4bd675@quicinc.com>
+Date:   Thu, 5 Jan 2023 17:05:51 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 00/14] Introduce QC USB SND audio offloading support
+Subject: Re: [RFC PATCH 02/14] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
 Content-Language: en-US
 To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
@@ -58,26 +59,27 @@ CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
         <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
         <quic_plai@quicinc.com>
 References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <0991fdf5-a29d-6ef7-71ec-9b4d858ed1eb@linux.intel.com>
+ <20221223233200.26089-3-quic_wcheng@quicinc.com>
+ <5babccd6-9796-7613-cf82-cc859f338448@linux.intel.com>
 From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <0991fdf5-a29d-6ef7-71ec-9b4d858ed1eb@linux.intel.com>
+In-Reply-To: <5babccd6-9796-7613-cf82-cc859f338448@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mgJq0Ikhc-ZvYuN4zvBOJncOm2AaJxDX
-X-Proofpoint-ORIG-GUID: mgJq0Ikhc-ZvYuN4zvBOJncOm2AaJxDX
+X-Proofpoint-ORIG-GUID: 4GmqWCMCbJ-9orrP_alCZ0dx9tR0YQfW
+X-Proofpoint-GUID: 4GmqWCMCbJ-9orrP_alCZ0dx9tR0YQfW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-05_14,2023-01-05_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- phishscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
- mlxlogscore=999 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301060006
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxlogscore=999 impostorscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301060006
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -89,159 +91,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Pierre,
 
-On 1/4/2023 3:19 PM, Pierre-Louis Bossart wrote:
+On 1/4/2023 3:33 PM, Pierre-Louis Bossart wrote:
 > 
 > 
 > On 12/23/22 17:31, Wesley Cheng wrote:
->> Several Qualcomm based chipsets can support USB audio offloading to a
->> dedicated audio DSP, which can take over issuing transfers to the USB
->> host controller.  The intention is to reduce the load on the main
->> processors in the SoC, and allow them to be placed into lower power modes.
+>> The QC ADSP is able to support USB playback and capture, so that the
+>> main application processor can be placed into lower CPU power modes.  This
+>> adds the required AFE port configurations and port start command to start
+>> an audio session.
 > 
-> It would be nice to clarify what you want to offload
-> a) audio data transfers for isoc ports
-> b) control for e.g. volume settings (those go to endpoint 0 IIRC)
-> c) Both?
-> 
-
-Thanks for sharing your experience, and inputs!
-
-It would be the audio related endpoints only, so ISOC and potentially 
-feedback ep.
-
-> This has a lot of implications on the design. ASoC/DPCM is mainly
-> intended for audio data transfers, control is a separate problem with
-> configurations handled with register settings or bus-specific commands.
+> It would be good to clarify what sort of endpoints can be supported. I
+> presume the SOF-synchronous case is handled, but how would you deal with
+> async endpoints with feedback (be it explicit or implicit)?
 > 
 
-Control would still be handled by the main processor.
+Sure, both types of feedback endpoints are expected to be supported by 
+the audio DSP, as well as sync eps.  We have the logic there to modify 
+the audio sample size accordingly.
 
->> There are several parts to this design:
->>    1. Adding ASoC binding layer
->>    2. Create a USB backend for Q6DSP
->>    3. Introduce XHCI interrupter support
->>    4. Create vendor ops for the USB SND driver
->>
->> Adding ASoC binding layer:
->> soc-usb: Intention is to treat a USB port similar to a headphone jack.
->> The port is always present on the device, but cable/pin status can be
->> enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
->> communicate with USB SND.
->>
->> Create a USB backend for Q6DSP:
->> q6usb: Basic backend driver that will be responsible for maintaining the
->> resources needed to initiate a playback stream using the Q6DSP.  Will
->> be the entity that checks to make sure the connected USB audio device
->> supports the requested PCM format.  If it does not, the PCM open call will
->> fail, and userpsace ALSA can take action accordingly.
->>
->> Introduce XHCI interrupter support:
->> XHCI HCD supports multiple interrupters, which allows for events to be routed
->> to different event rings.  This is determined by "Interrupter Target" field
->> specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
->>
->> Events in the offloading case will be routed to an event ring that is assigned
->> to the audio DSP.
->>
->> Create vendor ops for the USB SND driver:
->> qc_audio_offload: This particular driver has several components associated
->> with it:
->> - QMI stream request handler
->> - XHCI interrupter and resource management
->> - audio DSP memory management
->>
->> When the audio DSP wants to enable a playback stream, the request is first
->> received by the ASoC platform sound card.  Depending on the selected route,
->> ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
->> will send an AFE port start command (with enabling the USB playback path), and
->> the audio DSP will handle the request accordingly.
->>
->> Part of the AFE USB port start handling will have an exchange of control
->> messages using the QMI protocol.  The qc_audio_offload driver will populate the
->> buffer information:
->> - Event ring base address
->> - EP transfer ring base address
->>
->> and pass it along to the audio DSP.  All endpoint management will now be handed
->> over to the DSP, and the main processor is not involved in transfers.
->>
->> Overall, implementing this feature will still expose separate sound card and PCM
->> devices for both the platorm card and USB audio device:
->>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
->>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
->>   1 [Audio          ]: USB-Audio - USB Audio
->>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
->>
->> This is to ensure that userspace ALSA entities can decide which route to take
->> when executing the audio playback.  In the above, if card#1 is selected, then
->> USB audio data will take the legacy path over the USB PCM drivers, etc...
+> Note that it's very hard to make the decision not to support async
+> endpoints, there are quite a few devices that are exposed as async to
+> work around an obscure legacy issue on Windows but are really
+> sof-synchronous endpoints that never ask for any change of pace.
 > 
-> You would still need some sort of mutual exclusion to make sure the isoc
-> endpoints are not used concurrently by the two cards. Relying on
-> userspace intelligence to enforce that exclusion is not safe IMHO.
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
+>>   sound/soc/qcom/qdsp6/q6afe-dai.c              |  47 +++++
+>>   sound/soc/qcom/qdsp6/q6afe.c                  | 183 ++++++++++++++++++
+>>   sound/soc/qcom/qdsp6/q6afe.h                  |  46 ++++-
+>>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |  23 +++
+>>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |   1 +
+>>   sound/soc/qcom/qdsp6/q6routing.c              |   8 +
+>>   7 files changed, 308 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+>> index 9f7c5103bc82..746bc462bb2e 100644
+>> --- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+>> +++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+>> @@ -131,6 +131,7 @@
+>>   #define RX_CODEC_DMA_RX_7	126
+>>   #define QUINARY_MI2S_RX		127
+>>   #define QUINARY_MI2S_TX		128
+>> +#define USB_RX				129
+> 
+> the commit message says the DSP can support Playback and capture, but
+> here there's capture only ...
+> 
 > 
 
-Sure, I think we can make the USB card as being used if the offloading 
-path is currently being enabled.  Kernel could return an error to 
-userspace when this situation happens.
+Sorry I will update the commit message properly.  At the moment we've 
+only verified audio playback.
 
-> Intel looked at this sort of offload support a while ago and our
-> directions were very different - for a variety of reasons USB offload is
-> enabled on Windows platforms but remains a TODO for Linux. Rather than
-> having two cards, you could have a single card and addition subdevices
-> that expose the paths through the DSP. The benefits were that there was
-> a single set of controls that userspace needed to know about, and volume
-> settings were the same no matter which path you used (legacy or
-> DSP-optimized paths). That's consistent with the directions to use 'Deep
-> Buffer' PCM paths for local playback, it's the same idea of reducing
-> power consumption with optimized routing.
+>>   
+>>   static const struct snd_soc_dapm_route q6afe_dapm_routes[] = {
+>> +	{"USB Playback", NULL, "USB_RX"},
+> 
+> ... but here RX means playback?
+> 
+> I am not sure I get the convention on directions and what is actually
+> supported?
 > 
 
-Volume control would still be done through the legacy path as mentioned 
-above.  For example, if a USB headset w/ a HID interface exposed (for 
-volume control) was connected, those HID events would be routed to 
-userspace to adjust volume accordingly on the main processor. (although 
-you're right about having separate controls still present - one for the 
-ASoC card and another for USB card)
+The notation is based on the direction of which the audio data is 
+sourced or pushed on to the DSP.  So in playback, the DSP is receiving 
+audio data to send, and capture, it is transmitting audio data received. 
+(although we do not support capture yet)
 
-> Another point is that there may be cases where the DSP paths are not
-> available if the DSP memory and MCPS budget is exceeded. In those cases,
-> the DSP parts needs the ability to notify userspace that the legacy path
-> should be used.
-
-If we ran into this scenario, the audio DSP AFE port start command would 
-fail, and this would be propagated to the userspace entity.  It could 
-then potentially re-route to the legacy/non-offload path.
-
+>> +struct afe_param_id_usb_cfg {
+>> +/* Minor version used for tracking USB audio device configuration.
+>> + * Supported values: AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG
+>> + */
+>> +	u32                  cfg_minor_version;
+>> +/* Sampling rate of the port.
+>> + * Supported values:
+>> + * - AFE_PORT_SAMPLE_RATE_8K
+>> + * - AFE_PORT_SAMPLE_RATE_11025
+>> + * - AFE_PORT_SAMPLE_RATE_12K
+>> + * - AFE_PORT_SAMPLE_RATE_16K
+>> + * - AFE_PORT_SAMPLE_RATE_22050
+>> + * - AFE_PORT_SAMPLE_RATE_24K
+>> + * - AFE_PORT_SAMPLE_RATE_32K
+>> + * - AFE_PORT_SAMPLE_RATE_44P1K
+>> + * - AFE_PORT_SAMPLE_RATE_48K
+>> + * - AFE_PORT_SAMPLE_RATE_96K
+>> + * - AFE_PORT_SAMPLE_RATE_192K
+>> + */
+>> +	u32                  sample_rate;
+>> +/* Bit width of the sample.
+>> + * Supported values: 16, 24
+>> + */
+>> +	u16                  bit_width;
+>> +/* Number of channels.
+>> + * Supported values: 1 and 2
 > 
-> Another case to handle is that some USB devices can handle way more data
-> than DSPs can chew, for example Pro audio boxes that can deal with 8ch
-> 192kHz will typically use the legacy paths. Some also handle specific
-> formats such as DSD over PCM. So it's quite likely that PCM devices for
-> card0 and card1 above do NOT expose support for the same formats, or put
-> differently that only a subset of the USB device capabilities are
-> handled through the DSP.
-
-Same as the above.  We have programmed the USB backend to support the 
-profiles that the audio DSP can handle.  I assume if there was any other 
-request, the userspace entity would fail the PCM open for that requested 
-profile.
-
-> 
-> And last, power optimizations with DSPs typically come from additional
-> latency helping put the SoC in low-power modes. That's not necessarily
-> ideal for all usages, e.g. for music recording and mixing I am not
-> convinced the DSP path would help at all.
+> that aligns with my feedback on the cover letter, if you connect a
+> device that can support from than 2 channels should the DSP even expose
+> this DSP-optimized path?
 > 
 
-That's true.  At the same time, this feature is more for power related 
-benefits, not specifically for performance. (although we haven't seen 
-any performance related issues w/ this approach on the audio profiles 
-the DSP supports)  I think if its an audio profile that supports a high 
-sample rate and large number of channels, then the DSP wouldn't be able 
-to support it anyway, and userspace could still use the legacy path. 
-This would allow for those high-performance audio devices to not be 
-affected.
+My assumption is that I programmed the DAIs w/ PCM formats supported by 
+the DSP, so I think the ASoC core should not allow userspace to choose 
+that path if the hw params don't fit/match.
+
+> Oh and I forgot, what happens if there are multiple audio devices
+> connected, can the DSP deal with all of them? If not, how is this handled?
+> 
+
+This is one topic that we were pretty open ended on.  At least on our 
+implementation, only one audio device can be supported at a time.  We 
+choose the latest device that was plugged in or discovered by the USB 
+SND class driver.
+
+>> + */
+>> +	u16                  num_channels;
+>> +/* Data format supported by the USB. The supported value is
+>> + * 0 (#AFE_USB_AUDIO_DATA_FORMAT_LINEAR_PCM).
+>> + */
+>> +	u16                  data_format;
+>> +/* this field must be 0 */
+>> +	u16                  reserved;
+>> +/* device token of actual end USB aduio device */
+> 
+> typo: audio
+> 
+
+Thanks
+
+>> +	u32                  dev_token;
+>> +/* endianness of this interface */
+>> +	u32                   endian;
+> 
+> Is this a USB concept? I can't recall having seen any parts of the USB
+> audio class spec that the data can be big or little endian?
+> 
+
+No, this is probably just something our audio DSP uses on the AFE 
+commands that it receives.
+
+>> +/* service interval */
+>> +	u32                  service_interval;
+>> +} __packed;
+> 
+>> +int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
+>> +{
+>> +	union afe_port_config *pcfg = &port->port_cfg;
+>> +	struct afe_param_id_usb_audio_dev_params usb_dev;
+>> +	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
+>> +	struct afe_param_id_usb_audio_svc_interval svc_int;
+>> +	int ret = 0;
+>> +
+>> +	if (!pcfg) {
+>> +		pr_err("%s: Error, no configuration data\n", __func__);
+> 
+> can you use a dev_err() here and the rest of the code?
+> 
+
+Sure.
 
 Thanks
 Wesley Cheng
