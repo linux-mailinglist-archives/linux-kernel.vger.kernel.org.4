@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B2F65FEFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C408665FEFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbjAFKaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S231404AbjAFKer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbjAFK35 (ORCPT
+        with ESMTP id S229597AbjAFKep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:29:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 654FD736C7;
-        Fri,  6 Jan 2023 02:28:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFDEB11FB;
-        Fri,  6 Jan 2023 02:28:50 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DCF83F23F;
-        Fri,  6 Jan 2023 02:28:07 -0800 (PST)
-Date:   Fri, 6 Jan 2023 10:28:03 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        =?UTF-8?B?QW5kcsOhcyBTemVtesO2?= <szemzo.andras@gmail.com>,
-        Fabien Poussin <fabien.poussin@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: arm: sunxi: document MangoPi MQ-R
- board name
-Message-ID: <20230106102803.3e905d1c@donnerap.cambridge.arm.com>
-In-Reply-To: <4d6aec55-c53e-0aba-1168-8a9a80a3b598@linaro.org>
-References: <20230106010155.26868-1-andre.przywara@arm.com>
-        <20230106010155.26868-4-andre.przywara@arm.com>
-        <4d6aec55-c53e-0aba-1168-8a9a80a3b598@linaro.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 6 Jan 2023 05:34:45 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB9D69B37;
+        Fri,  6 Jan 2023 02:34:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VZ--e1q_1673001277;
+Received: from 30.221.147.58(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZ--e1q_1673001277)
+          by smtp.aliyun-inc.com;
+          Fri, 06 Jan 2023 18:34:39 +0800
+Message-ID: <7c85c49d-ce6c-cadb-dea3-56dbfa43086c@linux.alibaba.com>
+Date:   Fri, 6 Jan 2023 18:34:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/6] perf vendor events arm64: Add topdown L1 metrics
+ for neoverse-n2
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1672745976-2800146-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <5c5716e5-b2ff-67cd-b608-4eeffa7e04bc@oracle.com>
+ <1f3d53cb-4160-e29d-3934-d6a488d9fd49@linux.alibaba.com>
+ <7aa225df-af25-a6be-9bef-c965488ba43a@oracle.com>
+ <d4d132d9-1513-6a4e-981f-aa4bc4ebbcbb@linux.alibaba.com>
+ <00bf227a-75ce-c63c-c740-89b8d2b27e1c@oracle.com>
+ <CAP-5=fVGmjFOZqOk0E1bcqeTHcJhEmoA-vrKcHLOs4B_ythT1g@mail.gmail.com>
+ <6971b848-2754-6909-d36b-ea80fe157e95@oracle.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <6971b848-2754-6909-d36b-ea80fe157e95@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 10:21:04 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> On 06/01/2023 02:01, Andre Przywara wrote:
-> > The MangoPi MQ-R board is a close relative to its Allwinner D1/D1s
-> > siblings, but features two Arm Cortex-A7 cores instead of a RISC-V core.
-> > 
-> > Add the board/SoC compatible string pair to the list of known boards.
-> > 
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > ---
-> >  Documentation/devicetree/bindings/arm/sunxi.yaml | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > index 3ad1cd50e3fe0..ce445c5ed81c8 100644
-> > --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> > @@ -843,6 +843,11 @@ properties:
-> >            - const: wexler,tab7200
-> >            - const: allwinner,sun7i-a20
-> >  
-> > +      - description: MangoPi MQ-R board
-> > +        items:
-> > +          - const: widora,mangopi-mq-r  
+
+在 2023/1/6 下午6:14, John Garry 写道:
+> On 05/01/2023 21:13, Ian Rogers wrote:
+>>>> This may be a feasible idea. The value of slots comes from the register PMMIR_EL1, which I can read in
+>>>> /sys/bus/event_source/device/armv8_pmuv3_*/caps/slots. But how do I replace the slots in MetricExpr with the
+>>>> read slots values? Currently I understand that parameters in metricExpr only support events and constants.
+>>>>
+>>> Maybe during runtime we could create a pseudo metric/event for SLOT.
+>> For Intel we do this by just having a different constant for each
+>> architecture. It is fairly easy to add a new "literal", so you could
+>> add a #slots in expr__get_literal:
+>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/expr.c?h=perf*core*n407__;LyM!!ACWV5N9M2RV99hQ!IHcZFuFaLdQDQvVOnHVlbbME2S4aW8GohWUkydlejpi7ifFz61r7RutGXReRt0d88X_vDfkTySCiuD2PqOA$  Populating it would be the challenge 😄
+
+Yes! I was thinking the same as you, I found this method from the SMT_on variable in icl_metrics.json, then I
+tried it and it worked, so excited!
+
 > 
-> Not documented vendor prefix.
+> Thanks for the pointer. I think that the challenge in populating it really comes down to whether we would really want to make this generic.
+> 
+> I suppose that for arm64 we could have a method which accesses this PMMIR_EL1 register, while for other archs we could have a weak function which just returns NAN. If other archs want to use this key expr, they can add their own method.
+> 
 
-Yes, after sending I realised that I forgot to mention that this
-series relies on Samuel's D1/D1s DT series[1], which adds the basic .dtsi
-this builds on, but also adds this vendor string[2].
-Functionality-wise this also relies on the R528/T113-s clock series[3].
+Now I have to use this method, because I just found out that neoverse-n2 has been changed to neoverse-n2-v2,
+merging n2 and v2. The slots of n2 are 5, and the slots of v2 are 8. I will release the v6 patch and put the
+metric in the sbsa.json file. The metrics in sbsa.json is only applicable to arm64, so even if x86 cannot get
+the slots value, there will be no conflict.
 
-Cheers,
-Andre
 
-[1]
-https://lore.kernel.org/linux-arm-kernel/20221231233851.24923-1-samuel@sholland.org/
-[2]
-https://lore.kernel.org/linux-arm-kernel/20221231233851.24923-3-samuel@sholland.org/
-[3]
-https://lore.kernel.org/linux-arm-kernel/20221231231429.18357-1-samuel@sholland.org/
+> Out of curiosity, do you know if x86 has such a capability to get this slot info from HW?
+> 
+
