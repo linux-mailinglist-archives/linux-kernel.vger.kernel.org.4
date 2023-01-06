@@ -2,79 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B8766007A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC7366007E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbjAFMpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S233525AbjAFMs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjAFMpx (ORCPT
+        with ESMTP id S229701AbjAFMsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:45:53 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E769B2D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:45:51 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t15so1161466wro.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:45:51 -0800 (PST)
+        Fri, 6 Jan 2023 07:48:25 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F706E413
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:48:24 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso983943wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:48:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=khPmDzOyxE/W50Ody7PwHzpUcoSlWvXrUU0o2jFfLxk=;
-        b=Fvsz5yRrcMX4nxoWRAXgOW27XaqYBWwY/JJP4Fojd5awfjCnzaOBcg5ufYCfqbDjGo
-         uriwH7YQ+Go5EIRB9pOhU0M16q5ShJ8HZjF/BzJUMEtBy4eXSbsBrrUtBU9MWxQgAMcD
-         TLc8uuMvd3SHIb7wl7LZZ8wT4KB8+CYXOMoGVRveeuBbnImDlUWpVINhGAu24isKgTr6
-         cz6bN4U1vkJnY0d9ngCJaMj3QKWdru2dGZtObkMcm7WNXRfDxA/4EAbQTmoVy2Vr+iE4
-         hBMHq9xY5COTWPBPdhY+agc7wN2vYeD3HdG7AqGDTRx82Totq6x1B0PEHhPuYONTVnMt
-         C6IQ==
+        bh=8zVNUT3bgdnMkFHoj/GybUreH+dejeypvrE/0mlGO44=;
+        b=RLC4VF3LVFfa0bOsrwXfVnS6UTPE8TaIBoiP8TlbOSfaW4I0JqJ2Io23P0TSAHqCCu
+         DHE1TXTIS5AzTr2RGltgLFG+Aco9X3ZY1L7QnO+HaZeIwZ5VfcAE2mFlrCt3Sg9NHp5d
+         1QG1PW20BpMEqgjWeMknBPLUsuFxI7dKRWOpQ245bGXK5aV1qSD5MtscROyyT94iwqgs
+         TSsDipA04LOSx70GU34PifTCQxjWI3Do4TSTWu9mbleO5PmcBmbtAfGJsYNmY02VUHMK
+         tCSzEXzicW1n4FLhB0rilYbyjDAGnHn5lkWHxEo4HfLZmF6zgnIUZT+ymH5w6i9wpFgw
+         aHcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=khPmDzOyxE/W50Ody7PwHzpUcoSlWvXrUU0o2jFfLxk=;
-        b=bdUG3b+ZbVwdmxVaTIUuyeBUBi6SShh60XRoDgj+gxGTqZU7Iil/2QUfhhiI65b+NY
-         kosPhJpfag2OKONrOVQjM5uFKNrNaaEBUSxOOcoYeR2qwMHt+MG0BPxiUK3JEaV65gPq
-         npUTS6+vrizQKy1QJZNc3uWnlAHJcukbUmFpQ12Xxdz1JXHlNVVuSA7X4/AlbiX87RcE
-         tB+emt266l7LToqBZsysEtrGon0bpxsrW3Qv4Kc28F9ifvBKBqCQjefzfopoXSccm+og
-         apMHS+jmOL1WmZS289e10aeytWFHASUE2Rxem0MbvutYMH9w4IuDKxv7Qqjlis0OoEEr
-         smGw==
-X-Gm-Message-State: AFqh2kqrYytIRdrXPOg11onB4sSDxcFqOlgyHVBsVSvDVBM8aKJ0/w0u
-        r8CmiXcnP1jkJReK17a/PDQ5MQ==
-X-Google-Smtp-Source: AMrXdXuoIOO5FVUdypctPo2dsGnGrRrAcBI04oxEbt1bBMpKVgLXEnDGKxUhk1TmLa3v1vFVO23y7w==
-X-Received: by 2002:a5d:4249:0:b0:276:d612:4bbe with SMTP id s9-20020a5d4249000000b00276d6124bbemr33577771wrr.38.1673009150157;
-        Fri, 06 Jan 2023 04:45:50 -0800 (PST)
+        bh=8zVNUT3bgdnMkFHoj/GybUreH+dejeypvrE/0mlGO44=;
+        b=I91AFzMKQTCFmxVsy9fFFTOAfOqwe+NBs+czMLNn1IjJOaw8wEDDwzLVMJjXfu1gKO
+         ITRmR36Oo6KtiKjny2zqIc9xziZxsRHbyKhHKUat1V0OV/3UXq3tcXmTFkxAhgJ5rfU/
+         TkY2BS1yFmWIx6lcNJNjoz9IuA1wDS4BVezpDZ7OLfPBhnPpR+CG7SsTItncVSoAc8y+
+         Esom3wgsv1Jkx0s1HJ/24TB+9Pt4DuTek8P0t+xtVGgdfUBaQU2mUdQVfblCz9d6fzjw
+         Wksg2Yf/UaD6RkFSTQpzVcW5hACio8oCQHpw2ndqLtMI+9OmWAhfRMi967eLznZXMzAA
+         Z6FA==
+X-Gm-Message-State: AFqh2kq1xzLxcHpH7KDbgMKlKkE9oFeeL4RlPkyTvygvwSqLhNSvZUbx
+        LYTCnveR1n1YYPUFgwFviYY/jA==
+X-Google-Smtp-Source: AMrXdXvTAo5ItVnUoTZAbTRPzwj3gQr3rM9LmIfwukZgRbRtovmTeFlA8otEKXpd826Eati8fuXXjQ==
+X-Received: by 2002:a05:600c:3d91:b0:3d9:103d:9078 with SMTP id bi17-20020a05600c3d9100b003d9103d9078mr38149211wmb.22.1673009302667;
+        Fri, 06 Jan 2023 04:48:22 -0800 (PST)
 Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f8-20020a0560001b0800b002423edd7e50sm1100348wrz.32.2023.01.06.04.45.47
+        by smtp.gmail.com with ESMTPSA id h10-20020a05600c2caa00b003cfd58409desm6235286wmc.13.2023.01.06.04.48.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 04:45:48 -0800 (PST)
-Message-ID: <c114239e-2dae-3962-24f3-8277ff173582@linaro.org>
-Date:   Fri, 6 Jan 2023 13:45:46 +0100
+        Fri, 06 Jan 2023 04:48:21 -0800 (PST)
+Message-ID: <5ad7a6bc-0ffd-9d2d-ed80-62c3530cf2fa@linaro.org>
+Date:   Fri, 6 Jan 2023 13:48:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v3 4/7] dt-bindings: net: Add support StarFive dwmac
+Subject: Re: [PATCH v7 7/9] dt/bindings: drm/bridge: it6505: Add mode-switch
+ support
 Content-Language: en-US
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230106030001.1952-1-yanhong.wang@starfivetech.com>
- <20230106030001.1952-5-yanhong.wang@starfivetech.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20230105132457.4125372-1-treapking@chromium.org>
+ <20230105132457.4125372-8-treapking@chromium.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106030001.1952-5-yanhong.wang@starfivetech.com>
+In-Reply-To: <20230105132457.4125372-8-treapking@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,16 +105,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 03:59, Yanhong Wang wrote:
-> Add documentation to describe StarFive dwmac driver(GMAC).
-> 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> ---
->  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->  .../bindings/net/starfive,jh7110-dwmac.yaml   | 113 ++++++++++++++++++
->  MAINTAINERS                                   |   5 +
+On 05/01/2023 14:24, Pin-yen Lin wrote:
+> ITE IT6505 can be used in systems to switch the DP traffic between
+> two downstreams, which can be USB Type-C DisplayPort alternate mode
+> lane or regular DisplayPort output ports.
 
-Order the patches correctly. Why this binding patch is split from previous?
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
+> 
+> Update the binding to accommodate this usage by introducing a
+> data-lanes and a mode-switch property on endpoints.
+> 
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> 
+> ---
+> 
+> Changes in v7:
+> - Fixed issues reported by dt_binding_check.
+> - Updated the schema and the example dts for data-lanes.
+> - Changed to generic naming for the example dts node.
+> 
+> Changes in v6:
+> - Remove switches node and use endpoints and data-lanes property to
+>   describe the connections.
+> 
+>  .../bindings/display/bridge/ite,it6505.yaml   | 95 ++++++++++++++++---
+>  1 file changed, 84 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> index b16a9d9127dd..1ee7cd0d2035 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> @@ -77,20 +77,45 @@ properties:
+>          unevaluatedProperties: false
+>          description: Video port for DP output
+>  
+> -        properties:
+> -          endpoint:
+> +        patternProperties:
+> +          "^endpoint@[01]$":
+>              $ref: /schemas/graph.yaml#/$defs/endpoint-base
+>              unevaluatedProperties: false
+>  
+>              properties:
+> +              reg:
+> +                maxItems: 1
+> +
+> +              remote-endpoint: true
+> +
+>                data-lanes:
+> -                minItems: 1
+> -                uniqueItems: true
+> -                items:
+> -                  - enum: [ 0, 1 ]
+> -                  - const: 1
+> -                  - const: 2
+> -                  - const: 3
+> +                oneOf:
+> +                  - minItems: 1
+
+Drop minItems.
+
+> +                    maxItems: 1
+
+Actually drop this as well and just use items with one item (enum).
+
+> +                    items:
+> +                      enum: [0, 1, 2, 3]
+> +
+> +                  - items:
+> +                      - const: 0
+> +                      - const: 1
+> +
+> +                  - items:
+> +                      - const: 2
+> +                      - const: 3
+> +
+> +                  - items:
+> +                      - const: 0
+> +                      - const: 1
+> +                      - const: 2
+> +                      - const: 3
+> +
+> +              mode-switch:
+> +                type: boolean
+> +                description: Register this node as a Type-C mode switch or not.
+> +
+> +            required:
+> +              - reg
+> +              - remote-endpoint
+>  
+>      required:
+>        - port@0
+> @@ -102,7 +127,6 @@ required:
+>    - pwr18-supply
+>    - interrupts
+>    - reset-gpios
+> -  - extcon
+>    - ports
+>  
+>  additionalProperties: false
+> @@ -139,8 +163,11 @@ examples:
+>                  };
+>  
+>                  port@1 {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+>                      reg = <1>;
+> -                    it6505_out: endpoint {
+> +                    it6505_out: endpoint@0 {
+> +                        reg = <0>;
+>                          remote-endpoint = <&dp_in>;
+>                          data-lanes = <0 1>;
+>                      };
+> @@ -148,3 +175,49 @@ examples:
+>              };
+>          };
+>      };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c3 {
+
+Just i2c
 
 Best regards,
 Krzysztof
