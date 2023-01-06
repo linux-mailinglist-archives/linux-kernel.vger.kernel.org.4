@@ -2,195 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A0C66047F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4C8660481
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbjAFQjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
+        id S235413AbjAFQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbjAFQjE (ORCPT
+        with ESMTP id S235440AbjAFQj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:39:04 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9217378A65;
-        Fri,  6 Jan 2023 08:39:03 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 306Fn7S8014062;
-        Fri, 6 Jan 2023 16:38:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CeXlX0s+orjC2dhmPD+GUdFg6bkJa/KBwHIzDdgndjc=;
- b=YVPnDWVbH4QHUZEEIXABNJ4jWVDTOAoHn/rryjnn8TjfZvJTC+9CLp7i9Fqpv0ueA9Pg
- fkBrP/Ii53IV7zzkQVF9UmvhMS2groPV8Vwh756rK4CoRqehWiQp+xr/7S2fs3FQmAZB
- KRQNnCUJjcyEB+/jYwnEgEgUfBzRkSUCTGOWzNzBBLwLf98rVGibUGbzBhmWYTThbfGj
- U49fyeX4pxAt2ThKeo15MVMIEK5WpgzSwQ3xJVl7kCMYYkE/jNijLGH9IzbB8N40ekad
- vSiwsFV0bjLj7pKMfb41PUeS/e+SOfXylxnqa6vDWhIU4ezpzxFSh+FgbWGlSem2MBaO 2A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mx3s1terj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Jan 2023 16:38:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 306GcWrX010026
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 6 Jan 2023 16:38:32 GMT
-Received: from [10.216.49.11] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 6 Jan 2023
- 08:38:29 -0800
-Message-ID: <a613ee3e-e45c-f84a-362f-9b0651a83f5e@quicinc.com>
-Date:   Fri, 6 Jan 2023 22:08:25 +0530
+        Fri, 6 Jan 2023 11:39:29 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7877778A64;
+        Fri,  6 Jan 2023 08:39:28 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id t17so4663184eju.1;
+        Fri, 06 Jan 2023 08:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=62whTgwgxgcK47Dt+65MfHt3OP2RRvwYQXr7nW+cRsc=;
+        b=PXjjrBc0txLZcl8hUAjtECmhB84OGy+/jHK9l6ujHR1e5Z5AkJGvyt4BN+OvrCIQdE
+         CPdMqmCVq3YfxeeKMD+3GuwQypFZ+OLegZyBmgOAsGnirVk4zjrXVmCoCUYZ4s5J0uwh
+         EUgebIhXbNkym9OsA7dSvSPgVJ4QCv9WSifZN2YzlveTQGSkJ+0k/1DLTnAtUnrgP9Mm
+         Znifygp9Zwn7W01AxqzY+v9JYrZeTALnwb8sydq/ha+YzqKqupbwRNSSn2TAdtvSTUyi
+         UwpSILaa97KtddjgvInx9m1srk0ZdsAafe7U9A6bIYtVnl2WwTkQJyz76lWsVjr/WlSt
+         4ZCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=62whTgwgxgcK47Dt+65MfHt3OP2RRvwYQXr7nW+cRsc=;
+        b=ugxAtGsw19SyAerRcRVJY0CvvRpE605m5GDAvpfHbKzRR910SbqcAn8RAooxcjRX6Z
+         v9xUeHYnUec9/Jpbqcn3wgfCwEN3PV/82I7UDR/veMGDaETnQgQB83ToN5YmBCsu1O6y
+         BAB1JqD8+PQL474xRCsSf812Ttq0Fg4Umg2Vn6K9bAy99zbTC9cW7a2yYovjs/gcMoBK
+         dhNR7BSaW505+3bHNn6bpxpRz4vZ68O7RjfvIfof83Jt6tlF4em3KQdxILcLJ5ltb8lt
+         aWbHdVr6zMPRbSshYyoPUoXBVAfqEX4bRGvu0sdyJXFMSekKH50eeRMVVI4+wQeE9FG3
+         b11A==
+X-Gm-Message-State: AFqh2kqkY05geFjYR8LawMTpFPfUz3qAFXDnQDCZAqX5hDnEpuNGY3Zq
+        KSWgjvuPdwrtsLjw5JDoMOk=
+X-Google-Smtp-Source: AMrXdXtuU8FtF1HayoHRDOCl0DcmSv/ba7G3iGXBIv7V3RJcx1lMYP4kSihxNp+rXs7/25uR5ySdVg==
+X-Received: by 2002:a17:906:12c7:b0:7c1:639:6b42 with SMTP id l7-20020a17090612c700b007c106396b42mr56094594ejb.62.1673023166932;
+        Fri, 06 Jan 2023 08:39:26 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id w2-20020aa7cb42000000b0046a0096bfdfsm646278edt.52.2023.01.06.08.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 08:39:26 -0800 (PST)
+Date:   Fri, 6 Jan 2023 18:39:24 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 1/3] net: dsa: mv88e6xxx: change default
+ return of mv88e6xxx_port_bridge_flags
+Message-ID: <20230106163924.jxrdthslsxjogahs@skbuf>
+References: <20230106160529.1668452-1-netdev@kapio-technology.com>
+ <20230106160529.1668452-2-netdev@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <maz@kernel.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
- <Y7bar/zQ4khMDyiv@FVFF77S0Q05N>
-From:   Yogesh Lal <quic_ylal@quicinc.com>
-In-Reply-To: <Y7bar/zQ4khMDyiv@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ikwzcN-muuQhFcwp8rz7yd8rHXxbYNYB
-X-Proofpoint-GUID: ikwzcN-muuQhFcwp8rz7yd8rHXxbYNYB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-06_10,2023-01-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxscore=0
- bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301060128
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106160529.1668452-2-netdev@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 06, 2023 at 05:05:27PM +0100, Hans J. Schultz wrote:
+> The default return value -EOPNOTSUPP of mv88e6xxx_port_bridge_flags()
+> came from the return value of the DSA method port_egress_floods() in
+> commit 4f85901f0063 ("net: dsa: mv88e6xxx: add support for bridge flags"),
+> but the DSA API was changed in commit a8b659e7ff75 ("net: dsa: act as
+> passthrough for bridge port flags"), resulting in the return value
+> -EOPNOTSUPP not being valid anymore, and sections for new flags will not
+> need to set the return value to zero on success, as with the new mab flag
+> added in a following patch.
+> 
+> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+> ---
 
-On 1/5/2023 7:42 PM, Mark Rutland wrote:
-> On Thu, Jan 05, 2023 at 07:03:48PM +0530, Yogesh Lal wrote:
->> Hi,
->>
->> We are observing issue on A73 core where ERRATUM_858921 is broken.
-> Do you *only* see this issue on v5.15.y, or is mainline (e.g. v6.2-rc2) also
-> broken?
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Checked the code path and looks like its broken on mainline also.
+If a tag was not added on purpose, please state why and what changed.
 
-> I don't see any fix that fits your exact description below, but I do see that
-> we've made a bunch of changes in this area since.
->
->> On 5.15 kernel arch_timer_enable_workaround is set by reading
->> arm64_858921_read_cntpct_el0 and arm64_858921_read_cntvct_el0 during timer
->> register using following path.
->>
->> arch_timer_enable_workaround->atomic_set(&timer_unstable_counter_workaround_in_use,
->> 1);
->>
->> [code snap]
->> 564 static
->> 565 void arch_timer_enable_workaround(const struct
->> arch_timer_erratum_workaround *wa,
->> 566                               bool local)
->> 567 {
->> 568     int i;
->> 569
->> 570     if (local) {
->> 571 __this_cpu_write(timer_unstable_counter_workaround, wa);
->> 572     } else {
->> 573             for_each_possible_cpu(i)
->> 574                     per_cpu(timer_unstable_counter_workaround, i) = wa;
->> 575     }
->> 576
->> 577     if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
->> 578 atomic_set(&timer_unstable_counter_workaround_in_use, 1);
->>
->>
->> and based on above workaround enablement , appropriate function to get
->> counter is used.
->>
->> 1008 static void __init arch_counter_register(unsigned type)
->> 1009 {
->> 1010     u64 start_count;
->> 1011
->> 1012     /* Register the CP15 based counter if we have one */
->> 1013     if (type & ARCH_TIMER_TYPE_CP15) {
->> 1014         u64 (*rd)(void);
->> 1015
->> 1016         if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
->> 1017             arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
->> 1018             if (arch_timer_counter_has_wa())
->> 1019                 rd = arch_counter_get_cntvct_stable;
->> 1020             else
->> 1021                 rd = arch_counter_get_cntvct;
->> 1022         } else {
->> 1023             if (arch_timer_counter_has_wa())
->> 1024                 rd = arch_counter_get_cntpct_stable;
->> 1025             else
->> 1026                 rd = arch_counter_get_cntpct;
->> 1027         }
->> [snap]
->> 1043     /* 56 bits minimum, so we assume worst case rollover */
->> 1044     sched_clock_register(arch_timer_read_counter, 56, arch_timer_rate);
->>
->>
->> As our boot cores are not impacted by errata sched_clock_register() will
->> register !arch_timer_counter_has_wa() callback.
-> It would be helpful to mention this fact (that the system is big.LITTLE, and
-> the boot cores are not Cortex-A73) earlier in the report.
-will take care
->
->> Now when errata impacted core boots up and sched_clock_register already
->> register will !arch_timer_counter_has_wa() path.
->> As sched_clock_register is not per_cpu bases so arch_timer_read_counter will
->> always point to !arch_timer_counter_has_wa() function calls.
-> Hmm... yes, AFAICT this cannot work unless the affected CPUs are up before we
-> probe, and it doesn't make much sense for arch_counter_register() to look at
-> arch_timer_counter_has_wa() since it can be called before all CPUs are up.
->
->> Looks like this bug is side effect of following patch:
->>
->> commit 0ea415390cd345b7d09e8c9ebd4b68adfe873043
->> Author: Marc Zyngier <marc.zyngier@arm.com>
->> Date:   Mon Apr 8 16:49:07 2019 +0100
->>
->>      clocksource/arm_arch_timer: Use arch_timer_read_counter to access stable
->> counters
->>
->>      Instead of always going via arch_counter_get_cntvct_stable to access the
->>      counter workaround, let's have arch_timer_read_counter point to the
->>      right method.
->>
->>      For that, we need to track whether any CPU in the system has a
->>      workaround for the counter. This is done by having an atomic variable
->>      tracking this.
->>
->>      Acked-by: Mark Rutland <mark.rutland@arm.com>
->>      Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
->>      Signed-off-by: Will Deacon <will.deacon@arm.com>
->>
-> Yeah, that does look to be broken, but I think there are futher issues anyway
-> (e.g. late onlining).
->
-> AFAICT we need to detect this *stupidly early* in the CPU bringup path in order
-> to handle this safely, which is quite painful.
->
-> What a great.
->
-> Thanks,
-> Mark.
+Missing tags:
+
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
