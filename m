@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BEF6603D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA026603DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjAFQB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S234327AbjAFQDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjAFQBz (ORCPT
+        with ESMTP id S231237AbjAFQD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:01:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA6058D24;
-        Fri,  6 Jan 2023 08:01:50 -0800 (PST)
+        Fri, 6 Jan 2023 11:03:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C663687A9;
+        Fri,  6 Jan 2023 08:03:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3DF961787;
-        Fri,  6 Jan 2023 16:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42071C433D2;
-        Fri,  6 Jan 2023 16:01:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MJcD+P6R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1673020904;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBBdu/U+hz6Cjc+bNOWE5qE0BXhjUVEUBxjGp1oqy34=;
-        b=MJcD+P6RLNx85zvcTDbwATN1tyZPlfMj+IMI/v6tpbViVXdxcmKNhOrtlI3XjusmCbv5+x
-        J7TpkFOXiZ4iZ6OI5++8yRhz1LF/WD1nLP6TXO7dsHRPReRqLgS/U1bVqRxHu2ZlnLVq+g
-        zbMdCIya0ydVUzw1sn2CPgnVex97g/c=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d703d995 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 6 Jan 2023 16:01:44 +0000 (UTC)
-Date:   Fri, 6 Jan 2023 17:01:42 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, tbroch@chromium.org,
-        semenzato@chromium.org, dbasehore@chromium.org,
-        keescook@chromium.org
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
- suspend fails
-Message-ID: <Y7hF5vG8rWjbCLyL@zx2c4.com>
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
- <20230106030156.3258307-1-Jason@zx2c4.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4930DB81CDC;
+        Fri,  6 Jan 2023 16:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E2CC433D2;
+        Fri,  6 Jan 2023 16:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673021002;
+        bh=4SszgloLESJ9Z/oK4FE1YKuoW/GK96FBWkUuAnmvgLQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qzWxQcfJNUp5m9I7Ji/7kTT8W6fKWhXGKUoxWK2wy7GU1g7bi/gFJJMviU/QzPDTx
+         FHzRvCmfh/QDbeWwGE497oDvmMs7WR47xTiCmWF7w5Z6LnMrkqASEusXKG2/JThbng
+         y9uU3c6NtrBBRoZ3zwkS5bOqGGhyx+F27pdgIgoemW9s14k4b5ryw48DOW067uvnbZ
+         oYkNDV9E5X2qq/Uv/Ozgsl6SW8vwNN8/hfyQBHiMb1TRXGsj9wt8r9sKUSWlLhRQI0
+         Uy78KccldBm4xAjotlaJmicEVJWu9kh2tFlUYYeJcac3ErnoPoIX4pVuk9p+A5nHdA
+         2EGzqKnchCxTA==
+Date:   Fri, 6 Jan 2023 10:03:27 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Justin Iurman <justin.iurman@uliege.be>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ipv6: ioam: Replace 0-length array with flexible array
+Message-ID: <Y7hGT/KFR7aPHvxs@work>
+References: <20230105222115.never.661-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106030156.3258307-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230105222115.never.661-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Todd & ChromeOS folks,
+On Thu, Jan 05, 2023 at 02:21:16PM -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace struct ioam6_trace_hdr's
+> "data" 0-length array with a flexible array. Detected with GCC 13,
+> using -fstrict-flex-arrays=3:
+> 
+> net/ipv6/ioam6_iptunnel.c: In function 'ioam6_build_state':
+> net/ipv6/ioam6_iptunnel.c:194:37: warning: array subscript <unknown> is outside array bounds of '__u8[0]' {aka 'unsigned char[]'} [-Warray-bounds=]
+>   194 |                 tuninfo->traceh.data[trace->remlen * 4] = IPV6_TLV_PADN;
+>       |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+> In file included from include/linux/ioam6.h:11,
+>                  from net/ipv6/ioam6_iptunnel.c:13:
+> include/uapi/linux/ioam6.h:130:17: note: while referencing 'data'
+>   130 |         __u8    data[0];
+>       |                 ^~~~
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Justin Iurman <justin.iurman@uliege.be>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-On Fri, Jan 06, 2023 at 04:01:56AM +0100, Jason A. Donenfeld wrote:
-> TPM 1 is sometimes broken across system suspends, due to races or
-> locking issues or something else that haven't been diagnosed or fixed
-> yet, most likely having to do with concurrent reads from the TPM's
-> hardware random number generator driver. These issues prevent the system
-> from actually suspending, with errors like:
-> 
->   tpm tpm0: A TPM error (28) occurred continue selftest
->   ...
->   tpm tpm0: A TPM error (28) occurred attempting get random
->   ...
->   tpm tpm0: Error (28) sending savestate before suspend
->   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
->   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
->   tpm_tis 00:08: PM: failed to suspend: error 28
->   PM: Some devices failed to suspend, or early wake event detected
-> 
-> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
-> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
-> directly because the TPM maintainers weren't available. However, it
-> seems like this just addresses the most common cases of the bug, rather
-> than addressing it entirely. So there are more things to fix still,
-> apparently.
-> 
-> In lieu of actually fixing the underlying bug, just allow system suspend
-> to continue, so that laptops still go to sleep fine. Later, this can be
-> reverted when the real bug is fixed.
-> 
-> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
-> Cc: stable@vger.kernel.org # 6.1+
-> Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
 > ---
-> This is basically untested and I haven't worked out if there are any
-> awful implications of letting the system sleep when TPM suspend fails.
-> Maybe some PCRs get cleared and that will make everything explode on
-> resume? Maybe it doesn't matter? Somebody well versed in TPMology should
-> probably [n]ack this approach.
-
-When idling scrolling on my telephone to try to see what the
-implications of skipping TPM_ORD_SAVESTATE could be, I stumbled across
-some ChromeOS commits related to it, and realized that, ah-hah, finally
-there's an obvious group of stakeholders who make heavy use of the TPM
-and have likely amassed some expertise on it.
-
-So I was wondering if you'd take a look at this patch briefly to make
-sure it won't break ChromeOS laptops.
-
-Jason
+>  include/uapi/linux/ioam6.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/ioam6.h b/include/uapi/linux/ioam6.h
+> index ac4de376f0ce..8f72b24fefb3 100644
+> --- a/include/uapi/linux/ioam6.h
+> +++ b/include/uapi/linux/ioam6.h
+> @@ -127,7 +127,7 @@ struct ioam6_trace_hdr {
+>  #endif
+>  
+>  #define IOAM6_TRACE_DATA_SIZE_MAX 244
+> -	__u8	data[0];
+> +	__u8	data[];
+>  } __attribute__((packed));
+>  
+>  #endif /* _UAPI_LINUX_IOAM6_H */
+> -- 
+> 2.34.1
+> 
