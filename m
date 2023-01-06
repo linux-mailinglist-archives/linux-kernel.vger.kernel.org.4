@@ -2,93 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A816602D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2B36602D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbjAFPOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S229623AbjAFPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjAFPOJ (ORCPT
+        with ESMTP id S234786AbjAFPNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:14:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9303780AFA
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673018006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vvgD97kU9+qL6QG9gHAa/Xv7qOhCnerL5qxmQkJWWRU=;
-        b=S4W5IiEH87D/5Lj5NUTU/tpDdgAJ20erRIgYWJvVX915DKZLBkizBlR8PE0QfYHwv0pxVE
-        dUrcD/PmK8CVz0sATPAZRXzi/PGBa7Fra7UqU1UQZ1/X3r6nQDChWQxsNc1y4KzQKOPDQd
-        RIEV4dp2RBenSsLf+iKlVJloFDzSmog=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-78-D-HdO6c6MbeoP8lGewUIBw-1; Fri, 06 Jan 2023 10:13:25 -0500
-X-MC-Unique: D-HdO6c6MbeoP8lGewUIBw-1
-Received: by mail-il1-f198.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so1267662ill.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:13:25 -0800 (PST)
+        Fri, 6 Jan 2023 10:13:34 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87671809BA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:13:33 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c11ae6ab25so20824177b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WQYhbBO5EgEKPlarlDf3lbw8Z+u809vOBp5gbzOXfWg=;
+        b=ZglYSagXvvcpZ/nsgRjuPaZDjdPN8PQgxIP65++2BPx/oEUTNGiJ6AoAHFhWjzunNj
+         z0Wh2NzigVLGZE5V70sHsDkSHRIlbX04YSsFY4kZj+VKrKXUSKQU/IHyWYpeZ4h6s+LM
+         HuFMdrRs+7Os/tAO0gnglPLlsTOnUvsLWM2eD5F3eYPeJZTBYEIeitL6HpEE9KDqjSpQ
+         fHJLpcogYbfis5/hdrejzsvN++vqkalAmAZWn3OYTiEmPV1uKdzaXwfIs9Cwkqa4oU3m
+         vJ6baOqAhLGcADA5RNODdFXe/HvYbRrf2AfZG0Xg+OxM7u0cMNGAGrzoIYzm23eopTfF
+         RLWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vvgD97kU9+qL6QG9gHAa/Xv7qOhCnerL5qxmQkJWWRU=;
-        b=4FprfzIQ3dGU+Jk20KMO3LuRsYjhj9XeDdQstJqLY/GmiAzkwMjpLBN97opnvmYfwg
-         Ub63wX4U7wzDCanlYRlqI2zHDPqQwDMRIxOUacoLL2X21bby5ot3kL2Aj7tYOtfm1tq3
-         3wb1XfR867AkPu2cVwLOSkUht1rmOWC/aAHSLR6iYusDRNEsfj6BQILXOfTbSoQkUnpD
-         XK/9r7qrEVUyepCLOTAf9J4rOr3y6Y1zsLQCTp6gSQ+dLuoVhtQNnoC3KIuyGF+ewbjg
-         Y4FPekfYpEMR2sTxviRu8wzCxvXZGUsIqMwiUKCHvUJI0g4E4I10+amwYHY7JklKoiHB
-         RfnA==
-X-Gm-Message-State: AFqh2kou/dDPfGixlNBVd9fE7+LEU2qltNAlkndpUkF6mrk2PTUHC90V
-        lZWkXc6f8Wqb3YMhc+fNbMYJPw/U4/E6qOEA51ZwklGGr/HiStGIiGkSw9v5yrMBB23CtlH0aN9
-        CEG6LsJ0NAQ22cO/j0/l+2DIm
-X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr24217607ilh.5.1673018004595;
-        Fri, 06 Jan 2023 07:13:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs3hQLfmCVyQgkBZC8bBnFmi+ERVvFTRai4qzR4899jssfiWjGnVGb901SbWzQdZA/o/Zn/ZA==
-X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr24217586ilh.5.1673018004392;
-        Fri, 06 Jan 2023 07:13:24 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
-        by smtp.gmail.com with ESMTPSA id s11-20020a92cc0b000000b0030380d1e24bsm444093ilp.30.2023.01.06.07.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 07:13:23 -0800 (PST)
-Date:   Fri, 6 Jan 2023 10:13:14 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 34/46] hugetlb: userfaultfd: when using MADV_SPLIT, round
- addresses to PAGE_SIZE
-Message-ID: <Y7g6ihsCTIC765CO@x1n>
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-35-jthoughton@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105101844.1893104-35-jthoughton@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WQYhbBO5EgEKPlarlDf3lbw8Z+u809vOBp5gbzOXfWg=;
+        b=2vNDX4dst3HGe71ZArnun7ZRnQJh5hav4USi7McdjUrQKPGekxESUdNbWaBJQiJx5Y
+         vIhmbvBxL1BsU4ugaAxBuP03srEAsHCAPJFDprJie1In6pzyp6wv3MN7O+oVO5ak+7Rv
+         xJ/MbhWF4JOXY9GIeFUToV+1mN0h+pYsyv1qDTfc/Fp4TJXmR6SMqmEC66JSFPoNcmXF
+         xrZRCbZ32wQZgsuNu30yfMWxK4YkBKqceBNpyiKfry2mnG+3wFYlLbMGMxxzMPHBbAg/
+         EjoisngqqwKIzGzs8PKkpOqevrG+etRqsikqbrT2uiYxvmhf50VE6jh2lBFoC60kM4Fp
+         Arcg==
+X-Gm-Message-State: AFqh2kowwdKb6MOS638TxF/cVvbwds+4N65tqnlm/N6vMkZchu04OnZY
+        78QSi2C5toRLiZ7IdLRZrBiAaiYQrAk/
+X-Google-Smtp-Source: AMrXdXv4uHiZIJSyj4+N+cNmODTWl//P88+WIKFyg84i0Dqs6IfbUibr86rm2sJOmfCfZgkb0LKGk2RcYAU8
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b317:a30:653a:18e5])
+ (user=irogers job=sendgmr) by 2002:a0d:cbd5:0:b0:469:d2b9:d8e8 with SMTP id
+ n204-20020a0dcbd5000000b00469d2b9d8e8mr5538863ywd.177.1673018012862; Fri, 06
+ Jan 2023 07:13:32 -0800 (PST)
+Date:   Fri,  6 Jan 2023 07:13:19 -0800
+Message-Id: <20230106151320.619514-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Subject: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+From:   Ian Rogers <irogers@google.com>
+To:     Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, acme@kernel.org, irogers@google.com,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,90 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 10:18:32AM +0000, James Houghton wrote:
-> MADV_SPLIT enables HugeTLB HGM which allows for UFFDIO_CONTINUE in
-> PAGE_SIZE chunks. If a huge-page-aligned address were to be provided,
-> userspace would be completely unable to take advantage of HGM. That
-> would then require userspace to know to provide
-> UFFD_FEATURE_EXACT_ADDRESS.
-> 
-> This patch would make it harder to make a mistake. Instead of requiring
-> userspace to provide UFFD_FEATURE_EXACT_ADDRESS, always provide a usable
-> address.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  mm/hugetlb.c | 31 +++++++++++++++----------------
->  1 file changed, 15 insertions(+), 16 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 5af6db52f34e..5b6215e03fe1 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -5936,28 +5936,27 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
->  						  unsigned long addr,
->  						  unsigned long reason)
->  {
-> +	u32 hash;
-> +	struct vm_fault vmf;
-> +
->  	/*
->  	 * Don't use the hpage-aligned address if the user has explicitly
->  	 * enabled HGM.
->  	 */
->  	if (hugetlb_hgm_advised(vma) && reason == VM_UFFD_MINOR)
-> -		haddr = address & PAGE_MASK;
-> -
-> -	u32 hash;
-> -	struct vm_fault vmf = {
-> -		.vma = vma,
-> -		.address = haddr,
-> -		.real_address = addr,
-> -		.flags = flags,
-> +		haddr = addr & PAGE_MASK;
->  
-> -		/*
-> -		 * Hard to debug if it ends up being
-> -		 * used by a callee that assumes
-> -		 * something about the other
-> -		 * uninitialized fields... same as in
-> -		 * memory.c
-> -		 */
-> -	};
-> +	vmf.vma = vma;
-> +	vmf.address = haddr;
-> +	vmf.real_address = addr;
-> +	vmf.flags = flags;
+Including libbpf header files should be guarded by
+HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+under HAVE_BPF_SKEL.
 
-Const fields here:
+Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+Reported-by: Mike Leach <mike.leach@linaro.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-trace.c    | 2 ++
+ tools/perf/util/bpf_counter.h | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-mm/hugetlb.c: In function ‘hugetlb_handle_userfault’:
-mm/hugetlb.c:5961:17: error: assignment of member ‘vma’ in read-only object
- 5961 |         vmf.vma = vma;
-      |                 ^ 
-mm/hugetlb.c:5962:21: error: assignment of member ‘address’ in read-only object
- 5962 |         vmf.address = haddr;   
-      |                     ^      
-mm/hugetlb.c:5963:26: error: assignment of member ‘real_address’ in read-only object                                                                                                          
- 5963 |         vmf.real_address = addr;
-
-> +	/*
-> +	 * Hard to debug if it ends up being
-> +	 * used by a callee that assumes
-> +	 * something about the other
-> +	 * uninitialized fields... same as in
-> +	 * memory.c
-> +	 */
-
-PS: I think we can drop this along the way.
-
->  
->  	/*
->  	 * vma_lock and hugetlb_fault_mutex must be dropped before handling
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
-
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index 86e06f136f40..d21fe0f32a6d 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -16,7 +16,9 @@
+ 
+ #include "util/record.h"
+ #include <api/fs/tracing_path.h>
++#ifdef HAVE_LIBBPF_SUPPORT
+ #include <bpf/bpf.h>
++#endif
+ #include "util/bpf_map.h"
+ #include "util/rlimit.h"
+ #include "builtin.h"
+diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+index 4dbf26408b69..c6d21c07b14c 100644
+--- a/tools/perf/util/bpf_counter.h
++++ b/tools/perf/util/bpf_counter.h
+@@ -4,9 +4,12 @@
+ 
+ #include <linux/list.h>
+ #include <sys/resource.h>
++
++#ifdef HAVE_LIBBPF_SUPPORT
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+ #include <bpf/libbpf.h>
++#endif
+ 
+ struct evsel;
+ struct target;
+@@ -87,6 +90,8 @@ static inline void set_max_rlimit(void)
+ 	setrlimit(RLIMIT_MEMLOCK, &rinf);
+ }
+ 
++#ifdef HAVE_BPF_SKEL
++
+ static inline __u32 bpf_link_get_id(int fd)
+ {
+ 	struct bpf_link_info link_info = { .id = 0, };
+@@ -127,5 +132,6 @@ static inline int bperf_trigger_reading(int prog_fd, int cpu)
+ 
+ 	return bpf_prog_test_run_opts(prog_fd, &opts);
+ }
++#endif /* HAVE_BPF_SKEL */
+ 
+ #endif /* __PERF_BPF_COUNTER_H */
 -- 
-Peter Xu
+2.39.0.314.g84b9a713c41-goog
 
