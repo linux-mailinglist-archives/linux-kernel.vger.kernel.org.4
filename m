@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2553865FD0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2819365FD11
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjAFIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S229709AbjAFIs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjAFIrl (ORCPT
+        with ESMTP id S232243AbjAFIsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:47:41 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036663D2A;
-        Fri,  6 Jan 2023 00:47:40 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NpH614dQtz8R039;
-        Fri,  6 Jan 2023 16:47:37 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 3068lVvb047944;
-        Fri, 6 Jan 2023 16:47:31 +0800 (+08)
-        (envelope-from guo.ziliang@zte.com.cn)
-Received: from mapi (xaxapp03[null])
-        by mapi (Zmail) with MAPI id mid32;
-        Fri, 6 Jan 2023 16:47:33 +0800 (CST)
-Date:   Fri, 6 Jan 2023 16:47:33 +0800 (CST)
-X-Zmail-TransId: 2afb63b7e025ffffffffe75b211b
-X-Mailer: Zmail v1.0
-Message-ID: <202301061647338189934@zte.com.cn>
-Mime-Version: 1.0
-From:   <guo.ziliang@zte.com.cn>
-To:     <bhelgaas@google.com>
-Cc:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chen.lin5@zte.com.cn>, <guo.ziliang@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBQQ0k6IG9mOiBXYXJuIGlmIGJyaWRnZSBiYXNlL2xpbWl0IHJlZ2lvbiBvdmVybGFwcyB3aXRoIHN5c3RlbSByYW0gcmVnaW9u?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 3068lVvb047944
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63B7E029.000 by FangMail milter!
-X-FangMail-Envelope: 1672994857/4NpH614dQtz8R039/63B7E029.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<guo.ziliang@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63B7E029.000/4NpH614dQtz8R039
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        Fri, 6 Jan 2023 03:48:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48954724;
+        Fri,  6 Jan 2023 00:48:45 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso1054800pjc.2;
+        Fri, 06 Jan 2023 00:48:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CLvpBtlWPC1Y4yYI2pgDTW/iPqU69O+/L6LCbdiNubM=;
+        b=lHv5XTXiqHurmIC9daS85WL8F1hlIf+iMEPyKW/hqT5o6m23V36EImDG5+lebQRKh7
+         2rP/ozBPce66wr0G1nAHk8/dW/TCH5f1TsDPgdXZmFDqO5RiiValeEKncRc2RHt4kILf
+         eonuRBauT79z5oxxhHdll1stttLZGbIvf+OyUqPvaVX5K7Bg4/2e85/Wgh3kvRtnjoql
+         hS8c9IpERfH9+FDXga1NmZqwbw/Qrr0D8PaqUpr+7sRtH5lorO8aHxZu06g51dOUf58b
+         m+KeVRccO0fjzADOYFQplOOFDksFH4Eeo2d/d3NFs6OyU6noDiqMFRtJEoc79SyrI4Tm
+         iNfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CLvpBtlWPC1Y4yYI2pgDTW/iPqU69O+/L6LCbdiNubM=;
+        b=B/1+p1JdVnUiUe32VPR8lhWnBhvDJUVYXqzpxz7HTdkFt1QCmBJEM2apcev/0Rcff4
+         KU902RQ6gulDaVRXm11RUGLE3MRxNvyV1oatRLAypIBC9INfKGeYBzQNGGiq3UUnbMnS
+         5DdJv1rJqJlw0FQAj4+u17ASED2bscNbzcJnpPfnerrSTT5Lii1CUOk/XNUKkOMcWehX
+         2iV2CF6Q9Pz3JsWCUu6gyk5H4jXKAgY4PzdFaSW2OOVuukscWhdStOb/kuzeDa4qqB+t
+         jf9d80bmNDm4ClKYu9iTZhNwvxh8OaRiIr3OLKNNSD7EsiPG+Th9jETWi92edhbbYEsW
+         C2Ig==
+X-Gm-Message-State: AFqh2kr2RC8/QBK6Jq5QQQPD31rJ2ePGt39g7Roo0y9jfFplAmWhZxj/
+        K7UDD4+ueGWvV4r4Mgmx45wcram2Mw/y
+X-Google-Smtp-Source: AMrXdXtgJ2BhPl0zgwGWxM9NuOuMxVGVUoOI1lEAZJenlI7nk4b+Rj04PBbjF8EF5bk+mhPxDQqjhw==
+X-Received: by 2002:a17:902:d346:b0:192:9160:6cd with SMTP id l6-20020a170902d34600b00192916006cdmr35802234plk.13.1672994924239;
+        Fri, 06 Jan 2023 00:48:44 -0800 (PST)
+Received: from localhost.localdomain ([144.214.0.13])
+        by smtp.gmail.com with ESMTPSA id o9-20020a170903210900b0017fe9b038fdsm469840ple.14.2023.01.06.00.48.41
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 06 Jan 2023 00:48:43 -0800 (PST)
+From:   Hao Sun <sunhao.th@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
+Subject: [PATCH] bpf: skip task with pid=1 in send_signal_common()
+Date:   Fri,  6 Jan 2023 16:48:38 +0800
+Message-Id: <20230106084838.12690-1-sunhao.th@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,57 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Lin <chen.lin5@zte.com.cn>
-bridge base/limit(memory behind in lspci info, outbound pcie address/size)
-region is used to route outbound mem read/write transaction to ep. This
-base/limit region also may filter out inbound transactions which will
-result in inbound(eg: dma) transaction fail.
+The following kernel panic can be triggered when a task with pid=1
+attach a prog that attempts to send killing signal to itself, also
+see [1] for more details:
 
-For example, if bridge base/limit is [0x20000000, 0x203fffff], system ram
-is [0x20000000, 0x27ffffff]. The inbound mapping is usually 1:1 equal
-mapping. When allocated system ram for inbound tansaction is 0x20004000
-(any in bridge base/limit), this inbound transactions will be filter out.
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+CPU: 3 PID: 1 Comm: systemd Not tainted 6.1.0-09652-g59fe41b5255f #148
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0x100/0x178 lib/dump_stack.c:106
+panic+0x2c4/0x60f kernel/panic.c:275
+do_exit.cold+0x63/0xe4 kernel/exit.c:789
+do_group_exit+0xd4/0x2a0 kernel/exit.c:950
+get_signal+0x2460/0x2600 kernel/signal.c:2858
+arch_do_signal_or_restart+0x78/0x5d0 arch/x86/kernel/signal.c:306
+exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+__syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+do_syscall_64+0x44/0xb0 arch/x86/entry/common.c:86
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-AER may report 'UnsupReq' on inbound mem read/write transactions if address
-is in this base/limit region, but not all pcie AER enabled or work well. We
-warn it also in host bridge pci address detection phase.
+So skip task with pid=1 in bpf_send_signal_common() to avoid the panic.
 
-Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
+[1] https://lore.kernel.org/bpf/20221222043507.33037-1-sunhao.th@gmail.com
+
+Signed-off-by: Hao Sun <sunhao.th@gmail.com>
 ---
- drivers/pci/of.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/trace/bpf_trace.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 196834ed44fe..82e09af6c638 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -314,6 +314,8 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 23ce498bca97..ed21ab9fe846 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -844,6 +844,9 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type)
+ 	 */
+ 	if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+ 		return -EPERM;
++	/* Task should not be pid=1 to avoid kernel panic. */
++	if (unlikely(is_global_init(current)))
++		return -EPERM;
+ 	if (unlikely(!nmi_uaccess_okay()))
+ 		return -EPERM;
+ 
 
- 	dev_dbg(dev, "Parsing ranges property...\n");
- 	for_each_of_pci_range(&parser, &range) {
-+		int is_ram;
-+
- 		/* Read next ranges element */
- 		if ((range.flags & IORESOURCE_TYPE_BITS) == IORESOURCE_IO)
- 			range_type = "IO";
-@@ -332,6 +334,18 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
- 		if (range.cpu_addr == OF_BAD_ADDR || range.size == 0)
- 			continue;
-
-+		/*
-+		 * bridge base/limit(memory behind) region may filter out inbound
-+		 * transactions which will result in inbound(eg:dma) fail of ep.
-+		 * AER may report it if enabled, we warn it also.
-+		 */
-+		is_ram = region_intersects(range.pci_addr, range.size,
-+					IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE);
-+		if (is_ram == REGION_INTERSECTS) {
-+			dev_warn(dev, "%#012llx..%#012llx bridge base/limit region overlaps with system ram, may result in inbound fail\n",
-+				 range.pci_addr, range.pci_addr + range.size - 1);
-+		}
-+
- 		err = of_pci_range_to_resource(&range, dev_node, &tmp_res);
- 		if (err)
- 			continue;
+base-commit: 4aea86b4033f92f01547e6d4388d4451ae9b0980
 -- 
-2.15.2
+2.39.0
+
