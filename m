@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A925660639
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99EE66063D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbjAFSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S235021AbjAFSQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAFSO3 (ORCPT
+        with ESMTP id S229698AbjAFSQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:14:29 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BCD7682A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:14:28 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4b718cab0e4so32713737b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:14:28 -0800 (PST)
+        Fri, 6 Jan 2023 13:16:07 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E232DD66;
+        Fri,  6 Jan 2023 10:16:02 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id z7so1615200pfq.13;
+        Fri, 06 Jan 2023 10:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xP3geULSyX4lV8d6R9rMjnULV5w7kHHpTYX3xrPNxuU=;
-        b=UsNe0gNyAmOwYoDLj/i8PWxRee4X8jVDyisS53x003xJU8GpJ9FGr7LBLz9Q7mCcuZ
-         FP3rrd6blhEJhWHOaKCHN4riLuLTcrxVNIBsFEt8yoKjUhMM61KI6jRYNZZUZcDLsxHd
-         YhexIyBurtEAKJ0MtEO5v0WzSugvXSGoaDyejb3le0GET1TY5oD0cvBHWRuCZif2br2K
-         LxVd565xq0N7YcPuCC2Nzv/5fcsQAbUXVBZNE8abWQjr6DdDbpvbkkCdgDnZyVM4X0DL
-         bB5JTEjH/tCsNe8cTCWMiF9KG+7nl6HOBNhqYHa6z9w/U5HsrMW9a7y9LumOrzpeuivT
-         IgSg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tFVy3Y9MVCWte671WOFf60PfUPv+ycHx3SxmfV5kFG8=;
+        b=lbibIMuJyMXbJ2f2OyL1viffjumwMgpmMNynEDue06Z/2mLcY1PturmpBQ0tKz+++O
+         zcR2ZA6fIwexsqo2cb8HATM3qQbVR1vIJDfjMrJwfXDravZuN2XGnn211EJY2m4Pekrz
+         ZVat6RYBgxyrhjNjFOy4L1ereNBKykwwzQU/zYEZPSqFIHwOjbamjqY2NijUtQK8BrJo
+         2nW31/OdZsXqJn/cfjY7+T6dm/lg933yEtQaz4xDtodbAm6qvYILdifMMTBT0N3KQvvv
+         2aIxeB9W2cozL3Gk8bbaJX5HG9/ThseB+GM55mLOAURBKE3rgYfSMlL4/rdL1Nq/cJVC
+         GLiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xP3geULSyX4lV8d6R9rMjnULV5w7kHHpTYX3xrPNxuU=;
-        b=p6RmUqnJSxR5kZFFlxrS/64nyicdeEsVh+kd78zZyPko4JmkdLye9WnvMMDqr/Y8HU
-         SypYnGhD6lXL7LH5rIw6faxDZrFdDY3DHGL8pHXfUCrm3rxDpk8P4KbA6oDYmwrMtcu5
-         v6+Zyjq+acYS7BjQjQ4POlrEHBTJOVBgY+VUF8WKnL5+x0dC12VdFr7wN13ULrlpmIQ+
-         PM0AV7oOlwk8uS0eiSVJcdrObvazBeSW/YkPerh3d+sMVMsPxfL4A0PPQYzTA/eDC3rX
-         tw5kt1ZF97iFgWBqqtJ1sOnqPinp26W6KkS+I9bI0MeqzAqkrcl41D/aGGq20rYQ82bx
-         uQeQ==
-X-Gm-Message-State: AFqh2kqdHjo30U2Y8f0smLlfTqvD+olD5JP4c1ErYU8TM6Kgj5AuW2t6
-        C2PMzI6auhCfdTyFS6OU4WDaaEsz4ccXm1utwVJh3w==
-X-Google-Smtp-Source: AMrXdXslvebv24QddXX/TLgWhNaCTYaNYEw3yuKcUZCybMMAI19TPi0KCw62PgInbStQYarDYBZo8VgZN7ECFstTgWU=
-X-Received: by 2002:a81:6702:0:b0:477:b56e:e1d6 with SMTP id
- b2-20020a816702000000b00477b56ee1d6mr5205418ywc.188.1673028867810; Fri, 06
- Jan 2023 10:14:27 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tFVy3Y9MVCWte671WOFf60PfUPv+ycHx3SxmfV5kFG8=;
+        b=PPL41cYIKZFsAhrkDGoTYxIa7nQOKjrQam58Tz+V7lL0yroZT3DvQJsta/b2h8oH9X
+         L/+0r2weIRrrPxgQPdlhd6scDbBxwDebugEFZdyydOVQzHOJquHbGs1Ep9ZWktA9KLMI
+         xGhLWOUOlm280yNizy+ymhIvNc3GfnHlB4nEi8kEi4OWbVaTYSd+aqwmf4fOmHx9s2es
+         uNQgFyBaaXrnaOaVDViLOG+sPB7qXP4EEig1mCHg68l84WuxgEHHHBsI1yoP3RGpatdO
+         iCapoXTEEvgywTaFPq4YcRcOInS+TbmAGZkxFX6BWawgjiavbadEFzdBNvXQAf8iKtg/
+         CtfQ==
+X-Gm-Message-State: AFqh2koWGvvnXUVDCIbK3WQdX/YljISfP7+1cQCyTS1Jh1cXSVhaazje
+        2Ir6k5DjhZircEHvC1RcPY4PugVhyaw=
+X-Google-Smtp-Source: AMrXdXvWvTQTEvbZZvU5rS7I/TFVOA3XTgW8/cQSAawotu8/CeTy0IWLWu3FuNa7GGXNslr470w3xQ==
+X-Received: by 2002:a05:6a00:d52:b0:585:64d2:54a0 with SMTP id n18-20020a056a000d5200b0058564d254a0mr1659785pfv.24.1673028962204;
+        Fri, 06 Jan 2023 10:16:02 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id w2-20020aa79542000000b0056be4dbd4besm1406580pfq.111.2023.01.06.10.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 10:16:01 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 6 Jan 2023 08:15:59 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     hanjinke <hanjinke.666@bytedance.com>
+Cc:     Jan Kara <jack@suse.cz>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
+ queues for blk-throtl
+Message-ID: <Y7hlX4T1UOmQHiGf@slm.duckdns.org>
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <20230105161854.GA1259@blackbody.suse.cz>
+ <20230106153813.4ttyuikzaagkk2sc@quack3>
+ <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
+ <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
 MIME-Version: 1.0
-References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
-In-Reply-To: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 6 Jan 2023 20:14:16 +0200
-Message-ID: <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
-Subject: Re: Annoying message on the console for the db845c board
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 at 18:37, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
->
-> Hi all,
->
-> Does anyone have an idea on how to fix these timeout messages ? They are
-> displayed again and again every 5 seconds and that saturates the
-> filesystem after awhile.
+Hello,
 
-Could you please check that you have CONFIG_QCOM_RMTFS_MEM enabled and
-the rmtfs daemon running?
-I think that's the usual cause of such messages.
+On Sat, Jan 07, 2023 at 02:07:38AM +0800, hanjinke wrote:
+> In our internal scenario, iocost has been deployed as the main io isolation
+> method and is gradually spreading。
 
->
-> ...
-> [   24.662181] qcom-q6v5-mss 4080000.remoteproc: start timed out
-> [   24.768150] qcom-q6v5-mss 4080000.remoteproc: port failed halt
-> [   24.777618] remoteproc remoteproc0: can't start rproc
-> 4080000.remoteproc: -110
-> [   24.785022] remoteproc remoteproc0: Boot failed: -110
-> [   24.833657] remoteproc remoteproc0: powering up 4080000.remoteproc
-> [   24.840126] remoteproc remoteproc0: Booting fw image
-> qcom/sdm845/mba.mbn, size 238304
-> [   24.897361] qcom-q6v5-mss 4080000.remoteproc: MBA booted without
-> debug policy, loading mpss
-> [   31.573938] qcom-q6v5-mss 4080000.remoteproc: start timed out
-> [   31.680229] qcom-q6v5-mss 4080000.remoteproc: port failed halt
-> [   31.689683] remoteproc remoteproc0: can't start rproc
-> 4080000.remoteproc: -110
-> [   31.697070] remoteproc remoteproc0: Boot failed: -110
-> [   31.765283] remoteproc remoteproc0: powering up 4080000.remoteproc
-> [   31.771758] remoteproc remoteproc0: Booting fw image
-> qcom/sdm845/mba.mbn, size 238304
-> [   31.820553] qcom-q6v5-mss 4080000.remoteproc: MBA booted without
-> debug policy, loading mpss
-> ....
+Ah, glad to hear. If you don't mind sharing, how are you configuring iocost
+currently? How do you derive the parameters?
 
+> But for some specific scenarios with old kernel versions, blk-throtl
+> is alose needed. The scenario described in my email is in the early stage of
+
+Yeah, I think we use blk-throttle in very limited cases currently but might
+need to deploy hard limits more in the future.
+
+> research and extensive testing for it. During this period，some priority
+> inversion issues amoug cgroups or within one cgroup have been observed. So I
+> send this patch to try to fix or mitigate some of these issues.
+
+blk-throttle has a lot of issues which may be difficult to address. Even the
+way it's configured is pretty difficult to scale across different hardware /
+application combinations and we've neglected its control performance and
+behavior (like handling of shared IOs) for quite a while.
+
+While iocost's work-conserving control does address a lot of the use cases
+we see today, it's likely that we'll need hard limits more in the future
+too. I've been thinking about implementing io.max on top of iocost. There
+are some challenges around dynamic vrate adj semantics but it's kinda
+attractive because iocost already has the concept of total device capacity.
+
+Thanks.
 
 -- 
-With best wishes
-Dmitry
+tejun
