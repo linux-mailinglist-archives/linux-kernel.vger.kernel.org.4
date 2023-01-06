@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9E266013D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8283366013E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbjAFNaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:30:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S234703AbjAFNak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjAFNaS (ORCPT
+        with ESMTP id S234196AbjAFNaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:30:18 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247B576838;
-        Fri,  6 Jan 2023 05:30:15 -0800 (PST)
+        Fri, 6 Jan 2023 08:30:20 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C08777C6;
+        Fri,  6 Jan 2023 05:30:17 -0800 (PST)
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 0F9E840011;
-        Fri,  6 Jan 2023 13:30:13 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id B466840010;
+        Fri,  6 Jan 2023 13:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673011814;
+        t=1673011816;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nc6bvDcTrl1Ymn4a/GwwKE3r38ifE4VzNy4POuRlNdA=;
-        b=i0z6ch2YRTEow4Nh52qlH9tsP3VNdYmwUzkKmGYDOynJRz2A2oAHCtG2oMiihHHpJGN6u6
-        zbxqRSLAFFcDWMTe3BoLasDwsEtQ9R/eZz2xw7oPxAyc1GRjfErbmJPp8IiUTMPuqWtPEl
-        n8PYrNRKGfH8qVyb+r2imJhYaSM7vfoOitrPVZWSRjCAq97JEYhvJhL0AGYRUbgTO3fmvJ
-        uIWeP3ozA3HbPNCxiDe9JoQCJ0pVA96pF77MQiX+kWbn13CGuLHPa/DqFfSt4fVpdi10Yt
-        C96Gp1KXVZC5Oh7Muiw/z+xmnJbsayAL5YCgvjHCE0Z/JixuVEfCiYGiGxb+LQ==
+        bh=zHdG5dWGsORYS6XG1CcUMN1p2tcFBkBpXeEXIVWBo8Q=;
+        b=gRZd+VM02MADKNfgu66UEHMokrsVMXI/MBXuX1NRBymAldkteEF3bWjPHiL2Na3Rnsg055
+        sVEWGxJIc5g+uUfFp8PNBfSXAYyF6CzgWrh5Rr0smgVNlH5XZc+OhPVohfonqIvb2V8f0a
+        vFjdzh5h37q7+hvnHCIrE7FNQqysdVcmywDGRMYpvfVCcPnMIQS5ZR0KCKtzrf7uoJcE2W
+        T3sqDZwjXLbzNLR5sI6f3/mJjxBhmFr4IDhYzy4L9VQsbILz5g+ImmLrihNI6Rd0v5gpg3
+        EX5ZXUPKETN8273pnNN+SGqSI11ZZt7zge3UReeT+iGIMHD97ie4yhQ9C5ElsA==
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
@@ -50,51 +50,56 @@ Cc:     linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 03/10] MAINTAINERS: add the Freescale TSA controller entry
-Date:   Fri,  6 Jan 2023 14:29:44 +0100
-Message-Id: <20230106132951.392271-4-herve.codina@bootlin.com>
+Subject: [PATCH 04/10] powerpc/8xx: Use a larger CPM1 command check mask
+Date:   Fri,  6 Jan 2023 14:29:45 +0100
+Message-Id: <20230106132951.392271-5-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230106132951.392271-1-herve.codina@bootlin.com>
 References: <20230106132951.392271-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer
-for the Freescale TSA controller.
+The CPM1 command mask is defined for use with the standard
+CPM1 command register as described in the user's manual:
+  0  |1        3|4    7|8   11|12      14| 15|
+  RST|    -     |OPCODE|CH_NUM|     -    |FLG|
+
+In the QMC extension the CPM1 command register is redefined
+(QMC supplement user's manuel) with the following mapping:
+  0  |1        3|4    7|8           13|14| 15|
+  RST|QMC OPCODE|  1110|CHANNEL_NUMBER| -|FLG|
+
+Extend the check command mask in order to support both the
+standard CH_NUM field and the QMC extension CHANNEL_NUMBER
+field.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/powerpc/platforms/8xx/cpm1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f86d02cb427..2b4f5fe7ebad 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8372,6 +8372,15 @@ S:	Maintained
- F:	drivers/soc/fsl/qe/
- F:	include/soc/fsl/qe/
+diff --git a/arch/powerpc/platforms/8xx/cpm1.c b/arch/powerpc/platforms/8xx/cpm1.c
+index 8ef1f4392086..6b828b9f90d9 100644
+--- a/arch/powerpc/platforms/8xx/cpm1.c
++++ b/arch/powerpc/platforms/8xx/cpm1.c
+@@ -100,7 +100,7 @@ int cpm_command(u32 command, u8 opcode)
+ 	int i, ret;
+ 	unsigned long flags;
  
-+FREESCALE QUICC ENGINE TSA DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linuxppc-dev@lists.ozlabs.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
-+F:	drivers/soc/fsl/qe/tsa.c
-+F:	drivers/soc/fsl/qe/tsa.h
-+F:	include/dt-bindings/soc/fsl-tsa.h
-+
- FREESCALE QUICC ENGINE UCC ETHERNET DRIVER
- M:	Li Yang <leoyang.li@nxp.com>
- L:	netdev@vger.kernel.org
+-	if (command & 0xffffff0f)
++	if (command & 0xffffff03)
+ 		return -EINVAL;
+ 
+ 	spin_lock_irqsave(&cmd_lock, flags);
 -- 
 2.38.1
 
