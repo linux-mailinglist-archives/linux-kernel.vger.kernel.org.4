@@ -2,133 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A502B660A46
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A45660A4A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjAFX3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S236117AbjAFX3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjAFX3K (ORCPT
+        with ESMTP id S235888AbjAFX3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:29:10 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3466488DF0;
-        Fri,  6 Jan 2023 15:29:09 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id v10so3069530edi.8;
-        Fri, 06 Jan 2023 15:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/CHtBfuoBwh3965bbOqa0bDVHTb0f8Tm9+/rTtd0Ow=;
-        b=nNAFW27qekariEEjM4E0cydMN3kbkhn3rQ/aRH9h+cCh0JvnkXT2jOk5cukqT1gDGi
-         v3AsbnQIGDzbKRHZSTrQwI7qVOYhHt7fXeaQK31dgtRcbCy98nCiO+ZoCI2o1k1IiDFu
-         ao9r5KKjtgKBjtuKzsXll+FMEYr7QtmyEEWaK+uoOWSkzqVf1/LXrwYmq+260iv203W/
-         YbV+6cFzM00ABf1Mf9dyzNMN3tZmxi79HUvJRcK67ruEbW0hCPYeJz966mWsjMGNoBU+
-         bonmGWw16jiZpsbAEKELucLVMwWFhVJUUrLTT2uePgbllnFcOBm3jMQDg7K8qEKsUlwz
-         s9Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V/CHtBfuoBwh3965bbOqa0bDVHTb0f8Tm9+/rTtd0Ow=;
-        b=NmpWPsdJXE9dATdPQmdkZ22hoqCJG/c9VndUHzZuRLV/vwghATlj5WPDp4NUnmgWEd
-         7n+B65udy94JM0hSTh2VoojjHNZEgcTTbE/ddaNddOtDPe71tWPPSNCdvU24Q+qaHS8r
-         9zcZWJs/p4EwYYpKZa9WXdJZFmll/vJiR2D16uLKwTTedjRjeY/EAufUh11SW20l30fH
-         BUWixtFa0jg13bKxNCZFovoHafm5N8hXMk2+fqHksk0s4+MSGL04mxHGoYk8vQxZYy09
-         WL7vqjvCk9MEorbMeevuwy3IEEbl8+mGkUhNcGQutuDlA2f2D6y2MTf4zYZU29lRz89k
-         vSHw==
-X-Gm-Message-State: AFqh2ko4QyHdTky3Ty+3CwXtRPhj7u+LbMnFlbG7ig7RfV4RR3Ud3nSa
-        awPWtUBMU8n1b1ILlJ3idpQ=
-X-Google-Smtp-Source: AMrXdXsn0WEffBN4eL5PkzFeQq844b6d6Xzq6XU0xN5TrtgLG+1qyX57k8ID7qYKnH0Sw33cc1fZnA==
-X-Received: by 2002:aa7:d789:0:b0:497:4f53:ee8f with SMTP id s9-20020aa7d789000000b004974f53ee8fmr2427276edq.39.1673047747602;
-        Fri, 06 Jan 2023 15:29:07 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id p18-20020a50cd92000000b0046ba536ce52sm925379edi.95.2023.01.06.15.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 15:29:07 -0800 (PST)
-Date:   Sat, 7 Jan 2023 01:29:05 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <20230106232905.ievmjro2asx3dv3s@skbuf>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <Y7cNCK4h0do9pEPo@shell.armlinux.org.uk>
- <20230106230343.2noq2hxr4quqbtk4@skbuf>
- <3ede0be8-4da5-4f64-6c67-4c9e7853ea50@seco.com>
+        Fri, 6 Jan 2023 18:29:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B568CD0A;
+        Fri,  6 Jan 2023 15:29:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BF6B61F9E;
+        Fri,  6 Jan 2023 23:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BDE8C433F1;
+        Fri,  6 Jan 2023 23:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673047767;
+        bh=lwfSS0TgVuKSvxQOB/bNeAFUOiWtAHKnU5ZnPUUTNEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ULdwoj/gG2DPRAGGJsQ3OqOTh9Enpy6KWAhHuyXwQ9Fdu2fEwDf74kkhjpuMqXqgu
+         /PkdkXEW2V6/f+KQivQFkow/YQEfq7O7bzv+pPzQHvg5dmjmn1/V9Yh8zrobOlRCpF
+         thu9X2dG5ul/lcEvLObRvWedWq7GI64cgp47X8dmeoAHJFNQb98Zi84N/vy/WRe9RW
+         MK9887gUerXGBByoJX4Oo1X0A3+a/KG7GQhc2WF0iMAVW0TNYCWIh7RJTCYU3BLgvg
+         3YsV5ejs5uWIu6nNw80w3D9FwG+gKOghpvK9vLBiZeIKht6yUxFv1MGUitLSpLUorz
+         s/t41KtAuuv2A==
+Date:   Fri, 6 Jan 2023 23:29:21 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using
+ function pointers for cache management
+Message-ID: <Y7iu0RC9jgWh7hfJ@spud>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OpZnInV74VOFB1Cb"
 Content-Disposition: inline
-In-Reply-To: <3ede0be8-4da5-4f64-6c67-4c9e7853ea50@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 06:21:26PM -0500, Sean Anderson wrote:
-> On 1/6/23 18:03, Vladimir Oltean wrote:
-> > On Thu, Jan 05, 2023 at 05:46:48PM +0000, Russell King (Oracle) wrote:
-> >> On Thu, Jan 05, 2023 at 07:34:45PM +0200, Vladimir Oltean wrote:
-> >> > So we lose the advertisement of 5G and 2.5G, even if the firmware is
-> >> > provisioned for them via 10GBASE-R rate adaptation, right? Because when
-> >> > asked "What kind of rate matching is supported for 10GBASE-R?", the
-> >> > Aquantia driver will respond "None".
-> >> 
-> >> The code doesn't have the ability to do any better right now - since
-> >> we don't know what sets of interface modes _could_ be used by the PHY
-> >> and whether each interface mode may result in rate adaption.
-> >> 
-> >> To achieve that would mean reworking yet again all the phylink
-> >> validation from scratch, and probably reworking phylib and most of
-> >> the PHY drivers too so that they provide a lot more information
-> >> about their host interface behaviour.
-> >> 
-> >> I don't think there is an easy way to have a "perfect" solution
-> >> immediately - it's going to take a while to evolve - and probably
-> >> painfully evolve due to the slowness involved in updating all the
-> >> drivers that make use of phylink in some way.
-> > 
-> > Serious question. What do we gain in practical terms with this patch set
-> > applied? With certain firmware provisioning, some unsupported link modes
-> > won't be advertised anymore. But also, with other firmware, some supported
-> > link modes won't be advertised anymore.
-> 
-> Well, before the rate adaptation series, none of this would be
-> advertised. I would rather add advertisement only for what we can
-> actually support. We can always come back later and add additional
-> support.
 
-Well, yes. But practically, does it matter that we are negotiating a
-link speed that we don't support, when the effect is the same (link
-doesn't come up)? The only practical case I see is where advertising
-e.g. an unsupported 2.5G would cause the link to not establish at a
-supported 1G. But as you say, I don't think this will be the case with
-the firmware provisioning that Tim gave as an example?
+--OpZnInV74VOFB1Cb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > IIUC, Tim Harvey's firmware ultimately had incorrect provisioning, it's
-> > not like the existing code prevents his use case from working.
-> 
-> The existing code isn't great as-is, since all the user sees is that we
-> e.g. negotiated for 1G, but the link never came up.
-> 
-> --Sean
+On Fri, Jan 06, 2023 at 11:31:33PM +0100, Arnd Bergmann wrote:
+> On Fri, Jan 6, 2023, at 19:55, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +struct riscv_cache_ops zicbom_cmo_ops =3D {
+> > +	.clean_range =3D &zicbom_cmo_clean_range,
+> > +	.inv_range =3D &zicbom_cmo_inval_range,
+> > +	.flush_range =3D &zicbom_cmo_flush_range,
+> > +};
+> > +#else
+> > +struct riscv_cache_ops zicbom_cmo_ops =3D {
+> > +	.clean_range =3D NULL,
+> > +	.inv_range =3D NULL,
+> > +	.flush_range =3D NULL,
+> > +	.riscv_dma_noncoherent_cmo_ops =3D NULL,
+> > +};
+> > +#endif
+> > +EXPORT_SYMBOL(zicbom_cmo_ops);
+>=20
+> Same here: If the ZICBOM ISA is disabled, nothing should
+> reference zicbom_cmo_ops.
+
+> Also, since ZICBOM is a standard
+> extension, I think it makes sense to always have it enabled,
+> at least whenever noncoherent DMA is supported, that way
+> it can be the default that gets used in the absence of any
+> nonstandard cache controller.
+
+While I think of it, this is not possible as Zicbom requires toolchain
+support whereas the alternative methods for non-coherent DMA do not.
+
+Thanks,
+Conor.
+
+
+--OpZnInV74VOFB1Cb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7iu0AAKCRB4tDGHoIJi
+0lKnAPwP9GjTSF/p2NWFDVeTSbVY5BU7VIVCG30YMppNdquBvQEAtC4SemaEoAHM
+I5qlKNDdbS2X3qEHRE9DcLDTqdRtMA0=
+=ztwi
+-----END PGP SIGNATURE-----
+
+--OpZnInV74VOFB1Cb--
