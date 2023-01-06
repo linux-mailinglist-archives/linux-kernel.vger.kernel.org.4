@@ -2,204 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33317660641
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1E0660645
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbjAFSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S235493AbjAFSSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234793AbjAFSRV (ORCPT
+        with ESMTP id S235321AbjAFSR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:17:21 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D022DF3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:17:20 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id c20so1365749ilj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:17:20 -0800 (PST)
+        Fri, 6 Jan 2023 13:17:59 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396E835929
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:17:58 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m3so1643324wmq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:17:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1nWrzelfArIcGuHXeTwgFSuDsGz4bBzAEBvOTmzqK8s=;
-        b=GviCqBDMsbHSqEZ7te60Ivt8W0zr+ldNmIFdvuQj2jKROT6ilJCUd55JsiRXMYZnVi
-         gKLQdPUy8q5dcS0O1bQCRPcFwP7IKlqOp8c5FbQo7te+CvLleeMbj9tvUnhyNPn3L3Gl
-         Zi+XcXixkDZgVK4U2+Ghv/jQGC+5iPObuxOLQ=
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vZgX/uzlYtYm+9CzMWs/3dsasYH/jPMu/yKWM7axVwk=;
+        b=EYP1baRZFqqVCOv2pOnk8Fyfs9j+68lHjfHjXy3FlgSyMB+a6B7b/8lxKKeXQM6i3+
+         DUnkfdSpmpGibulk4z1SW1HEiJ/8mZiJud0QlpdKVVZWFI5fO126Iwwh2aunqAGusgw9
+         FORTEE3dj1I00pDSrYlO+fYYkuAEfEm/4fEbU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1nWrzelfArIcGuHXeTwgFSuDsGz4bBzAEBvOTmzqK8s=;
-        b=ZeUUYEdQ1aPPJs4jEn0BBsCLYSQHCfvRo6KVI/HzFpt2c2J0JVNWSSdG0stGQvIybO
-         Ie+d1piEciMnN7QyP8D82TH2i6iPzf84dC4jAiDRPD/RZ+BXfnsu7g2AUbGJZ5NwYA6x
-         s/1OHn6ml6USrk32/YcuAo0WJEjxP9VPLsmIwWV4H66VjRWNndXR1PEQZHCpOeMWbNB8
-         7Iva/zu2CGihKK52wiFScmCQ5bf3x+qy3/mZ7GVqno8p9bzDI8+eGN5iQHCKhAnx4Q4r
-         0sz5WBIgWWInF6BrNmQYOPvwX0u3Hau1y6JZpY8snRKJ5weg+L09IGd6tDM88ejqVhwM
-         HFJA==
-X-Gm-Message-State: AFqh2kpFclaYWS6kEKRhN+Qyyf7sUnZOdVzs7mPPFo72y4H+uSwgPhGw
-        ggBRaF1PkbCF7Gkm7mVRY5qtFA==
-X-Google-Smtp-Source: AMrXdXv/vUk/gL6Jl2xL27nlEmdywf/mjK1IuZUYkgiPJdf892p0RRCTlocRVs5eCrAyJNG8DMc2fw==
-X-Received: by 2002:a92:3012:0:b0:30b:b34b:c3bd with SMTP id x18-20020a923012000000b0030bb34bc3bdmr32701767ile.21.1673029039802;
-        Fri, 06 Jan 2023 10:17:19 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id y88-20020a029561000000b0039e2e4c82c8sm502250jah.123.2023.01.06.10.17.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 10:17:19 -0800 (PST)
-Date:   Fri, 6 Jan 2023 18:17:19 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Dhruva Gole <d-gole@ti.com>, lpieralisi@kernel.org,
-        robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH 1/1] PCI: qcom: Add support for system suspend and resume
-Message-ID: <Y7hlr3x9IrT/Kg82@google.com>
-References: <20230103074907.12784-1-manivannan.sadhasivam@linaro.org>
- <20230103074907.12784-2-manivannan.sadhasivam@linaro.org>
- <dad3aba3-a40b-8b76-c689-3dc877800263@ti.com>
- <20230105133639.GC4463@thinkpad>
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vZgX/uzlYtYm+9CzMWs/3dsasYH/jPMu/yKWM7axVwk=;
+        b=3/92hDct59M404zPo+D88vTYiAlreNv2FaYMZEFld3MuRR/wpgvRC17mlAZ2MixhqU
+         HdCwprUFJXhzzGY1Q+4hxhvELeufzSTcfPNjaBRjmXky/HHH7rSyJ4WhFmuyBjOyc4zS
+         B5QUxdy5Zwk2h+WQqBP5Whnmhls9hRiCsXyK9RZ9VHKinUVnF+sbcsIlsBEbvRoIIy7t
+         FH8m7eXq5mCDrJJzsIkck2qu8ICUSw2jD0bTuaKzhISzI5gD/erNNyq9vhXF1Ghgmpyt
+         nk5H5+oIGytnXsIzXSc2HlmkwiGC29bAX/Cvov6qK7aul6Xxcosyplz+pZ42dN0Vs8Ys
+         90fg==
+X-Gm-Message-State: AFqh2kqikkgJPyUREZ0ooT1AtlPKJDxYOend4MdydhcMRg0W/lVmK5T5
+        DiavTPouhTecKY0sPb7Mx8ko/w==
+X-Google-Smtp-Source: AMrXdXsk//Ebc0AFqktmpd6sDIvJObm64v2tJRUyH+TzrQSdtbUZvCiU+wBVSRkdkv1F957NrNmdzA==
+X-Received: by 2002:a05:600c:3d8a:b0:3d3:4406:8a37 with SMTP id bi10-20020a05600c3d8a00b003d344068a37mr40344682wmb.41.1673029076764;
+        Fri, 06 Jan 2023 10:17:56 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003d998412db6sm7762398wmn.28.2023.01.06.10.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 10:17:55 -0800 (PST)
+Date:   Fri, 6 Jan 2023 19:17:53 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Brian Norris <briannorris@chromium.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/atomic: Allow vblank-enabled + self-refresh
+ "disable"
+Message-ID: <Y7hl0Z9PZhFk8On9@phenom.ffwll.local>
+Mail-Followup-To: Brian Norris <briannorris@chromium.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
+References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+ <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105133639.GC4463@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 07:06:39PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Jan 03, 2023 at 04:46:11PM +0530, Dhruva Gole wrote:
+On Fri, Jan 06, 2023 at 06:53:49PM +0100, Daniel Vetter wrote:
+> On Thu, Jan 05, 2023 at 05:40:17PM -0800, Brian Norris wrote:
+> > The self-refresh helper framework overloads "disable" to sometimes mean
+> > "go into self-refresh mode," and this mode activates automatically
+> > (e.g., after some period of unchanging display output). In such cases,
+> > the display pipe is still considered "on", and user-space is not aware
+> > that we went into self-refresh mode. Thus, users may expect that
+> > vblank-related features (such as DRM_IOCTL_WAIT_VBLANK) still work
+> > properly.
 > > 
+> > However, we trigger the WARN_ONCE() here if a CRTC driver tries to leave
+> > vblank enabled here.
 > > 
-> > On 03/01/23 13:19, Manivannan Sadhasivam wrote:
-> > > During the system suspend, vote for minimal interconnect bandwidth and
-> > > also turn OFF the resources like clock and PHY if there are no active
-> > > devices connected to the controller. For the controllers with active
-> > > devices, the resources are kept ON as removing the resources will
-> > > trigger access violation during the late end of suspend cycle as kernel
-> > > tries to access the config space of PCIe devices to mask the MSIs.
-> > > 
-> > > Also, it is not desirable to put the link into L2/L3 state as that
-> > > implies VDD supply will be removed and the devices may go into powerdown
-> > > state. This will affect the lifetime of storage devices like NVMe.
-> > > 
-> > > And finally, during resume, turn ON the resources if the controller was
-> > > truly suspended (resources OFF) and update the interconnect bandwidth
-> > > based on PCIe Gen speed.
-> > > 
-> > > Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
+> > Add a new exception, such that we allow CRTCs to be "disabled" (with
+> > self-refresh active) with vblank interrupts still enabled.
 > > 
-> > Nice to have another driver added to the list of system suspend
-> > support!
+> > Cc: <stable@vger.kernel.org> # dependency for subsequent patch
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> > ---
 > > 
-> > Acked-by: Dhruva Gole <d-gole@ti.com>
+> >  drivers/gpu/drm/drm_atomic_helper.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 > > 
-> > >   drivers/pci/controller/dwc/pcie-qcom.c | 52 ++++++++++++++++++++++++++
-> > >   1 file changed, 52 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 5696e327795b..48810f1f2dba 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -227,6 +227,7 @@ struct qcom_pcie {
-> > >   	struct gpio_desc *reset;
-> > >   	struct icc_path *icc_mem;
-> > >   	const struct qcom_pcie_cfg *cfg;qcom_pcie_icc_update
-> > > +	bool suspended;
-> > >   };
-> > >   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> > > @@ -1835,6 +1836,52 @@ static int qcom_pcie_remove(struct platform_device *pdev)
-> > >   	return 0;
-> > >   }
-> > > +static int qcom_pcie_suspend_noirq(struct device *dev)
-> > > +{
-> > > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > > +	int ret;
-> > > +
-> > > +	ret = icc_set_bw(pcie->icc_mem, 0, 0);
-> > > +	if (ret) {
-> > > +		dev_err(pcie->pci->dev, "Failed to set interconnect bandwidth: %d\n", ret);
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * Turn OFF the resources only for controllers without active PCIe devices. For controllers
-> > > +	 * with active devices, the resources are kept ON and the link is expected to be in L0/L1
-> > > +	 * (sub)states.
-> > > +	 *
-> > > +	 * Turning OFF the resources for controllers with active PCIe devices will trigger access
-> > > +	 * violation during the end of the suspend cycle, as kernel tries to access the PCIe devices
-> > > +	 * config space for masking MSIs.
-> > > +	 *
-> > > +	 * Also, it is not desirable to put the link into L2/L3 state as that implies VDD supply
-> > > +	 * will be removed and the devices may go into powerdown state. This will affect the
-> > > +	 * lifetime of the storage devices like NVMe.
-> > > +	 */
-> > > +	if (!dw_pcie_link_up(pcie->pci)) {
-> > > +		qcom_pcie_host_deinit(&pcie->pci->pp);
-> > > +		pcie->suspended = true;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int qcom_pcie_resume_noirq(struct device *dev)
-> > > +{
-> > > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > > +
-> > > +	if (pcie->suspended) {
-> > > +		qcom_pcie_host_init(&pcie->pci->pp);
-> > > +		pcie->suspended = false;
-> > > +	}
-> > > +
-> > > +	qcom_pcie_icc_update(pcie);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static const struct of_device_id qcom_pcie_match[] = {
-> > >   	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> > >   	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> > > @@ -1870,12 +1917,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
-> > >   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
-> > >   DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
-> > > +static const struct dev_pm_ops qcom_pcie_pm_ops = {
-> > > +	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq, qcom_pcie_resume_noirq)
-> > > +};
-> > > +
-> > >   static struct platform_driver qcom_pcie_driver = {
-> > >   	.probe = qcom_pcie_probe,
-> > >   	.remove = qcom_pcie_remove,
-> > >   	.driver = {
-> > >   		.name = "qcom-pcie",
-> > >   		.of_match_table = qcom_pcie_match,
-> > > +		.pm = &qcom_pcie_pm_ops,
-> > >   	},
-> > >   };
-> > >   module_platform_driver(qcom_pcie_driver);
-> > 
-> > Out of curiosity, were you able to measure how much power you were able
-> > to save after adding suspend support for PCIe? I don't know if clock
-> > gating really saves much amount of power, but yeah its true that we
-> > can't really cut off the power domain entirely in this case.
-> > 
+> > diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+> > index d579fd8f7cb8..7b5eddadebd5 100644
+> > --- a/drivers/gpu/drm/drm_atomic_helper.c
+> > +++ b/drivers/gpu/drm/drm_atomic_helper.c
+> > @@ -1207,6 +1207,12 @@ disable_outputs(struct drm_device *dev, struct drm_atomic_state *old_state)
+> >  
+> >  		if (!drm_dev_has_vblank(dev))
+> >  			continue;
+> > +		/*
+> > +		 * Self-refresh is not a true "disable"; let vblank remain
+> > +		 * enabled.
+> > +		 */
+> > +		if (new_crtc_state->self_refresh_active)
+> > +			continue;
 > 
-> I did not measure the power consumption and I agree that we won't save much
-> power with setting icc bandwidth to 0. But it is better to have something
-> than nothing. And in the coming days, I have plans to look into other power
-> saving measures also.
+> This very fishy, because we check in crtc_needs_disable whether this
+> output should stay on due to self-refresh. Which means you should never
+> end up in here.
+> 
+> And yes vblank better work in self refresh :-) If it doesn't, then you
+> need to fake it with a timer, that's at least what i915 has done for
+> transparent self-refresh.
+> 
+> We might need a few more helpers. Also, probably more igt, or is this
+> something igt testing has uncovered? If so, please cite the igt testcase
+> which hits this.
 
-On a sc7280 system I see a reduction of ~30mW with this patch when no PCI
-card is plugged in. The reduction seems to come from powering the PHY down.
+Ok I think I was a bit slow here, and it makes sense. Except this now
+means we loose this check, and I'm also not sure whether we really want
+drivers to implement this all.
 
-Interestingly on that system power consumption during suspend (without this
-patch) is ~30mW higher *without* a PCI card vs. with a card. Maybe the PHY
-doesn't enter a low power mode when no card is plugged in?
+What I think we want here is a bit more:
+- for the self-refresh case check that the vblank all still works
+
+- check that drivers which use self_refresh are not using
+  drm_atomic_helper_wait_for_vblanks(), because that would defeat the
+  point
+
+- have a drm_crtc_vblank_off/on which take the crtc state, so they can
+  look at the self-refresh state
+
+- fake vblanks with hrtimer, because on most hw when you turn off the crtc
+  the vblanks are also turned off, and so your compositor would still
+  hang. The vblank machinery already has all the code to make this happen
+  (and if it's not all, then i915 psr code should have it).
+
+- I think kunit tests for this all would be really good, it's a rather
+  complex state machinery between modesets and vblank functionality. You
+  can speed up the kunit tests with some really high refresh rate, which
+  isn't possible on real hw.
+
+I'm also wondering why we've had this code for years and only hit issues
+now?
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
