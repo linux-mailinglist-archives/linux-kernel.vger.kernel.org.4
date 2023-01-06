@@ -2,246 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D1565FB69
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 07:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A545C65FB6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 07:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjAFGYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 01:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S231791AbjAFGZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 01:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjAFGYf (ORCPT
+        with ESMTP id S231788AbjAFGZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 01:24:35 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA15F6CFDD
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:24:32 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o15so426099wmr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 22:24:32 -0800 (PST)
+        Fri, 6 Jan 2023 01:25:34 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312DB6AD9A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:25:33 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so4975988pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 22:25:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DV1t0rzqIB6z+X/yrkwUe3maiIiJ2Fcpdq7MxWlVXGk=;
-        b=gQmQGmhfaKEWO6GLxj+xZcZl0OEJwClA+m7G0rYT/qnum8Gestw+8StAQKNHtNQov+
-         czRWH3Oz1pf3C7KUYcqd0yxO1Xi82BF1CN0qdAVba2gK9JuumugjU3kjL1dxrVrg0mQI
-         bwVmdG17+ESfUMrq16/2pWqOxzPauw2s2C2AfEqaghVXIqdvyQQ3eZ1uihm9Ayth6KbM
-         6szgn/uYpXUzJKUjt93P0SCQNeqO5VGgaaMVdJtmSWKtuaVKFADjmNCH4nVerGq9+1zb
-         CBAKp8uva+jOjjuk5IHEhrSSVJXahSfU+Oli7jpFddxZG6a34v23xbLv3JpH76BsU+wY
-         yIfA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YayHG7lExe8amFBKiiDo3qeuO6fzGOFyXNJRlTndIyE=;
+        b=Y29z1GWtlyZLdfJyfGvzO3zxWqYuBWudOWfkzJiIV7d/AhpRS27ZH6IAN+aoHBCvaz
+         B6ah7v1oIewCmGcQ0IZjDKZk8Hwrn7x17NB+36FoWZOCeHVbzd/PqDl85MrFEi3WL1eu
+         EiylNkCc5tCsaYipJ5iRd0nx59HJqmV02fhHg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DV1t0rzqIB6z+X/yrkwUe3maiIiJ2Fcpdq7MxWlVXGk=;
-        b=MmYC+zqsdIzOQdRXab1a0ZAqoIASU+Q7ILii3G+4tdS1e4TZ0QAfVPcgU1amEgr6+q
-         b7NpXGKO9Jw1bwae32m7Bw+4wjG7VTuKJ60SlNNgT3ZXlphObskMNEJxHAG9goux12V4
-         grmGaIA7jd4S8Hokp1pQqLuD6fR7+kM6+xpmR83GoBekaN30p+gcnoztaspzg5GeKDVU
-         UV34ybyKDyT5lpiDc5UHhTLxejiUos4sjZ0FCstLNa5r7k42tku2xpicVF1PTpcMO0Qp
-         oQgTyx8SWG68BMILFI/PRHXvNPdSJ5utGSuhD09jbmJ/ng1x4GrHLQo03RiMd2ijrXvZ
-         8/kQ==
-X-Gm-Message-State: AFqh2kq4bhgt5DTm8XmvWn+QWDThCVgukO9AHglLwisk+fuNDFG0Eura
-        DeKJr07F8+0/bCpiaeK5t6LNsP26w5fs5lu9RpKpDw==
-X-Google-Smtp-Source: AMrXdXvyfLhh52MCe7324YaZzZlNKssK5gq1cKgT7/lg+HimYUwMTBr476xcjRM7156hhU1/e5t7qVZ6t1CbMCiuECc=
-X-Received: by 2002:a05:600c:5d5:b0:3cf:6a4c:af8b with SMTP id
- p21-20020a05600c05d500b003cf6a4caf8bmr3969518wmd.115.1672986271093; Thu, 05
- Jan 2023 22:24:31 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YayHG7lExe8amFBKiiDo3qeuO6fzGOFyXNJRlTndIyE=;
+        b=fkhpe3wXZtwcAhjLZZxfu7kBGHbyDWA71JuxYp9vdCZ08BABFFrpYc3OFpw5WBLeOs
+         I2EEbedujzfiQxqh1EnoFBcl5J/fQNUXIXZy+sW7sIqOJwODKBBQZXexPIFQjUk+63uM
+         gPBaa2kyFNSl+Ym+dd5fnhqWpKHPljqmjyX1aPxfTfeRwe5knFaZBHsR685yjPu9Mzs/
+         u+1+XdjKhCsLaideD9xQ7jPNTzOwSlmZiaSK5m8E7WraTsH6yH6mFxAAdekM0dmMHDFE
+         ahqD0ZYHhr+ONy64T+tfYONo94+lcqaFl12TRenDBBFzKx9hNjR4k/w7LiS3536KOpiF
+         SJeA==
+X-Gm-Message-State: AFqh2kpC7PhLBLCJxXbocJj3Wrw29pTf5dJBkj9qSnmVFcnKVVV1FeJe
+        Zo+Gm0TVxa6RvIRluVXxPmM98g==
+X-Google-Smtp-Source: AMrXdXsJR0Jp0gvO8YvY12mJU7b2mREhu4mq2+p7jeRBSbkqkTeWPoVzJ58HtbpMMkv6mkmDI2j1LQ==
+X-Received: by 2002:a05:6a20:939a:b0:af:9539:a29e with SMTP id x26-20020a056a20939a00b000af9539a29emr65774366pzh.16.1672986332761;
+        Thu, 05 Jan 2023 22:25:32 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h3-20020aa796c3000000b005609d3d3008sm309232pfq.171.2023.01.05.22.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 22:25:32 -0800 (PST)
+Date:   Thu, 5 Jan 2023 22:25:31 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        kernel test robot <lkp@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
+Message-ID: <202301052224.D2569E38@keescook>
+References: <20230106042844.give.885-kees@kernel.org>
+ <CAMZ6RqKghb-YqQuWGiEn8D-CQgvecBxsxUz_2XYE0m3hs752gQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230105172243.7238-1-mike.leach@linaro.org> <CAP-5=fVbPVE4rxJ2s8phhJ5RRH4EnKaWrF2kaT0oCmK6kvhP2g@mail.gmail.com>
- <CAJ9a7Vi7cB2t3wao9d78j3G9v4zpO8_hHf8DB4vKOzgT9O+j6g@mail.gmail.com>
-In-Reply-To: <CAJ9a7Vi7cB2t3wao9d78j3G9v4zpO8_hHf8DB4vKOzgT9O+j6g@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 Jan 2023 22:24:18 -0800
-Message-ID: <CAP-5=fV5tiKNyJRUKC0gD_2Y=RgN=NrAtee4k1ZT1tynyJpL6w@mail.gmail.com>
-Subject: Re: [PATCH] perf build: Fix build error when NO_LIBBPF=1
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, acme@kernel.org, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKghb-YqQuWGiEn8D-CQgvecBxsxUz_2XYE0m3hs752gQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 3:40 PM Mike Leach <mike.leach@linaro.org> wrote:
->
-> Hi,
->
-> On Thu, 5 Jan 2023 at 19:03, Ian Rogers <irogers@google.com> wrote:
+On Fri, Jan 06, 2023 at 02:47:35PM +0900, Vincent MAILHOL wrote:
+> On Fri. 6 Jan 2023 at 13:28, Kees Cook <keescook@chromium.org> wrote:
+> > Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
+> > "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
+> > using -fstrict-flex-arrays=3:
 > >
-> > On Thu, Jan 5, 2023 at 9:22 AM Mike Leach <mike.leach@linaro.org> wrote:
-> > >
-> > > Recent updates to perf build result in the following output when cross
-> > > compiling to aarch64, with libelf unavailable, and therefore
-> > > NO_LIBBPF=1 set.
-> > >
-> > > ```
-> > >   $make -C tools/perf
-> > >
-> > >   <cut>
-> > >
-> > >   Makefile.config:428: No libelf found. Disables 'probe' tool, jvmti
-> > >   and BPF support in 'perf record'. Please install libelf-dev,
-> > >   libelf-devel or elfutils-libelf-devel
-> > >
-> > >   <cut>
-> > >
-> > >   libbpf.c:46:10: fatal error: libelf.h: No such file or directory
-> > >       46 | #include <libelf.h>
-> > >          |          ^~~~~~~~~~
-> > >   compilation terminated.
-> > >
-> > >   ./tools/build/Makefile.build:96: recipe for target
-> > >   '.tools/perf/libbpf/staticobjs/libbpf.o' failed
-> > >
-> > > ```
-> > >
-> > > plus one other include error for <gelf.h>
+> > net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
+> > net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+> >   558 |                         .fs.location = info->rule_locs[i],
+> >       |                                        ~~~~~~~~~~~~~~~^~~
+> > In file included from include/linux/ethtool.h:19,
+> >                  from include/uapi/linux/ethtool_netlink.h:12,
+> >                  from include/linux/ethtool_netlink.h:6,
+> >                  from net/ethtool/common.c:3:
+> > include/uapi/linux/ethtool.h:1186:41: note: while referencing
+> > 'rule_locs'
+> >  1186 |         __u32                           rule_locs[0];
+> >       |                                         ^~~~~~~~~
 > >
-> > Ouch, apologies for the breakage. You wouldn't happen to have
-> > something like a way with say a docker image to repro the problem? The
-> > make line above is somewhat minimal.
+> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 > >
->
-> Unfortunately not - I was cross compiling on my main workstation.
-> However, in theory
-> $make -C tools/perf NO_LIBBPF=1
-> should explicitly exclude the library from the build - which without
-> the fix it does not.
->
-> > > The issue is that the commit noted below adds libbpf to the prepare:
-> > > target but no longer accounts for the NO_LIBBPF define. Additionally
-> > > changing the include directories means that even if the libbpf target
-> > > build is prevented, bpf headers are missing in other parts of the build.
-> > >
-> > > This patch ensures that in the case of NO_LIBBPF=1, the build target is
-> > > changed to a header only target, and the headers are installed, without
-> > > attempting to build the libbpf.a target.
-> > >
-> > > Applies to perf/core
-> > >
-> > > Fixes: 746bd29e348f ("perf build: Use tools/lib headers from install path")
-> > > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > > ---
-> > >  tools/perf/Makefile.perf | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >
-> > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > > index 13e7d26e77f0..ee08ecf469f6 100644
-> > > --- a/tools/perf/Makefile.perf
-> > > +++ b/tools/perf/Makefile.perf
-> > > @@ -305,7 +305,11 @@ else
-> > >  endif
-> > >  LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-> > >  LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-> > > +ifndef NO_LIBBPF
-> > >  LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-> > > +else
-> > > +LIBBPF = $(LIBBPF_INCLUDE)/bpf/bpf.h
-> >
-> > This seems strange, don't we want to avoid libbpf targets?
-> >
->
-> This is a header only target - see my continuation comment below....
->
-> > > +endif
-> > >  CFLAGS += -I$(LIBBPF_OUTPUT)/include
-> > >
-> > >  ifneq ($(OUTPUT),)
-> > > @@ -826,10 +830,16 @@ $(LIBAPI)-clean:
-> > >         $(call QUIET_CLEAN, libapi)
-> > >         $(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
-> > >
-> > > +ifndef NO_LIBBPF
-> > >  $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
-> > >         $(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
-> > >                 O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
-> > >                 $@ install_headers
-> > > +else
-> > > +$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
-> > > +       $(Q)$(MAKE) -C $(LIBBPF_DIR) OUTPUT=$(LIBBPF_OUTPUT)/ \
-> > > +               DESTDIR=$(LIBBPF_DESTDIR) prefix= install_headers
-> > > +endif
-> >
-> > Shouldn't we just be able to conditionalize having $(LIBBPF) as a
-> > dependency for the perf binary? If there is no dependency then the
-> > targets won't be built and we shouldn't need to conditionalize here.
-> >
->
-> I did try doing just that, but the build process does two things when
-> building libbpf
-> a) builds the library
-> b) installs the bpf headers in the libbpf output location.
->
-> Now what the original patch  - "perf build: Use tools/lib headers from
-> install path"  - does is to also change the include paths to the
-> compiler to pick up the headers,
-> removing the line:
->
-> INC_FLAGS += -I$(srctree)/tools/lib/
->
-> from tools/perf/Makefile.config and adding the line
->
-> CFLAGS += -I$(LIBBPF_OUTPUT)/include
->
-> in tools/perf/Makefile.perf (along with similar lines for libperf, libapi etc)
->
-> The result of this is that if you only remove the library build, the
-> headers are not installed and other compilation units fail as the
-> headers are still included even if the library is not in use.
-> These were originally satisfied by the now removed INC_FLAGS +=
-> -I$(srctree)/tools/lib.
->
-> Thus when NO_LIBBPF=1 even though we do not build the library - we
-> still need to install the headers to retain the consistency - hence a
-> "header only" target, that only installs the headers without building
-> the library.
->
-> This avoids restoring the original -I$(srctree)/tools/lib/, which
-> would potentially mess up the oher library builds that have changed
-> their header include paths.
->
-> Regards
->
-> Mike
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: kernel test robot <lkp@intel.com>
+> > Cc: Oleksij Rempel <linux@rempel-privat.de>
+> > Cc: Sean Anderson <sean.anderson@seco.com>
+> > Cc: Alexandru Tachici <alexandru.tachici@analog.com>
+> > Cc: Amit Cohen <amcohen@nvidia.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v3: don't use helper (vincent)
+> 
+> v1: https://lore.kernel.org/all/20230105214126.never.757-kees@kernel.org
+>                                                ^^^^^
+> > v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
+>                                                   ^^^^^
+> v3: https://lore.kernel.org/netdev/20230106042844.give.885-kees@kernel.org
+>                                                   ^^^^
+> 
+> Seriously... :)
 
+Hurray! Someone noticed and it's not even April yet. :) *celebrate*
 
-Thanks Mike,
+-Kees
 
-The -I is needed for the libbpf headers but if NO_LIBBPF is enabled
-then the C define HAVE_LIBBPF_SUPPORT isn't and we shouldn't include
-any of these headers. This means updating the CFLAGS for libbpf should
-only be done if we actually build the static  libbpf.a, the dynamic
-version's headers should already be on the include path. I sent out a
-variant of this fix doing that here:
-https://lore.kernel.org/lkml/20230106061631.571659-1-irogers@google.com/
-
-Apologies again for the breakage, I can buy you a beer the next time
-I'm home in Manchester.
-Ian
-
->
-> > Thanks!
-> > Ian
-> >
-> > >  $(LIBBPF)-clean:
-> > >         $(call QUIET_CLEAN, libbpf)
-> > > --
-> > > 2.17.1
-> > >
->
->
->
-> --
-> Mike Leach
-> Principal Engineer, ARM Ltd.
-> Manchester Design Centre. UK
+-- 
+Kees Cook
