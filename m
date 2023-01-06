@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AB766025A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D7166026E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjAFOiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S233160AbjAFOns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjAFOiM (ORCPT
+        with ESMTP id S235503AbjAFOnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:38:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B538099B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673015846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
-        b=LzahyLOiYxfBw8+iz6KJdvbXLzxyGKM38tJXuvZ99jWXkRaa/pWiyWxnw96ad3VDUa2eXu
-        7q4jlekkasA/LqLYg9M/U5fpDBPx9jLNVaQku8V76TftuHrNV3w7hQrjxJbj82bVr65Szq
-        yH27ihWZYsAqqHcHol1SvEh7iCg56mw=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-47-Ev5Tegd2NiyPhZHz0KIywQ-1; Fri, 06 Jan 2023 09:37:25 -0500
-X-MC-Unique: Ev5Tegd2NiyPhZHz0KIywQ-1
-Received: by mail-il1-f197.google.com with SMTP id s2-20020a056e02216200b0030bc3be69e5so1207253ilv.20
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 06:37:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
-        b=Ittx8lueZuOf1ruxV8ko5FEG5fcjTtslW10gizTJrb9n8QsFeamnQjYSG/ScfdQWCE
-         oFLK7VlVyZks75/zve1mIizNz//iQs0rR9pOu33LbOuvx5E7nwbuwlvD9zEfSpz0Mkvc
-         NmhsBK2yUn104q3ok/pdvUgU8Sz+CTj4v5t+aOzApptWnxrjXJ7rtykzI7hwGS2FSh4z
-         Vfy455nss6BKWdnmACrA5T9yZUFTnnd9NfOZhKf5OcwPxhYDMyO++9vgACscOCzcGaVD
-         FW/Y9+DusqJAreaJRQr8PYwgwiAzz2L/gSiG2ePQwjyX144QqnX4BwKlYr3gWsm6aQmV
-         6L2A==
-X-Gm-Message-State: AFqh2kqxuK7U/E/cSBplvVPpNdzGHBNvdqFtShZLlGxHSbh0p/MQXTHK
-        P0PgezFesGYxOgpSnuHiz4Co2rHnqR4Ionmhg8ev3zevC7NZBjoZPw24ym2Flfl42bRipKn81QD
-        UcUuua8J9YZTTAUt1SXkxAnJh6HQD2vaMdK8xxzaC
-X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id t190-20020a0254c7000000b0038a757fdac9mr4442640jaa.84.1673015844320;
-        Fri, 06 Jan 2023 06:37:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvM4bw2Ko76z00L7EjKh+skm8JncjwnAQJE6ihiSkxq86ANz2AZ+mFp90pOVnrlYrhleh2gJGZWL4Ra8my8I3c=
-X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id
- t190-20020a0254c7000000b0038a757fdac9mr4442635jaa.84.1673015844043; Fri, 06
- Jan 2023 06:37:24 -0800 (PST)
+        Fri, 6 Jan 2023 09:43:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDD480ADD;
+        Fri,  6 Jan 2023 06:43:34 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F183122AA5;
+        Fri,  6 Jan 2023 14:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673016212; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VXOo+m2Ayjo47a4HPksQJilkMyb9b8UgnRO64hze/N4=;
+        b=Ek5WxsnVwShIhYVlxeIoKUYDktam2tv201i/QHJuRhLqWjv1ShId8QEP0ubSZk+zNvS7IW
+        E4RgUCCsJTS/324zFivq8HWEGZMMMfhJVzQSLG1ZKqYyzNzQs0Mq+jb4Cmji8kxvtP391M
+        nlo4CerUbzzEAvMWQIApeJ2ucHo3uYY=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id E5D5F2C141;
+        Fri,  6 Jan 2023 14:43:32 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id A0CC6DA7A3; Fri,  6 Jan 2023 15:38:01 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.2-rc3, part 2
+Date:   Fri,  6 Jan 2023 15:38:00 +0100
+Message-Id: <cover.1672944066.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20230106102332.1019632-9-benjamin.tissoires@redhat.com> <202301062140.zfdqzE9b-lkp@intel.com>
-In-Reply-To: <202301062140.zfdqzE9b-lkp@intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 6 Jan 2023 15:37:12 +0100
-Message-ID: <CAO-hwJK3RetR9T_=4C+3Fmj-ThNx-3XWgrOJGAL9VebM-PdgLw@mail.gmail.com>
-Subject: Re: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
-To:     kernel test robot <lkp@intel.com>
-Cc:     Greg KH <greg@kroah.com>, Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,69 +52,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 2:42 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Benjamin,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on hid/for-next]
-> [also build test WARNING on next-20230106]
-> [cannot apply to shuah-kselftest/next shuah-kselftest/fixes char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2-rc2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-> patch link:    https://lore.kernel.org/r/20230106102332.1019632-9-benjamin.tissoires%40redhat.com
-> patch subject: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
-> config: i386-randconfig-a013
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/46336953b47885c5111b7c1a92403b3d94cf3d41
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
->         git checkout 46336953b47885c5111b7c1a92403b3d94cf3d41
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/bpf/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/hid/bpf/hid_bpf_jmp_table.c:502:6: warning: no previous prototype for function 'call_hid_bpf_prog_put_deferred' [-Wmissing-prototypes]
->    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
->         ^
->    drivers/hid/bpf/hid_bpf_jmp_table.c:502:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
->    ^
->    static
->    1 warning generated.
->
->
-> vim +/call_hid_bpf_prog_put_deferred +502 drivers/hid/bpf/hid_bpf_jmp_table.c
->
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  501
-> 0baef37335dd4d Benjamin Tissoires 2022-11-03 @502  void call_hid_bpf_prog_put_deferred(struct work_struct *work)
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  503  {
-> ade9207f04dc40 Benjamin Tissoires 2023-01-06  504       /* kept around for patch readability, to be dropped in the next commmit */
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  505  }
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  506
->
+Hi,
 
-Oops, this function should have been dropped in 8/9 "HID: bpf: clean
-up entrypoint". It's now dead code. I'll fix it in v2.
+a few more regression and regular fixes. Please pull, thanks.
 
-Cheers,
-Benjamin
+- regressions:
+  - fix assertion condition using = instead of ==
+  - fix false alert on bad tree level check
+  - fix off-by-one error in delalloc search during lseek
 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+- fix compat ro feature check at read-write remount
 
+- handle case when read-repair happens with ongoing device replace
+
+- updated error messages
+
+----------------------------------------------------------------
+The following changes since commit fee4c19937439693f2420a916169d08e88576e8e:
+
+  btrfs: fix fscrypt name leak after failure to join log transaction (2022-12-20 19:43:47 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc2-tag
+
+for you to fetch changes up to 2ba48b20049b5a76f34a85f853c9496d1b10533a:
+
+  btrfs: fix compat_ro checks against remount (2023-01-03 16:22:13 +0100)
+
+----------------------------------------------------------------
+Filipe Manana (1):
+      btrfs: fix off-by-one in delalloc search during lseek
+
+Qu Wenruo (5):
+      btrfs: add error message for metadata level mismatch
+      btrfs: fix false alert on bad tree level check
+      btrfs: handle case when repair happens with dev-replace
+      btrfs: always report error in run_one_delayed_ref()
+      btrfs: fix compat_ro checks against remount
+
+Tanmay Bhushan (1):
+      btrfs: fix ASSERT em->len condition in btrfs_get_extent
+
+ fs/btrfs/bio.c            | 11 ++++++++++-
+ fs/btrfs/disk-io.c        | 11 ++++++++---
+ fs/btrfs/disk-io.h        |  2 +-
+ fs/btrfs/extent-io-tree.c |  2 +-
+ fs/btrfs/extent-tree.c    |  7 +++++--
+ fs/btrfs/extent_io.c      | 30 +++++++++++++++++++++++++-----
+ fs/btrfs/file.c           |  2 +-
+ fs/btrfs/inode.c          |  2 +-
+ fs/btrfs/super.c          |  2 +-
+ 9 files changed, 53 insertions(+), 16 deletions(-)
