@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE30765F8EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D046365F8F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjAFBQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S232689AbjAFBRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 20:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjAFBQH (ORCPT
+        with ESMTP id S231646AbjAFBQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:16:07 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA573E86F
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:14:11 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id ct7-20020a056a000f8700b00582e67e255bso51206pfb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 17:14:11 -0800 (PST)
+        Thu, 5 Jan 2023 20:16:14 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B796865ACD
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:14:17 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id g15-20020a17090a128f00b0022628a85a1cso125277pja.4
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 17:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=7iPI0dl/ko2Lo6A5R8RXBXgr3khsxs/MyGTJ8pdxMPM=;
-        b=ZaSgs0lSr/JJODEuSDEI4kPBIyYKk9ZEyKSnyX14YyGd+KcacGTqLZcQzCGgZE1j/6
-         NhleuIjiv89JqbxHeQJ2Fprh/hJA77EhZiE7Un9s7rlCZWL3wpLO7HF3MQmyLZf7y4Ey
-         VcOQdJzEVe7LplFmBqKjTZykJBAlohsByvNNW9lasR6poy+KaKwQfCauHCUg8lk2GuCr
-         STJy0HpuTrmVNyrlm//D66UZkS31Zf8sJ865YAvoNzjGqsLiiU9H/LbsQC4gJDvKi18C
-         ZEIF2PUBAPFwzWPsCyqVAYSubqlxyCUI3MWPQbqMACZP+SDYU3Zh1jblTcAvddN2fd5p
-         Qc0w==
+        bh=J1V7EU+EWrvW5nteFG4b5GW6PZRHrRfQBnmCjlAIqUI=;
+        b=rDxj9tQKYiqzEAX+7OptTHqneRJr0YZTO6aN9x2uXwofIdTLT+XyoddoR04GgEymcW
+         25D9NbmM6Vgxi0CgBfoiD3JVPyjTkX0GiuWUYqrP0ZNe05jdX/VbXNcZ5c8J0vzsBsv6
+         ujJcI9s4r9ExZTWATWI8o6fbaFJoF+aOmrVNfw4fCQSYCaLNG5VsjIGmNR+08wBm3Drb
+         B57EFQ87pbPdeCc3NufrdRe1bo9pg7o0yCRUEwvs3Hgjzdwo2Ca5VTroIQEdWgSVzzYv
+         mlhm/Z6a0pm/y23HQH6gmGxkAA7HtHBaUvgSffwXOme8r+mYa7SGg7BsGqygbGmKSCda
+         kYBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7iPI0dl/ko2Lo6A5R8RXBXgr3khsxs/MyGTJ8pdxMPM=;
-        b=GvdWmCzCbkjSCVgJv4ryNUAD8zZ/jBEmV1dPyT/tSQpBRu2ELtbhl5W+3PdYnGlMB5
-         Q/bqI7wPC1wuuRHquOB+qUUx2DDWjRGXsjQiq8URuCynSLDgjqSE6AkmqKKGmxGpBgG4
-         k0vgN98ppy0G2VH293ETE1F6oTnxsI2GrAkSkmFY8eQybLC/+fIB6ibVNFGW21FZqcR+
-         687r0yVcKHML94hjyx4c4F5B8bL98Jqmantm4B8RR62wEbAGW4AW5xi10ocaFRRb+XAs
-         apEw1vy2gIuEAvMZxMUdHPMKAEGTTr9/a86+oSDNH1TfpqyNyZMWX/NXedxnMPJTMbM6
-         lO2g==
-X-Gm-Message-State: AFqh2krKmsRdm2BunbWouMd+sAymGatr6dhzTnIzpJjP3QbKvFQCJZ/C
-        ScXz+BUnKH9Kq3OgXYrLVX153smD5q4=
-X-Google-Smtp-Source: AMrXdXuV5ubZU24A/2Z/LOyqgUjmQaAt0DIadBOPeaJ7WZw6iqYZ9yittKRNJ+NxDunMF7rB5NynpgV5WyA=
+        bh=J1V7EU+EWrvW5nteFG4b5GW6PZRHrRfQBnmCjlAIqUI=;
+        b=qdVlcKc8lnOmRQbw4bVLwYn8az+yFPAAhnRNzNH4xxozXwJRBl+g0YnA28U6xGUK4q
+         AaJLw2IAtMgnl7VmbL/jQzJ4BltplceCOcSEgfBxRieLJG4s5NPbr3KEooNF5Mjvui4/
+         9K6BBU7o2mNK+3TUMCOtGmxs40LQwR2E3QJNhtV8mC3l1Ho2RSs0Yqh+wBG+j9jloSlm
+         X3hMhefK2BH18fPsGU1gdB66P8UmuGlj3Qx7ZrYCHiFJOMT6QoequgROollcx87xdTre
+         xBGKWkZjK4JKjOVANBGwzGw8PYxtO55OXt7Kq3d4BRBEuqrq4HAqlaZarkvOKi/7xKrK
+         pDdA==
+X-Gm-Message-State: AFqh2kq8shHN3KpkivsVE0B5iMKPSi2QQ3/AmoTIBrHs7W2SQEN1otnH
+        HScVHpf1uAlvQ/r3zZgMWHBQoQcmwkA=
+X-Google-Smtp-Source: AMrXdXuM1Zf3I6N21WYVCEKzK0BaaasVg37qf8H7UQ2G6VwfuCFBj22ob5iTFvQCuSf2Ul2Ql0Gy5P66Hf4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3604:b0:219:d1eb:b8a1 with SMTP id
- ml4-20020a17090b360400b00219d1ebb8a1mr4230658pjb.174.1672967636674; Thu, 05
- Jan 2023 17:13:56 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:af91:b0:219:9eaa:80e2 with SMTP id
+ w17-20020a17090aaf9100b002199eaa80e2mr3338754pjq.207.1672967638285; Thu, 05
+ Jan 2023 17:13:58 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  6 Jan 2023 01:12:58 +0000
+Date:   Fri,  6 Jan 2023 01:12:59 +0000
 In-Reply-To: <20230106011306.85230-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230106011306.85230-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230106011306.85230-26-seanjc@google.com>
-Subject: [PATCH v5 25/33] KVM: SVM: Always update local APIC on writes to
- logical dest register
+Message-ID: <20230106011306.85230-27-seanjc@google.com>
+Subject: [PATCH v5 26/33] KVM: SVM: Update svm->ldr_reg cache even if LDR is "bad"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -68,7 +67,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,64 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the vCPU's local (virtual) APIC on LDR writes even if the write
-"fails".  The APIC needs to recalc the optimized logical map even if the
-LDR is invalid or zero, e.g. if the guest clears its LDR, the optimized
-map will be left as is and the vCPU will receive interrupts using its
-old LDR.
+Update SVM's cache of the LDR even if the new value is "bad".  Leaving
+stale information in the cache can result in KVM missing updates and/or
+invalidating the wrong entry, e.g. if avic_invalidate_logical_id_entry()
+is triggered after a different vCPU has "claimed" the old LDR.
 
 Fixes: 18f40c53e10f ("svm: Add VMEXIT handlers for AVIC")
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/avic.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ arch/x86/kvm/svm/avic.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 1fd473a57159..144e383a4c5d 100644
+index 144e383a4c5d..5b33f91b701c 100644
 --- a/arch/x86/kvm/svm/avic.c
 +++ b/arch/x86/kvm/svm/avic.c
-@@ -573,7 +573,7 @@ static void avic_invalidate_logical_id_entry(struct kvm_vcpu *vcpu)
- 		clear_bit(AVIC_LOGICAL_ID_ENTRY_VALID_BIT, (unsigned long *)entry);
+@@ -539,7 +539,7 @@ static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
+ 	return &logical_apic_id_table[index];
  }
  
--static int avic_handle_ldr_update(struct kvm_vcpu *vcpu)
-+static void avic_handle_ldr_update(struct kvm_vcpu *vcpu)
+-static int avic_ldr_write(struct kvm_vcpu *vcpu, u8 g_physical_id, u32 ldr)
++static void avic_ldr_write(struct kvm_vcpu *vcpu, u8 g_physical_id, u32 ldr)
  {
- 	int ret = 0;
+ 	bool flat;
+ 	u32 *entry, new_entry;
+@@ -547,15 +547,13 @@ static int avic_ldr_write(struct kvm_vcpu *vcpu, u8 g_physical_id, u32 ldr)
+ 	flat = kvm_lapic_get_reg(vcpu->arch.apic, APIC_DFR) == APIC_DFR_FLAT;
+ 	entry = avic_get_logical_id_entry(vcpu, ldr, flat);
+ 	if (!entry)
+-		return -EINVAL;
++		return;
+ 
+ 	new_entry = READ_ONCE(*entry);
+ 	new_entry &= ~AVIC_LOGICAL_ID_ENTRY_GUEST_PHYSICAL_ID_MASK;
+ 	new_entry |= (g_physical_id & AVIC_LOGICAL_ID_ENTRY_GUEST_PHYSICAL_ID_MASK);
+ 	new_entry |= AVIC_LOGICAL_ID_ENTRY_VALID_MASK;
+ 	WRITE_ONCE(*entry, new_entry);
+-
+-	return 0;
+ }
+ 
+ static void avic_invalidate_logical_id_entry(struct kvm_vcpu *vcpu)
+@@ -575,7 +573,6 @@ static void avic_invalidate_logical_id_entry(struct kvm_vcpu *vcpu)
+ 
+ static void avic_handle_ldr_update(struct kvm_vcpu *vcpu)
+ {
+-	int ret = 0;
  	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -582,10 +582,10 @@ static int avic_handle_ldr_update(struct kvm_vcpu *vcpu)
- 
- 	/* AVIC does not support LDR update for x2APIC */
- 	if (apic_x2apic_mode(vcpu->arch.apic))
--		return 0;
-+		return;
- 
- 	if (ldr == svm->ldr_reg)
--		return 0;
-+		return;
+ 	u32 ldr = kvm_lapic_get_reg(vcpu->arch.apic, APIC_LDR);
+ 	u32 id = kvm_xapic_id(vcpu->arch.apic);
+@@ -589,11 +586,8 @@ static void avic_handle_ldr_update(struct kvm_vcpu *vcpu)
  
  	avic_invalidate_logical_id_entry(vcpu);
  
-@@ -594,8 +594,6 @@ static int avic_handle_ldr_update(struct kvm_vcpu *vcpu)
- 
- 	if (!ret)
- 		svm->ldr_reg = ldr;
+-	if (ldr)
+-		ret = avic_ldr_write(vcpu, id, ldr);
 -
--	return ret;
+-	if (!ret)
+-		svm->ldr_reg = ldr;
++	svm->ldr_reg = ldr;
++	avic_ldr_write(vcpu, id, ldr);
  }
  
  static void avic_handle_dfr_update(struct kvm_vcpu *vcpu)
-@@ -617,8 +615,7 @@ static int avic_unaccel_trap_write(struct kvm_vcpu *vcpu)
- 
- 	switch (offset) {
- 	case APIC_LDR:
--		if (avic_handle_ldr_update(vcpu))
--			return 0;
-+		avic_handle_ldr_update(vcpu);
- 		break;
- 	case APIC_DFR:
- 		avic_handle_dfr_update(vcpu);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
