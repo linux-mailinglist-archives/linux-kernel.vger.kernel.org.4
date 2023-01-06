@@ -2,154 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FFD6606AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7616606AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjAFSw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S235303AbjAFS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjAFSwx (ORCPT
+        with ESMTP id S229586AbjAFS4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:52:53 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93376EDF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:52:52 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bk16so2091079wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:52:52 -0800 (PST)
+        Fri, 6 Jan 2023 13:56:08 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D84377D0B;
+        Fri,  6 Jan 2023 10:56:07 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso1726431wmq.1;
+        Fri, 06 Jan 2023 10:56:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zFR7Wmf9ELtFjlJq04xcru9S2eGwAWVDYFWePjOvsWE=;
-        b=JOtgCNHTFmz8jD2kcDh2BY8qEJFDafRE6HT4cApEbKPvQgifmAp92UAzXqcRzxOeqi
-         VNfYJ15XEzqvwg77AERdY08BX56pUOkxv9Y78wPLj72Tw7JAoQXQAVfbDJxoLtuGZpeY
-         AiqGCU/nqHkttNptiLn7PFFH6buLt9DYx/Veo=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3sUwYegRtAIb+OCTW5mqCGhd7voccHEpdVjTByrjOi8=;
+        b=mvN0mjmHwx/VFu46rg+zvq7VV2GQiEAzy4dIgGeV0yIXxsZrUwYalmgLGt3hYA9c+K
+         mICCY5cg/L9CRr1mMdCiPpsWIVAN13S6u2Cl/VL7fYIgCRxdq6HaBqXEqQd/j3Rk43ku
+         MdnZE/bTw0vfeRKDrDz+1AXCRaHow8HjAjICsrs/UMyI4AM2mK4/KpSVybyepQtbfbVB
+         n0fytKUNYyLxQhud+p3RURKhXkI3bzdSbteZPjnpodGBjtLpZP7H/kR8kh1fUaK4JYon
+         GzHHSm7kHUqUKkpAL+G6reEebXt7y1p84rTANDi1WpYk2V+B1sXpXhFY9UuZxlm0Cv+b
+         Hylg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zFR7Wmf9ELtFjlJq04xcru9S2eGwAWVDYFWePjOvsWE=;
-        b=suvX0RhmfFuS2ijlVgUeDD3STMMMeHXCaXmhjSJKZlybXB6f8jpbZGGyLUCc8IssDp
-         jm+1Qaf5jsAphSFUd8wVy0PM20Hc9ifOKIvo+CU+QYtqyr/zT1opPgCN0iZr2405+3e6
-         kX1IlVzCgkvxhUj700n2n+KVh7Szqc3kg3RI4zUTGjb2dRR40XMym17lRdxpjiByO1Ez
-         KoRDkvtVBh01GjlBxkPtqqJnNmoH1wURmQwQbgki45xbE+71GWpHUZHXgTFdqvxdct5G
-         BZHXALa6tP9d3PQ/8lvlM48Nu++r9pk/X6xes1jmxP+H8hSKOeYfDJOePubUesYD4WA9
-         xRQA==
-X-Gm-Message-State: AFqh2kpXAAeaUEPN9y1vAGbNseAMHHLs0Jf8QIvN8qRXljSNckd4k+av
-        VkhD/lk6GT45lG+L20JQmQSMzQ==
-X-Google-Smtp-Source: AMrXdXuChnuE6AXI+/EZeqKTU0XPuoALftuNLu4VCEg1NN6I1L5JLRtfk0jqNteHsg3uijYuLmPnnQ==
-X-Received: by 2002:a5d:46d0:0:b0:294:381e:1c7d with SMTP id g16-20020a5d46d0000000b00294381e1c7dmr13187714wrs.8.1673031171103;
-        Fri, 06 Jan 2023 10:52:51 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id m5-20020adfdc45000000b002428c4fb16asm1966950wrj.10.2023.01.06.10.52.49
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3sUwYegRtAIb+OCTW5mqCGhd7voccHEpdVjTByrjOi8=;
+        b=Wle7gDgUTCvyzMDMQmVahw+HyHkUvHUgQJlVHA7eVmh7R5bN5ERdtjnL27vHDFxT7n
+         zRTfwKQoeCEHBo2sJuo5Z1GSh7ua6cX+BAnhVwzxIQNNy1+OtXfSqNUfL8RiNFCyXWKA
+         Yv/I6vO22EEQB/t+ulcwIa2TlAKVN5uvOl+iRVMLuj1a4kZQ7BBR96T++kww3Vb9ekOE
+         /CPIFQZEYN1J8OBRxpGC4faUaUAxDyaW332Ot0WQoa7/Aox5tPmtbCuaUq/x2jts+cR7
+         xkUExpooQMT/a+t/rD+MfcDfTTj6sLsE2q0TkI+jL1PeT5ejlawnFecTMREipr7uUbCd
+         bMnw==
+X-Gm-Message-State: AFqh2krpBGau9GKWZ2JTxfLyp13v99giUJqv8CfXmxcNCcJszvV+p3Oj
+        ETDfKBSONX1lymxbkN0x6+A=
+X-Google-Smtp-Source: AMrXdXuzXHmK258HUVix6YG0pfb9Dmn1BifmbLfB1D03lJT7QadJIixWYT9Yd+fUM8OQlMJid4SkkQ==
+X-Received: by 2002:a05:600c:3d0e:b0:3d1:ee97:980 with SMTP id bh14-20020a05600c3d0e00b003d1ee970980mr49682190wmb.7.1673031365518;
+        Fri, 06 Jan 2023 10:56:05 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:79e8:5b4e:615a:91cd])
+        by smtp.gmail.com with ESMTPSA id d8-20020a05600c34c800b003c5571c27a1sm3162773wmq.32.2023.01.06.10.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 10:52:50 -0800 (PST)
-Date:   Fri, 6 Jan 2023 19:52:47 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Liwei Song <liwei.song@windriver.com>,
-        AlexDeucher <alexander.deucher@amd.com>,
-        =?iso-8859-1?Q?ChristianK=F6nig?= <christian.koenig@amd.com>,
-        PanXinhui <Xinhui.Pan@amd.com>, DavidAirlie <airlied@gmail.com>,
-        DanielVetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/radeon: free iio for atombios when driver shutdown
-Message-ID: <Y7ht/7gujgsrQt3Z@phenom.ffwll.local>
-Mail-Followup-To: Alex Deucher <alexdeucher@gmail.com>,
-        Liwei Song <liwei.song@windriver.com>,
-        AlexDeucher <alexander.deucher@amd.com>,
-        =?iso-8859-1?Q?ChristianK=F6nig?= <christian.koenig@amd.com>,
-        PanXinhui <Xinhui.Pan@amd.com>, DavidAirlie <airlied@gmail.com>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230106094729.38598-1-liwei.song@windriver.com>
- <CADnq5_Mu-9_HoH9PULANvWS39D0Sra+nxodwFspH-TXX_3GJKA@mail.gmail.com>
+        Fri, 06 Jan 2023 10:56:04 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v6 0/6] RISC-V non-coherent function pointer based cache management operations + non-coherent DMA support for AX45MP
+Date:   Fri,  6 Jan 2023 18:55:20 +0000
+Message-Id: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnq5_Mu-9_HoH9PULANvWS39D0Sra+nxodwFspH-TXX_3GJKA@mail.gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just a quick drive-by. For these simple cases where we just need to make
-sure that memory is freed using drmm_kmalloc and friends should help
-simplify things. Probably not worth it for radeon, but figured I'll throw
-it out there.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-For more functional code switching to drmm is harder because you need the
-right order. But for these all that matters is that stuff gets freed so
-there's no leak, and drmm can take care of that without ordering
-constraints.
--Daniel
+Hi All,
 
-On Fri, Jan 06, 2023 at 10:36:53AM -0500, Alex Deucher wrote:
-> Applied.  Thanks!
-> 
-> Alex
-> 
-> On Fri, Jan 6, 2023 at 5:00 AM Liwei Song <liwei.song@windriver.com> wrote:
-> >
-> > Fix below kmemleak when unload radeon driver:
-> >
-> > unreferenced object 0xffff9f8608ede200 (size 512):
-> >   comm "systemd-udevd", pid 326, jiffies 4294682822 (age 716.338s)
-> >   hex dump (first 32 bytes):
-> >     00 00 00 00 c4 aa ec aa 14 ab 00 00 00 00 00 00  ................
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >   backtrace:
-> >     [<0000000062fadebe>] kmem_cache_alloc_trace+0x2f1/0x500
-> >     [<00000000b6883cea>] atom_parse+0x117/0x230 [radeon]
-> >     [<00000000158c23fd>] radeon_atombios_init+0xab/0x170 [radeon]
-> >     [<00000000683f672e>] si_init+0x57/0x750 [radeon]
-> >     [<00000000566cc31f>] radeon_device_init+0x559/0x9c0 [radeon]
-> >     [<0000000046efabb3>] radeon_driver_load_kms+0xc1/0x1a0 [radeon]
-> >     [<00000000b5155064>] drm_dev_register+0xdd/0x1d0
-> >     [<0000000045fec835>] radeon_pci_probe+0xbd/0x100 [radeon]
-> >     [<00000000e69ecca3>] pci_device_probe+0xe1/0x160
-> >     [<0000000019484b76>] really_probe.part.0+0xc1/0x2c0
-> >     [<000000003f2649da>] __driver_probe_device+0x96/0x130
-> >     [<00000000231c5bb1>] driver_probe_device+0x24/0xf0
-> >     [<0000000000a42377>] __driver_attach+0x77/0x190
-> >     [<00000000d7574da6>] bus_for_each_dev+0x7f/0xd0
-> >     [<00000000633166d2>] driver_attach+0x1e/0x30
-> >     [<00000000313b05b8>] bus_add_driver+0x12c/0x1e0
-> >
-> > iio was allocated in atom_index_iio() called by atom_parse(),
-> > but it doesn't got released when the dirver is shutdown.
-> > Fix this kmemleak by free it in radeon_atombios_fini().
-> >
-> > Signed-off-by: Liwei Song <liwei.song@windriver.com>
-> > ---
-> >  drivers/gpu/drm/radeon/radeon_device.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
-> > index 92905ebb7b45..1c005e0ddd38 100644
-> > --- a/drivers/gpu/drm/radeon/radeon_device.c
-> > +++ b/drivers/gpu/drm/radeon/radeon_device.c
-> > @@ -1022,6 +1022,7 @@ void radeon_atombios_fini(struct radeon_device *rdev)
-> >  {
-> >         if (rdev->mode_info.atom_context) {
-> >                 kfree(rdev->mode_info.atom_context->scratch);
-> > +               kfree(rdev->mode_info.atom_context->iio);
-> >         }
-> >         kfree(rdev->mode_info.atom_context);
-> >         rdev->mode_info.atom_context = NULL;
-> > --
-> > 2.33.1
-> >
+RISC-V non-coherent function pointer based cache management operations
+=======================================================================
+As based on the previous discussion [0]. [1], It was suggested upon the below:
+* Move out cache drivers from drivers/soc/folder
+* Implement function pointers for CMO instead of ALTERNATIVE_x() macro
+* Add cache drivers to drivers/cache folder
+
+[0] https://lore.kernel.org/all/43aee000-5b89-4d94-98d2-b37b1a18a83e@app.fastmail.com/
+[1] https://lore.kernel.org/linux-riscv/Y62nOqzyuUKqYDpq@spud/#R
+
+This v6 version of the patch series add support to use function pointers for CMO
+and switches the current CMO implementations for zicbom and T-HEAD to use function
+pointers.
+
+Note, with the above approach we might see some performance degradation due to additional
+checks.
+
+----------x---------------------x--------------------x---------------x--------------
+
+
+non-coherent DMA support for AX45MP
+====================================
+
+On the Andes AX45MP core, cache coherency is a specification option so it
+may not be supported. In this case DMA will fail. To get around with this
+issue this patch series does the below:
+
+1] Andes alternative ports is implemented as errata which checks if the IOCP
+is missing and only then applies to CMO errata. One vendor specific SBI EXT
+(RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND) is implemented as part of errata. If we could
+access the DTB in errata I can get rid of this EXT ID from OpenSBI. Is there any
+approach we can access the DTB in patch callback?
+
+Below are the configs which Andes port provides (and are selected by RZ/Five):
+      - ERRATA_ANDES
+      - ERRATA_ANDES_CMO
+
+2] Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+block that allows dynamic adjustment of memory attributes in the runtime.
+It contains a configurable amount of PMA entries implemented as CSR
+registers to control the attributes of memory locations in interest.
+OpenSBI configures the PMA regions as required and creates a reserve memory
+node and propagates it to the higher boot stack.
+
+An RFC patch for OpenSBI is posted here:
+https://patchwork.ozlabs.org/project/opensbi/patch/20221212094421.14556-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        pma_resv0@58000000 {
+            compatible = "shared-dma-pool";
+            reg = <0x0 0x58000000 0x0 0x08000000>;
+            no-map;
+            linux,dma-default;
+        };
+    };
+
+The above shared DMA pool gets appended to Linux DTB so the DMA memory
+requests go through this region.
+
+3] We provide callbacks to synchronize specific content between memory and
+cache.
+
+        - arch_sync_dma_for_device()
+        - arch_sync_dma_for_cpu()
+
+4] RZ/Five SoC selects the below configs
+        - AX45MP_L2_CACHE
+        - DMA_GLOBAL_POOL
+        - ERRATA_ANDES
+        - ERRATA_ANDES_CMO
+
+OpenSBI implementation patches can be found here:
+1] https://patchwork.ozlabs.org/project/opensbi/cover/20221210103011.7814-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+2]https://patchwork.ozlabs.org/project/opensbi/patch/20221212094421.14556-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+----------x---------------------x--------------------x---------------x--------------
+
+Note,
+- This series requires testing on Cores with zicbom and T-Head SoCs
+- Ive used GCC 12.2.0 for compilation (tested with allmodconfig)
+- Tested all the IP blocks on RZ/Five which use DMA
+
+v5.1 -> v6
+* Dropped use of ALTERNATIVE_x() macro
+* Now switched to used function pointers for CMO
+* Moved driver to drivers/cache folder
+
+v5 -> v5.1
+* https://patchwork.kernel.org/project/linux-riscv/list/?series=708610&state=%2A&archive=both
+
+v4 -> v5
+* Rebased ALTERNATIVE_3() macro on top of Andrew's patches
+* Rebased the changes on top of Heiko's alternative call patches
+* Dropped configuring the PMA from Linux
+* Dropped configuring the L2 cache from Linux and dropped the binding for same
+* Now using runtime patching mechanism instead of compile time config
+
+RFC v3 -> v4
+* Implemented ALTERNATIVE_3() macro 
+* Now using runtime patching mechanism instead of compile time config
+* Added Andes CMO as and errata
+* Fixed comments pointed by Geert
+
+RFC v2-> RFC v3
+* Fixed review comments pointed by Conor
+* Move DT binding into cache folder
+* Fixed DT binding check issue
+* Added andestech,ax45mp-cache.h header file
+* Now passing the flags for the PMA setup as part of andestech,pma-regions
+  property.
+* Added andestech,inst/data-prefetch and andestech,tag/data-ram-ctl
+  properties to configure the L2 cache.
+* Registered the cache driver as platform driver
+
+RFC v1-> RFC v2
+* Moved out the code from arc/riscv to drivers/soc/renesas
+* Now handling the PMA setup as part of the L2 cache
+* Now making use of dma-noncoherent.c instead SoC specific implementation.
+* Dropped arch_dma_alloc() and arch_dma_free()
+* Switched to RISCV_DMA_NONCOHERENT
+* Included DT binding doc
+
+RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220906102154.32526-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (6):
+  riscv: mm: dma-noncoherent: Switch using function pointers for cache
+    management
+  riscv: asm: vendorid_list: Add Andes Technology to the vendors list
+  riscv: errata: Add Andes alternative ports
+  dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation
+    for L2 cache controller
+  cache: Add L2 cache management for Andes AX45MP RISC-V core
+  soc: renesas: Kconfig: Select the required configs for RZ/Five SoC
+
+ .../cache/andestech,ax45mp-cache.yaml         |  81 +++++
+ arch/riscv/Kconfig.erratas                    |  22 ++
+ arch/riscv/errata/Makefile                    |   1 +
+ arch/riscv/errata/andes/Makefile              |   1 +
+ arch/riscv/errata/andes/errata.c              |  71 +++++
+ arch/riscv/errata/thead/errata.c              |  71 +++++
+ arch/riscv/include/asm/alternative.h          |   3 +
+ arch/riscv/include/asm/dma-noncoherent.h      |  83 ++++++
+ arch/riscv/include/asm/errata_list.h          |  53 ----
+ arch/riscv/include/asm/vendorid_list.h        |   1 +
+ arch/riscv/kernel/alternative.c               |   5 +
+ arch/riscv/kernel/cpufeature.c                |   2 +
+ arch/riscv/mm/dma-noncoherent.c               |  94 +++++-
+ arch/riscv/mm/pmem.c                          |  18 +-
+ drivers/Kconfig                               |   2 +
+ drivers/Makefile                              |   1 +
+ drivers/cache/Kconfig                         |  10 +
+ drivers/cache/Makefile                        |   3 +
+ drivers/cache/ax45mp_cache.c                  | 279 ++++++++++++++++++
+ drivers/soc/renesas/Kconfig                   |   4 +
+ 20 files changed, 744 insertions(+), 61 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+ create mode 100644 arch/riscv/errata/andes/Makefile
+ create mode 100644 arch/riscv/errata/andes/errata.c
+ create mode 100644 arch/riscv/include/asm/dma-noncoherent.h
+ create mode 100644 drivers/cache/Kconfig
+ create mode 100644 drivers/cache/Makefile
+ create mode 100644 drivers/cache/ax45mp_cache.c
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.25.1
+
