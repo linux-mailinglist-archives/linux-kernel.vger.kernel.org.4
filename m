@@ -2,242 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018E9660207
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513F3660209
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbjAFOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S234786AbjAFOXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbjAFOW6 (ORCPT
+        with ESMTP id S234839AbjAFOX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:22:58 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D99A7BDCA;
-        Fri,  6 Jan 2023 06:22:57 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 6 Jan 2023 09:23:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26047F44B;
+        Fri,  6 Jan 2023 06:23:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C096426DA0;
-        Fri,  6 Jan 2023 14:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673014975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecx/oHASbbZpxUh4K46+VPuV5skiCtzUDP0hKsj3nsQ=;
-        b=AvLHeYSIE/vneG5QGV15RG9Qtc8x1LTeDPTSVwMhcZ4wuzAGKcA74cRB3E+u+ZVZ2579Xe
-        NmPJ5LSlPxPbjr4KmUhkZCrEwYl7hDG9/tPYi+96ZKGiF2LbPnSMfPXmOytQ7SCxrle3vx
-        eKmDr6mYdQMREQjRMt+JpvB+VGs0gKg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673014975;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecx/oHASbbZpxUh4K46+VPuV5skiCtzUDP0hKsj3nsQ=;
-        b=Q1G9fD6UpS3cIthvniPBuBUzDD0w3qXxgEJAOM9Ow5UGIf9CWYVLrZEvDGS3xH6Y2sDgzK
-        M3SO+Ev6BLDKqeDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B1D2013596;
-        Fri,  6 Jan 2023 14:22:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gHZfK78uuGOpdwAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 06 Jan 2023 14:22:55 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3641BA0742; Fri,  6 Jan 2023 15:22:55 +0100 (CET)
-Date:   Fri, 6 Jan 2023 15:22:55 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     tytso@mit.edu, jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        libaokun1@huawei.com, zhanchengbin1@huawei.com
-Subject: Re: [PATCH v2] jbd2: Fix data missing when reusing bh which is ready
- to be checkpointed
-Message-ID: <20230106142255.fqnzgw5tqr77mdzj@quack3>
-References: <20230106115603.2624644-1-chengzhihao1@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45070616FE;
+        Fri,  6 Jan 2023 14:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9159C433D2;
+        Fri,  6 Jan 2023 14:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673014986;
+        bh=GLq2I201W/dvI6oHhthki9BIrq367DLSrcf0EBqIqAE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NvicM3gAwQf8qOAExduvANxhpvRbAxZO+Apgfsr/RIvXzjS7hZ+jEFblXH1KYZJo3
+         U0EP59h6rECNeneqcfOCHGin8rJ2Ra1zPNS3eZwyfOJCMNO2XQyYGNUeRrFP9cLcxZ
+         3u0DMm2uGFau2NAHcXbS4mjqIUswmB2FWLsHjkyQ5t6mz6bjWgmKvm2yCid0Ga41Dw
+         d4U0FwyxV3g459s/qJ7XsIv3NQ9z9wWpvDkdsBq6qGLJc1clQJJfpVaq/FOfEwQBc5
+         ouxNOP8ShjdGO4/fDb7Jj77d2jyeewx3GqXumzKaMvVZWykGzaHgGRKSOfhUQeM8jr
+         jxrP0Nd0iWrRw==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        =?UTF-8?q?Ahelenia=20Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Eric Lin <eric.lin@sifive.com>,
+        Ian Rogers <irogers@google.com>,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Torsten Hilbrich <torsten.hilbrich@secunet.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v6.2: 1st batch
+Date:   Fri,  6 Jan 2023 11:22:56 -0300
+Message-Id: <20230106142256.763489-1-acme@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106115603.2624644-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 06-01-23 19:56:03, Zhihao Cheng wrote:
-> Following process will make data lost and could lead to a filesystem
-> corrupted problem:
-> 
-> 1. jh(bh) is inserted into T1->t_checkpoint_list, bh is dirty, and
->    jh->b_transaction = NULL
-> 2. T1 is added into journal->j_checkpoint_transactions.
-> 3. Get bh prepare to write while doing checkpoing:
->            PA				    PB
->    do_get_write_access             jbd2_log_do_checkpoint
->     spin_lock(&jh->b_state_lock)
->      if (buffer_dirty(bh))
->       clear_buffer_dirty(bh)   // clear buffer dirty
->        set_buffer_jbddirty(bh)
-> 				    transaction =
-> 				    journal->j_checkpoint_transactions
-> 				    jh = transaction->t_checkpoint_list
-> 				    if (!buffer_dirty(bh))
-> 		                      __jbd2_journal_remove_checkpoint(jh)
-> 				      // bh won't be flushed
-> 		                    jbd2_cleanup_journal_tail
->     __jbd2_journal_file_buffer(jh, transaction, BJ_Reserved)
-> 4. Aborting journal/Power-cut before writing latest bh on journal area.
-> 
-> In this way we get a corrupted filesystem with bh's data lost.
-> 
-> Fix it by moving the clearing of buffer_dirty bit just before the call
-> to __jbd2_journal_file_buffer(), both bit clearing and jh->b_transaction
-> assignment are under journal->j_list_lock locked, so that
-> jbd2_log_do_checkpoint() will wait until jh's new transaction fininshed
-> even bh is currently not dirty. And journal_shrink_one_cp_list() won't
-> remove jh from checkpoint list if the buffer head is reused in
-> do_get_write_access().
-> 
-> Cc: <stable@kernel.org>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> Signed-off-by: zhanchengbin <zhanchengbin1@huawei.com>
-> Suggested-by: Jan Kara <jack@suse.cz>
+Hi Linus,
 
-Thanks for the patch! It looks good, some suggestions for making it a bit
-more tidy below:
+	Please consider pulling, there are some more being tested but
+that should sit in linux-next/pending-fixes for a while.
 
-> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-> index 6a404ac1c178..06a5e7961ef2 100644
-> --- a/fs/jbd2/transaction.c
-> +++ b/fs/jbd2/transaction.c
-> @@ -1010,36 +1010,37 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
->  	 * ie. locked but not dirty) or tune2fs (which may actually have
->  	 * the buffer dirtied, ugh.)  */
->  
-> -	if (buffer_dirty(bh)) {
-> +	if (buffer_dirty(bh) && jh->b_transaction) {
->  		/*
->  		 * First question: is this buffer already part of the current
->  		 * transaction or the existing committing transaction?
->  		 */
-> -		if (jh->b_transaction) {
-> -			J_ASSERT_JH(jh,
-> -				jh->b_transaction == transaction ||
-> -				jh->b_transaction ==
-> -					journal->j_committing_transaction);
-> -			if (jh->b_next_transaction)
-> -				J_ASSERT_JH(jh, jh->b_next_transaction ==
-> -							transaction);
-> -			warn_dirty_buffer(bh);
-> -		}
-> +		J_ASSERT_JH(jh, jh->b_transaction == transaction ||
-> +			jh->b_transaction == journal->j_committing_transaction);
-> +		if (jh->b_next_transaction)
-> +			J_ASSERT_JH(jh, jh->b_next_transaction == transaction);
-> +		warn_dirty_buffer(bh);
->  		/*
-> -		 * In any case we need to clean the dirty flag and we must
-> -		 * do it under the buffer lock to be sure we don't race
-> -		 * with running write-out.
-> +		 * We need to clean the dirty flag and we must do it under the
-> +		 * buffer lock to be sure we don't race with running write-out.
->  		 */
->  		JBUFFER_TRACE(jh, "Journalling dirty buffer");
->  		clear_buffer_dirty(bh);
-> +		/*
-> +		 * Setting jbddirty after clearing buffer dirty is necessary.
-> +		 * Function jbd2_journal_restart() could keep buffer on
-> +		 * BJ_Reserved list until the transaction committing, then the
-> +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
-> +		 * after committing, the buffer couldn't fall on disk even
-> +		 * last checkpoint finished, which may corrupt filesystem.
-> +		 */
->  		set_buffer_jbddirty(bh);
->  	}
+        Please let me know if you think anything should be reworked,
 
-So I think the sequence:
+Best regards,
 
-	if (buffer_dirty(bh)) {
-		warn_dirty_buffer(bh);
-		JBUFFER_TRACE(jh, "Journalling dirty buffer");
-		clear_buffer_dirty(bh);
-		set_buffer_jbddirty(bh);
-	}
+- Arnaldo
 
-can be moved into the branch
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
-  	if (jh->b_transaction == transaction ||
-	    jh->b_next_transaction == transaction) {
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
-below. That way you can drop the assertions as well because they happen
-later in do_get_write_access() again anyway.
+are available in the Git repository at:
 
-Also I don't quite understand the new comment you have added. Do you mean
-we need to not only clear BH_Dirty bit but also set BH_JBDdirty as dirtying
-(through jbd2_journal_dirty_metadata()) does not have to follow after
-do_get_write_access()?
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.1-1-2023-01-06
 
-Otherwise the patch looks good.
+for you to fetch changes up to 481028dbf1daa2808e1be06f6a865b5fe5939efc:
 
-								Honza
->  
-> -	unlock_buffer(bh);
-> -
->  	error = -EROFS;
->  	if (is_handle_aborted(handle)) {
->  		spin_unlock(&jh->b_state_lock);
-> +		unlock_buffer(bh);
->  		goto out;
->  	}
->  	error = 0;
-> @@ -1049,8 +1050,10 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
->  	 * b_next_transaction points to it
->  	 */
->  	if (jh->b_transaction == transaction ||
-> -	    jh->b_next_transaction == transaction)
-> +	    jh->b_next_transaction == transaction) {
-> +		unlock_buffer(bh);
->  		goto done;
-> +	}
->  
->  	/*
->  	 * this is the first time this transaction is touching this buffer,
-> @@ -1074,10 +1077,24 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
->  		 */
->  		smp_wmb();
->  		spin_lock(&journal->j_list_lock);
-> +		if (test_clear_buffer_dirty(bh)) {
-> +			/*
-> +			 * Execute buffer dirty clearing and jh->b_transaction
-> +			 * assignment under journal->j_list_lock locked to
-> +			 * prevent bh being removed from checkpoint list if
-> +			 * the buffer is in an intermediate state (not dirty
-> +			 * and jh->b_transaction is NULL).
-> +			 */
-> +			JBUFFER_TRACE(jh, "Journalling dirty buffer");
-> +			set_buffer_jbddirty(bh);
-> +		}
->  		__jbd2_journal_file_buffer(jh, transaction, BJ_Reserved);
->  		spin_unlock(&journal->j_list_lock);
-> +		unlock_buffer(bh);
->  		goto done;
->  	}
-> +	unlock_buffer(bh);
-> +
->  	/*
->  	 * If there is already a copy-out version of this buffer, then we don't
->  	 * need to make another one
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+  perf tools: Fix build on uClibc systems by adding missing sys/types.h include (2023-01-04 16:44:01 -0300)
+
+----------------------------------------------------------------
+perf tools fixes for v6.2: 1st batch
+
+- Fix segfault when trying to process tracepoints present in a perf.data file
+  and not linked with libtraceevent.
+
+- Fix build on uClibc systems by adding missing sys/types.h include, that was
+  being obtained indirectly which stopped being the case when tools/lib/traceevent
+  was removed.
+
+- Don't show commands in 'perf help' that depend on linking with libtraceevent
+  when not building with that library, which is now a possibility since we
+  no longer ship a copy in tools/lib/traceevent.
+
+- Fix failure in 'perf test' entry testing the combination of 'perf probe' user
+  space function + 'perf record' + 'perf script' where it expects a backtrace
+  leading to glibc's inet_pton() from 'ping' that now happens more than once with
+  glibc 2.35 for IPv6 addreses.
+
+- Fix for the inet_pton perf test on s/390 where 'text_to_binary_address' now
+  appears on the backtrace.
+
+- Fix build error on riscv due to missing header for 'struct perf_sample'.
+
+- Fix 'make -C tools perf_install' install variant by not propagating the 'subdir'
+  to submakes for the 'install_headers' targets.
+
+- Fix handling of unsupported cgroup events when using BPF counters in 'perf stat'.
+
+- Count all cgroups, not just the last one when using 'perf stat
+  --for-each-cgroup' with --bpf-counters. This makes the output using BPF
+  counters match the output without using it, which was the intention all along,
+  the output should be the same using --bpf-counters or not.
+
+- Fix 'perf lock contention' core dump related to not finding the
+  "__sched_text_end" symbol on s/390.
+
+- Fix build failure when HEAD is signed: exclude the signature from the version
+  string.
+
+- Add missing closedir() calls to in perf_data__open_dir(), plugging a fd leak.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Ahelenia Ziemiańska (1):
+      perf tools: Don't include signature in version strings
+
+Arnaldo Carvalho de Melo (2):
+      perf tools: Fix segfault when trying to process tracepoints in perf.data and not linked with libtraceevent
+      perf test record_probe_libc_inet_pton: Fix failure due to extra inet_pton() backtrace in glibc >= 2.35
+
+Eric Lin (1):
+      perf tools riscv: Fix build error on riscv due to missing header for 'struct perf_sample'
+
+Ian Rogers (1):
+      perf build: Don't propagate subdir to submakes for install_headers
+
+Jesus Sanchez-Palencia (1):
+      perf tools: Fix build on uClibc systems by adding missing sys/types.h include
+
+Miaoqian Lin (1):
+      perf tools: Fix resources leak in perf_data__open_dir()
+
+Namhyung Kim (2):
+      perf stat: Fix handling of unsupported cgroup events when using BPF counters
+      perf stat: Fix handling of --for-each-cgroup with --bpf-counters to match non BPF mode
+
+Thomas Richter (2):
+      perf lock contention: Fix core dump related to not finding the "__sched_text_end" symbol on s/390
+      perf test record_probe_libc_inet_pton: Fix test on s/390 where 'text_to_binary_address' now appears on the backtrace
+
+Yang Jihong (1):
+      perf help: Use HAVE_LIBTRACEEVENT to filter out unsupported commands
+
+ tools/perf/Documentation/Makefile                  |  2 +-
+ tools/perf/Makefile.perf                           | 10 +++++-----
+ tools/perf/arch/riscv/util/unwind-libdw.c          |  2 +-
+ tools/perf/builtin-lock.c                          |  2 ++
+ tools/perf/command-list.txt                        | 10 +++++-----
+ .../tests/shell/record+probe_libc_inet_pton.sh     |  3 ++-
+ tools/perf/util/PERF-VERSION-GEN                   |  2 +-
+ tools/perf/util/bpf_counter_cgroup.c               | 14 +++----------
+ tools/perf/util/cgroup.c                           | 23 +++++++++++++++++-----
+ tools/perf/util/data.c                             |  2 ++
+ tools/perf/util/generate-cmdlist.sh                | 19 ++++++++++++++++--
+ tools/perf/util/sort.c                             | 12 +++++++++++
+ tools/perf/util/trace-event.h                      |  1 +
+ 13 files changed, 70 insertions(+), 32 deletions(-)
