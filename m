@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A88065FBD5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6989365FBE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjAFHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 02:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S229892AbjAFH2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 02:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjAFHSx (ORCPT
+        with ESMTP id S229437AbjAFH2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 02:18:53 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9076278165
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:18:27 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so496650wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 23:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uymr+EslUp8EqejpciiRzBBlWnLjLu5bMnDY1fDFA+U=;
-        b=oTZbkZtovB3HLWOtVT3OCUsmvFBZbSiMmXc1p3LXMmYPYUDD3DOUqg6SsHztTs3Dnw
-         L+z5mCjSPmKHPeGyrHGORgGZ4ajAp09OuF+xAMU9+x8nkq8VDtI6bdTZt5cezaObkkiz
-         uX7i8BVP6dzv241BgUyHvPvgA7lLI4KOOwr6ggTypkE078Zty8EdGyJtQGg+m8QFqoWi
-         AD6t3pC2o/dkGZh7xdb6ws4Be7Yz+EGWKl8vi4OPA3CiuyMlZYfB8XOrPtxO3z3NAVc1
-         BpoYI9DIGtv3i59Wvh/Ti71sDluSMca344CYxtrPERmsvmsjAKmClT3gxwI05ANNpX9v
-         dqDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uymr+EslUp8EqejpciiRzBBlWnLjLu5bMnDY1fDFA+U=;
-        b=qQYBQUiy4kNYEwyNZO5MrSIn48HeqeXito8a4GnXPb5oVZu5g665aP5MeoDdni5Tyo
-         fGA0Q9rv1zBXfsR/AqQ/lA9/7hih/POnRk5FVSuzXBZUAzToRD8sZfKydEcprgQAxse5
-         AvVd3YeQdxOMURISOvy4lisitUIjA8dTMcXMhD0Q7CAwKdpnyo0jkVs/EekH7br0IQhS
-         ixYvkhQPqmShgL9qGKydLx4IptlVDQrjnUBIu+AlYGp1Rq6vdLf1CMoSbkz1P08t2CvV
-         WMMl/1MFAF5tRXr2+9dUpulOGr1CauVmenNw5MJ6HwhIq2QNeRFs0WYo5JOwkM4ByhOE
-         SK5A==
-X-Gm-Message-State: AFqh2kqAM++ZpU4+10fgA/AW4kqQS4UQADV3SpNDwG8gmY3VitGBmAh4
-        bomxW3QR0fqF3Ca4H8RuB+edXA==
-X-Google-Smtp-Source: AMrXdXvy6MS/jUIHUdH1LF0M/X52le8844L/0iRR3YoWgYCboXI+dMKiHPtNijyqDhgVUlPVQw9J5Q==
-X-Received: by 2002:a05:600c:4fcf:b0:3cf:68f8:790b with SMTP id o15-20020a05600c4fcf00b003cf68f8790bmr39456245wmq.11.1672989506148;
-        Thu, 05 Jan 2023 23:18:26 -0800 (PST)
-Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z25-20020a1c4c19000000b003d1e1f421bfsm5048093wmf.10.2023.01.05.23.18.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 23:18:25 -0800 (PST)
-Message-ID: <25364b98-0b32-8283-7630-bcf0f6c22b4e@linaro.org>
-Date:   Fri, 6 Jan 2023 08:18:24 +0100
+        Fri, 6 Jan 2023 02:28:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C746ECBD
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:28:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04B1C61CAC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF99EC433F0;
+        Fri,  6 Jan 2023 07:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672990129;
+        bh=hnLVUbqW+hMDWxgzBrfbafMeO7GTTiLPMHRcilAYX/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jM5DZ7M/a5kh4030dVn82fp3noZPdHrkH7L0NFLA4nqLducIf/sLlsXWRUyYcp8Lm
+         OvSqvEin1hEXD7IWB3oiPttj4MUJFiHVTGwnr4EbUVRhM7pKW6VAndCtBFP9kPYZpZ
+         /IE99rLxs30RSZn71qz92E8QmJzsyj3trtI8dELkEi/lgK3ahUR89ScwmBCpMRMJCV
+         gBtu9F3GokQbe7FgmA4cVmkBmXciqw70oCJ1bakwBGa9Pt4xppGPs1fS0oseriiNX5
+         vwncSyCXl/AF2NnHxZR6zzKegO9DqBY6V026ZmIwOJ0sm86w6Ge+tjEs1Vbcz/quQY
+         ntjmJFrpYUSKQ==
+Date:   Fri, 6 Jan 2023 09:28:35 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH] maple_tree: Remove GFP_ZERO from kmem_cache_alloc() and
+ kmem_cache_alloc_bulk()
+Message-ID: <Y7fNo4IElYXCyPmd@kernel.org>
+References: <20230105160427.2988454-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: OSM L3: Add SM6350 OSM
- L3 compatible
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230104171643.1004054-1-konrad.dybcio@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230104171643.1004054-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105160427.2988454-1-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,15 +58,296 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 18:16, Konrad Dybcio wrote:
-> SM6350, similarly to SDM845, uses OSM hardware for L3 scaling.
-> Document it.
+On Thu, Jan 05, 2023 at 04:05:34PM +0000, Liam Howlett wrote:
+> Preallocations are common in the VMA code to avoid allocating under
+> certain locking conditions.  The preallocations must also cover the
+> worst-case scenario.  Removing the GFP_ZERO flag from the
+> kmem_cache_alloc() (and bulk variant) calls will reduce the amount of
+> time spent zeroing memory that may not be used.  Only zero out the
+> necessary area to keep track of the allocations in the maple state.
+> Zero the entire node prior to using it in the tree.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> This required internal changes to node counting on allocation, so the
+> test code is also updated.
+> 
+> This restores some micro-benchmark performance:
+> up to +9% in mmtests mmap1 by my testing
+> +10% to +20% in mmap, mmapaddr, mmapmany tests reported by Red Hat
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2149636
+> Reported-by: Jirka Hladky <jhladky@redhat.com>
+> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Liam Howlett <Liam.Howlett@oracle.com>
+> ---
+>  lib/maple_tree.c                 | 80 +++++++++++++++++---------------
+>  tools/testing/radix-tree/maple.c | 18 +++----
+>  2 files changed, 52 insertions(+), 46 deletions(-)
+> 
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 26e2045d3cda..82a8121fe49b 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -149,13 +149,12 @@ struct maple_subtree_state {
+>  /* Functions */
+>  static inline struct maple_node *mt_alloc_one(gfp_t gfp)
+>  {
+> -	return kmem_cache_alloc(maple_node_cache, gfp | __GFP_ZERO);
+> +	return kmem_cache_alloc(maple_node_cache, gfp);
+>  }
+>  
+>  static inline int mt_alloc_bulk(gfp_t gfp, size_t size, void **nodes)
+>  {
+> -	return kmem_cache_alloc_bulk(maple_node_cache, gfp | __GFP_ZERO, size,
+> -				     nodes);
+> +	return kmem_cache_alloc_bulk(maple_node_cache, gfp, size, nodes);
+>  }
+>  
+>  static inline void mt_free_bulk(size_t size, void __rcu **nodes)
+> @@ -1127,9 +1126,10 @@ static inline struct maple_node *mas_pop_node(struct ma_state *mas)
+>  {
+>  	struct maple_alloc *ret, *node = mas->alloc;
+>  	unsigned long total = mas_allocated(mas);
+> +	unsigned int req = mas_alloc_req(mas);
+>  
+>  	/* nothing or a request pending. */
+> -	if (unlikely(!total))
+> +	if (WARN_ON(!total))
 
+Hmm, isn't WARN_ON() here too much?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  		return NULL;
+>  
+>  	if (total == 1) {
+> @@ -1139,27 +1139,25 @@ static inline struct maple_node *mas_pop_node(struct ma_state *mas)
+>  		goto single_node;
+>  	}
+>  
+> -	if (!node->node_count) {
+> +	if (node->node_count == 1) {
+>  		/* Single allocation in this node. */
+>  		mas->alloc = node->slot[0];
+> -		node->slot[0] = NULL;
+>  		mas->alloc->total = node->total - 1;
+>  		ret = node;
+>  		goto new_head;
+>  	}
+> -
+>  	node->total--;
+> -	ret = node->slot[node->node_count];
+> -	node->slot[node->node_count--] = NULL;
+> +	ret = node->slot[--node->node_count];
+> +	node->slot[node->node_count] = NULL;
+>  
+>  single_node:
+>  new_head:
+> -	ret->total = 0;
+> -	ret->node_count = 0;
+> -	if (ret->request_count) {
+> -		mas_set_alloc_req(mas, ret->request_count + 1);
+> -		ret->request_count = 0;
+> +	if (req) {
+> +		req++;
+> +		mas_set_alloc_req(mas, req);
+>  	}
+> +
+> +	memset(ret, 0, sizeof(*ret));
+>  	return (struct maple_node *)ret;
+>  }
+>  
+> @@ -1178,21 +1176,20 @@ static inline void mas_push_node(struct ma_state *mas, struct maple_node *used)
+>  	unsigned long count;
+>  	unsigned int requested = mas_alloc_req(mas);
+>  
+> -	memset(reuse, 0, sizeof(*reuse));
+>  	count = mas_allocated(mas);
+>  
+> -	if (count && (head->node_count < MAPLE_ALLOC_SLOTS - 1)) {
+> -		if (head->slot[0])
+> -			head->node_count++;
+> -		head->slot[head->node_count] = reuse;
+> +	reuse->request_count = 0;
+> +	reuse->node_count = 0;
+> +	if (count && (head->node_count < MAPLE_ALLOC_SLOTS)) {
+> +		head->slot[head->node_count++] = reuse;
+>  		head->total++;
+>  		goto done;
+>  	}
+>  
+>  	reuse->total = 1;
+>  	if ((head) && !((unsigned long)head & 0x1)) {
+> -		head->request_count = 0;
+>  		reuse->slot[0] = head;
+> +		reuse->node_count = 1;
+>  		reuse->total += head->total;
+>  	}
+>  
+> @@ -1211,7 +1208,6 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+>  {
+>  	struct maple_alloc *node;
+>  	unsigned long allocated = mas_allocated(mas);
+> -	unsigned long success = allocated;
+>  	unsigned int requested = mas_alloc_req(mas);
+>  	unsigned int count;
+>  	void **slots = NULL;
+> @@ -1227,24 +1223,29 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+>  		WARN_ON(!allocated);
+>  	}
+>  
+> -	if (!allocated || mas->alloc->node_count == MAPLE_ALLOC_SLOTS - 1) {
+> +	if (!allocated || mas->alloc->node_count == MAPLE_ALLOC_SLOTS) {
+>  		node = (struct maple_alloc *)mt_alloc_one(gfp);
+>  		if (!node)
+>  			goto nomem_one;
+>  
+> -		if (allocated)
+> +		if (allocated) {
+>  			node->slot[0] = mas->alloc;
+> +			node->node_count = 1;
+> +		} else {
+> +			node->node_count = 0;
+> +		}
+>  
+> -		success++;
+>  		mas->alloc = node;
+> +		node->total = ++allocated;
+>  		requested--;
+>  	}
+>  
+>  	node = mas->alloc;
+> +	node->request_count = 0;
+>  	while (requested) {
+>  		max_req = MAPLE_ALLOC_SLOTS;
+> -		if (node->slot[0]) {
+> -			unsigned int offset = node->node_count + 1;
+> +		if (node->node_count) {
+> +			unsigned int offset = node->node_count;
+>  
+>  			slots = (void **)&node->slot[offset];
+>  			max_req -= offset;
+> @@ -1258,15 +1259,13 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+>  			goto nomem_bulk;
+>  
+>  		node->node_count += count;
+> -		/* zero indexed. */
+> -		if (slots == (void **)&node->slot)
+> -			node->node_count--;
+> -
+> -		success += count;
+> +		allocated += count;
+>  		node = node->slot[0];
+> +		node->node_count = 0;
+> +		node->request_count = 0;
+>  		requested -= count;
+>  	}
+> -	mas->alloc->total = success;
+> +	mas->alloc->total = allocated;
+>  	return;
+>  
+>  nomem_bulk:
+> @@ -1275,7 +1274,7 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+>  nomem_one:
+>  	mas_set_alloc_req(mas, requested);
+>  	if (mas->alloc && !(((unsigned long)mas->alloc & 0x1)))
+> -		mas->alloc->total = success;
+> +		mas->alloc->total = allocated;
+>  	mas_set_err(mas, -ENOMEM);
+>  	return;
+>  
+> @@ -5745,6 +5744,7 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
+>  void mas_destroy(struct ma_state *mas)
+>  {
+>  	struct maple_alloc *node;
+> +	unsigned long total;
+>  
+>  	/*
+>  	 * When using mas_for_each() to insert an expected number of elements,
+> @@ -5767,14 +5767,20 @@ void mas_destroy(struct ma_state *mas)
+>  	}
+>  	mas->mas_flags &= ~(MA_STATE_BULK|MA_STATE_PREALLOC);
+>  
+> -	while (mas->alloc && !((unsigned long)mas->alloc & 0x1)) {
+> +	total = mas_allocated(mas);
+> +	while (total) {
+>  		node = mas->alloc;
+>  		mas->alloc = node->slot[0];
+> -		if (node->node_count > 0)
+> -			mt_free_bulk(node->node_count,
+> -				     (void __rcu **)&node->slot[1]);
+> +		if (node->node_count > 1) {
+> +			size_t count = node->node_count - 1;
+> +
+> +			mt_free_bulk(count, (void __rcu **)&node->slot[1]);
+> +			total -= count;
+> +		}
+>  		kmem_cache_free(maple_node_cache, node);
+> +		total--;
+>  	}
+> +
+>  	mas->alloc = NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(mas_destroy);
+> diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
+> index 81fa7ec2e66a..1f36bc1c5d36 100644
+> --- a/tools/testing/radix-tree/maple.c
+> +++ b/tools/testing/radix-tree/maple.c
+> @@ -173,11 +173,11 @@ static noinline void check_new_node(struct maple_tree *mt)
+>  
+>  		if (!MAPLE_32BIT) {
+>  			if (i >= 35)
+> -				e = i - 35;
+> +				e = i - 34;
+>  			else if (i >= 5)
+> -				e = i - 5;
+> +				e = i - 4;
+>  			else if (i >= 2)
+> -				e = i - 2;
+> +				e = i - 1;
+>  		} else {
+>  			if (i >= 4)
+>  				e = i - 4;
+> @@ -305,17 +305,17 @@ static noinline void check_new_node(struct maple_tree *mt)
+>  	MT_BUG_ON(mt, mas.node != MA_ERROR(-ENOMEM));
+>  	MT_BUG_ON(mt, !mas_nomem(&mas, GFP_KERNEL));
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 1);
+> -	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS - 1);
+> +	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS);
+>  
+>  	mn = mas_pop_node(&mas); /* get the next node. */
+>  	MT_BUG_ON(mt, mn == NULL);
+>  	MT_BUG_ON(mt, not_empty(mn));
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS);
+> -	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS - 2);
+> +	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS - 1);
+>  
+>  	mas_push_node(&mas, mn);
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 1);
+> -	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS - 1);
+> +	MT_BUG_ON(mt, mas.alloc->node_count != MAPLE_ALLOC_SLOTS);
+>  
+>  	/* Check the limit of pop/push/pop */
+>  	mas_node_count(&mas, MAPLE_ALLOC_SLOTS + 2); /* Request */
+> @@ -323,14 +323,14 @@ static noinline void check_new_node(struct maple_tree *mt)
+>  	MT_BUG_ON(mt, mas.node != MA_ERROR(-ENOMEM));
+>  	MT_BUG_ON(mt, !mas_nomem(&mas, GFP_KERNEL));
+>  	MT_BUG_ON(mt, mas_alloc_req(&mas));
+> -	MT_BUG_ON(mt, mas.alloc->node_count);
+> +	MT_BUG_ON(mt, mas.alloc->node_count != 1);
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 2);
+>  	mn = mas_pop_node(&mas);
+>  	MT_BUG_ON(mt, not_empty(mn));
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 1);
+> -	MT_BUG_ON(mt, mas.alloc->node_count  != MAPLE_ALLOC_SLOTS - 1);
+> +	MT_BUG_ON(mt, mas.alloc->node_count  != MAPLE_ALLOC_SLOTS);
+>  	mas_push_node(&mas, mn);
+> -	MT_BUG_ON(mt, mas.alloc->node_count);
+> +	MT_BUG_ON(mt, mas.alloc->node_count != 1);
+>  	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 2);
+>  	mn = mas_pop_node(&mas);
+>  	MT_BUG_ON(mt, not_empty(mn));
+> -- 
+> 2.35.1
+> 
 
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
