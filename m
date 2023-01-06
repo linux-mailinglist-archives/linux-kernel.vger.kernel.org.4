@@ -2,229 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4430C6602CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6856602CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbjAFPMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S233548AbjAFPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjAFPMQ (ORCPT
+        with ESMTP id S233697AbjAFPMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:12:16 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D1877D37
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:12:14 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1896512pjj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:12:14 -0800 (PST)
+        Fri, 6 Jan 2023 10:12:49 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4D98111F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:12:32 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 17so1975325pll.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5xVMjZC40s+T1CFsdFSwBRfl09heYK9MQl9tX7e5Cpw=;
-        b=TnK9hT+c/rFv/XIRV/MbbK/llGR0/XIA4/cwX9DG2PO48vLquZcLeL3uV5YykaK2G8
-         lloggGj5Xgufw30fVOPPd9UYXWq05tBAmSKisz2YSa3N6zy8XWcqALUdgRomvzXVAhWp
-         n3tP1yC3nU+QVFo+3w5Kb0sPrYw1n1kKDj4WpIeYb4EF5iR1wiWqXDn1LK1LqRjAg+eQ
-         dt7k7PBQ9iA3OQTSEOB3NDwhph8dftXqYgL+MqA9o/E78+aeUjVfn5acdXIyTuYINQpo
-         gF2CirSEipJtCSGvWtQXt5ys252ipdj5e0eCsXjokt/zmlPP+yqBKaPdBqQFuf7HnECk
-         iZ2w==
+        bh=pOP2U/eNUNDM/BFzz41jwnvvD0q9z7KVLxoSLmeQ5Ik=;
+        b=iH0cdWoF7hCqRCgId3gkeJ5nhxynIfZPsMSD7cym2axK6NGs4o3XgpHZjB5bWHlgqB
+         AoNBsLh56wsCYg6PkC4kDVE/g+pjSg4Iw+mK0FMXtOl1gsPl4GvTVbS3VNycdNuFXEsn
+         a4ag/t2nRyYJu1CAmTpOpFDGkipTZNQBIkkZLuxaR79XWunm9Cvw8rrVwYzSp6GR0DKj
+         /LsAoDpBOGldlGPnbIe/ry6lRakkHOXvX2M1JpHsMsR0C35CWd7aLHINdBQl808CrHu9
+         uHxo+LDfuXIDogYoc+SbNNW8svMk8I1YLfI7Nz/PUkjiK/6uUmOXfisllo7wFfH+uXe1
+         QI0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5xVMjZC40s+T1CFsdFSwBRfl09heYK9MQl9tX7e5Cpw=;
-        b=HE2q3AZVcNwmR9ifMPVv/YuyXQKshEdg8niTfhD3o6nS6oqZkYtTNU/zZkXLqszMLR
-         dpG7AdnuRjSeA/Cnw3znpF5SnrYSx37fiSV104se2x5okIWJc69ux7UjhV0CpHqVKYON
-         WMmo/b0gkaGxeJyHFXk9x23OBpTt2axg38aVGUhaP0yN4cax5xLoVMLd+7SeS+aiP6Cj
-         3c00fysLdxbQe0KrT1GqcqXg5WEUHwo7KjH6Oku40GwiW4PAEPNts42g2Ugk+jgKGhdm
-         6PucUmGqAL1UrPViYwV16Yn66KLrsQzQv4xcNgO5a+NZLDTdZ0zeHw2gh+4aEAfa8UdD
-         ccrw==
-X-Gm-Message-State: AFqh2kpfJrtYirmQAG+IbVZXUjGa7PH00/HSDgBi7ivtiJx5n5b3LQo/
-        3LQA+dOxjDT4r4m//btSLmWNYukykqmHtZ7HaAeejw==
-X-Google-Smtp-Source: AMrXdXsKXTWBOy1Q8q1m6Ha+wg1bhsOCIfvQ0YA0iW+v80gcwiY6l/mBDuGj9tuGt8DX/JAMnSFdQ6CJTRaOoM/P7A8=
-X-Received: by 2002:a17:902:6b05:b0:18c:5dae:6f2 with SMTP id
- o5-20020a1709026b0500b0018c5dae06f2mr3196653plk.24.1673017933757; Fri, 06 Jan
- 2023 07:12:13 -0800 (PST)
+        bh=pOP2U/eNUNDM/BFzz41jwnvvD0q9z7KVLxoSLmeQ5Ik=;
+        b=DFqvKO32vq0/f4KVwlp3SZY2Y/exu5TFrGEXeaKgwHEgDTgTjMY0qzURKiGpBmxrx2
+         jwCoT4ZtRjdHfEViBjK2qSU5WWfoAEvrociUEe8Kz0ZSuGsV77PMfOLaOUBkr5oKAs7j
+         Gwt52zBNLeKDlUZNqPyuzE42kqcLSo5mxNY4Y+6PwtCEfg8s/sq/QWlqoNEHcf5pYnT2
+         VL0DXCpAR9IELwh54zi61PrgRZWOFQb4dAwvd1BNPI+AHqf9Ga6k8im1t55/7qHOdHpG
+         FqWAYUXk4HRnj8BCgMm93jCcQ3ZedL2aK2S44dDPKsJthzGKeSQ4wdVy/bP9BJs7Xd15
+         KDwQ==
+X-Gm-Message-State: AFqh2krYqnvKHhnWwwWgdo7l4ubPsIStDTTbJPAnhtMjpB5k1o0hFhfI
+        ysNok8+zhsFTmXM4T8P2IeJGqyAc8bRyYJo6OZsuIQ==
+X-Google-Smtp-Source: AMrXdXtU5V0QpvGP+OLVqYFgiJWNnTOSLBLIFWEusuHsSsLFG6DazczNuQ1GVC5dZz7mwSfu21vgm+nI7RXXx5oI+Z4=
+X-Received: by 2002:a17:90a:5d97:b0:226:c03e:23fc with SMTP id
+ t23-20020a17090a5d9700b00226c03e23fcmr716787pji.6.1673017952133; Fri, 06 Jan
+ 2023 07:12:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230106142537.607399-1-irogers@google.com> <Y7g2YXNaP0VM+F1o@kernel.org>
-In-Reply-To: <Y7g2YXNaP0VM+F1o@kernel.org>
+References: <20230106142537.607399-1-irogers@google.com> <20230106142537.607399-2-irogers@google.com>
+In-Reply-To: <20230106142537.607399-2-irogers@google.com>
 From:   Mike Leach <mike.leach@linaro.org>
-Date:   Fri, 6 Jan 2023 15:12:02 +0000
-Message-ID: <CAJ9a7Vg5-7c_p=6ga0my7cU2P9=N2N8YNMzUrd3kV18eX+ba2w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] perf build: Properly guard libbpf includes
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+Date:   Fri, 6 Jan 2023 15:12:21 +0000
+Message-ID: <CAJ9a7VjE4PzEe+Gu_KPi3JEw3TKQpC70yZrLRT+EmaEGDRLnEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] perf build: Fix build error when NO_LIBBPF=1
+To:     Ian Rogers <irogers@google.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, acme@kernel.org, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
         alexander.shishkin@linux.intel.com, jolsa@kernel.org,
         namhyung@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 at 14:55, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+On Fri, 6 Jan 2023 at 14:25, Ian Rogers <irogers@google.com> wrote:
 >
-> Em Fri, Jan 06, 2023 at 06:25:36AM -0800, Ian Rogers escreveu:
-> > Including libbpf header files should be guarded by
-> > HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
-> > under HAVE_BPF_SKEL.
-> >
-> > Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
-> > Reported-by: Mike Leach <mike.leach@linaro.org>
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+> The $(LIBBPF) target should only be a dependency of prepare if the
+> static version of libbpf is needed. Add a new LIBBPF_STATIC variable
+> that is set by Makefile.config. Use LIBBPF_STATIC to determine whether
+> the CFLAGS, etc. need updating and for adding $(LIBBPF) as a prepare
+> dependency.
 >
-> Can this be done in a way that reduces patch size?
+> As Makefile.config isn't loaded for "clean" as a target, always set
+> LIBBPF_OUTPUT regardless of whether it is needed for $(LIBBPF). This
+> is done to minimize conditional logic for $(LIBBPF)-clean.
 >
-> - Arnaldo
+> This issue and an original fix was reported by Mike Leach in:
+> https://lore.kernel.org/lkml/20230105172243.7238-1-mike.leach@linaro.org/
 >
-> > ---
-> >  tools/perf/builtin-trace.c    |  2 +
-> >  tools/perf/util/bpf_counter.h | 85 ++++++++++++++++++-----------------
-> >  2 files changed, 46 insertions(+), 41 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-> > index 86e06f136f40..d21fe0f32a6d 100644
-> > --- a/tools/perf/builtin-trace.c
-> > +++ b/tools/perf/builtin-trace.c
-> > @@ -16,7 +16,9 @@
-> >
-> >  #include "util/record.h"
-> >  #include <api/fs/tracing_path.h>
-> > +#ifdef HAVE_LIBBPF_SUPPORT
-> >  #include <bpf/bpf.h>
-> > +#endif
-> >  #include "util/bpf_map.h"
-> >  #include "util/rlimit.h"
-> >  #include "builtin.h"
-> > diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
-> > index 4dbf26408b69..9113c8bf5cb0 100644
-> > --- a/tools/perf/util/bpf_counter.h
-> > +++ b/tools/perf/util/bpf_counter.h
-> > @@ -4,9 +4,12 @@
-> >
-> >  #include <linux/list.h>
-> >  #include <sys/resource.h>
-> > +
-> > +#ifdef HAVE_LIBBPF_SUPPORT
-> >  #include <bpf/bpf.h>
-> >  #include <bpf/btf.h>
-> >  #include <bpf/libbpf.h>
-> > +#endif
-> >
-> >  struct evsel;
-> >  struct target;
-> > @@ -42,6 +45,47 @@ int bpf_counter__read(struct evsel *evsel);
-> >  void bpf_counter__destroy(struct evsel *evsel);
-> >  int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
-> >
-> > +static inline __u32 bpf_link_get_id(int fd)
-> > +{
-> > +     struct bpf_link_info link_info = { .id = 0, };
-> > +     __u32 link_info_len = sizeof(link_info);
-> > +
-> > +     bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
-> > +     return link_info.id;
-> > +}
-> > +
-> > +static inline __u32 bpf_link_get_prog_id(int fd)
-> > +{
-> > +     struct bpf_link_info link_info = { .id = 0, };
-> > +     __u32 link_info_len = sizeof(link_info);
-> > +
-> > +     bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
-> > +     return link_info.prog_id;
-> > +}
-> > +
-> > +static inline __u32 bpf_map_get_id(int fd)
-> > +{
-> > +     struct bpf_map_info map_info = { .id = 0, };
-> > +     __u32 map_info_len = sizeof(map_info);
-> > +
-> > +     bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
-> > +     return map_info.id;
-> > +}
-> > +
-> > +/* trigger the leader program on a cpu */
-> > +static inline int bperf_trigger_reading(int prog_fd, int cpu)
-> > +{
-> > +     DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-> > +                         .ctx_in = NULL,
-> > +                         .ctx_size_in = 0,
-> > +                         .flags = BPF_F_TEST_RUN_ON_CPU,
-> > +                         .cpu = cpu,
-> > +                         .retval = 0,
-> > +             );
-> > +
-> > +     return bpf_prog_test_run_opts(prog_fd, &opts);
-> > +}
-> > +
-> >  #else /* HAVE_BPF_SKEL */
-> >
-> >  #include <linux/err.h>
-> > @@ -87,45 +131,4 @@ static inline void set_max_rlimit(void)
-> >       setrlimit(RLIMIT_MEMLOCK, &rinf);
-> >  }
-> >
-> > -static inline __u32 bpf_link_get_id(int fd)
-> > -{
-> > -     struct bpf_link_info link_info = { .id = 0, };
-> > -     __u32 link_info_len = sizeof(link_info);
-> > -
-> > -     bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
-> > -     return link_info.id;
-> > -}
-> > -
-> > -static inline __u32 bpf_link_get_prog_id(int fd)
-> > -{
-> > -     struct bpf_link_info link_info = { .id = 0, };
-> > -     __u32 link_info_len = sizeof(link_info);
-> > -
-> > -     bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
-> > -     return link_info.prog_id;
-> > -}
-> > -
-> > -static inline __u32 bpf_map_get_id(int fd)
-> > -{
-> > -     struct bpf_map_info map_info = { .id = 0, };
-> > -     __u32 map_info_len = sizeof(map_info);
-> > -
-> > -     bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
-> > -     return map_info.id;
-> > -}
-> > -
-> > -/* trigger the leader program on a cpu */
-> > -static inline int bperf_trigger_reading(int prog_fd, int cpu)
-> > -{
-> > -     DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-> > -                         .ctx_in = NULL,
-> > -                         .ctx_size_in = 0,
-> > -                         .flags = BPF_F_TEST_RUN_ON_CPU,
-> > -                         .cpu = cpu,
-> > -                         .retval = 0,
-> > -             );
-> > -
-> > -     return bpf_prog_test_run_opts(prog_fd, &opts);
-> > -}
-> > -
-> >  #endif /* __PERF_BPF_COUNTER_H */
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
+> Fixes: 746bd29e348f ("perf build: Use tools/lib headers from install path")
+> Reported-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/Makefile.config |  2 ++
+>  tools/perf/Makefile.perf   | 21 ++++++++++++---------
+>  2 files changed, 14 insertions(+), 9 deletions(-)
+>
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index c2504c39bdcb..7c00ce0a7464 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -602,6 +602,8 @@ ifndef NO_LIBELF
+>            dummy := $(error Error: No libbpf devel library found, please install libbpf-devel);
+>          endif
+>        else
+> +        # Libbpf will be built as a static library from tools/lib/bpf.
+> +       LIBBPF_STATIC := 1
+>         CFLAGS += -DHAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
+>          CFLAGS += -DHAVE_LIBBPF_BPF_PROG_LOAD
+>          CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 13e7d26e77f0..4e370462e7e1 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -303,10 +303,12 @@ ifneq ($(OUTPUT),)
+>  else
+>    LIBBPF_OUTPUT = $(CURDIR)/libbpf
+>  endif
+> -LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
+> -LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
+> -LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
+> -CFLAGS += -I$(LIBBPF_OUTPUT)/include
+> +ifdef LIBBPF_STATIC
+> +  LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
+> +  LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
+> +  LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
+> +  CFLAGS += -I$(LIBBPF_OUTPUT)/include
+> +endif
+>
+>  ifneq ($(OUTPUT),)
+>    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> @@ -393,10 +395,8 @@ endif
+>  export PERL_PATH
+>
+>  PERFLIBS = $(LIBAPI) $(LIBPERF) $(LIBSUBCMD) $(LIBSYMBOL)
+> -ifndef NO_LIBBPF
+> -  ifndef LIBBPF_DYNAMIC
+> -    PERFLIBS += $(LIBBPF)
+> -  endif
+> +ifdef LIBBPF_STATIC
+> +  PERFLIBS += $(LIBBPF)
+>  endif
+>
+>  # We choose to avoid "if .. else if .. else .. endif endif"
+> @@ -756,12 +756,15 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
+>         $(arch_errno_name_array) \
+>         $(sync_file_range_arrays) \
+>         $(LIBAPI) \
+> -       $(LIBBPF) \
+>         $(LIBPERF) \
+>         $(LIBSUBCMD) \
+>         $(LIBSYMBOL) \
+>         bpf-skel
+>
+> +ifdef LIBBPF_STATIC
+> +prepare: $(LIBBPF)
+> +endif
+> +
+>  $(OUTPUT)%.o: %.c prepare FORCE
+>         $(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
+>
+> --
+> 2.39.0.314.g84b9a713c41-goog
 >
 
 Tested-by: Mike Leach <mike.leach@linaro.org>
-
-> --
->
-> - Arnaldo
-
 
 -- 
 Mike Leach
