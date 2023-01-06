@@ -2,219 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877EF65FE8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B1B65FE8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjAFKLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229597AbjAFKLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbjAFKLD (ORCPT
+        with ESMTP id S232271AbjAFKLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:11:03 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BB514017;
-        Fri,  6 Jan 2023 02:10:51 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bt23so1339183lfb.5;
-        Fri, 06 Jan 2023 02:10:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2AvodmV6r1uh3+mDTSjqcwni55KL3aLeYcKEIfJZqDE=;
-        b=IvCRei3g8gBwnMnOIOO1U/i1B8SBHsNbA7DI3GAyTm99zaDXuZAKH8v3RguWkiM2VN
-         O8Dsh9usI3T/yE2EkNqqugvx8jvjzobjO/nB7gnEdHx/yu5aRGQcdD0AeSNUIp/aSDen
-         9vumCnR7edk7ikFu/hN2Hh+FvUPRe1pyuErsY5RCsXrGChotXhedMRQvs40JUYlaraZ5
-         F9XScVaUmh0fYe/+3a4CXqV9oq3/xYRRKXt2fmx4Q1VwzfaVBxzOQqjHcWWu02UHLlk9
-         PiAy2iok3RqStX08WdMtoSC1p48s/Vbk8P4x1piGjzI1XmdTJfeikh1S9akIUxF6/AQR
-         Dzpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2AvodmV6r1uh3+mDTSjqcwni55KL3aLeYcKEIfJZqDE=;
-        b=aofra8EjPB8YCbxHLuSL5CQXb+128JZD+L8yHqRkHokrKYyBgu/9w/VF1VjBurY4lv
-         iEbJ2foHouzx/9T7d2n5lQVRJUaW52aQcfr4CdkOHzpPWKNR0i+scxsBgE2sO+RTu1Lm
-         UtrP4d8F8166QoBEJU4ZYwgc51Nwgc7D7xTlXHGyZotGXNoudpc4ZRActvO/Az0768KK
-         8HfGt8ivS9N+v4UD96F0QkJA5rsJKM5t69Xf1nDoREFiDTQ2HsNfJWJs9qrWy+BVr2pQ
-         QA91j2Tny7AT54brhgGZWb9RNfIkDnjUJ3uUjPlIhWeMh4hrMBnYytUDi/LRJcDcQzOg
-         qMkQ==
-X-Gm-Message-State: AFqh2kpAOt2sGDcDkV4+O0zkqfOOZ7SNIoLTsXm3VKgmsy33zmdxDMQZ
-        zROUQiSXrMyoX9d7FaYYtVo=
-X-Google-Smtp-Source: AMrXdXtj04V3806l2QPVJaWXM7VUg6xGiaQKAUFgAllga04EF7x+JJXdvpI0wO3L/6yA0drrLYtVXA==
-X-Received: by 2002:a19:f513:0:b0:4b5:731f:935a with SMTP id j19-20020a19f513000000b004b5731f935amr3431318lfb.0.1672999849781;
-        Fri, 06 Jan 2023 02:10:49 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056512324a00b004b5adb59ed5sm100351lfr.297.2023.01.06.02.10.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 02:10:49 -0800 (PST)
-Date:   Fri, 6 Jan 2023 12:10:47 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
-Subject: Re: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20230106121047.00003048@gmail.com>
-In-Reply-To: <SA1PR21MB133576523E55BBC7300DE2B1BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
-        <20221207003325.21503-3-decui@microsoft.com>
-        <20230105114435.000078e4@gmail.com>
-        <SA1PR21MB133560538DDD7006CCB36E30BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-        <20230105201024.00001ea0@gmail.com>
-        <SA1PR21MB133576523E55BBC7300DE2B1BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 6 Jan 2023 05:11:10 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A853C0C5;
+        Fri,  6 Jan 2023 02:11:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lHIURIrV1O2ttTlagvi68UrPW3Bp2MvowjEDC5NUpVYSIVmOBCAcZFZNB5yty7p/HAucKOZLtMR/KCA3ueWNDrmHC4qATbf44Cyovg+fzoMUKMDI4O78bsx+AW5uP0/JNl7Rr02pGxHFluOB/0nGjIomn9icmFZBXbygSff0+SNUniBse2I2ArQqpMLlYEBC8AgY8UL1MYvSgAPjBT6LQshp/hh8QcQibYavJ2xJf0G63GPUCDV7vEmkvz7nkIyMtLIMO8ar3kGPZq6fHOA/gS86hX+aMA8wMyQH8XCfrEOUbBgH+ZnkOfUKARppO1bunLNYlEStbpyPu0IkSuvh4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mQkh+S+xY+4cstl5gDCysc0d59+JBEjM26yIGo8VLTc=;
+ b=lK0tQFvndM0u3L6kC7njzNAT/vDw2uiZgoMQqBXvbq0tDn+dIcikRLND/0tRzNK+ke6WtFxb7DircrESCwNiVOdq7GIUHKcUtryfUnqQc4jUfbhC/2xoYqHae10wALAEDMwEKJKgNRh6cAKoEokmtMAfLZraeCl+vOV3+1OH9CJ8rFNvFIDtkE03ZAoDdED6XiXxwmfT43xV5G4kg2Eu3RGkpHgptzH7Ezyigd2ZWM04mDy54K7+7h3LCpkFQc9D0Y8ISf7VZqjZm+6B8PSWNoVZvn/lhz7kRLssDQKEZsx7DovlN+JHfONEHnoLhp4MuzeE4ovXeN1soTjtRTyEPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mQkh+S+xY+4cstl5gDCysc0d59+JBEjM26yIGo8VLTc=;
+ b=prElmeFOJEaipLYsFI881f2RkJu/9je3Y0PUdje/P+nKGchZAxmrHMjjFbU2ZBTd4xQs6+T7lwKsvGTnIfwB9bQTzxSvQxDyr1vIh2EGd9QUTgK/vnVh0+lGWAQ/gJLX1NxdAkZ5L4cDsEWsgd9qAKbDylkgG3KsiTWm2zrMMzvzn0cPh39wrloWNYienUMpgfKtIASTKKRKw9a8kLIBjQt9+iasHbPLejg3S2yA2qDQT+w+SH0U/HU7Y1ZQRPxeDlJ3KwR9ppp6NdLmV6OzgEhtsGaon3WbGC61+im2+aBJtUSZtHO4tc6ReHj9b3IK1JaNjFAUlkljw2cZhKGF5A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by DS0PR12MB7970.namprd12.prod.outlook.com (2603:10b6:8:149::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
+ 2023 10:11:02 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::a600:9252:615:d31a]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::a600:9252:615:d31a%3]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
+ 10:11:02 +0000
+Date:   Fri, 6 Jan 2023 12:10:57 +0200
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Petr Machata <petrm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mlxsw: spectrum_router: Replace 0-length array with
+ flexible array
+Message-ID: <Y7fzsd7aH/tCAMyf@shredder>
+References: <20230105232224.never.150-kees@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105232224.never.150-kees@kernel.org>
+X-ClientProxiedBy: VI1P191CA0004.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:800:1ba::10) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DS0PR12MB7970:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4df2247-b577-4d27-f4bd-08daefce50d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FK9ImDUa+jFfFoiSRWc5CyGfqHOBD4jMsUp9pZgWLrP9ROIxcGsGBbXFr0zuhuL9+YQeA7x+OxYND4kjPNpjT/fTrT84na36eTHddj8ILb/pYyPGarQVXt5tX4CkfwCBbmAPhh77lXt2zQG6SU4CWLbJ7pB0sR6KHJgRoPlY/w/qlUcqrEbn1mkvq928G3NPimwYDw9XE8XdLcVZr7YsZuV5N66xnOAUcD46HZTyTekd3Bs3XLHghcRLgWppENKecULLO1POKo/4kJfdzs+yR/wSsHLH+4WjVdcjFmRjMTUiI+Nd7gjrXBje/9nUOo26SK7BWzq8EsPVroxTxX+FYBnyfLJQL3aN3A2bl9VWd8GbFtczMnZaHVSqVmlWi+e4bUOYuJ1/YZ7SWUfWjFtfbKa+/qYPTUwofZZ3DSFbsQ1mPgij7PgB6vTkGop0kAuAGL/AZSAIGeFPkgCVoHgMY019k8bPy3FlnGh5HQ6qIGr4tu8Bi8lH073NBpIZ/fP6Xul99bMX8Y6xai/ZlQc+7GbFul9P2RQJXv0ViTHpb8kIRx0YstKvVJ9aElEnCzIVXghLUJnrI0PG16v/4kzzW5pzzod3DRaz8Z7XtFFaKFV4Tp679np3YMYpc7DnIjxsEauggeAacBO4u//HhC8qOSXiJBmZz4FPs2/4mf6LfT1OzHINoC1PW6Hsa0f+q+05DCelal1gvXp0HmNXY7eNSOcPhAlRp5gHxw4cr2ELeOo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(366004)(346002)(39860400002)(376002)(396003)(136003)(451199015)(83380400001)(66574015)(26005)(6512007)(9686003)(6666004)(6506007)(33716001)(86362001)(186003)(38100700002)(316002)(478600001)(4326008)(41300700001)(8676002)(2906002)(5660300002)(8936002)(966005)(6486002)(66476007)(66556008)(54906003)(66946007)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y6qpmSSZ5HhAHyhwbQ0KhL3muU4WfzdZcvAkyzbIvUpzULJcGjz8t/MxhWAw?=
+ =?us-ascii?Q?PtNYE7GF2BCUiZW3nc4IDhMvtjL8j1hal1Zd04mude6aYrB9EWNVS1QGUNMV?=
+ =?us-ascii?Q?x0GkjxZSmHiSkMyVihNb7KAPMuZcnYRV24OYPMIZNxf4cO3Cf+D9wDwLoGyl?=
+ =?us-ascii?Q?N3O03lBXbxr3FUNxsuOcDNfsL2VM0CmSsa9+5ECwVqG46J0EUXPzHK5Gjcm/?=
+ =?us-ascii?Q?Akur7CKYZEYjtjTLJ5Ylxc9xCqVunW7hp6qsuh8j1ANwYM4QlijLbHwbfOiR?=
+ =?us-ascii?Q?1qcMhtVIdpaBT/kK3gFsxpLjylRW6fTdCTOT/JWt9nCZZPXO1Zqddpuiv9cR?=
+ =?us-ascii?Q?9+G+N0kkgHcY9pZexnZhe4+rmDIn/O0GZixLYfs/uWsGe3PXZ5DoDCIk/bKW?=
+ =?us-ascii?Q?BvSJlg3ZFl/fjO6iPn8h0b+cI/TjE2aFUqWpknU+RzSxlq7YvtK5zgRXks8P?=
+ =?us-ascii?Q?p+GnkpW+rHJl2ptwSp5Z9fhiANrkrLhxOMBWV8thu5+/Q4M32pA6h3HqMUZX?=
+ =?us-ascii?Q?tUD6D/nN3mQePzcQe2Fm1LKt5SvXp4tudN99KYY0wBOaIw1jMuTDqpjqGwN8?=
+ =?us-ascii?Q?fPWjyQ4vbFOYHTCtNHc5cYIMZbMgJRDwCa5rklUIG3PoJWhjSrXjiHIWEf6z?=
+ =?us-ascii?Q?6Q2wv5bBDJvRgWYZNe4oigTltCq8urQfoW54KOPRAlE/U6Z8RGdewsgsArtu?=
+ =?us-ascii?Q?ezZ+Lt0WJYLPged23sjxxaOubyVsLw+y7NwyxxZ2AF+Qx8LbLlUflnHQN8xF?=
+ =?us-ascii?Q?1V9bIT1ixALIJjYcCanINXwWWpP6MVZuoAr5ZRq8PV1iC+xE9BcokyTaLjC4?=
+ =?us-ascii?Q?opo33RCcTSBJtPGVvI94QfQYKYPrzHEQxjz3sWq2k/xVMK1dO2qSBpvwtev5?=
+ =?us-ascii?Q?mmFqcyiL68hbyzH1ILiDlVxQ115hjBlr5VS0aPlBqS5Wetim6Lj6+0Bij7uv?=
+ =?us-ascii?Q?Y7sMK6j0QW82D/l5rb/KxyIpVNHQVogt+WC33CHvVHO/zqUmYPB4221A2nRV?=
+ =?us-ascii?Q?JN8tgVhf8mGC2i4wq6JQCR91hjh2hhJRl1UfI8DzDcLVQ8kzk83d8/KTmLRM?=
+ =?us-ascii?Q?spyeQZjD1tiHZOpcL6cUlkbDYClwStJf210KlbdqHxmm3K64kx6OnctDwGMA?=
+ =?us-ascii?Q?lHgIkWNchgyjrOMZHQwZInlMEUBoguJE1lbpip0CDcP7eXXrTWkcJwDF9q+K?=
+ =?us-ascii?Q?f29HVekdQ4y0yIplExKD1UsJlYnPT7GtqbSNk64jv+MbMm8kjFBPkVE5E111?=
+ =?us-ascii?Q?MQTQXnplOoplRLlsJrkdS+WIZBLY2hGMmZm45lRjK+fZdRipoqVTQ5f7Izkp?=
+ =?us-ascii?Q?48CzvI16XtMMI/gNDsgoKm4Jq+8EJpG5XrKrS+3Khk9Py7ativd0a7nvThfJ?=
+ =?us-ascii?Q?lpTGoE+jy5oorqmR0fgDb4OoyQFNU35dzf7C2cGABdfVSj4YYclzbzTRMDbk?=
+ =?us-ascii?Q?CrLIpTZH1c5xu9zDHfPgyLRDYjEn30LrziZIAPUCUmyzOEojk94S+HFLMwcc?=
+ =?us-ascii?Q?tADIK5/d86rbtNPbjUJn0ddOQ1bBgC5fFGsW4KeVL1Au5I7+erSWh2g4DDDl?=
+ =?us-ascii?Q?QwvqjJ96lcTbtYPhhm/5sEXmkEYX7+zsYBrBTtaO?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4df2247-b577-4d27-f4bd-08daefce50d2
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 10:11:02.6680
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7kREhydDK6umth2koU+OkFcyv/tig3BmTZEz9GU0GPjc/uW4mZYmooO5z2zWL+vUjbomUI7BASwNCZh9qHZChg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7970
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 20:29:25 +0000
-Dexuan Cui <decui@microsoft.com> wrote:
+On Thu, Jan 05, 2023 at 03:22:29PM -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace struct
+> mlxsw_sp_nexthop_group_info's "nexthops" 0-length array with a flexible
+> array. Detected with GCC 13, using -fstrict-flex-arrays=3:
+> 
+> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c: In function 'mlxsw_sp_nexthop_group_hash_obj':
+> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:3278:38: warning: array subscript i is outside array bounds of 'struct mlxsw_sp_nexthop[0]' [-Warray-bounds=]
+>  3278 |                         val ^= jhash(&nh->ifindex, sizeof(nh->ifindex), seed);
+>       |                                      ^~~~~~~~~~~~
+> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:2954:33: note: while referencing 'nexthops'
+>  2954 |         struct mlxsw_sp_nexthop nexthops[0];
+>       |                                 ^~~~~~~~
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Cc: Ido Schimmel <idosch@nvidia.com>
+> Cc: Petr Machata <petrm@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-> > From: Zhi Wang <zhi.wang.linux@gmail.com>
-> > Sent: Thursday, January 5, 2023 10:10 AM
-> > [...]
-> > I see. Then do we still need the hv_map_memory()in the following
-> > code piece in netvsc.c after {set_memoery_encrypted, decrypted}()
-> > supporting memory from vmalloc()?
-> 
-> For SNP, set_memory_decrypted() is already able to support memory
-> from vmalloc().
-> 
-> For TDX, currently set_memory_decrypted()() is unable to support
-> memory from vmalloc().
-> 
-I guess we both agree that memory conversion in HV should be done through
-coco so the hv_map_memory can be removed (even the extra does not hurt
-currently)
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-The memory conversion in current HV code is done by different approaches.
-Some are going through the coco, some are not, which ends up
-with if(hv_isolation_type_snp()) in memory allocation path. It can be
-confusing. I suppose a reasonable purpose of hv_isolation_type_snp()
-should cover the AMD SEV-SNP specific parts which haven't been (or are
-not going to be) covered by coco. For example the GHCB stuff. 
-
-Thanks,
-Zhi.
-
-> >         /* set_memory_decrypted() is called here. */
-> >         ret = vmbus_establish_gpadl(device->channel,
-> > net_device->recv_buf, buf_size, 
-> > &net_device->recv_buf_gpadl_handle);
-> >         if (ret != 0) {
-> >                 netdev_err(ndev,
-> >                         "unable to establish receive buffer's
-> > gpadl\n"); goto cleanup;
-> >         }
-> > 
-> >         /* Should we remove this? */
-> 
-> The below block of code is for SNP rather than TDX, so it has nothing to
-> do with the patch here. BTW, the code is ineeded removed in Michael's
-> patchset, which is for device assignment support for SNP guests on
-> Hyper-V:
-> https://lwn.net/ml/linux-kernel/1669951831-4180-11-git-send-email-mikelley@microsoft.com/
-
-So happy to see this. :)
-
-> and I'm happy with the removal of the code.
-> 
-> >         if (hv_isolation_type_snp()) {
-> >                 vaddr = hv_map_memory(net_device->recv_buf, buf_size);
-> >                 if (!vaddr) {
-> >                         ret = -ENOMEM;
-> >                         goto cleanup;
-> >                 }
-> > 
-> >                 net_device->recv_original_buf = net_device->recv_buf;
-> >                 net_device->recv_buf = vaddr;
-> >         }
-> > 
-> > I assume that we need an VA mapped to a shared GPA here.
-> 
-> Yes.
-> 
-> > The VA(net_device->recv_buf) has been associated with a shared GPA in
-> > set_memory_decrypted() by adjusting the kernel page table.
-> 
-> For a SNP guest with pavavisor on Hyper-V, this is not true in the
-> current mainline kernel: see set_memory_decrypted() ->
-> __set_memory_enc_dec():
-> 
-> static int __set_memory_enc_dec(unsigned long addr, int numpages, bool
-> enc) {
-> 		//Dexuan: For a SNP guest with paravisor on Hyper-V,
-> currently we // only call hv_set_mem_host_visibility(), i.e. the page
-> tabe is not // updated. This is being changed by Michael's patchset,
-> e.g.,
-> https://lwn.net/ml/linux-kernel/1669951831-4180-7-git-send-email-mikelley@microsoft.com/ 
->         if (hv_is_isolation_supported())
->                 return hv_set_mem_host_visibility(addr, numpages, !enc);
-> 
->         if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
->                 return __set_memory_enc_pgtable(addr, numpages, enc);
-> 
->         return 0;
-> }
-> 
-> > hv_map_memory()
-> > is with similar purpose but just a different way:
-> > 
-> > void *hv_map_memory(void *addr, unsigned long size)
-> > {
-> >         unsigned long *pfns = kcalloc(size / PAGE_SIZE,
-> >                                       sizeof(unsigned long),
-> > GFP_KERNEL);
-> >         void *vaddr;
-> >         int i;
-> > 
-> >         if (!pfns)
-> >                 return NULL;
-> > 
-> >         for (i = 0; i < size / PAGE_SIZE; i++)
-> >                 pfns[i] = vmalloc_to_pfn(addr + i * PAGE_SIZE) +
-> >                         (ms_hyperv.shared_gpa_boundary >>
-> > PAGE_SHIFT);
-> > 
-> >         vaddr = vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
-> >         kfree(pfns);
-> > 
-> >         return vaddr;
-> > }
-
+Thanks
