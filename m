@@ -2,185 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185B765FE54
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AA065FE4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjAFJsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S232793AbjAFJtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjAFJrs (ORCPT
+        with ESMTP id S233592AbjAFJsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:47:48 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3F943E4A;
-        Fri,  6 Jan 2023 01:47:42 -0800 (PST)
-X-UUID: 5ef82198f34b4f36b7f1aec6be54f3c0-20230106
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=X4OpMzMCZC5NsU7iKgxkeW2lRtfqrMDvsCdsi1Xg9II=;
-        b=YOWHIs+TQGmsYodGTjiny8eLDQhtew9o9Nf1ONsZmpPRH1qxZNHmBRAH7tPbYVUQyVJDbh6AhQDF7KRGut1VZe/T2EogNm31+I8gIi5iEYkMdMBIjEwZ1uEUNJcFeU//ge0hl4lZ3RSz1r29qIowT1Esy9q2Fz2iJcUghEN/i68=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:105d59f0-41ed-4289-9395-9cea694adaec,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-10
-X-CID-INFO: VERSION:1.1.17,REQID:105d59f0-41ed-4289-9395-9cea694adaec,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:-10
-X-CID-META: VersionHash:543e81c,CLOUDID:942105f5-ff42-4fb0-b929-626456a83c14,B
-        ulkID:230106174737XCU5EF6B,BulkQuantity:0,Recheck:0,SF:38|17|19|102,TC:nil
-        ,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:
-        0,OSA:0
-X-CID-BVR: 0
-X-UUID: 5ef82198f34b4f36b7f1aec6be54f3c0-20230106
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <garmin.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 5605930; Fri, 06 Jan 2023 17:47:36 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 6 Jan 2023 17:47:35 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 6 Jan 2023 17:47:35 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahrfL8TbG6ge1cTiWwP18Jhlwsw1eB343H5nrBv1vWU3YJLxzbmahZVnADeFolr6AqbN+6LsGMzw8oqlNfFqKmd16nYrtexuSGsnad+PyfeIMRdXqeRA0EkgmbB4hlIx2eX5h2UP7eajFW17GVy9GbGKiWZsubtFNgyOgqpgmzCL/jkfA4iiQACTpl/27uPsosVY0740U9YgIfCRA7kvWwxy16EyOzXlCNG1+WbOKxnyyzxDE/TGmEs/uq4ESvU743S+2/BHdANWw/fbPjPG55LwcG5BkAiDUlzoZ8vsKZQVfIUjovURKcYQRJhpSMHtYMHkBMN72sZAkZbFdSkI/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X4OpMzMCZC5NsU7iKgxkeW2lRtfqrMDvsCdsi1Xg9II=;
- b=QIjmLMYI22kXTJc5YEPeKd+ZPknQ/wbOQdaHkng5P9CjUXKqKjEmTnIGPNRNFF/qqqVnQjRI362Y8RMdnb4PJAb7HmfibtG0hWlb3K9rYN5CKzBoGOTEo9K0AKa+GVhk3IDOd+qNhGJ3jXSRxdY4STq9oztfHWyRNKJtD/uDavrYXBCqcsOJMz/uweDMwAXVxhYlIfIkXUGAmbxNHXblwiFSfZBL2SyCgwm+rRtbIWnpvP1DSCxRcQtuBZUWCLpHYgATi8s03mMYMWmaOFF8QZ4pcmvo4TFTUaKbXgJ9R1qIDI3Q5/xICQhHwVAR3FiUZgZQF2B9zn2ez6QXhJWtTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X4OpMzMCZC5NsU7iKgxkeW2lRtfqrMDvsCdsi1Xg9II=;
- b=l1RC4WRrV8NNjZRX6khln9CziuUt53I0h0u0pf3xj17sG6IWBE90apr+0s2DsgFcD+hnNq6h59wrDhyO/qdsyJM0NzasSc1bhxxuCh4s8RunDJOe6L9HFiMiGdR2u3y98v6Z0I8fFL00qCyp87GtI0z6CI/tYwyXYbPGOOCDtfE=
-Received: from PUZPR03MB5877.apcprd03.prod.outlook.com (2603:1096:301:a5::6)
- by SI2PR03MB5913.apcprd03.prod.outlook.com (2603:1096:4:145::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 09:47:33 +0000
-Received: from PUZPR03MB5877.apcprd03.prod.outlook.com
- ([fe80::6bf6:aaf0:3698:5453]) by PUZPR03MB5877.apcprd03.prod.outlook.com
- ([fe80::6bf6:aaf0:3698:5453%4]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 09:47:33 +0000
-From:   =?utf-8?B?R2FybWluIENoYW5nICjlvLXlrrbpipgp?= 
-        <Garmin.Chang@mediatek.com>
-To:     "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] Add power domain support for MT8188
-Thread-Topic: [PATCH v3 0/2] Add power domain support for MT8188
-Thread-Index: AQHZFqWJsQzQJaQLuUudGVvEgxokhq6ROoAA
-Date:   Fri, 6 Jan 2023 09:47:33 +0000
-Message-ID: <aa438a50a089d69625c87e6215526a7733488342.camel@mediatek.com>
-References: <20221223080553.9397-1-Garmin.Chang@mediatek.com>
-In-Reply-To: <20221223080553.9397-1-Garmin.Chang@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PUZPR03MB5877:EE_|SI2PR03MB5913:EE_
-x-ms-office365-filtering-correlation-id: 99d4630a-2a41-4ec2-5465-08daefcb08ef
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8P9qC1ulxYds0uE2w56d8PLkT597hsaSFK7nHZV2s8NUbDm9aEPuHgOvPWlGCrQQTRmv5QN5WyCn3QY+IqB9+vwb+LBP/tQQSN+H35nEnmTceqAgTVc4KCz8B/Bakj7GDNjOVxVEsbh1vacRJEfrvyubfY8hTRXqzgMLLGc3xnwLsX/wYmapxry7Dcjxt688Gi4zcWXDaMog0TVpc3sLgBvPBQ1JgA4ouxM0mTWWIx1c9bQZsyU/MAO4hiGmnlpLUSNk0YIdcPIMf5FVXId1/ovJtac4zXtjUwTzPAdjSuBDxEXJpXG5tAkddS/aZxG01uwFCmQsCjVOgboRVdknpS3yloibFWCjcvGByGakBLupDhfbIpVQaJR0VdGy/0rndXhF+B4yNIeM+uQ5HfrY7q5qUSwB8K7rHYh7XF6308mUIqCqZ+xTKmR9RS14jRwWe4U4n3/IpgDxwb312VUTrKY6nys0bKGx2H0ReYj03ooEkdy1lx5DVkAuumOne5mLxB1dQD2aLxeth67tf/kIAIJww4/7puYGinxjKYO1LrPONxSaJUyncauELPzstdcIzb8mb861/V4tVoYLHSkYZ0ATBevWtSXjD5Ip8LUSB9orUSAUiGv0wMtTZtYDYgf5CFGu1Azk2DOfk2ihb4azksR6CWG77zcS3IOyn4pC+HNDZEpNLzFUbuSzInCP/Ifz8ttODBimzQ5h91bl1QUbIY2BR7ahFIlqENiTd9+oCKMSqXSyCZ+tDp/SuXFWIWd0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR03MB5877.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(86362001)(122000001)(38070700005)(6486002)(26005)(38100700002)(71200400001)(41300700001)(6506007)(6512007)(186003)(478600001)(4744005)(5660300002)(8936002)(110136005)(66446008)(4001150100001)(76116006)(91956017)(66476007)(2906002)(66556008)(4326008)(8676002)(66946007)(64756008)(2616005)(85182001)(36756003)(316002)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjdiSHlZaE1iZHlac1k5czllNUJQaWRtZW1maWh0WTdEOGZUNGVKYW0vbE1k?=
- =?utf-8?B?c0NvMXI2TFBOMkJELy9CMi9jZW82blhMNEdXM2QvSDRhaGtrTGJIRE1Hd28y?=
- =?utf-8?B?a1oxMjh2THJrNkw5ZGZBbW5URlBrZW01Ti8rY3ByOHNQMkV0TmFEVUkwb2Zu?=
- =?utf-8?B?OGZLMi9CcGFoRWlZMCtHT2VpVVRCZ2RVemgvMUVpZ1E3R21lclFVSk5BQkhI?=
- =?utf-8?B?OUdJTzZsRXhEenVUTjZncW5mWjRzSkJjVXFhZTRDVVRvSGgxNFF4MmN6NFhT?=
- =?utf-8?B?TWNSUkFqYXIyU1pPZjdFZlJBRkplaTdXVThMcFJSaU1JWE03cldSUU8wZDNN?=
- =?utf-8?B?Ky9YMUpsSFBLd2dBeWpkNS9rT2tMb1JLVVNRN29CNUg3ajN0TllFb084bXZH?=
- =?utf-8?B?Wmp3VCtqMW94MnRFbzUvVXp4SXpnNCszZ0x4V0JhUU1wRGMxc3BuZkRiRjBF?=
- =?utf-8?B?Y3dRSkpRTEUxL0cwTUp4eTZuWkVWYkFqcUFySmgvTHJFM0E2MjZvUjJsOEtM?=
- =?utf-8?B?N3VaU3o4aEpjajlyOGUvRmdON3ZJSXZScFc3Z2pLRFJwczlVWTIvSVg5bi9I?=
- =?utf-8?B?c1IxamtPcGdwb3FrZXphQ0Y0TzR6ZXlWQ1VSTlBRNzM1YmRuUnY0cTZsWkFy?=
- =?utf-8?B?Y2o1R3NHclJkWlVBaUVuNkovUlJHRU1pWExVOTMyMm1jdUJmNlUzbWRGc3l0?=
- =?utf-8?B?SzNnMXJvSmIyeTZhNTAwZm5aY2YrdzRmZFlGV1V6bEh6YUg5K0ZTUVptaDQ0?=
- =?utf-8?B?QVlzOFNxKzlLbnI5aVlDOENDRk1wNzE2cTBGTHlLTmJST2d6SXFYam1pOE1I?=
- =?utf-8?B?R0ZmTE5xdlM3U212dm85S050bmpyVGxuekhWNUoyMlpNUEpnZk5OMmZONGpq?=
- =?utf-8?B?ZGFXUDlFcFJSeERqd2pKMFpVdXNRMHJlK1pPbDFWQlhUQUFSMlFWbkJ0ZUNv?=
- =?utf-8?B?SDJjQWpiOTBSVVNkbXV1MVFTc042TE1IbkRkRFdXUU1zSjBqbFZvMHFwMXls?=
- =?utf-8?B?c1M2L2lGU1BTTEthUGd4YWprUWlxU3kzcVY4dFFmMWxxKzhLOVdOTUg3aWh1?=
- =?utf-8?B?SXVlZVFDMDM4TkNpa2kyTlBxbTVnWHdkSkNkaGg3TTdSYWNzTTJIV3ZaMHZu?=
- =?utf-8?B?eW1YQzZrT3RvQy9DcnptYjdEdTd6SGc4Y0llb1JkMVVDUlF0OGtVcFpubnQv?=
- =?utf-8?B?cmV5TnU5QUpmaEs3M00wOVBOMUVid2pyQmNRQWxzZ25Ud2xRZ1R6R3IzM0dM?=
- =?utf-8?B?SXJMQkxKNU9aSTFuZ1c2TnpieS8xeXFFM2pzNnFoWjJTdGU3V1ZtMm81eEo0?=
- =?utf-8?B?Smo4VnRVM2NvTXJwakpPV2djZk1haW5ja0M4M1FsR3BZSEFiR0Jhd0c2NVF5?=
- =?utf-8?B?Z2tObS94Y1NDRzExNzNwVUFTamdxOE5uOFQ3WkFHaTlVV3lIMkN0Q2p3dytT?=
- =?utf-8?B?L0R5ZVNkYVd3eWVWTG9JencvU2hOd01qYXk1dkhEOE5XODFRMHlsM0MvVVNL?=
- =?utf-8?B?aWtoQWVrekdNbG1zMmxFdXkxN0ZsVWhBZjAwTDIraXJHeG5SVHQ0anJGM0FE?=
- =?utf-8?B?UVZ5NUZvN0xPQ3JpdVp0dU16Z2FieFFOaVBsUkhoMk9KRVRrL2xwbU1UaUMr?=
- =?utf-8?B?S2twS3RUZU9RVmw5blVmUnhVUDc2S3R6aGJzNm44RHFlQmoxMmt3ZDV1c3ZQ?=
- =?utf-8?B?VnJXRm0yT0R5eE5YZFlWNHNjdFVTRHB5NE5EV3pUZ0FmTEFXbEFMd1JhN3NH?=
- =?utf-8?B?L3R1cEx2bk9vMTZmRTllZ3FUdXA2bWI0bHpobGoxU0Y2Sy9oZURrWnZmczQy?=
- =?utf-8?B?bjVDT2dsZkh1Ukh2ZkFzVHJRUThZa0dXSkNJMTY2aTFUUlMrcG1tYllKY3ZW?=
- =?utf-8?B?WThucFVRcThoaCtLTFVWZE9zeEYxUWxyRVozWTRtbmlEdy9pdUE3TjR1aHJG?=
- =?utf-8?B?Vk00R2pQa3l0OXpxb1dISW42Mk5yQTczQkhNK0lIdk9iNVM5UXZJSkRXamhI?=
- =?utf-8?B?Nm9MSUxtWmJESktJY0VsOThKaStSeHJrVnA0NVBHT256Q2YwUXNaOThWMW52?=
- =?utf-8?B?Z2RISXEzZThZWE03N3lSTk1tNUQ1NGJvVEJaOEZCVjh2dXhTU1RkQTdqYW5J?=
- =?utf-8?B?WXZxcW5IbWVwVjljaXB4SzEvdWgvWTltS2V6Yks4ZzVqS1RHTlI2anVkMkdL?=
- =?utf-8?B?bEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AFB7FB09E99E764CA90839FBFC6D56C5@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 6 Jan 2023 04:48:08 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066183E84D;
+        Fri,  6 Jan 2023 01:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672998455; bh=X5XGAIPvr22MI0eLf6jR3JeaxkhbXLyZMnU47GJOnEw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=bhp4kWHBiZ062LakSuGlAeI1jKBq0geouwPhOVoA4z6A9Nvu2f5Vbkf+3u5Li+LdH
+         jKuMf77iV+neeDKMYPWVsJaXt99T9wcPsrQ2Nsn5ghGvjy7t+HxHT2AM/63qkdJUR5
+         27wRTyg50u5FawL3/ByCzivIkh8lr9/suzZ23VTZY8uNxy4LmvNuAKLIEJIsHZP841
+         3YMMg40GvU432j92jKuE3raVH85yxR9YCCOgUFwAePYpQ2brS0Qebf9yk6how3UoIr
+         MyU86ora954Uw3ppQdFmm5BthcjOqoFNHAMnX1/1QghE5K2bbH2ldKH30YBLpzVHrh
+         rs0qc/Y014QAg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.174.87]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4b1o-1pC4cz1nPy-001iw7; Fri, 06
+ Jan 2023 10:47:35 +0100
+Message-ID: <3bbd5135-a556-6097-9ca3-aef3399b2990@gmx.de>
+Date:   Fri, 6 Jan 2023 10:47:33 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR03MB5877.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99d4630a-2a41-4ec2-5465-08daefcb08ef
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2023 09:47:33.2711
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TvT0w7zai+ALM41vynwognx18aD3SRU550Kw6EH/8WYabiFBzTGrPRNtnBSG1VQhpU2UbvGhtdO1YUPBe6iECMoo17Gtxlg+bE8XPr3Tztc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5913
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 22/27] fbdev: remove tmiofb driver
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-23-arnd@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230105134622.254560-23-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:0Jq4oXtpeY5Zcp1vcmNdwRjg473SuDv8Fg8XziQ3y3xhHgj1BhB
+ LtDuFYRvQMmEUsp9ISNAP6vkXlOh6GIRvM3Rf3h/v2tF82uX6xAbObBZ++2D5xbrISu02AF
+ R9wbH8quUF6r/jTu2gM/8zJlQzcnAz1ThizbL3hKsJi57YuNYopB4bkZizTAD69ebdLZuDB
+ ij3zeuLgUN9lvqAxZaRyA==
+UI-OutboundReport: notjunk:1;M01:P0:0Z2ibuAUW7Q=;awQLBEyBJDhrp6pjDcs9iUmevu+
+ mSndKtwGgR6c9ubgsoaW+3gtipfaVYf8t9Yag8lKbeBk4dwJBDELWNhx1jZARg9jgJa8bqBD7
+ evV4ddefTFVRHKMCNR8DUs0sqAYZpct3Q1wpfEs/OH3QU4Yy2bMHY1Decqh1jRriyzrMjxR9R
+ qYZKO8YI8ibbx0JUEefBEixfpLRm+hbBYmNK1UkQonUXMfvI9u16PSnLZvL9n6Vy/Z6c6ZQ9e
+ DiKPsBMXcowuK6KbfdBqTVeVX/PT7bEJaUPmuUp3Ohe8OS+kC1QzFCKVgiprzqwVpHUaxRvVL
+ XTfI/9pY8L1Y2LGI68mkJJFzllOFQ35C2laqe8m7CVDpzYD4/Li34u5Ag9v+QfMgMgeUbcH/Q
+ Mvtj7UVZ+NSRxrcURZxf7wG+yzn5S41uPJcmDwl2d4qEE8utm5efj+v0d17zt7fNHf7fcHCbU
+ B9BDZfkRsCmDDBfWHOzXlIlu1FLhPzu9Jg2silzLGGSKlMWIfze4XKV/kRr+hphgJ3KDorT91
+ jhItr5mARaaGUPsz+c8XXqQ+5F2kFxjfAuqFmz8hhBNIVXhyoVi2IOMRriEr5eMVITrnnQF6O
+ k9jPMjFDkBKP8/oBrVIsMZrjFVa5NvFWgm8U+/p7cpX1Lz37/Xbs1inL57G8b5nHIGmMo7VQS
+ 688jqnCUTJbtBcviakG48A1+dmRwiomoLHmUMNUihS3WvRJyp95qygjejCrf5Qz/THiGGJgef
+ ztAKAIKMpHnUh/SGyFTcLVLM1/JqBF68aeAtziSEUelC5IhT0S+hGJbZMfCrFnbQrg7xS/erz
+ znxGAHw0accUORxOc7rFnkjOp/bW+zCLuSu2dvROt1pXuu5J/WpjFwwxiyoxenkYwy+NpPRSs
+ c4GC95tzvQBfaX+7WfrN3wS6+sQBAE5PVfct2vnlTsNaJwhBF0KF/SNJAirIHvo6wKSXeA0qt
+ POLI2UKtigOAILmXtBEnjDxIhaw=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWF0dGhpYXMNCg0KDQpKdXN0IGEgZ2VudGxlIHBpbmcgb24gdGhpcy4NCkNvdWxkIHlvdSBw
-bGVhc2UgcmV2aWV3IHRoaXMgcGF0Y2ggYW5kIGdpdmUgdXMgc29tZSBzdWdnZXN0aW9uPw0KDQoN
-ClRoYW5rcywNCkJlc3QgcmVnYXJkcywNCkdhcm1pbg0KDQoNCg0KT24gRnJpLCAyMDIyLTEyLTIz
-IGF0IDE2OjA1ICswODAwLCBHYXJtaW4uQ2hhbmcgd3JvdGU6DQo+IEJhc2Ugb24gdGFnOiBuZXh0
-LTIwMjIxMjIwLCBsaW51eC1uZXh0L21hc3Rlcg0KPiANCj4gY2hhbmdlcyBzaW5jZSB2MjoNCj4g
-LSAJYWRkIE1US19TQ1BEX0RPTUFJTl9TVVBQTFkgY2FwIHRvIE1GRzENCj4gLSAJYWRkIE1US19T
-Q1BEX0FMV0FZU19PTiBjYXAgdG8gQURTUF9JTkZSQQ0KPiANCj4gR2FybWluLkNoYW5nICgyKToN
-Cj4gICBkdC1iaW5kaW5nczogcG93ZXI6IEFkZCBNVDgxODggcG93ZXIgZG9tYWlucw0KPiAgIHNv
-YzogbWVkaWF0ZWs6IHBtLWRvbWFpbnM6IEFkZCBzdXBwb3J0IGZvciBtdDgxODgNCj4gDQo+ICAu
-Li4vcG93ZXIvbWVkaWF0ZWsscG93ZXItY29udHJvbGxlci55YW1sICAgICAgfCAgIDIgKw0KPiAg
-ZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXQ4MTg4LXBtLWRvbWFpbnMuaCAgICAgIHwgNjIzDQo+ICsr
-KysrKysrKysrKysrKysrKw0KPiAgZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLXBtLWRvbWFpbnMu
-YyAgICAgICAgIHwgICA1ICsNCj4gIC4uLi9kdC1iaW5kaW5ncy9wb3dlci9tZWRpYXRlayxtdDgx
-ODgtcG93ZXIuaCB8ICA0NCArKw0KPiAgaW5jbHVkZS9saW51eC9zb2MvbWVkaWF0ZWsvaW5mcmFj
-ZmcuaCAgICAgICAgIHwgMTIxICsrKysNCj4gIDUgZmlsZXMgY2hhbmdlZCwgNzk1IGluc2VydGlv
-bnMoKykNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3NvYy9tZWRpYXRlay9tdDgxODgt
-cG0tZG9tYWlucy5oDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9kdC1iaW5kaW5ncy9w
-b3dlci9tZWRpYXRlayxtdDgxODgtcG93ZXIuaA0KPiANCg==
+On 1/5/23 14:46, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> With the TMIO MFD support removed, the framebuffer driver can be
+> removed as well.
+>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Helge Deller <deller@gmx.de>
+
+Arnd, I assume you will push the whole series through the ARM tree
+(which I'd prefer) ?
+
+Helge
+
+
+> ---
+>   drivers/video/fbdev/Kconfig  |   22 -
+>   drivers/video/fbdev/Makefile |    1 -
+>   drivers/video/fbdev/tmiofb.c | 1040 ----------------------------------
+>   3 files changed, 1063 deletions(-)
+>   delete mode 100644 drivers/video/fbdev/tmiofb.c
+>
+> diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> index 28febf400666..3152f1a06a39 100644
+> --- a/drivers/video/fbdev/Kconfig
+> +++ b/drivers/video/fbdev/Kconfig
+> @@ -1871,28 +1871,6 @@ config FB_SH_MOBILE_LCDC
+>   	help
+>   	  Frame buffer driver for the on-chip SH-Mobile LCD controller.
+>
+> -config FB_TMIO
+> -	tristate "Toshiba Mobile IO FrameBuffer support"
+> -	depends on FB && (MFD_TMIO || COMPILE_TEST)
+> -	select FB_CFB_FILLRECT
+> -	select FB_CFB_COPYAREA
+> -	select FB_CFB_IMAGEBLIT
+> -	help
+> -	  Frame buffer driver for the Toshiba Mobile IO integrated as found
+> -	  on the Sharp SL-6000 series
+> -
+> -	  This driver is also available as a module ( =3D code which can be
+> -	  inserted and removed from the running kernel whenever you want). The
+> -	  module will be called tmiofb. If you want to compile it as a module,
+> -	  say M here and read <file:Documentation/kbuild/modules.rst>.
+> -
+> -	  If unsure, say N.
+> -
+> -config FB_TMIO_ACCELL
+> -	bool "tmiofb acceleration"
+> -	depends on FB_TMIO
+> -	default y
+> -
+>   config FB_S3C
+>   	tristate "Samsung S3C framebuffer support"
+>   	depends on FB && HAVE_CLK && HAS_IOMEM
+> diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
+> index 1bb870b98848..e5206c3331d6 100644
+> --- a/drivers/video/fbdev/Makefile
+> +++ b/drivers/video/fbdev/Makefile
+> @@ -85,7 +85,6 @@ obj-$(CONFIG_FB_PXA168)		  +=3D pxa168fb.o
+>   obj-$(CONFIG_PXA3XX_GCU)	  +=3D pxa3xx-gcu.o
+>   obj-$(CONFIG_MMP_DISP)           +=3D mmp/
+>   obj-$(CONFIG_FB_W100)		  +=3D w100fb.o
+> -obj-$(CONFIG_FB_TMIO)		  +=3D tmiofb.o
+>   obj-$(CONFIG_FB_AU1100)		  +=3D au1100fb.o
+>   obj-$(CONFIG_FB_AU1200)		  +=3D au1200fb.o
+>   obj-$(CONFIG_FB_VT8500)		  +=3D vt8500lcdfb.o
+> diff --git a/drivers/video/fbdev/tmiofb.c b/drivers/video/fbdev/tmiofb.c
+> deleted file mode 100644
+> index 50111966c981..000000000000
+
