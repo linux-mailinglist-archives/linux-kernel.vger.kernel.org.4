@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DF265FC8C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE9A65FC8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbjAFIMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S231696AbjAFIQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbjAFIMY (ORCPT
+        with ESMTP id S229554AbjAFIQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:12:24 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EE480AC3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 00:12:12 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id m7so581281wrn.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 00:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+1QoLzMOwe4AZxi9U3T/FZRHP0XNIyItt/D85y2F9MY=;
-        b=whzZnFxo6DiH/HlnkcVjioHYv5v+sIIEbFDhANNVgsxyPeyJBpB9xUGV7DHvqmC5je
-         q7VcVUkcBiorpj7FuRysgU7dp1DciDh5SJcV142kT7OGufRIinutj4zyGet9UWC5rl+G
-         Q24VA7CwBcNDBnhGdlbl38ZZh2IO7f+nFsKzcblsYnf3PSS8nJhIeHlxib7Ci65RUuTG
-         VJd6LoV0ZgZqOdJt7ru69UMGNEuqAmrfSFAA/eCKm4JJiClSFK6NDWURycNUEcr969VE
-         LqXzVefPBGq91ZpOOarcVVr7E47SCWnoZf6p7CUmmRkb+zOz0Cu4oUee3tkQpz9mLn3f
-         WxRg==
+        Fri, 6 Jan 2023 03:16:24 -0500
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB8919C1D;
+        Fri,  6 Jan 2023 00:16:23 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso3010603wmb.3;
+        Fri, 06 Jan 2023 00:16:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+1QoLzMOwe4AZxi9U3T/FZRHP0XNIyItt/D85y2F9MY=;
-        b=k2NU16MlfH9UD6ARtsJzLbeKWFejUTXZwXH21Td3M/8uCiG/4ZBTC99O4mMqHzqKSN
-         3woAzMV7pmKdWzSw7Qrqxg92aLBLBVXv6aArPi3K/SsK9OhkIBkYbnrUDZUmsRKDwzXG
-         4FOEsRwtkApNL1blMWwVlWhtQwrrDwW+9zd+bfu4l51Hca0tuZdRbFGFK1OPW7n5ViTA
-         0hznnGHjFsFEvWrgyd+jDdnG89008x4IqUr8JiKXi2NM4X7rt+f828fI4Z+qVUD8zjt0
-         r3GUFpexyB4ZXU2822bNPMPdOofk4kqbh59X2K+86kRMCRvRUUK9SPV07uHed5Z/fpY5
-         j6xw==
-X-Gm-Message-State: AFqh2koWSxXR2iJ0f/XfJ2RMi4fJp43POfwuU8hXcBYgx/e3HcYNvC0J
-        oVbCG0sA4uXQ5Sk9zhJxYO8Wvw==
-X-Google-Smtp-Source: AMrXdXsp705xAwNuVdwj4Kh6M/JyhI3AU0ZYTpvRreD62AS2PurFl+XtRc6ZXmNJ2R4akJEQXymK0g==
-X-Received: by 2002:a5d:51c9:0:b0:29c:73e2:68f1 with SMTP id n9-20020a5d51c9000000b0029c73e268f1mr9394453wrv.54.1672992732402;
-        Fri, 06 Jan 2023 00:12:12 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t19-20020a0560001a5300b002362f6fcaf5sm451545wry.48.2023.01.06.00.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 00:12:11 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] dt-bindings: PCI: qcom: unify clock order between MSM8996 and MSM8998
-Date:   Fri,  6 Jan 2023 09:12:03 +0100
-Message-Id: <20230106081203.14118-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230106081203.14118-1-krzysztof.kozlowski@linaro.org>
-References: <20230106081203.14118-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hzn+fC87PtV3ySGJzwCU5mfDve+3HpOp/GtT1ffSV+E=;
+        b=Yp1F6pys/bPvIZk+X3WxpOKu+qsaZLwxc7z5tJy6KYtBwDcwLmr8C6rsw/j+2V/fH/
+         2R0WrBS5b0+2VgSXq52z2bic3m7o9ysCojnQtDaj7RDrfXy5U5II/KrM9HhPnUNlDtoK
+         8s2Ix9RMxtioymeJX5lCFiQHLRLIFzQTD+fSqfsiYunO3LUUdmvlewQZP6dto5Xy48gj
+         ckjQUYMi0+uYnFhyPxZh4AGJqcI8q6fSBqxGyIqYogPq2BCikMenIybjlksr6kAkxIbC
+         y5IPARebiyUt01LXSUwWYYoNTzuydYOG9UiMJx4nUWficL1bAEAdND8q+LWZ4N+WS6DV
+         FWfw==
+X-Gm-Message-State: AFqh2kpoPMFJIyGC8k2AketHWXRKHTtu7C6Hd7CuTEhh+o4YIzMrtycO
+        fUNhXJoiTGetB4IOUCBE1mld1hWr5Xs=
+X-Google-Smtp-Source: AMrXdXtpWRNe5q8yMTB+/W75VSsW4BtQSDDq/dieL+0yb8xs2nILPbtlyIQybvyfMu8mqzWqgNma2Q==
+X-Received: by 2002:a05:600c:c87:b0:3d9:73fb:8aaa with SMTP id fj7-20020a05600c0c8700b003d973fb8aaamr29003169wmb.8.1672992981845;
+        Fri, 06 Jan 2023 00:16:21 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id s23-20020a1cf217000000b003d1e3b1624dsm5269919wmc.2.2023.01.06.00.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 00:16:21 -0800 (PST)
+Message-ID: <7c569ef3-4dc5-8901-ee12-e5567a21ead9@kernel.org>
+Date:   Fri, 6 Jan 2023 09:16:20 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/3] serial: 8250_rt288x: Remove unnecessary
+ UART_REG_UNMAPPED
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20230105124744.105950-1-ilpo.jarvinen@linux.intel.com>
+ <20230105124744.105950-4-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230105124744.105950-4-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSM8996 and MSM8998 use the same clocks, so use one order to make the
-binding simpler.
+On 05. 01. 23, 13:47, Ilpo Järvinen wrote:
+> As unmapped registers are at the tail of the array, the ARRAY_SIZE()
+> condition will catch them just fine. No need to define special
+> value for them.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>   drivers/tty/serial/8250/8250_rt288x.c | 16 ++++------------
+>   1 file changed, 4 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
+> index 3015afb99722..7399fea6dfc1 100644
+> --- a/drivers/tty/serial/8250/8250_rt288x.c
+> +++ b/drivers/tty/serial/8250/8250_rt288x.c
+> @@ -14,10 +14,8 @@
+>   
+>   #define RT288X_DL	0x28
+>   
+> -#define UART_REG_UNMAPPED	-1
+> -
+>   /* Au1x00/RT288x UART hardware has a weird register layout */
+> -static const s8 au_io_in_map[8] = {
+> +static const s8 au_io_in_map[7] = {
+>   	[UART_RX]	= 0,
+>   	[UART_IER]	= 2,
+>   	[UART_IIR]	= 3,
+> @@ -25,18 +23,14 @@ static const s8 au_io_in_map[8] = {
+>   	[UART_MCR]	= 6,
+>   	[UART_LSR]	= 7,
+>   	[UART_MSR]	= 8,
+> -	[UART_SCR]	= UART_REG_UNMAPPED,
+>   };
+>   
+> -static const s8 au_io_out_map[8] = {
+> +static const s8 au_io_out_map[5] = {
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
+And what about making them u8 at last?
 
----
+>   	[UART_TX]	= 1,
+>   	[UART_IER]	= 2,
+>   	[UART_FCR]	= 4,
+>   	[UART_LCR]	= 5,
+>   	[UART_MCR]	= 6,
+> -	[UART_LSR]	= UART_REG_UNMAPPED,
+> -	[UART_MSR]	= UART_REG_UNMAPPED,
+> -	[UART_SCR]	= UART_REG_UNMAPPED,
 
-Changes since v1:
-1. None
----
- .../devicetree/bindings/pci/qcom,pcie.yaml    | 24 ++++++-------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-index 612feec05267..680502de2764 100644
---- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-@@ -316,27 +316,17 @@ allOf:
-             enum:
-               - qcom,pcie-msm8996
-     then:
--      oneOf:
--        - properties:
--            clock-names:
--              items:
--                - const: pipe # Pipe Clock driving internal logic
--                - const: aux # Auxiliary (AUX) clock
--                - const: cfg # Configuration clock
--                - const: bus_master # Master AXI clock
--                - const: bus_slave # Slave AXI clock
--        - properties:
--            clock-names:
--              items:
--                - const: pipe # Pipe Clock driving internal logic
--                - const: bus_master # Master AXI clock
--                - const: bus_slave # Slave AXI clock
--                - const: cfg # Configuration clock
--                - const: aux # Auxiliary (AUX) clock
-       properties:
-         clocks:
-           minItems: 5
-           maxItems: 5
-+        clock-names:
-+          items:
-+            - const: pipe # Pipe Clock driving internal logic
-+            - const: aux # Auxiliary (AUX) clock
-+            - const: cfg # Configuration clock
-+            - const: bus_master # Master AXI clock
-+            - const: bus_slave # Slave AXI clock
-         resets: false
-         reset-names: false
- 
+thanks,
 -- 
-2.34.1
+js
+suse labs
 
