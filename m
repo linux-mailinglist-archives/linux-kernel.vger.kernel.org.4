@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AEA6603E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C62C6603EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbjAFQFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S234616AbjAFQH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbjAFQFO (ORCPT
+        with ESMTP id S231237AbjAFQHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:05:14 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB3669AA
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673021111; x=1704557111;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2wg7R/f93HJ9QU+RJU9BiPKtYMXBYhztY9N+K5G+7Eg=;
-  b=MeAojB75zNOU1uDTYG4XMRLMHVtZtzTW7knd1tSiGkKTl06WmFEWKGjl
-   TGT/SKpwPcQB14nisXcj0HiP51LXotPwUNWq1KCPdRtmDhHRsw8+OqKKV
-   1vTMfT2s+fWAHHfq2ommdfGjYTy/GYcXyiGMeOmSNCamjSIqtwlIRKufY
-   IaOq9riNwRobHZalO0Nobq2yniWUs6Kl4lEXpkNV0gTxVqj0pjs5wXu/R
-   B8r7TClG+LWZhFs/il8Ic5CjzslI4pfCFZEqBqKd7P7EtWQI/FmQDC7ni
-   5a+IxQv8SglWSnc5ZUX6+xs3rSlWgsiaFNFnKzs9p0MdVKoZk4dYC92Eq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="302199923"
-X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
-   d="scan'208";a="302199923"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 08:05:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="633521618"
-X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
-   d="scan'208";a="633521618"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jan 2023 08:05:05 -0800
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 4/4] perf/x86/intel/uncore: Add Emerald Rapids
-Date:   Fri,  6 Jan 2023 08:04:49 -0800
-Message-Id: <20230106160449.3566477-4-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230106160449.3566477-1-kan.liang@linux.intel.com>
-References: <20230106160449.3566477-1-kan.liang@linux.intel.com>
+        Fri, 6 Jan 2023 11:07:17 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43811FB;
+        Fri,  6 Jan 2023 08:07:14 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4C70F1884677;
+        Fri,  6 Jan 2023 16:07:11 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 337982503B65;
+        Fri,  6 Jan 2023 16:07:11 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2C36191201E4; Fri,  6 Jan 2023 16:07:11 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id D6DFB91201DF;
+        Fri,  6 Jan 2023 16:07:10 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 net-next 0/3] mv88e6xxx: Add MAB offload support
+Date:   Fri,  6 Jan 2023 17:05:26 +0100
+Message-Id: <20230106160529.1668452-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+This patch-set adds MAB [1] offload support in mv88e6xxx.
 
-From the perspective of the uncore PMU, the new Emerald Rapids is the
-same as the Sapphire Rapids. The only difference is the event list,
-which will be supported in the perf tool later.
+Patch #1: Correct default return value for mv88e6xxx_port_bridge_flags.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/uncore.c | 1 +
- 1 file changed, 1 insertion(+)
+Patch #2: Shorten the locked section in
+          mv88e6xxx_g1_atu_prob_irq_thread_fn().
 
-diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
-index 6f1ccc57a692..459b1aafd4d4 100644
---- a/arch/x86/events/intel/uncore.c
-+++ b/arch/x86/events/intel/uncore.c
-@@ -1833,6 +1833,7 @@ static const struct x86_cpu_id intel_uncore_match[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&spr_uncore_init),
-+	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,	&spr_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&snr_uncore_init),
- 	{},
- };
+Patch #3: The MAB implementation for mv88e6xxx.
+
+LOG:
+        V2:     -FID reading patch already applied, so dropped here. [1]
+                -Patch #2 here as separate patch instead of part of MAB
+                 implementation patch.
+                -Check if fid is MV88E6XXX_FID_STANDALONE, and not if
+                 fid is zero, as that is the correct check. Do not
+                 report an error.
+	V3:	-Fixed an overlooked mistake and reworded the commit
+		 message for patch #2.
+
+[1] https://git.kernel.org/netdev/net-next/c/4bf24ad09bc0
+
+Hans J. Schultz (3):
+  net: dsa: mv88e6xxx: change default return of
+    mv88e6xxx_port_bridge_flags
+  net: dsa: mv88e6xxx: shorten the locked section in
+    mv88e6xxx_g1_atu_prob_irq_thread_fn()
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
+
+ drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
+ drivers/net/dsa/mv88e6xxx/chip.c        | 20 +++---
+ drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 24 ++++---
+ drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
+ 6 files changed, 148 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
+
 -- 
-2.35.1
+2.34.1
 
