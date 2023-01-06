@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565FE6605A9
+	by mail.lfdr.de (Postfix) with ESMTP id A19E66605AA
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjAFRZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S235069AbjAFRZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjAFRZD (ORCPT
+        with ESMTP id S235695AbjAFRZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:25:03 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FA37DE2D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673025901; x=1704561901;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jlKgx9WSgbyevM0j24pS3GGx39cKDb3R2MwISe1GN+8=;
-  b=UqUG/LXGxjDmwQcH2/5bBxTc8IF+y6WiOtwHBuHmGk18CCf9JHw2otFc
-   G9GDibV+FtwM+LOervf9lBkFJnAhmIp2wMcufQErGJ45ObPJ87TA9HIUu
-   rkXzrzb92qVRi746OfPJUAr/irVB9oiLudGDUaAdwqra9cRQ7s0cDIKk5
-   N9/t2k3syKAiBWubpOze5LgmUIc6ETpY0Ej40lmZoMxcWtexBJTEPGChc
-   8UY68CptlvwxNiQDlDqJM/wG6VAyCrLZzNJVsEy1+EH4B4J0JFEU+I3da
-   5nLsICi+0CJeIc67AWxpa0U0vKBaN6uGqP06dvx/pq9Rk8FNRIFd+21xH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="321222511"
-X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
-   d="scan'208";a="321222511"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 09:25:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="763579604"
-X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
-   d="scan'208";a="763579604"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Jan 2023 09:24:59 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDqSh-0003iY-0K;
-        Fri, 06 Jan 2023 17:24:59 +0000
-Date:   Sat, 7 Jan 2023 01:24:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: versioncheck: ./tools/lib/bpf/bpf_helpers.h: 146: need
- linux/version.h
-Message-ID: <202301070124.h04pYrcb-lkp@intel.com>
+        Fri, 6 Jan 2023 12:25:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA2C7D9D7;
+        Fri,  6 Jan 2023 09:25:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0A133CE1DAF;
+        Fri,  6 Jan 2023 17:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA64C433EF;
+        Fri,  6 Jan 2023 17:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673025908;
+        bh=E0AMAcCDFiW3hKyGu+BfqHYfZVwE7Pp21GrhIKvYXUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sL95n0g4oKqnBJasaQSHf6Zj1FG/nGZ57LvX/UjhNsZp7C1njL8RJU86DSCdnrSuu
+         jnXIJTkHxdDJYXfFXiJ0vbwHvnho0aF66OOwWz7PJC089NC5vk8K/KU7stV218tS/G
+         91l+93BoFP+gENAHDh3rdZNLySKc8ZJhKUee9lQUMENWXRfXEehcuRk2Fsmn2/byQL
+         l1smFR5EZnaeFg/zVylCgdQgG1kAdx7a6oRr8usb0GdyOwNmtyKTDU2frKCaybAUQF
+         Bt1JGPQD1cukLzcJO3OtzQGwjVu/tiukgNXMXSQugLdhFyIaZDXqGsSXovEB9pul31
+         IP9h5sD7wXZVw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4752C40468; Fri,  6 Jan 2023 14:25:05 -0300 (-03)
+Date:   Fri, 6 Jan 2023 14:25:05 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y7hZccgOiueB31a+@kernel.org>
+References: <20230106151320.619514-1-irogers@google.com>
+ <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
-commit: 9ae2c26e43248b722e79fe867be38062c9dd1e5f libbpf: provide NULL and KERNEL_VERSION macros in bpf_helpers.h
-date:   1 year, 10 months ago
-reproduce:
-        make versioncheck
+Em Fri, Jan 06, 2023 at 03:28:03PM +0000, Mike Leach escreveu:
+> On Fri, 6 Jan 2023 at 15:13, Ian Rogers <irogers@google.com> wrote:
+> >
+> > Including libbpf header files should be guarded by
+> > HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+> > under HAVE_BPF_SKEL.
+> >
+> > Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+> > Reported-by: Mike Leach <mike.leach@linaro.org>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thanks, applied.
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-   ./arch/csky/include/asm/uaccess.h: 14 linux/version.h not needed.
-   ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
-   ./arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
-   ./arch/s390/include/asm/setup.h: 177: need linux/version.h
-   ./arch/um/drivers/vector_kern.c: 11 linux/version.h not needed.
-   ./arch/x86/hyperv/hv_proc.c: 3 linux/version.h not needed.
-   ./drivers/crypto/cavium/cpt/cptpf_main.c: 13 linux/version.h not needed.
-   ./drivers/crypto/cavium/zip/common.h: 59 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_display.c: 14 linux/version.h not needed.
-   ./drivers/gpu/drm/pl111/pl111_drv.c: 47 linux/version.h not needed.
-   ./drivers/hv/hv.c: 16 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-brcmstb.c: 25 linux/version.h not needed.
-   ./drivers/i2c/busses/i2c-xgene-slimpro.c: 22 linux/version.h not needed.
-   ./drivers/media/pci/cx25821/cx25821.h: 31 linux/version.h not needed.
-   ./drivers/media/platform/s3c-camif/camif-core.c: 26 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-common.h: 16 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c: 31 linux/version.h not needed.
-   ./drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c: 14 linux/version.h not needed.
-   ./drivers/media/usb/uvc/uvc_driver.c: 19 linux/version.h not needed.
-   ./drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c: 21 linux/version.h not needed.
-   ./drivers/net/ethernet/mellanox/mlx5/core/main.c: 53 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_main.c: 10 linux/version.h not needed.
-   ./drivers/net/usb/lan78xx.c: 5 linux/version.h not needed.
-   ./drivers/net/wireless/rsi/rsi_91x_ps.c: 19 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf.h: 14 linux/version.h not needed.
-   ./drivers/scsi/qedf/qedf_dbg.h: 13 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/powergate-bpmp.c: 10 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/drv_types.h: 17 linux/version.h not needed.
-   ./drivers/staging/rtl8723bs/include/ioctl_cfg80211.h: 10 linux/version.h not needed.
-   ./drivers/usb/core/hcd.c: 14 linux/version.h not needed.
-   ./drivers/usb/gadget/udc/aspeed-vhub/hub.c: 33 linux/version.h not needed.
-   ./include/linux/qed/qed_ll2_if.h: 15 linux/version.h not needed.
-   ./include/linux/usb/composite.h: 39 linux/version.h not needed.
-   ./init/version.c: 16 linux/version.h not needed.
-   ./kernel/sys.c: 42 linux/version.h not needed.
-   ./samples/bpf/sampleip_kern.c: 7 linux/version.h not needed.
-   ./samples/bpf/trace_event_kern.c: 8 linux/version.h not needed.
-   ./sound/soc/codecs/cs35l35.c: 12 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
->> ./tools/lib/bpf/bpf_helpers.h: 146: need linux/version.h
-   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 25 linux/version.h not needed.
+- Arnaldo
+
+> > ---
+> >  tools/perf/builtin-trace.c    | 2 ++
+> >  tools/perf/util/bpf_counter.h | 6 ++++++
+> >  2 files changed, 8 insertions(+)
+> >
+> > diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> > index 86e06f136f40..d21fe0f32a6d 100644
+> > --- a/tools/perf/builtin-trace.c
+> > +++ b/tools/perf/builtin-trace.c
+> > @@ -16,7 +16,9 @@
+> >
+> >  #include "util/record.h"
+> >  #include <api/fs/tracing_path.h>
+> > +#ifdef HAVE_LIBBPF_SUPPORT
+> >  #include <bpf/bpf.h>
+> > +#endif
+> >  #include "util/bpf_map.h"
+> >  #include "util/rlimit.h"
+> >  #include "builtin.h"
+> > diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+> > index 4dbf26408b69..c6d21c07b14c 100644
+> > --- a/tools/perf/util/bpf_counter.h
+> > +++ b/tools/perf/util/bpf_counter.h
+> > @@ -4,9 +4,12 @@
+> >
+> >  #include <linux/list.h>
+> >  #include <sys/resource.h>
+> > +
+> > +#ifdef HAVE_LIBBPF_SUPPORT
+> >  #include <bpf/bpf.h>
+> >  #include <bpf/btf.h>
+> >  #include <bpf/libbpf.h>
+> > +#endif
+> >
+> >  struct evsel;
+> >  struct target;
+> > @@ -87,6 +90,8 @@ static inline void set_max_rlimit(void)
+> >         setrlimit(RLIMIT_MEMLOCK, &rinf);
+> >  }
+> >
+> > +#ifdef HAVE_BPF_SKEL
+> > +
+> >  static inline __u32 bpf_link_get_id(int fd)
+> >  {
+> >         struct bpf_link_info link_info = { .id = 0, };
+> > @@ -127,5 +132,6 @@ static inline int bperf_trigger_reading(int prog_fd, int cpu)
+> >
+> >         return bpf_prog_test_run_opts(prog_fd, &opts);
+> >  }
+> > +#endif /* HAVE_BPF_SKEL */
+> >
+> >  #endif /* __PERF_BPF_COUNTER_H */
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
+> 
+> 
+> This version builds fine too.
+> 
+> Mike
+> -- 
+> Mike Leach
+> Principal Engineer, ARM Ltd.
+> Manchester Design Centre. UK
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+- Arnaldo
