@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAB365FD82
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F1B65FDCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjAFJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S232992AbjAFJXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjAFJUH (ORCPT
+        with ESMTP id S233866AbjAFJVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:20:07 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2B96C7C7;
-        Fri,  6 Jan 2023 01:20:03 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id s9so703892wru.13;
-        Fri, 06 Jan 2023 01:20:03 -0800 (PST)
+        Fri, 6 Jan 2023 04:21:24 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCA66E0E9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:21:08 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id m7so713219wrn.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:21:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qklMNUYmcxFOiWDqalcLw1HqhMrUrUGUH0yuIx/r7dw=;
-        b=kBuDGrFBD/4F0Qxyc0Q/XNKgtbT9NAwHyEh03m4+XyhTOGM0qhiNMUl4Z4Ts0yThUF
-         F88iJy2bOTiKhKAWG6VGZEK8VlPhy85HmGXpLmMph1+gEoGxs3GOyCawshrBw2Js0WQG
-         hEMXueoD2Bx3ygREgju+P0E80jfpCbEHF6v4C6B47srZ0inr6lQOZXFoYYsR/t6oXA0B
-         UQ16UMfv2oiC4iHdKZ/PqVEf5yU09kBDhzhCvY44RdtvruA4CSfXnscxvPEAtTL31/8+
-         mDc70I9+pfAVwucl2awgzjXdmQlTLurnf1AI85zocPgIGk29DN6JVOeAicfWYKkeu0Be
-         JlIg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uAfhATkIYXFpgazLFZ+AK9Lq1o03ZdKMm34LM7SHmEU=;
+        b=f1UmUxyILCnWGJP6qQZ7GcSBmaoU7z3kYlpph2vCbELXC7Xz7KHHFFxp+kUamJ+2t9
+         dm3GhM0EF/kBYDcV4aolDZWukCmIZLXLm0S/7lOnmYDmfWx2bXT8IAoB5M2ySYkW81R6
+         OwqTPM8Mmz+pvtNjtE08dy7FSYk83CiICoZ3T0XbLHiHP2uCmXSJx8dpH5opGReUsrBT
+         +ZdwGnyizkf+X3ghhIckgWqo99alISOiAjxja7b54BzRqLLQC08qLJ3JV75Owq/K5Cnu
+         KEx8+jwyEyu1XmrqlWoxhgk6SsExL+WZ+xYT05K+Yj5/p26r54DSCHzJFSvFUdQ92zBQ
+         dzEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qklMNUYmcxFOiWDqalcLw1HqhMrUrUGUH0yuIx/r7dw=;
-        b=cortX4MhiKBjZgiTWKX6NMJ6vCBDGqFhSNrxBg2S0AidFPa8sLmGcIEsCOrqwdNNfG
-         ALPLKXGicL42vFJjM8a42UHcfdGQzh9+joTZaTxhNZ76RpQyg4zfZ6P5aBhDgMLiFvJH
-         HgrNQZ9RPv28HNtbiHTrFhjlfI0o79GdwmoX/7ifBIC4pwSKbD/Pp6RCgq0xywd+DcSc
-         y2H/95iRndBNZ1UJeIt5r7QM/cloB1fazv5YV3qYqZlNe5nWMWz8NRoF8GeUviUhYFBV
-         ummQ2XJwLpRzi7olI1wDAN2wapipzftOmDYVMxgj5Ea0Qx34Lmelm3FVblr4oFpe3hDA
-         zQdw==
-X-Gm-Message-State: AFqh2koOSwYdK0YrUrE/GU52qaYIYa4tcS3CSOUPUjfH636+ZZ+Cm+uS
-        ej6HORbzT9+BfUctZwPIr0w=
-X-Google-Smtp-Source: AMrXdXuQnHguVnaqUAImY7Ha8tzoIj3tzVYsUFfS+LHX29qYWmEfpDpLz4Y5OmN6m0mRO9FYXyBBlg==
-X-Received: by 2002:a5d:4f8c:0:b0:28a:8b5d:6f4e with SMTP id d12-20020a5d4f8c000000b0028a8b5d6f4emr21106702wru.2.1672996802345;
-        Fri, 06 Jan 2023 01:20:02 -0800 (PST)
-Received: from [192.168.4.98] (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id u14-20020a5d6ace000000b002422bc69111sm734716wrw.9.2023.01.06.01.20.00
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAfhATkIYXFpgazLFZ+AK9Lq1o03ZdKMm34LM7SHmEU=;
+        b=X6I71GCjKfCgismNZwEn9fZX0HLqWuu9HS6Dhi8ctMI93GsngwvrNg8SUO0uCP7kul
+         pqOiwYRPdu4AKWCotk4gRDwVXnMWQdNnebU3XQ4Wjca8r5LF5DS3NkvEMwA39PHyHmXA
+         PZrmt/xEmMMPAA7Z0LrhOxN/gVdico+sKfzrYO442K6r0DTb8v6x32oHZxivNyVZS02o
+         V0ujO2JrcDxctichhe2hJ5ulDvcGL7iVp5T9snm3RvqnTp82+c7BzDereBImLkdxeqGR
+         q7He5eGrj8AtKKGORE1BjlHtmeHvFGU8jZTN9z6TyOtqfFWW0xCnsVWklm50t2FR1kSv
+         dJ3g==
+X-Gm-Message-State: AFqh2koEBar6lwPmkxm65vAdug/qpN8HKvG3tsWozHn02UrRQDN7iTV3
+        ujXnmgMR2LgCqIXRammBezVFDg==
+X-Google-Smtp-Source: AMrXdXu9fepmPpgEfQ6cshSmsZ+6857dtpUM6/8+Vafn1HbdY34/Rzfs18skEvxTNG6/20H2UhzJ3Q==
+X-Received: by 2002:adf:dec7:0:b0:242:115d:bee4 with SMTP id i7-20020adfdec7000000b00242115dbee4mr32938927wrn.16.1672996867159;
+        Fri, 06 Jan 2023 01:21:07 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z8-20020a5d6548000000b0028df2d57204sm689153wrv.81.2023.01.06.01.21.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 01:20:01 -0800 (PST)
-From:   Paul Durrant <xadimgnik@gmail.com>
-X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <4aba7537-7c70-4965-46e2-ac36d389ef0a@xen.org>
-Date:   Fri, 6 Jan 2023 09:20:00 +0000
+        Fri, 06 Jan 2023 01:21:06 -0800 (PST)
+Message-ID: <4d6aec55-c53e-0aba-1168-8a9a80a3b598@linaro.org>
+Date:   Fri, 6 Jan 2023 10:21:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v6 1/2] KVM: x86/cpuid: generalize
- kvm_update_kvm_cpuid_base() and also capture limit
+Subject: Re: [PATCH 3/4] dt-bindings: arm: sunxi: document MangoPi MQ-R board
+ name
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paul Durrant <pdurrant@amazon.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>
-References: <20221220134053.15591-1-pdurrant@amazon.com>
- <20221220134053.15591-2-pdurrant@amazon.com> <Y7XU2R0f3pCYF9uz@google.com>
- <82fbc53e-be3e-b516-2420-dc27e5b811e8@gmail.com>
- <Y7cSdYWX8e3FqlrO@google.com>
-Reply-To: paul@xen.org
-Organization: Xen Project
-In-Reply-To: <Y7cSdYWX8e3FqlrO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Icenowy Zheng <uwu@icenowy.me>,
+        =?UTF-8?B?QW5kcsOhcyBTemVtesO2?= <szemzo.andras@gmail.com>,
+        Fabien Poussin <fabien.poussin@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230106010155.26868-1-andre.przywara@arm.com>
+ <20230106010155.26868-4-andre.przywara@arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230106010155.26868-4-andre.przywara@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2023 18:09, Sean Christopherson wrote:
-> On Thu, Jan 05, 2023, Paul Durrant wrote:
->> On 04/01/2023 19:34, Sean Christopherson wrote:
->>> Since the struct is a 64-bit value, what about making this a pure getter that
->>> returns a copy?
->>>
->>> static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
->>> 							    const char *sig)
->>> {
->>> 	struct kvm_hypervisor_cpuid cpuid = {};
->>> 	struct kvm_cpuid_entry2 *entry;
->>> 	u32 function;
->>>
->>> 	for_each_possible_hypervisor_cpuid_base(cpuid.base) {
->>> 		entry = kvm_find_cpuid_entry(vcpu, function);
->>>
->>> 		if (entry) {
->>> 			u32 signature[3];
->>>
->>> 			signature[0] = entry->ebx;
->>> 			signature[1] = entry->ecx;
->>> 			signature[2] = entry->edx;
->>>
->>> 			if (!memcmp(signature, sig, sizeof(signature))) {
->>> 				cpuid.base = function;
->>> 				cpuid.limit = entry->eax;
->>> 				break;
->>> 			}
->>> 		}
->>> 	}
->>>
->>> 	return cpuid;
->>> }
->>>
->>>
->>> 	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
->>> 	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
->>
->> Yes, if that's preferable then no problem.
+On 06/01/2023 02:01, Andre Przywara wrote:
+> The MangoPi MQ-R board is a close relative to its Allwinner D1/D1s
+> siblings, but features two Arm Cortex-A7 cores instead of a RISC-V core.
 > 
-> I like it (obviously), but it's probably worth waiting a few days to see what
-> others think before posting a new version.
+> Add the board/SoC compatible string pair to the list of known boards.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  Documentation/devicetree/bindings/arm/sunxi.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> index 3ad1cd50e3fe0..ce445c5ed81c8 100644
+> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
+> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> @@ -843,6 +843,11 @@ properties:
+>            - const: wexler,tab7200
+>            - const: allwinner,sun7i-a20
+>  
+> +      - description: MangoPi MQ-R board
+> +        items:
+> +          - const: widora,mangopi-mq-r
 
-I think it's cleaner too, and I already did the typing so I may as well 
-post. I don't think anyone else has expressed any strong opinions on the 
-code either way.
+Not documented vendor prefix.
 
-Paul
+Best regards,
+Krzysztof
+
