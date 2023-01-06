@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD66A660857
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25D066085B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236045AbjAFUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S235607AbjAFUfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjAFUeO (ORCPT
+        with ESMTP id S236638AbjAFUfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:34:14 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19555AC40;
-        Fri,  6 Jan 2023 12:34:12 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p24so2829769plw.11;
-        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
+        Fri, 6 Jan 2023 15:35:04 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA046F97D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:34:58 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso2983976pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4DT+/huwtQo/Hb3OM+ZFYw7lz+P7V1u4iH9OMjxXR9I=;
-        b=TyYWgfhTM3HUIjd7gJ5EtNhIsQmtclO/JJBnQw05cqqM1htMS9Iz4jj3hqvCi5jHsd
-         Z7ErPjOy50rpGgRl4d+ka6KQKzbEhjB2GCPvY/WkURtIVtk7LK0O/woLERu5lz+56kIZ
-         kGiFsrYvyNSPgl0dCRopGB5pAhsjOTXAKf+1fkGHNnamy5aSmgKkOkXzouZzR/yerIKU
-         rzotxk8KfwqpTi3NgVJr6VljHEznnM53vevaUGvmpKnVHt3Lu23pC6gr5Hyd7oXbdEw4
-         7BlRkXXtLuLN3PSJZFIArc/DDmQlpvk2e02Wce5tLtCFI39xGB91YFWFBBO8CTqLDkeL
-         jweg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=smLihWAoqAqFbknhrZe9gcdfzxiLxKROgu0edof4WNI=;
+        b=XTWSKfx3nZLz4qPLToGFL8BRLfDjJeeRpHAPv1wqntQQBJJ7SpBBti7/NgGA745P9o
+         VrT68aF/TOwlmXWmpartLpvQqjI1pBThoa6QjJq5VpThBJm+mjeYZcd/t8anZIUAtbpI
+         BtSczITxJaiaqItBa3WuILOt9wgSAsJxysMoU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4DT+/huwtQo/Hb3OM+ZFYw7lz+P7V1u4iH9OMjxXR9I=;
-        b=lLgqaCBILuRAf0U2L95yL/RvweHsxsgUZv1XJBFbQT1ZvCvd+J4pAZmoWbpLVNjEvd
-         IkKvu+XhlxUd0gDANoGdf9wk4UCuCqOyFG76zOC9pJWjuBrQ8bm92T+LzK9cO3CPKP0e
-         /uu3meHUSdjalw+loDCe/vHRl1m4Lf0XFL1rHErGkEcQO/ODzjHxBOvtZeU49d/FpKaX
-         MoMXyX2frh3I3GhbId8LvMRhN7SO5S18D+IFhl/5i7pLaugvt0T4In1dAnRRojGLT9fh
-         g82xhfJRngwAdeTr+OJ1JfjF0Ct/1czdoGIQpu8DVo13dS3p1CCpM9XtD20Oh8wACzdO
-         0s+g==
-X-Gm-Message-State: AFqh2koGBYwweZAU68lUmghyhG0ET7iMK1FY7xTrxS8Svdeh1dZssu4n
-        XReUQAUmZG7xQsamNNou4gc=
-X-Google-Smtp-Source: AMrXdXu3ANdUQS5ELLp6Ej4q37pOTz53uQtmaHIHheb8C65lnfc0UhC5Mwve6aC06Y3kdcmsXgBpug==
-X-Received: by 2002:a05:6a20:bb10:b0:ad:2c7c:9510 with SMTP id fc16-20020a056a20bb1000b000ad2c7c9510mr62398353pzb.19.1673037252423;
-        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k15-20020a170902c40f00b0019276616e9fsm1310530plk.183.2023.01.06.12.34.11
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=smLihWAoqAqFbknhrZe9gcdfzxiLxKROgu0edof4WNI=;
+        b=SYtmYi+gcWrXfaMQTqJRB1mhJj87zivryw49NdlyH6ze/+xbo8RuNmEFjMIbq6kgjZ
+         RAjI8DImEvZvXRqNyGoKuRbD1mxQW6pKaUpvl+N6ZnCZY2vaMtabbDrkbEDoANnH3ITc
+         KpvjeeiGwqXCpXZNotUM3ZHg7Z2bOvypZQ+LMV050FDYnfnlgVDb1jmVqFrSya02V4s4
+         8gsy9SF7D/khc749Fcp/VRuTxmbWFwkg8ihFW38piVudwseG69bIFdvJaat124mFtoXm
+         kTVA9gt2+6KO7D2HOt6nVxUiet8Eap5CwjeCIpOIw0/8W1IL11pIy51c7Pe0SqLcEH3N
+         DSXw==
+X-Gm-Message-State: AFqh2krK6srODO9123Gu2UZ+sQoasFjdjc6sNGZYOFcL+IoCKQGGhWS2
+        6qkx6f9R0hUsCkIs0krruC3rSg==
+X-Google-Smtp-Source: AMrXdXsdMkFkNgHrTqmp5sajKoSVuShvjmPCPLLKswdGxixWwb9SOACATFN7VsWOKUoikzRE6j2XVw==
+X-Received: by 2002:a17:90a:d306:b0:219:f385:33a9 with SMTP id p6-20020a17090ad30600b00219f38533a9mr59906578pju.27.1673037297533;
+        Fri, 06 Jan 2023 12:34:57 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r13-20020a17090a940d00b0020dc318a43esm1302623pjo.25.2023.01.06.12.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 6 Jan 2023 10:34:10 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep() from
- blk_put_queue()
-Message-ID: <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
-References: <Y7g3L6fntnTtOm63@kili>
- <Y7hbYPSdLqW++y/p@slm.duckdns.org>
- <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
+        Fri, 06 Jan 2023 12:34:54 -0800 (PST)
+Date:   Fri, 6 Jan 2023 12:34:52 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Guenter Roeck <groeck@chromium.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] firmware: coreboot: Check size of table entry and split
+ memcpy
+Message-ID: <202301061234.D15CF0E627@keescook>
+References: <20230106045327.never.413-kees@kernel.org>
+ <CAODwPW8kXZ107kMuVGya9Y=i+8QwQzQHokXCpybzMBjd_w_83w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAODwPW8kXZ107kMuVGya9Y=i+8QwQzQHokXCpybzMBjd_w_83w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan reports the following smatch detected the following:
+On Fri, Jan 06, 2023 at 04:03:35PM +0100, Julius Werner wrote:
+> Have you considered adding the flexible array member directly to the
+> union in struct coreboot_device instead? I think that would make this
+> a bit simpler by not having to copy header and data portion
+> separately.
 
-  block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
+Are you thinking something like this?
 
-caused by blkcg_schedule_throttle() calling blk_put_queue() in an
-non-sleepable context.
 
-blk_put_queue() acquired might_sleep() in 63f93fd6fa57 ("block: mark
-blk_put_queue as potentially blocking") which transferred the might_sleep()
-from blk_free_queue().
+diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
+index 2652c396c423..564a3c908838 100644
+--- a/drivers/firmware/google/coreboot_table.c
++++ b/drivers/firmware/google/coreboot_table.c
+@@ -93,14 +93,19 @@ static int coreboot_table_populate(struct device *dev, void *ptr)
+ 	for (i = 0; i < header->table_entries; i++) {
+ 		entry = ptr_entry;
+ 
+-		device = kzalloc(sizeof(struct device) + entry->size, GFP_KERNEL);
++		if (entry->size < sizeof(*entry)) {
++			dev_warn(dev, "coreboot table entry too small!\n");
++			return -EINVAL;
++		}
++
++		device = kzalloc(sizeof(device->dev) + entry->size, GFP_KERNEL);
+ 		if (!device)
+ 			return -ENOMEM;
+ 
+ 		device->dev.parent = dev;
+ 		device->dev.bus = &coreboot_bus_type;
+ 		device->dev.release = coreboot_device_release;
+-		memcpy(&device->entry, ptr_entry, entry->size);
++		memcpy(device->raw, entry, entry->size);
+ 
+ 		switch (device->entry.tag) {
+ 		case LB_TAG_CBMEM_ENTRY:
+diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
+index 37f4d335a606..d814dca33a08 100644
+--- a/drivers/firmware/google/coreboot_table.h
++++ b/drivers/firmware/google/coreboot_table.h
+@@ -79,6 +79,7 @@ struct coreboot_device {
+ 		struct lb_cbmem_ref cbmem_ref;
+ 		struct lb_cbmem_entry cbmem_entry;
+ 		struct lb_framebuffer framebuffer;
++		DECLARE_FLEX_ARRAY(u8, raw);
+ 	};
+ };
+ 
 
-blk_free_queue() acquired might_sleep() in e8c7d14ac6c3 ("block: revert back
-to synchronous request_queue removal") while turning request_queue removal
-synchronous. However, this isn't necessary as nothing in the free path
-actually requires sleeping.
-
-It's pretty unusual to require a sleeping context in a put operation and
-it's not needed in the first place. Let's drop it.
-
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lkml.kernel.org/r/Y7g3L6fntnTtOm63@kili
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Fixes: e8c7d14ac6c3 ("block: revert back to synchronous request_queue removal") # v5.9+
---
- block/blk-core.c |    3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 9321767470dc..b5098355d8b2 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -283,12 +283,9 @@ static void blk_free_queue(struct request_queue *q)
-  *
-  * Decrements the refcount of the request_queue and free it when the refcount
-  * reaches 0.
-- *
-- * Context: Can sleep.
-  */
- void blk_put_queue(struct request_queue *q)
- {
--	might_sleep();
- 	if (refcount_dec_and_test(&q->refs))
- 		blk_free_queue(q);
- }
+-- 
+Kees Cook
