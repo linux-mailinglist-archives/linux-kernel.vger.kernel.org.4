@@ -2,223 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5290A660371
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DBD66037C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbjAFPis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S235793AbjAFPj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235793AbjAFPiq (ORCPT
+        with ESMTP id S235180AbjAFPjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:38:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3176812;
-        Fri,  6 Jan 2023 07:38:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 623FAB81DC6;
-        Fri,  6 Jan 2023 15:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E6C433EF;
-        Fri,  6 Jan 2023 15:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673019522;
-        bh=zECSIxnlqSh8Du9ojj67iCF+qRV5NrCmWjaftpFai5M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IASV2kuZp4oGVXt3aFShgGCb/jiX8ClpKtEpLQkSNcVZSQrKThTwlV6v22kYg1rZU
-         H5z+jzEzz76NfW2KkVGX/i9ato81Gl6tu/THrP9AtNxDh0HvCaj1aOla+bpWNW2Ivf
-         VUto3VQ/K8lxcjAg8LsHiMo+ZPjJ1GKe8QcD2lNkWMw872TBwu5DDWpr27VY0mQ5iB
-         DcQHhSCzgbac8SedwwkTpAePt77serxOnT8A9OxEtYf0hJXz+DcLXVhevQ4uXL9PN/
-         RvswlHkWUnjR3obfs+43MJ3yYPEX5c6R5aCc0RTsQ34oip+Wiq/Fe3X6xBIBOp5ZWl
-         AlkW2ItUmxQmg==
-Date:   Fri, 6 Jan 2023 09:38:40 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
-Message-ID: <20230106153840.GA1226257@bhelgaas>
+        Fri, 6 Jan 2023 10:39:16 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943A776803;
+        Fri,  6 Jan 2023 07:39:15 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1322d768ba7so1877095fac.5;
+        Fri, 06 Jan 2023 07:39:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
+        b=kCHCa/r/NH7je4QvL7iXn+mGinMO0F8rBjuPT2QnoR6UCmONeCpDaIl710U7xlpmT6
+         ikc1XvbZrH2G6v6Ld0fca1JWE5cOEg+kijfMUaFDYx835qxVEn/NO4CRdNIV1hXhLi6O
+         rrlxk+4D9lTSqnIgV2F/N+SXbUbcjK/Jzijiqx247t8iDkut1B0x8qPdt36ZE01G1QZW
+         /5R0EoDpcDbcFNpofc0nZGeQSzfXDpRT+ZaQn6YmnNmhgSospP8Ca2nKXFCRIl9L06qc
+         0O0Hf1tAT1axF1D8RPs/Aprow4ZU5Du+LmsxjuIoYb/wQtuBG8ejJ4PRaBaX6KY3PrTK
+         u6vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
+        b=F06yqebb7xDQZgx5Q9Unc1dyLa0uAdcBtIxE/hScAQSQTFAAZQwheUupor8i7YfVHL
+         /zACm1DuV6124XiE7mRVsXnzpyIPj6tX8ljTSSJPIicc8Kc5ykFykjWIfyn+zxMmjz04
+         jANegVLyW2V8+MlYOlI2hPtmf9BRpndzlOgv0VuiWj+1HF0Uv1yW+i1oK3MyeAG9jx1P
+         DW7ZmZZ+tgiJaRn3i1y3xSPHqczD8Ec1p+OFxXkzw6zBTXoYHaSaBiLOJn/XCGs0+YGR
+         mvgkoTVlr3M1aRsUUsE0GdZkUHfUcJhMPcy3etpLSZhFdWg79hGTk/j0SHG/cjC2nuPR
+         QYeQ==
+X-Gm-Message-State: AFqh2kpznEWAIdcvsF+Ykyw8/xa8crhN01WjTbc8/hMU/dClaH2trXWC
+        dEopLJfOM6cFMYlg4EdMmLx3UyWvzklUPQBRVMY=
+X-Google-Smtp-Source: AMrXdXt0/0Yzb/5d06C0pGHF7OeoMwC1Beik/HhdgRVorPYXTJ/t6Z10/P3fO3icF9eUsmYUsIHQhJSZPSADJk9q0Qw=
+X-Received: by 2002:a05:6870:c59c:b0:150:d9aa:4011 with SMTP id
+ ba28-20020a056870c59c00b00150d9aa4011mr1145315oab.96.1673019554943; Fri, 06
+ Jan 2023 07:39:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106095143.3158998-3-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20221227082932.798359-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
+In-Reply-To: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 6 Jan 2023 10:39:03 -0500
+Message-ID: <CADnq5_PtJ2JxAH7vaQsMHomUmiAxhiOqn4suf1SAQkaqt=sg+g@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.2-rc1
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-f2fs-devel@lists.sourceforge.net, kasan-dev@googlegroups.com,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rafael, linux-pm, linux-kernel in case you have comments on
-whether devices should still be usable after .remove()/.shutdown()]
+On Tue, Dec 27, 2022 at 10:34 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> On Tue, 27 Dec 2022, Geert Uytterhoeven wrote:
+> > Below is the list of build error/warning regressions/improvements in
+> > v6.2-rc1[1] compared to v6.1[2].
+> >
+> > Summarized:
+> >  - build errors: +11/-13
+>
+> amd-gfx@lists.freedesktop.org
+> linux-arm-kernel@lists.infradead.org
+> linux-media@vger.kernel.org
+> linux-wireless@vger.kernel.org
+> linux-mips@vger.kernel.org
+> linux-sh@vger.kernel.org
+> linux-f2fs-devel@lists.sourceforge.net
+> linuxppc-dev@lists.ozlabs.org
+> kasan-dev@googlegroups.com
+> linux-xtensa@linux-xtensa.org
+>
+>    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/displ=
+ay_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 b=
+ytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7082:1
+>    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/disp=
+lay_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048=
+ bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7127:1
+>
 
-On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
-> After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe services during
-> shutdown") we observe poweroff/reboot failures on systems with LS7A
-> chipset.
-> 
-> We found that if we remove "pci_command &= ~PCI_COMMAND_MASTER" in
-> do_pci_disable_device(), it can work well. The hardware engineer says
-> that the root cause is that CPU is still accessing PCIe devices while
-> poweroff/reboot, and if we disable the Bus Master Bit at this time, the
-> PCIe controller doesn't forward requests to downstream devices, and also
-> does not send TIMEOUT to CPU, which causes CPU wait forever (hardware
-> deadlock).
-> 
-> To be clear, the sequence is like this:
-> 
->   - CPU issues MMIO read to device below Root Port
-> 
->   - LS7A Root Port fails to forward transaction to secondary bus
->     because of LS7A Bus Master defect
-> 
->   - CPU hangs waiting for response to MMIO read
-> 
-> Then how is userspace able to use a device after the device is removed?
-> 
-> To give more details, let's take the graphics driver (e.g. amdgpu) as
-> an example. The userspace programs call printf() to display "shutting
-> down xxx service" during shutdown/reboot, or the kernel calls printk()
-> to display something during shutdown/reboot. These can happen at any
-> time, even after we call pcie_port_device_remove() to disable the pcie
-> port on the graphic card.
-> 
-> The call stack is: printk() --> call_console_drivers() --> con->write()
-> --> vt_console_print() --> fbcon_putcs()
-> 
-> This scenario happens because userspace programs (or the kernel itself)
-> don't know whether a device is 'usable', they just use it, at any time.
+@Siqueira, Rodrigo @Mahfooz, Hamza
 
-Thanks for this background.  So basically we want to call .remove() on
-a console device (or a bridge leading to it), but we expect it to keep
-working as usual afterwards?
+Can you take a look at fixing the DML stack size here up?
 
-That seems a little weird.  Is that the design we want?  Maybe we
-should have a way to mark devices so we don't remove them during
-shutdown or reboot?
+Alex
 
-> This hardware behavior is a PCIe protocol violation (Bus Master should
-> not be involved in CPU MMIO transactions), and it will be fixed in new
-> revisions of hardware (add timeout mechanism for CPU read request,
-> whether or not Bus Master bit is cleared).
-> 
-> On some x86 platforms, radeon/amdgpu devices can cause similar problems
-> [1][2]. Once before I wanted to make a single patch to solve "all of
-> these problems" together, but it seems unreasonable because maybe they
-> are not exactly the same problem. So, this patch add a new function
-> pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
-> dedicated for the shutdown path, and then add a quirk just for LS7A to
-> avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
-> platforms behave as before.
-> 
-> [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
-> [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
->  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
->  include/linux/pci.h                   |  1 +
->  3 files changed, 37 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> index 759ec211c17b..641308ba4126 100644
-> --- a/drivers/pci/controller/pci-loongson.c
-> +++ b/drivers/pci/controller/pci-loongson.c
-> @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  			DEV_PCIE_PORT_2, loongson_mrrs_quirk);
->  
-> +static void loongson_bmaster_quirk(struct pci_dev *pdev)
-> +{
-> +	/*
-> +	 * Some Loongson PCIe ports will cause CPU deadlock if there is
-> +	 * MMIO access to a downstream device when the root port disable
-> +	 * the Bus Master bit during poweroff/reboot.
-> +	 */
-> +	struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
-> +
-> +	bridge->no_dis_bmaster = 1;
-> +}
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_0, loongson_bmaster_quirk);
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_1, loongson_bmaster_quirk);
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_2, loongson_bmaster_quirk);
-> +
->  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
->  {
->  	pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index 2cc2e60bcb39..96f45c444422 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
->  {
->  	device_for_each_child(&dev->dev, NULL, remove_iter);
->  	pci_free_irq_vectors(dev);
-> -	pci_disable_device(dev);
->  }
->  
->  /**
-> @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
->  	}
->  
->  	pcie_port_device_remove(dev);
-> +
-> +	pci_disable_device(dev);
-> +}
-> +
-> +static void pcie_portdrv_shutdown(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
-> +
-> +	if (pci_bridge_d3_possible(dev)) {
-> +		pm_runtime_forbid(&dev->dev);
-> +		pm_runtime_get_noresume(&dev->dev);
-> +		pm_runtime_dont_use_autosuspend(&dev->dev);
-> +	}
-> +
-> +	pcie_port_device_remove(dev);
-> +
-> +	if (!bridge->no_dis_bmaster)
-> +		pci_disable_device(dev);
->  }
->  
->  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
-> @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
->  
->  	.probe		= pcie_portdrv_probe,
->  	.remove		= pcie_portdrv_remove,
-> -	.shutdown	= pcie_portdrv_remove,
-> +	.shutdown	= pcie_portdrv_shutdown,
->  
->  	.err_handler	= &pcie_portdrv_err_handler,
->  
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 3df2049ec4a8..a64dbcb89231 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -573,6 +573,7 @@ struct pci_host_bridge {
->  	unsigned int	ignore_reset_delay:1;	/* For entire hierarchy */
->  	unsigned int	no_ext_tags:1;		/* No Extended Tags */
->  	unsigned int	no_inc_mrrs:1;		/* No Increase MRRS */
-> +	unsigned int	no_dis_bmaster:1;	/* No Disable Bus Master */
->  	unsigned int	native_aer:1;		/* OS may use PCIe AER */
->  	unsigned int	native_pcie_hotplug:1;	/* OS may use PCIe hotplug */
->  	unsigned int	native_shpc_hotplug:1;	/* OS may use SHPC hotplug */
-> -- 
-> 2.31.1
-> 
+
+> arm64-gcc5/arm64-allmodconfig
+>
+>    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
+rray subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
+[-Werror=3Darray-bounds]:  =3D> 641:28
+>    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
+rray subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
+[-Werror=3Darray-bounds]:  =3D> 641:28
+>
+> m68k-gcc8/m68k-allmodconfig
+> See also https://lore.kernel.org/all/CAMuHMdWpPX2mpqFEWjjbjsQvDBQOXyjjdpK=
+nQu9qURAuVZXmMw@mail.gmail.com
+>
+>    + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overfl=
+ow' declared with attribute error: value doesn't fit into mask:  =3D> 151:3
+>
+> In function 'u32_encode_bits',
+>      inlined from 'ieee80211_mlo_multicast_tx' at /kisskb/src/net/mac8021=
+1/tx.c:4435:17,
+>      inlined from 'ieee80211_subif_start_xmit' at /kisskb/src/net/mac8021=
+1/tx.c:4483:3:
+>
+> mipsel-gcc5/mips-allmodconfig
+>
+>    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
+etime_assert_262' declared with attribute error: Unsupported access size fo=
+r {READ,WRITE}_ONCE().:  =3D> 358:45
+>    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
+etime_assert_263' declared with attribute error: Unsupported access size fo=
+r {READ,WRITE}_ONCE().:  =3D> 358:45
+>
+> In function 'follow_pmd_mask',
+>      inlined from 'follow_pud_mask' at /kisskb/src/mm/gup.c:735:9,
+>      inlined from 'follow_p4d_mask' at /kisskb/src/mm/gup.c:752:9,
+>      inlined from 'follow_page_mask' at /kisskb/src/mm/gup.c:809:9:
+>
+> sh4-gcc11/sh-defconfig (G=C3=BCnter wondered if pmd_t should use union)
+>
+>    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy=
+' offset [0, 127] is out of the bounds [0, 0] [-Werror=3Darray-bounds]:  =
+=3D> 57:33
+>
+> /kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
+> s390x-gcc11/s390-all{mod,yes}config
+>
+>    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset=
+' pointer overflow between offset [28, 898293814] and size [-898293787, -1]=
+ [-Werror=3Darray-bounds]:  =3D> 59:33
+>
+> /kisskb/src/fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
+>
+> powerpc-gcc11/ppc64_book3e_allmodconfig
+> powerpc-gcc11/powerpc-all{mod,yes}config
+>
+>    + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680=
+ bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 25=
+7:1
+>
+> xtensa-gcc11/xtensa-allmodconfig (patch available)
+>
+>    + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  =3D> 1718
+>
+> sh4-gcc11/sh-allmodconfig (ICE =3D internal compiler error)
+>
+> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37=
+871d5afb9d498426f83432e71c2/ (all 152 configs)
+> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1=
+e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+>
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                                             -- Linus Torv=
+alds
