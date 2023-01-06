@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7307A660451
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6567660453
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbjAFQe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S234327AbjAFQed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjAFQe1 (ORCPT
+        with ESMTP id S234814AbjAFQe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:34:27 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC2576EFF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:34:24 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id h192so1480467pgc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 08:34:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GLC5QUeUL2afI6fkE2hQgTHlKSoxUZrTGJ/pG2j0kWA=;
-        b=w3VSh96pSDfPKxhIYAAO/vefawk9pjXMQGzqCj1VBVod2nSAHd1botoFl8A65MufYq
-         6SKlVedRvbrkaU1TSRV26Ku27uPwGEW5R5z6vGEVyIp2IaUiprGgLpteQgkZbXTUoukO
-         Oh6UfkIoTM7Pgaui3yR2ulrqvpaU50RoCVDkoXfJCpK1V5Yd8XhoFz2r2Z0DwM709xRz
-         7CuezLqYehdDIu33yTk1OGc7dOaVYJ7UOUjT6+/mJ4VfSRdgCU0u/4x3eSL30r4+p346
-         v6u+/LgwGvJbWk5C1xUB/5nB98H7F4ycfdPFQNdgNdX4lptWf7czUZ8HtUDohCh+gBKZ
-         2GmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GLC5QUeUL2afI6fkE2hQgTHlKSoxUZrTGJ/pG2j0kWA=;
-        b=TNqCss26NNG0ClujuhI3qjmFRwFKmfw+SWpzICkvQKxyiYpGXQ0WAp0dCd/5BGNx7p
-         Mh+TL8jYaw0c2WoXwhqIZC2tq41uCYfxLr2zzd7h9Qz9kmmcNHO6hTYqmzFUWCOPQ4qW
-         gIf4K7yeODz/EfqBpeY9030JkUAvc1zGHW/TNF1naKvEhTyU1G4ZaZGjazgNbHYFma4X
-         Sba8b9pBuqb3ytLcG/2kE4gerGpWumxFJhyrNwqakzF7RO6Ud8tlGEAq2LrKhhmRO+L1
-         ezmPIKjCyOPpc3aNrQ0g81kV4eQi5rRYvZvPzrEchKvdTQm//UxENmpOu+OZ/hhMIhhk
-         o3zg==
-X-Gm-Message-State: AFqh2krujnQTrG4cLoQt4mc35HBcc2pkIpLX6VwLD6Hpw9zpG1Okc8qG
-        8s4BHbma7ZC+fZ+0ek1RiJMQ8Q==
-X-Google-Smtp-Source: AMrXdXupbQ23NlCXQq5N5/pRiwBTmYJq6n3/vRFF0HtTT9Bx4yoTaJfrihJF+V5rhcHAnyIj6AYxag==
-X-Received: by 2002:a62:1c42:0:b0:582:7d77:7fa2 with SMTP id c63-20020a621c42000000b005827d777fa2mr18705684pfc.11.1673022864134;
-        Fri, 06 Jan 2023 08:34:24 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:36e4:cfb6:3705:ebd9])
-        by smtp.gmail.com with ESMTPSA id 195-20020a6216cc000000b00580c51341fasm1346020pfw.177.2023.01.06.08.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 08:34:23 -0800 (PST)
-Date:   Fri, 6 Jan 2023 09:34:21 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, nm@ti.com, vigneshr@ti.com,
-        srk@ti.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v14 0/6] Introduce PRU remoteproc consumer API
-Message-ID: <20230106163421.GA2351214@p14s>
-References: <20230106121046.886863-1-danishanwar@ti.com>
+        Fri, 6 Jan 2023 11:34:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46AB809B7;
+        Fri,  6 Jan 2023 08:34:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3747661953;
+        Fri,  6 Jan 2023 16:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F21DC433D2;
+        Fri,  6 Jan 2023 16:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673022867;
+        bh=RCmdOFw+uCvdhcIA/LW4xBRZ+gvfGhHCNqUL32jU2Xo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hpE3oIXhVR5dllqnADRzufEpz6EQ+GrhQjbZtDfItpCdvXkEzyWkSKKhMtO7G6+oZ
+         nt4V/k3mugnvpwrvc0yLmczjihg1RZhJz3N7KlPfpZovJXGhQt4RHY2f6OoHJbHQRj
+         ImC9l08sBsKUrTQdrC6QffTfgiz6MB2zmdyALueWTcDVpSuwQYPuG6fFF7yIE9+C1H
+         TTEEuqjuTihapLf8DdcoQNZr3MF/fOORyke+VT1miCZ5FaOgTCoga1chaJ28ljjTBF
+         WKa7Q/P30AGuBKS2Ct31ASrcAqG3SrDB5UzCaQXnlevR0Z48Nx3yB9zpUgVOlRBl5o
+         bzv/y2ig0VAjQ==
+Date:   Fri, 6 Jan 2023 16:34:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v2 1/2] spi: spidev: fix a race condition when accessing
+ spidev->spi
+Message-ID: <Y7hNj+O0Y5NNNcna@sirena.org.uk>
+References: <20230106100719.196243-1-brgl@bgdev.pl>
+ <Y7gsiW6lAsz/krsV@sirena.org.uk>
+ <CAMRc=MfsUxuv6d4GXgf7aTDr3Af89JX1Na_+jWcQQGn2hngWzQ@mail.gmail.com>
+ <Y7hJbjnbcxZnh/9M@sirena.org.uk>
+ <CAMRc=MejZsbL=Ef=hNV-QGcrcgCepKfnAU4z+CFXFf8Wn09M-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pH2PIaMokPOQ5Eaq"
 Content-Disposition: inline
-In-Reply-To: <20230106121046.886863-1-danishanwar@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMRc=MejZsbL=Ef=hNV-QGcrcgCepKfnAU4z+CFXFf8Wn09M-g@mail.gmail.com>
+X-Cookie: Do not fold, spindle or mutilate.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> MD Danish Anwar (2):
->   remoteproc: pru: Add enum for PRU Core Identifiers.
->   remoteproc: pru: Add APIs to get and put the PRU cores
-> 
-> Roger Quadros (1):
->   remoteproc: pru: Add pru_rproc_set_ctable() function
-> 
-> Suman Anna (2):
->   dt-bindings: remoteproc: Add PRU consumer bindings
->   remoteproc: pru: Make sysfs entries read-only for PRU client driven
->     boots
-> 
-> Tero Kristo (1):
->   remoteproc: pru: Configure firmware based on client setup
-> 
->  .../bindings/remoteproc/ti,pru-consumer.yaml  |  60 +++++
->  drivers/remoteproc/pru_rproc.c                | 230 +++++++++++++++++-
->  include/linux/remoteproc/pruss.h              |  83 +++++++
->  3 files changed, 368 insertions(+), 5 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->  create mode 100644 include/linux/remoteproc/pruss.h
->
 
-I have applied this set.
+--pH2PIaMokPOQ5Eaq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
-Mathieu
+On Fri, Jan 06, 2023 at 05:27:34PM +0100, Bartosz Golaszewski wrote:
+> On Fri, Jan 6, 2023 at 5:16 PM Mark Brown <broonie@kernel.org> wrote:
 
-> -- 
-> 2.25.1
-> 
+> > The complication is using a semaphore at all, it's a pretty unusual
+> > locking construct and the whole up/down thing isn't clear to people
+> > who aren't familiar with it.  Given that there's no clounting being
+> > used rwlock would be a much more obvious choice if the microseconds
+> > of extra concurrency is meaningful somehow.
+
+> I don't have any numbers, it's just that in this case the rwsem feels
+> more correct. My opinion is not very strong so you can apply v2.
+
+Like I say the semaphore in particular feels wrong when we don't need
+the counting, we have an explicit reader/writer lock if that's what
+you're trying to accomplish.
+
+--pH2PIaMokPOQ5Eaq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO4TY4ACgkQJNaLcl1U
+h9A6KAf/QIVHDAnf2BFQybkviui2/MVLJ9ZIa8H0ZhYeY1uY1Hi48ye30FA9etWi
+cU5fxbPNmL6s/Sh9sKM686WY+6qqaOJ2OBRwV4TJE5cq4wo7tMweaqJi27PAPz94
+xtud1qnt2jQ+o3L6mPzYNjuS1EGriQPISuvX7QPmkHFfvaC1Axq1K45skRHk5MZ+
+T3FEzofCwtQONKHTqgnsmzONGfSgV4KtHWQ+abGrbvoUj5wlFdmgjjyaJCnoPG92
+4od4eV7HvYjES5p0nk1f4bAsbiMcpHSuUU5y0cIfrdV6FsqKQ2KZu7oBZYolcJLL
+GwiFC7s0Vze8Qupt87+Msz5cZiKTdg==
+=0M+x
+-----END PGP SIGNATURE-----
+
+--pH2PIaMokPOQ5Eaq--
