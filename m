@@ -2,112 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A8865FFEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C8D660008
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjAFMFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S233538AbjAFMLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjAFMFj (ORCPT
+        with ESMTP id S232538AbjAFMLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:05:39 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E3069B13
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:05:37 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pDlTc-0001Yv-13; Fri, 06 Jan 2023 13:05:36 +0100
-Message-ID: <a6a1c4db-39dd-4ca2-2e48-816bd7876a27@leemhuis.info>
-Date:   Fri, 6 Jan 2023 13:05:35 +0100
+        Fri, 6 Jan 2023 07:11:08 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939977289E;
+        Fri,  6 Jan 2023 04:11:05 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 306CAnee013330;
+        Fri, 6 Jan 2023 06:10:49 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673007049;
+        bh=tXbc96sb8j5CVa0DGNyxAaajFElFH9Gu+//+jPfif3A=;
+        h=From:To:CC:Subject:Date;
+        b=GGrpv/1PSlUlSK58ZOKmFLB163yN/rmzgiFilW4sqgxVOqnRSdSplMTuEKjTXe9pt
+         VbtNmSbn4eIfuh7ymGL1JE2gAdAdKmb8uoBLUYTYFLzY8WH9QPBccVt7jiznlhBQja
+         /nxEj+HrXAULwRkD8XzOSkaVEfzIz+2ouC71bWPk=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 306CAnAs089015
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 6 Jan 2023 06:10:49 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 6
+ Jan 2023 06:10:49 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 6 Jan 2023 06:10:49 -0600
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 306CAmCd096978;
+        Fri, 6 Jan 2023 06:10:48 -0600
+Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
+        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 306CAlSq028579;
+        Fri, 6 Jan 2023 06:10:48 -0600
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+Subject: [PATCH v14 0/6] Introduce PRU remoteproc consumer API
+Date:   Fri, 6 Jan 2023 17:40:40 +0530
+Message-ID: <20230106121046.886863-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: commit 3497b9a5 (usb: dwc3: add power down scale setting) breaks
- imx8mp
-Content-Language: en-US, de-DE
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Li Jun <jun.li@nxp.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <5ae757aa-5b0e-be81-e87c-134e2ba5205d@prevas.dk>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-Reply-To: Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <5ae757aa-5b0e-be81-e87c-134e2ba5205d@prevas.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673006737;ac45e655;
-X-HE-SMSGID: 1pDlTc-0001Yv-13
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+The Programmable Real-Time Unit and Industrial Communication Subsystem
+(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; all text you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.
-See link in footer if these mails annoy you.]
+There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+already merged and can be found under:
 
-On 06.01.23 12:54, Rasmus Villemoes wrote:
-> We have an imx8mp board with a lan7801 usb ethernet chip hardwired on
-> the PCB, which is used as the host port for a Microchip KSZ9567 switch.
-> 
-> While trying to update the kernel to 6.1.y, I found something quite
-> weird: When the switch was being probed for the second time (the first
-> ends with a standard -EPROBE_DEFER), the board would spontaneously reset.
-> 
-> Now when I disable the switch driver in .config just to see how far I
-> could otherwise get, the lan7801 device didn't appear until about 47
-> seconds after boot. Bisecting unambiguously points at 3497b9a5, and
-> digging in, it's pretty obvious why that is bogus at least for imx8mp.
-> 
-> The .dtsi file lists IMX8MP_CLK_USB_ROOT as the "suspend" clk, and
-> clk_get_rate() of that returns 500000000 ; divided by 16000 that's
-> 31250, which certainly doesn't fit in the 13-bit field GCTL_PWRDNSCALE.
-> But I assume the .dtsi file is wrong, because imx8mq.dtsi has
-> 74bd5951dd3 (arm64: dts: imx8mq: correct usb controller clocks), and it
-> seems likely from the commit log of 3497b9a5 that it was at least tested
-> on imx8mq.
-> 
-> Now I have no idea if the right clock for imx8mp is also some 32kHz clk,
-> but it would certainly make sense; unlike what the reference manual
-> claims, it seems that the reset value of the GCTL register is
-> 0x00112004, amounting to a pwrdwnscale value of 0x00100000>>19 == 2 ==
-> 32kHz/16kHz, and that could explain why things worked just fine without
-> 3497b9a5.
-> 
-> Li Jun, please either revert 3497b9a5 or figure out if imx8mp.dtsi is
-> broken and needs a fix similar to 74bd5951dd3.
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be:
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
-#regzbot ^introduced 3497b9a5c8c
-#regzbot title usb: dwc3: imx8mp broken
-#regzbot ignore-activity
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+This is the v14 of the patch series [1]. This version of the patchset 
+addresses the comments made on v13 [13] of the series. 
 
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (see page linked in footer for details).
+Two more patch series have been posted ([2] and [3]) that depends on this
+series, one has been posted to the soc/ti/ tree and another  
+to the networking tree. All the 3 series including this one, has been 
+sent as RFC [4] to get comments and to explain the dependencies.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Changes from v13 to v14 :
+
+*) Moved the header file pruss.h from include/linux/ . to include/linux/remoteproc/ .
+
+Changes from v12 [12] to v13 :
+
+*) Fixed the checkpatch warning in patch 2/6 of the series.
+
+Changes from v11 [11] to v12 :
+
+*) Removed extra put_device() from pru_rproc_get() API as asked by Roger.
+*) Removed rproc_put() call in the API __pru_rproc_get() when 
+rproc_get_by_phandle() returns null. Instead of that just return the error 
+pointer.
+
+Changes from v10 [10] to v11 :
+
+*) Re-ordered the patches 2/6 and 3/6 of the series as asked by Roger. Now the 
+2/6 patch of the series introduces the enum pruss_pru_id and the header file 
+<linux/pruss.h>. The patch 3/6 of the series introduces the pru_rproc_get() 
+and pru_rproc_put() APIS with their actua desired arguments.
+
+Changes from v9 [9] to v10 :
+
+*) There was compilation issue in v9 of the series because of dependencies 
+between 2nd and 3rd patch of the series. Fixed the dependencies in this series.
+*) Added enum documentation following the kernel-doc style [14] as asked by 
+Roger for 3/6 patch of the series.
+
+Changes from v8 [8] to v9 :
+
+*) Fixed the warnings generated by running checkpatch.pl script.
+*) Added Review/Ack tags.
+*) Listed just the SoBs tags for all the patches as suggested by Mathieu.
+*) Removed a comment for an already documented field in patch 5/6 of this series.
+
+Changes from v7 [7] to v8 :
+
+*) Removed get_device(&rproc->dev) from API __pru_rproc_get() in patch 2/5 of 
+this series as asked by Roger. 
+*) Replaced all the SoBs (other than mine) to Co-developed-by tags for all 
+the patches in this series as asked by Mathieu.
+*) Added a new patch (3/6) in this series for Introduction of pruss_pru_id enum.
+Previously this enum was part of patch 2/6. As asked by Roger removed this enum 
+(and the APIs that are using the enum) from patch 2/6 and added it in new patch.
+*) Removed a comment for an already documented field in patch 2/6 of this series.
+*) Changed 'pru' to 'PRU' in comment of API pru_rproc_set_firmware() as asked by 
+Roger.
+
+Changes from v6 [6] to v7 :
+
+*) Removed example section from ti,pru-consumer.yaml as the full example 
+included compatible property as well which is not introduced in this series 
+thus creating dt check binding error. Removing the example section fixes the
+dt binding check error. The example section will be included in 
+"ti,icssg-prueth.yaml" in the next version of series [3]
+*) Updated the commit message for patch 1/5 of this series to address Krzysztof's 
+comment.
+
+Changes from v5 [5] to v6  :
+
+*) Added rproc_get_by_phandle() in pru_rproc_get() 
+*) Provided background of Ctable in the commit messege.
+*) Removed patch "" [15] (6th Patch of the v5 of this series)
+   as it has dependency on series [2], thus creating a cyclic dependency.
+
+The patch [15] will be sent along with the next version of series [2].
+
+[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220603121520.13730-1-p-mohan@ti.com/
+[2] https://lore.kernel.org/all/20220418123004.9332-1-p-mohan@ti.com/
+[3] https://lore.kernel.org/all/20220531095108.21757-1-p-mohan@ti.com/
+[4] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+[5] https://lore.kernel.org/all/20220607045650.4999-1-p-mohan@ti.com/
+[6] https://lore.kernel.org/all/20221012114429.2341215-1-danishanwar@ti.com/
+[7] https://lore.kernel.org/all/20221031073801.130541-1-danishanwar@ti.com/
+[8] https://lore.kernel.org/all/20221116121634.2901265-1-danishanwar@ti.com/
+[9] https://lore.kernel.org/all/20221118111924.3277838-1-danishanwar@ti.com/
+[10] https://lore.kernel.org/all/20221201110500.4017889-1-danishanwar@ti.com/
+[11] https://lore.kernel.org/all/20221207110411.441692-1-danishanwar@ti.com/
+[12] https://lore.kernel.org/all/20221216053313.2974826-1-danishanwar@ti.com/
+[13] https://lore.kernel.org/all/20230105092149.686201-1-danishanwar@ti.com/
+[14] https://www.kernel.org/doc/html/v6.0/doc-guide/kernel-doc.html#structure-union-and-enumeration-documentation
+[15] https://lore.kernel.org/all/20220607045650.4999-7-p-mohan@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+MD Danish Anwar (2):
+  remoteproc: pru: Add enum for PRU Core Identifiers.
+  remoteproc: pru: Add APIs to get and put the PRU cores
+
+Roger Quadros (1):
+  remoteproc: pru: Add pru_rproc_set_ctable() function
+
+Suman Anna (2):
+  dt-bindings: remoteproc: Add PRU consumer bindings
+  remoteproc: pru: Make sysfs entries read-only for PRU client driven
+    boots
+
+Tero Kristo (1):
+  remoteproc: pru: Configure firmware based on client setup
+
+ .../bindings/remoteproc/ti,pru-consumer.yaml  |  60 +++++
+ drivers/remoteproc/pru_rproc.c                | 230 +++++++++++++++++-
+ include/linux/remoteproc/pruss.h              |  83 +++++++
+ 3 files changed, 368 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+ create mode 100644 include/linux/remoteproc/pruss.h
+
+-- 
+2.25.1
+
