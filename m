@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4C8660481
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688FF660497
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbjAFQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S235840AbjAFQmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbjAFQj3 (ORCPT
+        with ESMTP id S236026AbjAFQmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:39:29 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7877778A64;
-        Fri,  6 Jan 2023 08:39:28 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id t17so4663184eju.1;
-        Fri, 06 Jan 2023 08:39:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=62whTgwgxgcK47Dt+65MfHt3OP2RRvwYQXr7nW+cRsc=;
-        b=PXjjrBc0txLZcl8hUAjtECmhB84OGy+/jHK9l6ujHR1e5Z5AkJGvyt4BN+OvrCIQdE
-         CPdMqmCVq3YfxeeKMD+3GuwQypFZ+OLegZyBmgOAsGnirVk4zjrXVmCoCUYZ4s5J0uwh
-         EUgebIhXbNkym9OsA7dSvSPgVJ4QCv9WSifZN2YzlveTQGSkJ+0k/1DLTnAtUnrgP9Mm
-         Znifygp9Zwn7W01AxqzY+v9JYrZeTALnwb8sydq/ha+YzqKqupbwRNSSn2TAdtvSTUyi
-         UwpSILaa97KtddjgvInx9m1srk0ZdsAafe7U9A6bIYtVnl2WwTkQJyz76lWsVjr/WlSt
-         4ZCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=62whTgwgxgcK47Dt+65MfHt3OP2RRvwYQXr7nW+cRsc=;
-        b=ugxAtGsw19SyAerRcRVJY0CvvRpE605m5GDAvpfHbKzRR910SbqcAn8RAooxcjRX6Z
-         v9xUeHYnUec9/Jpbqcn3wgfCwEN3PV/82I7UDR/veMGDaETnQgQB83ToN5YmBCsu1O6y
-         BAB1JqD8+PQL474xRCsSf812Ttq0Fg4Umg2Vn6K9bAy99zbTC9cW7a2yYovjs/gcMoBK
-         dhNR7BSaW505+3bHNn6bpxpRz4vZ68O7RjfvIfof83Jt6tlF4em3KQdxILcLJ5ltb8lt
-         aWbHdVr6zMPRbSshYyoPUoXBVAfqEX4bRGvu0sdyJXFMSekKH50eeRMVVI4+wQeE9FG3
-         b11A==
-X-Gm-Message-State: AFqh2kqkY05geFjYR8LawMTpFPfUz3qAFXDnQDCZAqX5hDnEpuNGY3Zq
-        KSWgjvuPdwrtsLjw5JDoMOk=
-X-Google-Smtp-Source: AMrXdXtuU8FtF1HayoHRDOCl0DcmSv/ba7G3iGXBIv7V3RJcx1lMYP4kSihxNp+rXs7/25uR5ySdVg==
-X-Received: by 2002:a17:906:12c7:b0:7c1:639:6b42 with SMTP id l7-20020a17090612c700b007c106396b42mr56094594ejb.62.1673023166932;
-        Fri, 06 Jan 2023 08:39:26 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id w2-20020aa7cb42000000b0046a0096bfdfsm646278edt.52.2023.01.06.08.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 08:39:26 -0800 (PST)
-Date:   Fri, 6 Jan 2023 18:39:24 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 net-next 1/3] net: dsa: mv88e6xxx: change default
- return of mv88e6xxx_port_bridge_flags
-Message-ID: <20230106163924.jxrdthslsxjogahs@skbuf>
-References: <20230106160529.1668452-1-netdev@kapio-technology.com>
- <20230106160529.1668452-2-netdev@kapio-technology.com>
+        Fri, 6 Jan 2023 11:42:13 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212777CBEE;
+        Fri,  6 Jan 2023 08:41:20 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 27C4D426F3;
+        Fri,  6 Jan 2023 16:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1673023256; bh=gXgieJ9sHytuKgJOAD+se1IXoDv6b4RgyKmGjkVDxlg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=pl5bPON7tKn3exZITOT4qR8AxmLqINqBe1EkSfPfTGJJ4pMwe95KLLviTxrwqLQwB
+         gB2OZCPWfbSTQe1RTYksbZw1P3rif1MD6OpxracZDpEAx7BZIXrHRCB81DG5EHfZy2
+         lRU8twI8hP0fnB7iVC1/8UFC26t0x3V2ExshBDsPmwEpyfU5YIVUwlCsHtLUh51bBt
+         E6IVUFQLb3mIk76yVZBPdCd8Homo90egFg/3zLW44enN2xZ4KpInASlBjQS7dArvEQ
+         RFMZwgH3qEQOmOtJurTRDdnruH+rymWSscLNP6ZhTKPUz1yDkrbQfWWvn+tH+AiveM
+         DLUFRPoqXdk1Q==
+Message-ID: <6a9371e6-6516-5966-f92c-10bb228c8db3@marcan.st>
+Date:   Sat, 7 Jan 2023 01:40:49 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106160529.1668452-2-netdev@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/5] spi: Use a 32-bit DT property for
+ spi-cs-setup-delay-ns
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Janne Grunau <j@jannau.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230104093631.15611-4-marcan@marcan.st>
+ <Y7hLrxQO9GbgpW1h@sirena.org.uk>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <Y7hLrxQO9GbgpW1h@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 05:05:27PM +0100, Hans J. Schultz wrote:
-> The default return value -EOPNOTSUPP of mv88e6xxx_port_bridge_flags()
-> came from the return value of the DSA method port_egress_floods() in
-> commit 4f85901f0063 ("net: dsa: mv88e6xxx: add support for bridge flags"),
-> but the DSA API was changed in commit a8b659e7ff75 ("net: dsa: act as
-> passthrough for bridge port flags"), resulting in the return value
-> -EOPNOTSUPP not being valid anymore, and sections for new flags will not
-> need to set the return value to zero on success, as with the new mab flag
-> added in a following patch.
+On 07/01/2023 01.26, Mark Brown wrote:
+> On Wed, Jan 04, 2023 at 06:36:29PM +0900, Janne Grunau wrote:
 > 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
+>> 65us is not a reasonable maximum for this property, as some devices
+>> might need a much longer setup time (e.g. those driven by firmware on
+>> the other end). Plus, device tree property values are in 32-bit cells
+>> and smaller widths should not be used without good reason.
+> 
+> This breaks allmodconfig builds (I tested x86 but this should happen
+> for anything with -Werror):
+> 
+> /build/stage/linux/drivers/spi/spi.c: In function ‘of_spi_parse_dt’:
+> /build/stage/linux/drivers/spi/spi.c:2243:13: error: unused variable ‘cs_setup’ [-Werror=unused-variable]
+>  2243 |         u16 cs_setup;
+>       |             ^~~~~~~~
+> cc1: all warnings being treated as errors
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Yeah, the kernel test robot caught this one too. Sorry for missing it
+(it got buried in warning noise in a rather large rebuild on my side).
+That line should've been removed in #3 :(
 
-If a tag was not added on purpose, please state why and what changed.
+I see two patches got applied already. Do you want me to just respin #3-#5?
 
-Missing tags:
-
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+- Hector
