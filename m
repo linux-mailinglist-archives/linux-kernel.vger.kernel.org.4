@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C373A6605BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC41D6605C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbjAFRdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S235677AbjAFRdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbjAFRd1 (ORCPT
+        with ESMTP id S235039AbjAFRdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:33:27 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 69A8773E0C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:33:24 -0800 (PST)
-Received: (qmail 557466 invoked by uid 1000); 6 Jan 2023 12:33:23 -0500
-Date:   Fri, 6 Jan 2023 12:33:23 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mailhol.vincent@wanadoo.fr,
-        mkl@pengutronix.de, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in __usbnet_read_cmd/usb_submit_urb
-Message-ID: <Y7hbY2ttx4ZLkKNY@rowland.harvard.edu>
-References: <00000000000008f1d405f1999228@google.com>
+        Fri, 6 Jan 2023 12:33:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C8BC01;
+        Fri,  6 Jan 2023 09:33:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BFF961DA3;
+        Fri,  6 Jan 2023 17:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA690C433EF;
+        Fri,  6 Jan 2023 17:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673026422;
+        bh=GOJUwq8EqcG8L01e1DER1N6UxlUAS+PeczRwJOfMKv4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=j7qy6DKRFIQeNtVNjHN1UrI5L6ioL6SgpSAgEoH0IwFRD5z/HsZRN74JEQyEGiDBb
+         EpNqbINPNI7MLSU+5FkS1MD6QqY3M4/j19SpsBXfkf8z69Rfd8CIQz9r/hqpwNUdQd
+         ER1TXyhFbOzZxrpdfsscVquVTsHalOb1BMf5an93RsmfUAyYNOJWfM5tU+wtC+kKEz
+         YlalTIN706+44kDdh21KV0A9tVa6VwcSOkkROq0Pu/moue1JZDQXOGTRl9zXiEy+jw
+         g0Ebp8bryTsgYfGKqHyHfeMOiYzosu5fqH0ZNn0bXdwuNOn4iH4NwuTtQTfF3BjuVv
+         aF9r94bHKWXcA==
+Date:   Fri, 6 Jan 2023 11:33:41 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Liang, Kan" <kan.liang@linux.intel.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "kernelorg@undead.fr" <kernelorg@undead.fr>,
+        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
+        "2lprbe78@duck.com" <2lprbe78@duck.com>,
+        "nicholas.johnson-opensource@outlook.com.au" 
+        <nicholas.johnson-opensource@outlook.com.au>,
+        "benoitg@coeus.ca" <benoitg@coeus.ca>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
+        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Box, David E" <david.e.box@intel.com>,
+        "Sun, Yunying" <yunying.sun@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>
+Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
+Message-ID: <20230106173341.GA1234930@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000008f1d405f1999228@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230106004744.GA1186792@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 06:52:45AM -0800, syzbot wrote:
-> Hello,
+On Thu, Jan 05, 2023 at 06:47:44PM -0600, Bjorn Helgaas wrote:
+> On Fri, Jan 06, 2023 at 12:22:09AM +0000, Luck, Tony wrote:
+> > > ...and Dave, who reported that CXL enumeration was busted in -rc2, says
+> > > this patch fixes that. So you can also add:
+> > >
+> > > Tested-by: Dave Jiang <dave.jiang@intel.com>
+> > 
+> > Also seems good for my Broadwell/EDAC system.
+> > 
+> > Boot messages mentioning MMCONFIG are:
+> > 
+> > $ dmesg | grep MMCONFIG
+> > PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+> > PCI: not using MMCONFIG
+> > PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+> > PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] reserved in ACPI motherboard resources or EFI
 > 
-> syzbot found the following issue on:
+> This part looks ok.
 > 
-> HEAD commit:    1b929c02afd3 Linux 6.2-rc1
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=128acc94480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=19062640e84d2e8f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2a0e7abd24f1eb90ce25
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > PCI: MMCONFIG for 0000 [bus00-7f] at [mem 0x80000000-0x87ffffff] (base 0x80000000) (size reduced!)
+> > acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+> > acpi PNP0A03:01: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+> > acpi PNP0A08:02: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+> > acpi PNP0A08:03: fail to add MMCONFIG information, can't access extended configuration space under this bridge
 > 
-> Unfortunately, I don't have any reproducer for this issue yet.
-
-I don't know why not; the bug is easily repeatable.
-
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/22dc9b4a71a2/disk-1b929c02.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/3a88668bf3ce/vmlinux-1b929c02.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/3ff0c2e45492/bzImage-1b929c02.xz
+> But the rest of this still looks like a regression.  From your
+> previous dmesg log:
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com
+>   PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+>   PNP0A03:00: host bridge to domain 0000 [bus ff]
+>   PNP0A03:01: host bridge to domain 0000 [bus bf]
+>   PNP0A03:02: host bridge to domain 0000 [bus 7f]
+>   PNP0A03:03: host bridge to domain 0000 [bus 3f]
+>   PNP0A08:00: host bridge to domain 0000 [bus 00-3e]
+>   PNP0A08:01: host bridge to domain 0000 [bus 40-7e]
+>   PNP0A08:02: host bridge to domain 0000 [bus 80-be]
+>   PNP0A08:03: host bridge to domain 0000 [bus c0-fe]
 > 
-> ------------[ cut here ]------------
-> usb 3-1: BOGUS control dir, pipe 80003d80 doesn't match bRequestType c0
-> WARNING: CPU: 1 PID: 2386 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a3/0x1880 drivers/usb/core/urb.c:411
+> That MMCONFIG space should cover all those buses, but something is
+> going wrong.
 
-> Call Trace:
->  <TASK>
->  usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
->  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
->  __usbnet_read_cmd+0xb9/0x390 drivers/net/usb/usbnet.c:2010
->  usbnet_read_cmd+0x92/0xf0 drivers/net/usb/usbnet.c:2068
->  pl_vendor_req drivers/net/usb/plusb.c:60 [inline]
+Tony, would you mind collecting a dmesg log with "efi=debug"?  I want
+to see the EFI_MEMORY_MAPPED_IO size and what we remove from E820.
 
-This is obviously a bug in plusb.c.  The code is:
-
-static inline int
-pl_vendor_req(struct usbnet *dev, u8 req, u8 val, u8 index)
-{
-	return usbnet_read_cmd(dev, req,
-				USB_DIR_IN | USB_TYPE_VENDOR |
-				USB_RECIP_DEVICE,
-				val, index, NULL, 0);
-}
-
-Since the transfer length is 0 this should be a write, not a read.  The 
-USB_DIR_IN value shouldn't be present, and the call should be to 
-usbnet_write_cmd().
-
-There's a similar mistake in __usbnet_read_cmd().  The routine tests for 
-zero-length transfers, but when it finds one it merely avoids allocating 
-a transfer buffer instead of warning about a programming bug.
-
-Alan Stern
+Bjorn
