@@ -2,188 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AE666084C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997CF660851
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235692AbjAFU3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S235875AbjAFUbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjAFU3K (ORCPT
+        with ESMTP id S229552AbjAFUbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:29:10 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D843C734
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673036949; x=1704572949;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=LEXYZ5zXmWrrA4jfWFjY3GwzRj5uU/m7JKYbcP3HoJc=;
-  b=MkIB2sdJk7meE9H+f9sJ3FBS3s40xHR8h6qQULmtIOgwzd5b6UTA436P
-   VazR4rt7EUXPUTJVBjp9kY2myZO19R7Y7ZEGBFJRkKW1e6QOIrt78GOXV
-   GbqnOptAyNqDPtR9M6xIdxS7Mvt0PL/gsUvzUBqnXMmQhkKYyB4GPT2Bo
-   1psU3ITNi/q3QZ0W404xg7N7SMwm81PR9Ur+N08XP4HBwagBT9TmIp0J/
-   zGq5iubiYX66Vs61qCot03Xzhf4wtekDT8SIL8ePsBwfDaYebEel31S+L
-   9UznST6KjS4DSY5+n6EgUCYzlS+my19FWW6pWlErVEIYVAv2HieZ1qlux
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="306078260"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="306078260"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 12:29:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="724532893"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="724532893"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jan 2023 12:29:08 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 6 Jan 2023 12:29:07 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 6 Jan 2023 12:29:07 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 12:29:07 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.45) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 6 Jan 2023 12:29:07 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2T4mLxIWcLgTw6XaJvbDvwgEqn22/Y6ioEeAHCDK0gHJ8T7uJrLzZ++wi8hszs1Gf2uFywVxAWALHdiPPcXyynCstyzhXAwKqyEjAiCRupPcNrZHL9G9h0a4ybm3Z/DXYmOSCCvN1Raj8Z2KKfbdW0pgapwyC+vsXHCDkR2D2WbbijbdGQxKlRg8RUK5IyjGa7YhmeVRm4uRHqMub7Ij/wyiL8iByhgkuNF3++hhV3SmaNozOr5zCbWxqG8ATWZJQyHgTuJbPBjK+9LhRgP6RJrlHOG5ijdLqzRW1czH9EXN+nbkwLDI2gtyVKMoGLzHecfbBtzw3ua/if/424GoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QCry56yhug5W0tvKyiMyk1xbXaFh6dLGsGqgSE78PNY=;
- b=Q3WgcIedxTHILU4yfNqwX/ctu0qFwr0gxMcOd+LmfMnW1GaEIjMHZX65hFnd9pivwgdpVhQNEBWqckXZOmb2ZDwagE2ugvwOEO5UMdCxmfwBZQROiX62/8YtxYNEsSaJCQofGywXNcMTLvx6QMkn4W25IkQ71AtWumYMukiMkZkN97yPNvxIi+m1q2qHzM3A+aWo0VuE84I01Uo65Eii1qc/nqAg4jccOqkDVCsoJAfTxJsYpQw/Dp8UdF48CFAL/mdwi3iDfmOJa9qh+30r2hvgoj+MTzjeJFQ+SKkabp6xWUQnmputsufiuieVDwSYwcjT9u+ZKk1CZymyOl/iRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by PH7PR11MB6674.namprd11.prod.outlook.com (2603:10b6:510:1ac::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 20:29:05 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::570c:84d0:3c30:3282]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::570c:84d0:3c30:3282%9]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 20:29:05 +0000
-Date:   Fri, 6 Jan 2023 12:29:00 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
-        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v3 3/6] x86/microcode: Display revisions only when update
- is successful
-Message-ID: <Y7iEjDrXLRlwoz0W@a4bf019067fa.jf.intel.com>
-References: <20230103180212.333496-1-ashok.raj@intel.com>
- <20230103180212.333496-4-ashok.raj@intel.com>
- <Y7XMtWqSrs0uGkD7@zn.tnic>
- <Y7h5qD43kdPeEgQ7@a4bf019067fa.jf.intel.com>
- <Y7h8dpIQHnL93RdC@zn.tnic>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y7h8dpIQHnL93RdC@zn.tnic>
-X-ClientProxiedBy: SJ0PR03CA0353.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::28) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
+        Fri, 6 Jan 2023 15:31:02 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39F03C701
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:31:00 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id w13so1073915wrk.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:31:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zmnTz8/2kfdFyB6x8PTFchjQzfo0fx86uAVQddggYnU=;
+        b=QDiE9naefEI1d5kfh4laxGY1RcATSlKvPxkPLXOkcJ9yILKQhTE4aESsj1oYoKNoD1
+         +JqJEO+cE/oaC3db0934YfBDzaJfkep6EF1RNkAzSCyF4yOW4irWP5lPS/S+Pa1HYOkj
+         8DNo819Vw9PzXSpGcwo9fonNqrP4IfiIKYlVA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zmnTz8/2kfdFyB6x8PTFchjQzfo0fx86uAVQddggYnU=;
+        b=55QuFrUkPlsOcMcC7BoZxn6AcoXJzO73VtJTPvG8w0pIrycJAvCtHr3mXcKaWeuN8V
+         g/93+vaUiovvlSw4/hQY8J7r6Q4v7mpVj8U0FdKmbV106BFNT5pcnRe4Z2pIHb58QSW+
+         hWnXQ0btCaiVJdhVMtnxBqCgU5r/KlQ9KWNhsXYVZ8WSXmuws6+jyYEaQurT4vhtt3Gc
+         hb7WuuQ2Cpm0roKkCaBsf0Skh0usQocnm/azqpnvvebhf7u76f5PYlnFZ8JH3jBzvROh
+         D+L6SffheoQoI6OKlW2CJDWL4Df6fmou7NVvazdLI3w1GDNS6ZS+8XbJTiC9aR4XpxkX
+         bJsA==
+X-Gm-Message-State: AFqh2kp33ZvRlasLbSxOkcaUp2bG+Vml9xngJi33yOIFvcfflfGWN/GP
+        b1gzIF/Q+dlDOgZyAsCLRNXJYA==
+X-Google-Smtp-Source: AMrXdXsGhHQm6ue86ek8a/TahpSuukropvViZubkaaHdP6I4LctKBRL7+Y+FkYhKQhuX8FcLuzSEJg==
+X-Received: by 2002:adf:f54a:0:b0:242:2e1e:23a6 with SMTP id j10-20020adff54a000000b002422e1e23a6mr36969526wrp.22.1673037059116;
+        Fri, 06 Jan 2023 12:30:59 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id t14-20020adfeb8e000000b002baa780f0fasm1998405wrn.111.2023.01.06.12.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 12:30:58 -0800 (PST)
+Date:   Fri, 6 Jan 2023 21:30:56 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/atomic: Allow vblank-enabled + self-refresh
+ "disable"
+Message-ID: <Y7iFAJqGNXA7wHoK@phenom.ffwll.local>
+Mail-Followup-To: Brian Norris <briannorris@chromium.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
+References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+ <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
+ <Y7hl0Z9PZhFk8On9@phenom.ffwll.local>
+ <Y7h3cuAVE2fdS9K3@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|PH7PR11MB6674:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd76cec4-bc64-4099-357a-08daf024a7b2
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l0nmzRLeQqnOzsjf9nqmDCy3i0zhbtKGs2n2O5XdJIFwVwu8165LB7PldjAMCfKeuwphAAtQBYUsCfSxv3NB/qyfjuQLpLxo+nF6OxGcF/tTvU0EVDObJmciaQKIgadRwD7z9e7zVyF6ai9dgMR2uxGKb5qeW5mS3ai8pbW5UEGsafBYaR/xxhdN5N5TEsK7pJ/iyT79ySSOGvAUBPSdHBnM+u6RM9lvtmLOQYkXk01kA9/29qgu8DyyLNvHjC3wmnwSYqUWJeOyUdH6oKTJvjP0O/UXc9Q1+O6aJ5ayEBhM6sxrfx1zO6MlecMKQjtYRqAoklFvp3jZ3yEhybr8XEi123xnS3DWaOp19wuplw+pKYTbixDGbVxV/VBEKE/70FG+AJn1ULWilhjsoWHirTW9PK6LnbuymRvH5jDGplWDkYUxr7Vtcp27oI48QLUfMCUOSa8fm5kjgqgLL8HQ1mK14Fhk7cZueviZ/S3+vRsLdYZKYWsVuoCrLGGOKaXJzGLo78ffHCkQA4SisttCQ89OslsXfnS8UuXcxWq1C6wY0rKq3taagcoxfnDH41a/XvyV1aaE/QjBbCRv93joC7blgi3nEBBYqO7AQCZwS17/mfGVf/tt+b/tksGtmoctBeRS9xydMiY4EgtXTmEmxA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(366004)(396003)(39860400002)(346002)(451199015)(4326008)(66946007)(82960400001)(15650500001)(8676002)(66556008)(8936002)(66476007)(5660300002)(4744005)(2906002)(44832011)(83380400001)(38100700002)(86362001)(478600001)(316002)(6916009)(54906003)(6486002)(186003)(41300700001)(6666004)(107886003)(26005)(6512007)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LLDpdUcPrtPbqA40JdWVFdkqGzxCBgQuEqKHqnRdzjsZWSdOfuF9cjiR7b/r?=
- =?us-ascii?Q?z1OGXQg6aIAKRczg7FJICyxXKRGMjRcaSiBKv0gH+VnD1YuRinGbHGNTXw3s?=
- =?us-ascii?Q?jaGLYLZIqrmo2SS+PrLU2/W9R80ODg+vXvT8u0q9vBzJ/a6Ux31FWvPaaxwY?=
- =?us-ascii?Q?Ou2Nmhi6S869/Z6B/seDX1WqGAt+E64lO8spwYVp5G4TLxK3sSyskdo0VjHN?=
- =?us-ascii?Q?aup5Rou2kqvsMNKOnFSP5KOZaKyjEK0+xTfh0Kcud6tI178Uo4oOinyAeaxg?=
- =?us-ascii?Q?HJj0y8TsI4GqY70+AIX4+QGVhRgR85Np3Xaj4Yn+lT3RKyuVh5Rcme7fJNmZ?=
- =?us-ascii?Q?I/yD3wXpPlZX5KVt3NyNIErtJ4bVxaUnIVIPojX3JaUXpqsAveTRvDT8h1dt?=
- =?us-ascii?Q?xE9EeTj1E2OWrPRj7giI6hA7GWmvfZTmRWbcuTW+HwTwly1HJJnrsQttDtdB?=
- =?us-ascii?Q?wrZ4wgYwaieZhavahkCmU+tVoiRqyYlJhbA5RyfLfY1QQFIw5tgf1A/XGCJe?=
- =?us-ascii?Q?0ttYWMXVCFMYWQLdTj9g6iZqbDe7MbE4x0kBUm57HLbuduAK+lVM1fy2NEtR?=
- =?us-ascii?Q?+76k3Kh2coXnWvv+eJQKRvUxOh4pw8DJJ1rQEM1z/tAf7Ixk+d5EilhjT1cC?=
- =?us-ascii?Q?Vfx33EdhZhdlwyzybBYq/IPwoXtrcMqan94wkQ8bKOAXuGB4m5FzTBVNOl1g?=
- =?us-ascii?Q?5GeeK5m3kMfY9duA/dBuP6zdHun8+RNxS8/Vnuj5bqtDcOg4nmtbnJy7NC3e?=
- =?us-ascii?Q?SUA0hsYoO09a+PA6CWHd/kAonZUXvEqLjZos5mh0Fx5lqBhNzNVH1M3Il+uM?=
- =?us-ascii?Q?fa1cv52t66SMaY9bxEHNikfv3VAvuKvdzR66jHixnKj/70PDqdnDwzhEuCBT?=
- =?us-ascii?Q?kl8UcJmFX6qitmKftoPDyxMiJ8HXpiiT81p33Y6npQnvAWV1KSQPLUu+/GB3?=
- =?us-ascii?Q?5RQ6rYuGv6wG6OKxhQsQ3STnvOzV0q35woS3ALAfuK8M6lH58yY6NQ38NJMU?=
- =?us-ascii?Q?eAQYTPZblZz0fM7EuWLrO3MeuWaGHrkTDY9vW8IGK6VkSTri9vVZ3PFpHFwJ?=
- =?us-ascii?Q?o6N3aV00mYUJi8nvqcR5g9L+i6uDU2/e8pKvoyHoTOcAxg8mR+0zK8WBmHv3?=
- =?us-ascii?Q?eTiKQHwjsrYp4Qj+ZadnAz7k4js0WIwVkt1YQSrz7rZSvFl+kg+JVbnieQ8G?=
- =?us-ascii?Q?POfNvLoyXHUqTLDhztEvnz9IiTq7NB9Bb2Ke37b7HPo3k0W/sF8uMhaksS4X?=
- =?us-ascii?Q?77kQQsE+3mMUK//XwzMyb53fge1j0eH9cnJK3jtZB8ld2IyzfiYEyItBHc6C?=
- =?us-ascii?Q?l9RGBAxjeNE8D4QrMQn6+bTQsaoF3OmbTzCK1ymnC/281U7ICbBLR0WSPJcG?=
- =?us-ascii?Q?SEb86TlrAYxYzYP/Vz1Kd/8T5irXfX33pHjN+qepV88gL28XXFedhyaFhcGc?=
- =?us-ascii?Q?V4cAXgDVIEb1Kj/e4dCqhMUWXux52Ut93fIsBCWUnFf+n9VkW2wDfxwtGpPN?=
- =?us-ascii?Q?+L5yJDEdAfYX82Vnl398bYq2oN/P62Tep2b7rJCp6VAHLLl+tZZLA224RXuI?=
- =?us-ascii?Q?kmTn9WBlA2wDQqS+jCfyy5S/zlKiK19JdTXoOyeQQtSxvpb3iYXH9FCICO0J?=
- =?us-ascii?Q?hA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd76cec4-bc64-4099-357a-08daf024a7b2
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 20:29:05.0871
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZyVEHt6xdvN025Tf1oWe87ylUWjbqLHYI1c/7vmLLu8g9BM+/+cjdizuOIASneVvTIRoW/dxxA9Cy8c+4USMzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6674
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7h3cuAVE2fdS9K3@google.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 08:54:30PM +0100, Borislav Petkov wrote:
-> On Fri, Jan 06, 2023 at 11:42:32AM -0800, Ashok Raj wrote:
-> > > 9bd681251b7c ("x86/microcode: Announce reload operation's completion")
+On Fri, Jan 06, 2023 at 11:33:06AM -0800, Brian Norris wrote:
+> On Fri, Jan 06, 2023 at 07:17:53PM +0100, Daniel Vetter wrote:
+> > Ok I think I was a bit slow here, and it makes sense. Except this now
+> > means we loose this check, and I'm also not sure whether we really want
+> > drivers to implement this all.
 > > 
-> > Thanks.. yes I can add when I resent the series.
+> > What I think we want here is a bit more:
+> > - for the self-refresh case check that the vblank all still works
 > 
-> No, you should read the commit message:
-> 
-> "issue a single line to dmesg after the reload ... to let the user know that a
-> reload has at least been attempted."
-> 
-> and drop your patch.
-> 
-> We issue that line unconditionally to give feedback to the user that the attempt
-> was actually tried. Otherwise, you don't get any feedback and you wonder whether
-> it is doing anything.
-> 
-> The prev and next revision:
-> 
-> 	"microcode revision: 0x%x -> 0x%x\n",
-> 
-> will tell you whether something got loaded or not.
+> You mean, keep the WARN_ONCE(), but invert it to ensure that 'ret == 0'?
+> I did consider that, but I don't know why I stopped.
 
-Yes, that makes sense, Do you think we can add a note that the loading
-failed? since the old -> new, new is coming from new microcode rev.
+Yeah, so that we check that vblanks keep working in the self-refresh case.
 
-Reload failed/completed ? 
+> > - check that drivers which use self_refresh are not using
+> >   drm_atomic_helper_wait_for_vblanks(), because that would defeat the
+> >   point
+> 
+> I'm a bit lost on this one. drm_atomic_helper_wait_for_vblanks() is part
+> of the common drm_atomic_helper_commit_tail*() helpers, and so it's
+> naturally used in many cases (including Rockchip/PSR). And how does it
+> defeat the point?
+
+Yeah, but that's for backwards compat reasons, the much better function is
+drm_atomic_helper_wait_for_flip_done(). And if you go into self refresh
+that's really the better one.
+
+> > - have a drm_crtc_vblank_off/on which take the crtc state, so they can
+> >   look at the self-refresh state
+> 
+> And I suppose you mean this helper variant would kick off the next step
+> (fake vblank timer)?
+
+Yeah, I figured that's the better way to implement this since it would be
+driver agnostic. But rockchip is still the only driver using the
+self-refresh helpers, so I guess it doesn't really matter.
+
+> > - fake vblanks with hrtimer, because on most hw when you turn off the crtc
+> >   the vblanks are also turned off, and so your compositor would still
+> >   hang. The vblank machinery already has all the code to make this happen
+> >   (and if it's not all, then i915 psr code should have it).
+> 
+> Is a timer better than an interrupt? I'm pretty sure the vblank
+> interrupts still can fire on Rockchip CRTC (VOP) (see also the other
+> branch of this thread), so this isn't really necessary. (IGT vblank
+> tests pass without hanging.) Unless you simply prefer a fake timer for
+> some reason.
+> 
+> Also, I still haven't found that fake timer machinery, but maybe I just
+> don't know what I'm looking for.
+
+I ... didn't find it either. I'm honestly not sure whether this works for
+intel, or whether we do something silly like disable self-refresh when a
+vblank interrupt is pending :-/
+ 
+> > - I think kunit tests for this all would be really good, it's a rather
+> >   complex state machinery between modesets and vblank functionality. You
+> >   can speed up the kunit tests with some really high refresh rate, which
+> >   isn't possible on real hw.
+> 
+> Last time I tried my hand at kunit in a subsystem with no prior kunit
+> tests, I had a miserable time and gave up. At least DRM has a few
+> already, so maybe this wouldn't be as terrible. Perhaps I can give this
+> a shot, but there's a chance this will kick things to the back burner
+> far enough that I simply don't get around to it at all. (So far, I'm
+> only addressing this because KernelCI complained.)
+
+Nah if we dont solve this in a generic way then we don't need kunit to
+make sure it keeps working.
+
+> > I'm also wondering why we've had this code for years and only hit issues
+> > now?
+> 
+> I'd guess a few reasons:
+> 1. drm_self_refresh_helper_init() is only used by one driver -- Rockchip
+> 2. Rockchip systems are most commonly either Chromebooks, or else
+>    otherwise cheap embedded things, and may not have displays at all,
+>    let alone displays with PSR
+> 3. Rockchip Chromebooks shipped with a kernel forked off of the earlier
+>    PSR support, before everything got refactored (and vblank handling
+>    regressed) for the self-refresh "helpers". They only upgraded to a
+>    newer upstream kernel within the last few months.
+> 4. AFAICT, ChromeOS user space doesn't even exercise the vblank-related
+>    ioctls, so we don't actually notice that this is "broken". I suppose
+>    it would only be IGT tests that notice.
+> 5. I fixed up various upstream PSR bugs are part of #3 [0],
+>    along the way I unborked PSR enough that KernelCI finally caught the
+>    bug. See my explanation in [1] for why the vblank bug was masked, and
+>    appeared to be a "regression" due to my more recent fixes.
+
+Yeah I thought we had more drivers using self-refresh helpers, bot that's
+not the case :-/
+
+I think new proposal from me is to just respin this patch here with our
+discussion all summarized (it's good to record this stuff for the next
+person that comes around), and the WARN_ON adjusted so it also checks that
+vblank interrupts keep working (per the ret value at least, it's not a
+real functional check). And call that good enough.
+
+Also maybe look into switching from wait_for_vblanks to
+wait_for_flip_done, it's the right thing to do (see kerneldoc, it should
+explain things a bit).
+-Daniel
+
+
+> 
+> Brian
+> 
+> [0] Combined with point #2: ChromeOS would be the first serious users of
+>     the refactored PSR support. All this was needed to make it actually
+>     usable:
+> 
+>     (2021) c4c6ef229593 drm/bridge: analogix_dp: Make PSR-exit block less
+>     (2022) ca871659ec16 drm/bridge: analogix_dp: Support PSR-exit to disable transition <--- KernelCI "blamed" this one, because PSR was less broken
+>     (2022) e54a4424925a drm/atomic: Force bridge self-refresh-exit on CRTC switch
+> 
+> [1] https://lore.kernel.org/dri-devel/Y6OCg9BPnJvimQLT@google.com/
+> Re: renesas/master bisection: igt-kms-rockchip.kms_vblank.pipe-A-wait-forked on rk3399-gru-kevin
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
