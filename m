@@ -2,167 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD41F660A57
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937F5660A5F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjAFXkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S235746AbjAFXrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjAFXkk (ORCPT
+        with ESMTP id S229949AbjAFXrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:40:40 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6458CD25
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:40:39 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so1962993ilb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 15:40:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QrrYWzcWoltzpv0siwXuUV/EY9s60gSFWDSPmIMm7r8=;
-        b=52qtZipi1ZjEg+BIUOlPfF6OK7JKwCOhHcOL/0AZ3JFDdO6Z6XhiVTLyi5iWwIRAXJ
-         AgjWIMmN+fsBu0OGevTBjySVpqIcUSJ6nceVaIeBTfap7J0UHhXKM54eGOjs2ZLHCisJ
-         3x8Ogu2buHyDFFnVl3DmiSeHzTVJUJkkdHyAUAK6dJhsyQEKbW4YyudIVFKG75hKyZ7Q
-         O/05HQ6p/GQDaqcLFIclAD+OaFROCo24ZyON6+/y4VRd647cv86tdp0dYUGPMiDJJFYo
-         F/A/0iFEU47tHNLFq+lpf4cIVyBZ3s62DpC5BAWacL848BLqzOLpOB0Y1i03LkpNAptH
-         eNvA==
-X-Gm-Message-State: AFqh2kqo/rlbvcjHaeZUC6KlG4bGhFwKZj5HcXcqhhXu8XlGrj0vZlbX
-        mwJquJQ85oBJxR18TJQ/s+oAr+iJ0ejxGbIR1unJnk6sxOGN
-X-Google-Smtp-Source: AMrXdXutS8RDfLnzD3lIa3YX///H31+KBmn5njnZA5tmdvZEtFuY1CqehiT8fSHJvtsW+W1Z2/6ynHPSzJvzVVgzkLWh1UmCp2vm
+        Fri, 6 Jan 2023 18:47:32 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB73C0C9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:47:32 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 306N5gul028092;
+        Fri, 6 Jan 2023 23:46:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=7bOU/1rMRojUL+9O+ZsHeALRCF+79gUCRmXRC8S8dmE=;
+ b=L5vIC5x49ZmLR/KWYXOW7kEMm9N9cqDBnHXJF4FaJ1lUNPigTQRHBXLPdLOutmXPc9xJ
+ lp0KG1t38P7G8bC1dKUpy6Ilfy/P0UAoiYlXoEvG5X/DNS1yuIcYB5kWAJ7wEq4fl+Dd
+ q8Z7Tz/8w/1f0e8O8eoP5sxApa0/k6kpne7f3EY4mzM3UGenRJIo1tWwEKjrwOu9anjb
+ Z/atTrvqfnMcw/WNy9plHdZ6DtKwuFO9o/q53prs5w7aYCWMNP/z1Qk/U63SZgwBOtqr
+ G5c9v1zA/pPfHN4I38HfneEOfmIMr/8JMQoofm0gjlKuP7Oepst+sacMiYMRUb280Mgr 8Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mtdmtv7gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Jan 2023 23:46:57 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 306NdOUa023332;
+        Fri, 6 Jan 2023 23:46:56 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mwxkgst6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Jan 2023 23:46:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nrR6RfPWGf+IHbiiVpjb7QoVyDTfMhRkKVR29isXyU3dT4DrbiacqKAPlAhitaGMsulDKbeuhAQjd7ZRm2FtHlzHLeJtEM/SN4wdojswBD/oa2Zr+JRpaIN2cWfK7SQolNiucX5GCpoUSti1dnc5xnmi9g8ADIIPGPBNWUPiU1cSq+D3+dHA5hNyJB50/j8srhq9SooT2UQ1CccdRjwk3kc8DDTs8HJwg3RBVCxwPvHgkT2p4arWiLBElxqjswfVgB1/t8QoWjqj2nTKAZ1FhaWVngZ9+UwzNxlqM5+h2sLNxe8dIkm5wsp97fIUZ6nYxuE5lZM+uAK78TnRiqNVug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7bOU/1rMRojUL+9O+ZsHeALRCF+79gUCRmXRC8S8dmE=;
+ b=RmRhd4/0zXVQNbQfFdI4BC67ZUfdTLyHxx27LarJWX3nibxlD6LPinzVjt/K+1hePK1jBccGcnXt1ehZX5yl2W7eJ2dRf6OndLJXIds3Pc5ucyn8csgPDx9OVNX1uES1B7fjO/iws1rztjNlU/rRdxrLjkEMaptzykJiYWiaB76aErQDQtqwuLl2fmxiZFwFnB6J7IrDX52oQIqLudIzPVahBHejgP7t2lPLYYWkANli4FW5XFL9RLYqj2pwg7aUCjh8Horxff5gEEqddoUUWAKo9I8llXWw6YpQKHeA56JQN+bQI9TGXTHC28AuR0xxaN/9MuJnZb4MbYmNx+MA8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7bOU/1rMRojUL+9O+ZsHeALRCF+79gUCRmXRC8S8dmE=;
+ b=ZKJz7FH4kurBqrm+z5D+g4H9q4FQqeVq82CbJAyKKT0RymKOUbZbdtVitzhrNUYJtN4s73mroWcf+nLJ/LazZZhKzG9GFzZ7DIpJafoJuCKATITXgF+1Fy5tELp1jf5L8tCbBAYk/by/CgHXmTGsgBghHo57qSLjwnYw1jKkgn0=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ0PR10MB5785.namprd10.prod.outlook.com (2603:10b6:a03:3d1::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
+ 2023 23:46:54 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14%8]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
+ 23:46:53 +0000
+Date:   Fri, 6 Jan 2023 15:46:51 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        willy@infradead.org, tsahu@linux.ibm.com, jhubbard@nvidia.com
+Subject: Re: [PATCH mm-unstable 2/8] mm/hugetlb: convert
+ __update_and_free_page() to folios
+Message-ID: <Y7iy60T855MZlOyE@monkey>
+References: <20230103191340.116536-1-sidhartha.kumar@oracle.com>
+ <20230103191340.116536-3-sidhartha.kumar@oracle.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230103191340.116536-3-sidhartha.kumar@oracle.com>
+X-ClientProxiedBy: MW4PR04CA0167.namprd04.prod.outlook.com
+ (2603:10b6:303:85::22) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-X-Received: by 2002:a02:9f16:0:b0:38a:1a5d:45c2 with SMTP id
- z22-20020a029f16000000b0038a1a5d45c2mr5673954jal.97.1673048437374; Fri, 06
- Jan 2023 15:40:37 -0800 (PST)
-Date:   Fri, 06 Jan 2023 15:40:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd44f005f1a0f17f@google.com>
-Subject: [syzbot] [squashfs?] general protection fault in cache_first_page
-From:   syzbot <syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, phillip@squashfs.org.uk,
-        squashfs-devel@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ0PR10MB5785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 171d5c5a-3641-4163-1cf8-08daf0404a04
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JoroM2GC3nIP1fMN/vw5bs7bmS9xlK74uPKnkAKSXUft5cniT1vBN/wvSkJbaHN/OhNrruVyXuSYKMf4gxdXToG+wM5mEQ/7bC74aioPZJuFnFlDFl1OsOTj9GXQi7wyQHJADrFhi62FsofDqyJzo3Zh8RY9Ulole8eqCiagou+lQZ/Zl7yFORPSJ2btDcnjiI5iXq5b5da3PFl5fM35lXrbKGionsq4q+enQbUoqTbsNidZo2fpvcqvdcoNCSDG5LvbphJG5Lck1mWg7j9kT0iHvYzmewTbtgsj1wAp4Z0nj7ONhqFzMwCSm9ljqfEAdyTaihtv/LXizHJOq6+h3QOeMKvOk0IIlEaK4Sfw2KDqGhb6MMTsV8UjCUOuQnA/RFbFy2o4WRNPeEoAr8EuMINjJR6SRg+ad7GHENTy7fctzuwz2jboSn+jt3PMg4n/AHuAiKwv0AQKn/kjqNHG7E6N5dgi9vJK3AMmf/i9F4uwgj+zPPzLCd3mAbM8d/a6WYAC0CBW0Wq4emgWPN/4+8uhx2DiMuT4vRIn8ZydTXog0IHKEQTO3RKkYCteGmQChpdJdtYNrPz/yp9HJc7bpgnTZSPN+TRhItmrMMmuRUmbz+Ubc2THY3g/N/RjdrLbq9sRLuzwLNGY517Uk7mtHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(83380400001)(26005)(6512007)(9686003)(33716001)(6506007)(86362001)(186003)(53546011)(38100700002)(316002)(478600001)(4326008)(41300700001)(8676002)(6862004)(4744005)(5660300002)(2906002)(8936002)(44832011)(6486002)(66476007)(66556008)(6636002)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bVMDNdRESoYWL53ZUXwaP14UmY/wNEm+8i4f1ooDig7JvQ/9W4awpYYaGZJF?=
+ =?us-ascii?Q?hNV/4WU2kYx6cB8XzauQ9yF3lm9iUnOibYGs3VPGYqVPQqaBlp559jHcmP9k?=
+ =?us-ascii?Q?WsjYaRWz1fIDBL5sVfbbXXVIzP8oEwARge/b8xJfXqjR1b3KhQzI3ZDodvTa?=
+ =?us-ascii?Q?++J/dGSYMI8LrC+6bpqGIOdmKCDoyAHDFU0rHcATxrYzOk0lIqFg1cNUQUEe?=
+ =?us-ascii?Q?3y7bPbYl1fP7nqA9TiSboitOdyKDC4XDIIU9fkR6D4lSjAFyKM/BnP2ijHbd?=
+ =?us-ascii?Q?XFO/veOli0mvK1rW+gnXxE9EWKULg5oLABOGg+DtKIsTuguGoO7fUF+A8+pl?=
+ =?us-ascii?Q?EdKGHEuKUqJeQuzQBJAd49BAm7wy9X+C+89ih9iniV5UQKVM62LrfiD8iAZ4?=
+ =?us-ascii?Q?fBSh97ddC8zCF7Pb9Ada8nrjx505wn0f/Du0WXYAakTEOdBP2QV+7xf+kiVG?=
+ =?us-ascii?Q?y4eUIoyY+A1/3Fp+WXE9C+BW/N6i+icaSCjDjwndDCQ27VEiV2cLcEGVTuZ9?=
+ =?us-ascii?Q?mkK2+ou+ntGpga4CwBUtfp94Q105bZZftMTLzpthoRdE79JmAdavGBTpKeF5?=
+ =?us-ascii?Q?dXiH9A9bIyKjG4UtHkb0CuqAL4fqnIl2jQnFNJI44+zZz1QA9tgHf0XSuTgI?=
+ =?us-ascii?Q?dhVnURJ3KdxwyClJHZeyliXFcRse/RqAAJQQ13hOSRBxd1HTy2aWfkcXB5GI?=
+ =?us-ascii?Q?ZcJrfN7faByH9PM14AzNLDu11NK+L9r+eULkeQyicZNj8ZerN/oEfS6DrFlb?=
+ =?us-ascii?Q?kCTJyg2L1/8yMUqGxdq/khnD8ycIK2ZRT69iEkLyAqthrT77cq6pK16x3jPo?=
+ =?us-ascii?Q?GZBTUddrGvDB9O7/XKANZKLJCHt7PrUn0ZGoqr9ZhlzaSeYrvkP7xU9sdIOV?=
+ =?us-ascii?Q?WsxvJ35Y2W2EfvLdb2GwNXVqDoh4cxxUhhRNQ18eCm78J7P6AJk2IzqgYmM8?=
+ =?us-ascii?Q?PsCO9rRV1y7sWDFEAJ5hIvCIcOt51xzQes8bagChDpcNJkzRnEf1+dwSgESk?=
+ =?us-ascii?Q?HTqO6mEpezHvGZkzD2P/JbAxdOaJuvBdcXCKhgEcnXT2t5PZiJUre+yQ0B2h?=
+ =?us-ascii?Q?OR19nQOisFsyCLTSkvqRuxVsD+bGp/1lD9Jn1rWOpd3oO0+F9HeDEmRBj1Mq?=
+ =?us-ascii?Q?95HqFQm76eOr1cp2TlHFEQsu9GT1/flwiWqT3f+Gz2jQsv2pRsc5gzxLhFy1?=
+ =?us-ascii?Q?0oeMvDSKRzoQ2xQdrmLFOS2NrTNOkTRdbsJB2Lo1U3UDzq3dh7fjJAP8MXdD?=
+ =?us-ascii?Q?hsDTwBc0VLh7tS8fqHI9EtK6aTneb3HDP3dzAcdRw5nMcoDK6PMr3OlxbqAe?=
+ =?us-ascii?Q?AOU9q60oJt5poo6jc8noXH9cHblTqEbeS8VmH2h9bln94ZXmuiBA4TJz59XY?=
+ =?us-ascii?Q?xWXzblvAhgFZYrFdKC24J1ZfxSqctZfXY+9//Y7vWo2JBeITU1/WeJDirTx9?=
+ =?us-ascii?Q?1/Tqnlw5GV6rr+xI3gWTdXr4AqK6vhCayqKv7WUeEpnrHxd4/o6jsI7J4AFr?=
+ =?us-ascii?Q?iZzotyzwjRF+6jzzMr6V+qDZHascl3LjuZUWGb0QiA3aMv/FV8h7klBYA6Sq?=
+ =?us-ascii?Q?VzjUAgjz6JT/FE1YoDhJ+2hGa+BwryJG4GM+7aAKNsx/a+JEE0rDuS/pmj36?=
+ =?us-ascii?Q?kg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?utxuZWaEeCgacRr9R6SMbGTsMNAq3BCxirvFu0V17RFrG05qa6mehOkIwUnp?=
+ =?us-ascii?Q?JWGGCYBGI8sf+hFoc4VvQKQh8NhaKpR+REZ+nDkG4Vws+iDJUQbEBUQo0bmC?=
+ =?us-ascii?Q?9w8JBSBssHIHIHwuhhqDHd448wbUwdYxUCu9ooTihXWpYB+pA/IV/OM/E9Fx?=
+ =?us-ascii?Q?3bzUarbrQ1KfXjGc3vSMOAQLymXsG8QiW6QBfWwMjhFp215rgS0Ln9k45L2B?=
+ =?us-ascii?Q?l0IV4d97Gs7eF3jjr7FNpVGpuChkPVZU7o9BpMyiSZyml2/BMw3VzrQZz/8t?=
+ =?us-ascii?Q?hGSNek8LgF/8Pnx8NYRV6hiWb50uTs/8kBeFNwMAHfnF50NlRMpuuuJPWZLE?=
+ =?us-ascii?Q?0pmb+TEnkms1cM+tbx8r1hcFSFLHK4BZgORK8YfJOErg2Wv1JSHGAeyG+UuH?=
+ =?us-ascii?Q?BvBBuZklte0zfwACqh9f/x2GH7azsnG2GLr1F+YDtUed9p+O3PBAm3M+RZvI?=
+ =?us-ascii?Q?XtfLXY+vk2b9JXQJ3JQGfAkWAhZ6fxibMckMBYt+y31XzcNyjPxeQjGJRm2i?=
+ =?us-ascii?Q?4Ewd8iPtEjHxPNETA5HBzgFwPSZPz8+DskiWaLEK0z4wgL2Sg/orBeLRQYRm?=
+ =?us-ascii?Q?/r0nCFuHGYJr14b45Jv0SurFsCp38igCVSWmY4VvqLjL0mgiu4lBVGiCeXtC?=
+ =?us-ascii?Q?q6+4IkkipF3+Fbih4gyZNi+8JCSCBvP325jRu+Ib1cVmEVbS+kpQEvLab+gA?=
+ =?us-ascii?Q?fSTnFrc+ob3ozQSSAfIqTCilCek7xumd5OM1UNRvHT8o2lf0t4cunJcUkVUU?=
+ =?us-ascii?Q?RWhMZ7FYvU9nox50VMeZjmCukjZsFfN7GXXHDcVIJ+BEXbaBusxSp44iMcWg?=
+ =?us-ascii?Q?uyC+29kfbNvexO4THY+yiGgjuOGtMHJpAx9E8b9NzY76u+OhVU+snXqVyDCP?=
+ =?us-ascii?Q?sbPGl7Mg4lJ+N0FjyJ05G6QIvsRvp+i5IPaT0P2tlP80MiHvnoGO3sm2dYIq?=
+ =?us-ascii?Q?zIYKztNZun58xA3ymik497N5oq+EooIdKfDHzQ9fMrs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 171d5c5a-3641-4163-1cf8-08daf0404a04
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 23:46:53.8400
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GwKiTSBvUB0EpD2GqVfnjrFo4Jp7yc0Os6sff5qiqnclC8CXUhPK0vIbVpV9V01WFIjr71HXEspYKxZVU5C7Cg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5785
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-06_14,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301060185
+X-Proofpoint-GUID: zT66buMvylp_F4BZHIxa6IPtoqts5fr1
+X-Proofpoint-ORIG-GUID: zT66buMvylp_F4BZHIxa6IPtoqts5fr1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 01/03/23 13:13, Sidhartha Kumar wrote:
+> Change __update_and_free_page() to __update_and_free_hugetlb_folio() by
+> changing its callers to pass in a folio.
+> 
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> ---
+>  mm/hugetlb.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 
-syzbot found the following issue on:
+Thanks,
 
-HEAD commit:    88603b6dc419 Linux 6.2-rc2
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16e730c6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
-dashboard link: https://syzkaller.appspot.com/bug?extid=082fa4af80a5bb1a9843
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d010aa480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e758ec480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b9db5f495357/disk-88603b6d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ebd0d1ab4d5f/vmlinux-88603b6d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3231ab35ff51/bzImage-88603b6d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/7af690061ab1/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 8
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 0 PID: 5061 Comm: syz-executor165 Not tainted 6.2.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:cache_first_page+0x60/0x90 fs/squashfs/page_actor.c:27
-Code: 00 00 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 30 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 89 da 48 c1 ea 03 <80> 3c 02 00 75 0c 48 8b 03 5b c3 e8 80 47 92 ff eb bc 48 89 df e8
-RSP: 0018:ffffc90003cbfac0 EFLAGS: 00010212
-RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff823d0d6d RDI: ffff88801e25da40
-RBP: ffff88807c718000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 000000000000035c R15: 0000000000000000
-FS:  000055555707d300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc5ca52000 CR3: 0000000026419000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- squashfs_first_page fs/squashfs/page_actor.h:43 [inline]
- copy_bio_to_actor fs/squashfs/block.c:44 [inline]
- squashfs_read_data+0x7de/0xf50 fs/squashfs/block.c:221
- squashfs_read_table+0x15c/0x1f0 fs/squashfs/cache.c:432
- squashfs_read_xattr_id_table+0x20c/0x440 fs/squashfs/xattr_id.c:95
- squashfs_fill_super+0xf08/0x2700 fs/squashfs/super.c:348
- get_tree_bdev+0x444/0x760 fs/super.c:1282
- vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
- do_new_mount fs/namespace.c:3145 [inline]
- path_mount+0x132a/0x1e20 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc524a6fafa
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc5ca51ad8 EFLAGS: 00000282 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fc524a6fafa
-RDX: 0000000020000200 RSI: 0000000020000240 RDI: 00007ffc5ca51af0
-RBP: 00007ffc5ca51af0 R08: 00007ffc5ca51b30 R09: 00000000000001f1
-R10: 0000000000000000 R11: 0000000000000282 R12: 0000000000000004
-R13: 000055555707d2c0 R14: 0000000000000000 R15: 00007ffc5ca51b30
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:cache_first_page+0x60/0x90 fs/squashfs/page_actor.c:27
-Code: 00 00 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 30 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 89 da 48 c1 ea 03 <80> 3c 02 00 75 0c 48 8b 03 5b c3 e8 80 47 92 ff eb bc 48 89 df e8
-RSP: 0018:ffffc90003cbfac0 EFLAGS: 00010212
-RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff823d0d6d RDI: ffff88801e25da40
-RBP: ffff88807c718000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 000000000000035c R15: 0000000000000000
-FS:  000055555707d300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc5ca52000 CR3: 0000000026419000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	00 00                	add    %al,(%rax)
-   2:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-   9:	fc ff df
-   c:	48 c1 ea 03          	shr    $0x3,%rdx
-  10:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-  14:	75 30                	jne    0x46
-  16:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1d:	fc ff df
-  20:	48 8b 1b             	mov    (%rbx),%rbx
-  23:	48 89 da             	mov    %rbx,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	75 0c                	jne    0x3c
-  30:	48 8b 03             	mov    (%rbx),%rax
-  33:	5b                   	pop    %rbx
-  34:	c3                   	retq
-  35:	e8 80 47 92 ff       	callq  0xff9247ba
-  3a:	eb bc                	jmp    0xfffffff8
-  3c:	48 89 df             	mov    %rbx,%rdi
-  3f:	e8                   	.byte 0xe8
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+-- 
+Mike Kravetz
