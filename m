@@ -2,173 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EF166003A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5CF660043
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjAFM0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S230514AbjAFM3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjAFM0S (ORCPT
+        with ESMTP id S229869AbjAFM3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:26:18 -0500
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1060EB4A5;
-        Fri,  6 Jan 2023 04:26:13 -0800 (PST)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 71033420DB;
-        Fri,  6 Jan 2023 17:26:10 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1673007970; bh=wg8JNpq9AvwF4/UE4LxIWsEbYMZOmEvMwfA6fBrhr+c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=usIRpBPNoPC15w9jBF0CLlXcEPzEq+xnAPCSd4lb5m498cZjauqetoStPO9wEFOLY
-         CcfUMPWqgrb++X7QvpklNAJZqbQRSfHil8e6CCa4KqJOEUQZdShzD1Rc4igDQszpzd
-         72+EytJq9+HhpQ25GOIsFuvaH8GMF8yg17QO+nLzKXl6zfAIL8CYPjgBNfe7KzrnxO
-         etYRilelYKL/rTGq1iCJrPCVBup5Q2kqG12MwfzUTVWFWPtKglUfmZZYOY8tOLGjfJ
-         v+DkaYxNtDieYDElLa9zOE0g557bWGHjxZr0mvdaJ7UUi1Tf1eCHd/4MabLQwjxAmL
-         yCgwzKH238x7A==
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Siddharth Manthan <siddharth.manthan@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: Add device tree for Samsung Galaxy Tab A 8.0 (2015)
-Date:   Fri,  6 Jan 2023 17:25:32 +0500
-Message-Id: <20230106122532.3310265-4-nikita@trvn.ru>
-In-Reply-To: <20230106122532.3310265-1-nikita@trvn.ru>
-References: <20230106122532.3310265-1-nikita@trvn.ru>
+        Fri, 6 Jan 2023 07:29:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122613DBE8;
+        Fri,  6 Jan 2023 04:29:44 -0800 (PST)
+Date:   Fri, 06 Jan 2023 12:29:37 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673008181;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z66MPSETAUTnm4sAZTxLL8F84UXTMZxMyIRCDiuflnM=;
+        b=q2OidHKmZ8kxtK3ai+NcseOQS8lVWtfsOryf0c3DuAymJnHkZvrRnq5IE0pvIvxUfcMMeH
+        Oi9sa2SJ+P9l9fKiGIbG7P3qp63XsC0SVdvA/gKmXqrXnhGpHxb5L8sfGLPPHHgWdaX4bO
+        XmG/+6w/veTl5W5LfXeeQhohI/eTKz5UH/3Rkz39co91NrVrygwFm88r+82SEzRfCwsAQ7
+        UkOjUGlZIIVU9U4wyzx8QBGTQ6qr87o/Ey9SausfRBonHZ8aIoiDED5HlD6i6fTw49WAGF
+        zKCcPbI9CgS8rmFAqfOcluBc+Ij+auKPuHClmWS+pubFC4cHk6FWyohIX1XQcA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673008181;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z66MPSETAUTnm4sAZTxLL8F84UXTMZxMyIRCDiuflnM=;
+        b=ElwrptI9079vEe26bp+7PbZhlymSFwTnXjcFO99A+sXqqMhvTM4XSYf9SwZuDI2lkuvQNn
+        YtPg5G6saDWfZzDw==
+From:   "tip-bot2 for Wang Yong" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/boot/e820: Fix typo in e820.c comment
+Cc:     Wang Yong <yongw.kernel@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221211103849.173870-1-yongw.kernel@gmail.com>
+References: <20221211103849.173870-1-yongw.kernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167300817793.4906.15796352008210613315.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Manthan <siddharth.manthan@gmail.com>
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Galaxy Tab A 8.0 is a tablet, very similar to Tab A 9.7 with major
-differences being the display and touchscreen.
+Commit-ID:     47cdfb7b0a2733c157b27f772d852bfb9075384b
+Gitweb:        https://git.kernel.org/tip/47cdfb7b0a2733c157b27f772d852bfb9075384b
+Author:        Wang Yong <yongw.kernel@gmail.com>
+AuthorDate:    Sun, 11 Dec 2022 10:38:49 
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Fri, 06 Jan 2023 13:21:04 +01:00
 
-Add it's devicetree reusing a common dtsi from gt510.
+x86/boot/e820: Fix typo in e820.c comment
 
-Signed-off-by: Siddharth Manthan <siddharth.manthan@gmail.com>
-[Squashed multiple commits]
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+change "itsmain" to "its main".
+
+Fixes: 544a0f47e780 ("x86/boot/e820: Rename e820_table_saved to e820_table_firmware and improve the description")
+Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20221211103849.173870-1-yongw.kernel@gmail.com
 ---
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- .../boot/dts/qcom/msm8916-samsung-gt58.dts    | 78 +++++++++++++++++++
- 2 files changed, 79 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
+ arch/x86/kernel/e820.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 70e3b109aeff..062561db33f1 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -20,6 +20,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-gt510.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-gt58.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-new file mode 100644
-index 000000000000..fcf516888739
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-samsung-gt5-common.dtsi"
-+
-+/ {
-+	model = "Samsung Galaxy Tab A 8.0 (2015)";
-+	compatible = "samsung,gt58", "qcom,msm8916";
-+	chassis-type = "tablet";
-+
-+	reg_vdd_tsp: regulator-vdd-tsp {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_tsp";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&msmgpio 73 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-0 = <&reg_tsp_en_default>;
-+		pinctrl-names = "default";
-+	};
-+
-+	vibrator {
-+		compatible = "gpio-vibrator";
-+		enable-gpios = <&msmgpio 76 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&vibrator_en_default>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
-+&blsp_i2c5 {
-+	status = "okay";
-+
-+	touchscreen@20 {
-+		compatible = "zinitix,bt532";
-+		reg = <0x20>;
-+		interrupt-parent = <&msmgpio>;
-+		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-+
-+		touchscreen-size-x = <768>;
-+		touchscreen-size-y = <1024>;
-+
-+		vcca-supply = <&reg_vdd_tsp>;
-+		vdd-supply = <&pm8916_l6>;
-+
-+		pinctrl-0 = <&tsp_int_default>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
-+&msmgpio {
-+	reg_tsp_en_default: reg-tsp-en-default-state {
-+		pins = "gpio73";
-+		function = "gpio";
-+
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_default: tsp-int-default-state {
-+		pins = "gpio13";
-+		function = "gpio";
-+
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	vibrator_en_default: vibrator-en-default-state {
-+		pins = "gpio76";
-+		function = "gpio";
-+
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+};
--- 
-2.38.1
-
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index 9dac246..0614a79 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -53,7 +53,7 @@
+  *
+  * Once the E820 map has been converted to the standard Linux memory layout
+  * information its role stops - modifying it has no effect and does not get
+- * re-propagated. So itsmain role is a temporary bootstrap storage of firmware
++ * re-propagated. So its main role is a temporary bootstrap storage of firmware
+  * specific memory layout data during early bootup.
+  */
+ static struct e820_table e820_table_init		__initdata;
