@@ -2,97 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCEC65F9C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E1C65F9C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjAFC5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 21:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S231294AbjAFC7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 21:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjAFC5k (ORCPT
+        with ESMTP id S231587AbjAFC7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 21:57:40 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129E734D6E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:57:39 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so2722106wmb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 18:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zYnNol7tL6eujVJoPtHckFJLhOe/TlWL/0mv/fSdxbg=;
-        b=C4lqjpAnQXvwBwYmYF4V09tS/y3AQmmfmB+lQfenhOfbw71Tju+O1ssve3v2W5sgOn
-         Z1xhTMHcTRQOBT3NCMrjIGk0XuR3BsVNSvhuPsm7vndUDVfnVJ+UW48Lfbs3nXQTrBPT
-         MztAoXFks6grnIlAAxlmO+ZVyMWr91I5JEbA91P08RW3pd4i6KGRxAOt+4pNAON2FXn+
-         3xNdqzx9Tkh1p+zRB6N/xquvC108BDDSYR7Z+l/9JdSydHnqp38a26jv/EohEOc+gGdC
-         hKztTrHN02zeoeg/rbvZXw10k3aOFnd0Lf9Ad9mg1maqI5lhujY2a3UerxUMKzbtQWOL
-         7SRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zYnNol7tL6eujVJoPtHckFJLhOe/TlWL/0mv/fSdxbg=;
-        b=R1h8q2qt5LsZqtuP+TxbloEY4C/xeVdLk4gGGZUEAYKss2HSZYZYZkNfGL5oe6T1W+
-         dq3yyNOMlqzvqKZ9gx8XmHvkbQeHgmSLQB681D3FvDfDNnP05tlkG3rTD3c2UjVUru1j
-         6TGT92RscRFQlwHzQAwcoLF0r9uzRVsTrPduQV3yXSmirn4aVKsSay+xBREH4hUphu0g
-         XVBv4QmorrOPBk/50NjETnfMjcIhiwi5aod6ke/HC5Sv8pVmeRz2KBOubKQQ1iy2ffZO
-         cP/HQC7r5qB/69HYNFFvyl7VkSGS7n/KChr3ndt1Q05XpI+eBwO9/JwlxoEAZBGG7/ju
-         YQWw==
-X-Gm-Message-State: AFqh2kpWF+aqwWFhrwMq9ZnE2JVeS9ovZCKmJNVCe47yc8iZbg/dTViT
-        /17+bC+NxKfEfQRnIUdTRAmrrTdrWaTCOIry/XAfUQ==
-X-Google-Smtp-Source: AMrXdXubsV9SEgC7wXRqKqXtE6ieEZkLu8z0ZvO+WbUI2V/Tvi9MMJu1FXJzCCIYSqogdWKI9fTNtC6QYRZWMYcL4HM=
-X-Received: by 2002:a05:600c:44d4:b0:3d1:fd95:a8f6 with SMTP id
- f20-20020a05600c44d400b003d1fd95a8f6mr2772408wmo.189.1672973857619; Thu, 05
- Jan 2023 18:57:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20230105100014.1935-1-cuiyunhui@bytedance.com> <a8540626a36339bbac8603559b9200a08e4de9ed.camel@redhat.com>
-In-Reply-To: <a8540626a36339bbac8603559b9200a08e4de9ed.camel@redhat.com>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Fri, 6 Jan 2023 10:57:26 +0800
-Message-ID: <CAEEQ3wkD5bX34J36-OJ7WdHX=Y9hwFuoCtZ6_zyngKYrz3y1wQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2] sock: add tracepoint for send recv length
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, duanxiongchun@bytedance.com,
-        kuniyu@amazon.com, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 21:59:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E534D6E;
+        Thu,  5 Jan 2023 18:59:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3131661BE9;
+        Fri,  6 Jan 2023 02:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D088C433D2;
+        Fri,  6 Jan 2023 02:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1672973950;
+        bh=9iIG1jjU+cVTa0DXtA/OdBSV7ZjX8LTbLAr0Q7d3PZE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bz2w4rhzobDqBZ+3D9oM3QCJuycDcgpASYh8SwLG6eDAMHrwgtlykxcUYfTZNa89D
+         AQilsK0RNFrUl70fxFHUSBDmB4mR4PiUJ3Nr61ej0hz59AvWqMoLPdXQbcXFAEfnnv
+         AJ3D4yZM1WVhHKgliO3uqnMA8s/Rwcxc10RGlHSA=
+Date:   Thu, 5 Jan 2023 18:59:09 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] pipe: use __pipe_{lock,unlock} instead of spinlock
+Message-Id: <20230105185909.c77ce4d136279ec46a204d61@linux-foundation.org>
+In-Reply-To: <20230103063303.23345-1-zhanghongchen@loongson.cn>
+References: <20230103063303.23345-1-zhanghongchen@loongson.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 8:03 PM Paolo Abeni <pabeni@redhat.com> wrote:
+On Tue,  3 Jan 2023 14:33:03 +0800 Hongchen Zhang <zhanghongchen@loongson.cn> wrote:
 
-> > We can obtain the information with kretprobe, but as we know, kprobe ge=
-ts
-> > the result by trappig in an exception, which loses performance compared
-> > to tracepoint. We did a test for performance comparison. The results ar=
-e
-> > as follows. Time per request, sock_sendmsg(k,kr):  12.382ms,
-> > tcp_send_length(tracepoint): 11.887ms=EF=BC=8Cwithout hook=EF=BC=9A11.2=
-22ms
->
-> 12 ms per packet? I hope there is a an error in the unit of
-> measurement.
->
-> I'm unsure the delta wrt kreprobe justifies this change.
->
-> In any case you need to include the netdev ML into the recipients list,
-> and even Cong Wang, as he provided feedback on v1.
->
-> Thanks,
->
-> Paolo
->
+> Use spinlock in pipe_read/write cost too much time,IMO
+> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> On the other hand, we can use __pipe_lock/unlock to protect the
+> pipe->head/tail in pipe_resize_ring and post_one_notification.
 
-I will add the record of testing with the tool to the commit log of
-v3, and then send the email to netdev ML and CongWang, thank you.
+Can you please test this with the test code in Linus's 0ddad21d3e99 and
+check that performance is good?
+
