@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C19660632
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF79660636
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjAFSJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231690AbjAFSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAFSI5 (ORCPT
+        with ESMTP id S229510AbjAFSNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:08:57 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B6676221
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:08:56 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso2471568pjf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:08:56 -0800 (PST)
+        Fri, 6 Jan 2023 13:13:12 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD0E75D0F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:13:11 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id g16so2416804plq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:13:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRfBMIOrWnkTgcTHC8fokRZyL82kMsM9senrx2vjrp4=;
-        b=KGEHXfRmPiYzMG2kUn40dLIk5Z1zjbUEthvuPHMpU6fXdKK6/8qi6QmjzIFqCAjxHo
-         jdVeSB8e9/bEAZb+jcbPfsS3Hvi9dlBXT03QtiyWDcGq+k9yn3JWMV2F6TuXSP3iN7bh
-         1C2hcM1cmLER/jBXk3lKj5hiOdZ3tqDNm480o=
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6hDoZANBTNDNXKHRfQT835o0/wxRKpaQa8h7cG3GL/I=;
+        b=HpjIMHcBeuTexqS2iEUlRTJtstviTWvrYux58Oe7sSVYKSsf8XLttXnje1jWEiI+RH
+         lpVVdi6QgNKudvhxlav2zAtefm/YAQAUlaGrnfxmM8nNR4O9Un7adDztJtLbebJOhMu+
+         sR0RnQ2OhAtl8SxMify2tJxr0rFg4rrM1ohv6/1wicoDOyMWzBadR47ewwDJiQBRDqbC
+         +cbdgO9hKvnaBINC5sxCA17HaxzDRorlUH0VMmT8Ep2X5i5yGTUi+A2w/AduOyUY1E8J
+         qABf2cxNhaHH+ZWBaEv1yXAUKXZnJ4OinSSHjhU1kjUs4j6m48qqoh/R6ekQg7c3iKSx
+         TVAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aRfBMIOrWnkTgcTHC8fokRZyL82kMsM9senrx2vjrp4=;
-        b=KHPmaNLYnbWVTbBN3vH2Cog2akveAfgXEMIM0CPhctWenyKmSG5nREVx0iAFurxy9+
-         C3th2ppRqCpd547b5H9o/z2jWdLq/O4yupKwO6LJc1LgCUvwO/qAeVlFeYZWJMZgBEbo
-         7vhWqzp5bGP1l99kk0suDm4zAWJJ0GkF/V9Gdj7rQbAsT3wiYVWNZpmDEOKr1wemO2WZ
-         oeIHEpscz1WbhK26/DRHszoyjwLWgyujacu294FiZ4exKRZeAOnmHbYrPDF3gQKG1VGQ
-         wL9gsng764stWghrw2G62fcVUrDpHoU7w32GUzVt/LVrL5Z8O3tDOIsIv1BR8VuRrc8M
-         4Hzw==
-X-Gm-Message-State: AFqh2kpEz72eX1xHLWGc1gGYY6EwqgmVza3oJbVpEIv3am9T79FLOMg4
-        sPl3Mstabw33izZ2zwwy6VJxOA==
-X-Google-Smtp-Source: AMrXdXu3+CpeCXjMMRDSk0RxLILeTWZA5Pe+CQFqkM1hhlNB+wt9gU/hx35Rd9JRj7BX4MHLZ0xiiA==
-X-Received: by 2002:a17:902:eb8f:b0:192:8ec5:fd58 with SMTP id q15-20020a170902eb8f00b001928ec5fd58mr43083908plg.6.1673028536246;
-        Fri, 06 Jan 2023 10:08:56 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:5567:fb20:aa4f:352])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170902e80500b00189529ed580sm1282081plg.60.2023.01.06.10.08.55
+        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6hDoZANBTNDNXKHRfQT835o0/wxRKpaQa8h7cG3GL/I=;
+        b=WkEZm067zk1qNhwhbOFupI9y4IdLdvQ2ze3OETNCqQOKxwrd0w3lDI4joVpyQpdSt2
+         ODcQxIsMquiX0oWTwLTP5eNXuk9S08hhu5rNq25n4FjvcGyC33+bnn9oiqWn4dhAvwyf
+         7TjG3II+raLTFsDUSoqEvSCXPUucqqyYXKDMVL6yWgJpUfSmk8wXfNXyHmvnvu1Q+0+H
+         Ai7GYw8mHyFP7iAfVr2T7ZUWbt11B0N3EQfTSFPS+RbTju93qM9z8QHYm4HpjE2U/OEs
+         48+Pgg7s7O1ygpXt7B2FhZynuySVq/EIPsKBF0cn1CrrFQ0KVxtDGVGED2P3BYZF1zUJ
+         vSfg==
+X-Gm-Message-State: AFqh2koSTnqnTs8a0xFlplWpdQf9BKB103h7iEkqn2oOwHMhQxISOpQ7
+        5eYo3CjBx/MlPLSjYtHUZDkjDwp9/uXK4wWl
+X-Google-Smtp-Source: AMrXdXtL7dEzbBeZBTDGsfdqX7GT2hNOR4M+KwHHWAdzB2yvEwA2LC0r4975u/7an5Qm82ZxvgGaqg==
+X-Received: by 2002:a17:903:2404:b0:18d:61f6:e254 with SMTP id e4-20020a170903240400b0018d61f6e254mr74183365plo.33.1673028790203;
+        Fri, 06 Jan 2023 10:13:10 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id e18-20020a170902ef5200b00187033cac81sm1235942plx.145.2023.01.06.10.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 10:08:55 -0800 (PST)
-Date:   Fri, 6 Jan 2023 10:08:53 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Sean Paul <seanpaul@chromium.org>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/atomic: Allow vblank-enabled + self-refresh
- "disable"
-Message-ID: <Y7hjte/w8yP2TPlB@google.com>
-References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
- <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 06 Jan 2023 10:13:09 -0800 (PST)
+Date:   Fri, 06 Jan 2023 10:13:09 -0800 (PST)
+X-Google-Original-Date: Fri, 06 Jan 2023 10:11:53 PST (-0800)
+Subject: [GIT PULL] RISC-V Fixes for 6.2-rc3
+CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-96b62708-327b-4721-a0ef-49ef52a1b3c2@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-On Fri, Jan 06, 2023 at 06:53:49PM +0100, Daniel Vetter wrote:
-> On Thu, Jan 05, 2023 at 05:40:17PM -0800, Brian Norris wrote:
-> > The self-refresh helper framework overloads "disable" to sometimes mean
-> > "go into self-refresh mode," and this mode activates automatically
-> > (e.g., after some period of unchanging display output). In such cases,
-> > the display pipe is still considered "on", and user-space is not aware
-> > that we went into self-refresh mode. Thus, users may expect that
-> > vblank-related features (such as DRM_IOCTL_WAIT_VBLANK) still work
-> > properly.
-> > 
-> > However, we trigger the WARN_ONCE() here if a CRTC driver tries to leave
-> > vblank enabled here.
-> > 
-> > Add a new exception, such that we allow CRTCs to be "disabled" (with
-> > self-refresh active) with vblank interrupts still enabled.
-> > 
-> > Cc: <stable@vger.kernel.org> # dependency for subsequent patch
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > ---
-> > 
-> >  drivers/gpu/drm/drm_atomic_helper.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-> > index d579fd8f7cb8..7b5eddadebd5 100644
-> > --- a/drivers/gpu/drm/drm_atomic_helper.c
-> > +++ b/drivers/gpu/drm/drm_atomic_helper.c
-> > @@ -1207,6 +1207,12 @@ disable_outputs(struct drm_device *dev, struct drm_atomic_state *old_state)
-> >  
-> >  		if (!drm_dev_has_vblank(dev))
-> >  			continue;
-> > +		/*
-> > +		 * Self-refresh is not a true "disable"; let vblank remain
-> > +		 * enabled.
-> > +		 */
-> > +		if (new_crtc_state->self_refresh_active)
-> > +			continue;
-> 
-> This very fishy, because we check in crtc_needs_disable whether this
-> output should stay on due to self-refresh. Which means you should never
-> end up in here.
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-That's not what crtc_needs_disable() does w.r.t. self-refresh. In fact,
-it's the opposite; see, for example, the
-|new_state->self_refresh_active| clause. That clause means that if we're
-entering self-refresh, we *intend* to disable (i.e., we return 'true').
-That's because like I mention above, the self-refresh helpers overload
-what "disable" means.
+are available in the Git repository at:
 
-I'll also add my caveat again that I'm a bit new to DRM, so feel free to
-continue to correct me if I'm wrong :) Or perhaps Sean Paul could
-provide second opinions, as I believe he wrote this stuff.
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.2-rc3
 
-> And yes vblank better work in self refresh :-) If it doesn't, then you
-> need to fake it with a timer, that's at least what i915 has done for
-> transparent self-refresh.
+for you to fetch changes up to b9b916aee6715cd7f3318af6dc360c4729417b94:
 
-OK! Then that sounds like it at least ACKs my general idea for this
-series. (Michel and I poked at a few ideas in the thread at [1] and
-landed on approx. this solution, or else a fake/timer like you suggest.)
+  riscv: uaccess: fix type of 0 variable on error in get_user() (2023-01-05 12:30:41 -0800)
 
-> We might need a few more helpers. Also, probably more igt, or is this
-> something igt testing has uncovered? If so, please cite the igt testcase
-> which hits this.
+----------------------------------------------------------------
+RISC-V Fixes for 6.2-rc3
 
-The current patch only fixes a warning that comes when I try to do the
-second patch. The second patch is a direct product of an IGT test
-failure (a few of kms_vblank's subtests), and I linked [1] the KernelCI
-report there.
+* A fix to use the correct mask for c.jr/c.jalr when decoding
+  instructions.
+* A compile-time fix for get_user(), to avoid an sparse warning.
 
-Brian
+----------------------------------------------------------------
+Ben Dooks (1):
+      riscv: uaccess: fix type of 0 variable on error in get_user()
 
-[1] Link: https://lore.kernel.org/dri-devel/Y5itf0+yNIQa6fU4@sirena.org.uk/
-    Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Björn Töpel (1):
+      riscv, kprobes: Stricter c.jr/c.jalr decoding
+
+ arch/riscv/include/asm/uaccess.h         | 2 +-
+ arch/riscv/kernel/probes/simulate-insn.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
