@@ -2,153 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B22266020F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1960F660211
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjAFOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S232785AbjAFO0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbjAFOZ2 (ORCPT
+        with ESMTP id S234867AbjAFOZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:25:28 -0500
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C857BDCA;
-        Fri,  6 Jan 2023 06:25:27 -0800 (PST)
-Received: by mail-pf1-f181.google.com with SMTP id z7so1131153pfq.13;
-        Fri, 06 Jan 2023 06:25:27 -0800 (PST)
+        Fri, 6 Jan 2023 09:25:52 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C503D5E3
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:25:50 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-46eb8a5a713so19509547b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 06:25:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kC1oBRAXE838EyqcFtArpyyQWxtXQZCkq8gbe8hpVg4=;
+        b=DQbR51Biav8RW8cOre9crR/Cih3nKjqFKDEeGB3Vzb6WLdeL6VgDdEY0m9IzEDCgrN
+         cpAKhqH/MyXqYXG58AMkrIMXmqOH9z1eFuRMnCKzMvISBKAJH+V9UESk4I5TAuvNYXEk
+         0vHO4JLod2K+wj6DvdrtkZcdxfMvdsDMRzYMnpqZ98BOvclvUDCDI4bh72+5iOY4O+DX
+         R1cMezttAzMW0x/PXmONyk0cmTVL7Ohf+gaRYzCZRwWjzu9ZtuYYU+cHiv/EHb/6fL7D
+         lREvj57YppLZcivTMT7ICPNvpU2ba2yERIkGPY2Vq1wbOYbveGs+I2+CJBR7QrAOINNZ
+         fIrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZnhpvIy2ZsoQIvjxqkh6LV97wMF7pwAzJclzOI/EkUA=;
-        b=gJpZEqK8J9iUXg6/NaMcM7g+hrm6Idxwqlmg2b1oNBbzs6/lK/Loxi/Aw5Qxq0QDSL
-         Wzp5ZdvcMC4ujm8MnXlIKhlnF8ZUjqHI9TH5AiZQCCNsNoap4tu6GunKKk2qjR9HqW4u
-         J8ghWWq4JwmMmYkbOBsS0ok57pIMsqzoE1eL+gu9TQ/GvYMfgTCZ3WS8K0VTnen/BsOz
-         IOFqTOn25Q3HJoK9P6IJtl2knqLE86CIWndu/O6NDO83G/uhQPltF5L8o531fSzkeM2g
-         9oT9VV09XCANxxPLCJrBuhnGbPQxclXN1S079dOK5hzQ5PI8+k39fAOhRvDnuH1PoWTf
-         dWsw==
-X-Gm-Message-State: AFqh2koRrzxuFn0EPfhR9C0HyGBKOJMf9T2VMmVWRQZn8W0lbSysSCzL
-        x34QhEVBo7gsiSewxncoEuIKxMqnO4m9/mggJlY=
-X-Google-Smtp-Source: AMrXdXupE8sC+Y3fGN3ty9aij7GdI5lL4SimVP4vcqOWquE7YENA7c1nv0MwPYafQUD94503z2yComXmE17v1S9TlPc=
-X-Received: by 2002:a63:2106:0:b0:483:f80c:cdf3 with SMTP id
- h6-20020a632106000000b00483f80ccdf3mr2608100pgh.70.1673015126142; Fri, 06 Jan
- 2023 06:25:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20230106042844.give.885-kees@kernel.org> <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
-In-Reply-To: <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 6 Jan 2023 23:25:14 +0900
-Message-ID: <CAMZ6RqJXnUBxqyCFRaLxELjnvGzn9NoiePV2RVwBzAZRGH_Qmg@mail.gmail.com>
-Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        kernel test robot <lkp@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kC1oBRAXE838EyqcFtArpyyQWxtXQZCkq8gbe8hpVg4=;
+        b=evqYmfqLOMLky0hbp/3NR35ZNUDX+WiLrBzKUMRP3NW4ge3nE3DHIlizONcTm6G0nm
+         bLfv2koNBHEvjiaJcHvyz0bL992WMYvkKp2e+xeNIgueaLyJc2ijOHt1ka062hJPxWyc
+         OGMKxdDb0lT1Q+Gs3hJVPYM30HpGk71WUVq3zrWI628ZDtg+Vdoh3go8pW4UplPtNw+r
+         OmvxCxR3xSg9Vx2P9l9ijSueF1VH5WujaZByFsppExg2EUWHjIilnkNliPTOZlZ0DJVU
+         QE6AIzyXaK3xliaCvOy8oKdugpCLs23FpmO+ZAXQSOY5+4TKu7wT4GXKLAx7M+tQDGX5
+         +FDA==
+X-Gm-Message-State: AFqh2kpX3/VqmS7lRqmRqtDr+ATcD3PrIeI2vRxLRKrqgYdMaTCcRofM
+        cbfljC0GilI0xdjrUJVbEa/Rtn7hMxSO
+X-Google-Smtp-Source: AMrXdXssgHQfc2+9CJD0DISmI/eT1XOavZLaNqX+X6gT55ye+JxJrY74HJ53cDxcXjh9CaNg2Q33jZsFN+Pd
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b317:a30:653a:18e5])
+ (user=irogers job=sendgmr) by 2002:a81:9281:0:b0:391:ea94:ec9b with SMTP id
+ j123-20020a819281000000b00391ea94ec9bmr149767ywg.57.1673015149991; Fri, 06
+ Jan 2023 06:25:49 -0800 (PST)
+Date:   Fri,  6 Jan 2023 06:25:36 -0800
+Message-Id: <20230106142537.607399-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Subject: [PATCH v2 1/2] perf build: Properly guard libbpf includes
+From:   Ian Rogers <irogers@google.com>
+To:     Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, acme@kernel.org, irogers@google.com,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri. 6 Jan 2023 at 22:19, Jann Horn <jannh@google.com> wrote:
-> On Fri, Jan 6, 2023 at 5:28 AM Kees Cook <keescook@chromium.org> wrote:
-> > Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
-> > "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
-> > using -fstrict-flex-arrays=3:
-> >
-> > net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
-> > net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
-> >   558 |                         .fs.location = info->rule_locs[i],
-> >       |                                        ~~~~~~~~~~~~~~~^~~
-> > In file included from include/linux/ethtool.h:19,
-> >                  from include/uapi/linux/ethtool_netlink.h:12,
-> >                  from include/linux/ethtool_netlink.h:6,
-> >                  from net/ethtool/common.c:3:
-> > include/uapi/linux/ethtool.h:1186:41: note: while referencing
-> > 'rule_locs'
-> >  1186 |         __u32                           rule_locs[0];
-> >       |                                         ^~~~~~~~~
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-> >
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: kernel test robot <lkp@intel.com>
-> > Cc: Oleksij Rempel <linux@rempel-privat.de>
-> > Cc: Sean Anderson <sean.anderson@seco.com>
-> > Cc: Alexandru Tachici <alexandru.tachici@analog.com>
-> > Cc: Amit Cohen <amcohen@nvidia.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > v3: don't use helper (vincent)
-> > v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
-> > ---
-> >  include/uapi/linux/ethtool.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
-> > index 58e587ba0450..3135fa0ba9a4 100644
-> > --- a/include/uapi/linux/ethtool.h
-> > +++ b/include/uapi/linux/ethtool.h
-> > @@ -1183,7 +1183,7 @@ struct ethtool_rxnfc {
-> >                 __u32                   rule_cnt;
-> >                 __u32                   rss_context;
-> >         };
-> > -       __u32                           rule_locs[0];
-> > +       __u32                           rule_locs[];
->
-> Stupid question: Is this syntax allowed in UAPI headers despite not
-> being part of standard C90 or C++? Are we relying on all C/C++
-> compilers for pre-C99 having gcc/clang extensions?
+Including libbpf header files should be guarded by
+HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+under HAVE_BPF_SKEL.
 
-The [0] isn't part of the C90 standard either. So having to choose
-between [0] and [], the latter is the most portable nowadays.
+Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+Reported-by: Mike Leach <mike.leach@linaro.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-trace.c    |  2 +
+ tools/perf/util/bpf_counter.h | 85 ++++++++++++++++++-----------------
+ 2 files changed, 46 insertions(+), 41 deletions(-)
 
-If I do a bit of speleology, I can see that C99 flexible array members
-were used as early as v2.6.19 (released in November 2006):
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index 86e06f136f40..d21fe0f32a6d 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -16,7 +16,9 @@
+ 
+ #include "util/record.h"
+ #include <api/fs/tracing_path.h>
++#ifdef HAVE_LIBBPF_SUPPORT
+ #include <bpf/bpf.h>
++#endif
+ #include "util/bpf_map.h"
+ #include "util/rlimit.h"
+ #include "builtin.h"
+diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+index 4dbf26408b69..9113c8bf5cb0 100644
+--- a/tools/perf/util/bpf_counter.h
++++ b/tools/perf/util/bpf_counter.h
+@@ -4,9 +4,12 @@
+ 
+ #include <linux/list.h>
+ #include <sys/resource.h>
++
++#ifdef HAVE_LIBBPF_SUPPORT
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+ #include <bpf/libbpf.h>
++#endif
+ 
+ struct evsel;
+ struct target;
+@@ -42,6 +45,47 @@ int bpf_counter__read(struct evsel *evsel);
+ void bpf_counter__destroy(struct evsel *evsel);
+ int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
+ 
++static inline __u32 bpf_link_get_id(int fd)
++{
++	struct bpf_link_info link_info = { .id = 0, };
++	__u32 link_info_len = sizeof(link_info);
++
++	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
++	return link_info.id;
++}
++
++static inline __u32 bpf_link_get_prog_id(int fd)
++{
++	struct bpf_link_info link_info = { .id = 0, };
++	__u32 link_info_len = sizeof(link_info);
++
++	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
++	return link_info.prog_id;
++}
++
++static inline __u32 bpf_map_get_id(int fd)
++{
++	struct bpf_map_info map_info = { .id = 0, };
++	__u32 map_info_len = sizeof(map_info);
++
++	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
++	return map_info.id;
++}
++
++/* trigger the leader program on a cpu */
++static inline int bperf_trigger_reading(int prog_fd, int cpu)
++{
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .ctx_in = NULL,
++			    .ctx_size_in = 0,
++			    .flags = BPF_F_TEST_RUN_ON_CPU,
++			    .cpu = cpu,
++			    .retval = 0,
++		);
++
++	return bpf_prog_test_run_opts(prog_fd, &opts);
++}
++
+ #else /* HAVE_BPF_SKEL */
+ 
+ #include <linux/err.h>
+@@ -87,45 +131,4 @@ static inline void set_max_rlimit(void)
+ 	setrlimit(RLIMIT_MEMLOCK, &rinf);
+ }
+ 
+-static inline __u32 bpf_link_get_id(int fd)
+-{
+-	struct bpf_link_info link_info = { .id = 0, };
+-	__u32 link_info_len = sizeof(link_info);
+-
+-	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+-	return link_info.id;
+-}
+-
+-static inline __u32 bpf_link_get_prog_id(int fd)
+-{
+-	struct bpf_link_info link_info = { .id = 0, };
+-	__u32 link_info_len = sizeof(link_info);
+-
+-	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+-	return link_info.prog_id;
+-}
+-
+-static inline __u32 bpf_map_get_id(int fd)
+-{
+-	struct bpf_map_info map_info = { .id = 0, };
+-	__u32 map_info_len = sizeof(map_info);
+-
+-	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+-	return map_info.id;
+-}
+-
+-/* trigger the leader program on a cpu */
+-static inline int bperf_trigger_reading(int prog_fd, int cpu)
+-{
+-	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+-			    .ctx_in = NULL,
+-			    .ctx_size_in = 0,
+-			    .flags = BPF_F_TEST_RUN_ON_CPU,
+-			    .cpu = cpu,
+-			    .retval = 0,
+-		);
+-
+-	return bpf_prog_test_run_opts(prog_fd, &opts);
+-}
+-
+ #endif /* __PERF_BPF_COUNTER_H */
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-  https://elixir.bootlin.com/linux/v2.6.19/source/include/linux/usb/audio.h#L36
-
-This is prior to the include/linux and include/uapi/linux split, but
-believe me, this usb/audio.h file is indeed part of the uapi.
-So, yes, using C99 flexible array members in the UAPI is de facto
-allowed because it was used for the last 16 years.
-
-An interesting sub question would be:
-
-  What are the minimum compiler requirements to build a program using
-the Linux UAPI?
-
-And, after research, I could not find the answer. The requirements to
-build the kernel are well documented:
-
-  https://docs.kernel.org/process/changes.html#changes
-
-But no clue for the uapi. I guess that at one point in 2006, people
-decided that it was time to set the minimum requirement to C99. Maybe
-this matches the end of life of the latest pre-C99 GCC version? The
-detailed answer must be hidden somewhere on lkml.
-
-
-Yours sincerely,
-Vincent Mailhol
