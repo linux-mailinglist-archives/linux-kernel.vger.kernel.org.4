@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBD665FD0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2553865FD0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjAFIr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S232108AbjAFIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjAFIrX (ORCPT
+        with ESMTP id S232149AbjAFIrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:47:23 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22C0254724;
-        Fri,  6 Jan 2023 00:47:20 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowACnrfER4LdjAuloCw--.27825S2;
-        Fri, 06 Jan 2023 16:47:13 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, freedreno@lists.freedesktop.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH RESEND] drm/msm: Add missing check and destroy for alloc_ordered_workqueue
-Date:   Fri,  6 Jan 2023 16:47:12 +0800
-Message-Id: <20230106084712.29675-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACnrfER4LdjAuloCw--.27825S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urWkCF4DJFyxtFykJw43KFg_yoW8Xr4kpa
-        13AayrtryFya1agwnFyr1kua45C3W8K3WfC3yI9wnIgwn0yr4DAa48tFyjkry3GFZ7XF12
-        yFZ2ya4DZF1jkrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfU07KsUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 Jan 2023 03:47:41 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036663D2A;
+        Fri,  6 Jan 2023 00:47:40 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NpH614dQtz8R039;
+        Fri,  6 Jan 2023 16:47:37 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl2.zte.com.cn with SMTP id 3068lVvb047944;
+        Fri, 6 Jan 2023 16:47:31 +0800 (+08)
+        (envelope-from guo.ziliang@zte.com.cn)
+Received: from mapi (xaxapp03[null])
+        by mapi (Zmail) with MAPI id mid32;
+        Fri, 6 Jan 2023 16:47:33 +0800 (CST)
+Date:   Fri, 6 Jan 2023 16:47:33 +0800 (CST)
+X-Zmail-TransId: 2afb63b7e025ffffffffe75b211b
+X-Mailer: Zmail v1.0
+Message-ID: <202301061647338189934@zte.com.cn>
+Mime-Version: 1.0
+From:   <guo.ziliang@zte.com.cn>
+To:     <bhelgaas@google.com>
+Cc:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chen.lin5@zte.com.cn>, <guo.ziliang@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSBQQ0k6IG9mOiBXYXJuIGlmIGJyaWRnZSBiYXNlL2xpbWl0IHJlZ2lvbiBvdmVybGFwcyB3aXRoIHN5c3RlbSByYW0gcmVnaW9u?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 3068lVvb047944
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63B7E029.000 by FangMail milter!
+X-FangMail-Envelope: 1672994857/4NpH614dQtz8R039/63B7E029.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<guo.ziliang@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63B7E029.000/4NpH614dQtz8R039
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for the return value of alloc_ordered_workqueue as it may return
-NULL pointer.
-Moreover, use the destroy_workqueue in the later fails in order to avoid
-memory leak.
+From: Chen Lin <chen.lin5@zte.com.cn>
+bridge base/limit(memory behind in lspci info, outbound pcie address/size)
+region is used to route outbound mem read/write transaction to ep. This
+base/limit region also may filter out inbound transactions which will
+result in inbound(eg: dma) transaction fail.
 
-Fixes: c8afe684c95c ("drm/msm: basic KMS driver for snapdragon")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+For example, if bridge base/limit is [0x20000000, 0x203fffff], system ram
+is [0x20000000, 0x27ffffff]. The inbound mapping is usually 1:1 equal
+mapping. When allocated system ram for inbound tansaction is 0x20004000
+(any in bridge base/limit), this inbound transactions will be filter out.
+
+AER may report 'UnsupReq' on inbound mem read/write transactions if address
+is in this base/limit region, but not all pcie AER enabled or work well. We
+warn it also in host bridge pci address detection phase.
+
+Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
 ---
- drivers/gpu/drm/msm/msm_drv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/pci/of.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 8b0b0ac74a6f..b82d938226ad 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -418,6 +418,8 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 	priv->dev = ddev;
- 
- 	priv->wq = alloc_ordered_workqueue("msm", 0);
-+	if (!priv->wq)
-+		return -ENOMEM;
- 
- 	INIT_LIST_HEAD(&priv->objects);
- 	mutex_init(&priv->obj_lock);
-@@ -440,12 +442,12 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 
- 	ret = msm_init_vram(ddev);
- 	if (ret)
--		return ret;
-+		goto err_destroy_workqueue;
- 
- 	/* Bind all our sub-components: */
- 	ret = component_bind_all(dev, ddev);
- 	if (ret)
--		return ret;
-+		goto err_destroy_workqueue;
- 
- 	dma_set_max_seg_size(dev, UINT_MAX);
- 
-@@ -540,6 +542,8 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 
- err_msm_uninit:
- 	msm_drm_uninit(dev);
-+err_destroy_workqueue:
-+	destroy_workqueue(priv->wq);
- 	return ret;
- }
- 
+diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+index 196834ed44fe..82e09af6c638 100644
+--- a/drivers/pci/of.c
++++ b/drivers/pci/of.c
+@@ -314,6 +314,8 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
+
+ 	dev_dbg(dev, "Parsing ranges property...\n");
+ 	for_each_of_pci_range(&parser, &range) {
++		int is_ram;
++
+ 		/* Read next ranges element */
+ 		if ((range.flags & IORESOURCE_TYPE_BITS) == IORESOURCE_IO)
+ 			range_type = "IO";
+@@ -332,6 +334,18 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
+ 		if (range.cpu_addr == OF_BAD_ADDR || range.size == 0)
+ 			continue;
+
++		/*
++		 * bridge base/limit(memory behind) region may filter out inbound
++		 * transactions which will result in inbound(eg:dma) fail of ep.
++		 * AER may report it if enabled, we warn it also.
++		 */
++		is_ram = region_intersects(range.pci_addr, range.size,
++					IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE);
++		if (is_ram == REGION_INTERSECTS) {
++			dev_warn(dev, "%#012llx..%#012llx bridge base/limit region overlaps with system ram, may result in inbound fail\n",
++				 range.pci_addr, range.pci_addr + range.size - 1);
++		}
++
+ 		err = of_pci_range_to_resource(&range, dev_node, &tmp_res);
+ 		if (err)
+ 			continue;
 -- 
-2.25.1
-
+2.15.2
