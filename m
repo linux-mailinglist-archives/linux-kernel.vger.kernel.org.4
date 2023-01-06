@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F22660009
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5D566001C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbjAFML0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S231858AbjAFMSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjAFMLL (ORCPT
+        with ESMTP id S232477AbjAFMSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:11:11 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B6272880
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:11:06 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id w1so1088714wrt.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:11:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1lqgBvH3cRWcsX4rNdTLeZsM5ZhRSoVlfNbnRO4xtLI=;
-        b=NZzkWPIrVRiIAbnulSI1cGlv5xPVkOdI81R1Hqf6gUFNEShJAT2R4vqKoDP2f9sr7y
-         AlGlqkHwl/9UhifWe2VXw9qjYvU4SX4062Q4sHjhy8+4mb5ZuucpQU9XAWOGgHu4Kvyt
-         diAbNMYp4WOeG5FlQkmd8ewwyitIMAVoEQAH6Mc1ZOov1nAxKYZg7XP5UyxitVpAcK2L
-         QRhpdbjs5dlEsHphEstaP68MOESUgnHv6W3obyCjSVAp4XR5co+6glvCcbWZ7M7rLw2c
-         uDC/SXVLNrI4lTNRWvfNTLazN6FbjQ2z3zBvD+FCCdDsBWnzhl2Y6o735P/pwbKeCvKk
-         eqWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lqgBvH3cRWcsX4rNdTLeZsM5ZhRSoVlfNbnRO4xtLI=;
-        b=AasjIH3GBKI7WmbrVpHPQnIfa7R67+FHuFNJBf5loaQslhU+onEhwDc05wFsx8dBj2
-         Y54PcUZ97jj3DYdDuWPgAfL9YGGRgBQKJaDaKHxUOYjPozSzqPT40dDXkUSJofQYhR3K
-         V/ecLYr/g7CSbwIsOCA7vSdu5WDpiXulygA/oX0nk2D+29vXnkUzwLXXlTJa3rtr+D91
-         kxHGQY9/RJXN4kmiCNVfxSKB5P19xWtuKWiD1B6qeHH4bmXzm42nYYOkcVCLsYQkVhvV
-         Pn2nUYXJFQUMun2zj1H54Hj/L+hXfMarUr5KbgTffJNUeYaqAEjqiRnSkPzU5o3JuhKE
-         MqFQ==
-X-Gm-Message-State: AFqh2kr1qRU5mi6emG407lkl/gd3vytSa6b/SApr4Bbh/odIzT0IlHpA
-        ZdxRI1tsfmQmhQ4WHdZFMQfO/g==
-X-Google-Smtp-Source: AMrXdXsaPD2VrM67v81G5TB98BeNHs/8LMkyC5/h4SIxf1gMu6Awu2u2ZZwi6ee4WbsO3QPCIt8txQ==
-X-Received: by 2002:a5d:564e:0:b0:27d:59a5:28bc with SMTP id j14-20020a5d564e000000b0027d59a528bcmr26183768wrw.35.1673007064688;
-        Fri, 06 Jan 2023 04:11:04 -0800 (PST)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id n5-20020adfe785000000b00281eab50380sm1098766wrm.117.2023.01.06.04.11.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 04:11:04 -0800 (PST)
-Message-ID: <c8020dc5-e911-e9a1-a269-5fbcb682f346@isovalent.com>
-Date:   Fri, 6 Jan 2023 12:11:03 +0000
+        Fri, 6 Jan 2023 07:18:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBE736D7
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:18:24 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pDlfs-0004id-1I; Fri, 06 Jan 2023 13:18:16 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pDlfr-00060i-Gv; Fri, 06 Jan 2023 13:18:15 +0100
+Date:   Fri, 6 Jan 2023 13:18:15 +0100
+To:     Richard Weinberger <richard@nod.at>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ubifs: Handle LPT corruption better in
+ ubifs_garbage_collect_leb()
+Message-ID: <20230106121815.GA20604@pengutronix.de>
+References: <20180704140230.5606-1-richard@nod.at>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] bpf_doc: Fix build error with older python versions
-Content-Language: en-GB
-To:     Michal Suchanek <msuchanek@suse.de>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-References: <20230106114037.25036-1-msuchanek@suse.de>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230106114037.25036-1-msuchanek@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180704140230.5606-1-richard@nod.at>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Sascha Hauer <sha@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-01-06 12:40 UTC+0100 ~ Michal Suchanek <msuchanek@suse.de>
-> + make -j48 -s -C /dev/shm/kbuild/linux.33946/current ARCH=powerpc HOSTCC=gcc CROSS_COMPILE=powerpc64-suse-linux- clean
-> TypeError: '_sre.SRE_Match' object is not subscriptable
+Hi Richard,
+
+On Wed, Jul 04, 2018 at 04:02:30PM +0200, Richard Weinberger wrote:
+> If ubifs_garbage_collect_leb() notes a LPT problem, empty LEB, but
+> LPT has it makred as used, an ubifs_assert() is not enough.
+> We have to abort GC. Otherwise list_entry() returns an invalid
+> scan object and the kernel crashes.
 > 
-> Fixes: 8a76145a2ec2 ("bpf: explicitly define BPF_FUNC_xxx integer values")
-> 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> c: <stable@vger.kernel.org>
+> Fixes: 1e51764a3c2a ("UBIFS: add new flash file system")
+> Signed-off-by: Richard Weinberger <richard@nod.at>
 > ---
->  scripts/bpf_doc.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/ubifs/gc.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+
+What happened to this patch? It never made it anywhere. I just stumbled
+over this issue and found this patch afterwards.
+
 > 
-> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-> index e8d90829f23e..38d51e05c7a2 100755
-> --- a/scripts/bpf_doc.py
-> +++ b/scripts/bpf_doc.py
-> @@ -271,7 +271,7 @@ class HeaderParser(object):
->              if capture:
->                  fn_defines_str += self.line
->                  helper_name = capture.expand(r'bpf_\1')
-> -                self.helper_enum_vals[helper_name] = int(capture[2])
-> +                self.helper_enum_vals[helper_name] = int(capture.group(2))
->                  self.helper_enum_pos[helper_name] = i
->                  i += 1
->              else:
+> diff --git a/fs/ubifs/gc.c b/fs/ubifs/gc.c
+> index a03a47cf880d..11c09ce3c795 100644
+> --- a/fs/ubifs/gc.c
+> +++ b/fs/ubifs/gc.c
+> @@ -513,7 +513,13 @@ int ubifs_garbage_collect_leb(struct ubifs_info *c, struct ubifs_lprops *lp)
+>  	if (IS_ERR(sleb))
+>  		return PTR_ERR(sleb);
+>  
+> -	ubifs_assert(!list_empty(&sleb->nodes));
+> +	if (list_empty(&sleb->nodes)) {
+> +		ubifs_err(c, "Bad accouting information, LEB %i is marked as used but no nodes found!",
+> +			  lnum);
+> +		dump_stack();
+> +		return -EUCLEAN;
+> +	}
 
-Thanks, the change looks good.
+This changes the behaviour. With ubifs_assert() UBIFS goes readonly, but
+with this change it stays rw. Is this intended?
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+Sascha
 
-Would be nice to have a bit more context in the commit log: As I
-understand, Match objects have been scriptable since Python 3.6 (2016).
-
-Reference: https://docs.python.org/3/whatsnew/3.6.html#re
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
