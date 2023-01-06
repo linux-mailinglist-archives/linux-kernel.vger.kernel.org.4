@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0DB66023A
+	by mail.lfdr.de (Postfix) with ESMTP id E9B0B66023B
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbjAFOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S235062AbjAFOcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbjAFOb3 (ORCPT
+        with ESMTP id S234964AbjAFObg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:31:29 -0500
-Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD507F46D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:31:20 -0800 (PST)
-Date:   Fri, 06 Jan 2023 14:31:11 +0000
+        Fri, 6 Jan 2023 09:31:36 -0500
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CFF7F47C;
+        Fri,  6 Jan 2023 06:31:30 -0800 (PST)
+Date:   Fri, 06 Jan 2023 14:31:19 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1673015478; x=1673274678;
-        bh=zwgxDtrvvsnKx3WwIiMDTQ8qwPQosXJZ2V7U0l4c1eg=;
+        s=protonmail3; t=1673015488; x=1673274688;
+        bh=DtWV4ywnzbPv/3t4iWW53UDI2kgtD4vFbsJ8JLoPO6A=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=kR4wRpqtPRneXInVTW1WRLYAwKN3zaJ8PjaTKTTL6DUL4lToK8fHTZ7oUHqMobIfw
-         aO2D6qvOGUiz1YMm7MNWdXP7MrsaNWx8cLC9cWWocG20JpKAfqUhCo+bh8ChUtl32l
-         hkiwW2JszoAATrIth6JSTeDzl8dPBYVwQTV+VspeZzHq/FavrKVwqC9oTXAYYwmaGc
-         HIqeawU051Z+Ib5EnRWf+WEwWKJPBTIz9rk/cLbauksrhwnplOeVEg26n6kQ0T9Y2K
-         RSkNf4fos+IcrX270MZciNChFrj6rVwo5rCqVuW1aoPU3i172UX0R/lnTAlK8lltf4
-         jI7tQj9kBxYpA==
+        b=gv+ZO6GhXJCsor3tezbhHErNjyeymOKbXpLlxmUyAYTOfuNsHsevUAvRFeq9FMv0w
+         AZjj1v7aeeRbtwAuQx/eCs4OQOy/dKUw8hjUuK94Ro/FssjtW6ZtlDNUv8xYh2GZ30
+         4ds6z8HlaaHCuiCyqR9dL7m6ZovCIRPz0rbm95FzQLLgaH7lSqTj5Z2Rc9QIzkljNf
+         9Pxj9PbGQVbF4G67DsNHAA3H1RFRSO8LNM1huiFNq7jD1nzUsZ3TWwRbnrZkebUWuK
+         PtA258/LwBycSF6QXZSCxBzKsbT9vznzofuGvgPz8j3JpwVixX6AiCvcj/oVjOuag+
+         ckiCi2x894Vew==
 To:     devicetree@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -43,8 +43,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 2/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add initial common device tree
-Message-ID: <20230106143010.547140-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v6 3/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add new device trees
+Message-ID: <20230106143024.547194-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20230106142748.546975-1-linmengbo0689@protonmail.com>
 References: <20230106142748.546975-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -61,79 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The smartphones below are using the MSM8916 SoC,
-which are released in 2015-2016:
+After moving msm8916-samsung-j5.dts to msm8916-samsung-j5-common.dtsi,
+Add new J5 2016 device tree.
 
-Samsung Galaxy J5 2015 (SM-J500*)
-Samsung Galaxy J5 2016 (SM-J510*)
-
-Move msm8916-samsung-j5.dts to msm8916-samsung-j5-common.dtsi, and add
-a common device tree for with initial support for:
-
-- GPIO keys
-- SDHCI (internal and external storage)
-- USB Device Mode
-- UART (on USB connector via the SM5703 MUIC)
-- WCNSS (WiFi/BT)
-- Regulators
-
-The two devices (all other variants of J5 released in 2015 and J5X
-released in 2016) are very similar, with some differences in display and
-GPIO pins. The common parts are shared in msm8916-samsung-j5-common.dtsi
-to reduce duplication.
-
-This patch rewrites J5 2015 devices, later patches will add support for
-other models.
-
+[Add j5x device tree]
+Co-developed-by: Josef W Menad <JosefWMenad@protonmail.ch>
+Signed-off-by: Josef W Menad <JosefWMenad@protonmail.ch>
+[Use &pm8916_usbin as USB extcon and add chassis-type for j5x]
+Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+[Use common init device tree]
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- ...-j5.dts =3D> msm8916-samsung-j5-common.dtsi} |   7 -
- .../boot/dts/qcom/msm8916-samsung-j5.dts      | 224 ++----------------
- 2 files changed, 15 insertions(+), 216 deletions(-)
- copy arch/arm64/boot/dts/qcom/{msm8916-samsung-j5.dts =3D> msm8916-samsung=
--j5-common.dtsi} (95%)
- rewrite arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts (93%)
+ arch/arm64/boot/dts/qcom/Makefile                |  1 +
+ arch/arm64/boot/dts/qcom/msm8916-samsung-j5x.dts | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-j5x.dts
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts b/arch/arm64/b=
-oot/dts/qcom/msm8916-samsung-j5-common.dtsi
-similarity index 95%
-copy from arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
-copy to arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-index 7ac49a021563..502b38d4a61e 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-@@ -1,15 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
-=20
--/dts-v1/;
--
- #include "msm8916-pm8916.dtsi"
- #include <dt-bindings/gpio/gpio.h>
-=20
- / {
--=09model =3D "Samsung Galaxy J5 (2015)";
--=09compatible =3D "samsung,j5", "qcom,msm8916";
--=09chassis-type =3D "handset";
--
- =09aliases {
- =09=09serial0 =3D &blsp1_uart2;
- =09};
-@@ -92,7 +86,6 @@ &usb {
-=20
- &usb_hs_phy {
- =09extcon =3D <&pm8916_usbin>;
--=09qcom,init-seq =3D /bits/ 8 <0x1 0x19 0x2 0x0b>;
- };
-=20
- &smd_rpm_regulators {
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts b/arch/arm64/b=
-oot/dts/qcom/msm8916-samsung-j5.dts
-dissimilarity index 93%
-index 7ac49a021563..0a32d33e9778 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
-@@ -?,? +1,15 @@
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/M=
+akefile
+index 3f1d79388df7..a25973a8218d 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -39,6 +39,7 @@ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-gt510.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-gt58.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-heatqlte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-j5.dtb
++dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-j5x.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-on7.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-serranove.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-wingtech-wt86518.dtb
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5x.dts b/arch/arm64/=
+boot/dts/qcom/msm8916-samsung-j5x.dts
+new file mode 100644
+index 000000000000..7656ac4508cf
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5x.dts
+@@ -0,0 +1,11 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
 +/dts-v1/;
@@ -141,13 +106,9 @@ index 7ac49a021563..0a32d33e9778 100644
 +#include "msm8916-samsung-j5-common.dtsi"
 +
 +/ {
-+=09model =3D "Samsung Galaxy J5 (2015)";
-+=09compatible =3D "samsung,j5", "qcom,msm8916";
++=09model =3D "Samsung Galaxy J5 (2016)";
++=09compatible =3D "samsung,j5x", "qcom,msm8916";
 +=09chassis-type =3D "handset";
-+};
-+
-+&usb_hs_phy {
-+=09qcom,init-seq =3D /bits/ 8 <0x1 0x19 0x2 0x0b>;
 +};
 --=20
 2.30.2
