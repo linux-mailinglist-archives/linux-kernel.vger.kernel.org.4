@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB928660068
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F9660077
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjAFMlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S233386AbjAFMpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjAFMlY (ORCPT
+        with ESMTP id S233371AbjAFMpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:41:24 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D16769B24;
-        Fri,  6 Jan 2023 04:41:23 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id g14so1335776ljh.10;
-        Fri, 06 Jan 2023 04:41:23 -0800 (PST)
+        Fri, 6 Jan 2023 07:45:19 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D4B74588;
+        Fri,  6 Jan 2023 04:45:18 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id l184so1367313vsc.0;
+        Fri, 06 Jan 2023 04:45:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2IEXWb90A2ORKetFHJM3fQKwX37z+1Oer7Os7LHk7HE=;
-        b=TToPC1P90xgzIbNwuuuPO4EtE2wkqj9SO4p4W2r03VQ4DB+lCy1UxHBl4TlEQEF+Ii
-         REkY0Tb0Xqoar17Mi6Dfluz05qJhRQCLjbLp/iW7FWhe3WeGnU9RjqCHtPHYG8agEMd4
-         7mrPUGPArHaLyP4c2fhxyYabgnTD/rKJOuL2HapZB4e5yEAA1WqjcG2fLeU/fM45fo+M
-         9Cbl4hKp/BqbXX9h9z33NOoFaHa7wdVZY5RKODyx6jkQKYD8gai863vT7tGHsZJFz5a6
-         9oWax3naEbnKT9zbUYkVEBv/3VuaG7CFxN8sM95mR/4hIVuW7kT2tGOE1Zk/H20SUilf
-         EFPw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jL6yKbuIG5bg58/evB7hjRBzcxcNlKUiVEr9ODI7ufw=;
+        b=TkItBn/CS4JazJCi5yzrFkv4FFdOD+vEwo92+R3UjHUPhT79HVut13Xw6h2RdP/ktJ
+         HDEyslFM9HktYRF/ZTJqaJE3OtTmB/H5I/L2FRbZEWQ/87WoULShnlX7Xt9IIBFH9XBk
+         TuWfM7Zum6RmJOQLUTqEDpiheoFzB1V7tpRPysMlJk/PDii1+ByLczX7zBljYjs8tiPQ
+         vf0yapYm2fivghkpWaJLXvgDiImzKzz6bPWOD/yIfuFa/hyhpzTiG5dbK0DZsF+LJJQB
+         /Dj9xpH4ruQNObqHHKVd5lD8+yTt/afcy3jJ7vc7mnkJxy3JG5XkCqzYMvW0A6TltuPp
+         3Bng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2IEXWb90A2ORKetFHJM3fQKwX37z+1Oer7Os7LHk7HE=;
-        b=oiNA+XLOeVHNw4xYB8tQrp5ygObP4CFTb7jimECNuunmqCvghzqTatPl9MkacHTj1N
-         ix+LFhn/hDHLTZmctJymSdXiZhSPkcnTHLZAojkqwY15KlCzKqRif8SmfG9tSP20ip35
-         7vHal5Kv84TWsFgDuux1GmrmnXYRVqrJs6VoHt5Kq1bAZqT/hC+iCi5KON0wz0C5GNJZ
-         e9Qt0IvXf6LUZkdNgxl5Nf1NOPANU+4d0GDIFcH0K9SaMlByLuTZJ9wKdwO4XYT2AjGd
-         XJTONEl1HlFoRwmUfX2u2sQasnQsz98ewS17hWrTaewlLNvddTub81ExD7GzyzQ4//E0
-         IOlg==
-X-Gm-Message-State: AFqh2kqu8mRt/yaGYBdzdOPY4noOHafWSnIrCfUFgESAUT+bt/w39uJP
-        lzntefLZaXrBiLpdu1jI54Q=
-X-Google-Smtp-Source: AMrXdXuuvyBfKUIHCcRdIkLZGHWR3DULmqKZZWFxcW+qVza2hQQ693JqcAig2NKuMvKRn6zqQzjK7A==
-X-Received: by 2002:a2e:8256:0:b0:27f:ecef:bec7 with SMTP id j22-20020a2e8256000000b0027fecefbec7mr4992055ljh.20.1673008881754;
-        Fri, 06 Jan 2023 04:41:21 -0800 (PST)
-Received: from [192.168.0.108] (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
-        by smtp.googlemail.com with ESMTPSA id be40-20020a05651c172800b0027ff5abbc96sm93018ljb.130.2023.01.06.04.41.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 04:41:21 -0800 (PST)
-Message-ID: <2a6748b5-df3b-b3a7-f17a-664aab030b48@gmail.com>
-Date:   Fri, 6 Jan 2023 14:41:20 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jL6yKbuIG5bg58/evB7hjRBzcxcNlKUiVEr9ODI7ufw=;
+        b=tXAS2O0dCzKREnrpWFczf+nwyc4omT/XFsiOc8Ng6pesPD8tQNFt/osrVzI+U81yvL
+         Q+vMtGAsamB/5j2+i82RR+Kr0IxM3AmTCCBmHncUcsfMafb+Pu4jyJkGiuXI/Sb/3uw2
+         XxK6ChnQUABY2RgV0EJy77IRtpn3+PuN7gIk2Jd6maD5g6QUiv1NhnuK7/VcSQYPyqaD
+         L/Gq810z8M9vt2gcLd1eSoErEDR4g9UCizGX3YwREMYEb0nSfkuuH7nJ+LoPw2W+1oSa
+         7ONQ+KRxmqDo5Cth49yFzL6qdmK4H5ZpPM0Ql6xbYr0MmiT5nE+ExLTzDHVgUkjeOETe
+         Or2A==
+X-Gm-Message-State: AFqh2kodlhmjLi7upkXW+thy5Nb3pIEmnulrl9auyotCpwX2GXUuSJSd
+        WpunckUGNJWp367pLGiqK7SpG4llPIiVIcOt0L69uavmbv35Fg==
+X-Google-Smtp-Source: AMrXdXvYT2C0w2+sD74BfOfSicY9vAuLMtmsc92pY36FpG7KMWfK0oehgZvbwnJzvhULP62lifut0FGhYqxS7x3FbK4=
+X-Received: by 2002:a05:6102:510e:b0:3b1:2b83:1861 with SMTP id
+ bm14-20020a056102510e00b003b12b831861mr6419257vsb.10.1673009117334; Fri, 06
+ Jan 2023 04:45:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/3] dt-bindings: pinctrl: msm8226: Add General Purpose
- clocks
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106114403.275865-1-matti.lehtimaki@gmail.com>
- <20230106114403.275865-2-matti.lehtimaki@gmail.com>
- <b866e6e1-da10-9152-8bda-966015998877@linaro.org>
-Content-Language: en-US
-From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
-In-Reply-To: <b866e6e1-da10-9152-8bda-966015998877@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221220112927.440506-1-alistair@alistair23.me>
+ <20221220112927.440506-2-alistair@alistair23.me> <20221220132033.s5idqrol5kqxjasy@pengutronix.de>
+ <7a2dfaab-5340-236a-064d-15db3e00f409@pengutronix.de>
+In-Reply-To: <7a2dfaab-5340-236a-064d-15db3e00f409@pengutronix.de>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Fri, 6 Jan 2023 22:44:50 +1000
+Message-ID: <CAKmqyKOtDXUd6oxSmZjDc6NJHfVonBE67C-ddTmpfyPMaTtAnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        devicetree@vger.kernel.org, kernel@pengutronix.de, arnd@arndb.de,
+        festevam@gmail.com, s.hauer@pengutronix.de,
+        linux-kernel@vger.kernel.org, jernej.skrabec@gmail.com,
+        linux@armlinux.org.uk, robh+dt@kernel.org, linux-imx@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,20 +75,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6.1.2023 14.32, Krzysztof Kozlowski wrote:
-> On 06/01/2023 12:44, Matti Lehtimäki wrote:
->> +                blsp_uart3, blsp_uart4, blsp_uart5, cam_mclk0,
->> cam_mclk1, +                gp0_clk, gp1_clk, sdc3, wlan ]
-> 
-> Driver does not support them (and there is no driver change, unless
-> you cc-ed people selectively...).
+On Wed, Dec 21, 2022 at 2:51 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>
+> Hello Alistair,
+> Hello Marco,
+>
+> On 20.12.22 14:20, Marco Felsch wrote:
+> > Hi Alistair,
+> >
+> > thanks for your patch, please see below.
+> >
+> > On 22-12-20, Alistair Francis wrote:
+> >> Add support for the cyttsp5 touchscreen controller for the reMarkable 2.
+> >>
+> >> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> >> ---
+> >>  arch/arm/boot/dts/imx7d-remarkable2.dts | 98 +++++++++++++++++++++++++
+> >>  1 file changed, 98 insertions(+)
+> >>
+> >> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> >> index 8b2f11e85e05..a138b292ec6a 100644
+> >> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> >> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> >> @@ -8,6 +8,7 @@
+> >>  /dts-v1/;
+> >>
+> >>  #include "imx7d.dtsi"
+> >> +#include <dt-bindings/input/linux-event-codes.h>
+> >>
+> >>  / {
+> >>      model = "reMarkable 2.0";
+> >> @@ -69,6 +70,18 @@ reg_digitizer: regulator-digitizer {
+> >>              startup-delay-us = <100000>; /* 100 ms */
+> >>      };
+> >>
+> >> +    reg_touch: regulator-touch {
+> >> +            compatible = "regulator-fixed";
+> >> +            regulator-name = "VDD_3V3_TOUCH";
+> >> +            regulator-min-microvolt = <3300000>;
+> >> +            regulator-max-microvolt = <3300000>;
+> >> +            pinctrl-names = "default", "sleep";
+> >> +            pinctrl-0 = <&pinctrl_touch_reg>;
+> >> +            pinctrl-1 = <&pinctrl_touch_reg>;
+> >
+> > Why do we need a "sleep" state here?
 
-The driver changes are in patch number 2 of the series, I used
-git send-mail with a cc script, which uses get_maintainer.pl to
-get the needed addresses for each patch, to send the patches. It
-probably didn't send every patch to everyone and would need some
-improvement.
+Removed
 
--Matti
+> >
+> >> +            gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+> >> +            enable-active-high;
+> >> +    };
+> >> +
+> >>      wifi_pwrseq: wifi_pwrseq {
+> >>              compatible = "mmc-pwrseq-simple";
+> >>              pinctrl-names = "default";
+> >> @@ -106,6 +119,68 @@ wacom_digitizer: digitizer@9 {
+> >>      };
+> >>  };
+> >>
+> >> +&i2c3 {
+> >> +    clock-frequency = <100000>;
+> >
+> > This can be set to 400kHz, the driver handle the quirks internal.
+>
+> I would either leave this at 100kHz or increase to the maximum of
+> 384 kHz. DT is supposed to describe the hardware and if 400 kHz
+> isn't a safe frequency, it should be avoided, even if the Linux
+> driver handles it gracefully.
 
+I'm going to leave this at 100kHz then. Let me know if you want me to
+bump it to 384kHz instead.
 
+Alistair
+
+>
+> Cheers,
+> Ahmad
+>
+> >
+> > Regards,
+> >   Marco
+> >
+> >> +    pinctrl-names = "default";
+> >> +    pinctrl-0 = <&pinctrl_i2c3>;
+> >> +    status = "okay";
+> >> +
+> >> +    touchscreen@24 {
+> >> +            compatible = "cypress,tt21000";
+> >> +            reg = <0x24>;
+> >> +            pinctrl-names = "default";
+> >> +            pinctrl-0 = <&pinctrl_touch>;
+> >> +            interrupt-parent = <&gpio1>;
+> >> +            interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+> >> +            reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+> >> +            vdd-supply = <&reg_touch>;
+> >> +            touchscreen-size-x = <880>;
+> >> +            touchscreen-size-y = <1280>;
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            button@0 {
+> >> +                    reg = <0>;
+> >> +                    linux,keycodes = <KEY_HOMEPAGE>;
+> >> +            };
+> >> +
+> >> +            button@1 {
+> >> +                    reg = <1>;
+> >> +                    linux,keycodes = <KEY_MENU>;
+> >> +            };
+> >> +
+> >> +            button@2 {
+> >> +                    reg = <2>;
+> >> +                    linux,keycodes = <KEY_BACK>;
+> >> +            };
+> >> +
+> >> +            button@3 {
+> >> +                    reg = <3>;
+> >> +                    linux,keycodes = <KEY_SEARCH>;
+> >> +            };
+> >> +
+> >> +            button@4 {
+> >> +                    reg = <4>;
+> >> +                    linux,keycodes = <KEY_VOLUMEDOWN>;
+> >> +            };
+> >> +
+> >> +            button@5 {
+> >> +                    reg = <5>;
+> >> +                    linux,keycodes = <KEY_VOLUMEUP>;
+> >> +            };
+> >> +
+> >> +            button@6 {
+> >> +                    reg = <6>;
+> >> +                    linux,keycodes = <KEY_CAMERA>;
+> >> +            };
+> >> +
+> >> +            button@7 {
+> >> +                    reg = <7>;
+> >> +                    linux,keycodes = <KEY_POWER>;
+> >> +            };
+> >> +    };
+> >> +};
+> >> +
+> >>  &i2c4 {
+> >>      clock-frequency = <100000>;
+> >>      pinctrl-names = "default", "sleep";
+> >> @@ -232,6 +307,15 @@ MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11    0x00000014
+> >>              >;
+> >>      };
+> >>
+> >> +    pinctrl_touch: touchgrp {
+> >> +            fsl,pins = <
+> >> +                    /* CYTTSP interrupt */
+> >> +                    MX7D_PAD_GPIO1_IO14__GPIO1_IO14         0x54
+> >> +                    /* CYTTSP reset */
+> >> +                    MX7D_PAD_GPIO1_IO13__GPIO1_IO13         0x04
+> >> +            >;
+> >> +    };
+> >> +
+> >>      pinctrl_i2c1: i2c1grp {
+> >>              fsl,pins = <
+> >>                      MX7D_PAD_I2C1_SDA__I2C1_SDA             0x4000007f
+> >> @@ -239,6 +323,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL             0x4000007f
+> >>              >;
+> >>      };
+> >>
+> >> +    pinctrl_i2c3: i2c3grp {
+> >> +            fsl,pins = <
+> >> +                    MX7D_PAD_I2C3_SDA__I2C3_SDA             0x4000007f
+> >> +                    MX7D_PAD_I2C3_SCL__I2C3_SCL             0x4000007f
+> >> +            >;
+> >> +    };
+> >> +
+> >>      pinctrl_i2c4: i2c4grp {
+> >>              fsl,pins = <
+> >>                      MX7D_PAD_I2C4_SDA__I2C4_SDA             0x4000007f
+> >> @@ -246,6 +337,13 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL             0x4000007f
+> >>              >;
+> >>      };
+> >>
+> >> +    pinctrl_touch_reg: touchreggrp {
+> >> +            fsl,pins = <
+> >> +                    /* TOUCH_PWR_EN */
+> >> +                    MX7D_PAD_GPIO1_IO11__GPIO1_IO11         0x14
+> >> +            >;
+> >> +    };
+> >> +
+> >>      pinctrl_uart1: uart1grp {
+> >>              fsl,pins = <
+> >>                      MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX    0x79
+> >> --
+> >> 2.38.1
+> >>
+> >>
+> >>
+> >
+> >
+>
+> --
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>
