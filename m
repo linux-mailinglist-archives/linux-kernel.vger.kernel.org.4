@@ -2,74 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6F266083F
+	by mail.lfdr.de (Postfix) with ESMTP id AF680660840
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjAFUYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
+        id S235842AbjAFUYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjAFUY1 (ORCPT
+        with ESMTP id S230308AbjAFUY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 Jan 2023 15:24:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD388FC5;
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCF663D0;
         Fri,  6 Jan 2023 12:24:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16B3AB81E95;
-        Fri,  6 Jan 2023 20:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D3BC43396;
-        Fri,  6 Jan 2023 20:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673036663;
-        bh=0KuWCg8Jmwvu7nhxqZhepBZzEJ4BG2/U7bhs8grOa0A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NE75Eh62cPiQtZwdMykDUv4azIWOcclQ2fq+17CLNRTorpOFiKnBupSfmlgBfW9Mh
-         hD/Vtdc6xVvrcrJpLi2YVUr9Sw2Q78rMJKzoi2SvoZFErdEBxW9J89YdzrCJZs146+
-         p5awZBVUCDRF1Kj1Kk23mIR8kXc5GjGgxT4LnJeSMUYhysbwof+xUrN0HtAMDfrp0f
-         Xw4FcDi4h4ope82OBu4PTOm9LjTcsr7/CgGLBwHHM0bK+gRQRjohIB0lt820Val2Yk
-         8kK6cjhVlkpOv7H6jeSC1Be/ajk9UZQ5jR/u8wA2ablXvKh+iv07k97GRh6Ysq+rj0
-         becPY3Fy0FgGQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_schowdhu@quicinc.com, yang.lee@linux.alibaba.com
-Cc:     konrad.dybcio@linaro.org, abaci@linux.alibaba.com,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] soc: qcom: dcc: Fix unsigned comparison with less than zero
-Date:   Fri,  6 Jan 2023 14:24:19 -0600
-Message-Id: <167303665354.1802272.14384992770455268720.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230106011710.2827-1-yang.lee@linux.alibaba.com>
-References: <20230106011710.2827-1-yang.lee@linux.alibaba.com>
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 2036420007;
+        Fri,  6 Jan 2023 20:24:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1673036663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mXLB7qYeHa4vBxvLqa2JDTW+ypBNPll5UV2mYQOZFiQ=;
+        b=FxMDIq/5b+4qc8QZ/sXXfdW6wfXGP5CoTI++ELmLTMpcdgQyej7aQP57Z0f0ChZTfC742N
+        q62yCwvhXfDM5lLterNs8mapRDFo6kti1cJBcs6NSmL7w7+IHVZ1760qwTJHfhUDryAqaQ
+        cb6R7tBiCEZ7u+aJEFXfQDUesoHo0Gc5O3lB8aMQyM3fpqPyJe+WIqj9Ichh7VCldYpGF2
+        ugpeakHCnY5dMqvzM9pB4DMw3HPMc2s7TNsg2UG3eO9u3bQWVv3Np5XDiSZKZ/WqZSAPfH
+        g+hQcNFuSF49Jfag8sNhaY6oGf2RMTO68JFcDuEoq8SBSFUrl7OwWxMA35OZMA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Date:   Fri, 06 Jan 2023 21:24:22 +0100
+From:   clement.leger@bootlin.com
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: lan966x: check for ptp to be enabled in
+ lan966x_ptp_deinit()
+In-Reply-To: <20230106202148.77gkauaikjhyjcvi@soft-dev3-1>
+References: <20230106134830.333494-1-clement.leger@bootlin.com>
+ <20230106202148.77gkauaikjhyjcvi@soft-dev3-1>
+Message-ID: <de966535b41ea9be931083f59ddd3dcb@bootlin.com>
+X-Sender: clement.leger@bootlin.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 09:17:10 +0800, Yang Li wrote:
-> The return value from the call to kstrtouint_from_user() is int.
-> However, the return value is being assigned to
-> an unsigned int variable 'ret', so making 'ret' an int.
+Le 2023-01-06 21:21, Horatiu Vultur a écrit :
+> The 01/06/2023 14:48, Clément Léger wrote:
 > 
-> Eliminate the following warning:
-> ./drivers/soc/qcom/dcc.c:815:5-8: WARNING: Unsigned expression compared with zero: ret < 0
+> Hi Clement,
 > 
-> [...]
+>> 
+>> If ptp was not enabled due to missing IRQ for instance,
+>> lan966x_ptp_deinit() will dereference NULL pointers.
+>> 
+>> Fixes: d096459494a8 ("net: lan966x: Add support for ptp clocks")
+>> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> 
+> You forgot to mark the patch to target the net tree.  But other
+> than that looks good.
 
-Applied, thanks!
+Hi Horatiu,
 
-[1/1] soc: qcom: dcc: Fix unsigned comparison with less than zero
-      commit: d4b2c7484a8edd79c90b9f8acc8a03e5e3235b89
+I'll resent a V2 to the net tree then. Thanks for reviewing.
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Clément
+
+> 
+> Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> 
+>> ---
+>>  drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c 
+>> b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+>> index f9ebfaafbebc..a8348437dd87 100644
+>> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+>> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+>> @@ -1073,6 +1073,9 @@ void lan966x_ptp_deinit(struct lan966x *lan966x)
+>>         struct lan966x_port *port;
+>>         int i;
+>> 
+>> +       if (!lan966x->ptp)
+>> +               return;
+>> +
+>>         for (i = 0; i < lan966x->num_phys_ports; i++) {
+>>                 port = lan966x->ports[i];
+>>                 if (!port)
+>> --
+>> 2.38.1
+>> 
