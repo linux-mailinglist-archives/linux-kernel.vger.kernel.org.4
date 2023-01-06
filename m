@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368BD65FC55
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F9965FC5B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjAFH6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 02:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S232173AbjAFH6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 02:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAFH6P (ORCPT
+        with ESMTP id S232011AbjAFH6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 02:58:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06F07814E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:57:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672991854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xmb3IcLHCLsi/xOiQHUkWYlXfS8doiaC8cJwdmVUFK4=;
-        b=SLVzg7+qVCkSPwpEXCMyFeNPY9fsRC3J6m6t9JyyNaGFIjjHxovBVrdPL/kwwpyv/tLyr+
-        uAEuds0xSUup0UDOyInIosfoE5Z2o/gfG+Wqj40CVNLzVuwrG63GucOn2dCZ3OWAJ+VClz
-        dumlyhgYGDzQ/s+rMBR1O1MSWa7geiY=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-opQbHaJpNla5Pd1-tacLIQ-1; Fri, 06 Jan 2023 02:57:32 -0500
-X-MC-Unique: opQbHaJpNla5Pd1-tacLIQ-1
-Received: by mail-yb1-f199.google.com with SMTP id e12-20020a25500c000000b007b48c520262so1153849ybb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 23:57:32 -0800 (PST)
+        Fri, 6 Jan 2023 02:58:23 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605CB78E87;
+        Thu,  5 Jan 2023 23:58:18 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id a184so545508pfa.9;
+        Thu, 05 Jan 2023 23:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XouvIEMckFD/n/i3TL+KNnzKZMtEfFo4i1p26wV2Wug=;
+        b=HxIzGIhS2baO56Zs94wmhwt5tFoq9wj29F1lVQi6rWumWHmsDysbHm4U5DD7UP1wg/
+         FiU46dlHPLI/xvdBO2FIHfg8QlIpKLK7heoXRRWJ6sD504Fwd2yE5n+zPN13X9swSK8g
+         o1RNDmDgJJktcpSWMlSAgFF4RhyF4MpgZmvDUTQRmmoW/UgUdDdcUMfkRVMvmLDrNGeG
+         f+PHW5RNt+ijnKvmVZeIe0hUJIVek4ARAqet6stWBiu1cIogdeXjogsJfBtQfY2RFcZ9
+         Aycsf24xU0nZK5NcEe60jtKDdS8J9zmWVS1bVDlgFiM3vlDJaQv6PXfSnHtmGKHHZ1aB
+         N7pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xmb3IcLHCLsi/xOiQHUkWYlXfS8doiaC8cJwdmVUFK4=;
-        b=xAtjgmPe5TT0Mtqt47PyQv1sE2raIzKgD2mb2Q/40NFUKH7tXHMPL5DLucX6Ke6c6l
-         kMyy7gMCuvUAFW+NcREGKta9t5h3MvQmMCd7vmvkfftUnR1/IEOWL54C5jK16DpEj8Sh
-         WCY0qwOPqS7Dh3SZXUTiWhuIBiRPDLJO55Vf7N0Dho7jwB6uuGw6Q4fMX4hkf8T3cVCd
-         /3aRgCgdox19s78g67s9JNW4rSh8mM4PW1NGWLqhotJ6cTA9P0Y0YSJQv3UuNMBGZ1Uj
-         xpgv3P9xXl8RnYriTNe0NAUyaAi0W3cK1atSua/1RFZNMPavCjYhuy3yvPcfylkesIz3
-         W6wg==
-X-Gm-Message-State: AFqh2kq+xkkVwiP/NNQSKIwSZMU3R/MhOrdF66oOg6xQlzQ632xlYTgU
-        Vsw8zxCT1mpf5bjnoOFT4SsZUfWdp9ahk37RrFBjMcnhfp3uGJTfPoJBRMCMMnER478ZauUszXI
-        2hi/QvjilRxHpRQe6cKSM/vce/GUOtWguahi32Esh
-X-Received: by 2002:a05:690c:87:b0:46f:36b1:a27 with SMTP id be7-20020a05690c008700b0046f36b10a27mr4200659ywb.147.1672991851850;
-        Thu, 05 Jan 2023 23:57:31 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuC/bbIcMr4bQ8ok16zXLqM2NrU98mA2WJd0uc+HAfHs8BnKxPTLzGpg1jIsSESD/q9eqv3v1Jyw7xgl7+RWvk=
-X-Received: by 2002:a05:690c:87:b0:46f:36b1:a27 with SMTP id
- be7-20020a05690c008700b0046f36b10a27mr4200651ywb.147.1672991851590; Thu, 05
- Jan 2023 23:57:31 -0800 (PST)
+        bh=XouvIEMckFD/n/i3TL+KNnzKZMtEfFo4i1p26wV2Wug=;
+        b=2Hg8KPq/HiWlibvJKpQLr/ZnP2OeNIyD19l2zE9xLii2NuWO1HGN/bgn1VcA0EeBfp
+         y5MyKy6XZvAvSvuFJSGWC39qNy9WIl380cWQytu6ONc1b2tdAhO0jw8daM37nUjDb7u7
+         tOKf8N4Gucm7YqoSkwB2Bhlazd89OgEUyvFevSs3G0lXLS3jNhKW9N0bf4qUHrSq0yyY
+         3bQwWFkljicDOOckYWxpXkdERRV69VsXetTzMPn1RmA2a0l5JvnKdumlSTNiBxHpP+1E
+         cy9J89XOn29JGCal0ATbRkaphsPA3YRwSi4b+LYdNwrD+/fiDtJxc+SoE2c8bEG4hcWw
+         b/Tw==
+X-Gm-Message-State: AFqh2krxWSBmLHWXmoHaQUeOYjZsZhI5YKcu1jGHJwAN+oeOTnPAO+4Z
+        LgIRXmAwJeK9J3BVpXQt2pQ=
+X-Google-Smtp-Source: AMrXdXsUqeGN9iLG7PBrUzR0ek75zRLm2VCDCD6Jppc+fB/f6lg8Snvllo4Hh3lRJnMK1f3zpfgnpg==
+X-Received: by 2002:a62:184c:0:b0:581:1e00:beeb with SMTP id 73-20020a62184c000000b005811e00beebmr45473824pfy.15.1672991897814;
+        Thu, 05 Jan 2023 23:58:17 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id p7-20020a625b07000000b005825460056asm515765pfb.70.2023.01.05.23.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 23:58:17 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] media: platform: Fix refcount leak in probe and remove function
+Date:   Fri,  6 Jan 2023 11:58:09 +0400
+Message-Id: <20230106075809.966856-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230104211448.4804-1-vishal.moola@gmail.com> <20230104211448.4804-18-vishal.moola@gmail.com>
-In-Reply-To: <20230104211448.4804-18-vishal.moola@gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Fri, 6 Jan 2023 08:57:20 +0100
-Message-ID: <CAHc6FU55EfV0qvtpPUWAvHm72kPd7Rzb8=-GX0oFgfJonXt7Pg@mail.gmail.com>
-Subject: Re: [Cluster-devel] [PATCH v5 17/23] gfs2: Convert
- gfs2_write_cache_jdata() to use filemap_get_folios_tag()
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-btrfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,177 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 10:15 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
-> Converted function to use folios throughout. This is in preparation for
-> the removal of find_get_pgaes_range_tag(). This change removes 8 calls
-> to compound_head().
->
-> Also had to modify and rename gfs2_write_jdata_pagevec() to take in
-> and utilize folio_batch rather than pagevec and use folios rather
-> than pages. gfs2_write_jdata_batch() now supports large folios.
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  fs/gfs2/aops.c | 64 +++++++++++++++++++++++++++-----------------------
->  1 file changed, 35 insertions(+), 29 deletions(-)
->
-> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
-> index e782b4f1d104..0a47068f9acc 100644
-> --- a/fs/gfs2/aops.c
-> +++ b/fs/gfs2/aops.c
-> @@ -195,67 +195,71 @@ static int gfs2_writepages(struct address_space *mapping,
->  }
->
->  /**
-> - * gfs2_write_jdata_pagevec - Write back a pagevec's worth of pages
-> + * gfs2_write_jdata_batch - Write back a folio batch's worth of folios
->   * @mapping: The mapping
->   * @wbc: The writeback control
-> - * @pvec: The vector of pages
-> - * @nr_pages: The number of pages to write
-> + * @fbatch: The batch of folios
->   * @done_index: Page index
->   *
->   * Returns: non-zero if loop should terminate, zero otherwise
->   */
->
-> -static int gfs2_write_jdata_pagevec(struct address_space *mapping,
-> +static int gfs2_write_jdata_batch(struct address_space *mapping,
->                                     struct writeback_control *wbc,
-> -                                   struct pagevec *pvec,
-> -                                   int nr_pages,
-> +                                   struct folio_batch *fbatch,
->                                     pgoff_t *done_index)
->  {
->         struct inode *inode = mapping->host;
->         struct gfs2_sbd *sdp = GFS2_SB(inode);
-> -       unsigned nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
-> +       unsigned nrblocks;
->         int i;
->         int ret;
-> +       int nr_pages = 0;
-> +       int nr_folios = folio_batch_count(fbatch);
-> +
-> +       for (i = 0; i < nr_folios; i++)
-> +               nr_pages += folio_nr_pages(fbatch->folios[i]);
-> +       nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
->
->         ret = gfs2_trans_begin(sdp, nrblocks, nrblocks);
->         if (ret < 0)
->                 return ret;
->
-> -       for(i = 0; i < nr_pages; i++) {
-> -               struct page *page = pvec->pages[i];
-> +       for (i = 0; i < nr_folios; i++) {
-> +               struct folio *folio = fbatch->folios[i];
->
-> -               *done_index = page->index;
-> +               *done_index = folio->index;
->
-> -               lock_page(page);
-> +               folio_lock(folio);
->
-> -               if (unlikely(page->mapping != mapping)) {
-> +               if (unlikely(folio->mapping != mapping)) {
->  continue_unlock:
-> -                       unlock_page(page);
-> +                       folio_unlock(folio);
->                         continue;
->                 }
->
-> -               if (!PageDirty(page)) {
-> +               if (!folio_test_dirty(folio)) {
->                         /* someone wrote it for us */
->                         goto continue_unlock;
->                 }
->
-> -               if (PageWriteback(page)) {
-> +               if (folio_test_writeback(folio)) {
->                         if (wbc->sync_mode != WB_SYNC_NONE)
-> -                               wait_on_page_writeback(page);
-> +                               folio_wait_writeback(folio);
->                         else
->                                 goto continue_unlock;
->                 }
->
-> -               BUG_ON(PageWriteback(page));
-> -               if (!clear_page_dirty_for_io(page))
-> +               BUG_ON(folio_test_writeback(folio));
-> +               if (!folio_clear_dirty_for_io(folio))
->                         goto continue_unlock;
->
->                 trace_wbc_writepage(wbc, inode_to_bdi(inode));
->
-> -               ret = __gfs2_jdata_writepage(page, wbc);
-> +               ret = __gfs2_jdata_writepage(&folio->page, wbc);
->                 if (unlikely(ret)) {
->                         if (ret == AOP_WRITEPAGE_ACTIVATE) {
-> -                               unlock_page(page);
-> +                               folio_unlock(folio);
->                                 ret = 0;
->                         } else {
->
-> @@ -268,7 +272,8 @@ static int gfs2_write_jdata_pagevec(struct address_space *mapping,
->                                  * not be suitable for data integrity
->                                  * writeout).
->                                  */
-> -                               *done_index = page->index + 1;
-> +                               *done_index = folio->index +
-> +                                       folio_nr_pages(folio);
->                                 ret = 1;
->                                 break;
->                         }
-> @@ -305,8 +310,8 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->  {
->         int ret = 0;
->         int done = 0;
-> -       struct pagevec pvec;
-> -       int nr_pages;
-> +       struct folio_batch fbatch;
-> +       int nr_folios;
->         pgoff_t writeback_index;
->         pgoff_t index;
->         pgoff_t end;
-> @@ -315,7 +320,7 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->         int range_whole = 0;
->         xa_mark_t tag;
->
-> -       pagevec_init(&pvec);
-> +       folio_batch_init(&fbatch);
->         if (wbc->range_cyclic) {
->                 writeback_index = mapping->writeback_index; /* prev offset */
->                 index = writeback_index;
-> @@ -341,17 +346,18 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->                 tag_pages_for_writeback(mapping, index, end);
->         done_index = index;
->         while (!done && (index <= end)) {
-> -               nr_pages = pagevec_lookup_range_tag(&pvec, mapping, &index, end,
-> -                               tag);
-> -               if (nr_pages == 0)
-> +               nr_folios = filemap_get_folios_tag(mapping, &index, end,
-> +                               tag, &fbatch);
-> +               if (nr_folios == 0)
->                         break;
->
-> -               ret = gfs2_write_jdata_pagevec(mapping, wbc, &pvec, nr_pages, &done_index);
-> +               ret = gfs2_write_jdata_batch(mapping, wbc, &fbatch,
-> +                               &done_index);
->                 if (ret)
->                         done = 1;
->                 if (ret > 0)
->                         ret = 0;
-> -               pagevec_release(&pvec);
-> +               folio_batch_release(&fbatch);
->                 cond_resched();
->         }
->
-> --
-> 2.38.1
->
+rcar_fcp_get() take reference, which should be balanced with
+rcar_fcp_put(). Add missing rcar_fcp_put() in fdp1_remove and
+the error paths of fdp1_probe() to fix this.
 
-Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
+Fixes: 4710b752e029 ("[media] v4l: Add Renesas R-Car FDP1 Driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+I take commit Fixes: 7113469dafc2 ("media: vsp1: Fix an error handling
+path in the probe function") for reference.
+---
+ drivers/media/platform/renesas/rcar_fdp1.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Thanks,
-Andreas
+diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/platform/renesas/rcar_fdp1.c
+index 37ecf489d112..ed97bb161743 100644
+--- a/drivers/media/platform/renesas/rcar_fdp1.c
++++ b/drivers/media/platform/renesas/rcar_fdp1.c
+@@ -2313,8 +2313,10 @@ static int fdp1_probe(struct platform_device *pdev)
+ 
+ 	/* Determine our clock rate */
+ 	clk = clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(clk))
+-		return PTR_ERR(clk);
++	if (IS_ERR(clk)) {
++		ret = PTR_ERR(clk);
++		goto put_dev;
++	}
+ 
+ 	fdp1->clk_rate = clk_get_rate(clk);
+ 	clk_put(clk);
+@@ -2323,7 +2325,7 @@ static int fdp1_probe(struct platform_device *pdev)
+ 	ret = v4l2_device_register(&pdev->dev, &fdp1->v4l2_dev);
+ 	if (ret) {
+ 		v4l2_err(&fdp1->v4l2_dev, "Failed to register video device\n");
+-		return ret;
++		goto put_dev;
+ 	}
+ 
+ 	/* M2M registration */
+@@ -2393,6 +2395,8 @@ static int fdp1_probe(struct platform_device *pdev)
+ unreg_dev:
+ 	v4l2_device_unregister(&fdp1->v4l2_dev);
+ 
++put_dev:
++	rcar_fcp_put(fdp1->fcp);
+ 	return ret;
+ }
+ 
+@@ -2400,6 +2404,7 @@ static int fdp1_remove(struct platform_device *pdev)
+ {
+ 	struct fdp1_dev *fdp1 = platform_get_drvdata(pdev);
+ 
++	rcar_fcp_put(fdp1->fcp);
+ 	v4l2_m2m_release(fdp1->m2m_dev);
+ 	video_unregister_device(&fdp1->vfd);
+ 	v4l2_device_unregister(&fdp1->v4l2_dev);
+-- 
+2.25.1
 
