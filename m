@@ -2,283 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DAD65FA88
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAFF65FA8A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 05:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjAFD7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 22:59:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S230379AbjAFEAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 23:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjAFD7c (ORCPT
+        with ESMTP id S229451AbjAFEA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 22:59:32 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95C6B59A;
-        Thu,  5 Jan 2023 19:59:31 -0800 (PST)
-Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Np8gr2DzdznTlx;
-        Fri,  6 Jan 2023 11:58:00 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 6 Jan 2023 11:59:27 +0800
-Message-ID: <b2d4c8d9-8852-ddfe-f83b-dd5cedf05ca4@huawei.com>
-Date:   Fri, 6 Jan 2023 11:59:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH RESEND bpf-next 3/4] riscv, bpf: Add
- bpf_arch_text_poke support for RV64
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
- <20221220021319.1655871-4-pulehui@huaweicloud.com>
- <871qobqyh9.fsf@all.your.base.are.belong.to.us>
- <755a5b80-f916-7383-6746-3e202224dfcc@huaweicloud.com>
-From:   Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <755a5b80-f916-7383-6746-3e202224dfcc@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500020.china.huawei.com (7.221.188.8)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 23:00:29 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7606B59C;
+        Thu,  5 Jan 2023 20:00:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8C88BCE1C06;
+        Fri,  6 Jan 2023 04:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53430C433D2;
+        Fri,  6 Jan 2023 04:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1672977624;
+        bh=+UPdXkytzKMtZ3ZWHr4CnIskWe+T5fdDfosPD98BIPQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RiI1TTlG8cChT7br22VuUsCCJFUjhv1+2U6wbep8GVwXIEmQZQqtkiVFnz49/AiI1
+         oMzPMIkX+w0SlJpfyZ+MrlzPWmOyc1FG7DOJDsPxKlFGiwlpUT9KGdYNXEbV8Dp3HV
+         5gXx+czAystFOUsVKop9Yjv8GXgV9V7DIFNk64yY=
+Date:   Thu, 5 Jan 2023 20:00:23 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michael Larabel <michael@michaellarabel.com>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@google.com
+Subject: Re: [PATCH mm-unstable v2 1/2] mm: add vma_has_recency()
+Message-Id: <20230105200023.ac9f34f5b7738eae4fd940d6@linux-foundation.org>
+In-Reply-To: <20221230215252.2628425-1-yuzhao@google.com>
+References: <20221230215252.2628425-1-yuzhao@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 30 Dec 2022 14:52:51 -0700 Yu Zhao <yuzhao@google.com> wrote:
+
+> This patch adds vma_has_recency() to indicate whether a VMA may
+> exhibit temporal locality that the LRU algorithm relies on.
+> 
+> This function returns false for VMAs marked by VM_SEQ_READ or
+> VM_RAND_READ. While the former flag indicates linear access, i.e., a
+> special case of spatial locality, both flags indicate a lack of
+> temporal locality, i.e., the reuse of an area within a relatively
+> small duration.
+> 
+> "Recency" is chosen over "locality" to avoid confusion between
+> temporal and spatial localities.
+> 
+> Before this patch, the active/inactive LRU only ignored the accessed
+> bit from VMAs marked by VM_SEQ_READ. After this patch, the
+> active/inactive LRU and MGLRU share the same logic: they both ignore
+> the accessed bit if vma_has_recency() returns false.
+> 
+> For the active/inactive LRU, the following fio test showed a [6, 8]%
+> increase in IOPS when randomly accessing mapped files under memory
+> pressure.
+> 
+>   kb=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
+>   kb=$((kb - 8*1024*1024))
+> 
+>   modprobe brd rd_nr=1 rd_size=$kb
+>   dd if=/dev/zero of=/dev/ram0 bs=1M
+> 
+>   mkfs.ext4 /dev/ram0
+>   mount /dev/ram0 /mnt/
+>   swapoff -a
+> 
+>   fio --name=test --directory=/mnt/ --ioengine=mmap --numjobs=8 \
+>       --size=8G --rw=randrw --time_based --runtime=10m \
+>       --group_reporting
+> 
+> The discussion that led to this patch is here [1]. Additional test
+> results are available in that thread.
+> 
+> --- a/include/linux/mm_inline.h
+> +++ b/include/linux/mm_inline.h
+> @@ -595,4 +595,12 @@ pte_install_uffd_wp_if_needed(struct vm_area_struct *vma, unsigned long addr,
+>  #endif
+>  }
+>  
+> +static inline bool vma_has_recency(struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))
+> +		return false;
+
+I guess it's fairly obvious why these hints imply "doesn't have
+recency".  But still, some comments wouldn't hurt!
+
+> +	return true;
+> +}
+>  #endif
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 4000e9f017e0..ee72badad847 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1402,8 +1402,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  						force_flush = 1;
+>  					}
+>  				}
+> -				if (pte_young(ptent) &&
+> -				    likely(!(vma->vm_flags & VM_SEQ_READ)))
+> +				if (pte_young(ptent) && likely(vma_has_recency(vma)))
+
+So we're newly using VM_RAND_READ for the legacy LRU?  Deliberate?  If
+so, what are the effects and why?
+
+>  					mark_page_accessed(page);
+>  			}
+>  			rss[mm_counter(page)]--;
+> @@ -5148,8 +5147,8 @@ static inline void mm_account_fault(struct pt_regs *regs,
+>  #ifdef CONFIG_LRU_GEN
+>  static void lru_gen_enter_fault(struct vm_area_struct *vma)
+>  {
+> -	/* the LRU algorithm doesn't apply to sequential or random reads */
+> -	current->in_lru_fault = !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ));
+> +	/* the LRU algorithm only applies to accesses with recency */
+> +	current->in_lru_fault = vma_has_recency(vma);
+>  }
+>  
+>  static void lru_gen_exit_fault(void)
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 8a24b90d9531..9abffdd63a6a 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -823,25 +823,14 @@ static bool folio_referenced_one(struct folio *folio,
+>  		}
+>  
+>  		if (pvmw.pte) {
+> -			if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
+> -			    !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
+> +			if (lru_gen_enabled() && pte_young(*pvmw.pte)) {
+>  				lru_gen_look_around(&pvmw);
+>  				referenced++;
+>  			}
+
+I'd expect a call to vma_has_recency() here, but I'll trust you ;)
 
 
-On 2023/1/6 9:57, Pu Lehui wrote:
-> 
-> 
-> On 2023/1/4 2:12, Björn Töpel wrote:
->> Pu Lehui <pulehui@huaweicloud.com> writes:
->>
->>> From: Pu Lehui <pulehui@huawei.com>
->>>
->>> Implement bpf_arch_text_poke for RV64. For call scenario,
->>> ftrace framework reserve 4 nops for RV64 kernel function
->>> as function entry, and use auipc+jalr instructions to call
->>> kernel or module functions. However, since the auipc+jalr
->>> call instructions is non-atomic operation, we need to use
->>> stop-machine to make sure instruction patching in atomic
->>> context. As for jump scenario, since we only jump inside
->>> the trampoline, a jal instruction is sufficient.
->>
->> Hmm, is that really true? More below!
->>
->>>
->>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->>> ---
->>>   arch/riscv/net/bpf_jit.h        |   5 ++
->>>   arch/riscv/net/bpf_jit_comp64.c | 131 +++++++++++++++++++++++++++++++-
->>>   2 files changed, 134 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
->>> index d926e0f7ef57..bf9802a63061 100644
->>> --- a/arch/riscv/net/bpf_jit.h
->>> +++ b/arch/riscv/net/bpf_jit.h
->>> @@ -573,6 +573,11 @@ static inline u32 rv_fence(u8 pred, u8 succ)
->>>       return rv_i_insn(imm11_0, 0, 0, 0, 0xf);
->>>   }
->>> +static inline u32 rv_nop(void)
->>> +{
->>> +    return rv_i_insn(0, 0, 0, 0, 0x13);
->>> +}
->>> +
->>>   /* RVC instrutions. */
->>>   static inline u16 rvc_addi4spn(u8 rd, u32 imm10)
->>> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
->>> b/arch/riscv/net/bpf_jit_comp64.c
->>> index bf4721a99a09..fa8b03c52463 100644
->>> --- a/arch/riscv/net/bpf_jit_comp64.c
->>> +++ b/arch/riscv/net/bpf_jit_comp64.c
->>> @@ -8,6 +8,8 @@
->>>   #include <linux/bitfield.h>
->>>   #include <linux/bpf.h>
->>>   #include <linux/filter.h>
->>> +#include <linux/memory.h>
->>> +#include <linux/stop_machine.h>
->>>   #include "bpf_jit.h"
->>>   #define RV_REG_TCC RV_REG_A6
->>> @@ -238,7 +240,7 @@ static void __build_epilogue(bool is_tail_call, 
->>> struct rv_jit_context *ctx)
->>>       if (!is_tail_call)
->>>           emit_mv(RV_REG_A0, RV_REG_A5, ctx);
->>>       emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
->>> -          is_tail_call ? 4 : 0, /* skip TCC init */
->>> +          is_tail_call ? 20 : 0, /* skip reserved nops and TCC init */
->>>             ctx);
->>>   }
->>> @@ -615,6 +617,127 @@ static int add_exception_handler(const struct 
->>> bpf_insn *insn,
->>>       return 0;
->>>   }
->>> +struct text_poke_args {
->>> +    void *addr;
->>> +    const void *insns;
->>> +    size_t len;
->>> +    atomic_t cpu_count;
->>> +};
->>> +
->>> +static int do_text_poke(void *data)
->>> +{
->>> +    int ret = 0;
->>> +    struct text_poke_args *patch = data;
->>> +
->>> +    if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
->>> +        ret = patch_text_nosync(patch->addr, patch->insns, patch->len);
->>> +        atomic_inc(&patch->cpu_count);
->>> +    } else {
->>> +        while (atomic_read(&patch->cpu_count) <= num_online_cpus())
->>> +            cpu_relax();
->>> +        smp_mb();
->>> +    }
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static int bpf_text_poke_stop_machine(void *addr, const void *insns, 
->>> size_t len)
->>> +{
->>> +    struct text_poke_args patch = {
->>> +        .addr = addr,
->>> +        .insns = insns,
->>> +        .len = len,
->>> +        .cpu_count = ATOMIC_INIT(0),
->>> +    };
->>> +
->>> +    return stop_machine(do_text_poke, &patch, cpu_online_mask);
->>> +}
->>> +
->>> +static int gen_call_or_nops(void *target, void *ip, u32 *insns)
->>> +{
->>> +    int i, ret;
->>> +    s64 rvoff;
->>> +    struct rv_jit_context ctx;
->>> +
->>> +    ctx.ninsns = 0;
->>> +    ctx.insns = (u16 *)insns;
->>> +
->>> +    if (!target) {
->>> +        for (i = 0; i < 4; i++)
->>> +            emit(rv_nop(), &ctx);
->>> +        return 0;
->>> +    }
->>> +
->>> +    rvoff = (s64)(target - ip);
->>> +    emit(rv_sd(RV_REG_SP, -8, RV_REG_RA), &ctx);
->>> +    ret = emit_jump_and_link(RV_REG_RA, rvoff, false, &ctx);
->>> +    if (ret)
->>> +        return ret;
->>> +    emit(rv_ld(RV_REG_RA, -8, RV_REG_SP), &ctx);
->>> +
->>> +    return 0;
->>> +
->>> +}
->>> +
->>> +static int bpf_text_poke_call(void *ip, void *old_addr, void *new_addr)
->>> +{
->>> +    int ret;
->>> +    u32 old_insns[4], new_insns[4];
->>> +
->>> +    ret = gen_call_or_nops(old_addr, ip + 4, old_insns);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = gen_call_or_nops(new_addr, ip + 4, new_insns);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    mutex_lock(&text_mutex);
->>> +    if (memcmp(ip, old_insns, sizeof(old_insns))) {
->>> +        ret = -EFAULT;
->>> +        goto out;
->>> +    }
->>> +
->>> +    if (memcmp(ip, new_insns, sizeof(new_insns)))
->>> +        ret = bpf_text_poke_stop_machine(ip, new_insns,
->>> sizeof(new_insns));
->>
->> I'd rather see that you added a patch_text variant to
->> arch/riscv/kernel/patch.c (something like your
->> bpf_text_poke_stop_machine()), and use that here. Might be other users
->> of that as well -- Andy's ftrace patch maybe? :-)
->>
-> 
-> Good idea.
-> 
->>> +out:
->>> +    mutex_unlock(&text_mutex);
->>> +    return ret;
->>> +}
->>> +
->>> +static int bpf_text_poke_jump(void *ip, void *old_addr, void *new_addr)
->>> +{
->>> +    int ret;
->>> +    u32 old_insn, new_insn;
->>> +
->>> +    old_insn = old_addr ? rv_jal(RV_REG_ZERO, (s64)(old_addr - ip) 
->>> >> 1) : rv_nop();
->>> +    new_insn = new_addr ? rv_jal(RV_REG_ZERO, (s64)(new_addr - ip) 
->>> >> 1) : rv_nop();
->>> +
->>> +    mutex_lock(&text_mutex);
->>> +    if (memcmp(ip, &old_insn, sizeof(old_insn))) {
->>> +        ret = -EFAULT;
->>> +        goto out;
->>> +    }
->>> +
->>> +    if (memcmp(ip, &new_insn, sizeof(new_insn)))
->>> +        ret = patch_text_nosync(ip, &new_insn, sizeof(new_insn));
->>> +out:
->>> +    mutex_unlock(&text_mutex);
->>> +    return ret;
->>> +}
->>> +
->>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>> +               void *old_addr, void *new_addr)
->>
->> AFAIU there's nothing in the bpf_arch_text_poke() API that say that
->> BPF_MOD_JUMP is jumps within the trampoline. That is one usage, but not
->> the only one. In general, the jal might not have enough reach.
->>
->> I believe that this needs to be an auipc/jalr pair similar to
->> BPF_MOD_CALL (w/o linked register).
->>
-> 
-> The initial idea was that currently BPF_MOD_JUMP only serves for
+>  			if (ptep_clear_flush_young_notify(vma, address,
+> -						pvmw.pte)) {
+> -				/*
+> -				 * Don't treat a reference through
+> -				 * a sequentially read mapping as such.
+> -				 * If the folio has been used in another mapping,
+> -				 * we will catch it; if this other mapping is
+> -				 * already gone, the unmap path will have set
+> -				 * the referenced flag or activated the folio.
+> -				 */
+> -				if (likely(!(vma->vm_flags & VM_SEQ_READ)))
+> -					referenced++;
+> -			}
+> +						pvmw.pte))
+> +				referenced++;
+>  		} else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+>  			if (pmdp_clear_flush_young_notify(vma, address,
+>  						pvmw.pmd))
+> ...
+>
 
-small nit，the current riscv BPF_MOD_JUMP
+The posix_fadvise() manpage will need an update, please.  Not now, but
+if/when these changes are heading into mainline.  "merged into
+mm-stable" would be a good trigger for this activity.
 
-> bpf_tramp_image_put, and jal, which range is +/- 1MB, is sufficient for 
-> the distance between im->ip_after_call and im->ip_epilogue, and try to 
-> not use not-atomic auipc/jalr pair. But take deep consideration, this 
-> might be extended to other uses, such as tailcall optimization. So agree 
-> with your suggestion.
-> 
->>
->> And again, thanks for working on the RV trampoline!
->> Björn
-> 
+The legacy LRU has had used-once drop-behind for a long time (Johannes
+touched it last).  Have you noticed whether that's all working OK?
