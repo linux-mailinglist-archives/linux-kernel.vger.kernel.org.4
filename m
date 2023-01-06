@@ -2,156 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B682066078C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A54E66078E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbjAFUEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S236019AbjAFUFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbjAFUEw (ORCPT
+        with ESMTP id S235947AbjAFUFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:04:52 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2F435928
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:04:51 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id e129so1273188iof.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:04:51 -0800 (PST)
+        Fri, 6 Jan 2023 15:05:21 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B181D7A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:05:19 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id m7so2281031wrn.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:05:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzDYy7xH3h8odSKsfYc3qRpLkXTC2bMipKsVQCeG9FI=;
-        b=LppGhafXep900ETRX0WoS44tL4OJE5U/oiAMFVHG9hQ0mds8BDedt6H6Bw1FrzaM4t
-         N4iN+eaxJ90iKHNasykQ02gS0Ik5BRQ9Gn/Ch5b5p8hIX+WAipztit/AA7bm7flrp2hU
-         dq28Syy8Q+Mdab8MPFuej1FbyZ91btaR7d6dQ=
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UpGU+cdVK3SM6jir+mxXdoP9uvBXRWWoe82Gg0a/TfQ=;
+        b=IBLtyAaOl/9raVwH+lZtFBqYmzZLUwb1aTvMvHWtsrxUvXHKeNvPf2Z4sLb/8lhUnG
+         teLv7dU1nWBtLW6oOpXSyzLijuYoaopWks5gay0v4IatiPbDlI38MBG3bXbzlW7qBSx7
+         8HGbPC1w/AgS3fdCtr2ldQ84u/eiwSpKLgAkk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MzDYy7xH3h8odSKsfYc3qRpLkXTC2bMipKsVQCeG9FI=;
-        b=i468k3CQJmN6V7LDh9wS6tPK2oKaJtfaIl4p55DAN5i0PW56S5BLYg8lLQJF0k5X0d
-         AQo97N/llvwevGFfU1xcQ5+nPwVl2hKpBww42rQnDCRpSAsdbWzrn1jDFQgSrqXmirE6
-         n5+Bz8pCGTf5hSNHgV608DsTaqpDiCIHptIdQaxGczTXMAPYrqbyrdWZHEOwqoSquRWh
-         EMCwmb6rTPeCqhARVT5Vi/9UiU5UppWABNfrvRsq0A+WMzwWGKNZL9Iv+HnelE6s627C
-         Kjmj0RrEbedb1OdmYDCvjfxEkiATrbJ/5R67mls2CxcTV2g4GBWycqpihZHFMFnGVsMS
-         8HfA==
-X-Gm-Message-State: AFqh2kpDwt4Z6/y6vh0OfI1aB6DKpaPXtStgdxFKWqFUFktQrA1YAL+H
-        QiBVewDSCKbhwR02S7BG3fUX6fp5UoYFRg2OwmoKEQ==
-X-Google-Smtp-Source: AMrXdXt+OvGRW73oMucqsNbQBvW95NaKoS/i4Q0oSWPahJsIrZlzWwcHZyn2Uwc7cUnXowlDV8MNakYCs0MmrINVMWY=
-X-Received: by 2002:a02:665f:0:b0:376:1ab0:7bd5 with SMTP id
- l31-20020a02665f000000b003761ab07bd5mr5197244jaf.8.1673035489129; Fri, 06 Jan
- 2023 12:04:49 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpGU+cdVK3SM6jir+mxXdoP9uvBXRWWoe82Gg0a/TfQ=;
+        b=627XKTN9o93gyU3ky1QHk8nGsx4ifAw8Jki71XGsJoyVpcpTCZk1eX4mdZlz5nCx9r
+         RZPJiY9ZmkyRF2CrXib8ML1EJFayLhgOU9ZdKMyC39lM6PFQxxMufPhGMmR2OFdvMBGG
+         X5NVt8Ge7R9tb3v+kL7A5w5qIwjFSS8i310BWGgRnVofy37HhDvae3Zf2J3fn1KdMFXY
+         gD9dKdrpealoQpgWof3B6nwhj9Y8PZ1+OR18l6+aqcy7/f+j9rXBYOS5b34vLS4Ao+aN
+         1qbwOckixcZmQPD2dNM2KM6HXRnryXFG11/tzSdmjw2a+JRPNtC8LpAIVFeIy+/boJOj
+         ZexQ==
+X-Gm-Message-State: AFqh2koYf1AQunQejZmmCNvzG0apPV0Qs8YmT/u0xoYybxG4bceUN+1O
+        sOvEGJp0riIBs6iSvPJqXArX1w==
+X-Google-Smtp-Source: AMrXdXuXq7d7eNb8lJL+TQA5OVZQLRgie1AhDXr6CE1qdxWO8mfj4eIhK2Jd7Cc+vw2oC4U09t3ckA==
+X-Received: by 2002:adf:f007:0:b0:28e:66ae:75af with SMTP id j7-20020adff007000000b0028e66ae75afmr18337774wro.58.1673035518458;
+        Fri, 06 Jan 2023 12:05:18 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id w10-20020a5d404a000000b00275970a85f4sm1928236wrp.74.2023.01.06.12.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 12:05:17 -0800 (PST)
+Date:   Fri, 6 Jan 2023 21:05:15 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Hang Zhang <zh.nvgt@gmail.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with
+ console_lock()
+Message-ID: <Y7h++5sU/hGJ/yTS@phenom.ffwll.local>
+Mail-Followup-To: Hang Zhang <zh.nvgt@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221230063528.41037-1-zh.nvgt@gmail.com>
+ <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
+ <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
+ <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
+ <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com>
+ <Y7hvhtHeivfsnBtE@phenom.ffwll.local>
+ <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
 MIME-Version: 1.0
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
- <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com>
-From:   Luigi Semenzato <semenzato@chromium.org>
-Date:   Fri, 6 Jan 2023 12:04:37 -0800
-Message-ID: <CAA25o9Sbkg=qD+DH-aqXY9H5R_oBtePcnqagwAGCgoUk8D-Vyg@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        tbroch@chromium.org, dbasehore@chromium.org,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think it's fine to go ahead with your change, for multiple reasons.
-
-1. I doubt that any of the ChromeOS devices using TPM 1.2 are still
-being updated.
-2. If the SAVESTATE command fails, it is probably better to continue
-the transition to S3, and fail at resume, than to block the suspend.
-The suspend is often triggered by closing the lid, so users would not
-see what's going on and might put their running laptop in a backpack,
-where it could overheat.
-3. I don't recall bugs due to failures of TPM suspend, and I didn't
-find any such bug in our database.  Many (most?) ChromeOS devices left
-the TPM powered on in S3, so didn't use the suspend/resume path.
-
-Thank you for asking!
-
-
-On Fri, Jan 6, 2023 at 11:00 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Jan 5, 2023 at 7:02 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Fri, Jan 06, 2023 at 02:58:27PM -0500, Hang Zhang wrote:
+> On Fri, Jan 6, 2023 at 1:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
 > >
-> > In lieu of actually fixing the underlying bug, just allow system suspend
-> > to continue, so that laptops still go to sleep fine. Later, this can be
-> > reverted when the real bug is fixed.
->
-> So the patch looks fine to me, but since there's still the ChromeOS
-> discussion pending I'll wait for that to finish.
->
-> Perhaps re-send or at least remind me if/when it does?
->
-> Also, a query about the printout:
->
-> > +       if (rc)
-> > +               pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
-> > +                      chip->dev_num, rc);
->
-> so I suspect that 99% of the time the dev_num isn't actually all that
-> useful, but what *might* be useful is which tpm driver it is.
->
-> Just comparing the error dmesg output you had:
->
->   ..
->   tpm tpm0: Error (28) sending savestate before suspend
->   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
->   ..
->
-> that "tpm tpm0" output is kind of useless compared to the "tpm_tis 00:08" one.
->
-> So I think "dev_err(dev, ...)" would be more useful here.
->
-> Finally - and maybe I'm just being difficult here, I will note here
-> again that TPM2 devices don't have this issue, because the TPM2 path
-> for suspend doesn't do any of this at all.
->
-> It just does
->
->         tpm_transmit_cmd(..);
->
-> with a TPM2_CC_SHUTDOWN TPM_SU_STATE command, and doesn't even check
-> the return value. In fact, the tpm2 code *used* to have this comment:
->
->         /* In places where shutdown command is sent there's no much we can do
->          * except print the error code on a system failure.
->          */
->         if (rc < 0 && rc != -EPIPE)
->                 dev_warn(&chip->dev, "transmit returned %d while
-> stopping the TPM",
->                          rc);
->
-> but it was summarily removed when doing some re-organization around
-> buffer handling.
->
-> So just by looking at what tpm2 does, I'm not 100% convinced that tpm1
-> should do this dance at all.
->
-> But having a dev_err() is probably a good idea at least as a transitional thing.
->
->                   Linus
+> > On Thu, Jan 05, 2023 at 01:38:54PM -0500, Hang Zhang wrote:
+> > > On Thu, Jan 5, 2023 at 5:25 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > >
+> > > > On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > > >
+> > > > > Hi Helge
+> > > > >
+> > > > > On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
+> > > > > >
+> > > > > > On 12/30/22 07:35, Hang Zhang wrote:
+> > > > > > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
+> > > > > > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
+> > > > > > > con2fb_release_oldinfo(), this free operation is protected by
+> > > > > > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
+> > > > > > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
+> > > > > > > so that it can be checked to avoid use-after-free before the use sites
+> > > > > > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
+> > > > > > > the problem is that the use site is not protected by the same locks
+> > > > > > > as for the free operation, e.g., "default" case in do_fb_ioctl()
+> > > > > > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
+> > > > > > > which can invalidate the aforementioned state set and check in a
+> > > > > > > concurrent setting.
+> > > > > > >
+> > > > > > > Prevent the potential use-after-free issues by protecting the "default"
+> > > > > > > case in do_fb_ioctl() with console_lock(), similarly as for many other
+> > > > > > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
+> > > > > > >
+> > > > > > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> > > > > >
+> > > > > > applied to fbdev git tree.
+> > > > >
+> > > > > The patch above makes no sense at all to me:
+> > > > >
+> > > > > - fb_info is protected by lock_fb_info and
+> > > > > - the lifetime of fb_info is protected by the get/put functions
+> > > > > - yes there's the interaction with con2fb, which is protected by
+> > > > > console_lock, but the lifetime guarantees are ensured by the device
+> > > > > removal
+> > > > > - which means any stuff happening in matroxfb_remove is also not a
+> > > > > concern here (unless matroxfb completely gets all the device lifetime
+> > > > > stuff wrong, but it doesn't look like it's any worse than any of the
+> > > > > other fbdev drivers that we haven't recently fixed up due to the
+> > > > > takeover issues with firmware drivers
+> > > >
+> > > > I have also a really hard timing finding the con2fb map use in the
+> > > > matroxfb ioctl code, but that just might be that I didn't look
+> > > > carefully enough. Maybe that would shed some light on this.
+> > > > -Daniel
+> > > >
+> > > >
+> > > > >
+> > > > > On the very clear downside this now means we take console_lock for the
+> > > > > vblank ioctl (which is a device driver extension for reasons, despite
+> > > > > that it's a standard fbdev ioctl), which is no good at all given how
+> > > > > console_lock() is a really expensive lock.
+> > > > >
+> > > > > Unless I'm massively missing something, can you pls push the revert
+> > > > > before this lands in Linus' tree?
+> > > > >
+> > > > > Thanks, Daniel
+> > >
+> > > Hi, Daniel. Thank you for your feedback. We're not developers of the
+> > > video subsystem and thus may be short in domain knowledge (e.g., the
+> > > performance of console_lock() and the complex lifetime management).
+> > > This patch initially intended to bring up the potential use-after-free
+> > > issues here to the community - we have performed a best-effort code
+> > > review and cannot exclude the possibility based on our understanding.
+> > >
+> > > What we have observed is that the call chain leading to the free site
+> > > (do_fb_ioctl()->fbcon_set_con2fb_map_ioctl()->set_con2fb_map()->
+> > > con2fb_release_oldinfo()-> ... ->matroxfb_remove()) is only protected
+> > > by console_lock() but not lock_fb_info(), while the potential use
+> > > site (call chain starts from the default case in do_fb_ioctl()) is
+> > > only protected by lock_fb_info() but not console_lock().
+> > > We thus propose to add this extra console_lock() to the default case,
+> > > which is inspired by the lock protection of many other existing
+> > > switch-case terms in the same function.
+> > >
+> > > Since we do not have deep domain knowledge of this subsystem, we will
+> > > rely on the developers to make a decision regarding the patch. Thank
+> > > you again for your review and help!
+> >
+> > Can you please elaborate where you've found this use-after-free and how?
+> > I'm still not understanding how you even got here - this is orthogonal to
+> > whether the patch is the right fix or not.
+> > -Daniel
+> 
+> Hi, Daniel. Sure. This issue was initially flagged by our experimental static
+> code analyzer aiming to find use-after-free issues in the kernel - that's why
+> we don't have PoC or execution traces here. We deeply understand that
+> static analyzer can generate false alarms, so we have tried our best and
+> spent a good amount of time carefully reviewing the related code. We
+> eventually found that we could not exclude this potential issue based on our
+> study, so we decided to report this to the community with this tentative fix. As
+> mentioned, we may be short in domain knowledge, so your input is
+> highly appreciated. We respect the developer's decision about whether
+> this is really a problem and whether/how to fix it. However, if you think the
+> use-after-free is actually not possible, it will be very helpful if you can
+> elaborate on the reasoning since it will greatly help us improve our
+> analyzer. Thank you very much for your help!
+
+Please start out these patches with the fact that this is from an
+experimental checker.
+
+Also do include _why_ your checker things something is going wrong. If you
+cannot follow why the checker complains about something, then don't report
+it as an issue until you do. Also, if you do not understand the code,
+please make it absolutely clear that you just guessed a possible fix, but
+not that it's been tested in any way or form.
+
+If you don't do this, then we end up wasting a ton of time of people who
+don't have surplus time, because in this case the patch got review,
+applied, pull request made, I realized it looks funny, patch dropped, pull
+request remade, and then a fairly big thread here.
+
+All for a bug that's likely in your checker and not in the kernel. This is
+not great.
+ 
+> BTW, if this is worthed a fix and the performance of console_lock() is a
+> major concern, then I think there may be alternative solutions like adding
+> a lock_fb_info() to the free call chain - if that's better in performance,
+> or maybe selectively protect the matroxfb ioctl but not vblank ioctl as you
+> mentioned.
+
+Please start out with explaining what kind of bug your checker is seeing,
+and why. Not how you're trying to fix it. Because I'm pretty sure there
+isn't a bug, but since I've already spent a pile of time looking at this,
+I want to make sure.
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
