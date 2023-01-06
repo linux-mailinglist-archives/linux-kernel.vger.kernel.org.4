@@ -2,125 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE4D6602AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF5F66029C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbjAFOxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S234772AbjAFOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbjAFOxD (ORCPT
+        with ESMTP id S235518AbjAFOxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:53:03 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5CA831AC
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:53:02 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bs20so1484807wrb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 06:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb113jvJzDpaLqkQd+chLk6YPOzvbAerk9emcElPRW8=;
-        b=B9roCgNZ3+rIt6kkae9X8ldsFIGgC5Y/LAJrfN6RaNxbpKJwarDRvWjcsthOsW5+Bq
-         CZVLxCmGkTzXy4WZW2gayuF1H0oWfNyb/fmrCE0YkIupIyvB8spgVEi2Ryh6/t/qWuXj
-         cw2vs9mA0ucXzSA1iYpvpqf81mMRBudFtUvjDpQcfAwAselfjEIYq+oML/OV1Q3dArKD
-         qZnwPFhsX37pAhhQBulKY4z3CyDONPfL1lSj/xxuOQgmI3JRjkw7+8n19V7AMhjqnQt4
-         +2PAfu2Cx7XXebcWFMLl5763smmXHnTxqLChksC3PYTkBGlwBOlBI32eUOD8Pqd/UAMs
-         aP0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb113jvJzDpaLqkQd+chLk6YPOzvbAerk9emcElPRW8=;
-        b=P32wy1UU408LzNV0ZFCUl7yChvk38g3/R85hC643PkyH2d+SvlwAU1cwoObJId23kE
-         oba7f3sDLebj6Kb79DNG0OYUz5LWgZZDwP3GTZpVOiFayf8rpCsJcU5ClTU54vx/EMbO
-         WA3y/rEzg5IuG/koVlJesRualkJ/op8Xt4uRygSi+TEGLguBqPpnyH400buOGflBDlDt
-         dBTtTJGnk5aEm3Q3AfQkDcl4GlmaeJEZXqP8YS1jm5t3zUGqzlFKUmz7YYzTEgnKx0Iu
-         Zw6fn/YukyRGO6cwbvmN4cduBpbPSdPYruWQ9Mb6HbLMxJ5H9qGuibGNSrAsIfbzrwVa
-         4ikA==
-X-Gm-Message-State: AFqh2koSKWnv0pTzZggqf34/S4nVOd7jAmyjS44xhl59qv9q4jHJ2y4j
-        5mlXfi5+5P+AqNJa6qY0tyR98Q==
-X-Google-Smtp-Source: AMrXdXvv0m7kio2W55PZZW8SweXh/614tgLKinx4xscU4tnyjQfdaGyNgovQo1p45Ysx0bmcjLxFfw==
-X-Received: by 2002:a5d:5002:0:b0:28c:d89c:ae48 with SMTP id e2-20020a5d5002000000b0028cd89cae48mr18919200wrt.41.1673016780950;
-        Fri, 06 Jan 2023 06:53:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b1-20020adf9b01000000b0028e55b44a99sm1322146wrc.17.2023.01.06.06.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 06:53:00 -0800 (PST)
-Message-ID: <9771639f-5172-8f3b-3ce6-8fd195aa95b3@linaro.org>
-Date:   Fri, 6 Jan 2023 15:52:57 +0100
+        Fri, 6 Jan 2023 09:53:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047B580AEF
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:53:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 880E06170E
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 14:53:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77BCC433EF;
+        Fri,  6 Jan 2023 14:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673016811;
+        bh=78UUdwZOPaG83oAbSmoNYuND6jYC1D7+vVTriLgEc5k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LeHJRv1hNWtxX/1Lp7htRP8afhS0AQckjzduO2zn0vW6NNm73IN7kUXbDgZt3mFvR
+         xNr+0+d/ZXATFPz4F8PqrDikOt39VOLQZ1OtqzABCP7vH+UbpBQu8e7BRDvW63wtfw
+         2vRRc6JhMxfM66/RcfQOr/UY913ZpNCben0m+wrApcLiTTt/387Q4zxLv29004nLZN
+         dKGhB9HY+N4gSqCk3asaYJtfTnZCeH12+di319kNnOEPWMHFfdW5QIc7XfnNORCrSF
+         sgunNDmHhZWDfaZCxZWTPxMb0h/8Vxlg59YwBMtdXy0blWpIMuFivppEhIun40yU0p
+         8YK0Q6qq0HF0g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 68ACA5C0920; Fri,  6 Jan 2023 06:53:31 -0800 (PST)
+Date:   Fri, 6 Jan 2023 06:53:31 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Genjian <zhanggenjian123@gmail.com>
+Cc:     frederic@kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] context_tracking: Use arch_atomic_*() in __ct_user_enter
+ and __ct_user_exit
+Message-ID: <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221110082443.4069161-1-zhanggenjian@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
- <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110082443.4069161-1-zhanggenjian@kylinos.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 16:45, Ulf Hansson wrote:
-> On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Realtime kernels with PREEMPT_RT must use raw_spinlock_t for domains
->> which are invoked from CPU idle (thus from atomic section).  Example is
->> cpuidle PSCI domain driver which itself is PREEMPT_RT safe, but is being
->> called as part of cpuidle.
+On Thu, Nov 10, 2022 at 04:24:43PM +0800, Genjian wrote:
+> From: Genjian Zhang <zhanggenjian@kylinos.cn>
 > 
-> Just so I don't get this wrong, since the cpuidle-psci also calls
-> pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
-
-You are correct. Patch 3 here addresses it by... just not doing runtime
-PM. This is a hacky workaround but:
-1. I don't have any other idea,
-2. It's not a big problem because RT systems are not supposed to have
-any CPU idle (one of first things during RT system tuning is to disable
-cpuidle).
-
+> vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
+> __kasan_check_write() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
+> __kasan_check_write() leaves .noinstr.text section
 > 
->>
->> Add a flag allowing a power domain provider to indicate it is RT safe.
->> The flag is supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
->>
->> Cc: Adrien Thierry <athierry@redhat.com>
->> Cc: Brian Masney <bmasney@redhat.com>
->> Cc: linux-rt-users@vger.kernel.org
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> noinstr cannot have atomic_*() functions.because they have explicit
+> instrumentation.Switch to arch_ prefixed atomic operation functions to
+> avoid the explicit instrumentation.
 > 
-> For genpd, overall, I think this looks like an okay approach to me.
-> Although, let me check the whole series (I need some more time to do
-> that) before I give this my blessing.
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
 
-Sure, we are all have too many mails in inbox. :)
+Apologies for the delay, but finally queued, thank you!  Frederic gave
+his ack off-list, which I have included in the wordsmithed version below.
+Could you please check to make sure that I did not mess anything up?
 
-Best regards,
-Krzysztof
+							Thanx, Paul
 
+------------------------------------------------------------------------
+
+commit 936acd859f4a7b2b0f9900e26bc972385286df6e
+Author: Genjian Zhang <zhanggenjian@kylinos.cn>
+Date:   Thu Nov 10 16:24:43 2022 +0800
+
+    context_tracking: Use arch_atomic_*() in __ct_user_enter and __ct_user_exit
+    
+    The following diagnostics are issued by objtool:
+    
+    vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
+    __kasan_check_write() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
+    __kasan_check_write() leaves .noinstr.text section
+    
+    The reason for these diagnostics is that code marked noinstr if prohibited
+    from using atomic_*() functions, which have explicit instrumentation.
+    Therefore, switch to arch_ prefixed atomic operation functions to avoid
+    the explicit instrumentation.
+    
+    Reported-by: k2ci <kernel-bot@kylinos.cn>
+    Reported-by: kernel test robot <lkp@intel.com>
+    Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+    Acked-by: Frederic Weisbecker <frederic@kernel.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+index 77978e3723771..a09f1c19336ae 100644
+--- a/kernel/context_tracking.c
++++ b/kernel/context_tracking.c
+@@ -510,7 +510,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+ 			 * In this we case we don't care about any concurrency/ordering.
+ 			 */
+ 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+-				atomic_set(&ct->state, state);
++				arch_atomic_set(&ct->state, state);
+ 		} else {
+ 			/*
+ 			 * Even if context tracking is disabled on this CPU, because it's outside
+@@ -527,7 +527,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+ 			 */
+ 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+ 				/* Tracking for vtime only, no concurrent RCU EQS accounting */
+-				atomic_set(&ct->state, state);
++				arch_atomic_set(&ct->state, state);
+ 			} else {
+ 				/*
+ 				 * Tracking for vtime and RCU EQS. Make sure we don't race
+@@ -535,7 +535,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+ 				 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+ 				 * ordered.
+ 				 */
+-				atomic_add(state, &ct->state);
++				arch_atomic_add(state, &ct->state);
+ 			}
+ 		}
+ 	}
+@@ -630,12 +630,12 @@ void noinstr __ct_user_exit(enum ctx_state state)
+ 			 * In this we case we don't care about any concurrency/ordering.
+ 			 */
+ 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+-				atomic_set(&ct->state, CONTEXT_KERNEL);
++				arch_atomic_set(&ct->state, CONTEXT_KERNEL);
+ 
+ 		} else {
+ 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+ 				/* Tracking for vtime only, no concurrent RCU EQS accounting */
+-				atomic_set(&ct->state, CONTEXT_KERNEL);
++				arch_atomic_set(&ct->state, CONTEXT_KERNEL);
+ 			} else {
+ 				/*
+ 				 * Tracking for vtime and RCU EQS. Make sure we don't race
+@@ -643,7 +643,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
+ 				 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+ 				 * ordered.
+ 				 */
+-				atomic_sub(state, &ct->state);
++				arch_atomic_sub(state, &ct->state);
+ 			}
+ 		}
+ 	}
