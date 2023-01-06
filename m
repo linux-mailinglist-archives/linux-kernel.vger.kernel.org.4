@@ -2,149 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FD16605E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662B86605E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbjAFRqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235483AbjAFRrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbjAFRqq (ORCPT
+        with ESMTP id S235824AbjAFRrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:46:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7927F76EC7;
-        Fri,  6 Jan 2023 09:46:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FF69B810A7;
-        Fri,  6 Jan 2023 17:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBC0C433D2;
-        Fri,  6 Jan 2023 17:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673027202;
-        bh=zAgWER85TJxXLY2e0JUrVqfqSbbG8QDcAAUmSt21j+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GdavBENoM1AU/cSFJTsZ1n14zPEudSFwCpVOCtL9iEK5TSm9nm8LzU0Sz90l1sU6H
-         1ygDcWiLWBX44Qh4pAIwuuQE7m/N8FNNno0+oSAhnWTwsDrBX3ezd42junjgiLrrBC
-         GpUvbbRI38vCg3W+QtFWYVObEv7Rg1B4wtprkLgwwIe3P/FYTIVxRPdokqfOve09Er
-         mddhBngqbIoc/5LOL3l03Q/SOYZo66ruIKMfe7GkHsMlkxjXo6qYxy7NYJErryg1c/
-         w2du50eLFIB/5kh9Wk21mxNkiBUVPpOVM+gFLMlSiQ4XgO8iEP4H59gE/M0WO2TFsn
-         ILhGulNqmt2mQ==
-Date:   Fri, 6 Jan 2023 11:46:40 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-Message-ID: <20230106174640.ndis3zm5heoa5wpb@builder.lan>
-References: <20221215094532.589291-1-bhupesh.sharma@linaro.org>
- <20221215094532.589291-4-bhupesh.sharma@linaro.org>
+        Fri, 6 Jan 2023 12:47:12 -0500
+Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94C69529
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:47:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=3ZkqwT//XG7BkpEaYP0t4/kQtbvC2cyH6nezkShj9GI=;
+        b=CruGeZf3paWALutax0NxS9pNV1Lqs5S/DiNm+fMDSUuipD67l5jEADRaEHFPmzczMfTBfeE92VSTt
+         X8eWLfcALcVDyhkyf68AhUj/hEG2mv5eGI0GKDWeZqkOsZmiGonwHr6u+8qrhDzmAXsQSB07FD1gx2
+         YXvaIPdfFdcGJiKhEKONe0J3MNBaqaoOayBLvM3aOzL5BC9GXjxNseNvsNQPTc5dKWVcfDV29ZCdhH
+         JIh/FRP4CGczAIaTHHTLcHXsIntRzgZDT5bUMM0Rjn436EpxjUEI+SCDxV8lco24XpkKHwXh47vyBD
+         GB3vE0Z2ePsxuNK4djOwjvpRjD68uvA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=3ZkqwT//XG7BkpEaYP0t4/kQtbvC2cyH6nezkShj9GI=;
+        b=nT+VcIthoxhA8MnyKlBmjy04KeOPZMlHZv6M0+Vn/Scdjhuz3MDsqEzh6fZvTAmwNqGWCA8VWyn5o
+         +FqYDFPBw==
+X-HalOne-ID: 2298574e-8dea-11ed-af8f-cde5ad41a1dd
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay6 (Halon) with ESMTPSA
+        id 2298574e-8dea-11ed-af8f-cde5ad41a1dd;
+        Fri, 06 Jan 2023 17:47:09 +0000 (UTC)
+Date:   Fri, 6 Jan 2023 18:47:07 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH RESEND 4/4] backlight: tosa: Use backlight helper
+Message-ID: <Y7hem+T16FixeT0q@ravnborg.org>
+References: <20230106164856.1453819-5-steve@sk2.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215094532.589291-4-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106164856.1453819-5-steve@sk2.org>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 03:15:32PM +0530, Bhupesh Sharma wrote:
-> Add USB superspeed qmp phy node to dtsi.
-> Make sure that the oneplus board dts (which includes the
-> sm4250.dtsi) continues to work as intended.
+On Fri, Jan 06, 2023 at 05:48:55PM +0100, Stephen Kitt wrote:
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 > ---
->  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
->  arch/arm64/boot/dts/qcom/sm6115.dtsi          | 37 ++++++++++++++++++-
->  2 files changed, 38 insertions(+), 2 deletions(-)
+>  drivers/video/backlight/tosa_bl.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> index 3f39f25e0721e..4f0d65574448b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> @@ -232,6 +232,9 @@ &usb {
->  &usb_dwc3 {
->  	maximum-speed = "high-speed";
->  	dr_mode = "peripheral";
-> +
-> +	phys = <&usb_hsphy>;
-> +	phy-names = "usb2-phy";
->  };
+> diff --git a/drivers/video/backlight/tosa_bl.c b/drivers/video/backlight/tosa_bl.c
+> index 77b71f6c19b5..e338b1f00f6a 100644
+> --- a/drivers/video/backlight/tosa_bl.c
+> +++ b/drivers/video/backlight/tosa_bl.c
+> @@ -50,13 +50,8 @@ static void tosa_bl_set_backlight(struct tosa_bl_data *data, int brightness)
 >  
->  &usb_hsphy {
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index e4ce135264f3d..030763187cc3f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -579,6 +579,39 @@ usb_hsphy: phy@1613000 {
->  			status = "disabled";
->  		};
+>  static int tosa_bl_update_status(struct backlight_device *dev)
+>  {
+> -	struct backlight_properties *props = &dev->props;
+>  	struct tosa_bl_data *data = bl_get_data(dev);
+> -	int power = max(props->power, props->fb_blank);
+> -	int brightness = props->brightness;
+> -
+> -	if (power)
+> -		brightness = 0;
+> +	int brightness = backlight_get_brightness(dev);
 >  
-> +		usb_qmpphy: phy@1615000 {
-> +			compatible = "qcom,sm6115-qmp-usb3-phy";
-> +			reg = <0x01615000 0x200>;
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-> +				 <&gcc GCC_AHB2PHY_USB_CLK>;
-> +			clock-names = "com_aux",
-> +				      "ref",
-> +				      "cfg_ahb";
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
-> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
-> +			reset-names = "phy", "phy_phy";
-> +			status = "disabled";
-> +			#clock-cells = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			usb_ssphy: phy@1615200 {
-
-These patches looks good, but before introducing any
-qcom,sm6115-qmp-usb3-phy in any DT, could we please update the binding
-and driver to the new flattened format - to avoid having to revisit this
-when we try to introduce DP (which I'm guessing this instance has?)
-
-Regards,
-Bjorn
-
-> +				reg = <0x01615200 0x200>,
-> +				      <0x01615400 0x200>,
-> +				      <0x01615c00 0x400>,
-> +				      <0x01615600 0x200>,
-> +				      <0x01615800 0x200>,
-> +				      <0x01615a00 0x100>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <1>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
->  		qfprom@1b40000 {
->  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->  			reg = <0x01b40000 0x7000>;
-> @@ -1023,8 +1056,8 @@ usb_dwc3: usb@4e00000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x04e00000 0xcd00>;
->  				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
-> -				phys = <&usb_hsphy>;
-> -				phy-names = "usb2-phy";
-> +				phys = <&usb_hsphy>, <&usb_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
->  				iommus = <&apps_smmu 0x120 0x0>;
->  				snps,dis_u2_susphy_quirk;
->  				snps,dis_enblslpm_quirk;
+>  	tosa_bl_set_backlight(data, brightness);
+>  
 > -- 
-> 2.38.1
-> 
+> 2.30.2
