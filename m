@@ -2,125 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136D7660110
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C8A660115
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbjAFNRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S234157AbjAFNTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjAFNRh (ORCPT
+        with ESMTP id S230514AbjAFNTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:17:37 -0500
-Received: from egress-ip33a.ess.de.barracuda.com (egress-ip33a.ess.de.barracuda.com [18.185.115.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713B6C289
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:17:33 -0800 (PST)
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69]) by mx-outbound47-78.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 06 Jan 2023 13:17:31 +0000
-Received: by mail-lf1-f69.google.com with SMTP id q9-20020a19a409000000b004b6ee156e03so517687lfc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:17:31 -0800 (PST)
+        Fri, 6 Jan 2023 08:19:13 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6433E6C289
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:19:12 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id z5so184113wrt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:19:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yEFqgO5Sbwl96nBn28e5ofxJpRgmUFLXkbzNsaZFr1I=;
-        b=AT1w3jQRs6fE7wCeOTrBDr+qdzYn8lq9RB4LI0FtTaYGEx9F6JpFIpGTgQtg1gdLq1
-         114GRenHOhT143WTajBP761EhjoM0HqEfk+hB6g8x2QWmQlvB8L7XOqKzfO3peGUCUwe
-         GGSYTZB1cCVCk9Mzr4u0Dg3D2F1X6wnEIr+eU=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
+        b=L/vblB4a0M4F/C2rNy4x4Ddrm8AwkJlwA5QZf764OwGDyQaVaRdzvzqdh6re8HfEwH
+         zP2cbCGSidi730ZkGEGJLeojgoOQq7YFcXjioPvm/Wa6j+3y62wse/IcY7L7eq3Eua49
+         wJZCDlF6SGBQuHXx7rgd0i4d+00JZ7dNJfyaS5eD3DfG5KZxFdkrC3kDghNXENJ2rkxW
+         qDuAK1D/jV1xJrrXfwr4EjM2RxpyidD73N2s8B+XDtqkI67SOSIipArZsQA0DMfNaGoQ
+         MEmzRxI8oAgVHy5qim74XN/0hIJI5Fd++owsfjBeenurnxcw/R3Sf8/d21dUF2m1EXuD
+         3M5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yEFqgO5Sbwl96nBn28e5ofxJpRgmUFLXkbzNsaZFr1I=;
-        b=ZQSTVWxG8Cm69bMxUg18dUijhoUqWbFfxQYD9yiIz9u+8rX/FflMGQG4BfjiSpWEc0
-         UOf9R48UtJtyK3v+c8gOia2+BMIzuS8q60+WRzZEOfw6u6cd0iW4HRs4NvGdoXMM/FdV
-         SpCDQVQz7ZOmS5Zv4nCyorUe3Lmer5PMgJn3aT1kApeXVCXjamoN3C5sYgn2+v0J9KuU
-         RywKV2+B96KubVhd6MwDruKtxcog+XZZC5uxd+LRM5AA7fKOZZy2AAFX67BfdZnZpObA
-         yc85D9Fy8BZZiOnDEkVxdQVkPMcdAMAY7X/HrfhYiemiMT8XOZ8Gvbm+8Jhg5U2JbJy1
-         W3sQ==
-X-Gm-Message-State: AFqh2koPU3glAuUL0vF2QbdU70RHe9DSBsGnPJEqt8grgdL7ShmJLao5
-        4qL0Jyan6XceBaEuUs4LJLzw2Fl1OOhFYcLuA1Oj8xcUs8goXEkOxmyJ8jjrzcpQvzuQclgtpzV
-        WYwC/RUrCdeVROiP2291xrSVLMFOa9UNP683XtnJbPXW2h/pLE49q4vMAyrsmJkHCYYCF7C/0h+
-        Oh
-X-Received: by 2002:a05:651c:2104:b0:279:fe87:67fc with SMTP id a4-20020a05651c210400b00279fe8767fcmr2132202ljq.173.1673011050882;
-        Fri, 06 Jan 2023 05:17:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtegga+gTvuNkXHUMQUJzT+5v9aZ5oXotTUK7grzJ9/b8jYgXCq8WgxtFGCcyNjfoIEs21CBR9mAsyuP4FedcQ=
-X-Received: by 2002:a05:651c:2104:b0:279:fe87:67fc with SMTP id
- a4-20020a05651c210400b00279fe8767fcmr2132198ljq.173.1673011050640; Fri, 06
- Jan 2023 05:17:30 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
+        b=mUW0fKx4S/pNSYMTY6f+0T7nUzcUV3urFDtjzHzzKLJuCscHlFHdHmd0weqvLguL8i
+         utwR5M48iZSsfde7Jz9Nh6UDqxM8tj6fpHJJrHWARMQb/75W8MAeM+kZHwGkjZyCBq72
+         40nYGs0BTlubC+Elo7sDmtMwkDBmD5cPsctE0FEymsN/kDtV7z+L3k/0DihCZR8Wgebj
+         wOJgm766noxzCNjeWPP2XYeTS7+3bjIxVjEqavhrnbEXhWMDZg7TXZzBzgLw3VGGa0C7
+         nBbrzm6hPfKg7KW8gMt6igh362ouQSBmkO6wxepR08c2MMlusD2MA+XmX88SngRNr+cD
+         8mlQ==
+X-Gm-Message-State: AFqh2kqLX9PrqAlKnOyGPMli38EZDZLE4DKnv19ioNpOFpUWT55FQLAU
+        oin9nohEnKPLbATC+abKS304Iw==
+X-Google-Smtp-Source: AMrXdXsK9zd1f6w44VhV8Jc17GLbeev2R+BC9yDTntZebOuq7YzekZknrSuTiVGZs2ykWMNhSmYfjg==
+X-Received: by 2002:a5d:6981:0:b0:295:6a4f:4183 with SMTP id g1-20020a5d6981000000b002956a4f4183mr12629387wru.5.1673011150846;
+        Fri, 06 Jan 2023 05:19:10 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e7-20020a056000120700b00241dd5de644sm1167074wrx.97.2023.01.06.05.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 05:19:09 -0800 (PST)
+Message-ID: <9d141edb-c72c-8889-112b-71ce5699dc35@linaro.org>
+Date:   Fri, 6 Jan 2023 14:19:07 +0100
 MIME-Version: 1.0
-References: <20230105151740.29436-1-sinthu.raja@ti.com> <20230105151740.29436-2-sinthu.raja@ti.com>
- <977b5cce-2501-4d7a-fe24-437df88aee8f@linaro.org> <CAEd-yTR=zdg_pt=MzkzceGTY2SkV=16dyhXCtd4EU-KGzP_mAQ@mail.gmail.com>
- <ebb0a452-9ae6-780a-a6ca-d34d0ebbc520@linaro.org>
-In-Reply-To: <ebb0a452-9ae6-780a-a6ca-d34d0ebbc520@linaro.org>
-From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Date:   Fri, 6 Jan 2023 18:47:19 +0530
-Message-ID: <CAEd-yTRzxUGNM6u0SMnVNjM=xrsX9g1JUEYvaUhqa--KcgYfeQ@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] dt-bindings: arm: ti: Add binding for AM68 SK
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-BESS-ID: 1673011051-312110-5402-56896-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.167.69
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245287 [from 
-        cloudscan13-197.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/3] thermal/drivers/intel: Use generic trip points for
+ intel_pch
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "Brown, Len" <len.brown@intel.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "ricardo.neri-calderon@linux.intel.com" 
+        <ricardo.neri-calderon@linux.intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
+ <20230104222127.2364396-3-daniel.lezcano@kernel.org>
+ <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 6:28 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 06/01/2023 13:53, Sinthu Raja M wrote:
-> > On Fri, Jan 6, 2023 at 6:19 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 05/01/2023 16:17, Sinthu Raja wrote:
-> >>> From: Sinthu Raja <sinthu.raja@ti.com>
-> >>>
-> >>> AM68 Starter Kit is a low cost, small form factor board designed for
-> >>> TI's AM68 SoC which is optimized to provide best in class performance
-> >>> for industrial applications and add binding for the same.
-> >>>
-> >>> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> >>
-> >> What happened here?,
-> > Krzysztof
-> > Missed the merge window, so rebased to 6.2rc1 and reposted again.
->
-> And what was here in v3?
-Krzysztof,
-Are you asking about this tag?
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-As I was rebasing I thought of not adding. Do I need to respin the
-patch series with V5 again with the tag?
->
-> Best regards,
-> Krzysztof
->
+Hi Rui,
+
+On 06/01/2023 09:32, Zhang, Rui wrote:
+> On Wed, 2023-01-04 at 23:21 +0100, Daniel Lezcano wrote:
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> The thermal framework gives the possibility to register the trip
+>> points with the thermal zone. When that is done, no get_trip_* ops
+>> are
+>> needed and they can be removed.
+>>
+>> Convert the ops content logic into generic trip points and register
+>> them with the thermal zone.
+>>
+>> In order to consolidate the code, use the ACPI thermal framework API
+>> to fill the generic trip point from the ACPI tables.
+>>
+>> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+>> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+>> ---
+>>      V3:
+>>        - The driver Kconfig option selects CONFIG_THERMAL_ACPI
+>> ---
+>>   drivers/thermal/intel/Kconfig             |  1 +
+>>   drivers/thermal/intel/intel_pch_thermal.c | 88 +++++--------------
+>> ----
+>>   2 files changed, 20 insertions(+), 69 deletions(-)
+>>
+>> diff --git a/drivers/thermal/intel/Kconfig
+>> b/drivers/thermal/intel/Kconfig
+>> index f0c845679250..738b88b290f4 100644
+>> --- a/drivers/thermal/intel/Kconfig
+>> +++ b/drivers/thermal/intel/Kconfig
+>> @@ -75,6 +75,7 @@ config INTEL_BXT_PMIC_THERMAL
+>>   config INTEL_PCH_THERMAL
+>>   	tristate "Intel PCH Thermal Reporting Driver"
+>>   	depends on X86 && PCI
+>> +	select THERMAL_ACPI
+> 
+> THERMAL_ACPI depends on ACPI but the PCH thermal driver does not.
+> So we will run into "unmet dependencies" issue when CONFIG_ACPI is
+> cleared like below
+> 
+> WARNING: unmet direct dependencies detected for THERMAL_ACPI
+>    Depends on [n]: THERMAL [=y] && ACPI [=n]
+>    Selected by [m]:
+>    - INTEL_PCH_THERMAL [=m] && THERMAL [=y] && (X86 [=y] ||
+> X86_INTEL_QUARK [=n] || COMPILE_TEST [=n]) && X86 [=y] && PCI [=y]
+> 
+
+Ah yes, indeed. Thanks for spotting this.
+
+Given the code, I think we should do:
+
+	select THERMAL_ACPI if ACPI
+
+it is from my POV semantically correct.
 
 
 -- 
-With Regards
-Sinthu Raja
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
