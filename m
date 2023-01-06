@@ -2,133 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D165F95D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FAA65F969
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjAFB7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S229828AbjAFCGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 21:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjAFB7Z (ORCPT
+        with ESMTP id S229462AbjAFCGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:59:25 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3372A59F83;
-        Thu,  5 Jan 2023 17:59:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np62r3Y7Tz4xN4;
-        Fri,  6 Jan 2023 12:59:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1672970357;
-        bh=fHg0J3grlxueGqOhYIRKBvLUU2L27+ymcNSDWIS66R4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NBG0mfALAVDSJEWokIbMn7+jlyRG/A86lizNupklmYCfq3udoN5gRd0FhfXp/1II8
-         PlbfjHTCypTWoGQH5NYzCpxRvDumAzKcg/yu6zRkHg4WquwUSXaae6eMtuseGJvGR+
-         GIVSV0/oq8yry1cFG70YDH/TZZ89tbSGHPlWxjkyGzmpBVDNg5/gQMZpucwjTbNnCm
-         rc0FrV+DlaKCggAEXbICKm/P6L8In+CIdpybjKei1F9YcxB8SOakYlrR7zujHvsjq3
-         EUbY++Z5ltn1m55rUG5Va4oXyQ5LJWRuqEfjiucHZfePxvN3KwfsghQ9pMxQKmRjsi
-         B5S4I8JXqbpbQ==
-Date:   Fri, 6 Jan 2023 12:59:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm tree with the cgroup tree
-Message-ID: <20230106125915.60c8b547@canb.auug.org.au>
+        Thu, 5 Jan 2023 21:06:51 -0500
+X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 18:06:49 PST
+Received: from a27-19.smtp-out.us-west-2.amazonses.com (a27-19.smtp-out.us-west-2.amazonses.com [54.240.27.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F0C3C0FD;
+        Thu,  5 Jan 2023 18:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ude52klaz7ukvnrchdbsicqdl2lnui6h; d=aaront.org; t=1672970549;
+        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding;
+        bh=Cmz24rg2v6sSkGwNw58tGKSlPXAtf7goihufSQSgRQU=;
+        b=OTSv+DlU2mrxugOLjgqSj9NaHzlzF78TX1RzcACgtYB7/UWRCeIuAk/4LRW+/8u2
+        yX/hekQVtyXKsgabL3qmmCRWr8THpEy0R1uJ6WYTnu0HUsf4rx0iCzy7iAftNyDr6lq
+        D8M+2+Q5pQoI5jMkDNAwg+YFeqO1lnJ3mGcHowPs=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1672970549;
+        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+        bh=Cmz24rg2v6sSkGwNw58tGKSlPXAtf7goihufSQSgRQU=;
+        b=Qh0aaAYSWQyh97c8Ybx7gKS/oDcIXWJnAFQgrL/ojIIOEculrzvQcpAm5v0VEURn
+        uEwmxT0YqZjp+/KRWtJC2wwMOII11gX+RMMo+MuO3X7dRtTY2WdbX+y88NioN7hYxFt
+        EI6pa2GS6TiQpp5SCkO2l1Ob833jY8Xb1CPHkdiM=
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8Bz6eaKAcaVGWGnKR6K74s5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 6 Jan 2023 02:02:28 +0000
+From:   Aaron Thompson <dev@aaront.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 1/1] mm: Always release pages to the buddy allocator in
+ memblock_free_late().
+In-Reply-To: <Y7aq7fzKZ/EdLVp3@gmail.com>
+References: <010101857bbc3a41-173240b3-9064-42ef-93f3-482081126ec2-000000@us-west-2.amazonses.com>
+ <20230105041650.1485-1-dev@aaront.org>
+ <010001858025fc22-e619988e-c0a5-4545-bd93-783890b9ad14-000000@email.amazonses.com>
+ <Y7aq7fzKZ/EdLVp3@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0101018584d0b5a3-ea0e4d67-b00f-4254-8e1c-767fcafbec31-000000@us-west-2.amazonses.com>
+X-Sender: dev@aaront.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Feedback-ID: 1.us-west-2.OwdjDcIoZWY+bZWuVZYzryiuW455iyNkDEZFeL97Dng=:AmazonSES
+X-SES-Outgoing: 2023.01.06-54.240.27.19
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8Bz6eaKAcaVGWGnKR6K74s5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2023-01-05 02:48, Ingo Molnar wrote:
+> * Aaron Thompson <dev@aaront.org> wrote:
+> 
+>> For example, on an Amazon EC2 t3.micro VM (1 GB) booting via EFI:
+>> 
+>> v6.2-rc2:
+>>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>>   Node 0, zone      DMA
+>>           spanned  4095
+>>           present  3999
+>>           managed  3840
+>>   Node 0, zone    DMA32
+>>           spanned  246652
+>>           present  245868
+>>           managed  178867
+>> 
+>> v6.2-rc2 + patch:
+>>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>>   Node 0, zone      DMA
+>>           spanned  4095
+>>           present  3999
+>>           managed  3840
+>>   Node 0, zone    DMA32
+>>           spanned  246652
+>>           present  245868
+>>           managed  222816   # +43,949 pages
+> 
+> [ Note the annotation I added to the output - might be useful in the
+> changelog too. ]
+> 
+> So this patch adds around +17% of RAM to this 1 GB virtual system? That
+> looks rather significant ...
+> 
+> Thanks,
+> 
+> 	Ingo
 
-Today's linux-next merge of the mm tree got a conflict in:
+It is significant, but I wouldn't describe it as being added. I would 
+say that the system is currently losing 17% of RAM due to a bug, and 
+this patch fixes that bug.
 
-  Documentation/admin-guide/cgroup-v1/memory.rst
+The actual numbers depend on the mappings given by the EFI, so they're 
+largely out of our control. As an example, similar VMs that I run with 
+the OVMF EFI lose about 3%. I couldn't say for sure which is the 
+outlier, but my point is that the specific values are not really the 
+focus, this is just an example that shows that the issue can be 
+encountered in the wild with real impact. I know I'll be happy to get 
+that memory back, whether it is 3% or 17% :)
 
-between commit:
-
-  da3ad2e14f63 ("docs: cgroup-v1: add internal cross-references")
-
-from the cgroup tree and commits:
-
-  6cd7ad27c60f ("mm: memcontrol: deprecate charge moving")
-  9bf9f4ba8bd5 ("mm-memcontrol-deprecate-charge-moving-fix")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/admin-guide/cgroup-v1/memory.rst
-index 27d89495ac88,258e45cc3b2d..000000000000
---- a/Documentation/admin-guide/cgroup-v1/memory.rst
-+++ b/Documentation/admin-guide/cgroup-v1/memory.rst
-@@@ -725,10 -719,15 +727,17 @@@ If we want to change this to 1G, we ca
-         It is recommended to set the soft limit always below the hard limi=
-t,
-         otherwise the hard limit will take precedence.
- =20
- +.. _cgroup-v1-memory-move-charges:
- +
-- 8. Move charges at task migration
-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+ 8. Move charges at task migration (DEPRECATED!)
-+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=20
-+ THIS IS DEPRECATED!
-+=20
-+ It's expensive and unreliable! It's better practice to launch workload
-+ tasks directly from inside their target cgroup. Use dedicated workload
-+ cgroups to allow fine-grained policy adjustments without having to
-+ move physical pages between control domains.
- =20
-  Users can move charges associated with a task along with task migration, =
-that
-  is, uncharge task's pages from the old cgroup and charge them to the new =
-cgroup.
-
---Sig_/8Bz6eaKAcaVGWGnKR6K74s5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3gHMACgkQAVBC80lX
-0GyDkwf/SNfywJqZAw48DyGQE3faNgQVQBvKwOZIYQunabEqwlcQpz9VOEwEDHc7
-0vuDILB2h1nA1B9Jn4I+82IBP6lw4uyQP/3EdwXvdhswIdhLocZb37B+83Oy5Hu/
-U/RaNmR/kDUpNpPCWdNzlvy9/OW4WvObja2G0AxcV+T4zWJhnvjA5clT3CGXYwYA
-L4lj8EftbNsFTpZyeVa7ncYG1jerpbcm2QsaulqBhVfD8Pj3azhRC0P7tNgSUfhP
-u/ahT2fJiVIBL9VJHuRjHsgttYwrBZrJHNXzMkNOvqZGvD6P4NSJuT67LMNCp/LH
-2EF0fr0iW0AJ3XhACXJLY6V15p6aUg==
-=jGvc
------END PGP SIGNATURE-----
-
---Sig_/8Bz6eaKAcaVGWGnKR6K74s5--
+Thanks,
+-- Aaron
