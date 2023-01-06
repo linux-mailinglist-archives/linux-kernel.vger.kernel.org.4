@@ -2,128 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A545C65FB6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 07:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A417265FB6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 07:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjAFGZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 01:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S231998AbjAFGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 01:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjAFGZe (ORCPT
+        with ESMTP id S231933AbjAFGZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 01:25:34 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312DB6AD9A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:25:33 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so4975988pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 22:25:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YayHG7lExe8amFBKiiDo3qeuO6fzGOFyXNJRlTndIyE=;
-        b=Y29z1GWtlyZLdfJyfGvzO3zxWqYuBWudOWfkzJiIV7d/AhpRS27ZH6IAN+aoHBCvaz
-         B6ah7v1oIewCmGcQ0IZjDKZk8Hwrn7x17NB+36FoWZOCeHVbzd/PqDl85MrFEi3WL1eu
-         EiylNkCc5tCsaYipJ5iRd0nx59HJqmV02fhHg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YayHG7lExe8amFBKiiDo3qeuO6fzGOFyXNJRlTndIyE=;
-        b=fkhpe3wXZtwcAhjLZZxfu7kBGHbyDWA71JuxYp9vdCZ08BABFFrpYc3OFpw5WBLeOs
-         I2EEbedujzfiQxqh1EnoFBcl5J/fQNUXIXZy+sW7sIqOJwODKBBQZXexPIFQjUk+63uM
-         gPBaa2kyFNSl+Ym+dd5fnhqWpKHPljqmjyX1aPxfTfeRwe5knFaZBHsR685yjPu9Mzs/
-         u+1+XdjKhCsLaideD9xQ7jPNTzOwSlmZiaSK5m8E7WraTsH6yH6mFxAAdekM0dmMHDFE
-         ahqD0ZYHhr+ONy64T+tfYONo94+lcqaFl12TRenDBBFzKx9hNjR4k/w7LiS3536KOpiF
-         SJeA==
-X-Gm-Message-State: AFqh2kpC7PhLBLCJxXbocJj3Wrw29pTf5dJBkj9qSnmVFcnKVVV1FeJe
-        Zo+Gm0TVxa6RvIRluVXxPmM98g==
-X-Google-Smtp-Source: AMrXdXsJR0Jp0gvO8YvY12mJU7b2mREhu4mq2+p7jeRBSbkqkTeWPoVzJ58HtbpMMkv6mkmDI2j1LQ==
-X-Received: by 2002:a05:6a20:939a:b0:af:9539:a29e with SMTP id x26-20020a056a20939a00b000af9539a29emr65774366pzh.16.1672986332761;
-        Thu, 05 Jan 2023 22:25:32 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa796c3000000b005609d3d3008sm309232pfq.171.2023.01.05.22.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 22:25:32 -0800 (PST)
-Date:   Thu, 5 Jan 2023 22:25:31 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        kernel test robot <lkp@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
-Message-ID: <202301052224.D2569E38@keescook>
-References: <20230106042844.give.885-kees@kernel.org>
- <CAMZ6RqKghb-YqQuWGiEn8D-CQgvecBxsxUz_2XYE0m3hs752gQ@mail.gmail.com>
+        Fri, 6 Jan 2023 01:25:38 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C946CFD3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1672986337; x=1704522337;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OSh6iG/oZQCvISR52oSqMQP40dJuSBVTYSD1idAC9QE=;
+  b=CJ0+NiSTMPgfVw3cFehsfZRdPc+d8zMH4XjAMDjdV3oS+Ui9UWGXIIDB
+   OwdxkNYrQsFd5CLVojf4DoQD/5VHaFyvwc4O5/RJg9JrhQf8Q6ycyuft4
+   ioxEMy+NAV/xlTAMR3ACh2hZhwFY7CK60rwTAWJ5gtjubAFGaVjA73MfO
+   Gmkp8kKlXsPRzC91mMkqVEgDLFWsg84FWTnQHjaZ39AUG0gALF5I6u+z/
+   jndIFfjjFAZkw3dBfNT+3SQM/4igVjEJsz+N50HRzKml55mqB4eyb6FrE
+   NqBeJoQlk8ALTSpdBpldrjfHq/hyFwPCJrDTfrXap5a/OqYxYF0TFbUvO
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,304,1665417600"; 
+   d="scan'208";a="218417431"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Jan 2023 14:25:36 +0800
+IronPort-SDR: fQVh9u4r6tdQ81TQuLtNQ2DzIJAFsKETeviyJhlsgKQMuyv1Tj6OMQxAeAldUO4sNO3e8Rzr0u
+ EzaMrufN28zyDG8QghAQPkovaZiLKtchO+z44g5zJBQwvHSsXdotNvd3cwwsJlHJ/6OaKK2RlB
+ HGPCuFcRoXpo8OzzUQsZBJbry1qdfZ6WzFBEgJzbrxwetvT9AiFEQq64LW3lFdorehxWYAFZDP
+ E5jrpeJrfYYI2VQ8r8BD9uHqTrXTnyASV5zs2SUnOYQ8oinot4eYAHaFg+13ddSl9akod4ZGHV
+ ArQ=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jan 2023 21:43:31 -0800
+IronPort-SDR: LrrRIMAbPmAGvhPQK0u8dw7gmjfwJ9dJLSwMk8fx8R6uwJ3kKAfqvMDYyJlGzq/3pHoPPnjSps
+ aXAVf+5s8gT/Nrt5euWmMCwAxfpsheHgpH7bhZQu6yNWoI5PIjfyaZqr/oBgU4e6WmtGCQcuFI
+ e7w/ghUEqa4pp3Sm1Va4aXprbtww6YY8fbivS6QmzEmmAYol2H3aeYJkWVU9/7Ykq5zG3LaFpY
+ gVLoDzYANKM8bALgC7O1lfTeUE8i1RkActkdQh/Sy+4QSW9fbwBOGUWpA8vCHeSLQkwvYdqRsO
+ X4U=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jan 2023 22:25:37 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NpCy75VbHz1RwtC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:25:35 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1672986334; x=1675578335; bh=OSh6iG/oZQCvISR52oSqMQP40dJuSBVTYSD
+        1idAC9QE=; b=tL5usHqaa2eswcXq8vAuBvAvrB8x7hZAcO4nXPqFh8OUfs+VcDL
+        BNxXLIosK4QFXyuF67qObvHerSwPm5FB0wMf8MVK+cfVXjvF0i3qII0lNOjjHRtT
+        dVr3EN2cf9LK1Fqp15lArx8+Aa/hrtihNPsXgEGbzxqiVLyT0fMffDbxN8v3qGwg
+        sfQ3V3yScUOJ8le/60ePrFV4aYTA+op5rvfhEmsZ1AvHIUtB94SKg77ZIG3sqM3p
+        OS18vVQYoX8uokbWEHbpWJT+qqimr6F+6YuxhUN6crEPhpMZiP+wd0Cf5/JRku9+
+        kbq5Jhe5zjXsALtltDsF7OTZIvO9Ip0ynSw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id BzShbwyDIgl6 for <linux-kernel@vger.kernel.org>;
+        Thu,  5 Jan 2023 22:25:34 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NpCy50ZVpz1RvLy;
+        Thu,  5 Jan 2023 22:25:32 -0800 (PST)
+Message-ID: <2f5efafb-058c-566c-0b2e-a5dd8f4ae2ef@opensource.wdc.com>
+Date:   Fri, 6 Jan 2023 15:25:31 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKghb-YqQuWGiEn8D-CQgvecBxsxUz_2XYE0m3hs752gQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 08/27] ata: remove palmld pata driver
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-9-arnd@kernel.org>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230105134622.254560-9-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 02:47:35PM +0900, Vincent MAILHOL wrote:
-> On Fri. 6 Jan 2023 at 13:28, Kees Cook <keescook@chromium.org> wrote:
-> > Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
-> > "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
-> > using -fstrict-flex-arrays=3:
-> >
-> > net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
-> > net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
-> >   558 |                         .fs.location = info->rule_locs[i],
-> >       |                                        ~~~~~~~~~~~~~~~^~~
-> > In file included from include/linux/ethtool.h:19,
-> >                  from include/uapi/linux/ethtool_netlink.h:12,
-> >                  from include/linux/ethtool_netlink.h:6,
-> >                  from net/ethtool/common.c:3:
-> > include/uapi/linux/ethtool.h:1186:41: note: while referencing
-> > 'rule_locs'
-> >  1186 |         __u32                           rule_locs[0];
-> >       |                                         ^~~~~~~~~
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-> >
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: kernel test robot <lkp@intel.com>
-> > Cc: Oleksij Rempel <linux@rempel-privat.de>
-> > Cc: Sean Anderson <sean.anderson@seco.com>
-> > Cc: Alexandru Tachici <alexandru.tachici@analog.com>
-> > Cc: Amit Cohen <amcohen@nvidia.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > v3: don't use helper (vincent)
+On 1/5/23 22:46, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> v1: https://lore.kernel.org/all/20230105214126.never.757-kees@kernel.org
->                                                ^^^^^
-> > v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
->                                                   ^^^^^
-> v3: https://lore.kernel.org/netdev/20230106042844.give.885-kees@kernel.org
->                                                   ^^^^
+> The PXA palmld machine was removed, so the pata driver is no
+> longer used and can be removed. There is a chance that some of
+> this code might be useful for turning some of the other PXA
+> PCMCIA host drivers into PATA drivers, but it's clear that
+> it would not work unmodified, and it seems unlikely that
+> someone would do this work.
 > 
-> Seriously... :)
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Marek Vasut <marek.vasut@gmail.com>
+> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-ide@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Hurray! Someone noticed and it's not even April yet. :) *celebrate*
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
--Kees
+Feel free to queue this through your tree. Thanks !
+
+> ---
+>  drivers/ata/Kconfig       |   9 ---
+>  drivers/ata/Makefile      |   1 -
+>  drivers/ata/pata_palmld.c | 137 --------------------------------------
+>  3 files changed, 147 deletions(-)
+>  delete mode 100644 drivers/ata/pata_palmld.c
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index e4d9e39b08dd..4aafb75bf0c3 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -1082,15 +1082,6 @@ config PATA_OPTI
+>  
+>  	  If unsure, say N.
+>  
+> -config PATA_PALMLD
+> -	tristate "Palm LifeDrive PATA support"
+> -	depends on MACH_PALMLD
+> -	help
+> -	  This option enables support for Palm LifeDrive's internal ATA
+> -	  port via the new ATA layer.
+> -
+> -	  If unsure, say N.
+> -
+>  config PATA_PCMCIA
+>  	tristate "PCMCIA PATA support"
+>  	depends on PCMCIA
+> diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
+> index 0a863e7f3c60..4ee5c0761d90 100644
+> --- a/drivers/ata/Makefile
+> +++ b/drivers/ata/Makefile
+> @@ -105,7 +105,6 @@ obj-$(CONFIG_PATA_MPIIX)	+= pata_mpiix.o
+>  obj-$(CONFIG_PATA_NS87410)	+= pata_ns87410.o
+>  obj-$(CONFIG_PATA_OPTI)		+= pata_opti.o
+>  obj-$(CONFIG_PATA_PCMCIA)	+= pata_pcmcia.o
+> -obj-$(CONFIG_PATA_PALMLD)	+= pata_palmld.o
+>  obj-$(CONFIG_PATA_PLATFORM)	+= pata_platform.o
+>  obj-$(CONFIG_PATA_OF_PLATFORM)	+= pata_of_platform.o
+>  obj-$(CONFIG_PATA_RB532)	+= pata_rb532_cf.o
+> diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
+> deleted file mode 100644
+> index 51caa2a427dd..000000000000
 
 -- 
-Kees Cook
+Damien Le Moal
+Western Digital Research
+
