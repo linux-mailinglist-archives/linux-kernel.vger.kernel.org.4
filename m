@@ -2,125 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9850B65FAFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6811965FB1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjAFFrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 00:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S231356AbjAFF4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 00:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjAFFrt (ORCPT
+        with ESMTP id S229597AbjAFF4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 00:47:49 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD9948CD4;
-        Thu,  5 Jan 2023 21:47:46 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso4223678pjp.4;
-        Thu, 05 Jan 2023 21:47:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3YubsmjlT8gvaUNIbLlS2Rx5IGQKnpyKadMDjv71G7c=;
-        b=LLZwZOxnXI8avDE5Jt5cMfQKBijAwnEfmOvuGAezu362nWzKMSDE6mQZg7lYISvZGL
-         XqQprTfizgiPktFO192lrlMiTVwAwCG9ifwUr87xO0/hZRPaBv85kDOfRbK5OeR760JD
-         Ju5MAZ9RVMGVlhC7vy8tpLoUbJliTh0CPpezrF6T7aRipBR2Dp1ArK5BDqloL2ugzoWn
-         YEiehB45nLVb6beRTny2BGz71J6pcwXoGofHySWUqpewTk5g0KRZ5q8+Z5nnmzrfMpuA
-         oUAIxJOA6OWkbbh7Phdptjt0vJZ3kjOxIVyf57+vfB+hoB8f9bS/6k3D207fe+bnrzHG
-         /TTw==
-X-Gm-Message-State: AFqh2krlbnvXcdWKIZoyVfkNWu4rFaTM2yosDpSDBLpdL5SCBeQJWn8Y
-        aD64WFsAJDfoaH8FBGsnLBQPwxyqcUT26+QP9fk=
-X-Google-Smtp-Source: AMrXdXuDUVBnGhwZoxjcV0kodG3U5wRj+DXUQMWLdzEIhmGty+QTS7CeirNo2kTS3VxHb9HveTW1MqzR8K9BNMEtcGk=
-X-Received: by 2002:a17:902:ef87:b0:192:5cb3:b01a with SMTP id
- iz7-20020a170902ef8700b001925cb3b01amr2832255plb.95.1672984066101; Thu, 05
- Jan 2023 21:47:46 -0800 (PST)
+        Fri, 6 Jan 2023 00:56:05 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B864060CF5;
+        Thu,  5 Jan 2023 21:56:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672984562; x=1704520562;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5FYmc733b78fRd3B3tStq5rzw45ZjZPIs3hLf607W+U=;
+  b=XYxLxvmyeH7K8fy2k89VWV/X3oSSfIviWF+c6l/hMrlxK8yFmmX9KEuj
+   G2HmiD23KTWi317DuMl0NCs+cNOxSXf/PkJeXccmbXhhuz0X3JRulFtTs
+   10CI5l7zfYrl8e+w/IjdPf0oJ/8LB5tFQC3Jo++6/AtUeyCo1uRXpLUdI
+   XmKObNNosy42nuTTrUMuGV1MEY6L3oYj2nyplcExhCI8X6kRUYqSK4Gek
+   rLBsJZEp3kJ9zxXhdtwrJq6AqYa7R4Qvv2FycLyAa4c24HIDTXtmkFzQN
+   AOTORdplrkGVgvujw95nL9P8RK2yFjSxM79mUubzJwNmmJHjp3jH3NNhB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="323663145"
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="323663145"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 21:56:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="724333183"
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="724333183"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 21:55:58 -0800
+Message-ID: <7bbc0f65-e1c6-f388-29a8-390b8c9c92c8@linux.intel.com>
+Date:   Fri, 6 Jan 2023 13:48:11 +0800
 MIME-Version: 1.0
-References: <20230106042844.give.885-kees@kernel.org>
-In-Reply-To: <20230106042844.give.885-kees@kernel.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 6 Jan 2023 14:47:35 +0900
-Message-ID: <CAMZ6RqKghb-YqQuWGiEn8D-CQgvecBxsxUz_2XYE0m3hs752gQ@mail.gmail.com>
-Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        kernel test robot <lkp@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Cc:     baolu.lu@linux.intel.com,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
+ =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
+ =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
+Content-Language: en-US
+To:     Felix Kuehling <felix.kuehling@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Hegde, Vasant" <Vasant.Hegde@amd.com>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Joerg Roedel <jroedel@suse.de>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
+ <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
+ <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
+ <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
+ <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+ <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+ <6b5baa30-c218-0845-d6c2-32ac21ed6a6d@linux.intel.com>
+ <86099ef0-5a8d-bd1e-4e38-a3b361a68f10@amd.com>
+ <BL1PR12MB51448996E36254ADC80B5BF6F7FA9@BL1PR12MB5144.namprd12.prod.outlook.com>
+ <12db77f6-736d-a423-4cc0-e536eb7bb712@amd.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <12db77f6-736d-a423-4cc0-e536eb7bb712@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri. 6 Jan 2023 at 13:28, Kees Cook <keescook@chromium.org> wrote:
-> Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
-> "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
-> using -fstrict-flex-arrays=3:
->
-> net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
-> net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
->   558 |                         .fs.location = info->rule_locs[i],
->       |                                        ~~~~~~~~~~~~~~~^~~
-> In file included from include/linux/ethtool.h:19,
->                  from include/uapi/linux/ethtool_netlink.h:12,
->                  from include/linux/ethtool_netlink.h:6,
->                  from net/ethtool/common.c:3:
-> include/uapi/linux/ethtool.h:1186:41: note: while referencing
-> 'rule_locs'
->  1186 |         __u32                           rule_locs[0];
->       |                                         ^~~~~~~~~
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
->
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: kernel test robot <lkp@intel.com>
-> Cc: Oleksij Rempel <linux@rempel-privat.de>
-> Cc: Sean Anderson <sean.anderson@seco.com>
-> Cc: Alexandru Tachici <alexandru.tachici@analog.com>
-> Cc: Amit Cohen <amcohen@nvidia.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v3: don't use helper (vincent)
++Jason
 
-v1: https://lore.kernel.org/all/20230105214126.never.757-kees@kernel.org
-                                               ^^^^^
-> v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
-                                                  ^^^^^
-v3: https://lore.kernel.org/netdev/20230106042844.give.885-kees@kernel.org
-                                                  ^^^^
+On 1/5/23 11:27 PM, Felix Kuehling wrote:
+> Am 2023-01-05 um 09:46 schrieb Deucher, Alexander:
+>> [AMD Official Use Only - General]
+>>
+>>> -----Original Message-----
+>>> From: Hegde, Vasant <Vasant.Hegde@amd.com>
+>>> Sent: Thursday, January 5, 2023 5:46 AM
+>>> To: Baolu Lu <baolu.lu@linux.intel.com>; Matt Fagnani
+>>> <matt.fagnani@bell.net>; Thorsten Leemhuis <regressions@leemhuis.info>;
+>>> Deucher, Alexander <Alexander.Deucher@amd.com>; Joerg Roedel
+>>> <jroedel@suse.de>
+>>> Cc: iommu@lists.linux.dev; LKML <linux-kernel@vger.kernel.org>;
+>>> regressions@lists.linux.dev; Linux PCI <linux-pci@vger.kernel.org>; 
+>>> Bjorn
+>>> Helgaas <bhelgaas@google.com>
+>>> Subject: Re: [regression, bisected, pci/iommu] Bug 216865 - Black screen
+>>> when amdgpu started during 6.2-rc1 boot with AMD IOMMU enabled
+>>>
+>>> Baolu,
+>>>
+>>>
+>>> On 1/5/2023 4:07 PM, Baolu Lu wrote:
+>>>> On 2023/1/5 18:27, Vasant Hegde wrote:
+>>>>> On 1/5/2023 6:39 AM, Matt Fagnani wrote:
+>>>>>> I built 6.2-rc2 with the patch applied. The same black screen
+>>>>>> problem happened with 6.2-rc2 with the patch. I tried to use early
+>>>>>> kdump with 6.2-rc2 with the patch twice by panicking the kernel with
+>>>>>> sysrq+alt+c after the black screen happened. The system rebooted
+>>>>>> after about 10-20 seconds both times, but no kdump and dmesg files
+>>>>>> were saved in /var/crash. I'm attaching the lspci -vvv output as
+>>> requested.
+>>>>> Thanks for testing. As mentioned earlier I was not expecting this
+>>>>> patch to fix the black screen issue. It should fix kernel warnings
+>>>>> and IOMMU page fault related call traces. By any chance do you have 
+>>>>> the
+>>> kernel boot logs?
+>>>>> @Baolu,
+>>>>>     Looking into lspci output, it doesn't list ACS feature for
+>>>>> Graphics card. So with your fix it didn't enable PASID and hence it 
+>>>>> failed to
+>>> boot.
+>>>> So do you mind telling why does the PASID need to be enabled for the
+>>>> graphic device? Or in another word, what does the graphic driver use
+>>>> the PASID for?
+>>> Honestly I don't know the complete details of how PASID works with 
+>>> graphics
+>>> card. May be Alex or Joerg can explain it better.
+>> + Felix
+>>
+>> The GPU driver uses the pasid for shared virtual memory between the 
+>> CPU and GPU.  I.e., so that the user apps can use the same virtual 
+>> address space on the GPU and the CPU.  It also uses pasid to take 
+>> advantage of recoverable device page faults using PRS.
+> 
+> Agreed. This applies to GPU computing on some older AMD APUs that take 
+> advantage of memory coherence and IOMMUv2 address translation to create 
+> a shared virtual address space between the CPU and GPU. In this case it 
+> seems to be a Carrizo APU. It is also true for Raven APUs.
 
-Seriously... :)
+Thanks for the explanation.
 
-> v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
-> ---
->  include/uapi/linux/ethtool.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
-> index 58e587ba0450..3135fa0ba9a4 100644
-> --- a/include/uapi/linux/ethtool.h
-> +++ b/include/uapi/linux/ethtool.h
-> @@ -1183,7 +1183,7 @@ struct ethtool_rxnfc {
->                 __u32                   rule_cnt;
->                 __u32                   rss_context;
->         };
-> -       __u32                           rule_locs[0];
-> +       __u32                           rule_locs[];
->  };
+This is actually the problem that commit 201007ef707a was trying to fix.
+The PCIe fabric routes Memory Requests based on the TLP address,
+ignoring any PASID (PCIe r6.0, sec 2.2.10.4), so a TLP with PASID that
+should go upstream to the IOMMU may instead be routed as a P2P
+Request if its address falls in a bridge window.
+
+In SVA case, the IOMMU shares the address space of a user application.
+The user application side has no knowledge about the PCI bridge window.
+It is entirely possible that the device is programed with a P2P address
+and results in a disaster.
+
+--
+Best regards,
+baolu
