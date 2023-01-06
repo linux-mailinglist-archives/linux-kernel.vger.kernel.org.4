@@ -2,126 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04CA66069C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459986606A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbjAFSsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S235088AbjAFSs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjAFSr7 (ORCPT
+        with ESMTP id S235021AbjAFSso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:47:59 -0500
-X-Greylist: delayed 516 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 10:47:58 PST
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672ADE3D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:47:58 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id AEF6616C000A;
-        Fri,  6 Jan 2023 20:47:56 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OFXBDppdFQVh; Fri,  6 Jan 2023 20:47:55 +0200 (EET)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1673030875; bh=tp1wwYL+dWnG3JQw8MZJx330UNMQf42TIrG39TK3gRY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z+SIrCO/3K7QzEBb7e7mbglitdz5lX24ZKP69dZkhD7kSbZNVKh02LLdqwrh13HB+
-         3nf+Pn7OKidjwyS+4HMHJH29WXwKvJcjIbbIKLDvgZBrUiyv8KO14Rip5xsUeB8wea
-         kSO95Cws6tKYlwAuL6n2coxch1vvjS3faOdnNaGQ=
-To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        syed sabakareem <Syed.SabaKareem@amd.com>
-Subject: [RFC] Sound support for Huawei line of AMD laptops using ACP and
- ES8336 codec
-Date:   Fri, 06 Jan 2023 20:47:54 +0200
-Message-ID: <871qo7fqjp.fsf@mutex.one>
+        Fri, 6 Jan 2023 13:48:44 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D95D7D1F2;
+        Fri,  6 Jan 2023 10:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1673030919;
+        bh=3XmN6oeD1VcYxkdyM/Xe+kUR183VsWrkQGyGXz0WE7s=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=A269vLbwDzOem/okS5HwMyTOuzcZ/iVsmzcFjctQKmigXX80lCXxpNoVNUB7gLtOv
+         ixbMe02FVn7Y3LpwNx8yObJ4+eR1qPqcQRp5VT/KyWbtGEiwUABnhJRxknR7XlGkfN
+         WT3HofxdfCQvquSyJNA3vo9DFbu0Puf+Cq/uR41vcPmX1RzdcfU9NH0DetIgRZVi3r
+         AS2G3Kd3a73olpIdvCFidHxQreT6JxKLTlYGQrtoyFezzsvgBGbg29p46o+iKbmL8X
+         bVeehVFZTVlm0VU+dWHB5R7q1FQdkB/IRYwbA5jD5SWVgWYbM9x3ch/7D2QC7XmnmN
+         ekvkWHNzlwFeQ==
+Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NpXRW4V24zg2h;
+        Fri,  6 Jan 2023 13:48:39 -0500 (EST)
+Message-ID: <075db450-dc23-ff79-e1ce-1a8aad69f3e5@efficios.com>
+Date:   Fri, 6 Jan 2023 13:49:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: rseq(2) man page
+Content-Language: en-US
+To:     Alejandro Colomar <alx.manpages@gmail.com>,
+        linux-man@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>, paulmck <paulmck@kernel.org>
+References: <095c479b-baed-9d11-08a1-e698f59763d9@efficios.com>
+ <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-01-06 12:22, Alejandro Colomar wrote:
+> Hi Mathieu!
+[...]
+> 
+> BTW, would you mind sending links to the previous submissions?  I 
+> couldn't find them.  I know there are a few patches that we received 
+> when Michael was on-and-off that I deferred for a later time, and never 
+> did, and maybe this is one of those.  I tried to find such patches some 
+> time ago, but with no luck.
 
-I have a Huawei Matebook 14 AMD 2021 laptop for which the sound isn't
-supported on Linux. On further investigation in Windows and ACPI tables
-I could determine that this particular SKU has an ES8336 codec connected
-to the CPU ACP module.
-The CPU of my laptop is an AMD Ryzen 5 5500U which seems to be codenamed
-Lucienne and is a derivation of the Renoir family.
-Acording to lspci the ACP is revision 1:
+Here is what I could find in my archives (from most recent to oldest submission):
 
-03:00.5 Multimedia controller [0480]: Advanced Micro Devices, Inc. [AMD] Raven/Raven2/FireFlight/Renoir Audio Processor [1022:15e2] (rev 01)
-	Subsystem: Device [1e83:3e4d]
-	Kernel driver in use: snd_rn_pci_acp3x
-	Kernel modules: snd_pci_acp3x, snd_rn_pci_acp3x, snd_pci_acp5x,
-	snd_pci_acp6x, snd_acp_pci, snd_rpl_pci_acp6x,
-	snd_sof_amd_renoir
+https://lore.kernel.org/r/1094083824.1256.1591899797181.JavaMail.zimbra@efficios.com
+https://lore.kernel.org/r/20181206144228.9656-1-mathieu.desnoyers@efficios.com
+https://lore.kernel.org/r/20180919144028.10863-1-mathieu.desnoyers@efficios.com
+https://lore.kernel.org/r/20171116151711.19001-3-mathieu.desnoyers@efficios.com
+https://lore.kernel.org/r/20171115191316.828-3-mathieu.desnoyers@efficios.com
 
-I have written a machine driver for this platform and managed to make
-the sound and internal microphone work. I am looking to integrate this
-support but there are some issues with the current implementation of ACP
-support.
+Thanks,
 
-As far as I can tell there are 4 directions I could take to add support:
+Mathieu
 
-1. A standalone machine driver in sound/soc/amd that uses the platform
-  drivers from sound/soc/amd/raven/
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
-2. An embedded driver in sound/soc/amd/acp/acp-legacy-mach.c
-
-3. A standalone machine driver in sound/soc/amd that uses the platform
-  drivers from sound/soc/amd/renoir
-
-4. Use the SOF infrastructure
-
-Now as far as I can tell, all of these directions have issues:
-
-1. The pci driver from sound/soc/amd/raven/pci-acp3x.c doesn't support Lucienne
-   since it blocks rev 1 devices in :
-
-   /* Raven device detection */
-   if (pci->revision != 0x00)
-       return -ENODEV;
-
-   This is the approach I took and just changed the check to add support
-   for rev 1.
-   The sound and internal microphone worked ok and I didn't encounter any
-   issues with it. Of course I don't know the internals of ACP and
-   don't know what are the differences between rev 0 and rev 1.
-
-2. This approach could work but I would need to change the structure
-   acp_card_drvdata and struct snd_soc_dapm_widget acp_widgets,
-   to add proper support for jack handling (and maybe some other
-   modifications).
-   This driver seems to support rev 1 (in sound/soc/amd/acp/acp-pci.c):
-
-   switch (pci->revision) {
-	case 0x01:
-		chip->name = "acp_asoc_renoir";
-		chip->acp_rev = ACP3X_DEV;
-		break;
-
-   Also from the module description it seems that these drivers are
-   meant only for chromebook support.
-
-3. This seems like it would the best approach in theory, but the problem
-   is that the drivers inside only seem to add support for DMIC.
-
-4. I tried to use SOF early when I started tinkering, but I always got a
-   timeout during init phase when loading the renoir firmware.
-
-So the reason for this email is to get some idea, on how to best add
-support for these laptops.
