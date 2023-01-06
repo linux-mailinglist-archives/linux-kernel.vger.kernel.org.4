@@ -2,66 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160426600F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DAF6600F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbjAFNHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S234352AbjAFNHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjAFNGx (ORCPT
+        with ESMTP id S233258AbjAFNG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:06:53 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1916B5F4;
-        Fri,  6 Jan 2023 05:06:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=OeGOFTvMSS9FvB6JtiIYyOq/m+yHLbR2SAI7arZKtlc=; b=BLrxBhAQjLuRZ1sQFGPxSZJXlM
-        WO/DrLhlZ0a2OoIwm+fqlKMP8sDuAGIjTVWIGYVwAv5ozSoYgsxukFluzptlOy7Icf97iokCQ3ihO
-        G1K+fIJW07VpmEGbjn3mJaz/QlqyvQXgOxyi5ebFeOElBDX1bCiAA/FtI9T4Av5Rp1us=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pDmQi-001Kkg-45; Fri, 06 Jan 2023 14:06:40 +0100
-Date:   Fri, 6 Jan 2023 14:06:40 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] net: dsa: mv88e6xxx: add support for MV88E6071
- switch
-Message-ID: <Y7gc4DJ00xPNqyJ2@lunn.ch>
-References: <20230106101651.1137755-1-lukma@denx.de>
- <20230106101651.1137755-3-lukma@denx.de>
+        Fri, 6 Jan 2023 08:06:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D766E406;
+        Fri,  6 Jan 2023 05:06:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D771461E2B;
+        Fri,  6 Jan 2023 13:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826D8C433EF;
+        Fri,  6 Jan 2023 13:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673010417;
+        bh=1qhYVDm7j1muQ6+34gjzL4UJr40kZ7yhX+GsuvoA7u8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WnvsAYdW6FoAbWVo3OzFrj9soKEvjCqIdhyKr6ty1l9WD1KNt34PtgyhaF9BbRq0S
+         5d99vJORsQ3Dn2gdg8KW/P6hHryxLFOVN4T0gLkGM4bWlPvyaLvI0GjC6clA9hZmS3
+         8Rp8vQmW5Wz4rhrUXoGq0MyAKuJ9GGvqCFK8CRMDHx3Afe1JiKt2mTH4G5iX6T9Fc8
+         CD1wMSxbq4H/rZuP02RTgYkfogCKpA2RK/t/YqpwCSiiRP1c/CVEMw1Q59fMBY35/X
+         FBG7jOA1wgmRBcOgrdQJLkko0qhxfdAFF/0oXGwLwp8h4K3Lq7mfXwN3AnWnakB4Q7
+         9uj0HA+skT1cQ==
+Date:   Fri, 6 Jan 2023 14:06:51 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Ameer Hamza <ahamza@ixsystems.com>
+Cc:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, awalker@ixsystems.com
+Subject: Re: [PATCH] Add new open(2) flag - O_EMPTY_PATH
+Message-ID: <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
+References: <20221228160249.428399-1-ahamza@ixsystems.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230106101651.1137755-3-lukma@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221228160249.428399-1-ahamza@ixsystems.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 11:16:51AM +0100, Lukasz Majewski wrote:
-> A mv88e6250 family (i.e. LinkStreet) switch with 5 internal PHYs,
-> 2 RMIIs and no PTP support.
+On Wed, Dec 28, 2022 at 09:02:49PM +0500, Ameer Hamza wrote:
+> This patch adds a new flag O_EMPTY_PATH that allows openat and open
+> system calls to open a file referenced by fd if the path is empty,
+> and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+> beneficial in some cases since it would avoid having to grant /proc
+> access to things like samba containers for reopening files to change
+> flags in a race-free way.
 > 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+> ---
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+In general this isn't a bad idea and Aleksa and I proposed this as part
+of the openat2() patchset (see [1]).
 
-    Andrew
+However, the reason we didn't do this right away was that we concluded
+that it shouldn't be simply adding a flag. Reopening file descriptors
+through procfs is indeed very useful and is often required. But it's
+also been an endless source of subtle bugs and security holes as it
+allows reopening file descriptors with more permissions than the
+original file descriptor had.
+
+The same lax behavior should not be encoded into O_EMPTYPATH. Ideally we
+would teach O_EMPTYPATH to adhere to magic link modes by default. This
+would be tied to the idea of upgrade mask in openat2() (cf. [2]). They
+allow a caller to specify the permissions that a file descriptor may be
+reopened with at the time the fd is opened.
+
+[1]: https://lore.kernel.org/lkml/20190930183316.10190-4-cyphar@cyphar.com/
+[2]: https://lore.kernel.org/all/20220526130355.fo6gzbst455fxywy@senku/Kk
