@@ -2,95 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5A765F858
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4B165F85B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236109AbjAFAwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 19:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S236292AbjAFAxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 19:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235969AbjAFAwG (ORCPT
+        with ESMTP id S235969AbjAFAxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 19:52:06 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A392DC4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 16:52:04 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id C21AD20176;
-        Fri,  6 Jan 2023 01:52:02 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CXxScuYzd18E; Fri,  6 Jan 2023 01:52:02 +0100 (CET)
-Received: from begin (adijon-658-1-86-31.w86-204.abo.wanadoo.fr [86.204.233.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 157DA20172;
-        Fri,  6 Jan 2023 01:52:02 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pDaxl-000k0r-25;
-        Fri, 06 Jan 2023 01:52:01 +0100
-Date:   Fri, 6 Jan 2023 01:52:01 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] speakup: Fix warning comparing pointer to 0
-Message-ID: <20230106005201.h3ikdaisqgjupavc@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Yang Li <yang.lee@linux.alibaba.com>, w.d.hubbs@gmail.com,
-        chris@the-brannons.com, kirk@reisers.ca, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20230106004114.72589-1-yang.lee@linux.alibaba.com>
+        Thu, 5 Jan 2023 19:53:05 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EF965C0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 16:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672966385; x=1704502385;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9vU/8Mth58yBtKnCrPWLcJMObbOOLQ5hZfZ+Oa/TQQY=;
+  b=PPx+y+pgP/r0BKNFr3YAcZs6HcTQVVG/jxpVb5McMpI/PTQ7k6HDGUAR
+   /tZdd3LX8IeI62Bw63yFeO2FBGv0R+/gLyKbcD3ATWOvG3EPgeoFHSKaO
+   5bLeWsT69GhxXFqyiN3AmZbaAafPlTD2uzfS+dJlxgDu+AugWUNXqVvlm
+   USYPUSTMEekUqWx5JTiwL9XXFbgrMqOSIdbobsH94Skt7EpH7/04k3b6k
+   uobIZ3QGNpVNGNjdgU5kGelzU9ecR0Npk0slVHJakXxGpbp5f9wnu+8w2
+   vl6qWhP6Qwo/KwcMwlWAm/bPX/pU9bREoGFjjDzBdGL07amxpgxTVgOLc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="320071028"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="320071028"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:53:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="605743382"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="605743382"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2023 16:53:02 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDayj-0002lr-38;
+        Fri, 06 Jan 2023 00:53:01 +0000
+Date:   Fri, 06 Jan 2023 08:52:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 4282494a20cdcaf38d553f2c2ff6f252084f979c
+Message-ID: <63b770c8.VD2uEtOL7jf3O5NW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230106004114.72589-1-yang.lee@linux.alibaba.com>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yang Li, le ven. 06 janv. 2023 08:41:14 +0800, a ecrit:
-> ./drivers/accessibility/speakup/utils.h:39:15-16: WARNING comparing pointer to 0
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3636
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 4282494a20cdcaf38d553f2c2ff6f252084f979c  locking/qspinlock: Micro-optimize pending state waiting for unlock
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+elapsed time: 834m
 
-> ---
->  drivers/accessibility/speakup/utils.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-> index 4ce9a12f7664..db00c962f8e2 100644
-> --- a/drivers/accessibility/speakup/utils.h
-> +++ b/drivers/accessibility/speakup/utils.h
-> @@ -36,7 +36,7 @@ static inline void open_input(const char *dir_name, const char *name)
->  	else
->  		snprintf(filename, sizeof(filename), "%s", name);
->  	infile = fopen(filename, "r");
-> -	if (infile == 0) {
-> +	if (!infile) {
->  		fprintf(stderr, "can't open %s\n", filename);
->  		exit(1);
->  	}
-> -- 
-> 2.20.1.7.g153144c
-> 
+configs tested: 72
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+ia64                             allmodconfig
+arc                                 defconfig
+s390                             allmodconfig
+i386                          randconfig-a001
+alpha                               defconfig
+x86_64                              defconfig
+arm                                 defconfig
+s390                                defconfig
+i386                                defconfig
+i386                          randconfig-a003
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+arm64                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a005
+x86_64                        randconfig-a006
+x86_64                        randconfig-a015
+s390                             allyesconfig
+x86_64                               rhel-8.3
+arm                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+m68k                             allyesconfig
+x86_64                           rhel-8.3-bpf
+mips                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+m68k                             allmodconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                             allyesconfig
+sh                               allmodconfig
+arc                              allyesconfig
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20230105
+s390                 randconfig-r044-20230105
+riscv                randconfig-r042-20230105
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                          allmodconfig
+
+clang tested configs:
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+arm                  randconfig-r046-20230105
+hexagon              randconfig-r045-20230105
+hexagon              randconfig-r041-20230105
+x86_64                        randconfig-k001
 
 -- 
-Samuel
----
-Pour une évaluation indépendante, transparente et rigoureuse !
-Je soutiens la Commission d'Évaluation de l'Inria.
+0-DAY CI Kernel Test Service
+https://01.org/lkp
