@@ -2,174 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FD46606A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FFD6606AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjAFSts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S231281AbjAFSw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbjAFSti (ORCPT
+        with ESMTP id S229586AbjAFSwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:49:38 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40C874589
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:49:36 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id u8so1456051ilg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:49:36 -0800 (PST)
+        Fri, 6 Jan 2023 13:52:53 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93376EDF
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:52:52 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id bk16so2091079wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:52:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MnPFQI0zQH+ufIe4NpG7uds9d7bqyUhTRB750/CIDaE=;
-        b=ypF+eMOtz+SHom6Ti/j0q7w3SNGMZCKJRqKCZZ7QLmnAIgrMP81UcjQ2R4RR+4s4/J
-         sUghcfcmHZt3j4sJJ1K+RSkbg1i7eJKZqs5s5bQZiKx9gocGK/jX8RClIZCB3bz2SHzm
-         21MTouPINFuSJ0pnLqIdZfVFyuJm2fOPDNttlBB9G82xejAr24r1/3Ag6aCq3SphYgW9
-         T+kOFgnDhWhKWlFD330pqxqSyRIeNsb/tILZNvWuioCl8cz/mj40jzVVZ0xyif95mp6w
-         waG7HPLbUc8g/BXdGfh2V43aU0fPlcm3i9BjENEHYPk9ACAjwudLrha3H66wsUvuMvpu
-         1VmQ==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zFR7Wmf9ELtFjlJq04xcru9S2eGwAWVDYFWePjOvsWE=;
+        b=JOtgCNHTFmz8jD2kcDh2BY8qEJFDafRE6HT4cApEbKPvQgifmAp92UAzXqcRzxOeqi
+         VNfYJ15XEzqvwg77AERdY08BX56pUOkxv9Y78wPLj72Tw7JAoQXQAVfbDJxoLtuGZpeY
+         AiqGCU/nqHkttNptiLn7PFFH6buLt9DYx/Veo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MnPFQI0zQH+ufIe4NpG7uds9d7bqyUhTRB750/CIDaE=;
-        b=N8bd92NGPejxdjYw45tnic6XWdU/YL6a9rWEolRjl4fJ2QJs7IAnioCcR7oiZfbZ2V
-         xIBUvXJ0q/hVhh7Qc5tZjEcFM/O7xqmkZXPJgVSKmle+jHzoHwytpv9koRRqvq2NLY5C
-         MSr+W1b4n+FaVeXGvevqANS9RYFUf/FlONCzcaBuXhHMrmUPkzn6dzr8MF9EV1vaCWR8
-         gVdP2p8y5sRgaPlb+we0Awc76t3qw+k4dqGOdeh045qCah1i4PgHMAk5K5FF+Fq+bPwR
-         9MeCknBSyXsScCdZITatMVM4EhxwHJIooBaxVr+NIoNuA8KOrW5NQ6ZhZDSvnuIpN5dF
-         rBdA==
-X-Gm-Message-State: AFqh2kqsc1vxx6ifyGe0S3kOgHYb+tstuf3w9o+iBK0OuNyqvranLhya
-        PGEmfAsLz78iwJ2igshdzJdj0g==
-X-Google-Smtp-Source: AMrXdXsD6V6/w0NcDSDdpMWHoU4dkXEqhrgGvI7CuZrztJscRGU7CxpCZqMRdEbt2l+uLXFyNMjXvw==
-X-Received: by 2002:a92:d28f:0:b0:30b:d89f:35b2 with SMTP id p15-20020a92d28f000000b0030bd89f35b2mr6332449ilp.3.1673030976190;
-        Fri, 06 Jan 2023 10:49:36 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id r13-20020a92d98d000000b0030d6e5a28c6sm563402iln.60.2023.01.06.10.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 10:49:35 -0800 (PST)
-Message-ID: <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
-Date:   Fri, 6 Jan 2023 11:49:33 -0700
+        bh=zFR7Wmf9ELtFjlJq04xcru9S2eGwAWVDYFWePjOvsWE=;
+        b=suvX0RhmfFuS2ijlVgUeDD3STMMMeHXCaXmhjSJKZlybXB6f8jpbZGGyLUCc8IssDp
+         jm+1Qaf5jsAphSFUd8wVy0PM20Hc9ifOKIvo+CU+QYtqyr/zT1opPgCN0iZr2405+3e6
+         kX1IlVzCgkvxhUj700n2n+KVh7Szqc3kg3RI4zUTGjb2dRR40XMym17lRdxpjiByO1Ez
+         KoRDkvtVBh01GjlBxkPtqqJnNmoH1wURmQwQbgki45xbE+71GWpHUZHXgTFdqvxdct5G
+         BZHXALa6tP9d3PQ/8lvlM48Nu++r9pk/X6xes1jmxP+H8hSKOeYfDJOePubUesYD4WA9
+         xRQA==
+X-Gm-Message-State: AFqh2kpXAAeaUEPN9y1vAGbNseAMHHLs0Jf8QIvN8qRXljSNckd4k+av
+        VkhD/lk6GT45lG+L20JQmQSMzQ==
+X-Google-Smtp-Source: AMrXdXuChnuE6AXI+/EZeqKTU0XPuoALftuNLu4VCEg1NN6I1L5JLRtfk0jqNteHsg3uijYuLmPnnQ==
+X-Received: by 2002:a5d:46d0:0:b0:294:381e:1c7d with SMTP id g16-20020a5d46d0000000b00294381e1c7dmr13187714wrs.8.1673031171103;
+        Fri, 06 Jan 2023 10:52:51 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id m5-20020adfdc45000000b002428c4fb16asm1966950wrj.10.2023.01.06.10.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 10:52:50 -0800 (PST)
+Date:   Fri, 6 Jan 2023 19:52:47 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Liwei Song <liwei.song@windriver.com>,
+        AlexDeucher <alexander.deucher@amd.com>,
+        =?iso-8859-1?Q?ChristianK=F6nig?= <christian.koenig@amd.com>,
+        PanXinhui <Xinhui.Pan@amd.com>, DavidAirlie <airlied@gmail.com>,
+        DanielVetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/radeon: free iio for atombios when driver shutdown
+Message-ID: <Y7ht/7gujgsrQt3Z@phenom.ffwll.local>
+Mail-Followup-To: Alex Deucher <alexdeucher@gmail.com>,
+        Liwei Song <liwei.song@windriver.com>,
+        AlexDeucher <alexander.deucher@amd.com>,
+        =?iso-8859-1?Q?ChristianK=F6nig?= <christian.koenig@amd.com>,
+        PanXinhui <Xinhui.Pan@amd.com>, DavidAirlie <airlied@gmail.com>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230106094729.38598-1-liwei.song@windriver.com>
+ <CADnq5_Mu-9_HoH9PULANvWS39D0Sra+nxodwFspH-TXX_3GJKA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [bug report] memcontrol: schedule throttling if we are congested
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Dan Carpenter <error27@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y7g3L6fntnTtOm63@kili> <Y7hbYPSdLqW++y/p@slm.duckdns.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y7hbYPSdLqW++y/p@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADnq5_Mu-9_HoH9PULANvWS39D0Sra+nxodwFspH-TXX_3GJKA@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/23 10:33 AM, Tejun Heo wrote:
-> Hello,
-> 
-> (cc'ing Luis, Christoph and Jens and quoting whole body)
-> 
-> On Fri, Jan 06, 2023 at 05:58:55PM +0300, Dan Carpenter wrote:
->> Hello Tejun Heo,
->>
->> The patch 2cf855837b89: "memcontrol: schedule throttling if we are
->> congested" from Jul 3, 2018, leads to the following Smatch static
->> checker warning:
->>
->> block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
->>
->> The call tree looks like:
->>
->> ioc_rqos_merge() <- disables preempt
->> __cgroup_throttle_swaprate() <- disables preempt
->> -> blkcg_schedule_throttle()
->>
->> Here is one of the callers:
->> mm/swapfile.c
->>   3657          spin_lock(&swap_avail_lock);
->>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> Takes spin lock.
->>
->>   3658          plist_for_each_entry_safe(si, next, &swap_avail_heads[nid],
->>   3659                                    avail_lists[nid]) {
->>   3660                  if (si->bdev) {
->>   3661                          blkcg_schedule_throttle(si->bdev->bd_disk, true);
->>                                 ^^^^^^^^^^^^^^^^^^^^^^^
->> Calls blkcg_schedule_throttle().
->>
->>   3662                          break;
->>   3663                  }
->>   3664          }
->>
->> block/blk-cgroup.c
->>   1851  void blkcg_schedule_throttle(struct gendisk *disk, bool use_memdelay)
->>   1852  {
->>   1853          struct request_queue *q = disk->queue;
->>   1854  
->>   1855          if (unlikely(current->flags & PF_KTHREAD))
->>   1856                  return;
->>   1857  
->>   1858          if (current->throttle_queue != q) {
->>   1859                  if (!blk_get_queue(q))
->>   1860                          return;
->>   1861  
->>   1862                  if (current->throttle_queue)
->>   1863                          blk_put_queue(current->throttle_queue);
->>                                 ^^^^^^^^^^^^^^
->> Sleeps.
->>
->>   1864                  current->throttle_queue = q;
->>   1865          }
->>   1866  
->>   1867          if (use_memdelay)
->>   1868                  current->use_memdelay = use_memdelay;
->>   1869          set_notify_resume(current);
->>   1870  }
-> 
-> In general, it's quite unusual for a put operation to require a sleepable
-> context and I could be missing sth but the actual put / release paths don't
-> seem to actually need might_sleep(). It seems sprious.
-> 
-> The might_sleep() in put was added by Christoph's 63f93fd6fa57 ("block: mark
-> blk_put_queue as potentially blocking") which promoted it from release to
-> put cuz the caller usually can't tell whether its put is the last put.
-> 
-> And that put in release was added by Luis in e8c7d14ac6c3 ("block: revert
-> back to synchronous request_queue removal") while making the release path
-> synchronous, the rationale being that releasing asynchronously makes dynamic
-> device removal / readdition behaviors unpredictable and it also seems to
-> note that might_sleep() is no longer needed but still kept, which seems a
-> bit odd to me.
-> 
-> Here's my take on it:
-> 
-> * Let's please not require a sleepable context in a put operation. It's
->   unusual, inconvenient and error-prone, and likely to cause its users to
->   implement multiple copies of async mechanisms around it.
-> 
-> * A better way to deal with removal / readdition race is flushing release
->   operaitons either at the end of removal or before trying to add something
->   (you can get fancy w/ flushing only if there's name collision too), not
->   making a put path synchronously call release which needs to sleep.
-> 
-> * If might_sleep() is currently not needed, let's please drop it. It just
->   makes people scratch their head when reading the code.
+Just a quick drive-by. For these simple cases where we just need to make
+sure that memory is freed using drmm_kmalloc and friends should help
+simplify things. Probably not worth it for radeon, but figured I'll throw
+it out there.
 
-I looked over the call path, and I don't think anything in there sleeps.
-So should be fine to remove the might_sleep().
+For more functional code switching to drmm is harder because you need the
+right order. But for these all that matters is that stuff gets freed so
+there's no leak, and drmm can take care of that without ordering
+constraints.
+-Daniel
+
+On Fri, Jan 06, 2023 at 10:36:53AM -0500, Alex Deucher wrote:
+> Applied.  Thanks!
+> 
+> Alex
+> 
+> On Fri, Jan 6, 2023 at 5:00 AM Liwei Song <liwei.song@windriver.com> wrote:
+> >
+> > Fix below kmemleak when unload radeon driver:
+> >
+> > unreferenced object 0xffff9f8608ede200 (size 512):
+> >   comm "systemd-udevd", pid 326, jiffies 4294682822 (age 716.338s)
+> >   hex dump (first 32 bytes):
+> >     00 00 00 00 c4 aa ec aa 14 ab 00 00 00 00 00 00  ................
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >   backtrace:
+> >     [<0000000062fadebe>] kmem_cache_alloc_trace+0x2f1/0x500
+> >     [<00000000b6883cea>] atom_parse+0x117/0x230 [radeon]
+> >     [<00000000158c23fd>] radeon_atombios_init+0xab/0x170 [radeon]
+> >     [<00000000683f672e>] si_init+0x57/0x750 [radeon]
+> >     [<00000000566cc31f>] radeon_device_init+0x559/0x9c0 [radeon]
+> >     [<0000000046efabb3>] radeon_driver_load_kms+0xc1/0x1a0 [radeon]
+> >     [<00000000b5155064>] drm_dev_register+0xdd/0x1d0
+> >     [<0000000045fec835>] radeon_pci_probe+0xbd/0x100 [radeon]
+> >     [<00000000e69ecca3>] pci_device_probe+0xe1/0x160
+> >     [<0000000019484b76>] really_probe.part.0+0xc1/0x2c0
+> >     [<000000003f2649da>] __driver_probe_device+0x96/0x130
+> >     [<00000000231c5bb1>] driver_probe_device+0x24/0xf0
+> >     [<0000000000a42377>] __driver_attach+0x77/0x190
+> >     [<00000000d7574da6>] bus_for_each_dev+0x7f/0xd0
+> >     [<00000000633166d2>] driver_attach+0x1e/0x30
+> >     [<00000000313b05b8>] bus_add_driver+0x12c/0x1e0
+> >
+> > iio was allocated in atom_index_iio() called by atom_parse(),
+> > but it doesn't got released when the dirver is shutdown.
+> > Fix this kmemleak by free it in radeon_atombios_fini().
+> >
+> > Signed-off-by: Liwei Song <liwei.song@windriver.com>
+> > ---
+> >  drivers/gpu/drm/radeon/radeon_device.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+> > index 92905ebb7b45..1c005e0ddd38 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_device.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_device.c
+> > @@ -1022,6 +1022,7 @@ void radeon_atombios_fini(struct radeon_device *rdev)
+> >  {
+> >         if (rdev->mode_info.atom_context) {
+> >                 kfree(rdev->mode_info.atom_context->scratch);
+> > +               kfree(rdev->mode_info.atom_context->iio);
+> >         }
+> >         kfree(rdev->mode_info.atom_context);
+> >         rdev->mode_info.atom_context = NULL;
+> > --
+> > 2.33.1
+> >
 
 -- 
-Jens Axboe
-
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
