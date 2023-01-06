@@ -2,202 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D415A6609AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7DA6609AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjAFWtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 17:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S231459AbjAFWt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 17:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjAFWt1 (ORCPT
+        with ESMTP id S229521AbjAFWt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 Jan 2023 17:49:27 -0500
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7158C3C700
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 14:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D503C0FF;
+        Fri,  6 Jan 2023 14:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1673045366; x=1704581366;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=b92wzO1QTXNY++unlUUm0NBNCNegMzW2zc+jnoKi2Lw=;
-  b=qefOJXwhBpy0H+Vr7gCay7Wi5ZZIe62R2Fx0rmzQfc0/Zegy00Cjtg3i
-   4PbEqjbxsDgGLBlghiPUTAcCj62PxaeBKIFa8XiPj4aXSY06r0h6WDDyO
-   zu42WIpJL5vPfCtWVgVvzU3Uk1Vr5qN1YqAEKn+lIZpZTWnfGO7lxs1yQ
-   I=;
-X-IronPort-AV: E=Sophos;i="5.96,306,1665446400"; 
-   d="scan'208";a="284196790"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 22:49:26 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com (Postfix) with ESMTPS id F3202412BE;
-        Fri,  6 Jan 2023 22:49:24 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Fri, 6 Jan 2023 22:49:24 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.161.114) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Fri, 6 Jan 2023 22:49:23 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <hannes@cmpxchg.org>, <surenb@google.com>
-CC:     <ebiggers@kernel.org>, <mengcc@amazon.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: another use-after-free in ep_remove_wait_queue()
-Date:   Fri, 6 Jan 2023 14:48:59 -0800
-Message-ID: <20230106224859.4123476-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Wx7/2xlsGHq0QW2ou9GvgJ90Ghw3fsOK3yqO6pk4BQQ=;
+  b=fdcgp1Tkt44hqVE3/rkMCyt0POHvFeUSl96T/CnB0Bb1RYjK3bh1iQbJ
+   Ee1oSUn96/RuneeWE3SdDe6U9iAD2AGeOvN2SH4wNjdBh+s4jthLyExsz
+   PoTY8bp29WHreuxe/9vrRBbiQPsQ4OdkfKcs1QfbEvmpPz/wyXgorOzUU
+   0uPmURdcQfpygn5eKVP6wvNrq2LXQisl60ouUFBMeKLo0TobtpBZhsSZD
+   wdjmzIud9dVIrqvzI0rSZQPWrYbOJWCYnbC2FVWDcwAYH8GxC2r1skfAi
+   rnWSqvToWe3tH5KpQ4gHXRXQd+ToZX7ZK4Am1rc3rXf6YK6vM4Giro9vm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="387040280"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="387040280"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:49:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="719340233"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="719340233"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:49:24 -0800
+Message-ID: <9dca3a1d-eace-07ed-4cd2-09621912314a@intel.com>
+Date:   Fri, 6 Jan 2023 14:49:23 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.114]
-X-ClientProxiedBy: EX13D44UWC002.ant.amazon.com (10.43.162.169) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 13/16] x86/virt/tdx: Configure global KeyID on all
+ packages
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <383a2fb52a36d1e772bc547c289c5aeb8ea5d9cb.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <383a2fb52a36d1e772bc547c289c5aeb8ea5d9cb.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 12/8/22 22:52, Kai Huang wrote:
+> After the list of TDMRs and the global KeyID are configured to the TDX
+> module, the kernel needs to configure the key of the global KeyID on all
+> packages using TDH.SYS.KEY.CONFIG.
+> 
+> TDH.SYS.KEY.CONFIG needs to be done on one (any) cpu for each package.
+> Also, it cannot run concurrently on different cpus, so just use
+> smp_call_function_single() to do it one by one.
+> 
+> Note to keep things simple, neither the function to configure the global
+> KeyID on all packages nor the tdx_enable() checks whether there's at
+> least one online cpu for each package.  Also, neither of them explicitly
+> prevents any cpu from going offline.  It is caller's responsibility to
+> guarantee this.
 
-We found the following use-after-free with userspace code polling on
-a pressure file in a non-root cgroup using epoll.
+OK, but does someone *actually* do this?
 
-[   57.183661] BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x76/0x130
-[   57.186662] Write of size 4 at addr ffff888114976428 by task a.out/2426
+> Intel hardware doesn't guarantee cache coherency across different
+> KeyIDs.  The kernel needs to flush PAMT's dirty cachelines (associated
+> with KeyID 0) before the TDX module uses the global KeyID to access the
+> PAMT.  Otherwise, those dirty cachelines can silently corrupt the TDX
+> module's metadata.  Note this breaks TDX from functionality point of
+> view but TDX's security remains intact.
 
-[   57.190551] CPU: 0 PID: 2426 Comm: a.out Not tainted 6.2.0-rc2+ #16
-[   57.193384] Hardware name: Amazon EC2 c5a.large/, BIOS 1.0 10/16/2017
-[   57.196272] Call Trace:
-[   57.197565]  <TASK>
-[   57.198714]  dump_stack_lvl+0x8f/0xc0
-[   57.200494]  print_report+0x16c/0x4e0
-[   57.202084]  ? _raw_spin_lock_irqsave+0x76/0x130
-[   57.204077]  kasan_report+0xc3/0xf0
-[   57.205587]  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   57.207760]  ? _raw_spin_lock_irqsave+0x76/0x130
-[   57.209685]  kasan_check_range+0x2d2/0x310
-[   57.211477]  _raw_spin_lock_irqsave+0x76/0x130
-[   57.213355]  remove_wait_queue+0x25/0x130
-[   57.215102]  ep_free+0x12d/0x220
-[   57.216506]  ep_eventpoll_release+0x3c/0x40
-[   57.218254]  __fput+0x32b/0x700
-[   57.221486]  task_work_run+0x1db/0x230
-[   57.224885]  exit_to_user_mode_prepare+0xfd/0x100
-[   57.228662]  syscall_exit_to_user_mode+0x20/0x40
-[   57.232360]  do_syscall_64+0x52/0x90
-[   57.235691]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   57.239572] RIP: 0033:0x7fadf96e1c44
-[   57.242865] Code: 00 00 b8 ff ff ff ff eb 9c b8 ff ff ff ff eb 95 e8 01 e2 01 00 90 8b 05 2a ac 2c 00 48 63 ff 85 c0 75 11 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 3a f3 c3 48 83 ec 18 48 89 7c 24 08 e8 e4 a0
-[   57.255244] RSP: 002b:00007ffd1d1b7b98 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-[   57.261714] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fadf96e1c44
-[   57.266293] RDX: 0000000000000000 RSI: 00007ffd1d1b7b60 RDI: 0000000000000004
-[   57.270979] RBP: 00007ffd1d1b7bf0 R08: 00000000004007e0 R09: 00007fadf9a0f240
-[   57.275856] R10: 00000000000006ba R11: 0000000000000246 R12: 00000000004005e0
-[   57.280478] R13: 00007ffd1d1b7cd0 R14: 0000000000000000 R15: 0000000000000000
-[   57.285059]  </TASK>
+	Intel hardware doesn't guarantee cache coherency across
+	different KeyIDs.  The PAMTs are transitioning from being used
+	by the kernel mapping (KeyId 0) to the TDX module's "global
+	KeyID" mapping.
 
-[   57.290402] Allocated by task 2426:
-[   57.293705]  kasan_set_track+0x3d/0x60
-[   57.297102]  __kasan_kmalloc+0x85/0x90
-[   57.300491]  psi_trigger_create+0x155/0x850
-[   57.304040]  pressure_write+0x200/0x510
-[   57.307508]  cgroup_file_write+0x1de/0x3e0
-[   57.310949]  kernfs_fop_write_iter+0x27d/0x380
-[   57.314601]  vfs_write+0x7d7/0xaa0
-[   57.317891]  ksys_write+0xd7/0x1a0
-[   57.321152]  do_syscall_64+0x43/0x90
-[   57.324496]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+	This means that the kernel must flush any dirty KeyID-0 PAMT
+	cachelines before the TDX module uses the global KeyID to access
+	the PAMT.  Otherwise, if those dirty cachelines were written
+	back, they would corrupt the TDX module's metadata.  Aside: This
+	corruption would be detected by the memory integrity hardware on
+	the next read of the memory with the global KeyID.  The result
+	would likely be fatal to the system but would not impact TDX
+	security.
 
-[   57.330887] Freed by task 2429:
-[   57.334053]  kasan_set_track+0x3d/0x60
-[   57.337448]  kasan_save_free_info+0x27/0x40
-[   57.340977]  ____kasan_slab_free+0x11d/0x170
-[   57.344570]  slab_free_freelist_hook+0x87/0x150
-[   57.348236]  __kmem_cache_free+0xcb/0x180
-[   57.351710]  psi_trigger_destroy+0x458/0x550
-[   57.355274]  cgroup_file_release+0x96/0x110
-[   57.358779]  kernfs_drain_open_files+0x238/0x420
-[   57.362519]  kernfs_drain+0x191/0x2a0
-[   57.365901]  __kernfs_remove+0x3a6/0x600
-[   57.369363]  kernfs_remove_by_name_ns+0xc2/0x120
-[   57.373073]  cgroup_addrm_files+0x90f/0xcf0
-[   57.376610]  cgroup_destroy_locked+0x48a/0x730
-[   57.380260]  cgroup_rmdir+0x2b/0x130
-[   57.383650]  kernfs_iop_rmdir+0x17a/0x230
-[   57.387201]  vfs_rmdir+0x196/0x410
-[   57.390442]  do_rmdir+0x1c7/0x3f0
-[   57.393651]  __x64_sys_rmdir+0x45/0x50
-[   57.397000]  do_syscall_64+0x43/0x90
-[   57.400340]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Following the TDX module specification, flush cache before configuring
+> the global KeyID on all packages.  Given the PAMT size can be large
+> (~1/256th of system RAM), just use WBINVD on all CPUs to flush.
+> 
+> Note if any TDH.SYS.KEY.CONFIG fails, the TDX module may already have
+> used the global KeyID to write any PAMT.  Therefore, need to use WBINVD
+> to flush cache before freeing the PAMTs back to the kernel.
 
-[   57.406689] The buggy address belongs to the object at ffff888114976400
-                which belongs to the cache kmalloc-128 of size 128
-[   57.414907] The buggy address is located 40 bytes inside of
-                128-byte region [ffff888114976400, ffff888114976480)
-
-[   57.425474] The buggy address belongs to the physical page:
-[   57.429541] page:000000008c5ecb31 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x114976
-[   57.436725] flags: 0x2fffff80000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-[   57.441235] raw: 002fffff80000200 ffff8881000418c0 dead000000000100 dead000000000122
-[   57.447793] raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-[   57.454274] page dumped because: kasan: bad access detected
-
-[   57.460990] Memory state around the buggy address:
-[   57.464744]  ffff888114976300: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   57.471126]  ffff888114976380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[   57.477447] >ffff888114976400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   57.483833]                                   ^
-[   57.487541]  ffff888114976480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[   57.493976]  ffff888114976500: 00 00 00 00 00 00 00 00 00 00 00 00 00 01 fc fc
-
-Here is the simple repro.
-
-#include <fcntl.h>
-#include <sys/epoll.h>
-#include <unistd.h>
-
-int main(void)
-{
-	const char trigger_str[] = "some 100000 1000000";
-	int fd, epfd;
-	struct epoll_event event;
-	struct epoll_event events[1];
-
-	fd = open("/cgroup2/test/cpu.pressure", O_RDWR);
-	write(fd, trigger_str, sizeof(trigger_str));
-	epfd = epoll_create(1);
-	event.events = EPOLLPRI | EPOLLET;
-	event.data.fd = fd;
-	epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
-	epoll_wait(epfd, events, 1, -1); /* returns after rmdir */
-	sleep(5);
-	close(epfd);
-	close(fd);
-
-	return 0;
-}
-
-# mkdir /cgroup2
-# mount -t cgroup2 none /cgroup2
-# mkdir /cgroup2/test
-# ./a.out &
-# rmdir /cgroup2/test
-
-Looks like calling wake_up_pollfree() in psi_trigger_destroy() can properly
-clear the queue and then avoid this use-after-free, but POLLFREE wasn't
-considered enough there for the past similar issue[1]. While
-wake_up_pollfree() could *also* be called in psi_trigger_destroy(), it may
-be awkward and there can be more appropriate solution. It would be great if
-experts could have a look.
-
-[1] https://lkml.org/lkml/2021/11/16/264
+						s/need to// ^
 
 
-Regards,
-Munehisa
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index ab961443fed5..4c779e8412f1 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -946,6 +946,66 @@ static int config_tdx_module(struct tdmr_info_list *tdmr_list, u64 global_keyid)
+>  	return ret;
+>  }
+>  
+> +static void do_global_key_config(void *data)
+> +{
+> +	int ret;
+> +
+> +	/*
+> +	 * TDH.SYS.KEY.CONFIG may fail with entropy error (which is a
+> +	 * recoverable error).  Assume this is exceedingly rare and
+> +	 * just return error if encountered instead of retrying.
+> +	 */
+> +	ret = seamcall(TDH_SYS_KEY_CONFIG, 0, 0, 0, 0, NULL, NULL);
+> +
+> +	*(int *)data = ret;
+> +}
+> +
+> +/*
+> + * Configure the global KeyID on all packages by doing TDH.SYS.KEY.CONFIG
+> + * on one online cpu for each package.  If any package doesn't have any
+> + * online
+
+This looks like it stopped mid-sentence.
+
+> + * Note:
+> + *
+> + * This function neither checks whether there's at least one online cpu
+> + * for each package, nor explicitly prevents any cpu from going offline.
+> + * If any package doesn't have any online cpu then the SEAMCALL won't be
+> + * done on that package and the later step of TDX module initialization
+> + * will fail.  The caller needs to guarantee this.
+> + */
+
+*Does* the caller guarantee it?
+
+You're basically saying, "this code needs $FOO to work", but you're not
+saying who *provides* $FOO.
+
+> +static int config_global_keyid(void)
+> +{
+> +	cpumask_var_t packages;
+> +	int cpu, ret = 0;
+> +
+> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL))
+> +		return -ENOMEM;
+> +
+> +	for_each_online_cpu(cpu) {
+> +		int err;
+> +
+> +		if (cpumask_test_and_set_cpu(topology_physical_package_id(cpu),
+> +					packages))
+> +			continue;
+> +
+> +		/*
+> +		 * TDH.SYS.KEY.CONFIG cannot run concurrently on
+> +		 * different cpus, so just do it one by one.
+> +		 */
+> +		ret = smp_call_function_single(cpu, do_global_key_config, &err,
+> +				true);
+> +		if (ret)
+> +			break;
+> +		if (err) {
+> +			ret = err;
+> +			break;
+> +		}
+> +	}
+> +
+> +	free_cpumask_var(packages);
+> +	return ret;
+> +}
+> +
+>  static int init_tdx_module(void)
+>  {
+>  	/*
+> @@ -998,19 +1058,46 @@ static int init_tdx_module(void)
+>  	if (ret)
+>  		goto out_free_pamts;
+>  
+> +	/*
+> +	 * Hardware doesn't guarantee cache coherency across different
+> +	 * KeyIDs.  The kernel needs to flush PAMT's dirty cachelines
+> +	 * (associated with KeyID 0) before the TDX module can use the
+> +	 * global KeyID to access the PAMT.  Given PAMTs are potentially
+> +	 * large (~1/256th of system RAM), just use WBINVD on all cpus
+> +	 * to flush the cache.
+> +	 *
+> +	 * Follow the TDX spec to flush cache before configuring the
+> +	 * global KeyID on all packages.
+> +	 */
+
+I don't think this second paragraph adds very much clarity.
+
+
