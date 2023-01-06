@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6644066060A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E83660612
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbjAFR4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S234959AbjAFR4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbjAFR4D (ORCPT
+        with ESMTP id S234196AbjAFR4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:56:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBD7D9E7;
-        Fri,  6 Jan 2023 09:56:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF41361F0B;
-        Fri,  6 Jan 2023 17:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A179BC433EF;
-        Fri,  6 Jan 2023 17:56:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673027761;
-        bh=ot+tAafudNV7hoY7I2KoYwEZhq9iuC+POIAR3srNPPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VO1gdWoxPVKG1w4XeWigCGI++6zlHzV8PLbl9wH7VSr3blZwMmz8b/uKTAWyWrAij
-         K4WFX3d5vgVnYL5H+2Q79lQiDGIAQq3K4yL0V5lWSem6GPyewV7gX8ZrMrbtWgyXHh
-         sH5cdkvPtiz1mzY4mXWNVNC+Hc3ip1JYHL+3P1OiapEDfsa6j6Xdr718JUDLWNJmiG
-         10H9sk/mROjM1vKLcN3y6xcx7ht+VmiXYhzvOFZ6T8onVM0UGvS/camNu3ep80RZgN
-         qaRBbez0PQRRIHRBcg84qFawDcnagdgOTnxRX4YdXzeHtLrXpWuPEnNdMZLQKsLfxq
-         UvwgT1iyh81KQ==
-Date:   Fri, 6 Jan 2023 11:55:58 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: reserved-memory: rmtfs: Document
- qcom,assign-to-nav
-Message-ID: <20230106175558.7sfutxaishdlwhoe@builder.lan>
-References: <20230102165034.830620-1-konrad.dybcio@linaro.org>
+        Fri, 6 Jan 2023 12:56:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03C7DE02
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:56:31 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqx4-0001Et-NZ; Fri, 06 Jan 2023 18:56:22 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqx0-004FtV-BZ; Fri, 06 Jan 2023 18:56:18 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqwz-00AihF-Fm; Fri, 06 Jan 2023 18:56:17 +0100
+Date:   Fri, 6 Jan 2023 18:56:17 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Grant Likely <grant.likely@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
+ .probe_new()
+Message-ID: <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-2-uwe@kleine-koenig.org>
+ <20221216090904.qlekgvtpriijmvay@pengutronix.de>
+ <Y696MSvhEUWlHSoK@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cxrh6k27i7zhw6ts"
 Content-Disposition: inline
-In-Reply-To: <20230102165034.830620-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y696MSvhEUWlHSoK@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 05:50:33PM +0100, Konrad Dybcio wrote:
-> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
-> others really don't want that. Since it has to be conditional, add a
-> bool property to toggle this behavior.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v1 -> v2:
-> - Rewrite the newly added description
-> 
->  .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> index 2998f1c8f0db..4026788a4e40 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> @@ -31,6 +31,12 @@ properties:
->      description: >
->        vmid of the remote processor, to set up memory protection
->  
-> +  qcom,assign-to-nav:
-> +    type: boolean
-> +    description:
-> +      Whether to also assign the region to a third (NAV) VM, as opposed to
-> +      the usual 2.
 
-For better or worse, the binding currently takes the vmid of the first
-instance in qcom,vmid. Would it not be cleaner to turn qcom,vmid into an
-array and pass the nav vmid as a second element in that array?
+--cxrh6k27i7zhw6ts
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Bjorn
+Hello Jarkko,
 
-> +
->  required:
->    - qcom,client-id
->  
-> -- 
-> 2.39.0
-> 
+On Fri, Dec 30, 2022 at 11:54:25PM +0000, Jarkko Sakkinen wrote:
+> I picked it now.
+>=20
+> BR, Jarkko
+>=20
+> On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-K=F6nig wrote:
+> > while rebasing my series onto today's next I noticed the Subject being
+> > broken:
+> >=20
+> > 	$Subject ~=3D s/Convert to //
+
+I see you picked this patch, but you didn't drop the duplicated "Convert
+to " :-\
+
+Also you didn't pick patches #2 - #5 which are tpm related, too.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--cxrh6k27i7zhw6ts
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO4YL4ACgkQwfwUeK3K
+7Am5tAf8CcRnHBDsafIlP1LKrJdQcpJRhuW3vxmMWFQcjzZRYgQsba9ScKPERriX
+QDrX4MnJV4E5zvQiFDj9VMDVnkfSW3ovKIZ5s7DkIU73p3xElLMXEDlMzwisrUev
+Uj/sbJDXF6ALt7xclf07xLPnQ8h3HH5NBZKR2pygldLjzMiPBM5AiJT+EqB1eoNu
+DB/Ajl8zjD9MpCpTXswjIeNSsSauZxdIqBOrEkk9kf7h+Ztp7yh70KwgmMhaZEfW
+DKObRqBmi9kmb8BRlDT+bU2jRV1hSNj2RtHW8TVVU9CbiecSQw523vWwW7pgo2ms
+YX+s+JekGtpjs2GvITci0O8rw+vjbg==
+=5CRE
+-----END PGP SIGNATURE-----
+
+--cxrh6k27i7zhw6ts--
