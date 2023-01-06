@@ -2,154 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5668F6606F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC31660700
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjAFTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S234858AbjAFTSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:18:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjAFTQx (ORCPT
+        with ESMTP id S231860AbjAFTSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:16:53 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4061BC
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:16:52 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j3-20020a056e02154300b00304bc968ef1so1603592ilu.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:16:52 -0800 (PST)
+        Fri, 6 Jan 2023 14:18:17 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD201BC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:18:15 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d3so2613328plr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1g+D6GKRsTiQykQO9KE60w2GEfBj+ZoVYOVS89fqaM=;
+        b=lForBUT+xfCxFfejzmI48nWa304S9hs7+UtxKzsuGf+nKyNipgoBWpzJ3oOllc+BLy
+         fLDlp8q4SaVr26D/cDF6oKbi7FnAMwtfV4yARvo4vxo/iax71v8smWoTzF/n1QraNary
+         oqQVOZQeoGzYVFn3of8qosgGmmGcsI+Wup5HINc3+dtX1yQqnSXsHe+P2XXwvQ4WNLxG
+         1mZ+JIzOAaVv46hpmEMSoVcfUbbegViVzXj5QjdFOi1yRs7ritmPEDewD1MPVwBi3fsf
+         oMSiGOMJt4u0HEfrZYT3EG5kMiF4K9BabXmQPhxyvFFOrdAgjceyG36wgZzmDEnzlOkJ
+         ebXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EZ5VY6tdIbMSDaR0Xf93xL7xs0X1Eh1sLNVTDSkcDIM=;
-        b=zLMhL1yDnXnBzgaryrRoorb/87TrI0bOZVKZL5YGn4vpOrbkNcKd6rGOVm6haXKcv6
-         O9AMWfZUI1LJ1ABCGo7ZjinHTJ8mq0FyN4t8L/7QPx4jx94FQ92zjN4fl3Vn7rUrcYZS
-         QE9zoJpXSGjX618wXfwnSVDQF22HKMuoiLwyRF/1S910mZ6Ss0dAS0WvpaLm6PutZ3Is
-         9upOm2/ia+OVQHOfB7aWtS7sE4hYseLX9bCpoRSHH2N91KkrG8tKOL8sksYQVFkYrsas
-         7Ae9w/PncPqKOxsQ/AV+hMlxeALs/FnemKY1RPWS3VqsToR+mpvfX1ENHXxJjcO5jwLz
-         3XQQ==
-X-Gm-Message-State: AFqh2krhrOgYqqFWvHDKGhHJqi7HY/0ADewzWCDKIFQIHNIcJSGwpnT/
-        1E7EW2yqrMI2nniho7avH5JVk+70Uo1hWHClZeFfrbwNWwwy
-X-Google-Smtp-Source: AMrXdXsW8bY/m0QgL7+gmVNdFQmp+h4vEqyR9cqu7PN7he8J2hB+Lg8TCb78M/O9OIfLdX/R2IxJUptY53YBMa/9BK4RZlOzLhKB
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J1g+D6GKRsTiQykQO9KE60w2GEfBj+ZoVYOVS89fqaM=;
+        b=gZGztC2fnl55hcgGFJDBAH3HmNVe0qTUOXjmWOVTuV4nS5IJn22FkoprpsGG/c71y9
+         pFZKrPt32zqtdF+f8kmpN0irVQtrwzrrytIvqHw/ES8czMAtjO/+qzLNzSLclUFF0fQJ
+         IGFzFHGn6kg6DmwuvyXuoZPMIJuxfiKuqxVEtU7cAx04urOiJQSG2bOyg3mcAmc1V23Y
+         C1KIZ7Pefc6dfldVxetg+Huo/G+FAkjYUL3YzL+bUhVxghnLP9GFOxRBNqedQ15bjXM8
+         6iwccojA7E3x/ctXgdqhAOS2O5O4OZoKZPXLGxp+omQhJ/y1Rb6IISIfInWG66OvolYD
+         juCQ==
+X-Gm-Message-State: AFqh2koWA489LOWy5CfrrXMj4aHfvVVuwObkf5s8nW6EXue8YOBr1Yoz
+        /SWT2hOKDDIN/LipGOc6Z7cDng==
+X-Google-Smtp-Source: AMrXdXuynn2Ya06o13mJ6u/LbnfcEx4D+cI/xzrrDy+wPkCxomKjTBCmiUXC9ZkytIb46+gz7PMTEg==
+X-Received: by 2002:a05:6a20:8362:b0:ac:7a44:db55 with SMTP id z34-20020a056a20836200b000ac7a44db55mr56135144pzc.39.1673032694737;
+        Fri, 06 Jan 2023 11:18:14 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id e14-20020a170902ed8e00b00192850277fcsm1291714plj.146.2023.01.06.11.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 11:18:14 -0800 (PST)
+Date:   Fri, 6 Jan 2023 11:18:10 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Nagareddy Reddy <nspreddy@google.com>
+Subject: Re: [RFC 00/14] KVM: x86/MMU: Formalize the Shadow MMU
+Message-ID: <Y7hz8geAGgysptY5@google.com>
+References: <20221221222418.3307832-1-bgardon@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c54f:0:b0:30b:b564:154e with SMTP id
- a15-20020a92c54f000000b0030bb564154emr5178841ilj.85.1673032611516; Fri, 06
- Jan 2023 11:16:51 -0800 (PST)
-Date:   Fri, 06 Jan 2023 11:16:51 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000081dba605f19d42dd@google.com>
-Subject: [syzbot] [reiserfs?] kernel BUG in reiserfs_cut_from_item
-From:   syzbot <syzbot+b2c969f18c4ab30419f9@syzkaller.appspotmail.com>
-To:     jack@suse.cz, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yijiangshan@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221221222418.3307832-1-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 21, 2022 at 10:24:04PM +0000, Ben Gardon wrote:
+> This series makes the Shadow MMU a distinct part of the KVM x86 MMU,
+> implemented in separate files, with a defined interface to common code.
 
-syzbot found the following issue on:
+Overall I really like the end result.
 
-HEAD commit:    88603b6dc419 Linux 6.2-rc2
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14fd0692480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=b2c969f18c4ab30419f9
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14edd048480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a5c50c480000
+While looking through I found a few more bits of code that should
+probably be moved into shadow_mmu.c:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a44a84e5e4e6/disk-88603b6d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/df723f71c09d/vmlinux-88603b6d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3db040a6ceef/bzImage-88603b6d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2b27b4df465f/mount_0.gz
+ - kvm_mmu_zap_all(): Move the shadow MMU zapping to shadow_mmu.c (the
+   active_mmu_pages loop + commit_zap_page).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b2c969f18c4ab30419f9@syzkaller.appspotmail.com
+ - need_topup(), need_topup_split_caches_or_resched()
+   topup_split_caches() should be static functions in shadow_mmu.c.
 
-1:  ".."           1              2              0              2              (VISIBLE)
--------------------------------------------------------------------------------
-| 5| *3.6* [2 6 0x0 SD], item_len 44, item_location 340, free_space(entry_count) 65535 |
-	mode | size | nlinks | first direct | mtime
-	0100000 |     24 |  1 | 0 | 1672687496
-===================================================================
-REISERFS panic (device loop0): PAP-5580 reiserfs_cut_from_item: item to convert does not exist ([2 6 0x1 IND])
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/prints.c:390!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5065 Comm: syz-executor364 Not tainted 6.2.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
-Code: c0 50 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 80 51 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 46 16 92 31 c0 e8 01 ec 82 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
-RSP: 0018:ffffc90003c0f140 EFLAGS: 00010246
-RAX: 000000000000006e RBX: ffffffff8b0376e0 RCX: bc42c5d171a4b400
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003c0f230 R08: ffffffff816f2c9d R09: fffff52000781de1
-R10: fffff52000781de1 R11: 1ffff92000781de0 R12: ffffffff8b037700
-R13: ffffc90003c0f160 R14: ffffffff8cc71f98 R15: ffff888079d1a6a8
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055f2c5ae6c40 CR3: 0000000021dc5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- reiserfs_cut_from_item+0x219d/0x25b0 fs/reiserfs/stree.c:1729
- reiserfs_do_truncate+0x9d6/0x15a0 fs/reiserfs/stree.c:1973
- reiserfs_truncate_file+0x471/0x790 fs/reiserfs/inode.c:2310
- reiserfs_file_release+0x887/0xa30 fs/reiserfs/file.c:109
- __fput+0x3ba/0x880 fs/file_table.c:320
- task_work_run+0x243/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x644/0x2150 kernel/exit.c:867
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6be3efd489
-Code: Unable to access opcode bytes at 0x7f6be3efd45f.
-RSP: 002b:00007ffec10dfdd8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f6be3f72350 RCX: 00007f6be3efd489
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6be3f72350
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
-Code: c0 50 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 80 51 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 46 16 92 31 c0 e8 01 ec 82 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
-RSP: 0018:ffffc90003c0f140 EFLAGS: 00010246
-RAX: 000000000000006e RBX: ffffffff8b0376e0 RCX: bc42c5d171a4b400
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003c0f230 R08: ffffffff816f2c9d R09: fffff52000781de1
-R10: fffff52000781de1 R11: 1ffff92000781de0 R12: ffffffff8b037700
-R13: ffffc90003c0f160 R14: ffffffff8cc71f98 R15: ffff888079d1a6a8
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055f2c5ae6c40 CR3: 0000000021dc5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ - Split out kvm_mmu_init/uninit_vm() functions for the shadow MMU.
+   Notably, the split caches, active_mmu_pages, zapped_obsolete_pages,
+   and other Shadow MMU-specific stuff can go in shadow_mmu.c.
 
+ - The Shadow MMU parts of walk_shadow_page_lockless_begin/end() should
+   go in shadow_mmu.c. e.g. kvm_shadow_mmu_walk_lockless_begin/end().
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> Patch 3 is an enormous change, and doing it all at once in a single
+> commit all but guarantees merge conflicts and makes it hard to review. I
+> don't have a good answer to this problem as there's no easy way to move
+> 3.5K lines between files. I tried moving the code bit-by-bit but the
+> intermediate steps added complexity and ultimately the 50+ patches it
+> created didn't seem any easier to review.
+> Doing the big move all at once at least makes it easier to get past when
+> doing Git archeology, and doing it at the beggining of the series allows the
+> rest of the commits to still show up in Git blame.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+An alternative would be to rename mmu.c to shadow_mmu.c first and then
+move code in the opposite direction. That would preserve the git-blame
+history for shadow_mmu.c. But by the end of the series mmu.c and
+shadow_mmu.c are both ~3K LOC, so I don't think doing this is really any
+better. Either way, you have to move ~3K LOC.
