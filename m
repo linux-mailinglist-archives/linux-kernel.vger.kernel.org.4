@@ -2,181 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA0066061D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09481660620
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjAFR7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S234216AbjAFSAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjAFR6u (ORCPT
+        with ESMTP id S235821AbjAFSAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:58:50 -0500
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA277D9FE;
-        Fri,  6 Jan 2023 09:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673027929; x=1704563929;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v0c5rS0g/FP0JyphM1OQziPGtUPHcAvofBABcEmtwE4=;
-  b=AdE1c8QjeXq8igaxbbsmupelOOVfZn1yKZRkgXp3HwYHJ+UPMwYpF3dv
-   wMl1IDZi2hIfv9UlhNxjvJa650tPMhaM0O4HBA1qBVqz4UKjpiA9F1p+x
-   7HJIFJicvC/FqsiAjORuOqxjU2kZeVP9w0omjDoh3J4bCs5kFwLtuxYY4
-   4=;
-X-IronPort-AV: E=Sophos;i="5.96,306,1665446400"; 
-   d="scan'208";a="284118343"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 17:58:45 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com (Postfix) with ESMTPS id 1109AA2DC8;
-        Fri,  6 Jan 2023 17:58:41 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Fri, 6 Jan 2023 17:58:41 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.83) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Fri, 6 Jan 2023 17:58:36 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <mirsad.todorovac@alu.unizg.hr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <fw@strlen.de>,
-        <kuba@kernel.org>, <kuniyu@amazon.co.jp>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>,
-        <kuniyu@amazon.com>
-Subject: [PATCH selftest/net/af_unix 1/1] Fix size of parameter to connect()
-Date:   Sat, 7 Jan 2023 02:58:28 +0900
-Message-ID: <20230106175828.13333-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
-References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+        Fri, 6 Jan 2023 13:00:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D697DE19;
+        Fri,  6 Jan 2023 10:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C21FB81C48;
+        Fri,  6 Jan 2023 18:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6D65C433F0;
+        Fri,  6 Jan 2023 18:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673028015;
+        bh=xAdv+mpIHwbjZ8iMlZjBaAqeepkytaxdVGzBXlEganM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Xw5PuKwZm8WDga9WXbPlT7H0bs1jY1gy9CClNIJdO3eZk9f2O/s9uh47RdHg07tL2
+         91q/YZAz/3ULJnG0L0m+2WamSdH24DAgQvOsTKRvvQ+LHZujyU0NM0WH0RG9elZViv
+         Tj6yYCH0G8LFMSoNYDYkjdd9XMWzVmCmQ+VGdl6yGyV3xsE/8gAHKLogTw33d+EUwF
+         /59fcI0Pbk/pThEtXo2kGGbCGMYhSnsTQND6S4qHJqIzGuWyXiLmOl5WjCpcsi+Ae8
+         9ievRTqSjuiaypNDkc7OamNjeVAoWs9yyZrPk+jV/qHElDWMMPBT5xof19FgG4tUpj
+         9U0YYy6AWs/Pw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE0E2C395DF;
+        Fri,  6 Jan 2023 18:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.160.83]
-X-ClientProxiedBy: EX13D41UWB004.ant.amazon.com (10.43.161.135) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] bpf: skip invalid kfunc call in backtrack_insn
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167302801577.16346.8234283027258741479.git-patchwork-notify@kernel.org>
+Date:   Fri, 06 Jan 2023 18:00:15 +0000
+References: <20230104014709.9375-1-sunhao.th@gmail.com>
+In-Reply-To: <20230104014709.9375-1-sunhao.th@gmail.com>
+To:     Hao Sun <sunhao.th@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-Thanks for the patch.
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 18:18:58 +0100
-> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+On Wed,  4 Jan 2023 09:47:09 +0800 you wrote:
+> The verifier skips invalid kfunc call in check_kfunc_call(), which
+> would be captured in fixup_kfunc_call() if such insn is not
+> eliminated by dead code elimination. However, this can lead to the
+> following warning in backtrack_insn(), alse see [1]:
 > 
-> Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
-> error in selftests/net/af_unix/test_oob_unix.c:127.
-
-Could you wrap the changelog to 75 chars except for log (strace below) ?
-checkpatch.pl will help.
-
-  $ git show HEAD --format=email | ./scripts/checkpatch.pl
-
-
+> ------------[ cut here ]------------
+> verifier backtracking bug
+> WARNING: CPU: 6 PID: 8646 at kernel/bpf/verifier.c:2756 backtrack_insn
+> kernel/bpf/verifier.c:2756
+> 	__mark_chain_precision kernel/bpf/verifier.c:3065
+> 	mark_chain_precision kernel/bpf/verifier.c:3165
+> 	adjust_reg_min_max_vals kernel/bpf/verifier.c:10715
+> 	check_alu_op kernel/bpf/verifier.c:10928
+> 	do_check kernel/bpf/verifier.c:13821 [inline]
+> 	do_check_common kernel/bpf/verifier.c:16289
+> ...
 > 
-> The existing code happens to work provided that the autogenerated pathname is shorter than
-> sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
-> 
-> Visible from the trace excerpt:
-> 
-> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
-> 
-> BUG: The filename is trimmed to sizeof (struct sockaddr).
-> 
-> The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+> [...]
 
-Every patch that fixes networking code has to be applied cleanly on net.git.
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+Here is the summary with links:
+  - bpf: skip invalid kfunc call in backtrack_insn
+    https://git.kernel.org/bpf/bpf/c/d3178e8a434b
 
-But the patch can not be applied to net.git.
-Could you check this ?
-https://patchwork.kernel.org/project/netdevbpf/patch/bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr/
-
-Also, the mail title should be
-
-  [PATCH Tree Version Nth/Total] subsystem: Description.
-
-Next time, Tree is net and Version is v2, and we need not write 1/1, so the
-subject should be
-
-  [PATCH net v2] af_unix: selftest: Fix size of parameter to connect()
-
-Please see here for details.
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/maintainer-netdev.rst
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> 
-> Thanks and regards,
-> Mirsad Todorovac
-
-You can remove these lines.
-
-
-> 
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-In this case, you are the reporter and the author of the patch, so the
-Reported-by tag is not needed.  Instead, you have to add your SOB tag.
-
-  Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-> Cc: Florian Westphal <fw@strlen.de>
-> Reviewed-by: Florian Westphal <fw@strlen.de>
-
-Please add Fixes tag as I said here.
-https://lore.kernel.org/netdev/20230103111335.81600-1-kuniyu@amazon.com/#r
-
-Thank you,
-Kuniyuki
-
-
-> 
-> ---
->   tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> index b57e91e1c3f2..532459a15067 100644
-> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
-> 
->          wait_for_signal(pipefd[0]);
->          if (connect(cfd, (struct sockaddr *)consumer_addr,
-> -                    sizeof(struct sockaddr)) != 0) {
-> +                    sizeof(*consumer_addr)) != 0) {
->                  perror("Connect failed");
->                  kill(0, SIGTERM);
->                  exit(1);
-> 
-> --
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> -- 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
