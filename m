@@ -2,110 +2,547 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E730965FF23
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F05F65FF25
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjAFKsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S232271AbjAFKte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjAFKsG (ORCPT
+        with ESMTP id S229586AbjAFKtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:48:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458D66CFDF;
-        Fri,  6 Jan 2023 02:48:05 -0800 (PST)
-Date:   Fri, 06 Jan 2023 10:48:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673002083;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=/hxCtPufFtZ5al9rbAfK0+sKz8sTOiY727C5yei9u9k=;
-        b=t1MiUaHuRMCwIAF88dKGsbhsvmMLn/iopIFfDEWrJfWvT2+4gfJXlx7Fa3DQUUvdRwM1EW
-        l/nh5ReZ3ZFJJj5ByIzcUxJ0n2UfJeH3MPb3ID1gbN6V8LtuV/F5fP5h1i4MmdNSS/br9W
-        XGodTzOTdYA/ZcOUtz/TUAX2x0STSkCZEj3lvJPIHv+swBxLKPSilNmgxuAgi6qF/51rJi
-        RQr6qgdes0IHuJgx0xMgaVmVxobf/K+mAcAxK1k0jGusqFLNZNbPacnwHF1ZA9C1KWTPaC
-        s5kf108Ja1KBjufC02i0ytSRpCNP/vPxF0nl78cEnkeCPCWfF8ykYQ/y+c6Dsw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673002083;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=/hxCtPufFtZ5al9rbAfK0+sKz8sTOiY727C5yei9u9k=;
-        b=REJk9c4Jvqc7Zar4ycE2QFX2GuxLQF7FH8SBRwNK/arsg7SwLc7m/5y1FAAkS6gnRp+KJg
-        urGE9lT/BckJ5WBA==
-From:   "tip-bot2 for Hans de Goede" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/platform] x86/rtc: Simplify PNP ids check
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
+        Fri, 6 Jan 2023 05:49:31 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1040E6CFDF
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:49:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NpKpY44zNz4xyK;
+        Fri,  6 Jan 2023 21:49:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1673002165;
+        bh=h4wz4o+tsUBqZQDwPkY917/mAdruNJ6Mx3rXfeORC/g=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lBfEDJ+Wd3QKqj03xyZQ4wZZsaITbiafXjvqUChO12d4OSP13tLRwLGgrgO1IPoZg
+         kqxyQOKt+s9dKHLcrbnYvJM/EFPHwOyOYVUhCCu3YTsjtls+RV0w8ckjxbgmESmEnH
+         DnuQ1eeA8ICYri3fy2pZlXgRopyXzgzwIznA4lMKv1nZKYAOSX48igZO9lRmt03Dml
+         tVtzRTGZUpAddj9crZzZmxOQg2i9OBIo2ZG/xAqP+USz1TbVynyLZ/MAob8pJD72p+
+         tvNOwGwFWxIJxOLHQFqEoeHZGWZYO4FOJemYIod8rtv7iXsENh21QVWkzwC/u602zx
+         7F5vpG7/WUwjA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Russell Currey <ruscur@russell.cc>, linuxppc-dev@lists.ozlabs.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ajd@linux.ibm.com, zohar@linux.ibm.com,
+        Russell Currey <ruscur@russell.cc>
+Subject: Re: [PATCH v2 7/7] powerpc/pseries: Implement secvars for dynamic
+ secure boot
+In-Reply-To: <20221230042014.154483-8-ruscur@russell.cc>
+References: <20221230042014.154483-1-ruscur@russell.cc>
+ <20221230042014.154483-8-ruscur@russell.cc>
+Date:   Fri, 06 Jan 2023 21:49:21 +1100
+Message-ID: <87zgawgcpa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Message-ID: <167300208315.4906.17267307487336474723.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/platform branch of tip:
+Russell Currey <ruscur@russell.cc> writes:
+> The pseries platform can support dynamic secure boot (i.e. secure boot
+> using user-defined keys) using variables contained with the PowerVM LPAR
+> Platform KeyStore (PLPKS).  Using the powerpc secvar API, expose the
+> relevant variables for pseries dynamic secure boot through the existing
+> secvar filesystem layout.
+>
+> The relevant variables for dynamic secure boot are signed in the
+> keystore, and can only be modified using the H_PKS_SIGNED_UPDATE hcall.
+> Object labels in the keystore are encoded using ucs2 format.  With our
+> fixed variable names we don't have to care about encoding outside of the
+> necessary byte padding.
+>
+> When a user writes to a variable, the first 8 bytes of data must contain
+> the signed update flags as defined by the hypervisor.
+>
+> When a user reads a variable, the first 4 bytes of data contain the
+> policies defined for the object.
+>
+> Limitations exist due to the underlying implementation of sysfs binary
+> attributes, as is the case for the OPAL secvar implementation -
+> partial writes are unsupported and writes cannot be larger than PAGE_SIZE.
+>
+> Co-developed-by: Nayna Jain <nayna@linux.ibm.com>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> ---
+> v2: Remove unnecessary config vars from sysfs and document the others,
+>     thanks to review from Greg.  If we end up needing to expose more, we
+>     can add them later and update the docs.
+>
+>     Use sysfs_emit() instead of sprintf(), thanks to Greg.
+>
+>     Change the size of the sysfs binary attributes to include the 8-byte
+>     flags header, preventing truncation of large writes.
+>
+>  Documentation/ABI/testing/sysfs-secvar        |  67 ++++-
+>  arch/powerpc/platforms/pseries/Kconfig        |  13 +
+>  arch/powerpc/platforms/pseries/Makefile       |   4 +-
+>  arch/powerpc/platforms/pseries/plpks-secvar.c | 245 ++++++++++++++++++
+>  4 files changed, 326 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/powerpc/platforms/pseries/plpks-secvar.c
+>
+> diff --git a/Documentation/ABI/testing/sysfs-secvar b/Documentation/ABI/testing/sysfs-secvar
+> index feebb8c57294..466a8cb92b92 100644
+> --- a/Documentation/ABI/testing/sysfs-secvar
+> +++ b/Documentation/ABI/testing/sysfs-secvar
+> @@ -34,7 +34,7 @@ Description:	An integer representation of the size of the content of the
+>  
+>  What:		/sys/firmware/secvar/vars/<variable_name>/data
+>  Date:		August 2019
+> -Contact:	Nayna Jain h<nayna@linux.ibm.com>
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+>  Description:	A read-only file containing the value of the variable. The size
+>  		of the file represents the maximum size of the variable data.
+>  
+> @@ -44,3 +44,68 @@ Contact:	Nayna Jain <nayna@linux.ibm.com>
+>  Description:	A write-only file that is used to submit the new value for the
+>  		variable. The size of the file represents the maximum size of
+>  		the variable data that can be written.
+> +
+> +What:		/sys/firmware/secvar/config
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	This optional directory contains read-only config attributes as
+> +		defined by the secure variable implementation.  All data is in
+> +		ASCII format. The directory is only created if the backing
+> +		implementation provides variables to populate it, which at
+> +		present is only PLPKS on the pseries platform.
 
-Commit-ID:     bd4edba2653aeef0119b7a945f07e58711343bf9
-Gitweb:        https://git.kernel.org/tip/bd4edba2653aeef0119b7a945f07e58711343bf9
-Author:        Hans de Goede <hdegoede@redhat.com>
-AuthorDate:    Wed, 14 Dec 2022 22:24:47 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Fri, 06 Jan 2023 04:22:34 +01:00
+I think it's OK to mention that currently this only exists for PLPKS ...
 
-x86/rtc: Simplify PNP ids check
+> +What:		/sys/firmware/secvar/config/version
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
 
-compare_pnp_id() already iterates over the single linked pnp_ids list
-starting with the id past to it.
+... but I don't think we want to specify that files are only present for PLPKS. 
 
-So there is no need for add_rtc_cmos() to call compare_pnp_id()
-for each id on the list.
+Because if another backend wanted to create them in future, that would
+technically be an ABI change.
 
-No change in functionality intended.
+> +		Contains the config version as reported by the hypervisor in
+> +		ASCII decimal format.
+> +
+> +What:		/sys/firmware/secvar/config/max_object_size
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
+> +
+> +		Contains the maximum allowed size of objects in the keystore
+> +		in bytes, represented in ASCII decimal format.
+> +
+> +		This is not necessarily the same as the max size that can be
+> +		written to an update file as writes can contain more than
+> +		object data, you should use the size of the update file for
+> +		that purpose.
+> +
+> +What:		/sys/firmware/secvar/config/total_size
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
+> +
+> +		Contains the total size of the PLPKS in bytes, represented in
+> +		ASCII decimal format.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: linux-kernel@vger.kernel.org
----
- arch/x86/kernel/rtc.c |  9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Similarly here I think the description should be written in a way that
+is agnostic about the backend. So eg. "Contains the total size of the
+key store in bytes".
 
-diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
-index 3490464..1309b9b 100644
---- a/arch/x86/kernel/rtc.c
-+++ b/arch/x86/kernel/rtc.c
-@@ -138,15 +138,12 @@ static __init int add_rtc_cmos(void)
- 	static const char * const ids[] __initconst =
- 	    { "PNP0b00", "PNP0b01", "PNP0b02", };
- 	struct pnp_dev *dev;
--	struct pnp_id *id;
- 	int i;
+
+> +What:		/sys/firmware/secvar/config/used_space
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
+> +
+> +		Contains the current space consumed of the PLPKS in bytes,
+> +		represented in ASCII decimal format.
+> +
+> +What:		/sys/firmware/secvar/config/supported_policies
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
+> +
+> +		Contains a bitmask of supported policy flags by the hypervisor,
+> +		represented as an 8 byte hexadecimal ASCII string.  Consult the
+> +		hypervisor documentation for what these flags are.
+> +
+> +What:		/sys/firmware/secvar/config/signed_update_algorithms
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	RO file, only present if the secvar implementation is PLPKS.
+> +
+> +		Contains a bitmask of flags indicating which algorithms the
+> +		hypervisor supports objects to be signed with when modifying
+> +		secvars, represented as a 16 byte hexadecimal ASCII string.
+> +		Consult the hypervisor documentation for what these flags mean.
  
- 	pnp_for_each_dev(dev) {
--		for (id = dev->id; id; id = id->next) {
--			for (i = 0; i < ARRAY_SIZE(ids); i++) {
--				if (compare_pnp_id(id, ids[i]) != 0)
--					return 0;
--			}
-+		for (i = 0; i < ARRAY_SIZE(ids); i++) {
-+			if (compare_pnp_id(dev->id, ids[i]) != 0)
-+				return 0;
- 		}
- 	}
- #endif
+Can this at least say "as defined in PAPR version X section Y"?
+
+> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
+> index a3b4d99567cb..94e08c405d50 100644
+> --- a/arch/powerpc/platforms/pseries/Kconfig
+> +++ b/arch/powerpc/platforms/pseries/Kconfig
+> @@ -162,6 +162,19 @@ config PSERIES_PLPKS
+>  
+>  	  If unsure, select N.
+>  
+> +config PSERIES_PLPKS_SECVAR
+> +	depends on PSERIES_PLPKS
+> +	depends on PPC_SECURE_BOOT
+> +	bool "Support for the PLPKS secvar interface"
+> +	help
+> +	  PowerVM can support dynamic secure boot with user-defined keys
+> +	  through the PLPKS. Keystore objects used in dynamic secure boot
+> +	  can be exposed to the kernel and userspace through the powerpc
+> +	  secvar infrastructure. Select this to enable the PLPKS backend
+> +	  for secvars for use in pseries dynamic secure boot.
+> +
+> +	  If unsure, select N.
+
+I don't think we need that config option at all, or if we do it should
+not be user selectable and just enabled automatically by PSERIES_PLPKS.
+
+> diff --git a/arch/powerpc/platforms/pseries/Makefile b/arch/powerpc/platforms/pseries/Makefile
+> index 92310202bdd7..807756991f9d 100644
+> --- a/arch/powerpc/platforms/pseries/Makefile
+> +++ b/arch/powerpc/platforms/pseries/Makefile
+> @@ -27,8 +27,8 @@ obj-$(CONFIG_PAPR_SCM)		+= papr_scm.o
+>  obj-$(CONFIG_PPC_SPLPAR)	+= vphn.o
+>  obj-$(CONFIG_PPC_SVM)		+= svm.o
+>  obj-$(CONFIG_FA_DUMP)		+= rtas-fadump.o
+> -obj-$(CONFIG_PSERIES_PLPKS) += plpks.o
+> -
+> +obj-$(CONFIG_PSERIES_PLPKS)	+= plpks.o
+> +obj-$(CONFIG_PSERIES_PLPKS_SECVAR)	+= plpks-secvar.o
+
+I'm not convinced the secvar parts need to be in a separate C file.
+
+If it was all in plpks.c we could avoid all/most of plpks.h and a bunch
+of accessors and so on.
+
+But I don't feel that strongly about it if you think it's better separate.
+
+> diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c b/arch/powerpc/platforms/pseries/plpks-secvar.c
+> new file mode 100644
+> index 000000000000..8298f039bef4
+> --- /dev/null
+> +++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
+> @@ -0,0 +1,245 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Secure variable implementation using the PowerVM LPAR Platform KeyStore (PLPKS)
+> + *
+> + * Copyright 2022, IBM Corporation
+> + * Authors: Russell Currey
+> + *          Andrew Donnellan
+> + *          Nayna Jain
+> + */
+> +
+> +#define pr_fmt(fmt) "secvar: "fmt
+> +
+> +#include <linux/printk.h>
+> +#include <linux/init.h>
+> +#include <linux/types.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/kobject.h>
+> +#include <asm/secvar.h>
+> +#include "plpks.h"
+> +
+> +// Config attributes for sysfs
+> +#define PLPKS_CONFIG_ATTR(name, fmt, func)			\
+> +	static ssize_t name##_show(struct kobject *kobj,	\
+> +				   struct kobj_attribute *attr,	\
+> +				   char *buf)			\
+> +	{							\
+> +		return sysfs_emit(buf, fmt, func());		\
+> +	}							\
+> +	static struct kobj_attribute attr_##name = __ATTR_RO(name)
+> +
+> +PLPKS_CONFIG_ATTR(version, "%u\n", plpks_get_version);
+> +PLPKS_CONFIG_ATTR(max_object_size, "%u\n", plpks_get_maxobjectsize);
+> +PLPKS_CONFIG_ATTR(total_size, "%u\n", plpks_get_totalsize);
+> +PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
+> +PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
+> +PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n", plpks_get_signedupdatealgorithms);
+
+For those last two I wonder if we should be decoding the integer values
+into a comma separated list of named flags?
+
+Just blatting out the integer values is a bit gross. It's not helpful
+for shell scripts, and a consumer written in C has to strtoull() the
+value back into an integer before it can decode it.
+
+> +static const struct attribute *config_attrs[] = {
+> +	&attr_version.attr,
+> +	&attr_max_object_size.attr,
+> +	&attr_total_size.attr,
+> +	&attr_used_space.attr,
+> +	&attr_supported_policies.attr,
+> +	&attr_signed_update_algorithms.attr,
+> +	NULL,
+> +};
+> +
+> +static u16 get_ucs2name(const char *name, uint8_t **ucs2_name)
+> +{
+> +	int namelen = strlen(name) * 2;
+> +	*ucs2_name = kzalloc(namelen, GFP_KERNEL);
+> +
+> +	if (!*ucs2_name)
+> +		return 0;
+> +
+> +	for (int i = 0; name[i]; i++) {
+> +		(*ucs2_name)[i * 2] = name[i];
+> +		(*ucs2_name)[i * 2 + 1] = '\0';
+> +	}
+> +
+> +	return namelen;
+> +}
+
+There are some ucs2 routines in lib/ucs2_string.c, can we use any of
+them?
+
+> +static u32 get_policy(const char *name)
+> +{
+> +	if ((strcmp(name, "db") == 0) ||
+> +	    (strcmp(name, "dbx") == 0) ||
+> +	    (strcmp(name, "grubdb") == 0) ||
+> +	    (strcmp(name, "sbat") == 0))
+> +		return (WORLDREADABLE | SIGNEDUPDATE);
+> +	else
+> +		return SIGNEDUPDATE;
+> +}
+> +
+> +#define PLPKS_SECVAR_COUNT 8
+
+I don't think we need that. Just declare the array as unsized and then
+use ARRAY_SIZE(var_names) in plpks_get_next_variable().
+
+> +static char *var_names[PLPKS_SECVAR_COUNT] = {
+> +	"PK",
+> +	"KEK",
+> +	"db",
+> +	"dbx",
+> +	"grubdb",
+> +	"sbat",
+> +	"moduledb",
+> +	"trustedcadb",
+> +};
+> +
+> +static int plpks_get_variable(const char *key, uint64_t key_len,
+> +			      u8 *data, uint64_t *data_size)
+> +{
+> +	struct plpks_var var = {0};
+> +	u16 ucs2_namelen;
+> +	u8 *ucs2_name;
+> +	int rc = 0;
+> +
+> +	ucs2_namelen = get_ucs2name(key, &ucs2_name);
+> +	if (!ucs2_namelen)
+> +		return -ENOMEM;
+> +
+> +	var.name = ucs2_name;
+> +	var.namelen = ucs2_namelen;
+> +	var.os = PLPKS_VAR_LINUX;
+> +	rc = plpks_read_os_var(&var);
+> +
+> +	if (rc)
+> +		goto err;
+> +
+> +	*data_size = var.datalen + sizeof(var.policy);
+> +
+> +	// We can be called with data = NULL to just get the object size.
+> +	if (data) {
+> +		memcpy(data, &var.policy, sizeof(var.policy));
+> +		memcpy(data + sizeof(var.policy), var.data, var.datalen);
+> +	}
+
+There's a lot of allocation and copying going on. The secvar-sysfs.c
+data_read() has kzalloc'ed data, but only after already doing the hcall
+to get the size. Then plpks_read_os_var() does an allocation for the
+hcall and then another allocation of the exact data size. Then data_read()
+does another copy into the sysfs supplied buffer.
+
+So to read a single variable we do the hcall twice, and allocate/copy
+the content of the variable 4 times?
+
+ - Hypervisor into "output" in plpks_read_var().
+ - "output" into "var->data" in plpks_read_var().
+ - "var.data" into "data" in plpks_get_variable().
+ - "data" into "buf" in data_read().
+
+As long as maxobjsize is < PAGE_SIZE I think we could do the hcall
+directly into "buf". Maybe we want to avoid writing into "buf" directly
+in case the hcall fails or something, but the other 3 copies seem
+unnecessary.
+
+> +	kfree(var.data);
+> +err:
+> +	kfree(ucs2_name);
+> +	return rc;
+> +}
+> +
+> +static int plpks_set_variable(const char *key, uint64_t key_len,
+> +			      u8 *data, uint64_t data_size)
+> +{
+> +	struct plpks_var var = {0};
+> +	u16 ucs2_namelen;
+> +	u8 *ucs2_name;
+> +	int rc = 0;
+> +	u64 flags;
+> +
+> +	// Secure variables need to be prefixed with 8 bytes of flags.
+> +	// We only want to perform the write if we have at least one byte of data.
+> +	if (data_size <= sizeof(flags))
+> +		return -EINVAL;
+> +
+> +	ucs2_namelen = get_ucs2name(key, &ucs2_name);
+> +	if (!ucs2_namelen)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&flags, data, sizeof(flags));
+> +
+> +	var.datalen = data_size - sizeof(flags);
+> +	var.data = kzalloc(var.datalen, GFP_KERNEL);
+> +	if (!var.data) {
+> +		rc = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	memcpy(var.data, data + sizeof(flags), var.datalen);
+> +
+> +	var.name = ucs2_name;
+> +	var.namelen = ucs2_namelen;
+> +	var.os = PLPKS_VAR_LINUX;
+> +	var.policy = get_policy(key);
+> +
+> +	rc = plpks_signed_update_var(var, flags);
+> +
+> +	kfree(var.data);
+> +err:
+> +	kfree(ucs2_name);
+> +	return rc;
+> +}
+> +
+> +/*
+> + * get_next() in the secvar API is designed for the OPAL API.
+> + * If *key is 0, it returns the first variable in the keystore.
+> + * Otherwise, you pass the name of a key and it returns next in line.
+> + *
+> + * We're going to cheat here - since we have fixed keys and don't care about
+> + * key_len, we can just use it as an index.
+> + */
+
+That's kinda gross. Just change the ops API to do what we need? Either
+add a separate get-by-index routine or change the existing one and
+update the only other implementation.
+
+> +static int plpks_get_next_variable(const char *key, uint64_t *key_len, uint64_t keybufsize)
+> +{
+> +	if (!key || !key_len)
+> +		return -EINVAL;
+> +
+> +	if (*key_len >= PLPKS_SECVAR_COUNT)
+> +		return -ENOENT;
+> +
+> +	if (strscpy((char *)key, var_names[(*key_len)++], keybufsize) < 0)
+> +		return -E2BIG;
+> +
+> +	return 0;
+> +}
+> +
+> +// PLPKS dynamic secure boot doesn't give us a format string in the same way OPAL does.
+> +// Instead, report the format using the SB_VERSION variable in the keystore.
+> +static ssize_t plpks_secvar_format(char *buf)
+> +{
+> +	struct plpks_var var = {0};
+> +	ssize_t ret;
+> +
+> +	var.component = NULL;
+> +	// Only the signed variables have ucs2-encoded names, this one doesn't
+> +	var.name = "SB_VERSION";
+
+Is that specified somewhere?
+
+> +	var.namelen = 10;
+> +	var.datalen = 0;
+> +	var.data = NULL;
+> +
+> +	// Unlike the other vars, SB_VERSION is owned by firmware instead of the OS
+> +	ret = plpks_read_fw_var(&var);
+> +	if (ret) {
+> +		if (ret == -ENOENT)
+> +			return sysfs_emit(buf, "ibm,plpks-sb-unknown\n");
+> +
+> +		pr_err("Error %ld reading SB_VERSION from firmware\n", ret);
+> +		return ret;
+
+I'm not sure you should pass that raw error back to sysfs. Some of the
+values could be confusing, eg. if you return -EINVAL it looks like a
+parameter to the read() syscall was invalid. Might be better to just
+return -EIO.
+
+> +	}
+> +
+> +	// Hypervisor defines SB_VERSION as a "1 byte unsigned integer value"
+> +	ret = sysfs_emit(buf, "ibm,plpks-sb-%hhu\n", var.data[0]);
+
+The rest of the name string is just made up by us?
+
+> +	kfree(var.data);
+> +	return ret;
+> +}
+> +
+> +static int plpks_max_size(uint64_t *max_size)
+> +{
+> +	// The max object size reported by the hypervisor is accurate for the
+> +	// object itself, but we use the first 8 bytes of data on write as the
+> +	// signed update flags, so the max size a user can write is larger.
+> +	*max_size = (uint64_t)plpks_get_maxobjectsize() + 8;
+> +
+> +	return 0;
+> +}
+> +
+> +
+> +static const struct secvar_operations plpks_secvar_ops = {
+> +	.get = plpks_get_variable,
+> +	.get_next = plpks_get_next_variable,
+> +	.set = plpks_set_variable,
+> +	.format = plpks_secvar_format,
+> +	.max_size = plpks_max_size,
+> +};
+> +
+> +static int plpks_secvar_init(void)
+> +{
+> +	if (!plpks_is_available())
+> +		return -ENODEV;
+> +
+> +	set_secvar_ops(&plpks_secvar_ops);
+> +	set_secvar_config_attrs(config_attrs);
+> +	return 0;
+> +}
+> +device_initcall(plpks_secvar_init);
+
+That must be a machine_device_initcall(pseries, ...), otherwise we will
+blow up doing a hcall on powernv in plpks_is_available().
+
+cheers
