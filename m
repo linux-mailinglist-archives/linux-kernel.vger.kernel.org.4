@@ -2,38 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4B96600A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21156600AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjAFMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S233512AbjAFM4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjAFMxo (ORCPT
+        with ESMTP id S234049AbjAFMzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:53:44 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCE268CA1;
-        Fri,  6 Jan 2023 04:53:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VZ-H5ZQ_1673009616;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VZ-H5ZQ_1673009616)
-          by smtp.aliyun-inc.com;
-          Fri, 06 Jan 2023 20:53:37 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [RFC PATCH 6/6] erofs: enable page cache sharing in fscache mode
-Date:   Fri,  6 Jan 2023 20:53:30 +0800
-Message-Id: <20230106125330.55529-7-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230106125330.55529-1-jefflexu@linux.alibaba.com>
-References: <20230106125330.55529-1-jefflexu@linux.alibaba.com>
+        Fri, 6 Jan 2023 07:55:31 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEC27A91A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:54:35 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id z5so128100wrt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:54:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0VQTtg9FSwvM20hhEBQ4latfuLMcaI0mRbc2gb+Wsmo=;
+        b=zGZsa8cLWEhtzBevZZussjAm4VHCN2pntlxPMLfsR3UVJPOee021IF6+6gUefIjOI8
+         IFDwpsrLlHuGtmcITRyyTTqXLa9L+CI2xskRTX2kKfbFQlHgHAg0z1bWHRHk8gbeV7HR
+         pV6KrpISoASdQsrrBvwFlS8J5bVPDnIoK6xtWc+0iO4L7X6CJombsXW+Dua/axoA4MJk
+         fxSpo2VD2OTARoCzMKQQ6sISZPjXleM4MS+8+9pqBGBSB/iP1Y9ZUVDjkBdpCGyQebhY
+         pll49HcO5hsd7sLhqj3fWKgx7OOn2bpwls0u8wpIE4rMvGIj1ubCnRZuNGu8PGmjt1dc
+         2J4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0VQTtg9FSwvM20hhEBQ4latfuLMcaI0mRbc2gb+Wsmo=;
+        b=Q2pZdw4qx7ZPU9YoaDn05IT3bzHh3teJ4uATZkTDnGP8mkFK31KR+ajeww6rFhcW9F
+         jVOVADG3P8BoEXE4sb+IWhAM0cdZftF69K6Ajx0J4tXJIqKpp9mXwsENDyOLdLHGAudE
+         kXBztfNFqRR6M4WCHHaUKZwSEROu0sCDql3rfmHbbQbdSleAQdZmLMNk5El14iaRbayg
+         pnD+Rm0+b76fySFPwgLhuTbPVJUAbM+g//NTeVHoq+K2hjtpV2vEmeDgWh1Fp/sQNT7e
+         NSh+mIrbObS8CxkYQRca82XUNbJdiVDBALFdxXooO8a/UC6Gu31ZV8qIujcPs0IwlMZg
+         gdLA==
+X-Gm-Message-State: AFqh2koCWwrBB/h4rpnB9FZjNfwftzLFtNKfuQm4qcMnShvBhNFnMHOm
+        /M6n3mYUn3/8IbDVl64CN8ZXqA==
+X-Google-Smtp-Source: AMrXdXsdMCQTT70zgRFV/Vn26wT2YcgpPEAUPM7w5hQReZi/R7gT2YVbZF36R1ACF5NF6yt+Ntl4wg==
+X-Received: by 2002:a5d:525a:0:b0:287:6400:1f9c with SMTP id k26-20020a5d525a000000b0028764001f9cmr21089842wrc.42.1673009652170;
+        Fri, 06 Jan 2023 04:54:12 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m8-20020a5d6a08000000b002a1ae285bfasm1078634wru.77.2023.01.06.04.54.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 04:54:11 -0800 (PST)
+Message-ID: <18bde666-db4b-95b9-7ce1-a012ed33bf04@linaro.org>
+Date:   Fri, 6 Jan 2023 13:54:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] dt-bindings: display: panel: document the Visionox
+ VTDR6130 AMOLED DSI Panel bindings
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-0-9b746b858378@linaro.org>
+ <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-1-9b746b858378@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-vtdr6130-panel-v1-1-9b746b858378@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,90 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Erofs supports chunk deduplication to reduce disk usage.  Furthermore we
-can make inodes share page cache of these deduplicated chunks to reduce
-the memory usage.  This shall be much usable in container scenarios as
-deduplication is requisite for container image.
+On 03/01/2023 15:22, Neil Armstrong wrote:
+> Document the 1080x2400 Visionox VTDR6130 AMOLED DSI Panel bindings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/display/panel/visionox,vtdr6130.yaml  | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
 
-This can be achieved by managing page cache of deduplicated chunks in
-blob's address space.  In this way, all inodes sharing the deduplicated
-chunk will refer to and share the page cache in the blob's address
-space.
 
-So far there are some restrictions for enabling this feature.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The page cache sharing feature also supports .mmap().  The reverse
-mapping requires that one vma can not be shared among inodes and can
-be linked to only one inode.  As the vma will be finally linked to the
-blob's address space when page cache sharing enabled, the restriction of
-the reverse mapping actually requires that the mapped file area can not
-be mapped to multiple blobs.  Thus page cache sharing can only be
-enabled for those files mapped to one blob.
-
-The chunk based data layout guarantees that a chunk will not cross the
-device (blob) boundary.  Thus in chunk based data layout, those files
-smaller than the chunk size shall be guaranteed to be mapped to one
-blob.  As chunk size is tunable at a per-file basis, this restriction
-can be relaxed at image building phase.  As long as we ensure that the
-file can not be deduplicated, the file's chunk size can be set to a
-reasonable value larger than the file size, so that the page cache
-sharing feature can be enabled on this file later.
-
-The second restriction is that EROFS_BLKSIZ mus be multiples of
-PAGE_SIZE to avoid data leakage.  Otherwise unrelated data may be
-exposed at the end of the last page, since file's data is arranged in
-unit of EROFS_BLKSIZ in the image.
-
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/inode.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index d3b8736fa124..8fe9b29422b5 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -241,6 +241,29 @@ static int erofs_fill_symlink(struct inode *inode, void *kaddr,
- 	return 0;
- }
- 
-+static bool erofs_can_share_page_cache(struct inode *inode)
-+{
-+	struct erofs_inode *vi = EROFS_I(inode);
-+
-+	/* enable page cache sharing only in share domain mode */
-+	if (!erofs_is_fscache_mode(inode->i_sb) ||
-+	    !EROFS_SB(inode->i_sb)->domain_id)
-+		return false;
-+
-+	if (vi->datalayout != EROFS_INODE_CHUNK_BASED)
-+		return false;
-+
-+	/* avoid crossing multi devicces/blobs */
-+	if (inode->i_size > 1UL << vi->chunkbits)
-+		return false;
-+
-+	/* avoid data leakage in mmap routine */
-+	if (EROFS_BLKSIZ % PAGE_SIZE)
-+		return false;
-+
-+	return true;
-+}
-+
- static int erofs_fill_inode(struct inode *inode)
- {
- 	struct erofs_inode *vi = EROFS_I(inode);
-@@ -262,6 +285,10 @@ static int erofs_fill_inode(struct inode *inode)
- 		inode->i_op = &erofs_generic_iops;
- 		if (erofs_inode_is_data_compressed(vi->datalayout))
- 			inode->i_fop = &generic_ro_fops;
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		else if (erofs_can_share_page_cache(inode))
-+			inode->i_fop = &erofs_fscache_share_file_fops;
-+#endif
- 		else
- 			inode->i_fop = &erofs_file_fops;
- 		break;
--- 
-2.19.1.6.gb485710b
+Best regards,
+Krzysztof
 
