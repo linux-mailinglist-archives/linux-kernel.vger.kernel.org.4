@@ -2,153 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AA065FE4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0165E65FE61
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjAFJtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
+        id S232942AbjAFJtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbjAFJsI (ORCPT
+        with ESMTP id S233757AbjAFJtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:48:08 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066183E84D;
-        Fri,  6 Jan 2023 01:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672998455; bh=X5XGAIPvr22MI0eLf6jR3JeaxkhbXLyZMnU47GJOnEw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=bhp4kWHBiZ062LakSuGlAeI1jKBq0geouwPhOVoA4z6A9Nvu2f5Vbkf+3u5Li+LdH
-         jKuMf77iV+neeDKMYPWVsJaXt99T9wcPsrQ2Nsn5ghGvjy7t+HxHT2AM/63qkdJUR5
-         27wRTyg50u5FawL3/ByCzivIkh8lr9/suzZ23VTZY8uNxy4LmvNuAKLIEJIsHZP841
-         3YMMg40GvU432j92jKuE3raVH85yxR9YCCOgUFwAePYpQ2brS0Qebf9yk6how3UoIr
-         MyU86ora954Uw3ppQdFmm5BthcjOqoFNHAMnX1/1QghE5K2bbH2ldKH30YBLpzVHrh
-         rs0qc/Y014QAg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.174.87]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4b1o-1pC4cz1nPy-001iw7; Fri, 06
- Jan 2023 10:47:35 +0100
-Message-ID: <3bbd5135-a556-6097-9ca3-aef3399b2990@gmx.de>
-Date:   Fri, 6 Jan 2023 10:47:33 +0100
+        Fri, 6 Jan 2023 04:49:14 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 420C76CFF2;
+        Fri,  6 Jan 2023 01:48:59 -0800 (PST)
+Received: from loongson.cn (unknown [111.207.111.194])
+        by gateway (Coremail) with SMTP id _____8BxUvCH7rdjzg8AAA--.584S3;
+        Fri, 06 Jan 2023 17:48:55 +0800 (CST)
+Received: from loongson.. (unknown [111.207.111.194])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTL6A7rdjWCsVAA--.35666S2;
+        Fri, 06 Jan 2023 17:48:54 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+Date:   Fri,  6 Jan 2023 17:48:44 +0800
+Message-Id: <20230106094844.26241-1-zhanghongchen@loongson.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 22/27] fbdev: remove tmiofb driver
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-23-arnd@kernel.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230105134622.254560-23-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:0Jq4oXtpeY5Zcp1vcmNdwRjg473SuDv8Fg8XziQ3y3xhHgj1BhB
- LtDuFYRvQMmEUsp9ISNAP6vkXlOh6GIRvM3Rf3h/v2tF82uX6xAbObBZ++2D5xbrISu02AF
- R9wbH8quUF6r/jTu2gM/8zJlQzcnAz1ThizbL3hKsJi57YuNYopB4bkZizTAD69ebdLZuDB
- ij3zeuLgUN9lvqAxZaRyA==
-UI-OutboundReport: notjunk:1;M01:P0:0Z2ibuAUW7Q=;awQLBEyBJDhrp6pjDcs9iUmevu+
- mSndKtwGgR6c9ubgsoaW+3gtipfaVYf8t9Yag8lKbeBk4dwJBDELWNhx1jZARg9jgJa8bqBD7
- evV4ddefTFVRHKMCNR8DUs0sqAYZpct3Q1wpfEs/OH3QU4Yy2bMHY1Decqh1jRriyzrMjxR9R
- qYZKO8YI8ibbx0JUEefBEixfpLRm+hbBYmNK1UkQonUXMfvI9u16PSnLZvL9n6Vy/Z6c6ZQ9e
- DiKPsBMXcowuK6KbfdBqTVeVX/PT7bEJaUPmuUp3Ohe8OS+kC1QzFCKVgiprzqwVpHUaxRvVL
- XTfI/9pY8L1Y2LGI68mkJJFzllOFQ35C2laqe8m7CVDpzYD4/Li34u5Ag9v+QfMgMgeUbcH/Q
- Mvtj7UVZ+NSRxrcURZxf7wG+yzn5S41uPJcmDwl2d4qEE8utm5efj+v0d17zt7fNHf7fcHCbU
- B9BDZfkRsCmDDBfWHOzXlIlu1FLhPzu9Jg2silzLGGSKlMWIfze4XKV/kRr+hphgJ3KDorT91
- jhItr5mARaaGUPsz+c8XXqQ+5F2kFxjfAuqFmz8hhBNIVXhyoVi2IOMRriEr5eMVITrnnQF6O
- k9jPMjFDkBKP8/oBrVIsMZrjFVa5NvFWgm8U+/p7cpX1Lz37/Xbs1inL57G8b5nHIGmMo7VQS
- 688jqnCUTJbtBcviakG48A1+dmRwiomoLHmUMNUihS3WvRJyp95qygjejCrf5Qz/THiGGJgef
- ztAKAIKMpHnUh/SGyFTcLVLM1/JqBF68aeAtziSEUelC5IhT0S+hGJbZMfCrFnbQrg7xS/erz
- znxGAHw0accUORxOc7rFnkjOp/bW+zCLuSu2dvROt1pXuu5J/WpjFwwxiyoxenkYwy+NpPRSs
- c4GC95tzvQBfaX+7WfrN3wS6+sQBAE5PVfct2vnlTsNaJwhBF0KF/SNJAirIHvo6wKSXeA0qt
- POLI2UKtigOAILmXtBEnjDxIhaw=
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxTL6A7rdjWCsVAA--.35666S2
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3XFykGw43tw18tryDuw1kuFg_yoW7Zr1UpF
+        43tFW7WrWUAr109rW8GrsxZrnIg398Wa1UJrW8WF4FvFnrGrySqFs2kFyakFs5JrZ7ZryY
+        vF4jqa4Fyr1UArDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AF
+        wI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
+        14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7
+        AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 14:46, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> With the TMIO MFD support removed, the framebuffer driver can be
-> removed as well.
->
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Use spinlock in pipe_read/write cost too much time,IMO
+pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+On the other hand, we can use __pipe_{lock,unlock} to protect
+the pipe->{head,tail} in pipe_resize_ring and
+post_one_notification.
 
-Acked-by: Helge Deller <deller@gmx.de>
+I tested this patch using UnixBench's pipe test case on a x86_64
+machine,and get the following data:
+1) before this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     493023.3    396.3
+                                                        ========
+System Benchmarks Index Score (Partial Only)              396.3
 
-Arnd, I assume you will push the whole series through the ARM tree
-(which I'd prefer) ?
+2) after this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     507551.4    408.0
+                                                        ========
+System Benchmarks Index Score (Partial Only)              408.0
 
-Helge
+so we get ~3% speedup.
 
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+---
+ fs/pipe.c                 | 22 +---------------------
+ include/linux/pipe_fs_i.h | 12 ++++++++++++
+ kernel/watch_queue.c      |  8 ++++----
+ 3 files changed, 17 insertions(+), 25 deletions(-)
 
-> ---
->   drivers/video/fbdev/Kconfig  |   22 -
->   drivers/video/fbdev/Makefile |    1 -
->   drivers/video/fbdev/tmiofb.c | 1040 ----------------------------------
->   3 files changed, 1063 deletions(-)
->   delete mode 100644 drivers/video/fbdev/tmiofb.c
->
-> diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-> index 28febf400666..3152f1a06a39 100644
-> --- a/drivers/video/fbdev/Kconfig
-> +++ b/drivers/video/fbdev/Kconfig
-> @@ -1871,28 +1871,6 @@ config FB_SH_MOBILE_LCDC
->   	help
->   	  Frame buffer driver for the on-chip SH-Mobile LCD controller.
->
-> -config FB_TMIO
-> -	tristate "Toshiba Mobile IO FrameBuffer support"
-> -	depends on FB && (MFD_TMIO || COMPILE_TEST)
-> -	select FB_CFB_FILLRECT
-> -	select FB_CFB_COPYAREA
-> -	select FB_CFB_IMAGEBLIT
-> -	help
-> -	  Frame buffer driver for the Toshiba Mobile IO integrated as found
-> -	  on the Sharp SL-6000 series
-> -
-> -	  This driver is also available as a module ( =3D code which can be
-> -	  inserted and removed from the running kernel whenever you want). The
-> -	  module will be called tmiofb. If you want to compile it as a module,
-> -	  say M here and read <file:Documentation/kbuild/modules.rst>.
-> -
-> -	  If unsure, say N.
-> -
-> -config FB_TMIO_ACCELL
-> -	bool "tmiofb acceleration"
-> -	depends on FB_TMIO
-> -	default y
-> -
->   config FB_S3C
->   	tristate "Samsung S3C framebuffer support"
->   	depends on FB && HAVE_CLK && HAS_IOMEM
-> diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
-> index 1bb870b98848..e5206c3331d6 100644
-> --- a/drivers/video/fbdev/Makefile
-> +++ b/drivers/video/fbdev/Makefile
-> @@ -85,7 +85,6 @@ obj-$(CONFIG_FB_PXA168)		  +=3D pxa168fb.o
->   obj-$(CONFIG_PXA3XX_GCU)	  +=3D pxa3xx-gcu.o
->   obj-$(CONFIG_MMP_DISP)           +=3D mmp/
->   obj-$(CONFIG_FB_W100)		  +=3D w100fb.o
-> -obj-$(CONFIG_FB_TMIO)		  +=3D tmiofb.o
->   obj-$(CONFIG_FB_AU1100)		  +=3D au1100fb.o
->   obj-$(CONFIG_FB_AU1200)		  +=3D au1200fb.o
->   obj-$(CONFIG_FB_VT8500)		  +=3D vt8500lcdfb.o
-> diff --git a/drivers/video/fbdev/tmiofb.c b/drivers/video/fbdev/tmiofb.c
-> deleted file mode 100644
-> index 50111966c981..000000000000
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 42c7ff41c2db..4355ee5f754e 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
+ }
+ EXPORT_SYMBOL(pipe_unlock);
+ 
+-static inline void __pipe_lock(struct pipe_inode_info *pipe)
+-{
+-	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+-}
+-
+-static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+-{
+-	mutex_unlock(&pipe->mutex);
+-}
+-
+ void pipe_double_lock(struct pipe_inode_info *pipe1,
+ 		      struct pipe_inode_info *pipe2)
+ {
+@@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 	 */
+ 	was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+ 	for (;;) {
+-		/* Read ->head with a barrier vs post_one_notification() */
+-		unsigned int head = smp_load_acquire(&pipe->head);
++		unsigned int head = pipe->head;
+ 		unsigned int tail = pipe->tail;
+ 		unsigned int mask = pipe->ring_size - 1;
+ 
+@@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 
+ 			if (!buf->len) {
+ 				pipe_buf_release(pipe, buf);
+-				spin_lock_irq(&pipe->rd_wait.lock);
+ #ifdef CONFIG_WATCH_QUEUE
+ 				if (buf->flags & PIPE_BUF_FLAG_LOSS)
+ 					pipe->note_loss = true;
+ #endif
+ 				tail++;
+ 				pipe->tail = tail;
+-				spin_unlock_irq(&pipe->rd_wait.lock);
+ 			}
+ 			total_len -= chars;
+ 			if (!total_len)
+@@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ 			 * it, either the reader will consume it or it'll still
+ 			 * be there for the next write.
+ 			 */
+-			spin_lock_irq(&pipe->rd_wait.lock);
+ 
+ 			head = pipe->head;
+ 			if (pipe_full(head, pipe->tail, pipe->max_usage)) {
+-				spin_unlock_irq(&pipe->rd_wait.lock);
+ 				continue;
+ 			}
+ 
+ 			pipe->head = head + 1;
+-			spin_unlock_irq(&pipe->rd_wait.lock);
+ 
+ 			/* Insert it into the buffer array */
+ 			buf = &pipe->bufs[head & mask];
+@@ -1260,14 +1244,12 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+ 	if (unlikely(!bufs))
+ 		return -ENOMEM;
+ 
+-	spin_lock_irq(&pipe->rd_wait.lock);
+ 	mask = pipe->ring_size - 1;
+ 	head = pipe->head;
+ 	tail = pipe->tail;
+ 
+ 	n = pipe_occupancy(head, tail);
+ 	if (nr_slots < n) {
+-		spin_unlock_irq(&pipe->rd_wait.lock);
+ 		kfree(bufs);
+ 		return -EBUSY;
+ 	}
+@@ -1303,8 +1285,6 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+ 	pipe->tail = tail;
+ 	pipe->head = head;
+ 
+-	spin_unlock_irq(&pipe->rd_wait.lock);
+-
+ 	/* This might have made more room for writers */
+ 	wake_up_interruptible(&pipe->wr_wait);
+ 	return 0;
+diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+index 6cb65df3e3ba..f5084daf6eaf 100644
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_PIPE_FS_I_H
+ #define _LINUX_PIPE_FS_I_H
+ 
++#include <linux/fs.h>
++
+ #define PIPE_DEF_BUFFERS	16
+ 
+ #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
+@@ -223,6 +225,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
+ #define PIPE_SIZE		PAGE_SIZE
+ 
+ /* Pipe lock and unlock operations */
++static inline void __pipe_lock(struct pipe_inode_info *pipe)
++{
++	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
++}
++
++static inline void __pipe_unlock(struct pipe_inode_info *pipe)
++{
++	mutex_unlock(&pipe->mutex);
++}
++
+ void pipe_lock(struct pipe_inode_info *);
+ void pipe_unlock(struct pipe_inode_info *);
+ void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index a6f9bdd956c3..92e46cfe9419 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
+ 	if (!pipe)
+ 		return false;
+ 
+-	spin_lock_irq(&pipe->rd_wait.lock);
++	__pipe_lock(pipe);
+ 
+ 	mask = pipe->ring_size - 1;
+ 	head = pipe->head;
+@@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
+ 	buf->offset = offset;
+ 	buf->len = len;
+ 	buf->flags = PIPE_BUF_FLAG_WHOLE;
+-	smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
++	pipe->head = head + 1;
+ 
+ 	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
+-		spin_unlock_irq(&pipe->rd_wait.lock);
++		__pipe_unlock(pipe);
+ 		BUG();
+ 	}
+ 	wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+ 	done = true;
+ 
+ out:
+-	spin_unlock_irq(&pipe->rd_wait.lock);
++	__pipe_unlock(pipe);
+ 	if (done)
+ 		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+ 	return done;
+
+base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
+-- 
+2.31.1
 
