@@ -2,125 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED8165FFC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534DB65FFD0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjAFLtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S232291AbjAFLyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjAFLtP (ORCPT
+        with ESMTP id S229476AbjAFLyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:49:15 -0500
-Received: from ofcsgdbm.dwd.de (ofcsgdbm.dwd.de [141.38.3.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9577148D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:49:13 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by ofcsg2dn3.dwd.de (Postfix) with ESMTP id 4NpM7W69wBz2xNg
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dwd.de; h=
-        content-type:content-type:mime-version:references:message-id
-        :in-reply-to:subject:subject:from:from:date:date:received
-        :received:received:received:received:received:received:received;
-         s=dwd-csg20210107; t=1673005751; x=1674215352; bh=u7IIxirkt76f0
-        g/Rwq/qlgaw6SWFuad1KaMroHH8eUE=; b=bwfjMXHgqF6FghmQdDCzPVjv7640e
-        Q0/ZzeOZB5cHjIRDZeznpLErC02KtmYLyw2O9qWea5NDMLxDFunqdkdlyQ6eE9cb
-        jIHeA96n1+kJgN+skQUU9/6eEnNQDpV4tLFk/avU21Cm850B9PBrLp274lhK5PQn
-        aW8n/5NmrWpYM/mJRtd15mn0Qjk76xW9DJpBkmAQLcsMRnpiirYrRw0VfsRCIisb
-        kZl0isSUkhFmn3mDSPJGz/pmEzsdlhBUvGv2ID2zH5fydToRytn4L549d+Uuec7z
-        XJNLsSfviXJALa1xcgYBprjU/3Wqcxbq8MmM3A89seNlfg+cAB5GNP4yA==
-X-Virus-Scanned: by amavisd-new at csg.dwd.de
-Received: from ofcsg2cteh1.dwd.de ([172.30.232.65])
- by localhost (ofcsg2dn3.dwd.de [172.30.232.26]) (amavisd-new, port 10024)
- with ESMTP id QxDMB-HAuyYb for <linux-kernel@vger.kernel.org>;
- Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id A2FB7C902CE2
-        for <root@ofcsg2dn3.dwd.de>; Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 97B84C900F6B
-        for <root@ofcsg2dn3.dwd.de>; Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-X-DDEI-TLS-USAGE: Unused
-Received: from ofcsgdbm.dwd.de (unknown [172.30.232.26])
-        by ofcsg2cteh1.dwd.de (Postfix) with ESMTP
-        for <root@ofcsg2dn3.dwd.de>; Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-Received: from ofcsgdbm.dwd.de by localhost (Postfix XFORWARD proxy);
- Fri, 06 Jan 2023 11:49:11 -0000
-Received: from ofcsg2dvf2.dwd.de (ofcsg2dvf2.dwd.de [172.30.232.11])
-        by ofcsg2dn3.dwd.de (Postfix) with ESMTPS id 4NpM7W3wZjz2xMJ;
-        Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-Received: from ofmailhub.dwd.de (ofldap.dwd.de [141.38.39.208])
-        by ofcsg2dvf2.dwd.de  with ESMTP id 306BnB0j022256-306BnB0k022256;
-        Fri, 6 Jan 2023 11:49:11 GMT
-Received: from diagnostix.dwd.de (diagnostix.dwd.de [141.38.44.45])
-        by ofmailhub.dwd.de (Postfix) with ESMTP id 451534529B;
-        Fri,  6 Jan 2023 11:49:11 +0000 (UTC)
-Date:   Fri, 6 Jan 2023 11:49:11 +0000 (GMT)
-From:   Holger Kiehl <Holger.Kiehl@dwd.de>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scsi: megaraid_sas: Add flexible array member for SGLs
-In-Reply-To: <20230106053153.never.999-kees@kernel.org>
-Message-ID: <7cc1efed-1241-112d-2a12-6abeea323284@diagnostix.dwd.de>
-References: <20230106053153.never.999-kees@kernel.org>
+        Fri, 6 Jan 2023 06:54:40 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5B6718B7;
+        Fri,  6 Jan 2023 03:54:34 -0800 (PST)
+X-UUID: a4c5f7e2bd5b4cd194bd24e1be70a214-20230106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Zz4lAG7Fv806LdEwYUd3QNWOhaOm63H4dynzSxg33Ss=;
+        b=cO7+jAs4+RjwTzL9KNJjqXDUSR1pScpa6slz38msabFw1LKIlIPv19L8U9dGqEGOthkLwVZIqJ9o3Vh8YrrD9AzIywdytAUxUj5BGLHltJ/IUBrcZ7y+5UhfCKE/db18bD5PgtLv0hTn8WwhT8ZgR4UBlp9lSQPxTm9IKLgWjXw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:d7340043-b327-4932-a842-397f39ecf13a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:543e81c,CLOUDID:c3fe788b-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: a4c5f7e2bd5b4cd194bd24e1be70a214-20230106
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 97020260; Fri, 06 Jan 2023 19:54:31 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 6 Jan 2023 19:54:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 6 Jan 2023 19:54:30 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/2] mtk-wdt: Add reset-by-toprgu support
+Date:   Fri, 6 Jan 2023 19:53:24 +0800
+Message-ID: <20230106115326.15374-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-FEAS-Client-IP: 141.38.39.208
-X-FE-Last-Public-Client-IP: 141.38.39.208
-X-FE-Policy-ID: 2:2:1:SYSTEM
-X-TMASE-Version: DDEI-5.1-9.0.1002-27368.007
-X-TMASE-Result: 10--11.765800-10.000000
-X-TMASE-MatchedRID: scwq2vQP8OH/9O/B1c/Qy65i3jK3KDOoC/ExpXrHizxnyL8x0tKlOwpz
-        5A3IIcOFQMOJEqjTDADg9GpkpL2zRfvwmMFLImuh72Rb2bEJC+14/L/eKkYod2vlGb+24NaZwis
-        nIbO8h0PqNXg27YCW5IyCITJXo1Pu38rWKQkiws4y0WOtNS62pHLhUU/qa4OGXfUB/fqAxpO4kR
-        SZ1g8ZJSurxuGphsNqV5Y/cGuAJ/uR9GF2J2xqM/7E6GNqs6ce3x1YNh2+qanUZxEAlFPo846HM
-        5rqDwqtp9yvkxek7WN9ypEcdRqjcrWm5vJecezqWXZQfz2GkfqotqABjxieXQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-DDEI-PROCESSED-RESULT: Safe
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023, Kees Cook wrote:
+This series is based on next-20230106.
 
-> struct MPI2_RAID_SCSI_IO_REQUEST ends with a single SGL, but expects to
-> copy multiple. Add a flexible array member so the compiler can reason
-> about the size of the memcpy(). This will avoid the run-time false
-> positive warning:
->
->  memcpy: detected field-spanning write (size 128) of single field "&r1_cmd->io_request->SGL" at drivers/scsi/megaraid/megaraid_sas_fusion.c:3326 (size 16)
->
-> This change results in no binary output differences.
->
-> Reported-by: Holger Kiehl <Holger.Kiehl@dwd.de>
-> Link: https://lore.kernel.org/all/88de8faa-56c4-693d-2d3-67152ee72057@diagnostix.dwd.de/
-> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-> Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-> Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: megaraidlinux.pdl@broadcom.com
-> Cc: linux-scsi@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> Holger, are you able to test this change? I expect it should do the
-> trick, but I don't have the hardware.
->
-Yes, that does work. I no longer see 'memcpy: detected field-spanning
-write (size 128)'. Tested this on 6.1.4-rc1. Did not see any other
-regression.
+In some cases, we may need toprgu to reset the wdt counter after wdt
+resets.
 
-Regards,
-Holger
+Provide a reset_by_toprgu parameter for configuration. We can disable
+or enable it by adding reset_by_toprgu in dts.
+
+Allen-KH Cheng (2):
+  dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu support
+  watchdog: mtk_wdt: Add reset_by_toprgu support
+
+ .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml     | 4 ++++
+ drivers/watchdog/mtk_wdt.c                                 | 7 +++++++
+ 2 files changed, 11 insertions(+)
+
+-- 
+2.18.0
+
