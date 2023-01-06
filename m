@@ -2,162 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D84066000E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F22660009
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbjAFMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S233605AbjAFML0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbjAFMLS (ORCPT
+        with ESMTP id S229725AbjAFMLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:11:18 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14B5736D9;
-        Fri,  6 Jan 2023 04:11:15 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 306CB3ua099628;
-        Fri, 6 Jan 2023 06:11:03 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673007063;
-        bh=uTiut5o/7iFdu8/u+NPuwcc+4LBeafBX8Rz7JMBS3zI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=YqaHGNANO0nf47w2o9bZFTYV56O/kDwGMct/9U1Bvh+U4T+QNEURqvREY6+rcHZnk
-         OP8YziWpcx0FQi1Zk09iW98Rl5kZoJo0Vu/IAbKDzY6kUUizf2cun98aoutk9Ub9Iz
-         j9gHhiO4Nyh/ga4sJ+aLGtpY1hIgB/8mpS36SPng=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 306CB39P119074
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 6 Jan 2023 06:11:03 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 6
- Jan 2023 06:11:03 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 6 Jan 2023 06:11:03 -0600
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 306CB3Lu020441;
-        Fri, 6 Jan 2023 06:11:03 -0600
-Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
-        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 306CB2Z2028627;
-        Fri, 6 Jan 2023 06:11:02 -0600
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-Subject: [PATCH v14 6/6] remoteproc: pru: Configure firmware based on client setup
-Date:   Fri, 6 Jan 2023 17:40:46 +0530
-Message-ID: <20230106121046.886863-7-danishanwar@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230106121046.886863-1-danishanwar@ti.com>
-References: <20230106121046.886863-1-danishanwar@ti.com>
+        Fri, 6 Jan 2023 07:11:11 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B6272880
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:11:06 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id w1so1088714wrt.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:11:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1lqgBvH3cRWcsX4rNdTLeZsM5ZhRSoVlfNbnRO4xtLI=;
+        b=NZzkWPIrVRiIAbnulSI1cGlv5xPVkOdI81R1Hqf6gUFNEShJAT2R4vqKoDP2f9sr7y
+         AlGlqkHwl/9UhifWe2VXw9qjYvU4SX4062Q4sHjhy8+4mb5ZuucpQU9XAWOGgHu4Kvyt
+         diAbNMYp4WOeG5FlQkmd8ewwyitIMAVoEQAH6Mc1ZOov1nAxKYZg7XP5UyxitVpAcK2L
+         QRhpdbjs5dlEsHphEstaP68MOESUgnHv6W3obyCjSVAp4XR5co+6glvCcbWZ7M7rLw2c
+         uDC/SXVLNrI4lTNRWvfNTLazN6FbjQ2z3zBvD+FCCdDsBWnzhl2Y6o735P/pwbKeCvKk
+         eqWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1lqgBvH3cRWcsX4rNdTLeZsM5ZhRSoVlfNbnRO4xtLI=;
+        b=AasjIH3GBKI7WmbrVpHPQnIfa7R67+FHuFNJBf5loaQslhU+onEhwDc05wFsx8dBj2
+         Y54PcUZ97jj3DYdDuWPgAfL9YGGRgBQKJaDaKHxUOYjPozSzqPT40dDXkUSJofQYhR3K
+         V/ecLYr/g7CSbwIsOCA7vSdu5WDpiXulygA/oX0nk2D+29vXnkUzwLXXlTJa3rtr+D91
+         kxHGQY9/RJXN4kmiCNVfxSKB5P19xWtuKWiD1B6qeHH4bmXzm42nYYOkcVCLsYQkVhvV
+         Pn2nUYXJFQUMun2zj1H54Hj/L+hXfMarUr5KbgTffJNUeYaqAEjqiRnSkPzU5o3JuhKE
+         MqFQ==
+X-Gm-Message-State: AFqh2kr1qRU5mi6emG407lkl/gd3vytSa6b/SApr4Bbh/odIzT0IlHpA
+        ZdxRI1tsfmQmhQ4WHdZFMQfO/g==
+X-Google-Smtp-Source: AMrXdXsaPD2VrM67v81G5TB98BeNHs/8LMkyC5/h4SIxf1gMu6Awu2u2ZZwi6ee4WbsO3QPCIt8txQ==
+X-Received: by 2002:a5d:564e:0:b0:27d:59a5:28bc with SMTP id j14-20020a5d564e000000b0027d59a528bcmr26183768wrw.35.1673007064688;
+        Fri, 06 Jan 2023 04:11:04 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id n5-20020adfe785000000b00281eab50380sm1098766wrm.117.2023.01.06.04.11.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 04:11:04 -0800 (PST)
+Message-ID: <c8020dc5-e911-e9a1-a269-5fbcb682f346@isovalent.com>
+Date:   Fri, 6 Jan 2023 12:11:03 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] bpf_doc: Fix build error with older python versions
+Content-Language: en-GB
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20230106114037.25036-1-msuchanek@suse.de>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230106114037.25036-1-msuchanek@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+2023-01-06 12:40 UTC+0100 ~ Michal Suchanek <msuchanek@suse.de>
+> + make -j48 -s -C /dev/shm/kbuild/linux.33946/current ARCH=powerpc HOSTCC=gcc CROSS_COMPILE=powerpc64-suse-linux- clean
+> TypeError: '_sre.SRE_Match' object is not subscriptable
+> 
+> Fixes: 8a76145a2ec2 ("bpf: explicitly define BPF_FUNC_xxx integer values")
+> 
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  scripts/bpf_doc.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+> index e8d90829f23e..38d51e05c7a2 100755
+> --- a/scripts/bpf_doc.py
+> +++ b/scripts/bpf_doc.py
+> @@ -271,7 +271,7 @@ class HeaderParser(object):
+>              if capture:
+>                  fn_defines_str += self.line
+>                  helper_name = capture.expand(r'bpf_\1')
+> -                self.helper_enum_vals[helper_name] = int(capture[2])
+> +                self.helper_enum_vals[helper_name] = int(capture.group(2))
+>                  self.helper_enum_pos[helper_name] = i
+>                  i += 1
+>              else:
 
-Client device node property firmware-name is now used to configure
-firmware for the PRU instances. The default firmware is also
-restored once releasing the PRU resource.
+Thanks, the change looks good.
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/remoteproc/pru_rproc.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index f6ea445d2fa2..b76db7fa693d 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -172,6 +172,23 @@ void pru_control_set_reg(struct pru_rproc *pru, unsigned int reg,
- 	spin_unlock_irqrestore(&pru->rmw_lock, flags);
- }
- 
-+/**
-+ * pru_rproc_set_firmware() - set firmware for a PRU core
-+ * @rproc: the rproc instance of the PRU
-+ * @fw_name: the new firmware name, or NULL if default is desired
-+ *
-+ * Return: 0 on success, or errno in error case.
-+ */
-+static int pru_rproc_set_firmware(struct rproc *rproc, const char *fw_name)
-+{
-+	struct pru_rproc *pru = rproc->priv;
-+
-+	if (!fw_name)
-+		fw_name = pru->fw_name;
-+
-+	return rproc_set_firmware(rproc, fw_name);
-+}
-+
- static struct rproc *__pru_rproc_get(struct device_node *np, int index)
- {
- 	struct rproc *rproc;
-@@ -224,6 +241,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct rproc *rproc;
- 	struct pru_rproc *pru;
- 	struct device *dev;
-+	const char *fw_name;
- 	int ret;
- 
- 	rproc = __pru_rproc_get(np, index);
-@@ -249,11 +267,25 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-+	ret = of_property_read_string_index(np, "firmware-name", index,
-+					    &fw_name);
-+	if (!ret) {
-+		ret = pru_rproc_set_firmware(rproc, fw_name);
-+		if (ret) {
-+			dev_err(dev, "failed to set firmware: %d\n", ret);
-+			goto err;
-+		}
-+	}
-+
- 	return rproc;
- 
- err_no_rproc_handle:
- 	rproc_put(rproc);
- 	return ERR_PTR(ret);
-+
-+err:
-+	pru_rproc_put(rproc);
-+	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(pru_rproc_get);
- 
-@@ -273,6 +305,8 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pru_rproc_set_firmware(rproc, NULL);
-+
- 	mutex_lock(&pru->lock);
- 
- 	if (!pru->client_np) {
--- 
-2.25.1
+Would be nice to have a bit more context in the commit log: As I
+understand, Match objects have been scriptable since Python 3.6 (2016).
 
+Reference: https://docs.python.org/3/whatsnew/3.6.html#re
