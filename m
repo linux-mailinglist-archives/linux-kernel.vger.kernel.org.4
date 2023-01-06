@@ -2,184 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D42965FFE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312A765FFEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjAFMCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
+        id S231666AbjAFMCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjAFMC3 (ORCPT
+        with ESMTP id S229547AbjAFMCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:02:29 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F84E3225A;
-        Fri,  6 Jan 2023 04:02:28 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 306C2DMs066080;
-        Fri, 6 Jan 2023 06:02:13 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673006533;
-        bh=7q3SGj3F/tCY6enixxVoRGsdpeMIFq0XYzuubYHLrZc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=WuflFvl7pISP2M/5kUhHCHV1iWYQrh+flKoRhpRZUx18WDwLYmUq7o/wO8hmJSPLy
-         zYAqWFz9/QVp45aya+6N4QCYwMqXlBqCMOp0gnuqiHS23Kwte/4SxWyd48jNxy6tv3
-         2+0GNlUj+WUDmb/ouazjHpKQduaWDqOxQSadb9FE=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 306C2Dfa114784
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 6 Jan 2023 06:02:13 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 6
- Jan 2023 06:02:13 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 6 Jan 2023 06:02:13 -0600
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 306C28Ip013534;
-        Fri, 6 Jan 2023 06:02:09 -0600
-Message-ID: <4c93d5b2-ce15-afac-ccb8-384a366b0eae@ti.com>
-Date:   Fri, 6 Jan 2023 17:32:08 +0530
+        Fri, 6 Jan 2023 07:02:49 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C81A3728A9;
+        Fri,  6 Jan 2023 04:02:48 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58F7F11FB;
+        Fri,  6 Jan 2023 04:03:30 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.37.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5011E3F23F;
+        Fri,  6 Jan 2023 04:02:46 -0800 (PST)
+Date:   Fri, 6 Jan 2023 12:02:39 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     linux-perf-users@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Beeman Strong <beeman@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: Re: Expected rdpmc behavior during context swtich and a RISC-V
+ conundrum
+Message-ID: <Y7gN32eHJNyWBvVD@FVFF77S0Q05N>
+References: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [EXTERNAL] Re: [PATCH v13 2/6] remoteproc: pru: Add enum for PRU
- Core Identifiers.
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230105092149.686201-1-danishanwar@ti.com>
- <20230105092149.686201-3-danishanwar@ti.com> <20230105202356.GA2281956@p14s>
-From:   Md Danish Anwar <a0501179@ti.com>
-In-Reply-To: <20230105202356.GA2281956@p14s>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
+On Thu, Jan 05, 2023 at 11:59:24AM -0800, Atish Patra wrote:
+> Hi All,
+> There was a recent uabi update[1] for RISC-V that allows the users to
+> read cycle and instruction count without any checks.
+> We tried to restrict that behavior to address security concerns
+> earlier but it resulted in breakage for some user space
+> applications[2].
+> Thus, previous behavior was restored where a user on RISC-V platforms
+> can directly read cycle or instruction count[3].
+> 
+> Comparison with other ISAs w.r.t user space access of counters:
+> ARM64
+>   -- Enabled/Disabled via (/proc/sys/kernel/perf_user_access)
+>   -- Only for task bound events configured via perf.
+> 
+> X86
+>  --- rdpmc instruction
+>  --- Enable/Disable via “/sys/devices/cpu/rdpmc”
+> -- Before v4.0
+>  -- any process (even without active perf event) rdpmc
+> After v4.0
+> -- Default behavior changed to support only active events in a
+> process’s context.
+> -- Configured through perf similar to ARM64
+> -- Continue to maintain backward compatibility for unrestricted access
+> by writing 2 to “/sys/devices/cpu/rdpmc”
+> 
+> IMO, RISC-V should only enable user space access through perf similar
+> to ARM64 and x86 (post v4.0).
+> However, we do have to support the legacy behavior to avoid
+> application breakage.
+> As per my understanding a direct user space access can lead to the
+> following problems:
+> 
+> 1) There is no context switch support, so counts from other contexts are exposed
+> 2) If a perf user is allocated one of these counters, the counter
+> value will be written
+> 
+> Looking at the x86 code as it continues to allow the above behavior,
+> rdpmc_always_available_key is enabled in the above case. However,
+> during the context switch (cr4_update_pce_mm)
+> only dirty counters are cleared. It only prevents leakage from perf
+> task to rdpmc task.
+> 
+> How does the context switch of counters work for users who enable
+> unrestricted access by writing 2 to “/sys/devices/cpu/rdpmc” ?
+> Otherwise, rdpmc users likely get noise from other applications. Is
+> that expected ?
 
-On 06/01/23 01:53, Mathieu Poirier wrote:
-> On Thu, Jan 05, 2023 at 02:51:45PM +0530, MD Danish Anwar wrote:
->> Introducing enum pruss_pru_id for PRU Core Identifiers.
->> PRUSS_PRU0 indicates PRU Core 0.
->> PRUSS_PRU1 indicates PRU Core 1.
->> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
->>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  drivers/remoteproc/pru_rproc.c |  7 ++++---
->>  include/linux/pruss.h          | 31 +++++++++++++++++++++++++++++++
-> 
-> Please add this under include/linux/remoteproc/ to avoid adding an orphan file
-> under include/linux/.
-> 
-> Thanks,
-> Mathieu
-> 
+Regardless of leakage, they're also going to get random jumps in the visible
+values of the cycle count and instruction count as the task is context-switched
+(and/or if those values get reset across idle, as can happen on arm64), so
+those aren't going to be useful unless a number of other constraints apply.
 
-Sure, I will remove this header file from here and add it under
-include/linux/remoteproc/ .
+AFAICT the affected package was actually a library of intrinsics; does this
+affect a real application, or was this just in tests? If it's the latter there
+might still be scope to properly lock this down...
 
 Thanks,
-Danish.
+Mark.
 
->>  2 files changed, 35 insertions(+), 3 deletions(-)
->>  create mode 100644 include/linux/pruss.h
->>
->> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
->> index 128bf9912f2c..a1a208b31846 100644
->> --- a/drivers/remoteproc/pru_rproc.c
->> +++ b/drivers/remoteproc/pru_rproc.c
->> @@ -16,6 +16,7 @@
->>  #include <linux/module.h>
->>  #include <linux/of_device.h>
->>  #include <linux/of_irq.h>
->> +#include <linux/pruss.h>
->>  #include <linux/pruss_driver.h>
->>  #include <linux/remoteproc.h>
->>  
->> @@ -438,7 +439,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
->>  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
->>  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
->>  	/* PRU1 has its local RAM addresses reversed */
->> -	if (pru->id == 1)
->> +	if (pru->id == PRUSS_PRU1)
->>  		swap(dram0, dram1);
->>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
->>  
->> @@ -747,14 +748,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
->>  	case RTU0_IRAM_ADDR_MASK:
->>  		fallthrough;
->>  	case PRU0_IRAM_ADDR_MASK:
->> -		pru->id = 0;
->> +		pru->id = PRUSS_PRU0;
->>  		break;
->>  	case TX_PRU1_IRAM_ADDR_MASK:
->>  		fallthrough;
->>  	case RTU1_IRAM_ADDR_MASK:
->>  		fallthrough;
->>  	case PRU1_IRAM_ADDR_MASK:
->> -		pru->id = 1;
->> +		pru->id = PRUSS_PRU1;
->>  		break;
->>  	default:
->>  		ret = -EINVAL;
->> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
->> new file mode 100644
->> index 000000000000..e94a81e97a4c
->> --- /dev/null
->> +++ b/include/linux/pruss.h
->> @@ -0,0 +1,31 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/**
->> + * PRU-ICSS Subsystem user interfaces
->> + *
->> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
->> + *	Suman Anna <s-anna@ti.com>
->> + */
->> +
->> +#ifndef __LINUX_PRUSS_H
->> +#define __LINUX_PRUSS_H
->> +
->> +#include <linux/device.h>
->> +#include <linux/types.h>
->> +
->> +#define PRU_RPROC_DRVNAME "pru-rproc"
->> +
->> +/**
->> + * enum pruss_pru_id - PRU core identifiers
->> + * @PRUSS_PRU0: PRU Core 0.
->> + * @PRUSS_PRU1: PRU Core 1.
->> + * @PRUSS_NUM_PRUS: Total number of PRU Cores available.
->> + *
->> + */
->> +
->> +enum pruss_pru_id {
->> +	PRUSS_PRU0 = 0,
->> +	PRUSS_PRU1,
->> +	PRUSS_NUM_PRUS,
->> +};
->> +
->> +#endif /* __LINUX_PRUSS_H */
->> -- 
->> 2.25.1
->>
+> This can be a security concern also where a rogue rdpmc user
+> application can monitor other critical applications to initiate side
+> channel attack.
+> 
+> Am I missing something? Please correct my understanding of the x86
+> implementation if it is wrong.
+> 
+> [1] https://lore.kernel.org/lkml/20221201135110.3855965-1-conor.dooley@microchip.com/
+> [2] https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/REWcwYnzsKE?pli=1
+> [3] https://lore.kernel.org/all/YxIzgYP3MujXdqwj@aurel32.net/T/
+> 
+> -- 
+> Regards,
+> Atish
