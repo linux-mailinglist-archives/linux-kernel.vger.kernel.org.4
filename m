@@ -2,163 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945CF6606ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86316606F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjAFTJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S231638AbjAFTLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjAFTJL (ORCPT
+        with ESMTP id S229547AbjAFTLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:09:11 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888EC6A0E6;
-        Fri,  6 Jan 2023 11:09:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=sJniDLa2D+Z/oazYjAaq4GySTvYvssj5sYXiiUAvXgo=; b=mW9l7tkx4ir7lOr/5jfuCs+hGI
-        AFaFXzW5+MNROTrLpZaB5jmhnCR7vUmRxzhj/QJsiC2gLEPYmSW2tG02IHn04cNuV4yJkXG0TyjwL
-        T5mRN9KQUGy0+jb3ip2tT+CPs4bM1BmYFTz4eX52M+AO6AOWSfbw0TPbMX+WaVg30D1ukBV0aAs8n
-        3QOs/iO5En2fCIEvQCE47ZvlMJlVxvSxvRBmoXz2Ew6FHHg60ROv6epoGgkagicsz6/SE9j/t3JWm
-        liXNyfUYZJztFhP+AOwghAlV7euJ83SLnyBSVWogr8GJmMNIiwdKb/CATAYkmLDl6GAzzHPRFUIEv
-        Yk5wa8tA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pDs5R-00EXbQ-6r; Fri, 06 Jan 2023 19:09:05 +0000
-Date:   Fri, 6 Jan 2023 11:09:05 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Tejun Heo <tj@kernel.org>, Dan Carpenter <error27@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [bug report] memcontrol: schedule throttling if we are congested
-Message-ID: <Y7hx0QZ3m96F2wEv@bombadil.infradead.org>
-References: <Y7g3L6fntnTtOm63@kili>
- <Y7hbYPSdLqW++y/p@slm.duckdns.org>
- <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
+        Fri, 6 Jan 2023 14:11:20 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D965AF8
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:11:19 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gq18so2228367pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8D3UMgiXLWkn97zxdcVsZ26wy/4Qk/KB4lcp4wb6CBg=;
+        b=A4AqfUS5XUfLmvuEwP4oYqK2ebk4628oLq8T74ED9gI/jsApNxIUxodGWGQb0A3cXM
+         eRO1DyGJJK2WjsworIDKJ7ufOGIEkbe6lybdBjsrvWkehXq870VUkEVa00BSjANutHiW
+         oTJs0pI9PQf+0H6roXuPbQzeUkKXk4cteN3qg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8D3UMgiXLWkn97zxdcVsZ26wy/4Qk/KB4lcp4wb6CBg=;
+        b=54B3uLxxJAtKCYXXEhD6wzN0z3exgkJSa168l75nielOzDPWvjTcwqFs/rREK7ePNt
+         tLaoKrftILtVIk3a88ToImKtlqiXov/0jL0VK05f3BuQ0R9ma6Bf5F599LyX8NIuu9tH
+         aOFdR2YBVGGiSvwuiQRN2gsR3t44sfAi8rZboI47Yi5IkXfv1MZdXKAJ/JFfLa3TY18E
+         ChbwicRS5+vZgghLZgq8BTCdv8HGfY8d0dJneuPZdcsADRtjNRPNLgETKItfbjWWvF3L
+         4xdSE/4FAVHENRW9ZHdenV73vAWkIwbCP0BkGDviNCmCg8emeGuAH8Pqb3vnfxJfiQ4e
+         +fqA==
+X-Gm-Message-State: AFqh2koTh55lj4h23sjnPQcgSK7RFmgDrJVbK17lWkwHOFOuNAR+8bzt
+        fJ190kXrWJOz58cpLz6jDHCrSFNPv6ibJrf2
+X-Google-Smtp-Source: AMrXdXvYyR1F/thrOSPadqoE90Q0LDkthAlS9+yTY4mnVKRYpyTjuE3IUhd/bTftBN8cldUyhmW4Dw==
+X-Received: by 2002:a05:6a21:7893:b0:af:1a39:553d with SMTP id bf19-20020a056a21789300b000af1a39553dmr86781422pzc.14.1673032279194;
+        Fri, 06 Jan 2023 11:11:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z188-20020a6265c5000000b0055f209690c0sm688639pfb.50.2023.01.06.11.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 11:11:18 -0800 (PST)
+Date:   Fri, 6 Jan 2023 11:11:17 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vsprintf: fix possible NULL pointer deref in vsnprintf()
+Message-ID: <202301061107.C56365E@keescook>
+References: <1f4d159e-5382-3c75-bd5e-42337ecd8c28@omp.ru>
+ <Y7hDGoCbWG2ZYdlV@alley>
+ <20230106121457.05edbbdf@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230106121457.05edbbdf@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 11:49:33AM -0700, Jens Axboe wrote:
-> On 1/6/23 10:33 AM, Tejun Heo wrote:
-> > Hello,
-> > 
-> > (cc'ing Luis, Christoph and Jens and quoting whole body)
-> > 
-> > On Fri, Jan 06, 2023 at 05:58:55PM +0300, Dan Carpenter wrote:
-> >> Hello Tejun Heo,
-> >>
-> >> The patch 2cf855837b89: "memcontrol: schedule throttling if we are
-> >> congested" from Jul 3, 2018, leads to the following Smatch static
-> >> checker warning:
-> >>
-> >> block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
-> >>
-> >> The call tree looks like:
-> >>
-> >> ioc_rqos_merge() <- disables preempt
-> >> __cgroup_throttle_swaprate() <- disables preempt
-> >> -> blkcg_schedule_throttle()
-> >>
-> >> Here is one of the callers:
-> >> mm/swapfile.c
-> >>   3657          spin_lock(&swap_avail_lock);
-> >>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> >> Takes spin lock.
-> >>
-> >>   3658          plist_for_each_entry_safe(si, next, &swap_avail_heads[nid],
-> >>   3659                                    avail_lists[nid]) {
-> >>   3660                  if (si->bdev) {
-> >>   3661                          blkcg_schedule_throttle(si->bdev->bd_disk, true);
-> >>                                 ^^^^^^^^^^^^^^^^^^^^^^^
-> >> Calls blkcg_schedule_throttle().
-> >>
-> >>   3662                          break;
-> >>   3663                  }
-> >>   3664          }
-> >>
-> >> block/blk-cgroup.c
-> >>   1851  void blkcg_schedule_throttle(struct gendisk *disk, bool use_memdelay)
-> >>   1852  {
-> >>   1853          struct request_queue *q = disk->queue;
-> >>   1854  
-> >>   1855          if (unlikely(current->flags & PF_KTHREAD))
-> >>   1856                  return;
-> >>   1857  
-> >>   1858          if (current->throttle_queue != q) {
-> >>   1859                  if (!blk_get_queue(q))
-> >>   1860                          return;
-> >>   1861  
-> >>   1862                  if (current->throttle_queue)
-> >>   1863                          blk_put_queue(current->throttle_queue);
-> >>                                 ^^^^^^^^^^^^^^
-> >> Sleeps.
-> >>
-> >>   1864                  current->throttle_queue = q;
-> >>   1865          }
-> >>   1866  
-> >>   1867          if (use_memdelay)
-> >>   1868                  current->use_memdelay = use_memdelay;
-> >>   1869          set_notify_resume(current);
-> >>   1870  }
-> > 
-> > In general, it's quite unusual for a put operation to require a sleepable
-> > context and I could be missing sth but the actual put / release paths don't
-> > seem to actually need might_sleep(). It seems sprious.
-> > 
-> > The might_sleep() in put was added by Christoph's 63f93fd6fa57 ("block: mark
-> > blk_put_queue as potentially blocking") which promoted it from release to
-> > put cuz the caller usually can't tell whether its put is the last put.
-> > 
-> > And that put in release was added by Luis in e8c7d14ac6c3 ("block: revert
-> > back to synchronous request_queue removal") while making the release path
-> > synchronous, the rationale being 
-
-The rationale was that we reverted exepected userspace expection for
-something that was sync to async so broke userspace expectations and
-we can't do that.
-
-> > that releasing asynchronously makes dynamic
-> > device removal / readdition behaviors unpredictable and it also seems to
-> > note that might_sleep() is no longer needed but still kept, which seems a
-> > bit odd to me.
-> > 
-> > Here's my take on it:
-> > 
-> > * Let's please not require a sleepable context in a put operation. It's
-> >   unusual, inconvenient and error-prone, and likely to cause its users to
-> >   implement multiple copies of async mechanisms around it.
-> > 
-> > * A better way to deal with removal / readdition race is flushing release
-> >   operaitons either at the end of removal or before trying to add something
-> >   (you can get fancy w/ flushing only if there's name collision too), not
-> >   making a put path synchronously call release which needs to sleep.
-> > 
-> > * If might_sleep() is currently not needed, let's please drop it. It just
-> >   makes people scratch their head when reading the code.
+On Fri, Jan 06, 2023 at 12:14:57PM -0500, Steven Rostedt wrote:
+> On Fri, 6 Jan 2023 16:49:46 +0100
+> Petr Mladek <pmladek@suse.com> wrote:
 > 
-> I looked over the call path, and I don't think anything in there sleeps.
-> So should be fine to remove the might_sleep().
+> > > Index: linux/lib/vsprintf.c
+> > > ===================================================================
+> > > --- linux.orig/lib/vsprintf.c
+> > > +++ linux/lib/vsprintf.c
+> > > @@ -2738,6 +2738,15 @@ int vsnprintf(char *buf, size_t size, co
+> > >  	if (WARN_ON_ONCE(size > INT_MAX))
+> > >  		return 0;
+> > >  
+> > > +	/*
+> > > +	 * C99 allows @buf to be NULL when @size is 0. We treat such NULL as if
+> > > +	 * @buf pointed to 0-sized buffer, so we can both avoid a NULL pointer
+> > > +	 * dereference and still return # of characters that would be written
+> > > +	 * if @buf pointed to a valid buffer...
+> > > +	 */
+> > > +	if (!buf)
+> > > +		size = 0;  
+> > 
+> > It makes sense except that it would hide bugs. It should print a
+> > warning, for example:
+> 
+> I agree. This is a bug, and should not be quietly ignored.
 
-As soon as commit 63f93fd6fa5717 ("block: mark blk_put_queue as
-potentially blocking") on v6.2-rc1 it was upgraded to might_sleep()
-directly on blk_put_queue(), I can't find a rationale after that
-to justify the removal. But since it is not clear if we keep it,
-we should document that rationale.
+Yup.
 
-  Luis
+> 
+> > 
+> > 	char *err_msg;
+> > 
+> > 	err_msg = check_pointer_msg(buf);
+> > 	if (err_msg) {
+> > 		WARN_ONCE(1, "Invalid buffer passed to vsnprintf(). Trying to continue with 0 length limit\n");
+> > 		size = 0;
+> > 	}
+> 
+> 	if (WARN_ONCE(err_msg, "Invalid buffer passed to vsnprintf(). Trying to continue with 0 length limit\n"))
+> 		size = 0;
+
+Also good. Please CC me for an Ack when this is a full patch. :)
+
+-Kees
+
+-- 
+Kees Cook
