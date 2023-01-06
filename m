@@ -2,181 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513F3660209
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B22266020F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbjAFOXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S233416AbjAFOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbjAFOX1 (ORCPT
+        with ESMTP id S234693AbjAFOZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:23:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26047F44B;
-        Fri,  6 Jan 2023 06:23:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45070616FE;
-        Fri,  6 Jan 2023 14:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9159C433D2;
-        Fri,  6 Jan 2023 14:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673014986;
-        bh=GLq2I201W/dvI6oHhthki9BIrq367DLSrcf0EBqIqAE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NvicM3gAwQf8qOAExduvANxhpvRbAxZO+Apgfsr/RIvXzjS7hZ+jEFblXH1KYZJo3
-         U0EP59h6rECNeneqcfOCHGin8rJ2Ra1zPNS3eZwyfOJCMNO2XQyYGNUeRrFP9cLcxZ
-         3u0DMm2uGFau2NAHcXbS4mjqIUswmB2FWLsHjkyQ5t6mz6bjWgmKvm2yCid0Ga41Dw
-         d4U0FwyxV3g459s/qJ7XsIv3NQ9z9wWpvDkdsBq6qGLJc1clQJJfpVaq/FOfEwQBc5
-         ouxNOP8ShjdGO4/fDb7Jj77d2jyeewx3GqXumzKaMvVZWykGzaHgGRKSOfhUQeM8jr
-         jxrP0Nd0iWrRw==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        =?UTF-8?q?Ahelenia=20Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        Eric Lin <eric.lin@sifive.com>,
-        Ian Rogers <irogers@google.com>,
-        Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Torsten Hilbrich <torsten.hilbrich@secunet.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [GIT PULL] perf tools fixes for v6.2: 1st batch
-Date:   Fri,  6 Jan 2023 11:22:56 -0300
-Message-Id: <20230106142256.763489-1-acme@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Fri, 6 Jan 2023 09:25:28 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C857BDCA;
+        Fri,  6 Jan 2023 06:25:27 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id z7so1131153pfq.13;
+        Fri, 06 Jan 2023 06:25:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZnhpvIy2ZsoQIvjxqkh6LV97wMF7pwAzJclzOI/EkUA=;
+        b=gJpZEqK8J9iUXg6/NaMcM7g+hrm6Idxwqlmg2b1oNBbzs6/lK/Loxi/Aw5Qxq0QDSL
+         Wzp5ZdvcMC4ujm8MnXlIKhlnF8ZUjqHI9TH5AiZQCCNsNoap4tu6GunKKk2qjR9HqW4u
+         J8ghWWq4JwmMmYkbOBsS0ok57pIMsqzoE1eL+gu9TQ/GvYMfgTCZ3WS8K0VTnen/BsOz
+         IOFqTOn25Q3HJoK9P6IJtl2knqLE86CIWndu/O6NDO83G/uhQPltF5L8o531fSzkeM2g
+         9oT9VV09XCANxxPLCJrBuhnGbPQxclXN1S079dOK5hzQ5PI8+k39fAOhRvDnuH1PoWTf
+         dWsw==
+X-Gm-Message-State: AFqh2koRrzxuFn0EPfhR9C0HyGBKOJMf9T2VMmVWRQZn8W0lbSysSCzL
+        x34QhEVBo7gsiSewxncoEuIKxMqnO4m9/mggJlY=
+X-Google-Smtp-Source: AMrXdXupE8sC+Y3fGN3ty9aij7GdI5lL4SimVP4vcqOWquE7YENA7c1nv0MwPYafQUD94503z2yComXmE17v1S9TlPc=
+X-Received: by 2002:a63:2106:0:b0:483:f80c:cdf3 with SMTP id
+ h6-20020a632106000000b00483f80ccdf3mr2608100pgh.70.1673015126142; Fri, 06 Jan
+ 2023 06:25:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106042844.give.885-kees@kernel.org> <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
+In-Reply-To: <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 6 Jan 2023 23:25:14 +0900
+Message-ID: <CAMZ6RqJXnUBxqyCFRaLxELjnvGzn9NoiePV2RVwBzAZRGH_Qmg@mail.gmail.com>
+Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
+To:     Jann Horn <jannh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        kernel test robot <lkp@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri. 6 Jan 2023 at 22:19, Jann Horn <jannh@google.com> wrote:
+> On Fri, Jan 6, 2023 at 5:28 AM Kees Cook <keescook@chromium.org> wrote:
+> > Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
+> > "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
+> > using -fstrict-flex-arrays=3:
+> >
+> > net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
+> > net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+> >   558 |                         .fs.location = info->rule_locs[i],
+> >       |                                        ~~~~~~~~~~~~~~~^~~
+> > In file included from include/linux/ethtool.h:19,
+> >                  from include/uapi/linux/ethtool_netlink.h:12,
+> >                  from include/linux/ethtool_netlink.h:6,
+> >                  from net/ethtool/common.c:3:
+> > include/uapi/linux/ethtool.h:1186:41: note: while referencing
+> > 'rule_locs'
+> >  1186 |         __u32                           rule_locs[0];
+> >       |                                         ^~~~~~~~~
+> >
+> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> >
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: kernel test robot <lkp@intel.com>
+> > Cc: Oleksij Rempel <linux@rempel-privat.de>
+> > Cc: Sean Anderson <sean.anderson@seco.com>
+> > Cc: Alexandru Tachici <alexandru.tachici@analog.com>
+> > Cc: Amit Cohen <amcohen@nvidia.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v3: don't use helper (vincent)
+> > v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
+> > ---
+> >  include/uapi/linux/ethtool.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+> > index 58e587ba0450..3135fa0ba9a4 100644
+> > --- a/include/uapi/linux/ethtool.h
+> > +++ b/include/uapi/linux/ethtool.h
+> > @@ -1183,7 +1183,7 @@ struct ethtool_rxnfc {
+> >                 __u32                   rule_cnt;
+> >                 __u32                   rss_context;
+> >         };
+> > -       __u32                           rule_locs[0];
+> > +       __u32                           rule_locs[];
+>
+> Stupid question: Is this syntax allowed in UAPI headers despite not
+> being part of standard C90 or C++? Are we relying on all C/C++
+> compilers for pre-C99 having gcc/clang extensions?
 
-	Please consider pulling, there are some more being tested but
-that should sit in linux-next/pending-fixes for a while.
+The [0] isn't part of the C90 standard either. So having to choose
+between [0] and [], the latter is the most portable nowadays.
 
-        Please let me know if you think anything should be reworked,
+If I do a bit of speleology, I can see that C99 flexible array members
+were used as early as v2.6.19 (released in November 2006):
 
-Best regards,
+  https://elixir.bootlin.com/linux/v2.6.19/source/include/linux/usb/audio.h#L36
 
-- Arnaldo
+This is prior to the include/linux and include/uapi/linux split, but
+believe me, this usb/audio.h file is indeed part of the uapi.
+So, yes, using C99 flexible array members in the UAPI is de facto
+allowed because it was used for the last 16 years.
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+An interesting sub question would be:
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+  What are the minimum compiler requirements to build a program using
+the Linux UAPI?
 
-are available in the Git repository at:
+And, after research, I could not find the answer. The requirements to
+build the kernel are well documented:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.1-1-2023-01-06
+  https://docs.kernel.org/process/changes.html#changes
 
-for you to fetch changes up to 481028dbf1daa2808e1be06f6a865b5fe5939efc:
+But no clue for the uapi. I guess that at one point in 2006, people
+decided that it was time to set the minimum requirement to C99. Maybe
+this matches the end of life of the latest pre-C99 GCC version? The
+detailed answer must be hidden somewhere on lkml.
 
-  perf tools: Fix build on uClibc systems by adding missing sys/types.h include (2023-01-04 16:44:01 -0300)
 
-----------------------------------------------------------------
-perf tools fixes for v6.2: 1st batch
-
-- Fix segfault when trying to process tracepoints present in a perf.data file
-  and not linked with libtraceevent.
-
-- Fix build on uClibc systems by adding missing sys/types.h include, that was
-  being obtained indirectly which stopped being the case when tools/lib/traceevent
-  was removed.
-
-- Don't show commands in 'perf help' that depend on linking with libtraceevent
-  when not building with that library, which is now a possibility since we
-  no longer ship a copy in tools/lib/traceevent.
-
-- Fix failure in 'perf test' entry testing the combination of 'perf probe' user
-  space function + 'perf record' + 'perf script' where it expects a backtrace
-  leading to glibc's inet_pton() from 'ping' that now happens more than once with
-  glibc 2.35 for IPv6 addreses.
-
-- Fix for the inet_pton perf test on s/390 where 'text_to_binary_address' now
-  appears on the backtrace.
-
-- Fix build error on riscv due to missing header for 'struct perf_sample'.
-
-- Fix 'make -C tools perf_install' install variant by not propagating the 'subdir'
-  to submakes for the 'install_headers' targets.
-
-- Fix handling of unsupported cgroup events when using BPF counters in 'perf stat'.
-
-- Count all cgroups, not just the last one when using 'perf stat
-  --for-each-cgroup' with --bpf-counters. This makes the output using BPF
-  counters match the output without using it, which was the intention all along,
-  the output should be the same using --bpf-counters or not.
-
-- Fix 'perf lock contention' core dump related to not finding the
-  "__sched_text_end" symbol on s/390.
-
-- Fix build failure when HEAD is signed: exclude the signature from the version
-  string.
-
-- Add missing closedir() calls to in perf_data__open_dir(), plugging a fd leak.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-----------------------------------------------------------------
-Ahelenia Ziemiańska (1):
-      perf tools: Don't include signature in version strings
-
-Arnaldo Carvalho de Melo (2):
-      perf tools: Fix segfault when trying to process tracepoints in perf.data and not linked with libtraceevent
-      perf test record_probe_libc_inet_pton: Fix failure due to extra inet_pton() backtrace in glibc >= 2.35
-
-Eric Lin (1):
-      perf tools riscv: Fix build error on riscv due to missing header for 'struct perf_sample'
-
-Ian Rogers (1):
-      perf build: Don't propagate subdir to submakes for install_headers
-
-Jesus Sanchez-Palencia (1):
-      perf tools: Fix build on uClibc systems by adding missing sys/types.h include
-
-Miaoqian Lin (1):
-      perf tools: Fix resources leak in perf_data__open_dir()
-
-Namhyung Kim (2):
-      perf stat: Fix handling of unsupported cgroup events when using BPF counters
-      perf stat: Fix handling of --for-each-cgroup with --bpf-counters to match non BPF mode
-
-Thomas Richter (2):
-      perf lock contention: Fix core dump related to not finding the "__sched_text_end" symbol on s/390
-      perf test record_probe_libc_inet_pton: Fix test on s/390 where 'text_to_binary_address' now appears on the backtrace
-
-Yang Jihong (1):
-      perf help: Use HAVE_LIBTRACEEVENT to filter out unsupported commands
-
- tools/perf/Documentation/Makefile                  |  2 +-
- tools/perf/Makefile.perf                           | 10 +++++-----
- tools/perf/arch/riscv/util/unwind-libdw.c          |  2 +-
- tools/perf/builtin-lock.c                          |  2 ++
- tools/perf/command-list.txt                        | 10 +++++-----
- .../tests/shell/record+probe_libc_inet_pton.sh     |  3 ++-
- tools/perf/util/PERF-VERSION-GEN                   |  2 +-
- tools/perf/util/bpf_counter_cgroup.c               | 14 +++----------
- tools/perf/util/cgroup.c                           | 23 +++++++++++++++++-----
- tools/perf/util/data.c                             |  2 ++
- tools/perf/util/generate-cmdlist.sh                | 19 ++++++++++++++++--
- tools/perf/util/sort.c                             | 12 +++++++++++
- tools/perf/util/trace-event.h                      |  1 +
- 13 files changed, 70 insertions(+), 32 deletions(-)
+Yours sincerely,
+Vincent Mailhol
