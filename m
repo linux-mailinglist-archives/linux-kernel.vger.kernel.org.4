@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF42660859
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD66A660857
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbjAFUer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S236045AbjAFUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbjAFUeW (ORCPT
+        with ESMTP id S229552AbjAFUeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:34:22 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F28C6CFF6;
-        Fri,  6 Jan 2023 12:34:20 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f34so3576602lfv.10;
-        Fri, 06 Jan 2023 12:34:20 -0800 (PST)
+        Fri, 6 Jan 2023 15:34:14 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19555AC40;
+        Fri,  6 Jan 2023 12:34:12 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p24so2829769plw.11;
+        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XaDPfwoL+u15r2egWWYGKKyUhV9uIWkWkMZ5qdh5ZFM=;
-        b=k5txLsZIED9lM3Jb2r0MHLESXqPke1bd6U9IcmJpKvb23bLiRIKeqFj9wGUf2Dgls+
-         ZTFCesl2VsGFUIAnp7lq2vWUTT6s6yj8AnEQcFwxx3KoSwAgmStWBlasg9sqOySQR7Wl
-         BwN+Qm1yHSTTnbQ7nhYtWPjSm2o7z7fbD+cdwVvtR2p/2+aV42to0WakK/8NzTuUMH3y
-         rxWMOppyosFEERITJbodzqQSJl6SuAI2mn1KHARSATyyp5kgwr6E6YhzflS23dNsNsXD
-         je02DMVYAO7TsLCcciqffYqRflN+oDvnvcvhU/2yEsl9O3XQLHJr9apomcIh3fCqDzqR
-         TUNA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4DT+/huwtQo/Hb3OM+ZFYw7lz+P7V1u4iH9OMjxXR9I=;
+        b=TyYWgfhTM3HUIjd7gJ5EtNhIsQmtclO/JJBnQw05cqqM1htMS9Iz4jj3hqvCi5jHsd
+         Z7ErPjOy50rpGgRl4d+ka6KQKzbEhjB2GCPvY/WkURtIVtk7LK0O/woLERu5lz+56kIZ
+         kGiFsrYvyNSPgl0dCRopGB5pAhsjOTXAKf+1fkGHNnamy5aSmgKkOkXzouZzR/yerIKU
+         rzotxk8KfwqpTi3NgVJr6VljHEznnM53vevaUGvmpKnVHt3Lu23pC6gr5Hyd7oXbdEw4
+         7BlRkXXtLuLN3PSJZFIArc/DDmQlpvk2e02Wce5tLtCFI39xGB91YFWFBBO8CTqLDkeL
+         jweg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XaDPfwoL+u15r2egWWYGKKyUhV9uIWkWkMZ5qdh5ZFM=;
-        b=qlTAHBqkSzI1xPjph/dMO4vL0HuENvPg0aH8nNgBp8reroBaoK3Og3k4FO1EdaxMSb
-         cEgVwrUqO3fS9CiVeOun6nnbDKV/ReECBdSKimQ78kwh//prgCMlSf8i3Vipzp2KZvuH
-         TL9c/rzVIAiJ02JaXpEJJ3brwj9B8lMMQnaNcJjrqIFsoNY4P2rswUaRIjsn4y1TlY6r
-         0tKZDQXyr/wBowjPjH+rcRFSNOBCPxtCwG+goGKK1kx1ihAGm2cBw4LdM/NDN3Ofctzs
-         5xTJjQ1kFWicdjX3AlxUsV0VYMpbXeO6nAKJ31EBdiO/7sKsFITJj9KX5DBR8NvLty3e
-         MLnw==
-X-Gm-Message-State: AFqh2kq07owlapoVO+rfmTDc4/WXegW4RA/OiyrsfJj6zBT2AK6mIapk
-        2HCM9LcVNTU1ZKGx3OnNX4DzBItDNhVYgbvGQn7ccTcH3G4=
-X-Google-Smtp-Source: AMrXdXsr1MLYtopcnh+tmLgUHTFBMtoAcRNcihp/WJ9wQEGNmo3ZRBDdlafs9UXuVKYMg7uokWiYoSomzRcluiTgcTI=
-X-Received: by 2002:a05:6512:3e12:b0:4ca:6c11:d3e5 with SMTP id
- i18-20020a0565123e1200b004ca6c11d3e5mr2597435lfv.224.1673037258430; Fri, 06
- Jan 2023 12:34:18 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4DT+/huwtQo/Hb3OM+ZFYw7lz+P7V1u4iH9OMjxXR9I=;
+        b=lLgqaCBILuRAf0U2L95yL/RvweHsxsgUZv1XJBFbQT1ZvCvd+J4pAZmoWbpLVNjEvd
+         IkKvu+XhlxUd0gDANoGdf9wk4UCuCqOyFG76zOC9pJWjuBrQ8bm92T+LzK9cO3CPKP0e
+         /uu3meHUSdjalw+loDCe/vHRl1m4Lf0XFL1rHErGkEcQO/ODzjHxBOvtZeU49d/FpKaX
+         MoMXyX2frh3I3GhbId8LvMRhN7SO5S18D+IFhl/5i7pLaugvt0T4In1dAnRRojGLT9fh
+         g82xhfJRngwAdeTr+OJ1JfjF0Ct/1czdoGIQpu8DVo13dS3p1CCpM9XtD20Oh8wACzdO
+         0s+g==
+X-Gm-Message-State: AFqh2koGBYwweZAU68lUmghyhG0ET7iMK1FY7xTrxS8Svdeh1dZssu4n
+        XReUQAUmZG7xQsamNNou4gc=
+X-Google-Smtp-Source: AMrXdXu3ANdUQS5ELLp6Ej4q37pOTz53uQtmaHIHheb8C65lnfc0UhC5Mwve6aC06Y3kdcmsXgBpug==
+X-Received: by 2002:a05:6a20:bb10:b0:ad:2c7c:9510 with SMTP id fc16-20020a056a20bb1000b000ad2c7c9510mr62398353pzb.19.1673037252423;
+        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k15-20020a170902c40f00b0019276616e9fsm1310530plk.183.2023.01.06.12.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 12:34:12 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 6 Jan 2023 10:34:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep() from
+ blk_put_queue()
+Message-ID: <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
+References: <Y7g3L6fntnTtOm63@kili>
+ <Y7hbYPSdLqW++y/p@slm.duckdns.org>
+ <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
 MIME-Version: 1.0
-References: <20230106094844.26241-1-zhanghongchen@loongson.cn> <Y7hyw+fTdgAF6uYP@bombadil.infradead.org>
-In-Reply-To: <Y7hyw+fTdgAF6uYP@bombadil.infradead.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 6 Jan 2023 21:33:41 +0100
-Message-ID: <CA+icZUUdGCdzYvdi3_vdpHqNvE12wsAw3CKCmeut1-R78kjHHg@mail.gmail.com>
-Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        David Howells <dhowells@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 8:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Jan 06, 2023 at 05:48:44PM +0800, Hongchen Zhang wrote:
-> > Use spinlock in pipe_read/write cost too much time,IMO
-> > pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
-> > On the other hand, we can use __pipe_{lock,unlock} to protect
-> > the pipe->{head,tail} in pipe_resize_ring and
-> > post_one_notification.
-> >
-> > I tested this patch using UnixBench's pipe test case on a x86_64
-> > machine,and get the following data:
-> > 1) before this patch
-> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
-> > Pipe Throughput                   12440.0     493023.3    396.3
-> >                                                         ========
-> > System Benchmarks Index Score (Partial Only)              396.3
-> >
-> > 2) after this patch
-> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
-> > Pipe Throughput                   12440.0     507551.4    408.0
-> >                                                         ========
-> > System Benchmarks Index Score (Partial Only)              408.0
-> >
-> > so we get ~3% speedup.
-> >
-> > Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-> > ---
->
-> After the above "---" line you should have the changlog descrption.
-> For instance:
->
-> v3:
->   - fixes bleh blah blah
-> v2:
->   - fixes 0-day report by ... etc..
->   - fixes spelling or whatever
->
-> I cannot decipher what you did here differently, not do I want to go
-> looking and diff'ing. So you are making the life of reviewer harder.
->
+Dan reports the following smatch detected the following:
 
-Happy new 2023.
+  block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
 
-Positive wording... You can make reviewers' life easy when...
-(encourage people).
-Life is easy, people live hard.
+caused by blkcg_schedule_throttle() calling blk_put_queue() in an
+non-sleepable context.
 
-+1 Adding ChangeLog of patch history
+blk_put_queue() acquired might_sleep() in 63f93fd6fa57 ("block: mark
+blk_put_queue as potentially blocking") which transferred the might_sleep()
+from blk_free_queue().
 
-Cannot say...
-Might be good to add the link to Linus test-case + your results in the
-commit message as well?
+blk_free_queue() acquired might_sleep() in e8c7d14ac6c3 ("block: revert back
+to synchronous request_queue removal") while turning request_queue removal
+synchronous. However, this isn't necessary as nothing in the free path
+actually requires sleeping.
 
-...
-Link: https://git.kernel.org/linus/0ddad21d3e99 (test-case of Linus
-suggested-by Andrew)
-...
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-...
+It's pretty unusual to require a sleeping context in a put operation and
+it's not needed in the first place. Let's drop it.
 
-Thanks.
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lkml.kernel.org/r/Y7g3L6fntnTtOm63@kili
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Fixes: e8c7d14ac6c3 ("block: revert back to synchronous request_queue removal") # v5.9+
+--
+ block/blk-core.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
-Best regards,
--Sedat-
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 9321767470dc..b5098355d8b2 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -283,12 +283,9 @@ static void blk_free_queue(struct request_queue *q)
+  *
+  * Decrements the refcount of the request_queue and free it when the refcount
+  * reaches 0.
+- *
+- * Context: Can sleep.
+  */
+ void blk_put_queue(struct request_queue *q)
+ {
+-	might_sleep();
+ 	if (refcount_dec_and_test(&q->refs))
+ 		blk_free_queue(q);
+ }
