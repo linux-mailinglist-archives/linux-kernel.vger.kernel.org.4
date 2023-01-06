@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12283660413
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C228660416
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjAFQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S235321AbjAFQQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbjAFQPq (ORCPT
+        with ESMTP id S232218AbjAFQQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:15:46 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C337621D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:15:42 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so1347802ill.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 08:15:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UNRYTiAron3sOqUpJ4KY77PVeml0gjHFzZsHxgV0AOw=;
-        b=O/cuab9TAqQsTCjp7MO24K5pjzx6Hh0tCZ5i503kgqdpqbprCkB7esRpEaPQPUpZ/A
-         eF6MXgvE4oXk/xRjjj2hWVUougKBJTs+ayBJQBXdeBuCzNM77fDjwy+67qYLpgK8bUrS
-         BL9VyVacneK2VmQO+DPKt7mbjTDkNZ4RiDQBqbae0Ic6cZDd1IyJ/yy6n8CboLaGvtz6
-         oj0P8vfPUjmUo+jKDuo83xVcG2AzfMTHzfgvxVFc061jqpKdOK88qjH3J9KlYZbwnx/m
-         3ciA5Z7Wwj8jkYH1yX57D87n3zOykQ+cYo9/fMCCsB4JyQqeauLWoZHwfUto9u0GLjBP
-         4RAg==
-X-Gm-Message-State: AFqh2kp75+cWCIleFI67PD6YoWib7EQyys0uxdVT5b2kIgQQcx8wxWBI
-        JUuROmE8W2EKM14JnS6U8HiJ9lS+9d4OvJUo3yYQWnveQIdR
-X-Google-Smtp-Source: AMrXdXvVvhoHVE3I5wZ5bk8vuHXbnqPkZRWPGd+DQI0jEuAuia7zdBysgwK4Q/e0aLDS5CAtqfWlHrgRsDXT9ZqkBcqkh1oi5xO/
+        Fri, 6 Jan 2023 11:16:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4BCDE0;
+        Fri,  6 Jan 2023 08:16:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EBA15CE1D41;
+        Fri,  6 Jan 2023 16:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6DBC433EF;
+        Fri,  6 Jan 2023 16:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673021767;
+        bh=LUfq977S0xwl0fZvy6DFLm2MwNishlM8ceQPsMY0p4w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SNVZkEb30GUfOVmMtkO77BXIP9IhjnFiBsOPZrGxT7ySMiBYjFIzG7GFlsDrtdmwH
+         Py8yztjt4tmmy8kOxswSKy5nYwUkSrGFd/X67l7c6n1Il4stXWEb5UATOn1B5WyJL7
+         F1bEuDstg5Mx5QELT4++Ziphy/v9CkHtEfMZn8bn7tiGnMaQlnwT5yLr+V+8mdYDAC
+         WlI+W8Drc/jjFAQ2jRF4hoOhMw850RM7elFYS86C0QgGdkF2P1F6Y2lpBUp4EbDVbd
+         B3LrYhAi/lW+9CPezfnpeKAXO6u4wizN+ozJyCWZkPY6l2SVsXmTWT9HKVN5AJR+mZ
+         mfQfq5w/Zec6Q==
+Message-ID: <0ea195c3-89cc-1cb5-cdc5-a8bc3927dc99@kernel.org>
+Date:   Fri, 6 Jan 2023 09:16:05 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:c71:b0:30d:87b7:cfb2 with SMTP id
- f17-20020a056e020c7100b0030d87b7cfb2mr595870ilj.228.1673021741666; Fri, 06
- Jan 2023 08:15:41 -0800 (PST)
-Date:   Fri, 06 Jan 2023 08:15:41 -0800
-In-Reply-To: <000000000000fd3bbe05efb0d1fd@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009d209d05f19abaed@google.com>
-Subject: Re: [syzbot] [vfs?] [ntfs3?] [tmpfs?] WARNING in walk_component
-From:   syzbot <syzbot+eba014ac93ef29f83dc8@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org,
-        almaz.alexandrovich@paragon-software.com, hughd@google.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] net: ipv6: rpl_iptunnel: Replace 0-length arrays with
+ flexible arrays
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20230105221533.never.711-kees@kernel.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230105221533.never.711-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 1/5/23 3:15 PM, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace struct ipv6_rpl_sr_hdr's
+> "segments" union of 0-length arrays with flexible arrays. Detected with
+> GCC 13, using -fstrict-flex-arrays=3:
+> 
+> In function 'rpl_validate_srh',
+>     inlined from 'rpl_build_state' at ../net/ipv6/rpl_iptunnel.c:96:7:
+> ../net/ipv6/rpl_iptunnel.c:60:28: warning: array subscript <unknown> is outside array bounds of 'struct in6_addr[0]' [-Warray-bounds=]
+>    60 |         if (ipv6_addr_type(&srh->rpl_segaddr[srh->segments_left - 1]) &
+>       |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from ../include/net/rpl.h:12,
+>                  from ../net/ipv6/rpl_iptunnel.c:13:
+> ../include/uapi/linux/rpl.h: In function 'rpl_build_state':
+> ../include/uapi/linux/rpl.h:40:33: note: while referencing 'addr'
+>    40 |                 struct in6_addr addr[0];
+>       |                                 ^~~~
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/uapi/linux/rpl.h | 4 ++--
+>  net/ipv6/rpl_iptunnel.c  | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
 
-HEAD commit:    1f5abbd77e2c Merge tag 'thermal-6.2-rc3' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=113cc806480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
-dashboard link: https://syzkaller.appspot.com/bug?extid=eba014ac93ef29f83dc8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f5d83a480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1727f4b4480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6c5b2e8c2c94/disk-1f5abbd7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8956b2eee8db/vmlinux-1f5abbd7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c3464b3b12f5/bzImage-1f5abbd7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6acfd5ce1186/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+eba014ac93ef29f83dc8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON(!is_rwsem_reader_owned(sem)): count = 0x0, magic = 0xffff8880708871d0, owner = 0x0, curr 0xffff8880279e1d40, list empty
-WARNING: CPU: 1 PID: 5194 at kernel/locking/rwsem.c:1336 __up_read+0x5c0/0x720 kernel/locking/rwsem.c:1336
-Modules linked in:
-CPU: 1 PID: 5194 Comm: syz-executor234 Not tainted 6.2.0-rc2-syzkaller-00203-g1f5abbd77e2c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__up_read+0x5c0/0x720 kernel/locking/rwsem.c:1336
-Code: 03 80 3c 02 00 0f 85 35 01 00 00 49 8b 17 4d 89 f1 4c 89 e9 48 c7 c6 80 44 4c 8a ff 34 24 48 c7 c7 c0 41 4c 8a e8 70 b8 5c 08 <0f> 0b 5e e9 38 fb ff ff 48 89 df e8 e0 8a 6c 00 e9 b2 fa ff ff 48
-RSP: 0018:ffffc90003f4fb58 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffffffff8e730c28 RCX: 0000000000000000
-RDX: ffff8880279e1d40 RSI: ffffffff8166721c RDI: fffff520007e9f5d
-RBP: ffff8880708871d8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 1ffff920007e9f6f
-R13: ffff8880708871d0 R14: ffff8880279e1d40 R15: ffff8880708871d0
-FS:  00007f022ae3c700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f02330f3120 CR3: 000000001d72a000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- inode_unlock_shared include/linux/fs.h:771 [inline]
- lookup_slow fs/namei.c:1703 [inline]
- walk_component+0x34a/0x5a0 fs/namei.c:1993
- lookup_last fs/namei.c:2450 [inline]
- path_lookupat+0x1ba/0x840 fs/namei.c:2474
- filename_lookup+0x1d2/0x590 fs/namei.c:2503
- user_path_at_empty+0x46/0x60 fs/namei.c:2876
- user_path_at include/linux/namei.h:57 [inline]
- __do_sys_chdir fs/open.c:514 [inline]
- __se_sys_chdir fs/open.c:508 [inline]
- __x64_sys_chdir+0xbb/0x240 fs/open.c:508
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f02330b1a19
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f022ae3c2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000050
-RAX: ffffffffffffffda RBX: 0000000000000029 RCX: 00007f02330b1a19
-RDX: 00007f02330b1a19 RSI: ffffffffffffffb8 RDI: 0000000020000380
-RBP: 00007f0233155798 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f0233155790
-R13: 00007f023315579c R14: 6573726168636f69 R15: 0030656c69662f2e
- </TASK>
-
+Reviewed-by: David Ahern <dsahern@kernel.org>
