@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5496607D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A6B660797
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236690AbjAFULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S234858AbjAFUIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236465AbjAFUKj (ORCPT
+        with ESMTP id S236308AbjAFUI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:10:39 -0500
-Received: from relay.smtp-ext.broadcom.com (lpdvsmtp09.broadcom.com [192.19.166.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E388408C;
-        Fri,  6 Jan 2023 12:10:37 -0800 (PST)
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id C5EBCC0000E6;
-        Fri,  6 Jan 2023 12:10:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com C5EBCC0000E6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1673035836;
-        bh=frlTbcU6hpG61dJDfFSIHuuKmcrXAgLgJ5MGkCYlL0M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rHSrIX+d4KZB3KJnVo6JGxDZ/xdzqr0QFpxqe0U7kz+9pVT2LPg1guTWSbGWoRvTB
-         cDGQX0R3X9Vko8C2V38bS9KkT5V7EfuhDmtQHOK1TBTDnkuIFrlXOSEYE8ahj/L54q
-         78UWhKKejsKFI38B3n9MnMYmsSKR8Umu/o2eqbhI=
-Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id C403C18041CAC6;
-        Fri,  6 Jan 2023 12:10:36 -0800 (PST)
-Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id 1C50A101B3C; Fri,  6 Jan 2023 12:10:31 -0800 (PST)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 16/16] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
-Date:   Fri,  6 Jan 2023 12:08:08 -0800
-Message-Id: <20230106200809.330769-17-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230106200809.330769-1-william.zhang@broadcom.com>
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
+        Fri, 6 Jan 2023 15:08:27 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61B98408C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:08:25 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso1858767wmq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i9+HW72JLcvyRBnz5C5bVByBYZYS05ui/XR6+SsBR3c=;
+        b=rNTzkWFrVk6h1c0XbWOX5bDusbJf+Ejjkg+kpICiEEPo7tuDA4cWbu1f8LqFnmtk/O
+         vCxNkjfCwh4XX5GK/ka812+vSjyV1zbvzZCwHI86jW2fvgAwYgFYpWkTdNomnRi3+YC/
+         gV4v5AEQaoFHU/bY/5JIE/aQgb+z1Oyxvl1vnXx8G22XqGBi0i1n0tLQQtkLIf8zKLga
+         2AtQbmSHdOrp9EpNw7DH6Ts+8+ZHNuuz5geJbXCHLe+Mnyp/GJUttdOfpRv+IRYFQ1m2
+         vq2Dg0g756Th5rSnojaY/LLLf49b3rrniUfYCe3zlgavzBRalSHbWbHzRLXXuGUSZ4xC
+         y2rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i9+HW72JLcvyRBnz5C5bVByBYZYS05ui/XR6+SsBR3c=;
+        b=ef0IuRwWJaED53nYiNgWSq9QJA7ghGem+/sOw0uJArmDTbyNATzUHYb66l/4U9zj8K
+         +zmH1MDNqbrDuFSdZktE1tetzagqqqE5AJJUfrNxZ0GToZsoImVIAQm4cZ5jH+w0UGOL
+         BS2MOGgBQ55sEy77lCdYNkJvgNXAtqmsu+J/NdMCwKxHmdNggVDsrgI4uGQwqVOt76P3
+         mwoYJVmA7NxuvH8TFyS/TUpV1yhPfvjeLo2NAplKYVyzDsGI9ulTdgP5ywjMxzsHk3iU
+         XSAos7Y7tzINL5Gwk80iIhy8sB8U+npQ5m5nY9Z17cxqRWN7t9RWIV8pVwUCSQ9essb+
+         UJ5A==
+X-Gm-Message-State: AFqh2krzh6vecr6uO5Kd79Hy4WkkaXjVETZVra2KX8ogdAZTmtLwcwWI
+        94ijxfWRyWZJgo+WL1GHlZoRag==
+X-Google-Smtp-Source: AMrXdXs3tTUj9ID+GCgF+VYiLKuPcIGiS2TOdonsG3ogg03JBTKudMK8+1+shmcuLiHK1HgBdO/wng==
+X-Received: by 2002:a05:600c:4f83:b0:3d2:3f55:f73f with SMTP id n3-20020a05600c4f8300b003d23f55f73fmr40568114wmq.8.1673035704091;
+        Fri, 06 Jan 2023 12:08:24 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id az28-20020a05600c601c00b003cf57329221sm7304548wmb.14.2023.01.06.12.08.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 12:08:23 -0800 (PST)
+Message-ID: <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org>
+Date:   Fri, 6 Jan 2023 21:08:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Annoying message on the console for the db845c board
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
+ <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver and device tree doc were originally authored by Jonas Gorski
-and it has been updated from Broadcom recently including the dts yaml
-file and a new driver for the updated controller. Add Jonas Gorski and
-Broadcom engineers William Zhang and Kursad Oney as the maintainers.
+On 06/01/2023 19:14, Dmitry Baryshkov wrote:
+> On Fri, 6 Jan 2023 at 18:37, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi all,
+>>
+>> Does anyone have an idea on how to fix these timeout messages ? They are
+>> displayed again and again every 5 seconds and that saturates the
+>> filesystem after awhile.
+> 
+> Could you please check that you have CONFIG_QCOM_RMTFS_MEM enabled and
+> the rmtfs daemon running?
+> I think that's the usual cause of such messages.
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Yes, I have the option and the daemon running:
 
----
+zcat /proc/config.gz | grep CONFIG_QCOM_RMTFS_MEM
+CONFIG_QCOM_RMTFS_MEM=y
 
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ps -ef | grep rmtfs
+root      9888     1  2 20:07 ?        00:00:00 /usr/bin/rmtfs -r -P -s
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f0b7181e60a..c7b1d4046940 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4299,6 +4299,18 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	drivers/phy/broadcom/phy-brcm-usb*
- 
-+BROADCOM Broadband SoC High Speed SPI Controller DRIVER
-+M:	William Zhang <william.zhang@broadcom.com>
-+M:	Kursad Oney <kursad.oney@broadcom.com>
-+M:	Jonas Gorski <jonas.gorski@gmail.com>
-+R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi-peripheral-props.yaml
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
-+F:	drivers/spi/spi-bcm63xx-hsspi.c
-+F:	drivers/spi/spi-bcmbca-hsspi.c
-+
- BROADCOM ETHERNET PHY DRIVERS
- M:	Florian Fainelli <f.fainelli@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+
+
+
 -- 
-2.37.3
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
