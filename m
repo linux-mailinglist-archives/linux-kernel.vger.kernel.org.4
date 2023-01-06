@@ -2,141 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD3065FE1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150BB65FE27
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjAFJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S233948AbjAFJkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbjAFJjI (ORCPT
+        with ESMTP id S232758AbjAFJja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:39:08 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9738243E58
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672997414; x=1704533414;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L3XLTnt2PC2phaQBntNILIbKLlk/h/c2gjDwb/kJpOc=;
-  b=eHiyA4p0oVsM9/VudTH8EKBd6MXJxLPJdkuz4aUpDsWtMqJ3zrpbNxGO
-   vWkWix9FTMAuB6fLc3FuntauaYYU9sPsESwFldf81npUW19BTqrL/J8D4
-   dIOhVxITpmb7ZEhjNy/3L6BhUa7nsQXleLC7PfFQu6lAb9Y+Ia9fn0Sgy
-   nSGFY3PS9OvDz25bQmceMyrTBwcaqiah3A3AfBgbmrRksPpFalwAcNp84
-   c5/7GW7vtGZXq86XFvNuBCwpmTG/St/L+qch0m0GN6VJuLbeZZ0xJIMFb
-   C8Jz192x5YloOt24grbTmqbY6ZEXPvwPG9yuELp0vlRAjjUPfBQRT67zd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="310232291"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="310232291"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 01:30:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="779921070"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="779921070"
-Received: from joe-255.igk.intel.com (HELO localhost) ([172.22.229.67])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 01:30:08 -0800
-Date:   Fri, 6 Jan 2023 10:30:06 +0100
-From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch, ville.syrjala@linux.intel.com,
-        manasi.d.navare@intel.com, stanislav.lisovskiy@intel.com,
-        lucas.demarchi@intel.com, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/i915: Add missing check and destroy for
- alloc_workqueue
-Message-ID: <20230106093006.GA1586324@linux.intel.com>
-References: <20230106090934.6348-1-jiasheng@iscas.ac.cn>
+        Fri, 6 Jan 2023 04:39:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC8D17E39;
+        Fri,  6 Jan 2023 01:31:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7F32B81CD3;
+        Fri,  6 Jan 2023 09:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962C8C433EF;
+        Fri,  6 Jan 2023 09:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672997497;
+        bh=pmOPBYsdoU8C8Cg+g0Xq7F5/UqxY1GcvcUbUlcGlLiU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I6V2x0opcz4TnvcqLj+8o8pPeb/p/4cmDEvxcTiXZ9oc4w41dHphO6NHo7Q53wNns
+         yAxTywhwG48rwFgK69xaxcNv8O7eLIY6qAhpNGBKQcMdmJ3LoAlpbomtGZx9Z8UneJ
+         llaeknjvrZQVuyVE7oYgN6h/hqHWd2SIkO7J9sfDWCwuIVrToKBso+2ZO3KGfdL3+H
+         6DdSYh3QtDYjde/0ys8a5xfFj15a/i8Zn6u1CItfSPi3WuSHEVwcmSWYOBzlRLGGtE
+         bs1yxbAh3c2BA00xQZmezackjAjFz05IaW1lITPLHWcDxPBOcKvDtHufNjwEObpCJ7
+         Fz9KO8Eg/d5/g==
+Date:   Fri, 6 Jan 2023 09:31:33 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the backlight tree
+Message-ID: <Y7fqdX8FPEZW32sM@google.com>
+References: <20230106113509.5c101b53@canb.auug.org.au>
+ <Y7fo+tMnkSndJNXV@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230106090934.6348-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y7fo+tMnkSndJNXV@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 05:09:34PM +0800, Jiasheng Jiang wrote:
-> Add checks for the return value of alloc_workqueue and
-> alloc_ordered_workqueue as they may return NULL pointer and cause NULL
-> pointer dereference.
-> Moreover, destroy them when fails later in order to avoid memory leak.
-> Because in `drivers/gpu/drm/i915/i915_driver.c`, if
-> intel_modeset_init_noirq fails, its workqueues will not be destroyed.
-> 
-> Fixes: c26a058680dc ("drm/i915: Use a high priority wq for nonblocking plane updates")
-> Fixes: 757fffcfdffb ("drm/i915: Put all non-blocking modesets onto an ordered wq")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Fri, 06 Jan 2023, Lee Jones wrote:
 
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> On Fri, 06 Jan 2023, Stephen Rothwell wrote:
+> 
+> > Hi all,
+> > 
+> > The following commits are also in the backlight-fixes tree as different
+> > commits (but the same patches):
+> > 
+> >   44bbdb7e3a67 ("backlight: ktd253: Switch to use dev_err_probe() helper")
+> >   c0e09423bbb4 ("dt-bindings: backlight: qcom-wled: Add PMI8950 compatible")
+> >   73516cbcf8d9 ("backlight: pwm_bl: Drop support for legacy PWM probing")
+> > 
+> > Forgot to push out an updated backlight-fixes tree?
 
->  drivers/gpu/drm/i915/display/intel_display.c | 21 ++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
+What's the branch name that you're tracking?
+
+> Don't think so?
 > 
-> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
-> index 6c2686ecb62a..58f6840d6bd8 100644
-> --- a/drivers/gpu/drm/i915/display/intel_display.c
-> +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> @@ -8655,26 +8655,35 @@ int intel_modeset_init_noirq(struct drm_i915_private *i915)
->  	intel_dmc_ucode_init(i915);
->  
->  	i915->display.wq.modeset = alloc_ordered_workqueue("i915_modeset", 0);
-> +	if (!i915->display.wq.modeset) {
-> +		ret = -ENOMEM;
-> +		goto cleanup_vga_client_pw_domain_dmc;
-> +	}
-> +
->  	i915->display.wq.flip = alloc_workqueue("i915_flip", WQ_HIGHPRI |
->  						WQ_UNBOUND, WQ_UNBOUND_MAX_ACTIVE);
-> +	if (!i915->display.wq.flip) {
-> +		ret = -ENOMEM;
-> +		goto cleanup_modeset;
-> +	}
->  
->  	intel_mode_config_init(i915);
->  
->  	ret = intel_cdclk_init(i915);
->  	if (ret)
-> -		goto cleanup_vga_client_pw_domain_dmc;
-> +		goto cleanup_flip;
->  
->  	ret = intel_color_init(i915);
->  	if (ret)
-> -		goto cleanup_vga_client_pw_domain_dmc;
-> +		goto cleanup_flip;
->  
->  	ret = intel_dbuf_init(i915);
->  	if (ret)
-> -		goto cleanup_vga_client_pw_domain_dmc;
-> +		goto cleanup_flip;
->  
->  	ret = intel_bw_init(i915);
->  	if (ret)
-> -		goto cleanup_vga_client_pw_domain_dmc;
-> +		goto cleanup_flip;
->  
->  	init_llist_head(&i915->display.atomic_helper.free_list);
->  	INIT_WORK(&i915->display.atomic_helper.free_work,
-> @@ -8686,6 +8695,10 @@ int intel_modeset_init_noirq(struct drm_i915_private *i915)
->  
->  	return 0;
->  
-> +cleanup_flip:
-> +	destroy_workqueue(i915->display.wq.flip);
-> +cleanup_modeset:
-> +	destroy_workqueue(i915->display.wq.modeset);
->  cleanup_vga_client_pw_domain_dmc:
->  	intel_dmc_ucode_fini(i915);
->  	intel_power_domains_driver_remove(i915);
-> -- 
-> 2.25.1
-> 
+> 88603b6dc4194 (HEAD -> refs/heads/backlight-fixes, tag: \
+>   refs/tags/v6.2-rc2, 					\
+>   refs/remotes/mfd/mfd-fixes, 				\
+>   refs/remotes/leds/for-leds-next, 			\
+>   refs/remotes/backlight/backlight-fixes, 		\
+
+Ah, wait!  This is the old naming scheme.
+
+I assume, despite the message above, you're tracking
+'for-backlight-fixes', right?
+
+>   refs/heads/mfd-fixes, 				\
+>   refs/heads/for-leds-next) 				\
+>     Linux 6.2-rc2
+
+-- 
+Lee Jones [李琼斯]
