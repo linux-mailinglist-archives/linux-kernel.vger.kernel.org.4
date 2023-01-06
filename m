@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21E966052B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B2B66052D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbjAFQ6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
+        id S234650AbjAFQ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbjAFQ6K (ORCPT
+        with ESMTP id S234648AbjAFQ6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:58:10 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B5678A7A;
-        Fri,  6 Jan 2023 08:58:08 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d3so2212547plr.10;
-        Fri, 06 Jan 2023 08:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=snReoJ52ndOwVl0ihFne37Ntk/YfJwEwK939SBaIpCs=;
-        b=Gx4xxHNFjIVJ/RowxB+wt373DC9fu+a85w9xTcZD8wARaeDbA3mxC/HyWuGb/ZeYqo
-         PY68+XpwGGM2iTW5bU2vmHoqPKqEK2v7dDsrIAqu70HLSDIWC+Hwh5FC1NX6sSGpGCc6
-         LSBdG8LBPd+JCFyu4atqv2TiZQgf8cZhOs9+Y/bAsdcJd7V81VxcIcfss1N8XLHv1djY
-         CYx3y9m8FJNmh94zY/LasS6vhHg8gj5iyd2cs9kb1bL0G+TT/I94Dw0oiTJcZfzC1aFJ
-         LLvbzhY/wziR1nvD96f2rXcMGCDchif+jWC5dAoOLWmEJYeJTz7BJc2GGA7rbSta4Bjt
-         7+Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snReoJ52ndOwVl0ihFne37Ntk/YfJwEwK939SBaIpCs=;
-        b=TF/ehhUwPkxSOHTjZj1Sxuz+IvJTaqF16yVS5+5nV/6Up9P0cWxyiF52wg/Jf1Rg2S
-         rMjs2tHnvtsDXiWtI42sCWhKWechX9BKenmx3KHSJTATGJDoVGF8vyGRdIUFYehQVJii
-         H823WDVY/9QFeuYHvi3nEgm02wVOFuDmo28OpY4m1t7csP0vWHTDAvgALCJKn2I2zV3A
-         xbnkENYgCaOiU9C1lAI/Cu/FnmRYL96rqmb9VeZ5e3vtYrbK68RahXioJ+1Ltc+EYFSg
-         QzcNIeiQeMqZVzHm/A499NcCPpKg8iTAjxtc2OpqHy8pABC4kokZwZsJnnL7ym/LX6TH
-         oprw==
-X-Gm-Message-State: AFqh2kojqsP1IqId1H+ef2XepZUaG0KN8zUK5NtqNBe/6BSmfvalLNo8
-        vB2nFw0/TiGWm4WXjjQyDqQ=
-X-Google-Smtp-Source: AMrXdXsDW4929A4MkXhaXCwzQQ1ZTDCiZn/Ajnx6m9C3NPQSGbD5nxp7TRc1O11v6UzXqEwsXkorPA==
-X-Received: by 2002:a17:902:cad5:b0:193:12fd:a2e3 with SMTP id y21-20020a170902cad500b0019312fda2e3mr1334668pld.55.1673024288168;
-        Fri, 06 Jan 2023 08:58:08 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id g21-20020a170902869500b001745662d568sm1118025plo.278.2023.01.06.08.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 08:58:07 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 6 Jan 2023 06:58:05 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <20230106153813.4ttyuikzaagkk2sc@quack3>
+        Fri, 6 Jan 2023 11:58:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA4D78A7C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:58:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 799A661A27
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC8ABC433D2;
+        Fri,  6 Jan 2023 16:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673024292;
+        bh=JyZGOJP4/NukyFMmeiyPZ3FypoTBSgJYWood3uwdP/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oUBAlr3x4lJ3uy9sOag15lwabM6XKtfLJ3HLpNQCS/nwXIk+k4aodoUJ83gS26k3j
+         e3PaHgEaEqeo1s0rVBLAaB5p0JGp8O8e44DMR4viYFYbLSVHt5D+VEr43EsdrHdg1P
+         k4IPdC6L5FkW19EtG0JeZGeBaEbmC7dLo1+W5foM9QLSAWesLrit4zyxz71xTdD6u7
+         2YgYm6M+EeOVjfU65CwWgwEvG6L45ReT8l4xGFqEE+8DPize4l9lODOI7tUedKXfmP
+         5zhqnjkarid5GFKp3O8qZ5lODYBc4JRGPN5czk87QLZUXxSjjA01Cyv4KPDPixq63w
+         B7rlz6WT7y0fA==
+Received: by pali.im (Postfix)
+        id 09722A3A; Fri,  6 Jan 2023 17:58:09 +0100 (CET)
+Date:   Fri, 6 Jan 2023 17:58:09 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.2-rc1
+Message-ID: <20230106165809.vkz7lr7gi3xce22e@pali>
+References: <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
+ <20230104205640.o2uy2jk4v6yfm4w3@pali>
+ <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+ <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
+ <20230105174210.jbjoqelllcrd57q6@pali>
+ <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk>
+ <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
+ <1933bddd-42d7-d92b-974f-f26c46c01547@kernel.dk>
+ <CAHk-=wjJ=wD5D80hkWNCjJqS+djckAL+nXhXaHaiFzMAMve3rA@mail.gmail.com>
+ <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106153813.4ttyuikzaagkk2sc@quack3>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thursday 05 January 2023 13:33:11 Jens Axboe wrote:
+> On 1/5/23 1:03?PM, Linus Torvalds wrote:
+> > So nobody is going to be motivated to do any development in this area,
+> > and the best we can do is probably to just keep it limping along.
+> 
+> Indeed...
+...
+> > There's probably other cruft in pktcdvd that could be removed without
+> > removing the whole driver, but I do get the feeling that it's just
+> > less pain to keep the status quo, and that there isn't really much
+> > motivation for anybody to do anything else.
+> 
+> I'm reluctant to touch it outside of changes that are driven by core
+> changes, and of course the motivation to remove it was driven by not
+> wanting to do that either. Any kind of re-architecting of how it works I
+> would not advocate for. It supposedly works well enough that none of the
+> (few) users are reporting issues with it, best to just let it remain
+> like that imho.
 
-On Fri, Jan 06, 2023 at 04:38:13PM +0100, Jan Kara wrote:
-> Generally, problems are this are taken care of by IO schedulers. E.g. BFQ
-> has quite a lot of logic exactly to reduce problems like this. Sync and
-> async queues are one part of this logic inside BFQ (but there's more).
-
-With modern ssd's, even deadline's overhead is too high and a lot (but
-clearly not all) of what the IO schedulers do are no longer necessary. I
-don't see a good way back to elevators.
-
-> But given current architecture of the block layer IO schedulers are below
-> throttling frameworks such as blk-throtl so they have no chance of
-> influencing problems like this. So we are bound to reinvent the scheduling
-> logic IO schedulers are already doing. That being said I don't have a good
-> solution for this or architecture suggestion. Because implementing various
-> throttling frameworks within IO schedulers is cumbersome (complex
-> interactions) and generally the perfomance is too slow for some usecases.
-> We've been there (that's why there's cgroup support in BFQ) and really
-> the current architecture is much easier to reason about.
-
-Another layering problem w/ controlling from elevators is that that's after
-request allocation and the issuer has already moved on. We used to have
-per-cgroup rq pools but ripped that out, so it's pretty easy to cause severe
-priority inversions by depleting the shared request pool, and the fact that
-throttling takes place after the issuing task returned from issue path makes
-propagating the throttling operation upwards more challenging too.
-
-At least in terms of cgroup control, the new bio based behavior is a lot
-better. In the fb fleet, iocost is deployed on most (virtually all) of the
-machines and we don't see issues with severe priority inversions.
-Cross-cgroup control is pretty well controlled. Inside each cgroup, sync
-writes aren't prioritized but nobody seems to be troubled by that.
-
-My bet is that inversion issues are a lot more severe with blk-throttle
-because it's not work-conserving and not doing things like issue-as-root or
-other measures to alleviate issues which can arise from inversions.
-
-Jinke, is the case you described in the original email what you actually saw
-in production or a simplified test case for demonstration? If the latter,
-can you describe actual problems seen in production?
-
-Thanks.
-
--- 
-tejun
+Yea, I agree. This code is in state when it is _used_ and not developed
+anymore. Nobody is really motivated to re-architecture or rewrite this
+code. Such work has big probability to break something which currently
+works fine. And because lot of users are on stable/LTS kernel versions,
+it is possible that we would not notice breakage earlier than (lets say)
+in 5 years.
