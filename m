@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF79660636
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A925660639
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 19:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjAFSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 13:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S234416AbjAFSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 13:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAFSNM (ORCPT
+        with ESMTP id S229510AbjAFSO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 13:13:12 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD0E75D0F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:13:11 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id g16so2416804plq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:13:11 -0800 (PST)
+        Fri, 6 Jan 2023 13:14:29 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BCD7682A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 10:14:28 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4b718cab0e4so32713737b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 10:14:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6hDoZANBTNDNXKHRfQT835o0/wxRKpaQa8h7cG3GL/I=;
-        b=HpjIMHcBeuTexqS2iEUlRTJtstviTWvrYux58Oe7sSVYKSsf8XLttXnje1jWEiI+RH
-         lpVVdi6QgNKudvhxlav2zAtefm/YAQAUlaGrnfxmM8nNR4O9Un7adDztJtLbebJOhMu+
-         sR0RnQ2OhAtl8SxMify2tJxr0rFg4rrM1ohv6/1wicoDOyMWzBadR47ewwDJiQBRDqbC
-         +cbdgO9hKvnaBINC5sxCA17HaxzDRorlUH0VMmT8Ep2X5i5yGTUi+A2w/AduOyUY1E8J
-         qABf2cxNhaHH+ZWBaEv1yXAUKXZnJ4OinSSHjhU1kjUs4j6m48qqoh/R6ekQg7c3iKSx
-         TVAA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xP3geULSyX4lV8d6R9rMjnULV5w7kHHpTYX3xrPNxuU=;
+        b=UsNe0gNyAmOwYoDLj/i8PWxRee4X8jVDyisS53x003xJU8GpJ9FGr7LBLz9Q7mCcuZ
+         FP3rrd6blhEJhWHOaKCHN4riLuLTcrxVNIBsFEt8yoKjUhMM61KI6jRYNZZUZcDLsxHd
+         YhexIyBurtEAKJ0MtEO5v0WzSugvXSGoaDyejb3le0GET1TY5oD0cvBHWRuCZif2br2K
+         LxVd565xq0N7YcPuCC2Nzv/5fcsQAbUXVBZNE8abWQjr6DdDbpvbkkCdgDnZyVM4X0DL
+         bB5JTEjH/tCsNe8cTCWMiF9KG+7nl6HOBNhqYHa6z9w/U5HsrMW9a7y9LumOrzpeuivT
+         IgSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6hDoZANBTNDNXKHRfQT835o0/wxRKpaQa8h7cG3GL/I=;
-        b=WkEZm067zk1qNhwhbOFupI9y4IdLdvQ2ze3OETNCqQOKxwrd0w3lDI4joVpyQpdSt2
-         ODcQxIsMquiX0oWTwLTP5eNXuk9S08hhu5rNq25n4FjvcGyC33+bnn9oiqWn4dhAvwyf
-         7TjG3II+raLTFsDUSoqEvSCXPUucqqyYXKDMVL6yWgJpUfSmk8wXfNXyHmvnvu1Q+0+H
-         Ai7GYw8mHyFP7iAfVr2T7ZUWbt11B0N3EQfTSFPS+RbTju93qM9z8QHYm4HpjE2U/OEs
-         48+Pgg7s7O1ygpXt7B2FhZynuySVq/EIPsKBF0cn1CrrFQ0KVxtDGVGED2P3BYZF1zUJ
-         vSfg==
-X-Gm-Message-State: AFqh2koSTnqnTs8a0xFlplWpdQf9BKB103h7iEkqn2oOwHMhQxISOpQ7
-        5eYo3CjBx/MlPLSjYtHUZDkjDwp9/uXK4wWl
-X-Google-Smtp-Source: AMrXdXtL7dEzbBeZBTDGsfdqX7GT2hNOR4M+KwHHWAdzB2yvEwA2LC0r4975u/7an5Qm82ZxvgGaqg==
-X-Received: by 2002:a17:903:2404:b0:18d:61f6:e254 with SMTP id e4-20020a170903240400b0018d61f6e254mr74183365plo.33.1673028790203;
-        Fri, 06 Jan 2023 10:13:10 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id e18-20020a170902ef5200b00187033cac81sm1235942plx.145.2023.01.06.10.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 10:13:09 -0800 (PST)
-Date:   Fri, 06 Jan 2023 10:13:09 -0800 (PST)
-X-Google-Original-Date: Fri, 06 Jan 2023 10:11:53 PST (-0800)
-Subject: [GIT PULL] RISC-V Fixes for 6.2-rc3
-CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-96b62708-327b-4721-a0ef-49ef52a1b3c2@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xP3geULSyX4lV8d6R9rMjnULV5w7kHHpTYX3xrPNxuU=;
+        b=p6RmUqnJSxR5kZFFlxrS/64nyicdeEsVh+kd78zZyPko4JmkdLye9WnvMMDqr/Y8HU
+         SypYnGhD6lXL7LH5rIw6faxDZrFdDY3DHGL8pHXfUCrm3rxDpk8P4KbA6oDYmwrMtcu5
+         v6+Zyjq+acYS7BjQjQ4POlrEHBTJOVBgY+VUF8WKnL5+x0dC12VdFr7wN13ULrlpmIQ+
+         PM0AV7oOlwk8uS0eiSVJcdrObvazBeSW/YkPerh3d+sMVMsPxfL4A0PPQYzTA/eDC3rX
+         tw5kt1ZF97iFgWBqqtJ1sOnqPinp26W6KkS+I9bI0MeqzAqkrcl41D/aGGq20rYQ82bx
+         uQeQ==
+X-Gm-Message-State: AFqh2kqdHjo30U2Y8f0smLlfTqvD+olD5JP4c1ErYU8TM6Kgj5AuW2t6
+        C2PMzI6auhCfdTyFS6OU4WDaaEsz4ccXm1utwVJh3w==
+X-Google-Smtp-Source: AMrXdXslvebv24QddXX/TLgWhNaCTYaNYEw3yuKcUZCybMMAI19TPi0KCw62PgInbStQYarDYBZo8VgZN7ECFstTgWU=
+X-Received: by 2002:a81:6702:0:b0:477:b56e:e1d6 with SMTP id
+ b2-20020a816702000000b00477b56ee1d6mr5205418ywc.188.1673028867810; Fri, 06
+ Jan 2023 10:14:27 -0800 (PST)
+MIME-Version: 1.0
+References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
+In-Reply-To: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 6 Jan 2023 20:14:16 +0200
+Message-ID: <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
+Subject: Re: Annoying message on the console for the db845c board
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+On Fri, 6 Jan 2023 at 18:37, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi all,
+>
+> Does anyone have an idea on how to fix these timeout messages ? They are
+> displayed again and again every 5 seconds and that saturates the
+> filesystem after awhile.
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Could you please check that you have CONFIG_QCOM_RMTFS_MEM enabled and
+the rmtfs daemon running?
+I think that's the usual cause of such messages.
 
-are available in the Git repository at:
+>
+> ...
+> [   24.662181] qcom-q6v5-mss 4080000.remoteproc: start timed out
+> [   24.768150] qcom-q6v5-mss 4080000.remoteproc: port failed halt
+> [   24.777618] remoteproc remoteproc0: can't start rproc
+> 4080000.remoteproc: -110
+> [   24.785022] remoteproc remoteproc0: Boot failed: -110
+> [   24.833657] remoteproc remoteproc0: powering up 4080000.remoteproc
+> [   24.840126] remoteproc remoteproc0: Booting fw image
+> qcom/sdm845/mba.mbn, size 238304
+> [   24.897361] qcom-q6v5-mss 4080000.remoteproc: MBA booted without
+> debug policy, loading mpss
+> [   31.573938] qcom-q6v5-mss 4080000.remoteproc: start timed out
+> [   31.680229] qcom-q6v5-mss 4080000.remoteproc: port failed halt
+> [   31.689683] remoteproc remoteproc0: can't start rproc
+> 4080000.remoteproc: -110
+> [   31.697070] remoteproc remoteproc0: Boot failed: -110
+> [   31.765283] remoteproc remoteproc0: powering up 4080000.remoteproc
+> [   31.771758] remoteproc remoteproc0: Booting fw image
+> qcom/sdm845/mba.mbn, size 238304
+> [   31.820553] qcom-q6v5-mss 4080000.remoteproc: MBA booted without
+> debug policy, loading mpss
+> ....
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.2-rc3
 
-for you to fetch changes up to b9b916aee6715cd7f3318af6dc360c4729417b94:
-
-  riscv: uaccess: fix type of 0 variable on error in get_user() (2023-01-05 12:30:41 -0800)
-
-----------------------------------------------------------------
-RISC-V Fixes for 6.2-rc3
-
-* A fix to use the correct mask for c.jr/c.jalr when decoding
-  instructions.
-* A compile-time fix for get_user(), to avoid an sparse warning.
-
-----------------------------------------------------------------
-Ben Dooks (1):
-      riscv: uaccess: fix type of 0 variable on error in get_user()
-
-Björn Töpel (1):
-      riscv, kprobes: Stricter c.jr/c.jalr decoding
-
- arch/riscv/include/asm/uaccess.h         | 2 +-
- arch/riscv/kernel/probes/simulate-insn.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+-- 
+With best wishes
+Dmitry
