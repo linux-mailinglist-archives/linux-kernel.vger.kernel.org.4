@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7A265FF8A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86AE65FF8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjAFL2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S229498AbjAFLag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjAFL2d (ORCPT
+        with ESMTP id S229737AbjAFLad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:28:33 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A642126C0
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:28:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1772A11FB;
-        Fri,  6 Jan 2023 03:29:13 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9FE53F23F;
-        Fri,  6 Jan 2023 03:28:27 -0800 (PST)
-Message-ID: <1913041e-ee67-1e65-68fa-ef08b97ed9d5@arm.com>
-Date:   Fri, 6 Jan 2023 12:28:26 +0100
+        Fri, 6 Jan 2023 06:30:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9585FFC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:30:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E50661D93
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09CE9C433EF;
+        Fri,  6 Jan 2023 11:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673004627;
+        bh=9eD0m84lTiwXGIY4mwU2neZ/1BkaOZj8Akj1zYIJJ0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HAPu6+lL3woLdtod2IyCAmiIQ+xp1h5820d4H+f8l2WHKunXF+AinYH/4xDqYJeMl
+         QvkdDnOEnSf6KGImlvP0cS/birdJ+1BZYf+twkM16FOAxc7lPvPtkm5aMm/HzX3x2e
+         p/4sbt+1hgtdEHNDSle7X9MtcWtFY5VG37PVCyOc=
+Date:   Fri, 6 Jan 2023 12:30:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hang Zhang <zh.nvgt@gmail.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        Helge Deller <deller@gmx.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tty: vt: add some NULL checks for vc_data
+Message-ID: <Y7gGUPuoQ/vdGVl6@kroah.com>
+References: <20221229064153.23511-1-zh.nvgt@gmail.com>
+ <182d36d5-df77-2479-882a-5bb588c5f170@kernel.org>
+ <CAO2zrtaGnfH2yYttq4WqeD40Gt9_gerR7sy1szZotbOP+muW5A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v4 1/2] sched/fair: Introduce short duration task
- check
-Content-Language: en-US
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org
-References: <cover.1671158588.git.yu.c.chen@intel.com>
- <ec049fd9b635f76a9e1d1ad380fd9184ebeeca53.1671158588.git.yu.c.chen@intel.com>
- <82689dd6-9db1-dd00-069b-73a637a21126@arm.com>
- <Y7fdEruJGTux4fYH@chenyu5-mobl1>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Y7fdEruJGTux4fYH@chenyu5-mobl1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO2zrtaGnfH2yYttq4WqeD40Gt9_gerR7sy1szZotbOP+muW5A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 09:34, Chen Yu wrote:
-> Hi Dietmar,
-> thanks for reviewing the patch!
-> On 2023-01-05 at 12:33:16 +0100, Dietmar Eggemann wrote:
->> On 16/12/2022 07:11, Chen Yu wrote:
->>
->> [...]
->>
->>> @@ -5995,6 +6005,18 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->>>  
->>>  static void set_next_buddy(struct sched_entity *se);
->>>  
->>> +static inline void dur_avg_update(struct task_struct *p, bool task_sleep)
->>> +{
->>> +	u64 dur;
->>> +
->>> +	if (!task_sleep)
->>> +		return;
->>> +
->>> +	dur = p->se.sum_exec_runtime - p->se.prev_sum_exec_runtime_vol;
->>> +	p->se.prev_sum_exec_runtime_vol = p->se.sum_exec_runtime;
->>
->> Shouldn't se->prev_sum_exec_runtime_vol be set in enqueue_task_fair()
->> and not in dequeue_task_fair()->dur_avg_update()? Otherwise `dur` will
->> contain sleep time.
->>
-> After the task p is dequeued, p's sum_exec_runtime will not be increased.
-
-True.
-
-> Unless task p is switched in again, p's sum_exec_runtime will continue to
-> increase. So dur should not include the sleep time, because we substract
-
-Not sure I get this sentence? p's se->sum_exec_runtime will only
-increase if p is current, so running?
-
-> between the sum_exec_runtime rather than rq->clock_task. Not sure if I understand
-> this correctly?
-
-No, you're right. We're not dealing with time snapshots but rather with
-sum_exec_runtime snapshots. So the value will not change between dequeue
-and the next enqueue.
-
-e ... enqueue_task_fair()
-d ... dequeue_task_fair()
-s ... set_next_entity()
-p ... put_prev_entity()
-u ... update_curr_fair()->update_curr()
-
-p1:
-
----|---||--|--|---|--|--||---
-   d   es  u  p   s  u  pd
-
-   ^   ^
-   |   |
-  (A) (B)
-
-Same se->prev_sum_exec_runtime_vol value in (A) and (B).
-
-> My original thought was that, record the average run time of every section:
-> Only consider that task voluntarily relinquishes the CPU.
-> For example, suppose on CPU1, task p1 and p2 run alternatively:
+On Tue, Jan 03, 2023 at 10:01:15PM -0500, Hang Zhang wrote:
+> On Tue, Jan 3, 2023 at 4:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> >
+> > On 29. 12. 22, 7:41, Hang Zhang wrote:
+> > > vc_selection(), do_blank_screen() and scrollfront() all access "vc_data"
+> > > structures obtained from the global "vc_cons[fg_console].d", which can
+> > > be freed and nullified (e.g., in the error path of vc_allocate()). But
+> > > these functions don't have any NULL checks against the pointers before
+> > > dereferencing them, causing potentially use-after-free or null pointer
+> > > dereference.
+> >
+> > Could you elaborate under what circumstances is fg_console set to a
+> > non-allocated console?
 > 
->  --------------------> time
+> Hi, Jiri, thank you for your reply! I am not a developer for tty
+> subsystem, so the reasoning here is based on my best-effort code
+> reading. Please correct me if I am wrong.
 > 
->  | p1 runs 1ms | p2 preempt p1 | p1 switch in, runs 0.5ms and blocks |
->                ^               ^                                     ^
->  |_____________|               |_____________________________________|
->                                                                      ^
->                                                                      |
->                                                                   p1 dequeued
+> This patch is based on several observations:
 > 
-> p1's duration in one section is (1 + 0.5)ms. Because if p2 does not
-> preempt p1, p1 can run 1.5ms. This reflects the nature of a task,
-> how long it wishes to run at most.
-> 
->> Like we do for se->prev_sum_exec_runtime in set_next_entity() but for
->> one `set_next_entity()-put_prev_entity()` run section.
->>
->> AFAICS, you want to measure the exec_runtime sum over all run sections
->> between enqueue and dequeue.
-> Yes, we tried to record the 'decayed' average exec_runtime for each section.
-> Say, task p runs for a ms , then p is dequeued and blocks for b ms, and then
-> runs for c ms, its average duration is 0.875 * a + 0.125 * c , which is
-> what update_avg() does.
+> (1) at the beginning of vc_selection() (where one NULL check is
+> inserted in this patch), poke_blanked_console() is invoked, which
+> explicitly checks whether "vc_cons[fg_console].d" is NULL, suggesting
+> the possibility of "fg_console" associated with an unallocated console
+> at this point. However, poke_blanked_console() returns "void", so
+> even if "fg_console" is NULL, after returning to vc_selection(),
+> it will just keep executing, resulting in the possible NULL pointer
+> dereference later ("vc" in vc_selection() can be "vc_cons[fg_console].d"
+> if called from set_selection_kernel()). So this patch actually tries
+> to make the already existing NULL check take effect on the control
+> flow (e.g., early return if NULL).
 
-OK.
+But again, how can that value ever be NULL?
 
+And why are you returning "success" if it is?
+
+> (2) a similar NULL check for "vc_cons[fg_console].d" can also be found
+> in do_unblank_screen() ("if (!vc_cons_allocated(fg_console))") before
+> accessing the corresponding "vc_data". I do notice that the NULL check
+> has a comment "/* impossible */", but the check has not been removed so
+> far. My guess is that there might still be a chance that it can be
+> unallocated at that point.
+
+Please verify that this really ever could be NULL or not.
+
+thanks,
+
+greg k-h
