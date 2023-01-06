@@ -2,56 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABDF6605EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4134B6605F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbjAFRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S232981AbjAFRuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235545AbjAFRs5 (ORCPT
+        with ESMTP id S235373AbjAFRuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:48:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4387334D52
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:48:56 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqpg-0008Tu-JF; Fri, 06 Jan 2023 18:48:44 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqpf-004FsQ-3J; Fri, 06 Jan 2023 18:48:43 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pDqpd-00Aie3-VY; Fri, 06 Jan 2023 18:48:41 +0100
-Date:   Fri, 6 Jan 2023 18:48:41 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 560/606] rtc: ds1307: Convert to i2c's .probe_new()
-Message-ID: <20230106174841.kqgfnqua4vgd4kwo@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-561-uwe@kleine-koenig.org>
+        Fri, 6 Jan 2023 12:50:01 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3293687BD
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:50:00 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id d17so1970148wrs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MEWcai/0BTUSDXzlv/9ZnddHBUgd9q90oSNrTCd/iAE=;
+        b=hkasdKR/OrqmQwA/oOWmPJTk7z6ETkOAnL/+a1hwca7i4k8ududHCU7HQbUMGoP+qW
+         Uw1kYQ2NTYX+GOukmMyi/bR5ErlLtQqAnJdJ2bagG5WkAe3w1XbjORO4Qr+yOgg+9g3Q
+         Mf1s4J2Xy6cIj76SMWXp0VGHGG3zAIgDoQ+Mo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MEWcai/0BTUSDXzlv/9ZnddHBUgd9q90oSNrTCd/iAE=;
+        b=3NvRlhOMJZeULN3mTvMtKIThKCwcv+N1JZEysMmNioWWWjZgbcHVfYCMOmYwuY93tc
+         EX3erRKmcAQgtQmkKRU7fC/khPlonu+8mDsFfU1xNO43KDU4QOvJyeMhnkqaffWn5oq6
+         PZv0cqAMPLpLTC/Q/OOU21BhZyIJsIEJkc8APqrWOK0bxGq5wdnrzN1q2GPxyWyb1CXO
+         202FASw4gk2DhZl424Z6H8WWhiPRxS16Pbkj8h3twyeXTCBmRgSJeKAqNFCQBG1Wr7ce
+         iSBSk6g6sXNTuVYPfsDwSmoN+scydXe2iSxeopoTBur08bldn1jkAfnR1PjkTK/ltkBE
+         a3rw==
+X-Gm-Message-State: AFqh2kpkIuMzyQAeWgMxHk0wO/x9ievmaCHy+foMthYk7/49Gt9cqjkZ
+        MtMDB7Eb2gwmTqHnV3MknYszQw==
+X-Google-Smtp-Source: AMrXdXsSQA1sZlk78KWMQ3ZlByTzU+qPddwuRA0IvEpJPokqzlPt1nfac/dSnY9a55WhImAedfMMaw==
+X-Received: by 2002:adf:f4c1:0:b0:27e:7f5:6634 with SMTP id h1-20020adff4c1000000b0027e07f56634mr26567517wrp.60.1673027399535;
+        Fri, 06 Jan 2023 09:49:59 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id o12-20020adfe80c000000b0024258722a7fsm1710958wrm.37.2023.01.06.09.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 09:49:58 -0800 (PST)
+Date:   Fri, 6 Jan 2023 18:49:56 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        Sean Paul <seanpaul@chromium.org>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/atomic: Allow vblank-enabled + self-refresh
+ "disable"
+Message-ID: <Y7hfRNHMjk5H+muj@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        Sean Paul <seanpaul@chromium.org>, stable@vger.kernel.org
+References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+ <Y7fH88gNfja364JD@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fw3yxbv2qlboln3r"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-561-uwe@kleine-koenig.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <Y7fH88gNfja364JD@kroah.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,74 +83,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 06, 2023 at 08:04:19AM +0100, Greg KH wrote:
+> On Thu, Jan 05, 2023 at 05:40:17PM -0800, Brian Norris wrote:
+> > The self-refresh helper framework overloads "disable" to sometimes mean
+> > "go into self-refresh mode," and this mode activates automatically
+> > (e.g., after some period of unchanging display output). In such cases,
+> > the display pipe is still considered "on", and user-space is not aware
+> > that we went into self-refresh mode. Thus, users may expect that
+> > vblank-related features (such as DRM_IOCTL_WAIT_VBLANK) still work
+> > properly.
+> > 
+> > However, we trigger the WARN_ONCE() here if a CRTC driver tries to leave
+> > vblank enabled here.
+> > 
+> > Add a new exception, such that we allow CRTCs to be "disabled" (with
+> > self-refresh active) with vblank interrupts still enabled.
+> > 
+> > Cc: <stable@vger.kernel.org> # dependency for subsequent patch
+> 
+> "subsequent" doesn't mean much when it is committed, give it a name
+> perhaps?
 
---fw3yxbv2qlboln3r
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Alexandre,
-
-On Fri, Nov 18, 2022 at 11:44:54PM +0100, Uwe Kleine-K=F6nig wrote:
-> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/rtc/rtc-ds1307.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-> index 7c2276cf5514..b49c02fd78f7 100644
-> --- a/drivers/rtc/rtc-ds1307.c
-> +++ b/drivers/rtc/rtc-ds1307.c
-> @@ -1713,9 +1713,9 @@ static const struct regmap_config regmap_config =3D=
- {
->  	.val_bits =3D 8,
->  };
-> =20
-> -static int ds1307_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int ds1307_probe(struct i2c_client *client)
->  {
-> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
->  	struct ds1307		*ds1307;
->  	const void		*match;
->  	int			err =3D -ENODEV;
-> @@ -2012,7 +2012,7 @@ static struct i2c_driver ds1307_driver =3D {
->  		.name	=3D "rtc-ds1307",
->  		.of_match_table =3D ds1307_of_match,
->  	},
-> -	.probe		=3D ds1307_probe,
-> +	.probe_new	=3D ds1307_probe,
->  	.id_table	=3D ds1307_id,
->  };
-
-This is the last remaining rtc patch in my i2c probe_new stack. Would
-you mind to apply it?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---fw3yxbv2qlboln3r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO4XvcACgkQwfwUeK3K
-7AmakQf+Oo3+DP0Zw3V/BK3WK+JqVLEPAelaiSrfx1ToWpUat8fgoaX3z4fz9gfq
-SWG5IHiiMfXZumdOi5jGUG7A9EW2bHJM2qDM74ctScnThnsB1SThhD0pbJqNh8e2
-JSloiA0vNoxWCsA59Ui1AmRTS6ce2fBcgr1Rg+7Uz4aXqOvDweNuSofuM3GXokYY
-9eIuH8AToIfEHAHZns8rkwyBbN92xE8Qai4EolIluFUWM/fO3VhF0/2q3jyWPQqN
-s+3pW8FuS///F5Ytcu52vGC+yO2IkbLr4iaTJBB2qZhSvkhH6gADPXXTXhkb4Sxp
-4QXHKSbktA6WR83ZyKWO4/D+XbP2iw==
-=2ULL
------END PGP SIGNATURE-----
-
---fw3yxbv2qlboln3r--
+It also looks a bit funny tbh, and a bit much like duct-tape. I need to
+think through how this is supposed to work really.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
