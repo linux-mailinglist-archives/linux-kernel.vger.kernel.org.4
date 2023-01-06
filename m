@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148E965F87F
+	by mail.lfdr.de (Postfix) with ESMTP id B882C65F881
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbjAFBD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S236498AbjAFBD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 20:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236385AbjAFBDu (ORCPT
+        with ESMTP id S236444AbjAFBDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:03:50 -0500
+        Thu, 5 Jan 2023 20:03:52 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16BF654D9E;
-        Thu,  5 Jan 2023 17:03:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C86EB5F4A7;
+        Thu,  5 Jan 2023 17:03:51 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8589811FB;
-        Thu,  5 Jan 2023 17:04:30 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55B0612FC;
+        Thu,  5 Jan 2023 17:04:33 -0800 (PST)
 Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D3243F23F;
-        Thu,  5 Jan 2023 17:03:46 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 000253F23F;
+        Thu,  5 Jan 2023 17:03:48 -0800 (PST)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Samuel Holland <samuel@sholland.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -34,11 +34,13 @@ Cc:     Icenowy Zheng <uwu@icenowy.me>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] ARM: dts: sunxi: Add MangoPi MQ-R board support
-Date:   Fri,  6 Jan 2023 01:01:51 +0000
-Message-Id: <20230106010155.26868-1-andre.przywara@arm.com>
+        linux-kernel@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
+Subject: [PATCH 1/4] dts: add riscv include prefix link
+Date:   Fri,  6 Jan 2023 01:01:52 +0000
+Message-Id: <20230106010155.26868-2-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.5
+In-Reply-To: <20230106010155.26868-1-andre.przywara@arm.com>
+References: <20230106010155.26868-1-andre.przywara@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -49,43 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MangoPi MQ-R is a small SBC with the Allwinner T113-s3 SoC. That is
-a very close relative to the Allwinner D1/D1s SoCs, but with Arm
-Cortex-A7 cores, and 128 MB of SIP co-packaged DDR3 DRAM.
+The Allwinner D1/D1s SoCs (with a RISC-V core) use an (almost?) identical
+die as their R528/T113-s siblings with ARM Cortex-A7 cores.
 
-This series introduces the missing T113-s .dtsi, which builds on top of
-the D1/D1s .dtsi, but adds the ARM specific peripherals, like the CPU
-cores, the arch timer, the GIC and the PMU.
-This requires to add a symlink to the RISC-V DT directory in patch 1/4,
-to be able to easily reference the base .dtsi from other architecture
-directories.
+To allow sharing the basic SoC .dtsi files across those two
+architectures as well, introduce a symlink to the RISC-V DT directory.
 
-After I had written most of the board .dts, I realised that the
-MangoPi MQ is almost the same, minus the RISC-V/ARM difference. I am a
-bit unsure if we should share more of the board .dts, though, as this
-would go cross architectures. I am open to any comments here.
-
-Please have a look!
-
-Cheers,
-Andre
-
-Andre Przywara (4):
-  dts: add riscv include prefix link
-  ARM: dts: sunxi: add Allwinner T113-s SoC .dtsi
-  dt-bindings: arm: sunxi: document MangoPi MQ-R board name
-  ARM: dts: sunxi: add MangoPi MQ-R board
-
- .../devicetree/bindings/arm/sunxi.yaml        |   5 +
- arch/arm/boot/dts/Makefile                    |   1 +
- .../arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts | 160 ++++++++++++++++++
- arch/arm/boot/dts/sun8i-t113s.dtsi            |  59 +++++++
- scripts/dtc/include-prefixes/riscv            |   1 +
- 5 files changed, 226 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
- create mode 100644 arch/arm/boot/dts/sun8i-t113s.dtsi
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ scripts/dtc/include-prefixes/riscv | 1 +
+ 1 file changed, 1 insertion(+)
  create mode 120000 scripts/dtc/include-prefixes/riscv
 
+diff --git a/scripts/dtc/include-prefixes/riscv b/scripts/dtc/include-prefixes/riscv
+new file mode 120000
+index 0000000000000..2025094189380
+--- /dev/null
++++ b/scripts/dtc/include-prefixes/riscv
+@@ -0,0 +1 @@
++../../../arch/riscv/boot/dts
+\ No newline at end of file
 -- 
 2.35.5
 
