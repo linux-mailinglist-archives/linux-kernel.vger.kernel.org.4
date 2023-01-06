@@ -2,126 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5FC65FBB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE32365FBB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjAFHJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 02:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S229732AbjAFHKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 02:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbjAFHJp (ORCPT
+        with ESMTP id S232171AbjAFHKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 02:09:45 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34771FE7;
-        Thu,  5 Jan 2023 23:09:23 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id fz16-20020a17090b025000b002269d6c2d83so5278767pjb.0;
-        Thu, 05 Jan 2023 23:09:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
-         :message-id:from:cc:references:to:subject:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ysvQ5mWCfecP1pnK0ECpg7dYPVloD8TUDMgLXFROJSc=;
-        b=gL/Ugv/ETJll252x/aCu/2kunvNUeFZnkAgSCSQVAMQEQVxrunO9V415PmNHhQtQaZ
-         mNUU3l9fAFTjwKCUCIJK/AVf33RiX3pkyXEYhQrXarKFskuG6fULdC5Sz0icHCd+j2E6
-         ePemStCfS0nzBC7UCOBnXWOnIPSkyuW7Om0GRoUfHXcHFk4DDu9DSD1A6x5cA1k471o6
-         tXwwTA8tWUjCWYHUFX5egyBL53/ElGXhpm5dg5z9fJrWxKrLOcduK+vJqikZwUnRR4M9
-         2paxNNieP8A5W1PeqRyQ8l4KmXQKE6DqizUPjjhFR4YV8qTrtke5ug3BfY1zQgDljAd/
-         ocCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
-         :message-id:from:cc:references:to:subject:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ysvQ5mWCfecP1pnK0ECpg7dYPVloD8TUDMgLXFROJSc=;
-        b=2YZnf1jd2uK9Laj/WLXRVEZgAUDgYWKkZjrwWyoyA04gF2495JLRNSVlUqFvfdOqD3
-         o2kbpNe3zAPPwUzqparMySUwukkbnc87BETKkzZ05frhRZBjd3koa2vqS3jLG4hQ10OI
-         OU+uyjGrn9U9uzIIxuud08o5J35PEMGvEhoka0CMKHTYt2+6taAWFpxprAJiFRVqM6oJ
-         gpj6fI+z1/8vAZD0H2zYlcFA++fzGMcmfTtJqJ1R+qAQDC6q0En/dlwbrpbIUMPSMWOq
-         0e3EQKXI2xQreZ88K46H1MQfKfa3B+8TTzF6xLAfZtL8PphDQV9z1ZZ+nBk26yUiTak+
-         p5Jg==
-X-Gm-Message-State: AFqh2kqUrPDVM6ziFPOStpcbhBBp5JcaoNaMBMUBTglNGs1mh+Oq56Ae
-        A1Q4Upm8cIXAhjR2tOX1rnk=
-X-Google-Smtp-Source: AMrXdXv4n1QDuQCdzkPGOBceJ/X94uO2HWAOhcpZV+1FkbXOEddT5oC+zwETTA+hm8DufkBz/iaM9w==
-X-Received: by 2002:a17:902:e5c5:b0:189:c57c:9a19 with SMTP id u5-20020a170902e5c500b00189c57c9a19mr73726106plf.58.1672988963276;
-        Thu, 05 Jan 2023 23:09:23 -0800 (PST)
-Received: from [10.1.1.24] (122-62-142-61-fibre.sparkbb.co.nz. [122.62.142.61])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170903234100b0017f48a9e2d6sm113944plh.292.2023.01.05.23.09.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Jan 2023 23:09:22 -0800 (PST)
-Subject: Re: [syzbot] [hfs?] WARNING in hfs_write_inode
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-References: <000000000000dbce4e05f170f289@google.com>
- <5f45bb9a-5e00-48dd-82b0-46b19b1b98a3@app.fastmail.com>
- <CAHk-=wi8XyAUF9_z6-oa4Ava6PVZeE-=TVNcFK1puQHpOtqLLw@mail.gmail.com>
- <ab7a9477-ddc7-430f-b4ee-c67251e879b0@app.fastmail.com>
- <1bd49fc0-d64f-4eb8-841a-4b09e178b5fd@gmail.com>
- <CAHk-=wg3U3Y6eaura=xQzTsktpEOMETYYnue+_KSbQmpg7vZ0Q@mail.gmail.com>
- <1a3d07bf-16f5-71a8-6500-7d37802dbadd@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        syzbot <syzbot+7bb7cd3595533513a9e7@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        christian.brauner@ubuntu.com,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        jlayton@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        linux-m68k@lists.linux-m68k.org, flar@allandria.com
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <baced5a3-31a3-d104-bf31-87d75fecb8e9@gmail.com>
-Date:   Fri, 6 Jan 2023 20:09:11 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        Fri, 6 Jan 2023 02:10:06 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE71278155;
+        Thu,  5 Jan 2023 23:09:55 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NpDqs0VJ2zqTmv;
+        Fri,  6 Jan 2023 15:05:13 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 6 Jan 2023 15:09:54 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <zhengyejian1@huawei.com>
+CC:     <frederic@kernel.org>, <jiangshanlai@gmail.com>,
+        <joel@joelfernandes.org>, <josh@joshtriplett.org>,
+        <linux-kernel@vger.kernel.org>, <mathieu.desnoyers@efficios.com>,
+        <mhiramat@kernel.org>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <quic_neeraju@quicinc.com>,
+        <rcu@vger.kernel.org>, <rostedt@goodmis.org>
+Subject: [PATCH v2] rcu: Avoid stack overflow due to __rcu_irq_enter_check_tick() being kprobe-ed
+Date:   Fri, 6 Jan 2023 15:09:34 +0800
+Message-ID: <20230106070934.3434031-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230106035423.3376283-1-zhengyejian1@huawei.com>
+References: <20230106035423.3376283-1-zhengyejian1@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <1a3d07bf-16f5-71a8-6500-7d37802dbadd@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
+overflow [1]. This issue can be reproduced by enabling CONFIG_NO_HZ_FULL
+and boot kernel with argument "nohz_full=" then execute like:
+  # cd /sys/kernel/tracing/
+  # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+  # echo 1 > events/kprobes/enable
 
-Am 06.01.2023 um 12:46 schrieb Michael Schmitz:
-> Hi Linus,
->
-> Am 06.01.2023 um 10:53 schrieb Linus Torvalds:
->> On Thu, Jan 5, 2023 at 1:35 PM Michael Schmitz <schmitzmic@gmail.com>
->> wrote:
->>>
->>> Looking at Linus' patch, I wonder whether the missing fd.entrylength
->>> size test in the HFS_IS_RSRC(inode) case was due to the fact that a
->>> file's resource fork may be empty?
->>
->> But if that is the case, then the subsequent hfs_bnode_read would
->> return garbage, no? And then writing it back after the update would be
->> even worse.
->>
->> So adding that
->>
->> +               if (fd.entrylength < sizeof(struct hfs_cat_file))
->> +                       goto out;
->>
->> would seem to be the right thing anyway. No?
->
-> Yes, it would seem to be the right thing (in order to avoid further
-> corrupting HFS data structures). Returning -EIO might cause a regression
-> though.
+It seems __rcu_irq_enter_check_tick() should not be kprobe-ed, so add
+it into kprobe blacklist with NOKPROBE_SYMBOL(). This may have less impact
+than tagging as 'noinstr' which was discussed but not concluded in
+Link: https://lore.kernel.org/all/20221119040049.795065-1-zhengyejian1@huawei.com/
 
-A brief test on a HFS filesystem image (copy of my yaboot bootstrap 
-partition) did not show any regression, so your patch appears to be just 
-fine as-is.
+[1]
+Insufficient stack space to handle exception!
+ESR: 0x00000000f2000004 -- BRK (AArch64)
+FAR: 0x0000ffffccf3e510
+Task stack:     [0xffff80000ad30000..0xffff80000ad38000]
+IRQ stack:      [0xffff800008050000..0xffff800008058000]
+Overflow stack: [0xffff089c36f9f310..0xffff089c36fa0310]
+CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
+Hardware name: linux,dummy-virt (DT)
+pstate: 400003c5 (nZcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __rcu_irq_enter_check_tick+0x0/0x1b8
+lr : ct_nmi_enter+0x11c/0x138
+sp : ffff80000ad30080
+x29: ffff80000ad30080 x28: ffff089c82e20000 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff089c02a8d100 x24: 0000000000000000
+x23: 00000000400003c5 x22: 0000ffffccf3e510 x21: ffff089c36fae148
+x20: ffff80000ad30120 x19: ffffa8da8fcce148 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: ffffa8da8e44ea6c
+x14: ffffa8da8e44e968 x13: ffffa8da8e03136c x12: 1fffe113804d6809
+x11: ffff6113804d6809 x10: 0000000000000a60 x9 : dfff800000000000
+x8 : ffff089c026b404f x7 : 00009eec7fb297f7 x6 : 0000000000000001
+x5 : ffff80000ad30120 x4 : dfff800000000000 x3 : ffffa8da8e3016f4
+x2 : 0000000000000003 x1 : 0000000000000000 x0 : 0000000000000000
+Kernel panic - not syncing: kernel stack overflow
+CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0xf8/0x108
+ show_stack+0x20/0x30
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x1c/0x38
+ panic+0x214/0x404
+ add_taint+0x0/0xf8
+ panic_bad_stack+0x144/0x160
+ handle_bad_stack+0x38/0x58
+ __bad_stack+0x78/0x7c
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ [...]
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ el1_interrupt+0x28/0x60
+ el1h_64_irq_handler+0x18/0x28
+ el1h_64_irq+0x64/0x68
+ __ftrace_set_clr_event_nolock+0x98/0x198
+ __ftrace_set_clr_event+0x58/0x80
+ system_enable_write+0x144/0x178
+ vfs_write+0x174/0x738
+ ksys_write+0xd0/0x188
+ __arm64_sys_write+0x4c/0x60
+ invoke_syscall+0x64/0x180
+ el0_svc_common.constprop.0+0x84/0x160
+ do_el0_svc+0x48/0xe8
+ el0_svc+0x34/0xd0
+ el0t_64_sync_handler+0xb8/0xc0
+ el0t_64_sync+0x190/0x194
+SMP: stopping secondary CPUs
+Kernel Offset: 0x28da86000000 from 0xffff800008000000
+PHYS_OFFSET: 0xfffff76600000000
+CPU features: 0x00000,01a00100,0000421b
+Memory Limit: none
 
-Cheers,
+Cc: stable@vger.kernel.org
+Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/rcu/tree.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-	Michael
+Change since v1:
+  Make commit tile clear:
+  - rcu_irq_enter_check_tick()  ==>  __rcu_irq_enter_check_tick()
+  - kernel stack overflow  ==>  stack overflow
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index cf34a961821a..41606d3ed083 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -659,6 +659,7 @@ void __rcu_irq_enter_check_tick(void)
+ 	}
+ 	raw_spin_unlock_rcu_node(rdp->mynode);
+ }
++NOKPROBE_SYMBOL(__rcu_irq_enter_check_tick);
+ #endif /* CONFIG_NO_HZ_FULL */
+ 
+ /*
+-- 
+2.25.1
 
