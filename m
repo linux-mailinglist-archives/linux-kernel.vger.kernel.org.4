@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288E16608E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0479A6608E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjAFVnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S235845AbjAFVpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjAFVnB (ORCPT
+        with ESMTP id S229949AbjAFVo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:43:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B3C82F43;
-        Fri,  6 Jan 2023 13:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JIVcLmmyA6/m+YiOwB7DFkkX+oWdAkbzFPPqwaVy8WY=; b=j0bkeeFMEsRakLw1tzZ97Qcjr2
-        fMJY7Fxe4ZF7tc0SURp8dpL2Ow9Uu2YBygIcZIxjQeB5m7w8GE8zW7QCBrNV179lXrtQaP4ePRATi
-        1TJEzTkljdgsz7FUDMDF8WjfnVP361xy6iaMRxYmy+b829Fh7lzodyMlv8pM4Mk5DXxt93EjvnyFV
-        KIezkNoLiLhVhGAQxFxwjvToJb7GqXE1tIBWKlUlEA/Tq6IUNO+LukGPZkpOQCDL2gV0VQogwW6Nk
-        NUIsOqd7JzRCX2Hu433a4Ym6WbpYd69/uwECIk+3wbLNWNr5B/keRf1ZTC6K13p0SxqIWl4sUhbDu
-        3VpY5E5g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pDuUC-00HWiP-0T; Fri, 06 Jan 2023 21:42:48 +0000
-Date:   Fri, 6 Jan 2023 21:42:47 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yann Droneaud <ydroneaud@opteya.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, tglx@linutronix.de,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
- lazily freeable mappings
-Message-ID: <Y7iV18CqKAa4gO9r@casper.infradead.org>
-References: <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
- <Y7SDgtXayQCy6xT6@zx2c4.com>
- <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
- <Y7SJ+/axonTK0Fir@zx2c4.com>
- <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
- <Y7STv9+p248zr+0a@zx2c4.com>
- <10302240-51ec-0854-2c86-16752d67a9be@opteya.com>
- <Y7dV1lVUYjqs8fh0@zx2c4.com>
- <CAHk-=wijEC_oDzfUajhmp=ZVnzMTXgjxHEcxAfaHiNQm4iAcqA@mail.gmail.com>
- <CAHk-=wiO4rp8oVmj6i6vvC97gNePLN-SxhSK=UozA88G6nxBGQ@mail.gmail.com>
+        Fri, 6 Jan 2023 16:44:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4C182F43;
+        Fri,  6 Jan 2023 13:44:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B55EDB81C4A;
+        Fri,  6 Jan 2023 21:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23669C433EF;
+        Fri,  6 Jan 2023 21:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673041493;
+        bh=S6o14xUMpNWT1FgKozp+8Mj2OtyQejRW1OZhSS08KNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PaXnKMegaaP8z9ayDQcvrAUoCm6q92bglcPk8+v4XdHgqBfWpX8/c7mIncuC7ZPho
+         8INfXpMJNIhSCG72NGM3///9N6KJ1Rbxhg8r9i9vguk2uFn9hTbwVZx4o32zo2t5Oj
+         kL41IACjKWCbf98FhpuXG0+S73YkTqnOLzWqb3tlRJlIHd3lakCeaCQ37G2pnUB5wQ
+         lKFXYZ955FGncx/r01DjVLO6b2p14tp+Ho+tQqoWHFzNFS4b7KBQMFbEvhvoMJeP3A
+         rk23L8zlMc5hO6W4stjqdZHOkpenZQtdvzPZa5BIOtVE0FkRaDu0B8/I/sJgDsQFQG
+         cPf+lSTSscrkQ==
+Date:   Fri, 6 Jan 2023 21:44:47 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Jisheng Zhang <jszhang@kernel.org>
+Subject: Re: [PATCH v6 3/6] riscv: errata: Add Andes alternative ports
+Message-ID: <Y7iWTwZwNLiU8USP@spud>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Zd9zzwISgem4Gol8"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wiO4rp8oVmj6i6vvC97gNePLN-SxhSK=UozA88G6nxBGQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106185526.260163-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 06:08:28PM -0800, Linus Torvalds wrote:
-> Side note: making the 32-bit issue go away is likely trivial. We can
-> make 'vm_flags' be 64-bit, and a patch for that has been floating
-> around for over a decade:
-> 
->    https://lore.kernel.org/all/20110412151116.B50D.A69D9226@jp.fujitsu.com/
-> 
-> but there was enough push-back on that patch that I didn't want to
-> take it, and some of the arguments for it were not that convincing (at
-> the time).
-> 
-> But see commit ca16d140af91 ("mm: don't access vm_flags as 'int'"),
-> which happened as a result, and which I (obviously very naively)
-> believed would be a way to get the conversion to happen in a more
-> controlled manner. Sadly, it never actually took off, and we have very
-> few "vm_flags_t" users in the kernel, and a lot of "unsigned long
-> flags". We even started out with a "__nocast" annotation to try to
-> make sparse trigger on people who didn't use vm_flags_t properly. That
-> was removed due to it just never happening.
-> 
-> But converting things to vm_flags_t with a coccinelle script
-> (hand-wave: look for variables of of "unsigned long" that use the
-> VM_xyz constants), and then just making vm_flags_t be a "u64" instead
-> sounds like a way forward.
 
-I'd be more inclined to do:
+--Zd9zzwISgem4Gol8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-typedef unsigned int vm_flags_t[2];
+On Fri, Jan 06, 2023 at 06:55:23PM +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Add required ports of the Alternative scheme for Andes CPU cores.
+>=20
+> I/O Coherence Port (IOCP) provides an AXI interface for connecting extern=
+al
+> non-caching masters, such as DMA controllers. IOCP is a specification
+> option and is disabled on the Renesas RZ/Five SoC due to this reason cache
+> management needs a software workaround.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v5 -> v6
+> * Dropped patching alternative and now just probing IOCP
+>=20
+> v4 -> v5
+> * Sorted the Kconfig/Makefile/Switch based on Core name
+> * Added a comments
+> * Introduced RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND SBI EXT ID to check if
+>   CMO needs to be applied. Is there a way we can access the DTB while pat=
+ching
+>   as we can drop this SBI EXT ID and add a DT property instead for cmo?
+>=20
+> RFC v3 -> v4
+> * New patch
+> ---
+>  arch/riscv/Kconfig.erratas           | 22 +++++++++
+>  arch/riscv/errata/Makefile           |  1 +
+>  arch/riscv/errata/andes/Makefile     |  1 +
+>  arch/riscv/errata/andes/errata.c     | 71 ++++++++++++++++++++++++++++
+>  arch/riscv/include/asm/alternative.h |  3 ++
+>  arch/riscv/kernel/alternative.c      |  5 ++
+>  6 files changed, 103 insertions(+)
+>  create mode 100644 arch/riscv/errata/andes/Makefile
+>  create mode 100644 arch/riscv/errata/andes/errata.c
+>=20
+> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
+> index 69621ae6d647..f0f0c1abd52b 100644
+> --- a/arch/riscv/Kconfig.erratas
+> +++ b/arch/riscv/Kconfig.erratas
+> @@ -1,5 +1,27 @@
+>  menu "CPU errata selection"
+> =20
+> +config ERRATA_ANDES
+> +	bool "Andes AX45MP errata"
+> +	depends on !XIP_KERNEL
+> +	select RISCV_ALTERNATIVE
+> +	help
+> +	  All Andes errata Kconfig depend on this Kconfig. Disabling
+> +	  this Kconfig will disable all Andes errata. Please say "Y"
+> +	  here if your platform uses Andes CPU cores.
+> +
+> +	  Otherwise, please say "N" here to avoid unnecessary overhead.
+> +
+> +config ERRATA_ANDES_CMO
+> +	bool "Apply Andes cache management errata"
+> +	depends on ERRATA_ANDES && MMU && ARCH_R9A07G043
+> +	select RISCV_DMA_NONCOHERENT
+> +	default y
+> +	help
+> +	  This will apply the cache management errata to handle the
+> +	  non-standard handling on non-coherent operations on Andes cores.
+> +
+> +	  If you don't know what to do here, say "Y".
 
-and deal with all the fallout.  That'll find all the problems (although
-leave us vulnerable to people forgetting which half of the flags they
-want to be looking at).
+Ideally we would not need errata to turn this stuff on at all, but, as
+you pointed out to me off-list, arch_setup_dma_ops() complains if we
+have not set up.
 
-Hm.  We never actually converted vma->vm_flags to be vm_flags_t.  Only
-vm_region, which aiui is only used on nommu.
+I'm happy to commit to trying to sort that out in follow on work w/ MPFS,
+since in that case it really isn't errata, and not require it for this
+series as you do fit that particular bill IMO.
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+
+--Zd9zzwISgem4Gol8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7iWTwAKCRB4tDGHoIJi
+0olEAPoCdBHN/hX+YSUm1Fjy2xwp6TNGBBXu8o1krE1zIfywRAD/Zgo9xhRo3YEq
+gijazhkKQDRtERVdc8B/eqvdErFkDgo=
+=DDRQ
+-----END PGP SIGNATURE-----
+
+--Zd9zzwISgem4Gol8--
