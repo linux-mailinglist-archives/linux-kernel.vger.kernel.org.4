@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E4266047A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D6966046C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235697AbjAFQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S235682AbjAFQih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbjAFQig (ORCPT
+        with ESMTP id S235545AbjAFQiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:38:36 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B52D78A4F;
-        Fri,  6 Jan 2023 08:38:35 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 8BD5310000C;
-        Fri,  6 Jan 2023 16:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673023113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pwu/1JwYIXUNItAZ+OMdvXbkTVLSSu6E75e+vsZix3c=;
-        b=m6gcKoS++2sGnEQhfl2wOjkojZN7Z3KXQNimmEB8JszUjKLH8JIjD0GfX134lqMZNgb3Ec
-        71yxYlyQAzLfan4RdJYnQvZ9WQ/F+HOHb5p1oadIe7NU/WTCmdDAyG3uop1tfdwMAMKuNr
-        ysPJsfcgyZ7Hd+UvRvETUk2VwhUU/GHGDZqYZaL+Jo/AoRFBbw4TBz66+qm1q5bx7r1NTd
-        N6Ly1MfFTNMayJCqRmPOwQk1mgv5vQ+4+lM1pzbczIrdcAcf3m4mW9HaeoXBHT0ODCOXlV
-        dJ8qtW4opcp7gWc6GFt/YtAnzuglrph+pl23KUecdcJYPVC9D8dFeXgEMKSBeQ==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 10/10] MAINTAINERS: add the Freescale QMC audio entry
-Date:   Fri,  6 Jan 2023 17:37:46 +0100
-Message-Id: <20230106163746.439717-11-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230106163746.439717-1-herve.codina@bootlin.com>
-References: <20230106163746.439717-1-herve.codina@bootlin.com>
+        Fri, 6 Jan 2023 11:38:05 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CE078A5C;
+        Fri,  6 Jan 2023 08:38:03 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id fy8so4550739ejc.13;
+        Fri, 06 Jan 2023 08:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cVVA+wtN3OwRb/Llt+vsUs/VHbWYd94vDiApWlf28eA=;
+        b=ABQKaLwPguTKBSF04UtKiM3TJSxZzUYPYoqdOYC0irtnhPMRygdoBOKLtHXbiD8bUh
+         gfNHXwr7rpHSdc1rf3SuXySjrRn0uIGWfMlAHDpr3xUOYtTfkXvkxk+qQtt0AHr+aJXx
+         nw7ULMBESX5IwdWftp8lQ4qRHYWP6Anw4z4817kQZF3LB48kTdchDpgoQW2Gf3UNqOgJ
+         S9XzK9OthCMViShxcBtwrVzMdpjYgglyOGHaeZc2a38W5AJj0HsIHnh8upsQRiDGvjpE
+         UpP0i7YxFFCu/WMqJs+zD17riwqXvGuI6o4aEHEn9j4xr3HGqi/p7LC6xbJnbPxIlezw
+         r/NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cVVA+wtN3OwRb/Llt+vsUs/VHbWYd94vDiApWlf28eA=;
+        b=6Yp1Lzij7+dIhRpvdZ5lYBS+x+MHfCzPrY11pXlVPxc3H2I5zQ3LDmoAqJZ+YySoz3
+         gy+QI12YHHClSVUr+P8CYK2l6x8s528fCIMIogz+sBe+sr7OcmaYe8Q9By1k7dboLl3i
+         cd3tOooVhvGBDTfbo/QkS2rb5CRDkfampe5bdliBe+ptllfXRaT7J66Bon+LxTcfkZTN
+         bPoPyzSMwiiJREKcNacxasrVVyU2QKGIrK+OLDPqyuSz4mGRZWuCuLsjZSQjEfcg5ZzU
+         9gSnqzsE5voS68U7pXNH/faablpFQ0UBArTXtKmB+/EWpmZaGIExiv/DDCK61lucexoe
+         hD9A==
+X-Gm-Message-State: AFqh2kqaDm2bnQ9phpDzVkbvfpsFduAh7PbiJVgwnMIgsJagFqUQvbAr
+        Uh20B36rLazFvMeokDeY/d0=
+X-Google-Smtp-Source: AMrXdXuOH0umBDp9wrpS/HB4IQPoIxstkudT+eR+WDE7VdDybsxAkuOFnTnmy4R46+qCB3IcOd+IOg==
+X-Received: by 2002:a17:907:d601:b0:7c1:2d36:d11a with SMTP id wd1-20020a170907d60100b007c12d36d11amr54637846ejc.11.1673023082381;
+        Fri, 06 Jan 2023 08:38:02 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id k8-20020a17090632c800b00780982d77d1sm546762ejk.154.2023.01.06.08.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 08:38:02 -0800 (PST)
+Date:   Fri, 6 Jan 2023 18:37:59 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 2/3] net: dsa: mv88e6xxx: shorten the locked
+ section in mv88e6xxx_g1_atu_prob_irq_thread_fn()
+Message-ID: <20230106163759.42jrkxuyjlg3l3s5@skbuf>
+References: <20230106160529.1668452-1-netdev@kapio-technology.com>
+ <20230106160529.1668452-3-netdev@kapio-technology.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106160529.1668452-3-netdev@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the component, add myself as the maintainer
-for the Freescale QMC audio ASoC component.
+On Fri, Jan 06, 2023 at 05:05:28PM +0100, Hans J. Schultz wrote:
+> As only the hardware access functions up til and including
+> mv88e6xxx_g1_atu_mac_read() called under the interrupt handler
+> need to take the chip lock, we release the chip lock after this call.
+> The follow up code that handles the violations can run without the
+> chip lock held.
+> In further patches, the violation handler function will even be
+> incompatible with having the chip lock held. This due to an AB/BA
+> ordering inversion with rtnl_lock().
+> 
+> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+> ---
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Needs to compile without new warnings patch by patch.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 480f90db699d..a15997c2cc05 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8440,6 +8440,14 @@ F:	sound/soc/fsl/fsl*
- F:	sound/soc/fsl/imx*
- F:	sound/soc/fsl/mpc8610_hpcd.c
- 
-+FREESCALE SOC SOUND QMC DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-+L:	linuxppc-dev@lists.ozlabs.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-+F:	sound/soc/fsl/fsl_qmc_audio.c
-+
- FREESCALE USB PERIPHERAL DRIVERS
- M:	Li Yang <leoyang.li@nxp.com>
- L:	linux-usb@vger.kernel.org
--- 
-2.38.1
-
+../drivers/net/dsa/mv88e6xxx/global1_atu.c: In function ‘mv88e6xxx_g1_atu_prob_irq_thread_fn’:
+../drivers/net/dsa/mv88e6xxx/global1_atu.c:460:1: warning: label ‘out’ defined but not used [-Wunused-label]
+  460 | out:
+      | ^~~
+../drivers/net/dsa/mv88e6xxx/global1_atu.c:460:1: warning: unused label 'out'
