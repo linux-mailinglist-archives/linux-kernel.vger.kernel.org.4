@@ -2,166 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4787065FA70
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4E465FA79
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjAFDmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 22:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S229786AbjAFDqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 22:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjAFDmM (ORCPT
+        with ESMTP id S229509AbjAFDqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 22:42:12 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2057.outbound.protection.outlook.com [40.107.247.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF08D6B589;
-        Thu,  5 Jan 2023 19:42:05 -0800 (PST)
+        Thu, 5 Jan 2023 22:46:18 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2048.outbound.protection.outlook.com [40.107.95.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67ED6A0DD;
+        Thu,  5 Jan 2023 19:46:16 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y620mummi6E1HZlIvTwdYFrD+LkWUAKQINrnqHKFwzGNyfbUNau7ue3/Xg7PwZLXFoV3V6hM15oAyfFwR4gg9Gkfvaaaa3DvHq478Yg57JjYVm2qv9Wrz98P3BtpZER3grfZEzd4plTIKNgj/2lP9uaNMP9QWDR+b1uNYQOxhTXg91ebEO+wGFkrDBkfa3tXDCX6+b2qEF5aKGUShN854YyPu92e9Wbf4l6ffdsmi3v5grE5gvxy2/mY32JZPXtZMDX6X/Ltkkj5dkwzR+k67ee4cZqc1wX2ZUcU6FCqLhUPoKhNLKCU22d+eRfVT1dF6gTL1+pW24HCEfgHnbm2iQ==
+ b=YDG4eKsFRCtOY6eygrw3PhNtogQAi9ASQ4H94NzvQWexEzaG6OxDfWqg7qAvxbZpHgmWphqZIBGHd4wHRUjl6dBipSwRuXwsPFbmQdx46rPa23QtdGxIx9EyAYOQRimOSAFfH5wOVHRrA/6PU5vNB/y4jnVgsKWN+DyvKcYPxO973tWouGULCjgYbdd2RZxMeby+6EwDjNy4pxU7wf8aQD8Aj++TiwTO8YgVLH17pcrcXTCANpq7UGn/RLm7SJlROS1apPhqg+AXwle76q9FJC8d85nLUMYnmb0nwVnJ5XNUuq0MX81MzFVFFHR7UZEvTQj+6+alKRWznU5nCpuMsw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l4G5wZXUhS/UCosIeUj4Y9NRHxRLQxGvBi6w+2JckDA=;
- b=XC+UBeQ2cWpNFlut0AOqhTnF51xIbFkgbN3VH/AtoX5PJ5uJEDz2Qmkk6CSmnbs0j8eVm5m+ZM1nXrbIZm1YnattzMSrUsZ5xnlRGCjfO6ZWR8e5wOGb6g4cBOZeAy4TTymVOesyaevBYHsenbH20jhWuBzk3zh2Y4Y86TAp7hWTwYsT9dGotEg175rkmzShV3uTiKoowhas3P1z8cqOzbjzi6Rbuht+YMH27chKO2U9Ncg1UwOkJRcZBt6EYpFg3yTLm2SXFWd0vyA2TOvAEiyHe8/f0Kc68T75tC4P/qD+2h3IG1uZRlLr0oKImnxJ9AGgFOlXcJoiQDhL2C7MvQ==
+ bh=EfkWYfmf08RPyaseFOn8H2ZqENHSOLXOvc2w8xowAMo=;
+ b=NKrldTnRFXEZFksEF3xLWSgekQJs206l07DaT7/QMsX1NpGjFktJ5F1IZA7s1Clzu93gX30ZZHvpPTSx+r9jQ5I0AnDUS3RUTvkFddil9cpcbv2SpyXfVb1g+i9QNRKjOlRpJaRycvzzAq1ETj2JIJ/aOr3WCSzevnp9kaL965kXy3N1L4NxFJI8hqj27MvnApQuUvdxvupk9mxyS4FVca4+HIa8G/jyAnsHMro5VevxMDh37p42Dh7yYvYRd3l8UPExqqHrDFTwJw7F9keM6C99qoPbq3nLPXL6ff6bwHW45yUHREO8mPsihwaURnViW7wggBug8/PK7vIcXQq3oQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l4G5wZXUhS/UCosIeUj4Y9NRHxRLQxGvBi6w+2JckDA=;
- b=banDoSh2TTp8lnb3n+pmi6eBGviO8m+C2I839C6/Cuu0w7KsXcQTF0pOWiDayJy20z+9Z5ZhzvYxFcQs8uxqtYGUNNO6SMr5U43cxCNg/R1B5VzgADLmwniMY8gaqdWPpSz1KD4gUiI1FOV9F39qqSWoDr8GsYcpyhiO4GaIVHs=
+ bh=EfkWYfmf08RPyaseFOn8H2ZqENHSOLXOvc2w8xowAMo=;
+ b=e3IDOgwnrsTGgA7ud7gXqVIfSh2fLFa6Q0OroDSUF/Iroa5fvqZphalr+LdimJTBcbKl1iBn60rD1KVerYbQN5cdBitz70t3aYWJ+cK0/Kt6Dr/XsUD8FKPg0GNnHzKIYeOAbemYDEOFVpqrcHqUGlsuZukn1KFqndfpy+pCLjU=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB9PR04MB8480.eurprd04.prod.outlook.com (2603:10a6:10:2c6::20) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by SA0PR12MB4384.namprd12.prod.outlook.com (2603:10b6:806:9f::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 03:42:04 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::29b9:5061:2054:174b]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::29b9:5061:2054:174b%7]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 03:42:04 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     andersson@kernel.org, mathieu.poirier@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        arnaud.pouliquen@foss.st.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 5/5] remoteproc: imx_rproc: set address of .interrupts section as bootaddr
-Date:   Fri,  6 Jan 2023 11:43:05 +0800
-Message-Id: <20230106034305.2868740-6-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230106034305.2868740-1-peng.fan@oss.nxp.com>
-References: <20230106034305.2868740-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0017.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::10) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+ 2023 03:46:15 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::45ef:724b:4b64:b98]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::45ef:724b:4b64:b98%3]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
+ 03:46:14 +0000
+Message-ID: <77ad7875-4f02-d194-028e-aa39f510e39a@amd.com>
+Date:   Fri, 6 Jan 2023 09:16:01 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 09/13] cpufreq: amd-pstate: add driver working mode
+ switch support
+Content-Language: en-US
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221225163442.2205660-1-perry.yuan@amd.com>
+ <20221225163442.2205660-10-perry.yuan@amd.com>
+From:   Wyes Karny <wyes.karny@amd.com>
+In-Reply-To: <20221225163442.2205660-10-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0180.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:be::17) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DB9PR04MB8480:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f2b2bb6-fd75-4aef-7848-08daef97f9d5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SA0PR12MB4384:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ddf73b9-99a7-498b-ef49-08daef988f2e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VdsBD2on/an/hcKwkbuwjPJ+awFyNhU1Dz8dIvJYFYSVWM+Duh07b/PdOynDbcwRJ/gkbvfjBS/SEgbQ70o6hoTo7JHb7Pu1uXme2mlIFsskTACouSxynGZI6s3T5eXQ2sy5BMk497YUZWEvho0wa09j42v6kGDek8C9pvY/S0irkdGCmNwUJH3LPjoPT3xTBRz0fzCdDsOjGJheIPIVqBZE0phcPBADZbLG6W2KfXyqXQnbHaeClE1iBVc0d3GhA/JT0rDKW/mu0EAFvp6gN4H1D0XJz77f2qcg1JS+f554NsB5t2MVm9Dejnzm7BLmNIXi9VixB3+Mqw5qP3W724xSrQJwoqeSLzwRVTzCoRF56vAxRIt/oIosCLcLdRtlAzgEqIj32lIaVHTuTtsVT22KIz+m3tOVNj05KU3TJUEzxrd63mJoa7fDOyuTvdeKsItqW8LhbiFWwGwbjTrTvrb3ZHRs3uXDYJXBgf+T+DBJO88g4u99vzvLDJfX495S1ctxMExCblB6R5TLkL6FbEAYW3MZo6E9hfXTb106Y0i3EWiMdEqBcbkQkOBH8GDcUuNSwt3FjQ1WkMIrGLTmDRgFDefSPsgJ9JuovdZx/Awh/9MWa9/vvWkSj5cxc/7A40d72LAuZ++j2pDqWBS+9uJ38wLQIvVqTTbBWhVtwdHOV+P6Qehpi2misNJ+OyVi6ofI8SCaysQbXBQZ4Bj2xVwPpRWNyYRhG+bUAPdUox8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(376002)(136003)(396003)(451199015)(38350700002)(38100700002)(6512007)(86362001)(186003)(6486002)(316002)(26005)(4326008)(8676002)(66946007)(66556008)(478600001)(2616005)(1076003)(66476007)(52116002)(2906002)(6506007)(41300700001)(7416002)(83380400001)(5660300002)(8936002)(142923001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7tpRccgm/qYeWwD0flt1ywYiUCDHu0JXyvlbtyDohAv8Iy0rgA6wQsnbGu9L0W4WobY8fVlPboifrPLe3T5+r6xgQ6QYCNTbMQM2U+L1u5HXHtjIbRdjm/W3qsIX02IUukB0tGMMMAPq6/1ApFFsjv79Kztf+EwE2t8Igt0ehKE/x3y93jZHwralOvhWBazhyM0gzx4WAT24VPWc9paX1ZWueyXg88fZTfKesdw1rFv8jmzUhYueVYsAOfTr8QARCGAyGoX8z3nSHCVvAnQjma3Z7Zjdw3iw1hcUaY8xpfHB3t6nzh5azhzjgfMqz7yMPi9JrkhdX/hipnjbDGlS1mZWBgaHWNWHNrEYPSEuidT7hic8dUGslevcBWDybCqI9WvjSyTmq4015T2bmHxRKgWByAMGkRZDhnuDLgqNdAHg3hL13pw6BfecQaxwi6D77hgVC07VobttIXxjnmfi+mYjO8L3mVO5gicvR5lgiUcuxAfQ3dYIet7incx2y8j/R4fUjuHKp54pvzwH5UPXsgTs3eZArFkvt6c6bCoub7Ewt7DzicwUxpI5WNrP5YjNo5YHt86I0JwKQXhDX0VIfN6o2Lk22QQA7Ly+bg7WLGtcB/BkMPf4KBCKbZwV8WE0Sk69np5QDLxwEZ/5gISt1VEDdxokteYRF0BFwPdrv/w94iAaw9jo7Co6QeXEM/szWQrvqOqz05owrziR8t0PZGvj+Vt7wQ7q7kbwHlxwbdA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(376002)(396003)(136003)(451199015)(66556008)(4326008)(36756003)(66946007)(41300700001)(2616005)(8676002)(316002)(66476007)(2906002)(31696002)(86362001)(5660300002)(38100700002)(44832011)(478600001)(6506007)(53546011)(6486002)(8936002)(26005)(186003)(83380400001)(6666004)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yOwyW6kCwV3EtfQ4Z9RRjSsr1zJDxAHmXLqin9lOxufFGkvyDymCqy2Fwivo?=
- =?us-ascii?Q?ZxpzVph+xaWGKSFKQAGhDM4XLfxNjLqkX8s9qYcsypiNDsUq/PgZEEZSIUZs?=
- =?us-ascii?Q?gH7dyyGisgwazeTAs2mpR0fWwpRlSYeL3s1LvUnGyYoEW/3szA74whlpn4ho?=
- =?us-ascii?Q?RRIvkWv9cmullyhjAB/WvcBnCziK0VOwZTfKW4NK3GFlbEcuRpD890h8Br3r?=
- =?us-ascii?Q?G2AHrN/p9GP5VwJezYHpxUYxXYHgSTG7SszBtXuL3F34fpT0IrhOKD4OETBp?=
- =?us-ascii?Q?IiUeOhYwKgRmbZXlJWrVTx6PBPA4tRL020gwrhg7YRS/KDbHiP/dhvtGopCY?=
- =?us-ascii?Q?5V6/4j8Pa8X2sCZT+wpTvO4pxnV5vYIFvhwKjXETNTOOw4vgupsFzF2pwgJw?=
- =?us-ascii?Q?j1xzxYeRfFC1P2AmD8mA4g9Z3f0En7n+5Ok500N3hSVJd9q3JBadUG13CS+d?=
- =?us-ascii?Q?rz6FtmshbE71ILdnaPXCrqMbiD6jKJ11HmD+E5NV8/3YyLhCtLK0RCGDLTXA?=
- =?us-ascii?Q?DY4Aez6OZypy8aWlsunIndYeO3VoXsYxYWqqwiOX9dOgxMSyAfu601rkqqec?=
- =?us-ascii?Q?i4nswU593MZ7us7DEvYflgjL7XfeSLzNrMWwx2cDJzdTzGvrY/BZ7d9bYA+n?=
- =?us-ascii?Q?drO1Idj+FadWmTDZ3IJGNya0tUsUPbtyTibwur3GJPx9i6WX2JLTyjnnVzLv?=
- =?us-ascii?Q?0utE95lNaHOHIcOMmel5Bt4SSYS+qyCO+XhbLCrWp4eD674OTiyP5NoLHmZ/?=
- =?us-ascii?Q?eWpHCL3f5ttT0Qdw5viGJOaZSsZrRdGmOww7WoxIwWl1rGWwneq4oYuoZemj?=
- =?us-ascii?Q?9FtVqobgAyZvY33IcloCcaupSGGdFR6v0jPRY1yEdaqgttv4FDbRtk0DD3Bj?=
- =?us-ascii?Q?BxyDJpD0ICAvGKSOflUWVsz3q8ijdxF1cNY1Na4FwXRb0L3UOE16685/l969?=
- =?us-ascii?Q?Wk4mC70LfG0Mn+r/INqTOqeLOTIHgJKu8Ng9fn37X3RJdUZvnWrnlS1yodee?=
- =?us-ascii?Q?+qsTx0EelHy4ohpL5AszxlrSG8BzQ75ND2S8h6lXe8SYS3qQwZPdWHj+/elk?=
- =?us-ascii?Q?oHFJ9zkah33HeJLVTwpyhpruWSEIYSMuzF/X3ecnoGO4hoBCxt3Z9+i4rbHe?=
- =?us-ascii?Q?BdmxCOCVR1s7qBhmEwJtW6EweukOx/lSZIq9q2Mdeoa4vknr/5s9NyAkgYAt?=
- =?us-ascii?Q?tc5e+NJQd/G6sn6fLA/+rHXfaw/4sEZcCO/mg0Vd2XvVCif4GNh2FvH5hijA?=
- =?us-ascii?Q?FXY7bRmuKiRg8uctE04Rp0M3A3V8Qxx3DltL9Sax3+YtmhRL+sD7iSaR7nph?=
- =?us-ascii?Q?r+qEzE7KlwTNStxnFdE1f5EzGxKn2OWrKZTVyDa9wEU+9ohVQhRMOIMyjWdy?=
- =?us-ascii?Q?aKMhs/Gts7kwrqdEZH0Iq2BdsLbnHwh6+aqYvyJdo8T3GbZUD3l6UPPW2E0L?=
- =?us-ascii?Q?BGlbWCG4OFGHOdcp8NeluNCzYJ0wUShrRqO3xWYmumyi8MkS3lV/0RDsHb05?=
- =?us-ascii?Q?DZqecuDpI9j9a3yaNEVtehg2sjMYcT3TiFLVTUNFBtbJA0viezjxfE5+5h88?=
- =?us-ascii?Q?DOv2AVRtxd8ugIC/S6Z5ydtqKTVytXkx/XwdCMO2?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f2b2bb6-fd75-4aef-7848-08daef97f9d5
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkRxRENKcTFkMXhTWjNSbWs4TTVTTXNxSkxGUEdzVzArdEVZclRBRDVVVGJX?=
+ =?utf-8?B?dWwwSnFiT2N3NXhkV1RZSEJHcm15MCt5Q2V2SFFZNHR3NXRXeUI3Yi9VOHBP?=
+ =?utf-8?B?bXI2bTE1ZW1uSFRNbXFaNGsreWFNSGJsaUdGdDFqNk50RHdGckdmbnZKa20x?=
+ =?utf-8?B?VnljRU15d1JLMEtiK253OHJVK09qNzBTTklnK2dkQkMvRGJvdzhCWjgzNkln?=
+ =?utf-8?B?d1ZEelYxWTl6QVJZOGM2UWJETnlYaHNtb09YdG52QlF0NXJvcmVReFdzOFlt?=
+ =?utf-8?B?QkJQd0JPTVdrMlJ2M2ZjdmMrM0g0YXQ3MUQySGYrb21kKy9US1VXN3R1ek5K?=
+ =?utf-8?B?SVFLOHZVZUROTXd1U3hiakdCQlltZ2d3bFd5ZjJ2V3cwS1NCVDRMdTl5WDRl?=
+ =?utf-8?B?Mzc3Uzd3VzhhSUNEdlowSHhiNjBzT3hWeFFJOVUvRW9peVNGTThhVTRocVRu?=
+ =?utf-8?B?RVppbUpZdVdWangzU2FqWFQzVTJMSUU5NXo2RmVxQjkwR2VPbnRWakZlU3A1?=
+ =?utf-8?B?cmNBNVhNeUVaZzJ6STFwUjRIbHBMTWRUMldscGt0L2lZcW9zRlA0YTFIL3ds?=
+ =?utf-8?B?RzFkUXJadmJyNmt4emtORXl6K2UyMlg4cEg2aDRVUVpTdXBvOW83a3hGaVo5?=
+ =?utf-8?B?c3VzN3g4QzBMZVRzL3NRUmZ2ckEwL0kvT1hBTEJnc0VXQkczZ3BMV3lpbVEv?=
+ =?utf-8?B?QjJiM3RqQ1l5eUNUUjNXZDhDbklyaVgrOUNibWp1SEpZQUxuRUhDVW1mMXV4?=
+ =?utf-8?B?K3hSa0UxcCszRnNVeXVIUlppQ3ZmdTNkR3o1Z1M4aHhkRFJSbUxFSjBscHhV?=
+ =?utf-8?B?eXFFanhWbEVGbUNQd1MveW9KZDI1cjUzUlZ4ZWU2OTVKVk9uVmRqaG1BQzk5?=
+ =?utf-8?B?a1ZhRXc2WFJOWmNPbkU3UUdvamNNTy9nKzBSYXR3NERMYWpKeFlmd3ZLa3Bi?=
+ =?utf-8?B?NXpETWtlNlQwbm85Zy94RmQ3SG03eHNmRzlqSHBPc2FLNmFlVHR4bEsyeFQ4?=
+ =?utf-8?B?MHZxa2pRNjJYM1hyM3g3UGYyNS9WK0F1dnJ2VWVEdzdHVnczQXVNVFVpU2FU?=
+ =?utf-8?B?TWRVOVdnU0Q5aWw3eHN3aGEyRzk3OEliSHg1K0VmaGNtUkp2cU91U0lLdDlE?=
+ =?utf-8?B?REhFVk1rWFVValFSL3VnNkNsQ3g5MmJJMUxlTzh6RGhZTXYyditsT1dtQjVU?=
+ =?utf-8?B?NFZrWlJmeHY0M21sU3F2L3dyMnNzaWtoWlEzTmRPV2JrbktZdCtodVdnTnNx?=
+ =?utf-8?B?anRxZVBtYzZpTlE5eTkxdHRlV1gvNXZDMWlqZHdCTUUreEhmb0hZNDFISEVr?=
+ =?utf-8?B?L2xZaG9oL2c3RGM1eWMyRVVpbzBYcnA0RUpHTUl6ckxhSmxQdTVKNjlqL29Z?=
+ =?utf-8?B?NUl5aDVxS1ZTZFlTNlhiQTRUNjNpSThUeFhLMEZpTHNpY29sSkRTZEVTYThj?=
+ =?utf-8?B?VU5WOVFuQ1JXeERSSWplMzhiNGcxNXRtNlhvOElqL2VNdW5FL0VlK2x3Vkdn?=
+ =?utf-8?B?bmtjT2JDSGJPM0RQNkNLR2NrVHhLeFJDYWYycVF5L21GMHovYjZvZ0VOSnMv?=
+ =?utf-8?B?WWV1QXJiZ2lNT3RoOUNtSjBsc2ZhQlVWSVZnRHZYUUJQM0ZrRVk5NkR2c1Yv?=
+ =?utf-8?B?bHNxT05HcWpYUHJlRFhNWVRmSjZmUUU1eXFPa3hISDdKc2JDTzI4Zk10azU5?=
+ =?utf-8?B?cUhEY2hVM2JXOHVWTDY2V3IvaHQ2QUM1a2VyNEo4dzRHZ2NXMGtxMlNlMmVq?=
+ =?utf-8?B?MXR6M25RaktIVmZzdE01MnRUeHBNTkRRaklKemRxanRJZTlQK3pUcmNhSGdX?=
+ =?utf-8?B?NkZ0K3Bmd0JTbWgwRmJFZ0JFamRIUkZLUXdScnpkYW9pSnZ4Yk9WTVBVQm1y?=
+ =?utf-8?B?ZDRQWkVuYnhmNm5KUFlrMTN1bnZPZVJlait6K2k4WjRod0FENFZWcmZ2dVk5?=
+ =?utf-8?B?ekczVG1EOENabTFOcmxUY3VTQThTZzhtL2cyUEJCb0hYcU85YUtMSDh5dmpW?=
+ =?utf-8?B?NkZraTVXTzNaY0RJM2FWN1VnNkc2RHAvYTIvVWhNaXQrRG1GTE5FY0ppK1hE?=
+ =?utf-8?B?bXdOMVY4ZW1UZ2dmdFpYbE0zZ1g0ZTFWVGFTU2JyRHZuNUlHOEtQK000S3Nq?=
+ =?utf-8?Q?eWlID2102YkUjd+59s8G2/XQx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ddf73b9-99a7-498b-ef49-08daef988f2e
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 03:42:03.9462
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 03:46:14.6850
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R2D+nKWlLmLS96ROjvJCgYgTzkp5LKLzjY6yrqNgupnpoSnqY7oqbe5ek75vhDAXTyX56h1UJSPT2An6WRkDCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8480
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: KJKEUDPR9FtxhGSsAgYWUUxLNiilMnZNZgRT/nMGSxZgETpyQ5l36XXKWLbf+pQhvkQNGC3SFozw6ZMEVeyIYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4384
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi Perry,
 
-i.MX93 M33 has ROM, it needs the ".interrupts" section address to start
-M33 firmware. In current design, the Arm Trusted Firmware(ATF) use TCML
-start address when the 2nd arg is 0 when SMC call. So When the M33 firmware
-is built with TCML address, it works well.
+On 12/25/2022 10:04 PM, Perry Yuan wrote:
+----------------------------------->8----------------------------------
+> +static int amd_pstate_update_status(const char *buf, size_t size)
+> +{
+> +	int ret;
+> +	int mode_idx;
+> +
+> +	if (size > 7 || size < 3)
+> +		return -EINVAL;
+> +	mode_idx = get_mode_idx_from_str(buf, size);
+> +
+> +	switch(mode_idx) {
+> +	case AMD_PSTATE_DISABLE:
+> +		if (!default_pstate_driver)
+> +			return -EINVAL;
+> +		if (cppc_state == AMD_PSTATE_ACTIVE)
+> +			return -EBUSY;
 
-However when M33 firmware is built to run in DDR, we need pass the
-".interrupts" address as 2nd arg to ATF to start M33 firmwrae.
+what's the reason for not supporting active -> disable?
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/remoteproc/imx_rproc.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+> +		ret = cpufreq_unregister_driver(default_pstate_driver);
+> +		amd_pstate_driver_cleanup();
+> +		break;
+> +	case AMD_PSTATE_PASSIVE:
+> +		if (default_pstate_driver) {
+> +			if (default_pstate_driver == &amd_pstate_driver)
+> +				return 0;
+> +			cpufreq_unregister_driver(default_pstate_driver);
+> +			cppc_state = AMD_PSTATE_PASSIVE;
+> +			default_pstate_driver = &amd_pstate_driver;
+> +		}
+> +
+> +		ret = cpufreq_register_driver(default_pstate_driver);
+> +		break;
+> +	case AMD_PSTATE_ACTIVE:
+> +		if (default_pstate_driver) {
+> +			if (default_pstate_driver == &amd_pstate_epp_driver)
+> +				return 0;
+> +			cpufreq_unregister_driver(default_pstate_driver);
+> +			default_pstate_driver = &amd_pstate_epp_driver;
+> +			cppc_state = AMD_PSTATE_ACTIVE;
+> +		}
+> +
+> +		ret = cpufreq_register_driver(default_pstate_driver);
+> +		break;
+> +	default:
+> +		break;
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t show_status(struct kobject *kobj,
+> +			   struct kobj_attribute *attr, char *buf)
+> +{
+> +	ssize_t ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	ret = amd_pstate_show_status(buf);
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
+> +			    const char *buf, size_t count)
+> +{
+> +	char *p = memchr(buf, '\n', count);
+> +	int ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	ret = amd_pstate_update_status(buf, p ? p - buf : count);
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +
+> +	return ret < 0 ? ret : count;
+> +}
+> +
+>  cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>  cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>  
+>  cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+>  cpufreq_freq_attr_rw(energy_performance_preference);
+>  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> +define_one_global_rw(status);
+>  
+>  static struct freq_attr *amd_pstate_attr[] = {
+>  	&amd_pstate_max_freq,
+> @@ -795,6 +885,15 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>  	NULL,
+>  };
+>  
+> +static struct attribute *pstate_global_attributes[] = {
+> +	&status.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group amd_pstate_global_attr_group = {
+> +	.attrs = pstate_global_attributes,
+> +};
+> +
+>  static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>  {
+>  	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+> @@ -1154,6 +1253,25 @@ static int __init amd_pstate_init(void)
+>  	if (ret)
+>  		pr_err("failed to register with return %d\n", ret);
+>  
+> +	amd_pstate_kobj = kobject_create_and_add("amd-pstate", &cpu_subsys.dev_root->kobj);
+> +	if (!amd_pstate_kobj) {
+> +		ret = -EINVAL;
+> +		pr_err("global sysfs registration failed.\n");
+> +		goto kobject_free;
+> +	}
+> +
+> +	ret = sysfs_create_group(amd_pstate_kobj, &amd_pstate_global_attr_group);
+> +	if (ret) {
+> +		pr_err("sysfs attribute export failed with error %d.\n", ret);
+> +		goto global_attr_free;
+> +	}
+> +
+> +	return ret;
+> +
+> +global_attr_free:
+> +	kobject_put(amd_pstate_kobj);
+> +kobject_free:
+> +	cpufreq_unregister_driver(default_pstate_driver);
+>  	return ret;
+>  }
+>  device_initcall(amd_pstate_init);
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 2ddf89e15dc6..2e90fd470198 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -374,7 +374,8 @@ static int imx_rproc_start(struct rproc *rproc)
- 					 dcfg->src_start);
- 		break;
- 	case IMX_RPROC_SMC:
--		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0, 0, 0, 0, 0, 0, &res);
-+		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, rproc->bootaddr,
-+			      0, 0, 0, 0, 0, &res);
- 		ret = res.a0;
- 		break;
- 	case IMX_RPROC_SCU_API:
-@@ -664,6 +665,13 @@ static u64 imx_rproc_get_boot_addr(struct rproc *rproc, const struct firmware *f
- 		 */
- 		writel(*(u32 *)(elf_data + offset), va);
- 		writel(*(u32 *)(elf_data + offset + 4), va + 4);
-+	} else if (priv->dcfg->devtype == IMX_RPROC_IMX93) {
-+		/* i.MX93 Cortex-M33 has ROM, it only needs the section address */
-+		shdr = rproc_elf_find_shdr(rproc, fw, ".interrupts");
-+		if (!shdr)
-+			return bootaddr;
-+
-+		return elf_shdr_get_sh_addr(class, shdr);
- 	}
- 
- 	return bootaddr;
 -- 
-2.37.1
-
+Thanks & Regards,
+Wyes
