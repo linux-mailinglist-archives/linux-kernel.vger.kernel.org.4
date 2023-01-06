@@ -2,126 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E321E65FE25
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5F665FE23
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjAFJlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S232304AbjAFJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbjAFJkh (ORCPT
+        with ESMTP id S233135AbjAFJkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:40:37 -0500
-Received: from outbound-smtp55.blacknight.com (outbound-smtp55.blacknight.com [46.22.136.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE0D6CFDF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:35:28 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp55.blacknight.com (Postfix) with ESMTPS id 3B123FAAF6
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:35:27 +0000 (GMT)
-Received: (qmail 300 invoked from network); 6 Jan 2023 09:35:27 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 6 Jan 2023 09:35:27 -0000
-Date:   Fri, 6 Jan 2023 09:35:24 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] mm: discard __GFP_ATOMIC
-Message-ID: <20230106093524.ck5otyaopd724een@techsingularity.net>
-References: <20221129151701.23261-1-mgorman@techsingularity.net>
- <20221129151701.23261-7-mgorman@techsingularity.net>
- <Y7bVeE1gtSmS25td@kernel.org>
+        Fri, 6 Jan 2023 04:40:39 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED776DB81;
+        Fri,  6 Jan 2023 01:35:46 -0800 (PST)
+Received: from integral2 (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id 9B6B07E4BC;
+        Fri,  6 Jan 2023 09:35:43 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672997746;
+        bh=PSwF0Q2QKh+quczjcUBNpheJtkPkO8EGIsVhqAP+3sg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S6T3M0LDK5pKwF2CrZL7QN+nnoHPhrZqJIgxGFjOk8tEq7jNryY5I1a/RSWcMP580
+         E+URXp9bY0sS71Hv1G0QADQfdBtOyqC+8P8rHBM3bgUzdwLpIqqMCw7WJpP1km+TH7
+         wFhm4033n0SQRqT7S3QJLcQSPs4PylnlzsSolkePuafCtIYKpWIAd8E488rgjbDnp1
+         Sey8H6FHhW/l2vRQYbFf3v7X2om4WaXLDcjQpxqknuvuT3qbyMJvWkwAEpVR3BayuA
+         f7S9f/kkN3VAapCg9ccJxPzfeEQrtQh5W1UVE3XSFh2JCHbwkcJ47Yex/kk27S/+1Y
+         zdY4Fgdt/62mg==
+Date:   Fri, 6 Jan 2023 16:35:39 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Yu Zhe <yuzhe@nfschina.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+Subject: Re: [PATCH] io_uring: fix some spelling mistakes in comment
+Message-ID: <Y7fra/JE003tcpQq@integral2>
+References: <20230106091242.20288-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7bVeE1gtSmS25td@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106091242.20288-1-yuzhe@nfschina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 03:49:44PM +0200, Mike Rapoport wrote:
-> Hi Mel,
-> 
-> On Tue, Nov 29, 2022 at 03:17:01PM +0000, Mel Gorman wrote:
-> > From: NeilBrown <neilb@suse.de>
-> > 
-> > __GFP_ATOMIC serves little purpose.  Its main effect is to set
-> > ALLOC_HARDER which adds a few little boosts to increase the chance of an
-> > allocation succeeding, one of which is to lower the water-mark at which it
-> > will succeed.
-> > 
-> > It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
-> > adjusts this watermark.  It is probable that other users of __GFP_HIGH
-> > should benefit from the other little bonuses that __GFP_ATOMIC gets.
-> > 
-> > __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
-> > There is little point to this.  We already get a might_sleep() warning if
-> > __GFP_DIRECT_RECLAIM is set.
-> > 
-> > __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
-> > probable that testing ALLOC_HARDER is a better fit here.
-> > 
-> > __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
-> > sleep.  This should test __GFP_DIRECT_RECLAIM instead.
-> > 
-> > This patch:
-> >  - removes __GFP_ATOMIC
-> >  - allows __GFP_HIGH allocations to ignore watermark boosting as well
-> >    as GFP_ATOMIC requests.
-> >  - makes other adjustments as suggested by the above.
-> > 
-> > The net result is not change to GFP_ATOMIC allocations.  Other
-> > allocations that use __GFP_HIGH will benefit from a few different extra
-> > privileges.  This affects:
-> >   xen, dm, md, ntfs3
-> >   the vermillion frame buffer
-> >   hibernation
-> >   ksm
-> >   swap
-> > all of which likely produce more benefit than cost if these selected
-> > allocation are more likely to succeed quickly.
-> > 
-> > [mgorman: Minor adjustments to rework on top of a series]
-> > Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > ---
-> >  Documentation/mm/balance.rst   |  2 +-
-> 
-> Documentation/core-api/memory-allocation.rst needs an update as well, and
-> there are other mentions of GFP_ATOMIC in Documentation/
-> 
+On Fri, Jan 06, 2023 at 05:12:42PM +0800, Yu Zhe wrote:
+> @@ -2822,7 +2822,7 @@ static __cold void io_tctx_exit_cb(struct callback_head *cb)
+>  	 * When @in_idle, we're in cancellation and it's racy to remove the
+>  	 * node. It'll be removed by the end of cancellation, just ignore it.
+>  	 * tctx can be NULL if the queueing of this task_work raced with
+> -	 * work cancelation off the exec path.
+> +	 * work cancellation off the exec path.
+>  	 */
+>  	if (tctx && !atomic_read(&tctx->in_idle))
+>  		io_uring_del_tctx_node((unsigned long)work->ctx);
+> @@ -3095,7 +3095,7 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
+>  		bool loop = false;
+>  
+>  		io_uring_drop_tctx_refs(current);
+> -		/* read completions before cancelations */
+> +		/* read completions before cancellations */
 
-What part do you think needs updating in that file?
+"cancelations" is not a typo.
 
-There are two references to GFP_ATOMIC in that file, one about accessing
-reserves and another about non-sleeping allocations and the accuracy
-does not change after the series. If anything, this statement should
-change because it invites GFP_ATOMIC abuse for spurious reasons
-
-  * If you think that accessing memory reserves is justified and the kernel
-    will be stressed unless allocation succeeds, you may use ``GFP_ATOMIC``.
-
-There are other references to GFP_ATOMIC in Documentation/ that are are a
-little inaccurate but not in a way that is harmful and is not changed by
-the series. For example;
-
-	GFP_ATOMIC requests are kernel internal allocations that must
-	be satisfied, immediately.  The kernel may drop some request,
-	in rare cases even panic, if a GFP_ATOMIC alloc fails.
-
-This is a stronger statement than GFP_ATOMIC deserves but it's close enough
-in the given context.
+"cancelations" and "cancellations" are both valid spellings. The former
+is predominantly used in the US, while the latter is predominantly used
+in the UK.
 
 -- 
-Mel Gorman
-SUSE Labs
+Ammar Faizi
+
