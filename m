@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1336605C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC136605C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbjAFRik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S231408AbjAFRjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjAFRiW (ORCPT
+        with ESMTP id S234465AbjAFRjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:38:22 -0500
+        Fri, 6 Jan 2023 12:39:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA607D9DB
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:38:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FF87D9DB;
+        Fri,  6 Jan 2023 09:39:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8AF661ED7
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A55C433EF;
-        Fri,  6 Jan 2023 17:38:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD7461EEA;
+        Fri,  6 Jan 2023 17:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C782BC433EF;
+        Fri,  6 Jan 2023 17:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673026700;
-        bh=mVSb5WJNxb9CkrZLtlHqaTe+bEMhYwT0ZS0NE5kngJo=;
+        s=k20201202; t=1673026749;
+        bh=9lYpIJ7urZJueAO54CHt0eT1xP3N1T1yp3v6HZ0ADNs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oPb9v8shkRWv2aUHwslq3X46cvS6dY8A7pPkMe1YRMrZjY+zzg1ecLol0MIE9yNAf
-         J3EHogP5Z1HsWN5sNhF4uy7H4vGSQgMVfs8OrFhpp8GbzxgAbmqSEZ8WxqPEY4jxIE
-         wyL5CXat6/M1HL9GflD3J6JcyU98X1n4XgVxM58N67CEg2L8KoyQlLZCmolEZWgAYL
-         3tFbUJ2eush/oWAfFtvDpb5Pho1roN5bhmFIeWxMMnSoVvL1V31ryaGWJZux6N//H1
-         6tbSJzqaJzyNdVEvmA+cYBeaqJLZ/78wDWiTAioAjy2soPiaL4R7U9TpD0nhmaeTbj
-         n7mLWABL6ft8g==
-Date:   Fri, 6 Jan 2023 17:38:15 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com, james.morse@arm.com,
-        ebiederm@xmission.com, elver@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de
-Subject: Re: BUG: KCSAN: data-race in do_page_fault /
- spectre_v4_enable_task_mitigation
-Message-ID: <20230106173814.GA5169@willie-the-truck>
-References: <20221221145436.GF69385@mutt>
+        b=h5p+UChZEbXLcG+vuuBe5NXZesdLSwOIoel6pLd0TOAJY56sTRhdYAP5GUZNQz4Kf
+         QDj8NHkDlNXy3PFgQ3sSM5VD77x/X0tXJDd2+0S80RICDKQ+nda3cepNok4HRKH+I3
+         qdyZiSyXVXqDQk9EVBIvzpF18IAUT8Qrf+4fcCq1hejvXMSjuI+e4jKod5qscWbDCD
+         IRIwqE1Xy9h2ohvmBoPscSs+zVpl9JIrNsB08rYbaFiWhajBJru5AvY9PjdvbYi5eU
+         oox/QhKPLa7bnH2nGPsPefwjkkxBKGsBY1pqesjXX3ziqtQEQh9iSh4L7bp42KUhLq
+         so0PE2NRO5Pug==
+Date:   Fri, 6 Jan 2023 11:39:06 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_schowdhu@quicinc.com,
+        agross@kernel.org, konrad.dybcio@linaro.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v2 2/2] usb: misc: eud: Add driver support for SM6115 /
+ SM4250
+Message-ID: <20230106173906.djdk5vbm4e4uz3wv@builder.lan>
+References: <20230103150419.3923421-1-bhupesh.sharma@linaro.org>
+ <20230103150419.3923421-3-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221221145436.GF69385@mutt>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20230103150419.3923421-3-bhupesh.sharma@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,78 +59,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 03:54:36PM +0100, Anders Roxell wrote:
-> Hey,
+On Tue, Jan 03, 2023 at 08:34:19PM +0530, Bhupesh Sharma wrote:
+> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
 > 
-> I'm building an allmodconfig kernel on yesterdays linux-next (tag:
-> next-20221220) and I see a
-> "BUG: KCSAN: data-race in do_page_fault / spectre_v4_enable_task_mitigation"
-> when I boot up in QEMU. I ran the output via
-> scripts/decode_stacktrace.sh and this is what I see:
+> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
+> needs to be accessed only via the secure world (through 'scm'
+> calls).
 > 
-> 
-> [ 2105.261121][  T154] ==================================================================
-> [ 2105.266067][  T154] BUG: KCSAN: data-race in do_page_fault / spectre_v4_enable_task_mitigation
-> [ 2105.271577][  T154] 
-> [ 2105.273121][  T154] write to 0xffff8000210b3fb8 of 8 bytes by task 136 on cpu 0:
-> [ 2105.277743][ T154] spectre_v4_enable_task_mitigation (/home/anders/src/kernel/next/arch/arm64/kernel/proton-pack.c:651 /home/anders/src/kernel/next/arch/arm64/kernel/proton-pack.c:664) 
-> [ 2105.281802][ T154] __switch_to (/home/anders/src/kernel/next/arch/arm64/kernel/process.c:459 /home/anders/src/kernel/next/arch/arm64/kernel/process.c:532) 
-> [ 2105.284670][ T154] __schedule (/home/anders/src/kernel/next/kernel/sched/core.c:5247 /home/anders/src/kernel/next/kernel/sched/core.c:6555) 
-> [ 2105.287555][ T154] preempt_schedule_irq (/home/anders/src/kernel/next/arch/arm64/include/asm/irqflags.h:70 /home/anders/src/kernel/next/arch/arm64/include/asm/irqflags.h:98 /home/anders/src/kernel/next/kernel/sched/core.c:6868) 
-> [ 2105.290857][ T154] arm64_preempt_schedule_irq (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:237) 
-> [ 2105.294433][ T154] el1_interrupt (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:476 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:486) 
-> [ 2105.297433][ T154] el1h_64_irq_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:492) 
-> [ 2105.300718][ T154] el1h_64_irq (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:580) 
-> [ 2105.303497][ T154] arch_local_irq_restore (/home/anders/src/kernel/next/arch/arm64/include/asm/jump_label.h:21 /home/anders/src/kernel/next/arch/arm64/include/asm/irqflags.h:130) 
-> [ 2105.306750][ T154] fs_reclaim_acquire (/home/anders/src/kernel/next/mm/page_alloc.c:4691) 
-> [ 2105.310118][ T154] slab_pre_alloc_hook.constprop.0 (/home/anders/src/kernel/next/include/linux/sched/mm.h:272 /home/anders/src/kernel/next/mm/slab.h:720) 
-> [ 2105.313966][ T154] slab_alloc_node.isra.0 (/home/anders/src/kernel/next/mm/slub.c:3434) 
-> [ 2105.317343][ T154] __kmem_cache_alloc_lru (/home/anders/src/kernel/next/mm/slub.c:3469) 
-> [ 2105.320659][ T154] kmem_cache_alloc (/home/anders/src/kernel/next/mm/slub.c:3477) 
-> [ 2105.323673][ T154] getname_flags (/home/anders/src/kernel/next/fs/namei.c:139) 
-> [ 2105.326703][ T154] getname (/home/anders/src/kernel/next/fs/namei.c:218) 
-> [ 2105.329377][ T154] do_sys_openat2 (/home/anders/src/kernel/next/fs/open.c:1304) 
-> [ 2105.332352][ T154] __arm64_sys_openat (/home/anders/src/kernel/next/fs/open.c:1326) 
-> [ 2105.335573][ T154] el0_svc_common.constprop.0 (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:38 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:52 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:142) 
-> [ 2105.339272][ T154] do_el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:197) 
-> [ 2105.342025][ T154] el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:638) 
-> [ 2105.344687][ T154] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:656) 
-> [ 2105.348089][ T154] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
-> [ 2105.350998][  T154] 
-> [ 2105.352567][  T154] read to 0xffff8000210b3fb8 of 8 bytes by task 154 on cpu 0:
-> [ 2105.357117][ T154] do_page_fault (/home/anders/src/kernel/next/arch/arm64/mm/fault.c:517 /home/anders/src/kernel/next/arch/arm64/mm/fault.c:558) 
-> [ 2105.360110][ T154] do_translation_fault (/home/anders/src/kernel/next/arch/arm64/mm/fault.c:695) 
-> [ 2105.363400][ T154] do_mem_abort (/home/anders/src/kernel/next/arch/arm64/mm/fault.c:831) 
-> [ 2105.366400][ T154] el0_ia (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:534) 
-> [ 2105.369059][ T154] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:662) 
-> [ 2105.372445][ T154] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
-> [ 2105.375404][  T154] 
-> [ 2105.376935][  T154] no locks held by systemd/154.
-> [ 2105.379935][  T154] irq event stamp: 385
-> [ 2105.382448][ T154] hardirqs last enabled at (385): local_daif_restore (/home/anders/src/kernel/next/arch/arm64/include/asm/daifflags.h:71 (discriminator 1)) 
-> [ 2105.388413][ T154] hardirqs last disabled at (384): el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:662) 
-> [ 2105.394436][ T154] softirqs last enabled at (352): fpsimd_restore_current_state (/home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:264 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1780) 
-> [ 2105.400932][ T154] softirqs last disabled at (350): fpsimd_restore_current_state (/home/anders/src/kernel/next/include/linux/bottom_half.h:20 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:242 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1773) 
-> [ 2105.407394][  T154] 
-> [ 2105.408909][  T154] value changed: 0x0000000060000000 -> 0x0000000060001000
-> [ 2105.413225][  T154] 
-> [ 2105.414746][  T154] Reported by Kernel Concurrency Sanitizer on:
-> [ 2105.426169][  T154] Hardware name: linux,dummy-virt (DT)
-> [ 2105.429528][  T154] ==================================================================
-> 
-> 
-> The prctl case, which only gets called on 'current'. However, assuming
-> the kernel could be preempted while accessing current->pt_regs->pstate,
-> and then it races against the task switch.
-> 
-> Any idea what happens and how to fix it?
 
-I can't quite decipher this against mainline, as the line numbers above in
-do_page_fault() seem to correlate with reads of the esr, which is either
-a register or a stack read. I also think everything in the stacktraces
-is running in the context of 'current', so I can't see how we could really
-race here.
+This difference does not come from the platform number, but how the
+firmware is configured.
 
-:/
+How about relying on the presence of the extra DT properties to identify
+if the secure access is needed?
 
-Will
+> Also, the enable bit inside 'tcsr_check_reg' needs to be set
+> first to set the eud in 'enable' mode on these SoCs.
+> 
+> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  drivers/usb/misc/Kconfig    |  1 +
+>  drivers/usb/misc/qcom_eud.c | 49 ++++++++++++++++++++++++++++++++++---
+>  2 files changed, 47 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index a5f7652db7da1..ed4ae32ff1577 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -140,6 +140,7 @@ config USB_APPLEDISPLAY
+>  config USB_QCOM_EUD
+>  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	select QCOM_SCM
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	  This module enables support for Qualcomm Technologies, Inc.
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index b7f13df007646..a96ca28a4899b 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -11,7 +11,9 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/qcom_scm.h>
+>  #include <linux/slab.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/usb/role.h>
+> @@ -30,15 +32,24 @@
+>  #define EUD_INT_SAFE_MODE	BIT(4)
+>  #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
+>  
+> +struct eud_soc_data {
+> +	bool secure_eud_en;
+> +	bool tcsr_check_enable;
+> +};
+> +
+>  struct eud_chip {
+>  	struct device			*dev;
+>  	struct usb_role_switch		*role_sw;
+> +	const struct eud_soc_data	*eud_data;
+>  	void __iomem			*base;
+>  	void __iomem			*mode_mgr;
+>  	unsigned int			int_status;
+>  	int				irq;
+>  	bool				enabled;
+>  	bool				usb_attached;
+> +	phys_addr_t			mode_mgr_phys_base;
+
+Given that mode_mgr doesn't come with the "_phys_base" suffix, how about
+naming this "secure_mode_mgr"?
+
+> +	phys_addr_t			tcsr_check_phys_base;
+
+For now this could be a local variable in eud_probe(). Also while
+mode_mgr_phys_base denotes an address range, afaict this points directly
+to a single register. As such the suffix isn't appropriate.
+
+How about "tcsr_check"?
+
+> +
+>  };
+>  
+>  static int enable_eud(struct eud_chip *priv)
+> @@ -46,7 +57,11 @@ static int enable_eud(struct eud_chip *priv)
+>  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+>  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
+>  			priv->base + EUD_REG_INT1_EN_MASK);
+> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+> +
+> +	if (priv->eud_data->secure_eud_en)
+
+if (priv->mode_mgr_phys_base)
+
+Would avoid the notion of having two separate variables to keep track of
+the validity of one entity.
+
+> +		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, BIT(0));
+> +	else
+> +		writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+>  
+>  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
+>  }
+> @@ -54,7 +69,11 @@ static int enable_eud(struct eud_chip *priv)
+>  static void disable_eud(struct eud_chip *priv)
+>  {
+>  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
+> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+> +
+> +	if (priv->eud_data->secure_eud_en)
+> +		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, 0);
+> +	else
+> +		writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+>  }
+>  
+>  static ssize_t enable_show(struct device *dev,
+> @@ -178,12 +197,15 @@ static void eud_role_switch_release(void *data)
+>  static int eud_probe(struct platform_device *pdev)
+>  {
+>  	struct eud_chip *chip;
+> +	struct resource *res;
+>  	int ret;
+>  
+>  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+>  	if (!chip)
+>  		return -ENOMEM;
+>  
+> +	chip->eud_data = of_device_get_match_data(&pdev->dev);
+> +
+>  	chip->dev = &pdev->dev;
+>  
+>  	chip->role_sw = usb_role_switch_get(&pdev->dev);
+> @@ -200,10 +222,25 @@ static int eud_probe(struct platform_device *pdev)
+>  	if (IS_ERR(chip->base))
+>  		return PTR_ERR(chip->base);
+>  
+> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> +	chip->mode_mgr = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+
+Perhaps it would be best not to ioremap the region when secure accesses
+are required?
+
+Regards,
+Bjorn
+
+>  	if (IS_ERR(chip->mode_mgr))
+>  		return PTR_ERR(chip->mode_mgr);
+>  
+> +	if (chip->eud_data->secure_eud_en)
+> +		chip->mode_mgr_phys_base = res->start;
+> +
+> +	if (chip->eud_data->tcsr_check_enable) {
+> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+> +		if (!res)
+> +			return dev_err_probe(chip->dev, -ENODEV, "failed to get tcsr reg base\n");
+> +
+> +		chip->tcsr_check_phys_base = res->start;
+> +
+> +		ret = qcom_scm_io_writel(chip->tcsr_check_phys_base, BIT(0));
+> +		if (ret)
+> +			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
+> +	}
+> +
+>  	chip->irq = platform_get_irq(pdev, 0);
+>  	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
+>  			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
+> @@ -230,8 +267,14 @@ static int eud_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct eud_soc_data sm6115_eud_data = {
+> +	.secure_eud_en = true,
+> +	.tcsr_check_enable = true,
+> +};
+> +
+>  static const struct of_device_id eud_dt_match[] = {
+>  	{ .compatible = "qcom,sc7280-eud" },
+> +	{ .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_data },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, eud_dt_match);
+> -- 
+> 2.38.1
+> 
