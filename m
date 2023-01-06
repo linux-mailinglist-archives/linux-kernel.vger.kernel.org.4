@@ -2,125 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515DA66005C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E05466005D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbjAFMir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S229547AbjAFMkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbjAFMio (ORCPT
+        with ESMTP id S231511AbjAFMkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:38:44 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959FE687A7
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:38:43 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso3430525wmb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ7xr6hqaFunxstN9Frwa743d6EY0RYUMvbu/BvcENU=;
-        b=k533u49JmlzI9E0GmLi1/SbA4DHKKnuJLwcWPrk5dQCS8t7rkz+MHy08ABQhin/X/6
-         JgRoDBIY7EFHGJgc9dMEvwbhzTO0xbC3ALki8QJnhibyoI2nI9CwYpQcqCg9P/fjNqCs
-         KOGaNGKYtv0TvGzekX+Rn0gYaHJa96u63r2TCFFwoG5i49iv8XvbV92w7kwe2FydP22z
-         7kn9AMzHk5eFhxiflGGLIWTzivhLMwSi6yQQpqwWwpjbXoQKRkw2MZsgbtZZ9iOmr5Qb
-         IH6h6ZmVnSg3H5JJ2/HvwbK0bBIk4wLbn/xXWxNANNI6X1Kc37/4U42ZwinHarOws8PY
-         bAjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ7xr6hqaFunxstN9Frwa743d6EY0RYUMvbu/BvcENU=;
-        b=m2mGveutuFt6HU0k2A7+uGcV2k7GhTshZhbdwRPGB5w5MLbtxXJ6e7ujQ/gYra3t72
-         EHbRk98+pPmEQr7TOfIaNlpDdgPbigfVhp6ZpuQ9L7L0sYDSQrHPfzVgcrpjbc0g9kSj
-         Eglg+qSQPhT0EssgCRJhE+90aNwuWT93CxzRQAavLsqWnOOG31CeaivfWD+QOJ42CknY
-         efMTOihNANnta0P8ahSzURhYVVK5os6NAB40YlWczdPdRvyBgzEYhuCJIsFcL8ew6Tme
-         qS8IxA2gsQS1VzPujdiikh7vy959pbcMNFm1pdYyXjS+EK/U/bKbJa72KEiqIuOd5ufo
-         qXlg==
-X-Gm-Message-State: AFqh2krfy5qQnMfIMtoZIxFqBg1bvKmIYsF4vEViiYnu+RvhG/LFnO3P
-        Yl+SIJ/dQ+nBS2pQhI/L9sqeSg==
-X-Google-Smtp-Source: AMrXdXuDF8odo1Q4/ENstUcn7M+3KtSn24l85y5PF2Bz6Wp1IzYdkylooKFh18FcHa+t5fjNy1Ng1A==
-X-Received: by 2002:a05:600c:5012:b0:3d3:5a4a:9103 with SMTP id n18-20020a05600c501200b003d35a4a9103mr38570557wmr.31.1673008722161;
-        Fri, 06 Jan 2023 04:38:42 -0800 (PST)
-Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s2-20020adff802000000b00241bd7a7165sm1025445wrp.82.2023.01.06.04.38.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 04:38:41 -0800 (PST)
-Message-ID: <80c9fac7-36fe-293e-62f0-945515b8f481@linaro.org>
-Date:   Fri, 6 Jan 2023 13:38:38 +0100
+        Fri, 6 Jan 2023 07:40:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536B4687A6
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:40:04 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4E65424A8F;
+        Fri,  6 Jan 2023 12:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673008802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wh5xyDBHV8fkWq0+1QQR3mYomHcc7+MxORZJ1rFfnCw=;
+        b=LdGJVy1xEl97Sb2hltrGnPy3oXDlAcRdLGhCRCGoktKEQjCp8Se3attqVjxLfVVLQJwVYn
+        N+RjnN9DY3qwRRzGD+3jWtAPP1/HwfqMuQldk9+FA0KdF+xEnXNc+oPhI7MVY7HTtdfHpw
+        z3t8inHfHsY17RfUaBhcpK5Jv4JlIks=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2F7DE2C143;
+        Fri,  6 Jan 2023 12:40:02 +0000 (UTC)
+Date:   Fri, 6 Jan 2023 13:40:01 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kthread_worker: Check all delayed works when destroy
+ kthread worker
+Message-ID: <Y7gWoZJaymhvNNIx@alley>
+References: <20230104144230.938521-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
- number of resets and reset-names
-Content-Language: en-US
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230106030001.1952-1-yanhong.wang@starfivetech.com>
- <20230106030001.1952-3-yanhong.wang@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106030001.1952-3-yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104144230.938521-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 03:59, Yanhong Wang wrote:
-> Some boards(such as StarFive VisionFive v2) require more than one value
-> which defined by resets property, so the original definition can not
-> meet the requirements. In order to adapt to different requirements,
-> adjust the maxitems number definition.
+On Wed 2023-01-04 22:42:30, Zqiang wrote:
+> This commit add a check for delayed works, when destroy kthread worker
+> if there are still some pending delayed works will trigger warnning,
+> this remind caller should clear all pending delayed works before destroy
+> kthread worker.
 > 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> ---
->  .../devicetree/bindings/net/snps,dwmac.yaml   | 36 ++++++++++++++-----
->  1 file changed, 28 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> index e26c3e76ebb7..f7693e8c8d6d 100644
-> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> @@ -132,14 +132,6 @@ properties:
->          - pclk
->          - ptp_ref
->  
-> -  resets:
-> -    maxItems: 1
-> -    description:
-> -      MAC Reset signal.
-> -
-> -  reset-names:
-> -    const: stmmaceth
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Do not remove properties from top-level properties. Instead these should
-have widest constraints which are further constrain in allOf:if:then.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Here you should list items with minItems: 1.
-
-> -
-
-Best regards,
-Krzysztof
-
+Best Regards,
+Petr
