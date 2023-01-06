@@ -2,113 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327AD660099
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F98766009D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 13:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbjAFMxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 07:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S233789AbjAFMxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 07:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233882AbjAFMxa (ORCPT
+        with ESMTP id S234157AbjAFMxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:53:30 -0500
-Received: from egress-ip33a.ess.de.barracuda.com (egress-ip33a.ess.de.barracuda.com [18.185.115.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A8C68CA1
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 04:53:27 -0800 (PST)
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199]) by mx-outbound9-213.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 06 Jan 2023 12:53:25 +0000
-Received: by mail-lj1-f199.google.com with SMTP id a11-20020a05651c210b00b0027fc4f018a1so391144ljq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 04:53:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9D7DGzJQZ+0e/BP6gr0QBg/0weFGurVvmybVclcA84I=;
-        b=Bzy3Shsu74uzLf1ZdMLQxbYEHiKyrFlrN3YkNmQMlYrhtvt8IRG+ndNcwqgNoclx/2
-         28mNgJVa4RaEV25v1W6vt82pgOqn6YhC3jgWuhB0P+HuPo3jLPJFMiTKXMY+704ahWZa
-         ErQ8RRQEXtaKGvyX3FKoyC9N4t4S6pNOQCu7M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9D7DGzJQZ+0e/BP6gr0QBg/0weFGurVvmybVclcA84I=;
-        b=qnG/dsL0v0rRb3pqLEPDZt49D4mUXHM29KxdU8flLzp0KbCpAKwsyzLjARKXzGsTD4
-         Y6w92x3iZLA3lvWz0mPwKDHaa6J+/sEaaSRzdNWUGUty1usR0Dlj+dhZJk7D+uP+/Nfi
-         /ZQRf2GJdFSQ4DUhwtBMYZOl1PEjsJ1JiN/wwAPO6XcbuboAWsRbJ/TR7joQW/vWZPer
-         gmfixrkTjmHUhdM7Q8eGlv098de9ArXSEkYPT6ayDFoRamAq2UR2RjdTt/B2i7fuUbYP
-         BcianUdiC4o8DkQtVFqO9EbV7IvqqepbYhmSW1VL7bT8QTEd3AGbavviA8ryjpPfeoe5
-         ElpQ==
-X-Gm-Message-State: AFqh2kq9lbvuFKDbujdCUINOIAs6s9CD+zS9pERKcGJIuZlm0+5GVEN+
-        utuRSt48hb3wKbKlzUieaObgphhWb7O1+WCZ8tz2NZrvzeE6nlq5Vcr2uLt8V7VtBDSV1oKu0yZ
-        Bbi2VY/ypyhDr2VhRNuiVIVhvLXonJNYWF4dMDvcYvaViw0jqI9ipBaEDCzxtAbX1d8K+ozS62N
-        Vn
-X-Received: by 2002:ac2:58cc:0:b0:4a2:4d89:aa58 with SMTP id u12-20020ac258cc000000b004a24d89aa58mr4079225lfo.646.1673009604862;
-        Fri, 06 Jan 2023 04:53:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs0rvoHCjLtwhGzK4XEw9VyRpqBK13CxRNprtcuOn5/sU0IoGu6JAMhjzzViR3TUvZDZbSlmBmjcxrJkgjtrBs=
-X-Received: by 2002:ac2:58cc:0:b0:4a2:4d89:aa58 with SMTP id
- u12-20020ac258cc000000b004a24d89aa58mr4079219lfo.646.1673009604615; Fri, 06
- Jan 2023 04:53:24 -0800 (PST)
+        Fri, 6 Jan 2023 07:53:34 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265B868CA1;
+        Fri,  6 Jan 2023 04:53:32 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VZ-B6zj_1673009610;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VZ-B6zj_1673009610)
+          by smtp.aliyun-inc.com;
+          Fri, 06 Jan 2023 20:53:30 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [RFC PATCH 0/6] erofs: support page cache sharing between EROFS images in fscache mode
+Date:   Fri,  6 Jan 2023 20:53:24 +0800
+Message-Id: <20230106125330.55529-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-References: <20230105151740.29436-1-sinthu.raja@ti.com> <20230105151740.29436-2-sinthu.raja@ti.com>
- <977b5cce-2501-4d7a-fe24-437df88aee8f@linaro.org>
-In-Reply-To: <977b5cce-2501-4d7a-fe24-437df88aee8f@linaro.org>
-From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Date:   Fri, 6 Jan 2023 18:23:13 +0530
-Message-ID: <CAEd-yTR=zdg_pt=MzkzceGTY2SkV=16dyhXCtd4EU-KGzP_mAQ@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] dt-bindings: arm: ti: Add binding for AM68 SK
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-BESS-ID: 1673009605-302517-5394-56523-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.208.199
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245287 [from 
-        cloudscan11-91.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 6:19 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 05/01/2023 16:17, Sinthu Raja wrote:
-> > From: Sinthu Raja <sinthu.raja@ti.com>
-> >
-> > AM68 Starter Kit is a low cost, small form factor board designed for
-> > TI's AM68 SoC which is optimized to provide best in class performance
-> > for industrial applications and add binding for the same.
-> >
-> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
->
-> What happened here?,
-Krzysztof
-Missed the merge window, so rebased to 6.2rc1 and reposted again.
->
-> Best regards,
-> Krzysztof
->
+[Background]
+=============
+Erofs already supports chunk deduplication across different images to
+minimize disk usage since v6.1.  Furthermore, we can make inodes among
+different images share page cache for these deduplicated chunks to
+reduce the memory usage.  This shall be much usable in container
+scenarios as deduplication is requisite for container images.
 
 
+[Implementation]
+================
+This is achieved by managing page cache of deduplicated chunks in
+blob's address space.  In this way, all inodes sharing the deduplicated
+chunk will refer to and share the page cache in the blob's address
+space.
 
---
-With Regards
-Sinthu Raja
+
+[Restriction]
+==============
+The page cache sharing feature also supports .mmap().  The reverse
+mapping requires that one vma can not be shared among inodes and can
+be linked to only one inode.  As the vma will be finally linked to the
+blob's address space when page cache sharing enabled, the restriction of
+the reverse mapping actually requires that the mapped file area can not
+be mapped to multiple blobs.  Thus page cache sharing can only be
+enabled for those files mapped to one blob.
+
+The chunk based data layout guarantees that a chunk will not cross the
+device (blob) boundary.  Thus in chunk based data layout, those files
+smaller than the chunk size shall be guaranteed to be mapped to one
+blob.  As chunk size is tunable at a per-file basis, this restriction
+can be relaxed at image building phase.  As long as we ensure that the
+file can not be deduplicated, the file's chunk size can be set to a
+reasonable value larger than the file size, so that the file contains
+only one chunk, in which case page cache sharing feature can be enabled
+on this file later.
+
+
+[Effect]
+========
+The final optimization result of this feature depends on the following
+factors:
+
+1. The number of deduplicated (shared) chunks.  Images sharing most of
+the layers (e.g. a base image and v1 image based on the base image) will
+achieve better optimization.
+
+2. As the restriction mentioned above, the number of files for which
+page cache sharing can ben enabled among the files accessed.
+
+
+I test the workload of starting up Tensorflow, which will access quite
+many (~5K) files among the startup phase.  I get the base image of
+Tensorflow from [1] and build a new image (e.g. v1 image) on top of this
+base image.
+
+Since the image got from [1] is in OCI format, I have to convert it to
+erofs format with buildkit[2], with default chunk size of 1MB.
+
+I run containers from these two images with containerd (base image first,
+v2 image secondly).  The (page cache) memory usage of the rootfs
+(container image) is shown as below:
+
+			| page cache sharing	| page cache sharing
+			| disabled		| enabled
+------------------------|-----------------------|-------------------
+First container       	|      			|
+page cache usage (MB) 	| 150      		| 150
+------------------------+-----------------------|-------------------
+Second container      	|      			|
+page cache usage (MB) 	| 150			| 7
+
+It can be seen that most (~95%, 143MB/150MB) memory usage reduced under
+this workload (when starting following containers sharing container image
+layers).
+
+The remained 7MB memory usage is consumed by directories, since page
+cache sharing is enabled only for regular files in this RFC
+implementation.
+
+
+[1] docker.io/tensorflow/tensorflow:2.10.0
+[2] https://github.com/moby/buildkit
+
+
+Jingbo Xu (6):
+  erofs: remove unused device mapping in the meta routine
+  erofs: unify anonymous inodes for blob
+  erofs: alloc anonymous file for blob in share domain mode
+  erofs: implement .read_iter for page cache sharing
+  erofs: implement .mmap for page cache sharing
+  erofs: enable page cache sharing in fscache mode
+
+ fs/erofs/fscache.c  | 231 ++++++++++++++++++++++++++++++++------------
+ fs/erofs/inode.c    |  27 ++++++
+ fs/erofs/internal.h |   8 +-
+ fs/erofs/super.c    |   2 +
+ 4 files changed, 202 insertions(+), 66 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
+
