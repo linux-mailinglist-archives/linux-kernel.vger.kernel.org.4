@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B09660352
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777F8660354
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjAFPcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S235709AbjAFPcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236040AbjAFPbV (ORCPT
+        with ESMTP id S235898AbjAFPcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:31:21 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5368873E1B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:30:58 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-150debe2b7cso1935081fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:30:58 -0800 (PST)
+        Fri, 6 Jan 2023 10:32:16 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B7E75D25;
+        Fri,  6 Jan 2023 07:31:59 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id o75so2248718yba.2;
+        Fri, 06 Jan 2023 07:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oiJt6s7+hbogz7Pnp3dT+g0/bOfE/wSE2iJelIqj6/U=;
-        b=ZDLN8+H8kR4lAfnL9dFpNhPkExxpPDiNyX+c9Z8+BS9D0gRtkyROettmrozcJcr83S
-         JSxz9LjVvHiTvqCTPMtYEJkLVxHbyvp46uEh9NjgS+IG2z/l1hRSxveKyIGrVkUq01wT
-         GfxP/atYg9WZwQDaKnSnzG47Bt8Gb236gDLny5KIobdVQWzlQe+8VV8/t8g5t2lwQVFP
-         jfzIEnxIcxB6CScqePq/tz3JevZLHNlgCvO5h9QwEHCMwTGG71ZKFyMDLvWy9J9wgPYt
-         tCtnGSFaXoEX/cdzcKJcM4RQyDb4X0Cj/B15oiSupk262JZqZ8llZHICpArKJAtZRUo+
-         uV9A==
+        bh=dQP/5D3LqTosG+7vRYjRg9axW9DC5iFtmMm9kbIA6S4=;
+        b=fpRj6AGHA4XtKSDcDKpCmSdJ7iZtz93UjJW4eyt0E8Y0HA6m2pjJF0Edmb3yyGUSD0
+         nmFIP3HAV/4/fEsaHR1WkagVrIyNZVY53D9G8Nv0z12z73PjEF7eqOP2LabG8bdhmvpj
+         OFLbQPj/iYb4nZwJFGaL348GJbLCEjRbmnlo1XznWv2oKDpVhP9rAR6LaRR6CQKP3Q2U
+         rJGcAU4X/czptrga1MTc8GwkI6t/o1uVK/tEKXWR35Ib66nxWb74wIoi25xS1vr31uPh
+         vswd4Uxry24K6QB63vN/xRY27mEV110vK9o3DHQBzwvM0hF72hsGoYyzc92h8HF56j4/
+         4zvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oiJt6s7+hbogz7Pnp3dT+g0/bOfE/wSE2iJelIqj6/U=;
-        b=CaS3MO7D0y1i+7MeaZkkg1DULIoBviVkVTX+SK+BD2IDe+9LbAQR+rzUhq3nFcVmcH
-         1w8u/JZwd0zWamvI52fJhPXEW5udLA2BCdngm6BIU01gAswL3ygL9jmZpRPpfm6bwYfz
-         pHOT/Etg/Z7ovmu54ejs3mdWQcEo+x7pgOfZGUO40Dpywj5QLXIa1wCfqQOMRJXTeU4F
-         f2TFOT2SJTZDAz3lq4ooWn3zisQRDtPTJSeTAsPweYNjyB4iJG2Q+ByPWFrDKexaspRv
-         xolmj4Mu2sdx4/PMVi7+ZWZ484CS1h37TovfCwTeuyLkjMI/vg/wjfmnN0CjqskrWQQI
-         Q+0Q==
-X-Gm-Message-State: AFqh2korQpzDY5LWwD7hRAeZ2VE1NrNf4dtcaTuaiIFcWnnuwofuLjw3
-        bmQXPVldZCHO/1hLVSJ2k0jmJHFAbCZ5Gzcc2pbbHklY
-X-Google-Smtp-Source: AMrXdXsVu9tZH9aEpFTPrGxj623SET9TazA0U7VuGephptWzQv20D90ml/cZSokwL8XmyIJ3Wj/wgSNT3aUNvKZMMg8=
-X-Received: by 2002:a05:6870:970e:b0:148:3c8f:15ab with SMTP id
- n14-20020a056870970e00b001483c8f15abmr4679795oaq.46.1673019058265; Fri, 06
- Jan 2023 07:30:58 -0800 (PST)
+        bh=dQP/5D3LqTosG+7vRYjRg9axW9DC5iFtmMm9kbIA6S4=;
+        b=CdN4LlxeG+Ip6xSvxrwgND2FnBOKb2GZtqcm2qwokbJUI0zcgkRPO2ak3OT+j6DHc3
+         7m372RX3nUSJU6RSdxzLQPJptjObDODvdTiWKtpxam+igEtU9vYCUP02kPaPbpiBpejA
+         b+SG8SqelEl5OMOds/zFtV4O1ELkr19ES6RGBqb5XFrwMCuDeuI50QUT1IVn4dcR/B53
+         g8XyiyS1WBRrQyb5doJxepZaiEHHbdtl9ZHRZLlLMykjrFDOh3KGaRra8TYBA6v5Qk66
+         FMCVdbGpSGa9N7qTl/bHfBWXoQbgQwkiQl97t4qeT5UR3UQg7kdJXA9qQKCrmPuQ3s3R
+         tKYw==
+X-Gm-Message-State: AFqh2kpjbSnTzbRB2YkaZPfVVaDBOULc9BL4A9/Ap75CrAOHGEPTDYcO
+        DvBHc5+b7FiJLK+wE3XmfqUJ8S+R+oU6xiUNL75zbKYm
+X-Google-Smtp-Source: AMrXdXt6dpj7QuAOHVjRNg3OwKlcU9IbOAIKq7saQCRvRCp7g7ul5TQRFSj/Dvy9IjJcARHHPJANMQQ2CkX89JxRfgg=
+X-Received: by 2002:a25:9bc5:0:b0:706:bb2c:837 with SMTP id
+ w5-20020a259bc5000000b00706bb2c0837mr5891970ybo.240.1673019118613; Fri, 06
+ Jan 2023 07:31:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230106013232.25947-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230106013232.25947-1-yang.lee@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 6 Jan 2023 10:30:46 -0500
-Message-ID: <CADnq5_MTfRLcH2EvxYL61pjTEs_VsQnh1Ya_ahSCDZksyFqv5Q@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amdgpu: clean up some inconsistent indentings
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
+References: <20230105030434.255603-1-irogers@google.com> <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+From:   Martin Spier <spiermar@gmail.com>
+Date:   Fri, 6 Jan 2023 07:31:46 -0800
+Message-ID: <CAA6y9eV50Xw6tsq7dDJ61_uNM-yKdN8O+VU=6wcUFr7MGUbOaA@mail.gmail.com>
+Subject: Re: [PATCH v1] perf script flamegraph: Avoid d3-flame-graph package dependency
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        996839@bugs.debian.org, Andreas Gerstmayr <agerstmayr@redhat.com>,
+        Brendan Gregg <brendan@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -69,39 +75,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Thu, Jan 5, 2023 at 1:25 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Wed, Jan 4, 2023 at 7:04 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Currently flame graph generation requires a d3-flame-graph template to
+> > be installed. Unfortunately this is hard to come by for things like
+> > Debian [1]. If the template isn't installed warn and download it from
+> > jsdelivr CDN. If downloading fails generate a minimal flame graph
+> > again with the javascript coming from jsdelivr CDN.
+> >
+> > [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/scripts/python/flamegraph.py | 63 ++++++++++++++++++-------
+> >  1 file changed, 45 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
+> > index b6af1dd5f816..808b0e1c9be5 100755
+> > --- a/tools/perf/scripts/python/flamegraph.py
+> > +++ b/tools/perf/scripts/python/flamegraph.py
+> > @@ -25,6 +25,27 @@ import io
+> >  import argparse
+> >  import json
+> >  import subprocess
+> > +import urllib.request
+> > +
+> > +minimal_html = """<head>
+> > +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
+>
+> (hopefully fixed Martin Spier's e-mail address)
+>
+> The @4.1.3 comes from the README.md:
+> https://github.com/spiermar/d3-flame-graph/blob/master/README.md
+> Does it make sense just to drop it or use @latest ? It'd be nice not
+> to patch this file for every d3-flame-graph update.
+>
+> Thanks,
+> Ian
 
-Alex
+Yes, that's the right email.
 
-On Thu, Jan 5, 2023 at 8:37 PM Yang Li <yang.lee@linux.alibaba.com> wrote:
+Using @latest is an option, but it might be better to just use @4 to
+avoid breaking changes. Not expecting any major releases in the near
+future.
+
+Thanks,
+Martin
+
 >
-> drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c:65 amdgpu_gem_fault() warn: inconsistent indenting
->
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3639
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> index 00edc7002ee8..ed1164a87fce 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> @@ -62,10 +62,10 @@ static vm_fault_t amdgpu_gem_fault(struct vm_fault *vmf)
->                         goto unlock;
->                 }
->
-> -                ret = ttm_bo_vm_fault_reserved(vmf, vmf->vma->vm_page_prot,
-> -                                               TTM_BO_VM_NUM_PREFAULT);
-> +               ret = ttm_bo_vm_fault_reserved(vmf, vmf->vma->vm_page_prot,
-> +                                              TTM_BO_VM_NUM_PREFAULT);
->
-> -                drm_dev_exit(idx);
-> +               drm_dev_exit(idx);
->         } else {
->                 ret = ttm_bo_vm_dummy_page(vmf, vmf->vma->vm_page_prot);
->         }
-> --
-> 2.20.1.7.g153144c
->
+> > +</head>
+> > +<body>
+> > +  <div id="chart"></div>
+> > +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
+> > +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+> > +  <script type="text/javascript">
+> > +  const stacks = [/** @flamegraph_json **/];
+> > +  // Note, options is unused.
+> > +  const options = [/** @options_json **/];
+> > +
+> > +  var chart = flamegraph();
+> > +  d3.select("#chart")
+> > +        .datum(stacks[0])
+> > +        .call(chart);
+> > +  </script>
+> > +</body>
+> > +"""
+> >
+> >  # pylint: disable=too-few-public-methods
+> >  class Node:
+> > @@ -50,15 +71,18 @@ class FlameGraphCLI:
+> >          self.args = args
+> >          self.stack = Node("all", "root")
+> >
+> > -        if self.args.format == "html" and \
+> > -                not os.path.isfile(self.args.template):
+> > -            print("Flame Graph template {} does not exist. Please install "
+> > -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
+> > -                  "package, specify an existing flame graph template "
+> > -                  "(--template PATH) or another output format "
+> > -                  "(--format FORMAT).".format(self.args.template),
+> > -                  file=sys.stderr)
+> > -            sys.exit(1)
+> > +        if self.args.format == "html":
+> > +            if os.path.isfile(self.args.template):
+> > +                self.template = f"file://{self.args.template}"
+> > +            else:
+> > +                print(f"""
+> > +Warning: Flame Graph template '{self.args.template}'
+> > +does not exist, a template will be downloaded via http. To avoid this
+> > +please install a package such as the js-d3-flame-graph or
+> > +libjs-d3-flame-graph, specify an existing flame graph template
+> > +(--template PATH) or another output format (--format FORMAT).
+> > +""", file=sys.stderr)
+> > +            self.template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
+> >
+> >      @staticmethod
+> >      def get_libtype_from_dso(dso):
+> > @@ -129,15 +153,18 @@ class FlameGraphCLI:
+> >              options_json = json.dumps(options)
+> >
+> >              try:
+> > -                with io.open(self.args.template, encoding="utf-8") as template:
+> > -                    output_str = (
+> > -                        template.read()
+> > -                        .replace("/** @options_json **/", options_json)
+> > -                        .replace("/** @flamegraph_json **/", stacks_json)
+> > -                    )
+> > -            except IOError as err:
+> > -                print("Error reading template file: {}".format(err), file=sys.stderr)
+> > -                sys.exit(1)
+> > +                with urllib.request.urlopen(self.template) as template:
+> > +                    output_str = '\n'.join([
+> > +                        l.decode('utf-8') for l in template.readlines()
+> > +                    ])
+> > +            except Exception as err:
+> > +                print(f"Error reading template {self.template}: {err}\n"
+> > +                      "a minimal flame graph will be generated", file=sys.stderr)
+> > +                output_str = minimal_html
+> > +
+> > +            output_str = output_str.replace("/** @options_json **/", options_json)
+> > +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
+> > +
+> >              output_fn = self.args.output or "flamegraph.html"
+> >          else:
+> >              output_str = stacks_json
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
