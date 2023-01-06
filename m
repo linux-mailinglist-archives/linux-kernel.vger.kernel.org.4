@@ -2,115 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA0665FE0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A2F65FE1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjAFJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S229767AbjAFJiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjAFJgI (ORCPT
+        with ESMTP id S232940AbjAFJiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:36:08 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC95C8D38C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:28:04 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id g10so667836wmo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:28:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o62n9NBbSVSiAKonaXoYdKNKA7O0bg5G8XsGNr/A9Rc=;
-        b=tPYq5WRY85k9btPiVrnv2nF1F4k9la5HZRecSieuIdTpbp6MkznWVU0sa19MfcwdmA
-         qiWzMK2gE9soQ168GTB9AImH6iuqp5EM8+buKfArAOnp5X+K3cSfwYKjjFldwmiNjCtU
-         FY0HwG1ViN5QIbyYnemJAiMcxKQp016Ox3Ds2Wu5/6SJ2SrhAxG7dAcdcaIAAAFy1VQl
-         nEiDvP8QjQXeAx6DqwQhX76q9Vky0IfxdrSQOaCYz/41GtDRqAuK80qw/1Yz30427Lvl
-         JScaFZHXdbHlSHq6q5wHPkYBYwdRA62l+hhHPRvFvTCEw74zhDPPoq/+JQhW0pELUV6X
-         S+sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o62n9NBbSVSiAKonaXoYdKNKA7O0bg5G8XsGNr/A9Rc=;
-        b=ZECznSgcwa8BN8LShRz9kyFpSKu23cy6GsFn/me4g6t4cZ5U8FPsSPPQyAOL2htWGk
-         khSp1K9XM2qUUe0/jyjWEqCCm6biC4xDgbiioZqe8cddQPsSR8kD2x+DYsZpCh6sHJ1q
-         bP8tFayw+LI3hJeWAG3bcSENe86tMWM33CbCCNj6muUwpIRIXGLUCknBVbhMU4NcCMx5
-         eEx6K1fCKISa4KmVa8RlcLk2l4WIgui0AIk78bBwjb/m9jhDBLRsyQdsWOFypriFp258
-         axCk2ZGbJ1zFvSAvyChNpbZoc7PV+1Wv8T23iFS//7mL4beqeqiGIVQik1Ysr4Ru/J61
-         XBRQ==
-X-Gm-Message-State: AFqh2kpZtpcq4LeZz/celwQvIeN9Cg+O1eiqTjC0Oc2EaMOyZ1eOcxy6
-        zYPlqYLbIKSVpvmS00QgD7fzhQ==
-X-Google-Smtp-Source: AMrXdXs0JBJ4niKpF4pQfza4ErydKUpKj3bcSZLk7ks5fAlEoOogGLVXZLw1+9PUmKUf3HGg0CMNZA==
-X-Received: by 2002:a05:600c:34cf:b0:3d0:7415:c5a9 with SMTP id d15-20020a05600c34cf00b003d07415c5a9mr40190823wmq.21.1672997282446;
-        Fri, 06 Jan 2023 01:28:02 -0800 (PST)
-Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b003d9780466b0sm1125082wmq.31.2023.01.06.01.28.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 01:28:02 -0800 (PST)
-Message-ID: <9bbd5343-30bc-1146-3296-2c3a43b9a91b@linaro.org>
-Date:   Fri, 6 Jan 2023 10:28:00 +0100
+        Fri, 6 Jan 2023 04:38:00 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 400817C825;
+        Fri,  6 Jan 2023 01:29:04 -0800 (PST)
+Received: from loongson.cn (unknown [111.207.111.194])
+        by gateway (Coremail) with SMTP id _____8BxrOrf6bdj2A4AAA--.43S3;
+        Fri, 06 Jan 2023 17:29:03 +0800 (CST)
+Received: from loongson.. (unknown [111.207.111.194])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxD7_X6bdjVSgVAA--.63411S2;
+        Fri, 06 Jan 2023 17:29:00 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+Date:   Fri,  6 Jan 2023 17:28:53 +0800
+Message-Id: <20230106092853.26038-1-zhanghongchen@loongson.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] dt-bindings: usb: Correct and extend FOTG210 schema
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>
-References: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org>
- <20230103-gemini-fotg210-usb-v1-1-f2670cb4a492@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103-gemini-fotg210-usb-v1-1-f2670cb4a492@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxD7_X6bdjVSgVAA--.63411S2
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3XFykGw43tw4xCw17GF1rWFg_yoW7Ww48pa
+        13KFW7WrWUAr18urW8GrsxZr1ag398Wa1UJrW8GF4FvFnrGrySqFs2kFyakFn5JrZ7ZryY
+        vF4jqa4Fyr1UArDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AF
+        wI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
+        14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7
+        AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 00:35, Linus Walleij wrote:
-> It turns out that this IP block exists in at least two
-> incarnations: FOTG200 and FOTG210. The one in the Gemini
-> is FOTG200, so add the variants and rectify the binding
-> for Gemini.
-> 
-> This affects things such as the placement of certain
-> registers.
-> 
-> It remains to be seen how similar this block is to the
-> third USB block from Faraday, FUSB220.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/faraday,fotg210.yaml | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml b/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
-> index 84b3b69256b1..12d4fc742f20 100644
-> --- a/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
-> +++ b/Documentation/devicetree/bindings/usb/faraday,fotg210.yaml
-> @@ -5,7 +5,7 @@
->  $id: http://devicetree.org/schemas/usb/faraday,fotg210.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Faraday Technology FOTG210 HS OTG USB 2.0 controller
-> +title: Faraday Technology FOTG200 series HS OTG USB 2.0 controller Bindings
+Use spinlock in pipe_read/write cost too much time,IMO
+pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+On the other hand, we can use __pipe_{lock,unlock} to protect
+the pipe->{head,tail} in pipe_resize_ring and
+post_one_notification.
 
-That's not correct change, probably due to rebasing. Change the name
-only, do not add "Bindings".
+I tested this patch using UnixBench's pipe test case on a x86_64
+machine,and get the following data:
+1) before this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     493023.3    396.3
+                                                        ========
+System Benchmarks Index Score (Partial Only)              396.3
 
+2) after this patch
+System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+Pipe Throughput                   12440.0     507551.4    408.0
+                                                        ========
+System Benchmarks Index Score (Partial Only)              408.0
 
-Best regards,
-Krzysztof
+so we get ~3% speedup.
+
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+---
+ fs/pipe.c                 | 22 +---------------------
+ include/linux/pipe_fs_i.h | 10 ++++++++++
+ kernel/watch_queue.c      |  8 ++++----
+ 3 files changed, 15 insertions(+), 25 deletions(-)
+
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 42c7ff41c2db..4355ee5f754e 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
+ }
+ EXPORT_SYMBOL(pipe_unlock);
+ 
+-static inline void __pipe_lock(struct pipe_inode_info *pipe)
+-{
+-	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+-}
+-
+-static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+-{
+-	mutex_unlock(&pipe->mutex);
+-}
+-
+ void pipe_double_lock(struct pipe_inode_info *pipe1,
+ 		      struct pipe_inode_info *pipe2)
+ {
+@@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 	 */
+ 	was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+ 	for (;;) {
+-		/* Read ->head with a barrier vs post_one_notification() */
+-		unsigned int head = smp_load_acquire(&pipe->head);
++		unsigned int head = pipe->head;
+ 		unsigned int tail = pipe->tail;
+ 		unsigned int mask = pipe->ring_size - 1;
+ 
+@@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ 
+ 			if (!buf->len) {
+ 				pipe_buf_release(pipe, buf);
+-				spin_lock_irq(&pipe->rd_wait.lock);
+ #ifdef CONFIG_WATCH_QUEUE
+ 				if (buf->flags & PIPE_BUF_FLAG_LOSS)
+ 					pipe->note_loss = true;
+ #endif
+ 				tail++;
+ 				pipe->tail = tail;
+-				spin_unlock_irq(&pipe->rd_wait.lock);
+ 			}
+ 			total_len -= chars;
+ 			if (!total_len)
+@@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ 			 * it, either the reader will consume it or it'll still
+ 			 * be there for the next write.
+ 			 */
+-			spin_lock_irq(&pipe->rd_wait.lock);
+ 
+ 			head = pipe->head;
+ 			if (pipe_full(head, pipe->tail, pipe->max_usage)) {
+-				spin_unlock_irq(&pipe->rd_wait.lock);
+ 				continue;
+ 			}
+ 
+ 			pipe->head = head + 1;
+-			spin_unlock_irq(&pipe->rd_wait.lock);
+ 
+ 			/* Insert it into the buffer array */
+ 			buf = &pipe->bufs[head & mask];
+@@ -1260,14 +1244,12 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+ 	if (unlikely(!bufs))
+ 		return -ENOMEM;
+ 
+-	spin_lock_irq(&pipe->rd_wait.lock);
+ 	mask = pipe->ring_size - 1;
+ 	head = pipe->head;
+ 	tail = pipe->tail;
+ 
+ 	n = pipe_occupancy(head, tail);
+ 	if (nr_slots < n) {
+-		spin_unlock_irq(&pipe->rd_wait.lock);
+ 		kfree(bufs);
+ 		return -EBUSY;
+ 	}
+@@ -1303,8 +1285,6 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+ 	pipe->tail = tail;
+ 	pipe->head = head;
+ 
+-	spin_unlock_irq(&pipe->rd_wait.lock);
+-
+ 	/* This might have made more room for writers */
+ 	wake_up_interruptible(&pipe->wr_wait);
+ 	return 0;
+diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+index 6cb65df3e3ba..baae3d062422 100644
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -223,6 +223,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
+ #define PIPE_SIZE		PAGE_SIZE
+ 
+ /* Pipe lock and unlock operations */
++static inline void __pipe_lock(struct pipe_inode_info *pipe)
++{
++	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
++}
++
++static inline void __pipe_unlock(struct pipe_inode_info *pipe)
++{
++	mutex_unlock(&pipe->mutex);
++}
++
+ void pipe_lock(struct pipe_inode_info *);
+ void pipe_unlock(struct pipe_inode_info *);
+ void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index a6f9bdd956c3..92e46cfe9419 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
+ 	if (!pipe)
+ 		return false;
+ 
+-	spin_lock_irq(&pipe->rd_wait.lock);
++	__pipe_lock(pipe);
+ 
+ 	mask = pipe->ring_size - 1;
+ 	head = pipe->head;
+@@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
+ 	buf->offset = offset;
+ 	buf->len = len;
+ 	buf->flags = PIPE_BUF_FLAG_WHOLE;
+-	smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
++	pipe->head = head + 1;
+ 
+ 	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
+-		spin_unlock_irq(&pipe->rd_wait.lock);
++		__pipe_unlock(pipe);
+ 		BUG();
+ 	}
+ 	wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+ 	done = true;
+ 
+ out:
+-	spin_unlock_irq(&pipe->rd_wait.lock);
++	__pipe_unlock(pipe);
+ 	if (done)
+ 		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+ 	return done;
+-- 
+2.34.1
 
