@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237386608AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0016608AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbjAFVPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S235773AbjAFVPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjAFVO7 (ORCPT
+        with ESMTP id S230497AbjAFVPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:14:59 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1007381C2E
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 13:14:59 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id e21so1995691pfl.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 13:14:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CwOLnK2ifzFuyr165LNzqz5GnvMFyliD+SS3u04GcaQ=;
-        b=fQ3uOApcxQR/IsZivYDkfhBOj3GhwFU3tAsLTFuEVAPRPR10Inv7wS4kVorYVsJLlG
-         8n0xE/1sTmVOH0hu+adBfEjI8JaSxtmQsvOScWoHbuCb/zC7iXJRmVjUi/zMHRyp1Woj
-         aIkxixCOv2op1sVjyL0pqY0STzhYHHIKifcn+SV2YQ7lkhVjAP0pQ0BDvW7rWSaf9BcM
-         FbrWjT1sIdJKfH5SiffG/z0ZWEfSoZqDaCViQqjeNsv5lVZHXzUN/xFq4XiDMSOWk69M
-         Dl+f8JPEzAA1dBCgkT8/ssw8M92FVA43pnEzRE7ZHzoxOquhEfiJ7M967D5W8gGtWKtV
-         vDKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CwOLnK2ifzFuyr165LNzqz5GnvMFyliD+SS3u04GcaQ=;
-        b=koMJA181cbtC5CM8dCP2KKGK9ekUbWBplSMAJdQmJF+FHw9iqUoVt8gT5fHD0YCUGW
-         aGVNwQi3LQpRnF4PLPK1qvyWWdebkKMy7Ujc1Iv3qZ2VfkY3Bt26Pfg1lEi4PhL0cRlz
-         TOaBMYnsiC7Oec6YKaWODOIpH+rr1+G/qmG46BYuAUnzP6vejUEOrkQkhdnZZO6Q20cn
-         oml8U4FZyXZ4vgz/xyNY0ZWmU4yuL6wSGu2cVr19I8V2kbqOdVPx7o6vOPb3e6vr2Hq7
-         bnIo+SyesRyrGLBxBveTwvEwJJVTAQ2xG3/NgdJ7hZA00LJ90/ArgzHmEaR7TzggQbd8
-         115A==
-X-Gm-Message-State: AFqh2kqwtaPpN+d7eC5fj/WqOf5A8Cd0YG/hhMmqxHyqrUJYg/7EGFN1
-        r6DdZ7ySwRmOrF1QAIpCtkdf6FAMQ1ABpvj1hXY8
-X-Google-Smtp-Source: AMrXdXunbq8svWmpL5uzJpDIG9dH1bnChWXrVS5uoNEeJGgqDMuv7i47INaTjXl1feUFwaMf91aGmisI+GELaFzB0V8=
-X-Received: by 2002:a05:6a00:1345:b0:582:5f1a:97c2 with SMTP id
- k5-20020a056a00134500b005825f1a97c2mr1477126pfu.3.1673039698452; Fri, 06 Jan
- 2023 13:14:58 -0800 (PST)
+        Fri, 6 Jan 2023 16:15:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F9B81D56;
+        Fri,  6 Jan 2023 13:15:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE487B81E44;
+        Fri,  6 Jan 2023 21:14:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CA7C433D2;
+        Fri,  6 Jan 2023 21:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673039697;
+        bh=7GNxN3gsKz7ckSvjJ4+A1vUxvCZwJtjbQuQzb2hGY60=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MMtyeXWabLDMPgMF4+nOH1wV6HSKg/fA7FzabkE8Oe06a4xjktRuyD1Ra74LIiuYZ
+         13mSR7oewG0MtNjvuXZarHNbBkH9n4JlmbB43YA1Pu/EB6iEKSZfk39JsDevzOaLNu
+         ofI8qty68KhWGF3g5cvXP5fwxMeFCCOkQaHmduL+K73eagHXSYmTEI6MigVViiF4mH
+         L35QIi+JDp2m/qvJ6NYiPMyi3i8u95svnXDw9sRZveFtRVf/x9xVN4g/XLFHUu3aoF
+         AusAKQh7nH7FK8zSGnLbIi47wx7EA/J0bjnqCRqbgpvj2lrwPFr9AmAi3yPBdkl7Jp
+         9IZ1OEItjRWcQ==
+Date:   Fri, 6 Jan 2023 21:14:51 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
+ property
+Message-ID: <Y7iPS48viBg0QRok@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-4-william.zhang@broadcom.com>
 MIME-Version: 1.0
-References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 6 Jan 2023 16:14:47 -0500
-Message-ID: <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
-Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BxXeJB9XJtZjxHDf"
+Content-Disposition: inline
+In-Reply-To: <20230106200809.330769-4-william.zhang@broadcom.com>
+X-Cookie: Do not fold, spindle or mutilate.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,72 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Commit 98de59bfe4b2f ("take calculation of final prot in
-> security_mmap_file() into a helper") moved the code to update prot with the
-> actual protection flags to be granted to the requestor by the kernel to a
-> helper called mmap_prot(). However, the patch didn't update the argument
-> passed to ima_file_mmap(), making it receive the requested prot instead of
-> the final computed prot.
->
-> A possible consequence is that files mmapped as executable might not be
-> measured/appraised if PROT_EXEC is not requested but subsequently added in
-> the final prot.
->
-> Replace prot with mmap_prot(file, prot) as the second argument of
-> ima_file_mmap() to restore the original behavior.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/security.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/security.c b/security/security.c
-> index d1571900a8c7..0d2359d588a1 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
->                                         mmap_prot(file, prot), flags);
->         if (ret)
->                 return ret;
-> -       return ima_file_mmap(file, prot);
-> +       return ima_file_mmap(file, mmap_prot(file, prot));
->  }
 
-This seems like a reasonable fix, although as the original commit is
-~10 years old at this point I am a little concerned about the impact
-this might have on IMA.  Mimi, what do you think?
+--BxXeJB9XJtZjxHDf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Beyond that, my only other comment would be to only call mmap_prot()
-once and cache the results in a local variable.  You could also fix up
-some of the ugly indentation crimes in security_mmap_file() while you
-are at it, e.g. something like this:
+On Fri, Jan 06, 2023 at 12:07:55PM -0800, William Zhang wrote:
 
-diff --git a/security/security.c b/security/security.c
-index d1571900a8c7..2f9cad9ecac8 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1662,11 +1662,12 @@ int security_mmap_file(struct file *file, unsigned long
-prot,
-                       unsigned long flags)
-{
-       int ret;
--       ret = call_int_hook(mmap_file, 0, file, prot,
--                                       mmap_prot(file, prot), flags);
-+       unsigned long prot_adj = mmap_prot(file, prot);
-+
-+       ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
-       if (ret)
-               return ret;
--       return ima_file_mmap(file, prot);
-+       return ima_file_mmap(file, prot_adj);
-}
+> brcm,no-clk-gate is a Broadcom Broadband HS SPI controller specific
+> property for certain SPI device such as Broadcom ISI voice daughtercard
+> to work properly. It disables the clock gating feature when the chip
+> select is deasserted for any device that wants to keep the clock
+> running.
 
---
-paul-moore.com
+Why would this property be Broadcom specific?  Other devices could in
+theory implement this.
+
+> +properties:
+> +  brcm,no-clk-gate:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Some SPI device such as Broadcom ISI based voice daughtercard requires SPI
+> +      clock running even when chip select is deasserted. By default the
+> +      controller turns off or gate the clock when cs is not active to save
+> +      power. This flag tells the controller driver to keep the clock running
+> +      when chip select is not active.
+
+This seems problematic with any host controlled chip select support...
+
+--BxXeJB9XJtZjxHDf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO4j0oACgkQJNaLcl1U
+h9BIWgf/dihY/phVPCas+x/J3zN4PzuHT1GA+ZnnnM4zDpB7C5rGVTrCRnw0sCv/
+1UAmf6yaPRwRTlfd2OYlVpVzEGhRRgrMkYlJoU/bpzOVIOI00lHE+kJJpDonUWtq
+hDQHSwPHxuNBeEa2EP6MFco6q/InCrji4nvDE4VLsH1IMjA6gqpplGDPFzRVAKAX
+8dbRqhsk452doujt6sRXYhEkBcOJ+SSddDNMC3tgHeXNPFYjaXaqyPWAIgA7h9qU
+IMNCL1wIs/sGb8OTCJa4Yuw4hTbrZceKG1hi73ZQaS++6zw6Y/X1pXKhyxIihc9K
+IrlWTZZAn+ZRRQ1BNTz0GL7rqaZ+1g==
+=eY8r
+-----END PGP SIGNATURE-----
+
+--BxXeJB9XJtZjxHDf--
