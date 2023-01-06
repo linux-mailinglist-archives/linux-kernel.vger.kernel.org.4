@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D35660101
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B535866010D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjAFNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S233148AbjAFNQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjAFNOj (ORCPT
+        with ESMTP id S229968AbjAFNQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:14:39 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E5045656
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:14:38 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id a64so1421193vsc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:14:38 -0800 (PST)
+        Fri, 6 Jan 2023 08:16:41 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC566B5F4
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:16:40 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id bp26so984185ilb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRSichjsSpl7nn5VML7hlKwtWCxMGkZW9sF0ceCpu7Y=;
-        b=7nOV/pGUMtVuAg1wKzMZoJfLp+ifawDysT1k1gSKBnWNmZxkNlDd+a9s4ja2CzEzdJ
-         ewZnZ2O3WCbXCqHy6TZO/py3dGt2C+U7slBz7sP6qeoaOzc39Uuz5nGDLtwc3m099+Ba
-         8Z9AHA/Cb6lncQEDvS6LzH3vDS3i79asj/1VypjVxg7qQuTGxAaWiuKvNl+4D6R1wmoK
-         OHQYm1kXGZLLPW4mskl74LpBC2/eb1aYTC7BRu+SGUu/B84EQC58uVxczdDUNbnVT+ic
-         QyYkKm88vf1vmOk4xMsEfWHHXrDXOXxha6SDlhxu4IBkwSrD7qs2X0/OdJai0afC9zxV
-         Zs1w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s1LywjUroOs2NrgqtOKf4lPkuoCqOIhLUrwwnpXq1Ks=;
+        b=g71f0MKyl7a4tKOomdOmTJosMPOmmoETipJ3XedVA0ZPudtpAMibVUAveJ+s/XnOIh
+         wSLX93JPFrBPG1M/fGfXuNGBOohMyB/AtCZHJjU2NrqHQjHprIXtrX+/6t+njlpZDoBi
+         PwUaMstLzXPCeTofwqJz4Gg9dCsKkx7wUrVEXcuhoaZHb8nPdplPBFNlyqL7molaMA3L
+         d8kAMsQIOD0BQmOWqL6DWDT1dKZbjr2tYyZOv73eI6YZz9QDOJgHRZ4yTxId2vvGvZeP
+         fEUg+b3cT4saYg2VCgIUD2H2FlkOizKlnX9hbNcqgEbW9G0WiwT3GnoBTOHL/L/8pOsi
+         jx6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kRSichjsSpl7nn5VML7hlKwtWCxMGkZW9sF0ceCpu7Y=;
-        b=dZhMoaQT1mRcg2NqynxpBTcJaz7TGIBfkEWJgRPOXZzSL7vKdmT3XIvHopKL6ShE+i
-         mQdx2cPW+ALD6HSwBt9v6qdCKUishi0wGhI/izVLpuQGC66SHd4EtzNKLgUnxsp7Dphz
-         SIzpDWbdqjsyP1NlN0e6OLig9+BKWlXnkCAoA+8fmdMGAMpB4/x9jVYpwYj/SqFgWpc+
-         1CWiO/XSgI55m4ikDLH4OsM2TXn47SfDPFdS47BYdGUNILT5A1mBwwR9gqnZ8tz8iaNl
-         Vg+rvwa+vM92ZVORdms3DM0beVFkxiuH1+jSRI+lZsPER7Nu5f86oFJAAFV88awG73BI
-         XV0g==
-X-Gm-Message-State: AFqh2krBiRSQ2IeExxWwpj6XynRlfslKV/BMBEdMMgeLeVT/r/I26LoE
-        yudkSEjY2C/9IM4UqRICCG1ZeJ0zpvpJoi+4KXIrtg==
-X-Google-Smtp-Source: AMrXdXu7UBvoVaA3py91tPW1+5NfFOXh7jkcGj9+qlFVxuoA0psBokCY/DlLkdH01j7W9wipaLbbX/zr3ecBEiacoO4=
-X-Received: by 2002:a67:f642:0:b0:3c4:ec4b:b943 with SMTP id
- u2-20020a67f642000000b003c4ec4bb943mr6737873vso.17.1673010877549; Fri, 06 Jan
- 2023 05:14:37 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1LywjUroOs2NrgqtOKf4lPkuoCqOIhLUrwwnpXq1Ks=;
+        b=CFnrNj41QQYlMfjqeqilITIGNRmfAweX2kgva0xjdFGou4A2kGF5BjM1re5KR9X4iw
+         KpZhPxD2Bip4xLgu/2ScFNroVKC8i9f639lNyeBIRVKYYwKxb6wjLMHQ4NNTWCgCm7bQ
+         sRB954GM85+vEd90saffQOXZL+royLtszmNWGTRHHNOvSQTKgBcYZw4rmlqeGG9zruuw
+         23OjKXjXkgy6icxZ2/vwQlXTtXnbNUv0uLVRmfnsEEnams2bpJKMOoJY/AX/hn4jWs7N
+         DNnQKse2ksNJ7i+IJbNbxFORngIPwdZV8ee4B46I2PLGQHcE0wV76qCRrDv5jsG9EPQx
+         RS9w==
+X-Gm-Message-State: AFqh2kr8WlF9DuIDJLz6PEcGOtIQ9+4iR0WKqokSOQsmdViRGXEmFO8V
+        POGxMDyI+ZAmz2HrMJ1GrQW8xw==
+X-Google-Smtp-Source: AMrXdXsOg9ULNlsfpIyZ479J8TePmgEgGfziF3VIkTGzJr4CTw24cyLNhgMwW3ul6hcuQZ1AVUKm0g==
+X-Received: by 2002:a92:6e10:0:b0:30c:44bb:8d23 with SMTP id j16-20020a926e10000000b0030c44bb8d23mr13007747ilc.2.1673010999918;
+        Fri, 06 Jan 2023 05:16:39 -0800 (PST)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id a17-20020a92d591000000b0030be6c79645sm362853iln.68.2023.01.06.05.16.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 05:16:39 -0800 (PST)
+Message-ID: <04bf6bd1-1150-ac57-5a8d-a9971148bd40@linaro.org>
+Date:   Fri, 6 Jan 2023 07:16:38 -0600
 MIME-Version: 1.0
-References: <20230105150603.2810510-1-michael@walle.cc>
-In-Reply-To: <20230105150603.2810510-1-michael@walle.cc>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 6 Jan 2023 14:14:26 +0100
-Message-ID: <CAMRc=McEin9uXOFEeB1=oDKmUTu+hvKoaUGjCx-7Prc7RXubJw@mail.gmail.com>
-Subject: Re: [PATCH RESEND] gpio: regmap: use new regmap_might_sleep()
-To:     Michael Walle <michael@walle.cc>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next] net: ipa: correct IPA v4.7 IMEM offset
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        luca.weiss@fairphone.com, konrad.dybcio@linaro.org,
+        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230104181017.2880916-1-elder@linaro.org>
+ <20230105215806.4c192dad@kernel.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20230105215806.4c192dad@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 4:06 PM Michael Walle <michael@walle.cc> wrote:
->
-> Now that the regmap can be queried whether it might sleep, we can get
-> rid of the conservative setting "can_sleep = true". New drivers which
-> want to use gpio-regmap and can access the registers memory-mapped won't
-> have the restriction that their consumers have to use the
-> gpiod_*cansleep() variants anymore.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/gpio/gpio-regmap.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
-> index f907c9c19fce..fca17d478984 100644
-> --- a/drivers/gpio/gpio-regmap.c
-> +++ b/drivers/gpio/gpio-regmap.c
-> @@ -254,15 +254,7 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
->         chip->ngpio = config->ngpio;
->         chip->names = config->names;
->         chip->label = config->label ?: dev_name(config->parent);
-> -
-> -       /*
-> -        * If our regmap is fast_io we should probably set can_sleep to false.
-> -        * Right now, the regmap doesn't save this property, nor is there any
-> -        * access function for it.
-> -        * The only regmap type which uses fast_io is regmap-mmio. For now,
-> -        * assume a safe default of true here.
-> -        */
-> -       chip->can_sleep = true;
-> +       chip->can_sleep = regmap_might_sleep(config->regmap);
->
->         chip->get = gpio_regmap_get;
->         if (gpio->reg_set_base && gpio->reg_clr_base)
-> --
-> 2.30.2
->
+On 1/5/23 11:58 PM, Jakub Kicinski wrote:
+> On Wed,  4 Jan 2023 12:10:17 -0600 Alex Elder wrote:
+>> Note:  This fixes a commit that first landed in v6.2-rc1.
+> 
+> Why is it tagged for net-next then? 🤔️
+> Let's treat it as a normal fix with a Fixes tag and for net.
+> I reckon the commit message makes is sufficiently clear that
+> I'm to blame :)
 
-Applied, thanks!
+Sorry about that, I was confused, thinking it is only
+needed in 6.2-rc--the current release cycle.  But that's
+not the way it works.  I guess I wasn't fully recovered
+from the holiday break.
 
-Bart
+I'll re-send and base it on net/master.  Thanks.
+
+					-Alex
