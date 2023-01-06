@@ -2,118 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E638666045E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B787660460
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbjAFQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S235511AbjAFQh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbjAFQhW (ORCPT
+        with ESMTP id S233398AbjAFQh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:37:22 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB4878A5D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:37:20 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g10so1439712wmo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 08:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G2/wW8oWU2UO8G+hBvXbq+ylbwBDQdJAzgI/Jam/m+c=;
-        b=P0csNwpg9MOjalR15dbOZ1LUq6TdUofEE7438rE/cpAX6qEn5+mMoWvJXJC6ZpwDXi
-         EARyvmG1YWxE3zP8yqecpslPwHBQqDrVX25OOeNKcNA4wogZKUTF21SDNUxtcohel9tV
-         uyrmTwytfXzK01YXqFqnvwRbqTmq1slYryNo/Rr9NvXFfeJfSIv/Vmi2tlxrQ/Vq6vX8
-         2FVWVdbganGHT5PwcT5KSp1Z2Bh+9KufRjFHVx4f1iL9FdE9z650VAAIsK053hbFtN38
-         WjudDhMIuOe+JqvyoB12nLnQzAfugau3CkZyjmbbxBmEnWdKrqVrcPp3S78J0Vydyz/y
-         FWmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G2/wW8oWU2UO8G+hBvXbq+ylbwBDQdJAzgI/Jam/m+c=;
-        b=H6qlMfz14IZgkHJeV7flG+fU4LHdFzfGiweM3s+xhpXhiI1LBVt9tsJ4KGcaxcSgQA
-         LR2LX7q9ibm7EcbnO4Ic6HLQ1XDbxRKjpHeuNug/CjuCqE2NJOE7PqhA+lNiqGBnRe3i
-         9SJChwXHVrSkUtgBMTntgT4gwXG2J2y/7GRbhTcwevgpHD4kGQGqvsS3tW8cx2aNYjH7
-         INzkxfGLZZ8JBBQ6YT5fcG8AbWcm6IH3uqYpS92ERC2Oi8WDp0gmPDwwdWl4xVTE5nCZ
-         I6s0eeRmYy1Z0ZnH+SLMnpEBGiDbKqj1owIaeoIxwe4zJpu+eJyZ13TEy/KTobZy7To4
-         a6ew==
-X-Gm-Message-State: AFqh2kr/N3zYQRwhw5JM0DA1L+TVMtcWLB1yed17pKhahByTt4vGKuCh
-        716Z5qoN6K0qjzZEcT7jKv0jKA==
-X-Google-Smtp-Source: AMrXdXvPO6YvRPMFNA4tbcS1PTYl42JBHmgSt22BHUKuhzVUtPqixbPCPJIe9ANjVG/6QbqyJYPZYw==
-X-Received: by 2002:a05:600c:4d21:b0:3d2:2a72:2573 with SMTP id u33-20020a05600c4d2100b003d22a722573mr40022929wmp.11.1673023039183;
-        Fri, 06 Jan 2023 08:37:19 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l7-20020a5d6747000000b002b57bae7174sm1617699wrw.5.2023.01.06.08.37.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 08:37:18 -0800 (PST)
-Message-ID: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
-Date:   Fri, 6 Jan 2023 17:37:17 +0100
+        Fri, 6 Jan 2023 11:37:56 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C3E78A4C;
+        Fri,  6 Jan 2023 08:37:54 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 1AEA4100007;
+        Fri,  6 Jan 2023 16:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1673023073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wOlG0UFgwPyHibvWeKLz0mSVirAtrO9tROfk5VrpIi4=;
+        b=o/IsLhnuzz4J7IXPyjgToH+TVV87KVOB9oVq/yOCwg8YQW/N5lo2nZPqNeEicVLH0eMV1H
+        zDq1AKJXZyuesBSs/CeLdn9l6y4NTl8zMsqTQFxlkF7aP5Xuj1hZGDlBE2WYInDaNd7ylw
+        31VZif0xxfQ/QADxsHUYFm+ayTZT7/cuVvR/+DFAfdvcHTuqETOo+iQzS0ioTKW8ZxrQbf
+        SPllV1GWfvc1WxlkCgbPXonrIxWainYN2NsgiomhU6lxG/keik6Qss6p8PJj8BScMAV6bF
+        pN19xO8A/S3ipyUnT33HEnWuWIraQAskoJx1KhsbUgsy50c3MGjQP3XPRlehIg==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v2 00/10] Add the PowerQUICC audio support using the QMC
+Date:   Fri,  6 Jan 2023 17:37:36 +0100
+Message-Id: <20230106163746.439717-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Annoying message on the console for the db845c board
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-Hi all,
+This series adds support for audio using the QMC controller
+available in some Freescale PowerQUICC SoCs.
 
-Does anyone have an idea on how to fix these timeout messages ? They are 
-displayed again and again every 5 seconds and that saturates the 
-filesystem after awhile.
+This series contains three parts in order to show the different
+blocks hierarchy and their usage in this support.
 
-...
-[   24.662181] qcom-q6v5-mss 4080000.remoteproc: start timed out
-[   24.768150] qcom-q6v5-mss 4080000.remoteproc: port failed halt
-[   24.777618] remoteproc remoteproc0: can't start rproc 
-4080000.remoteproc: -110
-[   24.785022] remoteproc remoteproc0: Boot failed: -110
-[   24.833657] remoteproc remoteproc0: powering up 4080000.remoteproc
-[   24.840126] remoteproc remoteproc0: Booting fw image 
-qcom/sdm845/mba.mbn, size 238304
-[   24.897361] qcom-q6v5-mss 4080000.remoteproc: MBA booted without 
-debug policy, loading mpss
-[   31.573938] qcom-q6v5-mss 4080000.remoteproc: start timed out
-[   31.680229] qcom-q6v5-mss 4080000.remoteproc: port failed halt
-[   31.689683] remoteproc remoteproc0: can't start rproc 
-4080000.remoteproc: -110
-[   31.697070] remoteproc remoteproc0: Boot failed: -110
-[   31.765283] remoteproc remoteproc0: powering up 4080000.remoteproc
-[   31.771758] remoteproc remoteproc0: Booting fw image 
-qcom/sdm845/mba.mbn, size 238304
-[   31.820553] qcom-q6v5-mss 4080000.remoteproc: MBA booted without 
-debug policy, loading mpss
-....
+The first one is related to TSA (Time Slot Assigner).
+The TSA handles the data present at the pin level (TDM with up
+to 64 time slots) and dispatchs them to one or more serial
+controller (SCC).
 
-Thanks
-   -- Daniel
+The second is related to QMC (QUICC Multichannel Controller).
+The QMC handles the data at the serial controller (SCC) level
+and splits again the data to creates some virtual channels.
+
+The last one is related to the audio component (QMC audio).
+It is the glue between the QMC controller and the ASoC
+component. It handles one or more QMC virtual channels and
+creates one DAI per QMC virtual channels handled.
+
+Compared to the v1 series, this v2 series fixes errors raised
+by the test kernel robot.
+
+Best regards,
+Herve Codina
+
+Changes v1 -> v2:
+  - patch 2 and 6
+    Fix kernel test robot errors
+
+  - other patches
+    No changes
+
+Herve Codina (10):
+  dt-bindings: soc: fsl: cpm_qe: Add TSA controller
+  soc: fsl: qe: Add support for TSA
+  MAINTAINERS: add the Freescale TSA controller entry
+  powerpc/8xx: Use a larger CPM1 command check mask
+  dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+  soc: fsl: qe: Add support for QMC
+  MAINTAINERS: add the Freescale QMC controller entry
+  dt-bindings: sound: Add support for QMC audio
+  ASoC: fsl: Add support for QMC audio
+  MAINTAINERS: add the Freescale QMC audio entry
+
+ .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      |  167 ++
+ .../bindings/soc/fsl/cpm_qe/fsl,tsa.yaml      |  262 +++
+ .../bindings/sound/fsl,qmc-audio.yaml         |  110 ++
+ MAINTAINERS                                   |   25 +
+ arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+ drivers/soc/fsl/qe/Kconfig                    |   23 +
+ drivers/soc/fsl/qe/Makefile                   |    2 +
+ drivers/soc/fsl/qe/qmc.c                      | 1493 +++++++++++++++++
+ drivers/soc/fsl/qe/tsa.c                      |  783 +++++++++
+ drivers/soc/fsl/qe/tsa.h                      |   43 +
+ include/dt-bindings/soc/fsl-tsa.h             |   15 +
+ include/soc/fsl/qe/qmc.h                      |   71 +
+ sound/soc/fsl/Kconfig                         |    9 +
+ sound/soc/fsl/Makefile                        |    2 +
+ sound/soc/fsl/fsl_qmc_audio.c                 |  731 ++++++++
+ 15 files changed, 3737 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ create mode 100644 drivers/soc/fsl/qe/qmc.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.h
+ create mode 100644 include/dt-bindings/soc/fsl-tsa.h
+ create mode 100644 include/soc/fsl/qe/qmc.h
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.38.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
