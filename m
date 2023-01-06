@@ -2,129 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6CA65F82D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099B565F82F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbjAFAcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 19:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S236310AbjAFAfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 19:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236211AbjAFAcq (ORCPT
+        with ESMTP id S235658AbjAFAfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 19:32:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACD251304;
-        Thu,  5 Jan 2023 16:32:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 Jan 2023 19:35:14 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CD551304;
+        Thu,  5 Jan 2023 16:35:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E9561BC8;
-        Fri,  6 Jan 2023 00:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8025DC433F0;
-        Fri,  6 Jan 2023 00:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672965164;
-        bh=c0ecRMbUF6rl3SYarCW/FhvoXm6cemNd5r6GhYd+FYk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=XCdhcjEKbYRZDLEjDkx7gkh7OO4bF4Bis1P0gcAukKDmXQSWn/DsPQDRYlr9iEjOL
-         oCcFi30aIZ8kawIAbR0JrzdI830c9ZRlQ9qRZbecc8jeGtWjBAgB6BneCLOzVfTjgh
-         zEukt0z/Rky+9moufXUOEMxwBOM1sKXndlzVOeXzWYcF+YcIP0K1gQmkaFEJhWAF34
-         72zZCI6pQfnjKWkcblGD7xddcai2NG8IuQvY4ZB+qolPotCkdM51fDP+MjziCA/yJx
-         eTL2NrBPLyuayYUMSN9lAbR1+VSGKBe+6Im7UhDoRwzAzCN22r1f3Hh/RDs5Wa5Dj+
-         HgXrQsv1NY3sg==
-Date:   Thu, 5 Jan 2023 18:32:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, bhelgaas@google.com,
-        hdegoede@redhat.com, kernelorg@undead.fr, kjhambrick@gmail.com,
-        2lprbe78@duck.com, nicholas.johnson-opensource@outlook.com.au,
-        benoitg@coeus.ca, mika.westerberg@linux.intel.com,
-        wse@tuxedocomputers.com, mumblingdrunkard@protonmail.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        david.e.box@intel.com, yunying.sun@intel.com,
-        Tony Luck <tony.luck@intel.com>, dave.jiang@intel.com
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230106003242.GA1184026@bhelgaas>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Np49p4pZJz4xHV;
+        Fri,  6 Jan 2023 11:35:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1672965310;
+        bh=QsNb/dZSl0i/GsaVdWZJ0dRUuCpM7s2aweu/6a6ssAs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=krkcu8KJPbnR7HmQ8lO1K+j+2+f5NtCCEJI6k76fH02wgKn9JMcyVse9xlLlDieU3
+         7JS3nszI9vnbjRVsI7OpYod8qSSmNYPg934CI2IPWFd2rsSDTXjfaSZ4O+99P1TCPl
+         h1+xl43NVF7Gi6nNVHB6muRRy6C6VMgksZC/yYcDvbyITuBDS9m8XJkIrNTQ8L1uIU
+         AxjqzHUD1jqUuCD0QXMp41QMRe1BvytrVQpR4bTrsRmxfRRaGJZTfAS79ux/p1VVtF
+         Fprgjjj2SAf5ztJbt0Ya9/XFHEFI0oZtYsA4UskE3A4Wu5teWVpQLxk7Qg9L14PKFI
+         Dbhky9qrc3tZQ==
+Date:   Fri, 6 Jan 2023 11:35:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the backlight tree
+Message-ID: <20230106113509.5c101b53@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63b75f8083b79_c81f02949b@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Rc4wOj2XaBsdv9.Y9yMiBYY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 03:38:40PM -0800, Dan Williams wrote:
-> Bjorn Helgaas wrote:
-> > On Wed, Jan 04, 2023 at 09:39:56AM -0500, Liang, Kan wrote:
-> > > Hi Bjorn,
-> > > 
-> > > Happy new year!
-> > > 
-> > > We found some PCI issues with the latest 6.2-rc2.
-> > > 
-> > > - Using the lspci -xxxx, the extended PCI config space of all PCI
-> > > devices are missed with the latest 6.2-rc2. The system we used had 932
-> > > PCI devices, at least 800 which have extended space as seen when booted
-> > > into a 5.15 kernel. But none of them appeared in 6.2-rc2.
-> > > - The drivers which rely on the information in the extended PCI config
-> > > space don't work anymore. We have confirmed that the perf uncore driver
-> > > (uncore performance monitoring) and Intel VSEC driver (telemetry) don't
-> > > work in 6.2-rc2. There could be more drivers which are impacted.
-> > > 
-> > > After a bisect, we found the regression is caused by the below commit
-> > > 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map").
-> > > After reverting the commit, the issues are gone.
-> > 
-> > Can you try this patch (based on v6.2-rc1):
-> 
-> Looks good to me, one question below, but either way:
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> 
-> ...and Dave, who reported that CXL enumeration was busted in -rc2, says
-> this patch fixes that. So you can also add:
-> 
-> Tested-by: Dave Jiang <dave.jiang@intel.com>
+--Sig_/Rc4wOj2XaBsdv9.Y9yMiBYY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for all this!
+Hi all,
 
-> > +static bool is_efi_reserved(u64 start, u64 end, enum e820_type not_used)
-> > +{
-> > +	efi_memory_desc_t *md;
-> > +	u64 size, mmio_start, mmio_end;
-> > +
-> > +	for_each_efi_memory_desc(md) {
-> > +		if (md->type == EFI_MEMORY_MAPPED_IO) {
-> 
-> Should this also consider EFI_RESERVED_TYPE? Not that any known BIOS
-> needs that accommodation. This is more a question than a suggestion.
+The following commits are also in the backlight-fixes tree as different
+commits (but the same patches):
 
-I don't think GetMemoryMap() is intended as a way to tell the OS about
-device memory.  The OS needs to know what address space goes with what
-device and what kind of device it is.  The ACPI namespace supplies all
-that kind of information, so it doesn't make sense to me that we'd get
-some from ACPI and some from EFI.
+  44bbdb7e3a67 ("backlight: ktd253: Switch to use dev_err_probe() helper")
+  c0e09423bbb4 ("dt-bindings: backlight: qcom-wled: Add PMI8950 compatible")
+  73516cbcf8d9 ("backlight: pwm_bl: Drop support for legacy PWM probing")
 
-Also, the EFI spec says EfiReservedMemoryType is "Not usable."  But if
-ECAM space were described that way, obviously the OS *does* need to
-use it, so it doesn't really seem to fit.
+Forgot to push out an updated backlight-fixes tree?
 
-I do think the EFI spec is pretty poorly worded.  EfiMemoryMappedIO is
-"not used by the OS" -- misleading, since the OS *has* to use ECAM and
-host bridge apertures.  And "all system memory-mapped IO information
-should come from ACPI tables" -- well, the EfiMemoryMappedIO region is
-itself certainly some kind of information about memory-mapped IO
-space!  I think it should really refer to the ACPI *namespace*
-specifically, not just tables that might include MCFG, etc.  IMHO the
-static tables like MCFG are basically just a crutch for use before we
-know how to parse the namespace.
+--=20
+Cheers,
+Stephen Rothwell
 
-Anyway, I am inclined to do nothing with EFI_RESERVED_TYPE unless we
-come across a system that needs it.
+--Sig_/Rc4wOj2XaBsdv9.Y9yMiBYY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Bjorn
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO3bL0ACgkQAVBC80lX
+0GwEKwgAj2Z2W1uPI0BvHJuIFekuQ7+FbcBstqf1XmKERZPWQRxJZ29tsNChK0Ql
+xvXYAatulbJwNVPQe90SquCyWNVDQdiQ7GAipx6wzXz3ijBhukJNWOx4RNebCs/z
+eGtv8wYhvSaJxLq875n0Cz2Y1jpbUFmUcFyi23h04qOMd8NF38czlhA2pP8o0YNW
+WdvfiwNnZ+ogUT9LdO7d8fiT22uHH2UU56DsbfEPkIh9aeu+H1cmvEpBmtMPhJFC
+2HzaBmk46lpZP/nDAn2V7KKx/jfyIPAzHgBN69A+au1FUZtrRMisTYCxveHus+1h
+JlR5BjTy1jHQPFYyA81CEqWSHZPDgw==
+=PEt6
+-----END PGP SIGNATURE-----
+
+--Sig_/Rc4wOj2XaBsdv9.Y9yMiBYY--
