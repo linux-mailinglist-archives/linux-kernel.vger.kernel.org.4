@@ -2,170 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445AA65FE94
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D08F65FE95
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjAFKNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S233025AbjAFKO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbjAFKNT (ORCPT
+        with ESMTP id S229623AbjAFKOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:13:19 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743CA69B33
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:13:17 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DF0B925EF0;
-        Fri,  6 Jan 2023 10:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672999995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nERWJ8jWPlGQK5idcTkJNelcJmXRYvfJXwDNtJ1Pe4A=;
-        b=MaULLB4DgfHl6u1tgkaruYPDRAeRoPXNjzSi8ktosf+Vp4qW34m6hu/KGSnOUf8UUsBToy
-        XmasH0rlqiw3VGGc5imHtEYM85kkr2wIcRSU6CjicdfCmVu52DE9dyRnODc+VWJqbWHp0B
-        l4mfnAZlcgGaExZtsxAydkc0LrUUX3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672999995;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nERWJ8jWPlGQK5idcTkJNelcJmXRYvfJXwDNtJ1Pe4A=;
-        b=mWBUqwKncFqQaIkx1E72Oor3bxc7RsmdoL6G1gx5pBA4JvF6UTFVnwDU2kl7KPCYmlJ7cz
-        KLcLyV+K/gzhenAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B847B139D5;
-        Fri,  6 Jan 2023 10:13:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Gk9HLDv0t2OsfQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 06 Jan 2023 10:13:15 +0000
-Message-ID: <3f7fa3b3-9623-5c4c-94b1-a41dea6eaaf2@suse.cz>
-Date:   Fri, 6 Jan 2023 11:13:15 +0100
+        Fri, 6 Jan 2023 05:14:25 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D79C68C80;
+        Fri,  6 Jan 2023 02:14:24 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id z16so856931wrw.1;
+        Fri, 06 Jan 2023 02:14:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7mYIP03w+F2ym4rlVKOB3fADp0pcypDEHQWu+C41v0=;
+        b=d7bNkHhLBeuAUO6E2jn3Ja1ZzqIjAmQCiuXDmcLtnUv+3EcQQvTVJKLCht2qMV51vk
+         EM4XBNBKMobVt7M13fdIqMcxl4Yv61Bl1tE9wjOwx3zR92eURZyweQ/Nc1e9ITu7zThY
+         FntPU/oQDrFBIF268lOz4JnW0+eZ9gHi+sy4ln1w0jOG3UutROSrnd5DXP+euk3eHlra
+         pNxvI7CV//zUdM2eQEBtP/SV/gT5bPdnMSj11spnvzmoRn8IHTo9eJFC40HtMwFgne/D
+         DKCitKunAWo10BbzZmBp27v3JuIk7iRWju5PhvGfu++i+57lCdMX4XSL+XnkFIzTZPno
+         eSHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m7mYIP03w+F2ym4rlVKOB3fADp0pcypDEHQWu+C41v0=;
+        b=BYyBvgiaSNbkeebQzitpMMD8rC7RyU8ZPB6oYQjuWnL05Q28rzY0SprWv2/ZMdwMB5
+         4kdp/f4qLJqp5S4GfCKG5mSEPDt7Rc9Zb70QovsmA6d5SPFsECJL1w2p9VJ5f8/trIjr
+         VcoOSgPovsST996dxRGjlbg8UCXCrSGWabb5h6zo5F4EYmppYLjASNjbuLSAF/0dzDX+
+         BYs32r2sgiSa2CYZ5aCOohV/H/i14c4cRp//TVDYJtRUZyguM87JIZdPU9VmxcyfmkPc
+         fo1Yl+++gRjumD8EItBs20n3kHO5W3+BiwQ9koj8JADZqbpjUnfCjtb+KXC+JCWLbvYZ
+         kPJg==
+X-Gm-Message-State: AFqh2koU1rwok1OzqF9hdeFGWykonITJNFTYG+sckMxo/oTry1h02T6k
+        VOKGU59yT2yiTYNBRmRkM2I=
+X-Google-Smtp-Source: AMrXdXsSRUapvvCp99lwuaxUfeciu0N2k25Evk47TDaand3MgLRI15JqCWu/tqua6DPhjWpSGqR5eQ==
+X-Received: by 2002:adf:fc01:0:b0:297:dd4a:9207 with SMTP id i1-20020adffc01000000b00297dd4a9207mr13724373wrr.10.1673000062773;
+        Fri, 06 Jan 2023 02:14:22 -0800 (PST)
+Received: from gmail.com ([31.46.243.128])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b003d96b8e9bcasm6334403wmq.32.2023.01.06.02.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 02:14:21 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 6 Jan 2023 11:14:17 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "bp@alien8.de" <bp@alien8.de>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] perf/x86/rapl: Add support for Intel Meteor Lake
+Message-ID: <Y7f0eRI++oXvWlrM@gmail.com>
+References: <20230104145831.25498-1-rui.zhang@intel.com>
+ <25d07838-3904-a086-4238-f56c9424b53a@intel.com>
+ <ea9186869cca50a21efcc1a9cc4dbe5adcd1784b.camel@intel.com>
+ <Y7aejeHDpLlwwYbr@zn.tnic>
+ <4cc5cd868b20366fc9d4bf157656e0c295074282.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [linus:master] [mm, slub] 0af8489b02:
- kernel_BUG_at_include/linux/mm.h
-To:     Oliver Sang <oliver.sang@intel.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-References: <202212312021.bc1efe86-oliver.sang@intel.com>
- <41276905-b8a5-76ae-8a17-a8ec6558e988@suse.cz>
- <Y7Qxucg5le7WOzr7@xsang-OptiPlex-9020> <Y7VBFLHY/PMbb4XS@hyeyoo>
- <Y7Yr3kEkDEd51xns@xsang-OptiPlex-9020>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y7Yr3kEkDEd51xns@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cc5cd868b20366fc9d4bf157656e0c295074282.camel@intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 02:46, Oliver Sang wrote:
-> hi, Hyeonggon, hi, Vlastimil,
-> 
-> On Wed, Jan 04, 2023 at 06:04:20PM +0900, Hyeonggon Yoo wrote:
->> On Tue, Jan 03, 2023 at 09:46:33PM +0800, Oliver Sang wrote:
->> > On Tue, Jan 03, 2023 at 11:42:11AM +0100, Vlastimil Babka wrote:
->> > > So the events leading up to this could be something like:
->> > > 
->> > > - 0x2daee is order-1 slab folio of the inode cache, sitting on the partial list
->> > > - despite being on partial list, it's freed ???
->> > > - somebody else allocates order-2 page 0x2daec and uses it for whatever,
->> > > then frees it
->> > > - 0x2daec is reallocated as order-1 slab from names_cache, then freed
->> > > - we try to allocate from the slab page 0x2daee and trip on the PageTail
->> > > 
->> > > Except, the freeing of order-2 page would have reset the PageTail and
->> > > compound_head in 0x2daec, so this is even more complicated or involves some
->> > > extra race?
->> > 
->> > FYI, we ran tests more up to 500 times, then saw different issues but rate is
->> > actually low
->> > 
->> > 56d5a2b9ba85a390 0af8489b0216fa1dd83e264bef8
->> > ---------------- ---------------------------
->> >        fail:runs  %reproduction    fail:runs
->> >            |             |             |
->> >            :500         12%          61:500   dmesg.invalid_opcode:#[##]
->> >            :500          3%          14:500   dmesg.kernel_BUG_at_include/linux/mm.h
->> >            :500          3%          17:500   dmesg.kernel_BUG_at_include/linux/page-flags.h
->> >            :500          5%          26:500   dmesg.kernel_BUG_at_lib/list_debug.c
->> >            :500          0%           2:500   dmesg.kernel_BUG_at_mm/page_alloc.c
->> >            :500          0%           2:500   dmesg.kernel_BUG_at_mm/usercopy.c
->> > 
-> 
-> hi Vlastimil,
-> 
-> as you mentioned
->> Hm even if rate is low, the different kinds of reports could be useful to
->> see, if all of that is caused by the commit.
-> 
-> we tried to run tests even more times, but with the config which enable
->     CONFIG_DEBUG_PAGEALLOC
->     CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT
-> (config is attached as
->     config-6.1.0-rc2-00014-g0af8489b0216+CONFIG_DEBUG_PAGEALLOC+CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT
-> the only diff with previous config is
-> @@ -5601,7 +5601,8 @@ CONFIG_HAVE_KCSAN_COMPILER=y
->  # Memory Debugging
->  #
->  CONFIG_PAGE_EXTENSION=y
-> -# CONFIG_DEBUG_PAGEALLOC is not set
-> +CONFIG_DEBUG_PAGEALLOC=y
-> +CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
->  CONFIG_PAGE_OWNER=y
->  # CONFIG_PAGE_POISONING is not set
->  CONFIG_DEBUG_PAGE_REF=y
-> )
-> 
-> what we found now is some issues are also reproduced on parent now (still by
-> rcutorture tests here), though seems lower rate on parent.
-> 
-> =========================================================================================
-> compiler/kconfig/rootfs/runtime/tbox_group/test/testcase/torture_type:
->   gcc-11/i386-randconfig-a012-20221226+CONFIG_DEBUG_PAGEALLOC+CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT/debian-11.1-i386-20220923.cgz/300s/vm-snb/default/rcutorture/tasks-tracing
-> 
-> 56d5a2b9ba85a390 0af8489b0216fa1dd83e264bef8
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->           8:985         19%         199:990   dmesg.invalid_opcode:#[##]
->            :985          5%          51:990   dmesg.kernel_BUG_at_include/linux/mm.h
->           3:985          4%          41:990   dmesg.kernel_BUG_at_include/linux/page-flags.h
->           4:985         10%         102:990   dmesg.kernel_BUG_at_lib/list_debug.c
->            :985          0%           2:990   dmesg.kernel_BUG_at_mm/page_alloc.c
->           1:985          0%           3:990   dmesg.kernel_BUG_at_mm/usercopy.c
-> 
-> however, we noticed dmesg.kernel_BUG_at_include/linux/mm.h still have
-> relatively high rate on this commit but keeps clean on parent.
 
-Well that's interesting. As long as any bugs happen in the parent, it could
-mean the commit we suspect is just changing the circumstances and creating
-conditions that increase the bug happening - e.g. because it causes slab
-pages to be always immediately freed when the last object is freed.
+* Zhang, Rui <rui.zhang@intel.com> wrote:
 
-So I would be curiou about how some of the reports from the parent look like
-in detail. And if the rate at the parent (has it increased thanks to the
-DEBUG_PAGEALLOC?) is sufficient to bisect to the truly first bad commit. Thanks!
+> On Thu, 2023-01-05 at 10:55 +0100, Borislav Petkov wrote:
+> > On Thu, Jan 05, 2023 at 06:54:31AM +0000, Zhang, Rui wrote:
+> > > I thought of this before and got some ideas related.
+> > > Say, instead of maintaining the model list in a series of drivers,
+> > > can
+> > > we have something similar to "cpu_feature" instead?
+> > 
+> > Yes, you can define a synthetic X86_FEATURE flag and set it for each 
+> > CPU model which supports the feature in arch/x86/kernel/cpu/intel.c so 
+> > that at least all the model matching gunk is kept where it belongs, in 
+> > the CPU init code and the other code simply tests that flag.
+> 
+> Great, thanks for this info.
+> 
+> But I still have a question.
+>
+> Take RAPL feature for example, the feature is not architectural, although 
+> 80% of the platforms may follow the same behavior, but there are still 
+> cases that behave differently. And so far, there are 8 different 
+> behaviors based on different models.
+> 
+> In this case, can we have several different flags for the RAPL feature 
+> and make the RAPL driver probe on different RAPL flags? Or else, a model 
+> list is still needed.
 
+Introducing a synthethic CPU flag only makes sense for behavior that is 
+near-100% identical among models - ie. if the only thing missing is the 
+CPUID enumeration.
+
+If RAPL details are continuously changing among CPU models, with no real 
+architected compatibility guarantees, then it probably only makes sense to 
+introduce the flag once it's enumerated at the CPUID level as well.
+
+Thanks,
+
+	Ingo
