@@ -2,116 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B784F66036C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5290A660371
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbjAFPiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S235541AbjAFPis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjAFPiR (ORCPT
+        with ESMTP id S235793AbjAFPiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:38:17 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2435745A5;
-        Fri,  6 Jan 2023 07:38:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 6 Jan 2023 10:38:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3176812;
+        Fri,  6 Jan 2023 07:38:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 98D934023F;
-        Fri,  6 Jan 2023 15:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673019494; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D7BVs+c1jJrTgfTP4y3v5/V0eGmeqdXDwPfl0iJaAd4=;
-        b=3E3Lgs2aAGpDdYW5+AKcNWdB5l9w4zvWCacqafvED4WVf1Z7fBzgAfn2miDNOdc50rpRcF
-        /gPnEqvTuPLTE8Kk9wNQfTkQquPSENw6dOkP6baW5IQ0Juhba85jdQ8Erk0oTWmTJT8+Cw
-        TZV1dEMWE0AzpAAHzknBF1M3LaDLsbI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673019494;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D7BVs+c1jJrTgfTP4y3v5/V0eGmeqdXDwPfl0iJaAd4=;
-        b=1q0HHYB9DZXlBTx+ZpLaeAQje6jIDfq0gkybOD0Eto4yfx1n9s7rlKVsVBxz+DfiCkAVpl
-        X4mbSYxsz7b2OeDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87F5E13596;
-        Fri,  6 Jan 2023 15:38:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FK4pIWZAuGPrHAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 06 Jan 2023 15:38:14 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9F946A0742; Fri,  6 Jan 2023 16:38:13 +0100 (CET)
-Date:   Fri, 6 Jan 2023 16:38:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Jinke Han <hanjinke.666@bytedance.com>, tj@kernel.org,
-        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jack@suse.cz
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <20230106153813.4ttyuikzaagkk2sc@quack3>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 623FAB81DC6;
+        Fri,  6 Jan 2023 15:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E6C433EF;
+        Fri,  6 Jan 2023 15:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673019522;
+        bh=zECSIxnlqSh8Du9ojj67iCF+qRV5NrCmWjaftpFai5M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IASV2kuZp4oGVXt3aFShgGCb/jiX8ClpKtEpLQkSNcVZSQrKThTwlV6v22kYg1rZU
+         H5z+jzEzz76NfW2KkVGX/i9ato81Gl6tu/THrP9AtNxDh0HvCaj1aOla+bpWNW2Ivf
+         VUto3VQ/K8lxcjAg8LsHiMo+ZPjJ1GKe8QcD2lNkWMw872TBwu5DDWpr27VY0mQ5iB
+         DcQHhSCzgbac8SedwwkTpAePt77serxOnT8A9OxEtYf0hJXz+DcLXVhevQ4uXL9PN/
+         RvswlHkWUnjR3obfs+43MJ3yYPEX5c6R5aCc0RTsQ34oip+Wiq/Fe3X6xBIBOp5ZWl
+         AlkW2ItUmxQmg==
+Date:   Fri, 6 Jan 2023 09:38:40 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+Message-ID: <20230106153840.GA1226257@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105161854.GA1259@blackbody.suse.cz>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106095143.3158998-3-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 05-01-23 17:18:54, Michal Koutný wrote:
-> Hello Jinke.
-> 
-> On Mon, Dec 26, 2022 at 09:05:05PM +0800, Jinke Han <hanjinke.666@bytedance.com> wrote:
-> > In our test, fio writes a 100g file in sequential 4k blocksize in
-> > a container with low bps limit configured (wbps=10M).
-> > [...]
-> > At the same time, the operation of saving a small file by vim will be
-> > blocked amolst 140s.
-> 
-> Could you please elaborate why is this specific to blk-throtl?
-> 
-> I guess similar problem would arise for devices that are "naturally"
-> slow.
-> Then:
-> a) it must have been solved elsewhere in the block layer (but it's
->    broken),
-> b) it should be solved generically in the block layer (thus this is only
->    a partial solution).
+[+cc Rafael, linux-pm, linux-kernel in case you have comments on
+whether devices should still be usable after .remove()/.shutdown()]
 
-Generally, problems are this are taken care of by IO schedulers. E.g. BFQ
-has quite a lot of logic exactly to reduce problems like this. Sync and
-async queues are one part of this logic inside BFQ (but there's more).
+On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe services during
+> shutdown") we observe poweroff/reboot failures on systems with LS7A
+> chipset.
+> 
+> We found that if we remove "pci_command &= ~PCI_COMMAND_MASTER" in
+> do_pci_disable_device(), it can work well. The hardware engineer says
+> that the root cause is that CPU is still accessing PCIe devices while
+> poweroff/reboot, and if we disable the Bus Master Bit at this time, the
+> PCIe controller doesn't forward requests to downstream devices, and also
+> does not send TIMEOUT to CPU, which causes CPU wait forever (hardware
+> deadlock).
+> 
+> To be clear, the sequence is like this:
+> 
+>   - CPU issues MMIO read to device below Root Port
+> 
+>   - LS7A Root Port fails to forward transaction to secondary bus
+>     because of LS7A Bus Master defect
+> 
+>   - CPU hangs waiting for response to MMIO read
+> 
+> Then how is userspace able to use a device after the device is removed?
+> 
+> To give more details, let's take the graphics driver (e.g. amdgpu) as
+> an example. The userspace programs call printf() to display "shutting
+> down xxx service" during shutdown/reboot, or the kernel calls printk()
+> to display something during shutdown/reboot. These can happen at any
+> time, even after we call pcie_port_device_remove() to disable the pcie
+> port on the graphic card.
+> 
+> The call stack is: printk() --> call_console_drivers() --> con->write()
+> --> vt_console_print() --> fbcon_putcs()
+> 
+> This scenario happens because userspace programs (or the kernel itself)
+> don't know whether a device is 'usable', they just use it, at any time.
 
-But given current architecture of the block layer IO schedulers are below
-throttling frameworks such as blk-throtl so they have no chance of
-influencing problems like this. So we are bound to reinvent the scheduling
-logic IO schedulers are already doing. That being said I don't have a good
-solution for this or architecture suggestion. Because implementing various
-throttling frameworks within IO schedulers is cumbersome (complex
-interactions) and generally the perfomance is too slow for some usecases.
-We've been there (that's why there's cgroup support in BFQ) and really
-the current architecture is much easier to reason about.
+Thanks for this background.  So basically we want to call .remove() on
+a console device (or a bridge leading to it), but we expect it to keep
+working as usual afterwards?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+That seems a little weird.  Is that the design we want?  Maybe we
+should have a way to mark devices so we don't remove them during
+shutdown or reboot?
+
+> This hardware behavior is a PCIe protocol violation (Bus Master should
+> not be involved in CPU MMIO transactions), and it will be fixed in new
+> revisions of hardware (add timeout mechanism for CPU read request,
+> whether or not Bus Master bit is cleared).
+> 
+> On some x86 platforms, radeon/amdgpu devices can cause similar problems
+> [1][2]. Once before I wanted to make a single patch to solve "all of
+> these problems" together, but it seems unreasonable because maybe they
+> are not exactly the same problem. So, this patch add a new function
+> pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
+> dedicated for the shutdown path, and then add a quirk just for LS7A to
+> avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
+> platforms behave as before.
+> 
+> [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
+> [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
+> 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
+>  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
+>  include/linux/pci.h                   |  1 +
+>  3 files changed, 37 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> index 759ec211c17b..641308ba4126 100644
+> --- a/drivers/pci/controller/pci-loongson.c
+> +++ b/drivers/pci/controller/pci-loongson.c
+> @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  			DEV_PCIE_PORT_2, loongson_mrrs_quirk);
+>  
+> +static void loongson_bmaster_quirk(struct pci_dev *pdev)
+> +{
+> +	/*
+> +	 * Some Loongson PCIe ports will cause CPU deadlock if there is
+> +	 * MMIO access to a downstream device when the root port disable
+> +	 * the Bus Master bit during poweroff/reboot.
+> +	 */
+> +	struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
+> +
+> +	bridge->no_dis_bmaster = 1;
+> +}
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_0, loongson_bmaster_quirk);
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_1, loongson_bmaster_quirk);
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_2, loongson_bmaster_quirk);
+> +
+>  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
+>  {
+>  	pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
+> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> index 2cc2e60bcb39..96f45c444422 100644
+> --- a/drivers/pci/pcie/portdrv.c
+> +++ b/drivers/pci/pcie/portdrv.c
+> @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
+>  {
+>  	device_for_each_child(&dev->dev, NULL, remove_iter);
+>  	pci_free_irq_vectors(dev);
+> -	pci_disable_device(dev);
+>  }
+>  
+>  /**
+> @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
+>  	}
+>  
+>  	pcie_port_device_remove(dev);
+> +
+> +	pci_disable_device(dev);
+> +}
+> +
+> +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> +{
+> +	struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> +
+> +	if (pci_bridge_d3_possible(dev)) {
+> +		pm_runtime_forbid(&dev->dev);
+> +		pm_runtime_get_noresume(&dev->dev);
+> +		pm_runtime_dont_use_autosuspend(&dev->dev);
+> +	}
+> +
+> +	pcie_port_device_remove(dev);
+> +
+> +	if (!bridge->no_dis_bmaster)
+> +		pci_disable_device(dev);
+>  }
+>  
+>  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
+> @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
+>  
+>  	.probe		= pcie_portdrv_probe,
+>  	.remove		= pcie_portdrv_remove,
+> -	.shutdown	= pcie_portdrv_remove,
+> +	.shutdown	= pcie_portdrv_shutdown,
+>  
+>  	.err_handler	= &pcie_portdrv_err_handler,
+>  
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 3df2049ec4a8..a64dbcb89231 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -573,6 +573,7 @@ struct pci_host_bridge {
+>  	unsigned int	ignore_reset_delay:1;	/* For entire hierarchy */
+>  	unsigned int	no_ext_tags:1;		/* No Extended Tags */
+>  	unsigned int	no_inc_mrrs:1;		/* No Increase MRRS */
+> +	unsigned int	no_dis_bmaster:1;	/* No Disable Bus Master */
+>  	unsigned int	native_aer:1;		/* OS may use PCIe AER */
+>  	unsigned int	native_pcie_hotplug:1;	/* OS may use PCIe hotplug */
+>  	unsigned int	native_shpc_hotplug:1;	/* OS may use SHPC hotplug */
+> -- 
+> 2.31.1
+> 
