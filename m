@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9963666058D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C156660587
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjAFRVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S235541AbjAFRTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjAFRVS (ORCPT
+        with ESMTP id S235717AbjAFRTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:21:18 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA357D1F5
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:21:17 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id r72so1004805iod.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bsdimp-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dnx4N+OQn0QuEKmvfhqG2BPeqQB9ohu9oSWGkfmaPyU=;
-        b=Fn8EiHIfDBw/66XdydZpN1Ps6E9bXL/8/A/WalBjrZcSXiTor5KyLIqZHoOsYiunux
-         ktDm/mln44prujXc5jF0fMeGeY6tymaOYXXDaEQ7lM21Z56vHPkIR2zaQ76O5JQFLbvP
-         2fT+oilVGb/o25go8u1Mmet2/JtQXVg4CFw+wZV5l8h8J8gXyQgPiJ9WSpGP1YqhNFhq
-         bM4lZ7gdFCg2Jv3q5V2hHxjzX2Tp9379IHFT9gwfxHO7iPjYHZPz4TTLxDBRoMhlvEcu
-         YHFXPcnz0IbniDXDr6sfRS+adfn/1bfokAPkSU12KPAEsRxlvNsbrEfPKHD6mmIv5w8D
-         PVVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dnx4N+OQn0QuEKmvfhqG2BPeqQB9ohu9oSWGkfmaPyU=;
-        b=yuR8oFrpabFH4YV9/arfZNAotJGK87V0TnsM6LNgW7v34H7jXRZzCk0FgbklIqP2/S
-         QyiFUtGREjdboYk4angc0lXpaumbYh53oyQgX0dyDDA732jRFfL/dQqBD1VjrLsKEWmi
-         VkEcszDogWsbtmzMu+77foOFwHNO4ljfDowkqu1kR8HrKSE1xhTerN8kTWWFBieZOFY2
-         wdnabdnm+mUI6Cb1xrWxdVMxCIyVqDPPWmGe2k2x9zayvplTuHxe1NiBeOWnM2mrKqpp
-         NjRoCW3J5cRlD+u3A9K3IBYKM5LxiCItsG5x8GUw6aXIc4aPklTNsnO5eT8OtMy934XY
-         BHeA==
-X-Gm-Message-State: AFqh2kraDtPXsM8qAzfdreOeay85yGCxAil4CHUV9y8dHbUrtAN2k1Ej
-        GTPMq6lwH62u4itPh3OxBdZBwg==
-X-Google-Smtp-Source: AMrXdXtDquIc11hr+NAGdsZDPAnC27KArduGyR1b8XQtRsaoginAvmdmyC55X/rPIAZb/XfzfeM4iQ==
-X-Received: by 2002:a05:6602:124b:b0:6e2:d3f9:56d with SMTP id o11-20020a056602124b00b006e2d3f9056dmr43272805iou.0.1673025676792;
-        Fri, 06 Jan 2023 09:21:16 -0800 (PST)
-Received: from dune.bsdimp.com (50-253-99-174-static.hfc.comcastbusiness.net. [50.253.99.174])
-        by smtp.gmail.com with ESMTPSA id k1-20020a0566022d8100b006e4e8ad6b2bsm499289iow.36.2023.01.06.09.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 09:21:16 -0800 (PST)
-From:   Warner Losh <imp@bsdimp.com>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org, Warner Losh <imp@bsdimp.com>
-Subject: [PATCH v2] tools/nolibc: Fix S_ISxxx macros
-Date:   Fri,  6 Jan 2023 10:18:34 -0700
-Message-Id: <20230106171834.41532-1-imp@bsdimp.com>
-X-Mailer: git-send-email 2.33.1
+        Fri, 6 Jan 2023 12:19:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FEB7DE26
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:19:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 746A3B81E1F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:19:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4686C433D2;
+        Fri,  6 Jan 2023 17:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673025540;
+        bh=zsgQcMJyYEHvXA7+Hi2ymIKCkYKxtTDwcZPe25Ntk/c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ym4FgWJenrYaENFFfiHkz5raOXqV2gO8l0VH6+uErul8LKptdgwrWS01elvsQgZz6
+         ZYa//Gq0qzKDbfIqqShqHsOIV6Tbk3fQ1Hlw2IzEQhCVbw0nVIIB2QcmeR3oP4t7XM
+         oJN/EDTLheE85xLh46IKCZHk6AM4AZcNjwE0kX7djxvYBCjJR8RgdiAaKzeosuF2W1
+         etB9ZpWIIegqdrtPBiuTu6HafAu3AuKiX5kjm4Hgb7fujiNZHkV/YUvj0243vIr3e9
+         HjxEv09VWY4me/+kZebQbHTOIgEx+yoEx2dN0qyyMQ7NeypDK3Nmn0mDZ+aRw7CsQ6
+         w3ln33stGcPhw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH mm-unstable 1/1] include/linux/mm: declare different type of split_vma() for !CONFIG_MMU
+Date:   Fri,  6 Jan 2023 17:18:57 +0000
+Message-Id: <20230106171857.149918-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mode field has the type encoded as an value in a field, not as a bit
-mask. Mask the mode with S_IFMT instead of each type to test. Otherwise,
-false positives are possible: eg S_ISDIR will return true for block
-devices because S_IFDIR = 0040000 and S_IFBLK = 0060000 since mode is
-masked with S_IFDIR instead of S_IFMT. These macros now match the
-similar definitions in tools/include/uapi/linux/stat.h.
+Commit 95000286ff79 ("mm: switch vma_merge(), split_vma(), and
+__split_vma to vma iterator") on mm-unstable didn't make the change to
+nommu.c, but the declaration change was applied to !CONFIG_MMU, too.  It
+causes below build failure.
 
-Signed-off-by: Warner Losh <imp@bsdimp.com>
+    linux/mm/nommu.c:1347:5: error: conflicting types for 'split_vma'
+     1347 | int split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
+          |     ^~~~~~~~~
+    In file included from linux/mm/nommu.c:20:
+    linux/include/linux/mm.h:2846:12: note: previous declaration of 'split_vma' was here
+     2846 | extern int split_vma(struct vma_iterator *vmi, struct vm_area_struct *,
+          |            ^~~~~~~~~
+
+Fix the build failure by adding the split_vma() declaration for
+!CONFIG_MMU case.
+
+Fixes: 95000286ff79 ("mm: switch vma_merge(), split_vma(), and __split_vma to vma iterator") on mm-unstabl
+Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/include/nolibc/types.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ include/linux/mm.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 959997034e55..7770328dcef7 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -26,13 +26,13 @@
- #define S_IFSOCK       0140000
- #define S_IFMT         0170000
- 
--#define S_ISDIR(mode)  (((mode) & S_IFDIR)  == S_IFDIR)
--#define S_ISCHR(mode)  (((mode) & S_IFCHR)  == S_IFCHR)
--#define S_ISBLK(mode)  (((mode) & S_IFBLK)  == S_IFBLK)
--#define S_ISREG(mode)  (((mode) & S_IFREG)  == S_IFREG)
--#define S_ISFIFO(mode) (((mode) & S_IFIFO)  == S_IFIFO)
--#define S_ISLNK(mode)  (((mode) & S_IFLNK)  == S_IFLNK)
--#define S_ISSOCK(mode) (((mode) & S_IFSOCK) == S_IFSOCK)
-+#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-+#define S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-+#define S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
-+#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
-+#define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
- 
- /* dirent types */
- #define DT_UNKNOWN     0x0
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 4d9148b939f8..a2bf261cdbef 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2843,8 +2843,13 @@ extern struct vm_area_struct *vma_merge(struct vma_iterator *vmi,
+ extern struct anon_vma *find_mergeable_anon_vma(struct vm_area_struct *);
+ extern int __split_vma(struct vma_iterator *vmi, struct vm_area_struct *,
+ 		       unsigned long addr, int new_below);
++#ifdef CONFIG_MMU
+ extern int split_vma(struct vma_iterator *vmi, struct vm_area_struct *,
+ 			 unsigned long addr, int new_below);
++#else
++extern int split_vma(struct mm_struct *, struct vm_area_struct *,
++			 unsigned long addr, int new_below);
++#endif	/* CONFIG_MMU */
+ extern int insert_vm_struct(struct mm_struct *, struct vm_area_struct *);
+ extern void unlink_file_vma(struct vm_area_struct *);
+ extern struct vm_area_struct *copy_vma(struct vm_area_struct **,
 -- 
-2.33.1
+2.25.1
 
