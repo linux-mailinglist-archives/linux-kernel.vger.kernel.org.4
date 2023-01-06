@@ -2,227 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A54E66078E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340B3660791
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbjAFUFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S236111AbjAFUGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235947AbjAFUFV (ORCPT
+        with ESMTP id S236074AbjAFUGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:05:21 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B181D7A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:05:19 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id m7so2281031wrn.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:05:19 -0800 (PST)
+        Fri, 6 Jan 2023 15:06:08 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D617C107
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:06:07 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l1-20020a17090a384100b00226f05b9595so851149pjf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 12:06:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UpGU+cdVK3SM6jir+mxXdoP9uvBXRWWoe82Gg0a/TfQ=;
-        b=IBLtyAaOl/9raVwH+lZtFBqYmzZLUwb1aTvMvHWtsrxUvXHKeNvPf2Z4sLb/8lhUnG
-         teLv7dU1nWBtLW6oOpXSyzLijuYoaopWks5gay0v4IatiPbDlI38MBG3bXbzlW7qBSx7
-         8HGbPC1w/AgS3fdCtr2ldQ84u/eiwSpKLgAkk=
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tRynXyqPSXTn4rCoxoHLyvDBt750D/GgS94gTx+vdEA=;
+        b=cLduJRhC6MWyAlSPlrHt/96BIN6acHNahHOAfVFD/3gWpZGuHPRievwrVmS/p8g+7t
+         aVYrwNV3lYRBghHO5MmNDkouFdQhAqSkzXUy0Hz7Dijs+yqmSfbET21PQgNMUY6kQS39
+         Znkc6oXs+18uWOSthQsqyU5KHw7GX61bAzNtA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UpGU+cdVK3SM6jir+mxXdoP9uvBXRWWoe82Gg0a/TfQ=;
-        b=627XKTN9o93gyU3ky1QHk8nGsx4ifAw8Jki71XGsJoyVpcpTCZk1eX4mdZlz5nCx9r
-         RZPJiY9ZmkyRF2CrXib8ML1EJFayLhgOU9ZdKMyC39lM6PFQxxMufPhGMmR2OFdvMBGG
-         X5NVt8Ge7R9tb3v+kL7A5w5qIwjFSS8i310BWGgRnVofy37HhDvae3Zf2J3fn1KdMFXY
-         gD9dKdrpealoQpgWof3B6nwhj9Y8PZ1+OR18l6+aqcy7/f+j9rXBYOS5b34vLS4Ao+aN
-         1qbwOckixcZmQPD2dNM2KM6HXRnryXFG11/tzSdmjw2a+JRPNtC8LpAIVFeIy+/boJOj
-         ZexQ==
-X-Gm-Message-State: AFqh2koYf1AQunQejZmmCNvzG0apPV0Qs8YmT/u0xoYybxG4bceUN+1O
-        sOvEGJp0riIBs6iSvPJqXArX1w==
-X-Google-Smtp-Source: AMrXdXuXq7d7eNb8lJL+TQA5OVZQLRgie1AhDXr6CE1qdxWO8mfj4eIhK2Jd7Cc+vw2oC4U09t3ckA==
-X-Received: by 2002:adf:f007:0:b0:28e:66ae:75af with SMTP id j7-20020adff007000000b0028e66ae75afmr18337774wro.58.1673035518458;
-        Fri, 06 Jan 2023 12:05:18 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id w10-20020a5d404a000000b00275970a85f4sm1928236wrp.74.2023.01.06.12.05.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tRynXyqPSXTn4rCoxoHLyvDBt750D/GgS94gTx+vdEA=;
+        b=cipl/udVePJhy1+/DdZqQibKSRT3dyUoICdXl4WQCxZJ3yKGZ4nyBfeWZafozX1g8y
+         gc+EiSCjZeBM8vMnrO9BG6z6W8gtVxf8QjbX8r5RnvpEjVKWbT+2XlR7F2a0nBe6Hzjy
+         DUrM+WOys3WMP0/dONgEn79pTIQErENc1xA6P9ujjubfzxq8reoPdkbeSUVkgH2aiENe
+         bXBMjYFAYNrYXeNrymruBcSKJzkUgXNUlmDFvlqsmVxBXlyhbxE2E35Y6GU3l316xweP
+         xoLHDE5K0yfgO2Fx8LXyT0gt5pBGfMA/iTwOqWZC6wYDb9uyG/mbUCN+/tylB8pyih05
+         Ql2g==
+X-Gm-Message-State: AFqh2krHIaSe4IXf0+aEhWGhe3vd9N57nvOJvj+b2K3rGrjC29t5uyWQ
+        nZK3GJlKe/PjKoMnkGQ+KgXqow==
+X-Google-Smtp-Source: AMrXdXvG96Irf8pAn872krsUZ3eJehgkT0Bu9WsLRxGE92OxjgK3MlzCl0E7H4TVgFBUfEC4pHi9XQ==
+X-Received: by 2002:a05:6a21:1518:b0:ac:f68:33c9 with SMTP id nq24-20020a056a21151800b000ac0f6833c9mr68838378pzb.33.1673035567367;
+        Fri, 06 Jan 2023 12:06:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090a474700b00219463262desm1260669pjg.39.2023.01.06.12.06.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 12:05:17 -0800 (PST)
-Date:   Fri, 6 Jan 2023 21:05:15 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Hang Zhang <zh.nvgt@gmail.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with
- console_lock()
-Message-ID: <Y7h++5sU/hGJ/yTS@phenom.ffwll.local>
-Mail-Followup-To: Hang Zhang <zh.nvgt@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221230063528.41037-1-zh.nvgt@gmail.com>
- <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
- <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
- <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
- <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com>
- <Y7hvhtHeivfsnBtE@phenom.ffwll.local>
- <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
+        Fri, 06 Jan 2023 12:06:06 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] docs: deprecated.rst: Add note about DECLARE_FLEX_ARRAY() usage
+Date:   Fri,  6 Jan 2023 12:06:04 -0800
+Message-Id: <20230106200600.never.735-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1698; h=from:subject:message-id; bh=W2pNqJKTD43JaSpEWHJSnavL8GLLOvSWonV1g4X9lIc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjuH8srP2S6yInxOMPLcWkTR0LZU9mSxxMjjQUblOq ktFNXW6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY7h/LAAKCRCJcvTf3G3AJj4YD/ 9sUyfRQkLEqbQ9W3a9TRqEZpxbRuFpmJ/sUtAqaWxuUfiE9Et2MFXoOUvuly1JvN10Pt8eMO0Vj0LX RWriz62or9mGNZlpABetKNJRy21+GxioJ6xbY4T1yxoCJ5Yx2iwSCfINzYIqTRrqQWjgl36L8onyRi NLOokGHLnSe+IZE44utQZaEIIdXSpyt7NkOj357oXJzGtCDp9BQ8PcR6cU7wQxpPY4FDNkvCanVgc+ n50lU4TF30meeXv7VqbNctWXr4Aw90Vptd+e86Yy7tZNi1/m/2Iohe56S0cCeom+5u0KDkGhGRoDxb y2CsAJM3Odff6dd8d6+HvFGaOIwH9txtBRzaIzRAbz+N39AMvwnTI7R4inKEOdXKMK8LgCbx72uY4z mDgu0qK53IRZw/krLy0WOiE3nyub/mXyx4Rm0sjjq5CxV2+BQgeEjPNAXF9kMA1G48ORd8mo+bJdKE w06pTRg1MOnmifwPdx3jnMfENgzR6lYMrXfPK7ZoMDkasBNl/dJICc5ha2nDWbctsf7qKMR9LSuxA8 o2dOf97FvLReAhyuY2XymowXJ0xumC9//y8EpsfYEuAhKBEf2CMP8j8MZPPY+9CUVvZ0vZkt9ATcQ7 f4q7iDXw3xB8M4c52tWcOIlp5nB9nbVEz4kPhTwWDmIkk5U6oM4oo951CpzA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 02:58:27PM -0500, Hang Zhang wrote:
-> On Fri, Jan 6, 2023 at 1:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Thu, Jan 05, 2023 at 01:38:54PM -0500, Hang Zhang wrote:
-> > > On Thu, Jan 5, 2023 at 5:25 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > >
-> > > > On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > > >
-> > > > > Hi Helge
-> > > > >
-> > > > > On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
-> > > > > >
-> > > > > > On 12/30/22 07:35, Hang Zhang wrote:
-> > > > > > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
-> > > > > > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
-> > > > > > > con2fb_release_oldinfo(), this free operation is protected by
-> > > > > > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
-> > > > > > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
-> > > > > > > so that it can be checked to avoid use-after-free before the use sites
-> > > > > > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
-> > > > > > > the problem is that the use site is not protected by the same locks
-> > > > > > > as for the free operation, e.g., "default" case in do_fb_ioctl()
-> > > > > > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
-> > > > > > > which can invalidate the aforementioned state set and check in a
-> > > > > > > concurrent setting.
-> > > > > > >
-> > > > > > > Prevent the potential use-after-free issues by protecting the "default"
-> > > > > > > case in do_fb_ioctl() with console_lock(), similarly as for many other
-> > > > > > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
-> > > > > > >
-> > > > > > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
-> > > > > >
-> > > > > > applied to fbdev git tree.
-> > > > >
-> > > > > The patch above makes no sense at all to me:
-> > > > >
-> > > > > - fb_info is protected by lock_fb_info and
-> > > > > - the lifetime of fb_info is protected by the get/put functions
-> > > > > - yes there's the interaction with con2fb, which is protected by
-> > > > > console_lock, but the lifetime guarantees are ensured by the device
-> > > > > removal
-> > > > > - which means any stuff happening in matroxfb_remove is also not a
-> > > > > concern here (unless matroxfb completely gets all the device lifetime
-> > > > > stuff wrong, but it doesn't look like it's any worse than any of the
-> > > > > other fbdev drivers that we haven't recently fixed up due to the
-> > > > > takeover issues with firmware drivers
-> > > >
-> > > > I have also a really hard timing finding the con2fb map use in the
-> > > > matroxfb ioctl code, but that just might be that I didn't look
-> > > > carefully enough. Maybe that would shed some light on this.
-> > > > -Daniel
-> > > >
-> > > >
-> > > > >
-> > > > > On the very clear downside this now means we take console_lock for the
-> > > > > vblank ioctl (which is a device driver extension for reasons, despite
-> > > > > that it's a standard fbdev ioctl), which is no good at all given how
-> > > > > console_lock() is a really expensive lock.
-> > > > >
-> > > > > Unless I'm massively missing something, can you pls push the revert
-> > > > > before this lands in Linus' tree?
-> > > > >
-> > > > > Thanks, Daniel
-> > >
-> > > Hi, Daniel. Thank you for your feedback. We're not developers of the
-> > > video subsystem and thus may be short in domain knowledge (e.g., the
-> > > performance of console_lock() and the complex lifetime management).
-> > > This patch initially intended to bring up the potential use-after-free
-> > > issues here to the community - we have performed a best-effort code
-> > > review and cannot exclude the possibility based on our understanding.
-> > >
-> > > What we have observed is that the call chain leading to the free site
-> > > (do_fb_ioctl()->fbcon_set_con2fb_map_ioctl()->set_con2fb_map()->
-> > > con2fb_release_oldinfo()-> ... ->matroxfb_remove()) is only protected
-> > > by console_lock() but not lock_fb_info(), while the potential use
-> > > site (call chain starts from the default case in do_fb_ioctl()) is
-> > > only protected by lock_fb_info() but not console_lock().
-> > > We thus propose to add this extra console_lock() to the default case,
-> > > which is inspired by the lock protection of many other existing
-> > > switch-case terms in the same function.
-> > >
-> > > Since we do not have deep domain knowledge of this subsystem, we will
-> > > rely on the developers to make a decision regarding the patch. Thank
-> > > you again for your review and help!
-> >
-> > Can you please elaborate where you've found this use-after-free and how?
-> > I'm still not understanding how you even got here - this is orthogonal to
-> > whether the patch is the right fix or not.
-> > -Daniel
-> 
-> Hi, Daniel. Sure. This issue was initially flagged by our experimental static
-> code analyzer aiming to find use-after-free issues in the kernel - that's why
-> we don't have PoC or execution traces here. We deeply understand that
-> static analyzer can generate false alarms, so we have tried our best and
-> spent a good amount of time carefully reviewing the related code. We
-> eventually found that we could not exclude this potential issue based on our
-> study, so we decided to report this to the community with this tentative fix. As
-> mentioned, we may be short in domain knowledge, so your input is
-> highly appreciated. We respect the developer's decision about whether
-> this is really a problem and whether/how to fix it. However, if you think the
-> use-after-free is actually not possible, it will be very helpful if you can
-> elaborate on the reasoning since it will greatly help us improve our
-> analyzer. Thank you very much for your help!
+There wasn't any mention of when/where DECLARE_FLEX_ARRAY() should be
+used, so add the rationale and an example to the deprecation docs.
 
-Please start out these patches with the fact that this is from an
-experimental checker.
+Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-doc@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ Documentation/process/deprecated.rst | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Also do include _why_ your checker things something is going wrong. If you
-cannot follow why the checker complains about something, then don't report
-it as an issue until you do. Also, if you do not understand the code,
-please make it absolutely clear that you just guessed a possible fix, but
-not that it's been tested in any way or form.
-
-If you don't do this, then we end up wasting a ton of time of people who
-don't have surplus time, because in this case the patch got review,
-applied, pull request made, I realized it looks funny, patch dropped, pull
-request remade, and then a fairly big thread here.
-
-All for a bug that's likely in your checker and not in the kernel. This is
-not great.
+diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+index c8fd53a11a20..fcac0a929efa 100644
+--- a/Documentation/process/deprecated.rst
++++ b/Documentation/process/deprecated.rst
+@@ -346,3 +346,29 @@ struct_size() and flex_array_size() helpers::
+         instance->count = count;
  
-> BTW, if this is worthed a fix and the performance of console_lock() is a
-> major concern, then I think there may be alternative solutions like adding
-> a lock_fb_info() to the free call chain - if that's better in performance,
-> or maybe selectively protect the matroxfb ioctl but not vblank ioctl as you
-> mentioned.
-
-Please start out with explaining what kind of bug your checker is seeing,
-and why. Not how you're trying to fix it. Because I'm pretty sure there
-isn't a bug, but since I've already spent a pile of time looking at this,
-I want to make sure.
-
-Cheers, Daniel
+         memcpy(instance->items, source, flex_array_size(instance, items, instance->count));
++
++There are two special cases of replacement where the DECLARE_FLEX_ARRAY()
++helper needs to be used. (Note that it is named __DECLARE_FLEX_ARRAY() for
++use in UAPI headers.) When the flexible array is either alone in a struct,
++or is part of a union. These are disallowed by the C99 specification,
++but for no technical reason (as can be seen by both the existing use of
++such arrays in those places and the work-around that DECLARE_FLEX_ARRAY()
++uses). For example, to convert this::
++
++	struct something {
++		...
++		union {
++			struct type1 one[0];
++			struct type2 two[0];
++		};
++	};
++
++The helper must be used::
++
++	struct something {
++		...
++		union {
++			DECLARE_FLEX_ARRAY(struct type1, one);
++			DECLARE_FLEX_ARRAY(struct type2, two);
++		};
++	};
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
