@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997BF65FFAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB86C65FFAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbjAFLnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S232680AbjAFLoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbjAFLnG (ORCPT
+        with ESMTP id S229725AbjAFLn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:43:06 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E5969B1D;
-        Fri,  6 Jan 2023 03:43:04 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4NpM0K0sZFz9sTD;
-        Fri,  6 Jan 2023 12:42:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1673005377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+MKewvQAOmy/Zn8oNArbj5sMzsVqtojw6uyLjAN8pxw=;
-        b=RR68Uij7oOSXHjTTB6IOaiZ/WbfzNHq250+jiBWvglyo7RsQaixfIba1oTOVzP+MdTCWcf
-        Jyzp435Zmhb4JdZueZrcdt7ZjPijmFyzYkIdLkAOyk/2VRX8pMXF+7pDR3Zgh7S901EvLS
-        M9YeS46cK2eNA11KeWC1zaBgnwu5vISzjr8xftwfjXd7T8V9EwXqJ6jnEbkSVAx5s3y8V0
-        Ucish6QEzF4eXtaehQG4YxrtXfk0Y7NMwXCqtJ4zfn8XBPoaI6SDM0n/zAvHSBA/1eMjBr
-        /UbXykZOCpYV6Cg1HUXtLxoZmh/2XaE9ToBZ5CfSs0rtN2nUiCv6+py6c8s5jg==
-Message-ID: <9455bc5b-2074-4f48-71a7-5c816ee19a78@mailbox.org>
-Date:   Fri, 6 Jan 2023 12:42:54 +0100
+        Fri, 6 Jan 2023 06:43:59 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FA69B2B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:43:58 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so4930213pjg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=04eEBcfPF9rPWJ6oe8vSrIbuReCNM+F3t+uhS5IgjAI=;
+        b=eTbHhoFLjQJuPbwPLx+3u4gPgft2Pc5mtQeE0YFtzDmI1Ffve96+xCYRtzTIcYRbie
+         z08AL6l6eADTEDx42za6p3tIDuC+kO6hzPIxxF2h/FlDkJrbrrYxyHb6Akm2bw4S5zUL
+         zRyxdg74QrapIdR150Zp6h2SRd1jot0uGWzrU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=04eEBcfPF9rPWJ6oe8vSrIbuReCNM+F3t+uhS5IgjAI=;
+        b=n7/ywKwkFy5bEgtJWteIaF9BBPg6wP0hUpM1VEHKGqsl8+euTV41CFPblJp90JJAlr
+         T4GAa3v4JJ7uHHzpqR5oBQUF1yax5wsCQ+YANjXBhglCuIMif0JuBeUWyBAIinBGFVJC
+         6yNxCzSZdUIKRox+sw9zpZvBTaFpvW0bARC9B89NuhFCJnsJ2uDQg68osqfRsya98E10
+         KJwMmP09sp5DR0PQJm7lrqkKB8RHKJiNlH8TTuZgBb2keqlco3TbV5dJDlirK63RmuiZ
+         mrAvBmAyYkOZxz+i8tlPgJazJI2T1Qj8T9y/f0GY/V7efegCWJ+yMDYdkX9FSqAL/vve
+         Gfbg==
+X-Gm-Message-State: AFqh2kqa4FiaV9kACjHQ9Z9NW3vNj/RcYGVng0AW/nCUN90KUcVnpBCR
+        Tvle+JsXUhI07cBnjEAxrhRooyt5/lcJeStTfzI=
+X-Google-Smtp-Source: AMrXdXt4ExVot7Fs59JORt/2TP4UlmAWlVwHTp+xTuA7xI6XZYF9s7QMZyBpFosXVeUvgOK9JWu4eQ==
+X-Received: by 2002:a05:6a20:6f87:b0:b5:46fa:24e8 with SMTP id gv7-20020a056a206f8700b000b546fa24e8mr5337529pzb.38.1673005438176;
+        Fri, 06 Jan 2023 03:43:58 -0800 (PST)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com. [209.85.214.171])
+        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b00582388bd80csm944419pfj.83.2023.01.06.03.43.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 03:43:57 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id p24so1399647plw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:43:56 -0800 (PST)
+X-Received: by 2002:a17:902:934b:b0:191:2a9b:ec94 with SMTP id
+ g11-20020a170902934b00b001912a9bec94mr3686097plp.8.1673005436272; Fri, 06 Jan
+ 2023 03:43:56 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/2] drm/rockchip: vop: Leave vblank enabled in
- self-refresh
-To:     Brian Norris <briannorris@chromium.org>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     "kernelci.org bot" <bot@kernelci.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
-References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
- <20230105174001.2.Ic07cba4ab9a7bd3618a9e4258b8f92ea7d10ae5a@changeid>
-Content-Language: en-CA
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <20230105174001.2.Ic07cba4ab9a7bd3618a9e4258b8f92ea7d10ae5a@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: tq4hqps3dpqxcfuhdffygmxousg6bo4x
-X-MBO-RS-ID: a6ab78268fa770b490a
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106061659.never.817-kees@kernel.org>
+In-Reply-To: <20230106061659.never.817-kees@kernel.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 6 Jan 2023 12:43:44 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
+Message-ID: <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
+Subject: Re: [PATCH] media: uvcvideo: Silence memcpy() run-time false positive warnings
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        ionut_n2001@yahoo.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/23 02:40, Brian Norris wrote:
-> If we disable vblank when entering self-refresh, vblank APIs (like
-> DRM_IOCTL_WAIT_VBLANK) no longer work. But user space is not aware when
-> we enter self-refresh, so this appears to be an API violation -- that
-> DRM_IOCTL_WAIT_VBLANK fails with EINVAL whenever the display is idle and
-> enters self-refresh.
-> 
-> The downstream driver used by many of these systems never used to
-> disable vblank for PSR, and in fact, even upstream, we didn't do that
-> until radically redesigning the state machine in commit 6c836d965bad
-> ("drm/rockchip: Use the helpers for PSR").
-> 
-> Thus, it seems like a reasonable API fix to simply restore that
-> behavior, and leave vblank enabled.
-> 
-> Note that this appears to potentially unbalance the
-> drm_crtc_vblank_{off,on}() calls in some cases, but:
-> (a) drm_crtc_vblank_on() documents this as OK and
-> (b) if I do the naive balancing, I find state machine issues such that
->     we're not in sync properly; so it's easier to take advantage of (a).
-> 
-> Backporting notes:
-> Marking as 'Fixes' commit 6c836d965bad ("drm/rockchip: Use the helpers
-> for PSR"), but it probably depends on commit bed030a49f3e
-> ("drm/rockchip: Don't fully disable vop on self refresh") as well.
-> 
-> We also need the previous patch ("drm/atomic: Allow vblank-enabled +
-> self-refresh "disable""), of course.
-> 
-> Fixes: 6c836d965bad ("drm/rockchip: Use the helpers for PSR")
-> Cc: <stable@vger.kernel.org>
-> Link: https://lore.kernel.org/dri-devel/Y5itf0+yNIQa6fU4@sirena.org.uk/
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+Hi Kees
+
+Thanks for the patch
+
+Would it make more sense to replace *mem with a structure/union. Something like:
+https://patchwork.linuxtv.org/project/linux-media/patch/20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org/
+
+Regards!
+
+On Fri, 6 Jan 2023 at 07:19, Kees Cook <keescook@chromium.org> wrote:
+>
+> The memcpy() in uvc_video_decode_meta() intentionally copies across the
+> length and flags members and into the trailing buf flexible array.
+> Split the copy so that the compiler can better reason about (the lack
+> of) buffer overflows here. Avoid the run-time false positive warning:
+>
+>   memcpy: detected field-spanning write (size 12) of single field "&meta->length" at drivers/media/usb/uvc/uvc_video.c:1355 (size 1)
+>
+> Additionally fix a typo in the documentation for struct uvc_meta_buf.
+>
+> Reported-by: ionut_n2001@yahoo.com
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216810
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
-> 
->  drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-> index fa1f4ee6d195..c541967114b4 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-> @@ -719,11 +719,11 @@ static void vop_crtc_atomic_disable(struct drm_crtc *crtc,
->  
->  	mutex_lock(&vop->vop_lock);
->  
-> -	drm_crtc_vblank_off(crtc);
-> -
->  	if (crtc->state->self_refresh_active)
->  		goto out;
->  
-> +	drm_crtc_vblank_off(crtc);
-> +
->  	/*
->  	 * Vop standby will take effect at end of current frame,
->  	 * if dsp hold valid irq happen, it means standby complete.
-
-The out label immediately unlocks vop->vop_lock again, seems a bit pointless. :)
-
-AFAICT the self_refresh_active case should just return immediately, the out label would also send any pending atomic commit completion event, which seems wrong now that the vblank interrupt is left enabled. (I also wonder if drm_crtc_vblank_off doesn't take care of that already, at least amdgpu doesn't do this explicitly AFAICT)
+>  drivers/media/usb/uvc/uvc_video.c | 4 +++-
+>  include/uapi/linux/uvcvideo.h     | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index d2eb9066e4dc..b67347ab4181 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -1352,7 +1352,9 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+>         if (has_scr)
+>                 memcpy(stream->clock.last_scr, scr, 6);
+>
+> -       memcpy(&meta->length, mem, length);
+> +       meta->length = mem[0];
+> +       meta->flags  = mem[1];
+> +       memcpy(meta->buf, &mem[2], length - 2);
+>         meta_buf->bytesused += length + sizeof(meta->ns) + sizeof(meta->sof);
+>
+>         uvc_dbg(stream->dev, FRAME,
+> diff --git a/include/uapi/linux/uvcvideo.h b/include/uapi/linux/uvcvideo.h
+> index 8288137387c0..a9d0a64007ba 100644
+> --- a/include/uapi/linux/uvcvideo.h
+> +++ b/include/uapi/linux/uvcvideo.h
+> @@ -86,7 +86,7 @@ struct uvc_xu_control_query {
+>   * struct. The first two fields are added by the driver, they can be used for
+>   * clock synchronisation. The rest is an exact copy of a UVC payload header.
+>   * Only complete objects with complete buffers are included. Therefore it's
+> - * always sizeof(meta->ts) + sizeof(meta->sof) + meta->length bytes large.
+> + * always sizeof(meta->ns) + sizeof(meta->sof) + meta->length bytes large.
+>   */
+>  struct uvc_meta_buf {
+>         __u64 ns;
+> --
+> 2.34.1
+>
 
 
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
-
+Ricardo Ribalda
