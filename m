@@ -2,69 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924B366073D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B0C66073E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbjAFTgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S235820AbjAFThs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235745AbjAFTgd (ORCPT
+        with ESMTP id S231860AbjAFThr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:36:33 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5262F1;
-        Fri,  6 Jan 2023 11:36:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673033792; x=1704569792;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JKQwhg3SKN3PwT6OwIBONjP4dNuxovJ0f2FMLC1fPXY=;
-  b=D1J740NLI5kA6NVxgZwHuCuAkSghTZ35rLerR1Rx65bZ39t0M103srEH
-   r22UMNya9gvorRhMabqPVO9YqUksO/wuAKrjiCsPuT1F6L8yJJqF0lf11
-   SIX/gaSfd3SaQQYwr5M4Z+NVoM7S6Z513IK6zI9xwnUAjLuT52FOhi6a9
-   ey7+RSo27IJDFQ37DHs9Xyv/Fmqx14E8okwvWKPq+vu8wDoANms8Z3pmC
-   cWdFUQ3Ryv70ycSIebMI9Lkelym42y4PphGNJTAIwK//mk6iYm6P6TnxK
-   XnQIjt8yq7JxrbBuWn+sq84owFxlfv9lTKQeTBOEZC+KIla8IQpZUpJR4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="323791777"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="323791777"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:36:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="686563906"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="686563906"
-Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:36:31 -0800
-Message-ID: <725de6e9-e468-48ef-3bae-1e8a1b7ef0f7@intel.com>
-Date:   Fri, 6 Jan 2023 11:36:31 -0800
+        Fri, 6 Jan 2023 14:37:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4D771897
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:37:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qd3gcQO/dsMwm40vSdJDrJs6x0c/1tvVsSQuZfcMBco=; b=otkWWnw/kS3HCith14QNhH1zyy
+        ZxVupAUZLtwaY8cmQ/tpvupVcu4V6wbxTsSdvqAsZpg/ZxpMBwOTB6yKoYz4I1qcCGzTmxB285DoQ
+        VwFdxCn7nd+WeTLGzTbjf9hCk9HXUJ8a0HGFueHEXViZllUVG2Y2/te++AyLYjKsUjHliGmUavKqZ
+        kwNRklhkaKFddZNcDVWkknOIyu6uas7zb2PNTwQAe5YKztPctyxQOH9rPW8bLc5WvMpe6bQTV8XKt
+        Jf+ziobT/clE+GzYpaIK9DiabT8RzNCRVav9VRkJ985HL1N1juWu0Rl7egIgy7c/UFUbvaPXkbuao
+        R9Th1+8A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pDsXG-00HRj5-QG; Fri, 06 Jan 2023 19:37:50 +0000
+Date:   Fri, 6 Jan 2023 19:37:50 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] mm: use folio_headpage() instead of folio_page()
+Message-ID: <Y7h4jsv6jl0XSIsk@casper.infradead.org>
+References: <20230106174028.151384-1-sj@kernel.org>
+ <20230106174028.151384-3-sj@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 09/16] x86/virt/tdx: Fill out TDMRs to cover all TDX
- memory regions
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
-        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1670566861.git.kai.huang@intel.com>
- <6f9c0bc1074501fa2431bde73bdea57279bf0085.1670566861.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <6f9c0bc1074501fa2431bde73bdea57279bf0085.1670566861.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106174028.151384-3-sj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,170 +49,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 22:52, Kai Huang wrote:
-> Start to transit out the "multi-steps" to construct a list of "TD Memory
-> Regions" (TDMRs) to cover all TDX-usable memory regions.
-> 
-> The kernel configures TDX-usable memory regions by passing a list of
-> TDMRs "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains
-> the information of the base/size of a memory region, the base/size of the
-> associated Physical Address Metadata Table (PAMT) and a list of reserved
-> areas in the region.
-> 
-> Do the first step to fill out a number of TDMRs to cover all TDX memory
-> regions.  To keep it simple, always try to use one TDMR for each memory
-> region.  As the first step only set up the base/size for each TDMR.
-> 
-> Each TDMR must be 1G aligned and the size must be in 1G granularity.
-> This implies that one TDMR could cover multiple memory regions.  If a
-> memory region spans the 1GB boundary and the former part is already
-> covered by the previous TDMR, just use a new TDMR for the remaining
-> part.
-> 
-> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
-> are consumed but there is more memory region to cover.
+On Fri, Jan 06, 2023 at 05:40:27PM +0000, SeongJae Park wrote:
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index bc5c156ef470..8ae73973a7fc 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -3211,7 +3211,7 @@ static const char *shmem_get_link(struct dentry *dentry,
+>  		folio = filemap_get_folio(inode->i_mapping, 0);
+>  		if (!folio)
+>  			return ERR_PTR(-ECHILD);
+> -		if (PageHWPoison(folio_page(folio, 0)) ||
+> +		if (PageHWPoison(folio_headpage(folio)) ||
 
-This could probably use some discussion of why it is not being
-future-proofed.  Maybe:
+This is actually incorrect.  We don't want the head page, we want the
+page at index 0.  It's a subtle but important difference later on.
 
-	There are fancier things that could be done like trying to merge
-	adjacent TDMRs.  This would allow more pathological memory
-	layouts to be supported.  But, current systems are not even
-	close to exhausting the existing TDMR resources in practice.
-	For now, keep it simple.
+> @@ -3222,7 +3222,7 @@ static const char *shmem_get_link(struct dentry *dentry,
+>  			return ERR_PTR(error);
+>  		if (!folio)
+>  			return ERR_PTR(-ECHILD);
+> -		if (PageHWPoison(folio_page(folio, 0))) {
+> +		if (PageHWPoison(folio_headpage(folio))) {
 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index d36ac72ef299..5b1de0200c6b 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -407,6 +407,90 @@ static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
->  			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
->  }
+Same here.
+
+> +++ b/mm/slab.c
+> @@ -1373,7 +1373,7 @@ static struct slab *kmem_getpages(struct kmem_cache *cachep, gfp_t flags,
+>  	/* Make the flag visible before any changes to folio->mapping */
+>  	smp_wmb();
+>  	/* Record if ALLOC_NO_WATERMARKS was set when allocating the slab */
+> -	if (sk_memalloc_socks() && page_is_pfmemalloc(folio_page(folio, 0)))
+> +	if (sk_memalloc_socks() && page_is_pfmemalloc(folio_headpage(folio)))
+
+We should have a folio_is_pfmemalloc().
+
+> @@ -1389,7 +1389,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
 >  
-> +/* Get the TDMR from the list at the given index. */
-> +static struct tdmr_info *tdmr_entry(struct tdmr_info_list *tdmr_list,
-> +				    int idx)
-> +{
-> +	return (struct tdmr_info *)((unsigned long)tdmr_list->first_tdmr +
-> +			tdmr_list->tdmr_sz * idx);
-> +}
+>  	BUG_ON(!folio_test_slab(folio));
+>  	__slab_clear_pfmemalloc(slab);
+> -	page_mapcount_reset(folio_page(folio, 0));
+> +	page_mapcount_reset(folio_headpage(folio));
 
-I think that's more complicated and has more casting than necessary.
-This looks nicer:
+This one should be &folio->page.
 
-	int tdmr_info_offset = tdmr_list->tdmr_sz * idx;
+> @@ -1398,7 +1398,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += 1 << order;
+>  	unaccount_slab(slab, order, cachep);
+> -	__free_pages(folio_page(folio, 0), order);
+> +	__free_pages(folio_headpage(folio), order);
 
-	return (void *)tdmr_list->first_tdmr + tdmr_info_offset;
+&folio->page.
 
-Also, it might even be worth keeping ->first_tdmr as a void*.  It isn't
-a real C array and keeping it as void* would keep anyone from doing:
-
-	tdmr_foo = tdmr_list->first_tdmr[foo];
-
-> +#define TDMR_ALIGNMENT		BIT_ULL(30)
-> +#define TDMR_PFN_ALIGNMENT	(TDMR_ALIGNMENT >> PAGE_SHIFT)
-> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
-> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
-> +
-> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
-> +{
-> +	return tdmr->base + tdmr->size;
-> +}
-> +
-> +/*
-> + * Take the memory referenced in @tmb_list and populate the
-> + * preallocated @tdmr_list, following all the special alignment
-> + * and size rules for TDMR.
-> + */
-> +static int fill_out_tdmrs(struct list_head *tmb_list,
-> +			  struct tdmr_info_list *tdmr_list)
-> +{
-> +	struct tdx_memblock *tmb;
-> +	int tdmr_idx = 0;
-> +
-> +	/*
-> +	 * Loop over TDX memory regions and fill out TDMRs to cover them.
-> +	 * To keep it simple, always try to use one TDMR to cover one
-> +	 * memory region.
-> +	 *
-> +	 * In practice TDX1.0 supports 64 TDMRs, which is big enough to
-> +	 * cover all memory regions in reality if the admin doesn't use
-> +	 * 'memmap' to create a bunch of discrete memory regions.  When
-> +	 * there's a real problem, enhancement can be done to merge TDMRs
-> +	 * to reduce the final number of TDMRs.
-> +	 */
-> +	list_for_each_entry(tmb, tmb_list, list) {
-> +		struct tdmr_info *tdmr = tdmr_entry(tdmr_list, tdmr_idx);
-> +		u64 start, end;
-> +
-> +		start = TDMR_ALIGN_DOWN(PFN_PHYS(tmb->start_pfn));
-> +		end   = TDMR_ALIGN_UP(PFN_PHYS(tmb->end_pfn));
-> +
-> +		/*
-> +		 * A valid size indicates the current TDMR has already
-> +		 * been filled out to cover the previous memory region(s).
-> +		 */
-> +		if (tdmr->size) {
-> +			/*
-> +			 * Loop to the next if the current memory region
-> +			 * has already been fully covered.
-> +			 */
-> +			if (end <= tdmr_end(tdmr))
-> +				continue;
-> +
-> +			/* Otherwise, skip the already covered part. */
-> +			if (start < tdmr_end(tdmr))
-> +				start = tdmr_end(tdmr);
-> +
-> +			/*
-> +			 * Create a new TDMR to cover the current memory
-> +			 * region, or the remaining part of it.
-> +			 */
-> +			tdmr_idx++;
-> +			if (tdmr_idx >= tdmr_list->max_tdmrs)
-> +				return -E2BIG;
-> +
-> +			tdmr = tdmr_entry(tdmr_list, tdmr_idx);
-> +		}
-> +
-> +		tdmr->base = start;
-> +		tdmr->size = end - start;
-> +	}
-> +
-> +	/* @tdmr_idx is always the index of last valid TDMR. */
-> +	tdmr_list->nr_tdmrs = tdmr_idx + 1;
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Construct a list of TDMRs on the preallocated space in @tdmr_list
->   * to cover all TDX memory regions in @tmb_list based on the TDX module
-> @@ -416,16 +500,23 @@ static int construct_tdmrs(struct list_head *tmb_list,
->  			   struct tdmr_info_list *tdmr_list,
->  			   struct tdsysinfo_struct *sysinfo)
->  {
-> +	int ret;
-> +
-> +	ret = fill_out_tdmrs(tmb_list, tdmr_list);
-> +	if (ret)
-> +		goto err;
-> +
->  	/*
->  	 * TODO:
->  	 *
-> -	 *  - Fill out TDMRs to cover all TDX memory regions.
->  	 *  - Allocate and set up PAMTs for each TDMR.
->  	 *  - Designate reserved areas for each TDMR.
->  	 *
->  	 * Return -EINVAL until constructing TDMRs is done
->  	 */
-> -	return -EINVAL;
-> +	ret = -EINVAL;
-> +err:
-> +	return ret;
->  }
+> @@ -939,9 +939,9 @@ void free_large_kmalloc(struct folio *folio, void *object)
+>  	kasan_kfree_large(object);
+>  	kmsan_kfree_large(object);
 >  
->  static int init_tdx_module(void)
+> -	mod_lruvec_page_state(folio_page(folio, 0), NR_SLAB_UNRECLAIMABLE_B,
+> +	mod_lruvec_page_state(folio_headpage(folio), NR_SLAB_UNRECLAIMABLE_B,
+>  			      -(PAGE_SIZE << order));
 
-Otherwise this actually looks fine.
+	lruvec_stat_mod_folio(folio, NR_SLAB_UNRECLAIMABLE_B, ...
+
+> -	__free_pages(folio_page(folio, 0), order);
+> +	__free_pages(folio_headpage(folio), order);
+
+&folio->page.
+
+> +++ b/mm/slub.c
+> @@ -1859,7 +1859,7 @@ static inline struct slab *alloc_slab_page(gfp_t flags, int node,
+>  	__folio_set_slab(folio);
+>  	/* Make the flag visible before any changes to folio->mapping */
+>  	smp_wmb();
+> -	if (page_is_pfmemalloc(folio_page(folio, 0)))
+> +	if (page_is_pfmemalloc(folio_headpage(folio)))
+
+folio_is_pfmemalloc()
+
+> @@ -2066,7 +2066,7 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += pages;
+>  	unaccount_slab(slab, order, s);
+> -	__free_pages(folio_page(folio, 0), order);
+> +	__free_pages(folio_headpage(folio), order);
+
+&folio->page.
