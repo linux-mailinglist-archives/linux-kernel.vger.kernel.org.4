@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA8965FD4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA4265FD4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjAFJHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S232226AbjAFJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjAFJHa (ORCPT
+        with ESMTP id S229532AbjAFJId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:07:30 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5581C42E;
-        Fri,  6 Jan 2023 01:07:29 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 6 Jan 2023 04:08:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895361C436
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:08:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id BD12C11FB;
-        Fri,  6 Jan 2023 10:07:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1672996047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G/N9bFhFvobzsxRElHamLqc2QSzr6u1r8qJYQ1cDHWs=;
-        b=OODeHX4+Fne2I9M3Ccj5dHUWATFgG/aLXyDmh8ECSxscD0O8FfLYSvxDCuqmtctdZlZfrI
-        l0u0Y/l4eTU06lHziwX9q2KsUqecQPdMUtji3mWNP8QosRd3AfdjcoN2Rp5vrPksMI8TJX
-        +k7sBr/igIPm0iigwUsrhKUwsKXKaTBFgFeo/9gJFXOsBHAjBMB9zxB/MYZVNDJXY2DqZ7
-        Vo9CycD6DWFT4/0fvertQrb/KY9cMfFA1gNyGrS1UGgiR7Y4haw+//eqLA6kcNRIaYuhC3
-        QObe1TMR3iyumZpXOREXMU9vPiqWYpP3KPt/VlXLUKeXvenE6BH+elLE1oM3WQ==
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 276A061D58
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF9FC433D2;
+        Fri,  6 Jan 2023 09:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672996110;
+        bh=4nrv9O5BL94tk4LE5kqrTpUjmT36drfqRc0Gut7k0Lc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oLlpw6LEV0dblqDXr3O/S1T62dg7UWg6nKDlN+8BR9WVU6e8wOqiSSasHqHIiGxic
+         Kh3G7TryqAgaVRzgxW8Rh4ao8/v4uz+mOas57N8AD66f6NCKVnal6IUQIQGT8KGc5F
+         4L+N25tk9uCGwv+WDe1BkdXDbqSyKgl0TzVIhiAHzcrz8Vrao5HQWepbI8BXIjJS45
+         KdBmKo8awvKXjHnVpBT1Ncv3L3vaiv1NevdKbkM0+kKqHKCl2SqKjdntbHtnPm9pHm
+         lNxIfPeibrrTfqg4G3t5mESWSOoFbcVTNwUjEFfO8MarBjfDRjbJEPg4Jg661yUFPb
+         IyagTS2kWBc9w==
+Date:   Fri, 6 Jan 2023 17:08:27 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/chromeos: cros_ec: Use per-device lockdep key
+Message-ID: <Y7flCydDtLVwsXIJ@google.com>
+References: <20230106045537.1243887-1-wenst@chromium.org>
 MIME-Version: 1.0
-Date:   Fri, 06 Jan 2023 10:07:27 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH net-next v2 0/8] Add support for two classes of VCAP rules
-In-Reply-To: <20230106085317.1720282-1-steen.hegelund@microchip.com>
-References: <20230106085317.1720282-1-steen.hegelund@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <35a9ff9fa0980e1e8542d338c6bf1e0c@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106045537.1243887-1-wenst@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steen,
-
-thanks for adding me on CC :) I was just about to reply on your v1.
-
-Am 2023-01-06 09:53, schrieb Steen Hegelund:
-> This adds support for two classes of VCAP rules:
+On Fri, Jan 06, 2023 at 12:55:37PM +0800, Chen-Yu Tsai wrote:
+> Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
+> the following lock sequences:
 > 
-> - Permanent rules (added e.g. for PTP support)
-> - TC user rules (added by the TC userspace tool)
+> 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
+> 2. lock(&ec_dev->lock); lock(prepare_lock);
 > 
-> For this to work the VCAP Loopups must be enabled from boot, so that 
-> the
-> "internal" clients like PTP can add rules that are always active.
+> The actual dependency chains are much longer. The shortened version
+> looks somewhat like:
 > 
-> When the TC tool add a flower filter the VCAP rule corresponding to 
-> this
-> filter will be disabled (kept in memory) until a TC matchall filter 
-> creates
-> a link from chain 0 to the chain (lookup) where the flower filter was
-> added.
+> 1. cros-ec-rpmsg on mtk-scp
+>    ec_dev->lock -> prepare_lock
+> 2. In rt5682_i2c_probe() on native I2C bus:
+>    prepare_lock -> regmap->lock -> (possibly) i2c_adapter->bus_lock
+> 3. In rt5682_i2c_probe() on native I2C bus:
+>    regmap->lock -> i2c_adapter->bus_lock
+> 4. In sbs_probe() on cros-ec-i2c (passthrough) I2C bus on cros-ec
+>    i2c_adapter->bus_lock -> ec_dev->lock
 > 
-> When the flower filter is enabled it will be written to the appropriate
-> VCAP lookup and become active in HW.
+> While lockdep is correct that the shared lockdep classes have a circular
+> dependency, it is bogus because
 > 
-> Likewise the flower filter will be disabled if there is no link from 
-> chain
-> 0 to the chain of the filter (lookup), and when that happens the
-> corresponding VCAP rule will be read from the VCAP instance and stored 
-> in
-> memory until it is deleted or enabled again.
+>   a) 2+3 happen on a native I2C bus
+>   b) 4 happens on the actual EC on ChromeOS devices
+>   c) 1 happens on the SCP coprocessor on MediaTek Chromebooks that just
+>      happen to expose a cros-ec interface, but do not have a passthrough
+>      I2C bus
+> 
+> In short, the "dependencies" are actually on different devices.
 
-I've just done a very quick smoke test and looked at my lan9668 board
-that the following error isn't printed anymore. No functional testing.
-   vcap_val_rule:1678: keyset was not updated: -22
+Path of 4 looks weird to me.
 
-And it is indeed gone. But I have a few questions regarding how these
-patches are applied. They were first sent for net, but now due to
-a remark that they are too invasive they are targeted at net-next.
-But they have a Fixes: tag. Won't they be eventually backported to
-later kernels in any case? What's the difference between net and
-net-next then?
+Could you point out where sbs_probe() gets to acquire ec_dev->lock?
 
-Also patches 3-8 (the one with the fixes tags) don't apply without
-patch 1-2 (which don't have fixes tags). IMHO they should be
-reordered.
+I may misunderstand: I thought there is no such I2C bus for passthrough
+from kernel's point of view (as the bus and devices behind the EC).
+See also [2].
 
-Wouldn't it make more sense, to fix the regression via net (and
-a Fixes: tag) and then make that stuff work without tc? Maybe
-the fix is just reverting the commits.
+[2]: https://elixir.bootlin.com/linux/v6.2-rc2/source/drivers/platform/chrome/cros_ec.c#L241
 
--michael
+
+On a related note, for the commit title: s/chromeos/chrome/ if it gets
+chance to have next version.
