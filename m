@@ -2,189 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C1D65FF93
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918A265FFD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjAFLbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S229869AbjAFL54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjAFLbi (ORCPT
+        with ESMTP id S229564AbjAFL5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:31:38 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B541A39E;
-        Fri,  6 Jan 2023 03:31:36 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NpLdm4pcBzqTwL;
-        Fri,  6 Jan 2023 19:26:52 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 6 Jan
- 2023 19:31:33 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <tytso@mit.edu>, <jack@suse.com>
-CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yi.zhang@huawei.com>,
-        <libaokun1@huawei.com>, <zhanchengbin1@huawei.com>
-Subject: [PATCH v2] jbd2: Fix data missing when reusing bh which is ready to be checkpointed
-Date:   Fri, 6 Jan 2023 19:56:03 +0800
-Message-ID: <20230106115603.2624644-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 6 Jan 2023 06:57:54 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E616C19C1D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:57:52 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso902606wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=uqn3mQGjfprH1rWo7J/GVbJ8MDxMwLe8ZGhcyU28Kk0=;
+        b=U0R0pFPm3Tc7cEN5cy5a4/JNSrzO6jPWmvnZjpxCTPD8kn6LSfbDM8SET0/Pu7WkjN
+         feQLHe0xrhJ9aiEXmi/x7Zrxa4Bf8HzXsQVrt6CXO5jqLmzBoItJrodxooxQnX6UXSbm
+         Z7eB8N4TT5Z5rVHmXI0HqyppSDWsvf/aOQQDjzeGfYtXsliEE8FmLO8r1aEq2++T+B2u
+         GtSE1o1zeZLU5l3lvgHWK/OqRo4Ak3blLp6e7lVymJPRsWRTTWtO8i6XeW0gyabcOJy/
+         k2p2lYLGVxpTotmhG29hpv9G+Dr/S8orpI6/TqEPhjt60GjnHYy264EudeUDw9jtyjbI
+         XqsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uqn3mQGjfprH1rWo7J/GVbJ8MDxMwLe8ZGhcyU28Kk0=;
+        b=JMX5bwCaRvglU+n3KJjRGdh1WbvtQNkMNudaCRwmGUqNxmuDV9s+Yu/EtN7P8SYMwo
+         Wa2NIqBaBrg+2er+3Uv0lbk5IBnYo5zBUzzxRTNexa1gZ9bltMt0aesTpguXG4SY8kFQ
+         /dUGtdTEC2RDLvwOQSqUQZ4e5YhOA8rFXdbeh2C/Eq1h5ZvZOX+yGpY8OgPf9XjAvPv9
+         GrPMTKPkbgaHpivAQlV+40bX1J2QtG9LwPgy+06jcGB4697Hy4ZboLErb2KC6JTYNp24
+         S5+p0rR0GdQ4nP4ASsIN26r6gXSpPIXAkQZHGiDlrfcXVshp74hEzeIm28BKLclWU9Lj
+         axxg==
+X-Gm-Message-State: AFqh2krEK/CkJkPHYBk9nTBk5T7ugHCWgBxJ8MelbBcAUxWws4GaDVmQ
+        Qf4uidOWC2/2We/lOf4z6Ws=
+X-Google-Smtp-Source: AMrXdXuSoNUb6vHR404wC0WJatwP953geQgp52V1FYQgel/u+4E58mCe6nD1v7Hudbi1OJ0coLwGMQ==
+X-Received: by 2002:a7b:c3c1:0:b0:3c7:1359:783b with SMTP id t1-20020a7bc3c1000000b003c71359783bmr38939246wmj.1.1673006271464;
+        Fri, 06 Jan 2023 03:57:51 -0800 (PST)
+Received: from gmail.com (1F2EF380.nat.pool.telekom.hu. [31.46.243.128])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003d9dee823a3sm469577wmq.5.2023.01.06.03.57.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 03:57:50 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 6 Jan 2023 12:57:48 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [GIT PULL] perf fixes
+Message-ID: <Y7gMvFPLjvCv2Jx1@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will make data lost and could lead to a filesystem
-corrupted problem:
+Linus,
 
-1. jh(bh) is inserted into T1->t_checkpoint_list, bh is dirty, and
-   jh->b_transaction = NULL
-2. T1 is added into journal->j_checkpoint_transactions.
-3. Get bh prepare to write while doing checkpoing:
-           PA				    PB
-   do_get_write_access             jbd2_log_do_checkpoint
-    spin_lock(&jh->b_state_lock)
-     if (buffer_dirty(bh))
-      clear_buffer_dirty(bh)   // clear buffer dirty
-       set_buffer_jbddirty(bh)
-				    transaction =
-				    journal->j_checkpoint_transactions
-				    jh = transaction->t_checkpoint_list
-				    if (!buffer_dirty(bh))
-		                      __jbd2_journal_remove_checkpoint(jh)
-				      // bh won't be flushed
-		                    jbd2_cleanup_journal_tail
-    __jbd2_journal_file_buffer(jh, transaction, BJ_Reserved)
-4. Aborting journal/Power-cut before writing latest bh on journal area.
+Please pull the latest perf/urgent git tree from:
 
-In this way we get a corrupted filesystem with bh's data lost.
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-urgent-2023-01-06
 
-Fix it by moving the clearing of buffer_dirty bit just before the call
-to __jbd2_journal_file_buffer(), both bit clearing and jh->b_transaction
-assignment are under journal->j_list_lock locked, so that
-jbd2_log_do_checkpoint() will wait until jh's new transaction fininshed
-even bh is currently not dirty. And journal_shrink_one_cp_list() won't
-remove jh from checkpoint list if the buffer head is reused in
-do_get_write_access().
+   # HEAD: 57512b57dcfaf63c52d8ad2fb35321328cde31b0 perf/x86/rapl: Add support for Intel Emerald Rapids
 
-Cc: <stable@kernel.org>
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: zhanchengbin <zhanchengbin1@huawei.com>
-Suggested-by: Jan Kara <jack@suse.cz>
----
- v1->v2: Adopt Jan's suggestion, move the clearing of buffer_dirty bit
-	 and __jbd2_journal_file_buffer() inside journal->j_list_lock
-	 locking area.
- fs/jbd2/transaction.c | 51 ++++++++++++++++++++++++++++---------------
- 1 file changed, 34 insertions(+), 17 deletions(-)
+Intel RAPL updates for new model IDs.
 
-diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-index 6a404ac1c178..06a5e7961ef2 100644
---- a/fs/jbd2/transaction.c
-+++ b/fs/jbd2/transaction.c
-@@ -1010,36 +1010,37 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
- 	 * ie. locked but not dirty) or tune2fs (which may actually have
- 	 * the buffer dirtied, ugh.)  */
- 
--	if (buffer_dirty(bh)) {
-+	if (buffer_dirty(bh) && jh->b_transaction) {
- 		/*
- 		 * First question: is this buffer already part of the current
- 		 * transaction or the existing committing transaction?
- 		 */
--		if (jh->b_transaction) {
--			J_ASSERT_JH(jh,
--				jh->b_transaction == transaction ||
--				jh->b_transaction ==
--					journal->j_committing_transaction);
--			if (jh->b_next_transaction)
--				J_ASSERT_JH(jh, jh->b_next_transaction ==
--							transaction);
--			warn_dirty_buffer(bh);
--		}
-+		J_ASSERT_JH(jh, jh->b_transaction == transaction ||
-+			jh->b_transaction == journal->j_committing_transaction);
-+		if (jh->b_next_transaction)
-+			J_ASSERT_JH(jh, jh->b_next_transaction == transaction);
-+		warn_dirty_buffer(bh);
- 		/*
--		 * In any case we need to clean the dirty flag and we must
--		 * do it under the buffer lock to be sure we don't race
--		 * with running write-out.
-+		 * We need to clean the dirty flag and we must do it under the
-+		 * buffer lock to be sure we don't race with running write-out.
- 		 */
- 		JBUFFER_TRACE(jh, "Journalling dirty buffer");
- 		clear_buffer_dirty(bh);
-+		/*
-+		 * Setting jbddirty after clearing buffer dirty is necessary.
-+		 * Function jbd2_journal_restart() could keep buffer on
-+		 * BJ_Reserved list until the transaction committing, then the
-+		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
-+		 * after committing, the buffer couldn't fall on disk even
-+		 * last checkpoint finished, which may corrupt filesystem.
-+		 */
- 		set_buffer_jbddirty(bh);
- 	}
- 
--	unlock_buffer(bh);
--
- 	error = -EROFS;
- 	if (is_handle_aborted(handle)) {
- 		spin_unlock(&jh->b_state_lock);
-+		unlock_buffer(bh);
- 		goto out;
- 	}
- 	error = 0;
-@@ -1049,8 +1050,10 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
- 	 * b_next_transaction points to it
- 	 */
- 	if (jh->b_transaction == transaction ||
--	    jh->b_next_transaction == transaction)
-+	    jh->b_next_transaction == transaction) {
-+		unlock_buffer(bh);
- 		goto done;
-+	}
- 
- 	/*
- 	 * this is the first time this transaction is touching this buffer,
-@@ -1074,10 +1077,24 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
- 		 */
- 		smp_wmb();
- 		spin_lock(&journal->j_list_lock);
-+		if (test_clear_buffer_dirty(bh)) {
-+			/*
-+			 * Execute buffer dirty clearing and jh->b_transaction
-+			 * assignment under journal->j_list_lock locked to
-+			 * prevent bh being removed from checkpoint list if
-+			 * the buffer is in an intermediate state (not dirty
-+			 * and jh->b_transaction is NULL).
-+			 */
-+			JBUFFER_TRACE(jh, "Journalling dirty buffer");
-+			set_buffer_jbddirty(bh);
-+		}
- 		__jbd2_journal_file_buffer(jh, transaction, BJ_Reserved);
- 		spin_unlock(&journal->j_list_lock);
-+		unlock_buffer(bh);
- 		goto done;
- 	}
-+	unlock_buffer(bh);
-+
- 	/*
- 	 * If there is already a copy-out version of this buffer, then we don't
- 	 * need to make another one
--- 
-2.31.1
+NOTE: technically this is hardware-enablement, but we generally make an 
+exception for trivial expansions of model check tables that only affect 
+those models. Let me know if it's a bridge too far for -rc3.
 
+ Thanks,
+
+	Ingo
+
+------------------>
+Chris Wilson (1):
+      perf/x86/rapl: Treat Tigerlake like Icelake
+
+Zhang Rui (2):
+      perf/x86/rapl: Add support for Intel Meteor Lake
+      perf/x86/rapl: Add support for Intel Emerald Rapids
+
+
+ arch/x86/events/rapl.c | 5 +++++
+ 1 file changed, 5 insertions(+)
