@@ -2,336 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A55965FF44
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6E765FF46
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjAFLAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S229491AbjAFLA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbjAFLA2 (ORCPT
+        with ESMTP id S232676AbjAFLAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:00:28 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07CB6E404;
-        Fri,  6 Jan 2023 03:00:25 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g13so1480805lfv.7;
-        Fri, 06 Jan 2023 03:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SW/9INdwr3DrYb2M+rAGHTyplFx8OBOFvhB2p2FQ81g=;
-        b=YGZG6HLlJTM1TzVguVykMUMISCXM7q+UjvSMdJu/JFbstAbEhmX9zl00Ot/vdYlHuH
-         mrJUYxN9aUmEEleOI9XqYREcIYdFSO+LLDNEgVyPSxP7xyAoM7nLyz91bZytDg2ipyc5
-         rtwFPcccNTAwDlleo1/tNnRxRxQJcbPhO/EUY+utFjnaQ5G8YUsUQo+EpNvx0N56BSfU
-         XiFwyB5XuIA2W0aoSt6ge2GPqrLvOg8Ro6OjBbkqaZ19kQgwc9WqvXOKIy2YVsOC2Srd
-         r+XSOeF5ZBhhIERbaAJKzzW3e04msgG05KCqpE2MatkdcMGTsxLYC8Lyhr6yqn+HuSE6
-         sA6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SW/9INdwr3DrYb2M+rAGHTyplFx8OBOFvhB2p2FQ81g=;
-        b=MigHEXRsipuFD/cs9fYuHxSNtZn5RqAgW3N5JXWboly4BEIK4H6t3eI0EMpEXd95Jo
-         n7t9N8a2UldLecsUDxGmIyniZ9A3vezqEHdK/nPR1af0r0rAP1Sv0auODLYUd7S5nDRs
-         VWEMvap8Cmw/9wHWMiYAYTUjPbjxNmrAX5NMdAxS3OWNcIWVXCWyfQos8HVXBdyV4rsc
-         45EPYteeA5wu4NwnKiXNfrX4fpdW56SgrFQBRU6O+mtcYgYYlbSWs7hdZ4d2AwPBTxga
-         9i1RiLGgEPnBarqw65eIIYefW97gY1LQXuCtWD8ovmfhiWvAtREHOmEL7Rl9/46hQ79/
-         Diwg==
-X-Gm-Message-State: AFqh2kqEeEpoiYGdjaCsUvKHzVUmyHOQtjRqZKFgkJQTONoydLZ0g9K1
-        b/r9dXNSspGoWj+n7jyPAic=
-X-Google-Smtp-Source: AMrXdXtDMayUSEW9gWTi7+nisJn78bTVn/CPWxx9tXKewtHzILbf4J0iJs41oTm9pCVVia9rc5OSIg==
-X-Received: by 2002:a19:f513:0:b0:4b5:731f:935a with SMTP id j19-20020a19f513000000b004b5731f935amr3441875lfb.0.1673002823960;
-        Fri, 06 Jan 2023 03:00:23 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id a22-20020a2e9816000000b0027fc54f8bf0sm69016ljj.35.2023.01.06.03.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 03:00:23 -0800 (PST)
-Date:   Fri, 6 Jan 2023 13:00:21 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] Drivers: hv: vmbus: Support TDX guests
-Message-ID: <20230106130021.00006c94@gmail.com>
-In-Reply-To: <20221121195151.21812-7-decui@microsoft.com>
-References: <20221121195151.21812-1-decui@microsoft.com>
-        <20221121195151.21812-7-decui@microsoft.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 6 Jan 2023 06:00:49 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11A56E406
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:00:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1673002843; x=1704538843;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dzMGYcC76vsGLcqnozoVnvpsbbrZPxZlS6l3+6NEWPY=;
+  b=naec50Kp6sLLWCYDqj1rKADbuTlIuhoAft0to+UFS80b9HlOQqM3SGQO
+   bBsmtBs5Hjzse+TjvxpceMd8VW6CAFnu/5W0LJd/Be8RgXi6I2/O6hfIs
+   ew8dojAEZ2uaje9qHuvLH7koOLGKQZdbCZP+wLMin7wu0MAm167/bDboW
+   HhBAEQOVWmuWNE9b1ZjEZmc7gb06Koa0gXTNfIKcFcBQ0yMVcJHil6Pw+
+   ojntvPbXyjmnDxswKxn5E6cP2YP31HG3pcmfpVpCz1yfm+lQWC2/y6T76
+   U9bJU7yl0KvgOev8I89uA/334c2YqUxSktbtLjzfFnTi4I7w0YbHpNeud
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,305,1665417600"; 
+   d="scan'208";a="225224631"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Jan 2023 19:00:43 +0800
+IronPort-SDR: dtGPcXsf3O9EmbO8RkV4KGkoI6k8u7e/ke9yS1gMTQynaBnJRdyJKLNMjXFTgZVSLzJNTMLhlJ
+ SVXl3iY5D3jrr5fmk8D2n3rci3yOUAwZR9VZzDm7xhcAHvb4eR5gXXTfnoECh37YRQNQ7JmN5h
+ ax53ZfVOxnezD+gDtiJzIxH4SzfGJlcgKryO8t1UXCIfhg64HYiUMqtP5W2kYvw/hTt+8Pk0Tr
+ iFbjrri51KlRUC23k8DF+dW5oIYKNQvGFX4tIZroRCfE7ZZOMUFuf5LAugV0IAR0USqMb02PNl
+ r04=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Jan 2023 02:12:53 -0800
+IronPort-SDR: LbYF3NBVCZjtTQKL3syAGJtT2rYWE2Wzbt3e00v40XjCmYNnJPb09UEQCR+FTP058ZnHIVmxWI
+ pxddpK2bsQci7lGx7QLyWWi1XUi7euR0db/bmblg40QhZacFajYn7G+Guf+eAPJLX57MomoVpr
+ aHAyml7bYJ8cRfewGOFOiaoAu7xf8/Qdk65jAaNmnTAE+EV/aryruFC07afTan8tXDdBqv5MZW
+ k1bkif22v06Bs5Up+0JtmaEZEa5WY5UdkmgX9NuhWYnDrTK44ZFpPSNi9H0Sq8BJl5jc0AMxep
+ Ti8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Jan 2023 03:00:44 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NpL3Z6BZDz1RwqL
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:00:42 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1673002841; x=1675594842; bh=dzMGYcC76vsGLcqnozoVnvpsbbrZPxZlS6l
+        3+6NEWPY=; b=bI2spnR+FSiaJZD4rCqOcAS5ZC4aFxAg5nxQYH9ZyzdPB6qzPqK
+        qJl9DAxhBKDWf75kvgRz6sFKhkvGo50dpTfOtfOw5I8MQXCgPtZvgnoa/XgMBmkC
+        wJHygiz9VZ/Az5WOlI3Sdx7uHm/Ao6zAZDxNQktjEiG78uC3st3QbwZQLWOukKxZ
+        DUDsw4M1M3dbDDQNyDNtaAOQjAiUl5Sw1+bS5x7hERVnVcEQQFO1JwIP8BGbgppB
+        FOg+lp5YUtPl5ESQQVtmFQMXdwq9uWaQHrrW3FyDCmkFvGTM0kyzMmxZI6O0eUPi
+        Qtj2WFVnjNkfsy2c8K9rcPVMSkjP2XxaCmA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2l0hAJt0314b for <linux-kernel@vger.kernel.org>;
+        Fri,  6 Jan 2023 03:00:41 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NpL3X00tLz1RvLy;
+        Fri,  6 Jan 2023 03:00:39 -0800 (PST)
+Message-ID: <32aaa034-dc39-75dd-f4ec-e0e5ef9dd29c@opensource.wdc.com>
+Date:   Fri, 6 Jan 2023 20:00:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/7] block: add a new helper bdev_{is_zone_start,
+ offset_from_zone_start}
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk
+Cc:     kernel@pankajraghav.com, linux-kernel@vger.kernel.org,
+        hare@suse.de, bvanassche@acm.org, snitzer@kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org, hch@lst.de,
+        linux-block@vger.kernel.org, gost.dev@samsung.com
+References: <20230106083317.93938-1-p.raghav@samsung.com>
+ <CGME20230106083320eucas1p1f8de0c6ecf351738e8f0ee5f3390d94f@eucas1p1.samsung.com>
+ <20230106083317.93938-3-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230106083317.93938-3-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 11:51:51 -0800
-Dexuan Cui <decui@microsoft.com> wrote:
-
-> Intel folks added the generic code to support a TDX guest in April, 2022.
-> This commit and some earlier commits from me add the Hyper-V specific
-> code so that a TDX guest can run on Hyper-V.
+On 1/6/23 17:33, Pankaj Raghav wrote:
+> Instead of open coding to check for zone start, add a helper to improve
+> readability and store the logic in one place.
 > 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> bdev_offset_from_zone_start() will be used later in the series.
+> 
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 > ---
->  arch/x86/hyperv/hv_init.c      | 19 +++++++++++++++----
->  arch/x86/kernel/cpu/mshyperv.c | 10 ++++++++++
->  arch/x86/mm/pat/set_memory.c   |  2 +-
->  drivers/hv/connection.c        |  4 +++-
->  drivers/hv/hv.c                | 25 +++++++++++++++++++++++++
->  drivers/hv/ring_buffer.c       |  2 +-
->  6 files changed, 55 insertions(+), 7 deletions(-)
+>  block/blk-core.c       |  2 +-
+>  block/blk-zoned.c      |  4 ++--
+>  include/linux/blkdev.h | 18 ++++++++++++++++++
+>  3 files changed, 21 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 05682c4e327f..694f7fb04e5d 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -77,7 +77,7 @@ static int hyperv_init_ghcb(void)
->  static int hv_cpu_init(unsigned int cpu)
->  {
->  	union hv_vp_assist_msr_contents msr = { 0 };
-> -	struct hv_vp_assist_page **hvp =
-> &hv_vp_assist_page[smp_processor_id()];
-> +	struct hv_vp_assist_page **hvp;
->  	int ret;
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index 9321767470dc..0405b3144e7a 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -573,7 +573,7 @@ static inline blk_status_t blk_check_zone_append(struct request_queue *q,
+>  		return BLK_STS_NOTSUPP;
 >  
->  	ret = hv_common_cpu_init(cpu);
-> @@ -87,6 +87,7 @@ static int hv_cpu_init(unsigned int cpu)
->  	if (!hv_vp_assist_page)
->  		return 0;
+>  	/* The bio sector must point to the start of a sequential zone */
+> -	if (bio->bi_iter.bi_sector & (bdev_zone_sectors(bio->bi_bdev) - 1) ||
+> +	if (!bdev_is_zone_start(bio->bi_bdev, bio->bi_iter.bi_sector) ||
+>  	    !bio_zone_is_seq(bio))
+>  		return BLK_STS_IOERR;
 >  
-> +	hvp = &hv_vp_assist_page[smp_processor_id()];
->  	if (!*hvp) {
->  		if (hv_root_partition) {
->  			/*
-> @@ -398,11 +399,21 @@ void __init hyperv_init(void)
->  	if (hv_common_init())
->  		return;
+> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
+> index db829401d8d0..614b575be899 100644
+> --- a/block/blk-zoned.c
+> +++ b/block/blk-zoned.c
+> @@ -277,10 +277,10 @@ int blkdev_zone_mgmt(struct block_device *bdev, enum req_op op,
+>  		return -EINVAL;
 >  
-> -	hv_vp_assist_page = kcalloc(num_possible_cpus(),
-> -				    sizeof(*hv_vp_assist_page),
-> GFP_KERNEL);
-> +	/*
-> +	 * The VP assist page is useless to a TDX guest: the only use we
-> +	 * would have for it is lazy EOI, which can not be used with
-> TDX.
-> +	 */
-> +	if (hv_isolation_type_tdx())
-> +		hv_vp_assist_page = NULL;
-> +	else
-> +		hv_vp_assist_page = kcalloc(num_possible_cpus(),
-> +					    sizeof(*hv_vp_assist_page),
-> +					    GFP_KERNEL);
->  	if (!hv_vp_assist_page) {
->  		ms_hyperv.hints &= ~HV_X64_ENLIGHTENED_VMCS_RECOMMENDED;
-> -		goto common_free;
-> +
-> +		if (!hv_isolation_type_tdx())
-> +			goto common_free;
->  	}
+>  	/* Check alignment (handle eventual smaller last zone) */
+> -	if (sector & (zone_sectors - 1))
+> +	if (!bdev_is_zone_start(bdev, sector))
+>  		return -EINVAL;
 >  
->  	if (hv_isolation_type_snp()) {
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c
-> b/arch/x86/kernel/cpu/mshyperv.c index dddccdbc5526..6f597b23ad3e 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -350,7 +350,17 @@ static void __init ms_hyperv_init_platform(void)
->  			case HV_ISOLATION_TYPE_TDX:
->  				static_branch_enable(&isolation_type_tdx);
->  
-> +				cc_set_vendor(CC_VENDOR_INTEL);
-> +
->  				ms_hyperv.shared_gpa_boundary =
-> cc_mkdec(0); +
-> +				/* Don't use the unsafe Hyper-V TSC
-> page */
-> +				ms_hyperv.features &=
-> +					~HV_MSR_REFERENCE_TSC_AVAILABLE;
-> +
-> +				/* HV_REGISTER_CRASH_CTL is unsupported
-> */
-> +				ms_hyperv.misc_features &=
-> +
-> ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE; break;
->  
->  			default:
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 2e5a045731de..bb44aaddb230 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -2120,7 +2120,7 @@ static int __set_memory_enc_pgtable(unsigned long
-> addr, int numpages, bool enc) 
->  static int __set_memory_enc_dec(unsigned long addr, int numpages, bool
-> enc) {
-> -	if (hv_is_isolation_supported())
-> +	if (hv_is_isolation_supported() && !hv_isolation_type_tdx())
->  		return hv_set_mem_host_visibility(addr, numpages, !enc);
->  
->  	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-
-Let's say there will be four cases:
-
-----
-case a. SEV-SNP guest with paravisor
-
-In the code, this case is represented by:
-
-hv_is_isolation_supported() && hv_isolation_type_snp()
-hv_is_isolation_supported() && !hv_isolation_type_tdx()
-
-case b. TDX guest with paravisor
-?
-
-case c. SEV-SNP guest *without* paravisor
-?
-
-case d. TDX guest *without* paravisor
-
-In the code, this case is represented by:
-
-hv_is_isolation_supported() && hv_isolation_type_tdx()
-----
-
-1. It would be better to use "hv_is_isolation_supported() &&
-hv_isolation_type_snp()" to represent case a to avoid confusion in the
-above patch.
-
-2. For now, hv_is_isolation_supported() only shows if the guest is a CC
-guest or not. hv_isolation_type_*() only represent SNP or TDX but
-not "w/ or w/o paravisor".
-
-How are you going to represent case b and c in __set_memory_enc_dec()?
-
-I think you are looking for something to show if the guest is running
-with a paravisor or not here:
-
-if (hv_is_isolation_supported() && hv_is_isolation_with_paravisor())
-...
-
-Thanks,
-Zhi.
-
-
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index 9dc27e5d367a..1ecc3c29e3f7 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -250,12 +250,14 @@ int vmbus_connect(void)
->  		 * Isolation VM with AMD SNP needs to access monitor
-> page via
->  		 * address space above shared gpa boundary.
->  		 */
-> -		if (hv_isolation_type_snp()) {
-> +		if (hv_isolation_type_snp() || hv_isolation_type_tdx())
-> { vmbus_connection.monitor_pages_pa[0] +=
->  				ms_hyperv.shared_gpa_boundary;
->  			vmbus_connection.monitor_pages_pa[1] +=
->  				ms_hyperv.shared_gpa_boundary;
-> +		}
->  
-> +		if (hv_isolation_type_snp()) {
->  			vmbus_connection.monitor_pages[0]
->  				=
-> memremap(vmbus_connection.monitor_pages_pa[0], HV_HYP_PAGE_SIZE,
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 4d6480d57546..03b3257bc1ab 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -18,6 +18,7 @@
->  #include <linux/clockchips.h>
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
-> +#include <linux/set_memory.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
->  #include "hyperv_vmbus.h"
-> @@ -119,6 +120,7 @@ int hv_synic_alloc(void)
->  {
->  	int cpu;
->  	struct hv_per_cpu_context *hv_cpu;
-> +	int ret;
+> -	if ((nr_sectors & (zone_sectors - 1)) && end_sector != capacity)
+> +	if (!bdev_is_zone_start(bdev, nr_sectors) && end_sector != capacity)
+>  		return -EINVAL;
 >  
 >  	/*
->  	 * First, zero all per-cpu memory areas so hv_synic_free() can
-> @@ -168,6 +170,21 @@ int hv_synic_alloc(void)
->  			pr_err("Unable to allocate post msg page\n");
->  			goto err;
->  		}
-> +
-> +
-> +		if (hv_isolation_type_tdx()) {
-> +			ret = set_memory_decrypted(
-> +				(unsigned
-> long)hv_cpu->synic_message_page, 1);
-> +			BUG_ON(ret);
-> +
-> +			ret = set_memory_decrypted(
-> +				(unsigned
-> long)hv_cpu->synic_event_page, 1);
-> +			BUG_ON(ret);
-> +
-> +			ret = set_memory_decrypted(
-> +				(unsigned long)hv_cpu->post_msg_page,
-> 1);
-> +			BUG_ON(ret);
-> +		}
->  	}
->  
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 0e40b014c40b..04b7cbfd7a2a 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -715,6 +715,7 @@ static inline unsigned int disk_zone_no(struct gendisk *disk, sector_t sector)
+>  {
 >  	return 0;
-> @@ -225,6 +242,10 @@ void hv_synic_enable_regs(unsigned int cpu)
->  	} else {
->  		simp.base_simp_gpa =
-> virt_to_phys(hv_cpu->synic_message_page)
->  			>> HV_HYP_PAGE_SHIFT;
+>  }
 > +
-> +		if (hv_isolation_type_tdx())
-> +			simp.base_simp_gpa +=
-> ms_hyperv.shared_gpa_boundary
-> +				>> HV_HYP_PAGE_SHIFT;
->  	}
+
+whiteline change
+
+>  static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
+>  {
+>  	return 0;
+> @@ -1304,6 +1305,23 @@ static inline sector_t bdev_zone_sectors(struct block_device *bdev)
+>  	return q->limits.chunk_sectors;
+>  }
 >  
->  	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
-> @@ -243,6 +264,10 @@ void hv_synic_enable_regs(unsigned int cpu)
->  	} else {
->  		siefp.base_siefp_gpa =
-> virt_to_phys(hv_cpu->synic_event_page)
->  			>> HV_HYP_PAGE_SHIFT;
+> +static inline sector_t bdev_offset_from_zone_start(struct block_device *bdev,
+> +						   sector_t sec)
+> +{
+> +	if (!bdev_is_zoned(bdev))
+
+this helper should never be called outside of code supporting zones. So
+why this check ?
+
+> +		return 0;
 > +
-> +		if (hv_isolation_type_tdx())
-> +			siefp.base_siefp_gpa +=
-> ms_hyperv.shared_gpa_boundary
-> +				>> HV_HYP_PAGE_SHIFT;
->  	}
->  
->  	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
-> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-> index c6692fd5ab15..a51da82316ce 100644
-> --- a/drivers/hv/ring_buffer.c
-> +++ b/drivers/hv/ring_buffer.c
-> @@ -233,7 +233,7 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info
-> *ring_info, 
->  		ring_info->ring_buffer = (struct hv_ring_buffer *)
->  			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
-> -				PAGE_KERNEL);
-> +				pgprot_decrypted(PAGE_KERNEL_NOENC));
->  
->  		kfree(pages_wraparound);
->  		if (!ring_info->ring_buffer)
+> +	return sec & (bdev_zone_sectors(bdev) - 1);
+> +}
+> +
+> +static inline bool bdev_is_zone_start(struct block_device *bdev, sector_t sec)
+> +{
+> +	if (!bdev_is_zoned(bdev))
+> +		return false;
+
+Same here.
+
+> +
+> +	return bdev_offset_from_zone_start(bdev, sec) == 0;
+> +}
+> +
+>  static inline int queue_dma_alignment(const struct request_queue *q)
+>  {
+>  	return q ? q->limits.dma_alignment : 511;
+
+-- 
+Damien Le Moal
+Western Digital Research
 
