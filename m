@@ -2,149 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B1B65FE8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C0D65FE90
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAFKLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
+        id S232976AbjAFKMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjAFKLK (ORCPT
+        with ESMTP id S232271AbjAFKMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:11:10 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A853C0C5;
-        Fri,  6 Jan 2023 02:11:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lHIURIrV1O2ttTlagvi68UrPW3Bp2MvowjEDC5NUpVYSIVmOBCAcZFZNB5yty7p/HAucKOZLtMR/KCA3ueWNDrmHC4qATbf44Cyovg+fzoMUKMDI4O78bsx+AW5uP0/JNl7Rr02pGxHFluOB/0nGjIomn9icmFZBXbygSff0+SNUniBse2I2ArQqpMLlYEBC8AgY8UL1MYvSgAPjBT6LQshp/hh8QcQibYavJ2xJf0G63GPUCDV7vEmkvz7nkIyMtLIMO8ar3kGPZq6fHOA/gS86hX+aMA8wMyQH8XCfrEOUbBgH+ZnkOfUKARppO1bunLNYlEStbpyPu0IkSuvh4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mQkh+S+xY+4cstl5gDCysc0d59+JBEjM26yIGo8VLTc=;
- b=lK0tQFvndM0u3L6kC7njzNAT/vDw2uiZgoMQqBXvbq0tDn+dIcikRLND/0tRzNK+ke6WtFxb7DircrESCwNiVOdq7GIUHKcUtryfUnqQc4jUfbhC/2xoYqHae10wALAEDMwEKJKgNRh6cAKoEokmtMAfLZraeCl+vOV3+1OH9CJ8rFNvFIDtkE03ZAoDdED6XiXxwmfT43xV5G4kg2Eu3RGkpHgptzH7Ezyigd2ZWM04mDy54K7+7h3LCpkFQc9D0Y8ISf7VZqjZm+6B8PSWNoVZvn/lhz7kRLssDQKEZsx7DovlN+JHfONEHnoLhp4MuzeE4ovXeN1soTjtRTyEPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mQkh+S+xY+4cstl5gDCysc0d59+JBEjM26yIGo8VLTc=;
- b=prElmeFOJEaipLYsFI881f2RkJu/9je3Y0PUdje/P+nKGchZAxmrHMjjFbU2ZBTd4xQs6+T7lwKsvGTnIfwB9bQTzxSvQxDyr1vIh2EGd9QUTgK/vnVh0+lGWAQ/gJLX1NxdAkZ5L4cDsEWsgd9qAKbDylkgG3KsiTWm2zrMMzvzn0cPh39wrloWNYienUMpgfKtIASTKKRKw9a8kLIBjQt9+iasHbPLejg3S2yA2qDQT+w+SH0U/HU7Y1ZQRPxeDlJ3KwR9ppp6NdLmV6OzgEhtsGaon3WbGC61+im2+aBJtUSZtHO4tc6ReHj9b3IK1JaNjFAUlkljw2cZhKGF5A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by DS0PR12MB7970.namprd12.prod.outlook.com (2603:10b6:8:149::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 10:11:02 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a600:9252:615:d31a]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a600:9252:615:d31a%3]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 10:11:02 +0000
-Date:   Fri, 6 Jan 2023 12:10:57 +0200
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Petr Machata <petrm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mlxsw: spectrum_router: Replace 0-length array with
- flexible array
-Message-ID: <Y7fzsd7aH/tCAMyf@shredder>
-References: <20230105232224.never.150-kees@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105232224.never.150-kees@kernel.org>
-X-ClientProxiedBy: VI1P191CA0004.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:800:1ba::10) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        Fri, 6 Jan 2023 05:12:51 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35346879D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:12:50 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id d14so205344uak.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 02:12:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywCSUF+X295X7XbFjWuK654uTeSEr3DQy9LQ0QXRwbk=;
+        b=JxA2IQYp1OzLpRTt6TJefF1yxxSYEAmcheawYkZApCdToXvztRP6ykTemrQTzi5eZa
+         yBF8fZGdBRzUuQFs8cGQdnWjRdPSmHvLj/AfIUdKmQej5LHmCfuRQZrFRqWbAqOckfLR
+         X6EobZrXLpp8ArH5LPGwd+6cyuJ8SJ6RCEDA+zqLH3ViGu0bAlvNJWF+XrkaJgMBZnS4
+         IAI34lqmP8TPbMpjpmCbZ51uY7rdnu/95O8BAVa17cKac+mp7rFV34dy9n9m5LKvH6XV
+         k2Zp+zaeRDlyR80sNsOnPp7m8bKjjGh1/QbZ240oL+Slg4+W3ImhAgbr+hT3yunCrqWu
+         E90g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywCSUF+X295X7XbFjWuK654uTeSEr3DQy9LQ0QXRwbk=;
+        b=pyaM5aOKZBlAwDidORYW97qU+Px7KL3bvmH2vSzpMw6FhJj5w36YYJm1WJBu8s6JdZ
+         GRLtjyYnV0MK0qYi8bGlTCMBDOQ95myb2f3eS0whWWf7pAkdpvsCcuvvHJv6eFQs8S1/
+         ll7cwOOs2jksJAOwmHKU5Sw4hwQ26m1m1mypubsgiyBiYTazXb5Gd9X2cjyvS0hJ7kWb
+         YMC/Zlwec1tYdPzMfJ9Tr5gH1xxlMlwjKdCYY5I5WV88+uL2PYtdbm5qVu0xKJBHRQDP
+         1jRgOIxtM6bPe9HkVsRzmX3nOBe4VIhl/9VkWC0zHam5uJGSyN/iHBX66AsQhkHhgria
+         lGdQ==
+X-Gm-Message-State: AFqh2kpGMw5xJ2sjCli9pqDWXuCmq/3F+wfzKVLKDHyQNnGYHL8DbB44
+        rKZB98kqxn8+es7BI/TYeISMOJcnm7LGQBR8R2Wysg==
+X-Google-Smtp-Source: AMrXdXuZ3NuN6/159on7c/7uCnqTDsn8Cbh4ESQwvfI5CMjlUpe800yuPE5y7O9SfoRYx8sCKp+7hCbBgCw38Yvi+HQ=
+X-Received: by 2002:ab0:152b:0:b0:418:620e:6794 with SMTP id
+ o40-20020ab0152b000000b00418620e6794mr5137240uae.59.1672999969735; Fri, 06
+ Jan 2023 02:12:49 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DS0PR12MB7970:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4df2247-b577-4d27-f4bd-08daefce50d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FK9ImDUa+jFfFoiSRWc5CyGfqHOBD4jMsUp9pZgWLrP9ROIxcGsGBbXFr0zuhuL9+YQeA7x+OxYND4kjPNpjT/fTrT84na36eTHddj8ILb/pYyPGarQVXt5tX4CkfwCBbmAPhh77lXt2zQG6SU4CWLbJ7pB0sR6KHJgRoPlY/w/qlUcqrEbn1mkvq928G3NPimwYDw9XE8XdLcVZr7YsZuV5N66xnOAUcD46HZTyTekd3Bs3XLHghcRLgWppENKecULLO1POKo/4kJfdzs+yR/wSsHLH+4WjVdcjFmRjMTUiI+Nd7gjrXBje/9nUOo26SK7BWzq8EsPVroxTxX+FYBnyfLJQL3aN3A2bl9VWd8GbFtczMnZaHVSqVmlWi+e4bUOYuJ1/YZ7SWUfWjFtfbKa+/qYPTUwofZZ3DSFbsQ1mPgij7PgB6vTkGop0kAuAGL/AZSAIGeFPkgCVoHgMY019k8bPy3FlnGh5HQ6qIGr4tu8Bi8lH073NBpIZ/fP6Xul99bMX8Y6xai/ZlQc+7GbFul9P2RQJXv0ViTHpb8kIRx0YstKvVJ9aElEnCzIVXghLUJnrI0PG16v/4kzzW5pzzod3DRaz8Z7XtFFaKFV4Tp679np3YMYpc7DnIjxsEauggeAacBO4u//HhC8qOSXiJBmZz4FPs2/4mf6LfT1OzHINoC1PW6Hsa0f+q+05DCelal1gvXp0HmNXY7eNSOcPhAlRp5gHxw4cr2ELeOo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(366004)(346002)(39860400002)(376002)(396003)(136003)(451199015)(83380400001)(66574015)(26005)(6512007)(9686003)(6666004)(6506007)(33716001)(86362001)(186003)(38100700002)(316002)(478600001)(4326008)(41300700001)(8676002)(2906002)(5660300002)(8936002)(966005)(6486002)(66476007)(66556008)(54906003)(66946007)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y6qpmSSZ5HhAHyhwbQ0KhL3muU4WfzdZcvAkyzbIvUpzULJcGjz8t/MxhWAw?=
- =?us-ascii?Q?PtNYE7GF2BCUiZW3nc4IDhMvtjL8j1hal1Zd04mude6aYrB9EWNVS1QGUNMV?=
- =?us-ascii?Q?x0GkjxZSmHiSkMyVihNb7KAPMuZcnYRV24OYPMIZNxf4cO3Cf+D9wDwLoGyl?=
- =?us-ascii?Q?N3O03lBXbxr3FUNxsuOcDNfsL2VM0CmSsa9+5ECwVqG46J0EUXPzHK5Gjcm/?=
- =?us-ascii?Q?Akur7CKYZEYjtjTLJ5Ylxc9xCqVunW7hp6qsuh8j1ANwYM4QlijLbHwbfOiR?=
- =?us-ascii?Q?1qcMhtVIdpaBT/kK3gFsxpLjylRW6fTdCTOT/JWt9nCZZPXO1Zqddpuiv9cR?=
- =?us-ascii?Q?9+G+N0kkgHcY9pZexnZhe4+rmDIn/O0GZixLYfs/uWsGe3PXZ5DoDCIk/bKW?=
- =?us-ascii?Q?BvSJlg3ZFl/fjO6iPn8h0b+cI/TjE2aFUqWpknU+RzSxlq7YvtK5zgRXks8P?=
- =?us-ascii?Q?p+GnkpW+rHJl2ptwSp5Z9fhiANrkrLhxOMBWV8thu5+/Q4M32pA6h3HqMUZX?=
- =?us-ascii?Q?tUD6D/nN3mQePzcQe2Fm1LKt5SvXp4tudN99KYY0wBOaIw1jMuTDqpjqGwN8?=
- =?us-ascii?Q?fPWjyQ4vbFOYHTCtNHc5cYIMZbMgJRDwCa5rklUIG3PoJWhjSrXjiHIWEf6z?=
- =?us-ascii?Q?6Q2wv5bBDJvRgWYZNe4oigTltCq8urQfoW54KOPRAlE/U6Z8RGdewsgsArtu?=
- =?us-ascii?Q?ezZ+Lt0WJYLPged23sjxxaOubyVsLw+y7NwyxxZ2AF+Qx8LbLlUflnHQN8xF?=
- =?us-ascii?Q?1V9bIT1ixALIJjYcCanINXwWWpP6MVZuoAr5ZRq8PV1iC+xE9BcokyTaLjC4?=
- =?us-ascii?Q?opo33RCcTSBJtPGVvI94QfQYKYPrzHEQxjz3sWq2k/xVMK1dO2qSBpvwtev5?=
- =?us-ascii?Q?mmFqcyiL68hbyzH1ILiDlVxQ115hjBlr5VS0aPlBqS5Wetim6Lj6+0Bij7uv?=
- =?us-ascii?Q?Y7sMK6j0QW82D/l5rb/KxyIpVNHQVogt+WC33CHvVHO/zqUmYPB4221A2nRV?=
- =?us-ascii?Q?JN8tgVhf8mGC2i4wq6JQCR91hjh2hhJRl1UfI8DzDcLVQ8kzk83d8/KTmLRM?=
- =?us-ascii?Q?spyeQZjD1tiHZOpcL6cUlkbDYClwStJf210KlbdqHxmm3K64kx6OnctDwGMA?=
- =?us-ascii?Q?lHgIkWNchgyjrOMZHQwZInlMEUBoguJE1lbpip0CDcP7eXXrTWkcJwDF9q+K?=
- =?us-ascii?Q?f29HVekdQ4y0yIplExKD1UsJlYnPT7GtqbSNk64jv+MbMm8kjFBPkVE5E111?=
- =?us-ascii?Q?MQTQXnplOoplRLlsJrkdS+WIZBLY2hGMmZm45lRjK+fZdRipoqVTQ5f7Izkp?=
- =?us-ascii?Q?48CzvI16XtMMI/gNDsgoKm4Jq+8EJpG5XrKrS+3Khk9Py7ativd0a7nvThfJ?=
- =?us-ascii?Q?lpTGoE+jy5oorqmR0fgDb4OoyQFNU35dzf7C2cGABdfVSj4YYclzbzTRMDbk?=
- =?us-ascii?Q?CrLIpTZH1c5xu9zDHfPgyLRDYjEn30LrziZIAPUCUmyzOEojk94S+HFLMwcc?=
- =?us-ascii?Q?tADIK5/d86rbtNPbjUJn0ddOQ1bBgC5fFGsW4KeVL1Au5I7+erSWh2g4DDDl?=
- =?us-ascii?Q?QwvqjJ96lcTbtYPhhm/5sEXmkEYX7+zsYBrBTtaO?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4df2247-b577-4d27-f4bd-08daefce50d2
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 10:11:02.6680
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7kREhydDK6umth2koU+OkFcyv/tig3BmTZEz9GU0GPjc/uW4mZYmooO5z2zWL+vUjbomUI7BASwNCZh9qHZChg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7970
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230105125334.727282894@linuxfoundation.org>
+In-Reply-To: <20230105125334.727282894@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 6 Jan 2023 15:42:38 +0530
+Message-ID: <CA+G9fYsgUDmUENC4+a66U=wXP_HQRyEeR8CGZCOy+zjw2pjm_Q@mail.gmail.com>
+Subject: Re: [PATCH 4.9 000/251] 4.9.337-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 03:22:29PM -0800, Kees Cook wrote:
-> Zero-length arrays are deprecated[1]. Replace struct
-> mlxsw_sp_nexthop_group_info's "nexthops" 0-length array with a flexible
-> array. Detected with GCC 13, using -fstrict-flex-arrays=3:
-> 
-> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c: In function 'mlxsw_sp_nexthop_group_hash_obj':
-> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:3278:38: warning: array subscript i is outside array bounds of 'struct mlxsw_sp_nexthop[0]' [-Warray-bounds=]
->  3278 |                         val ^= jhash(&nh->ifindex, sizeof(nh->ifindex), seed);
->       |                                      ^~~~~~~~~~~~
-> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:2954:33: note: while referencing 'nexthops'
->  2954 |         struct mlxsw_sp_nexthop nexthops[0];
->       |                                 ^~~~~~~~
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-> 
-> Cc: Ido Schimmel <idosch@nvidia.com>
-> Cc: Petr Machata <petrm@nvidia.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Thu, 5 Jan 2023 at 18:28, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> -------------------------------------------
+> NOTE:
+>
+> This is going to be the LAST 4.9.y release to be made by the stable/LTS
+> kernel maintainers.  After this release, it will be end-of-life and you
+> should not use it at all.  You should have moved to a newer kernel
+> branch by now (as seen on the https://kernel.org/category/releases.html
+> page), but if NOT, and this is going to be a real hardship, please
+> contact me directly.
+> -------------------------------------------
+>
+> This is the start of the stable review cycle for the 4.9.337 release.
+> There are 251 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 07 Jan 2023 12:52:55 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.337-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-Thanks
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.9.337-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: e5be668a53e8317a07f6b4a6b3e0b17b232cb6a1
+* git describe: v4.9.336-252-ge5be668a53e8
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+36-252-ge5be668a53e8
+
+## Test Regressions (compared to v4.9.336)
+
+## Metric Regressions (compared to v4.9.336)
+
+## Test Fixes (compared to v4.9.336)
+
+## Metric Fixes (compared to v4.9.336)
+
+## Test result summary
+total: 77532, pass: 66466, fail: 2409, skip: 8290, xfail: 367
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 284 total, 278 passed, 6 failed
+* arm64: 55 total, 48 passed, 7 failed
+* i386: 31 total, 30 passed, 1 failed
+* mips: 43 total, 40 passed, 3 failed
+* parisc: 2 total, 0 passed, 2 failed
+* powerpc: 27 total, 21 passed, 6 failed
+* s390: 17 total, 12 passed, 5 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 52 total, 49 passed, 3 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
