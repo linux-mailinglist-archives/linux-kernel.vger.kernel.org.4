@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6411965FAF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F074565FAF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjAFFiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 00:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S230490AbjAFFki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 00:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjAFFiu (ORCPT
+        with ESMTP id S229490AbjAFFkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 00:38:50 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FFD61452
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 21:38:49 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id h11-20020a6b7a0b000000b006e0004fc167so336115iom.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 21:38:49 -0800 (PST)
+        Fri, 6 Jan 2023 00:40:36 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C425AC71
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 21:40:31 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id h192so541373pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 21:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cAq/ViZLPRG+IbYXxjYoUcfudX/jAXQF/9Rus0IPRi8=;
+        b=Lq8FEDrl7w73AawfkdR0gzucxPyYA88LoMQ9IKo5nwc1q0IFPeO+RrV7QfVr2J7PcU
+         nKPGFig5ECCU1f7rLNN+fcLqS234b87jLmkLs7nMYwBVPm7z/AJzuKs/npew4GxdNkJH
+         qoMHeDNLB5WX0XsejLBe1jTC7YLeVuodNQS4yqBNeTR5NN9htWbH5vpfu43FpPsCunum
+         UhCQIfy+LGU7ZDkh5ZGTYMMKMi3xfVLrpc/AVEaKjSfaUvx7lpXxYScw7cgo30H5b5ty
+         4u484EW1raeq8/iY0uaB68T1JTP8a7Jl3IEcxQJVbA8kL5+fPDJ4ixlG0Af8xKEYhLXL
+         qJlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9haJaoxzzlxIw80KSghijxYYontjX86CShnPu8UjfW4=;
-        b=n+nfDsXIx96UzY0kHJEe5d9NX+rXMoaagGgJwT3D7FHgxT0vafn8yWMHEBwzZpeQEm
-         fjWzqHiZGc4f/dJgq3bylK9n0ksB4KylDlB6IvN4o0PSO8U5z2Kcx8JOVEnCmgcQFAOk
-         stWM64RV0GGTK1TLtCWhRiFWgU+krVywuESroBmj2C4l/F5VqVEE3e7mfwAP+CJcPKGr
-         Cc7U7GrLWMMoRY3mHCZWsVj5zwmvYaeJ7yMWboKVpgjnZ1nvBTMIJ2QUIgfq3ft89zij
-         9+D8J3pMfJMzaYiuI1k/QB1+cUikNc/Q9XOU+ny9rNdbdyKMF2CCzERR4L03lh2qDNCf
-         qZdQ==
-X-Gm-Message-State: AFqh2kp7Fc9M1A4c18SHjFNFrtRlOBwfQeOsv7eJkkn6cgOgNSkxNRcN
-        /LwU8gxUT0pib/VG+KZZlAhbgvsJe4OI2a0QMqzUgBSSVX0T
-X-Google-Smtp-Source: AMrXdXsruXyrNEkCIYr6WYHzHNmYGVS2jLn5bC+W07DFgx/KzGjFaAh/wTFmxNS2SlEDLWf7FbBp2WpymlZEbGzufhoGGftuJW4I
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cAq/ViZLPRG+IbYXxjYoUcfudX/jAXQF/9Rus0IPRi8=;
+        b=8KWck/MMPEBjGs7qG+ZNcULgb9JuF9aioqJQ26Qdaob3TmKW18ZmTWm1xMP3FE5P1M
+         ZDisU5aWx3zWjUoKUeKZGaJw2l9K6BbyIamNxGkAwjZh02579ALyOYo4lP+dwzAlO2G7
+         AjzvCUvF5BHgYHD6BiPC/oYQdFkPhqwOEoTv/vMSzymfXWrOHa75gc1U1d7+Eb34zOYw
+         vzZWNp00uUQRjhk9eddVTpDuJfMSoDRmyVItGmLwI9xxFf8zG1kzexIKCo1gpnjaFr+q
+         UGFmbUougYYRSl0cWe0IP6mmIN7d/sZyK0/lin9uGK4hoLMIVCccuCGMGgif6sXzr3Za
+         5WmA==
+X-Gm-Message-State: AFqh2kqgtzT6QBcojyG42xdxf3KksZTOHppImizfrRKfa8qFi5o7OdPR
+        iBWfrrTWouNPf/aUFInGWoM=
+X-Google-Smtp-Source: AMrXdXu+iN/YbjZPjvZY+uZn4uVMnBgw88vBSWEuWRrgyI83KjmTV/uP9eefedbo4Dum7xGtV0Qd4g==
+X-Received: by 2002:aa7:99cb:0:b0:580:d188:f516 with SMTP id v11-20020aa799cb000000b00580d188f516mr52824129pfi.19.1672983631353;
+        Thu, 05 Jan 2023 21:40:31 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id y11-20020aa79e0b000000b0057ef155103asm209763pfq.155.2023.01.05.21.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 21:40:30 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] soc: ti: pm33xx: Fix refcount leak in am33xx_pm_probe
+Date:   Fri,  6 Jan 2023 09:40:22 +0400
+Message-Id: <20230106054022.947529-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:a510:0:b0:38a:1efa:7053 with SMTP id
- e16-20020a02a510000000b0038a1efa7053mr5097206jam.173.1672983528747; Thu, 05
- Jan 2023 21:38:48 -0800 (PST)
-Date:   Thu, 05 Jan 2023 21:38:48 -0800
-In-Reply-To: <000000000000cad14205ee10ec87@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f238aa05f191d4d6@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in p9_client_disconnect
-From:   syzbot <syzbot+ea8b28e8dca42fc3bcbe@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, davem@davemloft.net, edumazet@google.com,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+wkup_m3_ipc_get() takes refcount, which should be freed by
+wkup_m3_ipc_put(). Add missing refcount release in the error paths.
 
-HEAD commit:    247f34f7b803 Linux 6.1-rc2
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=145dcb52480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=ea8b28e8dca42fc3bcbe
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1360a90c480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1580e9e6480000
+Fixes: 5a99ae0092fe ("soc: ti: pm33xx: AM437X: Add rtc_only with ddr in self-refresh support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/soc/ti/pm33xx.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ea8b28e8dca42fc3bcbe@syzkaller.appspotmail.com
-
-Unable to handle kernel paging request at virtual address 0032503900080052
-Mem abort info:
-  ESR = 0x0000000096000044
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000044
-  CM = 0, WnR = 1
-[0032503900080052] address between user and kernel address ranges
-Internal error: Oops: 0000000096000044 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3076 Comm: syz-executor424 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : p9_client_disconnect+0x1c/0x30 net/9p/client.c:1067
-lr : p9_client_disconnect+0x18/0x30 net/9p/client.c:1065
-sp : ffff800012e43ca0
-x29: ffff800012e43ca0 x28: ffff0000cb48cec0 x27: 0000000000000000
-x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d37d050
-x23: ffff80000d379000 x22: 0000000000000000 x21: 0000000000000000
-x20: ffff0000cc82cf00 x19: 3032503900080002 x18: 0000000000000035
-x17: 4553006964623d4d x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: ffff0000c5860c18 x12: ffff0000ccb854d8
-x11: ff8080000be7a520 x10: 0000000000000000 x9 : ffff80000be7a520
-x8 : 0000000000000002 x7 : 0000000000000000 x6 : ffff80000c0374d8
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0000cb48cec0 x1 : 0000000000000000 x0 : 3032503900080002
-Call trace:
- p9_client_disconnect+0x1c/0x30
- v9fs_session_cancel+0x20/0x30 fs/9p/v9fs.c:530
- v9fs_kill_super+0x2c/0x50 fs/9p/vfs_super.c:225
- deactivate_locked_super+0x70/0xe8 fs/super.c:331
- deactivate_super+0xd0/0xd4 fs/super.c:362
- cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0x100/0x148 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: 910003fd aa0003f3 9710b2fd 52800048 (b9005268) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	910003fd 	mov	x29, sp
-   4:	aa0003f3 	mov	x19, x0
-   8:	9710b2fd 	bl	0xfffffffffc42cbfc
-   c:	52800048 	mov	w8, #0x2                   	// #2
-* 10:	b9005268 	str	w8, [x19, #80] <-- trapping instruction
+diff --git a/drivers/soc/ti/pm33xx.c b/drivers/soc/ti/pm33xx.c
+index ce09c42eaed2..f04c21157904 100644
+--- a/drivers/soc/ti/pm33xx.c
++++ b/drivers/soc/ti/pm33xx.c
+@@ -527,7 +527,7 @@ static int am33xx_pm_probe(struct platform_device *pdev)
+ 
+ 	ret = am33xx_pm_alloc_sram();
+ 	if (ret)
+-		return ret;
++		goto err_wkup_m3_ipc_put;
+ 
+ 	ret = am33xx_pm_rtc_setup();
+ 	if (ret)
+@@ -572,13 +572,14 @@ static int am33xx_pm_probe(struct platform_device *pdev)
+ 	pm_runtime_put_sync(dev);
+ err_pm_runtime_disable:
+ 	pm_runtime_disable(dev);
+-	wkup_m3_ipc_put(m3_ipc);
+ err_unsetup_rtc:
+ 	iounmap(rtc_base_virt);
+ 	clk_put(rtc_fck);
+ err_free_sram:
+ 	am33xx_pm_free_sram();
+ 	pm33xx_dev = NULL;
++err_wkup_m3_ipc_put:
++	wkup_m3_ipc_put(m3_ipc);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
