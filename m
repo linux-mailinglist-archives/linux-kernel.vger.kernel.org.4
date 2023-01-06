@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0705665FF20
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E730965FF23
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjAFKrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S231831AbjAFKsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjAFKrq (ORCPT
+        with ESMTP id S232243AbjAFKsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:47:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2636CFD8;
-        Fri,  6 Jan 2023 02:47:44 -0800 (PST)
-Date:   Fri, 06 Jan 2023 10:47:40 -0000
+        Fri, 6 Jan 2023 05:48:06 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458D66CFDF;
+        Fri,  6 Jan 2023 02:48:05 -0800 (PST)
+Date:   Fri, 06 Jan 2023 10:48:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673002061;
+        s=2020; t=1673002083;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UCPmF4a7fJSy7N958ILHl30COeBhXJyN71lpqNDHdi4=;
-        b=gNI9r51omTZ7ay/jxeNhhi8DdUpH7HxefHE5xsXPkpvwmOzP8XqzTuWuJJQXcYLeWovX6r
-        3k0Zy213zyd5Q8kQXjaKADO+f0XFdsN4MKdaePzRKo1SZNodtAw5Ch9Kj7WuLRMrvSGr21
-        /z990ZqHmIbdIEF8qLBl2VJGZpW02t8KwXe5L0z1vd7BkP4gtaRfxVrOA1v4FW8YzT13F1
-        ZlSS7Yzy4KdbCcSmHFUtH0WZntz2uS7B3tNYHiskHcK5e4F5D8QmRqXhO5CGBelEUof6i4
-        dHoEaApeDUtFUJhIQgBESZ3PoZuwzd99cgOFxGmI1E1M+k/ufMuY9mRMRRLYtg==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=/hxCtPufFtZ5al9rbAfK0+sKz8sTOiY727C5yei9u9k=;
+        b=t1MiUaHuRMCwIAF88dKGsbhsvmMLn/iopIFfDEWrJfWvT2+4gfJXlx7Fa3DQUUvdRwM1EW
+        l/nh5ReZ3ZFJJj5ByIzcUxJ0n2UfJeH3MPb3ID1gbN6V8LtuV/F5fP5h1i4MmdNSS/br9W
+        XGodTzOTdYA/ZcOUtz/TUAX2x0STSkCZEj3lvJPIHv+swBxLKPSilNmgxuAgi6qF/51rJi
+        RQr6qgdes0IHuJgx0xMgaVmVxobf/K+mAcAxK1k0jGusqFLNZNbPacnwHF1ZA9C1KWTPaC
+        s5kf108Ja1KBjufC02i0ytSRpCNP/vPxF0nl78cEnkeCPCWfF8ykYQ/y+c6Dsw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673002061;
+        s=2020e; t=1673002083;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UCPmF4a7fJSy7N958ILHl30COeBhXJyN71lpqNDHdi4=;
-        b=xItUobodVDUSC86Sj9yLS7XaZDvDIEm+IEmdxLPy+yt3wvi7Tc23G6NUcpwDEiWqX/lD+x
-        0W04LXc1JZamefAw==
-From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=/hxCtPufFtZ5al9rbAfK0+sKz8sTOiY727C5yei9u9k=;
+        b=REJk9c4Jvqc7Zar4ycE2QFX2GuxLQF7FH8SBRwNK/arsg7SwLc7m/5y1FAAkS6gnRp+KJg
+        urGE9lT/BckJ5WBA==
+From:   "tip-bot2 for Hans de Goede" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/signal/compat: Move sigaction_compat_abi() to signal_64.c
-Cc:     Brian Gerst <brgerst@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221219193904.190220-3-brgerst@gmail.com>
-References: <20221219193904.190220-3-brgerst@gmail.com>
+Subject: [tip: x86/platform] x86/rtc: Simplify PNP ids check
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
 MIME-Version: 1.0
-Message-ID: <167300206067.4906.9151776655307963512.tip-bot2@tip-bot2>
+Message-ID: <167300208315.4906.17267307487336474723.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,84 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+The following commit has been merged into the x86/platform branch of tip:
 
-Commit-ID:     6be9a8f18fb2ea88d37a69f076f7011fc012ae1a
-Gitweb:        https://git.kernel.org/tip/6be9a8f18fb2ea88d37a69f076f7011fc012ae1a
-Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Mon, 19 Dec 2022 14:39:04 -05:00
+Commit-ID:     bd4edba2653aeef0119b7a945f07e58711343bf9
+Gitweb:        https://git.kernel.org/tip/bd4edba2653aeef0119b7a945f07e58711343bf9
+Author:        Hans de Goede <hdegoede@redhat.com>
+AuthorDate:    Wed, 14 Dec 2022 22:24:47 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Fri, 06 Jan 2023 04:16:02 +01:00
+CommitterDate: Fri, 06 Jan 2023 04:22:34 +01:00
 
-x86/signal/compat: Move sigaction_compat_abi() to signal_64.c
+x86/rtc: Simplify PNP ids check
 
-Also remove the now-empty signal_compat.c.
+compare_pnp_id() already iterates over the single linked pnp_ids list
+starting with the id past to it.
 
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
+So there is no need for add_rtc_cmos() to call compare_pnp_id()
+for each id on the list.
+
+No change in functionality intended.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20221219193904.190220-3-brgerst@gmail.com
-Cc: Al Viro <viro@zeniv.linux.org.uk>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: linux-kernel@vger.kernel.org
 ---
- arch/x86/kernel/Makefile        |  1 -
- arch/x86/kernel/signal_64.c     | 13 +++++++++++++
- arch/x86/kernel/signal_compat.c | 15 ---------------
- 3 files changed, 13 insertions(+), 16 deletions(-)
- delete mode 100644 arch/x86/kernel/signal_compat.c
+ arch/x86/kernel/rtc.c |  9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 96d51bb..dd61752 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -45,7 +45,6 @@ obj-y			+= head$(BITS).o
- obj-y			+= ebda.o
- obj-y			+= platform-quirks.o
- obj-y			+= process_$(BITS).o signal.o signal_$(BITS).o
--obj-$(CONFIG_COMPAT)	+= signal_compat.o
- obj-y			+= traps.o idt.o irq.o irq_$(BITS).o dumpstack_$(BITS).o
- obj-y			+= time.o ioport.o dumpstack.o nmi.o
- obj-$(CONFIG_MODIFY_LDT_SYSCALL)	+= ldt.o
-diff --git a/arch/x86/kernel/signal_64.c b/arch/x86/kernel/signal_64.c
-index 9eea4e8..13a1e60 100644
---- a/arch/x86/kernel/signal_64.c
-+++ b/arch/x86/kernel/signal_64.c
-@@ -382,6 +382,19 @@ badframe:
- }
- #endif /* CONFIG_X86_X32_ABI */
+diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
+index 3490464..1309b9b 100644
+--- a/arch/x86/kernel/rtc.c
++++ b/arch/x86/kernel/rtc.c
+@@ -138,15 +138,12 @@ static __init int add_rtc_cmos(void)
+ 	static const char * const ids[] __initconst =
+ 	    { "PNP0b00", "PNP0b01", "PNP0b02", };
+ 	struct pnp_dev *dev;
+-	struct pnp_id *id;
+ 	int i;
  
-+#ifdef CONFIG_COMPAT
-+void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact)
-+{
-+	if (!act)
-+		return;
-+
-+	if (in_ia32_syscall())
-+		act->sa.sa_flags |= SA_IA32_ABI;
-+	if (in_x32_syscall())
-+		act->sa.sa_flags |= SA_X32_ABI;
-+}
-+#endif /* CONFIG_COMPAT */
-+
- /*
- * If adding a new si_code, there is probably new data in
- * the siginfo.  Make sure folks bumping the si_code
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-deleted file mode 100644
-index c4e9b85..0000000
---- a/arch/x86/kernel/signal_compat.c
-+++ /dev/null
-@@ -1,15 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/compat.h>
--#include <linux/uaccess.h>
--#include <linux/ptrace.h>
--
--void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact)
--{
--	if (!act)
--		return;
--
--	if (in_ia32_syscall())
--		act->sa.sa_flags |= SA_IA32_ABI;
--	if (in_x32_syscall())
--		act->sa.sa_flags |= SA_X32_ABI;
--}
+ 	pnp_for_each_dev(dev) {
+-		for (id = dev->id; id; id = id->next) {
+-			for (i = 0; i < ARRAY_SIZE(ids); i++) {
+-				if (compare_pnp_id(id, ids[i]) != 0)
+-					return 0;
+-			}
++		for (i = 0; i < ARRAY_SIZE(ids); i++) {
++			if (compare_pnp_id(dev->id, ids[i]) != 0)
++				return 0;
+ 		}
+ 	}
+ #endif
