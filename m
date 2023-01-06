@@ -2,154 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AF0660215
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5526866021B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbjAFO2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S235052AbjAFO2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjAFO17 (ORCPT
+        with ESMTP id S234409AbjAFO2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:27:59 -0500
-Received: from outbound-smtp52.blacknight.com (outbound-smtp52.blacknight.com [46.22.136.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302EE1A059
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:27:57 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp52.blacknight.com (Postfix) with ESMTPS id 7A27CFA9B3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 14:27:55 +0000 (GMT)
-Received: (qmail 25837 invoked from network); 6 Jan 2023 14:27:55 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 6 Jan 2023 14:27:55 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [RFC PATCH] locking/rwbase: Prevent indefinite writer starvation
-Date:   Fri,  6 Jan 2023 14:27:43 +0000
-Message-Id: <20230106142743.30759-1-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.35.3
+        Fri, 6 Jan 2023 09:28:11 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6D07BDFA;
+        Fri,  6 Jan 2023 06:28:10 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id c7so2105415qtw.8;
+        Fri, 06 Jan 2023 06:28:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sTTGdSaTAYfgyHoEh6QlDUjZgdx3Q8oPnHfz8VzgQOg=;
+        b=Q6CmC3NSakWvriapeKHNhR0OIaHEZCG0AJi6GytUNWSynftDKGy88mKe/CgoZzUhcH
+         UKqbRLh6aMUnhsfJR57mUHt6eH5n54xDqvbsP77ff7AsQ9j3xL8v60duoEmOzhsDdQ9J
+         KCpCQ0X5199tKnUMsjKvVAvAXcnedSk/3bSFevwAb8xNAwslcoUkK5BoxYQrjzDTLCDU
+         YDsQQg4N4bgyNIbapGE9ntR0Nj3SkNYNRor58gWkgAKS/wuEJDCpPXWU8kUSN22WIHzG
+         sc5b1WiXbT3uLT3VcnRDMU0i+lJezTqfPeDCeJiWhwERCNtfeneGnGTqaKJkDuqBS0Si
+         XGQQ==
+X-Gm-Message-State: AFqh2koNmMqSeVrZ8VVt3if8eUCJxfjqZOc2wMOO4A84AKLoRhg4mR1Q
+        xpiZLB0jHUUfGR45ZfVPx5kQPfsNZ6DEhQ==
+X-Google-Smtp-Source: AMrXdXvqrl1jwQBvcq1sKQK95248AgIOxEt9qyToLcHNUhEjpUkj+LCGd4pcfPPT7STTMxoNXQHODQ==
+X-Received: by 2002:ac8:6049:0:b0:3a6:8b77:7eef with SMTP id k9-20020ac86049000000b003a68b777eefmr72958306qtm.38.1673015288853;
+        Fri, 06 Jan 2023 06:28:08 -0800 (PST)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id ge9-20020a05622a5c8900b003a7e38055c9sm553291qtb.63.2023.01.06.06.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 06:28:08 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 203so1984437yby.10;
+        Fri, 06 Jan 2023 06:28:08 -0800 (PST)
+X-Received: by 2002:a25:b944:0:b0:7b2:4421:82be with SMTP id
+ s4-20020a25b944000000b007b2442182bemr806049ybm.380.1673015287896; Fri, 06 Jan
+ 2023 06:28:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104141245.8407-1-aford173@gmail.com> <20230104141245.8407-2-aford173@gmail.com>
+In-Reply-To: <20230104141245.8407-2-aford173@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 6 Jan 2023 15:27:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXQfAJUVsYeN37T_KvXUoEaSqYJ+UWtUehLv-9R9goVzA@mail.gmail.com>
+Message-ID: <CAMuHMdXQfAJUVsYeN37T_KvXUoEaSqYJ+UWtUehLv-9R9goVzA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] Revert "arm64: dts: renesas: Add compatible
+ properties to AR8031 Ethernet PHYs"
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rw_semaphore and rwlock are explicitly unfair to writers in the presense
-of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
-("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
+Hi Adam,
 
-	The implementation is writer unfair, as it is not feasible to do
-	priority inheritance on multiple readers, but experience has shown
-	that real-time workloads are not the typical workloads which are
-	sensitive to writer starvation.
+CC Ethernet phy
 
-While atypical, it's also trivial to block writers with PREEMPT_RT
-indefinitely without ever making forward progress. Since LTP-20220121,
-the dio_truncate test case went from having 1 reader to having 16 readers
-and the number of readers is sufficient to prevent the down_write ever
-succeeding while readers exist. Ultimately the test is killed after 30
-minutes as a failure.
+On Wed, Jan 4, 2023 at 3:12 PM Adam Ford <aford173@gmail.com> wrote:
+> This reverts commit 18a2427146bf8a3da8fc7825051d6aadb9c2d8fb.
+>
+> Due to the part shortage, the AR8031 PHY was replaced with a
+> Micrel KSZ9131.  Hard-coding the ID of the PHY makes this new
+> PHY non-operational.  Since previous hardware had shipped,
+> it's not as simple as just replacing the ID number as it would
+> break the older hardware.  Since the generic mode can correctly
+> identify both versions of hardware, it seems safer to revert
+> this patch.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-dio_truncate is not a realtime application but indefinite writer starvation
-is undesirable. The test case has one writer appending and truncating files
-A and B while multiple readers read file A.  The readers and writer are
-contending for one file's inode lock which never succeeds as the readers
-keep reading until the writer is done which never happens.
+Thanks for your patch!
 
-This patch records a timestamp when the first writer is blocked. Reader
-bias is allowed until the first writer has been blocked for a minimum of
-4ms and a maximum of (4ms + 1 jiffie). The cutoff time is arbitrary on
-the assumption that a hard realtime application missing a 4ms deadline
-would not need PRREMPT_RT. It's expected that hard realtime applications
-avoid such heavy reader/writer contention by design. On a test machine,
-the test completed in 92 seconds.
+> --- a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
+> @@ -59,8 +59,6 @@ &avb {
+>         status = "okay";
+>
+>         phy0: ethernet-phy@0 {
+> -               compatible = "ethernet-phy-id004d.d074",
+> -                            "ethernet-phy-ieee802.3-c22";
+>                 reg = <0>;
+>                 interrupt-parent = <&gpio2>;
+>                 interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
 
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- include/linux/rwbase_rt.h  |  3 +++
- kernel/locking/rwbase_rt.c | 12 +++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+The next line:
 
-diff --git a/include/linux/rwbase_rt.h b/include/linux/rwbase_rt.h
-index 1d264dd08625..05c4dc74b8bd 100644
---- a/include/linux/rwbase_rt.h
-+++ b/include/linux/rwbase_rt.h
-@@ -10,12 +10,14 @@
- 
- struct rwbase_rt {
- 	atomic_t		readers;
-+	unsigned long		waiter_blocked;
- 	struct rt_mutex_base	rtmutex;
- };
- 
- #define __RWBASE_INITIALIZER(name)				\
- {								\
- 	.readers = ATOMIC_INIT(READER_BIAS),			\
-+	.waiter_blocked = 0,					\
- 	.rtmutex = __RT_MUTEX_BASE_INITIALIZER(name.rtmutex),	\
- }
- 
-@@ -23,6 +25,7 @@ struct rwbase_rt {
- 	do {							\
- 		rt_mutex_base_init(&(rwbase)->rtmutex);		\
- 		atomic_set(&(rwbase)->readers, READER_BIAS);	\
-+		(rwbase)->waiter_blocked = 0;			\
- 	} while (0)
- 
- 
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index c201aadb9301..492bcfa7572c 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -65,6 +65,9 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
- 	return 0;
- }
- 
-+/* Allow reader bias with a pending writer for a minimum of 4ms or 1 tick. */
-+#define RW_CONTENTION_THRESHOLD (HZ/250+1)
-+
- static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
- 				      unsigned int state)
- {
-@@ -76,7 +79,8 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
- 	 * Allow readers, as long as the writer has not completely
- 	 * acquired the semaphore for write.
- 	 */
--	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
-+	if (atomic_read(&rwb->readers) != WRITER_BIAS &&
-+	    jiffies - rwb->waiter_blocked < RW_CONTENTION_THRESHOLD) {
- 		atomic_inc(&rwb->readers);
- 		raw_spin_unlock_irq(&rtm->wait_lock);
- 		return 0;
-@@ -264,12 +268,18 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		if (__rwbase_write_trylock(rwb))
- 			break;
- 
-+		/* Record first new read/write contention. */
-+		if (!rwb->waiter_blocked)
-+			rwb->waiter_blocked = jiffies;
-+
- 		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
- 		rwbase_schedule();
- 		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
- 
- 		set_current_state(state);
- 	}
-+
-+	rwb->waiter_blocked = 0;
- 	rwbase_restore_current_state();
- 	trace_contention_end(rwb, 0);
- 
--- 
-2.35.3
+                reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
 
+Unfortunately, removing the compatible value will cause regressions
+for kexec/kdump and for Ethernet driver unbind, as the PHY reset will
+be asserted before starting the new kernel, or on driver unbind.
+Due to a deficiency in the Ethernet PHY subsystem, the PHY will be
+probed while the reset is still asserted, and thus fail probing[1].
+
+Is there a (new) proper way to handle this?
+Perhaps the issue has been fixed in the PHY subsystem meanwhile?
+
+Thanks!
+
+[1] https://lore.kernel.org/all/cover.1631174218.git.geert+renesas@glider.be
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
