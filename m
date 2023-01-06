@@ -2,216 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947DD660A0C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2C9660A15
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjAFXFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S234760AbjAFXHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjAFXFI (ORCPT
+        with ESMTP id S229550AbjAFXHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:05:08 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E5B728A4
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:05:06 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bk16so2616173wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 15:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zqz2c15YdsTf/vosYEGg1J/pQE1F5HJIRHSLzaSGoc8=;
-        b=cG19kKeLS6D/bEFR2TVrMijwS5ZzsGsmowfl9d3IKI43XJWEC2nx3nzMge9uQ71cYe
-         rsG650r2MbMfOogivN7O3CgQGiqBNDznV5jK2PuHR4y6LtAbGryHySPY9BMo7kBokemq
-         r3Far+DoCkSEbOT79eEWsqDacXZ5U/AJct/zw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zqz2c15YdsTf/vosYEGg1J/pQE1F5HJIRHSLzaSGoc8=;
-        b=XRsr1Do/ir/uoq+VXv/5FoeUagUgIP3G2J4qGHTeTHgtvTySBDIww62tBrJcwiIcsM
-         E/Bjtqy4NIBi5pwnTQCmMJJxDYkNowq1dIjuxHmSvlaYBjPphTqT/wVcHxN0SGXUQL1t
-         UmxzqCNnf1UtoBEhTLwaMsb8tUkFNb7g+LuBg6XZQBEzFjjhsK3PPV1ly6S7afmH/YNH
-         gPJ+UFH2NaPoooOjv7H7SgnI88mvxCV6TnbLcU0NwKEY684OLZmzpXP4RqUm3Wu/q6l5
-         7pn1e4gZ4xoyug9+4WlYQwXIER1v0BoWx3L65DO7v973bLsbvw3pwbHvcu36DEP7Lp89
-         Ku8g==
-X-Gm-Message-State: AFqh2kr2bkSDr7CT+t5Ydp8Z97XTcHn+aoUhxa5KypsP5O6UEWTflVjU
-        25HijwCta9jxsdpLdVRO0ry95TUBZ4hX//li
-X-Google-Smtp-Source: AMrXdXtGE2LfYknIL3jkyctQbCkBvch/sStXCgCbWfCvJUq3Us6jXKqGoqm8Feslig4AY32+2VoFNQ==
-X-Received: by 2002:adf:e690:0:b0:2b3:f6f:293b with SMTP id r16-20020adfe690000000b002b30f6f293bmr5305633wrm.47.1673046304852;
-        Fri, 06 Jan 2023 15:05:04 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d4682000000b0028d66c43101sm2299161wrq.29.2023.01.06.15.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 15:05:04 -0800 (PST)
-Date:   Sat, 7 Jan 2023 00:05:01 +0100
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dave Airlie <airlied@gmail.com>
-Subject: [PULL] drm-fixes
-Message-ID: <Y7ipHUfN00F3abQf@phenom.ffwll.local>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dave Airlie <airlied@gmail.com>
+        Fri, 6 Jan 2023 18:07:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A068460A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:07:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TR84vYn9WShU7mQuihrDE3sVN5KTjnPiAIwI8uaw7XY=; b=BleR+jVeMLiVyeU5OGRNms2olO
+        I4Mmx1iWeaRDY71Lh+EPLJ15QXsDlhf5eU3q1yIMp+WKzUe3P9Nm1h5tmWxIDS+AnsnLcccxx6PBj
+        ZWufKj9pXpOdWzEQp8ykmx7Xbd40jRRObVI5gJrEIljuJ0DeRUfcFYPMu66EcSPijK26GGTpdjjvL
+        n/Dks04KBCyYS7TPYLaBINCFJsph+uy8Xbfwjj6kZjIEfOmNmBPd/j9hpA5m2AUrVspd//BUERygk
+        OpflN+vVk7qrwj3Ab6c0UGIL+iE1kiQxphoye57f1qnetgiHdeFQsebwMOjJ0KLAbY7oTZS5lP98P
+        yaPcPqMQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pDvny-00HaCV-Mk; Fri, 06 Jan 2023 23:07:18 +0000
+Date:   Fri, 6 Jan 2023 23:07:18 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, sj@kernel.org
+Subject: Re: [PATCH mm-unstable] mm: introduce folio_is_pfmemalloc
+Message-ID: <Y7ippkAfMZpL22Vr@casper.infradead.org>
+References: <20230106215251.599222-1-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106215251.599222-1-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus
+On Fri, Jan 06, 2023 at 03:52:51PM -0600, Sidhartha Kumar wrote:
+> Add a folio equivalent for page_is_pfmemalloc. This removes two instances
+> of page_is_pfmemalloc(folio_page(folio, 0)) so the folio can be used
+> directly.
+> 
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 
-Still not much, but more than last week. Dave should be back next week
-from the beaching.
-
-drm-fixes-2023-01-06:
-drm-fixes for 6.2-rc3
-
-drivers:
-- i915-gvt fixes
-- amdgpu/kfd fixes
-- panfrost bo refcounting fix
-- meson afbc corruption fix
-- imx plane width fix
-
-core:
-- drm/sched fixes
-- drm/mm kunit test fix
-- dma-buf export error handling fixes
-
-Cheers, Daniel
-
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
-
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-06
-
-for you to fetch changes up to 5193326c4c5a656c733b6d2c6537e3f36319bcac:
-
-  Merge tag 'drm-intel-fixes-2023-01-05' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2023-01-06 10:16:49 +0100)
-
-----------------------------------------------------------------
-drm-fixes for 6.2-rc3
-
-drivers:
-- i915-gvt fixes
-- amdgpu/kfd fixes
-- panfrost bo refcounting fix
-- meson afbc corruption fix
-- imx plane width fix
-
-core:
-- drm/sched fixes
-- drm/mm kunit test fix
-- dma-buf export error handling fixes
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      drm/tests: reduce drm_mm_test stack usage
-
-Carlo Caione (1):
-      drm/meson: Reduce the FIFO lines held when AFBC is not used
-
-Christian König (1):
-      dma-buf: fix dma_buf_export init order v2
-
-Dan Carpenter (1):
-      drm/i915: unpin on error in intel_vgpu_shadow_mm_pin()
-
-Daniel Vetter (4):
-      Merge tag 'drm-misc-next-fixes-2023-01-03' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'drm-misc-fixes-2023-01-05' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.2-2023-01-04' of https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2023-01-05' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Dmitry Osipenko (2):
-      drm/scheduler: Fix lockup in drm_sched_entity_kill()
-      drm/scheduler: Fix lockup in drm_sched_entity_kill()
-
-Ma Jun (1):
-      drm/plane-helper: Add the missing declaration of drm_atomic_state
-
-Maxime Ripard (1):
-      Merge drm/drm-fixes into drm-misc-fixes
-
-Michel Dänzer (1):
-      Revert "drm/amd/display: Enable Freesync Video Mode by default"
-
-Mukul Joshi (1):
-      drm/amdkfd: Fix kernel warning during topology setup
-
-Philipp Zabel (1):
-      drm/imx: ipuv3-plane: Fix overlay plane width
-
-Rodrigo Vivi (1):
-      Merge tag 'gvt-fixes-2023-01-05' of https://github.com/intel/gvt-linux into drm-intel-fixes
-
-Samson Tam (1):
-      drm/amd/display: Uninitialized variables causing 4k60 UCLK to stay at DPM1 and not DPM0
-
-Steven Price (1):
-      drm/panfrost: Fix GEM handle creation ref-counting
-
-Xiu Jianfeng (1):
-      drm/virtio: Fix memory leak in virtio_gpu_object_create()
-
-Zheng Wang (1):
-      drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-
-Zhenyu Wang (2):
-      drm/i915/gvt: fix gvt debugfs destroy
-      drm/i915/gvt: fix vgpu debugfs clean in remove
-
-Zhi Wang (1):
-      drm/i915/gvt: use atomic operations to change the vGPU status
-
- drivers/dma-buf/dma-buf-sysfs-stats.c              |  7 +-
- drivers/dma-buf/dma-buf-sysfs-stats.h              |  4 +-
- drivers/dma-buf/dma-buf.c                          | 82 ++++++++++------------
- drivers/gpu/drm/amd/amdgpu/amdgpu.h                |  1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            | 27 +++++++
- drivers/gpu/drm/amd/amdkfd/kfd_topology.c          |  2 +-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 12 ++--
- .../dc/dml/dcn32/display_mode_vba_util_32.c        |  6 +-
- drivers/gpu/drm/i915/gvt/debugfs.c                 | 36 ++++++++--
- drivers/gpu/drm/i915/gvt/dmabuf.c                  |  3 +-
- drivers/gpu/drm/i915/gvt/gtt.c                     | 21 ++++--
- drivers/gpu/drm/i915/gvt/gvt.h                     | 15 ++--
- drivers/gpu/drm/i915/gvt/interrupt.c               |  2 +-
- drivers/gpu/drm/i915/gvt/kvmgt.c                   | 35 ++++-----
- drivers/gpu/drm/i915/gvt/scheduler.c               |  4 +-
- drivers/gpu/drm/i915/gvt/vgpu.c                    | 12 ++--
- drivers/gpu/drm/imx/ipuv3-plane.c                  | 14 ++--
- drivers/gpu/drm/meson/meson_viu.c                  |  5 +-
- drivers/gpu/drm/panfrost/panfrost_drv.c            | 27 ++++---
- drivers/gpu/drm/panfrost/panfrost_gem.c            | 16 +----
- drivers/gpu/drm/panfrost/panfrost_gem.h            |  5 +-
- drivers/gpu/drm/scheduler/sched_entity.c           |  2 +-
- drivers/gpu/drm/scheduler/sched_main.c             |  4 +-
- drivers/gpu/drm/tests/Makefile                     |  2 +
- drivers/gpu/drm/tests/drm_mm_test.c                |  6 +-
- drivers/gpu/drm/virtio/virtgpu_object.c            |  6 +-
- include/drm/drm_plane_helper.h                     |  1 +
- 27 files changed, 204 insertions(+), 153 deletions(-)
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
