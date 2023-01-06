@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB86C65FFAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1765FFB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjAFLoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S232936AbjAFLoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjAFLn7 (ORCPT
+        with ESMTP id S231404AbjAFLoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:43:59 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FA69B2B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:43:58 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so4930213pjg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:43:58 -0800 (PST)
+        Fri, 6 Jan 2023 06:44:16 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6936A0D6;
+        Fri,  6 Jan 2023 03:44:15 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j17so1630749lfr.3;
+        Fri, 06 Jan 2023 03:44:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=04eEBcfPF9rPWJ6oe8vSrIbuReCNM+F3t+uhS5IgjAI=;
-        b=eTbHhoFLjQJuPbwPLx+3u4gPgft2Pc5mtQeE0YFtzDmI1Ffve96+xCYRtzTIcYRbie
-         z08AL6l6eADTEDx42za6p3tIDuC+kO6hzPIxxF2h/FlDkJrbrrYxyHb6Akm2bw4S5zUL
-         zRyxdg74QrapIdR150Zp6h2SRd1jot0uGWzrU=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=knZj9C7RStQgqCaOUasP2ACocGzxIXf8GlmB4evRoos=;
+        b=iHX3gpe8Ci/lB+b400zFYdvkd8bZkA6Ei5NFo3ss+9QhGY7vtDCRymB4Tw8e3LDZhd
+         e88Ee14A7xpPRp2Yi2GadnGm0JJPcDmV6B3hn0tElDeqxl1QN17f8+3r1HmQYpkEiwOt
+         Y1uaWSdO6vsA5DYzSCMF91vXro89D7VFnxhgSolkChaESga4FJq29NhnUo7Y929yfZx3
+         rUXnnj1s3wEheEs2CBza+n9j2G7jr16M8vz7ajYyJybCfPxD2G7qxWrdYgYSZ8Nk8g11
+         0PPctCkosqN2ZRfWaacrZ+JBe8LQu+2LQP31Wf9WnC0D0xBU7Iopys+9X7NLRHngWUD5
+         ngdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=04eEBcfPF9rPWJ6oe8vSrIbuReCNM+F3t+uhS5IgjAI=;
-        b=n7/ywKwkFy5bEgtJWteIaF9BBPg6wP0hUpM1VEHKGqsl8+euTV41CFPblJp90JJAlr
-         T4GAa3v4JJ7uHHzpqR5oBQUF1yax5wsCQ+YANjXBhglCuIMif0JuBeUWyBAIinBGFVJC
-         6yNxCzSZdUIKRox+sw9zpZvBTaFpvW0bARC9B89NuhFCJnsJ2uDQg68osqfRsya98E10
-         KJwMmP09sp5DR0PQJm7lrqkKB8RHKJiNlH8TTuZgBb2keqlco3TbV5dJDlirK63RmuiZ
-         mrAvBmAyYkOZxz+i8tlPgJazJI2T1Qj8T9y/f0GY/V7efegCWJ+yMDYdkX9FSqAL/vve
-         Gfbg==
-X-Gm-Message-State: AFqh2kqa4FiaV9kACjHQ9Z9NW3vNj/RcYGVng0AW/nCUN90KUcVnpBCR
-        Tvle+JsXUhI07cBnjEAxrhRooyt5/lcJeStTfzI=
-X-Google-Smtp-Source: AMrXdXt4ExVot7Fs59JORt/2TP4UlmAWlVwHTp+xTuA7xI6XZYF9s7QMZyBpFosXVeUvgOK9JWu4eQ==
-X-Received: by 2002:a05:6a20:6f87:b0:b5:46fa:24e8 with SMTP id gv7-20020a056a206f8700b000b546fa24e8mr5337529pzb.38.1673005438176;
-        Fri, 06 Jan 2023 03:43:58 -0800 (PST)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com. [209.85.214.171])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b00582388bd80csm944419pfj.83.2023.01.06.03.43.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 03:43:57 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id p24so1399647plw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:43:56 -0800 (PST)
-X-Received: by 2002:a17:902:934b:b0:191:2a9b:ec94 with SMTP id
- g11-20020a170902934b00b001912a9bec94mr3686097plp.8.1673005436272; Fri, 06 Jan
- 2023 03:43:56 -0800 (PST)
+        bh=knZj9C7RStQgqCaOUasP2ACocGzxIXf8GlmB4evRoos=;
+        b=cCG3YF4z5KYsv/gQvO4zPSlCG1VJt19m0nmri5VByRt67NRiybZAUZ/lXjRbhunT0d
+         7WNwRkmUJ6FQ1NDR4jVXCpWnLWZ0AV/7jJHZX9n/3E0z7M/j3SMR/z6KwJFZSw7FZlSZ
+         E3dfajUgfRGy7kvuInAv1BRbKG3M4dzb/XYB0qaNtq7G22nAlLESKjG7Al+MJrLAlNcn
+         emeFFYOAo078sMcHF5alQsxN/YJblaVMjE8ZgORlO01zB1Vt2ye1/vg0q8FDSmLrGp22
+         +T2ff7pLAwX5KqwL+fy2ymeaWUu7Nj4T8oJjpap6UqVjTPRprTRcb3ferX4H90w552jg
+         1Wtw==
+X-Gm-Message-State: AFqh2kq+DhCShPN5Zj2IjC9ws1ho9f5DG6vcW3lEnKLrJU8WnYbWYUtz
+        bsVtZ+ED8PSsFlkBClACaJU8hHcUZKHu6Q==
+X-Google-Smtp-Source: AMrXdXsiRFTd46XSvutc+xReqJnCPDwFIzWm7CRiZpGxWouQyEMQHlddcDKxVUR93HKAah3O7krI3A==
+X-Received: by 2002:a05:6512:39d6:b0:4cc:586b:183b with SMTP id k22-20020a05651239d600b004cc586b183bmr2256518lfu.60.1673005453533;
+        Fri, 06 Jan 2023 03:44:13 -0800 (PST)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.gmail.com with ESMTPSA id u3-20020ac258c3000000b004b5872a7003sm129747lfo.98.2023.01.06.03.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 03:44:13 -0800 (PST)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] General Purpose clocks and matisse-wifi backlight
+Date:   Fri,  6 Jan 2023 13:44:00 +0200
+Message-Id: <20230106114403.275865-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230106061659.never.817-kees@kernel.org>
-In-Reply-To: <20230106061659.never.817-kees@kernel.org>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 6 Jan 2023 12:43:44 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
-Message-ID: <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
-Subject: Re: [PATCH] media: uvcvideo: Silence memcpy() run-time false positive warnings
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        ionut_n2001@yahoo.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees
+This series adds support for general purpose clocks found on MSM8226
+and enables ti,lp8556 backlight on matisse-wifi which uses general
+purpose clocks with clk-pwm.
 
-Thanks for the patch
+Luca Weiss (1):
+  pinctrl: qcom: msm8226: Add General Purpose clocks
 
-Would it make more sense to replace *mem with a structure/union. Something like:
-https://patchwork.linuxtv.org/project/linux-media/patch/20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org/
+Matti Lehtimäki (2):
+  dt-bindings: pinctrl: msm8226: Add General Purpose clocks
+  ARM: dts: qcom: apq8026-samsung-matisse-wifi: Add display backlight
 
-Regards!
-
-On Fri, 6 Jan 2023 at 07:19, Kees Cook <keescook@chromium.org> wrote:
->
-> The memcpy() in uvc_video_decode_meta() intentionally copies across the
-> length and flags members and into the trailing buf flexible array.
-> Split the copy so that the compiler can better reason about (the lack
-> of) buffer overflows here. Avoid the run-time false positive warning:
->
->   memcpy: detected field-spanning write (size 12) of single field "&meta->length" at drivers/media/usb/uvc/uvc_video.c:1355 (size 1)
->
-> Additionally fix a typo in the documentation for struct uvc_meta_buf.
->
-> Reported-by: ionut_n2001@yahoo.com
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216810
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 4 +++-
->  include/uapi/linux/uvcvideo.h     | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index d2eb9066e4dc..b67347ab4181 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -1352,7 +1352,9 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
->         if (has_scr)
->                 memcpy(stream->clock.last_scr, scr, 6);
->
-> -       memcpy(&meta->length, mem, length);
-> +       meta->length = mem[0];
-> +       meta->flags  = mem[1];
-> +       memcpy(meta->buf, &mem[2], length - 2);
->         meta_buf->bytesused += length + sizeof(meta->ns) + sizeof(meta->sof);
->
->         uvc_dbg(stream->dev, FRAME,
-> diff --git a/include/uapi/linux/uvcvideo.h b/include/uapi/linux/uvcvideo.h
-> index 8288137387c0..a9d0a64007ba 100644
-> --- a/include/uapi/linux/uvcvideo.h
-> +++ b/include/uapi/linux/uvcvideo.h
-> @@ -86,7 +86,7 @@ struct uvc_xu_control_query {
->   * struct. The first two fields are added by the driver, they can be used for
->   * clock synchronisation. The rest is an exact copy of a UVC payload header.
->   * Only complete objects with complete buffers are included. Therefore it's
-> - * always sizeof(meta->ts) + sizeof(meta->sof) + meta->length bytes large.
-> + * always sizeof(meta->ns) + sizeof(meta->sof) + meta->length bytes large.
->   */
->  struct uvc_meta_buf {
->         __u64 ns;
-> --
-> 2.34.1
->
-
+ .../pinctrl/qcom,msm8226-pinctrl.yaml         |  4 +-
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 59 +++++++++++++++++++
+ drivers/pinctrl/qcom/pinctrl-msm8226.c        | 11 +++-
+ 3 files changed, 70 insertions(+), 4 deletions(-)
 
 -- 
-Ricardo Ribalda
+2.34.1
+
