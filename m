@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A406608AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6546608B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjAFVQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S235283AbjAFVSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234327AbjAFVQJ (ORCPT
+        with ESMTP id S231417AbjAFVSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:16:09 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3920926D;
-        Fri,  6 Jan 2023 13:16:07 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d17so2455219wrs.2;
-        Fri, 06 Jan 2023 13:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OP+YfN5L/CAL5jnc65vOTHTY7IY6KT8aEtFoTjI7ujo=;
-        b=gnUAtsSOMFLBBLUcvV5Q0U3dKVfxAtie0fDP4YcsrbWSqEphdsCYQc0QrAwUZqBZJG
-         ru9lMiR5yYJlxaIHYNCRq5Wojzd/cy+mkt4Jq4PMjmgFDNEjV9OE8I37N0fbdS0ltg/c
-         qxVrUPCrHUeXbcDhUu97Q4XOJIa1Lt/6UvaTYjepQK5HWurzgRyUq9XZTUsaYoNkAQmF
-         zw6CZ3movbDjwJ6o0XWo6rqb+DMnJq/waVH30xyzg4VhWd9iJzKFByUKBuIOSZtL+EYu
-         k0oBYR93eAarjOop6AQgiTs8R0IrGsXUc6rXfoq3mQy5UTYHXIw9Ssw8VOnf+oVyW75f
-         Z/jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OP+YfN5L/CAL5jnc65vOTHTY7IY6KT8aEtFoTjI7ujo=;
-        b=xB2zhQf71vc87vipwwZOHCGYPqvWyng8qUoQ1attTH1NOx+7Ead7IApasM/LqBYk4K
-         DkKnsp25cqGMVBM2lXW8FABIw2eJ0BVd0YJNgl1XsAjScWSEW2Qzv53/RpwD1nDSfSvw
-         BGfv3g7Cou6HLvVnxMyFXRRniBdxgk38wBCzQ5lbM3+eqMdlIS6Er1I7YlnLW4+tkfh1
-         j4ZuenZ/Mwt6Ya2U3Ym55CjvqLNz4zB7nnjt9oD/KGogqS1gUhX2FrFmIwMhUKebCEWJ
-         Bel1wU6dyXZrcQoDvtp+a9ggLrKv8zjoleue33zFMREqu1vLd1QDBWZmYANC+swL/rkh
-         gyeQ==
-X-Gm-Message-State: AFqh2kpPgtU67yOj0iO1G7QqPVfc1yVbT+F3GCwHX+sCkhxfyqFM3SoI
-        40eXCxDKIFjI5lXy7CYKvIc=
-X-Google-Smtp-Source: AMrXdXsZBmrazdAEnZS+ZMUuv0w9wkfwZTql33wtBDXFGDKMyjaLGHHnKMojyGeEMPgu6WzXPwzwpg==
-X-Received: by 2002:a05:6000:70a:b0:263:542c:5918 with SMTP id bs10-20020a056000070a00b00263542c5918mr39982464wrb.38.1673039765448;
-        Fri, 06 Jan 2023 13:16:05 -0800 (PST)
-Received: from localhost (host81-157-153-247.range81-157.btcentralplus.com. [81.157.153.247])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm2206491wrx.21.2023.01.06.13.16.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 13:16:04 -0800 (PST)
-Date:   Fri, 6 Jan 2023 21:16:03 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 0/2] docs/mm: start filling out new structure
-Message-ID: <Y7iPk+bBNX435TqV@lucifer>
-References: <20230101094523.1522109-1-rppt@kernel.org>
+        Fri, 6 Jan 2023 16:18:09 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D687781C30;
+        Fri,  6 Jan 2023 13:18:07 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 3F0AA604F1;
+        Fri,  6 Jan 2023 22:18:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673039886; bh=whBWRRi6+5dafVrdHXk6f5Ni/cHoDI18bNNHDz7fQPg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qh9H0LU3AFs1ry2tYESspJyuuzH1IqS4ZQ4LrhGyHOQjPuek2S33ty2HPC0rF2nRn
+         RJsRnswjpjHSPBIkq5Dm4fuyVoGCFeC+DgWublbi1LS8jP+cKZAqTYXpvmy6rhhas8
+         tmn7WVRl10+O2uJbsvo4pw6Hk7sRCe+sFEjsXxdlGgWwyc0uJKZWG6AvPWLStg9ACu
+         gcxEbWHTHQRRAAzG2jjDDyT/jUcXEIqFigrPG/A4hulMQmgnbwrbFQq/ExP9FOqibT
+         mNPsrNBbA9pqtNdAE2Wb5q+eAWb1qMHE9Iu37B23rHZLvBDzsxPgkJsE5yWeEO08IZ
+         PjvS51iolwgEQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Jl9NtbcDPe2Z; Fri,  6 Jan 2023 22:18:04 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 7E881604F0;
+        Fri,  6 Jan 2023 22:18:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673039883; bh=whBWRRi6+5dafVrdHXk6f5Ni/cHoDI18bNNHDz7fQPg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZWQi72lCmS6wlMhGlrJXi8hF1CFQPbZ86tSn4uasP+roJQ0MuMlq0UV7x0cQ1qRLw
+         4/IsNr8lNgT9dVCD1rDQCLu/nUfCpHlUNB/eVnKd24VYbbDy2fgZJsn6Anx11CsxZW
+         CksY5wWvWGzgvf2LC2HzRW7gYfFjvuc6zY8I8VRnaDZX7QWYNCJP6iV0IcYHHTSdfC
+         L/Sq8ITIWgQdDs2tG2CDiE7KRsWMUHQpX1OgUIaDdFS/SH7KA0jdEmj2AdRFKORdYd
+         EY7D1XQRXag5iKGvxrfSheca4b+d+gfhKnG9Uj3C+FwEBlnAflzmYwybJUzJAEMT0V
+         lhEbeGkmvWCrA==
+Message-ID: <d600f5c4-290b-d575-19a0-9cc83f77caaa@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 22:18:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230101094523.1522109-1-rppt@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: BUG: assert spuriously fails in selftest/proc/proc-uptime-001.c
+Content-Language: en-US, hr
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
+ <Y7h2xvzKLg36DSq8@p183>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <Y7h2xvzKLg36DSq8@p183>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,84 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 11:45:21AM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Hi,
->
-> Last year at LSF/MM Matthew promptly created the new structure for MM
-> documentation, but there still was no patches with content.
->
-> I've started to work on it a while ago and I wanted to send it out in a
-> more complete form, but I've got distracted and didn't have time to work
-> on this.
->
-> With fast changes around struct page and the threat of Lorenzo's book,
-> I've decided to send out what I have till now with a hope that we can
-> really make this a collaborative effort with people filling paragraph
-> here and there.
+Hi all,
 
-:))
+In the same environment as the previous bug report (Lenovo Ideapad 3 15ITL6 laptop
+running Ubuntu 22.10 kinetic kudu and 6.2-rc2 vanilla Torvalds tree kernel), the
+next test in the ...selftest/proc/* sequence spuriously fails in assert (i1 <= i0).
 
-Don't worry, I feel as if this documentation and my book only overlap partially,
-so there is no reason to consider it a threat!
+Please note that the compiler is the novelty GCC 12.2.0-3ubuntu1.
 
-Being a developer I love bullet points. So I will sum up my thoughts on this
-that way:-
+This was previously hidden by premature hang in the `make kselftest` run due to
+proc-empty-vm an proc-pid-vm problems that are now fixed.
 
-- I have to, practically, target a single kernel version (v6.0) if I am to stand
-  any chance of getting this done. By the time the book is released (mid 2024
-  maybe even later?) it will have slid further from tip kernel so the aims of
-  the documentation and the book naturally diverge on this basis alone.
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
+proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
+Aborted (core dumped)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc# ./proc-uptime-001
 
-- I have to, again for entirely pragmatic reasons, target a specific
-  architecture (x86-64) where architecture-specific discussions are to be had,
-  another luxury the core documents cannot afford, so in this respect they must
-  go further and be broader than my own.
+It happens about half of the times the program is called.
 
-- The aims of the mm documentation here are, as I gather, to provide a broad
-  overview, API guide, and general explainer. Of course the book will somewhat
-  overlap with each of these, but I am also taking a deeply self-indulgent (and
-  perhaps unwise) approach of going quite a bit deeper and diving into code and
-  visualisations and providing something of a 'guided tour' of the kernel in a
-  way that just wouldn't make sense or be probably particularly helpful in the
-  context of mm docs.
+The source seems OK, I can't tell why the idle counter doesn't look monotonic to
+the program.
 
-- I feel as if the two are actually symbiotic rather than in competition and I
-  really want both to happen and be helpful to people, coming from different
-  angles and with different aims as they do. Given your and other maintainers's
-  competence and experience both of which dramatically eclipse mine many, many
-  times over I am certain these documents will be excellent and will be
-  extremely useful, I only hope that the book can at least somewhat compare!
+Hope this helps.
 
-I'd like to contribute too but my time is so limited with the day job and book
-that I'd rather keep what time I have for kernel contributions to code/reviews
-in order to keep myself 'in the game' so to speak, however I am happy to review
-when I have a moment to!
+BTW, good news: this time I have checked independently, and this is the last test from the .../selftest/proc
+group that doesn't have clean exit code 0.
 
-Proximally speaking, I will take a look at the actual patches here and try
-(humbly!) to review as best I can!
+Thanks,
+Mirsad
 
-I should add that I feel quite honoured to be referenced at all here! :)
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
-Cheers, Lorenzo
-
->
-> If somebody does not feel like sending formal patches, just send me the
-> "raw" text my way and I'll deal with the rest.
->
-> The text is relatively heavily formatted because I believe the target
-> audience will prefer html version.
->
-> Mike Rapoport (IBM) (2):
->   docs/mm: Page Reclaim: add page label to allow external references
->   docs/mm: Physical Memory: add structure, introduction and nodes
->     description
->
->  Documentation/mm/page_reclaim.rst    |   2 +
->  Documentation/mm/physical_memory.rst | 322 +++++++++++++++++++++++++++
->  2 files changed, 324 insertions(+)
->
-> --
-> 2.35.1
->
