@@ -2,163 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6811965FB1D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5975B65FB13
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjAFF4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 00:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        id S231712AbjAFFvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 00:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjAFF4F (ORCPT
+        with ESMTP id S231463AbjAFFuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 00:56:05 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B864060CF5;
-        Thu,  5 Jan 2023 21:56:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672984562; x=1704520562;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5FYmc733b78fRd3B3tStq5rzw45ZjZPIs3hLf607W+U=;
-  b=XYxLxvmyeH7K8fy2k89VWV/X3oSSfIviWF+c6l/hMrlxK8yFmmX9KEuj
-   G2HmiD23KTWi317DuMl0NCs+cNOxSXf/PkJeXccmbXhhuz0X3JRulFtTs
-   10CI5l7zfYrl8e+w/IjdPf0oJ/8LB5tFQC3Jo++6/AtUeyCo1uRXpLUdI
-   XmKObNNosy42nuTTrUMuGV1MEY6L3oYj2nyplcExhCI8X6kRUYqSK4Gek
-   rLBsJZEp3kJ9zxXhdtwrJq6AqYa7R4Qvv2FycLyAa4c24HIDTXtmkFzQN
-   AOTORdplrkGVgvujw95nL9P8RK2yFjSxM79mUubzJwNmmJHjp3jH3NNhB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="323663145"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="323663145"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 21:56:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="724333183"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="724333183"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2023 21:55:58 -0800
-Message-ID: <7bbc0f65-e1c6-f388-29a8-390b8c9c92c8@linux.intel.com>
-Date:   Fri, 6 Jan 2023 13:48:11 +0800
+        Fri, 6 Jan 2023 00:50:51 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3887C6C7E0;
+        Thu,  5 Jan 2023 21:50:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UaM40+uuvcfyTnyFLPhnEkCkb+aR6HPU3BaofMh9dEK3vA1E3Uk5gBzpyldT/Bd9TwzD+wB97b5aptT0uhPYO8GtDySdlO7rAcvdDi9eHk5EAXebCP6Q/6h8NPuuJly/62yc67XU6ugNdShpWT9bMLv5/HP3TDQRtyOHpAc5uAjJXCTizz3wmpyWOszvpavwYDFEaBhLB5hbe9z6lIDUI2HI6pJi1SXm9woHhSDTwuqlRrIxMXfNtS80nHP0iABXuSmjWJmEhBQhxhrk5ytrShczMs9bKYWR4NEJ8Qfz7S3uPDCbVovWXy0yNHANcguF47szDei//X7wZxJwYcD/pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BKXpjY9aYWFFLNIkFsMgRO96SSIU4dgItG3vbJMFxj8=;
+ b=m0b6rytiPrGYQ9wCBUdMQ4++1InJr+HI8IlrC8oDf1Gr0n26Tx6JHEPpRY9I37HbPCZeoS+2WWRnZBWIi539wzz5EPi9Fr9MYMviWpRGM0nHjSAsgfOajJdu2PwyFrR6HWBFkmaxcsD1DbJcGu+2+BNpXL31MwmZtfx9mG16dMjXdXLvdXRbQNkA9lGMHgefFwN7B9OrlUt71izoNdMbnLeUTn//9PfYu4USQalal2yeMGpg4z4MNaNRtNisesyi5uGAEJlM/5Q/JtXitCUi390jkEYPzUM1A74EqGM8LuSiiiPax6ghkwjbV7X3qTVVKsyoWXKi7jE6dLDKTxIwNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BKXpjY9aYWFFLNIkFsMgRO96SSIU4dgItG3vbJMFxj8=;
+ b=J3eUoe/8EaYyyppkTV/KV/8laNs2c4ZqmnyJiY0iFwsywc7b52XAWLw0U/ubXypX7/qT8rAxO6ggK5xkG1F/6MiHKwSrEvPf6oa3sUW4m1BZf3+k8JjmX+94tOTlepsDXxzg1wPBvm7LY7zcwK0i/vcsbV6DopUZEL2MfH7aMlA=
+Received: from MW4PR04CA0305.namprd04.prod.outlook.com (2603:10b6:303:82::10)
+ by MW4PR12MB6731.namprd12.prod.outlook.com (2603:10b6:303:1eb::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
+ 2023 05:50:32 +0000
+Received: from CO1PEPF00001A64.namprd05.prod.outlook.com
+ (2603:10b6:303:82:cafe::63) by MW4PR04CA0305.outlook.office365.com
+ (2603:10b6:303:82::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
+ Transport; Fri, 6 Jan 2023 05:50:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A64.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5986.15 via Frontend Transport; Fri, 6 Jan 2023 05:49:44 +0000
+Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 5 Jan 2023 23:49:38 -0600
+From:   Perry Yuan <perry.yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
+        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: amd-pstate: fix kernel hang issue while amd-pstate unregistering
+Date:   Fri, 6 Jan 2023 13:48:56 +0800
+Message-ID: <20230106054856.37403-1-perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
- =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
- =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
-Content-Language: en-US
-To:     Felix Kuehling <felix.kuehling@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Hegde, Vasant" <Vasant.Hegde@amd.com>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Joerg Roedel <jroedel@suse.de>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
- <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
- <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
- <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
- <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
- <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
- <6b5baa30-c218-0845-d6c2-32ac21ed6a6d@linux.intel.com>
- <86099ef0-5a8d-bd1e-4e38-a3b361a68f10@amd.com>
- <BL1PR12MB51448996E36254ADC80B5BF6F7FA9@BL1PR12MB5144.namprd12.prod.outlook.com>
- <12db77f6-736d-a423-4cc0-e536eb7bb712@amd.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <12db77f6-736d-a423-4cc0-e536eb7bb712@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A64:EE_|MW4PR12MB6731:EE_
+X-MS-Office365-Filtering-Correlation-Id: e61445e7-a669-4056-a54d-08daefa9ec71
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gQNgwI8vUdgirNxN9K8QNRlrnCexw1K8Ta+IIIG87yFoijkTE7Fo+o2PjZwCQ8uU0Osmp4ct6DeAgCVkHeMqS7y0Zmg+sl4Rpkk99ZAUOEAXZr6rLN7usc11hQyPBEj/xmnAF7SyyCKT0WDLum2EgmRtnWNxt9EtlhTHnUPHgATYjlWdj3lrDxrylO1ir9bVsILIEvvqdP6OU14b5e3cd03oempZQdACN5V0jdLMffxYn3Ry5r+zM+EWRojAdMMR3Wfd4ZYF9S7emH+gw6ftT0uIywN9sNA+NiJMPvjGUZlYNPyOwgtwAOaOHJ9nRHNYcNfgpwSLsxJ8KSnZCcYLKap4kZ4c47TbRMgMC1WNx1FEDzcL/K1auny6Fh1FYcADHYBBwQIPqME3nc56KkmHaWrXBZjIBbvLDTey3dZeHvUr2bKpDhKHgbcaqCEltQ/p5FYwCCm+o983XF+oXc/voP7AFjs+rLc9xP63hTB6boN5piRg2ycmfON/sbKIF9GZCZwqsEHZ5x0brGM5hqHlsF74MxkvGGfMUZoglN3q8QQs27KsUqKwXKNOJHMx9AkEUNoACED6DIhhRc3JAa2VvayMSlUjsjGJ8LkfhYMTHWEhr86674E9dT39nHevw9qm6jPaTj2LsBXOL6DbLIFwX3DfuAiTNe4fki10b7VRPZgYleW03ixIsUl4HrGMuzthtTc+tgOrwM9s6dZGDAjlHPuCjvVu+zql9EYbCVakIHw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199015)(46966006)(40470700004)(36840700001)(36860700001)(82740400003)(36756003)(2616005)(40460700003)(40480700001)(2906002)(316002)(70586007)(110136005)(16526019)(82310400005)(356005)(81166007)(54906003)(86362001)(426003)(47076005)(41300700001)(83380400001)(1076003)(5660300002)(8676002)(4326008)(336012)(7696005)(8936002)(186003)(44832011)(70206006)(26005)(6666004)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 05:49:44.6717
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e61445e7-a669-4056-a54d-08daefa9ec71
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A64.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6731
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Jason
+In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
+increase increments the kobject reference count of policy and make it as
+busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
+decrement the kobject reference count back, it will resolve the kernel
+hang issue when unregistering the amd-pstate driver and register the
+`amd_pstate_epp` driver instance.
 
-On 1/5/23 11:27 PM, Felix Kuehling wrote:
-> Am 2023-01-05 um 09:46 schrieb Deucher, Alexander:
->> [AMD Official Use Only - General]
->>
->>> -----Original Message-----
->>> From: Hegde, Vasant <Vasant.Hegde@amd.com>
->>> Sent: Thursday, January 5, 2023 5:46 AM
->>> To: Baolu Lu <baolu.lu@linux.intel.com>; Matt Fagnani
->>> <matt.fagnani@bell.net>; Thorsten Leemhuis <regressions@leemhuis.info>;
->>> Deucher, Alexander <Alexander.Deucher@amd.com>; Joerg Roedel
->>> <jroedel@suse.de>
->>> Cc: iommu@lists.linux.dev; LKML <linux-kernel@vger.kernel.org>;
->>> regressions@lists.linux.dev; Linux PCI <linux-pci@vger.kernel.org>; 
->>> Bjorn
->>> Helgaas <bhelgaas@google.com>
->>> Subject: Re: [regression, bisected, pci/iommu] Bug 216865 - Black screen
->>> when amdgpu started during 6.2-rc1 boot with AMD IOMMU enabled
->>>
->>> Baolu,
->>>
->>>
->>> On 1/5/2023 4:07 PM, Baolu Lu wrote:
->>>> On 2023/1/5 18:27, Vasant Hegde wrote:
->>>>> On 1/5/2023 6:39 AM, Matt Fagnani wrote:
->>>>>> I built 6.2-rc2 with the patch applied. The same black screen
->>>>>> problem happened with 6.2-rc2 with the patch. I tried to use early
->>>>>> kdump with 6.2-rc2 with the patch twice by panicking the kernel with
->>>>>> sysrq+alt+c after the black screen happened. The system rebooted
->>>>>> after about 10-20 seconds both times, but no kdump and dmesg files
->>>>>> were saved in /var/crash. I'm attaching the lspci -vvv output as
->>> requested.
->>>>> Thanks for testing. As mentioned earlier I was not expecting this
->>>>> patch to fix the black screen issue. It should fix kernel warnings
->>>>> and IOMMU page fault related call traces. By any chance do you have 
->>>>> the
->>> kernel boot logs?
->>>>> @Baolu,
->>>>>     Looking into lspci output, it doesn't list ACS feature for
->>>>> Graphics card. So with your fix it didn't enable PASID and hence it 
->>>>> failed to
->>> boot.
->>>> So do you mind telling why does the PASID need to be enabled for the
->>>> graphic device? Or in another word, what does the graphic driver use
->>>> the PASID for?
->>> Honestly I don't know the complete details of how PASID works with 
->>> graphics
->>> card. May be Alex or Joerg can explain it better.
->> + Felix
->>
->> The GPU driver uses the pasid for shared virtual memory between the 
->> CPU and GPU.  I.e., so that the user apps can use the same virtual 
->> address space on the GPU and the CPU.  It also uses pasid to take 
->> advantage of recoverable device page faults using PRS.
-> 
-> Agreed. This applies to GPU computing on some older AMD APUs that take 
-> advantage of memory coherence and IOMMUv2 address translation to create 
-> a shared virtual address space between the CPU and GPU. In this case it 
-> seems to be a Carrizo APU. It is also true for Raven APUs.
+Acked-by: Huang Rui <ray.huang@amd.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/cpufreq/amd-pstate.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for the explanation.
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 204e39006dda..c17bd845f5fc 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+ 		max_perf = min_perf;
+ 
+ 	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
++	cpufreq_cpu_put(policy);
+ }
+ 
+ static int amd_get_min_freq(struct amd_cpudata *cpudata)
+-- 
+2.34.1
 
-This is actually the problem that commit 201007ef707a was trying to fix.
-The PCIe fabric routes Memory Requests based on the TLP address,
-ignoring any PASID (PCIe r6.0, sec 2.2.10.4), so a TLP with PASID that
-should go upstream to the IOMMU may instead be routed as a P2P
-Request if its address falls in a bridge window.
-
-In SVA case, the IOMMU shares the address space of a user application.
-The user application side has no knowledge about the PCI bridge window.
-It is entirely possible that the device is programed with a P2P address
-and results in a disaster.
-
---
-Best regards,
-baolu
