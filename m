@@ -2,675 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5313C660547
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A728F660539
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbjAFRFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S235047AbjAFREw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235444AbjAFRFC (ORCPT
+        with ESMTP id S234754AbjAFREt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:05:02 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C17CBCE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:04:59 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 306GWo9Y013350;
-        Fri, 6 Jan 2023 18:04:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=qJBHwySShQSGqR61Tg+6755r8l5nn7oY0r0pjZIaOZM=;
- b=HjPxL68aoKjj61UzlBNOFJbxZvOH7Mk8SY2jVcOV9qu/4PACTDb2cLBHcf5//kCv/unE
- l+Lc3cMPqoF8pOWslDJLx+lUqRgXyM25oj9CbLmGCkQzsfZGxR8eN8lpgLrVDKY3pRWP
- V7QSTAiGJA0uVkzJHwAcrUDHY//D2Um7iR8+iXrcCW5TegV86atJ2bjGWBOzFduZJqgh
- VwXTNCsE84cHUY3ahE8ejZgoe0crZpt9COiyF2f2Fyrzvn+qVTsZKxG26SDz2HvmfH2/
- yb6ge+8QAPD4CydwQFxlErZB+GF4IVwlH8IVt6KwaSFtWg4QXDAFERvVPlah56Br5ZkR Wg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mx41mpc6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Jan 2023 18:04:44 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E042A100034;
-        Fri,  6 Jan 2023 18:04:43 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DA4C5219D9E;
-        Fri,  6 Jan 2023 18:04:43 +0100 (CET)
-Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 6 Jan
- 2023 18:04:41 +0100
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Etienne CARRIERE <etienne.carriere@linaro.org>,
-        Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
-        Lionel DEBIEVE <lionel.debieve@foss.st.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v5 2/3] nvmem: stm32: add OP-TEE support for STM32MP13x
-Date:   Fri, 6 Jan 2023 18:04:29 +0100
-Message-ID: <20230106180414.v5.2.Ibc43aa73f865090affeb1751af0cc260c7f1dd07@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230106170430.1214186-1-patrick.delaunay@foss.st.com>
-References: <20230106170430.1214186-1-patrick.delaunay@foss.st.com>
+        Fri, 6 Jan 2023 12:04:49 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A687A38F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:04:47 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id l129so22309vkh.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:04:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xseUPxj6qju1eAHZF4W0HuKF5TTX5DKrVnNk+FidbeQ=;
+        b=YUwPwh5ejNxlLBTChU4Fr1O9Ds3g0si6gSkt3lNwR6epu/baE/LsoiyebzxyQYI+4q
+         sBUKQqndV2uSyLPZt9TMS5Ehk+feOIVwCerE2W20+gdwk8LKWCHMmWPJ3hDDdugc6H6f
+         /ORwJNRlIgU7Q0LmZ183o8w7jWMhw8eCm8sQdQxOMWEdyfnMi0sPNxtEsHwHmR/5jFqc
+         2ydQ34WUEjive1EcXRXT0dvqeUMKKY8G+gPEhVZDSykEmxwF+RHYVHGRBCzxdEac97GV
+         +hT1JXC+DTCzF9JsuKbk97+BccRI8CJUdsMiK0JcuiiysJk06ULT9j48qFfYPiz4V1vU
+         wLyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xseUPxj6qju1eAHZF4W0HuKF5TTX5DKrVnNk+FidbeQ=;
+        b=fY/ipwxHIl88c+J3qARaQaQ3hwSG+w9YyDatmRMShUjQUmqMeKsOn+39eHg7buXQm5
+         MqLztKfSQQdjUrJKYPphS3IjKshq9pvVg3xoHaYj+gQeqCQM45mqhisSGoOlLXvOnWUF
+         1k1pIcHwLlcu6Sb0pZzZoVyaGS7CK63ZjG0ySSZUuuQCHzZosOE8jpPZA/gZ63/25g9y
+         aeh6X9rFs5zalpoN572xDp1TPmeUbeKZpQppijThuec3NgGsCKfy3xD77lBGyUXm2eqX
+         EzbfpzVx2eRUD6BJQ0UpAYwSVB6gzhU/cyDVrlwg3QQE8TxErHKp2JwpB6MKkBhA/fpq
+         F15Q==
+X-Gm-Message-State: AFqh2kpEHQ79wP9HsNEpRDauh8JWrHTX+s7t79HXVo7319LUcXihRmDp
+        GFQvWpxbbbkv96ToEb7s6uZldOZnDAIHKot6P3aJXQ==
+X-Google-Smtp-Source: AMrXdXuBYGnNNxK5jSvnXlmVwdgfhPwdJALkJU8jnvzWWVy2a+QcG+wCMHCGABkrOkb1OUI/x5Yp3AGn8TedpjD1uYs=
+X-Received: by 2002:a1f:a390:0:b0:3bd:1d27:eaa with SMTP id
+ m138-20020a1fa390000000b003bd1d270eaamr5829505vke.4.1673024685492; Fri, 06
+ Jan 2023 09:04:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-06_11,2023-01-06_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221220084404.19280-1-umang.jain@ideasonboard.com>
+ <Y6Lqs8RUiyi452gM@pendragon.ideasonboard.com> <Y6MF3l40WM3onmyO@kroah.com>
+ <d48462f6-de4c-2816-0a7a-b3b13993604c@ideasonboard.com> <Y6SVegtHvwQ3p+3K@pendragon.ideasonboard.com>
+ <629b3f63-74e4-5cb5-29d1-6d2846bc24c7@i2se.com> <Y6lxtk4bqWwXAyHH@pendragon.ideasonboard.com>
+In-Reply-To: <Y6lxtk4bqWwXAyHH@pendragon.ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 6 Jan 2023 17:04:29 +0000
+Message-ID: <CAPY8ntCePNY8eNtB58_6=doON4_oRb4OLuGLfA=0SDhRvmb3+Q@mail.gmail.com>
+Subject: Re: [PATCH] staging: vc04_services: vchiq_arm: Create platform_device
+ per device
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For boot with OP-TEE on STM32MP13, the communication with the secure
-world no more use STMicroelectronics SMC but communication with the
-STM32MP BSEC TA, for data access (read/write) or lock operation:
-- all the request are sent to OP-TEE trusted application,
-- for upper OTP with ECC protection and with word programming only
-  each OTP are permanently locked when programmed to avoid ECC error
-  on the second write operation
+Hi Laurent, Greg, Stefan, and Umang
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+Sorry, still catching up from the holiday period.
 
-Changes in v5:
-- minor changes after Etienne Carierre review (comments,
-  change %x to %#x, remove goto to out_tee_session)
+On Mon, 26 Dec 2022 at 10:04, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Stefan,
+>
+> On Fri, Dec 23, 2022 at 12:24:22PM +0100, Stefan Wahren wrote:
+> > Am 22.12.22 um 18:35 schrieb Laurent Pinchart:
+> > > On Thu, Dec 22, 2022 at 01:59:28PM +0530, Umang Jain wrote:
+> > >> On 12/21/22 6:40 PM, Greg Kroah-Hartman wrote:
+> > >>> On Wed, Dec 21, 2022 at 01:14:59PM +0200, Laurent Pinchart wrote:
+> > >>>> On Tue, Dec 20, 2022 at 02:14:04PM +0530, Umang Jain wrote:
+> > >>>>> Create a proper per device platorm_device structure for all the child
+> > >>>>> devices that needs to be registered by vchiq platform driver. Replace
+> > >>>>> the vchiq_register_child() with platform_add_devices() to register the
+> > >>>>> child devices.
+> > >>>>
+> > >>>> This explains what the patch does, but not why.
+> > >>>>
+> > >>>>> This is part of an effort to address TODO item "Get rid of all non
+> > >>>>> essential global structures and create a proper per device structure"
+> > >>>>
+> > >>>> And this explains part of the reason only. Could you please expand the
+> > >>>> commit message with the reasoning behind this change ? It's not clear
+> > >>>> from the change below why this is needed and good.
+> > >>
+> > >> Ok, I thought the TODO reference was sufficient but I'll expand on it.
+> > >>
+> > >>>>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > >>>>> ---
+> > >>>>>    .../interface/vchiq_arm/vchiq_arm.c           | 59 ++++++++++---------
+> > >>>>>    1 file changed, 31 insertions(+), 28 deletions(-)
+> > >>>>>
+> > >>>>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > >>>>> index 22de23f3af02..fa42ea3791a7 100644
+> > >>>>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > >>>>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> > >>>>> @@ -65,8 +65,29 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
+> > >>>>>    DEFINE_SPINLOCK(msg_queue_spinlock);
+> > >>>>>    struct vchiq_state g_state;
+> > >>>>>
+> > >>>>> -static struct platform_device *bcm2835_camera;
+> > >>>>> -static struct platform_device *bcm2835_audio;
+> > >>>>> +static u64 vchiq_device_dmamask = DMA_BIT_MASK(32);
+> > >>>>
+> > >>>> The fact that this isn't const and is used by two different
+> > >>>> platform_device instances is worrying. Either it can be made const, or
+> > >>>> it's wrong.
+> > >>
+> > >> ack.
+> > >>
+> > >>>>> +
+> > >>>>> +static struct platform_device bcm2835_camera = {
+> > >>>>> +       .name           = "bcm2835-camera",
+> > >>>>> +       .id             = PLATFORM_DEVID_NONE,
+> > >>>>> +       .dev            = {
+> > >>>>> +               .dma_mask       = &vchiq_device_dmamask,
+> > >>>>> +       }
+> > >>>>> +};
+> > >>>>> +
+> > >>>>> +static struct platform_device bcm2835_audio = {
+> > >>>>> +       .name           = "bcm2835_audio",
+> > >>>>> +       .id             = PLATFORM_DEVID_NONE,
+> > >>>>> +       .dev            = {
+> > >>>>> +               .dma_mask       = &vchiq_device_dmamask,
+> > >>>>> +       }
+> > >>>>> +
+> > >>>>
+> > >>>> Extra blank line.
+> > >>
+> > >> oops, checkpatch.pl didn't catch this :-/
+> > >>
+> > >>>>> +};
+> > >>>>> +
+> > >>>>> +static struct platform_device *vchiq_devices[] __initdata = {
+> > >>>>
+> > >>>> Make it const.
+> > >>>>
+> > >>>>> +       &bcm2835_camera,
+> > >>>>> +       &bcm2835_audio,
+> > >>>>> +};
+> > >>>>>
+> > >>>>>    struct vchiq_drvdata {
+> > >>>>>         const unsigned int cache_line_size;
+> > >>>>> @@ -1763,28 +1784,6 @@ static const struct of_device_id vchiq_of_match[] = {
+> > >>>>>    };
+> > >>>>>    MODULE_DEVICE_TABLE(of, vchiq_of_match);
+> > >>>>>
+> > >>>>> -static struct platform_device *
+> > >>>>> -vchiq_register_child(struct platform_device *pdev, const char *name)
+> > >>>>> -{
+> > >>>>> -       struct platform_device_info pdevinfo;
+> > >>>>> -       struct platform_device *child;
+> > >>>>> -
+> > >>>>> -       memset(&pdevinfo, 0, sizeof(pdevinfo));
+> > >>>>> -
+> > >>>>> -       pdevinfo.parent = &pdev->dev;
+> > >>>>> -       pdevinfo.name = name;
+> > >>>>> -       pdevinfo.id = PLATFORM_DEVID_NONE;
+> > >>>>> -       pdevinfo.dma_mask = DMA_BIT_MASK(32);
+> > >>>>> -
+> > >>>>> -       child = platform_device_register_full(&pdevinfo);
+> > >>>>> -       if (IS_ERR(child)) {
+> > >>>>> -               dev_warn(&pdev->dev, "%s not registered\n", name);
+> > >>>>> -               child = NULL;
+> > >>>>> -       }
+> > >>>>> -
+> > >>>>> -       return child;
+> > >>>>> -}
+> > >>>>> -
+> > >>>>>    static int vchiq_probe(struct platform_device *pdev)
+> > >>>>>    {
+> > >>>>>         struct device_node *fw_node;
+> > >>>>> @@ -1832,8 +1831,11 @@ static int vchiq_probe(struct platform_device *pdev)
+> > >>>>>                 goto error_exit;
+> > >>>>>         }
+> > >>>>>
+> > >>>>> -       bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
+> > >>>>> -       bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
+> > >>>>> +       err = platform_add_devices(vchiq_devices, ARRAY_SIZE(vchiq_devices));
+> > >>>>> +       if (err) {
+> > >>>>> +               dev_warn(&pdev->dev, "Failed to add vchiq child devices");
+> > >>>>> +               goto error_exit;
+> > >>>>> +       }
+> > >>>>
+> > >>>> If you unbind and rebind this driver, the platform_device instances
+> > >>>> defined as global variables will be reused, and I'm pretty sure that
+> > >>>> will cause issues, for instance with the kobj->state_initialized check
+> > >>>> in kobject_init() (called from device_initialize(), itself called from
+> > >>>> platform_device_register(), from platform_add_devices()). I'm not sure
+> > >>>> static instances of platform_device are a very good idea in general.
+> > >>>
+> > >>> static instances of any device are a horrible idea, but it seems that
+> > >>> many drivers do this and abuse platform devices this way :(
+> > >>
+> > >> It seems  I have been a victim of the abuse usage while looking for
+> > >> platform_device references in the codebase. I'm working on a new
+> > >> approach for this.
+> > >>
+> > >> Currently (as per the linux-next branch), the vchiq driver will happily
+> > >> carry on if any of the child  platform device registration fails. That
+> > >> means if bcm2835-audio fails to register, bcm2835-camera will  still
+> > >> kept registered I suppose.
+> > >>
+> > >> However with usage of platform_add_devices() in this patch, I introduced
+> > >> a functionality change (I'm realizing this now) - any failure of child
+> > >> platform device registeration will -unregister- all the other platform
+> > >> devices i.e. if bcm2835-audio fails, bcm2835-camera will also get
+> > >> unregistered.
+> > >>
+> > >> Should I be working towards the status-quo behavior ? Or it's sane to
+> > >> unregistered other platform devices if one of the fails like
+> > >> platform_add_devices() does ? (This affects my new approach as well,
+> > >> hence the question)
+> > >
+> > > If it doesn't cause too much extra complexity, it would be nice to skip
+> > > devices that can't be registered successfully, and still support the
+> > > other ones. I don't expect registration failures to be a occuring
+> > > normally, so if this causes too much completely, I think it would still
+> > > be fine to fail more harshly.
+> > >
+> > >>> Ideally this should be done properly, with the correct devices created
+> > >>> automatically based on the device tree structure, NOT hard-coded into a
+> > >>> .c file like this.
+> > >>>
+> > >>> So I too really do not like this change, why are these not being created
+> > >>> by the firware layer automatically?
+> > >>
+> > >> Not sure if this is a helpful comment, but as far I know, there can be
+> > >> vchiq child platform devices which probably don't have a Device tree
+> > >> entry. like the bcm2835-isp [1] I posted earlier.
+> > >>
+> > >> [1] https://lore.kernel.org/lkml/20221121214722.22563-1-umang.jain@ideasonboard.com/
+> > >
+> > > Those devices are implemented and exposed by the firmware running on the
+> > > VC4. The device tree describes the VC4 itself with the resources
+> > > required to communicate with it through a mailbox interface. I was going
+> > > to say that the platform devices are then created based on what the
+> > > firmware exposes, but that's not right, they're indeed hardcoded in the
+> > > vchiq driver. Adding corresponding DT nodes (as children of the vchiq DT
+> > > node) could make sense. Dave, do you have any opinion on this ?
+> >
+> > i vaguely remember the discussion how to represent audio and camera
+> > interface in the device tree. Representing as child nodes of the VC4 has
+> > been rejected on the device tree mailing some years ago, because this
+> > doesn't represent the physical (hardware) wiring. It's still possible to
+> > access e.g. the camera interface from the ARM.
+>
+> For the camera, things have changed a lot since the mail thread you've
+> linked. The CSI-2 receiver (and camera sensors) are now described in DT
+> and controlled from the ARM side. I believe the firmware still supports
+> controlling that hardware from the VC4 side (limited to a very small set
+> of camera sensors), but I think we can ignore that from a mainline point
+> of view.
+>
+> The devices that are still controlled from the VC4 side are the camera
+> ISP, the video codec and the audio interface. As far as I can tell,
+> there's no plan to change this in neither the short term or long term
+> future. Based on my limited understanding, this architecture makes sense
+> for the ISP and codec as they share resources in a way that is best
+> handled by the VC4 firmware. I have no idea about the audio side. Dave,
+> please correct me if this is incorrect.
 
-Changes in v4:
-- fixe warning reported by kernel test robot for 64 bits support in
-  drivers/nvmem/stm32-bsec-optee-ta.c:260:18:
-  warning: format '%d' expects argument of type 'int',
-  but argument 4 has type 'size_t'
+Audio is only the analogue audio interface. HDMI should now be handled
+under the KMS driver.
 
-Changes in v3:
-- add a separate file stm32-bsec-optee-ta.c with STM32MP BSEC TA
-  communication functions to avoid #if in romem driver.
+ISP and codec hardware are blocks we haven't got permission from
+Broadcom to open source, therefore they will remain under the
+firmware.
+Analogue audio is doing processing in the firmware that the ARM1176 of
+Pi0/1 hasn't got the grunt to do.
 
-Changes in v2:
-- rebase series on linux-next/master
-- minor update after V1 revue
-- add missing sentinel in stm32_romem_of_match()
-- reorder function and remove prototypes for stm32_bsec_pta... functions
-- change stm32_bsec_pta_find to static
-- add return value in dev_err()
-- cleanups some comments, which can be on one line
-- remove test on priv->ctx in stm32_bsec_pta_remove
-- add missing tee_shm_free(shm) in stm32_bsec_pta_write() when
-  tee_shm_get_va failed
-- return error in stm32_bsec_pta_find when devm_add_action_or_reset failed
-- handle driver_register error in stm32_romem_init
+> > The whole approach with using a separate binding for all the firmware
+> > stuff lead to a lot of trouble on the Raspberry Pi platform (ugly
+> > dependencies between firmware, DT and kernel). So i would like to avoid
+> > this here. In case the current implementation is a no go, how about
+> > letting the ARM core discover the available interfaces e.g. via mailbox
+> > interface?
+>
+> I don't know if this is possible with existing firmware, and, if not, if
+> it could be implemented (the firmware isn't open-source). If not, we
+> will need to handle the current situation in the best possible way,
+> which would require creating devices either in the VCHIQ driver, or
+> through DT. I agree the former is probably best, there would still be a
+> dependency between the kernel and firmware, but DT would at least be out
+> of the picture. A custom bus seems fine to me.
 
- drivers/nvmem/Kconfig               |  11 +
- drivers/nvmem/Makefile              |   1 +
- drivers/nvmem/stm32-bsec-optee-ta.c | 298 ++++++++++++++++++++++++++++
- drivers/nvmem/stm32-bsec-optee-ta.h |  80 ++++++++
- drivers/nvmem/stm32-romem.c         |  54 ++++-
- 5 files changed, 441 insertions(+), 3 deletions(-)
- create mode 100644 drivers/nvmem/stm32-bsec-optee-ta.c
- create mode 100644 drivers/nvmem/stm32-bsec-optee-ta.h
+There is currently no way to enumerate the VCHIQ services that are
+available from the firmware. They are normally all present, but
+configuring the firmware for minimum memory usage does remove all
+except audio.
+The vchiq_open_service call will fail if the relevant service isn't
+running, which is currently handled from the probe of each of the
+drivers.
 
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 755f551426b5..4d262f69a073 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -290,9 +290,20 @@ config NVMEM_SPRD_EFUSE
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nvmem-sprd-efuse.
- 
-+config NVMEM_STM32_BSEC_OPTEE_TA
-+	bool "STM32MP BSEC OP-TEE TA support for nvmem-stm32-romem driver"
-+	depends on OPTEE
-+	help
-+	  Say y here to enable the accesses to STM32MP SoC OTPs by the OP-TEE
-+	  trusted application STM32MP BSEC.
-+
-+	  This library is a used by stm32-romem driver or included in the module
-+	  called nvmem-stm32-romem.
-+
- config NVMEM_STM32_ROMEM
- 	tristate "STMicroelectronics STM32 factory-programmed memory support"
- 	depends on ARCH_STM32 || COMPILE_TEST
-+	imply NVMEM_STM32_BSEC_OPTEE_TA
- 	help
- 	  Say y here to enable read-only access for STMicroelectronics STM32
- 	  factory-programmed memory area.
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index fa80fe17e567..6a1efffa88f0 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -61,6 +61,7 @@ obj-$(CONFIG_NVMEM_SPRD_EFUSE)		+= nvmem_sprd_efuse.o
- nvmem_sprd_efuse-y			:= sprd-efuse.o
- obj-$(CONFIG_NVMEM_STM32_ROMEM)		+= nvmem_stm32_romem.o
- nvmem_stm32_romem-y 			:= stm32-romem.o
-+nvmem_stm32_romem-$(CONFIG_NVMEM_STM32_BSEC_OPTEE_TA) += stm32-bsec-optee-ta.o
- obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
- nvmem_sunplus_ocotp-y			:= sunplus-ocotp.o
- obj-$(CONFIG_NVMEM_SUNXI_SID)		+= nvmem_sunxi_sid.o
-diff --git a/drivers/nvmem/stm32-bsec-optee-ta.c b/drivers/nvmem/stm32-bsec-optee-ta.c
-new file mode 100644
-index 000000000000..f89ce791dd12
---- /dev/null
-+++ b/drivers/nvmem/stm32-bsec-optee-ta.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * OP-TEE STM32MP BSEC PTA interface, used by STM32 ROMEM driver
-+ *
-+ * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
-+ */
-+
-+#include <linux/tee_drv.h>
-+
-+#include "stm32-bsec-optee-ta.h"
-+
-+/*
-+ * Read OTP memory
-+ *
-+ * [in]		value[0].a		OTP start offset in byte
-+ * [in]		value[0].b		Access type (0:shadow, 1:fuse, 2:lock)
-+ * [out]	memref[1].buffer	Output buffer to store read values
-+ * [out]	memref[1].size		Size of OTP to be read
-+ *
-+ * Return codes:
-+ * TEE_SUCCESS - Invoke command success
-+ * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-+ * TEE_ERROR_ACCESS_DENIED - OTP not accessible by caller
-+ */
-+#define PTA_BSEC_READ_MEM		0x0
-+
-+/*
-+ * Write OTP memory
-+ *
-+ * [in]		value[0].a		OTP start offset in byte
-+ * [in]		value[0].b		Access type (0:shadow, 1:fuse, 2:lock)
-+ * [in]		memref[1].buffer	Input buffer to read values
-+ * [in]		memref[1].size		Size of OTP to be written
-+ *
-+ * Return codes:
-+ * TEE_SUCCESS - Invoke command success
-+ * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-+ * TEE_ERROR_ACCESS_DENIED - OTP not accessible by caller
-+ */
-+#define PTA_BSEC_WRITE_MEM		0x1
-+
-+/* value of PTA_BSEC access type = value[in] b */
-+#define SHADOW_ACCESS	0
-+#define FUSE_ACCESS	1
-+#define LOCK_ACCESS	2
-+
-+/* Bitfield definition for LOCK status */
-+#define LOCK_PERM			BIT(30)
-+
-+/* OP-TEE STM32MP BSEC TA UUID */
-+static const uuid_t stm32mp_bsec_ta_uuid =
-+	UUID_INIT(0x94cf71ad, 0x80e6, 0x40b5,
-+		  0xa7, 0xc6, 0x3d, 0xc5, 0x01, 0xeb, 0x28, 0x03);
-+
-+/*
-+ * Check whether this driver supports the BSEC TA in the TEE instance
-+ * represented by the params (ver/data) to this function.
-+ */
-+static int stm32_bsec_optee_ta_match(struct tee_ioctl_version_data *ver,
-+				     const void *data)
-+{
-+	/* Currently this driver only supports GP compliant, OP-TEE based TA */
-+	if ((ver->impl_id == TEE_IMPL_ID_OPTEE) &&
-+		(ver->gen_caps & TEE_GEN_CAP_GP))
-+		return 1;
-+	else
-+		return 0;
-+}
-+
-+/* Open a session to OP-TEE for STM32MP BSEC TA */
-+static int stm32_bsec_ta_open_session(struct tee_context *ctx, u32 *id)
-+{
-+	struct tee_ioctl_open_session_arg sess_arg;
-+	int rc;
-+
-+	memset(&sess_arg, 0, sizeof(sess_arg));
-+	export_uuid(sess_arg.uuid, &stm32mp_bsec_ta_uuid);
-+	sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
-+	sess_arg.num_params = 0;
-+
-+	rc = tee_client_open_session(ctx, &sess_arg, NULL);
-+	if ((rc < 0) || (sess_arg.ret != 0)) {
-+		pr_err("%s: tee_client_open_session failed err:%#x, ret:%#x\n",
-+		       __func__, sess_arg.ret, rc);
-+		if (!rc)
-+			rc = -EINVAL;
-+	} else {
-+		*id = sess_arg.session;
-+	}
-+
-+	return rc;
-+}
-+
-+/* close a session to OP-TEE for STM32MP BSEC TA */
-+static void stm32_bsec_ta_close_session(void *ctx, u32 id)
-+{
-+	tee_client_close_session(ctx, id);
-+}
-+
-+/* stm32_bsec_optee_ta_open() - initialize the STM32MP BSEC TA */
-+int stm32_bsec_optee_ta_open(struct tee_context **ctx)
-+{
-+	struct tee_context *tee_ctx;
-+	u32 session_id;
-+	int rc;
-+
-+	/* Open context with TEE driver */
-+	tee_ctx = tee_client_open_context(NULL, stm32_bsec_optee_ta_match, NULL, NULL);
-+	if (IS_ERR(tee_ctx)) {
-+		rc = PTR_ERR(tee_ctx);
-+		if (rc == -ENOENT)
-+			return -EPROBE_DEFER;
-+		pr_err("%s: tee_client_open_context failed (%d)\n", __func__, rc);
-+
-+		return rc;
-+	}
-+
-+	/* Check STM32MP BSEC TA presence */
-+	rc = stm32_bsec_ta_open_session(tee_ctx, &session_id);
-+	if (rc) {
-+		tee_client_close_context(tee_ctx);
-+		return rc;
-+	}
-+
-+	stm32_bsec_ta_close_session(tee_ctx, session_id);
-+
-+	*ctx = tee_ctx;
-+
-+	return 0;
-+}
-+
-+/* stm32_bsec_optee_ta_open() - release the PTA STM32MP BSEC TA */
-+void stm32_bsec_optee_ta_close(void *ctx)
-+{
-+	tee_client_close_context(ctx);
-+}
-+
-+/* stm32_bsec_optee_ta_read() - nvmem read access using PTA client driver */
-+int stm32_bsec_optee_ta_read(struct tee_context *ctx, unsigned int offset,
-+			     void *buf, size_t bytes)
-+{
-+	struct tee_shm *shm;
-+	struct tee_ioctl_invoke_arg arg;
-+	struct tee_param param[2];
-+	u8 *shm_buf;
-+	u32 start, num_bytes;
-+	int ret;
-+	u32 session_id;
-+
-+	ret = stm32_bsec_ta_open_session(ctx, &session_id);
-+	if (ret)
-+		return ret;
-+
-+	memset(&arg, 0, sizeof(arg));
-+	memset(&param, 0, sizeof(param));
-+
-+	arg.func = PTA_BSEC_READ_MEM;
-+	arg.session = session_id;
-+	arg.num_params = 2;
-+
-+	/* align access on 32bits */
-+	start = ALIGN_DOWN(offset, 4);
-+	num_bytes = round_up(offset + bytes - start, 4);
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-+	param[0].u.value.a = start;
-+	param[0].u.value.b = SHADOW_ACCESS;
-+
-+	shm = tee_shm_alloc_kernel_buf(ctx, num_bytes);
-+	if (IS_ERR(shm)) {
-+		ret = PTR_ERR(shm);
-+		goto out_tee_session;
-+	}
-+
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[1].u.memref.shm = shm;
-+	param[1].u.memref.size = num_bytes;
-+
-+	ret = tee_client_invoke_func(ctx, &arg, param);
-+	if (ret < 0 || arg.ret != 0) {
-+		pr_err("TA_BSEC invoke failed TEE err:%#x, ret:%#x\n",
-+			arg.ret, ret);
-+		if (!ret)
-+			ret = -EIO;
-+	}
-+	if (!ret) {
-+		shm_buf = tee_shm_get_va(shm, 0);
-+		if (IS_ERR(shm_buf)) {
-+			ret = PTR_ERR(shm_buf);
-+			pr_err("tee_shm_get_va failed for transmit (%d)\n", ret);
-+		} else {
-+			/* read data from 32 bits aligned buffer */
-+			memcpy(buf, &shm_buf[offset % 4], bytes);
-+		}
-+	}
-+
-+	tee_shm_free(shm);
-+
-+out_tee_session:
-+	stm32_bsec_ta_close_session(ctx, session_id);
-+
-+	return ret;
-+}
-+
-+/* stm32_bsec_optee_ta_write() - nvmem write access using PTA client driver */
-+int stm32_bsec_optee_ta_write(struct tee_context *ctx, unsigned int lower,
-+			      unsigned int offset, void *buf, size_t bytes)
-+{	struct tee_shm *shm;
-+	struct tee_ioctl_invoke_arg arg;
-+	struct tee_param param[2];
-+	u8 *shm_buf;
-+	int ret;
-+	u32 session_id;
-+
-+	ret = stm32_bsec_ta_open_session(ctx, &session_id);
-+	if (ret)
-+		return ret;
-+
-+	/* Allow only writing complete 32-bits aligned words */
-+	if ((bytes % 4) || (offset % 4))
-+		return -EINVAL;
-+
-+	memset(&arg, 0, sizeof(arg));
-+	memset(&param, 0, sizeof(param));
-+
-+	arg.func = PTA_BSEC_WRITE_MEM;
-+	arg.session = session_id;
-+	arg.num_params = 2;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-+	param[0].u.value.a = offset;
-+	param[0].u.value.b = FUSE_ACCESS;
-+
-+	shm = tee_shm_alloc_kernel_buf(ctx, bytes);
-+	if (IS_ERR(shm)) {
-+		ret = PTR_ERR(shm);
-+		goto out_tee_session;
-+	}
-+
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-+	param[1].u.memref.shm = shm;
-+	param[1].u.memref.size = bytes;
-+
-+	shm_buf = tee_shm_get_va(shm, 0);
-+	if (IS_ERR(shm_buf)) {
-+		ret = PTR_ERR(shm_buf);
-+		pr_err("tee_shm_get_va failed for transmit (%d)\n", ret);
-+		tee_shm_free(shm);
-+
-+		goto out_tee_session;
-+	}
-+
-+	memcpy(shm_buf, buf, bytes);
-+
-+	ret = tee_client_invoke_func(ctx, &arg, param);
-+	if (ret < 0 || arg.ret != 0) {
-+		pr_err("TA_BSEC invoke failed TEE err:%#x, ret:%#x\n", arg.ret, ret);
-+		if (!ret)
-+			ret = -EIO;
-+	}
-+	pr_debug("Write OTPs %d to %zu, ret=%d\n", offset / 4, (offset + bytes) / 4, ret);
-+
-+	/* Lock the upper OTPs with ECC protection, word programming only */
-+	if (!ret && ((offset + bytes) >= (lower * 4))) {
-+		u32 start, nb_lock;
-+		u32 *lock = (u32 *)shm_buf;
-+		int i;
-+
-+		/*
-+		 * don't lock the lower OTPs, no ECC protection and incremental
-+		 * bit programming, a second write is allowed
-+		 */
-+		start = max_t(u32, offset, lower * 4);
-+		nb_lock = (offset + bytes - start) / 4;
-+
-+		param[0].u.value.a = start;
-+		param[0].u.value.b = LOCK_ACCESS;
-+		param[1].u.memref.size = nb_lock * 4;
-+
-+		for (i = 0; i < nb_lock; i++)
-+			lock[i] = LOCK_PERM;
-+
-+		ret = tee_client_invoke_func(ctx, &arg, param);
-+		if (ret < 0 || arg.ret != 0) {
-+			pr_err("TA_BSEC invoke failed TEE err:%#x, ret:%#x\n", arg.ret, ret);
-+			if (!ret)
-+				ret = -EIO;
-+		}
-+		pr_debug("Lock upper OTPs %d to %d, ret=%d\n",
-+			 start / 4, start / 4 + nb_lock, ret);
-+	}
-+
-+	tee_shm_free(shm);
-+
-+out_tee_session:
-+	stm32_bsec_ta_close_session(ctx, session_id);
-+
-+	return ret;
-+}
-diff --git a/drivers/nvmem/stm32-bsec-optee-ta.h b/drivers/nvmem/stm32-bsec-optee-ta.h
-new file mode 100644
-index 000000000000..3966a0535179
---- /dev/null
-+++ b/drivers/nvmem/stm32-bsec-optee-ta.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * OP-TEE STM32MP BSEC PTA interface, used by STM32 ROMEM driver
-+ *
-+ * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
-+ */
-+
-+#if IS_ENABLED(CONFIG_NVMEM_STM32_BSEC_OPTEE_TA)
-+/**
-+ * stm32_bsec_optee_ta_open() - initialize the STM32 BSEC TA
-+ * @ctx: the OP-TEE context on success
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+int stm32_bsec_optee_ta_open(struct tee_context **ctx);
-+
-+/**
-+ * stm32_bsec_optee_ta_close() - release the STM32 BSEC TA
-+ * @ctx: the OP-TEE context
-+ *
-+ * This function used to clean the OP-TEE resources initialized in
-+ * stm32_bsec_optee_ta_open(); it can be used as callback to
-+ * devm_add_action_or_reset()
-+ */
-+void stm32_bsec_optee_ta_close(void *ctx);
-+
-+/**
-+ * stm32_bsec_optee_ta_read() - nvmem read access using TA client driver
-+ * @ctx: the OP-TEE context provided by stm32_bsec_optee_ta_open
-+ * @offset: nvmem offset
-+ * @buf: buffer to fill with nvem values
-+ * @bytes: number of bytes to read
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+int stm32_bsec_optee_ta_read(struct tee_context *ctx, unsigned int offset,
-+			     void *buf, size_t bytes);
-+
-+/**
-+ * stm32_bsec_optee_ta_write() - nvmem write access using TA client driver
-+ * @ctx: the OP-TEE context provided by stm32_bsec_optee_ta_open
-+ * @lower: number of lower OTP, not protected by ECC
-+ * @offset: nvmem offset
-+ * @buf: buffer with nvem values
-+ * @bytes: number of bytes to write
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+int stm32_bsec_optee_ta_write(struct tee_context *ctx, unsigned int lower,
-+			      unsigned int offset, void *buf, size_t bytes);
-+
-+#else
-+
-+static inline int stm32_bsec_optee_ta_open(struct tee_context **ctx)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline void stm32_bsec_optee_ta_close(void *ctx)
-+{
-+}
-+
-+static inline int stm32_bsec_optee_ta_read(struct tee_context *ctx,
-+					   unsigned int offset, void *buf,
-+					   size_t bytes)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int stm32_bsec_optee_ta_write(struct tee_context *ctx,
-+					    unsigned int lower,
-+					    unsigned int offset, void *buf,
-+					    size_t bytes)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif /* CONFIG_NVMEM_STM32_BSEC_OPTEE_TA */
-diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index d1d03c2ad081..978a63edf297 100644
---- a/drivers/nvmem/stm32-romem.c
-+++ b/drivers/nvmem/stm32-romem.c
-@@ -11,6 +11,9 @@
- #include <linux/module.h>
- #include <linux/nvmem-provider.h>
- #include <linux/of_device.h>
-+#include <linux/tee_drv.h>
-+
-+#include "stm32-bsec-optee-ta.h"
- 
- /* BSEC secure service access from non-secure */
- #define STM32_SMC_BSEC			0x82001003
-@@ -25,12 +28,14 @@
- struct stm32_romem_cfg {
- 	int size;
- 	u8 lower;
-+	bool ta;
- };
- 
- struct stm32_romem_priv {
- 	void __iomem *base;
- 	struct nvmem_config cfg;
- 	u8 lower;
-+	struct tee_context *ctx;
- };
- 
- static int stm32_romem_read(void *context, unsigned int offset, void *buf,
-@@ -138,12 +143,29 @@ static int stm32_bsec_write(void *context, unsigned int offset, void *buf,
- 	return 0;
- }
- 
-+static int stm32_bsec_pta_read(void *context, unsigned int offset, void *buf,
-+			       size_t bytes)
-+{
-+	struct stm32_romem_priv *priv = context;
-+
-+	return stm32_bsec_optee_ta_read(priv->ctx, offset, buf, bytes);
-+}
-+
-+static int stm32_bsec_pta_write(void *context, unsigned int offset, void *buf,
-+				size_t bytes)
-+{
-+	struct stm32_romem_priv *priv = context;
-+
-+	return stm32_bsec_optee_ta_write(priv->ctx, priv->lower, offset, buf, bytes);
-+}
-+
- static int stm32_romem_probe(struct platform_device *pdev)
- {
- 	const struct stm32_romem_cfg *cfg;
- 	struct device *dev = &pdev->dev;
- 	struct stm32_romem_priv *priv;
- 	struct resource *res;
-+	int rc;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -173,15 +195,31 @@ static int stm32_romem_probe(struct platform_device *pdev)
- 	} else {
- 		priv->cfg.size = cfg->size;
- 		priv->lower = cfg->lower;
--		priv->cfg.reg_read = stm32_bsec_read;
--		priv->cfg.reg_write = stm32_bsec_write;
-+		if (cfg->ta) {
-+			rc = stm32_bsec_optee_ta_open(&priv->ctx);
-+			/* wait for OP-TEE client driver to be up and ready */
-+			if (rc)
-+				return rc;
-+		}
-+		if (priv->ctx) {
-+			rc = devm_add_action_or_reset(dev, stm32_bsec_optee_ta_close, priv->ctx);
-+			if (rc) {
-+				dev_err(dev, "devm_add_action_or_reset() failed (%d)\n", rc);
-+				return rc;
-+			}
-+			priv->cfg.reg_read = stm32_bsec_pta_read;
-+			priv->cfg.reg_write = stm32_bsec_pta_write;
-+		} else {
-+			priv->cfg.reg_read = stm32_bsec_read;
-+			priv->cfg.reg_write = stm32_bsec_write;
-+		}
- 	}
- 
- 	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &priv->cfg));
- }
- 
- /*
-- * STM32MP15 BSEC OTP regions: 4096 OTP bits (with 3072 effective bits)
-+ * STM32MP15/13 BSEC OTP regions: 4096 OTP bits (with 3072 effective bits)
-  * => 96 x 32-bits data words
-  * - Lower: 1K bits, 2:1 redundancy, incremental bit programming
-  *   => 32 (x 32-bits) lower shadow registers = words 0 to 31
-@@ -191,6 +229,13 @@ static int stm32_romem_probe(struct platform_device *pdev)
- static const struct stm32_romem_cfg stm32mp15_bsec_cfg = {
- 	.size = 384,
- 	.lower = 32,
-+	.ta = false,
-+};
-+
-+static const struct stm32_romem_cfg stm32mp13_bsec_cfg = {
-+	.size = 384,
-+	.lower = 32,
-+	.ta = true,
- };
- 
- static const struct of_device_id stm32_romem_of_match[] = {
-@@ -198,7 +243,10 @@ static const struct of_device_id stm32_romem_of_match[] = {
- 		.compatible = "st,stm32mp15-bsec",
- 		.data = (void *)&stm32mp15_bsec_cfg,
- 	}, {
-+		.compatible = "st,stm32mp13-bsec",
-+		.data = (void *)&stm32mp13_bsec_cfg,
- 	},
-+	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, stm32_romem_of_match);
- 
--- 
-2.25.1
+There's not a straight 1:1 mapping between the VCHIQ service 4cc and
+the kernel driver. bcm2835-camera, bcm2835-codec, and bcm2835-isp are
+all using the 'mmal' service 4cc, as that then has further selection
+for which MMAL components are present. Just advertising the vchiq
+service therefore isn't sufficient, and you'd be needing a sub-bus for
+the MMAL components and which kernel drivers those spawn.
 
+Even that is non-trivial as bcm2835-codec supports multiple 1-in,
+1-out components (video encode, video decode, JPEG encode,
+deinterlace, and a simple usage of the ISP for image conversion), so
+we now need to be passing info into bcm2835-codec as to which
+component to instantiate.
+
+
+If there really is a desire to be able to enumerate the VCHIQ services
+running, then it may be possible to add it to the firmware. My gut
+feeling is that it would be more sensible to implement it as a VCHIQ
+query rather than adding a dependency on the mailbox service.
+Doing so is going to be an issue for backwards compatibility, as a new
+kernel running on old firmware will end up with no services (including
+audio and camera that they currently would get).
+
+Getting a full list of MMAL components could also be done once the
+MMAL service had been opened, but it gets a touch ugly. Again there's
+going to be an issue with backwards compatibility if running an old
+firmware on a new kernel.
+
+  Dave
+
+> > For more inspiration take a look at this old thread [1]
+> >
+> > But i agree DT binding for vchiq itself is also a TODO
+> >
+> > and any help is appreciated.
+> >
+> > [1] - http://lists.infradead.org/pipermail/linux-rpi-kernel/2017-February/005541.html
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
