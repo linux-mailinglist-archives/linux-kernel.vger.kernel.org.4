@@ -2,154 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B88E660280
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03371660285
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbjAFOtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S234623AbjAFOuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjAFOtd (ORCPT
+        with ESMTP id S234782AbjAFOuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:49:33 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B9A80AE2;
-        Fri,  6 Jan 2023 06:49:32 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id v3so1299171pgh.4;
-        Fri, 06 Jan 2023 06:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c/4B91u6ylTOx45/hW4gw/DI9Z2QPBD6uPxzsWE2OKI=;
-        b=lBGd001WMXdtntPtwChp6zaRmJnQeUHwDPEXKK/yB9/1/JZVtXHJJwt0DBicxsBhgg
-         ycomVC11nLhHdKKbEv3OsAFQaHaZ5yB4ieDLfSid+KIGCuh9RnBEvkOosidug4LbyFyD
-         5px175Lc3gPq+dOSbxYjmw8uMOBa57VmxXVS7h29Kh5z57lAfMXGGXSlvRdgLLYszgbI
-         842PPSUVxWgT7+HdaV+vjG6+LbHAJaW5vQkGrhIgIyHuRTaCQuwDnmpIJT8R5cK3YrLf
-         wc8U6I1+6NtR4DRVX4RLMHIynabLaz5d5dLYJpQ8n9LopdC3AVJBJfgnSYehPfLb0FkZ
-         UN8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c/4B91u6ylTOx45/hW4gw/DI9Z2QPBD6uPxzsWE2OKI=;
-        b=ukr/Jn3PxWCAyrE25EgoniIymIRhGMMzN8PdWox1wVYMLjgU3oE8PVB+u9O9/9oWek
-         B7mHntMY80o4upI18ZkLB9yaf2nz9KqaLtRebtqrjIexKCDBjbyeL+JpY+wOIrXgLuOF
-         7XRUm1XGg/54Ad1YMCqBhQpwTA0spIc88B9Xdikz/VusQRIslwWqcJErHbtnqlzovH22
-         WT1fQdqcojo4GGHDYkYmiVDeZuLd7vYtg7SlTx5daM3Xt3J9w62msg9LxaJdVQFWwtIs
-         KKMkLTT0iOwSGTGcimbObUFKOyTFOENFWCx4lywTRV8FaHAtnk94lC5pmqzN0fcVAz0m
-         UZUg==
-X-Gm-Message-State: AFqh2krOwcr7kCu28t9YuCkoK7zEBkOkLDa1wjUINM+YzqKafLDMvzex
-        6w+gj7nSritb8gxsg2H7i8+ARVeTgL8cIxj7hCY=
-X-Google-Smtp-Source: AMrXdXv6Hi6xAyBKGxu0uaFaLQxZ/0W2Skmn5T7z+UH6tBvjBrYG8c3gK+7llscHrF2GRQ2pBJLun1kC7jxATlgJE40=
-X-Received: by 2002:a63:4d04:0:b0:46f:c183:2437 with SMTP id
- a4-20020a634d04000000b0046fc1832437mr3001814pgb.613.1673016571907; Fri, 06
- Jan 2023 06:49:31 -0800 (PST)
+        Fri, 6 Jan 2023 09:50:05 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391E880AEF;
+        Fri,  6 Jan 2023 06:50:02 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C933F1EC050D;
+        Fri,  6 Jan 2023 15:50:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673016600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=pJXYOpevDeH94S9Y0/8hjDZhR1yAlOLk1AabVA0ifvI=;
+        b=SvEJT9UNtkbWfP8Y8B3zja9SXWS0PDGwxOTN8z2sY7qwB2zdisTuyotKg8jaFMc0I0kUFr
+        7yN1MOrMbBd1A0MCGGjFEBmPFYwnbJG9QL0aVaMfTapxvSeoI2LWdxGV9G6v6NhT4ksMrA
+        VI+ELc8doeCSNwf7Ph+TGsWZ1kJYcdA=
+Date:   Fri, 6 Jan 2023 15:49:56 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "Bityutskiy, Artem" <artem.bityutskiy@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] perf/x86/rapl: Add support for Intel Meteor Lake
+Message-ID: <Y7g1FCY4Y+hY26aC@zn.tnic>
+References: <20230104145831.25498-1-rui.zhang@intel.com>
+ <25d07838-3904-a086-4238-f56c9424b53a@intel.com>
+ <ea9186869cca50a21efcc1a9cc4dbe5adcd1784b.camel@intel.com>
+ <Y7aejeHDpLlwwYbr@zn.tnic>
+ <4cc5cd868b20366fc9d4bf157656e0c295074282.camel@intel.com>
+ <Y7f6RhF8FuK9R399@zn.tnic>
+ <d6ae35f1e72d4bb8e02f44fe6d9369f1a5f21619.camel@intel.com>
 MIME-Version: 1.0
-References: <20230104141245.8407-1-aford173@gmail.com> <20230104141245.8407-2-aford173@gmail.com>
- <CAMuHMdXQfAJUVsYeN37T_KvXUoEaSqYJ+UWtUehLv-9R9goVzA@mail.gmail.com>
- <CAHCN7xJQZgLgDH_beWZfvzksEgm87rotfq7T2SMhgzjojJesKg@mail.gmail.com> <CAMuHMdXD_hq8xtrxxCZ_dToJwCKp3CfAiJh-jg5SqeM8qKgyyQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXD_hq8xtrxxCZ_dToJwCKp3CfAiJh-jg5SqeM8qKgyyQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 6 Jan 2023 08:49:20 -0600
-Message-ID: <CAHCN7x+aGm50mfoDkPDGHnm4zTyNSf8VEPWKHDKx=u+0y4VJPg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] Revert "arm64: dts: renesas: Add compatible
- properties to AR8031 Ethernet PHYs"
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d6ae35f1e72d4bb8e02f44fe6d9369f1a5f21619.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 8:45 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Adam,
->
-> On Fri, Jan 6, 2023 at 3:35 PM Adam Ford <aford173@gmail.com> wrote:
-> > On Fri, Jan 6, 2023 at 8:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Wed, Jan 4, 2023 at 3:12 PM Adam Ford <aford173@gmail.com> wrote:
-> > > > This reverts commit 18a2427146bf8a3da8fc7825051d6aadb9c2d8fb.
-> > > >
-> > > > Due to the part shortage, the AR8031 PHY was replaced with a
-> > > > Micrel KSZ9131.  Hard-coding the ID of the PHY makes this new
-> > > > PHY non-operational.  Since previous hardware had shipped,
-> > > > it's not as simple as just replacing the ID number as it would
-> > > > break the older hardware.  Since the generic mode can correctly
-> > > > identify both versions of hardware, it seems safer to revert
-> > > > this patch.
-> > > >
-> > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > --- a/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-> > > > +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi
-> > > > @@ -59,8 +59,6 @@ &avb {
-> > > >         status = "okay";
-> > > >
-> > > >         phy0: ethernet-phy@0 {
-> > > > -               compatible = "ethernet-phy-id004d.d074",
-> > > > -                            "ethernet-phy-ieee802.3-c22";
-> > > >                 reg = <0>;
-> > > >                 interrupt-parent = <&gpio2>;
-> > > >                 interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> > >
-> > > The next line:
-> > >
-> > >                 reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
-> > >
-> > > Unfortunately, removing the compatible value will cause regressions
-> > > for kexec/kdump and for Ethernet driver unbind, as the PHY reset will
-> > > be asserted before starting the new kernel, or on driver unbind.
-> > > Due to a deficiency in the Ethernet PHY subsystem, the PHY will be
-> > > probed while the reset is still asserted, and thus fail probing[1].
-> >
-> > FWIW, the bootloader brings the device out of reset.  Would it be
->
-> The bootloader is not involved when using kexec/kdump, or when
-> unbinding the Ethernet driver.
->
-> > sufficient to keep  "ethernet-phy-ieee802.3-c22" and drop the
-> > hard-coded ID?
->
-> I am afraid not, as that still requires actual probing to determine
-> the PHY ID.
+On Fri, Jan 06, 2023 at 02:38:10PM +0000, Zhang, Rui wrote:
+> And then set the feature flags based on this, and make the drivers test
+> the feature flags.
 
-OK.  I'll try to find out how many of the older versions of the board
-shipped. I don't really want to maintain two device trees for a small
-population of boards.  Even those customers with early hardware won't
-be getting the same versions going forward and Qualcomm/Atheros told
-us it's an EOL part and cancelled our orders.  If there are no
-objections, I might just change the ID to the new PHY.  The customers
-who received the older hardware should have already been notified of
-the hardware change and the fact they won't get any more with that
-PHY.
+That would be the purpose of synthetic flags.
 
-adam
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> The goal of this is to do model list update in one place instead of 4
+> or more different drivers when a new model comes.
+
+Do you really have to update 4 different places each time?
+
+As said before, you have to do the model matching *somewhere*. If you have to do
+model matching in a lot of drivers - and it looks like you do - judging by
+
+$ git grep X86_MATCH_INTEL_FAM6
+
+output, then doing the matching once in cpu/intel.c and setting a synthetic flag
+does make sense because all that matching code will disappear from all the
+drivers but be concentrated in one place.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
