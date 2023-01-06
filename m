@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A974265FD42
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F72D65FD46
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjAFJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S232243AbjAFJEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbjAFJDZ (ORCPT
+        with ESMTP id S231719AbjAFJEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:03:25 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCC062C0
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:03:21 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so3560480wml.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:03:21 -0800 (PST)
+        Fri, 6 Jan 2023 04:04:39 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF8368C93
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:04:38 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d17so702539wrs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BzESQrUDM05zlTEwrX4Mj8dG0qJRTLEWdAlMpGzRIU=;
-        b=ipTeb+kU+Y9knB9QUZ7sUKNDljfl2Jel9SUsuWtjkKXaoI5rUdeCqry2nktxA255PR
-         JzrInWHtqpSM9HJNbN+vnvPDLJwc4esfi5OVDYxIzvq95Aq1JEjpVlrBCiz/jMR0gSVJ
-         PtBiZxSi3+HB3HMv1+1yL/f3cbo6wzZ0w8Qw4=
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7oh+tO4VAYKsBsuVwmWetnQdvzWD6pRcTuec9yQCMBE=;
+        b=VcaBOgij5Nk7bOXAUDlWpO3pECWUZyZWpSZ9DBn9QmP8brgHn/moTN+rNHmuO6cOtC
+         asHTEQw18D4FXFnaijCwcAt7eYm/Kh2f4vnvOhoSe5bCickgXh6TdjnkDr+bByGv+i1w
+         H24kaMd/bbmMxayX/wnQyntJY1KG+9uUD+jnY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8BzESQrUDM05zlTEwrX4Mj8dG0qJRTLEWdAlMpGzRIU=;
-        b=1Y3cLI3zI9TztiTUUNVXYNo/LSRT7GfzFWn/TfE+NxvENxy53Mvez5ojPvPhwe9Kvh
-         LRgp1v22AYM8z+Crh8SV0n/6yCZWtua3FlJZE8WAcdEEh5GyGMh/ovGT31jzzvcoh22C
-         g1xv7pAM5CNX3GMe6AUxEkcUEIMTg82aNi58r4roi4jd62eKdYRcm79O6As668L/BmKz
-         6BROcnvDw/rbIy2TspDrJf4G/nA3ABf2KSKoA6nvbWx0KgtS/FZie8m18wG8b7JYqf2o
-         AHRCUJvvbR12LKCG4VbEoanCl1KAD6kjFefpRPE4VruYnQUhgoAu3CogvcemfzMPuHKs
-         BZcw==
-X-Gm-Message-State: AFqh2krOZ6islUYnyVwK5+17P+DQuYNUWTd5sR60x4sm2zpzPQWHM6QH
-        shXcaxrj+/pvtk35ebZjscm6gQ==
-X-Google-Smtp-Source: AMrXdXt0arOZc3l0kts8OHBZ/+UO0oRr7Cuyh3i4z4GyM+Yn5GuirvZkRTu52vYbVVMlytkF25SSdg==
-X-Received: by 2002:a05:600c:3d86:b0:3cf:9ac8:c537 with SMTP id bi6-20020a05600c3d8600b003cf9ac8c537mr39944191wmb.14.1672995799979;
-        Fri, 06 Jan 2023 01:03:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7oh+tO4VAYKsBsuVwmWetnQdvzWD6pRcTuec9yQCMBE=;
+        b=MMAyo2nVJNb7rFKu6frsSG3GrlL/eS9i498rrqEWo9JIcRtsodNyu463RKB1XoLoMn
+         u3Qh8cVsVlgoKwdeAs6TBF91zlJxUHJH+nAVFFXhNBuhIw25bxU28jQwvEuVf//ZiLBy
+         9ve38o4Cx/whfdEEWfcrFtyP49yeYLYj9RIbgmkYG1i3Hvs6Jy7lZeF9/wcwbEi79lPb
+         fTqsocBS7rELxN1tVPsjZxrHFJ39bbIzsfaEZods56hTPop7dhmWu5GTG1iJrLKPd5W5
+         i8oJv1O1BEE/dWcX/8dmXEQ7uqSwqytZimm/Z8ViaLyfr0YHa4pZgccRTgjS/mMfBQY4
+         Aa0A==
+X-Gm-Message-State: AFqh2krcU3DRnX3qEiRBbaEU57Z0G+6G8j2LxL9xQp88sqawDvJP/rGH
+        qq7PanUUQcabcmsy9JAmX+21Bg==
+X-Google-Smtp-Source: AMrXdXsF6r0whrWtJmT10SJbfExjNBDHpWpevEeXU/qX5vrGPfkbuLARTKy9wemqwWZrlmIvuLuqHw==
+X-Received: by 2002:a5d:48c6:0:b0:242:844a:835d with SMTP id p6-20020a5d48c6000000b00242844a835dmr30521789wrs.65.1672995876891;
+        Fri, 06 Jan 2023 01:04:36 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003c70191f267sm5847712wmo.39.2023.01.06.01.03.18
+        by smtp.gmail.com with ESMTPSA id a14-20020adff7ce000000b002549b649b62sm569112wrq.50.2023.01.06.01.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 01:03:18 -0800 (PST)
-Date:   Fri, 6 Jan 2023 10:03:16 +0100
+        Fri, 06 Jan 2023 01:04:36 -0800 (PST)
+Date:   Fri, 6 Jan 2023 10:04:34 +0100
 From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     Steev Klimaszewski <steev@kali.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] drm/msm: Set preferred depth.
-Message-ID: <Y7fj1N4blo2MYZDt@phenom.ffwll.local>
-Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
+Message-ID: <Y7fkIvBRHcsgHR0l@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Steev Klimaszewski <steev@kali.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20230106071609.3948-1-steev@kali.org>
- <98a30f00-c98f-cecb-d681-30b55caf2f8a@suse.de>
+ <f52cca60-ab6a-460a-65f9-367c083b51fa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <98a30f00-c98f-cecb-d681-30b55caf2f8a@suse.de>
+In-Reply-To: <f52cca60-ab6a-460a-65f9-367c083b51fa@linaro.org>
 X-Operating-System: Linux phenom 5.19.0-2-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 09:31:31AM +0100, Thomas Zimmermann wrote:
-> Am 06.01.23 um 08:16 schrieb Steev Klimaszewski:
+On Fri, Jan 06, 2023 at 09:18:21AM +0200, Dmitry Baryshkov wrote:
+> On 06/01/2023 09:16, Steev Klimaszewski wrote:
 > > As of commit 37c90d589dc0 ("drm/fb-helper: Fix single-probe color-format
 > > selection"), if no supported color formats are found, it tries to use the
 > > driver provided default, which msm didn't have set and leads to the
@@ -148,39 +146,14 @@ On Fri, Jan 06, 2023 at 09:31:31AM +0100, Thomas Zimmermann wrote:
 > > ---
 > >   drivers/gpu/drm/msm/msm_drv.c | 1 +
 > >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> > index 8b0b0ac74a6f..65c4c93c311e 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@ -479,6 +479,7 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
-> >   	drm_helper_move_panel_connectors_to_head(ddev);
-> > +	ddev->mode_config.preferred_depth = 24;
 > 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-preferred_depth is not a mandatory thing, we need to fix the fbdev patch,
-not work around that in all the drivers. xrgb8888 is the assumed default.
+I think a documentation patch that preferred_depth = 0 actually means
+xrgb8888 would be good, since we seem to have a serious confusion going on
+here?
 -Daniel
-
-> 
-> Best regards
-> Thomas
-> 
-> >   	ddev->mode_config.funcs = &mode_config_funcs;
-> >   	ddev->mode_config.helper_private = &mode_config_helper_funcs;
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
-
-
-
-
 -- 
 Daniel Vetter
 Software Engineer, Intel Corporation
