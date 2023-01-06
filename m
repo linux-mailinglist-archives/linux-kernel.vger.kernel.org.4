@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7A465F8BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20C765F8BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbjAFBNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S236383AbjAFBNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 20:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236736AbjAFBNP (ORCPT
+        with ESMTP id S236747AbjAFBNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:13:15 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC7472D07
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:13:14 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-46658ec0cfcso2651217b3.19
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 17:13:14 -0800 (PST)
+        Thu, 5 Jan 2023 20:13:17 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585B71FFF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 17:13:16 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id z4-20020a17090ab10400b002195a146546so2085980pjq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 17:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=exXmbXtQOvjtL6oDSNpvthzMuaVH9c6hK6Io7Q3H2PQ=;
-        b=Gd2Hc3yAemxhyPG2YJom6CSzPSNwdfYGbmw+Li60o3dSnVKYx0XiVKd0icK+AHEuIk
-         cr5aDPLRFr/2CT8g2JuA15L4l7Yr9Gv+v4vZE6abq951XP07mH9FmjQbtRMeGxHWqvA1
-         6+okIXdOG0GcP9+YnE6ajjTn+vj+n3TIqQsyXKSyK3fVAN1scHB4o95WZ7LLHrHJWChj
-         mEF6ZpF8Noq7jcrGsh7Tig0G45woaqJy6021lf/DM3NZxjaWBpvN9MYJxWV6PInswNb4
-         P5I7cDsWcUr4lBnWnASkz0clzoO1ftn9eCbP+0lbwF3aW8mGbteLdVvaygR51AERV6qs
-         dstg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=O/yK9t38GUx7xAC8BnI1OsbEu+wskTkGWc8pHxjCI1M=;
+        b=XC1QRawbtqcuGIvkyZGXfO4dWvKusbHvx7Ceuk2s9f1EDWyGwTXKxmEF/7/RoIyTQl
+         83ZnpCeWlNJvN0EszGtRNrqExAEYtasediUZNG+ehmTQiMkhoIjKnQhWX+hIoogU83y5
+         xCHw6f+G8TqjvtBXoV0fhoUCuqOQwLxYgvCx9gO1Yv6C08Kbd4rG0qe2BBVTMw5geDsF
+         YPuiC4gu1ZtesL5MNl+S7dkrBrISA94kw1YYFc7EnChdP1MFnbPrSXyA/2qtyEzjSHcX
+         TfB3JBGQsJtAUeyHu6mN2XX8OUtEzSnJzI4Mv2SeSy55WQ4uXyfv6rzWDVYiIitmKYhS
+         xNBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=exXmbXtQOvjtL6oDSNpvthzMuaVH9c6hK6Io7Q3H2PQ=;
-        b=Iu4pEUlsYl540P1X74MF6HKCEDSS+jN24+Jinjg+J9COFenIawhtsVI9c73yzPd0ZR
-         Le0T5i8g/ZGqdLTzoL6SwSRfl4DDoyE9VSUodAez6UNWs4JyZYS/fbxseC3Ht2qdlir0
-         T6sYFyKuLVBc8+aY4Hi93DVutPWY1R2kLuCjVhCiDpOBsrUCDzLuYKRabtFXI6IMYEtu
-         KLf6QjVFKlJl1pnv30LZDGn2xLzXeaNao+1jIxPyX8NyE14tBt5sRpw0iFg0DJB6+/LH
-         kEZcLsaEhO4P30qOUxB4Ivl22pguHpgLuQjqEm7kOamLiDbs2Jv6duTloRwuDw6PVFGJ
-         bh/g==
-X-Gm-Message-State: AFqh2kq5zL73YrZ9TFqF+V2D25jZw53s6GLYqa3WmrQMolbobu3lPneW
-        DXmMajWBgWLIdmZKDs5utsjhluGOXQM=
-X-Google-Smtp-Source: AMrXdXtta04aQhy7QBNY7oPlWzJPsXfi2+xs0akHqXF92W/veVVbnwfRL4McCB4DkElSKPuingj0Yr4c+L8=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O/yK9t38GUx7xAC8BnI1OsbEu+wskTkGWc8pHxjCI1M=;
+        b=7/rzBzGPaR6a+u6jsRU4g0NWZhPtzBdclwvvwUHJVEfxHXsd/XC2o7Syhmd5nAyNJr
+         hMSUpzIeDY2BtEOW3qnF1EfGnnFwlxRVkJhQNWG93VTRDAWdIkbsjVQUcKIJHAe/4/wh
+         j/8iy0FZPSFoDQB9aI+6g5TgZXW9jIx2VtWGkHeZ2G1B2O6bkDP+18jYyus13NW8w5LP
+         QE7QgjBSlTr3lnT8HdkMQplB0iC5b8HQHhuQs0od4S38rArOdQhbNso2Cq9QEvQdhUAY
+         FNJ3f7sWeZ13TXWRlC7wkgvLm5EHq/G0osYx+clYyLSMJLVaX+wMOFbToOzahAWXByFO
+         rDVA==
+X-Gm-Message-State: AFqh2kqyEbdWGvZYl6p8A6pHRQf4b9NmRx6pxmuJqQuFv6AGrlG752Ui
+        8GVjB9/BBb3+fZbIMv+5/6vgjKIHLwI=
+X-Google-Smtp-Source: AMrXdXsgyShRZdisFO/emIevEQAlXI6bCsWIdDxxcLZDMha/PDisLDjL6Hp3/hVg7Q3rpOuUTqoyPIwEZ98=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:2e47:0:b0:722:fd7a:94c4 with SMTP id
- b7-20020a252e47000000b00722fd7a94c4mr3420610ybn.607.1672967593768; Thu, 05
- Jan 2023 17:13:13 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:903:40c8:b0:189:7a15:134b with SMTP id
+ t8-20020a17090340c800b001897a15134bmr2814877pld.143.1672967595896; Thu, 05
+ Jan 2023 17:13:15 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  6 Jan 2023 01:12:33 +0000
+Date:   Fri,  6 Jan 2023 01:12:34 +0000
+In-Reply-To: <20230106011306.85230-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20230106011306.85230-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230106011306.85230-1-seanjc@google.com>
-Subject: [PATCH v5 00/33] KVM: x86: AVIC and local APIC fixes+cleanups
+Message-ID: <20230106011306.85230-2-seanjc@google.com>
+Subject: [PATCH v5 01/33] KVM: x86: Blindly get current x2APIC reg value on
+ "nodecode write" traps
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -64,7 +68,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,126 +76,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo,
+When emulating a x2APIC write in response to an APICv/AVIC trap, get the
+the written value from the vAPIC page without checking that reads are
+allowed for the target register.  AVIC can generate trap-like VM-Exits on
+writes to EOI, and so KVM needs to get the written value from the backing
+page without running afoul of EOI's write-only behavior.
 
-This is a wholesale (and hopefully a drop-in) replacement for the patches
-in `kvm-lapic-fix-and-cleanup`.  The changes for " KVM: x86: Inhibit APIC
-memslot if x2APIC and AVIC are enabled" in v5 are relatively minor, but it
-led to multiple conflicts in later patches, i.e. a patch-to-be-squashed
-wasn't going to work.  Let me know if you've already done a lot of
-massaging on your side, shouldn't be too difficult to generate patches to
-go on top.
+Alternatively, EOI could be special cased to always write '0', e.g. so
+that the sanity check could be preserved, but x2APIC on AMD is actually
+supposed to disallow non-zero writes (not emulated by KVM), and the
+sanity check was a byproduct of how the KVM code was written, i.e. wasn't
+added to guard against anything in particular.
 
-The first half or so patches fix semi-urgent, real-world relevant APICv
-and AVIC bugs.
+Fixes: 70c8327c11c6 ("KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg")
+Fixes: 1bd9dfec9fd4 ("KVM: x86: Do not block APIC write for non ICR registers")
+Reported-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/lapic.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-The second half fixes a variety of AVIC and optimized APIC map bugs
-where KVM doesn't play nice with various edge cases that are
-architecturally legal(ish), but are unlikely to occur in most real world
-scenarios
-
-v5:
-  - Fix even more bugs! [Greg]
-  - Collect reviews. [Maxim]
-  - Don't use an inhibit flag for hybrid AVIC. [Maxim]
-  - Fix an LDR cluster calc goof in the AVIC code. [Maxim]
-  - Drop a redundant "ldr == 0" check. [Maxim]
-  - Add helpers for logical vs. physical optimized map calcs. [Maxim]
-
-v4:
-  - https://lore.kernel.org/all/20221001005915.2041642-1-seanjc@google.com
-  - Fix more bugs! [Alejandro]
-  - Delete APIC memslot to inhibit xAVIC acceleration when x2APIC is
-    enabled on AMD/SVM instead of using a "partial" inihbit. [Maxim]
-
-v3:
-  - https://lore.kernel.org/all/20220920233134.940511-1-seanjc@google.com
-  - Collect reviews. [Paolo]
-  - Drop "partial" x2APIC inhibit and instead delete the memslot.
-    [Maxim, Suravee]
-  - Skip logical mode updates for x2APIC, which just reuses the
-    phys_map with some clever logic. [Suravee]
-  - Add a fix for "nodecode write" traps. [Alejandro]
-
-v2:
-  - https://lore.kernel.org/all/20220903002254.2411750-1-seanjc@google.com
-  - Collect reviews. [Li, Maxim]
-  - Disable only MMIO access when x2APIC is enabled (instead of disabling
-    all of AVIC). [Maxim]
-  - Inhibit AVIC when logical IDs are aliased. [Maxim]
-  - Tweak name of set_virtual_apic_mode() hook. [Maxim]
-  - Straight up revert logical ID fastpath mess. [Maxim]
-  - Reword changelog about skipping vCPU during logical setup. [Maxim]
-  - Fix LDR updates on AVIC. [Maxim?]
-  - Fix a nasty ISR caching bug.
-  - Flush TLB when activating AVIC.
-
-v1: https://lore.kernel.org/all/20220831003506.4117148-1-seanjc@google.com
-
-Greg Edwards (1):
-  KVM: x86: Allow APICv APIC ID inhibit to be cleared
-
-Sean Christopherson (31):
-  KVM: x86: Blindly get current x2APIC reg value on "nodecode write"
-    traps
-  KVM: x86: Purge "highest ISR" cache when updating APICv state
-  KVM: SVM: Flush the "current" TLB when activating AVIC
-  KVM: SVM: Process ICR on AVIC IPI delivery failure due to invalid
-    target
-  KVM: x86: Don't inhibit APICv/AVIC on xAPIC ID "change" if APIC is
-    disabled
-  KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID mismatch is due to
-    32-bit ID
-  KVM: SVM: Don't put/load AVIC when setting virtual APIC mode
-  KVM: x86: Handle APICv updates for APIC "mode" changes via request
-  KVM: x86: Move APIC access page helper to common x86 code
-  KVM: x86: Inhibit APIC memslot if x2APIC and AVIC are enabled
-  KVM: SVM: Replace "avic_mode" enum with "x2avic_enabled" boolean
-  KVM: SVM: Compute dest based on sender's x2APIC status for AVIC kick
-  Revert "KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when
-    possible"
-  KVM: SVM: Document that vCPU ID == APIC ID in AVIC kick fastpatch
-  KVM: SVM: Add helper to perform final AVIC "kick" of single vCPU
-  KVM: x86: Explicitly skip optimized logical map setup if vCPU's LDR==0
-  KVM: x86: Explicitly track all possibilities for APIC map's logical
-    modes
-  KVM: x86: Skip redundant x2APIC logical mode optimized cluster setup
-  KVM: x86: Disable APIC logical map if logical ID covers multiple MDAs
-  KVM: x86: Disable APIC logical map if vCPUs are aliased in logical
-    mode
-  KVM: x86: Honor architectural behavior for aliased 8-bit APIC IDs
-  KVM: x86: Inhibit APICv/AVIC if the optimized physical map is disabled
-  KVM: SVM: Inhibit AVIC if vCPUs are aliased in logical mode
-  KVM: SVM: Always update local APIC on writes to logical dest register
-  KVM: SVM: Update svm->ldr_reg cache even if LDR is "bad"
-  KVM: SVM: Require logical ID to be power-of-2 for AVIC entry
-  KVM: SVM: Handle multiple logical targets in AVIC kick fastpath
-  KVM: SVM: Ignore writes to Remote Read Data on AVIC write traps
-  Revert "KVM: SVM: Do not throw warning when calling avic_vcpu_load on
-    a running vcpu"
-  KVM: x86: Track required APICv inhibits with variable, not callback
-  KVM: x86: Add helpers to recalc physical vs. logical optimized APIC
-    maps
-
-Suravee Suthikulpanit (1):
-  KVM: SVM: Fix x2APIC Logical ID calculation for
-    avic_kick_target_vcpus_fast
-
- Documentation/virt/kvm/x86/errata.rst |  11 +
- arch/x86/include/asm/kvm-x86-ops.h    |   1 -
- arch/x86/include/asm/kvm_host.h       |  52 +++-
- arch/x86/kvm/lapic.c                  | 319 +++++++++++++++++-----
- arch/x86/kvm/lapic.h                  |   2 +
- arch/x86/kvm/svm/avic.c               | 372 ++++++++++++--------------
- arch/x86/kvm/svm/nested.c             |   2 +-
- arch/x86/kvm/svm/svm.c                |   8 +-
- arch/x86/kvm/svm/svm.h                |  27 +-
- arch/x86/kvm/vmx/vmx.c                |  58 +---
- arch/x86/kvm/x86.c                    |  29 +-
- 11 files changed, 524 insertions(+), 357 deletions(-)
-
-
-base-commit: c04ec04c0d15a51aa33660be175ed978beb8de0c
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 4efdb4a4d72c..5c0f93fc073a 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2284,23 +2284,18 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+ 	u64 val;
+ 
+-	if (apic_x2apic_mode(apic)) {
+-		if (KVM_BUG_ON(kvm_lapic_msr_read(apic, offset, &val), vcpu->kvm))
+-			return;
+-	} else {
+-		val = kvm_lapic_get_reg(apic, offset);
+-	}
+-
+ 	/*
+ 	 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
+ 	 * xAPIC, ICR writes need to go down the common (slightly slower) path
+ 	 * to get the upper half from ICR2.
+ 	 */
+ 	if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
++		val = kvm_lapic_get_reg64(apic, APIC_ICR);
+ 		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+ 		trace_kvm_apic_write(APIC_ICR, val);
+ 	} else {
+ 		/* TODO: optimize to just emulate side effect w/o one more write */
++		val = kvm_lapic_get_reg(apic, offset);
+ 		kvm_lapic_reg_write(apic, offset, (u32)val);
+ 	}
+ }
 -- 
 2.39.0.314.g84b9a713c41-goog
 
