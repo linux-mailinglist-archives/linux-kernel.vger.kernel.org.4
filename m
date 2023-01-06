@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF5F66029C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB156602A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbjAFOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S233486AbjAFOzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235518AbjAFOxd (ORCPT
+        with ESMTP id S235562AbjAFOzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:53:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047B580AEF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 06:53:33 -0800 (PST)
+        Fri, 6 Jan 2023 09:55:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22158110B;
+        Fri,  6 Jan 2023 06:55:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 880E06170E
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 14:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77BCC433EF;
-        Fri,  6 Jan 2023 14:53:31 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30257CE1D06;
+        Fri,  6 Jan 2023 14:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1194BC433EF;
+        Fri,  6 Jan 2023 14:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673016811;
-        bh=78UUdwZOPaG83oAbSmoNYuND6jYC1D7+vVTriLgEc5k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LeHJRv1hNWtxX/1Lp7htRP8afhS0AQckjzduO2zn0vW6NNm73IN7kUXbDgZt3mFvR
-         xNr+0+d/ZXATFPz4F8PqrDikOt39VOLQZ1OtqzABCP7vH+UbpBQu8e7BRDvW63wtfw
-         2vRRc6JhMxfM66/RcfQOr/UY913ZpNCben0m+wrApcLiTTt/387Q4zxLv29004nLZN
-         dKGhB9HY+N4gSqCk3asaYJtfTnZCeH12+di319kNnOEPWMHFfdW5QIc7XfnNORCrSF
-         sgunNDmHhZWDfaZCxZWTPxMb0h/8Vxlg59YwBMtdXy0blWpIMuFivppEhIun40yU0p
-         8YK0Q6qq0HF0g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 68ACA5C0920; Fri,  6 Jan 2023 06:53:31 -0800 (PST)
-Date:   Fri, 6 Jan 2023 06:53:31 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Genjian <zhanggenjian123@gmail.com>
-Cc:     frederic@kernel.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] context_tracking: Use arch_atomic_*() in __ct_user_enter
- and __ct_user_exit
-Message-ID: <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221110082443.4069161-1-zhanggenjian@kylinos.cn>
+        s=k20201202; t=1673016932;
+        bh=UyzAwDFj483hUCSJgJwOF1/K5+N5Cz7AuCJePXSb/Ak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W++K1xDs78oD3sadQHcJb/VGnRR+TjNwleDAIIMV7LiJ34YG6txNOJKG5XyfFTdOA
+         Rjg4fCFEMjCyP16hwAJ2Ym6dsdRpm/SpW1Jd0SS3VcEkX8R/vZ7lHhEa4tnfSHdsmb
+         r8P8sSxug0TnC9/JJ1vAeZ1hqwWaBE0dPT3O3yj31/vzTVu/kPEHISNgVkCPBenBxf
+         tYUAq6YlgwkdP5uJTn7wZQNIgHy5cFKRB8dXWia6ljjho3zD34S69Su+13AlOBHu8W
+         Z+CZeTH/5LkbRYhbJn9uLzP66wmUqtHuBkJE08VPJxq7z04MUsnlem+/etCUqpfK8h
+         4WAq+21OPTrQA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9396840468; Fri,  6 Jan 2023 11:55:29 -0300 (-03)
+Date:   Fri, 6 Jan 2023 11:55:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: Re: [PATCH v2 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y7g2YXNaP0VM+F1o@kernel.org>
+References: <20230106142537.607399-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110082443.4069161-1-zhanggenjian@kylinos.cn>
+In-Reply-To: <20230106142537.607399-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,106 +59,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 04:24:43PM +0800, Genjian wrote:
-> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+Em Fri, Jan 06, 2023 at 06:25:36AM -0800, Ian Rogers escreveu:
+> Including libbpf header files should be guarded by
+> HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+> under HAVE_BPF_SKEL.
 > 
-> vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
-> __kasan_check_write() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
-> __kasan_check_write() leaves .noinstr.text section
+> Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+> Reported-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+Can this be done in a way that reduces patch size?
+
+- Arnaldo
+
+> ---
+>  tools/perf/builtin-trace.c    |  2 +
+>  tools/perf/util/bpf_counter.h | 85 ++++++++++++++++++-----------------
+>  2 files changed, 46 insertions(+), 41 deletions(-)
 > 
-> noinstr cannot have atomic_*() functions.because they have explicit
-> instrumentation.Switch to arch_ prefixed atomic operation functions to
-> avoid the explicit instrumentation.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 86e06f136f40..d21fe0f32a6d 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -16,7 +16,9 @@
+>  
+>  #include "util/record.h"
+>  #include <api/fs/tracing_path.h>
+> +#ifdef HAVE_LIBBPF_SUPPORT
+>  #include <bpf/bpf.h>
+> +#endif
+>  #include "util/bpf_map.h"
+>  #include "util/rlimit.h"
+>  #include "builtin.h"
+> diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+> index 4dbf26408b69..9113c8bf5cb0 100644
+> --- a/tools/perf/util/bpf_counter.h
+> +++ b/tools/perf/util/bpf_counter.h
+> @@ -4,9 +4,12 @@
+>  
+>  #include <linux/list.h>
+>  #include <sys/resource.h>
+> +
+> +#ifdef HAVE_LIBBPF_SUPPORT
+>  #include <bpf/bpf.h>
+>  #include <bpf/btf.h>
+>  #include <bpf/libbpf.h>
+> +#endif
+>  
+>  struct evsel;
+>  struct target;
+> @@ -42,6 +45,47 @@ int bpf_counter__read(struct evsel *evsel);
+>  void bpf_counter__destroy(struct evsel *evsel);
+>  int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
+>  
+> +static inline __u32 bpf_link_get_id(int fd)
+> +{
+> +	struct bpf_link_info link_info = { .id = 0, };
+> +	__u32 link_info_len = sizeof(link_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> +	return link_info.id;
+> +}
+> +
+> +static inline __u32 bpf_link_get_prog_id(int fd)
+> +{
+> +	struct bpf_link_info link_info = { .id = 0, };
+> +	__u32 link_info_len = sizeof(link_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> +	return link_info.prog_id;
+> +}
+> +
+> +static inline __u32 bpf_map_get_id(int fd)
+> +{
+> +	struct bpf_map_info map_info = { .id = 0, };
+> +	__u32 map_info_len = sizeof(map_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> +	return map_info.id;
+> +}
+> +
+> +/* trigger the leader program on a cpu */
+> +static inline int bperf_trigger_reading(int prog_fd, int cpu)
+> +{
+> +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +			    .ctx_in = NULL,
+> +			    .ctx_size_in = 0,
+> +			    .flags = BPF_F_TEST_RUN_ON_CPU,
+> +			    .cpu = cpu,
+> +			    .retval = 0,
+> +		);
+> +
+> +	return bpf_prog_test_run_opts(prog_fd, &opts);
+> +}
+> +
+>  #else /* HAVE_BPF_SKEL */
+>  
+>  #include <linux/err.h>
+> @@ -87,45 +131,4 @@ static inline void set_max_rlimit(void)
+>  	setrlimit(RLIMIT_MEMLOCK, &rinf);
+>  }
+>  
+> -static inline __u32 bpf_link_get_id(int fd)
+> -{
+> -	struct bpf_link_info link_info = { .id = 0, };
+> -	__u32 link_info_len = sizeof(link_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> -	return link_info.id;
+> -}
+> -
+> -static inline __u32 bpf_link_get_prog_id(int fd)
+> -{
+> -	struct bpf_link_info link_info = { .id = 0, };
+> -	__u32 link_info_len = sizeof(link_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> -	return link_info.prog_id;
+> -}
+> -
+> -static inline __u32 bpf_map_get_id(int fd)
+> -{
+> -	struct bpf_map_info map_info = { .id = 0, };
+> -	__u32 map_info_len = sizeof(map_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> -	return map_info.id;
+> -}
+> -
+> -/* trigger the leader program on a cpu */
+> -static inline int bperf_trigger_reading(int prog_fd, int cpu)
+> -{
+> -	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> -			    .ctx_in = NULL,
+> -			    .ctx_size_in = 0,
+> -			    .flags = BPF_F_TEST_RUN_ON_CPU,
+> -			    .cpu = cpu,
+> -			    .retval = 0,
+> -		);
+> -
+> -	return bpf_prog_test_run_opts(prog_fd, &opts);
+> -}
+> -
+>  #endif /* __PERF_BPF_COUNTER_H */
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 
-Apologies for the delay, but finally queued, thank you!  Frederic gave
-his ack off-list, which I have included in the wordsmithed version below.
-Could you please check to make sure that I did not mess anything up?
+-- 
 
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 936acd859f4a7b2b0f9900e26bc972385286df6e
-Author: Genjian Zhang <zhanggenjian@kylinos.cn>
-Date:   Thu Nov 10 16:24:43 2022 +0800
-
-    context_tracking: Use arch_atomic_*() in __ct_user_enter and __ct_user_exit
-    
-    The following diagnostics are issued by objtool:
-    
-    vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
-    __kasan_check_write() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
-    __kasan_check_write() leaves .noinstr.text section
-    
-    The reason for these diagnostics is that code marked noinstr if prohibited
-    from using atomic_*() functions, which have explicit instrumentation.
-    Therefore, switch to arch_ prefixed atomic operation functions to avoid
-    the explicit instrumentation.
-    
-    Reported-by: k2ci <kernel-bot@kylinos.cn>
-    Reported-by: kernel test robot <lkp@intel.com>
-    Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-    Acked-by: Frederic Weisbecker <frederic@kernel.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index 77978e3723771..a09f1c19336ae 100644
---- a/kernel/context_tracking.c
-+++ b/kernel/context_tracking.c
-@@ -510,7 +510,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
- 			 * In this we case we don't care about any concurrency/ordering.
- 			 */
- 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
--				atomic_set(&ct->state, state);
-+				arch_atomic_set(&ct->state, state);
- 		} else {
- 			/*
- 			 * Even if context tracking is disabled on this CPU, because it's outside
-@@ -527,7 +527,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
- 			 */
- 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
- 				/* Tracking for vtime only, no concurrent RCU EQS accounting */
--				atomic_set(&ct->state, state);
-+				arch_atomic_set(&ct->state, state);
- 			} else {
- 				/*
- 				 * Tracking for vtime and RCU EQS. Make sure we don't race
-@@ -535,7 +535,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
- 				 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
- 				 * ordered.
- 				 */
--				atomic_add(state, &ct->state);
-+				arch_atomic_add(state, &ct->state);
- 			}
- 		}
- 	}
-@@ -630,12 +630,12 @@ void noinstr __ct_user_exit(enum ctx_state state)
- 			 * In this we case we don't care about any concurrency/ordering.
- 			 */
- 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
--				atomic_set(&ct->state, CONTEXT_KERNEL);
-+				arch_atomic_set(&ct->state, CONTEXT_KERNEL);
- 
- 		} else {
- 			if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
- 				/* Tracking for vtime only, no concurrent RCU EQS accounting */
--				atomic_set(&ct->state, CONTEXT_KERNEL);
-+				arch_atomic_set(&ct->state, CONTEXT_KERNEL);
- 			} else {
- 				/*
- 				 * Tracking for vtime and RCU EQS. Make sure we don't race
-@@ -643,7 +643,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
- 				 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
- 				 * ordered.
- 				 */
--				atomic_sub(state, &ct->state);
-+				arch_atomic_sub(state, &ct->state);
- 			}
- 		}
- 	}
+- Arnaldo
