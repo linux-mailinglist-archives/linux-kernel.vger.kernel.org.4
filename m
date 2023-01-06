@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44087660A3B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780DE660A40
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjAFXZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S231470AbjAFX0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjAFXZa (ORCPT
+        with ESMTP id S230228AbjAFX0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:25:30 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6B185C82;
-        Fri,  6 Jan 2023 15:25:29 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id l139so3415752ybl.12;
-        Fri, 06 Jan 2023 15:25:29 -0800 (PST)
+        Fri, 6 Jan 2023 18:26:51 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C04E714B8;
+        Fri,  6 Jan 2023 15:26:50 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4bf16baa865so41205037b3.13;
+        Fri, 06 Jan 2023 15:26:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/x9CY3CWPVOyJ/ylljcq1J8tB9E3uIzlqDARiQcJMg=;
-        b=X+1VJHd81c6280pqJESzaGBW1CskNUbZxt1jFNNGMuyjS6EoKoFwnYR8uTu3XF/8Lo
-         LgpQ6BYXhDDlmq7Cnkm2Cug+C9xqKQuQqRfWdtO9dQ0Hdwu5ak8Bgby9elo4VAMo1IWJ
-         PzskCkS0V3S9tqV+ZV2TnCMaF4CFe/p3F3helCSq7EnNHXri/Xi16YjQEZl5C5mjt5d1
-         DBWPKez87DqhHh/yFHezS7X8LRnw15vR68VjBvBUcRvBjO9Eu9irPRq2y1EbPxrf5VCf
-         DCH3V+GSlHdeGdxtCs37wX0G5LVwmwhq4M3N8oZf/hrAAXjJewTVKGbgqRVVulN+brY5
-         RZnw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PzMwwdZY3oMiVjSJDQ9I4Kl9NTgscPHXL13NH+00AiY=;
+        b=BudRq+yLdzWdBk7w1nfo7PylN5GTI3Zfl0fUXhAujRwr2KAocfV77UMVbP/+4hmPWX
+         Wf8hbTI5KS1OT6z5JQQ2IMoITWVziOSwqPqgzGwo8NhbILROPxiShRf8h2rC8+RrbZEF
+         hyCmUtTIRuw77C0EMsQ+LucO/bNBdTK2f0JyKL+zahTXtAJ6SVGKbe2vS5+ZLTGCrYD+
+         0MiOYFdAR6vFdyAvlJpfzKYIu48QHgVi8uzBX3klEKmxn8l8VJLx1X/HHN91ydI7doYi
+         Dnhw+/nDRYEpoqL7cJ7G9+YWBN997DTZBYO8kjLYiorRdmTHD1HMkqFuDEZQFfqN4oVL
+         8bGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x/x9CY3CWPVOyJ/ylljcq1J8tB9E3uIzlqDARiQcJMg=;
-        b=DJmfEKabniG2V1qFGTZnmH/p4mzKrY1oIQkClAHyAJGPRoJZs9e2x3KH6ioC52iqfq
-         WJbEhcBG+8Fp26o6rtb6mpgyFFQ3SzOzgQH/BZKLZZSCL5NuGKPvbKg4yv2KfQFSZ/id
-         1T7gSBTJPp7EUvVXc38caLl7YfkXa1a0TUHhCi2MkHu2NHNbzMEg2VUr6E79xHQQ4iUa
-         5vZtgNSWaaoxvLkhfDYgk9zD4OXrRLdhL4FkQw4N5vRtBxdu6Wb3ShaE0tBowPIlr4B0
-         TPCu5C0C6E232IpbJNIONw3TP4HGoLRnZMyKw39NDS1XXsPSRTSwbPsFNr1XSZJ+sznE
-         YoSQ==
-X-Gm-Message-State: AFqh2kr5uMWE7wVXaBnvbw246mD5WDCj+1sjiYSatFl8bA6LMzdltiyq
-        06d2gE7vfsILWYNISQeCiMO4MygJEyuD9ddvpkioIoYPM3usbJZ+
-X-Google-Smtp-Source: AMrXdXtzhvS4tKOzaKHTjdSB1dkfXPINULzU3DlwM8FZBtFz2W6f6snn7VcUhhvYSnkrphQdGhMUI9O5qAZ/i0Hcato=
-X-Received: by 2002:a25:420b:0:b0:7b4:998f:196a with SMTP id
- p11-20020a25420b000000b007b4998f196amr956110yba.489.1673047528756; Fri, 06
- Jan 2023 15:25:28 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PzMwwdZY3oMiVjSJDQ9I4Kl9NTgscPHXL13NH+00AiY=;
+        b=rhn6TOz9j6reRgkpIlDMWI9IT6oHU6CC6vRMxYQIiNcGPQskyiZ7kcoEgcOY/houVR
+         cepmxMT8JFhVY7s9ty694Ej3poTW15hK5DNd3HE5T581vhpZWbBe3kLo+EDdqGCT9b9Q
+         4IVK3V24rp70lmbUmOG1QpkIgZ1Tj65+eNwbs0LQrFYqi5enL1TGdlVo5FcX++lWOBiS
+         PXKlyl9IhnkEDLgqNksMzjStCeG/12vi14u8AeUKZ8UYrPqYb6jTe5cCNjkkXxNDxsMl
+         P8GP0ryg/SxuY7pRBh5wthBhBGJyxw+gQG4Uhfyk5foxSbiHEyRJUeK+v33fxEqdjIPI
+         uawQ==
+X-Gm-Message-State: AFqh2kp2bFZ0V1SNQtiYCHJGH6KslKWsZWxazUT6gC6PkjGi9n292FHC
+        vlRIY83vQ5Dkuf+R8v35cN4xsXMGcAczDNzrQhVQnWP/iTSU2Yr1
+X-Google-Smtp-Source: AMrXdXsjllksGM0DMnueHbPOmq+XMnr9w3tkvoLDythchnZrcP8JhfJVo/VMX2ztMrvycS+l+7qinbFNNC8qpghsPvc=
+X-Received: by 2002:a0d:f601:0:b0:3d8:8c0e:6d48 with SMTP id
+ g1-20020a0df601000000b003d88c0e6d48mr440064ywf.462.1673047609522; Fri, 06 Jan
+ 2023 15:26:49 -0800 (PST)
 MIME-Version: 1.0
 References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
-In-Reply-To: <Y6r4mXz5NS0+HVXo@zn.tnic>
+ <Y6r+UbfkXruwHU2v@zn.tnic> <76353487-736A-4470-AD31-77F47F8C08F6@me.com>
+In-Reply-To: <76353487-736A-4470-AD31-77F47F8C08F6@me.com>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 7 Jan 2023 00:25:17 +0100
-Message-ID: <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
+Date:   Sat, 7 Jan 2023 00:26:38 +0100
+Message-ID: <CANiq72mZ3d-W53o4iFryouRKkHkdyR=_qBWkMGm1aNd8Y9ZSnQ@mail.gmail.com>
 Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
  transitively contain a `#[repr(align)]` type
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
+To:     Alexander Altman <alexanderaltman@me.com>
+Cc:     Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,25 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Borislav,
-
-On Tue, Dec 27, 2022 at 2:52 PM Borislav Petkov <bp@alien8.de> wrote:
+On Tue, Dec 27, 2022 at 9:31 PM Alexander Altman <alexanderaltman@me.com> w=
+rote:
 >
-> These reproduction instructions look insufficient to me. The env needs a
-> rust compiler installed. Which I don't have:
+> One way to resolve this temporarily would be to add the following line ab=
+ove
+> the offending struct:
+> /// <div rustbindgen hide></div>
+> This will cause bindgen to ignore the struct entirely and not translate i=
+t.  If it=E2=80=99s
+> actually needed for Rust code, now or later, then we can=E2=80=99t do tha=
+t and need
+> to actually replace it with something translatable, or else leave it hidd=
+en and
+> manually create its translation on the Rust side.  For the latter, just u=
+sing a
+> u32 for the entire bitfield-containing union would be sufficient.
 
-Yeah, note the x86_64-rhel-8.3-rust config name. It is a config the
-kernel test robot added for testing with Rust enabled (which explains
-the version text you saw for `rustc`).
+Thanks a lot Alexander for taking a look!
 
-> ./scripts/rust_is_available.sh -v
-> ***
-> *** Rust compiler '' could not be found.
-> ***
+This is https://github.com/rust-lang/rust-bindgen/issues/2179.
 
-The script is meant to be called as a Make target, e.g. `make LLVM=1
-rustavailable`. Perhaps we can put a message if the script was called
-directly.
+What we do for constructs that `bindgen` cannot map is to add the
+appropriate parameter/line in `rust/bindgen_parameters`. We hit a
+similar case for `x86_msi_data` that you can see in that file. So
+please feel free to add it there.
+
+If we end up needing to access it from the Rust side, another
+alternative is to write a C function that performs the required
+operation on it that then the Rust side calls.
 
 Cheers,
 Miguel
