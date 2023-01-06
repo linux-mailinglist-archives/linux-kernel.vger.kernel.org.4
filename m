@@ -2,97 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74402660855
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF42660859
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjAFUeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S236117AbjAFUer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjAFUdh (ORCPT
+        with ESMTP id S235692AbjAFUeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:33:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253D5AC40;
-        Fri,  6 Jan 2023 12:33:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA97161F46;
-        Fri,  6 Jan 2023 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD775C433EF;
-        Fri,  6 Jan 2023 20:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673037215;
-        bh=70eLmqi50DwC4nGrPC6/BhJbdlKVrPt5HYhMfBWpJBc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UfFy2UIysVqCxWrNKjf2Jr8Hf6TtCep7aeD7mCO4w6TSdgK/anVbepYZjzWj+HtsT
-         8u+UnX/hBhFxGZ+OF4GB2Kq6td4lFIXgcWX4brSuw/vmUFoOeiSh6ZMMqyQHUFOeZ/
-         zzWrjqZBrRu1ujLDeVwLko5/4E4LNoFpth8IZQIYXYWCLiGa175VU8YIr9F0h51ATG
-         S583TMR0011jHZ+wV3E3GmmxR7CJDmeRHGW3IFD/+10n6aDdg8uldIJX+OcXlGch6F
-         dXnSFDryDTI5C6R8fGOU/AgJmR6cf7PXqZrYEsAnVLIedRtNKhOCWkPXlyOQbAnC5w
-         CbVBv3EkdEdPw==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH] include/linux/mm: fix release_pages_arg kernel doc comment
-Date:   Fri,  6 Jan 2023 20:33:31 +0000
-Message-Id: <20230106203331.127532-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 6 Jan 2023 15:34:22 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F28C6CFF6;
+        Fri,  6 Jan 2023 12:34:20 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f34so3576602lfv.10;
+        Fri, 06 Jan 2023 12:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XaDPfwoL+u15r2egWWYGKKyUhV9uIWkWkMZ5qdh5ZFM=;
+        b=k5txLsZIED9lM3Jb2r0MHLESXqPke1bd6U9IcmJpKvb23bLiRIKeqFj9wGUf2Dgls+
+         ZTFCesl2VsGFUIAnp7lq2vWUTT6s6yj8AnEQcFwxx3KoSwAgmStWBlasg9sqOySQR7Wl
+         BwN+Qm1yHSTTnbQ7nhYtWPjSm2o7z7fbD+cdwVvtR2p/2+aV42to0WakK/8NzTuUMH3y
+         rxWMOppyosFEERITJbodzqQSJl6SuAI2mn1KHARSATyyp5kgwr6E6YhzflS23dNsNsXD
+         je02DMVYAO7TsLCcciqffYqRflN+oDvnvcvhU/2yEsl9O3XQLHJr9apomcIh3fCqDzqR
+         TUNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XaDPfwoL+u15r2egWWYGKKyUhV9uIWkWkMZ5qdh5ZFM=;
+        b=qlTAHBqkSzI1xPjph/dMO4vL0HuENvPg0aH8nNgBp8reroBaoK3Og3k4FO1EdaxMSb
+         cEgVwrUqO3fS9CiVeOun6nnbDKV/ReECBdSKimQ78kwh//prgCMlSf8i3Vipzp2KZvuH
+         TL9c/rzVIAiJ02JaXpEJJ3brwj9B8lMMQnaNcJjrqIFsoNY4P2rswUaRIjsn4y1TlY6r
+         0tKZDQXyr/wBowjPjH+rcRFSNOBCPxtCwG+goGKK1kx1ihAGm2cBw4LdM/NDN3Ofctzs
+         5xTJjQ1kFWicdjX3AlxUsV0VYMpbXeO6nAKJ31EBdiO/7sKsFITJj9KX5DBR8NvLty3e
+         MLnw==
+X-Gm-Message-State: AFqh2kq07owlapoVO+rfmTDc4/WXegW4RA/OiyrsfJj6zBT2AK6mIapk
+        2HCM9LcVNTU1ZKGx3OnNX4DzBItDNhVYgbvGQn7ccTcH3G4=
+X-Google-Smtp-Source: AMrXdXsr1MLYtopcnh+tmLgUHTFBMtoAcRNcihp/WJ9wQEGNmo3ZRBDdlafs9UXuVKYMg7uokWiYoSomzRcluiTgcTI=
+X-Received: by 2002:a05:6512:3e12:b0:4ca:6c11:d3e5 with SMTP id
+ i18-20020a0565123e1200b004ca6c11d3e5mr2597435lfv.224.1673037258430; Fri, 06
+ Jan 2023 12:34:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106094844.26241-1-zhanghongchen@loongson.cn> <Y7hyw+fTdgAF6uYP@bombadil.infradead.org>
+In-Reply-To: <Y7hyw+fTdgAF6uYP@bombadil.infradead.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 6 Jan 2023 21:33:41 +0100
+Message-ID: <CA+icZUUdGCdzYvdi3_vdpHqNvE12wsAw3CKCmeut1-R78kjHHg@mail.gmail.com>
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 449c796768c9 ("mm: teach release_pages() to take an array of
-encoded page pointers too") added the kernel doc comment for
-release_pages() on top of 'union release_pages_arg', so making 'make
-htmldocs' complains as below:
+On Fri, Jan 6, 2023 at 8:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Fri, Jan 06, 2023 at 05:48:44PM +0800, Hongchen Zhang wrote:
+> > Use spinlock in pipe_read/write cost too much time,IMO
+> > pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> > On the other hand, we can use __pipe_{lock,unlock} to protect
+> > the pipe->{head,tail} in pipe_resize_ring and
+> > post_one_notification.
+> >
+> > I tested this patch using UnixBench's pipe test case on a x86_64
+> > machine,and get the following data:
+> > 1) before this patch
+> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > Pipe Throughput                   12440.0     493023.3    396.3
+> >                                                         ========
+> > System Benchmarks Index Score (Partial Only)              396.3
+> >
+> > 2) after this patch
+> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > Pipe Throughput                   12440.0     507551.4    408.0
+> >                                                         ========
+> > System Benchmarks Index Score (Partial Only)              408.0
+> >
+> > so we get ~3% speedup.
+> >
+> > Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+> > ---
+>
+> After the above "---" line you should have the changlog descrption.
+> For instance:
+>
+> v3:
+>   - fixes bleh blah blah
+> v2:
+>   - fixes 0-day report by ... etc..
+>   - fixes spelling or whatever
+>
+> I cannot decipher what you did here differently, not do I want to go
+> looking and diff'ing. So you are making the life of reviewer harder.
+>
 
-    ./include/linux/mm.h:1268: warning: cannot understand function prototype: 'typedef union '
+Happy new 2023.
 
-The kernel doc comment for the function is already on top of the
-function's definition in mm/swap.c, and the new comment is actually not
-for the function but indeed release_pages_arg.  Fixing the comment to
-reflect the intent would be one option.  But, kernel doc cannot parse
-the union as below due to the attribute.
+Positive wording... You can make reviewers' life easy when...
+(encourage people).
+Life is easy, people live hard.
 
-    ./include/linux/mm.h:1272: error: Cannot parse struct or union!
++1 Adding ChangeLog of patch history
 
-Modify the comment to reflect the intent but do not mark it as a kernel
-doc comment.
+Cannot say...
+Might be good to add the link to Linus test-case + your results in the
+commit message as well?
 
-Fixes: 449c796768c9 ("mm: teach release_pages() to take an array of encoded page pointers too")
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- include/linux/mm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+...
+Link: https://git.kernel.org/linus/0ddad21d3e99 (test-case of Linus
+suggested-by Andrew)
+...
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+...
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a2bf261cdbef..3df8815f6d51 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1297,10 +1297,10 @@ static inline void folio_put_refs(struct folio *folio, int refs)
- 		__folio_put(folio);
- }
- 
--/**
-- * release_pages - release an array of pages or folios
-+/*
-+ * union release_pages_arg - an array of pages or folios
-  *
-- * This just releases a simple array of multiple pages, and
-+ * release_pages() releases a simple array of multiple pages, and
-  * accepts various different forms of said page array: either
-  * a regular old boring array of pages, an array of folios, or
-  * an array of encoded page pointers.
--- 
-2.25.1
+Thanks.
 
+Best regards,
+-Sedat-
