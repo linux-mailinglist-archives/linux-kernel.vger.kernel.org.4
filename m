@@ -2,184 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A3A660777
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3309B660780
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbjAFTzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S236071AbjAFT6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbjAFTyy (ORCPT
+        with ESMTP id S231375AbjAFT6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:54:54 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304D83196
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:54:49 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id w13so991522wrk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:54:49 -0800 (PST)
+        Fri, 6 Jan 2023 14:58:41 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94A77AD7;
+        Fri,  6 Jan 2023 11:58:39 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id c133so1950849oif.1;
+        Fri, 06 Jan 2023 11:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UdTJkOBXcCkLftLc+pQ5NTN4WFWIGu0wm8XHj4yqSYU=;
-        b=AHemXy1MF2QGcr+FcK28C2P3kyG10cenBEPd9yQJhqSb7J6QUGHxFdkXKd9CNEykTA
-         BMuLR5/yvb8l4QdJvmx0Epb5bMK5THtuRZIcsNOmUs4VAN2cmuEUWGPBCWqeoZWCvuQs
-         CAdio0xzyMNKnJWFsJ2cA2d/abp2t0kIII1b4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=43NGCXT/H0n1aRVH9SXEFAWkSQcjel85u1UCejcZUzE=;
+        b=Yp21phty91QCImy9nuXutKu7L91irr6aoHlIyDJ2wxxzCHnnf96taSlOAVqW+7IeU/
+         DyW0aQC0VGGXXHcNtbq8SQSnt/KX8tTnaLblk/euoek1dlqcT3sLGPAw3WxeYrC8OhG2
+         56ngG5GNNJ101pK8F7uVt/dJyz5HxIuYsCcB5hqGf8qiahcbNBrpLG4Tvcw1woK+PQGh
+         2Up0+NmB6LoBE8GUXpQmk2iUoO9iUic7QvEn7nCFjvj/ysSCkaWuJaba+mRRsR19eWPH
+         CZsS9FZK/B2yY3tHSvJmp+CfkkZSrmEzxQWAeYha9+dYBYUZ0JQX1hmCy2CpzrMByRvV
+         En6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UdTJkOBXcCkLftLc+pQ5NTN4WFWIGu0wm8XHj4yqSYU=;
-        b=GDQeRv/QTLdaRbKxR97S1Lgvib2zmRDIpO6x4VoKgz1jJVbPKMH8bLre4mRAtn2Sut
-         /NKPV+JzLAMiSHsVgPqCAhqP9o+0LEm/44g5n2MGZTASg1/OWIGPZjfRvm6kHGfQker+
-         Ay7HSEUZ+j9PX8KGYe0LZwzhRsf1bMWNzsTpovRY9xVcOm92JLEjSS30YQDu5v6UMsMJ
-         4qyfVzor7noTfrsnL9vTVmqIonbX0Q/RbYCRDAh2CCS1wKQ8WgLAAYaIxx0yhlzmMmBN
-         7tPpSJ1WxvHwbu3uJlPwdT1Vsj0/xx1q2sBnysVJmk94356xI5x6Jv+t2vPHR10sRfBP
-         51IQ==
-X-Gm-Message-State: AFqh2koUqfuPoBIndxxb2BZhmg06HzxnjBvEZ4o/Tx+2C4POU+Cyuwhs
-        wK6Lnv2kyWvbwXTXl4yxfVRG/A==
-X-Google-Smtp-Source: AMrXdXvJMFXkKw/BFxl7hm/6TuBNTOklsHNzkYAIGkk6eFaSgZ1kgvPsJmPD31/1sKHiPBwSTU+Kmg==
-X-Received: by 2002:adf:f24c:0:b0:250:cbfb:688e with SMTP id b12-20020adff24c000000b00250cbfb688emr40295994wrp.42.1673034887979;
-        Fri, 06 Jan 2023 11:54:47 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id x2-20020adff642000000b002a01e64f7a1sm2052766wrp.88.2023.01.06.11.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 11:54:47 -0800 (PST)
-Date:   Fri, 6 Jan 2023 20:54:44 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Melissa Wen <mwen@igalia.com>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        etnaviv@lists.freedesktop.org, noralf@tronnes.org,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Emma Anholt <emma@anholt.net>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Tomi Valkeinen <tomba@kernel.org>
-Subject: Re: [PATCH 5/9] drm/arc: use new debugfs device-centered functions
-Message-ID: <Y7h8hBfWZd2Ka4OP@phenom.ffwll.local>
-Mail-Followup-To: =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Melissa Wen <mwen@igalia.com>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        etnaviv@lists.freedesktop.org, noralf@tronnes.org,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Emma Anholt <emma@anholt.net>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Tomi Valkeinen <tomba@kernel.org>
-References: <20221226155029.244355-1-mcanal@igalia.com>
- <20221226155029.244355-6-mcanal@igalia.com>
+        bh=43NGCXT/H0n1aRVH9SXEFAWkSQcjel85u1UCejcZUzE=;
+        b=2cfOAv3Udq20hxm+YbDD3+r/M44kIYFrowYxviD7ROMraspz+5jz71USHay24pYRUS
+         xHA2IEK+CSO7y6jeA3M6Jw7rRXoVYuhsbU4HoA0vTvhZISET7lG6a/9mMmBvYoHfY4Fl
+         6F6RFcNjm/iaGezgr5uUmpAv/lCZQWNfmece1pjIuo4kGKVviOKg0GmIbm/u9kJOUsRj
+         rwRlOXjy1aOMvnaKGdPCYXk2ybhnWo4yk0CyVfcwxFFJxNWprIPvfsTUEYvRmz/1aQ25
+         Fz/LQBxvsftL8Oxti+Km3Ovp4FbFyWmZp/dfvXROL7kMQcpBvdY4tAhMnX7+UwzqH24c
+         lilw==
+X-Gm-Message-State: AFqh2koWili4GGOx59UnQeQCFZXB941YZ2/TVpC+O3xUi8j2oPCyqwml
+        LhE+s4C+AnBBrsAP7sGAultRLVt+q6++Z1FM+tPS6TDFpHQ=
+X-Google-Smtp-Source: AMrXdXuq0dIsh/j5UlY1v0Ms2aDphfCe1kgrNQtOygjNs4fU3R3Rbwke6Jw+4TdTdX7oRbKFRFlCvZJdr787XvGeH9I=
+X-Received: by 2002:a05:6808:c:b0:35d:ff69:49c0 with SMTP id
+ u12-20020a056808000c00b0035dff6949c0mr3728406oic.146.1673035118628; Fri, 06
+ Jan 2023 11:58:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221226155029.244355-6-mcanal@igalia.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+References: <20221230063528.41037-1-zh.nvgt@gmail.com> <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
+ <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
+ <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
+ <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com> <Y7hvhtHeivfsnBtE@phenom.ffwll.local>
+In-Reply-To: <Y7hvhtHeivfsnBtE@phenom.ffwll.local>
+From:   Hang Zhang <zh.nvgt@gmail.com>
+Date:   Fri, 6 Jan 2023 14:58:27 -0500
+Message-ID: <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
+Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with console_lock()
+To:     Hang Zhang <zh.nvgt@gmail.com>, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 12:50:25PM -0300, Maíra Canal wrote:
-> Replace the use of drm_debugfs_create_files() with the new
-> drm_debugfs_add_file() function, which center the debugfs files
-> management on the drm_device instead of drm_minor. Moreover, remove the
-> debugfs_init hook and add the debugfs files directly on arcpgu_probe(),
-> before drm_dev_register().
-> 
-> Signed-off-by: Maíra Canal <mcanal@igalia.com>
-> ---
->  drivers/gpu/drm/tiny/arcpgu.c | 22 ++++++----------------
->  1 file changed, 6 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tiny/arcpgu.c b/drivers/gpu/drm/tiny/arcpgu.c
-> index 611bbee15071..b074a0b4c7b3 100644
-> --- a/drivers/gpu/drm/tiny/arcpgu.c
-> +++ b/drivers/gpu/drm/tiny/arcpgu.c
-> @@ -338,8 +338,8 @@ static int arcpgu_unload(struct drm_device *drm)
->  #ifdef CONFIG_DEBUG_FS
->  static int arcpgu_show_pxlclock(struct seq_file *m, void *arg)
->  {
-> -	struct drm_info_node *node = (struct drm_info_node *)m->private;
-> -	struct drm_device *drm = node->minor->dev;
-> +	struct drm_debugfs_entry *entry = m->private;
-> +	struct drm_device *drm = entry->dev;
->  	struct arcpgu_drm_private *arcpgu = dev_to_arcpgu(drm);
->  	unsigned long clkrate = clk_get_rate(arcpgu->clk);
->  	unsigned long mode_clock = arcpgu->pipe.crtc.mode.crtc_clock * 1000;
-> @@ -348,17 +348,6 @@ static int arcpgu_show_pxlclock(struct seq_file *m, void *arg)
->  	seq_printf(m, "mode: %lu\n", mode_clock);
->  	return 0;
->  }
-> -
-> -static struct drm_info_list arcpgu_debugfs_list[] = {
-> -	{ "clocks", arcpgu_show_pxlclock, 0 },
-> -};
-> -
-> -static void arcpgu_debugfs_init(struct drm_minor *minor)
-> -{
-> -	drm_debugfs_create_files(arcpgu_debugfs_list,
-> -				 ARRAY_SIZE(arcpgu_debugfs_list),
-> -				 minor->debugfs_root, minor);
-> -}
->  #endif
->  
->  static const struct drm_driver arcpgu_drm_driver = {
-> @@ -371,9 +360,6 @@ static const struct drm_driver arcpgu_drm_driver = {
->  	.patchlevel = 0,
->  	.fops = &arcpgu_drm_ops,
->  	DRM_GEM_DMA_DRIVER_OPS,
-> -#ifdef CONFIG_DEBUG_FS
-> -	.debugfs_init = arcpgu_debugfs_init,
-> -#endif
->  };
->  
->  static int arcpgu_probe(struct platform_device *pdev)
-> @@ -390,6 +376,10 @@ static int arcpgu_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> +#ifdef CONFIG_DEBUG_FS
-> +	drm_debugfs_add_file(&arcpgu->drm, "clocks", arcpgu_show_pxlclock, NULL);
-> +#endif
+On Fri, Jan 6, 2023 at 1:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Thu, Jan 05, 2023 at 01:38:54PM -0500, Hang Zhang wrote:
+> > On Thu, Jan 5, 2023 at 5:25 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > >
+> > > On Thu, 5 Jan 2023 at 11:21, Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > >
+> > > > Hi Helge
+> > > >
+> > > > On Mon, 2 Jan 2023 at 16:28, Helge Deller <deller@gmx.de> wrote:
+> > > > >
+> > > > > On 12/30/22 07:35, Hang Zhang wrote:
+> > > > > > In do_fb_ioctl(), user specified "fb_info" can be freed in the callee
+> > > > > > fbcon_get_con2fb_map_ioctl() -> set_con2fb_map() ->
+> > > > > > con2fb_release_oldinfo(), this free operation is protected by
+> > > > > > console_lock() in fbcon_set_con2fb_map_ioctl(), it also results in
+> > > > > > the change of certain states such as "minfo->dead" in matroxfb_remove(),
+> > > > > > so that it can be checked to avoid use-after-free before the use sites
+> > > > > > (e.g., the check at the beginning of matroxfb_ioctl()). However,
+> > > > > > the problem is that the use site is not protected by the same locks
+> > > > > > as for the free operation, e.g., "default" case in do_fb_ioctl()
+> > > > > > can lead to "matroxfb_ioctl()" but it's not protected by console_lock(),
+> > > > > > which can invalidate the aforementioned state set and check in a
+> > > > > > concurrent setting.
+> > > > > >
+> > > > > > Prevent the potential use-after-free issues by protecting the "default"
+> > > > > > case in do_fb_ioctl() with console_lock(), similarly as for many other
+> > > > > > cases like "case FBIOBLANK" and "case FBIOPAN_DISPLAY".
+> > > > > >
+> > > > > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> > > > >
+> > > > > applied to fbdev git tree.
+> > > >
+> > > > The patch above makes no sense at all to me:
+> > > >
+> > > > - fb_info is protected by lock_fb_info and
+> > > > - the lifetime of fb_info is protected by the get/put functions
+> > > > - yes there's the interaction with con2fb, which is protected by
+> > > > console_lock, but the lifetime guarantees are ensured by the device
+> > > > removal
+> > > > - which means any stuff happening in matroxfb_remove is also not a
+> > > > concern here (unless matroxfb completely gets all the device lifetime
+> > > > stuff wrong, but it doesn't look like it's any worse than any of the
+> > > > other fbdev drivers that we haven't recently fixed up due to the
+> > > > takeover issues with firmware drivers
+> > >
+> > > I have also a really hard timing finding the con2fb map use in the
+> > > matroxfb ioctl code, but that just might be that I didn't look
+> > > carefully enough. Maybe that would shed some light on this.
+> > > -Daniel
+> > >
+> > >
+> > > >
+> > > > On the very clear downside this now means we take console_lock for the
+> > > > vblank ioctl (which is a device driver extension for reasons, despite
+> > > > that it's a standard fbdev ioctl), which is no good at all given how
+> > > > console_lock() is a really expensive lock.
+> > > >
+> > > > Unless I'm massively missing something, can you pls push the revert
+> > > > before this lands in Linus' tree?
+> > > >
+> > > > Thanks, Daniel
+> >
+> > Hi, Daniel. Thank you for your feedback. We're not developers of the
+> > video subsystem and thus may be short in domain knowledge (e.g., the
+> > performance of console_lock() and the complex lifetime management).
+> > This patch initially intended to bring up the potential use-after-free
+> > issues here to the community - we have performed a best-effort code
+> > review and cannot exclude the possibility based on our understanding.
+> >
+> > What we have observed is that the call chain leading to the free site
+> > (do_fb_ioctl()->fbcon_set_con2fb_map_ioctl()->set_con2fb_map()->
+> > con2fb_release_oldinfo()-> ... ->matroxfb_remove()) is only protected
+> > by console_lock() but not lock_fb_info(), while the potential use
+> > site (call chain starts from the default case in do_fb_ioctl()) is
+> > only protected by lock_fb_info() but not console_lock().
+> > We thus propose to add this extra console_lock() to the default case,
+> > which is inspired by the lock protection of many other existing
+> > switch-case terms in the same function.
+> >
+> > Since we do not have deep domain knowledge of this subsystem, we will
+> > rely on the developers to make a decision regarding the patch. Thank
+> > you again for your review and help!
+>
+> Can you please elaborate where you've found this use-after-free and how?
+> I'm still not understanding how you even got here - this is orthogonal to
+> whether the patch is the right fix or not.
+> -Daniel
 
-A pure bikeshed, but I think it's cleaner to drop the #ifdef here and
-above and mark the potentially unused functions as __maybe_unused.
+Hi, Daniel. Sure. This issue was initially flagged by our experimental static
+code analyzer aiming to find use-after-free issues in the kernel - that's why
+we don't have PoC or execution traces here. We deeply understand that
+static analyzer can generate false alarms, so we have tried our best and
+spent a good amount of time carefully reviewing the related code. We
+eventually found that we could not exclude this potential issue based on our
+study, so we decided to report this to the community with this tentative fix. As
+mentioned, we may be short in domain knowledge, so your input is
+highly appreciated. We respect the developer's decision about whether
+this is really a problem and whether/how to fix it. However, if you think the
+use-after-free is actually not possible, it will be very helpful if you can
+elaborate on the reasoning since it will greatly help us improve our
+analyzer. Thank you very much for your help!
 
-With or without that: Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+BTW, if this is worthed a fix and the performance of console_lock() is a
+major concern, then I think there may be alternative solutions like adding
+a lock_fb_info() to the free call chain - if that's better in performance,
+or maybe selectively protect the matroxfb ioctl but not vblank ioctl as you
+mentioned.
 
-> +
->  	ret = drm_dev_register(&arcpgu->drm, 0);
->  	if (ret)
->  		goto err_unload;
-> -- 
-> 2.38.1
-> 
+Thanks,
+Hang
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+>
+> >
+> > Best,
+> > Hang
+> >
+> > > >
+> > > > > Thanks,
+> > > > > Helge
+> > > > >
+> > > > > > ---
+> > > > > >   drivers/video/fbdev/core/fbmem.c | 2 ++
+> > > > > >   1 file changed, 2 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+> > > > > > index 1e70d8c67653..8b1a1527d18a 100644
+> > > > > > --- a/drivers/video/fbdev/core/fbmem.c
+> > > > > > +++ b/drivers/video/fbdev/core/fbmem.c
+> > > > > > @@ -1182,6 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+> > > > > >               console_unlock();
+> > > > > >               break;
+> > > > > >       default:
+> > > > > > +             console_lock();
+> > > > > >               lock_fb_info(info);
+> > > > > >               fb = info->fbops;
+> > > > > >               if (fb->fb_ioctl)
+> > > > > > @@ -1189,6 +1190,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+> > > > > >               else
+> > > > > >                       ret = -ENOTTY;
+> > > > > >               unlock_fb_info(info);
+> > > > > > +             console_unlock();
+> > > > > >       }
+> > > > > >       return ret;
+> > > > > >   }
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > Daniel Vetter
+> > > > Software Engineer, Intel Corporation
+> > > > http://blog.ffwll.ch
+> > >
+> > >
+> > >
+> > > --
+> > > Daniel Vetter
+> > > Software Engineer, Intel Corporation
+> > > http://blog.ffwll.ch
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
