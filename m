@@ -2,149 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B5565FB23
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 06:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A5965FB27
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 07:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjAFF6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 00:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S231297AbjAFGCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 01:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjAFF6p (ORCPT
+        with ESMTP id S229589AbjAFGC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 00:58:45 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2076.outbound.protection.outlook.com [40.107.237.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F3C61478;
-        Thu,  5 Jan 2023 21:58:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z7n9FX3xiiPu7C2Idem5n0+EeWAfWddGabj/81cujDs7fw6ceONgs0n+NFcyjJ/O8x2PZ262nWIPyQdOLOwrVUuYB0/0OpllI/JvoRPzGbucAn5aIu58x0qyCPysdU0Ga4uoCY4d882Sa13YvMgCEnbhFzKB2MevDpcmoazzlDjHS6wCWx3G6Zr4GFYpmK/jqERQHuVKp8QJ88BsuigMM2Ntj+FxvxU5a2ZdYvFQMHJTYZkKca0WHwP5B9wIfVBYX6q0uMrLJ0k847EUfetaiQwIuz+fsIMUoXWZZeWrx0dyzeI98R0KDGrlZmhUDLM6GBWEgrHLQdrhnmlYxZWIVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6eBoghNUwE1y4uqYMb2h40pF0okrcrOUYUW0aoJdL0E=;
- b=g3ydWALO1TnF4bBTXjjvRjcvRth2P0cAza990CDOGcuJdGvZaOi4cM3K6++X47vc0Gy+0Uxg9JHOnnWTRqWmJfNDm1Clbf4cXM8gsTDx/pArJKPBvMbtG3Xx4BkBEy88VQd/gSEJOf71f8VWBl8QlslA1yMUYRkfDcakDY4Mufp6JkHTy7cDWxW38LahozVXv/QrJJJxGc8rX9tZMMeIgTip4xmoNjmisnG8vc2ROKHqCuvouv26iya4DQK5G1cIfPWqMfY7ZRlA1vKqKvzM1zk6AaA0ahQuQu6Kz3rkns6FKkihz0z5gEMqrEyJTxGXeEekyM7SJjbErN1G9NIF2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6eBoghNUwE1y4uqYMb2h40pF0okrcrOUYUW0aoJdL0E=;
- b=kvlaoEuuBNB+ZEYhzoTq5UX0DiHHIKp6j3rZADxN6ibNoaQAK2+8Md8tzcMuEb3K7ePtRLK7pRQlPp3b1NdtlBH9PPfdQNEjKQLh2PpkZFCFkNb893zu5sBzfzBpQw1X41DBFooHtxQTGxNY/c511wJbTN+vnFnwc1/WYn7Cqzs=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by PH0PR12MB5482.namprd12.prod.outlook.com (2603:10b6:510:ea::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 05:58:40 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed%8]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 05:58:40 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
-CC:     "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 06/13] cpufreq: amd-pstate: implement Pstate EPP
- support for the AMD processors
-Thread-Topic: [PATCH v9 06/13] cpufreq: amd-pstate: implement Pstate EPP
- support for the AMD processors
-Thread-Index: AQHZGH7/m5zLGzzK3EG3ptMdQMNA+a6Q7KsAgAAJP2A=
-Date:   Fri, 6 Jan 2023 05:58:40 +0000
-Message-ID: <DM4PR12MB5278D7464FA0CEE9A5DB330E9CFB9@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20221225163442.2205660-1-perry.yuan@amd.com>
- <20221225163442.2205660-7-perry.yuan@amd.com>
- <c8e15651-d4d3-bdb1-f9d3-b5efb93fcd5b@amd.com>
-In-Reply-To: <c8e15651-d4d3-bdb1-f9d3-b5efb93fcd5b@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-06T05:58:36Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8d62015f-c77d-482a-b4b3-46414bd34f4f;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-01-06T05:58:36Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: d7c24be2-ff91-47b5-a7be-a6fdd2c28f16
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|PH0PR12MB5482:EE_
-x-ms-office365-filtering-correlation-id: e4bde912-bfa7-47aa-d4c1-08daefab0f5c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s0vDNdxkPEXIiIoLTj9YUWZAGA2YkChOKkuXuLysdNRLmlDg5xWHiTcPO5wjcFUeS86PHzj8b1wN+bdUzCh3Dzfmwdkzgl3JbSJX2DDy9ICzP94NFiRg8jlDVf3pHiVmb5youUgSiojHtivDk4tNnBtc0FMRAwETOpUlg7+6z7nliX8JOqF9I5iG2kzBRbss2EXSLTdjT4GhWuMymzGp8IWpyoARfV1R68uT5YlrpoR5MAlPDk8n1/5L1vvFxwPkLHkdkIXKcAhyUuzETcgva39t5WmGS7YpeVgz23QDKZ6fOGzTfF5wbk4/4lmCvvfRSahCl6zFbLfXezsT4rg/jZvjHdb0ui7GS47iKjSNwg6Kdn6xtO7JsJfJ9yycSH8MWcUgxXSWT8lziw5LuKGwLupj7OQj22XIN5+ljnaDxlcmheUdvllMnRVnaAVJU1k6bPac30zlR4NvEheIYal4N/Ve+YJY4Y1+iZicY/phs+vrprXaHmsIXBJcT11wfabnxb9ou1kQvCEpTJ+c1oav3oav3lM/oNCg8CnaG/9vjv93hV57bfeCGd1B5DEXKGpcWCHaVCz4A7dQeYvC8UCpQv4fjgl71JeTpowj5EtRd75JQit3e2kzoQ396Bd7G4KbxMERRYKUZS1GwgUhSEz36PndufQjyvAkYmDuIMOpNXsVDXEDaQNKAL5t8slVdcrKtNDv+uezxfHcPx1SPV3Wyw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(366004)(39860400002)(346002)(451199015)(110136005)(6506007)(7696005)(478600001)(53546011)(86362001)(55016003)(122000001)(38070700005)(38100700002)(9686003)(33656002)(186003)(26005)(83380400001)(71200400001)(64756008)(66946007)(8676002)(8936002)(5660300002)(66556008)(76116006)(4326008)(66446008)(66476007)(52536014)(316002)(2906002)(54906003)(41300700001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K0J1UjJuZWk3WCsxeE9LM3daUm41amxrSEY4SjU3em1PYzBrOStyZGpVMG9w?=
- =?utf-8?B?Q0xZeHF3Q1oyS05zRTFHME9kOTBpQStjWFU2UEw5NWQ2OGNVQW1GTnUwWEp5?=
- =?utf-8?B?R2NFUmV0WHVyaTgxbENIbUVKY3ZiRW93bnh0MThOQnl3VHVleU1QTGJqOTI1?=
- =?utf-8?B?TVpmNjk4ZWdUbXEvTE1NdDJPV2RZbXpMVGNwYVhScmdSVFlsem1lZlBlRFFP?=
- =?utf-8?B?MVlvRFVlQ01aZk9JMXJINHdXNVQxbjdJWnBGV01NOGhtNU5aOUJET2dYdkh6?=
- =?utf-8?B?QnhSYU1tZDUwaTlxeng4U21acGMvU2puVHBXQytVV0V2aG4rdUxLVUErWmYr?=
- =?utf-8?B?dmt3UWFZbFBQc0l0U2dVQzRNaUkrSWpZa0xqczlIMjF6dnNzRXp5YXUxYkxH?=
- =?utf-8?B?OVpDUGhXc1AxOWNTc2NaK2VzYWVHbGlYaU5IOE03OVVDL3A2bFlaZ1ZRclgy?=
- =?utf-8?B?ZUZmVHVWblRmakZFZVFKanVBeFc2bjFoRnVOZFFyYmdBT3hqVFBtNXczTXZB?=
- =?utf-8?B?QjFNdERhWWtHVnFETkpIOHpsSmk0YU51bW01cUcxS3BFZzd4MGc3US92anpw?=
- =?utf-8?B?a2hyZ0VWWWpPV0dPTWlzMGtnRmpjQWt0OVJRNGJvU0JjTkRpYlhKcTN2WVNn?=
- =?utf-8?B?MW5ZbHVRZ1UrQ2EwWDFWdkFyZjBEVGxLeXFRS0FGOVBOMkhpNkphQktDNzgr?=
- =?utf-8?B?VUtJeG9uQU9oNy9MZDVPaS9jQ0NoKzVpQm5LSmlaQ1BpcTdkeGlRZHBqelZF?=
- =?utf-8?B?ZjBReWxheU9GVXpseEJReEtoMSs0WE56a0FMdmVCUi9OVXBsNnlvNldGVSsx?=
- =?utf-8?B?RFl2eUFQT3dTYlpzcWR1NjMvTk5NSFRaM0Fqc0Jma1RZY3BPcjNBa2RWcElv?=
- =?utf-8?B?UGY5UDJmWEJuTFBjVVFNdHovODVhbzU0MnhNZ3Q0MzdxYmxwekdlODdMVlB6?=
- =?utf-8?B?L3pVRXdpeDFaMG9WMW8yVDVld2dqeDI4bHpqbnRjMWhSdjlKbXBndWRqT3lE?=
- =?utf-8?B?WGEwcW8wcS9tSVRocTJ1d3dxMm1IazNQMW1IK1NaSTVacTh4aUJNTDZYOGl1?=
- =?utf-8?B?RUU2TTV2RDVRTlV6MXhaZW8ydkI0bElZM2VKeWtvMmROOUZNVU9SZHNjWGc2?=
- =?utf-8?B?eFVUbDZZMG5nY0o3Nmhocy9qOU1zRGZYM2lpdEhRUmZ1VjUvS3ZqMWdpQ0xO?=
- =?utf-8?B?RlZsb1ozdk1MK2gvOW9BcG5yUGovdzY5cWtDWWhiSncxQXQ5cmhGV1grZlVC?=
- =?utf-8?B?LzhwMGd5QTYrcnMzMVNOdUo0UUY0ajNxbFJjYUM5YTZyL2tROHVBQkJOMWpr?=
- =?utf-8?B?cG9lOWx5NnBYY2hiTCsvanhQSzZBdWpMcjBId3dXMmpnSzM0ZkVhZEhUR2F4?=
- =?utf-8?B?ZHlGelNrRGVOSDB4K2JXd1gways3ZG14QmZzVk84Zzd0ZWE0TU5FdCtVdkdD?=
- =?utf-8?B?by9FQlRTQ29Id1hFdUJPZUszeSt5SS9leTh6bGtWeVNESGc3QStQL3BMRlM1?=
- =?utf-8?B?bitTM202YzFWaHp3eXE2dUxnUmNZMkxPZU5SSm0zdmZGK2J3V2RzVUgvbWNU?=
- =?utf-8?B?SHR1bER1TDVCajZ4VUVvV1dOTUVleERzUlF5a2paYjdsVnV5VUU5SHcwM08r?=
- =?utf-8?B?YkhYRWJpUWIrSmRIcGVLTGsxazYvUzEyVXVabHNyekdZTCtuVnZCUXJqdWZ2?=
- =?utf-8?B?OStmVEZDS0pTVW5OZ3Y0MmRNZGF2VERnMENleFFkTlFaL1RuZCtYWTZBSXV1?=
- =?utf-8?B?d3prTmkrdzk4dVdVdHlWV1dlZlBnUjdVRlVldGU5RDZ2VXVhc0dRb25ha3lw?=
- =?utf-8?B?UGlsaE1qSXRMYmxaRDg0ZmFPWnhaYkV0SUpKWkVCUXQ1TGp0SU92b1FCd3M0?=
- =?utf-8?B?T3lJUTZTQk9Da09zUlN2SkxxTXhtdkV1Z2Jsa3ZVZjRvUTMvdE1VYUhLUXZ4?=
- =?utf-8?B?ZUdmeHdHbnI3b3FZWlJ4WXFIUm1VMnhkVkdqMFFRSnZFY2lybU8xVmQ3QW5W?=
- =?utf-8?B?eHdOVEUyVU40dzZ4RlRIMlptRG9NSkRTS0JsVVpIM0dnR21yZ0hvNkRRUm1u?=
- =?utf-8?B?L05sRDFpSFBPdURETE9HYVNVVzNqSmxCMVdILzNlTTdBVVBuaFFHQlFnZGNi?=
- =?utf-8?Q?ySYWiKq0edsnw4EJMTdUHBkwJ?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 6 Jan 2023 01:02:29 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332163D2A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 22:02:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYyOh5y_1672984943;
+Received: from 30.97.49.39(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VYyOh5y_1672984943)
+          by smtp.aliyun-inc.com;
+          Fri, 06 Jan 2023 14:02:24 +0800
+Message-ID: <d47e1048-ed3e-ee4b-9da0-bf4f289debc3@linux.alibaba.com>
+Date:   Fri, 6 Jan 2023 14:02:22 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4bde912-bfa7-47aa-d4c1-08daefab0f5c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2023 05:58:40.2222
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b90Dgxbmf17c0HcVb1KQsBMhFzBZFk2NXvBrcHs3w88h9WzupCLeDQMcd5B2DSo7dHah3frkfe9b1lYT4WZOLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5482
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3] erofs: replace erofs_unzipd workqueue with per-cpu
+ threads
+To:     Sandeep Dhavale <dhavale@google.com>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Gao Xiang <xiang@kernel.org>
+References: <20230106054105.3998588-1-dhavale@google.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230106054105.3998588-1-dhavale@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,83 +46,384 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIFd5ZXMuIA0KDQo+IC0tLS0t
-T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEthcm55LCBXeWVzIDxXeWVzLkthcm55QGFt
-ZC5jb20+DQo+IFNlbnQ6IEZyaWRheSwgSmFudWFyeSA2LCAyMDIzIDE6MjIgUE0NCj4gVG86IFl1
-YW4sIFBlcnJ5IDxQZXJyeS5ZdWFuQGFtZC5jb20+OyByYWZhZWwuai53eXNvY2tpQGludGVsLmNv
-bTsNCj4gTGltb25jaWVsbG8sIE1hcmlvIDxNYXJpby5MaW1vbmNpZWxsb0BhbWQuY29tPjsgSHVh
-bmcsIFJheQ0KPiA8UmF5Lkh1YW5nQGFtZC5jb20+OyB2aXJlc2gua3VtYXJAbGluYXJvLm9yZw0K
-PiBDYzogU2hhcm1hLCBEZWVwYWsgPERlZXBhay5TaGFybWFAYW1kLmNvbT47IEZvbnRlbm90LCBO
-YXRoYW4NCj4gPE5hdGhhbi5Gb250ZW5vdEBhbWQuY29tPjsgRGV1Y2hlciwgQWxleGFuZGVyDQo+
-IDxBbGV4YW5kZXIuRGV1Y2hlckBhbWQuY29tPjsgSHVhbmcsIFNoaW1tZXINCj4gPFNoaW1tZXIu
-SHVhbmdAYW1kLmNvbT47IER1LCBYaWFvamlhbiA8WGlhb2ppYW4uRHVAYW1kLmNvbT47IE1lbmcs
-DQo+IExpIChKYXNzbWluZSkgPExpLk1lbmdAYW1kLmNvbT47IGxpbnV4LXBtQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2OSAwNi8xM10gY3B1ZnJlcTogYW1kLXBzdGF0ZTogaW1wbGVtZW50IFBzdGF0ZSBFUFAN
-Cj4gc3VwcG9ydCBmb3IgdGhlIEFNRCBwcm9jZXNzb3JzDQo+IA0KPiBIaSBQZXJyeSwNCj4gDQo+
-IE9uIDEyLzI1LzIwMjIgMTA6MDQgUE0sIFBlcnJ5IFl1YW4gd3JvdGU6DQo+IC0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPjgtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-DQo+ID4gK3N0YXRpYyBzdHJ1Y3QgY3B1ZnJlcV9kcml2ZXIgYW1kX3BzdGF0ZV9lcHBfZHJpdmVy
-ID0gew0KPiA+ICsJLmZsYWdzCQk9IENQVUZSRVFfQ09OU1RfTE9PUFMsDQo+ID4gKwkudmVyaWZ5
-CQk9IGFtZF9wc3RhdGVfZXBwX3ZlcmlmeV9wb2xpY3ksDQo+ID4gKwkuc2V0cG9saWN5CT0gYW1k
-X3BzdGF0ZV9lcHBfc2V0X3BvbGljeSwNCj4gPiArCS5pbml0CQk9IGFtZF9wc3RhdGVfZXBwX2Nw
-dV9pbml0LA0KPiA+ICsJLmV4aXQJCT0gYW1kX3BzdGF0ZV9lcHBfY3B1X2V4aXQsDQo+ID4gKwku
-bmFtZQkJPSAiYW1kX3BzdGF0ZV9lcHAiLA0KPiANCj4gU21hbGwgbml0LCBhbWRfcHN0YXRlX2Ry
-aXZlciBuYW1lIGlzICJhbWQtcHN0YXRlIiwgd2hlcmVhcyBoZXJlIGZvcg0KPiBhbWRfcHN0YXRl
-X2VwcF9kcml2ZXIgbmFtZSAiYW1kX3BzdGF0ZV9lcHAiIGlzIHVzZWQuDQo+IFNob3VsZCBhbWRf
-cHN0YXRlX2RyaXZlciByZW5hbWVkICJhbWRfcHN0YXRlIj8NCg0KRm9yIHRoZSBub24tZXBwIGFu
-ZCBlcHAgZHJpdmVyIG5hbWUsIEkgc3VnZ2VzdCB0byBrZWVwIHRoZSBzYW1lIHJ1bGUgZm9yIHRo
-ZSBuYW1lLiBidXQgaXQgZGVwZW5kcyBvbiBSYXkgd291bGQgbGlrZSB0byBjaGFuZ2UgaXQgb3Ig
-bm90IGZvciBub24tZXBwIGRyaXZlciBuYW1lLg0KDQoNCj4gDQo+ID4gKwkuYXR0cgkJPSBhbWRf
-cHN0YXRlX2VwcF9hdHRyLA0KPiA+ICt9Ow0KPiA+ICsNCj4gPiAgc3RhdGljIGludCBfX2luaXQg
-YW1kX3BzdGF0ZV9pbml0KHZvaWQpICB7DQo+ID4gIAlpbnQgcmV0Ow0KPiA+IEBAIC02NTYsNyAr
-MTAxMiw4IEBAIHN0YXRpYyBpbnQgX19pbml0IGFtZF9wc3RhdGVfaW5pdCh2b2lkKQ0KPiA+ICAJ
-LyogY2FwYWJpbGl0eSBjaGVjayAqLw0KPiA+ICAJaWYgKGJvb3RfY3B1X2hhcyhYODZfRkVBVFVS
-RV9DUFBDKSkgew0KPiA+ICAJCXByX2RlYnVnKCJBTUQgQ1BQQyBNU1IgYmFzZWQgZnVuY3Rpb25h
-bGl0eSBpcw0KPiBzdXBwb3J0ZWRcbiIpOw0KPiA+IC0JCWFtZF9wc3RhdGVfZHJpdmVyLmFkanVz
-dF9wZXJmID0gYW1kX3BzdGF0ZV9hZGp1c3RfcGVyZjsNCj4gPiArCQlpZiAoY3BwY19zdGF0ZSA9
-PSBBTURfUFNUQVRFX1BBU1NJVkUpDQo+ID4gKwkJCWRlZmF1bHRfcHN0YXRlX2RyaXZlci0+YWRq
-dXN0X3BlcmYgPQ0KPiBhbWRfcHN0YXRlX2FkanVzdF9wZXJmOw0KPiA+ICAJfSBlbHNlIHsNCj4g
-PiAgCQlwcl9kZWJ1ZygiQU1EIENQUEMgc2hhcmVkIG1lbW9yeSBiYXNlZCBmdW5jdGlvbmFsaXR5
-IGlzDQo+IHN1cHBvcnRlZFxuIik7DQo+ID4gIAkJc3RhdGljX2NhbGxfdXBkYXRlKGFtZF9wc3Rh
-dGVfZW5hYmxlLCBjcHBjX2VuYWJsZSk7IEBAIC0NCj4gNjY3LDE0DQo+ID4gKzEwMjQsMTMgQEAg
-c3RhdGljIGludCBfX2luaXQgYW1kX3BzdGF0ZV9pbml0KHZvaWQpDQo+ID4gIAkvKiBlbmFibGUg
-YW1kIHBzdGF0ZSBmZWF0dXJlICovDQo+ID4gIAlyZXQgPSBhbWRfcHN0YXRlX2VuYWJsZSh0cnVl
-KTsNCj4gPiAgCWlmIChyZXQpIHsNCj4gPiAtCQlwcl9lcnIoImZhaWxlZCB0byBlbmFibGUgYW1k
-LXBzdGF0ZSB3aXRoIHJldHVybiAlZFxuIiwgcmV0KTsNCj4gPiArCQlwcl9lcnIoImZhaWxlZCB0
-byBlbmFibGUgd2l0aCByZXR1cm4gJWRcbiIsIHJldCk7DQo+ID4gIAkJcmV0dXJuIHJldDsNCj4g
-PiAgCX0NCj4gPg0KPiA+IC0JcmV0ID0gY3B1ZnJlcV9yZWdpc3Rlcl9kcml2ZXIoJmFtZF9wc3Rh
-dGVfZHJpdmVyKTsNCj4gPiArCXJldCA9IGNwdWZyZXFfcmVnaXN0ZXJfZHJpdmVyKGRlZmF1bHRf
-cHN0YXRlX2RyaXZlcik7DQo+ID4gIAlpZiAocmV0KQ0KPiA+IC0JCXByX2VycigiZmFpbGVkIHRv
-IHJlZ2lzdGVyIGFtZF9wc3RhdGVfZHJpdmVyIHdpdGgNCj4gcmV0dXJuICVkXG4iLA0KPiA+IC0J
-CSAgICAgICByZXQpOw0KPiA+ICsJCXByX2VycigiZmFpbGVkIHRvIHJlZ2lzdGVyIHdpdGggcmV0
-dXJuICVkXG4iLCByZXQpOw0KPiA+DQo+ID4gIAlyZXR1cm4gcmV0Ow0KPiA+ICB9DQo+ID4gQEAg
-LTY5Niw2ICsxMDUyLDEyIEBAIHN0YXRpYyBpbnQgX19pbml0IGFtZF9wc3RhdGVfcGFyYW0oY2hh
-ciAqc3RyKQ0KPiA+ICAJCWlmIChjcHBjX3N0YXRlID09IEFNRF9QU1RBVEVfRElTQUJMRSkNCj4g
-PiAgCQkJcHJfaW5mbygiZHJpdmVyIGlzIGV4cGxpY2l0bHkgZGlzYWJsZWRcbiIpOw0KPiA+DQo+
-ID4gKwkJaWYgKGNwcGNfc3RhdGUgPT0gQU1EX1BTVEFURV9BQ1RJVkUpDQo+ID4gKwkJCWRlZmF1
-bHRfcHN0YXRlX2RyaXZlciA9ICZhbWRfcHN0YXRlX2VwcF9kcml2ZXI7DQo+ID4gKw0KPiA+ICsJ
-CWlmIChjcHBjX3N0YXRlID09IEFNRF9QU1RBVEVfUEFTU0lWRSkNCj4gPiArCQkJZGVmYXVsdF9w
-c3RhdGVfZHJpdmVyID0gJmFtZF9wc3RhdGVfZHJpdmVyOw0KPiA+ICsNCj4gPiAgCQlyZXR1cm4g
-MDsNCj4gPiAgCX0NCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2FtZC1wc3Rh
-dGUuaCBiL2luY2x1ZGUvbGludXgvYW1kLXBzdGF0ZS5oDQo+ID4gaW5kZXggZGFlMmNlMGY2NzM1
-Li44MzQxYTJhMjk0OGEgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9saW51eC9hbWQtcHN0YXRl
-LmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2FtZC1wc3RhdGUuaA0KPiA+IEBAIC00Nyw2ICs0
-NywxMCBAQCBzdHJ1Y3QgYW1kX2FwZXJmX21wZXJmIHsNCj4gPiAgICogQHByZXY6IExhc3QgQXBl
-cmYvTXBlcmYvdHNjIGNvdW50IHZhbHVlIHJlYWQgZnJvbSByZWdpc3Rlcg0KPiA+ICAgKiBAZnJl
-cTogY3VycmVudCBjcHUgZnJlcXVlbmN5IHZhbHVlDQo+ID4gICAqIEBib29zdF9zdXBwb3J0ZWQ6
-IGNoZWNrIHdoZXRoZXIgdGhlIFByb2Nlc3NvciBvciBTQklPUyBzdXBwb3J0cw0KPiA+IGJvb3N0
-IG1vZGUNCj4gPiArICogQGVwcF9wb2xpY3k6IExhc3Qgc2F2ZWQgcG9saWN5IHVzZWQgdG8gc2V0
-IGVuZXJneS1wZXJmb3JtYW5jZQ0KPiA+ICsgcHJlZmVyZW5jZQ0KPiA+ICsgKiBAZXBwX2NhY2hl
-ZDogQ2FjaGVkIENQUEMgZW5lcmd5LXBlcmZvcm1hbmNlIHByZWZlcmVuY2UgdmFsdWUNCj4gPiAr
-ICogQHBvbGljeTogQ3B1ZnJlcSBwb2xpY3kgdmFsdWUNCj4gPiArICogQGNwcGNfY2FwMV9jYWNo
-ZWQgQ2FjaGVkIE1TUl9BTURfQ1BQQ19DQVAxIHJlZ2lzdGVyIHZhbHVlDQo+ID4gICAqDQo+ID4g
-ICAqIFRoZSBhbWRfY3B1ZGF0YSBpcyBrZXkgcHJpdmF0ZSBkYXRhIGZvciBlYWNoIENQVSB0aHJl
-YWQgaW4gQU1EIFAtDQo+IFN0YXRlLCBhbmQNCj4gPiAgICogcmVwcmVzZW50cyBhbGwgdGhlIGF0
-dHJpYnV0ZXMgYW5kIGdvYWxzIHRoYXQgQU1EIFAtU3RhdGUgcmVxdWVzdHMgYXQNCj4gcnVudGlt
-ZS4NCj4gPiBAQCAtNzIsNiArNzYsMTIgQEAgc3RydWN0IGFtZF9jcHVkYXRhIHsNCj4gPg0KPiA+
-ICAJdTY0CWZyZXE7DQo+ID4gIAlib29sCWJvb3N0X3N1cHBvcnRlZDsNCj4gPiArDQo+ID4gKwkv
-KiBFUFAgZmVhdHVyZSByZWxhdGVkIGF0dHJpYnV0ZXMqLw0KPiA+ICsJczE2CWVwcF9wb2xpY3k7
-DQo+ID4gKwlzMTYJZXBwX2NhY2hlZDsNCj4gPiArCXUzMglwb2xpY3k7DQo+ID4gKwl1NjQJY3Bw
-Y19jYXAxX2NhY2hlZDsNCj4gPiAgfTsNCj4gPg0KPiA+ICAvKg0KPiANCj4gLS0NCj4gVGhhbmtz
-ICYgUmVnYXJkcywNCj4gV3llcw0K
+Hi Sandeep,
+
+On 2023/1/6 13:41, Sandeep Dhavale wrote:
+> Using per-cpu thread pool we can reduce the scheduling latency compared
+> to workqueue implementation. With this patch scheduling latency and
+> variation is reduced as per-cpu threads are high priority kthread_workers.
+> 
+> The results were evaluated on arm64 Android devices running 5.10 kernel.
+> 
+> The table below shows resulting improvements of total scheduling latency
+> for the same app launch benchmark runs with 50 iterations. Scheduling
+> latency is the latency between when the task (workqueue kworker vs
+> kthread_worker) became eligible to run to when it actually started
+> running.
+> +-------------------------+-----------+----------------+---------+
+> |                         | workqueue | kthread_worker |  diff   |
+> +-------------------------+-----------+----------------+---------+
+> | Average (us)            |     15253 |           2914 | -80.89% |
+> | Median (us)             |     14001 |           2912 | -79.20% |
+> | Minimum (us)            |      3117 |           1027 | -67.05% |
+> | Maximum (us)            |     30170 |           3805 | -87.39% |
+> | Standard deviation (us) |      7166 |            359 |         |
+> +-------------------------+-----------+----------------+---------+
+> 
+> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+> ---
+> V2 -> V3
+> Fix a warning Reported-by: kernel test robot <lkp@intel.com>
+> 
+> V1 -> V2
+> * Changed name of kthread_workers from z_erofs to erofs_worker
+> * Added kernel configuration to run kthread_workers at normal or
+>    high priority
+> * Added cpu hotplug support
+> * Added wrapped kthread_workers under worker_pool
+> * Added one unbound thread in a pool to handle a context where
+>    we already stopped per-cpu kthread worker
+> * Updated commit message
+> 
+> Background: Boot times and cold app launch benchmarks are very
+> important to android ecosystem as they directly translate to
+> responsiveness from user point of view. While erofs provides
+> lot of important features like space savings, we saw some
+> performance penalty in cold app launch benchmarks in few scenarios.
+> Analysis showed that the significant variance was coming from the
+> scheduling cost while decompression cost was more or less the same.
+> 
+> Having per-cpu thread pool we can see from above table that this
+> variation is reduced by ~80% on average. Link to LPC 2022 slides and
+> talk at [1]
+> 
+> [1] https://lpc.events/event/16/contributions/1338/
+
+Let's move these words into the commit message as well for others to refer.
+
+I think look into (and try) this version later this week.
+
+Thanks,
+Gao Xiang
+
+> ---
+>   fs/erofs/Kconfig |  11 +++
+>   fs/erofs/zdata.c | 201 +++++++++++++++++++++++++++++++++++++++++------
+>   fs/erofs/zdata.h |   4 +-
+>   3 files changed, 192 insertions(+), 24 deletions(-)
+> 
+> diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
+> index 85490370e0ca..879f493c6641 100644
+> --- a/fs/erofs/Kconfig
+> +++ b/fs/erofs/Kconfig
+> @@ -108,3 +108,14 @@ config EROFS_FS_ONDEMAND
+>   	  read support.
+>   
+>   	  If unsure, say N.
+> +
+> +config EROFS_FS_KTHREAD_HIPRI
+> +	bool "EROFS high priority percpu kthread workers"
+> +	depends on EROFS_FS
+> +	default n
+> +	help
+> +	  EROFS uses per cpu kthread workers pool to carry out async work.
+> +	  This permits EROFS to configure per cpu kthread workers to run
+> +	  at higher priority.
+> +
+> +	  If unsure, say N.
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index ccf7c55d477f..b4bf2da72d1a 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -8,6 +8,8 @@
+>   #include "compress.h"
+>   #include <linux/prefetch.h>
+>   #include <linux/psi.h>
+> +#include <linux/slab.h>
+> +#include <linux/cpuhotplug.h>
+>   
+>   #include <trace/events/erofs.h>
+>   
+> @@ -184,26 +186,152 @@ typedef tagptr1_t compressed_page_t;
+>   #define tag_compressed_page_justfound(page) \
+>   	tagptr_fold(compressed_page_t, page, 1)
+>   
+> -static struct workqueue_struct *z_erofs_workqueue __read_mostly;
+> +struct erofs_kthread_worker_pool {
+> +	struct kthread_worker __rcu **workers;
+> +	struct kthread_worker *unbound_worker;
+> +};
+>   
+> -void z_erofs_exit_zip_subsystem(void)
+> +static struct erofs_kthread_worker_pool worker_pool;
+> +DEFINE_SPINLOCK(worker_pool_lock);
+> +
+> +static void erofs_destroy_worker_pool(void)
+>   {
+> -	destroy_workqueue(z_erofs_workqueue);
+> -	z_erofs_destroy_pcluster_pool();
+> +	unsigned int cpu;
+> +	struct kthread_worker *worker;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		worker = rcu_dereference_protected(
+> +				worker_pool.workers[cpu],
+> +				1);
+> +		rcu_assign_pointer(worker_pool.workers[cpu], NULL);
+> +
+> +		if (worker)
+> +			kthread_destroy_worker(worker);
+> +	}
+> +
+> +	if (worker_pool.unbound_worker)
+> +		kthread_destroy_worker(worker_pool.unbound_worker);
+> +
+> +	kfree(worker_pool.workers);
+>   }
+>   
+> -static inline int z_erofs_init_workqueue(void)
+> +static inline void erofs_set_worker_priority(struct kthread_worker *worker)
+>   {
+> -	const unsigned int onlinecpus = num_possible_cpus();
+> +#ifdef CONFIG_EROFS_FS_KTHREAD_HIPRI
+> +	sched_set_fifo_low(worker->task);
+> +#else
+> +	sched_set_normal(worker->task, 0);
+> +#endif
+> +}
+>   
+> -	/*
+> -	 * no need to spawn too many threads, limiting threads could minimum
+> -	 * scheduling overhead, perhaps per-CPU threads should be better?
+> -	 */
+> -	z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+> -					    WQ_UNBOUND | WQ_HIGHPRI,
+> -					    onlinecpus + onlinecpus / 4);
+> -	return z_erofs_workqueue ? 0 : -ENOMEM;
+> +static int erofs_create_kthread_workers(void)
+> +{
+> +	unsigned int cpu;
+> +	struct kthread_worker *worker;
+> +
+> +	for_each_online_cpu(cpu) {
+> +		worker = kthread_create_worker_on_cpu(cpu, 0, "erofs_worker/%u", cpu);
+> +		if (IS_ERR(worker)) {
+> +			erofs_destroy_worker_pool();
+> +			return -ENOMEM;
+> +		}
+> +		erofs_set_worker_priority(worker);
+> +		rcu_assign_pointer(worker_pool.workers[cpu], worker);
+> +	}
+> +
+> +	worker = kthread_create_worker(0, "erofs_unbound_worker");
+> +	if (IS_ERR(worker)) {
+> +		erofs_destroy_worker_pool();
+> +		return PTR_ERR(worker);
+> +	}
+> +	erofs_set_worker_priority(worker);
+> +	worker_pool.unbound_worker = worker;
+> +
+> +	return 0;
+> +}
+> +
+> +static int erofs_init_worker_pool(void)
+> +{
+> +	int err;
+> +
+> +	worker_pool.workers = kcalloc(num_possible_cpus(),
+> +			sizeof(struct kthread_worker *), GFP_ATOMIC);
+> +	if (!worker_pool.workers)
+> +		return -ENOMEM;
+> +	err = erofs_create_kthread_workers();
+> +
+> +	return err;
+> +}
+> +
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +static enum cpuhp_state erofs_cpuhp_state;
+> +static int erofs_cpu_online(unsigned int cpu)
+> +{
+> +	struct kthread_worker *worker;
+> +
+> +	worker = kthread_create_worker_on_cpu(cpu, 0, "erofs_worker/%u", cpu);
+> +	if (IS_ERR(worker))
+> +		return -ENOMEM;
+> +
+> +	erofs_set_worker_priority(worker);
+> +
+> +	spin_lock(&worker_pool_lock);
+> +	rcu_assign_pointer(worker_pool.workers[cpu], worker);
+> +	spin_unlock(&worker_pool_lock);
+> +
+> +	synchronize_rcu();
+> +
+> +	return 0;
+> +}
+> +
+> +static int erofs_cpu_offline(unsigned int cpu)
+> +{
+> +	struct kthread_worker *worker;
+> +
+> +	spin_lock(&worker_pool_lock);
+> +	worker = rcu_dereference_protected(worker_pool.workers[cpu],
+> +			lockdep_is_held(&worker_pool_lock));
+> +	rcu_assign_pointer(worker_pool.workers[cpu], NULL);
+> +	spin_unlock(&worker_pool_lock);
+> +
+> +	synchronize_rcu();
+> +
+> +	if (worker)
+> +		kthread_destroy_worker(worker);
+> +
+> +	return 0;
+> +}
+> +
+> +static int erofs_cpu_hotplug_init(void)
+> +{
+> +	int state;
+> +
+> +	state = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> +			"fs/erofs:online",
+> +			erofs_cpu_online, erofs_cpu_offline);
+> +	if (state < 0)
+> +		return state;
+> +
+> +	erofs_cpuhp_state = state;
+> +
+> +	return 0;
+> +}
+> +
+> +static void erofs_cpu_hotplug_destroy(void)
+> +{
+> +	if (erofs_cpuhp_state)
+> +		cpuhp_remove_state_nocalls(erofs_cpuhp_state);
+> +}
+> +#else /* !CONFIG_HOTPLUG_CPU */
+> +static inline int erofs_cpu_hotplug_init(void) { return 0; }
+> +static inline void erofs_cpu_hotplug_destroy(void) {}
+> +#endif
+> +
+> +void z_erofs_exit_zip_subsystem(void)
+> +{
+> +	erofs_cpu_hotplug_destroy();
+> +	erofs_destroy_worker_pool();
+> +	z_erofs_destroy_pcluster_pool();
+>   }
+>   
+>   int __init z_erofs_init_zip_subsystem(void)
+> @@ -211,10 +339,23 @@ int __init z_erofs_init_zip_subsystem(void)
+>   	int err = z_erofs_create_pcluster_pool();
+>   
+>   	if (err)
+> -		return err;
+> -	err = z_erofs_init_workqueue();
+> +		goto out_error_pcluster_pool;
+> +
+> +	err = erofs_init_worker_pool();
+>   	if (err)
+> -		z_erofs_destroy_pcluster_pool();
+> +		goto out_error_worker_pool;
+> +
+> +	err = erofs_cpu_hotplug_init();
+> +	if (err < 0)
+> +		goto out_error_cpuhp_init;
+> +
+> +	return err;
+> +
+> +out_error_cpuhp_init:
+> +	erofs_destroy_worker_pool();
+> +out_error_worker_pool:
+> +	z_erofs_destroy_pcluster_pool();
+> +out_error_pcluster_pool:
+>   	return err;
+>   }
+>   
+> @@ -1143,7 +1284,7 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
+>   	}
+>   }
+>   
+> -static void z_erofs_decompressqueue_work(struct work_struct *work)
+> +static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
+>   {
+>   	struct z_erofs_decompressqueue *bgq =
+>   		container_of(work, struct z_erofs_decompressqueue, u.work);
+> @@ -1156,6 +1297,20 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
+>   	kvfree(bgq);
+>   }
+>   
+> +static void erofs_schedule_kthread_work(struct kthread_work *work)
+> +{
+> +	struct kthread_worker *worker;
+> +	unsigned int cpu = raw_smp_processor_id();
+> +
+> +	rcu_read_lock();
+> +	worker = rcu_dereference(worker_pool.workers[cpu]);
+> +	if (!worker)
+> +		worker = worker_pool.unbound_worker;
+> +
+> +	kthread_queue_work(worker, work);
+> +	rcu_read_unlock();
+> +}
+> +
+>   static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+>   				       bool sync, int bios)
+>   {
+> @@ -1170,15 +1325,15 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+>   
+>   	if (atomic_add_return(bios, &io->pending_bios))
+>   		return;
+> -	/* Use workqueue and sync decompression for atomic contexts only */
+> +	/* Use kthread_workers and sync decompression for atomic contexts only */
+>   	if (in_atomic() || irqs_disabled()) {
+> -		queue_work(z_erofs_workqueue, &io->u.work);
+> +		erofs_schedule_kthread_work(&io->u.work);
+>   		/* enable sync decompression for readahead */
+>   		if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
+>   			sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
+>   		return;
+>   	}
+> -	z_erofs_decompressqueue_work(&io->u.work);
+> +	z_erofs_decompressqueue_kthread_work(&io->u.work);
+>   }
+>   
+>   static struct page *pickup_page_for_submission(struct z_erofs_pcluster *pcl,
+> @@ -1306,7 +1461,7 @@ jobqueue_init(struct super_block *sb,
+>   			*fg = true;
+>   			goto fg_out;
+>   		}
+> -		INIT_WORK(&q->u.work, z_erofs_decompressqueue_work);
+> +		kthread_init_work(&q->u.work, z_erofs_decompressqueue_kthread_work);
+>   	} else {
+>   fg_out:
+>   		q = fgq;
+> @@ -1500,7 +1655,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+>   
+>   	/*
+>   	 * although background is preferred, no one is pending for submission.
+> -	 * don't issue workqueue for decompression but drop it directly instead.
+> +	 * don't issue kthread_work for decompression but drop it directly instead.
+>   	 */
+>   	if (!*force_fg && !nr_bios) {
+>   		kvfree(q[JQ_SUBMIT]);
+> diff --git a/fs/erofs/zdata.h b/fs/erofs/zdata.h
+> index d98c95212985..808bbbf71b7b 100644
+> --- a/fs/erofs/zdata.h
+> +++ b/fs/erofs/zdata.h
+> @@ -6,6 +6,8 @@
+>   #ifndef __EROFS_FS_ZDATA_H
+>   #define __EROFS_FS_ZDATA_H
+>   
+> +#include <linux/kthread.h>
+> +
+>   #include "internal.h"
+>   #include "tagptr.h"
+>   
+> @@ -107,7 +109,7 @@ struct z_erofs_decompressqueue {
+>   
+>   	union {
+>   		struct completion done;
+> -		struct work_struct work;
+> +		struct kthread_work work;
+>   	} u;
+>   
+>   	bool eio;
