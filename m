@@ -2,109 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE20465F819
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B153965F81C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236110AbjAFAXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 19:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S236145AbjAFAYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 19:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbjAFAXC (ORCPT
+        with ESMTP id S235829AbjAFAYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 19:23:02 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985A13D5E9
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 16:23:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672964581; x=1704500581;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=alDlSsUypPpOsQWLMrzHj8v2U7jXVVWbTrCGNn/m7Ng=;
-  b=WXZL/Cy0RwWUiQOAyiFK47bEMfhwVi71OHqYZOHPjQxqGEf33FlioAqf
-   8z2XyekPm/mVyb3m0bIu9QgafJ2W15NE2z01JHPWy30+yDT4qpfZ3aq7D
-   D+A+1g5WXThpDQfjGqXIfLndw1VuG7vTbzs7EUwUkAnTR9PW7I+xbiaRD
-   Cy+R8g0FOh9hj7/ifS5HyUy1O3Wt4RnF1+fIwf8o37Dpe3/FvZrjFzN6u
-   iZ/rDa5jXg0Of+YG2u2mT3zdRcXxa7oX5fEg1pmsBEGmaQco+kTMkKAf6
-   53+KyF+V3/ZevUG9Uv7Ohti8WdGifixQMoUWaVdDt4tEzoF/TJQmrUlZR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="302057500"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="302057500"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:23:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="655766568"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="655766568"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2023 16:22:59 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDaVe-0002kR-31;
-        Fri, 06 Jan 2023 00:22:58 +0000
-Date:   Fri, 6 Jan 2023 08:22:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thierry Reding <treding@nvidia.com>
-Subject: versioncheck: ./drivers/soc/tegra/cbb/tegra-cbb.c: 19
- linux/version.h not needed.
-Message-ID: <202301060848.p69LPv95-lkp@intel.com>
+        Thu, 5 Jan 2023 19:24:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E593D5E7;
+        Thu,  5 Jan 2023 16:24:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA471B81C1D;
+        Fri,  6 Jan 2023 00:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D0AC433EF;
+        Fri,  6 Jan 2023 00:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672964651;
+        bh=Pr+ByNbnKnyylNHymZV2KojcC95mHZk9AOH8Fd3/i0c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vj5bJav6AbfJrIGZRQRFk79a4eWhGWNCku0ikf98IQdE/cy6oYSJRR981IYDMPduN
+         ua3U0S7rIzOUnf+eQimZw0/cdjb4QbYolcAlip2PCMFwES+vf/dEGF3UJgSomx+9ho
+         B8FrEoWGtB9TL2kUcVgrVchpY7oFO86PcdEVRHacm3jf/4mcWi+8DnjNwZrsdhuPmh
+         CLO5eiTTRD7yYIEgtW0O7Arfsyda8nSU8yDTVE2q6PC8Jmj1MY/8ErIfh48Zs71pbr
+         MjkhN5uNOD2hpavHEfWFems11bzTuwj2zSx3scFx2yFarEnNuaSxRJ8gHi4uWMiF3w
+         /ZPyjFfwa650g==
+Date:   Thu, 5 Jan 2023 16:24:10 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Ying Hsu <yinghsu@chromium.org>, linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] Bluetooth: Fix possible deadlock in
+ rfcomm_sk_state_change
+Message-ID: <Y7dqKnQe8UUeQ/CD@x130>
+References: <20230103111221.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+ <Y7UiDn3Gi5YdNIoC@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7UiDn3Gi5YdNIoC@unreal>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
-commit: b7134422146692e096e807751656fc58ee1a717d soc/tegra: cbb: Add CBB 1.0 driver for Tegra194
-date:   4 months ago
-reproduce:
-        make versioncheck
+On 04 Jan 08:51, Leon Romanovsky wrote:
+>On Tue, Jan 03, 2023 at 11:12:46AM +0000, Ying Hsu wrote:
+>> There's a possible deadlock when two processes are connecting
+>> and closing concurrently:
+>>   + CPU0: __rfcomm_dlc_close locks rfcomm and then calls
+>>   rfcomm_sk_state_change which locks the sock.
+>>   + CPU1: rfcomm_sock_connect locks the socket and then calls
+>>   rfcomm_dlc_open which locks rfcomm.
+>>
+>> Here's the call trace:
+>>
+>> -> #2 (&d->lock){+.+.}-{3:3}:
+>>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+>>        __mutex_lock0x12f/0x1360 kernel/locking/mutex.c:747
+>>        __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
+>>        rfcomm_dlc_close+1e9/0x240 net/bluetooth/rfcomm/core.c:520
+>>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+>>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+>>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+>>        __sock_release+0xcd/0x280 net/socket.c:650
+>>        sock_close+0x1c/0x20 net/socket.c:1365
+>>        __fput+0x27c/0xa90 fs/file_table.c:320
+>>        task_work_run+0x16f/0x270 kernel/task_work.c:179
+>>        exit_task_work include/linux/task_work.h:38 [inline]
+>>        do_exit+0xaa8/0x2950 kernel/exit.c:867
+>>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+>>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
+>>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+>>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> -> #1 (rfcomm_mutex){+.+.}-{3:3}:
+>>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+>>        __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+>>        rfcomm_dlc_open+0x93/0xa80 net/bluetooth/rfcomm/core.c:425
+>>        rfcomm_sock_connect+0x329/0x450 net/bluetooth/rfcomm/sock.c:413
+>>        __sys_connect_file+0x153/0x1a0 net/socket.c:1976
+>>        __sys_connect+0x165/0x1a0 net/socket.c:1993
+>>        __do_sys_connect net/socket.c:2003 [inline]
+>>        __se_sys_connect net/socket.c:2000 [inline]
+>>        __x64_sys_connect+0x73/0xb0 net/socket.c:2000
+>>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> -> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+>>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
+>>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+>>        validate_chain kernel/locking/lockdep.c:3831 [inline]
+>>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+>>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
+>>        lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+>>        lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
+>>        lock_sock include/net/sock.h:1725 [inline]
+>>        rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+>>        __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
+>>        rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+>>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
+>>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
+>>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
+>>        __sock_release+0xcd/0x280 net/socket.c:650
+>>        sock_close+0x1c/0x20 net/socket.c:1365
+>>        __fput+0x27c/0xa90 fs/file_table.c:320
+>>        task_work_run+0x16f/0x270 kernel/task_work.c:179
+>>        exit_task_work include/linux/task_work.h:38 [inline]
+>>        do_exit+0xaa8/0x2950 kernel/exit.c:867
+>>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+>>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
+>>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+>>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+>> ---
+>> This commit has been tested with a C reproducer on qemu-x86_64.
+>>
+>>  net/bluetooth/rfcomm/sock.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+>> index 21e24da4847f..29f9a88a3dc8 100644
+>> --- a/net/bluetooth/rfcomm/sock.c
+>> +++ b/net/bluetooth/rfcomm/sock.c
+>> @@ -410,8 +410,10 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+>>  	d->sec_level = rfcomm_pi(sk)->sec_level;
+>>  	d->role_switch = rfcomm_pi(sk)->role_switch;
+>>
+>> +	release_sock(sk);
+>>  	err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
+>                                           ^^^^
+>Are you sure that "sk" still exists here after you called to release_sock(sk)?
+>What prevents from use-after-free here?
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+sk must be valid to be locked in first place.
+release_sock() has mutex unlock semantics so it doesn't free anything..
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
->> ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
->> ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./init/version.c: 19 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 301: need linux/version.h
-   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+from a quick review it doesn't seem to be necessary to keep the lock held
+around rfcomm_dlc_open, and looking into bt_sock_wait_state, it also
+releases the lock temporarily internally ..  so it won't matter if the lock
+got released temporarily earlier, IMHO. 
+Though you might want to make sure rfcomm_pi(sk)->src won't change,
+it seems like other functions use &rfcomm_sk_list.lock to protect it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Saeed Mahameed <saeed@kernel.org>
+
+>>  			      sa->rc_channel);
+>> +	lock_sock(sk);
+>>  	if (!err)
+>>  		err = bt_sock_wait_state(sk, BT_CONNECTED,
+>>  				sock_sndtimeo(sk, flags & O_NONBLOCK));
+>> --
+>> 2.39.0.314.g84b9a713c41-goog
+>>
