@@ -2,148 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F3365FCF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ADE65FCF5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbjAFIlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S232452AbjAFImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbjAFIlI (ORCPT
+        with ESMTP id S229532AbjAFIl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:41:08 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DC41661
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 00:41:05 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so596290wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 00:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQ+8HIJ9qo+uvPNDlSOLAl09pspajE/jGQLqn+GctwE=;
-        b=g+bL/kz4N0u4j4m6b4dDBq0ByVqnqvm8x9MhPflvSwxNOKVlwjRWcDcjMewidd8pDi
-         KiqhilCqKeGSqkBcg/g9XoUm0PScgVbw50cAMEhe2o5ozxTYa+ecG/5Z8/dP8B7LPr+i
-         +cNPiQXI3ohZaWPQQvFmFjlsZGaQz4UZ9e+CPZNFwyKPWZhznsbIOK2h0oQQ1MZucR5/
-         AW0h7Vc1AQ7cUhcmnwJbQRoWFhcKWwTR7n6p4oKA+myDvrizjOgCCzwYg1MjCg6iRD/U
-         KlcqvTWvjL8YAvdd9sZ21E+/ROXzlA8hPwl2ZWmvPm4r5ehf7jFFxpIpNA2MJvdkcZiY
-         HULg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQ+8HIJ9qo+uvPNDlSOLAl09pspajE/jGQLqn+GctwE=;
-        b=PuyC/837AkJGoFRLNan9DpU5bdoQlh4EgqpFMv8O/wRc+KxOAXl9t7FI//rcIL/NDK
-         hUZXNbU46XSoikMH4Ry7JYVqQ1PF8A3Xe8K9iaK5Wccg/NyQeCxw/vwMWJ48UtI+NuHx
-         Q0WSIZObFwrK0yBy4syWrBHnbKcQFza35+Yrz8Ym8lbWs1myKSE4YUyL/xvi8tvHUEck
-         T+i/OAXo5zTz13BkNlUaayXbIZxsiEdD8sJy6xoP4uvPZtoYRWbITb3oVEqgV8lx7VRb
-         grYFQD6g3W++Hylr0TWycfDQ2PMQkLyze9T0qUBVafM5Wf+3SQY7Wppz0rdENgPcsjIq
-         oZ3g==
-X-Gm-Message-State: AFqh2kqx7cVkh1i4zBTTALGL6Td2ykCd4361G3azYykRmQ40qeKkwVvU
-        jfBLGKVHdB29G9/Qt0EsmkV1fQ==
-X-Google-Smtp-Source: AMrXdXuO0btZmX5/hPLbDyMyJluSzegGErfB/GYYPmycI3+Pub+W4ovVH+QCq3bP5pijUvTokbz/JQ==
-X-Received: by 2002:a7b:c39a:0:b0:3d2:640:c4e5 with SMTP id s26-20020a7bc39a000000b003d20640c4e5mr37028702wmj.8.1672994464000;
-        Fri, 06 Jan 2023 00:41:04 -0800 (PST)
-Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f15-20020a7bcd0f000000b003d9a71ee54dsm854874wmj.36.2023.01.06.00.41.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 00:41:03 -0800 (PST)
-Message-ID: <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
-Date:   Fri, 6 Jan 2023 09:41:01 +0100
+        Fri, 6 Jan 2023 03:41:58 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467014166A;
+        Fri,  6 Jan 2023 00:41:56 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E181124E1BB;
+        Fri,  6 Jan 2023 16:41:48 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
+ 2023 16:41:48 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
+ 2023 16:41:48 +0800
+Message-ID: <e1e75e70-2143-defb-b6ff-1ec41df19bba@starfivetech.com>
+Date:   Fri, 6 Jan 2023 16:41:47 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
- combinations
+Subject: Re: [PATCH v2 3/3] riscv: dts: starfive: Add mmc node
 Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230105213856.1828360-1-andreas@kemnade.info>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230105213856.1828360-1-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221227122227.460921-1-william.qiu@starfivetech.com>
+ <20221227122227.460921-4-william.qiu@starfivetech.com>
+ <CAPDyKFqziA+PB__v8nJzgkTuM9ZszW8X2U-akvRFv0_qwZ22OA@mail.gmail.com>
+ <14433b44-8359-b9e8-446c-bb49e86bf48f@starfivetech.com>
+ <CAPDyKFrH=U-Sz1Kx2AJ+X_FXi9GcEdHXjO+aC=MXpGP_+xgOsQ@mail.gmail.com>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <CAPDyKFrH=U-Sz1Kx2AJ+X_FXi9GcEdHXjO+aC=MXpGP_+xgOsQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2023 22:38, Andreas Kemnade wrote:
-> Currently make dtbs_check shows lots of errors because imx*.dtsi does
-> not use single compatibles but combinations of them.
-> Allow all the combinations used there.
+
+
+On 2023/1/5 0:05, Ulf Hansson wrote:
+> On Wed, 4 Jan 2023 at 07:08, William Qiu <william.qiu@starfivetech.com> wrote:
+>>
+>>
+>>
+>> On 2023/1/2 22:03, Ulf Hansson wrote:
+>> > On Tue, 27 Dec 2022 at 13:22, William Qiu <william.qiu@starfivetech.com> wrote:
+>> >>
+>> >> This adds the mmc node for the StarFive JH7110 SoC.
+>> >> Set sdioo node to emmc and set sdio1 node to sd.
+>> >>
+>> >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> >> ---
+>> >>  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
+>> >>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
+>> >>  2 files changed, 63 insertions(+)
+>> >>
+>> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> >> index c8946cf3a268..d8244fd1f5a0 100644
+>> >> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> >> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> >> @@ -47,6 +47,31 @@ &clk_rtc {
+>> >>         clock-frequency = <32768>;
+>> >>  };
+>> >>
+>> >> +&mmc0 {
+>> >> +       max-frequency = <100000000>;
+>> >> +       card-detect-delay = <300>;
+>> >
+>> > Nitpick:  This seems redundant for a non-removable card!?
+>> >
+>>
+>> Will drop
+>>
+>> >> +       bus-width = <8>;
+>> >> +       cap-mmc-highspeed;
+>> >> +       mmc-ddr-1_8v;
+>> >> +       mmc-hs200-1_8v;
+>> >> +       non-removable;
+>> >> +       cap-mmc-hw-reset;
+>> >> +       post-power-on-delay-ms = <200>;
+>> >> +       status = "okay";
+>> >> +};
+>> >> +
+>> >> +&mmc1 {
+>> >> +       max-frequency = <100000000>;
+>> >> +       card-detect-delay = <300>;
+>> >
+>> > Nitpick: This looks redundant for polling based card detection
+>> > (broken-cd is set a few lines below).
+>> >
+>>
+>> Will drop
+>>
+>> >> +       bus-width = <4>;
+>> >> +       no-sdio;
+>> >> +       no-mmc;
+>> >> +       broken-cd;
+>> >> +       cap-sd-highspeed;
+>> >> +       post-power-on-delay-ms = <200>;
+>> >> +       status = "okay";
+>> >> +};
+>> >> +
+>> >>  &gmac0_rmii_refin {
+>> >>         clock-frequency = <50000000>;
+>> >>  };
+>> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> >> index c22e8f1d2640..08a780d2c0f4 100644
+>> >> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> >> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> >> @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
+>> >>                         #reset-cells = <1>;
+>> >>                 };
+>> >>
+>> >> +               syscon: syscon@13030000 {
+>> >> +                       compatible = "starfive,syscon", "syscon";
+>> >> +                       reg = <0x0 0x13030000 0x0 0x1000>;
+>> >> +               };
+>> >> +
+>> >>                 gpio: gpio@13040000 {
+>> >>                         compatible = "starfive,jh7110-sys-pinctrl";
+>> >>                         reg = <0x0 0x13040000 0x0 0x10000>;
+>> >> @@ -433,5 +438,38 @@ uart5: serial@12020000 {
+>> >>                         reg-shift = <2>;
+>> >>                         status = "disabled";
+>> >>                 };
+>> >> +
+>> >> +               /* unremovable emmc as mmcblk0 */
+>> >
+>> > Don't confuse the mmc0 node name with mmcblk0. There is no guarantee
+>> > that this is true, unless you also specify an alias.
+>> >
+>>
+>> Hi Ulf,
+>>
+>> Thank you for taking time to review and provide helpful comments for this patch.
+>> Actually we define mmc0 as eMMC, which is mmcblk0 in the kernel, and define mmc1 as SDIO,
+>> which is mmcblk1 in the kernel, so it's not confuse.
+>>
 > 
-> Patches fixing the dtsi files according to binding documentation were
-> submitted multiple times and are commonly rejected, so relax the rules.
-> Example:
-> https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
+> My point is, mmc0 from DT node perspective doesn't necessarily need to
+> map to mmc0, as that depends on the "probe" order of the devices. At
+> least for the Linux kernel, mmc0 from DT point of view, could end up
+> being mmc1.
 > 
-> Reason: compatibility of new dtbs with old kernels or bootloaders.
+> To avoid confusion, please drop the "mmcblk*" here. It's anyway a
+> Linux specific thing. Don't get me wrong, feel free to keep the
+> information about eMMC and SDIO for the corresponding mmc controller
+> node.
 > 
-> This will significantly reduce noise on make dtbs_check.
+> Moreover, if you can't use PARTID/UUID to find the rootfs device -
+> then you may use an aliases node, to let mmc0 to be enumerated as
+> mmc0, for example. See below.
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
->  .../bindings/mmc/fsl-imx-esdhc.yaml           | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> aliases {
+>      mmc0 = &mmc0;
+> }
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> index dc6256f04b42..118ebb75f136 100644
-> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> @@ -37,6 +37,30 @@ properties:
->            - fsl,imx8mm-usdhc
->            - fsl,imxrt1050-usdhc
->            - nxp,s32g2-usdhc
+> Kind regards
+> Uffe
 
-You must drop the items from enum above. Binding saying:
-compatible="A"
-or:
-compatible="A", "B"
+Hi Uffe,
 
-is not correct. Either A is or is not compatible with B.
+Thank you for taking time to review.
+I'll take your suggestion into consideration and drop the "mmcblk*".
 
-> +      - items:
-> +          - const: fsl,imx50-esdhc
-> +          - const: fsl,imx53-esdhc
-> +      - items:
-> +          - const: fsl,imx6sl-usdhc
-> +          - const: fsl,imx6q-usdhc
-> +      - items:
-> +          - const: fsl,imx6sll-usdhc
-> +          - const: fsl,imx6sx-usdhc
-> +      - items:
-> +          - const: fsl,imx6sx-usdhc
-> +          - const: fsl,imx6sl-usdhc
-> +      - items:
-> +          - const: fsl,imx6ul-usdhc
-> +          - const: fsl,imx6sx-usdhc
-> +      - items:
-> +          - const: fsl,imx6ull-usdhc
-> +          - const: fsl,imx6sx-usdhc
-> +      - items:
-> +          - const: fsl,imx7d-usdhc
-> +          - const: fsl,imx6sl-usdhc
-> +      - items:
-> +          - const: fsl,imx7ulp-usdhc
-> +          - const: fsl,imx6sx-usdhc
-
-Half of these should be enum (6ul, 7ulp etc) with fallback.
-
->        - items:
->            - enum:
->                - fsl,imx8mq-usdhc
-
-Best regards,
-Krzysztof
-
+Best Regards
+William Qiu
