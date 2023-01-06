@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6925F660442
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E7C66044D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjAFQ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S231440AbjAFQdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbjAFQ1o (ORCPT
+        with ESMTP id S229877AbjAFQdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:27:44 -0500
+        Fri, 6 Jan 2023 11:33:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43865DE44;
-        Fri,  6 Jan 2023 08:27:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB61876EFB;
+        Fri,  6 Jan 2023 08:33:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F69AB81D9C;
-        Fri,  6 Jan 2023 16:27:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E830AC433D2;
-        Fri,  6 Jan 2023 16:27:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7F66B81E05;
+        Fri,  6 Jan 2023 16:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CB3AC433EF;
+        Fri,  6 Jan 2023 16:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673022459;
-        bh=AzKGgYVMInMdjQmyjjFqHOTYxjbhsiHA9tT3/tUbEUk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZDpwNPQ/qxOtAqUGh6oWYPqYoW+8fR5Rdb9DsxBjoXcyX4mhoBNctjDttvQkh+cmW
-         AA60OgAQLh21G+T4GyaMeG8o3WYi5cLDIaZvVkOCnWAFirx0JwS1FvLCbEu7f+O7kC
-         1p9HJyCCbwxqCSUD9jUJVjoedaIMkVM+jNUVQ+d63bjdkFFD1a0c9R+mpYYgONnkX9
-         lrB2qw0ruuHEJk3DAJog6bfXyH3QuCe7YYnrwyHGqKPMY11wx6c1Xe3NKWZo9uzAKT
-         lm0MWUqGejl4KhbN/7wZX8yY4lQifK+mIUiQ/zwitfn5t5nPZq7KZXVDQXK+inRtLq
-         Z2kunqJCvvMGA==
-Date:   Fri, 6 Jan 2023 10:27:44 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        linux-hardening@vger.kernel.org, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-wired-lan] [PATCH] net/i40e: Replace 0-length array with
- flexible array
-Message-ID: <Y7hMALdQP7MC+mD7@work>
-References: <20230105234557.never.799-kees@kernel.org>
+        s=k20201202; t=1673022792;
+        bh=dIyjAVQ4zC1CK3pgE3nLqfcLv9FRSRVsJPB2VsHT/I4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=B04hPGSdBRClWe7Xv41li5rL1cWZY7ANkHf/Mg8AHmSb0o2LuEq5XJ2uJbJtRMJL5
+         aYiLSS49PR0iAU9PvqLRfEwN2ULjI8w8A0qF3mHU83y4/CXwkbYiOX8QU/GXZ8ElbG
+         gq7t11gSV88v6vbjNQ1f9aG4DdZOw1s3wbOBBapc07157xwcNBToWyA5D8UmF4jX4i
+         atyG8ufzbwpQb5xLnWS+HI2TylMMkLZCUhs8q8SUojEI/vd45vlVb8E8nccu+thA/F
+         jR8lOvucJmUjXys9fwzMQbgOU+epVISYLs1gU1DYlIzLhaGYJGLGoXXIglAEn+V7oQ
+         xMpSrxvx1+kiQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20230104093631.15611-1-marcan@marcan.st>
+References: <20230104093631.15611-1-marcan@marcan.st>
+Subject: Re: [PATCH 0/5] SPI core CS delay fixes and additions
+Message-Id: <167302278905.177027.5835777381294854019.b4-ty@kernel.org>
+Date:   Fri, 06 Jan 2023 16:33:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105234557.never.799-kees@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-214b3
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,61 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 03:46:01PM -0800, Kees Cook wrote:
-> Zero-length arrays are deprecated[1]. Replace struct i40e_lump_tracking's
-> "list" 0-length array with a flexible array. Detected with GCC 13,
-> using -fstrict-flex-arrays=3:
+On Wed, 04 Jan 2023 18:36:26 +0900, Hector Martin wrote:
+> Commits f6c911f3308c ("spi: dt-bindings: Introduce
+> spi-cs-setup-ns property") and 33a2fde5f77b ("spi: Introduce
+> spi-cs-setup-ns property") introduced a new property to represent the
+> CS setup delay in the device tree, but they have some issues:
 > 
-> In function 'i40e_put_lump',
->     inlined from 'i40e_clear_interrupt_scheme' at drivers/net/ethernet/intel/i40e/i40e_main.c:5145:2:
-> drivers/net/ethernet/intel/i40e/i40e_main.c:278:27: warning: array subscript <unknown> is outside array bounds of 'u16[0]' {aka 'short unsigned int[]'} [-Warray-bounds=]
->   278 |                 pile->list[i] = 0;
->       |                 ~~~~~~~~~~^~~
-> drivers/net/ethernet/intel/i40e/i40e.h: In function 'i40e_clear_interrupt_scheme':
-> drivers/net/ethernet/intel/i40e/i40e.h:179:13: note: while referencing 'list'
->   179 |         u16 list[0];
->       |             ^~~~
+> - The property is only parsed as a 16-bit integer number of nanoseconds,
+>   which limits the maximum value to ~65us. This is not a reasonable
+>   upper limit, as some devices might need a lot more.
+> - The property name is inconsistent with other delay properties, which
+>   use a "*-delay-ns" naming scheme.
+> - Only the setup delay is introduced, but not the related hold and
+>   inactive delay times.
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-> 
-> Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: intel-wired-lan@lists.osuosl.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> [...]
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
---
-Gustavo
 
-> ---
->  drivers/net/ethernet/intel/i40e/i40e.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e.h b/drivers/net/ethernet/intel/i40e/i40e.h
-> index 60e351665c70..3a1c28ca5bb4 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e.h
-> +++ b/drivers/net/ethernet/intel/i40e/i40e.h
-> @@ -176,7 +176,7 @@ enum i40e_interrupt_policy {
->  
->  struct i40e_lump_tracking {
->  	u16 num_entries;
-> -	u16 list[0];
-> +	u16 list[];
->  #define I40E_PILE_VALID_BIT  0x8000
->  #define I40E_IWARP_IRQ_PILE_ID  (I40E_PILE_VALID_BIT - 2)
->  };
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> Intel-wired-lan mailing list
-> Intel-wired-lan@osuosl.org
-> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+[1/5] spi: dt-bindings: Rename spi-cs-setup-ns to spi-cs-setup-delay-ns
+      commit: 38892ea4cefbb6ed3a91e76d3af84a1f8077d2d4
+[2/5] spi: Rename spi-cs-setup-ns property to spi-cs-setup-delay-ns
+      commit: e0fe6a31cac84735939c29d1e05055d58325c6c0
+[3/5] spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
+      (no commit info)
+[4/5] spi: dt-bindings: Add hold/inactive CS delay peripheral properties
+      (no commit info)
+[5/5] spi: Parse hold/inactive CS delay values from the DT
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
