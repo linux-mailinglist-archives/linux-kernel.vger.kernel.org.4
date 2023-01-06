@@ -2,207 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2366096D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A41660980
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjAFWVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 17:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S236232AbjAFW2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 17:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjAFWVD (ORCPT
+        with ESMTP id S231395AbjAFW2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 17:21:03 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404C7DE26;
-        Fri,  6 Jan 2023 14:21:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673043663; x=1704579663;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fsHOPPQFiulqGu7o78qgPixVmSbGcMUL81E6/CjfVe4=;
-  b=PAEGPmbaz3hq7KEx+K+xpiPe3dvHM1v6r/SLBL3YWaBu5o2YqhogsAWw
-   F9o2jfggjQAhXv/7dR6TTD+oXTQPSTZ1gIREwNGbG86392/uZmr76vAs1
-   S+PIgWwUvnipPPQAto27AnIPY9Z4h56ZS04c9iKpcC5oQ8Wxcny9o2E10
-   HyXbeS6w6OWg/+/GXnEJmuqzc+nsL0VwMPriZCD5PrCDXR5IiHJwx8h7H
-   6ARaJQDLYnm3AVZqMn5LgJUu7o0cM8/1YGTXlyuq3Dwk2YN1OGDB3spAh
-   +2NTbPxKSI9ZLFkbr/3kDn/40xlSrtwi4Aetx55GOjSerm/9VwsmTAaO+
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="310370554"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="310370554"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:21:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="606025616"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="606025616"
-Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:21:01 -0800
-Message-ID: <e1a55f50-efc0-5098-1a2d-f0eaa0b51a82@intel.com>
-Date:   Fri, 6 Jan 2023 14:21:01 -0800
+        Fri, 6 Jan 2023 17:28:41 -0500
+X-Greylist: delayed 359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 14:28:39 PST
+Received: from a27-19.smtp-out.us-west-2.amazonses.com (a27-19.smtp-out.us-west-2.amazonses.com [54.240.27.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9F485CAA;
+        Fri,  6 Jan 2023 14:28:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ude52klaz7ukvnrchdbsicqdl2lnui6h; d=aaront.org; t=1673043759;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+        bh=IY8vnxo83o2Y6gMUZqHh+QTdUHhVKEY+SOxvGnmpdHg=;
+        b=PzJxcT0U+Y7PPepn/l0fSGHaFMAE4Z6Nobcb8Y7BLD49uS+ucpHfD/hBcqtjSiop
+        bEu5zTsKilWNQKuoNHe3/B5SbWfZ6cSemOVNswFIfYARkKiTyREgYp7Rr07/lJSrfq+
+        5HYKB5ApZ5L0ezFR445IWVVr/dzuII2MsQsKQF4U=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1673043759;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+        bh=IY8vnxo83o2Y6gMUZqHh+QTdUHhVKEY+SOxvGnmpdHg=;
+        b=M+/LshSr7RcA29c1Uh1QjtkHM2viQZrAjQ8zPl7vMU1FvYCwwUUe3O11YUz0IlHL
+        0PLYuNarCYlfPvPHsBEvmPbnMUiQHhud9nZWeiPSFXpV/mMWiNpa41elf0xA9Yne7GD
+        AhWbzAcOUs3k3d0KhqObuNIo7ETLpG2fCji/THMo=
+From:   Aaron Thompson <dev@aaront.org>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org, Aaron Thompson <dev@aaront.org>
+Subject: [PATCH v3 0/1] Pages not released from memblock to the buddy allocator
+Date:   Fri, 6 Jan 2023 22:22:39 +0000
+Message-ID: <01010185892dd125-7738e4af-55c6-43b6-9cd9-d52dfea959d9-000000@us-west-2.amazonses.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 12/16] x86/virt/tdx: Designate the global KeyID and
- configure the TDX module
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
-        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1670566861.git.kai.huang@intel.com>
- <d7b01f396908da796644e58298a34c1f8a140be7.1670566861.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <d7b01f396908da796644e58298a34c1f8a140be7.1670566861.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Feedback-ID: 1.us-west-2.OwdjDcIoZWY+bZWuVZYzryiuW455iyNkDEZFeL97Dng=:AmazonSES
+X-SES-Outgoing: 2023.01.06-54.240.27.19
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 22:52, Kai Huang wrote:
-> After a list of "TD Memory Regions" (TDMRs) has been constructed to
-> cover all TDX-usable memory regions, the next step is to pick up a TDX
-> private KeyID as the "global KeyID" (which protects, i.e. TDX module's
-> metadata), and configure it to the TDX module along with the TDMRs.
+Changelog:
+v3:
+  - Include the difference of managed pages in the commit message (suggested by
+    Ingo Molnar)
 
-For whatever reason, whenever I see "i.e." in a changelog, it's usually
-going off the rails.  This is no exception.  Let's also get rid of the
-passive voice:
+v2:
+  - Add comment in memblock_free_late() (suggested by Mike Rapoport)
+  - Improve commit message, including an explanation of the x86_64 EFI boot
+    issue (suggested by Mike Rapoport and David Rientjes)
 
-	The next step After constructing a list of "TD Memory Regions"
-	(TDMRs) to cover all TDX-usable memory regions is to designate a
-	TDX private KeyID as the "global KeyID".  This KeyID is used by
-	the TDX module for mapping things like the PAMT and other TDX
-	metadata.  This KeyID is passed to the TDX module at the same
-	time as the TDMRs.
+Hi all,
 
-> To keep things simple, just use the first TDX KeyID as the global KeyID.
+(I've CC'ed the KMSAN and x86 EFI maintainers as an FYI; the only code change
+I'm proposing is in memblock.)
+
+I've run into a case where pages are not released from memblock to the buddy
+allocator. If deferred struct page init is enabled, and memblock_free_late() is
+called before page_alloc_init_late() has run, and the pages being freed are in
+the deferred init range, then the pages are never released. memblock_free_late()
+calls memblock_free_pages() which only releases the pages if they are not in the
+deferred range. That is correct for free pages because they will be initialized
+and released by page_alloc_init_late(), but memblock_free_late() is dealing with
+reserved pages. If memblock_free_late() doesn't release those pages, they will
+forever be reserved. All reserved pages were initialized by memblock_free_all(),
+so I believe the fix is to simply have memblock_free_late() call
+__free_pages_core() directly instead of memblock_free_pages().
+
+In addition, there was a recent change (3c20650982609 "init: kmsan: call KMSAN
+initialization routines") that added a call to kmsan_memblock_free_pages() in
+memblock_free_pages(). It looks to me like it would also be incorrect to make
+that call in the memblock_free_late() case, because the KMSAN metadata was
+already initialized for all reserved pages by kmsan_init_shadow(), which runs
+before memblock_free_all(). Having memblock_free_late() call __free_pages_core()
+directly also fixes this issue.
+
+I encountered this issue when I tried to switch some x86_64 VMs I was running
+from BIOS boot to EFI boot. The x86 EFI code reserves all EFI boot services
+ranges via memblock_reserve() (part of setup_arch()), and it frees them later
+via memblock_free_late() (part of efi_enter_virtual_mode()). The EFI
+implementation of the VM I was attempting this on, an Amazon EC2 t3.micro
+instance, maps north of 170 MB in boot services ranges that happen to fall in
+the deferred init range. I certainly noticed when that much memory went missing
+on a 1 GB VM.
+
+I've tested the patch on EC2 instances, qemu/KVM VMs with OVMF, and some real
+x86_64 EFI systems, and they all look good to me. However, the physical systems
+that I have don't actually trigger this issue because they all have more than 4
+GB of RAM, so their deferred init range starts above 4 GB (it's always in the
+highest zone and ZONE_DMA32 ends at 4 GB) while their EFI boot services mappings
+are below 4 GB.
+
+Deferred struct page init can't be enabled on x86_32 so those systems are
+unaffected. I haven't found any other code paths that would trigger this issue,
+though I can't promise that there aren't any. I did run with this patch on an
+arm64 VM as a sanity check, but memblock=debug didn't show any calls to
+memblock_free_late() so that system was unaffected as well.
+
+I am guessing that this change should also go the stable kernels but it may not
+apply cleanly (__free_pages_core() was __free_pages_boot_core() and
+memblock_free_pages() was __free_pages_bootmem() when this issue was first
+introduced). I haven't gone through that process before so please let me know if
+I can help with that.
+
+This is the end result on an EC2 t3.micro instance booting via EFI:
+
+v6.2-rc2:
+  # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+  Node 0, zone      DMA
+          spanned  4095
+          present  3999
+          managed  3840
+  Node 0, zone    DMA32
+          spanned  246652
+          present  245868
+          managed  178867
+
+v6.2-rc2 + patch:
+  # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+  Node 0, zone      DMA
+          spanned  4095
+          present  3999
+          managed  3840
+  Node 0, zone    DMA32
+          spanned  246652
+          present  245868
+          managed  222816
 
 
+Aaron Thompson (1):
+  mm: Always release pages to the buddy allocator in
+    memblock_free_late().
 
+ mm/memblock.c                     | 8 +++++++-
+ tools/testing/memblock/internal.h | 4 ++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-> ---
->  arch/x86/virt/vmx/tdx/tdx.c | 41 +++++++++++++++++++++++++++++++++++--
->  arch/x86/virt/vmx/tdx/tdx.h |  2 ++
->  2 files changed, 41 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 620b35e2a61b..ab961443fed5 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -916,6 +916,36 @@ static int construct_tdmrs(struct list_head *tmb_list,
->  	return ret;
->  }
->  
-> +static int config_tdx_module(struct tdmr_info_list *tdmr_list, u64 global_keyid)
-> +{
-> +	u64 *tdmr_pa_array, *p;
-> +	size_t array_sz;
-> +	int i, ret;
-> +
-> +	/*
-> +	 * TDMRs are passed to the TDX module via an array of physical
-> +	 * addresses of each TDMR.  The array itself has alignment
-> +	 * requirement.
-> +	 */
-> +	array_sz = tdmr_list->nr_tdmrs * sizeof(u64) +
-> +		TDMR_INFO_PA_ARRAY_ALIGNMENT - 1;
-
-One other way of doing this which might be a wee bit less messy:
-
-	array_sz = roundup_pow_of_two(array_sz);
-	if (array_sz < TDMR_INFO_PA_ARRAY_ALIGNMENT)
-		array_sz = TDMR_INFO_PA_ARRAY_ALIGNMENT;
-
-Since that keeps 'array_sz' at a power-of-two, then kzalloc() will give
-you all the alignment you need, except if the array is too small, in
-which case you can just bloat it to the alignment requirement.
-
-This would get rid of the PTR_ALIGN() below too.
-
-Your choice.  What you have works too.
-
-> +	p = kzalloc(array_sz, GFP_KERNEL);
-> +	if (!p)
-> +		return -ENOMEM;
-> +
-> +	tdmr_pa_array = PTR_ALIGN(p, TDMR_INFO_PA_ARRAY_ALIGNMENT);
-> +	for (i = 0; i < tdmr_list->nr_tdmrs; i++)
-> +		tdmr_pa_array[i] = __pa(tdmr_entry(tdmr_list, i));
-> +
-> +	ret = seamcall(TDH_SYS_CONFIG, __pa(tdmr_pa_array), tdmr_list->nr_tdmrs,
-> +				global_keyid, 0, NULL, NULL);
-> +
-> +	/* Free the array as it is not required anymore. */
-> +	kfree(p);
-> +
-> +	return ret;
-> +}
-> +
->  static int init_tdx_module(void)
->  {
->  	/*
-> @@ -960,17 +990,24 @@ static int init_tdx_module(void)
->  	if (ret)
->  		goto out_free_tdmrs;
->  
-> +	/*
-> +	 * Use the first private KeyID as the global KeyID, and pass
-> +	 * it along with the TDMRs to the TDX module.
-> +	 */
-> +	ret = config_tdx_module(&tdmr_list, tdx_keyid_start);
-> +	if (ret)
-> +		goto out_free_pamts;
-
-This is "consuming" tdx_keyid_start.  Does it need to get incremented
-since the first guest can't use this KeyID now?
-
->  	/*
->  	 * TODO:
->  	 *
-> -	 *  - Pick up one TDX private KeyID as the global KeyID.
-> -	 *  - Configure the TDMRs and the global KeyID to the TDX module.
->  	 *  - Configure the global KeyID on all packages.
->  	 *  - Initialize all TDMRs.
->  	 *
->  	 *  Return error before all steps are done.
->  	 */
->  	ret = -EINVAL;
-> +out_free_pamts:
->  	if (ret)
->  		tdmrs_free_pamt_all(&tdmr_list);
->  	else
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index d0c762f1a94c..4d2edd477480 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -20,6 +20,7 @@
->   * TDX module SEAMCALL leaf functions
->   */
->  #define TDH_SYS_INFO		32
-> +#define TDH_SYS_CONFIG		45
->  
->  struct cmr_info {
->  	u64	base;
-> @@ -96,6 +97,7 @@ struct tdmr_reserved_area {
->  } __packed;
->  
->  #define TDMR_INFO_ALIGNMENT	512
-> +#define TDMR_INFO_PA_ARRAY_ALIGNMENT	512
->  
->  struct tdmr_info {
->  	u64 base;
+-- 
+2.30.2
 
