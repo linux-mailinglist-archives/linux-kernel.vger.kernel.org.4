@@ -2,158 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2071D66072B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162BD660732
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbjAFTdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S235677AbjAFTeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjAFTdK (ORCPT
+        with ESMTP id S231277AbjAFTeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:33:10 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F852BC3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:33:09 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id g16so2646421plq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MFslfd+pC3/chcOWKMwxg3XD+/XfpfE2RT5MHLxEcXU=;
-        b=USdDzZhhWDJBoerKZ6sMe7xg6j0XN8M9ShxJ4WtrGWLrm7Qvne88YzVYrL5fIU0niK
-         eE7dTaorSZcyd/zlf4KVTqdihiFDkB/gNmtEOAXRyKxnA9SYcWnEpAAWpaorPuJ//Qkd
-         AV5giVIwDvgnNz3AVs4WTV6OiJHAtAzClM4No=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MFslfd+pC3/chcOWKMwxg3XD+/XfpfE2RT5MHLxEcXU=;
-        b=gTf+f29wV4NgFuZ5rUKmN0TU+7/51oQ1CNMHKtfInxU+u0I2znL9U8EiBBaG4dK3IM
-         E50FRE6kIsIf0mqz4/oZhQ3/cfFhqQQ/svbCX8XDpZYf+NN4k4y7h7ELNYPsuh+B5eOY
-         OIZER1MTQCUMPgaFxkK3nKkgNk9Omn6K9QUezA3DK4li2Uen+K7991j0VyFcftWzJsWc
-         IVNmrrhkUZ4f3U5M2BYJlYHbrQgCqZ8r84+PDss/rb/5vulE+io2Y6sIeVWKbW3z5pg4
-         w9OdU0h+bQtE6tvGh7Jk11Q/KGgc7XZsOOw2h8gu4a4gRqWJxZTrZ4JMKZv2rKvPDIzy
-         V3uw==
-X-Gm-Message-State: AFqh2kqkbad/a2veQiQoIlVsf1U4WZbfeIFFSouTRR1RA9m3JqROwty6
-        9hJXTNcxNUhOHYemHhg9BxjJhA==
-X-Google-Smtp-Source: AMrXdXsH3vIaY64jg/dcbXKNEQaz/aJx6Q/1RM0SJeHVYhMTi8gZJKnEWYPW2YjzNx/EtPEwTX3XXQ==
-X-Received: by 2002:a17:902:b402:b0:191:2b76:612c with SMTP id x2-20020a170902b40200b001912b76612cmr53370723plr.62.1673033589074;
-        Fri, 06 Jan 2023 11:33:09 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:bc4e:2cc9:68b3:15dc])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b001894881842dsm1298174plr.151.2023.01.06.11.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 11:33:08 -0800 (PST)
-Date:   Fri, 6 Jan 2023 11:33:06 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Sean Paul <seanpaul@chromium.org>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/atomic: Allow vblank-enabled + self-refresh
- "disable"
-Message-ID: <Y7h3cuAVE2fdS9K3@google.com>
-References: <20230105174001.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
- <Y7hgLUXOrD7QwKs1@phenom.ffwll.local>
- <Y7hl0Z9PZhFk8On9@phenom.ffwll.local>
+        Fri, 6 Jan 2023 14:34:10 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD671897;
+        Fri,  6 Jan 2023 11:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+/GD8PRl+jyl3wTiMZAp9rcLOar4g14C13jzDgJg/Mk=; b=Y08UrcZINgykpAfN/XOYJlNenG
+        7iRZP0/+vD80IcmcIiFvLMVB4jecfgBFDY/9PpTb1LxhMJ4Amyrq4q9WBl/fuZO7sJmOQ7TjJaoX3
+        ouYW9IDjciXV0ep2Y/NHv9SzRuPYJXGCt9qRe45M87uounVerUcFM5OdjaEZkg8BXhel6ZEaeBHMB
+        d656BJUCcEh28YYMlgr5JblevdbwE2QcYsd950FLgVccD/YezIF5hx/ArmJ4PDJLSCyRQZJyhDOg8
+        6hT41t0/5gHoyhzJbbTlXovPj2c1Zat7KwrYQFqO6bD6s+3yvdgZAI4nMzIPfGSWKp3V2RM8vyh5T
+        f48T+wQA==;
+Received: from p200300ccff08c9001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff08:c900:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pDsTY-0003X1-2R; Fri, 06 Jan 2023 20:34:00 +0100
+Date:   Fri, 6 Jan 2023 20:33:58 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
+ combinations
+Message-ID: <20230106203358.14878660@aktux>
+In-Reply-To: <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
+References: <20230105213856.1828360-1-andreas@kemnade.info>
+        <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7hl0Z9PZhFk8On9@phenom.ffwll.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 07:17:53PM +0100, Daniel Vetter wrote:
-> Ok I think I was a bit slow here, and it makes sense. Except this now
-> means we loose this check, and I'm also not sure whether we really want
-> drivers to implement this all.
+On Fri, 6 Jan 2023 09:41:01 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> On 05/01/2023 22:38, Andreas Kemnade wrote:
+> > Currently make dtbs_check shows lots of errors because imx*.dtsi does
+> > not use single compatibles but combinations of them.
+> > Allow all the combinations used there.
+> > 
+> > Patches fixing the dtsi files according to binding documentation were
+> > submitted multiple times and are commonly rejected, so relax the rules.
+> > Example:
+> > https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
+> > 
+> > Reason: compatibility of new dtbs with old kernels or bootloaders.
+> > 
+> > This will significantly reduce noise on make dtbs_check.
+> > 
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > ---
+> >  .../bindings/mmc/fsl-imx-esdhc.yaml           | 24 +++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > index dc6256f04b42..118ebb75f136 100644
+> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > @@ -37,6 +37,30 @@ properties:
+> >            - fsl,imx8mm-usdhc
+> >            - fsl,imxrt1050-usdhc
+> >            - nxp,s32g2-usdhc  
 > 
-> What I think we want here is a bit more:
-> - for the self-refresh case check that the vblank all still works
+> You must drop the items from enum above. Binding saying:
+> compatible="A"
+> or:
+> compatible="A", "B"
+> 
+> is not correct. Either A is or is not compatible with B.
+> 
+hmm, here we have A = B + some additional features
+or
+A = B + some additional features and additional quirks required.
 
-You mean, keep the WARN_ONCE(), but invert it to ensure that 'ret == 0'?
-I did consider that, but I don't know why I stopped.
+For the latter we have e.g.
+A=
+static const struct esdhc_soc_data usdhc_imx6sx_data = {
+        .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
+                        | ESDHC_FLAG_HAVE_CAP1 | ESDHC_FLAG_HS200
+                        | ESDHC_FLAG_STATE_LOST_IN_LPMODE
+                        | ESDHC_FLAG_BROKEN_AUTO_CMD23,
+};
+B=
+static const struct esdhc_soc_data usdhc_imx6sl_data = {
+        .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
+                        | ESDHC_FLAG_HAVE_CAP1 | ESDHC_FLAG_ERR004536
+                        | ESDHC_FLAG_HS200
+                        | ESDHC_FLAG_BROKEN_AUTO_CMD23,
+};
 
-> - check that drivers which use self_refresh are not using
->   drm_atomic_helper_wait_for_vblanks(), because that would defeat the
->   point
+so there is the difference in ESDHC_FLAG_STATE_LOST_IN_LPMODE.
+That might make no difference in some usage scenario (e.g. some bootloader
+not doing any LPMODE), but I wonder why
+we need to *enforce* specifying such half-compatible things.
 
-I'm a bit lost on this one. drm_atomic_helper_wait_for_vblanks() is part
-of the common drm_atomic_helper_commit_tail*() helpers, and so it's
-naturally used in many cases (including Rockchip/PSR). And how does it
-defeat the point?
-
-> - have a drm_crtc_vblank_off/on which take the crtc state, so they can
->   look at the self-refresh state
-
-And I suppose you mean this helper variant would kick off the next step
-(fake vblank timer)?
-
-> - fake vblanks with hrtimer, because on most hw when you turn off the crtc
->   the vblanks are also turned off, and so your compositor would still
->   hang. The vblank machinery already has all the code to make this happen
->   (and if it's not all, then i915 psr code should have it).
-
-Is a timer better than an interrupt? I'm pretty sure the vblank
-interrupts still can fire on Rockchip CRTC (VOP) (see also the other
-branch of this thread), so this isn't really necessary. (IGT vblank
-tests pass without hanging.) Unless you simply prefer a fake timer for
-some reason.
-
-Also, I still haven't found that fake timer machinery, but maybe I just
-don't know what I'm looking for.
-
-> - I think kunit tests for this all would be really good, it's a rather
->   complex state machinery between modesets and vblank functionality. You
->   can speed up the kunit tests with some really high refresh rate, which
->   isn't possible on real hw.
-
-Last time I tried my hand at kunit in a subsystem with no prior kunit
-tests, I had a miserable time and gave up. At least DRM has a few
-already, so maybe this wouldn't be as terrible. Perhaps I can give this
-a shot, but there's a chance this will kick things to the back burner
-far enough that I simply don't get around to it at all. (So far, I'm
-only addressing this because KernelCI complained.)
-
-> I'm also wondering why we've had this code for years and only hit issues
-> now?
-
-I'd guess a few reasons:
-1. drm_self_refresh_helper_init() is only used by one driver -- Rockchip
-2. Rockchip systems are most commonly either Chromebooks, or else
-   otherwise cheap embedded things, and may not have displays at all,
-   let alone displays with PSR
-3. Rockchip Chromebooks shipped with a kernel forked off of the earlier
-   PSR support, before everything got refactored (and vblank handling
-   regressed) for the self-refresh "helpers". They only upgraded to a
-   newer upstream kernel within the last few months.
-4. AFAICT, ChromeOS user space doesn't even exercise the vblank-related
-   ioctls, so we don't actually notice that this is "broken". I suppose
-   it would only be IGT tests that notice.
-5. I fixed up various upstream PSR bugs are part of #3 [0],
-   along the way I unborked PSR enough that KernelCI finally caught the
-   bug. See my explanation in [1] for why the vblank bug was masked, and
-   appeared to be a "regression" due to my more recent fixes.
-
-Brian
-
-[0] Combined with point #2: ChromeOS would be the first serious users of
-    the refactored PSR support. All this was needed to make it actually
-    usable:
-
-    (2021) c4c6ef229593 drm/bridge: analogix_dp: Make PSR-exit block less
-    (2022) ca871659ec16 drm/bridge: analogix_dp: Support PSR-exit to disable transition <--- KernelCI "blamed" this one, because PSR was less broken
-    (2022) e54a4424925a drm/atomic: Force bridge self-refresh-exit on CRTC switch
-
-[1] https://lore.kernel.org/dri-devel/Y6OCg9BPnJvimQLT@google.com/
-Re: renesas/master bisection: igt-kms-rockchip.kms_vblank.pipe-A-wait-forked on rk3399-gru-kevin
+Regards,
+Andreas
