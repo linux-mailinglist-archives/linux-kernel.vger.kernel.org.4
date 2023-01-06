@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC2266086A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9B566086B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbjAFUpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S235973AbjAFUpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjAFUpS (ORCPT
+        with ESMTP id S235859AbjAFUpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:45:18 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CDE9C;
-        Fri,  6 Jan 2023 12:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xiUR5yo1Xf+kMhRxDbcyFgKeRt/FmPsE+7rBoN9l/64=; b=mB3DXq7p6xE0ZmjOtPLKf39Eac
-        RlcwzW41zXRbvidWKT98jr/aUtzfKlHqHQAoVJCPd0u+2S+8BuiqcD//5cRF0vMnJu29ccM6pgMDy
-        CMtKeT1WzPMayddbXJP8zY6NNB6ItbBYYgu7brL0mNSNxjJTFVjyZHcKmb7xfr8+FN7JD78w5lbs4
-        jFVgMTSBT32CErD6eG6IS5m/hPGUu4sBaVwYrcob/Ut3TdeQxWhg4xD38N8Fj2W+gIAnICYFTr5tU
-        QD0piuJjbQhObchkwzBOD2wv/vJD3UHdmqFVcumN3+6Rpnys805rtfmEggn9H/9lO/dDMgbQqtZtG
-        8nQE8opw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pDtaS-00ErfA-KQ; Fri, 06 Jan 2023 20:45:12 +0000
-Date:   Fri, 6 Jan 2023 12:45:12 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Dan Carpenter <error27@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep()
- from blk_put_queue()
-Message-ID: <Y7iIWA6h88cYjhcO@bombadil.infradead.org>
-References: <Y7g3L6fntnTtOm63@kili>
- <Y7hbYPSdLqW++y/p@slm.duckdns.org>
- <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
- <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
+        Fri, 6 Jan 2023 15:45:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE70669BD
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 12:45:30 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D36811EC02F2;
+        Fri,  6 Jan 2023 21:45:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673037928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eYV8zDhpGymcSl64VHc8NEHhSI4QfjSkII09GWz28kA=;
+        b=Y9UTH6LD331tb/ZtXpZBzRV0p2J01HmX5B11P9yxRcWvqQL/RZ6oTqe/VAyOn2UnILGzkP
+        ZPidtn8JSrTw602Ytn9zBNUzFHdXjDQvQyCG8YhxKwmkeSGGUefBPSD8CzEGJE1wttM+sV
+        9watab/4LiVCPRrIvAa7OBRJqGuAh6I=
+Date:   Fri, 6 Jan 2023 21:45:24 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH v3 3/6] x86/microcode: Display revisions only when update
+ is successful
+Message-ID: <Y7iIZHa0fuJkHHjz@zn.tnic>
+References: <20230103180212.333496-1-ashok.raj@intel.com>
+ <20230103180212.333496-4-ashok.raj@intel.com>
+ <Y7XMtWqSrs0uGkD7@zn.tnic>
+ <Y7h5qD43kdPeEgQ7@a4bf019067fa.jf.intel.com>
+ <Y7h8dpIQHnL93RdC@zn.tnic>
+ <Y7iEjDrXLRlwoz0W@a4bf019067fa.jf.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y7iEjDrXLRlwoz0W@a4bf019067fa.jf.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 10:34:10AM -1000, Tejun Heo wrote:
-> Dan reports the following smatch detected the following:
-> 
->   block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
-> 
-> caused by blkcg_schedule_throttle() calling blk_put_queue() in an
-> non-sleepable context.
-> 
-> blk_put_queue() acquired might_sleep() in 63f93fd6fa57 ("block: mark
-> blk_put_queue as potentially blocking") which transferred the might_sleep()
-> from blk_free_queue().
-> 
-> blk_free_queue() acquired might_sleep() in e8c7d14ac6c3 ("block: revert back
-> to synchronous request_queue removal") while turning request_queue removal
-> synchronous. However, this isn't necessary as nothing in the free path
-> actually requires sleeping.
-> 
-> It's pretty unusual to require a sleeping context in a put operation and
-> it's not needed in the first place. Let's drop it.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lkml.kernel.org/r/Y7g3L6fntnTtOm63@kili
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Fixes: e8c7d14ac6c3 ("block: revert back to synchronous request_queue removal") # v5.9+
+On Fri, Jan 06, 2023 at 12:29:00PM -0800, Ashok Raj wrote:
+> Yes, that makes sense, Do you think we can add a note that the loading
+> failed? since the old -> new, new is coming from new microcode rev.
 
-*tons* has changed since e8c7d14ac6c3 and so the bots might think that
-*if* this patch is applied upstream it is justified for older kernels
-and I don't think that's yet been verified and doubt it.
+It has failed when
 
-And so I think adding a "Fixes" tag is not appropriate here.
+old == new.
 
-First I'd like to hear from Christoph if he agrees with this patch
-upstream. For stable, someone would have to do the homework.
+I.e.,
 
-  Luis
+	"microcode revision: 0x1a -> 0x1a"
+
+when the current revision on the CPU is 0x1a.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
