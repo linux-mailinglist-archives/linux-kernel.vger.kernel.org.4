@@ -2,95 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE62365FD37
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AC265FD84
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbjAFI6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S232662AbjAFJUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbjAFI5T (ORCPT
+        with ESMTP id S232849AbjAFJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:57:19 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278B7D71;
-        Fri,  6 Jan 2023 00:56:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bn26so700342wrb.0;
-        Fri, 06 Jan 2023 00:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6eTpEaZS3gI5KkJOL7rAYuEVIpZC2a1r1N5nUQx2/48=;
-        b=pmGa0wZ23WgLNDg+K81xV9MA5BkK965hsvbic0PPUJ+w8TipXc1bn1ziXM39x2tqlf
-         7wr2F9nO1mcojmWOjEIriLKX5ebxT0Hl87lzP2rHvcbied/EFwXFpTv8IGyuUFzZjhuq
-         YQ9ysdHHARISpfdmc/+UrwyMxuC6ByHD4SbDIXlE6bZLLxUunZ3Ch/aZa9W6gle39v4q
-         hq22SmMYkiv5oiir5XuZRiAzLoa4he8dRDOLnkO75pes5k9R+3cMhs6+EmZTERiwh+Nb
-         nn/39VAlvIBFgGQR6jDiWjOHxM59xuNuyPxfVQ72Z0JwVjRd41quUW7BU1THrSRYXf6T
-         F+eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6eTpEaZS3gI5KkJOL7rAYuEVIpZC2a1r1N5nUQx2/48=;
-        b=dnySSqeCeK2W/gmVinCasYCHrpAOAHytH55G4yzskR7dsLP0F5XbAHKn40gS+zVooU
-         eKFu8XCETw3YC825CT1Pjf7AdhrDJ6NJxO3FoYc0bCl2m5yYvkpSQHaq6jShHtZsc04J
-         qLF14Eqjkb/nvx/tUyQBUEP1eEL02ga4820/MNGLju10BCQePloQUI1svYvwKGbByVXy
-         pdCafJFgCz6hXy/dDqCYU+KdOZxSrCNYsLv2QJ/69t6nhoGACIXyvVb+ooLPhv9agVnw
-         jg3/xt9IpWquynlepELHkylQ1o3SE4K4PIRkmwrTfpHRb8kZbGY8jOEVKAw7sK4oYR6q
-         UoYA==
-X-Gm-Message-State: AFqh2kpXcGqgn2QNZ+Ch/wksD5fXzuOu15htTVVjbi9NGda8k/mlwBOC
-        pH+435YJLdffZk8HltRTnGQ=
-X-Google-Smtp-Source: AMrXdXuSCe/xgCkPs3CvwZY23GDRjA5+h4O/DP7gzLHP1bhKPRqDnutWxNWdk3hMlQ1Ut6NyW/Kptg==
-X-Received: by 2002:a5d:4143:0:b0:290:3629:a824 with SMTP id c3-20020a5d4143000000b002903629a824mr18181109wrq.40.1672995370092;
-        Fri, 06 Jan 2023 00:56:10 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d6a08000000b002a1ae285bfasm535407wru.77.2023.01.06.00.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 00:56:09 -0800 (PST)
-Date:   Fri, 6 Jan 2023 11:56:00 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next v2 0/8] Add support for two classes of VCAP rules
-Message-ID: <Y7fiIPM2GCqE2Upw@kadam>
-References: <20230106085317.1720282-1-steen.hegelund@microchip.com>
+        Fri, 6 Jan 2023 04:20:15 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3494B6B5B4;
+        Fri,  6 Jan 2023 01:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672996813; x=1704532813;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bH60lttMRq+HLemkhaHEGZFswOR2yI2RyBlMJvmUNTA=;
+  b=OCzjHHI5XHMwR/uer+oCEMRwnC7amwfV/V6BXcUVkteKjVDVfQbIcaaB
+   J25q0NHfReTXUNHqKMkvbpDwU9KdpJFxbRx+sjbm5dpu5XQO3+0xGyjEI
+   l4CMt6Cv91eFhZQYejKwDm5heE9JLanYwE4iqkTIXvhc2/9iPy98h44Dd
+   Yj7jCWI/CnZ9T6mkOzqJjLyCHG7QVvUwZ66fic37LXqYdsXLQoeIbTlJL
+   Vhynh6GOE2iR+WNAp3anKfJJhIZB/u50heh2eyzoKgVe2OcAwupdZWSpY
+   5y5Q9Ta16EP6b2ST8LgJr8mr+Lu6uZgqcLLShKV+q7Z+XLQcndnNo/eCQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="322511361"
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="322511361"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 01:20:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="719139328"
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="719139328"
+Received: from unknown (HELO fred..) ([172.25.112.68])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Jan 2023 01:20:10 -0800
+From:   Xin Li <xin3.li@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com
+Subject: [RFC PATCH v2 00/32] x86: enable FRED for x86-64
+Date:   Fri,  6 Jan 2023 00:55:45 -0800
+Message-Id: <20230106085617.17248-1-xin3.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106085317.1720282-1-steen.hegelund@microchip.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 09:53:09AM +0100, Steen Hegelund wrote:
-> Version History:
-> ================
-> v2      Adding a missing goto exit in vcap_add_rule (Dan Carpenter).
+This patch set enables FRED for x86-64, and it's based on the previous LKGS
+patch set.
 
-Thanks!
+The Intel flexible return and event delivery (FRED) architecture defines simple
+new transitions that change privilege level (ring transitions).  The FRED
+architecture was designed with the following goals:
+1) Improve overall performance and response time by replacing event delivery
+through the interrupt descriptor table (IDT event delivery) and event return by
+the IRET instruction with lower latency transitions.
+2) Improve software robustness by ensuring that event delivery establishes the
+full supervisor context and that event return establishes the full user context.
 
-regards,
-dan carpenter
+The new transitions defined by the FRED architecture are FRED event delivery and,
+for returning from events, two FRED return instructions. FRED event delivery can
+effect a transition from ring 3 to ring 0, but it is used also to deliver events
+incident to ring 0. One FRED instruction (ERETU) effects a return from ring 0 to
+ring 3, while the other (ERETS) returns while remaining in ring 0.
+
+In addition to these transitions, the FRED architecture defines a new instruction
+(LKGS) for managing the state of the GS segment register. The LKGS instruction
+can be used by 64-bit operating systems that do not use the new FRED transitions.
+
+The Intel FRED architecture spec can be downloaded from:
+	https://cdrdv2.intel.com/v1/dl/getContent/678938
+
+As of now there is no publicly avaiable CPU supporting FRED, thus the Intel
+Simics® Simulator is used as software development and testing vehicle. And
+it can be downloaded from:
+	https://www.intel.com/content/www/us/en/developer/articles/tool/simics-simulator.html
+
+To enable FRED, Simics package 8112 QSP-CPU needs to be installed with CPU
+model configured as:
+	$cpu_comp_class = "x86-experimental-fred"
+
+Longer term, we should refactor common code shared by FRED and IDT into common
+shared files, and contain IDT code using a new config CONFIG_X86_IDT.
+
+TODO: call exc_raise_irq() to reinject IRQ in KVM VMX.
+
+H. Peter Anvin (Intel) (24):
+  x86/traps: let common_interrupt() handle IRQ_MOVE_CLEANUP_VECTOR
+  x86/traps: add a system interrupt table for system interrupt dispatch
+  x86/traps: add external_interrupt() to dispatch external interrupts
+  x86/cpufeature: add the cpu feature bit for FRED
+  x86/opcode: add ERETU, ERETS instructions to x86-opcode-map
+  x86/objtool: teach objtool about ERETU and ERETS
+  x86/cpu: add X86_CR4_FRED macro
+  x86/fred: add Kconfig option for FRED (CONFIG_X86_FRED)
+  x86/fred: if CONFIG_X86_FRED is disabled, disable FRED support
+  x86/cpu: add MSR numbers for FRED configuration
+  x86/fred: header file with FRED definitions
+  x86/fred: make unions for the cs and ss fields in struct pt_regs
+  x86/fred: reserve space for the FRED stack frame
+  x86/fred: add a page fault entry stub for FRED
+  x86/fred: add a debug fault entry stub for FRED
+  x86/fred: add a NMI entry stub for FRED
+  x86/fred: FRED entry/exit and dispatch code
+  x86/fred: FRED initialization code
+  x86/fred: update MSR_IA32_FRED_RSP0 during task switch
+  x86/fred: let ret_from_fork() jmp to fred_exit_user when FRED is
+    enabled
+  x86/fred: disallow the swapgs instruction when FRED is enabled
+  x86/fred: no ESPFIX needed when FRED is enabled
+  x86/fred: allow single-step trap and NMI when starting a new thread
+  x86/fred: allow FRED systems to use interrupt vectors 0x10-0x1f
+
+Xin Li (8):
+  x86/traps: add install_system_interrupt_handler()
+  x86/traps: add exc_raise_irq() for VMX IRQ reinjection
+  x86/fred: header file for event types
+  x86/fred: add a machine check entry stub for FRED
+  x86/fred: fixup fault on ERETU by jumping to fred_entrypoint_user
+  x86/ia32: do not modify the DPL bits for a null selector
+  x86/fred: allow dynamic stack frame size
+  x86/fred: disable FRED by default in its early stage
+
+ .../admin-guide/kernel-parameters.txt         |   4 +
+ arch/x86/Kconfig                              |   9 +
+ arch/x86/entry/Makefile                       |   5 +-
+ arch/x86/entry/entry_32.S                     |   2 +-
+ arch/x86/entry/entry_64.S                     |   5 +
+ arch/x86/entry/entry_64_fred.S                |  59 +++++
+ arch/x86/entry/entry_fred.c                   | 233 ++++++++++++++++++
+ arch/x86/entry/vsyscall/vsyscall_64.c         |   2 +-
+ arch/x86/ia32/ia32_signal.c                   |  21 +-
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/entry-common.h           |   3 +
+ arch/x86/include/asm/event-type.h             |  17 ++
+ arch/x86/include/asm/extable_fixup_types.h    |   4 +-
+ arch/x86/include/asm/fred.h                   | 131 ++++++++++
+ arch/x86/include/asm/idtentry.h               |  68 ++++-
+ arch/x86/include/asm/irq.h                    |   5 +
+ arch/x86/include/asm/irq_vectors.h            |  15 +-
+ arch/x86/include/asm/msr-index.h              |  12 +-
+ arch/x86/include/asm/processor.h              |  12 +-
+ arch/x86/include/asm/ptrace.h                 |  36 ++-
+ arch/x86/include/asm/switch_to.h              |  10 +-
+ arch/x86/include/asm/thread_info.h            |  35 +--
+ arch/x86/include/asm/traps.h                  |  15 ++
+ arch/x86/include/asm/vmx.h                    |  17 +-
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/kernel/Makefile                      |   1 +
+ arch/x86/kernel/apic/apic.c                   |  11 +-
+ arch/x86/kernel/apic/vector.c                 |   8 +-
+ arch/x86/kernel/cpu/acrn.c                    |   7 +-
+ arch/x86/kernel/cpu/common.c                  |  88 ++++---
+ arch/x86/kernel/cpu/mce/core.c                |  11 +
+ arch/x86/kernel/cpu/mshyperv.c                |  22 +-
+ arch/x86/kernel/espfix_64.c                   |   8 +
+ arch/x86/kernel/fred.c                        |  73 ++++++
+ arch/x86/kernel/head_32.S                     |   3 +-
+ arch/x86/kernel/idt.c                         |   6 +-
+ arch/x86/kernel/irq.c                         |   6 +-
+ arch/x86/kernel/irqinit.c                     |   7 +-
+ arch/x86/kernel/kvm.c                         |   4 +-
+ arch/x86/kernel/nmi.c                         |  28 +++
+ arch/x86/kernel/process.c                     |   5 +
+ arch/x86/kernel/process_64.c                  |  21 +-
+ arch/x86/kernel/traps.c                       | 175 +++++++++++--
+ arch/x86/lib/x86-opcode-map.txt               |   2 +-
+ arch/x86/mm/extable.c                         |  28 +++
+ arch/x86/mm/fault.c                           |  20 +-
+ drivers/xen/events/events_base.c              |   5 +-
+ kernel/fork.c                                 |   6 +
+ tools/arch/x86/include/asm/cpufeatures.h      |   1 +
+ .../arch/x86/include/asm/disabled-features.h  |   8 +-
+ tools/arch/x86/include/asm/msr-index.h        |  12 +-
+ tools/arch/x86/lib/x86-opcode-map.txt         |   2 +-
+ tools/objtool/arch/x86/decode.c               |  22 +-
+ 54 files changed, 1148 insertions(+), 173 deletions(-)
+ create mode 100644 arch/x86/entry/entry_64_fred.S
+ create mode 100644 arch/x86/entry/entry_fred.c
+ create mode 100644 arch/x86/include/asm/event-type.h
+ create mode 100644 arch/x86/include/asm/fred.h
+ create mode 100644 arch/x86/kernel/fred.c
+
+-- 
+2.34.1
 
