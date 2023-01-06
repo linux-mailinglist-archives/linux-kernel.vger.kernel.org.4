@@ -2,78 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027BD660586
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9963666058D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235416AbjAFRTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S231786AbjAFRVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbjAFRSa (ORCPT
+        with ESMTP id S229586AbjAFRVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:18:30 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6569AC0E
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:18:29 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id m5-20020a6b7f45000000b006fc1dded1b9so1100362ioq.18
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:18:29 -0800 (PST)
+        Fri, 6 Jan 2023 12:21:18 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA357D1F5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:21:17 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id r72so1004805iod.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bsdimp-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dnx4N+OQn0QuEKmvfhqG2BPeqQB9ohu9oSWGkfmaPyU=;
+        b=Fn8EiHIfDBw/66XdydZpN1Ps6E9bXL/8/A/WalBjrZcSXiTor5KyLIqZHoOsYiunux
+         ktDm/mln44prujXc5jF0fMeGeY6tymaOYXXDaEQ7lM21Z56vHPkIR2zaQ76O5JQFLbvP
+         2fT+oilVGb/o25go8u1Mmet2/JtQXVg4CFw+wZV5l8h8J8gXyQgPiJ9WSpGP1YqhNFhq
+         bM4lZ7gdFCg2Jv3q5V2hHxjzX2Tp9379IHFT9gwfxHO7iPjYHZPz4TTLxDBRoMhlvEcu
+         YHFXPcnz0IbniDXDr6sfRS+adfn/1bfokAPkSU12KPAEsRxlvNsbrEfPKHD6mmIv5w8D
+         PVVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KNubMI1GatQvLGtaWUgQht+S/ChcWAcDTlFlP/zM3lw=;
-        b=go+xWYSLLj/Qu+5+fAhgPJO44BTeeb2UYcVJB7dDm9J2BGOdr4OczZ9ZoZnjqEgPyU
-         NK9q96pAdxLlwNjPQ2Nd3y0fZUo03HIura4IqFEmaKoTJ26XhbSguActStvE78+aUK5W
-         e3a6IlUSIgoOeMdtzKNRq7qLd+UGAG2qlLCJSAV0FNfzWyrX/+aPZX5oJB9TAel2CPWb
-         cg0qVTm9Y0WI4JeqAFlIjhnhfDwtUVY1TONO4JVvM4PBx9fDWmsLK/E+n3v690/N+H0a
-         mGODrffi0jSZUW0fgR8foI/2c+JicHOyuR1dT1jqmqePSlL1OAUE8zswgko1g73++3EP
-         YlTw==
-X-Gm-Message-State: AFqh2koz+p3G4SSzyTHRbfbFatH6f0mLPViw61uQwlaf8Hv13w2Z7ew5
-        GaD+nGhCB4GXrhvBQbWPbpfrsVsHEoUn5Q0XeFu2YhGSEnoe
-X-Google-Smtp-Source: AMrXdXsC4+9DIJj/3HSQrpzNWCyl6PVy0sO43QtssChaZWPBo2v+DiTAj5KrRFuPHZIJNFMRYRhQQO79CuInadAneRX5Eo4M6ZNg
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dnx4N+OQn0QuEKmvfhqG2BPeqQB9ohu9oSWGkfmaPyU=;
+        b=yuR8oFrpabFH4YV9/arfZNAotJGK87V0TnsM6LNgW7v34H7jXRZzCk0FgbklIqP2/S
+         QyiFUtGREjdboYk4angc0lXpaumbYh53oyQgX0dyDDA732jRFfL/dQqBD1VjrLsKEWmi
+         VkEcszDogWsbtmzMu+77foOFwHNO4ljfDowkqu1kR8HrKSE1xhTerN8kTWWFBieZOFY2
+         wdnabdnm+mUI6Cb1xrWxdVMxCIyVqDPPWmGe2k2x9zayvplTuHxe1NiBeOWnM2mrKqpp
+         NjRoCW3J5cRlD+u3A9K3IBYKM5LxiCItsG5x8GUw6aXIc4aPklTNsnO5eT8OtMy934XY
+         BHeA==
+X-Gm-Message-State: AFqh2kraDtPXsM8qAzfdreOeay85yGCxAil4CHUV9y8dHbUrtAN2k1Ej
+        GTPMq6lwH62u4itPh3OxBdZBwg==
+X-Google-Smtp-Source: AMrXdXtDquIc11hr+NAGdsZDPAnC27KArduGyR1b8XQtRsaoginAvmdmyC55X/rPIAZb/XfzfeM4iQ==
+X-Received: by 2002:a05:6602:124b:b0:6e2:d3f9:56d with SMTP id o11-20020a056602124b00b006e2d3f9056dmr43272805iou.0.1673025676792;
+        Fri, 06 Jan 2023 09:21:16 -0800 (PST)
+Received: from dune.bsdimp.com (50-253-99-174-static.hfc.comcastbusiness.net. [50.253.99.174])
+        by smtp.gmail.com with ESMTPSA id k1-20020a0566022d8100b006e4e8ad6b2bsm499289iow.36.2023.01.06.09.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 09:21:16 -0800 (PST)
+From:   Warner Losh <imp@bsdimp.com>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Warner Losh <imp@bsdimp.com>
+Subject: [PATCH v2] tools/nolibc: Fix S_ISxxx macros
+Date:   Fri,  6 Jan 2023 10:18:34 -0700
+Message-Id: <20230106171834.41532-1-imp@bsdimp.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c984:0:b0:304:a7a2:6878 with SMTP id
- y4-20020a92c984000000b00304a7a26878mr5636073iln.206.1673025508785; Fri, 06
- Jan 2023 09:18:28 -0800 (PST)
-Date:   Fri, 06 Jan 2023 09:18:28 -0800
-In-Reply-To: <783988.1673005658@warthog.procyon.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000026c40c05f19b9b69@google.com>
-Subject: Re: [syzbot] kernel BUG in rxrpc_put_peer
-From:   syzbot <syzbot+c22650d2844392afdcfd@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The mode field has the type encoded as an value in a field, not as a bit
+mask. Mask the mode with S_IFMT instead of each type to test. Otherwise,
+false positives are possible: eg S_ISDIR will return true for block
+devices because S_IFDIR = 0040000 and S_IFBLK = 0060000 since mode is
+masked with S_IFDIR instead of S_IFMT. These macros now match the
+similar definitions in tools/include/uapi/linux/stat.h.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Signed-off-by: Warner Losh <imp@bsdimp.com>
+---
+ tools/include/nolibc/types.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5540 } 2684 jiffies s: 2885 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 959997034e55..7770328dcef7 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -26,13 +26,13 @@
+ #define S_IFSOCK       0140000
+ #define S_IFMT         0170000
+ 
+-#define S_ISDIR(mode)  (((mode) & S_IFDIR)  == S_IFDIR)
+-#define S_ISCHR(mode)  (((mode) & S_IFCHR)  == S_IFCHR)
+-#define S_ISBLK(mode)  (((mode) & S_IFBLK)  == S_IFBLK)
+-#define S_ISREG(mode)  (((mode) & S_IFREG)  == S_IFREG)
+-#define S_ISFIFO(mode) (((mode) & S_IFIFO)  == S_IFIFO)
+-#define S_ISLNK(mode)  (((mode) & S_IFLNK)  == S_IFLNK)
+-#define S_ISSOCK(mode) (((mode) & S_IFSOCK) == S_IFSOCK)
++#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
++#define S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
++#define S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
++#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
++#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
++#define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
++#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+ 
+ /* dirent types */
+ #define DT_UNKNOWN     0x0
+-- 
+2.33.1
 
-
-Tested on:
-
-commit:         9e80802b rxrpc: TEST: Remove almost all use of RCU
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=1587a762480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=affadc28955d87c3
-dashboard link: https://syzkaller.appspot.com/bug?extid=c22650d2844392afdcfd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
