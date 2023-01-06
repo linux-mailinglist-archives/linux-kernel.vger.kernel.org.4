@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795896600FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D35660101
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjAFNIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S231195AbjAFNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbjAFNI0 (ORCPT
+        with ESMTP id S229703AbjAFNOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:08:26 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B227682E;
-        Fri,  6 Jan 2023 05:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AIn0omFiQ6ug6+/lFbRBrzJnTT28JoHUtOwQC51TEC4=; b=ZYinozzs4jPqWY/S6TxD0mPRoS
-        5jNkISXlmT6f5d5CScCjfkfTXRnek//tcI5u1CG5Qv+1i67XJciqksFpmywXzzFTgHJdgEprjLB9E
-        izkBWAr6gRRRdn12i8UYrlgjZMK/yoVkk4AA6t0aA7mboWJ/poWrlQur5wth0AEwX1Ng=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pDmS6-001Klg-Iq; Fri, 06 Jan 2023 14:08:06 +0100
-Date:   Fri, 6 Jan 2023 14:08:06 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <Y7gdNlrKkfi2JvQk@lunn.ch>
-References: <20230106101651.1137755-1-lukma@denx.de>
+        Fri, 6 Jan 2023 08:14:39 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E5045656
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:14:38 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id a64so1421193vsc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRSichjsSpl7nn5VML7hlKwtWCxMGkZW9sF0ceCpu7Y=;
+        b=7nOV/pGUMtVuAg1wKzMZoJfLp+ifawDysT1k1gSKBnWNmZxkNlDd+a9s4ja2CzEzdJ
+         ewZnZ2O3WCbXCqHy6TZO/py3dGt2C+U7slBz7sP6qeoaOzc39Uuz5nGDLtwc3m099+Ba
+         8Z9AHA/Cb6lncQEDvS6LzH3vDS3i79asj/1VypjVxg7qQuTGxAaWiuKvNl+4D6R1wmoK
+         OHQYm1kXGZLLPW4mskl74LpBC2/eb1aYTC7BRu+SGUu/B84EQC58uVxczdDUNbnVT+ic
+         QyYkKm88vf1vmOk4xMsEfWHHXrDXOXxha6SDlhxu4IBkwSrD7qs2X0/OdJai0afC9zxV
+         Zs1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kRSichjsSpl7nn5VML7hlKwtWCxMGkZW9sF0ceCpu7Y=;
+        b=dZhMoaQT1mRcg2NqynxpBTcJaz7TGIBfkEWJgRPOXZzSL7vKdmT3XIvHopKL6ShE+i
+         mQdx2cPW+ALD6HSwBt9v6qdCKUishi0wGhI/izVLpuQGC66SHd4EtzNKLgUnxsp7Dphz
+         SIzpDWbdqjsyP1NlN0e6OLig9+BKWlXnkCAoA+8fmdMGAMpB4/x9jVYpwYj/SqFgWpc+
+         1CWiO/XSgI55m4ikDLH4OsM2TXn47SfDPFdS47BYdGUNILT5A1mBwwR9gqnZ8tz8iaNl
+         Vg+rvwa+vM92ZVORdms3DM0beVFkxiuH1+jSRI+lZsPER7Nu5f86oFJAAFV88awG73BI
+         XV0g==
+X-Gm-Message-State: AFqh2krBiRSQ2IeExxWwpj6XynRlfslKV/BMBEdMMgeLeVT/r/I26LoE
+        yudkSEjY2C/9IM4UqRICCG1ZeJ0zpvpJoi+4KXIrtg==
+X-Google-Smtp-Source: AMrXdXu7UBvoVaA3py91tPW1+5NfFOXh7jkcGj9+qlFVxuoA0psBokCY/DlLkdH01j7W9wipaLbbX/zr3ecBEiacoO4=
+X-Received: by 2002:a67:f642:0:b0:3c4:ec4b:b943 with SMTP id
+ u2-20020a67f642000000b003c4ec4bb943mr6737873vso.17.1673010877549; Fri, 06 Jan
+ 2023 05:14:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106101651.1137755-1-lukma@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105150603.2810510-1-michael@walle.cc>
+In-Reply-To: <20230105150603.2810510-1-michael@walle.cc>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 6 Jan 2023 14:14:26 +0100
+Message-ID: <CAMRc=McEin9uXOFEeB1=oDKmUTu+hvKoaUGjCx-7Prc7RXubJw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] gpio: regmap: use new regmap_might_sleep()
+To:     Michael Walle <michael@walle.cc>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 11:16:49AM +0100, Lukasz Majewski wrote:
-> Different Marvell DSA switches support different size of max frame
-> bytes to be sent. This value corresponds to the memory allocated
-> in switch to store single frame.
-> 
-> For example mv88e6185 supports max 1632 bytes, which is now in-driver
-> standard value. On the other hand - mv88e6250 supports 2048 bytes.
-> To be more interresting - devices supporting jumbo frames - use yet
-> another value (10240 bytes)
-> 
-> As this value is internal and may be different for each switch IC,
-> new entry in struct mv88e6xxx_info has been added to store it.
-> 
-> This commit doesn't change the code functionality - it just provides
-> the max frame size value explicitly - up till now it has been
-> assigned depending on the callback provided by the IC driver
-> (e.g. .set_max_frame_size, .port_set_jumbo_size).
-> 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+On Thu, Jan 5, 2023 at 4:06 PM Michael Walle <michael@walle.cc> wrote:
+>
+> Now that the regmap can be queried whether it might sleep, we can get
+> rid of the conservative setting "can_sleep = true". New drivers which
+> want to use gpio-regmap and can access the registers memory-mapped won't
+> have the restriction that their consumers have to use the
+> gpiod_*cansleep() variants anymore.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/gpio/gpio-regmap.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+> index f907c9c19fce..fca17d478984 100644
+> --- a/drivers/gpio/gpio-regmap.c
+> +++ b/drivers/gpio/gpio-regmap.c
+> @@ -254,15 +254,7 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
+>         chip->ngpio = config->ngpio;
+>         chip->names = config->names;
+>         chip->label = config->label ?: dev_name(config->parent);
+> -
+> -       /*
+> -        * If our regmap is fast_io we should probably set can_sleep to false.
+> -        * Right now, the regmap doesn't save this property, nor is there any
+> -        * access function for it.
+> -        * The only regmap type which uses fast_io is regmap-mmio. For now,
+> -        * assume a safe default of true here.
+> -        */
+> -       chip->can_sleep = true;
+> +       chip->can_sleep = regmap_might_sleep(config->regmap);
+>
+>         chip->get = gpio_regmap_get;
+>         if (gpio->reg_set_base && gpio->reg_clr_base)
+> --
+> 2.30.2
+>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Applied, thanks!
 
-FYI: It is normal to include a patch 0/X for a patchset, which
-explains the big picture of the patchset. Please try to remember this
-for your next patchset.
-
-    Andrew
-
-
+Bart
