@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CD265F929
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C2365F930
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 02:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjAFBdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 20:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S229839AbjAFBhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 20:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjAFBdf (ORCPT
+        with ESMTP id S230042AbjAFBgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:33:35 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CBD657B;
-        Thu,  5 Jan 2023 17:33:32 -0800 (PST)
+        Thu, 5 Jan 2023 20:36:53 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4842F1B1F4;
+        Thu,  5 Jan 2023 17:36:51 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Np5T30zgSz4f436J;
-        Fri,  6 Jan 2023 09:33:27 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgCHpjBmerdjjyhpBA--.22531S3;
-        Fri, 06 Jan 2023 09:33:28 +0800 (CST)
-Subject: Re: [PATCH -next 3/4] block/rq_qos: use a global mutex to protect
- rq_qos apis
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230104085354.2343590-1-yukuai1@huaweicloud.com>
- <20230104085354.2343590-4-yukuai1@huaweicloud.com>
- <Y7XyIzGptuqO8EAt@slm.duckdns.org> <Y7YZnM/nqb0gxOei@slm.duckdns.org>
- <df2f7a60-467f-08ce-2a3e-1dc7853424aa@huaweicloud.com>
- <Y7cYKdOwSlfHtj7t@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <ef55a0f1-d3c2-3979-963e-2fa10ba3c2ff@huaweicloud.com>
-Date:   Fri, 6 Jan 2023 09:33:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Np5Xt04M7z4f3p1g;
+        Fri,  6 Jan 2023 09:36:46 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP1 (Coremail) with SMTP id cCh0CgDHNC8ve7djmUtpBA--.44504S2;
+        Fri, 06 Jan 2023 09:36:48 +0800 (CST)
+Message-ID: <22c7dad7-1cda-fbdd-95e8-11a470f09fec@huaweicloud.com>
+Date:   Fri, 6 Jan 2023 09:36:47 +0800
 MIME-Version: 1.0
-In-Reply-To: <Y7cYKdOwSlfHtj7t@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH RESEND bpf-next 4/4] riscv, bpf: Add bpf trampoline
+ support for RV64
+Content-Language: en-US
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+ <20221220021319.1655871-5-pulehui@huaweicloud.com>
+ <87y1qjpgy4.fsf@all.your.base.are.belong.to.us>
+From:   Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <87y1qjpgy4.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCHpjBmerdjjyhpBA--.22531S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry7CFWrWr1fJF4rJF1xuFg_yoW7Jw47pF
-        4UtF4UCr4kKr15Xa17Ary5Ja1UJrsY93W5Jr1xGr1fAa4j9r1DXr1ktFWjqrykJr4DAa17
-        XayDJ3yFqrn8GaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CM-TRANSID: cCh0CgDHNC8ve7djmUtpBA--.44504S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3CFWUCF4DAr1fZFWDurWUXFb_yoWkXr4kpF
+        yDGF4fAFy8XF1YqFyvqF4UXF4avr4ktFnFkFyrtF95ArZ0vr4fK34rKF4Y9ry5Crn5Ar48
+        ZF4qywnIk3WUGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,142 +80,368 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-‘⁄ 2023/01/06 2:34, Tejun Heo –¥µ¿:
-> Hello,
+
+On 2023/1/4 3:16, Bj√∂rn T√∂pel wrote:
+> Pu Lehui <pulehui@huaweicloud.com> writes:
 > 
-> On Thu, Jan 05, 2023 at 09:35:21AM +0800, Yu Kuai wrote:
->>> Can you please take a look at the following patchset I just posted:
->>>
->>>     https://lkml.kernel.org/r/20230105002007.157497-1-tj@kernel.org
->>>
->>> After that, all these configuration operations are wrapped between
->>> blkg_conf_init() and blkg_conf_exit() which probably are the right place to
->>> implement the synchronization.
+>> From: Pu Lehui <pulehui@huawei.com>
 >>
->> I see that, blkg_conf_init() and blkg_conf_exit() is good, however there
->> are some details I want to confirm:
+>> BPF trampoline is the critical infrastructure of the bpf
+>> subsystem, acting as a mediator between kernel functions
+>> and BPF programs. Numerous important features, such as
+>> using ebpf program for zero overhead kernel introspection,
+>> rely on this key component. We can't wait to support bpf
+>> trampoline on RV64. The implementation of bpf trampoline
+>> was closely to x86 and arm64 for future development. The
+>> related tests have passed, as well as the test_verifier
+>> with no new failure ceses.
 >>
->> 1) rq_qos_add() can be called from iocost/iolatency, where
->> blkg_conf_init() will be called first, while rq_qos_add() can also be
->> called from wbt, where there is no blkg_conf_init(). Hence it seems to
->> me we need two locks here, one to protect rq_qos apis; one to
->> synchronize policy configuration and device removal.
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>>   arch/riscv/net/bpf_jit_comp64.c | 322 ++++++++++++++++++++++++++++++++
+>>   1 file changed, 322 insertions(+)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+>> index fa8b03c52463..11c001782e7b 100644
+>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>> @@ -738,6 +738,328 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>>   	       bpf_text_poke_jump(ip, old_addr, new_addr);
+>>   }
+>>   
+>> +static void store_args(int nregs, int args_off, struct rv_jit_context *ctx)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < nregs; i++) {
+>> +		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+>> +		args_off -= 8;
+>> +	}
+>> +}
+>> +
+>> +static void restore_args(int nregs, int args_off, struct rv_jit_context *ctx)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < nregs; i++) {
+>> +		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
+>> +		args_off -= 8;
+>> +	}
+>> +}
+>> +
+>> +static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_off,
+>> +			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+>> +{
+>> +	u32 insn;
+>> +	int ret, branch_off, offset;
+>> +	struct bpf_prog *p = l->link.prog;
+>> +	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+>> +
+>> +	if (l->cookie) {
+>> +		emit_imm(RV_REG_T1, l->cookie, ctx);
+>> +		emit_sd(RV_REG_FP, -run_ctx_off + cookie_off, RV_REG_T1, ctx);
+>> +	} else {
+>> +		emit_sd(RV_REG_FP, -run_ctx_off + cookie_off, RV_REG_ZERO, ctx);
+>> +	}
+>> +
+>> +	/* arg1: prog */
+>> +	emit_imm(RV_REG_A0, (const s64)p, ctx);
+>> +	/* arg2: &run_ctx */
+>> +	emit_addi(RV_REG_A1, RV_REG_FP, -run_ctx_off, ctx);
+>> +	ret = emit_call((const u64)bpf_trampoline_enter(p), true, ctx);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/* if (__bpf_prog_enter(prog) == 0)
+>> +	 *	goto skip_exec_of_prog;
+>> +	 */
+>> +	branch_off = ctx->ninsns;
+>> +	/* nop reserved for conditional jump */
+>> +	emit(rv_nop(), ctx);
+>> +
+>> +	/* store prog start time */
+>> +	emit_mv(RV_REG_S1, RV_REG_A0, ctx);
+>> +
+>> +	/* arg1: &args_off */
+>> +	emit_addi(RV_REG_A0, RV_REG_FP, -args_off, ctx);
+>> +	if (!p->jited)
+>> +		/* arg2: progs[i]->insnsi for interpreter */
+>> +		emit_imm(RV_REG_A1, (const s64)p->insnsi, ctx);
+>> +	ret = emit_call((const u64)p->bpf_func, true, ctx);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (save_ret)
+>> +		emit_sd(RV_REG_FP, -retval_off, regmap[BPF_REG_0], ctx);
+>> +
+>> +	/* update branch with beqz */
+>> +	offset = ninsns_rvoff(ctx->ninsns - branch_off);
+>> +	insn = rv_beq(RV_REG_A0, RV_REG_ZERO, offset >> 1);
+>> +	*(u32 *)(ctx->insns + branch_off) = insn;
+>> +
+>> +	/* arg1: prog */
+>> +	emit_imm(RV_REG_A0, (const s64)p, ctx);
+>> +	/* arg2: prog start time */
+>> +	emit_mv(RV_REG_A1, RV_REG_S1, ctx);
+>> +	/* arg3: &run_ctx */
+>> +	emit_addi(RV_REG_A2, RV_REG_FP, -run_ctx_off, ctx);
+>> +	ret = emit_call((const u64)bpf_trampoline_exit(p), true, ctx);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int invoke_bpf_mod_ret(struct bpf_tramp_links *tl, int args_off, int retval_off,
+>> +			      int run_ctx_off, int *branches_off, struct rv_jit_context *ctx)
+>> +{
+>> +	int i, ret;
+>> +
+>> +	/* cleanup to avoid garbage return value confusion */
+>> +	emit_sd(RV_REG_FP, -retval_off, RV_REG_ZERO, ctx);
+>> +	for (i = 0; i < tl->nr_links; i++) {
+>> +		ret = invoke_bpf_prog(tl->links[i], args_off, retval_off,
+>> +				run_ctx_off, true, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +		emit_ld(RV_REG_T1, -retval_off, RV_REG_FP, ctx);
+>> +		branches_off[i] = ctx->ninsns;
+>> +		/* nop reserved for conditional jump */
+>> +		emit(rv_nop(), ctx);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>> +					 const struct btf_func_model *m,
+>> +					 struct bpf_tramp_links *tlinks,
+>> +					 void *func_addr, u32 flags,
+>> +					 struct rv_jit_context *ctx)
+>> +{
+>> +	int i, ret, offset;
+>> +	int *branches_off = NULL;
+>> +	int stack_size = 0, nregs = m->nr_args;
+>> +	int retaddr_off, fp_off, retval_off, args_off;
+>> +	int nregs_off, ip_off, run_ctx_off, sreg_off;
+>> +	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+>> +	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>> +	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+>> +	void *orig_call = func_addr;
+>> +	bool save_ret;
+>> +	u32 insn;
+>> +
+>> +	/* Generated trampoline stack layout:
+>> +	 *
+>> +	 * FP - 8	    [ RA of parent func	] return address of parent
+>> +	 *					  function
+>> +	 * FP - retaddr_off [ RA of traced func	] return address of traced
+>> +	 *					  function
+>> +	 * FP - fp_off	    [ FP of parent func ]
+>> +	 *
+>> +	 * FP - retval_off  [ return value      ] BPF_TRAMP_F_CALL_ORIG or
+>> +	 *					  BPF_TRAMP_F_RET_FENTRY_RET
+>> +	 *                  [ argN              ]
+>> +	 *                  [ ...               ]
+>> +	 * FP - args_off    [ arg1              ]
+>> +	 *
+>> +	 * FP - nregs_off   [ regs count        ]
+>> +	 *
+>> +	 * FP - ip_off      [ traced func	] BPF_TRAMP_F_IP_ARG
+>> +	 *
+>> +	 * FP - run_ctx_off [ bpf_tramp_run_ctx ]
+>> +	 *
+>> +	 * FP - sreg_off    [ callee saved reg	]
+>> +	 *
+>> +	 *		    [ pads              ] pads for 16 bytes alignment
+>> +	 */
+>> +
+>> +	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
+>> +		return -ENOTSUPP;
+>> +
+>> +	/* extra regiters for struct arguments */
+>> +	for (i = 0; i < m->nr_args; i++)
+>> +		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+>> +			nregs += round_up(m->arg_size[i], 8) / 8 - 1;
+>> +
+>> +	/* 8 arguments passed by registers */
+>> +	if (nregs > 8)
+>> +		return -ENOTSUPP;
+>> +
+>> +	/* room for parent function return address */
+>> +	stack_size += 8;
+>> +
+>> +	stack_size += 8;
+>> +	retaddr_off = stack_size;
+>> +
+>> +	stack_size += 8;
+>> +	fp_off = stack_size;
+>> +
+>> +	save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
+>> +	if (save_ret) {
+>> +		stack_size += 8;
+>> +		retval_off = stack_size;
+>> +	}
+>> +
+>> +	stack_size += nregs * 8;
+>> +	args_off = stack_size;
+>> +
+>> +	stack_size += 8;
+>> +	nregs_off = stack_size;
+>> +
+>> +	if (flags & BPF_TRAMP_F_IP_ARG) {
+>> +		stack_size += 8;
+>> +		ip_off = stack_size;
+>> +	}
+>> +
+>> +	stack_size += round_up(sizeof(struct bpf_tramp_run_ctx), 8);
+>> +	run_ctx_off = stack_size;
+>> +
+>> +	stack_size += 8;
+>> +	sreg_off = stack_size;
+>> +
+>> +	stack_size = round_up(stack_size, 16);
+>> +
+>> +	emit_addi(RV_REG_SP, RV_REG_SP, -stack_size, ctx);
+>> +
+>> +	emit_sd(RV_REG_SP, stack_size - retaddr_off, RV_REG_RA, ctx);
+>> +	emit_sd(RV_REG_SP, stack_size - fp_off, RV_REG_FP, ctx);
+>> +
+>> +	emit_addi(RV_REG_FP, RV_REG_SP, stack_size, ctx);
+>> +
+>> +	/* callee saved register S1 to pass start time */
+>> +	emit_sd(RV_REG_FP, -sreg_off, RV_REG_S1, ctx);
+>> +
+>> +	/* store ip address of the traced function */
+>> +	if (flags & BPF_TRAMP_F_IP_ARG) {
+>> +		emit_imm(RV_REG_T1, (const s64)func_addr, ctx);
+>> +		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
+>> +	}
+>> +
+>> +	emit_li(RV_REG_T1, nregs, ctx);
+>> +	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
+>> +
+>> +	store_args(nregs, args_off, ctx);
+>> +
+>> +	/* skip to actual body of traced function */
+>> +	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+>> +		orig_call += 16;
+>> +
+>> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>> +		emit_imm(RV_REG_A0, (const s64)im, ctx);
+>> +		ret = emit_call((const u64)__bpf_tramp_enter, true, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	for (i = 0; i < fentry->nr_links; i++) {
+>> +		ret = invoke_bpf_prog(fentry->links[i], args_off, retval_off, run_ctx_off,
+>> +				      flags & BPF_TRAMP_F_RET_FENTRY_RET, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (fmod_ret->nr_links) {
+>> +		branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
+>> +		if (!branches_off)
+>> +			return -ENOMEM;
+>> +
+>> +		ret = invoke_bpf_mod_ret(fmod_ret, args_off, retval_off, run_ctx_off,
+>> +					 branches_off, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>> +		restore_args(nregs, args_off, ctx);
+>> +		ret = emit_call((const u64)orig_call, true, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +		emit_sd(RV_REG_FP, -retval_off, RV_REG_A0, ctx);
+>> +		/* nop reserved for bpf_tramp_image_put */
+>> +		im->ip_after_call = ctx->insns + ctx->ninsns;
+>> +		emit(rv_nop(), ctx);
+>> +	}
+>> +
+>> +	/* update branches saved in invoke_bpf_mod_ret with bnez */
+>> +	for (i = 0; i < fmod_ret->nr_links; i++) {
+>> +		offset = ninsns_rvoff(ctx->ninsns - branches_off[i]);
+>> +		insn = rv_bne(RV_REG_T1, RV_REG_ZERO, offset >> 1);
+>> +		*(u32 *)(ctx->insns + branches_off[i]) = insn;
+>> +	}
+>> +
+>> +	for (i = 0; i < fexit->nr_links; i++) {
+>> +		ret = invoke_bpf_prog(fexit->links[i], args_off, retval_off,
+>> +				      run_ctx_off, false, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>> +		im->ip_epilogue = ctx->insns + ctx->ninsns;
+>> +		emit_imm(RV_REG_A0, (const s64)im, ctx);
+>> +		ret = emit_call((const u64)__bpf_tramp_exit, true, ctx);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+>> +		restore_args(nregs, args_off, ctx);
+>> +
+>> +	if (save_ret)
+>> +		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
+>> +
+>> +	emit_ld(RV_REG_S1, -sreg_off, RV_REG_FP, ctx);
+>> +
+>> +	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+>> +		/* return address of parent function */
+>> +		emit_ld(RV_REG_RA, stack_size - 8, RV_REG_SP, ctx);
+>> +	else
+>> +		/* return address of traced function */
+>> +		emit_ld(RV_REG_RA, stack_size - retaddr_off, RV_REG_SP, ctx);
+>> +
+>> +	emit_ld(RV_REG_FP, stack_size - fp_off, RV_REG_SP, ctx);
+>> +	emit_addi(RV_REG_SP, RV_REG_SP, stack_size, ctx);
+>> +
+>> +	emit_jalr(RV_REG_ZERO, RV_REG_RA, 0, ctx);
+>> +
+>> +	bpf_flush_icache(ctx->insns, ctx->insns + ctx->ninsns);
+>> +
+>> +	kfree(branches_off);
+>> +
+>> +	return ctx->ninsns;
+>> +
+>> +}
+>> +
+>> +int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+>> +				void *image_end, const struct btf_func_model *m,
+>> +				u32 flags, struct bpf_tramp_links *tlinks,
+>> +				void *func_addr)
+>> +{
+>> +	int ret;
+>> +	struct rv_jit_context ctx;
+>> +
+>> +	ctx.ninsns = 0;
+>> +	ctx.insns = image;
+>> +	ret = __arch_prepare_bpf_trampoline(im, m, tlinks, func_addr, flags, &ctx);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	if (ninsns_rvoff(ret) > (long)image_end - (long)image)
+>> +		return -EFBIG;
 > 
-> wbt's lazy init is tied to one of the block device sysfs files, right? So,
-> it *should* already be protected against device removal.
-
-That seems not true, I don't think q->sysfs_lock can protect that,
-consider that queue_wb_lat_store() doesn't check if del_gendisk() is
-called or not:
-
-t1: wbt lazy init		t2: remove device
-queue_attr_store
-				del_gendisk
-				blk_unregister_queue
-				 mutex_lock(&q->sysfs_lock)
-			         ...
-				 mutex_unlock(&q->sysfs_lock);
-				rq_qos_exit
-  mutex_lock(&q->sysfs_lock);
-   queue_wb_lat_store
-   wbt_init
-    rq_qos_add
-  mutex_unlock(&q->sysfs_lock);
-
-I tried to comfirm that by adding following delay:
-
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 93d9e9c9a6ea..101c33cb0a2b 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -11,6 +11,7 @@
-  #include <linux/blktrace_api.h>
-  #include <linux/blk-mq.h>
-  #include <linux/debugfs.h>
-+#include <linux/delay.h>
-
-  #include "blk.h"
-  #include "blk-mq.h"
-@@ -734,6 +735,8 @@ queue_attr_store(struct kobject *kobj, struct 
-attribute *attr,
-         if (!entry->store)
-                 return -EIO;
-
-+       msleep(10000);
-+
-         mutex_lock(&q->sysfs_lock);
-         res = entry->store(q, page, length);
-         mutex_unlock(&q->sysfs_lock);
-
-And then do the following test:
-
-1) echo 10000 > /sys/block/sdb/queue/wbt_lat_usec &
-2) echo 1 > /sys/block/sda/device/delete
-
-Then, following bug is triggered:
-
-[   51.923642] BUG: unable to handle page fault for address: 
-ffffffffffffffed
-[   51.924294] #PF: supervisor read access in kernel mode
-[   51.924773] #PF: error_code(0x0000) - not-present page
-[   51.925252] PGD 1820b067 P4D 1820b067 PUD 1820d067 PMD 0
-[   51.925754] Oops: 0000 [#1] PREEMPT SMP
-[   51.926123] CPU: 1 PID: 539 Comm: bash Tainted: G        W 
-6.2.0-rc1-next-202212267
-[   51.927124] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
-BIOS ?-20190727_073836-b4
-[   51.928334] RIP: 0010:__rq_qos_issue+0x30/0x60
-[   51.928761] Code: 48 89 f5 53 48 89 fb 48 83 05 eb eb c9 0b 01 eb 19 
-48 89 df 48 83 05 e6 e9
-[   51.930426] RSP: 0018:ffffc90000c3b9b0 EFLAGS: 00010206
-[   51.930905] RAX: 0000000000000000 RBX: ffffffffffffffed RCX: 
-0000000000000017
-[   51.931554] RDX: 000007c329800000 RSI: ffff8881022c0380 RDI: 
-ffffffffffffffed
-[   51.932197] RBP: ffff8881022c0380 R08: 0000000c385056e3 R09: 
-ffff8881022c05c8
-[   51.932841] R10: 0000000000000000 R11: ffff888100a94000 R12: 
-ffff888102145000
-[   51.933488] R13: 0000000000000000 R14: ffff888100a94000 R15: 
-ffff8881022c04a0
-[   51.934140] FS:  00007fd23def9700(0000) GS:ffff88813bd00000(0000) 
-knlGS:0000000000000000
-[   51.934856] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   51.935379] CR2: ffffffffffffffed CR3: 0000000106fff000 CR4: 
-00000000000006e0
-[   51.936036] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
-0000000000000000
-[   51.936675] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
-0000000000000400
-[   51.937315] Call Trace:
-[   51.937545]  <TASK>
-[   51.937749]  blk_mq_start_request+0x1d1/0x240
-[   51.938151]  scsi_queue_rq+0x347/0x1190
-[   51.938513]  blk_mq_dispatch_rq_list+0x366/0xef0
-[   51.938938]  ? tick_nohz_tick_stopped+0x1a/0x40
-[   51.939356]  ? __irq_work_queue_local+0x59/0xd0
-[   51.939769]  ? __sbitmap_get_word+0x3b/0xb0
-[   51.940153]  __blk_mq_sched_dispatch_requests+0xdd/0x210
-[   51.940633]  blk_mq_sched_dispatch_requests+0x38/0xa0
-[   51.941089]  __blk_mq_run_hw_queue+0xca/0x110
-[   51.941483]  __blk_mq_delay_run_hw_queue+0x1fc/0x210
-[   51.941931]  blk_mq_run_hw_queue+0x15c/0x1d0
-[   51.942327]  blk_mq_sched_insert_request+0x9c/0x210
-[   51.942769]  blk_execute_rq+0xec/0x290
-[   51.943121]  __scsi_execute+0x131/0x310
-[   51.943492]  sd_sync_cache+0xc6/0x280
-[   51.943831]  sd_shutdown+0x7f/0x180
-[   51.944155]  sd_remove+0x53/0x80
-[   51.944457]  device_remove+0x80/0xa0
-[   51.944785]  device_release_driver_internal+0x131/0x270
-[   51.945257]  device_release_driver+0x16/0x20
-[   51.945643]  bus_remove_device+0x135/0x200
-
-Thanks,
-Kuai
+> This looks risky! First you generate the image, and here you realize
+> that you already wrote in all the wrong places?!
 > 
-> Thanks.
+
+Oops, this will probably lead to OOB. Will fix in the next.
+
+>> +
+>> +	return ninsns_rvoff(ret);
 > 
+> Ok, this was a bit subtle to me. The return value of the this function
+> is used in kernel/bpf/bpf_struct_ops.c. Now I know! :-)
+> 
+> 
+> Thanks!
+> Bj√∂rn
 
