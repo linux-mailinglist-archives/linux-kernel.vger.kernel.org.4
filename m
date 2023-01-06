@@ -2,127 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162BD660732
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924B366073D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbjAFTeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S235814AbjAFTgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjAFTeK (ORCPT
+        with ESMTP id S235745AbjAFTgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:34:10 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD671897;
-        Fri,  6 Jan 2023 11:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+/GD8PRl+jyl3wTiMZAp9rcLOar4g14C13jzDgJg/Mk=; b=Y08UrcZINgykpAfN/XOYJlNenG
-        7iRZP0/+vD80IcmcIiFvLMVB4jecfgBFDY/9PpTb1LxhMJ4Amyrq4q9WBl/fuZO7sJmOQ7TjJaoX3
-        ouYW9IDjciXV0ep2Y/NHv9SzRuPYJXGCt9qRe45M87uounVerUcFM5OdjaEZkg8BXhel6ZEaeBHMB
-        d656BJUCcEh28YYMlgr5JblevdbwE2QcYsd950FLgVccD/YezIF5hx/ArmJ4PDJLSCyRQZJyhDOg8
-        6hT41t0/5gHoyhzJbbTlXovPj2c1Zat7KwrYQFqO6bD6s+3yvdgZAI4nMzIPfGSWKp3V2RM8vyh5T
-        f48T+wQA==;
-Received: from p200300ccff08c9001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff08:c900:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pDsTY-0003X1-2R; Fri, 06 Jan 2023 20:34:00 +0100
-Date:   Fri, 6 Jan 2023 20:33:58 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
- combinations
-Message-ID: <20230106203358.14878660@aktux>
-In-Reply-To: <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
-References: <20230105213856.1828360-1-andreas@kemnade.info>
-        <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 6 Jan 2023 14:36:33 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5262F1;
+        Fri,  6 Jan 2023 11:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673033792; x=1704569792;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JKQwhg3SKN3PwT6OwIBONjP4dNuxovJ0f2FMLC1fPXY=;
+  b=D1J740NLI5kA6NVxgZwHuCuAkSghTZ35rLerR1Rx65bZ39t0M103srEH
+   r22UMNya9gvorRhMabqPVO9YqUksO/wuAKrjiCsPuT1F6L8yJJqF0lf11
+   SIX/gaSfd3SaQQYwr5M4Z+NVoM7S6Z513IK6zI9xwnUAjLuT52FOhi6a9
+   ey7+RSo27IJDFQ37DHs9Xyv/Fmqx14E8okwvWKPq+vu8wDoANms8Z3pmC
+   cWdFUQ3Ryv70ycSIebMI9Lkelym42y4PphGNJTAIwK//mk6iYm6P6TnxK
+   XnQIjt8yq7JxrbBuWn+sq84owFxlfv9lTKQeTBOEZC+KIla8IQpZUpJR4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="323791777"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="323791777"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:36:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="686563906"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="686563906"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:36:31 -0800
+Message-ID: <725de6e9-e468-48ef-3bae-1e8a1b7ef0f7@intel.com>
+Date:   Fri, 6 Jan 2023 11:36:31 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 09/16] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <6f9c0bc1074501fa2431bde73bdea57279bf0085.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <6f9c0bc1074501fa2431bde73bdea57279bf0085.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 09:41:01 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> On 05/01/2023 22:38, Andreas Kemnade wrote:
-> > Currently make dtbs_check shows lots of errors because imx*.dtsi does
-> > not use single compatibles but combinations of them.
-> > Allow all the combinations used there.
-> > 
-> > Patches fixing the dtsi files according to binding documentation were
-> > submitted multiple times and are commonly rejected, so relax the rules.
-> > Example:
-> > https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
-> > 
-> > Reason: compatibility of new dtbs with old kernels or bootloaders.
-> > 
-> > This will significantly reduce noise on make dtbs_check.
-> > 
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > ---
-> >  .../bindings/mmc/fsl-imx-esdhc.yaml           | 24 +++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > index dc6256f04b42..118ebb75f136 100644
-> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > @@ -37,6 +37,30 @@ properties:
-> >            - fsl,imx8mm-usdhc
-> >            - fsl,imxrt1050-usdhc
-> >            - nxp,s32g2-usdhc  
+On 12/8/22 22:52, Kai Huang wrote:
+> Start to transit out the "multi-steps" to construct a list of "TD Memory
+> Regions" (TDMRs) to cover all TDX-usable memory regions.
 > 
-> You must drop the items from enum above. Binding saying:
-> compatible="A"
-> or:
-> compatible="A", "B"
+> The kernel configures TDX-usable memory regions by passing a list of
+> TDMRs "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains
+> the information of the base/size of a memory region, the base/size of the
+> associated Physical Address Metadata Table (PAMT) and a list of reserved
+> areas in the region.
 > 
-> is not correct. Either A is or is not compatible with B.
+> Do the first step to fill out a number of TDMRs to cover all TDX memory
+> regions.  To keep it simple, always try to use one TDMR for each memory
+> region.  As the first step only set up the base/size for each TDMR.
 > 
-hmm, here we have A = B + some additional features
-or
-A = B + some additional features and additional quirks required.
+> Each TDMR must be 1G aligned and the size must be in 1G granularity.
+> This implies that one TDMR could cover multiple memory regions.  If a
+> memory region spans the 1GB boundary and the former part is already
+> covered by the previous TDMR, just use a new TDMR for the remaining
+> part.
+> 
+> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
+> are consumed but there is more memory region to cover.
 
-For the latter we have e.g.
-A=
-static const struct esdhc_soc_data usdhc_imx6sx_data = {
-        .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
-                        | ESDHC_FLAG_HAVE_CAP1 | ESDHC_FLAG_HS200
-                        | ESDHC_FLAG_STATE_LOST_IN_LPMODE
-                        | ESDHC_FLAG_BROKEN_AUTO_CMD23,
-};
-B=
-static const struct esdhc_soc_data usdhc_imx6sl_data = {
-        .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
-                        | ESDHC_FLAG_HAVE_CAP1 | ESDHC_FLAG_ERR004536
-                        | ESDHC_FLAG_HS200
-                        | ESDHC_FLAG_BROKEN_AUTO_CMD23,
-};
+This could probably use some discussion of why it is not being
+future-proofed.  Maybe:
 
-so there is the difference in ESDHC_FLAG_STATE_LOST_IN_LPMODE.
-That might make no difference in some usage scenario (e.g. some bootloader
-not doing any LPMODE), but I wonder why
-we need to *enforce* specifying such half-compatible things.
+	There are fancier things that could be done like trying to merge
+	adjacent TDMRs.  This would allow more pathological memory
+	layouts to be supported.  But, current systems are not even
+	close to exhausting the existing TDMR resources in practice.
+	For now, keep it simple.
 
-Regards,
-Andreas
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index d36ac72ef299..5b1de0200c6b 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -407,6 +407,90 @@ static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
+>  			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
+>  }
+>  
+> +/* Get the TDMR from the list at the given index. */
+> +static struct tdmr_info *tdmr_entry(struct tdmr_info_list *tdmr_list,
+> +				    int idx)
+> +{
+> +	return (struct tdmr_info *)((unsigned long)tdmr_list->first_tdmr +
+> +			tdmr_list->tdmr_sz * idx);
+> +}
+
+I think that's more complicated and has more casting than necessary.
+This looks nicer:
+
+	int tdmr_info_offset = tdmr_list->tdmr_sz * idx;
+
+	return (void *)tdmr_list->first_tdmr + tdmr_info_offset;
+
+Also, it might even be worth keeping ->first_tdmr as a void*.  It isn't
+a real C array and keeping it as void* would keep anyone from doing:
+
+	tdmr_foo = tdmr_list->first_tdmr[foo];
+
+> +#define TDMR_ALIGNMENT		BIT_ULL(30)
+> +#define TDMR_PFN_ALIGNMENT	(TDMR_ALIGNMENT >> PAGE_SHIFT)
+> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
+> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
+> +
+> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
+> +{
+> +	return tdmr->base + tdmr->size;
+> +}
+> +
+> +/*
+> + * Take the memory referenced in @tmb_list and populate the
+> + * preallocated @tdmr_list, following all the special alignment
+> + * and size rules for TDMR.
+> + */
+> +static int fill_out_tdmrs(struct list_head *tmb_list,
+> +			  struct tdmr_info_list *tdmr_list)
+> +{
+> +	struct tdx_memblock *tmb;
+> +	int tdmr_idx = 0;
+> +
+> +	/*
+> +	 * Loop over TDX memory regions and fill out TDMRs to cover them.
+> +	 * To keep it simple, always try to use one TDMR to cover one
+> +	 * memory region.
+> +	 *
+> +	 * In practice TDX1.0 supports 64 TDMRs, which is big enough to
+> +	 * cover all memory regions in reality if the admin doesn't use
+> +	 * 'memmap' to create a bunch of discrete memory regions.  When
+> +	 * there's a real problem, enhancement can be done to merge TDMRs
+> +	 * to reduce the final number of TDMRs.
+> +	 */
+> +	list_for_each_entry(tmb, tmb_list, list) {
+> +		struct tdmr_info *tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		u64 start, end;
+> +
+> +		start = TDMR_ALIGN_DOWN(PFN_PHYS(tmb->start_pfn));
+> +		end   = TDMR_ALIGN_UP(PFN_PHYS(tmb->end_pfn));
+> +
+> +		/*
+> +		 * A valid size indicates the current TDMR has already
+> +		 * been filled out to cover the previous memory region(s).
+> +		 */
+> +		if (tdmr->size) {
+> +			/*
+> +			 * Loop to the next if the current memory region
+> +			 * has already been fully covered.
+> +			 */
+> +			if (end <= tdmr_end(tdmr))
+> +				continue;
+> +
+> +			/* Otherwise, skip the already covered part. */
+> +			if (start < tdmr_end(tdmr))
+> +				start = tdmr_end(tdmr);
+> +
+> +			/*
+> +			 * Create a new TDMR to cover the current memory
+> +			 * region, or the remaining part of it.
+> +			 */
+> +			tdmr_idx++;
+> +			if (tdmr_idx >= tdmr_list->max_tdmrs)
+> +				return -E2BIG;
+> +
+> +			tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		}
+> +
+> +		tdmr->base = start;
+> +		tdmr->size = end - start;
+> +	}
+> +
+> +	/* @tdmr_idx is always the index of last valid TDMR. */
+> +	tdmr_list->nr_tdmrs = tdmr_idx + 1;
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Construct a list of TDMRs on the preallocated space in @tdmr_list
+>   * to cover all TDX memory regions in @tmb_list based on the TDX module
+> @@ -416,16 +500,23 @@ static int construct_tdmrs(struct list_head *tmb_list,
+>  			   struct tdmr_info_list *tdmr_list,
+>  			   struct tdsysinfo_struct *sysinfo)
+>  {
+> +	int ret;
+> +
+> +	ret = fill_out_tdmrs(tmb_list, tdmr_list);
+> +	if (ret)
+> +		goto err;
+> +
+>  	/*
+>  	 * TODO:
+>  	 *
+> -	 *  - Fill out TDMRs to cover all TDX memory regions.
+>  	 *  - Allocate and set up PAMTs for each TDMR.
+>  	 *  - Designate reserved areas for each TDMR.
+>  	 *
+>  	 * Return -EINVAL until constructing TDMRs is done
+>  	 */
+> -	return -EINVAL;
+> +	ret = -EINVAL;
+> +err:
+> +	return ret;
+>  }
+>  
+>  static int init_tdx_module(void)
+
+Otherwise this actually looks fine.
