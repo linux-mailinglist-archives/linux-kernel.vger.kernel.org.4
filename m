@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E0E660EF4
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B9660F06
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 14:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjAGM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 07:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        id S231335AbjAGNVU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 Jan 2023 08:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjAGM6V (ORCPT
+        with ESMTP id S229640AbjAGNVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:58:21 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D4F8FF7
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:58:19 -0800 (PST)
-Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 307CwIOV084132;
-        Sat, 7 Jan 2023 21:58:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
- Sat, 07 Jan 2023 21:58:18 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
-Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 307CwIxi084129
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 7 Jan 2023 21:58:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ca66366f-b8a5-3b49-11ab-97bb839a4105@I-love.SAKURA.ne.jp>
-Date:   Sat, 7 Jan 2023 21:58:19 +0900
+        Sat, 7 Jan 2023 08:21:17 -0500
+Received: from mail.krjc.kg (unknown [212.112.113.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9F457913
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 05:21:14 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.krjc.kg (Postfix) with ESMTP id 4D4FA263581;
+        Sat,  7 Jan 2023 07:48:09 +0600 (+06)
+Received: from mail.krjc.kg ([127.0.0.1])
+        by localhost (mail.krjc.kg [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id wdLa3lHIP6y6; Sat,  7 Jan 2023 07:48:01 +0600 (+06)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.krjc.kg (Postfix) with ESMTP id 5B7CF4C06F3;
+        Sat,  7 Jan 2023 00:39:47 +0600 (+06)
+X-Virus-Scanned: amavisd-new at krjc.kg
+Received: from mail.krjc.kg ([127.0.0.1])
+        by localhost (mail.krjc.kg [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QgcOd2KM9_Ry; Sat,  7 Jan 2023 00:39:47 +0600 (+06)
+Received: from [192.168.100.202] (unknown [217.21.116.220])
+        by mail.krjc.kg (Postfix) with ESMTPSA id 2206A80CF26;
+        Fri,  6 Jan 2023 22:47:37 +0600 (+06)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 (repost)] locking/lockdep: add
- debug_show_all_lock_holders()
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <41f43b27-d910-78e0-c0b3-f2885fe1cd22@I-love.SAKURA.ne.jp>
- <c8893402-d1b2-9fad-3aad-d130c5f5923b@I-love.SAKURA.ne.jp>
-In-Reply-To: <c8893402-d1b2-9fad-3aad-d130c5f5923b@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: rahaline annetus
+To:     Recipients <Mr.Stefano@mail.krjc.kg>
+From:   Mr.Stefano@mail.krjc.kg, Pessina@mail.krjc.kg, test@mail.krjc.kg
+Date:   Fri, 06 Jan 2023 19:47:30 +0300
+Reply-To: stefanopessia755@hotmail.com
+Message-Id: <20230106164739.2206A80CF26@mail.krjc.kg>
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_99,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_PDS_TO_EQ_FROM_NAME
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9933]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [stefanopessia755[at]hotmail.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [212.112.113.131 listed in wl.mailspike.net]
+        *  0.0 T_PDS_TO_EQ_FROM_NAME From: name same as To: address
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I decided to send this patch via my tree.
+Summa 500 000,00 € on teile annetanud STEFANO PESSINA. Lisateabe saamiseks võtke palun tagasi aadressil stefanopessia755@hotmail.com
 
-On 2022/12/29 9:25, Tetsuo Handa wrote:
-> Hello, Andrew.
-> 
-> Since neither Peter nor Ingo is responding, would you take this patch via
-> your tree?
 
+
+
+The sum of €500,000.00 has been donated to you by STEFANO PESSINA. Kindly get back for more info via stefanopessia755@hotmail.com
