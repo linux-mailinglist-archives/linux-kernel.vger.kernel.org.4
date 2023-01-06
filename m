@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FAA65F969
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668EA65F964
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjAFCGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 21:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S229551AbjAFCFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 21:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjAFCGv (ORCPT
+        with ESMTP id S229441AbjAFCFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 21:06:51 -0500
-X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 18:06:49 PST
-Received: from a27-19.smtp-out.us-west-2.amazonses.com (a27-19.smtp-out.us-west-2.amazonses.com [54.240.27.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F0C3C0FD;
-        Thu,  5 Jan 2023 18:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ude52klaz7ukvnrchdbsicqdl2lnui6h; d=aaront.org; t=1672970549;
-        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding;
-        bh=Cmz24rg2v6sSkGwNw58tGKSlPXAtf7goihufSQSgRQU=;
-        b=OTSv+DlU2mrxugOLjgqSj9NaHzlzF78TX1RzcACgtYB7/UWRCeIuAk/4LRW+/8u2
-        yX/hekQVtyXKsgabL3qmmCRWr8THpEy0R1uJ6WYTnu0HUsf4rx0iCzy7iAftNyDr6lq
-        D8M+2+Q5pQoI5jMkDNAwg+YFeqO1lnJ3mGcHowPs=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1672970549;
-        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding:Feedback-ID;
-        bh=Cmz24rg2v6sSkGwNw58tGKSlPXAtf7goihufSQSgRQU=;
-        b=Qh0aaAYSWQyh97c8Ybx7gKS/oDcIXWJnAFQgrL/ojIIOEculrzvQcpAm5v0VEURn
-        uEwmxT0YqZjp+/KRWtJC2wwMOII11gX+RMMo+MuO3X7dRtTY2WdbX+y88NioN7hYxFt
-        EI6pa2GS6TiQpp5SCkO2l1Ob833jY8Xb1CPHkdiM=
+        Thu, 5 Jan 2023 21:05:36 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486475F86
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672970735; x=1704506735;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6VMcYmNHJ/oZ4CfBUmGhmOWLs1SQJbQG9gauunFPGbY=;
+  b=oJqeQOohnPJ/jjMQJyL1bnErfWr2tODvqcE2m1bTd1WslvTT797uwvSe
+   ETR9NqpcEL/usduyQXaalz6/hlogQ40FTnFCRAeYc/7YgtWw5/OU4Z0N3
+   mrUhXtUTDGuIspWSl0OvZVkS5siQWrVqHw21eSiiu2KseuXph3lExlC5P
+   e4epjqZiAlFKTjh8K7ElmtOCQtztHE8fRYERGFmkdOJ7x9u85sOAdbM67
+   On/n9OsVFD/bl7lfVDVkGmQi7VMp9wQnRni2XvymT8nguYUacV6/YQJNL
+   sQPVmJtDqhO4jLybb4r/pOg7B2zXu/BozuIdLWCMh5sd3Kc/fQGj0NrHk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="310171319"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="310171319"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 18:05:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="779834737"
+X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
+   d="scan'208";a="779834737"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2023 18:05:32 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pDc6t-0002q3-2M;
+        Fri, 06 Jan 2023 02:05:31 +0000
+Date:   Fri, 6 Jan 2023 10:04:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: versioncheck: ./init/version-timestamp.c: 5 linux/version.h not
+ needed.
+Message-ID: <202301060933.Btw5f1Pl-lkp@intel.com>
 MIME-Version: 1.0
-Date:   Fri, 6 Jan 2023 02:02:28 +0000
-From:   Aaron Thompson <dev@aaront.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 1/1] mm: Always release pages to the buddy allocator in
- memblock_free_late().
-In-Reply-To: <Y7aq7fzKZ/EdLVp3@gmail.com>
-References: <010101857bbc3a41-173240b3-9064-42ef-93f3-482081126ec2-000000@us-west-2.amazonses.com>
- <20230105041650.1485-1-dev@aaront.org>
- <010001858025fc22-e619988e-c0a5-4545-bd93-783890b9ad14-000000@email.amazonses.com>
- <Y7aq7fzKZ/EdLVp3@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0101018584d0b5a3-ea0e4d67-b00f-4254-8e1c-767fcafbec31-000000@us-west-2.amazonses.com>
-X-Sender: dev@aaront.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Feedback-ID: 1.us-west-2.OwdjDcIoZWY+bZWuVZYzryiuW455iyNkDEZFeL97Dng=:AmazonSES
-X-SES-Outgoing: 2023.01.06-54.240.27.19
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
+commit: 2df8220cc511326508ec4da2f43ef69311bdd7b9 kbuild: build init/built-in.a just once
+date:   3 months ago
+reproduce:
+        make versioncheck
 
-On 2023-01-05 02:48, Ingo Molnar wrote:
-> * Aaron Thompson <dev@aaront.org> wrote:
-> 
->> For example, on an Amazon EC2 t3.micro VM (1 GB) booting via EFI:
->> 
->> v6.2-rc2:
->>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
->>   Node 0, zone      DMA
->>           spanned  4095
->>           present  3999
->>           managed  3840
->>   Node 0, zone    DMA32
->>           spanned  246652
->>           present  245868
->>           managed  178867
->> 
->> v6.2-rc2 + patch:
->>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
->>   Node 0, zone      DMA
->>           spanned  4095
->>           present  3999
->>           managed  3840
->>   Node 0, zone    DMA32
->>           spanned  246652
->>           present  245868
->>           managed  222816   # +43,949 pages
-> 
-> [ Note the annotation I added to the output - might be useful in the
-> changelog too. ]
-> 
-> So this patch adds around +17% of RAM to this 1 GB virtual system? That
-> looks rather significant ...
-> 
-> Thanks,
-> 
-> 	Ingo
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-It is significant, but I wouldn't describe it as being added. I would 
-say that the system is currently losing 17% of RAM due to a bug, and 
-this patch fixes that bug.
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j16 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+>> ./init/version-timestamp.c: 5 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 301: need linux/version.h
+   ./tools/perf/include/bpf/bpf.h: 70: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
 
-The actual numbers depend on the mappings given by the EFI, so they're 
-largely out of our control. As an example, similar VMs that I run with 
-the OVMF EFI lose about 3%. I couldn't say for sure which is the 
-outlier, but my point is that the specific values are not really the 
-focus, this is just an example that shows that the issue can be 
-encountered in the wild with real impact. I know I'll be happy to get 
-that memory back, whether it is 3% or 17% :)
-
-Thanks,
--- Aaron
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
