@@ -2,335 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405736603F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F896603F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjAFQHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S234814AbjAFQHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjAFQHT (ORCPT
+        with ESMTP id S234908AbjAFQHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:07:19 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2640425F;
-        Fri,  6 Jan 2023 08:07:14 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 242671884680;
-        Fri,  6 Jan 2023 16:07:12 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 1DF9E2503B65;
-        Fri,  6 Jan 2023 16:07:12 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 10A4991201E4; Fri,  6 Jan 2023 16:07:12 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id C11C39EC000C;
-        Fri,  6 Jan 2023 16:07:11 +0000 (UTC)
-From:   "Hans J. Schultz" <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB implementation
-Date:   Fri,  6 Jan 2023 17:05:29 +0100
-Message-Id: <20230106160529.1668452-4-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230106160529.1668452-1-netdev@kapio-technology.com>
-References: <20230106160529.1668452-1-netdev@kapio-technology.com>
+        Fri, 6 Jan 2023 11:07:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4773C398;
+        Fri,  6 Jan 2023 08:07:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECEB0B81CDC;
+        Fri,  6 Jan 2023 16:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1C4C433EF;
+        Fri,  6 Jan 2023 16:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673021255;
+        bh=fErnzGHXYp7EafkqUofZ+/wlGIMUeDfiUn5oFwF8PJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rf5RCh3GLjZ44a5+pgObN4yfEQfuca85fWyqwY9CZgECrt2KCA95nL3BPxHrgxUDb
+         +pvfRs8IjM839H91auovz6a/NnMZrvb5vAD+DKt9FJmUSlpznRfBaT1sEccgEjIBEM
+         ZgW078wbxJSJMD9Tg2QBTWP7b46qFeWULbEb4GQRenp5jUCj6qYgdnF1E8Ze0l29ih
+         X8QNZdNZmqep4Jvplq9Wumr2HR+zq+V7ibhRdJdOm1RGbvxYw3UJXqj1XF4VGELt51
+         HFVjRATppE+eGlYmy5X5D3qJt2KyhOakr39U2a7Q8edvaazsYp3/sB5Q4zvd6/DcDh
+         XfWEI0sSzSYPA==
+Date:   Fri, 6 Jan 2023 09:07:33 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] crypto: hisilicon: Wipe entire pool on error
+Message-ID: <Y7hHRYUk6NypdZxT@dev-arch.thelio-3990X>
+References: <20230106041945.never.831-kees@kernel.org>
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106041945.never.831-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implementation for the Marvell mv88e6xxx chip series is based on
-handling ATU miss violations occurring when packets ingress on a port
-that is locked with learning on. This will trigger a
-SWITCHDEV_FDB_ADD_TO_BRIDGE event, which will result in the bridge module
-adding a locked FDB entry. This bridge FDB entry will not age out as
-it has the extern_learn flag set.
+On Thu, Jan 05, 2023 at 08:19:48PM -0800, Kees Cook wrote:
+> To work around a Clang __builtin_object_size bug that shows up under
+> CONFIG_FORTIFY_SOURCE and UBSAN_BOUNDS, move the per-loop-iteration
+> mem_block wipe into a single wipe of the entire pool structure after
+> the loop.
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1780
+> Cc: Weili Qian <qianweili@huawei.com>
+> Cc: Zhou Wang <wangzhou1@hisilicon.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Userspace daemons can listen to these events and either accept or deny
-access for the host, by either replacing the locked FDB entry with a
-simple entry or leave the locked entry.
+Thanks for the patch!
 
-If the host MAC address is already present on another port, a ATU
-member violation will occur, but to no real effect, and the packet will
-be dropped in hardware. Statistics on these violations can be shown with
-the command and example output of interest:
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-ethtool -S ethX
-NIC statistics:
-...
-     atu_member_violation: 5
-     atu_miss_violation: 23
-...
-
-Where ethX is the interface of the MAB enabled port.
-
-Furthermore, as added vlan interfaces where the vid is not added to the
-VTU will cause ATU miss violations reporting the FID as
-MV88E6XXX_FID_STANDALONE, we need to check and skip the miss violations
-handling in this case.
-
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
----
- drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
- drivers/net/dsa/mv88e6xxx/chip.c        | 18 ++++--
- drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
- drivers/net/dsa/mv88e6xxx/global1_atu.c |  8 +++
- drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
- 6 files changed, 138 insertions(+), 6 deletions(-)
- create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
- create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
-
-diff --git a/drivers/net/dsa/mv88e6xxx/Makefile b/drivers/net/dsa/mv88e6xxx/Makefile
-index 49bf358b9c4f..1409e691ab77 100644
---- a/drivers/net/dsa/mv88e6xxx/Makefile
-+++ b/drivers/net/dsa/mv88e6xxx/Makefile
-@@ -15,6 +15,7 @@ mv88e6xxx-objs += port_hidden.o
- mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
- mv88e6xxx-objs += serdes.o
- mv88e6xxx-objs += smi.o
-+mv88e6xxx-objs += switchdev.o
- mv88e6xxx-objs += trace.o
- 
- # for tracing framework to find trace.h
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 29d4ff8e1181..07f1391c64e7 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1728,11 +1728,11 @@ static int mv88e6xxx_vtu_get(struct mv88e6xxx_chip *chip, u16 vid,
- 	return err;
- }
- 
--static int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
--			      int (*cb)(struct mv88e6xxx_chip *chip,
--					const struct mv88e6xxx_vtu_entry *entry,
--					void *priv),
--			      void *priv)
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv)
- {
- 	struct mv88e6xxx_vtu_entry entry = {
- 		.vid = mv88e6xxx_max_vid(chip),
-@@ -6526,7 +6526,7 @@ static int mv88e6xxx_port_pre_bridge_flags(struct dsa_switch *ds, int port,
- 	const struct mv88e6xxx_ops *ops;
- 
- 	if (flags.mask & ~(BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
--			   BR_BCAST_FLOOD | BR_PORT_LOCKED))
-+			   BR_BCAST_FLOOD | BR_PORT_LOCKED | BR_PORT_MAB))
- 		return -EINVAL;
- 
- 	ops = chip->info->ops;
-@@ -6584,6 +6584,12 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
- 			goto out;
- 	}
- 
-+	if (flags.mask & BR_PORT_MAB) {
-+		bool mab = !!(flags.val & BR_PORT_MAB);
-+
-+		mv88e6xxx_port_set_mab(chip, port, mab);
-+	}
-+
- 	if (flags.mask & BR_PORT_LOCKED) {
- 		bool locked = !!(flags.val & BR_PORT_LOCKED);
- 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index e693154cf803..f635a5bb47ce 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -280,6 +280,9 @@ struct mv88e6xxx_port {
- 	unsigned int serdes_irq;
- 	char serdes_irq_name[64];
- 	struct devlink_region *region;
-+
-+	/* MacAuth Bypass control flag */
-+	bool mab;
- };
- 
- enum mv88e6xxx_region_id {
-@@ -784,6 +787,12 @@ static inline bool mv88e6xxx_is_invalid_port(struct mv88e6xxx_chip *chip, int po
- 	return (chip->info->invalid_port_mask & BIT(port)) != 0;
- }
- 
-+static inline void mv88e6xxx_port_set_mab(struct mv88e6xxx_chip *chip,
-+					  int port, bool mab)
-+{
-+	chip->ports[port].mab = mab;
-+}
-+
- int mv88e6xxx_read(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val);
- int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val);
- int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
-@@ -802,6 +811,12 @@ static inline void mv88e6xxx_reg_unlock(struct mv88e6xxx_chip *chip)
- 	mutex_unlock(&chip->reg_lock);
- }
- 
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv);
-+
- int mv88e6xxx_fid_map(struct mv88e6xxx_chip *chip, unsigned long *bitmap);
- 
- #endif /* _MV88E6XXX_CHIP_H */
-diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-index 557428cee457..ce3b3690c3c0 100644
---- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-+++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-@@ -12,6 +12,7 @@
- 
- #include "chip.h"
- #include "global1.h"
-+#include "switchdev.h"
- #include "trace.h"
- 
- /* Offset 0x01: ATU FID Register */
-@@ -443,6 +444,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 						   entry.portvec, entry.mac,
- 						   fid);
- 		chip->ports[spid].atu_miss_violation++;
-+
-+		if (fid != MV88E6XXX_FID_STANDALONE && chip->ports[spid].mab) {
-+			err = mv88e6xxx_handle_miss_violation(chip, spid,
-+							      &entry, fid);
-+			if (err)
-+				goto out;
-+		}
- 	}
- 
- 	if (val & MV88E6XXX_G1_ATU_OP_FULL_VIOLATION) {
-diff --git a/drivers/net/dsa/mv88e6xxx/switchdev.c b/drivers/net/dsa/mv88e6xxx/switchdev.c
-new file mode 100644
-index 000000000000..4c346a884fb2
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/switchdev.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * switchdev.c
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<netdev@kapio-technology.com>
-+ *
-+ */
-+
-+#include <net/switchdev.h>
-+#include "chip.h"
-+#include "global1.h"
-+#include "switchdev.h"
-+
-+struct mv88e6xxx_fid_search_ctx {
-+	u16 fid_search;
-+	u16 vid_found;
-+};
-+
-+static int __mv88e6xxx_find_vid(struct mv88e6xxx_chip *chip,
-+				const struct mv88e6xxx_vtu_entry *entry,
-+				void *priv)
-+{
-+	struct mv88e6xxx_fid_search_ctx *ctx = priv;
-+
-+	if (ctx->fid_search == entry->fid) {
-+		ctx->vid_found = entry->vid;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mv88e6xxx_find_vid(struct mv88e6xxx_chip *chip, u16 fid, u16 *vid)
-+{
-+	struct mv88e6xxx_fid_search_ctx ctx;
-+	int err;
-+
-+	ctx.fid_search = fid;
-+	mv88e6xxx_reg_lock(chip);
-+	err = mv88e6xxx_vtu_walk(chip, __mv88e6xxx_find_vid, &ctx);
-+	mv88e6xxx_reg_unlock(chip);
-+	if (err < 0)
-+		return err;
-+	if (err == 1)
-+		*vid = ctx.vid_found;
-+	else
-+		return -ENOENT;
-+
-+	return 0;
-+}
-+
-+int mv88e6xxx_handle_miss_violation(struct mv88e6xxx_chip *chip, int port,
-+				    struct mv88e6xxx_atu_entry *entry, u16 fid)
-+{
-+	struct switchdev_notifier_fdb_info info = {
-+		.addr = entry->mac,
-+		.locked = true,
-+	};
-+	struct net_device *brport;
-+	struct dsa_port *dp;
-+	u16 vid;
-+	int err;
-+
-+	err = mv88e6xxx_find_vid(chip, fid, &vid);
-+	if (err)
-+		return err;
-+
-+	info.vid = vid;
-+	dp = dsa_to_port(chip->ds, port);
-+
-+	rtnl_lock();
-+	brport = dsa_port_to_bridge_port(dp);
-+	if (!brport) {
-+		rtnl_unlock();
-+		return -ENODEV;
-+	}
-+	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE,
-+				       brport, &info.info, NULL);
-+	rtnl_unlock();
-+
-+	return err;
-+}
-diff --git a/drivers/net/dsa/mv88e6xxx/switchdev.h b/drivers/net/dsa/mv88e6xxx/switchdev.h
-new file mode 100644
-index 000000000000..62214f9d62b0
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/switchdev.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later
-+ *
-+ * switchdev.h
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<netdev@kapio-technology.com>
-+ *
-+ */
-+
-+#ifndef _MV88E6XXX_SWITCHDEV_H_
-+#define _MV88E6XXX_SWITCHDEV_H_
-+
-+#include "chip.h"
-+
-+int mv88e6xxx_handle_miss_violation(struct mv88e6xxx_chip *chip, int port,
-+				    struct mv88e6xxx_atu_entry *entry,
-+				    u16 fid);
-+
-+#endif /* _MV88E6XXX_SWITCHDEV_H_ */
--- 
-2.34.1
-
+> ---
+>  drivers/crypto/hisilicon/sgl.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+> index 2b6f2281cfd6..0974b0041405 100644
+> --- a/drivers/crypto/hisilicon/sgl.c
+> +++ b/drivers/crypto/hisilicon/sgl.c
+> @@ -124,9 +124,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
+>  	for (j = 0; j < i; j++) {
+>  		dma_free_coherent(dev, block_size, block[j].sgl,
+>  				  block[j].sgl_dma);
+> -		memset(block + j, 0, sizeof(*block));
+>  	}
+> -	kfree(pool);
+> +	kfree_sensitive(pool);
+>  	return ERR_PTR(-ENOMEM);
+>  }
+>  EXPORT_SYMBOL_GPL(hisi_acc_create_sgl_pool);
+> -- 
+> 2.34.1
+> 
