@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EA165FF86
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DF365FF89
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbjAFL0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S233284AbjAFL02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjAFL0N (ORCPT
+        with ESMTP id S232803AbjAFL0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:26:13 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7C160D0;
-        Fri,  6 Jan 2023 03:26:12 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 92AB43200AA4;
-        Fri,  6 Jan 2023 06:26:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 06 Jan 2023 06:26:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673004368; x=1673090768; bh=I7mBrQSCFI
-        tUQt1fxLzHS6xUeZXx0GJtfnCC/5PE5f4=; b=guDcxstlcbTlVjV7lIS+fDf37l
-        NG12X/yxr6xxZu9TxVS8uyp2/7pKbhRv7u5exECyNvyyTXYdzkDmtkLR0G/sMZGx
-        KOGDXqC//m9WJ820qOlRD2veEDe+Oax9iMJFngR8jhQXBthsnOcI9Vh0kMhBJuX+
-        ChcB237Pr0nloxj244NiNdu18yvne/+uMpJw8b0Sl6TkkftWz1uJXMpZEJ0HmyPg
-        J6WM6MMmrD+8H/QYVclbZj+UCkxjkiB22H6FGorBc73X1tX+MUpUUmj0Jez1uPEa
-        K6Yc+0fLCEB9Misehq3/Zj1RRnIX4jO4eFBkQ0OhDio5u/hAcNZGEBP641Bg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1673004368; x=1673090768; bh=I7mBrQSCFItUQt1fxLzHS6xUeZXx
-        0GJtfnCC/5PE5f4=; b=Xzhd6JZKjtyjfgZVVIEWAZA+Htk60K10x2hBRdFvGNYC
-        XN74CdJfEjEK/A4z2Z5ufMwo01arKR5E6XX1cAtQASJgfM86QoFAwPZu/7JjywN7
-        YlweRciM0SzwUNjET+v0DBc4734rCynfmiq2ma1K66ARyOHVGV0qdmEptcwPUsz0
-        Olbc+0LkU1ZFWKkbeWG3a3lbTG0oPTpBEXfzkYhRADsISXYSO6ijNBxIspDTvDyu
-        7AhTQe8wSWYOIu+2L5l16ojP4MTD4vlzr+wtCciJ0kIP2IzVTLVUT9yOMYvpqV3c
-        z0AmLs5pXo4bW4ESqmPgvwCEZ11DIM/1CLqTrZsMaw==
-X-ME-Sender: <xms:TwW4Y0xH2YKVFGy5sl4ulYKE7x-P8FnXfbkvPGl0vlXam2oONNsfzQ>
-    <xme:TwW4Y4S_l9YsliSk2AUmu4MXdVZKKYykwLRBvQQWnsRlYWtbF_gTLLfQb8hq2Rlak
-    iDPLkVtS3RodSs6XQ0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:TwW4Y2V7vbGUv6Yq8a_-7w8eqTTFdft_68WY5Xfjqv4vqBU6d7hqow>
-    <xmx:TwW4Yyi0iYZHbrVv91NPYTXVY5Rx77ixhJArlxVjJE9G8gB6EdpT5A>
-    <xmx:TwW4Y2BpoQE5UeiaQZvw1iraAzWhlF171STggQniNPQa8QQywNKB1A>
-    <xmx:UAW4Y40Xl2XtQ8B-FWoDd-h_i5CpuqeRT1NTGqYDZBXCu-3D-VGgHg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B32FCB60089; Fri,  6 Jan 2023 06:26:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <14e3a492-5d61-4bfe-8998-b29f66b37061@app.fastmail.com>
-In-Reply-To: <3bbd5135-a556-6097-9ca3-aef3399b2990@gmx.de>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-23-arnd@kernel.org>
- <3bbd5135-a556-6097-9ca3-aef3399b2990@gmx.de>
-Date:   Fri, 06 Jan 2023 12:25:47 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Helge Deller" <deller@gmx.de>, "Arnd Bergmann" <arnd@kernel.org>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>
-Cc:     "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 22/27] fbdev: remove tmiofb driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 Jan 2023 06:26:21 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC285FFC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 03:26:19 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o15so848650wmr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 03:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5l1OQud5PtBEYy3tKVwqWPj8C6sV/6VkPzpWrf+T4lU=;
+        b=asrnv1tiLJumHwWO0FdvosKBbuEC+K3Sam8YpyOTYzKrHyuznnw+NGwxgOp0q9XvEl
+         e/gYmPMIVo5jq8bFhHy+0MY0y1EGIoIsXcxbghGqHigQ80IZTFqS0cIO7S4UtkdpyR7D
+         TZOnTOd4ZJGc6c1EQKUUQ040tLV+cY+IERclS7lo6w26MSvfc2uHGUgWkqehqcWmYlIX
+         9i2+q6K5Ah556MB60rD+J1qfLRJTEkUkqR41xYVtlOd4XvBTO+lpp2yydBTc90Gi9nGc
+         HewRufSKI9vTuVXoWlANrChj6HMi9sqCJuI2zkShE+WjB2dAuiuB3iAKRe+6059/odZY
+         VDqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5l1OQud5PtBEYy3tKVwqWPj8C6sV/6VkPzpWrf+T4lU=;
+        b=aGPTugfItE2rZadqLiynZf2TnOHKVng85dK4Y3KOMqONvN3zU6BMtogAIFifS7fVVd
+         g8EhmaKr3w7cJbaTKavmkmG7L2uP8JPDGDsnsqhQ1kxahCq1fE8xNUaVNfcqnGca/BdG
+         r/xKJYlPimvWqRhNewiZd1M2870/spg+SMrp+BC6LLEIBX9tUQqeocYVWPRoip+aK+Cq
+         flQBTFBot7hlAJneuf8w3n1pWiSEXzMhaUbhwlSrKsWg3HDRWcukb+tlGZ4x+m4RgtkW
+         /yWRV281YwxqY0TX/0jfrRjMfQ+JHQAg5avKGfxFzmANzDJ0IZ7oXAngckBSCWJ/QdBG
+         zvDQ==
+X-Gm-Message-State: AFqh2krQM9PampONHAVVQ3RUgy8n8DMyfj74FjkTteLSDYv/cJRw0o8P
+        yykWdRw49ZZGlhbJMT+EpuxzXw==
+X-Google-Smtp-Source: AMrXdXuWNBHffDg8m5KIOd5FY7J7wKII0TVE+1Kkw5uXqH6Gjuopgs2RLnDT3biVkIhC6Xwcg4wrng==
+X-Received: by 2002:a05:600c:4999:b0:3d3:4007:9c88 with SMTP id h25-20020a05600c499900b003d340079c88mr41144922wmp.18.1673004377916;
+        Fri, 06 Jan 2023 03:26:17 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003d208eb17ecsm1342821wmb.26.2023.01.06.03.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 03:26:17 -0800 (PST)
+Message-ID: <2f9a150e-11bc-a963-f9b5-75b4ba3206bf@linaro.org>
+Date:   Fri, 6 Jan 2023 12:26:15 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 4/8] arm64: dts: qcom: msm8916-samsung-gt510: Add Vibrator
+Content-Language: en-US
+To:     Nikita Travkin <nikita@trvn.ru>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Siddharth Manthan <siddharth.manthan@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230105123240.1089375-1-nikita@trvn.ru>
+ <20230105123240.1089375-5-nikita@trvn.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230105123240.1089375-5-nikita@trvn.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023, at 10:47, Helge Deller wrote:
-> On 1/5/23 14:46, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> With the TMIO MFD support removed, the framebuffer driver can be
->> removed as well.
->>
->> Cc: Helge Deller <deller@gmx.de>
->> Cc: linux-fbdev@vger.kernel.org
->> Cc: dri-devel@lists.freedesktop.org
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Acked-by: Helge Deller <deller@gmx.de>
->
-> Arnd, I assume you will push the whole series through the ARM tree
-> (which I'd prefer) ?
+On 05/01/2023 13:32, Nikita Travkin wrote:
+> gt510 uses a PWM controllable vibrator, that uses a general purpose
+> clock output for it's control. Set up the pwm, supply and the vibrator.
+> 
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+>  .../boot/dts/qcom/msm8916-samsung-gt510.dts   | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> index e9916199e5a3..44d527b3f1f6 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> @@ -8,4 +8,51 @@ / {
+>  	model = "Samsung Galaxy Tab A 9.7 (2015)";
+>  	compatible = "samsung,gt510", "qcom,msm8916";
+>  	chassis-type = "tablet";
+> +
 
-Yes, I think it's best to keep this together here.
+Squash. One patch per adding GT510, one for GT58.
 
-     Arnd
+Best regards,
+Krzysztof
+
