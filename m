@@ -2,158 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C8A660115
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5497E66011C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 14:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbjAFNTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 08:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+        id S230164AbjAFNUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 08:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjAFNTN (ORCPT
+        with ESMTP id S231764AbjAFNUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:19:13 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6433E6C289
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:19:12 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id z5so184113wrt.6
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:19:12 -0800 (PST)
+        Fri, 6 Jan 2023 08:20:12 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8275D01
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 05:20:11 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id b192so669573iof.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 05:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
-        b=L/vblB4a0M4F/C2rNy4x4Ddrm8AwkJlwA5QZf764OwGDyQaVaRdzvzqdh6re8HfEwH
-         zP2cbCGSidi730ZkGEGJLeojgoOQq7YFcXjioPvm/Wa6j+3y62wse/IcY7L7eq3Eua49
-         wJZCDlF6SGBQuHXx7rgd0i4d+00JZ7dNJfyaS5eD3DfG5KZxFdkrC3kDghNXENJ2rkxW
-         qDuAK1D/jV1xJrrXfwr4EjM2RxpyidD73N2s8B+XDtqkI67SOSIipArZsQA0DMfNaGoQ
-         MEmzRxI8oAgVHy5qim74XN/0hIJI5Fd++owsfjBeenurnxcw/R3Sf8/d21dUF2m1EXuD
-         3M5A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ODfjaAogRSQDrpJDcdV44wIkQB0J6eo+/VX7vu6a+RQ=;
+        b=Of+LoJJZTMhlqKM6TD5QYSucSHpAUYBiRy3U98w/e0fNGihygPwthZWgaLH4oA4Wq6
+         cifSKnlPGyedbK0LjPRlvJtAoYnPfCKYEbCJtyFTolECd0Ahj1tHGWZeYi1yBZ/nhJnv
+         vMjfoyEnNAx3ZAaXrhoagiDWk2yUWXs+/XqQkfSlhRdt/pTGCEhx2/Q5b8XyN+mi4JzW
+         iWv3EJUwkbNcgM4/1j/nrbtbinRHV4IBjlcRgGgLz57kKHjT409Gf0dw1NHK6UUXpFWE
+         7r/3Zih4I1LH+Q5HIl7LLFfWyp3xtcxYBvGRldefpOPT7PvgVjaKHGmDIs5l4RmJ2Meo
+         mOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
-        b=mUW0fKx4S/pNSYMTY6f+0T7nUzcUV3urFDtjzHzzKLJuCscHlFHdHmd0weqvLguL8i
-         utwR5M48iZSsfde7Jz9Nh6UDqxM8tj6fpHJJrHWARMQb/75W8MAeM+kZHwGkjZyCBq72
-         40nYGs0BTlubC+Elo7sDmtMwkDBmD5cPsctE0FEymsN/kDtV7z+L3k/0DihCZR8Wgebj
-         wOJgm766noxzCNjeWPP2XYeTS7+3bjIxVjEqavhrnbEXhWMDZg7TXZzBzgLw3VGGa0C7
-         nBbrzm6hPfKg7KW8gMt6igh362ouQSBmkO6wxepR08c2MMlusD2MA+XmX88SngRNr+cD
-         8mlQ==
-X-Gm-Message-State: AFqh2kqLX9PrqAlKnOyGPMli38EZDZLE4DKnv19ioNpOFpUWT55FQLAU
-        oin9nohEnKPLbATC+abKS304Iw==
-X-Google-Smtp-Source: AMrXdXsK9zd1f6w44VhV8Jc17GLbeev2R+BC9yDTntZebOuq7YzekZknrSuTiVGZs2ykWMNhSmYfjg==
-X-Received: by 2002:a5d:6981:0:b0:295:6a4f:4183 with SMTP id g1-20020a5d6981000000b002956a4f4183mr12629387wru.5.1673011150846;
-        Fri, 06 Jan 2023 05:19:10 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e7-20020a056000120700b00241dd5de644sm1167074wrx.97.2023.01.06.05.19.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 05:19:09 -0800 (PST)
-Message-ID: <9d141edb-c72c-8889-112b-71ce5699dc35@linaro.org>
-Date:   Fri, 6 Jan 2023 14:19:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ODfjaAogRSQDrpJDcdV44wIkQB0J6eo+/VX7vu6a+RQ=;
+        b=tWbZ34+mal9v00seEF+X8f3gyfJtrgNBGpeHCUcLnss2CU95FN+m5rlg8u/4y14QS4
+         N6GhiGE5kuAmj9jEESw8DaTqHpklUJt0Z5tsTi33Hr5X363nHb74CHd8ycnnXNYaWb9z
+         57t3ZK8zcp4a/e+LnR8TKa9EKAiN0D5gOKpBOs5ijneBleLkuO4eeGjB8yjJcDcwb0/P
+         Srn9AvkgnDe71+z1hNG+i7OqWKrc+rQOfcMJw6hWmUFMPSd+s7TwWYmhXqeUow+owiad
+         ubRmew666QRWq8vj351VPEt5m0wSxjNSYsdfXax4a7xJIF/nbmmIOHx0uM/md08G7UG+
+         PRCQ==
+X-Gm-Message-State: AFqh2kqg88uVeZbCXx8aAVhVvc2yHG9aw8NtvfVpLIxAOvfrVCe8vTkQ
+        TPiRIcWiVG9JcClC4C9bZTjnbNPVL1Zwyl0546w/Hg==
+X-Google-Smtp-Source: AMrXdXsnXZg9dF2+tKS5u/QJJJHJkhTwEs6e8ljUhXQUpLjJQSjoB54WuvJKWMat9a70++y5/p/txVkNz8MnjHjZTj4=
+X-Received: by 2002:a05:6602:184d:b0:6ed:9ed6:6bab with SMTP id
+ d13-20020a056602184d00b006ed9ed66babmr3437742ioi.54.1673011210612; Fri, 06
+ Jan 2023 05:20:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/3] thermal/drivers/intel: Use generic trip points for
- intel_pch
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "Brown, Len" <len.brown@intel.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "ricardo.neri-calderon@linux.intel.com" 
-        <ricardo.neri-calderon@linux.intel.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
- <20230104222127.2364396-3-daniel.lezcano@kernel.org>
- <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230106042844.give.885-kees@kernel.org>
+In-Reply-To: <20230106042844.give.885-kees@kernel.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 6 Jan 2023 14:19:34 +0100
+Message-ID: <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
+Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        kernel test robot <lkp@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 6, 2023 at 5:28 AM Kees Cook <keescook@chromium.org> wrote:
+> Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
+> "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
+> using -fstrict-flex-arrays=3:
+>
+> net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
+> net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+>   558 |                         .fs.location = info->rule_locs[i],
+>       |                                        ~~~~~~~~~~~~~~~^~~
+> In file included from include/linux/ethtool.h:19,
+>                  from include/uapi/linux/ethtool_netlink.h:12,
+>                  from include/linux/ethtool_netlink.h:6,
+>                  from net/ethtool/common.c:3:
+> include/uapi/linux/ethtool.h:1186:41: note: while referencing
+> 'rule_locs'
+>  1186 |         __u32                           rule_locs[0];
+>       |                                         ^~~~~~~~~
+>
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: kernel test robot <lkp@intel.com>
+> Cc: Oleksij Rempel <linux@rempel-privat.de>
+> Cc: Sean Anderson <sean.anderson@seco.com>
+> Cc: Alexandru Tachici <alexandru.tachici@analog.com>
+> Cc: Amit Cohen <amcohen@nvidia.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v3: don't use helper (vincent)
+> v2: https://lore.kernel.org/lkml/20230105233420.gonna.036-kees@kernel.org
+> ---
+>  include/uapi/linux/ethtool.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+> index 58e587ba0450..3135fa0ba9a4 100644
+> --- a/include/uapi/linux/ethtool.h
+> +++ b/include/uapi/linux/ethtool.h
+> @@ -1183,7 +1183,7 @@ struct ethtool_rxnfc {
+>                 __u32                   rule_cnt;
+>                 __u32                   rss_context;
+>         };
+> -       __u32                           rule_locs[0];
+> +       __u32                           rule_locs[];
 
-Hi Rui,
-
-On 06/01/2023 09:32, Zhang, Rui wrote:
-> On Wed, 2023-01-04 at 23:21 +0100, Daniel Lezcano wrote:
->> From: Daniel Lezcano <daniel.lezcano@linaro.org>
->>
->> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops
->> are
->> needed and they can be removed.
->>
->> Convert the ops content logic into generic trip points and register
->> them with the thermal zone.
->>
->> In order to consolidate the code, use the ACPI thermal framework API
->> to fill the generic trip point from the ACPI tables.
->>
->> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
->> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
->> ---
->>      V3:
->>        - The driver Kconfig option selects CONFIG_THERMAL_ACPI
->> ---
->>   drivers/thermal/intel/Kconfig             |  1 +
->>   drivers/thermal/intel/intel_pch_thermal.c | 88 +++++--------------
->> ----
->>   2 files changed, 20 insertions(+), 69 deletions(-)
->>
->> diff --git a/drivers/thermal/intel/Kconfig
->> b/drivers/thermal/intel/Kconfig
->> index f0c845679250..738b88b290f4 100644
->> --- a/drivers/thermal/intel/Kconfig
->> +++ b/drivers/thermal/intel/Kconfig
->> @@ -75,6 +75,7 @@ config INTEL_BXT_PMIC_THERMAL
->>   config INTEL_PCH_THERMAL
->>   	tristate "Intel PCH Thermal Reporting Driver"
->>   	depends on X86 && PCI
->> +	select THERMAL_ACPI
-> 
-> THERMAL_ACPI depends on ACPI but the PCH thermal driver does not.
-> So we will run into "unmet dependencies" issue when CONFIG_ACPI is
-> cleared like below
-> 
-> WARNING: unmet direct dependencies detected for THERMAL_ACPI
->    Depends on [n]: THERMAL [=y] && ACPI [=n]
->    Selected by [m]:
->    - INTEL_PCH_THERMAL [=m] && THERMAL [=y] && (X86 [=y] ||
-> X86_INTEL_QUARK [=n] || COMPILE_TEST [=n]) && X86 [=y] && PCI [=y]
-> 
-
-Ah yes, indeed. Thanks for spotting this.
-
-Given the code, I think we should do:
-
-	select THERMAL_ACPI if ACPI
-
-it is from my POV semantically correct.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Stupid question: Is this syntax allowed in UAPI headers despite not
+being part of standard C90 or C++? Are we relying on all C/C++
+compilers for pre-C99 having gcc/clang extensions?
