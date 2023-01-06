@@ -2,82 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7F16608BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E566608C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbjAFVTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S236305AbjAFVVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236421AbjAFVTG (ORCPT
+        with ESMTP id S236680AbjAFVUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:19:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8324D81D59
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 13:19:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6479361F7D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 21:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC344C433F1;
-        Fri,  6 Jan 2023 21:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673039944;
-        bh=/8huUFCjuIyFqY1McKNe/kroodgfvyukd5xcoZ1Cqw4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=q14wYnD7fFiYhHYzOOQhYA2juyOsLEkBjOIesuawGa03Iw1Il5BholfLSKtqHZYB0
-         /UaCN4cbSkQwAiCjCxlzvF1XZMsuLI2NayGNywKfdxF7NqSMvgHBCHTXp6KOdPdv6/
-         7Vvpt4ChKWTY9y86MBR6ma0VFeWk2/LPP16hDcVaF0bla16Eihpgb1ZWX8wCgDbfW/
-         NteyFRMor0nxdAd8vSCjxRLJGAwDGoTrIYFO0afs+V6Za46DsrumqCeKyhmzhXnNAa
-         p1n1tTl2TsaBRj2RMi3iBidZ6HkxHrqKnvka6lx96q9fWfQib/zpecPs3fMbY3Ln1n
-         3D4sfVRcT4IsA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A89A7E5724D;
-        Fri,  6 Jan 2023 21:19:04 +0000 (UTC)
-Subject: Re: [GIT PULL] perf fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y7gMvFPLjvCv2Jx1@gmail.com>
-References: <Y7gMvFPLjvCv2Jx1@gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y7gMvFPLjvCv2Jx1@gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-urgent-2023-01-06
-X-PR-Tracked-Commit-Id: 57512b57dcfaf63c52d8ad2fb35321328cde31b0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d7a0853d650b381921732ff5bca618432a279033
-Message-Id: <167303994468.10294.16435122099183401656.pr-tracker-bot@kernel.org>
-Date:   Fri, 06 Jan 2023 21:19:04 +0000
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 Jan 2023 16:20:24 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304684605
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 13:19:54 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id w13so1179447wrk.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 13:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8w9WwD8cU2sQXh0jUahrAS8aHOv0f+YBYRs6lEtmg5Y=;
+        b=SwR0Sc5cdgkg+mkvu6a3CJHKQL0OejJJ1UVxD8va7F59QP/HTDoX7BJZMHJ4wA5cUu
+         aHJJiex6JlUC2CVpCYbC6ubNLhZfKI+sODLh/OHlscJY5sOnEhpiYDVqrlIJEfelKfpP
+         UcGIrGMBhr4baq4nUgAr5PdpyouKVr3EhkFjg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8w9WwD8cU2sQXh0jUahrAS8aHOv0f+YBYRs6lEtmg5Y=;
+        b=thSYS4dxqMxSq0MsEyZdhjz5zyFo3Y78v8lUx8Ymbfae4JyHurS4xgecQmkXb5Aofq
+         vz3JcvM6oMAZz3YSle/2VsY7pbSiYfGXzX6tJo7Nwp63EBWWtXeX4dJBVvLHikL4bPv7
+         YJkr9VbmgJ0NcnyakSCJmpIBFpqGCEcuYzTD+xwk7kAxwMtetB2Hx8belI2jnjtITTZW
+         b2B2rM5ItfIsM+GHiuFLbZgmInH4zcECLy8XYsGw77W+92caY48Zi6yjme6KSKX3RiU8
+         wWa7lXYXfIllRGQwb/1dJRtkoylf74EXVU1XdL308hfidMrhzCUvvg7HslfZ3d4qlWfX
+         jYgg==
+X-Gm-Message-State: AFqh2kq1jEdE94nBPmr+Dn6ZLdAKfM64wdBpR5iE3JVUW5jVT9I8nTQ+
+        bc+HY/7i9E0J4LMfSUyCIxQAVw==
+X-Google-Smtp-Source: AMrXdXua9Jskr4PiCR6lh7uqkSdITN6NhzScvm3xwzZMIh86YT0olwp/PfO66lwq/di/e5hf05XfBw==
+X-Received: by 2002:adf:dc84:0:b0:29f:1d23:a4e9 with SMTP id r4-20020adfdc84000000b0029f1d23a4e9mr10695486wrj.21.1673039989904;
+        Fri, 06 Jan 2023 13:19:49 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id m18-20020a05600c4f5200b003c71358a42dsm10079885wmq.18.2023.01.06.13.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 13:19:49 -0800 (PST)
+Date:   Fri, 6 Jan 2023 22:19:46 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Hang Zhang <zh.nvgt@gmail.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH] fbmem: prevent potential use-after-free issues with
+ console_lock()
+Message-ID: <Y7iQckF/6EMYVpQt@phenom.ffwll.local>
+Mail-Followup-To: Hang Zhang <zh.nvgt@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221230063528.41037-1-zh.nvgt@gmail.com>
+ <2711de96-fcbe-5611-657a-ab29becd2ff6@gmx.de>
+ <CAKMK7uEOX5n64cjzMt9GRQaS13HFPFyOeqdrkmzc035U5_T8tg@mail.gmail.com>
+ <CAKMK7uE7CAXO50JPQ6ziQGGehqfDK2UanBQbfLdUH2RwrwXUvw@mail.gmail.com>
+ <CAO2zrtYDcOfvxpG6wPghPnWZVks+NL6N9VaynsBVoX7nHBcxuw@mail.gmail.com>
+ <Y7hvhtHeivfsnBtE@phenom.ffwll.local>
+ <CAO2zrtb9H=OWPbrgmqTxQnHqETt-P4K6AxiwdtN7guxUYL2NCw@mail.gmail.com>
+ <Y7h++5sU/hGJ/yTS@phenom.ffwll.local>
+ <CAO2zrtaB3GZRSzgWu2kV_jTojwuhtL_kFz0gpzPPVGe9D8kVbQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO2zrtaB3GZRSzgWu2kV_jTojwuhtL_kFz0gpzPPVGe9D8kVbQ@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 6 Jan 2023 12:57:48 +0100:
+On Fri, Jan 06, 2023 at 03:25:14PM -0500, Hang Zhang wrote:
+> On Fri, Jan 6, 2023 at 3:05 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > On Fri, Jan 06, 2023 at 02:58:27PM -0500, Hang Zhang wrote:
+> > > On Fri, Jan 6, 2023 at 1:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > BTW, if this is worthed a fix and the performance of console_lock() is a
+> > > major concern, then I think there may be alternative solutions like adding
+> > > a lock_fb_info() to the free call chain - if that's better in performance,
+> > > or maybe selectively protect the matroxfb ioctl but not vblank ioctl as you
+> > > mentioned.
+> >
+> > Please start out with explaining what kind of bug your checker is seeing,
+> > and why. Not how you're trying to fix it. Because I'm pretty sure there
+> > isn't a bug, but since I've already spent a pile of time looking at this,
+> > I want to make sure.
+> 
+> We are sorry for the inconvenience caused, we'll follow these practices and
+> guidelines in the future. Thank you!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-urgent-2023-01-06
+Once more: Please explain what you're static checker is seeing. I want to
+understanding this, and I'm hoping at least someone involved in this
+static checker can explain what it thinks is going on.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d7a0853d650b381921732ff5bca618432a279033
-
-Thank you!
-
+Thanks, Daniel
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
