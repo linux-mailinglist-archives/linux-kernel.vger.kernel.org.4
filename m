@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7F065FC80
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA4E65FC85
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbjAFILY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S232011AbjAFIMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbjAFILN (ORCPT
+        with ESMTP id S231980AbjAFIMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:11:13 -0500
-X-Greylist: delayed 91 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 00:11:12 PST
-Received: from mail-40130.protonmail.ch (mail-40130.protonmail.ch [185.70.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17778E83;
-        Fri,  6 Jan 2023 00:11:12 -0800 (PST)
-Date:   Fri, 06 Jan 2023 08:10:56 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1672992670; x=1673251870;
-        bh=sqU8j2UrbPk5rmGQd+h1CDYMuTAr/lhJo2M2lNImIGM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=f8Dr1UFPhq/rgZRIl7fL1A0hJ6eNFloIthMr8qp7J8LNgwtOfYdsRaVt3G71gB5GD
-         thxEQAEo0ARYltYw0qIUdppUIayWhx8LRekrxcjMvpUhnUe6cdW4Ef6IoDvtRXSQG/
-         E88KT25yJ3Faz4u11250aFhAux6Ed2gcF1wTgIqGwFgLDmGxBL8aESfxqll3p4YeGw
-         Rkf91EdaOHTy+Hd2T5qIDkCxboH2cya61sbknSRyRPdNX4VyeSImTdIHaHHk8gR/dl
-         ad/iWJabHx7iWfjAceggTpLYdgVfN8mhZ2N/lm78APlT++KyBCCBeG8rir0pfXBRRK
-         SjqG3Fvosa7sQ==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
+        Fri, 6 Jan 2023 03:12:18 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCEE80AC4
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 00:12:09 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r2so589496wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 00:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZChit4SZ+t74Z1lauaylK93+vgHZQXN9aZ0NlWhuSs=;
+        b=HpBtQu2GClSSM2B7TEgboivQH02ii0IoAFcgvZNsqHtkZSBJ7FSQYKgzEZ7lxmZ7Jx
+         ewJoVsNhj3rBJOqtzs1Kan/1Yjyu/n826wfVWG21GS9SH/yfAppou18TH1nxySieuu2p
+         Ca99wH9PXRPIc2Y5kh/8ysVX793jwqKkNVrCx2lFE87hKaNmL/33ddR2HyS0MI8qvs/M
+         zsasO4MqvBgY0Gg8QeW8j58AKUpRgRmsc5NXxP2P399+ov7HGTWpXN9YDKteswx6WtQE
+         FEPN0Rbwe8pG97B/9xmpL3x6GvsfZ4obzK05nG1VsaAuH8c8mjetJDqY4J3X04Pq+zLn
+         z8lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5ZChit4SZ+t74Z1lauaylK93+vgHZQXN9aZ0NlWhuSs=;
+        b=ERLSJAwg0pB76zKRAZdrkb4iAOP1MoRV76HglQzP3OWIUHpy1cggaF/TtHGJH/aODn
+         sQEIDzC6jB8Yj9AR2mFi+AKjdytlGOl4hfc0S6USiwYW9hyUNNRMTF8shy/isWq/vEKw
+         DiKMpe8uVdxAY1ebdZ42gtSH6vLv3T1694hk3UXg6reZDk89GVzRG36yJBVRKGrTWqHl
+         P/WY4JVltScQ1ABb6QQMwAx2O1V5EFGii5JkZrE9elTdBmRr+XokoikGWMtRENsK8I6a
+         fUnPqwFUTddUDMMcNyGgobpGgsriLvJbJ5mqBtgAjzA3iRF3f265lavQrBRZjYadFuMM
+         IicA==
+X-Gm-Message-State: AFqh2konyO5wS2vx7jd1D43gCLSiV6c71FuRc0/iDLIBKO36W66JzDLd
+        ncNcySFTISawvqA5UQcp08G2Rg==
+X-Google-Smtp-Source: AMrXdXsG2zv9lit5Hl81g3vtSOCu3Zp+W7x3IscChnM+Q5qA7PUkTJz6g+QkCH6Yn5zPD2nBgGOB9w==
+X-Received: by 2002:adf:f0cf:0:b0:291:ab:1a43 with SMTP id x15-20020adff0cf000000b0029100ab1a43mr13729612wro.40.1672992727847;
+        Fri, 06 Jan 2023 00:12:07 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t19-20020a0560001a5300b002362f6fcaf5sm451545wry.48.2023.01.06.00.12.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 00:12:06 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v5 5/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add flash LED
-Message-ID: <20230106080937.256340-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20230106080644.255940-1-linmengbo0689@protonmail.com>
-References: <20230106080644.255940-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] dt-bindings: PCI: qcom: add oneOf to compatible match
+Date:   Fri,  6 Jan 2023 09:12:01 +0100
+Message-Id: <20230106081203.14118-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FL8005A uses Qualcomm GPIO flash LEDs which is compatible with
-SGM3140 Flash LED driver. Add it to the device tree.
+Prepare for extending compatible list by adding oneOf keyword.
+No functional changes.
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm6=
-4/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-index 2cac99e3e52c..d0759c341bae 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -21,6 +21,22 @@ chosen {
- =09=09stdout-path =3D "serial0";
- =09};
-=20
-+=09flash-led-controller {
-+=09=09/* Actually qcom,leds-gpio-flash */
-+=09=09compatible =3D "sgmicro,sgm3140";
-+=09=09enable-gpios =3D <&msmgpio 31 GPIO_ACTIVE_HIGH>;
-+=09=09flash-gpios =3D <&msmgpio 32 GPIO_ACTIVE_HIGH>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&camera_flash_default>;
-+
-+=09=09flash_led: led {
-+=09=09=09function =3D LED_FUNCTION_FLASH;
-+=09=09=09color =3D <LED_COLOR_ID_WHITE>;
-+=09=09=09flash-max-timeout-us =3D <250000>;
-+=09=09};
-+=09};
-+
- =09gpio-keys {
- =09=09compatible =3D "gpio-keys";
-=20
-@@ -239,6 +255,14 @@ l18 {
- };
-=20
- &msmgpio {
-+=09camera_flash_default: camera-flash-default-state {
-+=09=09pins =3D "gpio31", "gpio32";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09gpio_keys_default: gpio-keys-default-state {
- =09=09pins =3D "gpio107";
- =09=09function =3D "gpio";
---=20
-2.30.2
+Changes since v1:
+1. Split from previous patch as Bjorn requested.
+---
+ .../devicetree/bindings/pci/qcom,pcie.yaml    | 39 ++++++++++---------
+ 1 file changed, 20 insertions(+), 19 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+index a5859bb3dc28..09a4e3c330f1 100644
+--- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+@@ -16,25 +16,26 @@ description: |
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,pcie-ipq8064
+-      - qcom,pcie-ipq8064-v2
+-      - qcom,pcie-apq8064
+-      - qcom,pcie-apq8084
+-      - qcom,pcie-msm8996
+-      - qcom,pcie-ipq4019
+-      - qcom,pcie-ipq8074
+-      - qcom,pcie-qcs404
+-      - qcom,pcie-sa8540p
+-      - qcom,pcie-sc7280
+-      - qcom,pcie-sc8180x
+-      - qcom,pcie-sc8280xp
+-      - qcom,pcie-sdm845
+-      - qcom,pcie-sm8150
+-      - qcom,pcie-sm8250
+-      - qcom,pcie-sm8450-pcie0
+-      - qcom,pcie-sm8450-pcie1
+-      - qcom,pcie-ipq6018
++    oneOf:
++      - enum:
++          - qcom,pcie-ipq8064
++          - qcom,pcie-ipq8064-v2
++          - qcom,pcie-apq8064
++          - qcom,pcie-apq8084
++          - qcom,pcie-msm8996
++          - qcom,pcie-ipq4019
++          - qcom,pcie-ipq8074
++          - qcom,pcie-qcs404
++          - qcom,pcie-sa8540p
++          - qcom,pcie-sc7280
++          - qcom,pcie-sc8180x
++          - qcom,pcie-sc8280xp
++          - qcom,pcie-sdm845
++          - qcom,pcie-sm8150
++          - qcom,pcie-sm8250
++          - qcom,pcie-sm8450-pcie0
++          - qcom,pcie-sm8450-pcie1
++          - qcom,pcie-ipq6018
+ 
+   reg:
+     minItems: 4
+-- 
+2.34.1
 
