@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C49F6603D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AA46603D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjAFQA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        id S230497AbjAFQAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 11:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjAFQAH (ORCPT
+        with ESMTP id S233358AbjAFQA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:00:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37D6086D;
-        Fri,  6 Jan 2023 08:00:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673020806; x=1704556806;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Gr0ThjkBH4hqu7cX0DnaFFxx29/OpLOv7ZxaLh7iykA=;
-  b=nBQCaQfpIu1WVkQ76CekdAqtHIs5brxCb4aeIrUgV9nNxGASMlXYXq9H
-   kwDrkq6OcodV6w/wCBZQkhKThRqIw1lcrAJkDVs5E9pMsfDWRCcLJVgpg
-   bK0+oz8vMJLnTI81U11QfV+AkzL5JRLYRjehiPJhTpI3hmAqz+HYLGf3A
-   +4jvjke5x4t3ZsjcdJrUIgTl+JkiLtvR3Z6EQR1eKvK8+qHZaRrQVNaYy
-   lmufyyExwXhtVjzHQIJdiWIfygEAOraVooNHbBcGa7zavRda3ppnNTNbX
-   0SvhsxDIw3Vz88nRIPWMzOi10O3iuBzUqKT3D1WFleZQfSi8J0KLxcjtk
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
-   d="scan'208";a="194620230"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2023 09:00:05 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 6 Jan 2023 08:59:57 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 6 Jan 2023 08:59:54 -0700
-Message-ID: <f653b23f-cf25-61ec-60d4-91dd7823edd2@microchip.com>
-Date:   Fri, 6 Jan 2023 16:59:52 +0100
+        Fri, 6 Jan 2023 11:00:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564643E7C;
+        Fri,  6 Jan 2023 08:00:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ABF6B81DC4;
+        Fri,  6 Jan 2023 16:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB5FC433EF;
+        Fri,  6 Jan 2023 16:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673020822;
+        bh=RQ9/DSHPqkUIWMwP6Ei9ZryCNoPhLA/Cjadj71jF/k0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AEtuigL93tsRhNpPKEMAWpFvGs1H9i/eb5or5fD2Wb0CHaP0anA8STL5JRxGbmuj9
+         Jzx3z9IO7dNd+9Q6FCtdj3Z0NDzN8/h1VFNtEPUalRkC18V7Utv0GDO48Jgcr29r4l
+         m5WOMs14rOnacYnipLSFWB7mYJy/XKQB7mdJTs8Wnk2Oo9Xj2+JWCLaj5rOZfsvtzP
+         0iRTLYsSwK9O6tA7OMtGHVfQsXnqDcpI7fIMuo/mCg0Cgo3IOins5kfpu7NIvnJ6Hi
+         7OsQ2TXltMca10qMcyZQMhJFx+Bb+XrNFHZOggM3fAncgCfpRCY/mMj3A3j+ljIEpJ
+         sAXii3Wf/edcg==
+Date:   Fri, 6 Jan 2023 10:00:26 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] net: ipv6: rpl_iptunnel: Replace 0-length arrays with
+ flexible arrays
+Message-ID: <Y7hFmjlUoyFOv6gB@work>
+References: <20230105221533.never.711-kees@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] MAINTAINERS: Update email of Tudor Ambarus
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-CC:     <arnd@arndb.de>, <richard@nod.at>,
-        <krzysztof.kozlowski+dt@linaro.org>, <herbert@gondor.apana.org.au>,
-        <robh+dt@kernel.org>, <akpm@linux-foundation.org>,
-        <claudiu.beznea@microchip.com>, <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <pratyush@kernel.org>, <michael@walle.cc>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221226144043.367706-1-tudor.ambarus@linaro.org>
- <feb09bac-0ea4-9154-362b-6d81cba352a8@linaro.org>
- <678ad800-7a3b-e2bf-6428-f06d696d8edb@linaro.org>
- <20230106165506.0a34fa78@xps-13>
-Content-Language: en-US
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230106165506.0a34fa78@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105221533.never.711-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 at 16:55, Miquel Raynal wrote:
-> Hey Tudor, hello all,
+On Thu, Jan 05, 2023 at 02:15:37PM -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace struct ipv6_rpl_sr_hdr's
+> "segments" union of 0-length arrays with flexible arrays. Detected with
+> GCC 13, using -fstrict-flex-arrays=3:
 > 
-> tudor.ambarus@linaro.org wrote on Fri, 6 Jan 2023 17:45:20 +0200:
+> In function 'rpl_validate_srh',
+>     inlined from 'rpl_build_state' at ../net/ipv6/rpl_iptunnel.c:96:7:
+> ../net/ipv6/rpl_iptunnel.c:60:28: warning: array subscript <unknown> is outside array bounds of 'struct in6_addr[0]' [-Warray-bounds=]
+>    60 |         if (ipv6_addr_type(&srh->rpl_segaddr[srh->segments_left - 1]) &
+>       |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from ../include/net/rpl.h:12,
+>                  from ../net/ipv6/rpl_iptunnel.c:13:
+> ../include/uapi/linux/rpl.h: In function 'rpl_build_state':
+> ../include/uapi/linux/rpl.h:40:33: note: while referencing 'addr'
+>    40 |                 struct in6_addr addr[0];
+>       |                                 ^~~~
 > 
->> Miquel,
->>
->> Since we don't have an answer from Arnd, would you please queue this to
->> mtd/fixes?
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 > 
-> Are MAINTAINERS changes accepted through fixes PR? I see a number of
-> experienced people in Cc:, I would like to hear from you folks, because
-> I never had to do that before. If yes, then I'll do it right away,
-> otherwise I'll apply to mtd/next. I'm all ears :)
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-I remember a conversation that stated that MAINTAINERS changes must land 
-in Linus' tree the quickest, because it'll just avoid confusion and 
-bouncing emails.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-My $0.2...
+Thanks!
+--
+Gustavo
 
-Regards,
-   Nicolas
-
--- 
-Nicolas Ferre
-
+> ---
+>  include/uapi/linux/rpl.h | 4 ++--
+>  net/ipv6/rpl_iptunnel.c  | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/uapi/linux/rpl.h b/include/uapi/linux/rpl.h
+> index 708adddf9f13..7c8970e5b84b 100644
+> --- a/include/uapi/linux/rpl.h
+> +++ b/include/uapi/linux/rpl.h
+> @@ -37,8 +37,8 @@ struct ipv6_rpl_sr_hdr {
+>  #endif
+>  
+>  	union {
+> -		struct in6_addr addr[0];
+> -		__u8 data[0];
+> +		__DECLARE_FLEX_ARRAY(struct in6_addr, addr);
+> +		__DECLARE_FLEX_ARRAY(__u8, data);
+>  	} segments;
+>  } __attribute__((packed));
+>  
+> diff --git a/net/ipv6/rpl_iptunnel.c b/net/ipv6/rpl_iptunnel.c
+> index ff691d9f4a04..b1c028df686e 100644
+> --- a/net/ipv6/rpl_iptunnel.c
+> +++ b/net/ipv6/rpl_iptunnel.c
+> @@ -13,7 +13,7 @@
+>  #include <net/rpl.h>
+>  
+>  struct rpl_iptunnel_encap {
+> -	struct ipv6_rpl_sr_hdr srh[0];
+> +	DECLARE_FLEX_ARRAY(struct ipv6_rpl_sr_hdr, srh);
+>  };
+>  
+>  struct rpl_lwt {
+> -- 
+> 2.34.1
+> 
