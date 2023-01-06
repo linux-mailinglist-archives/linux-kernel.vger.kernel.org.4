@@ -2,117 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1048965FC31
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7767065FC32
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjAFHhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 02:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S230407AbjAFHi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 02:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjAFHgn (ORCPT
+        with ESMTP id S229490AbjAFHi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 02:36:43 -0500
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EBDB43;
-        Thu,  5 Jan 2023 23:36:42 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id s9so514208wru.13;
-        Thu, 05 Jan 2023 23:36:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RzVe0pLyjmPge14+7JwNFlVI9TqNDRuuVylOl2kg1Co=;
-        b=lI6epv+Y5sX3ssp9XynYH8y+m+luFo6GyWUtpBL+kXwvoKfjjzcFvi+xyu73XqHuXO
-         siAbQzHpcv0hHPtHzdfHmGius642dYcJ5wymj//N53ZEhhpMWBltBSnJsCpgoiSl18nz
-         gyYRjUX/MHO2LCPhEK+3WeD0QVw2DTPxPoRj/dqEf1AhrcxATHk55WpeOi2Ky0G3rZoF
-         SzeI4Wq53jKu9Vg7NlIwCZC4Lzz4qBEJdbcaoB0lveOtkojJ2mgf7PKprmKmL7zHuRAX
-         HFiAnXWCyQ0wF5fkvGd438y8YN38IS31nyzxFOEfxAbu0WvSf6Ml+3VQoik5aB3CImgH
-         RSjg==
-X-Gm-Message-State: AFqh2krdw1stMQjn1XofBm6xjXDQ2RovywESTCAqe99JdmAXTI/zGWv4
-        q3wmsd95ARyKqo1xF7anO3W2dI+c7Wg=
-X-Google-Smtp-Source: AMrXdXtPt0ag0rkCaE4nqXFoISH+uK3Zzq0fB085NZaWE0JE1aLA0Qe/fAu/SFnXktbO+CQ3h3sAGQ==
-X-Received: by 2002:a5d:67c3:0:b0:2a4:bd16:2931 with SMTP id n3-20020a5d67c3000000b002a4bd162931mr6037393wrw.62.1672990600904;
-        Thu, 05 Jan 2023 23:36:40 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm362278wrp.55.2023.01.05.23.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 23:36:40 -0800 (PST)
-Message-ID: <d5c3269e-b91b-087f-6b85-f5d55a9f7185@kernel.org>
-Date:   Fri, 6 Jan 2023 08:36:39 +0100
+        Fri, 6 Jan 2023 02:38:57 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252C0B43
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:38:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672990719; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=dumhgiwWnO5896HhtI0bgKFJN7PINS0ZjvMEkcSjaacedaxbIvMWNVE75KRkdB0MJNEWgk5luzmKaqSrY3wiNDRiwnQCPrWSJskUQ23Fl9JxE0qdHA+F2flHklixZfajXE5RJHJWqX43SSv9/rpgBRUhIUVIlJ8yUzg+jyfUXqs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1672990719; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=TioKn5CO8tJoob2wJhuL1JbsftJhJzptZqlgXBEAeJE=; 
+        b=G9XKNIOLCc220iEQgGqtOaVhAC1/mgMQKK8ER9AjTEhg4NJTBl04zbVrvudR/B2w5iceAm1+FbjeLeJnaI/jLAfYTiAzKE7ADxiCCP9TORWe4VPQZVpIXIGZ0nL3iheth65Y4nIA30PyJzZZpV5ZycQU4HqkkWiHd+6R6QCuAgc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672990719;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=TioKn5CO8tJoob2wJhuL1JbsftJhJzptZqlgXBEAeJE=;
+        b=fZdYvtD1+TeKBEcaVMLM+wngttu+IXYG5lDFY6FDeBwujMjZDTe9JkEyakehPnV0
+        N6joYFh6VX7K/8piO4aisF4u9WJpB1oohZgnMr4ZhNcugxEnh+iQqxZ59z2VwsLKH0H
+        f/s1KxG/RRVfyGKojAqkzXac9J2gfZVk5RvqAjsw=
+Received: from edelgard.fodlan.icenowy.me (120.85.96.143 [120.85.96.143]) by mx.zohomail.com
+        with SMTPS id 1672990717981580.103026584164; Thu, 5 Jan 2023 23:38:37 -0800 (PST)
+Message-ID: <fa4342510fdf93f809671239fe1a1df68b378357.camel@icenowy.me>
+Subject: Re: [RFC PATCH 2/3] riscv: use VA+PA variant of CMO macros for DMA
+ synchorization
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 06 Jan 2023 15:38:33 +0800
+In-Reply-To: <2135147.irdbgypaU6@diego>
+References: <20230104074146.578485-1-uwu@icenowy.me>
+         <CAJF2gTTO3jx8FqMVRmfgkjO02sCVx2SVbe-Sn1uKXojyn8RDaA@mail.gmail.com>
+         <bcce507a31662004262fa3bbe911f1b1ff7f27af.camel@icenowy.me>
+         <2135147.irdbgypaU6@diego>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230105124744.105950-1-ilpo.jarvinen@linux.intel.com>
- <20230105124744.105950-2-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v2 1/3] serial: 8250: RT288x/Au1xxx code away from core
-In-Reply-To: <20230105124744.105950-2-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05. 01. 23, 13:47, Ilpo Järvinen wrote:
-> A non-trivial amount of RT288x/Au1xxx code is encapsulated into
-> ifdeffery in 8250_port / 8250_early and some if UPIO_AU blocks.
-> 
-> Create a separate file from them. Add mapsize, bugs, and divisor latch
-> read/write functions into plat_serial8250_port to carry the setup
-> necessary for these devices over to uart port.
-> 
-> Also handle errors properly in the cases where RT288x/Au1xxx code is
-> not configured.
-> 
-> It seems that 0x1000 mapsize is likely overkill but I've kept it the
-> same as previously (the value was shrunk to that value in b2b13cdfd05e
-> ("SERIAL 8250: Fixes for Alchemy UARTs.")). Seemingly, the driver only
-> needs to access register at 0x28 for the divisor latch.
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-...
-> --- a/include/linux/serial_8250.h
-> +++ b/include/linux/serial_8250.h
-...
-> @@ -28,8 +32,11 @@ struct plat_serial8250_port {
->   	unsigned char	has_sysrq;	/* supports magic SysRq */
->   	upf_t		flags;		/* UPF_* flags */
->   	unsigned int	type;		/* If UPF_FIXED_TYPE */
-> +	unsigned short	bugs;		/* port bugs */
->   	unsigned int	(*serial_in)(struct uart_port *, int);
->   	void		(*serial_out)(struct uart_port *, int, int);
-> +	int		(*dl_read)(struct uart_8250_port *);
-> +	void		(*dl_write)(struct uart_8250_port *, int);
+=E5=9C=A8 2023-01-04=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:16 +0100=EF=BC=
+=8CHeiko St=C3=BCbner=E5=86=99=E9=81=93=EF=BC=9A
+> Hi,
+>=20
+> Am Mittwoch, 4. Januar 2023, 10:27:53 CET schrieb Icenowy Zheng:
+> > =E5=9C=A8 2023-01-04=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 17:24 +0800=EF=
+=BC=8CGuo Ren=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Wed, Jan 4, 2023 at 4:59 PM Icenowy Zheng <uwu@icenowy.me>
+> > > wrote:
+> > > >=20
+> > > > =E5=9C=A8 2023-01-04=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 16:50 +080=
+0=EF=BC=8CGuo Ren=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > On Wed, Jan 4, 2023 at 3:43 PM Icenowy Zheng <uwu@icenowy.me>
+> > > > > wrote:
+> > > > > >=20
+> > > > > > DMA synchorization is done on PA and the VA is calculated
+> > > > > > from
+> > > > > > the
+> > > > > > PA.
+> > > > > >=20
+> > > > > > Use the alternative macro variant that takes both VA and PA
+> > > > > > as
+> > > > > > parameters, thus in case the ISA extension used support PA
+> > > > > > directly, the
+> > > > > > overhead for re-converting VA to PA can be omitted.
+> > > > > >=20
+> > > > > > Suggested-by: Guo Ren <guoren@kernel.org>
+> > > > > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > > > > > ---
+> > > > > > =C2=A0arch/riscv/mm/dma-noncoherent.c | 8 ++++----
+> > > > > > =C2=A01 file changed, 4 insertions(+), 4 deletions(-)
+> > > > > >=20
+> > > > > > diff --git a/arch/riscv/mm/dma-noncoherent.c
+> > > > > > b/arch/riscv/mm/dma-
+> > > > > > noncoherent.c
+> > > > > > index d919efab6eba..a751f4aece62 100644
+> > > > > > --- a/arch/riscv/mm/dma-noncoherent.c
+> > > > > > +++ b/arch/riscv/mm/dma-noncoherent.c
+> > > > > > @@ -19,13 +19,13 @@ void
+> > > > > > arch_sync_dma_for_device(phys_addr_t
+> > > > > > paddr, size_t size,
+> > > > > >=20
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 switch (dir) {
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case DMA_TO_DEVICE:
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 ALT_CMO_OP(clean, vaddr, size,
+> > > > > > riscv_cbom_block_size);
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 ALT_CMO_OP_VPA(clean, vaddr, paddr, size,
+> > > > > > riscv_cbom_block_size);
+> > > > > ALT_CMO_OP -> ALT_CMO_OP_VPA, is the renaming necessary?
+> > > >=20
+> > > > I didn't rename the original ALT_CMO_OP, ALT_CMO_OP_VPA is
+> > > > something
+> > > > new.
+> > > The ##_VPA is really strange.
+> > >=20
+> > > How about:
+> > > ALT_CMO_OP=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> A=
+LT_CMO_OP_VA
+> > > ALT_CMO_OP_VPA -> ALT_CMO_OP
+> >=20
+> > It's thus a much bigger change.
+> >=20
+> > If you are not fond of _VPA, I can rename it to _VA_PA.
+>=20
+> before you spend too much time on this, there is currently a parallel
+> discussion running about including all the other different vendor-
+> specific cache management.
+>=20
+> See [0] and the thread before that for reference.
 
-int sounds very weird in the write-to-HW context. Even though both the 
-others and the original are ints. They all should be simply u32.
+The code shown here seems to be only a draft, and not even testable.
 
->   	void		(*set_termios)(struct uart_port *,
->   			               struct ktermios *new,
->   			               const struct ktermios *old);
+>=20
+> The consensus seems to be that cache-handling itself is not fast
+> anyway,
+> and therefore to reduce complexity for the cache handling and move
+> non-zicbom cache-handling into a indirect function call that the can
+> be
+> overridden at runtime.
 
-Could you document the new ones in the kernel-doc manner above the 
-structure (but so far without the kernel-doc tag /**). So that:
-1) they are documented
-2) once someone decides to document them all, they can simply stick the 
-kernel-doc tag and document only the rest.
+Well yes I tested this patchset on my LiteX with OpenC906, and it does
+not help at all on LiteETH throughtput. So maybe this is only some
+theortical gain.
 
-thanks,
--- 
-js
-suse labs
+>=20
+>=20
+> Heiko
+>=20
+> [0]
+> https://lore.kernel.org/all/43aee000-5b89-4d94-98d2-b37b1a18a83e@app.fast=
+mail.com/
+>=20
+>=20
 
