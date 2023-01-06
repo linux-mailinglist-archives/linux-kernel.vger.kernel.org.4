@@ -2,107 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE0A65F97F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89A765F989
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjAFCT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 21:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S229694AbjAFCZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 21:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAFCTY (ORCPT
+        with ESMTP id S229530AbjAFCZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 21:19:24 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36A063192
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:19:23 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so340822pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 18:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3c7r5CVeKCtGkrjBQKe2j2BkzZGAFZSBu4iQLvl/Dc=;
-        b=ymOp4FsBVO3b1dCJgqCzg2dWBwFCIirOuHMEwXPctLHzaUPUF3He3otmmrBLRffN0C
-         cjMipDRv32HQ1aatzMbbZv5mbht4mT0D9Bl2TSXPvO2JMzawqNQ7C9MeUk7m+IdBcOTL
-         rdSF9mxuTnYGxMvE7dUXnb3D9Nd83ReJXsJ+xadvl63kIOAmTUPwUVXYrMkBSseyVLHI
-         hrC9PUCo6VYymAcVwF6aXI9ANK0i6C9dNLRn0wGoh6ESD5Pf3qzBi9nLtCzO+BFAIbsv
-         BY6d+lZxJ/xAUVfr36mHi16cRTmYa0K+pSZrgZxQo6OJiVKak7qhoJts32z5haX7Yflz
-         B38Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3c7r5CVeKCtGkrjBQKe2j2BkzZGAFZSBu4iQLvl/Dc=;
-        b=ISPYwR6ce9D3UPDlHqi53RkEZ7S+pfAC8QUmfgvhftMBeeBxj4XZtazQjqpSi4tkQe
-         mejzwSV8UP8LYrEyuZfZ71Si7Ur97CBqXNvkpHavlcKBwHIY0oQXfL8Ib9fza6r1cXhl
-         Yw0bNPMsFjMU1vSCcZEQnkmY49nEjE1crtd9Rnb4wNEfE1xSZ2JCsRHH/ihaagK8Rsf4
-         Eze+IPGkozZuY94SlhAkVJ0VaBg0ZLsN/hdakTDf+ycFLI637nXgtBuRyWc4P0ok6PRm
-         hlZXriHIVC97IP8Tn7SPL5mruhWoOyEzzhwgrXkVX+VwUlu1z0B1Eehlt23RJDnkUNbW
-         3Apg==
-X-Gm-Message-State: AFqh2kpo/CLk7zxCb+o9PAFxy2c4m7ZjEkP6fDmvddDU4rdvLSj/cipx
-        sKOxOrhYHh1N5aS7iwLFUBN4OQ==
-X-Google-Smtp-Source: AMrXdXt+zMra2PsOltyR7AhUQ+yAJvYJwHcUm6/hIXZneUjM6OQ2KmRhnJ6wy9bINmE2ogH9ZVjBLg==
-X-Received: by 2002:a17:90a:7e14:b0:219:eeb9:943f with SMTP id i20-20020a17090a7e1400b00219eeb9943fmr55978542pjl.49.1672971563379;
-        Thu, 05 Jan 2023 18:19:23 -0800 (PST)
-Received: from localhost ([122.172.82.107])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090a134100b002260b06befbsm1890357pjf.16.2023.01.05.18.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 18:19:22 -0800 (PST)
-Date:   Fri, 6 Jan 2023 07:49:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
-Message-ID: <20230106021920.65cnix2lmcj6k5bs@vireshk-i7>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-5-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105134622.254560-5-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 21:25:04 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135F563F5A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:25:01 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230106022457epoutp04fcbaf4876eed161e7b6ef0ba78df5838~3lxO3HQTr2542625426epoutp04J
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:24:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230106022457epoutp04fcbaf4876eed161e7b6ef0ba78df5838~3lxO3HQTr2542625426epoutp04J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1672971897;
+        bh=zYAVVwKbYWstk25NjpAYrxBF81yAcrHna5VCyCM4pz8=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=mtMuKQAPQ5gb4u0njOYlSAGUXfO60S83nMptdarFtNEE07qbA+XQpbza2kUocTw2i
+         f5OvZIsYVsK10mFrw0NAMK0d5CYOSUBx7ex60BKAQ2dqd5ezUq/uUK7f5XN8tuSaye
+         BoSddzSg6iwwWUpjCWBXTPNoE/Xw3E2LROsf3yaY=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230106022457epcas2p1e8b266521fd8f3ab2e6b8cec6ec29135~3lxOdNyH42057020570epcas2p1i;
+        Fri,  6 Jan 2023 02:24:57 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Np6cS3djLz4x9Q0; Fri,  6 Jan
+        2023 02:24:56 +0000 (GMT)
+X-AuditID: b6c32a47-619ff7000000f187-f5-63b786783a81
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        51.0F.61831.87687B36; Fri,  6 Jan 2023 11:24:56 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] scsi: ufs: core: fix devfreq deadlocks
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Asutosh Das <quic_asutoshd@quicinc.com>
+CC:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Can Guo <quic_cang@quicinc.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <DM6PR04MB65750DE015FA51FDC08D994BFCFA9@DM6PR04MB6575.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230106022456epcms2p784b3cf9115f6b170bdef0732258381ba@epcms2p7>
+Date:   Fri, 06 Jan 2023 11:24:56 +0900
+X-CMS-MailID: 20230106022456epcms2p784b3cf9115f6b170bdef0732258381ba
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmuW5F2/Zkg0+XxSwezNvGZvHy51U2
+        i2kffjJbvDykabHoxjYmixWVFpd3zWGz6L6+g81i+fF/TBYLO+ayWEy6toHNYsHGR4wOPB6X
+        r3h7bFrVyeYxYdEBRo+PT2+xeEzcU+fRt2UVo8fnTXIe7Qe6mQI4orJtMlITU1KLFFLzkvNT
+        MvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4AuVVIoS8wpBQoFJBYXK+nb2RTl
+        l5akKmTkF5fYKqUWpOQUmBfoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ9x9/pCpYBVnxew5p5ka
+        GFexdzFyckgImEj0Tl3FCmILCexglDjaYdXFyMHBKyAo8XeHMEhYWMBOYs+x68wQJUoS59bM
+        YgQpERYwkLjVaw4SZhPQk/i5ZAYbSFhEoEzizeWYLkYuDmaBTmaJB3sXQ23ilZjR/pQFwpaW
+        2L58KyOIzSkQK7H60wxmiLiGxI9lvVC2qMTN1W/ZYez3x+YzQtgiEq33zkLVCEo8+LkbKi4p
+        cejQV7AbJATyJTYcCIQI10i8XX4AqkRf4lrHRhaIB30lvvV5gIRZBFQl/k2/CDXRReL8vD6w
+        rcwC8hLb385hBilnFtCUWL9LH2K4ssSRWywwPzVs/M2OzmYW4JPoOPwXLr5j3hMmiFY1iUVN
+        RhMYlWchwngWklWzEFYtYGRexSiWWlCcm55abFRgDI/V5PzcTYzg1KrlvoNxxtsPeocYmTgY
+        DzFKcDArifCW9W9LFuJNSaysSi3Kjy8qzUktPsRoCvTkRGYp0eR8YHLPK4k3NLE0MDEzMzQ3
+        MjUwVxLnDdo6P1lIID2xJDU7NbUgtQimj4mDU6qBiel2a1D0/xDdE5+WTnwUvEqAXf8Yi/ak
+        SFUG13+m8kvNW1jXPzvxsaFW7siX34cOc+463PP6Mff2YxvcIwLXdjWHfvv2zJTpXqZKUKNc
+        laTdVOcU6z0PFujW8P230z1ed7XlSXJF0eyFS24Z9oflihhPYb3mzbHVddLRyyt+b9hhezQ8
+        wSJrc65WX4wC3+w3X5LlnKXWPWS5tXH9uUNStcGLtwsucTfeWlVzRPmDVuJ6RVuW1dUn+ESq
+        zh87NmlN1pH7LFZzp9qeyZade5OvpdS81GkuY8nVlR5HLYI1+id6+ky8saLWun/zqrXl6d+j
+        IkS2HLj8WO6nlPTTecubku8oxLw223/x+qRH1qy1k5RYijMSDbWYi4oTAbW/Hvo2BAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230105072134epcas2p47a72da1ee48e341295575770d3eb573c
+References: <DM6PR04MB65750DE015FA51FDC08D994BFCFA9@DM6PR04MB6575.namprd04.prod.outlook.com>
+        <20221222102121.18682-1-johan+linaro@kernel.org>
+        <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
+        <20230104141045.GB8114@asutoshd-linux1.qualcomm.com>
+        <3db8c140-2e4e-0d75-4d81-b2c1f22f68d1@acm.org>
+        <CGME20230105072134epcas2p47a72da1ee48e341295575770d3eb573c@epcms2p7>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-01-23, 14:45, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> There is currently no devicetree support for any of these three
-> SoCs, and no board files remain. As it seems unlikely that anyone
-> is going to add DT support soon, let's drop the SoC specific code
-> now.
-> 
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/cpufreq/pxa3xx-cpufreq.c |  21 +-
+>> On 1/4/23 06:10, Asutosh Das wrote:
+>> > Load based toggling of WB seemed fine to me then.
+>> > I haven't thought about another method to toggle WriteBooster yet.
+>> > Let me see if I can come up with something.
+>> > IMT if you have a mechanism in mind, please let me know.
+>> 
+>> Hi Asutosh,
+>> 
+>> Which UFS devices need this mechanism? All UFS devices I'm familiar with can
+>> achieve wire speed for large write requests without enabling the WriteBooster.
+>This feature assures SLC-performance for writes to the WriteBooster buffer.
+>So enabling it is advantageous as far as write performance.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I agree with you. Also, it can be used in various ways.
 
--- 
-viresh
+>As for the toggling functionality, compared to e.g. enabling it on init and leave it on,
+>some flash vendors require it because of device health considerations.
+>This is not the case for us, so let others to comment.
+
+In our case, it does not matter whether to toggle or not.
+To make the code simple, it seems to be a good way to enable it on init and leave it on.
+Considering device health, WB can be disabled through lifetime check.
+
+Thanks,
+Jinyoung.
+
+>
+>Thanks,
+>Avri
+>> 
+>> Thanks,
+>> 
+>> Bart.
+
