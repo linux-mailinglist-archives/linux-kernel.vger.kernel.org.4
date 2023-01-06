@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B783066055F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8663660563
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjAFRMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S233714AbjAFROr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjAFRMp (ORCPT
+        with ESMTP id S229498AbjAFROo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:12:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E0F4A;
-        Fri,  6 Jan 2023 09:12:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30535B81E23;
-        Fri,  6 Jan 2023 17:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC70C433F0;
-        Fri,  6 Jan 2023 17:12:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673025157;
-        bh=V5Cjg+awY8Te/ixBSRyQpxLPmfpep+g4G3a1tJRNLok=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VNfP4/F0dfJRk7reIaprVMzvcoccOdze4nX70LAupzjjKetpCPGRWb2G3qOaCToEa
-         woHRS2Hz28fWSc0VZbsztUVLVW2Wb0As9rrVUyHQKCC35JP2v/CTf2X/xmRaIjqCuZ
-         QM62NmR2wOsFufxVaVpPh9KIcqEL0RBBZbiB/1JMgdYx17+a9J33VWMVsP3plBaQDB
-         BirwwXpX3NQvfQ1ZsXJV3CH35QiGtp995QAmNO0cWdwiHmFfMpoUt+T+d0k/Y1+m9W
-         lkQiwiStYCED1iaOixsCiQhGxYPI5aomvLbqjDO3NePEDsJhkuvgZJM3xHV6tNBXIp
-         1ExdOB4shDn7A==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        krzysztof.kozlowski+dt@linaro.org, abel.vesa@linaro.org,
-        konrad.dybcio@linaro.org, agross@kernel.org,
-        dmitry.baryshkov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 0/4] clk: qcom: Add support for SM8550
-Date:   Fri,  6 Jan 2023 11:12:36 -0600
-Message-Id: <167302514590.1787824.9356171697272297388.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230104093450.3150578-1-abel.vesa@linaro.org>
-References: <20230104093450.3150578-1-abel.vesa@linaro.org>
+        Fri, 6 Jan 2023 12:14:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE9934D71;
+        Fri,  6 Jan 2023 09:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673025283; x=1704561283;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4O8Pfzee9suId3D3oEwPVIn6YNM/oTj5BaqLDLcPnvY=;
+  b=QOMw9SCxFljrIqDZ/Pygo1Euf7tmE+FH13Ftceit1BbeVmQ2ioVU54pS
+   eWaH4B9pvZCzOAcvrDxWmd3SXfH8fZOHviOl1hmNU6LOpPI3VnJA9ApUo
+   bkah1gD7u2/wpSNMh6eEoNLLpKeL9/Vp3t7izBZwbOu5VEkpSYV+AJejb
+   pZ2Fv7jRSptzCUqDvbG4vq44L03Xsw2LYxed9bmrXN0BSyXBQrTnFj70Z
+   ThhspGgHskcrCq6nRyfZoBhvq6kgrH4ma1xWckSdqRjNms80Lcs3dFL76
+   8FIr47caY7BHWAY5TktOkb/5kiasDdQoougt+ksnMeCHzzaUerpcYl71v
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="322590300"
+X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
+   d="scan'208";a="322590300"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 09:14:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="719252663"
+X-IronPort-AV: E=Sophos;i="5.96,305,1665471600"; 
+   d="scan'208";a="719252663"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 09:14:41 -0800
+Message-ID: <b6e72ab7-eb48-22bb-f7f7-6869408d1dda@intel.com>
+Date:   Fri, 6 Jan 2023 09:14:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 04/16] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <5ea3f199c0d6f9f3e1738fa5c211c52d4d618e84.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <5ea3f199c0d6f9f3e1738fa5c211c52d4d618e84.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 11:34:46 +0200, Abel Vesa wrote:
-> This patchset adds more clocks support for the Qualcomm SM8550 SoC,
-> It adds the TCSR clock controller driver and the rpmh clocks.
+On 12/8/22 22:52, Kai Huang wrote:
 > 
-> Changes since v7:
->  * Replaced RPMH_CXO_PAD_CLK with RPMH_CXO_CLK in the TCSR CC binding
->    schema example
+> The TDX module will be initialized in multi-steps defined by the TDX
+> module and most of those steps involve a specific SEAMCALL:
 > 
-> [...]
+>  1) Get the TDX module information and TDX-capable memory regions
+>     (TDH.SYS.INFO).
+>  2) Build the list of TDX-usable memory regions.
+>  3) Construct a list of "TD Memory Regions" (TDMRs) to cover all
+>     TDX-usable memory regions.
+>  4) Pick up one TDX private KeyID as the global KeyID.
+>  5) Configure the TDMRs and the global KeyID to the TDX module
+>     (TDH.SYS.CONFIG).
+>  6) Configure the global KeyID on all packages (TDH.SYS.KEY.CONFIG).
+>  7) Initialize all TDMRs (TDH.SYS.TDMR.INIT).
 
-Applied, thanks!
+I don't think you really need this *AND* the "TODO" comments in
+init_tdx_module().  Just say:
 
-[1/4] dt-bindings: clock: Add SM8550 TCSR CC clocks
-      commit: d8aa375bd70681b76c6bd5fe93bab6011e16a0fb
-[2/4] dt-bindings: clock: Add RPMHCC for SM8550
-      commit: ffcdd6907e9a1fdccd9350147d0f59cafb87e768
-[3/4] clk: qcom: rpmh: Add support for SM8550 rpmh clocks
-      commit: 478a573be730dd704ab6acee43f40d91fe8c808a
-[4/4] clk: qcom: Add TCSR clock driver for SM8550
-      commit: e9a7b78b20889d2325bef4a1eb39c1088858ab81
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+	Add a placeholder tdx_enable() to initialize the TDX module on
+	demand.  The TODO list will be pared down as functionality is
+	added.
