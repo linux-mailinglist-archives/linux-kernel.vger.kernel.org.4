@@ -2,187 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAFF65FA8A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 05:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B1465FA8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 05:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjAFEAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 23:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S230465AbjAFEEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 23:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjAFEA3 (ORCPT
+        with ESMTP id S229554AbjAFEEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 23:00:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7606B59C;
-        Thu,  5 Jan 2023 20:00:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8C88BCE1C06;
-        Fri,  6 Jan 2023 04:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53430C433D2;
-        Fri,  6 Jan 2023 04:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1672977624;
-        bh=+UPdXkytzKMtZ3ZWHr4CnIskWe+T5fdDfosPD98BIPQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RiI1TTlG8cChT7br22VuUsCCJFUjhv1+2U6wbep8GVwXIEmQZQqtkiVFnz49/AiI1
-         oMzPMIkX+w0SlJpfyZ+MrlzPWmOyc1FG7DOJDsPxKlFGiwlpUT9KGdYNXEbV8Dp3HV
-         5gXx+czAystFOUsVKop9Yjv8GXgV9V7DIFNk64yY=
-Date:   Thu, 5 Jan 2023 20:00:23 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michael Larabel <michael@michaellarabel.com>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@google.com
-Subject: Re: [PATCH mm-unstable v2 1/2] mm: add vma_has_recency()
-Message-Id: <20230105200023.ac9f34f5b7738eae4fd940d6@linux-foundation.org>
-In-Reply-To: <20221230215252.2628425-1-yuzhao@google.com>
-References: <20221230215252.2628425-1-yuzhao@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 23:04:33 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F7DF60;
+        Thu,  5 Jan 2023 20:04:31 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso531515pjc.2;
+        Thu, 05 Jan 2023 20:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rwrbQ89JxGf5E1tqt615Grch6aQdxBCOBt3gXa1CYss=;
+        b=qagZxk6Kofq1foEbMVlPeOlXomkklr4c4SbxgdC9aEuXQWcxvNkeae47eUNaSlKW7z
+         KvAm2dzEBTsoLD+dNfYN/wj+UE/cNxceZmvvdQuS/ZvakclnPg7W4r9yW0hE8dE7SFdQ
+         4W4JMGMuWzftTJabfLDpeo2A+PzFmsd7jHKcALG/Fvgyc0nRGlBpPykWAn3PxzCAhv8V
+         Tpfuh2978tJZ4dRJTXs0Vq38SzN0SshM9XJO1aA19fWFETN6aJHeCs/JQGDicoRKxE2h
+         D3Pu4jOkHcVjn9YXtIhxPv+e8Qkgv2ot2O3QydBTMspFmSGkbXW0D0YVAxfYxb8+6STX
+         iMrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rwrbQ89JxGf5E1tqt615Grch6aQdxBCOBt3gXa1CYss=;
+        b=y2lb0xw3u9bu9+aiTZFrN7SIwe368EA18gOSzAqgNcNjb2SfGTMxD1JgHhXWOxAh5A
+         /gQB8ZA5Y0AXl6VgPTMS+KKeehzQl14SJnKc7bXz9yrY/SlF7y2dxnIWLEwQ5ihJSXLK
+         tsTZAAF6aSWjQu1eqPshiagEbse9UKx8CHrmfB3y/NgiI1btUVkMNKPUVIjdQRf2R4vh
+         HgB6EnZWarZ1sfpe8RMsUioihkEiePPj0fpbzfW4OKtBThZtHTtpZZomTGP3ITU9Hxqx
+         Vd/OuPsVczV3Wd/52ubZvy4k2dVbtZgNo3aM42VQZyc7kTVSnblmk/uXBc03AClCQOoC
+         dW6g==
+X-Gm-Message-State: AFqh2kqVSknHNq4Bu1e5QC+PIMYOoUYOZ6gcBdTTrIB7SXYBV194JUzW
+        3b8PnvrSbck0CRXyjRb6l8I=
+X-Google-Smtp-Source: AMrXdXsf2Qq9QgyRBD0DLUoRwv38lSdxrCy33bs8koo1xImvj/pNg+54ZHpRBncdxxPKxBo56ZC6tw==
+X-Received: by 2002:a05:6a20:9f48:b0:ac:29b6:a235 with SMTP id ml8-20020a056a209f4800b000ac29b6a235mr64334893pzb.54.1672977871165;
+        Thu, 05 Jan 2023 20:04:31 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-2.three.co.id. [116.206.28.2])
+        by smtp.gmail.com with ESMTPSA id q2-20020a63cc42000000b004788780dd8esm56089pgi.63.2023.01.05.20.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 20:04:30 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id E1CCF103B03; Fri,  6 Jan 2023 11:04:27 +0700 (WIB)
+Date:   Fri, 6 Jan 2023 11:04:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mm tree with the cgroup tree
+Message-ID: <Y7edy9vr4VQ7BwzP@debian.me>
+References: <20230106125915.60c8b547@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FkfKZnor6TbpOfrD"
+Content-Disposition: inline
+In-Reply-To: <20230106125915.60c8b547@canb.auug.org.au>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Dec 2022 14:52:51 -0700 Yu Zhao <yuzhao@google.com> wrote:
 
-> This patch adds vma_has_recency() to indicate whether a VMA may
-> exhibit temporal locality that the LRU algorithm relies on.
-> 
-> This function returns false for VMAs marked by VM_SEQ_READ or
-> VM_RAND_READ. While the former flag indicates linear access, i.e., a
-> special case of spatial locality, both flags indicate a lack of
-> temporal locality, i.e., the reuse of an area within a relatively
-> small duration.
-> 
-> "Recency" is chosen over "locality" to avoid confusion between
-> temporal and spatial localities.
-> 
-> Before this patch, the active/inactive LRU only ignored the accessed
-> bit from VMAs marked by VM_SEQ_READ. After this patch, the
-> active/inactive LRU and MGLRU share the same logic: they both ignore
-> the accessed bit if vma_has_recency() returns false.
-> 
-> For the active/inactive LRU, the following fio test showed a [6, 8]%
-> increase in IOPS when randomly accessing mapped files under memory
-> pressure.
-> 
->   kb=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
->   kb=$((kb - 8*1024*1024))
-> 
->   modprobe brd rd_nr=1 rd_size=$kb
->   dd if=/dev/zero of=/dev/ram0 bs=1M
-> 
->   mkfs.ext4 /dev/ram0
->   mount /dev/ram0 /mnt/
->   swapoff -a
-> 
->   fio --name=test --directory=/mnt/ --ioengine=mmap --numjobs=8 \
->       --size=8G --rw=randrw --time_based --runtime=10m \
->       --group_reporting
-> 
-> The discussion that led to this patch is here [1]. Additional test
-> results are available in that thread.
-> 
-> --- a/include/linux/mm_inline.h
-> +++ b/include/linux/mm_inline.h
-> @@ -595,4 +595,12 @@ pte_install_uffd_wp_if_needed(struct vm_area_struct *vma, unsigned long addr,
->  #endif
->  }
->  
-> +static inline bool vma_has_recency(struct vm_area_struct *vma)
-> +{
-> +	if (vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))
-> +		return false;
+--FkfKZnor6TbpOfrD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I guess it's fairly obvious why these hints imply "doesn't have
-recency".  But still, some comments wouldn't hurt!
-
-> +	return true;
-> +}
->  #endif
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 4000e9f017e0..ee72badad847 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1402,8 +1402,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->  						force_flush = 1;
->  					}
->  				}
-> -				if (pte_young(ptent) &&
-> -				    likely(!(vma->vm_flags & VM_SEQ_READ)))
-> +				if (pte_young(ptent) && likely(vma_has_recency(vma)))
-
-So we're newly using VM_RAND_READ for the legacy LRU?  Deliberate?  If
-so, what are the effects and why?
-
->  					mark_page_accessed(page);
->  			}
->  			rss[mm_counter(page)]--;
-> @@ -5148,8 +5147,8 @@ static inline void mm_account_fault(struct pt_regs *regs,
->  #ifdef CONFIG_LRU_GEN
->  static void lru_gen_enter_fault(struct vm_area_struct *vma)
->  {
-> -	/* the LRU algorithm doesn't apply to sequential or random reads */
-> -	current->in_lru_fault = !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ));
-> +	/* the LRU algorithm only applies to accesses with recency */
-> +	current->in_lru_fault = vma_has_recency(vma);
->  }
->  
->  static void lru_gen_exit_fault(void)
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 8a24b90d9531..9abffdd63a6a 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -823,25 +823,14 @@ static bool folio_referenced_one(struct folio *folio,
->  		}
->  
->  		if (pvmw.pte) {
-> -			if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
-> -			    !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
-> +			if (lru_gen_enabled() && pte_young(*pvmw.pte)) {
->  				lru_gen_look_around(&pvmw);
->  				referenced++;
->  			}
-
-I'd expect a call to vma_has_recency() here, but I'll trust you ;)
+On Fri, Jan 06, 2023 at 12:59:15PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the mm tree got a conflict in:
+>=20
+>   Documentation/admin-guide/cgroup-v1/memory.rst
+>=20
+> between commit:
+>=20
+>   da3ad2e14f63 ("docs: cgroup-v1: add internal cross-references")
+>=20
+> from the cgroup tree and commits:
+>=20
+>   6cd7ad27c60f ("mm: memcontrol: deprecate charge moving")
+>   9bf9f4ba8bd5 ("mm-memcontrol-deprecate-charge-moving-fix")
+>=20
+> from the mm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc Documentation/admin-guide/cgroup-v1/memory.rst
+> index 27d89495ac88,258e45cc3b2d..000000000000
+> --- a/Documentation/admin-guide/cgroup-v1/memory.rst
+> +++ b/Documentation/admin-guide/cgroup-v1/memory.rst
+> @@@ -725,10 -719,15 +727,17 @@@ If we want to change this to 1G, we ca
+>          It is recommended to set the soft limit always below the hard li=
+mit,
+>          otherwise the hard limit will take precedence.
+>  =20
+>  +.. _cgroup-v1-memory-move-charges:
+>  +
+> - 8. Move charges at task migration
+> - =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> + 8. Move charges at task migration (DEPRECATED!)
+> + =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=20
+> + THIS IS DEPRECATED!
+> +=20
+> + It's expensive and unreliable! It's better practice to launch workload
+> + tasks directly from inside their target cgroup. Use dedicated workload
+> + cgroups to allow fine-grained policy adjustments without having to
+> + move physical pages between control domains.
+>  =20
+>   Users can move charges associated with a task along with task migration=
+, that
+>   is, uncharge task's pages from the old cgroup and charge them to the ne=
+w cgroup.
 
 
->  			if (ptep_clear_flush_young_notify(vma, address,
-> -						pvmw.pte)) {
-> -				/*
-> -				 * Don't treat a reference through
-> -				 * a sequentially read mapping as such.
-> -				 * If the folio has been used in another mapping,
-> -				 * we will catch it; if this other mapping is
-> -				 * already gone, the unmap path will have set
-> -				 * the referenced flag or activated the folio.
-> -				 */
-> -				if (likely(!(vma->vm_flags & VM_SEQ_READ)))
-> -					referenced++;
-> -			}
-> +						pvmw.pte))
-> +				referenced++;
->  		} else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
->  			if (pmdp_clear_flush_young_notify(vma, address,
->  						pvmw.pmd))
-> ...
->
+Ah! I see the oversight in 4ddb1a2aa1a3c4 ("docs: cgroup-v1: wrap
+remaining admonitions in admonition blocks") instead. I forgot to remove
+mention to the deprecation notice, which is present in mm tree rather
+than cgroups one...
 
-The posix_fadvise() manpage will need an update, please.  Not now, but
-if/when these changes are heading into mainline.  "merged into
-mm-stable" would be a good trigger for this activity.
+The fixup makes the deprecation notice isn't consistent with other
+admonitions in the doc (which have been wrapped), so I have recently sent
+the wrapper patch for it at [1].
 
-The legacy LRU has had used-once drop-behind for a long time (Johannes
-touched it last).  Have you noticed whether that's all working OK?
+Thanks.
+
+[1]: https://lore.kernel.org/linux-doc/20230106034836.23708-1-bagasdotme@gm=
+ail.com/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--FkfKZnor6TbpOfrD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY7edxwAKCRD2uYlJVVFO
+oxfrAP0RG/b2ksVJx0lGIaCpk+lu5J8KcHWOUQ6UodhgBAAKdAD/fOR8tFzUoTBM
+b+vu6/5wpFVyegwGxKCTBo2q5FeVhgo=
+=Cusr
+-----END PGP SIGNATURE-----
+
+--FkfKZnor6TbpOfrD--
