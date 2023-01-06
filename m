@@ -2,81 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0313465FE14
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E4C65FE12
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjAFJe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S232766AbjAFJey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjAFJdr (ORCPT
+        with ESMTP id S234002AbjAFJeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:33:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A5969B3E;
-        Fri,  6 Jan 2023 01:25:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5F8A2CE1C69;
-        Fri,  6 Jan 2023 09:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35326C433EF;
-        Fri,  6 Jan 2023 09:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672997119;
-        bh=QHmR1i1xKrKcwTzIjJxIvmmAPckAFiixJhZc1hmGvf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EiiXHX8Lmbn/vftAyRE5sQeXtaKaVHL9y/iY+7h8tIeWx59VwgeIXhngAYbX6p4tI
-         X7ip4P4eiI74B6mtAqpedGfuAUpUhr5DNaFK1FPJPHjTw5VL2bebEwHRXaEwagMI2f
-         EgS4O3t/AXl8YzX12PKVQe2crB7K3NgKSe//RWAW0fzi5em7Fs0h4Ctz68cpCryTZn
-         KHIczZBmC5Z7rkuNF5BUOQfdxViHSbLl0ooURoy0a7ddh3Ca4mTVwovIpJOgpZGuNM
-         DQAvcL9xrYn/V6lzTER+eTnhJUmcJAncuFzWyqSqy5E24hzktM99hTnEIY2MyrO9km
-         uH+tX/jVEbfVA==
-Date:   Fri, 6 Jan 2023 09:25:14 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the backlight tree
-Message-ID: <Y7fo+tMnkSndJNXV@google.com>
-References: <20230106113509.5c101b53@canb.auug.org.au>
+        Fri, 6 Jan 2023 04:34:07 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613A81125
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:26:11 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id bs20so742492wrb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:26:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OzjZkwhDPrrcLXve7rYhUcMyijjyvM53BT53pIm7uHU=;
+        b=g+n1cnPdI/JdQo/jMHI0OkwWEjtwDLK0fL4cH4EyguAc63VVcTOvNiy8LZnR1GwgRl
+         3Lmyl+oNocRPIY9rb9+CINkbG6/1olcm4cZm5Kk2drBZlkii4nQT982gY7kKRCnQE0Hy
+         up7gfmmmFjMfeCPf7gdh2yD3qeNa8+Apq690Y6mQt4zNPQtoZAzYM7CzHXEGo0NaWPSM
+         kqW9cd35+gSr+k9FcaqzQCn9EMjxG46igwN9SlXadZ9Pz+5PMAEsInHpXv2HvrXitijf
+         dN7HK+6g53AW0ZKZlfZiqwl0alE9HJf1Nk6flcgKapvDMBsT4sOFvXmtW2mmdv7kogGr
+         WQZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzjZkwhDPrrcLXve7rYhUcMyijjyvM53BT53pIm7uHU=;
+        b=sx5N09u74AnBxt5n2+es01YiuHkr1o6Vm02Ns89/+N30abG3yMZII2uPQ+wDS9V3j4
+         N/5hIXGQVwwJTp4mPBi2JPJKQYUDPpaP+F+ldHoI006iItpqbAnRw5Kkr4B8ust4oeLh
+         RzRPy+YFEejdWAwtxFU8rXlHwNYcaQVo9ymckyWUVcTHjUQ1I3Naq7dbEwAd2VF/hicb
+         TUrwwLN/l3beSWNEfIKqoSSGImgFFUxTCJKpAHqUE/BdB+JPntDIdOW9vLQc/susXCuB
+         wOBKIJklc3ejjgXiHAdbcK/XiglZ7jvMFRNE7cN1159W/Mf3IEBOd5Up9kqZEFKN7XwL
+         Drpw==
+X-Gm-Message-State: AFqh2ko2EANm9v8Ia5ljpNt2IGP8ve+L4l8YeVNv+Ro2VbHUvKtszhu9
+        0w7vIV6/puM0c4X/mw1tBr3h0Q==
+X-Google-Smtp-Source: AMrXdXsk4DyQ2BVf7+eVPQLAp9uSQAAZtSiQP1YMsjZ+EX5uYdaeKz4wvaK8AvaFvqbYTFzAkoXOcA==
+X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id cc18-20020a5d5c12000000b0024208009a7fmr36467648wrb.65.1672997142546;
+        Fri, 06 Jan 2023 01:25:42 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bx11-20020a5d5b0b000000b002366f9bd717sm752424wrb.45.2023.01.06.01.25.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 01:25:41 -0800 (PST)
+Message-ID: <23ee90c0-b6cb-bc71-9e92-72c51a169373@linaro.org>
+Date:   Fri, 6 Jan 2023 10:25:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230106113509.5c101b53@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net-next v1 1/3] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy Driver bindings
+Content-Language: en-US
+To:     "Frank.Sae" <Frank.Sae@motor-comm.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
+ <20230105073024.8390-2-Frank.Sae@motor-comm.com>
+ <b74baadf-37a4-c9a2-c821-3c3e0143fa4a@linaro.org>
+ <8fa89dac-6859-af93-0dc0-ffcb42b5bb30@motor-comm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8fa89dac-6859-af93-0dc0-ffcb42b5bb30@motor-comm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 06 Jan 2023, Stephen Rothwell wrote:
-
-> Hi all,
+On 06/01/2023 10:17, Frank.Sae wrote:
+> Hi Krzysztof Kozlowski,
 > 
-> The following commits are also in the backlight-fixes tree as different
-> commits (but the same patches):
+> On 2023/1/6 16:26, Krzysztof Kozlowski wrote:
+>> On 05/01/2023 08:30, Frank wrote:
+>>> Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
+>>>
+>>
+>> Subject: drop second, redundant "Driver bindings".
 > 
->   44bbdb7e3a67 ("backlight: ktd253: Switch to use dev_err_probe() helper")
->   c0e09423bbb4 ("dt-bindings: backlight: qcom-wled: Add PMI8950 compatible")
->   73516cbcf8d9 ("backlight: pwm_bl: Drop support for legacy PWM probing")
+> Change Subject from
+> dt-bindings: net: Add Motorcomm yt8xxx ethernet phy Driver bindings
+> to
+> dt-bindings: net: Add Motorcomm yt8xxx ethernet phy
+> ?
+
+Yes.
+
 > 
-> Forgot to push out an updated backlight-fixes tree?
+>>
+>>> Signed-off-by: Frank <Frank.Sae@motor-comm.com>
+>>
+>> Use full first and last name. Your email suggests something more than
+>> only "Frank".
+>>
+> 
+> OK , I will use  Frank.Sae <Frank.Sae@motor-comm.com>
 
-Don't think so?
+Without "dot" between parts of name.
 
-88603b6dc4194 (HEAD -> refs/heads/backlight-fixes, tag: \
-  refs/tags/v6.2-rc2, 					\
-  refs/remotes/mfd/mfd-fixes, 				\
-  refs/remotes/leds/for-leds-next, 			\
-  refs/remotes/backlight/backlight-fixes, 		\
-  refs/heads/mfd-fixes, 				\
-  refs/heads/for-leds-next) 				\
-    Linux 6.2-rc2
+> 
+>>> ---
+>>>  .../bindings/net/motorcomm,yt8xxx.yaml        | 180 ++++++++++++++++++
+>>>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>>>  MAINTAINERS                                   |   1 +
+Best regards,
+Krzysztof
 
--- 
-Lee Jones [李琼斯]
