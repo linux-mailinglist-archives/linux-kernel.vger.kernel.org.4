@@ -2,161 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F0B65FE24
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E5365FE20
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbjAFJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S232445AbjAFJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbjAFJjb (ORCPT
+        with ESMTP id S233386AbjAFJjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 Jan 2023 04:39:31 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149C243E6A;
-        Fri,  6 Jan 2023 01:31:54 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bk16so733011wrb.11;
-        Fri, 06 Jan 2023 01:31:54 -0800 (PST)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D6458817
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 01:32:01 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so3147294wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 01:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=th0WEGaeBwuDgYUOSMw9cNMnaXqVuZ+hnr9Z3HPgsnM=;
-        b=P4h1nCH0pNXiBh97+05WMCCCnvwVd+8Qh+qHWdt1XOsIvPsTIN0gDOv2ElSVJbpQtZ
-         iTdW/+Nq9eQl0f42F355euMRrZjwsE8nmdAQRXaVRsEdeqE2DAOa0Knnbe9xH0fHG3nJ
-         p9jp3CGQYctIYOjq/CprJVeVqL7M8iLfNh4W34JBFu64O7yH0FzAW0dXdSLCAl2CGoLS
-         xqcn5wBkgx/Cms+7GNI7mwmjSCMtuC6mtc69nZkB8J+Drfu3ru7eew11rx2M+vVjtZks
-         jQXATSqYyaYguuYnDDSjWaLSklo/pdCK1RdJkZHOvBx9FlXqvYIM1+03RaQp32sco2pU
-         h6TQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v982tKjruzjnEGR+qtBvwCfxbuiittS57VqGvWmNxEA=;
+        b=xaCDj00Zx5JE+B4HrORfAr0IUeuE5ge23LPipHcZiC+zhR+ezzDiRV+IkbNT1CNAfz
+         rcZpOyT+Fjty9jGTicbtHTPGVD6+xBAHsPfRj7SmGkCbqgYflh6KN0ngzQiHkZ/wb0g2
+         GQwNtJiRUz9XyhjzUb4XRYeJXa/9JHTqgG/f+6ZMzLL5EV9512q02xKq0HL9ZrKmbdZo
+         qIf8MnF2ucYuTihFjPM26qK+eqI35YBoIWuZGBJN6rDpvJLAJAOqN2ynjxDf85eUp+9L
+         w/mouXYO4yJKgYvCtgK5fOo2+VuFObrE8U8Z4zW0W4w58uztuEn9Gk10ZqHfObAvhaQr
+         g5bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=th0WEGaeBwuDgYUOSMw9cNMnaXqVuZ+hnr9Z3HPgsnM=;
-        b=Utyiwl/aBq1cbnir5oTbyw0jHlNu17lwg29DMxCYr47WJWrE3nmMXN/Vn4l6MuwMhh
-         21TFuAHeHozzFAD9xOrCRadl++wVnrEXNJ/TRw5wN03HNoVkIpKLAZOB4rSDBmFeQP8D
-         IF1o5v5CBMw8Zp7C7FpeJJejIik1eMc34MjLi2K3BPYWJkayqNsTafBGs9ECDK5xgnN8
-         Vki9bKsI6O7VwvcqrSjVnXke+4t8BXV6Wq/wG9qBT3h+O9AE9CTQ2BNqpRsBE3MhOqzd
-         tjCxGZSnEOJFLUAQuh5OmcdVe/L10OVGgkXqW7YKcPjojaIIIBN/WQhY2zoZQyd6fSfX
-         atAg==
-X-Gm-Message-State: AFqh2krNIoZKmhrekrm/bZ+E6Yqj/Qe5Vx6+mW9BynLMAC3yBV9LUynu
-        8qZHY02K2sNr9uPslZRSzy8=
-X-Google-Smtp-Source: AMrXdXtXQ/FBBWfKI4DSehNmTv8LCHGOsZk2Do1P/FMzAL8FrZnsXAj3VoTqLGE6YNTj+kSS9U7kVg==
-X-Received: by 2002:a5d:4950:0:b0:26e:7604:6575 with SMTP id r16-20020a5d4950000000b0026e76046575mr31432386wrs.65.1672997512513;
-        Fri, 06 Jan 2023 01:31:52 -0800 (PST)
-Received: from localhost ([217.138.219.182])
-        by smtp.gmail.com with ESMTPSA id bj27-20020a0560001e1b00b0023659925b2asm659623wrb.51.2023.01.06.01.31.50
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v982tKjruzjnEGR+qtBvwCfxbuiittS57VqGvWmNxEA=;
+        b=SCEfsYOSKGDkeR+71xpCp9S+c96XlW8CoWn2Hi68aLcBdHjLLsHB+T4Rcs0+1KVNig
+         ZHAOYkCF99calmvNlXJcqVcq6UZAh9YIf/dCiKmeFEj4kDeNosRikS84MYzcWtEEYQT6
+         H0anIt/yViwcUnFZeTKsHpoxltpjPHeN1u1caSka96N1+T54KmtDrZir9XFfIJGz8wZK
+         1nLTiET6w5j6yV4Y3es7Dob/JECg2aultWEb8Pua87wp5xYweUT16Ovb1WtAkvs1kd0M
+         HEwR3vH2nO4q6+iJDDQ0rRVHvbGV94ZlbrJ1e5NkaxKSsAxtmGUdpId2bJKE19xiPCbi
+         tcCQ==
+X-Gm-Message-State: AFqh2kohpu7Acbv736QC07QEk60S8NISEF8foLX81wnyMMghNN+Gv5oJ
+        Tf1fyXpNASmyF5aS5QH8pJrJzH/A/JbemFZb
+X-Google-Smtp-Source: AMrXdXvYSLjYzCElzyzK7yhn2iQbRJ2DGluk25DvaH9fz9jVXIzkSfkiBzSZ7TwN2v8AjLBXVXylQw==
+X-Received: by 2002:a05:600c:798:b0:3d3:5737:3b0f with SMTP id z24-20020a05600c079800b003d357373b0fmr47719090wmo.36.1672997519650;
+        Fri, 06 Jan 2023 01:31:59 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id iv14-20020a05600c548e00b003b47b80cec3sm6203606wmb.42.2023.01.06.01.31.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 01:31:52 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Fri, 06 Jan 2023 01:31:58 -0800 (PST)
+Message-ID: <bb52b82d-5149-c512-ad30-3b993221bd78@linaro.org>
+Date:   Fri, 6 Jan 2023 10:31:56 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/3] dt-bindings: clock: document SM8550 DISPCC clock
+ controller
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-dispcc-v1-0-81bfcc26b2dc@linaro.org>
+ <20230103-topic-sm8550-upstream-dispcc-v1-1-81bfcc26b2dc@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-dispcc-v1-1-81bfcc26b2dc@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 06 Jan 2023 10:31:49 +0100
-Message-Id: <CPL04DQZPZ6P.1XLQFWLE9CISR@vincent>
-Cc:     <linux-kernel@vger.kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH 5/6] fixdep: avoid parsing the same file over again
-From:   "Vincenzo" <vincenzopalazzodev@gmail.com>
-To:     "Masahiro Yamada" <masahiroy@kernel.org>,
-        <linux-kbuild@vger.kernel.org>
-X-Mailer: aerc 0.8.2
-References: <20221231064203.1623793-1-masahiroy@kernel.org>
- <20221231064203.1623793-6-masahiroy@kernel.org>
-In-Reply-To: <20221231064203.1623793-6-masahiroy@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-
-On Sat Dec 31, 2022 at 7:42 AM CET, Masahiro Yamada wrote:
-> The dep files (*.d files) emitted by C compilers usually contain the
-> deduplicated list of included files.
->
-> There is an exceptional case; if a header is included by the -include
-> command line option, and also by #include directive, it appears twice
-> in the *.d file.
->
-> For example, the top Makefile specifies the command line option,
-> -include $(srctree)/include/linux/kconfig.h. You do not need to
-> add #include <linux/kconfig.h> in every source file.
->
-> In fact, include/linux/kconfig.h is listed twice in many .*.cmd files
-> due to include/linux/xarray.h including <linux/kconfig.h>.
-> I did not fix that since it is a small redundancy.
->
-> However, this is more annoying for rustc. rustc emits the dependency
-> for each emission type.
->
-> For example, cmd_rustc_library emits dep-info, obj, and metadata.
-> So, the emitted *.d file contains the dependency for those 3 targets,
-> which makes fixdep parse the same file 3 times.
->
->   $ grep rust/alloc/raw_vec.rs rust/.alloc.o.cmd
->     rust/alloc/raw_vec.rs \
->     rust/alloc/raw_vec.rs \
->     rust/alloc/raw_vec.rs \
->
-> To skip the second parsing, this commit adds a hash table for parsed
-> files, just like we did for CONFIG options.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On 03/01/2023 14:53, Neil Armstrong wrote:
+> Document device tree bindings for display clock controller for
+> Qualcomm SM8550 SoC.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->
->  scripts/basic/fixdep.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-> index b20777b888d7..cc8f6d34c2ca 100644
-> --- a/scripts/basic/fixdep.c
-> +++ b/scripts/basic/fixdep.c
-> @@ -113,7 +113,7 @@ struct item {
->  };
-> =20
->  #define HASHSZ 256
-> -static struct item *config_hashtab[HASHSZ];
-> +static struct item *config_hashtab[HASHSZ], *file_hashtab[HASHSZ];
-> =20
->  static unsigned int strhash(const char *str, unsigned int sz)
->  {
-> @@ -361,6 +361,10 @@ static void parse_dep_file(char *p, const char *targ=
-et)
->  			 * name, which will be the original one, and ignore any
->  			 * other source names, which will be intermediate
->  			 * temporary files.
-> +			 *
-> +			 * rustc emits the same dependency list for each
-> +			 * emission type. It is enough to list the source name
-> +			 * just once.
->  			 */
->  			if (!saw_any_target) {
->  				saw_any_target =3D true;
-> @@ -368,7 +372,8 @@ static void parse_dep_file(char *p, const char *targe=
-t)
->  				printf("deps_%s :=3D \\\n", target);
->  				need_parse =3D true;
->  			}
-> -		} else if (!is_ignored_file(p, q - p)) {
-> +		} else if (!is_ignored_file(p, q - p) &&
-> +			   !in_hashtable(p, q - p, file_hashtab)) {
->  			printf("  %s \\\n", p);
->  			need_parse =3D true;
->  		}
-> --=20
-> 2.34.1
+>  .../bindings/clock/qcom,sm8550-dispcc.yaml         | 106 +++++++++++++++++++++
+>  include/dt-bindings/clock/qcom,sm8550-dispcc.h     | 101 ++++++++++++++++++++
+>  2 files changed, 207 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml
+> new file mode 100644
+> index 000000000000..06c04656cb55
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml
+> @@ -0,0 +1,106 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm8550-dispcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Display Clock & Reset Controller for SM8550
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +
+> +description: |
+> +  Qualcomm display clock control module provides the clocks, resets and power
+> +  domains on SM8550.
+> +
+> +  See also:: include/dt-bindings/clock/qcom,sm8550-dispcc.h
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm8550-dispcc
+> +
+> +  clocks:
+> +    minItems: 3
+
+Clock inputs should be optional if we can really treat them optional,
+e.g. reparent to something else or just adjust list of parents. Since
+the driver has fixed parent data, it suggests these are not really
+optional and they are all in the hardware (always).
+
+
+Best regards,
+Krzysztof
 
