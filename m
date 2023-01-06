@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5CB660900
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A81660905
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjAFV4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S236382AbjAFV5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbjAFV4a (ORCPT
+        with ESMTP id S235841AbjAFV44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:56:30 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BD25FAD;
-        Fri,  6 Jan 2023 13:56:20 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bt23so3867233lfb.5;
-        Fri, 06 Jan 2023 13:56:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJ1VHG8QdvW23DuDLj0FR+4QbFnd8LU8x0Q0vsj/g7A=;
-        b=XR6QnKRhjr9YVIh2ceB7fPSiS2E0NvSY04bzdRg0ka8DpR4RWE1IOJNn+j1qcNaCJC
-         Q2nzQng87I2Kml2/F2dFhK5Mgr/uTWveWjQx35w0eFoPumVKE08IdWUAJimaiqrM8vg8
-         XSrHSpolYohKDKG9LYxTH0VY378OLgyd17W8ivYolOJ/qNzQWPl1TaOcGJaRJQMkA0wE
-         rkuz8M2n81tFhSNKGnGEqdbOvEjYMVapT+FzEJuYcYrpRyyTBf4z3vEpkvFAwXGXqM3V
-         4rxlrQ38a4yaVOIabmJbvl210YyPHO3xiIQ1O8YDszJmGXRFVBcyn+dqNPJLlMj9jy0c
-         88Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YJ1VHG8QdvW23DuDLj0FR+4QbFnd8LU8x0Q0vsj/g7A=;
-        b=KXgExHHYJ5wsSOlYKnut42yaEMFZ0gZF0dWLIdKKADrxVtRTquCEgeOGT09hQBI5R1
-         xt7h9X9u6clBpPzouo+JiiOpmUiLSrKW9MdERsPIbXkOUosxvY6QY2bbghVv1TvMTG2K
-         6EeAD2c4pNXITJoyqiXAceJjVXAF1Rym2UhsdFaKGn5lpohf/eMEVr1sYL6SDd1lFGIL
-         vH8SKBWUo6jYXpwccEq4bcEch0Pbkib/KYa8Fmq1B7RZH368NZ5j/qyRYUmJMbwn8SkO
-         S2AJXDDiWQizBzjqF1MszfKeJ++963LYG43mYlRbYKe6nGJxJ2OhrqWObUjWYwdNMURH
-         W/dQ==
-X-Gm-Message-State: AFqh2kr25YACWBysDx813PdBuQ6xMuX91LbHxPatKgZpuDxEb8OcgSBF
-        HW7tbkzi2Yqj72siWdeeOtg=
-X-Google-Smtp-Source: AMrXdXuiFLTGHD/Jb7PNLzWczXpK9IOZHvL9ZCXGvQZb8hsNuAX0kGMNqxNRpnZnq3k4Hb5VpFKpTA==
-X-Received: by 2002:a05:6512:2308:b0:4b5:6b87:a5ce with SMTP id o8-20020a056512230800b004b56b87a5cemr17870719lfu.46.1673042179015;
-        Fri, 06 Jan 2023 13:56:19 -0800 (PST)
-Received: from localhost.localdomain ([46.147.136.10])
-        by smtp.gmail.com with ESMTPSA id p20-20020a056512235400b004cb430b5b38sm290474lfu.185.2023.01.06.13.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 13:56:18 -0800 (PST)
-From:   Alexander Pantyukhin <apantykhin@gmail.com>
-To:     peterz@infradead.org, akpm@linux-foundation.org
-Cc:     mingo@redhat.com, namhyung@kernel.org, jolsa@kernel.org,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Pantyukhin <apantykhin@gmail.com>
-Subject: [PATCH] tools:perf:scripts:python:intel-pt-events del unusedvar
-Date:   Sat,  7 Jan 2023 02:56:13 +0500
-Message-Id: <20230106215613.7159-1-apantykhin@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 6 Jan 2023 16:56:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D96F7A3B7;
+        Fri,  6 Jan 2023 13:56:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 626ACCE1E7F;
+        Fri,  6 Jan 2023 21:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FDC6C433EF;
+        Fri,  6 Jan 2023 21:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673042209;
+        bh=W8Jp+Iv7U6tzDRr3G/V0I5zmQ7OAuAiols6tlyh1DdU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=O0Ei8LxZHTZ3xU2wjzz5MfpxwoKPc6JqtOvkj6mxx3qtRqHbcu7EA+1uDviDUR7Ak
+         jF+E8iHN1F5JQdmSVkU3b11wCtn/5y9eKTS6rhxQNlvVn8G9r6JDMuJJt9FHGdeoxb
+         tN38w7RgwVSL8+WHn5G15aRsCUU+Evf+yi374xzKbwo3yiVJyLW96jZw6yZDqPmKCZ
+         oGWcG5BIONwRSfy9UhYUnqr6+Z4GF387HldCWo2G3r3S1ezkQkmbVV51jMGKT0fg0d
+         yfuCQ5rHOgcVbhEDVOn+MliejuqAKl7rChp0nELmB50nvmt7dyOKVrHm/vqas81Mdk
+         uK0BGEX8FOBgQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+In-Reply-To: <20230106100719.196243-1-brgl@bgdev.pl>
+References: <20230106100719.196243-1-brgl@bgdev.pl>
+Subject: Re: [PATCH v2 1/2] spi: spidev: fix a race condition when accessing
+ spidev->spi
+Message-Id: <167304220835.799739.15392427246183345092.b4-ty@kernel.org>
+Date:   Fri, 06 Jan 2023 21:56:48 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The event_attr is never used later, the var is ok be deleted.
-Additional code simplification is to substitute string slice comparison
-with "substring" function. This case no need to know the length specific
-words.
+On Fri, 06 Jan 2023 11:07:18 +0100, Bartosz Golaszewski wrote:
+> There's a spinlock in place that is taken in file_operations callbacks
+> whenever we check if spidev->spi is still alive (not null). It's also
+> taken when spidev->spi is set to NULL in remove().
+> 
+> This however doesn't protect the code against driver unbind event while
+> one of the syscalls is still in progress. To that end we need a lock taken
+> continuously as long as we may still access spidev->spi. As both the file
+> ops and the remove callback are never called from interrupt context, we
+> can replace the spinlock with a mutex.
+> 
+> [...]
 
-Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
----
- tools/perf/scripts/python/intel-pt-events.py | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Applied to
 
-diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
-index 08862a2582f4..28d08e2fb7cd 100644
---- a/tools/perf/scripts/python/intel-pt-events.py
-+++ b/tools/perf/scripts/python/intel-pt-events.py
-@@ -340,7 +340,6 @@ def print_srccode(comm, param_dict, sample, symbol, dso, with_insn):
- 	print(start_str, src_str)
- 
- def do_process_event(param_dict):
--	event_attr = param_dict["attr"]
- 	sample	   = param_dict["sample"]
- 	raw_buf	   = param_dict["raw_buf"]
- 	comm	   = param_dict["comm"]
-@@ -359,13 +358,13 @@ def do_process_event(param_dict):
- 		print(glb_switch_str[cpu])
- 		del glb_switch_str[cpu]
- 
--	if name[0:12] == "instructions":
-+	if name.startswith("instructions"):
- 		if glb_src:
- 			print_srccode(comm, param_dict, sample, symbol, dso, True)
- 		else:
- 			print_instructions_start(comm, sample)
- 			print_common_ip(param_dict, sample, symbol, dso)
--	elif name[0:8] == "branches":
-+	elif name.startswith("branches"):
- 		if glb_src:
- 			print_srccode(comm, param_dict, sample, symbol, dso, False)
- 		else:
--- 
-2.25.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/2] spi: spidev: fix a race condition when accessing spidev->spi
+      commit: 1f4d2dd45b6ef9c047f620d2812326a7813d2354
+[2/2] spi: spidev: remove debug messages that access spidev->spi without locking
+      commit: 50028988403ab8e031093655af9c6919ecba3aa6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
