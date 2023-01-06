@@ -2,172 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C5C65FA7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DAD65FA88
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjAFDxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 22:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S230062AbjAFD7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 22:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjAFDxB (ORCPT
+        with ESMTP id S229451AbjAFD7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 22:53:01 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C8F4BD6E;
-        Thu,  5 Jan 2023 19:52:59 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Np8XK3HmYz16LyF;
-        Fri,  6 Jan 2023 11:51:29 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+        Thu, 5 Jan 2023 22:59:32 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95C6B59A;
+        Thu,  5 Jan 2023 19:59:31 -0800 (PST)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Np8gr2DzdznTlx;
+        Fri,  6 Jan 2023 11:58:00 +0800 (CST)
+Received: from [10.67.109.184] (10.67.109.184) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 6 Jan 2023 11:52:57 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <frederic@kernel.org>, <paulmck@kernel.org>
-CC:     <jiangshanlai@gmail.com>, <joel@joelfernandes.org>,
-        <josh@joshtriplett.org>, <linux-kernel@vger.kernel.org>,
-        <mathieu.desnoyers@efficios.com>, <mhiramat@kernel.org>,
-        <quic_neeraju@quicinc.com>, <rcu@vger.kernel.org>,
-        <rostedt@goodmis.org>, <peterz@infradead.org>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH] rcu: Avoid kernel stack overflow due to rcu_irq_enter_check_tick() being kprobe-ed
-Date:   Fri, 6 Jan 2023 11:54:23 +0800
-Message-ID: <20230106035423.3376283-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2375.34; Fri, 6 Jan 2023 11:59:27 +0800
+Message-ID: <b2d4c8d9-8852-ddfe-f83b-dd5cedf05ca4@huawei.com>
+Date:   Fri, 6 Jan 2023 11:59:27 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml100012.china.huawei.com (7.185.36.121)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH RESEND bpf-next 3/4] riscv, bpf: Add
+ bpf_arch_text_poke support for RV64
+Content-Language: en-US
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+ <20221220021319.1655871-4-pulehui@huaweicloud.com>
+ <871qobqyh9.fsf@all.your.base.are.belong.to.us>
+ <755a5b80-f916-7383-6746-3e202224dfcc@huaweicloud.com>
+From:   Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <755a5b80-f916-7383-6746-3e202224dfcc@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500020.china.huawei.com (7.221.188.8)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
-overflow [1]. This issue can be reproduced by enabling CONFIG_NO_HZ_FULL
-and boot kernel with argument "nohz_full=" then execute like:
-  # cd /sys/kernel/tracing/
-  # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
-  # echo 1 > events/kprobes/enable
 
-It seems __rcu_irq_enter_check_tick() should not be kprobe-ed, so add
-it into kprobe blacklist with NOKPROBE_SYMBOL(). This may have less impact
-than tagging as 'noinstr' which was discussed but not concluded in
-Link: https://lore.kernel.org/all/20221119040049.795065-1-zhengyejian1@huawei.com/
 
-[1]
-Insufficient stack space to handle exception!
-ESR: 0x00000000f2000004 -- BRK (AArch64)
-FAR: 0x0000ffffccf3e510
-Task stack:     [0xffff80000ad30000..0xffff80000ad38000]
-IRQ stack:      [0xffff800008050000..0xffff800008058000]
-Overflow stack: [0xffff089c36f9f310..0xffff089c36fa0310]
-CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
-Hardware name: linux,dummy-virt (DT)
-pstate: 400003c5 (nZcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __rcu_irq_enter_check_tick+0x0/0x1b8
-lr : ct_nmi_enter+0x11c/0x138
-sp : ffff80000ad30080
-x29: ffff80000ad30080 x28: ffff089c82e20000 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff089c02a8d100 x24: 0000000000000000
-x23: 00000000400003c5 x22: 0000ffffccf3e510 x21: ffff089c36fae148
-x20: ffff80000ad30120 x19: ffffa8da8fcce148 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: ffffa8da8e44ea6c
-x14: ffffa8da8e44e968 x13: ffffa8da8e03136c x12: 1fffe113804d6809
-x11: ffff6113804d6809 x10: 0000000000000a60 x9 : dfff800000000000
-x8 : ffff089c026b404f x7 : 00009eec7fb297f7 x6 : 0000000000000001
-x5 : ffff80000ad30120 x4 : dfff800000000000 x3 : ffffa8da8e3016f4
-x2 : 0000000000000003 x1 : 0000000000000000 x0 : 0000000000000000
-Kernel panic - not syncing: kernel stack overflow
-CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace+0xf8/0x108
- show_stack+0x20/0x30
- dump_stack_lvl+0x68/0x84
- dump_stack+0x1c/0x38
- panic+0x214/0x404
- add_taint+0x0/0xf8
- panic_bad_stack+0x144/0x160
- handle_bad_stack+0x38/0x58
- __bad_stack+0x78/0x7c
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- [...]
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- el1_interrupt+0x28/0x60
- el1h_64_irq_handler+0x18/0x28
- el1h_64_irq+0x64/0x68
- __ftrace_set_clr_event_nolock+0x98/0x198
- __ftrace_set_clr_event+0x58/0x80
- system_enable_write+0x144/0x178
- vfs_write+0x174/0x738
- ksys_write+0xd0/0x188
- __arm64_sys_write+0x4c/0x60
- invoke_syscall+0x64/0x180
- el0_svc_common.constprop.0+0x84/0x160
- do_el0_svc+0x48/0xe8
- el0_svc+0x34/0xd0
- el0t_64_sync_handler+0xb8/0xc0
- el0t_64_sync+0x190/0x194
-SMP: stopping secondary CPUs
-Kernel Offset: 0x28da86000000 from 0xffff800008000000
-PHYS_OFFSET: 0xfffff76600000000
-CPU features: 0x00000,01a00100,0000421b
-Memory Limit: none
+On 2023/1/6 9:57, Pu Lehui wrote:
+> 
+> 
+> On 2023/1/4 2:12, Björn Töpel wrote:
+>> Pu Lehui <pulehui@huaweicloud.com> writes:
+>>
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> Implement bpf_arch_text_poke for RV64. For call scenario,
+>>> ftrace framework reserve 4 nops for RV64 kernel function
+>>> as function entry, and use auipc+jalr instructions to call
+>>> kernel or module functions. However, since the auipc+jalr
+>>> call instructions is non-atomic operation, we need to use
+>>> stop-machine to make sure instruction patching in atomic
+>>> context. As for jump scenario, since we only jump inside
+>>> the trampoline, a jal instruction is sufficient.
+>>
+>> Hmm, is that really true? More below!
+>>
+>>>
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>> ---
+>>>   arch/riscv/net/bpf_jit.h        |   5 ++
+>>>   arch/riscv/net/bpf_jit_comp64.c | 131 +++++++++++++++++++++++++++++++-
+>>>   2 files changed, 134 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>>> index d926e0f7ef57..bf9802a63061 100644
+>>> --- a/arch/riscv/net/bpf_jit.h
+>>> +++ b/arch/riscv/net/bpf_jit.h
+>>> @@ -573,6 +573,11 @@ static inline u32 rv_fence(u8 pred, u8 succ)
+>>>       return rv_i_insn(imm11_0, 0, 0, 0, 0xf);
+>>>   }
+>>> +static inline u32 rv_nop(void)
+>>> +{
+>>> +    return rv_i_insn(0, 0, 0, 0, 0x13);
+>>> +}
+>>> +
+>>>   /* RVC instrutions. */
+>>>   static inline u16 rvc_addi4spn(u8 rd, u32 imm10)
+>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
+>>> b/arch/riscv/net/bpf_jit_comp64.c
+>>> index bf4721a99a09..fa8b03c52463 100644
+>>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>>> @@ -8,6 +8,8 @@
+>>>   #include <linux/bitfield.h>
+>>>   #include <linux/bpf.h>
+>>>   #include <linux/filter.h>
+>>> +#include <linux/memory.h>
+>>> +#include <linux/stop_machine.h>
+>>>   #include "bpf_jit.h"
+>>>   #define RV_REG_TCC RV_REG_A6
+>>> @@ -238,7 +240,7 @@ static void __build_epilogue(bool is_tail_call, 
+>>> struct rv_jit_context *ctx)
+>>>       if (!is_tail_call)
+>>>           emit_mv(RV_REG_A0, RV_REG_A5, ctx);
+>>>       emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
+>>> -          is_tail_call ? 4 : 0, /* skip TCC init */
+>>> +          is_tail_call ? 20 : 0, /* skip reserved nops and TCC init */
+>>>             ctx);
+>>>   }
+>>> @@ -615,6 +617,127 @@ static int add_exception_handler(const struct 
+>>> bpf_insn *insn,
+>>>       return 0;
+>>>   }
+>>> +struct text_poke_args {
+>>> +    void *addr;
+>>> +    const void *insns;
+>>> +    size_t len;
+>>> +    atomic_t cpu_count;
+>>> +};
+>>> +
+>>> +static int do_text_poke(void *data)
+>>> +{
+>>> +    int ret = 0;
+>>> +    struct text_poke_args *patch = data;
+>>> +
+>>> +    if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+>>> +        ret = patch_text_nosync(patch->addr, patch->insns, patch->len);
+>>> +        atomic_inc(&patch->cpu_count);
+>>> +    } else {
+>>> +        while (atomic_read(&patch->cpu_count) <= num_online_cpus())
+>>> +            cpu_relax();
+>>> +        smp_mb();
+>>> +    }
+>>> +
+>>> +    return ret;
+>>> +}
+>>> +
+>>> +static int bpf_text_poke_stop_machine(void *addr, const void *insns, 
+>>> size_t len)
+>>> +{
+>>> +    struct text_poke_args patch = {
+>>> +        .addr = addr,
+>>> +        .insns = insns,
+>>> +        .len = len,
+>>> +        .cpu_count = ATOMIC_INIT(0),
+>>> +    };
+>>> +
+>>> +    return stop_machine(do_text_poke, &patch, cpu_online_mask);
+>>> +}
+>>> +
+>>> +static int gen_call_or_nops(void *target, void *ip, u32 *insns)
+>>> +{
+>>> +    int i, ret;
+>>> +    s64 rvoff;
+>>> +    struct rv_jit_context ctx;
+>>> +
+>>> +    ctx.ninsns = 0;
+>>> +    ctx.insns = (u16 *)insns;
+>>> +
+>>> +    if (!target) {
+>>> +        for (i = 0; i < 4; i++)
+>>> +            emit(rv_nop(), &ctx);
+>>> +        return 0;
+>>> +    }
+>>> +
+>>> +    rvoff = (s64)(target - ip);
+>>> +    emit(rv_sd(RV_REG_SP, -8, RV_REG_RA), &ctx);
+>>> +    ret = emit_jump_and_link(RV_REG_RA, rvoff, false, &ctx);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +    emit(rv_ld(RV_REG_RA, -8, RV_REG_SP), &ctx);
+>>> +
+>>> +    return 0;
+>>> +
+>>> +}
+>>> +
+>>> +static int bpf_text_poke_call(void *ip, void *old_addr, void *new_addr)
+>>> +{
+>>> +    int ret;
+>>> +    u32 old_insns[4], new_insns[4];
+>>> +
+>>> +    ret = gen_call_or_nops(old_addr, ip + 4, old_insns);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>> +    ret = gen_call_or_nops(new_addr, ip + 4, new_insns);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>> +    mutex_lock(&text_mutex);
+>>> +    if (memcmp(ip, old_insns, sizeof(old_insns))) {
+>>> +        ret = -EFAULT;
+>>> +        goto out;
+>>> +    }
+>>> +
+>>> +    if (memcmp(ip, new_insns, sizeof(new_insns)))
+>>> +        ret = bpf_text_poke_stop_machine(ip, new_insns,
+>>> sizeof(new_insns));
+>>
+>> I'd rather see that you added a patch_text variant to
+>> arch/riscv/kernel/patch.c (something like your
+>> bpf_text_poke_stop_machine()), and use that here. Might be other users
+>> of that as well -- Andy's ftrace patch maybe? :-)
+>>
+> 
+> Good idea.
+> 
+>>> +out:
+>>> +    mutex_unlock(&text_mutex);
+>>> +    return ret;
+>>> +}
+>>> +
+>>> +static int bpf_text_poke_jump(void *ip, void *old_addr, void *new_addr)
+>>> +{
+>>> +    int ret;
+>>> +    u32 old_insn, new_insn;
+>>> +
+>>> +    old_insn = old_addr ? rv_jal(RV_REG_ZERO, (s64)(old_addr - ip) 
+>>> >> 1) : rv_nop();
+>>> +    new_insn = new_addr ? rv_jal(RV_REG_ZERO, (s64)(new_addr - ip) 
+>>> >> 1) : rv_nop();
+>>> +
+>>> +    mutex_lock(&text_mutex);
+>>> +    if (memcmp(ip, &old_insn, sizeof(old_insn))) {
+>>> +        ret = -EFAULT;
+>>> +        goto out;
+>>> +    }
+>>> +
+>>> +    if (memcmp(ip, &new_insn, sizeof(new_insn)))
+>>> +        ret = patch_text_nosync(ip, &new_insn, sizeof(new_insn));
+>>> +out:
+>>> +    mutex_unlock(&text_mutex);
+>>> +    return ret;
+>>> +}
+>>> +
+>>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>>> +               void *old_addr, void *new_addr)
+>>
+>> AFAIU there's nothing in the bpf_arch_text_poke() API that say that
+>> BPF_MOD_JUMP is jumps within the trampoline. That is one usage, but not
+>> the only one. In general, the jal might not have enough reach.
+>>
+>> I believe that this needs to be an auipc/jalr pair similar to
+>> BPF_MOD_CALL (w/o linked register).
+>>
+> 
+> The initial idea was that currently BPF_MOD_JUMP only serves for
 
-Cc: stable@vger.kernel.org
-Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/rcu/tree.c | 1 +
- 1 file changed, 1 insertion(+)
+small nit，the current riscv BPF_MOD_JUMP
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index cf34a961821a..41606d3ed083 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -659,6 +659,7 @@ void __rcu_irq_enter_check_tick(void)
- 	}
- 	raw_spin_unlock_rcu_node(rdp->mynode);
- }
-+NOKPROBE_SYMBOL(__rcu_irq_enter_check_tick);
- #endif /* CONFIG_NO_HZ_FULL */
- 
- /*
--- 
-2.25.1
-
+> bpf_tramp_image_put, and jal, which range is +/- 1MB, is sufficient for 
+> the distance between im->ip_after_call and im->ip_epilogue, and try to 
+> not use not-atomic auipc/jalr pair. But take deep consideration, this 
+> might be extended to other uses, such as tailcall optimization. So agree 
+> with your suggestion.
+> 
+>>
+>> And again, thanks for working on the RV trampoline!
+>> Björn
+> 
