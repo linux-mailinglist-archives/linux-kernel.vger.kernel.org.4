@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5600265FE67
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CF365FE6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjAFJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S232375AbjAFJ6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAFJy2 (ORCPT
+        with ESMTP id S229694AbjAFJ6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:54:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7A8645641;
-        Fri,  6 Jan 2023 01:54:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AFEF11FB;
-        Fri,  6 Jan 2023 01:55:09 -0800 (PST)
-Received: from [10.57.45.115] (unknown [10.57.45.115])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4688B3F23F;
-        Fri,  6 Jan 2023 01:54:25 -0800 (PST)
-Message-ID: <44e87647-d64e-ee24-0046-06bb15f5a1f4@arm.com>
-Date:   Fri, 6 Jan 2023 09:54:23 +0000
+        Fri, 6 Jan 2023 04:58:04 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB0F6165;
+        Fri,  6 Jan 2023 01:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1672999082; x=1704535082;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=VZqJLZm6Ci+sGx44e38EWK4CmsPPAKDhPQybyoFfhKE=;
+  b=LRqAJHUCyuDFHI0GAG6LhL3Oeyfe1G0tmbAoMCfDPLJhVkadMOIOR0ET
+   LCZ2H8T6h7/SdOJH8HeFF2gN6RcT5HoOY8IQxb4IPrrlPI2DQWpMDF/9y
+   U9nxZiubBO0MzeLNymaSPFIedRYlbZ3KCWUaz9Td+8cCwsD6T6u2yfmj3
+   etn8hLTdthwNipHr4jLuvaPxdHuaQKTV0rifLK+sUmjtrfgs2JwOs2DL+
+   yyXz+G7k1vYMG2O4OCVz9y1Ux5f7/lR7tN9C07bu88bENwD6nSDhr6KyQ
+   G6uem2/9KmFZSJOksXMEV9smpDAxfARspBUwVaT56ReMscsCL1Y9oYUoG
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="194571779"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2023 02:58:01 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 6 Jan 2023 02:57:58 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 02:57:55 -0700
+Message-ID: <b6b2db49dfdd2c3809c8b2c99077ca5110d84d97.camel@microchip.com>
+Subject: Re: [PATCH net-next v2 0/8] Add support for two classes of VCAP
+ rules
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>
+Date:   Fri, 6 Jan 2023 10:57:54 +0100
+In-Reply-To: <35a9ff9fa0980e1e8542d338c6bf1e0c@walle.cc>
+References: <20230106085317.1720282-1-steen.hegelund@microchip.com>
+         <35a9ff9fa0980e1e8542d338c6bf1e0c@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v6 11/14] kernel: events: Export
- perf_report_aux_output_id()
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     mathieu.poirier@linaro.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        Mike Leach <mike.leach@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-References: <20221123195010.6859-1-mike.leach@linaro.org>
- <20221123195010.6859-12-mike.leach@linaro.org>
- <e3afc4ad-8a95-7d0b-832b-7f7a8be0b647@arm.com>
- <9ea2a0d8-b025-bb56-3a04-1a88e340da2d@arm.com>
-In-Reply-To: <9ea2a0d8-b025-bb56-3a04-1a88e340da2d@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,67 +78,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter, Ingo, Arnaldo
-
-On 13/12/2022 10:08, Suzuki K Poulose wrote:
-> Peter,
-> 
-> On 24/11/2022 11:04, Suzuki Kuruppassery Poulose wrote:
->> Peter
->>
->>
->> On 23/11/2022 19:50, Mike Leach wrote:
->>> CoreSight trace being updated to use the perf_report_aux_output_id()
->>> in a similar way to intel-pt.
->>>
->>> This function in needs export visibility to allow it to be called from
->>> kernel loadable modules, which CoreSight may configured to be built as.
->>>
->>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
->>> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->>> ---
->>>   kernel/events/core.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/kernel/events/core.c b/kernel/events/core.c
->>> index 4ec3717003d5..ad388552f1d5 100644
->>> --- a/kernel/events/core.c
->>> +++ b/kernel/events/core.c
->>> @@ -9231,6 +9231,7 @@ void perf_report_aux_output_id(struct 
->>> perf_event *event, u64 hw_id)
->>>       perf_output_end(&handle);
->>>   }
->>> +EXPORT_SYMBOL_GPL(perf_report_aux_output_id);
->>
->> Are you happy with me picking up this change through the coresight  
->> tree ?
->>
->> Suzuki
->>
-> 
-> Please could you let me know your thoughts on this ? Coresight PMU would
-> use this to inform the dynamically allocated trace id for a CPU to the
-> perf via this HWID packet.
-> 
-> If you are happy with the above change, I could pick it up via the
-> coresight tree with your Ack. Otherwise, please could you pick it
-> up ?
->
-
-Please could you let us know if this is acceptable and if so, how can
-this be pushed ? CoreSight PMU (which can be built as a module) is using
-these packets to advertise the traceID allocated for a given CPU bound
-ETM (which is made dynamic due to the limited number of ids available).
-The perf tool can use these packets to then decode and separate the
-trace data from shared buffer.
-
-As of now, the series to enable the dynamic trace id allocation is
-blocked on this change.
+Hi Michael,
 
 
-Kind regards
-Suzuki
+On Fri, 2023-01-06 at 10:07 +0100, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> Hi Steen,
+>=20
+> thanks for adding me on CC :) I was just about to reply on your v1.
+>=20
+> Am 2023-01-06 09:53, schrieb Steen Hegelund:
+> > This adds support for two classes of VCAP rules:
+> >=20
+> > - Permanent rules (added e.g. for PTP support)
+> > - TC user rules (added by the TC userspace tool)
+> >=20
+> > For this to work the VCAP Loopups must be enabled from boot, so that
+> > the
+> > "internal" clients like PTP can add rules that are always active.
+> >=20
+> > When the TC tool add a flower filter the VCAP rule corresponding to
+> > this
+> > filter will be disabled (kept in memory) until a TC matchall filter
+> > creates
+> > a link from chain 0 to the chain (lookup) where the flower filter was
+> > added.
+> >=20
+> > When the flower filter is enabled it will be written to the appropriate
+> > VCAP lookup and become active in HW.
+> >=20
+> > Likewise the flower filter will be disabled if there is no link from
+> > chain
+> > 0 to the chain of the filter (lookup), and when that happens the
+> > corresponding VCAP rule will be read from the VCAP instance and stored
+> > in
+> > memory until it is deleted or enabled again.
+>=20
+> I've just done a very quick smoke test and looked at my lan9668 board
+> that the following error isn't printed anymore. No functional testing.
+> =C2=A0=C2=A0 vcap_val_rule:1678: keyset was not updated: -22
 
-> Suzuki
-> 
+Good to hear.
 
+>=20
+> And it is indeed gone. But I have a few questions regarding how these
+> patches are applied. They were first sent for net, but now due to
+> a remark that they are too invasive they are targeted at net-next.
+> But they have a Fixes: tag. Won't they be eventually backported to
+> later kernels in any case? What's the difference between net and
+> net-next then?
+
+I am not sure I can answer that.
+
+>=20
+> Also patches 3-8 (the one with the fixes tags) don't apply without
+> patch 1-2 (which don't have fixes tags). IMHO they should be
+> reordered.
+
+Right.
+
+>=20
+> Wouldn't it make more sense, to fix the regression via net (and
+> a Fixes: tag) and then make that stuff work without tc? Maybe
+> the fix is just reverting the commits.
+
+I have discussed this again with Horatiu and I have the following suggestio=
+n of
+how to proceed:
+
+1) Create a small LAN966x specific patch for net (see below for the two pos=
+sible
+   variants).
+
+2) Continue with a net-next V3 without any 'Fixes' tags on top of the patch=
+ in
+   (1) when it becomes available in net-next.
+
+
+The LAN966x patch for net (with a Fixes tag) could contain either:
+
+a) No check on enabled lookup
+
+   Removal of the check for enabled lookups:
+  =20
+   -	if (!ANA_VCAP_S2_CFG_ENA_GET(val))
+   -		return -ENOENT;
+  =20
+   This will remove the error that you have seen, but  will still require a
+   matchall rule to enable the PTP rules.  This is compatible with the TC
+   framework.
+  =20
+b) Always enable lookups
+
+   Enable the lookups at startup.
+   Remove the lookup enable check as above.
+  =20
+   This will make the PTP rules (and any other rules) work even without the
+   matchall rule to enable them.  It its not ideal, but solves the problem =
+that
+   you have been experiencing without the 'TC magic'
+  =20
+   The V3 in net-next will provide the full solution.
+
+I expect that you might prefer the b) version.
+
+>=20
+> -michael
+
+BR
+Steen
