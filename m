@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767D965FFB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9891765FFBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbjAFLor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S233899AbjAFLpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjAFLol (ORCPT
+        with ESMTP id S233783AbjAFLot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:44:41 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A825D728AE;
-        Fri,  6 Jan 2023 03:44:35 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id y25so1605594lfa.9;
-        Fri, 06 Jan 2023 03:44:35 -0800 (PST)
+        Fri, 6 Jan 2023 06:44:49 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99157289C;
+        Fri,  6 Jan 2023 03:44:39 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id y25so1605769lfa.9;
+        Fri, 06 Jan 2023 03:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BGXbQDgVE0UpM54kZDE3FWO38LNW+xtw1R1SGBRDg1g=;
-        b=YsTNByG+CwDkfZkmwptl1UPf1jKLfs+A8yjolRN49Isf/pKhKSe8627hD1XSuycUXP
-         OVYH2kPuQBlcybz0+ovsyO6EaPbWBSF9Xv3Ia5vZz+E05Hk65qNRoY+z+rpg+4Wotd8t
-         x9GR9vOmNqzBRFFB9UwFgQvpx9vMkJXp/V8fgfcVyEjXd+n4xBWpypGpD3avMM2fFutW
-         ti/qPpGHnEzuRt1Htisrkhq2xN1a2swO57Kto3Pkd4IB39xFVrk+V1LuyPVjG3ewKOfC
-         zPZcRQqa09k9ZeSSpeIcJPtGSJd5zWHVY03hJ8m8J2d4wcj9gRx2xl/2g3BGFrBNq9WG
-         mtIw==
+        bh=5irNV1hNyR0Do6fsEmjA5PW9Al1mS3pqAQZVCiHC7Rg=;
+        b=TY3jSlP4Pb+SHN0F4iGFOHzKa/rtPa7uKe6GVtWuHdZ0Awd3F6DWQ2nrrDaeEt2833
+         dzQA8KE30KGlCl3nQsqrT1m7N9bVs6i3aJcNvLmM8JJaudQpMkY/UjSsuun8XIOXPvJA
+         QYEKRoJpy6DVxFeg1ra4tijDp9D5lis3TFdl9W/y8dhuqdU3Gp6lPppCd2PlZATRxTby
+         45CD/Ia3AlYhcuWntycOWEHkJFkoXYU/bM7YXinoeBwHj9KNV5x3O3RXU6CJzBCn43fQ
+         IZD7em0dmop8LXIfPCjTCozjVJjJm4/NkQrNrRwEwk7WQAL66dfGBagxyJSx7GyZOe7t
+         OGDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BGXbQDgVE0UpM54kZDE3FWO38LNW+xtw1R1SGBRDg1g=;
-        b=voUDulLGLLcjZuKzTz3dbnozVMJi26plQPOufSMjEm2BB5nfTY8IBBZaJVb2oRmxlO
-         IaXpeFsLx6BYKePuCUchIy/kJRNC43EEtnkvJAixiQTdLweQegzcjFIlbKH/eUY0wwQl
-         CW0dKaH/cZh+hCILt060cZvtztTX9hOVIhogwzmYtrk9FQCfAlntHx/S6IktmT5nWxB5
-         u/cwRJT8w74O1bebiAtqTg5A0Pzv34ZJeN43MZCuVgtcdQrLJJi/CK8/gtvRLeVVGolZ
-         WMNH5oDhK94xrVMORlaPv2n9eGflLoAavaKr/uaqyCoC8jizmnV17Hh855aY2onqDps5
-         jt4A==
-X-Gm-Message-State: AFqh2kpDH+11Bi+2syraOp8xkKQxKvIfUrrhbWZEnOBl/1nyQaotau+x
-        odW2m1GLTfxgV4cXkI7i90qkSK4xqfKzyQ==
-X-Google-Smtp-Source: AMrXdXvOMxtOCkoCo6teMPBIKq2YPYMTBa7D+w8lsn1c9jTWyzJPWZfcP8OaUKQQoDcHy230XK4sKw==
-X-Received: by 2002:a05:6512:25a2:b0:4bc:a66e:9aa7 with SMTP id bf34-20020a05651225a200b004bca66e9aa7mr14452924lfb.6.1673005473956;
-        Fri, 06 Jan 2023 03:44:33 -0800 (PST)
+        bh=5irNV1hNyR0Do6fsEmjA5PW9Al1mS3pqAQZVCiHC7Rg=;
+        b=yLuyJFfoVnbDVdkmh0v5MazJ7ohHYqvMRdbYdWVqHJ0uFGARPZQQ8OkulJNvoqVBxa
+         n09bJ3OlYZPrlhg5iBjr8S2o7hompCWGAOQ2Fu01XnVQsuPAZG69o/uwPLUOJGPHE8Fh
+         Br0a9jEmwOaLVqAZllEI90y2FsHQ6efnna0GBm9rsQZAuCZITqBcQnC7HhTXmofGpezi
+         p1ClvxLapTpfp7huDQF6YOZP4dlqWOBUch7ikX8n9Hz/KvSCZc+MhsW53KSbGHwGB9qJ
+         fR31orVF9dopxaGIO9A6ZjaqEMkUOAgwjKpU1FjbyLHDM8opJAiLLICXwtVCUEvQQJVh
+         4/QQ==
+X-Gm-Message-State: AFqh2kqx5jp20fbHIidmmEdHCEhvm06KVis2juBRB9/2jTDvjvSkcDLu
+        IOevQ60Db0LTL2zdXM40LMpD04Pn9hElPw==
+X-Google-Smtp-Source: AMrXdXu+k8ipnAm8OrpKH3hq3Uu5L09QNj4BYxsINvOq7F6JsETV/zir+opHAT+SdbgcxdJQ+97DIw==
+X-Received: by 2002:ac2:4bd3:0:b0:4a4:68b7:d638 with SMTP id o19-20020ac24bd3000000b004a468b7d638mr14607443lfq.31.1673005477945;
+        Fri, 06 Jan 2023 03:44:37 -0800 (PST)
 Received: from i-vetokaappi.home.lan (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac258c3000000b004b5872a7003sm129747lfo.98.2023.01.06.03.44.33
+        by smtp.gmail.com with ESMTPSA id u3-20020ac258c3000000b004b5872a7003sm129747lfo.98.2023.01.06.03.44.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 03:44:33 -0800 (PST)
+        Fri, 06 Jan 2023 03:44:37 -0800 (PST)
 From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
         =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: pinctrl: msm8226: Add General Purpose clocks
-Date:   Fri,  6 Jan 2023 13:44:01 +0200
-Message-Id: <20230106114403.275865-2-matti.lehtimaki@gmail.com>
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] pinctrl: qcom: msm8226: Add General Purpose clocks
+Date:   Fri,  6 Jan 2023 13:44:02 +0200
+Message-Id: <20230106114403.275865-3-matti.lehtimaki@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230106114403.275865-1-matti.lehtimaki@gmail.com>
 References: <20230106114403.275865-1-matti.lehtimaki@gmail.com>
@@ -81,28 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the general purpose clock functions that are found on MSM8226.
+From: Luca Weiss <luca@z3ntu.xyz>
 
+Add support for the general purpose clocks that are found on MSM8226.
+
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Co-developed-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- .../devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml     | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pinctrl/qcom/pinctrl-msm8226.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml
-index 3b79f5be860b..6e3808065845 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml
-@@ -66,8 +66,8 @@ $defs:
-         enum: [ gpio, cci_i2c0, blsp_uim1, blsp_uim2, blsp_uim3, blsp_uim5,
-                 blsp_i2c1, blsp_i2c2, blsp_i2c3, blsp_i2c4, blsp_i2c5, blsp_spi1,
-                 blsp_spi2, blsp_spi3, blsp_spi5, blsp_uart1, blsp_uart2,
--                blsp_uart3, blsp_uart4, blsp_uart5, cam_mclk0, cam_mclk1, sdc3,
--                wlan ]
-+                blsp_uart3, blsp_uart4, blsp_uart5, cam_mclk0, cam_mclk1,
-+                gp0_clk, gp1_clk, sdc3, wlan ]
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm8226.c b/drivers/pinctrl/qcom/pinctrl-msm8226.c
+index fca0645e8008..0f05725e0a21 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm8226.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm8226.c
+@@ -362,6 +362,8 @@ enum msm8226_functions {
+ 	MSM_MUX_cam_mclk0,
+ 	MSM_MUX_cam_mclk1,
+ 	MSM_MUX_cci_i2c0,
++	MSM_MUX_gp0_clk,
++	MSM_MUX_gp1_clk,
+ 	MSM_MUX_gpio,
+ 	MSM_MUX_sdc3,
+ 	MSM_MUX_wlan,
+@@ -447,6 +449,9 @@ static const char * const cci_i2c0_groups[] = { "gpio29", "gpio30" };
+ static const char * const cam_mclk0_groups[] = { "gpio26" };
+ static const char * const cam_mclk1_groups[] = { "gpio27" };
  
-       bias-pull-down: true
-       bias-pull-up: true
++static const char * const gp0_clk_groups[] = { "gpio33" };
++static const char * const gp1_clk_groups[] = { "gpio34" };
++
+ static const char * const sdc3_groups[] = {
+ 	"gpio39", "gpio40", "gpio41", "gpio42", "gpio43", "gpio44"
+ };
+@@ -480,6 +485,8 @@ static const struct msm_function msm8226_functions[] = {
+ 	FUNCTION(cam_mclk0),
+ 	FUNCTION(cam_mclk1),
+ 	FUNCTION(cci_i2c0),
++	FUNCTION(gp0_clk),
++	FUNCTION(gp1_clk),
+ 	FUNCTION(gpio),
+ 	FUNCTION(sdc3),
+ 	FUNCTION(wlan),
+@@ -519,8 +526,8 @@ static const struct msm_pingroup msm8226_groups[] = {
+ 	PINGROUP(30,  cci_i2c0, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(31,  NA, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(32,  NA, NA, NA, NA, NA, NA, NA),
+-	PINGROUP(33,  NA, NA, NA, NA, NA, NA, NA),
+-	PINGROUP(34,  NA, NA, NA, NA, NA, NA, NA),
++	PINGROUP(33,  NA, NA, gp0_clk, NA, NA, NA, NA),
++	PINGROUP(34,  NA, NA, gp1_clk, NA, NA, NA, NA),
+ 	PINGROUP(35,  NA, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(36,  NA, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(37,  NA, NA, NA, NA, NA, NA, NA),
 -- 
 2.34.1
 
