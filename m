@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B2B66052D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 17:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477AF660536
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbjAFQ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 11:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S234831AbjAFRA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbjAFQ6O (ORCPT
+        with ESMTP id S231527AbjAFRAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 11:58:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA4D78A7C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 08:58:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 799A661A27
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:58:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC8ABC433D2;
-        Fri,  6 Jan 2023 16:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673024292;
-        bh=JyZGOJP4/NukyFMmeiyPZ3FypoTBSgJYWood3uwdP/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oUBAlr3x4lJ3uy9sOag15lwabM6XKtfLJ3HLpNQCS/nwXIk+k4aodoUJ83gS26k3j
-         e3PaHgEaEqeo1s0rVBLAaB5p0JGp8O8e44DMR4viYFYbLSVHt5D+VEr43EsdrHdg1P
-         k4IPdC6L5FkW19EtG0JeZGeBaEbmC7dLo1+W5foM9QLSAWesLrit4zyxz71xTdD6u7
-         2YgYm6M+EeOVjfU65CwWgwEvG6L45ReT8l4xGFqEE+8DPize4l9lODOI7tUedKXfmP
-         5zhqnjkarid5GFKp3O8qZ5lODYBc4JRGPN5czk87QLZUXxSjjA01Cyv4KPDPixq63w
-         B7rlz6WT7y0fA==
-Received: by pali.im (Postfix)
-        id 09722A3A; Fri,  6 Jan 2023 17:58:09 +0100 (CET)
-Date:   Fri, 6 Jan 2023 17:58:09 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.2-rc1
-Message-ID: <20230106165809.vkz7lr7gi3xce22e@pali>
-References: <CAHk-=wh1x-gbmE72xBPcEnchvmPn=13mU--+7Cfay0dNHCxxuw@mail.gmail.com>
- <20230104205640.o2uy2jk4v6yfm4w3@pali>
- <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
- <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk>
- <20230105174210.jbjoqelllcrd57q6@pali>
- <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk>
- <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
- <1933bddd-42d7-d92b-974f-f26c46c01547@kernel.dk>
- <CAHk-=wjJ=wD5D80hkWNCjJqS+djckAL+nXhXaHaiFzMAMve3rA@mail.gmail.com>
- <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk>
+        Fri, 6 Jan 2023 12:00:53 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8A741648
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:00:51 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id z16so1839418wrw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NPGjO3GLxwuKoc7lZtIvtYmPySePxCmc9A8414gqSgU=;
+        b=euSC14S8bRke4P9nxYzrLsV7/Rs+V6Xwl16eqrk35fgRXHrcJW5M+EQ3TnnmVVz0OG
+         imulyWr/yTkRznDSLBl6k+WUX9Hs08bCyaj/QtWTBFWr7PY4Bs/uZgGVLA+u+G0kjK1Q
+         qXyAQWkNWXr2Jtmwao2CR7rfbv8Gr9gBMeR00JF4LoZPF4CGI8jAAZLlvp+/VbpPfmIo
+         4eeQb6ZkqPijQpvRdJPZbbz8MfSqPjoTyC40kWVWydVWtcd5HC6/wjxYGrCZJJ8aS6w/
+         OHJDK985nTHcaHYGlN3Uos/RdUc/afXFpdOH7junzOIQUY5F7bbBQggu0lFe/Q4h5PNO
+         TfVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NPGjO3GLxwuKoc7lZtIvtYmPySePxCmc9A8414gqSgU=;
+        b=Bhtn5pCRkl+mfrXUaR6tZXeZhu5GXE/LqX0i4lxB/140x5k4OL+bAUDqFqaBxlt1FT
+         CWSdtQBwjpNIJlA9nN/SSPLcZgNcYICNAbGqykw8DsQtBH/+RDfnw/BmupEsjyElrih0
+         iXvnqkSZiJU9TChxA3mXhwrgKwQJwoFxCbX42U5YTsVXVAt8dLGwsPHcVgQmdUrlDHTN
+         5ol4woWG2bYjglI9AG5Fdyni596/ppO/WXR/TLowUdPCpKUjWap/KTXwOL7k8H4gl9W5
+         cUp+vSULDz8PcKfcEr1WEO8eKeUn3SBp6k2/brlXfvKzSJg/F8uhy4GZHP75Wv79WiiS
+         Anqg==
+X-Gm-Message-State: AFqh2kqRZhaV5OXv7LKmVlFkejwe1k4QXnemTHmhmBx538mwU2K79D2q
+        xHK6eCIB6bE291jAZTPpggA4eQ==
+X-Google-Smtp-Source: AMrXdXuFqZYcBKNOWyaXZXz+967P6PyjNmHIk3ic4subWD87vHVwOE8AwQVtHuWeEOjpKP7UFEo2PQ==
+X-Received: by 2002:adf:da51:0:b0:2b6:daf8:52ad with SMTP id r17-20020adfda51000000b002b6daf852admr3402719wrl.52.1673024449899;
+        Fri, 06 Jan 2023 09:00:49 -0800 (PST)
+Received: from blmsp ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
+        by smtp.gmail.com with ESMTPSA id f8-20020a0560001b0800b002423edd7e50sm1633417wrz.32.2023.01.06.09.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 09:00:49 -0800 (PST)
+Date:   Fri, 6 Jan 2023 18:00:48 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johnson.wang@mediatek.com,
+        miles.chen@mediatek.com, fparent@baylibre.com,
+        chun-jie.chen@mediatek.com, sam.shih@mediatek.com,
+        y.oudjana@protonmail.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, ryder.lee@kernel.org,
+        daniel@makrotopia.org, jose.exposito89@gmail.com,
+        yangyingliang@huawei.com, pablo.sun@mediatek.com,
+        weiyi.lu@mediatek.com, ikjn@chromium.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v2 04/23] clk: mediatek: cpumux: Propagate struct device
+ where possible
+Message-ID: <20230106170048.p4d3rq6kehmf3adp@blmsp>
+References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com>
+ <20221223094259.87373-5-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5F8QZGc4oDKJAGbpvubqiewvngURpNhrenS3pcGQNrOYw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAGXv+5F8QZGc4oDKJAGbpvubqiewvngURpNhrenS3pcGQNrOYw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 05 January 2023 13:33:11 Jens Axboe wrote:
-> On 1/5/23 1:03?PM, Linus Torvalds wrote:
-> > So nobody is going to be motivated to do any development in this area,
-> > and the best we can do is probably to just keep it limping along.
-> 
-> Indeed...
-...
-> > There's probably other cruft in pktcdvd that could be removed without
-> > removing the whole driver, but I do get the feeling that it's just
-> > less pain to keep the status quo, and that there isn't really much
-> > motivation for anybody to do anything else.
-> 
-> I'm reluctant to touch it outside of changes that are driven by core
-> changes, and of course the motivation to remove it was driven by not
-> wanting to do that either. Any kind of re-architecting of how it works I
-> would not advocate for. It supposedly works well enough that none of the
-> (few) users are reporting issues with it, best to just let it remain
-> like that imho.
+Hi Angelo,
 
-Yea, I agree. This code is in state when it is _used_ and not developed
-anymore. Nobody is really motivated to re-architecture or rewrite this
-code. Such work has big probability to break something which currently
-works fine. And because lot of users are on stable/LTS kernel versions,
-it is possible that we would not notice breakage earlier than (lets say)
-in 5 years.
+On Mon, Dec 26, 2022 at 03:07:10PM +0800, Chen-Yu Tsai wrote:
+> On Fri, Dec 23, 2022 at 5:43 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+> >
+> > Take a pointer to a struct device in mtk_clk_register_cpumuxes() and
+> > propagate the same to mtk_clk_register_cpumux() => clk_hw_register().
+> > Even though runtime pm is unlikely to be used with CPU muxes, this
+> > helps with code consistency and possibly opens to commonization of
+> > some mtk_clk_register_(x) functions.
+> >
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> As with the gates patch, could we make the |struct device *| parameter the
+> first one? Also for this case I think we could even drop the
+> |struct device_node *| parameter.
+
+Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
+
+clk_hw_register and others are using the device pointer as first
+parameter as well. So I think it makes sense to do it the same way as
+ChenYu suggested.
+
+Best,
+Markus
