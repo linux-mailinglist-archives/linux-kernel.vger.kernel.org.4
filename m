@@ -2,193 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C8D65FE99
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2F365FEA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 11:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbjAFKPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 05:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S233195AbjAFKRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 05:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbjAFKPS (ORCPT
+        with ESMTP id S229623AbjAFKRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:15:18 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6B569B27
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:15:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673000117; x=1704536117;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=/eoMdymTEkpMW13UmQ6manSwCHMYpdQ0iAtJu9006UE=;
-  b=e5ITLM8Yyulq0PH3CFUbntx9RRzj4xv/UdmFamVnAo17Fnrj/GSWE2DH
-   fYYthmXDVDTKuuPZpdP50+f04CS30oeuEpLynydGJH5sTZ6zWaylL8A9f
-   V+jE5zFtROx4V2gSamxO0m+hoaY4Gpy0U1K9Q3YMu7DFiVNaaNgML5Xce
-   OY6j7njVO0ZOiXLnmB1bj87kT4v8OojwvPt43hfT4eKifw4wq5DGSMlJS
-   c3h0IDN0FiIF2kWDC439IRb2HFeK8887U3xa4UXYdX2ajUsMOTYa088zH
-   ET0IeLuBjk4WMTo4xrG/YV39DfMWYoTdfcBksMNVBVz5k8xoMa8kWXq7y
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="305966426"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="305966426"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 02:15:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="829860777"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="829860777"
-Received: from mjervis-mobl1.ger.corp.intel.com (HELO [10.213.209.50]) ([10.213.209.50])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 02:15:12 -0800
-Message-ID: <69c2f2bd-e9de-b8ec-8790-055f4cc1d834@linux.intel.com>
-Date:   Fri, 6 Jan 2023 10:15:10 +0000
+        Fri, 6 Jan 2023 05:17:36 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618B026E6;
+        Fri,  6 Jan 2023 02:17:34 -0800 (PST)
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 6BD9C855F3;
+        Fri,  6 Jan 2023 11:17:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1673000251;
+        bh=/eIa0D/g1AhXYWja1k/WFzyx8e1tJpZ3rsMlh8fHKdg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BU8uzegwb9FW3hf1KlKeaGXUXU1pYZ3n9fOm8K+sKmkj+EO1EZVKlufe/SN3bjReM
+         xSMFNUSgKlP9UY1OBiqbKGgpsS3JIFyndY6+ivwClmSQKshEnpg78a1VAtI+ZDspQa
+         Jf4cfJFIMseY93DJr8VDPEQdwOBvv85bWnNfL0/BiO2LSHFlR7fWr1d+owe/QRuPDh
+         HIKU2Kmq5BjxFWSmKtACIDqiC0PU/YtyTumdg2Tw3ymnSxVCenxH1HHaa0YnPC3rB0
+         8WExpeibhPlV24MqejOTqq4vM1HRBseulN/es0anRMS9gGYaYeKzsTer1M8LZiQLb9
+         7EWysRoqkBnzg==
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH v4 1/3] dsa: marvell: Provide per device information about max frame size
+Date:   Fri,  6 Jan 2023 11:16:49 +0100
+Message-Id: <20230106101651.1137755-1-lukma@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/i915: Fix potential context UAFs
-Content-Language: en-US
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-To:     Andi Shyti <andi.shyti@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        katrinzhou <katrinzhou@tencent.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        "open list:INTEL DRM DRIVERS" <intel-gfx@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230103234948.1218393-1-robdclark@gmail.com>
- <Y7byJa9VZyKO2gnT@ashyti-mobl2.lan>
- <b1aea77b-ba55-61a2-2c33-f7754e0ca586@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <b1aea77b-ba55-61a2-2c33-f7754e0ca586@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Different Marvell DSA switches support different size of max frame
+bytes to be sent. This value corresponds to the memory allocated
+in switch to store single frame.
 
-On 05/01/2023 16:00, Tvrtko Ursulin wrote:
-> 
-> On 05/01/2023 15:52, Andi Shyti wrote:
->> Hi Rob,
->>
->> On Tue, Jan 03, 2023 at 03:49:46PM -0800, Rob Clark wrote:
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> gem_context_register() makes the context visible to userspace, and which
->>> point a separate thread can trigger the I915_GEM_CONTEXT_DESTROY ioctl.
->>> So we need to ensure that nothing uses the ctx ptr after this.  And we
->>> need to ensure that adding the ctx to the xarray is the *last* thing
->>> that gem_context_register() does with the ctx pointer.
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>
->> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
->>
->> I also agree with Tvrtko that we should add Stable: and Fixes:.
-> 
-> Yeah I'll add them all when merging. Just waiting for full CI results. 
-> It will be like this:
-> 
-> Fixes: eb4dedae920a ("drm/i915/gem: Delay tracking the GEM context until 
-> it is registered")
-> Fixes: a4c1cdd34e2c ("drm/i915/gem: Delay context creation (v3)")
-> Fixes: 49bd54b390c2 ("drm/i915: Track all user contexts per client")
-> Cc: <stable@vger.kernel.org> # v5.10+
+For example mv88e6185 supports max 1632 bytes, which is now in-driver
+standard value. On the other hand - mv88e6250 supports 2048 bytes.
+To be more interresting - devices supporting jumbo frames - use yet
+another value (10240 bytes)
 
-Pushed to drm-intel-gt-next - thanks for the fix and reviews.
+As this value is internal and may be different for each switch IC,
+new entry in struct mv88e6xxx_info has been added to store it.
 
-Regards,
+This commit doesn't change the code functionality - it just provides
+the max frame size value explicitly - up till now it has been
+assigned depending on the callback provided by the IC driver
+(e.g. .set_max_frame_size, .port_set_jumbo_size).
 
-Tvrtko
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
 
-> 
-> Regards,
-> 
-> Tvrtko
-> 
->> One little thing, "user after free" is clearer that UAF :)
->>
->> Thanks,
->> Andi
->>
->>> ---
->>>   drivers/gpu/drm/i915/gem/i915_gem_context.c | 24 +++++++++++++++------
->>>   1 file changed, 18 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c 
->>> b/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> index 7f2831efc798..6250de9b9196 100644
->>> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> @@ -1688,6 +1688,10 @@ void i915_gem_init__contexts(struct 
->>> drm_i915_private *i915)
->>>       init_contexts(&i915->gem.contexts);
->>>   }
->>> +/*
->>> + * Note that this implicitly consumes the ctx reference, by placing
->>> + * the ctx in the context_xa.
->>> + */
->>>   static void gem_context_register(struct i915_gem_context *ctx,
->>>                    struct drm_i915_file_private *fpriv,
->>>                    u32 id)
->>> @@ -1703,10 +1707,6 @@ static void gem_context_register(struct 
->>> i915_gem_context *ctx,
->>>       snprintf(ctx->name, sizeof(ctx->name), "%s[%d]",
->>>            current->comm, pid_nr(ctx->pid));
->>> -    /* And finally expose ourselves to userspace via the idr */
->>> -    old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
->>> -    WARN_ON(old);
->>> -
->>>       spin_lock(&ctx->client->ctx_lock);
->>>       list_add_tail_rcu(&ctx->client_link, &ctx->client->ctx_list);
->>>       spin_unlock(&ctx->client->ctx_lock);
->>> @@ -1714,6 +1714,10 @@ static void gem_context_register(struct 
->>> i915_gem_context *ctx,
->>>       spin_lock(&i915->gem.contexts.lock);
->>>       list_add_tail(&ctx->link, &i915->gem.contexts.list);
->>>       spin_unlock(&i915->gem.contexts.lock);
->>> +
->>> +    /* And finally expose ourselves to userspace via the idr */
->>> +    old = xa_store(&fpriv->context_xa, id, ctx, GFP_KERNEL);
->>> +    WARN_ON(old);
->>>   }
->>>   int i915_gem_context_open(struct drm_i915_private *i915,
->>> @@ -2199,14 +2203,22 @@ finalize_create_context_locked(struct 
->>> drm_i915_file_private *file_priv,
->>>       if (IS_ERR(ctx))
->>>           return ctx;
->>> +    /*
->>> +     * One for the xarray and one for the caller.  We need to grab
->>> +     * the reference *prior* to making the ctx visble to userspace
->>> +     * in gem_context_register(), as at any point after that
->>> +     * userspace can try to race us with another thread destroying
->>> +     * the context under our feet.
->>> +     */
->>> +    i915_gem_context_get(ctx);
->>> +
->>>       gem_context_register(ctx, file_priv, id);
->>>       old = xa_erase(&file_priv->proto_context_xa, id);
->>>       GEM_BUG_ON(old != pc);
->>>       proto_context_close(file_priv->dev_priv, pc);
->>> -    /* One for the xarray and one for the caller */
->>> -    return i915_gem_context_get(ctx);
->>> +    return ctx;
->>>   }
->>>   struct i915_gem_context *
->>> -- 
->>> 2.38.1
+---
+Changes for v2:
+- Define max_frame_size with default value of 1632 bytes,
+- Set proper value for the mv88e6250 switch SoC (linkstreet) family
+
+Changes for v3:
+- Add default value for 1632B of the max frame size (to avoid problems
+  with not defined values)
+
+Changes for v4:
+- Rework the mv88e6xxx_get_max_mtu() by using per device defined
+  max_frame_size value
+
+- Add WARN_ON_ONCE() when max_frame_size is not defined
+
+- Add description for the new 'max_frame_size' member of mv88e6xxx_info
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 41 ++++++++++++++++++++++++++++----
+ drivers/net/dsa/mv88e6xxx/chip.h |  6 +++++
+ 2 files changed, 42 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 242b8b325504..fc6d98c4a029 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3545,11 +3545,10 @@ static int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int port)
+ {
+ 	struct mv88e6xxx_chip *chip = ds->priv;
+ 
+-	if (chip->info->ops->port_set_jumbo_size)
+-		return 10240 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
+-	else if (chip->info->ops->set_max_frame_size)
+-		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
+-	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
++	WARN_ON_ONCE(!chip->info->max_frame_size);
++
++	return chip->info->max_frame_size - VLAN_ETH_HLEN - EDSA_HLEN
++		- ETH_FCS_LEN;
+ }
+ 
+ static int mv88e6xxx_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+@@ -4955,6 +4954,7 @@ static const struct mv88e6xxx_ops mv88e6250_ops = {
+ 	.avb_ops = &mv88e6352_avb_ops,
+ 	.ptp_ops = &mv88e6250_ptp_ops,
+ 	.phylink_get_caps = mv88e6250_phylink_get_caps,
++	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
+ };
+ 
+ static const struct mv88e6xxx_ops mv88e6290_ops = {
+@@ -5543,6 +5543,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5565,6 +5566,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_ports = 11,
+ 		.num_internal_phys = 0,
+ 		.max_vid = 4095,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5586,6 +5588,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 8,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5610,6 +5613,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5633,6 +5637,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_ports = 8,
+ 		.num_internal_phys = 0,
+ 		.max_vid = 4095,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5655,6 +5660,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 11,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x10,
+ 		.global1_addr = 0x1b,
+@@ -5679,6 +5685,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5704,6 +5711,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 0,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5728,6 +5736,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5753,6 +5762,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5777,6 +5787,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5802,6 +5813,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5825,6 +5837,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_ports = 10,
+ 		.num_internal_phys = 0,
+ 		.max_vid = 4095,
++		.max_frame_size = 1632,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5848,6 +5861,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 16,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5872,6 +5886,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 16,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5895,6 +5910,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 9,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5918,6 +5934,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 9,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5941,6 +5958,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 9,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -5968,6 +5986,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 2,
+ 		.invalid_port_mask = BIT(2) | BIT(3) | BIT(4),
+ 		.max_vid = 4095,
++		.max_frame_size = 2048,
+ 		.port_base_addr = 0x08,
+ 		.phy_base_addr = 0x00,
+ 		.global1_addr = 0x0f,
+@@ -5992,6 +6011,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6015,6 +6035,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_ports = 7,
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
++		.max_frame_size = 2048,
+ 		.port_base_addr = 0x08,
+ 		.phy_base_addr = 0x00,
+ 		.global1_addr = 0x0f,
+@@ -6038,6 +6059,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 16,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 1522,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6062,6 +6084,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6087,6 +6110,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6112,6 +6136,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 11,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x10,
+ 		.global1_addr = 0x1b,
+@@ -6137,6 +6162,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6161,6 +6187,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 5,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6186,6 +6213,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 15,
+ 		.max_vid = 4095,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x10,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6211,6 +6239,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 16,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6236,6 +6265,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_gpio = 16,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+@@ -6260,6 +6290,7 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
+ 		.num_internal_phys = 9,
+ 		.max_vid = 8191,
+ 		.max_sid = 63,
++		.max_frame_size = 10240,
+ 		.port_base_addr = 0x0,
+ 		.phy_base_addr = 0x0,
+ 		.global1_addr = 0x1b,
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
+index e693154cf803..31c09b66fbff 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.h
++++ b/drivers/net/dsa/mv88e6xxx/chip.h
+@@ -132,6 +132,12 @@ struct mv88e6xxx_info {
+ 	unsigned int num_gpio;
+ 	unsigned int max_vid;
+ 	unsigned int max_sid;
++
++	/* Max Frame Size.
++	 * This value corresponds to the memory allocated in switch internal
++	 * memory to store single frame.
++	 */
++	unsigned int max_frame_size;
+ 	unsigned int port_base_addr;
+ 	unsigned int phy_base_addr;
+ 	unsigned int global1_addr;
+-- 
+2.20.1
+
