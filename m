@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A56660946
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F2C660947
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 23:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236354AbjAFWIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 17:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S236448AbjAFWIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 17:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235695AbjAFWHl (ORCPT
+        with ESMTP id S235927AbjAFWHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 17:07:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2F84BCB;
-        Fri,  6 Jan 2023 14:07:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0669FB81C4A;
-        Fri,  6 Jan 2023 22:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B8AC433EF;
-        Fri,  6 Jan 2023 22:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673042858;
-        bh=c66oe5wybRoqWCFcVW6cGO/BKva+TgCILRvTFkO6oBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ro7RTlMO/NV43orzBNYrUksWo3Cn21zSRcKbp3ja98pQN5zPLJ69zVkusrJWvugh1
-         gjUxwPZHi/LZSKRQ4u+hdFie0EdT0gWLjlF7XfPcCnVSMnA16dFaT5Gho1dirM42HP
-         DqWJ/imEK1/FPEu1iL+wN6dj0eI3OtLvY0MhE9PMmV84JKDJB1UWUT75Hhx9QxMMtv
-         wj2k9URPqM/tXULZ0b/WHmcLFgolO3sSBwbWYImeya38tsuZpMTcTg9VacLXtSz95r
-         N8MCM9X5YuibTPtrg++xmgHGl7VxJLBpPoaxnmlmbcwe1FYYi5XezmxLdow2m97Aj2
-         /cVI1LRrhnsQA==
-Date:   Fri, 6 Jan 2023 22:07:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/16] spi: bcm63xx-hsspi: prepend: Disable spi mem dual
- io read op support
-Message-ID: <Y7ibpEw8UKKwBksD@sirena.org.uk>
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-15-william.zhang@broadcom.com>
+        Fri, 6 Jan 2023 17:07:49 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A60184BCB;
+        Fri,  6 Jan 2023 14:07:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673042869; x=1704578869;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PUhwpAPx9QoZBSVf0J1Kqv9kcSs4Ha7qkZRGZTH8vzQ=;
+  b=EWVv+6XcGEfVmVjZEuznc4i9AQd0FXp+Dgaot8lxGEqj9H8pOQTF8SAq
+   IBXUd2v04Aov6TQ80Ihmx86D1s6us9FbhAOIyjY4OnDwyps1crrkOGLKe
+   i7Obz/pNLQSv3HLV7X6tFUd4pmEkOLTuTRjqKoSc9C1cL5v8KHyPGM5jd
+   +uK5byOCoeKoGQBkRl1fHCbHE38Dy3tAtyI1Oe6IwKJoV94lmhCOHJqdO
+   4rOsCoqazpcWAAXXXcl84PjH5KEDu25Y1Mp8hgsX31hddtW+IqLZaGrfl
+   sz1fEd776yOhhuQGPtiDRG0kf1khTGZF4BX7g+jm5dtUp0vMmb/EnR5dT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="349787228"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="349787228"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:07:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="649436711"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="649436711"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 14:07:47 -0800
+Message-ID: <2d7d2824-7aa7-5f96-d79b-b44ff7fe2ef9@intel.com>
+Date:   Fri, 6 Jan 2023 14:07:47 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EwWYfXXpNT8odNd5"
-Content-Disposition: inline
-In-Reply-To: <20230106200809.330769-15-william.zhang@broadcom.com>
-X-Cookie: Do not fold, spindle or mutilate.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 11/16] x86/virt/tdx: Designate reserved areas for all
+ TDMRs
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <27dcd2781a450b3f77a2aec833de6a3669bc0fb8.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <27dcd2781a450b3f77a2aec833de6a3669bc0fb8.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/8/22 22:52, Kai Huang wrote:
+> +static int tdmr_add_rsvd_area(struct tdmr_info *tdmr, int *p_idx, u64 addr,
+> +			      u64 size, u16 max_reserved_per_tdmr)
+> +{
+> +	struct tdmr_reserved_area *rsvd_areas = tdmr->reserved_areas;
+> +	int idx = *p_idx;
+> +
+> +	/* Reserved area must be 4K aligned in offset and size */
+> +	if (WARN_ON(addr & ~PAGE_MASK || size & ~PAGE_MASK))
+> +		return -EINVAL;
+> +
+> +	if (idx >= max_reserved_per_tdmr)
+> +		return -E2BIG;
+> +
+> +	rsvd_areas[idx].offset = addr - tdmr->base;
+> +	rsvd_areas[idx].size = size;
+> +
+> +	*p_idx = idx + 1;
+> +
+> +	return 0;
+> +}
 
---EwWYfXXpNT8odNd5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's probably worth at least a comment here to say:
 
-On Fri, Jan 06, 2023 at 12:08:06PM -0800, William Zhang wrote:
-> In general the controller supports SPI dual mode operation but the
-> particular SPI flash dual io read op switches from single mode in cmd
-> phase to dual mode in address and data phase. This is not compatible
-> with prepend operation where cmd and address are sent out through the
-> prepend buffer and they must use same the number of io pins.
->=20
-> This patch disables these SPI flash dual io read ops through the mem_ops
-> supports_op interface when prepend mode is used. This makes sure the SPI
-> flash driver selects the compatible read ops at run time.
+	/*
+	 * Consume one reserved area per call.  Make no effort to
+	 * optimize or reduce the number of reserved areas which are
+	 * consumed by contiguous reserved areas, for instance.
+	 */
 
-This suggests that your prepend mode is attempting to combine
-incompatible transfers doesn't it?  Presumably other devices could
-generate similar access patterns...
+I think the -E2BIG is also wrong.  It should be ENOSPC.  I'd also add a
+pr_warn() there.  Especially with how lazy this whole thing is, I can
+start to see how the reserved areas might be exhausted.  Let's be kind
+to our future selves and make the error (and the fix) easier to find.
 
---EwWYfXXpNT8odNd5
-Content-Type: application/pgp-signature; name="signature.asc"
+It's probably also worth noting *somewhere* that there's a balance to be
+had between TDMRs and reserved areas.  A system that is running out of
+reserved areas in a TDMR could split a TDMR to get more reserved areas.
+A system that has run out of TDMRs could relatively easily coalesce two
+adjacent TDMRs (before the PAMTs are allocated) and use a reserved area
+if there was a gap between them.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO4m6QACgkQJNaLcl1U
-h9BPoAf/f3LHS3QMDi/9wy02iBggh+iqTs52FZRHzluvZjiMrEUO67cD8y6jJ1Al
-dd2+4cgc4J3Sz25wsLKvLuPq7KFehLVAd8n+dUlozQqoVoUBTPqZROzWiavKKfQL
-j1YJE3voybTFib1zW9zHMbzevln3nsTNq33ZX+Lid6SX3Liei61SDZz2Iw3af6HW
-hvnIdPlr2OEESnwr4VfnnmGM+ZGJ5jIidWsj0zAuPmb8TT39XqWOmVId0/CM+hFB
-+WNHNWjHg+wzpp5s2zOJvSl9zUDjWnBJe6LM0cyM9yX9t+syv/atUJzdFDeVr/wW
-+Lshri95xSSZ11akM/oxAjnSxANB8A==
-=pZKP
------END PGP SIGNATURE-----
-
---EwWYfXXpNT8odNd5--
+I'm *really* close to acking this patch once those are fixed up.
