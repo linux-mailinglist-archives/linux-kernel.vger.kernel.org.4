@@ -2,109 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E82F660710
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E17660715
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjAFTXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
+        id S235684AbjAFTYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjAFTXV (ORCPT
+        with ESMTP id S234858AbjAFTYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:23:21 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B28314017
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:23:20 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2723347pjj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GzCgQ6kuQycdzwh6t3skvEow87f6nzRLM3lEMDxfCiw=;
-        b=WLX3Uq2Ju0++6xITuhnNWagM/zuoRNv8enKtAe43Bje28LFSgRbuN0S0JMDVLg2wpc
-         FZtxZkbWhETfVX0Q5GDPP89Ma+OlP5vCL4l9m//rWN97dadTyAkjZHCjyEVBg2zu8u9X
-         Smd5/OprTtQDPQdK/iDrHhTpmF0qGieFvowJM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GzCgQ6kuQycdzwh6t3skvEow87f6nzRLM3lEMDxfCiw=;
-        b=ZSzwLGAIhXdntR7sZf8EnCixTKqtXOLQ+dKdCmzz6om8FunVZuxG3wfZzDLYr13ALu
-         C5E8MQNy/aCvHasv/m9Jr6wJgRrTi7jaaFxk9dKrBCRy4oPOLkWnOWIOA8NoEHSsXxx/
-         zQHTttyglLBhD45TxyoKpmOyCFf35J8K504h47BGr5RfiN4m8u1uASG6zi/ZPnb4eQe/
-         KDHTem/AsbnSme0Pbk9J7dmZ56pcRYLUBV5+6+KSHm0v+kVcxAt0tHZEZy5cn5u6t9D0
-         YctRBJVjyeRg6Dk4MKft7GZuI0UJOHystEA3EiMdUnyo+XkZktl7KultjjMCKioODglE
-         HILw==
-X-Gm-Message-State: AFqh2koyxYjNQKbN1rZNV1vqv3J9oR+dL6abWuMScrqGwzxZ47X21YrJ
-        pRR2Q9lcSUozLcdElCjkT9B3dw==
-X-Google-Smtp-Source: AMrXdXuoBEios2bSour0+HwdUKLT+RXpqNTpRwJbB5HpIms5ZeSnyw7PfLZgzcT+ft/00U0d8uMDEw==
-X-Received: by 2002:a05:6a20:1b02:b0:aa:7d04:109b with SMTP id ch2-20020a056a201b0200b000aa7d04109bmr71297175pzb.40.1673032999757;
-        Fri, 06 Jan 2023 11:23:19 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q2-20020a63cc42000000b004788780dd8esm1194945pgi.63.2023.01.06.11.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 11:23:19 -0800 (PST)
-Date:   Fri, 6 Jan 2023 11:23:18 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     david.keisarschm@mail.huji.ac.il
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Jason@zx2c4.com,
-        aksecurity@gmail.com, ilay.bahat1@gmail.com
-Subject: Re: [PATCH v3 3/3] Replace invocation of weak PRNG in
- arch/x86/mm/kaslr.c
-Message-ID: <202301061118.836BF431F@keescook>
-References: <cover.1671277662.git.david.keisarschm@mail.huji.ac.il>
- <a6b5907e2a1249f109c9112652cbbec244e00fba.1671277662.git.david.keisarschm@mail.huji.ac.il>
+        Fri, 6 Jan 2023 14:24:53 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF23A73E2D;
+        Fri,  6 Jan 2023 11:24:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673033092; x=1704569092;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=urJOmVPJ99y51Km3uk2nWj9LuSQ8wgumbaoe8ilFZxI=;
+  b=EA3QJluaZ4LJnq5YTpMWn3bLLNTSTtPD5ouLGbJe7ar49KvcAO0H+9ut
+   EDz8uVy5D5W1Ai0HlzVxNva9aVqO/i2LtB+OIkBdmgtENtkUmx/fPzlZ4
+   a5KoOaoquwWLIrYb53QyaIh3CYRkdtIUanXskBsf4rJNn5dZnVXGDqgYd
+   TXedAyfAWwygQuWDNNbWpGkHfCgl7M/IX1eDigAE2piqdQQGejC45NZWl
+   phDwrO5ECjKkOwr1c9hk4sJTJuWhFtfYWAC+YzCDtlEMuPOh0R/ZrJG/l
+   ugyqwtuxh8xZenJLlaBzzKoecHSt7pzloXbGsrs7bbI7UzVud79vEFGP4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="323789766"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="323789766"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:24:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="688391354"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="688391354"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 11:24:51 -0800
+Message-ID: <c70c30fb-073f-4355-c6a6-052d013a99da@intel.com>
+Date:   Fri, 6 Jan 2023 11:24:51 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6b5907e2a1249f109c9112652cbbec244e00fba.1671277662.git.david.keisarschm@mail.huji.ac.il>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 08/16] x86/virt/tdx: Add placeholder to construct TDMRs
+ to cover all TDX memory regions
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <ef6fe9247007ee8e15272de01ded1e0a9152be02.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ef6fe9247007ee8e15272de01ded1e0a9152be02.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 08:19:00PM +0200, david.keisarschm@mail.huji.ac.il wrote:
-> From: David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>
-> 
-> This third series add some changes to the commit messages,
-> and also replaces get_random_u32 with get_random_u32_below,
-> in a case a modulo operation is done on the result.
-> 
-> The memory randomization of the virtual address space of kernel memory regions
-> (physical memory mapping, vmalloc & vmemmap) inside arch/x86/mm/kaslr.c
-> is based on the function prandom_bytes_state which uses the prandom_u32 PRNG.
-> 
-> However, this PRNG turned out to be weak, as noted in commit c51f8f88d705
-> To fix it, we have changed the invocation of prandom_bytes_state to get_random_bytes.
-> 
-> Unlike get_random_bytes which maintains its own state, prandom_bytes state needs to be seeded,
-> thus, we have omitted the call to the seeding function, since it is not needed anymore.
+> +struct tdmr_info_list {
+> +	struct tdmr_info *first_tdmr;
 
-I'd really rather not do this. prandom is being seeded from "true" RNG,
-and it allows for the KASLR to be hand-seeded for a repeatable layout
-for doing debugging and performance analysis (for the coming FG-KASLR).
+This is named badly.  This is really a pointer to an array.  While it
+_does_ of course point to the first member of the array, the naming
+should make it clear that there are multiple tdmr_infos here.
 
-AIUI, prandom is weak due to its shared state (which KASLR's use doesn't
-have) and its predictability over time (but KASLR uses it only at
-boot-time). And being able to recover the outputs would mean KASLR was
-already broken, so there isn't anything that becomes MORE exposed.
+> +	int tdmr_sz;
+> +	int max_tdmrs;
+> +	int nr_tdmrs;	/* Actual number of TDMRs */
+> +};
 
-If there is some other weakness, then sure, we can re-evaluate it, but
-for now I'd rather leave this as-is.
+This 'tdmr_info_list's is declared in an unfortunate place.  I thought
+the tdmr_size_single() function below was related to it.
 
--Kees
+Also, tdmr_sz and max_tdmrs can both be derived from 'sysinfo'.  Do they
+really need to be stored here?  If so, I think I'd probably do something
+like this with the structure:
 
--- 
-Kees Cook
+struct tdmr_info_list {
+	struct tdmr_info *tdmrs;
+	int nr_consumed_tdmrs; // How many @tdmrs are in use
+
+	/* Metadata for freeing this structure: */
+	int tdmr_sz;   // Size of one 'tdmr_info' (has a flex array)
+	int max_tdmrs; // How many @tdmrs are allocated
+};
+
+Modulo whataver folks are doing for comments these days.
+
+> +/* Calculate the actual TDMR size */
+> +static int tdmr_size_single(u16 max_reserved_per_tdmr)
+> +{
+> +	int tdmr_sz;
+> +
+> +	/*
+> +	 * The actual size of TDMR depends on the maximum
+> +	 * number of reserved areas.
+> +	 */
+> +	tdmr_sz = sizeof(struct tdmr_info);
+> +	tdmr_sz += sizeof(struct tdmr_reserved_area) * max_reserved_per_tdmr;
+> +
+> +	return ALIGN(tdmr_sz, TDMR_INFO_ALIGNMENT);
+> +}
+> +
+> +static int alloc_tdmr_list(struct tdmr_info_list *tdmr_list,
+> +			   struct tdsysinfo_struct *sysinfo)
+> +{
+> +	size_t tdmr_sz, tdmr_array_sz;
+> +	void *tdmr_array;
+> +
+> +	tdmr_sz = tdmr_size_single(sysinfo->max_reserved_per_tdmr);
+> +	tdmr_array_sz = tdmr_sz * sysinfo->max_tdmrs;
+> +
+> +	/*
+> +	 * To keep things simple, allocate all TDMRs together.
+> +	 * The buffer needs to be physically contiguous to make
+> +	 * sure each TDMR is physically contiguous.
+> +	 */
+> +	tdmr_array = alloc_pages_exact(tdmr_array_sz,
+> +			GFP_KERNEL | __GFP_ZERO);
+> +	if (!tdmr_array)
+> +		return -ENOMEM;
+> +
+> +	tdmr_list->first_tdmr = tdmr_array;
+> +	/*
+
+	^ probably missing whitepsace before the comment
+
+> +	 * Keep the size of TDMR to find the target TDMR
+> +	 * at a given index in the TDMR list.
+> +	 */
+> +	tdmr_list->tdmr_sz = tdmr_sz;
+> +	tdmr_list->max_tdmrs = sysinfo->max_tdmrs;
+> +	tdmr_list->nr_tdmrs = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
+> +{
+> +	free_pages_exact(tdmr_list->first_tdmr,
+> +			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
+> +}
+> +
+> +/*
+> + * Construct a list of TDMRs on the preallocated space in @tdmr_list
+> + * to cover all TDX memory regions in @tmb_list based on the TDX module
+> + * information in @sysinfo.
+> + */
+> +static int construct_tdmrs(struct list_head *tmb_list,
+> +			   struct tdmr_info_list *tdmr_list,
+> +			   struct tdsysinfo_struct *sysinfo)
+> +{
+> +	/*
+> +	 * TODO:
+> +	 *
+> +	 *  - Fill out TDMRs to cover all TDX memory regions.
+> +	 *  - Allocate and set up PAMTs for each TDMR.
+> +	 *  - Designate reserved areas for each TDMR.
+> +	 *
+> +	 * Return -EINVAL until constructing TDMRs is done
+> +	 */
+> +	return -EINVAL;
+> +}
+> +
+>  static int init_tdx_module(void)
+>  {
+>  	/*
+> @@ -358,6 +439,7 @@ static int init_tdx_module(void)
+>  			TDSYSINFO_STRUCT_SIZE, TDSYSINFO_STRUCT_ALIGNMENT);
+>  	struct cmr_info cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
+>  	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);
+> +	struct tdmr_info_list tdmr_list;
+>  	int ret;
+>  
+>  	ret = tdx_get_sysinfo(sysinfo, cmr_array);
+> @@ -380,11 +462,19 @@ static int init_tdx_module(void)
+>  	if (ret)
+>  		goto out;
+>  
+> +	/* Allocate enough space for constructing TDMRs */
+> +	ret = alloc_tdmr_list(&tdmr_list, sysinfo);
+> +	if (ret)
+> +		goto out_free_tdx_mem;
+> +
+> +	/* Cover all TDX-usable memory regions in TDMRs */
+> +	ret = construct_tdmrs(&tdx_memlist, &tdmr_list, sysinfo);
+> +	if (ret)
+> +		goto out_free_tdmrs;
+> +
+>  	/*
+>  	 * TODO:
+>  	 *
+> -	 *  - Construct a list of TDMRs to cover all TDX-usable memory
+> -	 *    regions.
+>  	 *  - Pick up one TDX private KeyID as the global KeyID.
+>  	 *  - Configure the TDMRs and the global KeyID to the TDX module.
+>  	 *  - Configure the global KeyID on all packages.
+> @@ -393,6 +483,16 @@ static int init_tdx_module(void)
+>  	 *  Return error before all steps are done.
+>  	 */
+>  	ret = -EINVAL;
+> +out_free_tdmrs:
+> +	/*
+> +	 * Free the space for the TDMRs no matter the initialization is
+> +	 * successful or not.  They are not needed anymore after the
+> +	 * module initialization.
+> +	 */
+> +	free_tdmr_list(&tdmr_list);
+> +out_free_tdx_mem:
+> +	if (ret)
+> +		free_tdx_memlist(&tdx_memlist);
+>  out:
+>  	/*
+>  	 * @tdx_memlist is written here and read at memory hotplug time.
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index 6d32f62e4182..d0c762f1a94c 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -90,6 +90,29 @@ struct tdsysinfo_struct {
+>  	DECLARE_FLEX_ARRAY(struct cpuid_config, cpuid_configs);
+>  } __packed;
+>  
+> +struct tdmr_reserved_area {
+> +	u64 offset;
+> +	u64 size;
+> +} __packed;
+> +
+> +#define TDMR_INFO_ALIGNMENT	512
+> +
+> +struct tdmr_info {
+> +	u64 base;
+> +	u64 size;
+> +	u64 pamt_1g_base;
+> +	u64 pamt_1g_size;
+> +	u64 pamt_2m_base;
+> +	u64 pamt_2m_size;
+> +	u64 pamt_4k_base;
+> +	u64 pamt_4k_size;
+> +	/*
+> +	 * Actual number of reserved areas depends on
+> +	 * 'struct tdsysinfo_struct'::max_reserved_per_tdmr.
+> +	 */
+> +	DECLARE_FLEX_ARRAY(struct tdmr_reserved_area, reserved_areas);
+> +} __packed __aligned(TDMR_INFO_ALIGNMENT);
+> +
+>  /*
+>   * Do not put any hardware-defined TDX structure representations below
+>   * this comment!
+
