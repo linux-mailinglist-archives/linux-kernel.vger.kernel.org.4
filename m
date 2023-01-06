@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4A965FC1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD31865FBFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 08:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjAFHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 02:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S232046AbjAFHdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 02:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbjAFHd3 (ORCPT
+        with ESMTP id S231245AbjAFHce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 02:33:29 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C513078144
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:33:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1672990355; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=GoX6sahFvLaj/pKTGxEYSA/SV0Z8iTxRNlPOTF/TMgPVoBVhOMiVjl5APinTt+nvQKg3O2M3UONNmbF0d8l3FPSNA0kHAsFuJ74fz5yui0PdoLY7ZMaLvAs5u/TeTYOghl+PLsccgAoffUBXBhLEavCbT/N+bTqz/CVSS/adp+M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1672990355; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=WS/hdy01N0Juv3Ttgo1sNOBbMRgD6F4OxFx94LvmrTs=; 
-        b=J36Khy8nncWCKdpXmKPRNy9KmSlXMPR48kT/5veYaDWuS++cdJ64SqXpMmRds0/+dYaa85xDiBl2dE3j0r/0U65GauaWpB+1U0oUU+dxnj3UG9UtYAVtbiFe1D+QZfCv2uLpZwl63eH/IAibsCQXmvcf8xhyC7W45BzG7rCUN7g=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672990355;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=WS/hdy01N0Juv3Ttgo1sNOBbMRgD6F4OxFx94LvmrTs=;
-        b=e0fnq40I7zFWKG5ueLuqjBd5HB8GrJgqxKQ/59ff1YuASWMDhJ09QP37lHvRBfE6
-        3oHPJXDp8p3MW/1qIQC0zoXZVZup+ZQwto+PHYBuTC/PxTSd7jsk+qLZKl9ySkWkTNm
-        Q1hV2pm10rPvmLe60m6GHFtRUuADW/Co7CF6F8no=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1672990345371256.09667059009894; Fri, 6 Jan 2023 13:02:25 +0530 (IST)
-Date:   Fri, 06 Jan 2023 13:02:25 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "kernel test robot" <lkp@intel.com>
-Cc:     "maarten lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "maxime ripard" <mripard@kernel.org>,
-        "thomas zimmermann" <tzimmermann@suse.de>,
-        "david airlie" <airlied@gmail.com>,
-        "daniel vetter" <daniel@ffwll.ch>,
-        "simon ser" <contact@emersion.fr>,
-        "jim cromie" <jim.cromie@gmail.com>,
-        "oe-kbuild-all" <oe-kbuild-all@lists.linux.dev>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "dri-devel" <dri-devel@lists.freedesktop.org>
-Message-ID: <18585fec891.52e321753098.6078461646055436084@siddh.me>
-In-Reply-To: <202301060832.V0LzL1Hg-lkp@intel.com>
-References: <7acc7401b5ad0aec973948822bfa906a9615c43e.1672957022.git.code@siddh.me> <202301060832.V0LzL1Hg-lkp@intel.com>
-Subject: Re: [PATCH v4 01/10] drm/print: Fix and add support for NULL as
- first argument in drm_* macros
+        Fri, 6 Jan 2023 02:32:34 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1235A6A0F6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 23:32:33 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id ay40so509559wmb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 Jan 2023 23:32:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tpLSm6CuKDS6yh1V9OvmrxhxF+Wx/408Npf/SDOYlgc=;
+        b=XUmyNwMsSi1igSUA6OyZ8APYUipjp4oPFJZlJhVNqsDOwr6oqlbHTRGcvpUixUnlMk
+         EhCmLAq5WdQJnP4FB0qZ/96nb9/CstBsU2UpfQDHs7uqxMqiZq4+xJoJLLMIJwcOCnRW
+         l6yL9Q9YNE6thamc5I5pWXQ+GP/fpdxuh8+V6rfD/luO5tmy5vzCSvBmQ2F19FD2oUxF
+         Wf95+jc8zqBg9fnS42BQMOBFKjXZ39Qjy3ujEYHkTT8jAoSYUT9budfiDQitDG49iexJ
+         ILUZcjltGL0x5LHPv+mw3NrNhEwe2v01oZKPDMj2YPM4UnP4B2cZJufIYbMauN5Ykspt
+         LMsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpLSm6CuKDS6yh1V9OvmrxhxF+Wx/408Npf/SDOYlgc=;
+        b=PUTz8eVaJnMfHkz20OtLUr2aln4rEXXpfHomgsZZcQ9jrAAToIFuZzDW4HofEqNyBS
+         /kdb8vY1XM7S4iC/2NDOCwUoXsyVMGHe9XzTeVNBFlgdQfHIFPmjKEYZ6D0LFG/yJKP4
+         w8e78QGU/qJzP6xuTSNkaRSM9kJM3+j/NPe76SnF0vrJ6/C/9PfyStC+RDFAUgnVqCdB
+         /G13QhmihLsXky36ZjgH6AGfxRWd46DbwYlDHe5nofXqzL6Td+RlihmgCeHFNttlocDL
+         ohN0OxVncS7BbE6Ta+7M3OUKZqVqjW8PkDH/tZszlS7HjZKuXQ7DKjxUxfPr4gJXJgE2
+         py+g==
+X-Gm-Message-State: AFqh2kozCk0DnEG8hmvUg8a+dsbHlyTB7HOKi9qH58DIL884IYc1qX0X
+        tcegYrnsD21N5Zw0JRGJIkPGtg==
+X-Google-Smtp-Source: AMrXdXsPrLpJuWu5vWsJ9FCOE0dsyQg2/VcnP2li8WxEguxBxOZYC/+M9y71/sz3HWtjlzFjceOTjw==
+X-Received: by 2002:a05:600c:500a:b0:3d3:5b56:b834 with SMTP id n10-20020a05600c500a00b003d35b56b834mr38440614wmr.5.1672990351634;
+        Thu, 05 Jan 2023 23:32:31 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k13-20020a7bc40d000000b003d9b351de26sm694803wmi.9.2023.01.05.23.32.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 23:32:30 -0800 (PST)
+Message-ID: <8b1f8f2c-c8ea-c987-4860-e3be3bf312f1@linaro.org>
+Date:   Fri, 6 Jan 2023 08:32:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] dt-bindings: PCI: qcom: add MSM8998 specific
+ compatible
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103203915.GA1020424@bhelgaas>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103203915.GA1020424@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 06 Jan 2023 06:43:35 +0530, kernel test robot wrote
-> Hi Siddh,
+On 03/01/2023 21:39, Bjorn Helgaas wrote:
+> On Tue, Nov 15, 2022 at 01:53:07PM +0100, Krzysztof Kozlowski wrote:
+>> Add new compatible for MSM8998 (compatible with MSM8996) to allow
+>> further customizing if needed and to accurately describe the hardware.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Thank you for the patch! Perhaps something to improve:
+> Hi Krzysztof,
+> 
+> Would you mind splitting this into two patches?
+> 
+>   - Convert "compatible:" from enum: to oneOf:
+>   - Add MSM8998
+> 
+> Having them combined makes the history a little bit harder to follow.
+> 
 
-Yes, I sent the rectification as a reply to this patch. [1]
-Reviewers may please take note.
+Sure.
 
-Thanks,
-Siddh
 
-[1] https://lore.kernel.org/all/20230105224018.132302-1-code@siddh.me/
+Best regards,
+Krzysztof
+
