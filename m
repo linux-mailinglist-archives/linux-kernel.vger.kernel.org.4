@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A658D65FFD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0051565FFD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 12:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233050AbjAFLyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 06:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S233270AbjAFLyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 06:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjAFLyn (ORCPT
+        with ESMTP id S232042AbjAFLyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 06:54:43 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0292045644;
-        Fri,  6 Jan 2023 03:54:38 -0800 (PST)
-X-UUID: f598861a368e4a86b9d15a501c8fe39b-20230106
+        Fri, 6 Jan 2023 06:54:44 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8101F718B7;
+        Fri,  6 Jan 2023 03:54:42 -0800 (PST)
+X-UUID: fd29bc19f56b49a299ef7cd42801477a-20230106
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=11f2m6HWavy1ycHJjCqVibR6VCcvs9IjPFDFLxUESd4=;
-        b=KWMm219cnN+xu6dKaEdI49NOOeeOul9VVoHiZOPRxpRGRG7rR4n3GUXkdjQXeBA3MwDL13tH/iDdNOHbhobazSfVajyvn+gO9YVlXXs16nQSOm4VYhqSylzyQGo6eyXpmxZ0B8dMlgABrvEQjSuOH21Wvj2oYdHE/Tm+2sP57nU=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2hXwYWe+jSegcz4Df7bZIw4pzdL+uc/kulrqwbGGLYw=;
+        b=KMMeE1RqzOSSCc5b+EMSblYd1OumkGv1i/BC0UBV++nX3fmaKBhcljMNjsOZURoSpdMZKy5s2NsrSpLaj9+DJ7japiTLwVeCkXH3zNNPgJDxBIm5DaFVmIh3ZJV5HZUOkYULHdQJ50blvgVxdATqj1bf1xWINzCj7aA2fPCPPpM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:161a2145-f1d9-4e37-90a6-9864c237938b,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:f8fe788b-8530-4eff-9f77-222cf6e2895b,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-O-INFO: VERSION:1.1.17,REQID:f6a95baf-a0fc-45ca-b8d3-3c2688fee488,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:f6a95baf-a0fc-45ca-b8d3-3c2688fee488,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:22ff788b-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:2301061954379M8BZJD6,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
 X-CID-BVR: 0,NGT
-X-UUID: f598861a368e4a86b9d15a501c8fe39b-20230106
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+X-UUID: fd29bc19f56b49a299ef7cd42801477a-20230106
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 179388553; Fri, 06 Jan 2023 19:54:33 +0800
+        with ESMTP id 1742996875; Fri, 06 Jan 2023 19:54:34 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 6 Jan 2023 19:54:31 +0800
+ Fri, 6 Jan 2023 19:54:33 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 6 Jan 2023 19:54:31 +0800
+ 15.2.792.15 via Frontend Transport; Fri, 6 Jan 2023 19:54:33 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -52,9 +56,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 1/2] dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu support
-Date:   Fri, 6 Jan 2023 19:53:25 +0800
-Message-ID: <20230106115326.15374-2-allen-kh.cheng@mediatek.com>
+Subject: [PATCH 2/2] watchdog: mtk_wdt: Add reset_by_toprgu support
+Date:   Fri, 6 Jan 2023 19:53:26 +0800
+Message-ID: <20230106115326.15374-3-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230106115326.15374-1-allen-kh.cheng@mediatek.com>
 References: <20230106115326.15374-1-allen-kh.cheng@mediatek.com>
@@ -71,29 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some applications, the mtk-wdt requires the toprgu (TOP Reset
-Generation Unit) to reset counter after wdt resets. Add optional
-mediatek,reset-by-toprgu property to enable it.
+In some cases, the MediaTek watchdog requires the toprgu to reset
+counter after wdt resets.
+
+Provide a reset_by_toprgu parameter for configuration.
 
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 ---
- .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml        | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/watchdog/mtk_wdt.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-index b3605608410c..bf06dcd0c12c 100644
---- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-@@ -52,6 +52,10 @@ properties:
-     description: Disable sending output reset signal
-     type: boolean
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index 3e6212591e69..a9c437598e7e 100644
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -50,6 +50,7 @@
+ #define WDT_MODE_IRQ_EN		(1 << 3)
+ #define WDT_MODE_AUTO_START	(1 << 4)
+ #define WDT_MODE_DUAL_EN	(1 << 6)
++#define WDT_MODE_CNT_SEL	(1 << 8)
+ #define WDT_MODE_KEY		0x22000000
  
-+  mediatek,reset-by-toprgu:
-+    description: Reset counter by toprgu
-+    type: boolean
+ #define WDT_SWRST		0x14
+@@ -70,6 +71,7 @@ struct mtk_wdt_dev {
+ 	spinlock_t lock; /* protects WDT_SWSYSRST reg */
+ 	struct reset_controller_dev rcdev;
+ 	bool disable_wdt_extrst;
++	bool reset_by_toprgu;
+ };
+ 
+ struct mtk_wdt_data {
+@@ -279,6 +281,8 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
+ 		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+ 	if (mtk_wdt->disable_wdt_extrst)
+ 		reg &= ~WDT_MODE_EXRST_EN;
++	if (mtk_wdt->reset_by_toprgu)
++		reg |= WDT_MODE_CNT_SEL;
+ 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
+ 	iowrite32(reg, wdt_base + WDT_MODE);
+ 
+@@ -408,6 +412,9 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	mtk_wdt->disable_wdt_extrst =
+ 		of_property_read_bool(dev->of_node, "mediatek,disable-extrst");
+ 
++	mtk_wdt->reset_by_toprgu =
++		of_property_read_bool(dev->of_node, "mediatek,reset-by-toprgu");
 +
-   '#reset-cells':
-     const: 1
+ 	return 0;
+ }
  
 -- 
 2.18.0
