@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769DD65F9A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2752665F9A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjAFCn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 21:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S230262AbjAFCr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 21:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjAFCn5 (ORCPT
+        with ESMTP id S229441AbjAFCry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 21:43:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7416765AD0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 18:43:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DBB661CD1
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 02:43:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC51C433EF;
-        Fri,  6 Jan 2023 02:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1672973035;
-        bh=WmNNxGj4cSqyKU6i+FHCVSPDnmXabZA7XDWvz/rOo6A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SJs6dY8jbeR1bjxa30qfx/BEjhaVK+OQAGCOAwaqhxcHZBmbWNTx2f4uUnlV57H5L
-         qxVfOW0d49MABV71dnbiieb3NVP3ZYNy4xjrEd5Fcf9HgwJMDVB1Ki9Hgty9eohKNg
-         y3WgEOIOXFUxPdFw5kk1U3c6ELo90MTbK7MkND3o=
-Date:   Thu, 5 Jan 2023 18:43:54 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] util_macros.h: Add missing insclusion
-Message-Id: <20230105184354.ea9a981aa8c76bbfd6a2c212@linux-foundation.org>
-In-Reply-To: <20230103121937.32085-1-andriy.shevchenko@linux.intel.com>
-References: <20230103121937.32085-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 21:47:54 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E2865AFA;
+        Thu,  5 Jan 2023 18:47:52 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYxvzEL_1672973261;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VYxvzEL_1672973261)
+          by smtp.aliyun-inc.com;
+          Fri, 06 Jan 2023 10:47:49 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     roderick.colenbrander@sony.com
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        rydberg@bitmath.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] HID: playstation: remove unreachable code
+Date:   Fri,  6 Jan 2023 10:47:39 +0800
+Message-Id: <20230106024739.13151-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 Jan 2023 14:19:37 +0200 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+The function dualshock4_get_calibration_data cannot execute hid_err,
+delete the invalid code.
 
-> The header is the direct user of definitions from the math.h,
-> include it.
-> 
-> ...
->
-> --- a/include/linux/util_macros.h
-> +++ b/include/linux/util_macros.h
-> @@ -2,6 +2,8 @@
->  #ifndef _LINUX_HELPER_MACROS_H_
->  #define _LINUX_HELPER_MACROS_H_
->  
-> +#include <linux/math.h>
-> +
->  #define __find_closest(x, a, as, op)					\
->  ({									\
->  	typeof(as) __fc_i, __fc_as = (as) - 1;				\
+drivers/hid/hid-playstation.c:1766 dualshock4_get_calibration_data() warn: ignoring unreachable code.
 
-Does this fix any known build errors, or was it an I-noticed-this thing?
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3641
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/hid/hid-playstation.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/hid/hid-playstation.c b/drivers/hid/hid-playstation.c
+index f399bf0d3c8c..8fef1498c397 100644
+--- a/drivers/hid/hid-playstation.c
++++ b/drivers/hid/hid-playstation.c
+@@ -1763,11 +1763,8 @@ static int dualshock4_get_calibration_data(struct dualshock4 *ds4)
+ 					ret = -EILSEQ;
+ 					goto err_free;
+ 				}
+-				hid_err(hdev, "Failed to retrieve DualShock4 calibration info: %d\n", ret);
+-				goto err_free;
+-			} else {
++			} else
+ 				break;
+-			}
+ 		}
+ 	} else { /* Bluetooth */
+ 		buf = kzalloc(DS4_FEATURE_REPORT_CALIBRATION_BT_SIZE, GFP_KERNEL);
+-- 
+2.20.1.7.g153144c
+
