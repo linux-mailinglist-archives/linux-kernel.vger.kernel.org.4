@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C6066024E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B431C660253
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 15:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbjAFOfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 09:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S230244AbjAFOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 09:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbjAFOep (ORCPT
+        with ESMTP id S233789AbjAFOgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:34:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310B38318F;
-        Fri,  6 Jan 2023 06:34:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 6 Jan 2023 09:36:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93C67BF3;
+        Fri,  6 Jan 2023 06:36:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D75D8B81C0C;
-        Fri,  6 Jan 2023 14:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D60EC433D2;
-        Fri,  6 Jan 2023 14:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673015658;
-        bh=ynDFiEQrOvyn+hQ5jOy9DWfHWTy4bEEbSvBtrELW8dQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wMa2bMRGLHxuCrjcj5axey3B7v6+dvVeQQuaJ8ItKM59V2cpPmjUZXy6+op3d6hT5
-         A2BZBq2upk6x425FjB3YjhAokFgxKfnB82s2oZWj5Fj85R1ggEwW5sEpCyMfVUTG4T
-         /8dN2p/dGuSrjAsXsnH3oNaFVlGCivLJr8MfbVPA=
-Date:   Fri, 6 Jan 2023 15:34:15 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Georg =?iso-8859-1?Q?M=FCller?= <georgmueller@gmx.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/177] 6.0.18-rc1 review
-Message-ID: <Y7gxZ201DOi7nyZZ@kroah.com>
-References: <20230104160507.635888536@linuxfoundation.org>
- <53f19c0a-412d-ba8e-57bb-b626ba5b7672@gmx.net>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 01D1326572;
+        Fri,  6 Jan 2023 14:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673015773; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyA+rzUmCJe634szsMWfvCeiahqN7Z90H5rR+wJZupE=;
+        b=Rlvt4yQlGWdaRnydMv0xO4Pc5jNWfo7pbJleru4LDu3pTUbN2rEMMZHk5H4JEMctXNUVwB
+        U2LDa58Aw8vclgcnTzN/Kl8I/6Plszo8jZKPcQFzsnIGM0JcPWhX4snEm94GVbArexv5PQ
+        Rb9juinfir4DfI5Ge3ObL7GcV+hQLzU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673015773;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyA+rzUmCJe634szsMWfvCeiahqN7Z90H5rR+wJZupE=;
+        b=UTEVgsSJgNEhZF0g/FA9vfUhhnswavGd1JDAcG2Ss2SiJK6HFckesDAqaLBa099tiFLDgE
+        6zCprhfL6wAuduCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7013139D5;
+        Fri,  6 Jan 2023 14:36:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id izplONwxuGPLfQAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 06 Jan 2023 14:36:12 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 64A1FA0742; Fri,  6 Jan 2023 15:36:12 +0100 (CET)
+Date:   Fri, 6 Jan 2023 15:36:12 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com,
+        =?utf-8?B?THXDrXM=?= Henriques <lhenriques@suse.de>
+Subject: Re: [PATCH 2/2] ext4: update s_journal_inum if it changes after
+ journal replay
+Message-ID: <20230106143612.nzif3jndh7p32nej@quack3>
+References: <20230106104706.2410740-1-libaokun1@huawei.com>
+ <20230106104706.2410740-3-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <53f19c0a-412d-ba8e-57bb-b626ba5b7672@gmx.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106104706.2410740-3-libaokun1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 03:27:58PM +0100, Georg Müller wrote:
-> Hi Greg,
+On Fri 06-01-23 18:47:06, Baokun Li wrote:
+> When mounting a crafted ext4 image, s_journal_inum may change after journal
+> replay, which is obviously unreasonable because we have successfully loaded
+> and replayed the journal through the old s_journal_inum. And the new
+> s_journal_inum bypasses some of the checks in ext4_get_journal(), which
+> may trigger a null pointer dereference problem. So if s_journal_inum
+> changes after the journal replay, we ignore the change, and rewrite the
+> current journal_inum to the superblock.
 > 
-> Am 04.01.23 um 17:04 schrieb Greg Kroah-Hartman:
-> > This is the start of the stable review cycle for the 6.0.18 release.
-> > There are 177 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Fri, 06 Jan 2023 16:04:29 +0000.
-> > Anything received after that time might be too late.
-> 
-> There is an easy-to-trigger kernel panic in cifs which was introduced in 6.0.16 and could be fixed by backporting the following commit:
-> 
->    9ee2afe5207b ("cifs: prevent copying past input buffer boundaries")
-> 
-> Please see https://bugzilla.kernel.org/show_bug.cgi?id=216895 for the details
-> 
-> Could this commit be added as well to 6.0.18?
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216541
+> Reported-by: Luís Henriques <lhenriques@suse.de>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  fs/ext4/super.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-It is too late for this release, we can add it to the next one.  Or you
-can move to 6.1.y which you should be doing anyway as 6.0.y is about to
-go end-of-life in a few days.
+Looks good. Feel free to add:
 
-thanks,
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-greg k-h
+								Honza
+
+
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 260c1b3e3ef2..3fe9dc19ff9c 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5953,8 +5953,11 @@ static int ext4_load_journal(struct super_block *sb,
+>  	if (!really_read_only && journal_devnum &&
+>  	    journal_devnum != le32_to_cpu(es->s_journal_dev)) {
+>  		es->s_journal_dev = cpu_to_le32(journal_devnum);
+> -
+> -		/* Make sure we flush the recovery flag to disk. */
+> +		ext4_commit_super(sb);
+> +	}
+> +	if (!really_read_only && journal_inum &&
+> +	    journal_inum != le32_to_cpu(es->s_journal_inum)) {
+> +		es->s_journal_inum = cpu_to_le32(journal_inum);
+>  		ext4_commit_super(sb);
+>  	}
+>  
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
