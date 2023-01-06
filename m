@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3067C65FE5E
+	by mail.lfdr.de (Postfix) with ESMTP id AAEC665FE60
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 10:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjAFJul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 04:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S232344AbjAFJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 04:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbjAFJt5 (ORCPT
+        with ESMTP id S233701AbjAFJvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:49:57 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B4343E4E;
-        Fri,  6 Jan 2023 01:49:51 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pDjMD-0006dY-Az; Fri, 06 Jan 2023 10:49:49 +0100
-Message-ID: <a1081b61-c066-153d-2ec3-1f86ce68c0e6@leemhuis.info>
-Date:   Fri, 6 Jan 2023 10:49:48 +0100
+        Fri, 6 Jan 2023 04:51:19 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4500143E6F;
+        Fri,  6 Jan 2023 01:51:13 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so3180456wms.0;
+        Fri, 06 Jan 2023 01:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrvSssTB54upRg+amSTSh/m+siv7swZXJmxro5GGQhE=;
+        b=DkMJEdErIM0JJ4Lsey5FNClcs15i1jkoL40dFVWuKQBG1HJHG7jCqEVxfF7pZUKOH4
+         f3+tns/BVe41pT5SG9WNVhMZOgxWzzfWdW37h5QK6gXVXQX/guMyw4smWUmB3KLjFOqp
+         JUBJLynSuNdC1E6rDaL3YcDvQNo/w0w1qChXa+YUCXwH8UzihQgxFkxM4mAffSBA9jws
+         MDeHP7FegRPVUgUjPQmjP4PbAzaRef3WMb89myLHqCd2fv+On9aOvCWG28Zw+iCSVecc
+         d+e5j65HDoBbW8G5J8MRCyYgsLmSNvyinldoEoPxbhNu7OIArj8tYpQeKbNY/k7daeKK
+         8TAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XrvSssTB54upRg+amSTSh/m+siv7swZXJmxro5GGQhE=;
+        b=009aFAxoqt6QFOHB0Ak41MQsjpOydaNeEN/k6H4hyu8ATN9kg9RSyRnnD5EFg6ZF16
+         4uZ6KsB9RqVieGdcEGP8S+0R6sGl5fGxb8FpLNARQk2zSwloZ3dzIztpMLCYG0kWsGDw
+         /G9QBBpkyMAJcjVGvZS8nYYxTwfN4fcEC0tkkUOsAVxWBU1TsjAV+ZWcKMEkdPHyrQaC
+         LUWtoG7vafgEPBPemjin8Oaeaj12WjCjTHbHRfprmtFZkArj28lx7oWLkmYyUMKiFeAm
+         NDKci397MqywUIRFQDiTm6WmI4+NH12ufEMaFt2bgksHAvAZIUOHXxNRwYvCxshvnVYx
+         5RTQ==
+X-Gm-Message-State: AFqh2ko9ck5qOtMjMRFpgoRdXRjRlFHupm7iFX1ZESdfkH2YlMjGpOAG
+        pGQsuoIYwwCdCkXOAQeQkY7WNkIjTsoBuw==
+X-Google-Smtp-Source: AMrXdXsQ24CbKi7l5KynCzOUOI0ucQ+COq4HrbvltkoDujLgok5MIgKicQzXltu7ybAXDYYigIpAyA==
+X-Received: by 2002:a05:600c:3d86:b0:3cf:9ac8:c537 with SMTP id bi6-20020a05600c3d8600b003cf9ac8c537mr40063633wmb.14.1672998671819;
+        Fri, 06 Jan 2023 01:51:11 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bg24-20020a05600c3c9800b003cfa3a12660sm13770079wmb.1.2023.01.06.01.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 01:51:11 -0800 (PST)
+Date:   Fri, 6 Jan 2023 12:51:07 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Yu Zhe <yuzhe@nfschina.com>
+Cc:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com
+Subject: Re: [PATCH] io_uring: fix some spelling mistakes in comment
+Message-ID: <Y7fvC+3qjMPvAQIG@kadam>
+References: <20230106091242.20288-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Steve French <sfrench@samba.org>
-Cc:     Kim Scarborough <kim@scarborough.kim>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Subject: =?UTF-8?Q?=5bRegression=5d_Bug=c2=a0216881_-_CIFS_1=2e0_mounts_fail?=
- =?UTF-8?Q?_with_=22VFS=3a_bogus_file_nlink_value_0=22?=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672998591;3d316d92;
-X-HE-SMSGID: 1pDjMD-0006dY-Az
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106091242.20288-1-yuzhe@nfschina.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216881 :
-
->  Kim Scarborough 2023-01-04 07:00:50 UTC
+On Fri, Jan 06, 2023 at 05:12:42PM +0800, Yu Zhe wrote:
+> Fix typos in comment.
 > 
-> An SMB mount to a Windows XP machine in my fstab no longer works. It last worked with 6.0.9. fstab line:
-> 
-> //server/D /remote/server/D cifs noauto,_netdev,username=example,password=example,uid=1000,vers=1.0,nomultichannel 0 0
-> 
-> When I attempt to mount this now, I get the following error:
-> 
-> mount error(20): Not a directory
-> 
-> dmesg shows:
-> 
-> CIFS: VFS: bogus file nlink value 0
 
-See the ticket for more details.
+The cancelation vs cancellation thing is a British vs American spelling
+difference.  (Leave it as-is).
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+regards,
+dan carpenter
 
-#regzbot introduced: v6.0..v6.1
-https://bugzilla.kernel.org/show_bug.cgi?id=216881
-#regzbot title: cifs: cifs 1.0 mounts fail with "VFS: bogus file nlink
-value 0"
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
