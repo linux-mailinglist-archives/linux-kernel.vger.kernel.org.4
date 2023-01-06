@@ -2,167 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6856602CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A816602D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 16:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbjAFPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 10:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S235325AbjAFPOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 10:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjAFPMt (ORCPT
+        with ESMTP id S234720AbjAFPOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 10:12:49 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4D98111F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:12:32 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id 17so1975325pll.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pOP2U/eNUNDM/BFzz41jwnvvD0q9z7KVLxoSLmeQ5Ik=;
-        b=iH0cdWoF7hCqRCgId3gkeJ5nhxynIfZPsMSD7cym2axK6NGs4o3XgpHZjB5bWHlgqB
-         AoNBsLh56wsCYg6PkC4kDVE/g+pjSg4Iw+mK0FMXtOl1gsPl4GvTVbS3VNycdNuFXEsn
-         a4ag/t2nRyYJu1CAmTpOpFDGkipTZNQBIkkZLuxaR79XWunm9Cvw8rrVwYzSp6GR0DKj
-         /LsAoDpBOGldlGPnbIe/ry6lRakkHOXvX2M1JpHsMsR0C35CWd7aLHINdBQl808CrHu9
-         uHxo+LDfuXIDogYoc+SbNNW8svMk8I1YLfI7Nz/PUkjiK/6uUmOXfisllo7wFfH+uXe1
-         QI0Q==
+        Fri, 6 Jan 2023 10:14:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9303780AFA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 07:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673018006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vvgD97kU9+qL6QG9gHAa/Xv7qOhCnerL5qxmQkJWWRU=;
+        b=S4W5IiEH87D/5Lj5NUTU/tpDdgAJ20erRIgYWJvVX915DKZLBkizBlR8PE0QfYHwv0pxVE
+        dUrcD/PmK8CVz0sATPAZRXzi/PGBa7Fra7UqU1UQZ1/X3r6nQDChWQxsNc1y4KzQKOPDQd
+        RIEV4dp2RBenSsLf+iKlVJloFDzSmog=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-78-D-HdO6c6MbeoP8lGewUIBw-1; Fri, 06 Jan 2023 10:13:25 -0500
+X-MC-Unique: D-HdO6c6MbeoP8lGewUIBw-1
+Received: by mail-il1-f198.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so1267662ill.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 07:13:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pOP2U/eNUNDM/BFzz41jwnvvD0q9z7KVLxoSLmeQ5Ik=;
-        b=DFqvKO32vq0/f4KVwlp3SZY2Y/exu5TFrGEXeaKgwHEgDTgTjMY0qzURKiGpBmxrx2
-         jwCoT4ZtRjdHfEViBjK2qSU5WWfoAEvrociUEe8Kz0ZSuGsV77PMfOLaOUBkr5oKAs7j
-         Gwt52zBNLeKDlUZNqPyuzE42kqcLSo5mxNY4Y+6PwtCEfg8s/sq/QWlqoNEHcf5pYnT2
-         VL0DXCpAR9IELwh54zi61PrgRZWOFQb4dAwvd1BNPI+AHqf9Ga6k8im1t55/7qHOdHpG
-         FqWAYUXk4HRnj8BCgMm93jCcQ3ZedL2aK2S44dDPKsJthzGKeSQ4wdVy/bP9BJs7Xd15
-         KDwQ==
-X-Gm-Message-State: AFqh2krYqnvKHhnWwwWgdo7l4ubPsIStDTTbJPAnhtMjpB5k1o0hFhfI
-        ysNok8+zhsFTmXM4T8P2IeJGqyAc8bRyYJo6OZsuIQ==
-X-Google-Smtp-Source: AMrXdXtU5V0QpvGP+OLVqYFgiJWNnTOSLBLIFWEusuHsSsLFG6DazczNuQ1GVC5dZz7mwSfu21vgm+nI7RXXx5oI+Z4=
-X-Received: by 2002:a17:90a:5d97:b0:226:c03e:23fc with SMTP id
- t23-20020a17090a5d9700b00226c03e23fcmr716787pji.6.1673017952133; Fri, 06 Jan
- 2023 07:12:32 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvgD97kU9+qL6QG9gHAa/Xv7qOhCnerL5qxmQkJWWRU=;
+        b=4FprfzIQ3dGU+Jk20KMO3LuRsYjhj9XeDdQstJqLY/GmiAzkwMjpLBN97opnvmYfwg
+         Ub63wX4U7wzDCanlYRlqI2zHDPqQwDMRIxOUacoLL2X21bby5ot3kL2Aj7tYOtfm1tq3
+         3wb1XfR867AkPu2cVwLOSkUht1rmOWC/aAHSLR6iYusDRNEsfj6BQILXOfTbSoQkUnpD
+         XK/9r7qrEVUyepCLOTAf9J4rOr3y6Y1zsLQCTp6gSQ+dLuoVhtQNnoC3KIuyGF+ewbjg
+         Y4FPekfYpEMR2sTxviRu8wzCxvXZGUsIqMwiUKCHvUJI0g4E4I10+amwYHY7JklKoiHB
+         RfnA==
+X-Gm-Message-State: AFqh2kou/dDPfGixlNBVd9fE7+LEU2qltNAlkndpUkF6mrk2PTUHC90V
+        lZWkXc6f8Wqb3YMhc+fNbMYJPw/U4/E6qOEA51ZwklGGr/HiStGIiGkSw9v5yrMBB23CtlH0aN9
+        CEG6LsJ0NAQ22cO/j0/l+2DIm
+X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr24217607ilh.5.1673018004595;
+        Fri, 06 Jan 2023 07:13:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs3hQLfmCVyQgkBZC8bBnFmi+ERVvFTRai4qzR4899jssfiWjGnVGb901SbWzQdZA/o/Zn/ZA==
+X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id z12-20020a92bf0c000000b0030c03c07a56mr24217586ilh.5.1673018004392;
+        Fri, 06 Jan 2023 07:13:24 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-39-70-52-228-144.dsl.bell.ca. [70.52.228.144])
+        by smtp.gmail.com with ESMTPSA id s11-20020a92cc0b000000b0030380d1e24bsm444093ilp.30.2023.01.06.07.13.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 07:13:23 -0800 (PST)
+Date:   Fri, 6 Jan 2023 10:13:14 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 34/46] hugetlb: userfaultfd: when using MADV_SPLIT, round
+ addresses to PAGE_SIZE
+Message-ID: <Y7g6ihsCTIC765CO@x1n>
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-35-jthoughton@google.com>
 MIME-Version: 1.0
-References: <20230106142537.607399-1-irogers@google.com> <20230106142537.607399-2-irogers@google.com>
-In-Reply-To: <20230106142537.607399-2-irogers@google.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Fri, 6 Jan 2023 15:12:21 +0000
-Message-ID: <CAJ9a7VjE4PzEe+Gu_KPi3JEw3TKQpC70yZrLRT+EmaEGDRLnEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf build: Fix build error when NO_LIBBPF=1
-To:     Ian Rogers <irogers@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, acme@kernel.org, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230105101844.1893104-35-jthoughton@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 at 14:25, Ian Rogers <irogers@google.com> wrote:
->
-> The $(LIBBPF) target should only be a dependency of prepare if the
-> static version of libbpf is needed. Add a new LIBBPF_STATIC variable
-> that is set by Makefile.config. Use LIBBPF_STATIC to determine whether
-> the CFLAGS, etc. need updating and for adding $(LIBBPF) as a prepare
-> dependency.
->
-> As Makefile.config isn't loaded for "clean" as a target, always set
-> LIBBPF_OUTPUT regardless of whether it is needed for $(LIBBPF). This
-> is done to minimize conditional logic for $(LIBBPF)-clean.
->
-> This issue and an original fix was reported by Mike Leach in:
-> https://lore.kernel.org/lkml/20230105172243.7238-1-mike.leach@linaro.org/
->
-> Fixes: 746bd29e348f ("perf build: Use tools/lib headers from install path")
-> Reported-by: Mike Leach <mike.leach@linaro.org>
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Thu, Jan 05, 2023 at 10:18:32AM +0000, James Houghton wrote:
+> MADV_SPLIT enables HugeTLB HGM which allows for UFFDIO_CONTINUE in
+> PAGE_SIZE chunks. If a huge-page-aligned address were to be provided,
+> userspace would be completely unable to take advantage of HGM. That
+> would then require userspace to know to provide
+> UFFD_FEATURE_EXACT_ADDRESS.
+> 
+> This patch would make it harder to make a mistake. Instead of requiring
+> userspace to provide UFFD_FEATURE_EXACT_ADDRESS, always provide a usable
+> address.
+> 
+> Signed-off-by: James Houghton <jthoughton@google.com>
 > ---
->  tools/perf/Makefile.config |  2 ++
->  tools/perf/Makefile.perf   | 21 ++++++++++++---------
->  2 files changed, 14 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index c2504c39bdcb..7c00ce0a7464 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -602,6 +602,8 @@ ifndef NO_LIBELF
->            dummy := $(error Error: No libbpf devel library found, please install libbpf-devel);
->          endif
->        else
-> +        # Libbpf will be built as a static library from tools/lib/bpf.
-> +       LIBBPF_STATIC := 1
->         CFLAGS += -DHAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
->          CFLAGS += -DHAVE_LIBBPF_BPF_PROG_LOAD
->          CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 13e7d26e77f0..4e370462e7e1 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -303,10 +303,12 @@ ifneq ($(OUTPUT),)
->  else
->    LIBBPF_OUTPUT = $(CURDIR)/libbpf
->  endif
-> -LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-> -LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-> -LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-> -CFLAGS += -I$(LIBBPF_OUTPUT)/include
-> +ifdef LIBBPF_STATIC
-> +  LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-> +  LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-> +  LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-> +  CFLAGS += -I$(LIBBPF_OUTPUT)/include
-> +endif
->
->  ifneq ($(OUTPUT),)
->    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> @@ -393,10 +395,8 @@ endif
->  export PERL_PATH
->
->  PERFLIBS = $(LIBAPI) $(LIBPERF) $(LIBSUBCMD) $(LIBSYMBOL)
-> -ifndef NO_LIBBPF
-> -  ifndef LIBBPF_DYNAMIC
-> -    PERFLIBS += $(LIBBPF)
-> -  endif
-> +ifdef LIBBPF_STATIC
-> +  PERFLIBS += $(LIBBPF)
->  endif
->
->  # We choose to avoid "if .. else if .. else .. endif endif"
-> @@ -756,12 +756,15 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
->         $(arch_errno_name_array) \
->         $(sync_file_range_arrays) \
->         $(LIBAPI) \
-> -       $(LIBBPF) \
->         $(LIBPERF) \
->         $(LIBSUBCMD) \
->         $(LIBSYMBOL) \
->         bpf-skel
->
-> +ifdef LIBBPF_STATIC
-> +prepare: $(LIBBPF)
-> +endif
+>  mm/hugetlb.c | 31 +++++++++++++++----------------
+>  1 file changed, 15 insertions(+), 16 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 5af6db52f34e..5b6215e03fe1 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5936,28 +5936,27 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+>  						  unsigned long addr,
+>  						  unsigned long reason)
+>  {
+> +	u32 hash;
+> +	struct vm_fault vmf;
 > +
->  $(OUTPUT)%.o: %.c prepare FORCE
->         $(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+>  	/*
+>  	 * Don't use the hpage-aligned address if the user has explicitly
+>  	 * enabled HGM.
+>  	 */
+>  	if (hugetlb_hgm_advised(vma) && reason == VM_UFFD_MINOR)
+> -		haddr = address & PAGE_MASK;
+> -
+> -	u32 hash;
+> -	struct vm_fault vmf = {
+> -		.vma = vma,
+> -		.address = haddr,
+> -		.real_address = addr,
+> -		.flags = flags,
+> +		haddr = addr & PAGE_MASK;
+>  
+> -		/*
+> -		 * Hard to debug if it ends up being
+> -		 * used by a callee that assumes
+> -		 * something about the other
+> -		 * uninitialized fields... same as in
+> -		 * memory.c
+> -		 */
+> -	};
+> +	vmf.vma = vma;
+> +	vmf.address = haddr;
+> +	vmf.real_address = addr;
+> +	vmf.flags = flags;
 
-Tested-by: Mike Leach <mike.leach@linaro.org>
+Const fields here:
+
+mm/hugetlb.c: In function ‘hugetlb_handle_userfault’:
+mm/hugetlb.c:5961:17: error: assignment of member ‘vma’ in read-only object
+ 5961 |         vmf.vma = vma;
+      |                 ^ 
+mm/hugetlb.c:5962:21: error: assignment of member ‘address’ in read-only object
+ 5962 |         vmf.address = haddr;   
+      |                     ^      
+mm/hugetlb.c:5963:26: error: assignment of member ‘real_address’ in read-only object                                                                                                          
+ 5963 |         vmf.real_address = addr;
+
+> +	/*
+> +	 * Hard to debug if it ends up being
+> +	 * used by a callee that assumes
+> +	 * something about the other
+> +	 * uninitialized fields... same as in
+> +	 * memory.c
+> +	 */
+
+PS: I think we can drop this along the way.
+
+>  
+>  	/*
+>  	 * vma_lock and hugetlb_fault_mutex must be dropped before handling
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Peter Xu
+
