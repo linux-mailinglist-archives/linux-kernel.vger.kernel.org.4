@@ -2,205 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC8A65F857
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5A765F858
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 01:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbjAFAuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 19:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S236109AbjAFAwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 19:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235969AbjAFAui (ORCPT
+        with ESMTP id S235969AbjAFAwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 19:50:38 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8792561329;
-        Thu,  5 Jan 2023 16:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672966237; x=1704502237;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7r33uxFZaEZ3sirZC2Q1R9GU+Zmntk4xR0BpDvqw8CU=;
-  b=E7vizuzeA+V/v4cd7rEeUtzFXwRZNBYCqj3oVmONixnw+RKkBW5S18xv
-   RNBRPM9kC99aXuj+OUkbMUgVZ50lEeYhb13z1bEvQaxSYPzYXWMDyCyFK
-   FRogTJR+Ppv18zEZeN0Gh6qTRn072aTTf+GEaWOtiIGwM4bwMpgnEFDX1
-   ao0JoslQrhItAyLeQEtnYueK6EG/yqLig1ygiZxSP1JQuqgGNTVa0di78
-   txCo56E8VMsnpGzRiXvIOsZoAZZ1zVqC/jE7lAbhqn0DTG3kZaks9Rl1P
-   GoCa0qqrKHhMS4K/AszpFVx42W/4oQPmCEpee2d0bFY5zPeFAe96zZkIr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="408619139"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="408619139"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:50:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="763339807"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="763339807"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jan 2023 16:50:35 -0800
-Received: from [10.252.211.52] (kliang2-mobl1.ccr.corp.intel.com [10.252.211.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 5 Jan 2023 19:52:06 -0500
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A392DC4
+        for <linux-kernel@vger.kernel.org>; Thu,  5 Jan 2023 16:52:04 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id C21AD20176;
+        Fri,  6 Jan 2023 01:52:02 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CXxScuYzd18E; Fri,  6 Jan 2023 01:52:02 +0100 (CET)
+Received: from begin (adijon-658-1-86-31.w86-204.abo.wanadoo.fr [86.204.233.31])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 582DE580418;
-        Thu,  5 Jan 2023 16:50:33 -0800 (PST)
-Message-ID: <edb001f3-d685-4c57-b614-02f2c8d33ff1@linux.intel.com>
-Date:   Thu, 5 Jan 2023 19:50:31 -0500
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 157DA20172;
+        Fri,  6 Jan 2023 01:52:02 +0100 (CET)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pDaxl-000k0r-25;
+        Fri, 06 Jan 2023 01:52:01 +0100
+Date:   Fri, 6 Jan 2023 01:52:01 +0100
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca,
+        speakup@linux-speakup.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] speakup: Fix warning comparing pointer to 0
+Message-ID: <20230106005201.h3ikdaisqgjupavc@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Yang Li <yang.lee@linux.alibaba.com>, w.d.hubbs@gmail.com,
+        chris@the-brannons.com, kirk@reisers.ca, speakup@linux-speakup.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20230106004114.72589-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, hdegoede@redhat.com, kernelorg@undead.fr,
-        kjhambrick@gmail.com, 2lprbe78@duck.com,
-        nicholas.johnson-opensource@outlook.com.au, benoitg@coeus.ca,
-        mika.westerberg@linux.intel.com, wse@tuxedocomputers.com,
-        mumblingdrunkard@protonmail.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.e.box@intel.com,
-        yunying.sun@intel.com, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-References: <20230105223257.GA1177387@bhelgaas>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230105223257.GA1177387@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230106004114.72589-1-yang.lee@linux.alibaba.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-01-05 5:32 p.m., Bjorn Helgaas wrote:
-> [+cc Tony, Dan]
+Yang Li, le ven. 06 janv. 2023 08:41:14 +0800, a ecrit:
+> ./drivers/accessibility/speakup/utils.h:39:15-16: WARNING comparing pointer to 0
 > 
-> On Wed, Jan 04, 2023 at 09:39:56AM -0500, Liang, Kan wrote:
->> Hi Bjorn,
->>
->> Happy new year!
->>
->> We found some PCI issues with the latest 6.2-rc2.
->>
->> - Using the lspci -xxxx, the extended PCI config space of all PCI
->> devices are missed with the latest 6.2-rc2. The system we used had 932
->> PCI devices, at least 800 which have extended space as seen when booted
->> into a 5.15 kernel. But none of them appeared in 6.2-rc2.
->> - The drivers which rely on the information in the extended PCI config
->> space don't work anymore. We have confirmed that the perf uncore driver
->> (uncore performance monitoring) and Intel VSEC driver (telemetry) don't
->> work in 6.2-rc2. There could be more drivers which are impacted.
->>
->> After a bisect, we found the regression is caused by the below commit
->> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map").
->> After reverting the commit, the issues are gone.
-> 
-> Can you try this patch (based on v6.2-rc1):
-> 
-> > commit 89a0067217b0 ("x86/pci: Treat EfiMemoryMappedIO as reservation
-of ECAM space")
-> parent 1b929c02afd3
-> Author: Bjorn Helgaas <bhelgaas@google.com>
-> Date:   Thu Jan 5 16:02:58 2023 -0600
-> 
->     x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
->     
->     Normally we reject ECAM space unless it is reported as reserved in the E820
->     table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
->     means extended config space (offsets 0x100-0xfff) may not be accessible.
->     
->     Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
->     mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
->     normally converted to an E820 entry by a bootloader or EFI stub.
->     
->     07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
->     E820 entries that correspond to EfiMemoryMappedIO regions because some
->     other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
->     E820 entries prevent Linux from allocating BAR space for hot-added devices.
->     
->     Allow use of ECAM for extended config space when the region is covered by
->     an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
->     _CRS.
->     
->     Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
->     Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
-> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3636
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-The patch fixes the issue I reported.
+Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-Tested-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
-> index 758cbfe55daa..4adc587a4c94 100644
-> --- a/arch/x86/pci/mmconfig-shared.c
-> +++ b/arch/x86/pci/mmconfig-shared.c
-> @@ -12,6 +12,7 @@
->   */
->  
->  #include <linux/acpi.h>
-> +#include <linux/efi.h>
->  #include <linux/pci.h>
->  #include <linux/init.h>
->  #include <linux/bitmap.h>
-> @@ -442,6 +443,25 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
->  	return mcfg_res.flags;
->  }
->  
-> +static bool is_efi_reserved(u64 start, u64 end, enum e820_type not_used)
-> +{
-> +	efi_memory_desc_t *md;
-> +	u64 size, mmio_start, mmio_end;
-> +
-> +	for_each_efi_memory_desc(md) {
-> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
-> +			size = md->num_pages << EFI_PAGE_SHIFT;
-> +			mmio_start = md->phys_addr;
-> +			mmio_end = mmio_start + size - 1;
-> +
-> +			if (mmio_start <= start && end <= mmio_end)
-> +				return true;
-> +		}
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  typedef bool (*check_reserved_t)(u64 start, u64 end, enum e820_type type);
->  
->  static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
-> @@ -452,7 +472,7 @@ static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
->  	u64 size = resource_size(&cfg->res);
->  	u64 old_size = size;
->  	int num_buses;
-> -	char *method = with_e820 ? "E820" : "ACPI motherboard resources";
-> +	char *method = with_e820 ? "E820" : "ACPI motherboard resources or EFI";
->  
->  	while (!is_reserved(addr, addr + size, E820_TYPE_RESERVED)) {
->  		size >>= 1;
-> @@ -502,15 +522,17 @@ pci_mmcfg_check_reserved(struct device *dev, struct pci_mmcfg_region *cfg, int e
->  	if (!early && !acpi_disabled) {
->  		if (is_mmconf_reserved(is_acpi_reserved, cfg, dev, 0))
->  			return true;
-> +		if (is_mmconf_reserved(is_efi_reserved, cfg, dev, 0))
-> +			return true;
->  
->  		if (dev)
->  			dev_info(dev, FW_INFO
-> -				 "MMCONFIG at %pR not reserved in "
-> +				 "MMCONFIG at %pR not reserved in EFI "
->  				 "ACPI motherboard resources\n",
->  				 &cfg->res);
->  		else
->  			pr_info(FW_INFO PREFIX
-> -			       "MMCONFIG at %pR not reserved in "
-> +			       "MMCONFIG at %pR not reserved in EFI or "
->  			       "ACPI motherboard resources\n",
->  			       &cfg->res);
+> ---
+>  drivers/accessibility/speakup/utils.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
+> index 4ce9a12f7664..db00c962f8e2 100644
+> --- a/drivers/accessibility/speakup/utils.h
+> +++ b/drivers/accessibility/speakup/utils.h
+> @@ -36,7 +36,7 @@ static inline void open_input(const char *dir_name, const char *name)
+>  	else
+>  		snprintf(filename, sizeof(filename), "%s", name);
+>  	infile = fopen(filename, "r");
+> -	if (infile == 0) {
+> +	if (!infile) {
+>  		fprintf(stderr, "can't open %s\n", filename);
+>  		exit(1);
 >  	}
+> -- 
+> 2.20.1.7.g153144c
+> 
+
+-- 
+Samuel
+---
+Pour une évaluation indépendante, transparente et rigoureuse !
+Je soutiens la Commission d'Évaluation de l'Inria.
