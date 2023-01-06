@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9189F6606F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE18660739
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbjAFTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
+        id S234465AbjAFTeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjAFTNU (ORCPT
+        with ESMTP id S235748AbjAFTeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:13:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFB868799;
-        Fri,  6 Jan 2023 11:13:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4fFJTo3td0EaVTFdM5bjLZ2rfCzevY+CZk+c5LeFYls=; b=gBTyIAy13xD19rRq3HNUq2LAQA
-        9519MzZCt8oZpCQDgIUYkvArms/BnXH5g0qNTXpM204LENwQnaf7n9L1f71TQRbBTdP/GfPUFoQGf
-        sYd0v+Uqz/Z50GBoNO9rtisMhd2JxoKzyL+K+hWyUpCKTgib667xXZrI7qBeYhiapb7APoEGZlSjN
-        EH4XR8rEn5nJo5f4ncJjf/fYGjOxOkoTOR60ShDJatQPocMEc8ByQF8lRGUlD+ZeZiDf2n5Rvv4rA
-        9NA+JTBhKSwM5zNDgs4oTLxfxbZGx8JkhmbDWO5xjstPxpw8m59i5n/za4+zeKCyvyDRxUHqSVzDO
-        oE7LCFDQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pDs9L-00EYJA-Gb; Fri, 06 Jan 2023 19:13:07 +0000
-Date:   Fri, 6 Jan 2023 11:13:07 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        David Howells <dhowells@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
-Message-ID: <Y7hyw+fTdgAF6uYP@bombadil.infradead.org>
-References: <20230106094844.26241-1-zhanghongchen@loongson.cn>
+        Fri, 6 Jan 2023 14:34:44 -0500
+X-Greylist: delayed 1140 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 11:34:41 PST
+Received: from 19.mo550.mail-out.ovh.net (19.mo550.mail-out.ovh.net [178.32.97.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C3C76813
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:34:41 -0800 (PST)
+Received: from director9.ghost.mail-out.ovh.net (unknown [10.108.4.132])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id C466C23D85
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 19:15:39 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-2mh8d (unknown [10.110.208.218])
+        by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 997A81FEE4;
+        Fri,  6 Jan 2023 19:15:39 +0000 (UTC)
+Received: from RCM-web4.webmail.mail.ovh.net ([176.31.235.81])
+        by ghost-submission-6684bf9d7b-2mh8d with ESMTPSA
+        id ELr3I1tzuGO5GwAAZ2D+lg
+        (envelope-from <rafal@milecki.pl>); Fri, 06 Jan 2023 19:15:39 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106094844.26241-1-zhanghongchen@loongson.cn>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 06 Jan 2023 20:15:39 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     INAGAKI Hiroshi <musashino.open@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
+In-Reply-To: <57f10c5d-2a71-7f8d-e2ab-6e868d8ba79b@linaro.org>
+References: <20221012155133.287-1-musashino.open@gmail.com>
+ <57f10c5d-2a71-7f8d-e2ab-6e868d8ba79b@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e8932e3eaf1bd9a690e2f41aad8faf3a@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 8312237537736436699
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgdduvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpefhvefhgfffheegveeujeduveekvdevkeefvddvfeduuddvgfdukeeugeffvdduffenucffohhmrghinhepghhithdrnhhofienucfkphepuddvjedrtddrtddruddpudelgedrudekjedrjeegrddvfeefpddujeeirdefuddrvdefhedrkedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehtddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 05:48:44PM +0800, Hongchen Zhang wrote:
-> Use spinlock in pipe_read/write cost too much time,IMO
-> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
-> On the other hand, we can use __pipe_{lock,unlock} to protect
-> the pipe->{head,tail} in pipe_resize_ring and
-> post_one_notification.
-> 
-> I tested this patch using UnixBench's pipe test case on a x86_64
-> machine,and get the following data:
-> 1) before this patch
-> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
-> Pipe Throughput                   12440.0     493023.3    396.3
->                                                         ========
-> System Benchmarks Index Score (Partial Only)              396.3
-> 
-> 2) after this patch
-> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
-> Pipe Throughput                   12440.0     507551.4    408.0
->                                                         ========
-> System Benchmarks Index Score (Partial Only)              408.0
-> 
-> so we get ~3% speedup.
-> 
-> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-> ---
+Hi Srinivas,
 
-After the above "---" line you should have the changlog descrption.
-For instance:
+On 2022-11-11 18:41, Srinivas Kandagatla wrote:
+> On 12/10/2022 16:51, INAGAKI Hiroshi wrote:
+>> This patch fixes crc32 error on Big-Endianness system by conversion of
+>> calculated crc32 value.
+>> 
+>> Little-Endianness system:
+>> 
+>>    obtained crc32: Little
+>> calculated crc32: Little
+>> 
+>> Big-Endianness system:
+>> 
+>>    obtained crc32: Little
+>> calculated crc32: Big
+>> 
+>> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
+>> 
+>> [    8.570000] u_boot_env 
+>> 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated 
+>> CRC32: 0x88cd6f09 (expected: 0x096fcd88)
+>> [    8.580000] u_boot_env: probe of 
+>> 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
+>> 
+>> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment 
+>> variables")
+>> 
+>> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+>> ---
+> 
+> Applied thanks,
 
-v3:
-  - fixes bleh blah blah
-v2:
-  - fixes 0-day report by ... etc..
-  - fixes spelling or whatever
+has this patch been lost somewhere in the process?
 
-I cannot decipher what you did here differently, not do I want to go
-looking and diff'ing. So you are making the life of reviewer harder.
-
-  Luis
+I'm quite sure I saw it in linux-next.git and probably in nvmem.git. Now
+it seems to be gone.
