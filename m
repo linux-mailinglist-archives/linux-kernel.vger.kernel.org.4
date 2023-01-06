@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A1265FCBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD92365FCC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjAFI3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
+        id S232180AbjAFIau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbjAFI3X (ORCPT
+        with ESMTP id S232291AbjAFIae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:29:23 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596187A920;
-        Fri,  6 Jan 2023 00:29:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672993762; x=1704529762;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=OKsrMUds3JwbloBzsKaWTIBxPZJcQykKaE7DFA0jHmc=;
-  b=U/xWVyOHxgN8UVNgCoxjkPp5/PDVkvNqKEUqvkOXELYdMdLnmprncL2z
-   19xtwCs/rpAOXFp5Xhe/V6wLn3zq6bCkXtkmTy70WOyutJt29FEWWaFpf
-   tfN9+Qsv3LXg4w+PexnnqtTw2PVG+hio7PbCBLNuxxMJkGzBSQ5Uf0h0P
-   MnBsIyy/wfMdCcV8s4ynolUn90AMLdk2tkj64JQI+5XVj92X+6Q35RvQf
-   Wsh9n5L5rzpYPADVzZDd7YuVCeu8I8APaJfb+b7GpyLbBRnnfAtvnmus9
-   Ew8H/fl3EgyqD9PgiyXDTCg4Ukzf6IwFrmgazsFjLphiT3F83UnCRTkNB
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="195562570"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2023 01:29:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 6 Jan 2023 01:29:21 -0700
-Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 01:29:17 -0700
-From:   Divya Koppera <Divya.Koppera@microchip.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>,
-        <alexanderduyck@fb.com>
-CC:     <UNGLinuxDriver@microchip.com>
-Subject: [PATCH v6 net-next 2/2] net: phy: micrel: Fix warn: passing zero to PTR_ERR
-Date:   Fri, 6 Jan 2023 13:59:05 +0530
-Message-ID: <20230106082905.1159-3-Divya.Koppera@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230106082905.1159-1-Divya.Koppera@microchip.com>
-References: <20230106082905.1159-1-Divya.Koppera@microchip.com>
+        Fri, 6 Jan 2023 03:30:34 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27AF7A91A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 00:30:32 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so3054209wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 00:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G5jrLtn8skMYCUXB5w36mPxMFBmvOOBixvoM0MNxf2A=;
+        b=VPQZX08QJQA2/rBoVhzNqjs9Q//E7TAtUGS/2sSP0e24M57lKiNkymlTsNnzmZYYF+
+         AjN4InbfEfDt3bsnkUBV6weQsvmWq8bF0LL0/UQqFClCFlAu+6w9FhM83X5DjlV3HZLa
+         VdtLHQH2Ero13mAUyU8c739+GCwhMrDJUgn98qmGcmWA01YcqV/QNaNG3EWGE5m6Gw3T
+         NX7+vrEKYbMkJfOo5zq0EpwEsOwSKYuC4l4XuVLiWjrzTCgmUtDoas5MA+ElYXwtKfRH
+         UGMKobEgN5/d/GJzbZ5R5kjxM9Soxsi4t8oipf0aJsR/4jQdbFTFZ7+eSeEfpf1xgfuK
+         YIig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5jrLtn8skMYCUXB5w36mPxMFBmvOOBixvoM0MNxf2A=;
+        b=2OzQOkQGvZsJkdCENjgLMUxSGxYAZyTBwe3UxPVSZzZl83OsNQ2ZWHaMp9Uw3Iji0U
+         1S7Tv96iImvNdMk0qsJxJjFmZ+k9daN3RXdclTRmVfbrhY2HQjVK2EunpjFQNZjMcSwp
+         30WTMXWfxFKBU/wDamVpgg6VKhVk5MWMAxRBJjFKrQ88scdPva4xEAT7lweI793S/2mf
+         iqoUH2low5gYg2ygDLP6s1i0BNO8Rcgm/REAJSXlAJMB0Lk6DQ5IfzOcYiC8gEoKTVUg
+         UW8Pu5HctHqf7hKjGiLr2nJnLdLCGeZEfO/SdolsrAoumVu78/fbwumwTNZfgX/5bh0F
+         Ke1A==
+X-Gm-Message-State: AFqh2koJEPO/Jxb4IUiaEgDeuffk3n6F/cj2jx/mtda9vd71Qof2wk4L
+        NYjlX3TYSpL5X/hVYj/H9R3hww==
+X-Google-Smtp-Source: AMrXdXth0T1efa07WNTmxF4kDFoDPEKZKZl+aoOg/cdR2N9PPlFzW5PKylKrMGJebkSdtyetneKKoA==
+X-Received: by 2002:a05:600c:248:b0:3d3:5d47:271c with SMTP id 8-20020a05600c024800b003d35d47271cmr37959272wmj.12.1672993831427;
+        Fri, 06 Jan 2023 00:30:31 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o21-20020a1c7515000000b003d995a704fdsm840230wmc.33.2023.01.06.00.30.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 00:30:30 -0800 (PST)
+Message-ID: <f17c520c-71c2-6b36-bfcf-e817092849f0@linaro.org>
+Date:   Fri, 6 Jan 2023 09:30:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V9 5/5] ASoC: dt-bindings: Add schema for "awinic,aw88395"
+Content-Language: en-US
+To:     wangweidong.a@awinic.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        perex@perex.cz, tiwai@suse.com, ckeepax@opensource.cirrus.com,
+        rf@opensource.cirrus.com, pierre-louis.bossart@linux.intel.com,
+        james.schulman@cirrus.com, flatmax@flatmax.com,
+        cezary.rojewski@intel.com, povik+lin@cutebit.org,
+        yangxiaohua@everest-semi.com, daniel.beer@igorinstitute.com,
+        13691752556@139.com, srinivas.kandagatla@linaro.org,
+        jonathan.albrieux@gmail.com, steve@sk2.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     liweilei@awinic.com, zhaolei@awinic.com, yijiangtao@awinic.com
+References: <20230106032835.141918-1-wangweidong.a@awinic.com>
+ <20230106032835.141918-6-wangweidong.a@awinic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230106032835.141918-6-wangweidong.a@awinic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle the NULL pointer case
+On 06/01/2023 04:28, wangweidong.a@awinic.com wrote:
+> From: Weidong Wang <wangweidong.a@awinic.com>
+> 
+> Add a DT schema for describing Awinic AW88395 audio amplifiers. They are
+> controlled using I2C.
+> 
+> Signed-off-by: Weidong Wang <wangweidong.a@awinic.com>
+> ---
 
-Fixes New smatch warnings:
-drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
 
-vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
----
-v5 -> v6:
-- Removed fixes tag as this is to fix static analysis issues and not
-  real fix.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-v4 -> v5:
-- Removed run time check and added compile time check for PHC
-
-v3 -> v4:
-- Split the patch for different warnings
-- Renamed variable from shared_priv to shared.
-
-v2 -> v3:
-- Changed subject line from net to net-next
-- Removed config check for ptp and clock configuration
-  instead added null check for ptp_clock
-- Fixed one more warning related to initialisaton.
-
-v1 -> v2:
-- Handled NULL pointer case
-- Changed subject line with net-next to net
----
- drivers/net/phy/micrel.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 1bcdb828db56..650ef53fcf20 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -3017,10 +3017,6 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
- {
- 	struct lan8814_shared_priv *shared = phydev->shared->priv;
- 
--	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
--	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
--		return 0;
--
- 	/* Initialise shared lock for clock*/
- 	mutex_init(&shared->shared_lock);
- 
-@@ -3040,12 +3036,16 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
- 
- 	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
- 					       &phydev->mdio.dev);
--	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
-+	if (IS_ERR(shared->ptp_clock)) {
- 		phydev_err(phydev, "ptp_clock_register failed %lu\n",
- 			   PTR_ERR(shared->ptp_clock));
- 		return -EINVAL;
- 	}
- 
-+	/* Check if PHC support is missing at the configuration level */
-+	if (!shared->ptp_clock)
-+		return 0;
-+
- 	phydev_dbg(phydev, "successfully registered ptp clock\n");
- 
- 	shared->phydev = phydev;
--- 
-2.17.1
+Best regards,
+Krzysztof
 
