@@ -2,246 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC136605C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0202A6605CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjAFRjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S234279AbjAFRj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbjAFRjL (ORCPT
+        with ESMTP id S234465AbjAFRjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:39:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FF87D9DB;
-        Fri,  6 Jan 2023 09:39:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD7461EEA;
-        Fri,  6 Jan 2023 17:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C782BC433EF;
-        Fri,  6 Jan 2023 17:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673026749;
-        bh=9lYpIJ7urZJueAO54CHt0eT1xP3N1T1yp3v6HZ0ADNs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h5p+UChZEbXLcG+vuuBe5NXZesdLSwOIoel6pLd0TOAJY56sTRhdYAP5GUZNQz4Kf
-         QDj8NHkDlNXy3PFgQ3sSM5VD77x/X0tXJDd2+0S80RICDKQ+nda3cepNok4HRKH+I3
-         qdyZiSyXVXqDQk9EVBIvzpF18IAUT8Qrf+4fcCq1hejvXMSjuI+e4jKod5qscWbDCD
-         IRIwqE1Xy9h2ohvmBoPscSs+zVpl9JIrNsB08rYbaFiWhajBJru5AvY9PjdvbYi5eU
-         oox/QhKPLa7bnH2nGPsPefwjkkxBKGsBY1pqesjXX3ziqtQEQh9iSh4L7bp42KUhLq
-         so0PE2NRO5Pug==
-Date:   Fri, 6 Jan 2023 11:39:06 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_schowdhu@quicinc.com,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v2 2/2] usb: misc: eud: Add driver support for SM6115 /
- SM4250
-Message-ID: <20230106173906.djdk5vbm4e4uz3wv@builder.lan>
-References: <20230103150419.3923421-1-bhupesh.sharma@linaro.org>
- <20230103150419.3923421-3-bhupesh.sharma@linaro.org>
+        Fri, 6 Jan 2023 12:39:25 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25B47D9DC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:39:24 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id s66so971998oib.7
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 09:39:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OGdzRsnsgcIRm6FiVcM30qmoD/VjHz+6+Th5gll9lk=;
+        b=mzDUAzs4cx0ARO+0UMIH2tF1EyP8ycEVSqmz0vxgfpmVk3C7jprtdw4dSxPoJQc9T0
+         EY8PFBc3D/IbyBz6yTa/OvaQ2l2XrpYdgXNS9cyb5pkubu99ldU+0j9i6leWCHD60lz/
+         P10BDhQgqSrioYwaL1LwSbU4hiiqtS9CJt6Uhd8lC4k9Zs6S9MiTBU9tBe5jDgBOVeQY
+         PrYiqFVdmpf3zHi+eRV62r985fA/sqYPD24q12Rw0zTw/Fc3NVm7xSESqM3tkse2/u3R
+         p91yfsT8Sih6nK+JGdHvuNE4XM6PsoBovsQIgZCTBO7Z5WgROhDqRJd2bcyk5gV9a1U9
+         cNzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4OGdzRsnsgcIRm6FiVcM30qmoD/VjHz+6+Th5gll9lk=;
+        b=8EKhEStiOaRcIE+j4CRz8GhuWAGiJQ4/uYEERo9bjufjtU6y8KWAKI/RSHlz62gCto
+         lxLJf2nBZ1CBT6lpi89Td2n2eMPLOIhgws0iT1d29u/FDuAZLhL/WWV39wyQNShl1zm3
+         M2Lt47i1GN1QeKOBaDVxAPyQLJdvfGXXShsxo4a8RjHuOIkBiDb4gRbr1I4SMy/wY5cV
+         JobuW49QQeOCDzgY9XvLy5o208ciYdgYK907bcup9jaL3Fs5xc9gbjye/jr0MIbeSPDB
+         cLAUTreIeWaWPirIE65DjZcs5QqoW2gxXbmxY/C0Z9ngGYNmNKrPlInx+RIh26y/a5yS
+         dMew==
+X-Gm-Message-State: AFqh2koS3S2/+14wWAn28LkvB36Zft4t4bAL8S2onMNtGuRM6lcY6vHq
+        G7LrgFaomxo6RN+tC3iA/PJlxpbDps3PvSfm8tU=
+X-Google-Smtp-Source: AMrXdXsG3KHcYsKS9EN756ILgXcCI983jgaNgB9xFxkc0wYdxFIqGcn0jyf44WWTYylT8UitT3WqOQb0IHxpvHLs+oM=
+X-Received: by 2002:a05:6808:c:b0:35d:ff69:49c0 with SMTP id
+ u12-20020a056808000c00b0035dff6949c0mr3695550oic.146.1673026764297; Fri, 06
+ Jan 2023 09:39:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103150419.3923421-3-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229064153.23511-1-zh.nvgt@gmail.com> <182d36d5-df77-2479-882a-5bb588c5f170@kernel.org>
+ <CAO2zrtaGnfH2yYttq4WqeD40Gt9_gerR7sy1szZotbOP+muW5A@mail.gmail.com> <Y7gGUPuoQ/vdGVl6@kroah.com>
+In-Reply-To: <Y7gGUPuoQ/vdGVl6@kroah.com>
+From:   Hang Zhang <zh.nvgt@gmail.com>
+Date:   Fri, 6 Jan 2023 12:39:13 -0500
+Message-ID: <CAO2zrtY=zfx4asJ5nuU0RsziTnWV_8vXp7MkbLG_rWGQ5-1YpA@mail.gmail.com>
+Subject: Re: [PATCH] tty: vt: add some NULL checks for vc_data
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        Helge Deller <deller@gmx.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 08:34:19PM +0530, Bhupesh Sharma wrote:
-> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> 
-> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> needs to be accessed only via the secure world (through 'scm'
-> calls).
-> 
+On Fri, Jan 6, 2023 at 6:30 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jan 03, 2023 at 10:01:15PM -0500, Hang Zhang wrote:
+> > On Tue, Jan 3, 2023 at 4:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> > >
+> > > On 29. 12. 22, 7:41, Hang Zhang wrote:
+> > > > vc_selection(), do_blank_screen() and scrollfront() all access "vc_data"
+> > > > structures obtained from the global "vc_cons[fg_console].d", which can
+> > > > be freed and nullified (e.g., in the error path of vc_allocate()). But
+> > > > these functions don't have any NULL checks against the pointers before
+> > > > dereferencing them, causing potentially use-after-free or null pointer
+> > > > dereference.
+> > >
+> > > Could you elaborate under what circumstances is fg_console set to a
+> > > non-allocated console?
+> >
+> > Hi, Jiri, thank you for your reply! I am not a developer for tty
+> > subsystem, so the reasoning here is based on my best-effort code
+> > reading. Please correct me if I am wrong.
+> >
+> > This patch is based on several observations:
+> >
+> > (1) at the beginning of vc_selection() (where one NULL check is
+> > inserted in this patch), poke_blanked_console() is invoked, which
+> > explicitly checks whether "vc_cons[fg_console].d" is NULL, suggesting
+> > the possibility of "fg_console" associated with an unallocated console
+> > at this point. However, poke_blanked_console() returns "void", so
+> > even if "fg_console" is NULL, after returning to vc_selection(),
+> > it will just keep executing, resulting in the possible NULL pointer
+> > dereference later ("vc" in vc_selection() can be "vc_cons[fg_console].d"
+> > if called from set_selection_kernel()). So this patch actually tries
+> > to make the already existing NULL check take effect on the control
+> > flow (e.g., early return if NULL).
+>
+> But again, how can that value ever be NULL?
+>
+> And why are you returning "success" if it is?
 
-This difference does not come from the platform number, but how the
-firmware is configured.
+Hi, Greg. Thank you for your reply. When writing this patch, we didn't have
+many special considerations for the return value - the main purpose is to make
+it return early to prevent the later potential null pointer
+dereference. The return
+value is borrowed from other early return branches within
+vc_selection() that all
+return 0. We can certainly change it to a specific error code according to
+developers' comments.
 
-How about relying on the presence of the extra DT properties to identify
-if the secure access is needed?
+Sure, we will try to put more effort into investigating the
+possibility of the NULL
+pointer. Due to our limited domain knowledge, any help/insight from the
+developers and maintainers is highly appreciated. Thank you very much!
 
-> Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> first to set the eud in 'enable' mode on these SoCs.
-> 
-> Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/usb/misc/Kconfig    |  1 +
->  drivers/usb/misc/qcom_eud.c | 49 ++++++++++++++++++++++++++++++++++---
->  2 files changed, 47 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index a5f7652db7da1..ed4ae32ff1577 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -140,6 +140,7 @@ config USB_APPLEDISPLAY
->  config USB_QCOM_EUD
->  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> +	select QCOM_SCM
->  	select USB_ROLE_SWITCH
->  	help
->  	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index b7f13df007646..a96ca28a4899b 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -11,7 +11,9 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> +#include <linux/qcom_scm.h>
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
->  #include <linux/usb/role.h>
-> @@ -30,15 +32,24 @@
->  #define EUD_INT_SAFE_MODE	BIT(4)
->  #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
->  
-> +struct eud_soc_data {
-> +	bool secure_eud_en;
-> +	bool tcsr_check_enable;
-> +};
-> +
->  struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
-> +	const struct eud_soc_data	*eud_data;
->  	void __iomem			*base;
->  	void __iomem			*mode_mgr;
->  	unsigned int			int_status;
->  	int				irq;
->  	bool				enabled;
->  	bool				usb_attached;
-> +	phys_addr_t			mode_mgr_phys_base;
-
-Given that mode_mgr doesn't come with the "_phys_base" suffix, how about
-naming this "secure_mode_mgr"?
-
-> +	phys_addr_t			tcsr_check_phys_base;
-
-For now this could be a local variable in eud_probe(). Also while
-mode_mgr_phys_base denotes an address range, afaict this points directly
-to a single register. As such the suffix isn't appropriate.
-
-How about "tcsr_check"?
-
-> +
->  };
->  
->  static int enable_eud(struct eud_chip *priv)
-> @@ -46,7 +57,11 @@ static int enable_eud(struct eud_chip *priv)
->  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->  			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->eud_data->secure_eud_en)
-
-if (priv->mode_mgr_phys_base)
-
-Would avoid the notion of having two separate variables to keep track of
-the validity of one entity.
-
-> +		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, BIT(0));
-> +	else
-> +		writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
->  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->  }
-> @@ -54,7 +69,11 @@ static int enable_eud(struct eud_chip *priv)
->  static void disable_eud(struct eud_chip *priv)
->  {
->  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->eud_data->secure_eud_en)
-> +		qcom_scm_io_writel(priv->mode_mgr_phys_base + EUD_REG_EUD_EN2, 0);
-> +	else
-> +		writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
->  }
->  
->  static ssize_t enable_show(struct device *dev,
-> @@ -178,12 +197,15 @@ static void eud_role_switch_release(void *data)
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct resource *res;
->  	int ret;
->  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
->  	if (!chip)
->  		return -ENOMEM;
->  
-> +	chip->eud_data = of_device_get_match_data(&pdev->dev);
-> +
->  	chip->dev = &pdev->dev;
->  
->  	chip->role_sw = usb_role_switch_get(&pdev->dev);
-> @@ -200,10 +222,25 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
->  
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> +	chip->mode_mgr = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-
-Perhaps it would be best not to ioremap the region when secure accesses
-are required?
-
-Regards,
-Bjorn
-
->  	if (IS_ERR(chip->mode_mgr))
->  		return PTR_ERR(chip->mode_mgr);
->  
-> +	if (chip->eud_data->secure_eud_en)
-> +		chip->mode_mgr_phys_base = res->start;
-> +
-> +	if (chip->eud_data->tcsr_check_enable) {
-> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-> +		if (!res)
-> +			return dev_err_probe(chip->dev, -ENODEV, "failed to get tcsr reg base\n");
-> +
-> +		chip->tcsr_check_phys_base = res->start;
-> +
-> +		ret = qcom_scm_io_writel(chip->tcsr_check_phys_base, BIT(0));
-> +		if (ret)
-> +			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-> +	}
-> +
->  	chip->irq = platform_get_irq(pdev, 0);
->  	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
->  			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-> @@ -230,8 +267,14 @@ static int eud_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct eud_soc_data sm6115_eud_data = {
-> +	.secure_eud_en = true,
-> +	.tcsr_check_enable = true,
-> +};
-> +
->  static const struct of_device_id eud_dt_match[] = {
->  	{ .compatible = "qcom,sc7280-eud" },
-> +	{ .compatible = "qcom,sm6115-eud", .data = &sm6115_eud_data },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, eud_dt_match);
-> -- 
-> 2.38.1
-> 
+Thanks,
+Hang
