@@ -2,130 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BFC660890
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7B3660894
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbjAFU6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S235699AbjAFU77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbjAFU61 (ORCPT
+        with ESMTP id S229752AbjAFU7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:58:27 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE8C73E21;
-        Fri,  6 Jan 2023 12:58:26 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 14E165C00FF;
-        Fri,  6 Jan 2023 15:58:24 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 06 Jan 2023 15:58:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673038704; x=1673125104; bh=asiYST5Ghw
-        xvQTVw1LJKwe5e2Vz+ZHE03cHN4ukynt4=; b=bCw5+cCEaGZbkn79Md3n/s+2JR
-        jZSktKXnrbP2k2QNO/DtQ+6Gwf7M8V79PgGXQ+Uwi501+VljT1lAVzngKKcyIG3c
-        bukY+sByr4LYTrNSDqdhs03LmiHl5eN4inMKMUx2/yGRVNZY0evvjduiUhiDQyPL
-        JWHZ/BZ+5JQK6ed9tW3dB0bYDix1HiVroiWIxmiC+FdGfgiBwSxVJPCVT0EkV5Ya
-        Fb7NokNkpLusu2g64Yk1srsbGnGg69FufTmb88LYJ3KL+berWdwKNp/MJGf7OLuU
-        vjGOg+RBLYY5rYX1oMefRdBdBQBs9c3kA7pSjb943evbq46atF9D/+VeW6yg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1673038704; x=1673125104; bh=asiYST5GhwxvQTVw1LJKwe5e2Vz+
-        ZHE03cHN4ukynt4=; b=DG00yeM+19g/2hGS1FyWu9dJSrr4+kDzcyS9goTqNyiB
-        fq3BuSyZWkU6RsJVlcw3ae1qIdwneyYM46Ttbr+siDwR3iuEk20Cl0X9F8kQIzFs
-        epbxucBryVCmcZLmsCbAufiSDVsVQsb+kyicsbJC40Ssgrn65M/rW0haGlgv3gFt
-        st5GHDonyN0lv05B0KDO6gA5KDA1Sujd7WGD//8mHNJOvxIVF0avSXO3bclr8hId
-        +2oe33Xh6i2y0N9k3i8CsJNK5GUzgWUfQmHXhHkMfg8I6QIgP44l78J70514LA8w
-        6vhvykNk8r/xVQ7Mml83ROqOC4wb6QanXcqSQOtuBA==
-X-ME-Sender: <xms:bou4Y1Cbo-Wq1Ukal6g9tFmIV9Hhu8vHeaXqlJEYryVYDLGYODQB0A>
-    <xme:bou4Yzgd6Zlp4ugKYU9VMX2XVqBm21jrloQiB1vGsig5aZqvc09i_ouBza77Z35Dv
-    um6Jrqxrry8inBuvTQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgddugeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:bou4YwkZgm-tBVfTgr0hD7-8hM3Eiau_tTSUat8Dz3XFTJhuWwI_VA>
-    <xmx:bou4Y_wqEoTDKxKfOBIAsq_2o5uFybmlL66MCnGcfJZT6PQjdVfyQg>
-    <xmx:bou4Y6R57vIL8B-eJIH1WWnCGA9BrjQ05cVx-xPijQWYDPaqDB_VOQ>
-    <xmx:cIu4Y0DFZvH3dukMWRmM8x1xBocb0kNNJ8zfbZCAS24Xl65d9Fr6kA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 58F17B60086; Fri,  6 Jan 2023 15:58:22 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <d60047d0-5b0c-4c1e-b656-b7cbc236b23c@app.fastmail.com>
-In-Reply-To: <202301061209.4EA0C177@keescook>
-References: <20230106042844.give.885-kees@kernel.org>
- <CAG48ez0Jg9Eeh=RWpYh=sKhzukE3Sza2RKMmNs8o0FrHU0dj9w@mail.gmail.com>
- <CAMZ6RqJXnUBxqyCFRaLxELjnvGzn9NoiePV2RVwBzAZRGH_Qmg@mail.gmail.com>
- <202301061209.4EA0C177@keescook>
-Date:   Fri, 06 Jan 2023 21:58:02 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kees Cook" <keescook@chromium.org>,
-        "Vincent MAILHOL" <mailhol.vincent@wanadoo.fr>
-Cc:     "Jann Horn" <jannh@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>,
-        "kernel test robot" <lkp@intel.com>,
-        "Oleksij Rempel" <linux@rempel-privat.de>,
-        "Sean Anderson" <sean.anderson@seco.com>,
-        "Alexandru Tachici" <alexandru.tachici@analog.com>,
-        "Amit Cohen" <amcohen@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        "Linux API" <linux-api@vger.kernel.org>
-Subject: Re: minimum compiler for Linux UAPI (was Re: [PATCH v3] ethtool: Replace
- 0-length array with flexible array)
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 6 Jan 2023 15:59:55 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C88673E22;
+        Fri,  6 Jan 2023 12:59:54 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D56794AE;
+        Fri,  6 Jan 2023 21:59:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673038793;
+        bh=tfFk4cqOy1XZOWYxQx6dNDf7ZPddGqF7hvQjN8/ARcg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=otnO9peaexEaR6dNwwdK/TH9cG1Yy9JmNOzvWmhLNnx5tIgkCoKFznTboBEx1CcTB
+         wz2ld2BBZL3CJzDSBVQAxhMYL5WkA2fqChJla67pfRGYeLfD5cr2Ee2VQxq0ox65/d
+         j0e0swG0f+27FAwC5RpxJgRfIIXVBIk30EeeGVhM=
+Date:   Fri, 6 Jan 2023 22:59:47 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 6/7] media: uvcvideo: Fix power line control for
+ Lenovo Integrated Camera
+Message-ID: <Y7iLwzYCEzhT8lCl@pendragon.ideasonboard.com>
+References: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
+ <20230105-uvc-gcc5-v2-6-2ba6c660d6f5@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105-uvc-gcc5-v2-6-2ba6c660d6f5@chromium.org>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        SUBJECT_DRUG_GAP_L autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023, at 21:13, Kees Cook wrote:
-> On Fri, Jan 06, 2023 at 11:25:14PM +0900, Vincent MAILHOL wrote:
->> On Fri. 6 Jan 2023 at 22:19, Jann Horn <jannh@google.com> wrote:
->> 
->>   What are the minimum compiler requirements to build a program using
->> the Linux UAPI?
->
-> You're right -- we haven't explicitly documented this. C99 seems like
-> the defacto minimum, though.
->
->> And, after research, I could not find the answer. The requirements to
->> build the kernel are well documented:
->> 
->>   https://docs.kernel.org/process/changes.html#changes
->> 
->> But no clue for the uapi. I guess that at one point in 2006, people
->> decided that it was time to set the minimum requirement to C99. Maybe
->> this matches the end of life of the latest pre-C99 GCC version? The
->> detailed answer must be hidden somewhere on lkml.
->
-> I would make the argument that the requirements for building Linux UAPI
-> should match that of building the kernel...
+Hi Ricardo,
 
-I think it's a bit more nuanced than that: glibc does not require
-C99 but does include some kernel headers from generic library
-headers, so I would not make the assumption that it's always
-safe to use C99 features. On the other hand, Linux specific
-device drivers whose header is only really used from one
-application are free to make assumptions about the toolchain.
+Thank you for the patch.
 
-      Arnd
+On Thu, Jan 05, 2023 at 02:52:57PM +0100, Ricardo Ribalda wrote:
+> The device does not implement the power line control correctly. It is
+> a UVC 1.5 device, but implements the PLC control as a UVC 1.1 device.
+
+Did you mean PLF (power line frequency) ? I'd write:
+
+The device does not implement the power line frequency control
+correctly. It is a UVC 1.5 device, but implements the control as a UVC
+1.1 device.
+
+No need to resubmit just for this, I'll handle it locally.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> Add the corresponding control mapping override.
+> 
+> Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.01
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x30c9
+>   idProduct          0x0093
+>   bcdDevice            0.07
+>   iManufacturer           3 Lenovo
+>   iProduct                1 Integrated Camera
+>   iSerial                 2 8SSC21J75356V1SR2830069
+>   bNumConfigurations      1
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c   |  2 +-
+>  drivers/media/usb/uvc/uvc_driver.c | 16 ++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+>  3 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index f559a1ac6e3c..28ef9b2024a1 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -736,7 +736,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
+>  				  V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
+>  };
+>  
+> -static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+> +const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+>  	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+>  	.entity		= UVC_GUID_UVC_PROCESSING,
+>  	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 37d2b08bc8b2..57c948d47bbf 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2385,6 +2385,13 @@ static const struct uvc_device_info uvc_ctrl_power_line_limited = {
+>  	},
+>  };
+>  
+> +static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
+> +	.mappings = (const struct uvc_control_mapping *[]) {
+> +		&uvc_ctrl_power_line_mapping_uvc11,
+> +		NULL, /* Sentinel */
+> +	},
+> +};
+> +
+>  static const struct uvc_device_info uvc_quirk_probe_minmax = {
+>  	.quirks = UVC_QUIRK_PROBE_MINMAX,
+>  };
+> @@ -2964,6 +2971,15 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
+> +	/* Lenovo Integrated Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x30c9,
+> +	  .idProduct		= 0x0093,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
+> +	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
+>  	/* Sonix Technology USB 2.0 Camera */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 1b2d9f327583..31c33eb0edf5 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -748,6 +748,7 @@ void uvc_status_stop(struct uvc_device *dev);
+>  
+>  /* Controls */
+>  extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
+> +extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
+>  extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
+>  
+>  int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+
+-- 
+Regards,
+
+Laurent Pinchart
