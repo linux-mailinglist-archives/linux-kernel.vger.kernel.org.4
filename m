@@ -2,46 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6F06608D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087476608D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 22:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbjAFVbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 16:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S235939AbjAFVfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 16:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjAFVba (ORCPT
+        with ESMTP id S235862AbjAFVfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 16:31:30 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D1F82F42;
-        Fri,  6 Jan 2023 13:31:27 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9704F4AE;
-        Fri,  6 Jan 2023 22:31:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673040685;
-        bh=JsHLhS3oE4mcgCjOu+F+v3r7tNdA6fZM74E3u0wxSi8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1Fzz7G70sXQozXjMjVejqSqD4zrQOhBA8Nza7YoPqMg9fpv/60BnULeaMUTKrj7P
-         y+bVsmwp90mOp59T2Ly0UmhoNWS4PSTTNihK6veNkLqX6h8o0BCL6JXtiJtmsMwEFd
-         ULyvWp32Frz/1afpqmDRQuKguNTCbwCDGoj6s8rk=
-Date:   Fri, 6 Jan 2023 23:31:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v2 7/7] media: uvcvideo: Use standard names for menus
-Message-ID: <Y7iTKL3uyUyPvrQ1@pendragon.ideasonboard.com>
-References: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
- <20230105-uvc-gcc5-v2-7-2ba6c660d6f5@chromium.org>
+        Fri, 6 Jan 2023 16:35:51 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A4782F64
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 13:35:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673040946; x=1704576946;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vUS8xxpYjW2ypUV3qN+z5HqMMLUpjdjqKp7g50E0Nz0=;
+  b=MN9NrMU58rXRw+6koIYZl/mdwI/6ofeyjVgzLTfgg9yEZtKUDWecEeD/
+   4vHfc1fcjqSk+GfebpcWaPuXLl3PcOz5B2PEGdUvnDdz4MMdnzDkqhrbN
+   WVbm+koiQ9Lqf+vnOK288jN/c0NlO80KABy4OW9vx2NVjzju7HAGCCdvR
+   6PFiZ4XVDt0I97cTECwBaP+gV8xGGVYqj1T2sci7nzxTTVYnb6DmK3NuV
+   QfvI+MVi9y4H8ZhVe8yvcVRULzQ6bITWkdIRAq0p6dhAl14e1P/7a+D10
+   tyKHmCpf/VkBusbWTXTC7lbTXIbjTwyGdjWEvaFbyv1mEm0bI1/hAJGuU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="310362430"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="310362430"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 13:35:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="763645900"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="763645900"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jan 2023 13:35:45 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 6 Jan 2023 13:35:45 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 13:35:45 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 6 Jan 2023 13:35:44 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B7hY8SXR85rp6cURyJFIL6i/hQnlUC5eEY7LXJQSaDfwTxG92rCYscNSt+G6LwF02oU7M5ElNLjnn+7qjvsU7gxsOEVjbT+W3Af6LMg60bOQ+x+SdUx1P6Qnprzu/m1QVBJ2sCdmTrN1MPPRcshHZ7g8WEOeG3FoFm3m9A5uYWkm3ebvUiHprK9k6HCyrkEJLr/4OM9astRLo/jOT6avclgm1gbwab+OnJRSVMzViqgvnO+edQcc64Zvb06tp77jWBxZJA5bFOfUVFgJVaTUKoq3LXZkB4KLyYdiL7OT1BrBX5tHAiRl/+0Vh64i4EOs+SOE7umJ/0hxjetXERRppg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vUS8xxpYjW2ypUV3qN+z5HqMMLUpjdjqKp7g50E0Nz0=;
+ b=jrl34MSxx9/+CwPIc0d9sn6ksCMRbFJF/LroooRq+p2ZFjm/uyoeySs4nv879hduKdaRo4I2bKfgZwvSyzBgTcMcljlpSeo/an0pX7ctgjc4UA9H9bouuDEDDQvgU+tVOxXWSOkarQFujatNWklFEzNSyY6ZplEqjWyBmMjffqVuwszcs8s0SO8jEQ1nX4nb9n43wI8XYyEjsLExttNsdrGM/uQ4uRKVociyG7iFQ6qB3Prrbh7YlEzDoC8aMxudTPT/M8nnFHQnXvLRLT4v6O4sjAVBh3irQnriviDlU61KlglcE4qiIBpiSD9H9JJYW89Ejt8iSFbzsGmUBomHbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by BL1PR11MB5527.namprd11.prod.outlook.com (2603:10b6:208:317::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
+ 2023 21:35:41 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::3c14:aeca:37e2:c679]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::3c14:aeca:37e2:c679%7]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
+ 21:35:41 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>, "Raj, Ashok" <ashok.raj@intel.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
+        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: RE: [PATCH v3 3/6] x86/microcode: Display revisions only when update
+ is successful
+Thread-Topic: [PATCH v3 3/6] x86/microcode: Display revisions only when update
+ is successful
+Thread-Index: AQHZH52NAoBL85VeDUGvO9l83Nz44a6OnkiAgAMwhQCAAANYAIAAGXUA
+Date:   Fri, 6 Jan 2023 21:35:41 +0000
+Message-ID: <SJ1PR11MB6083BD0E0191061B72A47982FCFB9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230103180212.333496-1-ashok.raj@intel.com>
+ <20230103180212.333496-4-ashok.raj@intel.com> <Y7XMtWqSrs0uGkD7@zn.tnic>
+ <Y7h5qD43kdPeEgQ7@a4bf019067fa.jf.intel.com> <Y7h8dpIQHnL93RdC@zn.tnic>
+In-Reply-To: <Y7h8dpIQHnL93RdC@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|BL1PR11MB5527:EE_
+x-ms-office365-filtering-correlation-id: 2d9c0774-f857-48a7-edbd-08daf02df5b6
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NLZOaNPKroHDdNJ7qnVfHgmZngQB24aCKMYdUea/rXYBqHGnMKnQEccugfgxqC1E1IJ+DisaposzszAB/B7TifTVRVSll0pUDVPxsHEkPCjI1buJfP8nCFYiOSOcz9NFuV36PLZRJELzz0CMNZ8REPPuMn+sYpV8+2xhlTzLXHNQc0eYaTaHs4RD0X1FC5QBxJQdTKdsflcGRkQzDnqxmtSbT44Uxe9U89pRSZnjoDHCgGN15XqATOCEv1dP9gmfQ1hfpMbqy+T+VTzgv089z1FBa639pQ5dfSp2Zg7LufmQrmkJ0zYn0tjCwiYIgW9Rt7BKlq1DXkztKpHG2CeMtB72MUzyOoJVE0zsbftuaW2lGske/TV4AUDiB4UU/I2ja68Nd4HFmbt/sHELn6FuxUCMbfrUcKTliQrrc9EFRybizpze/T1P94vbCiGFJRz+bCI33n0ehfrMTm/ce4qxmJhOVAvrvOQbdybc7rM7ULYACIl/WjJBtclrjbQVwfdjGN/d9O9b9XYoYUtESGAcIaDz2G+kSN33XQqstxRjKj/fkQjdBaaFkQ1qUNkTSXXtvVvpY54IdRdtMnxgKFMrmFxYZDTPROPxUUQAe50b/T+6ZmnzqPDrbrd8jhJURXY49lWY0inPQ/96hH16kB6ONI7c7Mmp8mhncsFIPFu4vvS5HGxzbbjG5cJCClgLubPhMrGk0p64B1cgYy/BIp1v8Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199015)(86362001)(8936002)(41300700001)(122000001)(6506007)(52536014)(7696005)(478600001)(38070700005)(64756008)(71200400001)(5660300002)(38100700002)(82960400001)(83380400001)(26005)(316002)(66556008)(4744005)(9686003)(76116006)(8676002)(15650500001)(186003)(66446008)(4326008)(66476007)(33656002)(2906002)(110136005)(66946007)(6636002)(54906003)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzduWHFhQzdlZDI2bk9Vbll5Uk44aFBwQmx2UDhzLytDS3IwZjJtWVFGZno0?=
+ =?utf-8?B?WjVpcXNITHE4S2RDNTFVNWpETVk5L3pJbGlyQzlWYTdUaUM5Y1M1dnRFZG1Z?=
+ =?utf-8?B?OW9IRkUyUEZXQkFHL0NGd0ZXdU85UjA5a0QrVUFpQ0tBeTd6ZVZvTW8yMjJT?=
+ =?utf-8?B?RWEzT1BmMy8zQSt4ZFFQSWM0VWQ3T2J0YW9NeXYwMnEzM1UwM2ZUZmtGZC9Z?=
+ =?utf-8?B?eHhYK1FMQXhENVlsRk9manlBVDVkV1JlQ0ZCQWNqcVNLelRmaDhJSldJV2Z4?=
+ =?utf-8?B?TTZ2MUNsajlEQTVMaVRXb1dQbHg1SmdSWlRkaWdEY3VJQzYzN3VFVXJuazBY?=
+ =?utf-8?B?a0hHYmI5ZlBtbUJuYlFOTUV2T0lNS2tzQWNwRDRDU0lEQlpZeEhjb29QNnlu?=
+ =?utf-8?B?dHFzbGd1MnFlaHMralh3QUp5Y2xldmxsaTM3TlFSYUpXaC9TNnpFUDlGbzRm?=
+ =?utf-8?B?dkxlSmF2OVFKNjNhdGoxcy9kcjNZcDl0M1ZCZkw2UzQxYnQwbFlMalRKRUt4?=
+ =?utf-8?B?ZjdNQjZFYkhtR2VEQjBCVHVUbVBReHdOMFFMUkZ3MmRFdDEvU0l5dzdEd3Q3?=
+ =?utf-8?B?S0E1eHorVVVJdUs1MW9OYUtyaHZNOFAvdVJoVnhUWjV2SStpSldQSkxOY2dK?=
+ =?utf-8?B?Y2dIOHRCWmxUMkZ4aXAvTEhvaUEyVnpISkNFMEdjdXpLZWRjbkZGeENRc0d2?=
+ =?utf-8?B?dVRnd2ZsMkcxNmtwZG1UdVBDR3hXbG5GZHRaTGlpbFpjWjBFdUJuOWpQUjV5?=
+ =?utf-8?B?VThnK0dSMHVEc3RYS3FkUXhWb1BZQWhHR2d5UkZPdTl2bHJqWXNjSzZtWDhE?=
+ =?utf-8?B?RitMVW1VZm5jeFF2M2djWnlVaUk0a09SRGRHTUtrUTJEb1psVkJHdlI5RW9l?=
+ =?utf-8?B?ekhYM1FnY0UrNE94RHVxeGtmc2RjaWw1V3hYelVWNy9oYVFhSW9GdUtudlo3?=
+ =?utf-8?B?WkE4Zjcwc05HekdOamRzQ3VvRUgwNFFobFp4aHpUUzJyWXlvbk5wSEdmUlIv?=
+ =?utf-8?B?elovbmFPMEpwSXlDajF3TWhwR000ejEyWEhUYWJGbmlOWTdjOUtIaTQ2Y0Zq?=
+ =?utf-8?B?ckJXUmFmdnVEWG5MZ085KzdYN2FmWTlDamFsUjlQMlUvK3Z5NFowT0UzRkpy?=
+ =?utf-8?B?b29hamh3WDl0cEJSQ05OWWFjaEhvRy9FTEpGUk9lMzg2S0d2QnNVRDB4R2Jk?=
+ =?utf-8?B?aFhqL29BS1VNdVhzTGFPbGorVjZxenNLMUlzaGtLUWtwQldDbkNkS2E2dEpG?=
+ =?utf-8?B?cEFkTDRPOFpKcDRINUJ2MVA3a21TMFJlaEhzd05wVWxMWFN2K0hURGpHTHRQ?=
+ =?utf-8?B?TWhFOTZGbXlhMEVlNlJBU3BhNlBWdUlrZmtjWVYzb05uS01Kb1hTZUd3R3k3?=
+ =?utf-8?B?NWNSZDYva3B3UTJkR3BSeEFtNUtKVi9Sb2ZuNy9IY3A1TnBXRjZiS25rSTJo?=
+ =?utf-8?B?K0d2UTdHMkFPaERUTy9qSjZTVlNXV09mQmszbGlrSFlyMXpXYmZ3bmxzVE1q?=
+ =?utf-8?B?d2hCVGV5QjdTUU5nZVdSL2Z6akxub2RmZ2xrQzJFcUFCVGZTQmwyeC9NbHZB?=
+ =?utf-8?B?UUxkanhvRkE2WGFtYUtTeG1DcWc2QjQwRW5MZ0s5MVViRFgrNmtNT3BTKzY3?=
+ =?utf-8?B?LzRYOUk0WGJkMmtFNEtxTEVkSE9Mak9jYlRnN011emdwUThiMkdmeDlHVUJw?=
+ =?utf-8?B?YmdBUUJ3d2d6OVlrVUpJbnhxNU9iUkJONGFjZ0gzMjhNTitVOG43U3NYNXpm?=
+ =?utf-8?B?RSs2NVl3djUzZVA1cDJBamM1NDN1WUMrK0kyUTBzdVpGN21kRHcyWmMyM0xB?=
+ =?utf-8?B?SkZzRm1qTWp2WitEVXA4Y3VYQm5hSXY5WkVNSEtibENsUVNVSjRFTUQxVTM1?=
+ =?utf-8?B?Mmd1YUlsbHVzL1dQWkVNY0UvVWVQazFWMUxZOU1hZURVTFlCRXBqdG5wQktT?=
+ =?utf-8?B?WUZ3QUV2d2xQTTdUQTdBckZobzdvQWwwMEpsd3BiNm8rd2hKdHVsSER5NlpP?=
+ =?utf-8?B?QUlQNWd1V09RWVQ1MERrYlpGV0tZVzFPSmhwaTR4cXNxdkZzMzlsN2Q3U0tN?=
+ =?utf-8?B?V2MwZ2hNakxucUhwNnkyeVZaU1I0ZTFZT2lsVElXV3JpdWVIVllYbzJvb1FF?=
+ =?utf-8?Q?jIjk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230105-uvc-gcc5-v2-7-2ba6c660d6f5@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d9c0774-f857-48a7-edbd-08daf02df5b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2023 21:35:41.2634
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jJG/BohB7UI5sFqGmlqTVffIO+avJk5I59s13ss/ZuZX5ERci09ImRnhvCWZhWkZ4GKYfaTUUbt9VQnS4e2sow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5527
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,499 +165,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
-
-Thank you for the patch.
-
-On Thu, Jan 05, 2023 at 02:52:58PM +0100, Ricardo Ribalda wrote:
-> Instead of duplicating the menu info, use the one from the core.
-> Also, do not use extra memory for 1:1 mappings.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c | 122 +++++++++++++++++++++++++++------------
->  drivers/media/usb/uvc/uvc_v4l2.c | 105 ++++++++++++++++++++++++---------
->  drivers/media/usb/uvc/uvcvideo.h |   3 +-
->  include/uapi/linux/uvcvideo.h    |   4 +-
->  4 files changed, 168 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index 28ef9b2024a1..f5a9d67e0966 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -364,19 +364,31 @@ static const u32 uvc_control_classes[] = {
->  	V4L2_CID_USER_CLASS,
->  };
->  
-> -static const struct uvc_menu_info power_line_frequency_controls[] = {
-> -	{ 0, "Disabled" },
-> -	{ 1, "50 Hz" },
-> -	{ 2, "60 Hz" },
-> -	{ 3, "Auto" },
-> -};
-> +static const int exposure_auto_mapping[] = { 2, 1, 4, 8 };
->  
-> -static const struct uvc_menu_info exposure_auto_controls[] = {
-> -	{ 2, "Auto Mode" },
-> -	{ 1, "Manual Mode" },
-> -	{ 4, "Shutter Priority Mode" },
-> -	{ 8, "Aperture Priority Mode" },
-> -};
-
-Let's add a bit of documentation, as it's getting quite complex.
-
-/*
- * This function translates the V4L2 menu index @idx, as exposed to userspace as
- * the V4L2 control value, to the corresponding UVC control value used by the
- * device. The custom menu_mapping in the control @mapping is used when
- * available, otherwise the function assumes that the V4L2 and UVC values are
- * identical.
- *
- * For controls of type UVC_CTRL_DATA_TYPE_BITMASK, the UVC control value is
- * expressed as a bitmask and is thus guaranteed to have a single bit set.
- *
- * The function returns -EINVAL if the V4L2 menu index @idx isn't valid for the
- * control, which includes all controls whose type isn't UVC_CTRL_DATA_TYPE_ENUM
- * or UVC_CTRL_DATA_TYPE_BITMASK.
- */
-
-> +static int uvc_mapping_get_menu_value(const struct uvc_control_mapping *mapping,
-> +				      u32 idx)
-> +{
-> +	if (!test_bit(idx, &mapping->menu_mask))
-> +		return -EINVAL;
-> +
-> +	if (mapping->menu_mapping)
-> +		return mapping->menu_mapping[idx];
-> +
-> +	return idx;
-> +}
-> +
-> +static const char *
-> +uvc_mapping_get_menu_name(const struct uvc_control_mapping *mapping, u32 idx)
-> +{
-> +	if (!test_bit(idx, &mapping->menu_mask))
-> +		return NULL;
-> +
-> +	if (mapping->menu_names)
-> +		return mapping->menu_names[idx];
-> +
-> +	return v4l2_ctrl_get_menu(mapping->id)[idx];
-> +}
->  
->  static s32 uvc_ctrl_get_zoom(struct uvc_control_mapping *mapping,
->  	u8 query, const u8 *data)
-> @@ -525,9 +537,9 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
->  		.offset		= 0,
->  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
-> -		.menu_info	= exposure_auto_controls,
-> +		.menu_mapping	= exposure_auto_mapping,
->  		.menu_mask	=
-> -			GENMASK(ARRAY_SIZE(exposure_auto_controls) - 1, 0),
-> +			GENMASK(ARRAY_SIZE(exposure_auto_mapping) - 1, 0),
->  		.slave_ids	= { V4L2_CID_EXPOSURE_ABSOLUTE, },
->  	},
->  	{
-> @@ -731,7 +743,6 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
->  	.offset		= 0,
->  	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-> -	.menu_info	= power_line_frequency_controls,
->  	.menu_mask	= GENMASK(V4L2_CID_POWER_LINE_FREQUENCY_60HZ,
->  				  V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
->  };
-> @@ -744,7 +755,6 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
->  	.offset		= 0,
->  	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-> -	.menu_info	= power_line_frequency_controls,
->  	.menu_mask	= GENMASK(V4L2_CID_POWER_LINE_FREQUENCY_60HZ,
->  				  V4L2_CID_POWER_LINE_FREQUENCY_DISABLED),
->  };
-> @@ -762,7 +772,6 @@ static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc15 = {
->  	.offset		= 0,
->  	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-> -	.menu_info	= power_line_frequency_controls,
->  	.menu_mask	= GENMASK(V4L2_CID_POWER_LINE_FREQUENCY_AUTO,
->  				  V4L2_CID_POWER_LINE_FREQUENCY_DISABLED),
->  };
-> @@ -995,13 +1004,17 @@ static s32 __uvc_ctrl_get_value(struct uvc_control_mapping *mapping,
->  	s32 value = mapping->get(mapping, UVC_GET_CUR, data);
->  
->  	if (mapping->v4l2_type == V4L2_CTRL_TYPE_MENU) {
-> -		const struct uvc_menu_info *menu = mapping->menu_info;
->  		unsigned int i;
->  
-> -		for (i = 0; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-> +		for (i = 0; BIT(i) <= mapping->menu_mask; ++i) {
-> +			u32 menu_value;
-> +
->  			if (!test_bit(i, &mapping->menu_mask))
->  				continue;
-> -			if (menu->value == value) {
-> +
-> +			menu_value = uvc_mapping_get_menu_value(mapping, i);
-> +
-> +			if (menu_value == value) {
->  				value = i;
->  				break;
->  			}
-> @@ -1212,7 +1225,6 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->  {
->  	struct uvc_control_mapping *master_map = NULL;
->  	struct uvc_control *master_ctrl = NULL;
-> -	const struct uvc_menu_info *menu;
->  	unsigned int i;
->  
->  	memset(v4l2_ctrl, 0, sizeof(*v4l2_ctrl));
-> @@ -1257,11 +1269,15 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->  		v4l2_ctrl->maximum = fls(mapping->menu_mask) - 1;
->  		v4l2_ctrl->step = 1;
->  
-> -		menu = mapping->menu_info;
-> -		for (i = 0; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-> +		for (i = 0; BIT(i) <= mapping->menu_mask; ++i) {
-> +			u32 menu_value;
-> +
->  			if (!test_bit(i, &mapping->menu_mask))
->  				continue;
-> -			if (menu->value == v4l2_ctrl->default_value) {
-> +
-> +			menu_value = uvc_mapping_get_menu_value(mapping, i);
-> +
-> +			if (menu_value == v4l2_ctrl->default_value) {
->  				v4l2_ctrl->default_value = i;
->  				break;
->  			}
-> @@ -1360,11 +1376,11 @@ int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->  int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
->  	struct v4l2_querymenu *query_menu)
->  {
-> -	const struct uvc_menu_info *menu_info;
->  	struct uvc_control_mapping *mapping;
->  	struct uvc_control *ctrl;
->  	u32 index = query_menu->index;
->  	u32 id = query_menu->id;
-> +	const char *name;
->  	int ret;
->  
->  	memset(query_menu, 0, sizeof(*query_menu));
-> @@ -1386,22 +1402,39 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
->  		goto done;
->  	}
->  
-> -	menu_info = &mapping->menu_info[query_menu->index];
-> -
->  	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
-> +		int menu_value;
-
-Let's name the variable "mask" as it stores the menu value translated to
-the UVC bitmask.
-
-> +
->  		if (!ctrl->cached) {
->  			ret = uvc_ctrl_populate_cache(chain, ctrl);
->  			if (ret < 0)
->  				goto done;
->  		}
->  
-> -		if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & menu_info->value)) {
-> +		menu_value = uvc_mapping_get_menu_value(mapping,
-> +							query_menu->index);
-> +		if (menu_value < 0) {
-> +			ret = menu_value;
-> +			goto done;
-> +		}
-> +
-> +		/*
-> +		 * So far, only V4L2_CID_EXPOSURE_AUTO falls into this category
-> +		 * and its mappings (exposure_auto_mapping), are a bitmap.
-> +		 */
-
-The comment is a bit confusing if you're not aware of the discussion in
-the review of the previous version of this patch. I'd drop it as the
-documentation of uvc_mapping_get_menu_value(), coupled with the name
-"mask" for the variable, should be good enough.
-
-> +		if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & menu_value)) {
->  			ret = -EINVAL;
->  			goto done;
->  		}
->  	}
->  
-> -	strscpy(query_menu->name, menu_info->name, sizeof(query_menu->name));
-> +	name = uvc_mapping_get_menu_name(mapping, query_menu->index);
-> +	if (!name) {
-> +		ret = -EINVAL;
-> +		goto done;
-> +	}
-> +
-> +	strscpy(query_menu->name, name, sizeof(query_menu->name));
->  
->  done:
->  	mutex_unlock(&chain->ctrl_mutex);
-> @@ -1902,7 +1935,7 @@ int uvc_ctrl_set(struct uvc_fh *handle,
->  		if (!test_bit(xctrl->value, &mapping->menu_mask))
->  			return -EINVAL;
->  
-> -		value = mapping->menu_info[xctrl->value].value;
-> +		value = uvc_mapping_get_menu_value(mapping, xctrl->value);
->  
->  		/*
->  		 * Valid menu indices are reported by the GET_RES request for
-> @@ -2327,7 +2360,8 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
->  		return -ENOMEM;
->  
->  	map->name = NULL;
-> -	map->menu_info = NULL;
-> +	map->menu_names = NULL;
-> +	map->menu_mapping = NULL;
->  
->  	/* For UVCIOC_CTRL_MAP custom control */
->  	if (mapping->name) {
-> @@ -2338,10 +2372,22 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
->  
->  	INIT_LIST_HEAD(&map->ev_subs);
->  
-> -	size = sizeof(*mapping->menu_info) * fls(mapping->menu_mask);
-> -	map->menu_info = kmemdup(mapping->menu_info, size, GFP_KERNEL);
-> -	if (!map->menu_info)
-> -		goto err_nomem;
-> +	if (mapping->menu_mapping && mapping->menu_mask) {
-> +		size = sizeof(mapping->menu_mapping[0])
-> +		       * fls(mapping->menu_mask);
-> +		map->menu_mapping = kmemdup(mapping->menu_mapping, size,
-> +					    GFP_KERNEL);
-> +		if (!map->menu_mapping)
-> +			goto err_nomem;
-> +	}
-> +	if (mapping->menu_names && mapping->menu_mask) {
-> +		size = sizeof(mapping->menu_names[0])
-> +		       * fls(mapping->menu_mask);
-> +		map->menu_names = kmemdup(mapping->menu_names, size,
-> +					  GFP_KERNEL);
-> +		if (!map->menu_names)
-> +			goto err_nomem;
-> +	}
->  
->  	if (map->get == NULL)
->  		map->get = uvc_get_le_value;
-> @@ -2364,7 +2410,8 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
->  	return 0;
->  
->  err_nomem:
-> -	kfree(map->menu_info);
-> +	kfree(map->menu_names);
-> +	kfree(map->menu_mapping);
->  	kfree(map->name);
->  	kfree(map);
->  	return -ENOMEM;
-> @@ -2686,7 +2733,8 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
->  
->  	list_for_each_entry_safe(mapping, nm, &ctrl->info.mappings, list) {
->  		list_del(&mapping->list);
-> -		kfree(mapping->menu_info);
-> +		kfree(mapping->menu_names);
-> +		kfree(mapping->menu_mapping);
->  		kfree(mapping->name);
->  		kfree(mapping);
->  	}
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 0774a11360c0..06b4afbbf8b1 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -26,14 +26,84 @@
->  
->  #include "uvcvideo.h"
->  
-> +static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
-> +				      struct uvc_control_mapping *map,
-> +				      const struct uvc_xu_control_mapping *xmap)
-> +{
-> +	unsigned int i;
-> +	size_t size;
-> +	int ret;
-> +
-> +	/*
-> +	 * Prevent excessive memory consumption, as well as integer
-> +	 * overflows.
-> +	 */
-> +	if (xmap->menu_count == 0 ||
-> +	    xmap->menu_count > UVC_MAX_CONTROL_MENU_ENTRIES)
-> +		return -EINVAL;
-> +
-> +	map->menu_names = NULL;
-> +	map->menu_mapping = NULL;
-> +
-> +	map->menu_mask = BIT_MASK(xmap->menu_count);
-> +
-> +	size = xmap->menu_count * sizeof(*map->menu_mapping);
-> +	map->menu_mapping = kzalloc(size, GFP_KERNEL);
-> +	if (!map->menu_mapping) {
-> +		ret = -ENOMEM;
-> +		goto done;
-> +	}
-> +
-> +	for (i = 0; i < xmap->menu_count ; i++) {
-> +		if (copy_from_user((u32 *)&map->menu_mapping[i],
-> +				   &xmap->menu_info[i].value,
-> +				   sizeof(map->menu_mapping[i]))) {
-> +			ret = -EACCES;
-> +			goto done;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Always use the standard naming if available, otherwise copy the
-> +	 * names supplied by userspace.
-> +	 */
-> +	if (!v4l2_ctrl_get_menu(map->id)) {
-> +		size = xmap->menu_count * sizeof(map->menu_names[0]);
-> +		map->menu_names = kzalloc(size, GFP_KERNEL);
-> +		if (!map->menu_names) {
-> +			ret = -ENOMEM;
-> +			goto done;
-> +		}
-> +
-> +		for (i = 0; i < xmap->menu_count ; i++) {
-> +			/* sizeof(names[i]) - 1: to take care of \0 */
-> +			if (copy_from_user((char *)map->menu_names[i],
-> +					xmap->menu_info[i].name,
-> +					sizeof(map->menu_names[i]) - 1)) {
-
-Alignment.
-
-I can address all this when applying.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +				ret = -EACCES;
-> +				goto done;
-> +			}
-> +		}
-> +	}
-> +
-> +	ret = uvc_ctrl_add_mapping(chain, map);
-> +
-> +done:
-> +	kfree(map->menu_names);
-> +	map->menu_names = NULL;
-> +	kfree(map->menu_mapping);
-> +	map->menu_mapping = NULL;
-> +
-> +	return ret;
-> +}
-> +
->  /* ------------------------------------------------------------------------
->   * UVC ioctls
->   */
-> -static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
-> -	struct uvc_xu_control_mapping *xmap)
-> +static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
-> +				 struct uvc_xu_control_mapping *xmap)
->  {
->  	struct uvc_control_mapping *map;
-> -	unsigned int size;
->  	int ret;
->  
->  	map = kzalloc(sizeof(*map), GFP_KERNEL);
-> @@ -61,39 +131,20 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
->  	case V4L2_CTRL_TYPE_INTEGER:
->  	case V4L2_CTRL_TYPE_BOOLEAN:
->  	case V4L2_CTRL_TYPE_BUTTON:
-> +		ret = uvc_ctrl_add_mapping(chain, map);
->  		break;
->  
->  	case V4L2_CTRL_TYPE_MENU:
-> -		/*
-> -		 * Prevent excessive memory consumption, as well as integer
-> -		 * overflows.
-> -		 */
-> -		if (xmap->menu_count == 0 ||
-> -		    xmap->menu_count > UVC_MAX_CONTROL_MENU_ENTRIES) {
-> -			ret = -EINVAL;
-> -			goto free_map;
-> -		}
-> -
-> -		size = xmap->menu_count * sizeof(*map->menu_info);
-> -		map->menu_info = memdup_user(xmap->menu_info, size);
-> -		if (IS_ERR(map->menu_info)) {
-> -			ret = PTR_ERR(map->menu_info);
-> -			goto free_map;
-> -		}
-> -
-> -		map->menu_mask = GENMASK(xmap->menu_count - 1, 0);
-> +		ret = uvc_control_add_xu_mapping(chain, map, xmap);
->  		break;
->  
->  	default:
->  		uvc_dbg(chain->dev, CONTROL,
->  			"Unsupported V4L2 control type %u\n", xmap->v4l2_type);
->  		ret = -ENOTTY;
-> -		goto free_map;
-> +		break;
->  	}
->  
-> -	ret = uvc_ctrl_add_mapping(chain, map);
-> -
-> -	kfree(map->menu_info);
->  free_map:
->  	kfree(map);
->  
-> @@ -1316,7 +1367,7 @@ static long uvc_ioctl_default(struct file *file, void *fh, bool valid_prio,
->  	switch (cmd) {
->  	/* Dynamic controls. */
->  	case UVCIOC_CTRL_MAP:
-> -		return uvc_ioctl_ctrl_map(chain, arg);
-> +		return uvc_ioctl_xu_ctrl_map(chain, arg);
->  
->  	case UVCIOC_CTRL_QUERY:
->  		return uvc_xu_ctrl_query(chain, arg);
-> @@ -1429,7 +1480,7 @@ static long uvc_v4l2_compat_ioctl32(struct file *file,
->  		ret = uvc_v4l2_get_xu_mapping(&karg.xmap, up);
->  		if (ret)
->  			return ret;
-> -		ret = uvc_ioctl_ctrl_map(handle->chain, &karg.xmap);
-> +		ret = uvc_ioctl_xu_ctrl_map(handle->chain, &karg.xmap);
->  		if (ret)
->  			return ret;
->  		ret = uvc_v4l2_put_xu_mapping(&karg.xmap, up);
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 31c33eb0edf5..c5a1c1c9d49e 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -114,7 +114,8 @@ struct uvc_control_mapping {
->  	enum v4l2_ctrl_type v4l2_type;
->  	u32 data_type;
->  
-> -	const struct uvc_menu_info *menu_info;
-> +	const u32 *menu_mapping;
-> +	const char (*menu_names)[UVC_MENU_NAME_LEN];
->  	unsigned long menu_mask;
->  
->  	u32 master_id;
-> diff --git a/include/uapi/linux/uvcvideo.h b/include/uapi/linux/uvcvideo.h
-> index 8288137387c0..d45d0c2ea252 100644
-> --- a/include/uapi/linux/uvcvideo.h
-> +++ b/include/uapi/linux/uvcvideo.h
-> @@ -36,9 +36,11 @@
->  	 UVC_CTRL_FLAG_GET_MAX | UVC_CTRL_FLAG_GET_RES | \
->  	 UVC_CTRL_FLAG_GET_DEF)
->  
-> +#define UVC_MENU_NAME_LEN 32
-> +
->  struct uvc_menu_info {
->  	__u32 value;
-> -	__u8 name[32];
-> +	__u8 name[UVC_MENU_NAME_LEN];
->  };
->  
->  struct uvc_xu_control_mapping {
-
--- 
-Regards,
-
-Laurent Pinchart
+PiBXZSBpc3N1ZSB0aGF0IGxpbmUgdW5jb25kaXRpb25hbGx5IHRvIGdpdmUgZmVlZGJhY2sgdG8g
+dGhlIHVzZXIgdGhhdCB0aGUgYXR0ZW1wdA0KPiB3YXMgYWN0dWFsbHkgdHJpZWQuIE90aGVyd2lz
+ZSwgeW91IGRvbid0IGdldCBhbnkgZmVlZGJhY2sgYW5kIHlvdSB3b25kZXIgd2hldGhlcg0KPiBp
+dCBpcyBkb2luZyBhbnl0aGluZy4NCj4NCj4gVGhlIHByZXYgYW5kIG5leHQgcmV2aXNpb246DQo+
+DQo+CSJtaWNyb2NvZGUgcmV2aXNpb246IDB4JXggLT4gMHgleFxuIiwNCj4NCj4gd2lsbCB0ZWxs
+IHlvdSB3aGV0aGVyIHNvbWV0aGluZyBnb3QgbG9hZGVkIG9yIG5vdC4NCg0KU2VlbXMgbGlrZSBh
+IHZlcnkgc3VidGxlIGluZGljYXRpb24gb2YgYSBwb3NzaWJseSBpbXBvcnRhbnQgZmFpbHVyZS4N
+Cg0KRS5nLiBUaGVyZSBpcyBzb21lIHNlY3VyaXR5IHVwZGF0ZSB3aXRoIG5ldyBtaWNyb2NvZGUg
+dG8gbWl0aWdhdGUuDQoNClVzZXIgZG93bmxvYWRzIHRoZSBuZXcgbWljcm9jb2RlLiBSdW5zOg0K
+DQojIGVjaG8gMSA+IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L21pY3JvY29kZS9yZWxvYWQNCg0K
+CVtUaGlzIGZhaWxzIGZvciBzb21lIHJlYXNvbl0NCg0KTG9va3MgYXQgY29uc29sZQ0KDQojIGRt
+ZXNnIHwgdGFpbCAtMQ0KbWljcm9jb2RlIHJldmlzaW9uOiAweDQwMDAxYSAtPiAweDQwMDFhDQoN
+ClVzZXIgZG9lc24ndCBub3RpY2UgdGhhdCB0aGUgdmVyc2lvbiBkaWRuJ3QgY2hhbmdlIGFuZCB0
+aGlua3MNCnRoYXQgYWxsIGlzIHdlbGwuDQoNCklzIHRoZXJlIGFuIGVhcmxpZXIgbWVzc2FnZSB0
+aGF0IHNheXMgc29tZXRoaW5nIGxpa2UgdGhpcz8NCg0KbWljcm9jb2RlOiBpbml0aWF0aW5nIHVw
+ZGF0ZSB0byB2ZXJzaW9uIDB4NTAwM2YNCg0KLVRvbnkNCg0KDQo=
