@@ -2,114 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC31660700
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475C2660706
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 20:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbjAFTSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 14:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S234603AbjAFTUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 14:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjAFTSR (ORCPT
+        with ESMTP id S229698AbjAFTUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:18:17 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD201BC
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 11:18:15 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d3so2613328plr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 11:18:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1g+D6GKRsTiQykQO9KE60w2GEfBj+ZoVYOVS89fqaM=;
-        b=lForBUT+xfCxFfejzmI48nWa304S9hs7+UtxKzsuGf+nKyNipgoBWpzJ3oOllc+BLy
-         fLDlp8q4SaVr26D/cDF6oKbi7FnAMwtfV4yARvo4vxo/iax71v8smWoTzF/n1QraNary
-         oqQVOZQeoGzYVFn3of8qosgGmmGcsI+Wup5HINc3+dtX1yQqnSXsHe+P2XXwvQ4WNLxG
-         1mZ+JIzOAaVv46hpmEMSoVcfUbbegViVzXj5QjdFOi1yRs7ritmPEDewD1MPVwBi3fsf
-         oMSiGOMJt4u0HEfrZYT3EG5kMiF4K9BabXmQPhxyvFFOrdAgjceyG36wgZzmDEnzlOkJ
-         ebXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J1g+D6GKRsTiQykQO9KE60w2GEfBj+ZoVYOVS89fqaM=;
-        b=gZGztC2fnl55hcgGFJDBAH3HmNVe0qTUOXjmWOVTuV4nS5IJn22FkoprpsGG/c71y9
-         pFZKrPt32zqtdF+f8kmpN0irVQtrwzrrytIvqHw/ES8czMAtjO/+qzLNzSLclUFF0fQJ
-         IGFzFHGn6kg6DmwuvyXuoZPMIJuxfiKuqxVEtU7cAx04urOiJQSG2bOyg3mcAmc1V23Y
-         C1KIZ7Pefc6dfldVxetg+Huo/G+FAkjYUL3YzL+bUhVxghnLP9GFOxRBNqedQ15bjXM8
-         6iwccojA7E3x/ctXgdqhAOS2O5O4OZoKZPXLGxp+omQhJ/y1Rb6IISIfInWG66OvolYD
-         juCQ==
-X-Gm-Message-State: AFqh2koWA489LOWy5CfrrXMj4aHfvVVuwObkf5s8nW6EXue8YOBr1Yoz
-        /SWT2hOKDDIN/LipGOc6Z7cDng==
-X-Google-Smtp-Source: AMrXdXuynn2Ya06o13mJ6u/LbnfcEx4D+cI/xzrrDy+wPkCxomKjTBCmiUXC9ZkytIb46+gz7PMTEg==
-X-Received: by 2002:a05:6a20:8362:b0:ac:7a44:db55 with SMTP id z34-20020a056a20836200b000ac7a44db55mr56135144pzc.39.1673032694737;
-        Fri, 06 Jan 2023 11:18:14 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170902ed8e00b00192850277fcsm1291714plj.146.2023.01.06.11.18.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 11:18:14 -0800 (PST)
-Date:   Fri, 6 Jan 2023 11:18:10 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Nagareddy Reddy <nspreddy@google.com>
-Subject: Re: [RFC 00/14] KVM: x86/MMU: Formalize the Shadow MMU
-Message-ID: <Y7hz8geAGgysptY5@google.com>
-References: <20221221222418.3307832-1-bgardon@google.com>
+        Fri, 6 Jan 2023 14:20:00 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DF373E26;
+        Fri,  6 Jan 2023 11:19:58 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id CFD22604F1;
+        Fri,  6 Jan 2023 20:19:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673032795; bh=aw5exVyI+B1u4awEJxlKl0A6jA33w5svmejfQDbjXXU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fsS0PTItehDbTzAuBqsAJGEQ4ebd82LRT0cnz8rr4jpF5twqDAxZ6zhM2NPSTsNs8
+         jNKsK9t4CIwqXprmYJOGb4zyzDPYtGTBLTFimvag8kYBT+hIRbQBu2Eo8vDm8MwSNR
+         RukvZWAIazPM0Zj/PB2+BiRy3bvziAYB9tGP+ZM4SUERLWc5GTnQ/cr3IFj7xOjXh9
+         IakgNvAwV39fwpf4Tw5CIt76X2Y/L9gQUO+d6pdJRqv421ZfXk71/5qasNROnKyrAJ
+         NkKvFrRuuAO+AzldI7NlIKUPBrAADf4N31E8VNbrdjV8XMr5YLLyNUq9sevlnoTgn9
+         QT7uOo3nXf4Rw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ea3YROiPfPs6; Fri,  6 Jan 2023 20:19:53 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 301E2604F0;
+        Fri,  6 Jan 2023 20:19:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673032793; bh=aw5exVyI+B1u4awEJxlKl0A6jA33w5svmejfQDbjXXU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IZbQNO3oYDirik5HMt0cBpp+qDMKUT8+zZCWbupoFsHb3zMbrS9hniLGTloNWdwEB
+         VeVUrFWTlltr9Af2uD18ZMUbh/7mb8NFsWRTEjAhoSqeUPiUi6PkJ8GD3j4Z/X7QDc
+         +BZajV0blBzJWO44rbWoex2rNuYUxP79VO47dLUFIUFNVKGwzysMu8sbdIMjuW6dFd
+         CGlnT1n8ZF8S0wgIefrUzNCdQz8wBpiOrlW6lJ7kzqqzVdWWDXIJ8rqmy4hfB3rAub
+         b/7YzqSD+E1471nh9MVmQ9gYXRJKIzrRjyXQSc3LdxKOn8z5fN/Y/mkcU0Ed03Qzzo
+         K+9K2OqIeTRXA==
+Message-ID: <1b8abfbb-d589-0b2b-c7a1-6e92d628fbdf@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 20:19:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221222418.3307832-1-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH selftest/net/af_unix 1/1] Fix size of parameter to
+ connect()
+Content-Language: en-US, hr
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
+        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+ <20230106175828.13333-1-kuniyu@amazon.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230106175828.13333-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 10:24:04PM +0000, Ben Gardon wrote:
-> This series makes the Shadow MMU a distinct part of the KVM x86 MMU,
-> implemented in separate files, with a defined interface to common code.
+Hi,
 
-Overall I really like the end result.
+On 06. 01. 2023. 18:58, Kuniyuki Iwashima wrote:
+> Hi,
+> 
+> Thanks for the patch.
 
-While looking through I found a few more bits of code that should
-probably be moved into shadow_mmu.c:
+Thank you for your quick review. I had to do the homework before replying.
 
- - kvm_mmu_zap_all(): Move the shadow MMU zapping to shadow_mmu.c (the
-   active_mmu_pages loop + commit_zap_page).
+> From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Date:   Fri, 6 Jan 2023 18:18:58 +0100
+>> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>
+>> Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
+>> error in selftests/net/af_unix/test_oob_unix.c:127.
+> 
+> Could you wrap the changelog to 75 chars except for log (strace below) ?
+> checkpatch.pl will help.
+> 
+>    $ git show HEAD --format=email | ./scripts/checkpatch.pl
 
- - need_topup(), need_topup_split_caches_or_resched()
-   topup_split_caches() should be static functions in shadow_mmu.c.
+The complete result according to the guidelines will be in the followup email.
 
- - Split out kvm_mmu_init/uninit_vm() functions for the shadow MMU.
-   Notably, the split caches, active_mmu_pages, zapped_obsolete_pages,
-   and other Shadow MMU-specific stuff can go in shadow_mmu.c.
+>> The existing code happens to work provided that the autogenerated pathname is shorter than
+>> sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
+>>
+>> Visible from the trace excerpt:
+>>
+>> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+>> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+>> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+>>
+>> BUG: The filename is trimmed to sizeof (struct sockaddr).
+>>
+>> The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+> 
+> Every patch that fixes networking code has to be applied cleanly on net.git.
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+> 
+> But the patch can not be applied to net.git.
 
- - The Shadow MMU parts of walk_shadow_page_lockless_begin/end() should
-   go in shadow_mmu.c. e.g. kvm_shadow_mmu_walk_lockless_begin/end().
+I have tested the patch against net.git, and it is a verbatim copy (tested by diff).
 
-> Patch 3 is an enormous change, and doing it all at once in a single
-> commit all but guarantees merge conflicts and makes it hard to review. I
-> don't have a good answer to this problem as there's no easy way to move
-> 3.5K lines between files. I tried moving the code bit-by-bit but the
-> intermediate steps added complexity and ultimately the 50+ patches it
-> created didn't seem any easier to review.
-> Doing the big move all at once at least makes it easier to get past when
-> doing Git archeology, and doing it at the beggining of the series allows the
-> rest of the commits to still show up in Git blame.
+> Could you check this ?
+> https://patchwork.kernel.org/project/netdevbpf/patch/bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr/
+> 
+> Also, the mail title should be
+> 
+>    [PATCH Tree Version Nth/Total] subsystem: Description.
+> 
+> Next time, Tree is net and Version is v2, and we need not write 1/1, so the
+> subject should be
+> 
+>    [PATCH net v2] af_unix: selftest: Fix size of parameter to connect()
 
-An alternative would be to rename mmu.c to shadow_mmu.c first and then
-move code in the opposite direction. That would preserve the git-blame
-history for shadow_mmu.c. But by the end of the series mmu.c and
-shadow_mmu.c are both ~3K LOC, so I don't think doing this is really any
-better. Either way, you have to move ~3K LOC.
+Got it. Will do in the followup email.
+
+> Please see here for details.
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/maintainer-netdev.rst
+> 
+> 
+>>
+>> Thanks and regards,
+>> Mirsad Todorovac
+> 
+> You can remove these lines.
+
+Sure.
+
+>> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+> In this case, you are the reporter and the author of the patch, so the
+> Reported-by tag is not needed.  Instead, you have to add your SOB tag.
+> 
+>    Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+OK.
+
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Paolo Abeni <pabeni@redhat.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+>> Cc: Florian Westphal <fw@strlen.de>
+>> Reviewed-by: Florian Westphal <fw@strlen.de>
+> 
+> Please add Fixes tag as I said here.
+> https://lore.kernel.org/netdev/20230103111335.81600-1-kuniyu@amazon.com/#r
+> 
+> Thank you,
+> Kuniyuki
+> 
+> 
+>>
+>> ---
+>>    tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+>> index b57e91e1c3f2..532459a15067 100644
+>> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
+>> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+>> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+>>
+>>           wait_for_signal(pipefd[0]);
+>>           if (connect(cfd, (struct sockaddr *)consumer_addr,
+>> -                    sizeof(struct sockaddr)) != 0) {
+>> +                    sizeof(*consumer_addr)) != 0) {
+>>                   perror("Connect failed");
+>>                   kill(0, SIGTERM);
+>>                   exit(1);
+>>
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
