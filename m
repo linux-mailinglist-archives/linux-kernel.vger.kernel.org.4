@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662B86605E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABDF6605EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 18:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbjAFRrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 12:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S235652AbjAFRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 12:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235824AbjAFRrM (ORCPT
+        with ESMTP id S235545AbjAFRs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:47:12 -0500
-Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94C69529
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:47:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3ZkqwT//XG7BkpEaYP0t4/kQtbvC2cyH6nezkShj9GI=;
-        b=CruGeZf3paWALutax0NxS9pNV1Lqs5S/DiNm+fMDSUuipD67l5jEADRaEHFPmzczMfTBfeE92VSTt
-         X8eWLfcALcVDyhkyf68AhUj/hEG2mv5eGI0GKDWeZqkOsZmiGonwHr6u+8qrhDzmAXsQSB07FD1gx2
-         YXvaIPdfFdcGJiKhEKONe0J3MNBaqaoOayBLvM3aOzL5BC9GXjxNseNvsNQPTc5dKWVcfDV29ZCdhH
-         JIh/FRP4CGczAIaTHHTLcHXsIntRzgZDT5bUMM0Rjn436EpxjUEI+SCDxV8lco24XpkKHwXh47vyBD
-         GB3vE0Z2ePsxuNK4djOwjvpRjD68uvA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3ZkqwT//XG7BkpEaYP0t4/kQtbvC2cyH6nezkShj9GI=;
-        b=nT+VcIthoxhA8MnyKlBmjy04KeOPZMlHZv6M0+Vn/Scdjhuz3MDsqEzh6fZvTAmwNqGWCA8VWyn5o
-         +FqYDFPBw==
-X-HalOne-ID: 2298574e-8dea-11ed-af8f-cde5ad41a1dd
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay6 (Halon) with ESMTPSA
-        id 2298574e-8dea-11ed-af8f-cde5ad41a1dd;
-        Fri, 06 Jan 2023 17:47:09 +0000 (UTC)
-Date:   Fri, 6 Jan 2023 18:47:07 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH RESEND 4/4] backlight: tosa: Use backlight helper
-Message-ID: <Y7hem+T16FixeT0q@ravnborg.org>
-References: <20230106164856.1453819-5-steve@sk2.org>
+        Fri, 6 Jan 2023 12:48:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4387334D52
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 09:48:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpg-0008Tu-JF; Fri, 06 Jan 2023 18:48:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpf-004FsQ-3J; Fri, 06 Jan 2023 18:48:43 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpd-00Aie3-VY; Fri, 06 Jan 2023 18:48:41 +0100
+Date:   Fri, 6 Jan 2023 18:48:41 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 560/606] rtc: ds1307: Convert to i2c's .probe_new()
+Message-ID: <20230106174841.kqgfnqua4vgd4kwo@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-561-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fw3yxbv2qlboln3r"
 Content-Disposition: inline
-In-Reply-To: <20230106164856.1453819-5-steve@sk2.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221118224540.619276-561-uwe@kleine-koenig.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 05:48:55PM +0100, Stephen Kitt wrote:
-> Instead of retrieving the backlight brightness in struct
-> backlight_properties manually, and then checking whether the backlight
-> should be on at all, use backlight_get_brightness() which does all
-> this and insulates this from future changes.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+
+--fw3yxbv2qlboln3r
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Alexandre,
+
+On Fri, Nov 18, 2022 at 11:44:54PM +0100, Uwe Kleine-K=F6nig wrote:
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/video/backlight/tosa_bl.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/video/backlight/tosa_bl.c b/drivers/video/backlight/tosa_bl.c
-> index 77b71f6c19b5..e338b1f00f6a 100644
-> --- a/drivers/video/backlight/tosa_bl.c
-> +++ b/drivers/video/backlight/tosa_bl.c
-> @@ -50,13 +50,8 @@ static void tosa_bl_set_backlight(struct tosa_bl_data *data, int brightness)
->  
->  static int tosa_bl_update_status(struct backlight_device *dev)
+>  drivers/rtc/rtc-ds1307.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 7c2276cf5514..b49c02fd78f7 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -1713,9 +1713,9 @@ static const struct regmap_config regmap_config =3D=
+ {
+>  	.val_bits =3D 8,
+>  };
+> =20
+> -static int ds1307_probe(struct i2c_client *client,
+> -			const struct i2c_device_id *id)
+> +static int ds1307_probe(struct i2c_client *client)
 >  {
-> -	struct backlight_properties *props = &dev->props;
->  	struct tosa_bl_data *data = bl_get_data(dev);
-> -	int power = max(props->power, props->fb_blank);
-> -	int brightness = props->brightness;
-> -
-> -	if (power)
-> -		brightness = 0;
-> +	int brightness = backlight_get_brightness(dev);
->  
->  	tosa_bl_set_backlight(data, brightness);
->  
-> -- 
-> 2.30.2
+> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	struct ds1307		*ds1307;
+>  	const void		*match;
+>  	int			err =3D -ENODEV;
+> @@ -2012,7 +2012,7 @@ static struct i2c_driver ds1307_driver =3D {
+>  		.name	=3D "rtc-ds1307",
+>  		.of_match_table =3D ds1307_of_match,
+>  	},
+> -	.probe		=3D ds1307_probe,
+> +	.probe_new	=3D ds1307_probe,
+>  	.id_table	=3D ds1307_id,
+>  };
+
+This is the last remaining rtc patch in my i2c probe_new stack. Would
+you mind to apply it?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fw3yxbv2qlboln3r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO4XvcACgkQwfwUeK3K
+7AmakQf+Oo3+DP0Zw3V/BK3WK+JqVLEPAelaiSrfx1ToWpUat8fgoaX3z4fz9gfq
+SWG5IHiiMfXZumdOi5jGUG7A9EW2bHJM2qDM74ctScnThnsB1SThhD0pbJqNh8e2
+JSloiA0vNoxWCsA59Ui1AmRTS6ce2fBcgr1Rg+7Uz4aXqOvDweNuSofuM3GXokYY
+9eIuH8AToIfEHAHZns8rkwyBbN92xE8Qai4EolIluFUWM/fO3VhF0/2q3jyWPQqN
+s+3pW8FuS///F5Ytcu52vGC+yO2IkbLr4iaTJBB2qZhSvkhH6gADPXXTXhkb4Sxp
+4QXHKSbktA6WR83ZyKWO4/D+XbP2iw==
+=2ULL
+-----END PGP SIGNATURE-----
+
+--fw3yxbv2qlboln3r--
