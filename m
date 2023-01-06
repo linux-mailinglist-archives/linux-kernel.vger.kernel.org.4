@@ -2,63 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D67B660881
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1414660887
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 21:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbjAFUxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 15:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S235862AbjAFUyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 15:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjAFUwv (ORCPT
+        with ESMTP id S235962AbjAFUyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:52:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020ED60DB;
-        Fri,  6 Jan 2023 12:52:49 -0800 (PST)
+        Fri, 6 Jan 2023 15:54:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A36346;
+        Fri,  6 Jan 2023 12:54:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7801D61F7B;
-        Fri,  6 Jan 2023 20:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994F3C433D2;
-        Fri,  6 Jan 2023 20:52:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DD6461F71;
+        Fri,  6 Jan 2023 20:54:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A220DC433D2;
+        Fri,  6 Jan 2023 20:54:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673038368;
-        bh=g/RIiNB9/RFoA9UF9GYBh0qSF9aeCBwIFqFvltrJ9yE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=S/P2HsxGgwQyCezihm4mvB5ATvcsO0NiKNH6TpcE5bHVRgaN2vJ4yPkSJp6UwLUqi
-         nkrouS0Z3wpfcpV4CiFy6p6oBXUBA6lr4cMnT+LAIQX5XQZHsWhVhQdzIjOWciU9XE
-         A1mGKSFGNlaUEGoSLOL5NeE0kt+jr8g5tOaEGodnD+tEg42Coh0BE+PzUMSKM8xQl0
-         FUjKXQbTzOJaMiw+KXw0m0xEfkaqghrS9OwSBsTkp5ksz4Ob/LAeSxdBtA+ZONMpGX
-         I6NAvaljkpt7usoHZr0LG9sfi5FkY8U5xK2xgBirY7kkCXYT1UPpfTZYAyZqEh0Tb6
-         P6XfczAuBBiwA==
-Date:   Fri, 6 Jan 2023 14:52:46 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Sun, Yunying" <yunying.sun@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-rc2
-Message-ID: <20230106205246.GA1250625@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083140CF57548745F445A56FCFB9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        s=k20201202; t=1673038444;
+        bh=2XFVyFO90sv15IXbHfuoR96vEeg0uVA9f6scATbkw5I=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=mHfJQe+ghzVdgZxSVelgm1jSG5vA5KgBsk91CsnOdE6+vYEnKP07FXxBqc+wIWjNc
+         /ney0ntA5oVoXHpljLmbG/ptlT/69CqOGDRiBfs67lVR/GpQtfA4SFKxt6Hqv2BrBx
+         /Zil7U7xTEbnwogsadNwFzIvOXp6M8oDMMmGpSRt/t2pBweXijPjNQBXjJ4Hz0fpTX
+         qSPyHb2Bu6mdIo6QJC/HJCYTeL5tzoccdmge+vm1oc6K4rSnBht9HhRe3PbU0FE3ZW
+         aP0OkfFtzOACThVhMDHKsjFKc34/bLpq9aJjwF+moBB4D8aQh33Cwmke0C/NvktWH2
+         FqeZFd7BC2/Uw==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 798D327C0054;
+        Fri,  6 Jan 2023 15:54:02 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Fri, 06 Jan 2023 15:54:02 -0500
+X-ME-Sender: <xms:aYq4Y-HpRJ9B9KVZyG6iVEM6s8NDCETv5X-KrsUs5WE5OYU3DXhsxw>
+    <xme:aYq4Y_XW2bsYUXDLlsowJxX4un9TnJD8ALkVdygkeHk166HmYyfqqNhrlDRbmSbZ8
+    fRUS-pwOvmyKPYVEqw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgddugedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:aYq4Y4L8HErcX2HRlQKr0dw1B7SrsvMkRW9QTjnonJuhU-hAl0LKqw>
+    <xmx:aYq4Y4G772EnhzgLQ69UtH1UMRr7vy4DshAEEJ42s6kcmdGFJQp3YQ>
+    <xmx:aYq4Y0WAuAq2TWSCMZ7Wx8xq4jkY6HXE77C4c58bGSdFK0VwRwDZKw>
+    <xmx:aoq4Y5VRPXbo6ksg6EpyLzGFFIiWUfS8hsisPDiECVffoznwvBoMwg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AC89E31A03FD; Fri,  6 Jan 2023 15:54:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <f36f19ee-5bff-4cd0-b9a9-0fe987cf6d38@app.fastmail.com>
+In-Reply-To: <CAHk-=wiO4rp8oVmj6i6vvC97gNePLN-SxhSK=UozA88G6nxBGQ@mail.gmail.com>
+References: <20230101162910.710293-3-Jason@zx2c4.com>
+ <Y7QIg/hAIk7eZE42@gmail.com>
+ <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
+ <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
+ <Y7SDgtXayQCy6xT6@zx2c4.com>
+ <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
+ <Y7SJ+/axonTK0Fir@zx2c4.com>
+ <CAHk-=wi4gshfKjbhEO_xZdVb9ztXf0iuv5kKhxtvAHf2HzTmng@mail.gmail.com>
+ <Y7STv9+p248zr+0a@zx2c4.com>
+ <10302240-51ec-0854-2c86-16752d67a9be@opteya.com>
+ <Y7dV1lVUYjqs8fh0@zx2c4.com>
+ <CAHk-=wijEC_oDzfUajhmp=ZVnzMTXgjxHEcxAfaHiNQm4iAcqA@mail.gmail.com>
+ <CAHk-=wiO4rp8oVmj6i6vvC97gNePLN-SxhSK=UozA88G6nxBGQ@mail.gmail.com>
+Date:   Fri, 06 Jan 2023 12:53:41 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Yann Droneaud" <ydroneaud@opteya.com>,
+        "Ingo Molnar" <mingo@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, "Thomas Gleixner" <tglx@linutronix.de>,
+        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>,
+        "Linux API" <linux-api@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Adhemerval Zanella Netto" <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        "Florian Weimer" <fweimer@redhat.com>,
+        "Arnd Bergmann" <arnd@arndb.de>, "Jann Horn" <jannh@google.com>,
+        "Christian Brauner" <brauner@kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always lazily
+ freeable mappings
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,220 +104,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 06:03:13PM +0000, Luck, Tony wrote:
-> > Tony, would you mind collecting a dmesg log with "efi=debug"?  I want
-> > to see the EFI_MEMORY_MAPPED_IO size and what we remove from E820.
-> 
-> Bjorn,
-> 
-> Booted the 6.2-rc1 kernel with the patch that you provided yesterday with efi=debug option.
-> 
-> Compressed dmesg file attached.
-
-Thanks, Tony!  Something is wrong with the EFI MMIO removal
-(obviously), but I don't see what it is.  Could you try the patch
-below (replacement for previous one, with more debug)?
 
 
-commit ce347c04cc2f ("x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space")
-parent 1b929c02afd3
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Thu Jan 5 16:02:58 2023 -0600
+On Thu, Jan 5, 2023, at 6:08 PM, Linus Torvalds wrote:
+> On Thu, Jan 5, 2023 at 5:02 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> None of what you ask for is for any kind of real security, it's all
+>> just crazy "but I want to feel the warm and fuzzies and take shortcuts
+>> elsewhere, and push my pain onto other people".
+>
+> Actually, let me maybe soften that a bit and say that it's
+> "convenience features". It might make some things more _convenient_ to
+> do, exactly because it might allow other parts to do short-cuts.
+>
+> But because it's a convenience-feature, it had also better either be
+> (a) really easy and clear to do in the kernel and (b) have
+> sufficiently *wide* convenience so that it doesn't end up being one of
+> those "corner case things we have to maintain forever and nobody
+> uses".
+>
+> And I think VM_DROPPABLE matches (a), and would be fine if it had some
+> other non-made-up use (although honestly, we should solve the 32-bit
+> problem first - ignoring it isn't fine for anything that is supposed
+> to be widely useful).
+>
+> We *have* talked about features kind of like it before, for people
+> doing basically caches in user space that they can re-create on demand
+> and are ok with just going away under memory pressure.
+>
+> But those people almost invariably want dropped pages to cause a
+> SIGSEGV or SIGBUS, not to come back as zeroes.
+>
+> So you were insulting when you said kernel people don't care about
+> security issues.  And I'm just telling you that's not true, but it
+> *is* 100% true that kernel people are often really fed up with
+> security people who have their blinders on, focus on some small thing,
+> and think nothing else ever matters.
+>
+> So yes, the way to get something like VM_DROPPABLE accepted is to
+> remove the blinders, and have it be something more widely useful, and
+> not be a "for made up bad code".
 
-    x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
-    
-    Normally we reject ECAM space unless it is reported as reserved in the E820
-    table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
-    means extended config space (offsets 0x100-0xfff) may not be accessible.
-    
-    Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
-    mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
-    normally converted to an E820 entry by a bootloader or EFI stub.
-    
-    07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
-    E820 entries that correspond to EfiMemoryMappedIO regions because some
-    other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
-    E820 entries prevent Linux from allocating BAR space for hot-added devices.
-    
-    Allow use of ECAM for extended config space when the region is covered by
-    an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
-    _CRS.
-    
-    Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
-    Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
+I'm going to suggest a very very different approach: fix secret storage in memory for real.  That is, don't lock "super secret sensitive stuff" into memory, and don't wipe it either.  *Encrypt* it.
 
-diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
-index 758cbfe55daa..07308f403649 100644
---- a/arch/x86/pci/mmconfig-shared.c
-+++ b/arch/x86/pci/mmconfig-shared.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/efi.h>
- #include <linux/pci.h>
- #include <linux/init.h>
- #include <linux/bitmap.h>
-@@ -442,6 +443,33 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
- 	return mcfg_res.flags;
- }
- 
-+static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
-+{
-+	efi_memory_desc_t *md;
-+	u64 size, mmio_start, mmio_end;
-+
-+	pr_info("is_efi_mmio %#lx-%#lx\n",
-+		(unsigned long) start, (unsigned long) end);
-+	for_each_efi_memory_desc(md) {
-+		if (md->type == EFI_MEMORY_MAPPED_IO) {
-+			size = md->num_pages << EFI_PAGE_SHIFT;
-+			mmio_start = md->phys_addr;
-+			mmio_end = mmio_start + size - 1;
-+
-+			pr_info("  efi_mmio %#lx-%#lx\n",
-+				(unsigned long) mmio_start,
-+				(unsigned long) mmio_end);
-+			if (mmio_start <= start && end <= mmio_end) {
-+				pr_info("is_efi_mmio true\n");
-+				return true;
-+			}
-+		}
-+	}
-+
-+	pr_info("is_efi_mmio false\n");
-+	return false;
-+}
-+
- typedef bool (*check_reserved_t)(u64 start, u64 end, enum e820_type type);
- 
- static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
-@@ -452,23 +480,24 @@ static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
- 	u64 size = resource_size(&cfg->res);
- 	u64 old_size = size;
- 	int num_buses;
--	char *method = with_e820 ? "E820" : "ACPI motherboard resources";
-+	char *method = with_e820 ? "E820" : "ACPI motherboard resources or EFI";
- 
-+	pr_info("is_mmconf_reserved %ps [bus %02x-%02x] %pR\n",
-+		is_reserved, cfg->start_bus, cfg->end_bus, &cfg->res);
- 	while (!is_reserved(addr, addr + size, E820_TYPE_RESERVED)) {
-+		pr_info("  %#lx-%#lx (size %#lx) not reserved\n",
-+			(unsigned long) addr, (unsigned long) (addr + size - 1),
-+			(unsigned long) size);
- 		size >>= 1;
-+		pr_info("  size reduced to %#lx\n", (unsigned long) size);
- 		if (size < (16UL<<20))
- 			break;
- 	}
- 
--	if (size < (16UL<<20) && size != old_size)
-+	if (size < (16UL<<20) && size != old_size) {
-+		pr_info("is_mmconf_reserved %ps false\n", is_reserved);
- 		return false;
--
--	if (dev)
--		dev_info(dev, "MMCONFIG at %pR reserved in %s\n",
--			 &cfg->res, method);
--	else
--		pr_info(PREFIX "MMCONFIG at %pR reserved in %s\n",
--		       &cfg->res, method);
-+	}
- 
- 	if (old_size != size) {
- 		/* update end_bus */
-@@ -487,30 +516,42 @@ static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
- 				&cfg->res, (unsigned long) cfg->address);
- 		else
- 			pr_info(PREFIX
--				"MMCONFIG for %04x [bus%02x-%02x] "
-+				"MMCONFIG for %04x [bus %02x-%02x] "
- 				"at %pR (base %#lx) (size reduced!)\n",
- 				cfg->segment, cfg->start_bus, cfg->end_bus,
- 				&cfg->res, (unsigned long) cfg->address);
- 	}
- 
-+	if (dev)
-+		dev_info(dev, "MMCONFIG at %pR reserved in %s\n",
-+			 &cfg->res, method);
-+	else
-+		pr_info(PREFIX "MMCONFIG at %pR reserved in %s\n",
-+		       &cfg->res, method);
-+
- 	return true;
- }
- 
- static bool __ref
- pci_mmcfg_check_reserved(struct device *dev, struct pci_mmcfg_region *cfg, int early)
- {
-+	pr_info("pci_mmcfg_check_reserved([bus %02x-%02x] %pR, %s)\n",
-+		cfg->start_bus, cfg->end_bus, &cfg->res,
-+		early ? "early" : "late");
- 	if (!early && !acpi_disabled) {
- 		if (is_mmconf_reserved(is_acpi_reserved, cfg, dev, 0))
- 			return true;
-+		if (is_mmconf_reserved(is_efi_mmio, cfg, dev, 0))
-+			return true;
- 
- 		if (dev)
- 			dev_info(dev, FW_INFO
--				 "MMCONFIG at %pR not reserved in "
-+				 "MMCONFIG at %pR not reserved in EFI or "
- 				 "ACPI motherboard resources\n",
- 				 &cfg->res);
- 		else
- 			pr_info(FW_INFO PREFIX
--			       "MMCONFIG at %pR not reserved in "
-+			       "MMCONFIG at %pR not reserved in EFI or "
- 			       "ACPI motherboard resources\n",
- 			       &cfg->res);
- 	}
-@@ -536,6 +577,7 @@ static void __init pci_mmcfg_reject_broken(int early)
- {
- 	struct pci_mmcfg_region *cfg;
- 
-+	pr_info("pci_mmcfg_reject_broken(%s)\n", early ? "early" : "late");
- 	list_for_each_entry(cfg, &pci_mmcfg_list, list) {
- 		if (pci_mmcfg_check_reserved(NULL, cfg, early) == 0) {
- 			pr_info(PREFIX "not using MMCONFIG\n");
-@@ -570,6 +612,7 @@ static int __init pci_parse_mcfg(struct acpi_table_header *header)
- 	unsigned long i;
- 	int entries;
- 
-+	pr_info("pci_parse_mcfg\n");
- 	if (!header)
- 		return -EINVAL;
- 
-@@ -661,6 +704,7 @@ static int __initdata known_bridge;
- 
- void __init pci_mmcfg_early_init(void)
- {
-+	pr_info("pci_mmcfg_early_init\n");
- 	if (pci_probe & PCI_PROBE_MMCONF) {
- 		if (pci_mmcfg_check_hostbridge())
- 			known_bridge = 1;
-@@ -674,6 +718,7 @@ void __init pci_mmcfg_early_init(void)
- 
- void __init pci_mmcfg_late_init(void)
- {
-+	pr_info("pci_mmcfg_late_init\n");
- 	/* MMCONFIG disabled */
- 	if ((pci_probe & PCI_PROBE_MMCONF) == 0)
- 		return;
-@@ -725,6 +770,8 @@ int pci_mmconfig_insert(struct device *dev, u16 seg, u8 start, u8 end,
- 	struct resource *tmp = NULL;
- 	struct pci_mmcfg_region *cfg;
- 
-+	dev_info(dev, "pci_mmconfig_insert %02x-%02x addr %#lx\n",
-+		 start, end, (unsigned long)addr);
- 	if (!(pci_probe & PCI_PROBE_MMCONF) || pci_mmcfg_arch_init_failed)
- 		return -ENODEV;
- 
-@@ -788,6 +835,7 @@ int pci_mmconfig_insert(struct device *dev, u16 seg, u8 start, u8 end,
- 
- 	mutex_unlock(&pci_mmcfg_lock);
- 
-+	dev_info(dev, "pci_mmconfig_insert returns %d\n", rc);
- 	return rc;
- }
- 
+This boils down to implementing proper encrypted swap support, which is not conceptually that difficult.  The kernel already has identifiers (mapping, offset, etc) for every page in swap and already stores some metadata.  Using that as part of a cryptographic operation seems conceptually fairly straightforward.
+
+And a nice implementation of this could be on by default, and the kernel could even tell userspace that it's on, and then userspace could just stop worrying about this particular issue.
