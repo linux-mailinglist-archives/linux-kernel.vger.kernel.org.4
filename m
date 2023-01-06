@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2819365FD11
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC5665FD19
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 09:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjAFIs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 03:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S231289AbjAFIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 03:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjAFIsp (ORCPT
+        with ESMTP id S229737AbjAFIxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 03:48:45 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48954724;
-        Fri,  6 Jan 2023 00:48:45 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso1054800pjc.2;
-        Fri, 06 Jan 2023 00:48:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLvpBtlWPC1Y4yYI2pgDTW/iPqU69O+/L6LCbdiNubM=;
-        b=lHv5XTXiqHurmIC9daS85WL8F1hlIf+iMEPyKW/hqT5o6m23V36EImDG5+lebQRKh7
-         2rP/ozBPce66wr0G1nAHk8/dW/TCH5f1TsDPgdXZmFDqO5RiiValeEKncRc2RHt4kILf
-         eonuRBauT79z5oxxhHdll1stttLZGbIvf+OyUqPvaVX5K7Bg4/2e85/Wgh3kvRtnjoql
-         hS8c9IpERfH9+FDXga1NmZqwbw/Qrr0D8PaqUpr+7sRtH5lorO8aHxZu06g51dOUf58b
-         m+KeVRccO0fjzADOYFQplOOFDksFH4Eeo2d/d3NFs6OyU6noDiqMFRtJEoc79SyrI4Tm
-         iNfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CLvpBtlWPC1Y4yYI2pgDTW/iPqU69O+/L6LCbdiNubM=;
-        b=B/1+p1JdVnUiUe32VPR8lhWnBhvDJUVYXqzpxz7HTdkFt1QCmBJEM2apcev/0Rcff4
-         KU902RQ6gulDaVRXm11RUGLE3MRxNvyV1oatRLAypIBC9INfKGeYBzQNGGiq3UUnbMnS
-         5DdJv1rJqJlw0FQAj4+u17ASED2bscNbzcJnpPfnerrSTT5Lii1CUOk/XNUKkOMcWehX
-         2iV2CF6Q9Pz3JsWCUu6gyk5H4jXKAgY4PzdFaSW2OOVuukscWhdStOb/kuzeDa4qqB+t
-         jf9d80bmNDm4ClKYu9iTZhNwvxh8OaRiIr3OLKNNSD7EsiPG+Th9jETWi92edhbbYEsW
-         C2Ig==
-X-Gm-Message-State: AFqh2kr2RC8/QBK6Jq5QQQPD31rJ2ePGt39g7Roo0y9jfFplAmWhZxj/
-        K7UDD4+ueGWvV4r4Mgmx45wcram2Mw/y
-X-Google-Smtp-Source: AMrXdXtgJ2BhPl0zgwGWxM9NuOuMxVGVUoOI1lEAZJenlI7nk4b+Rj04PBbjF8EF5bk+mhPxDQqjhw==
-X-Received: by 2002:a17:902:d346:b0:192:9160:6cd with SMTP id l6-20020a170902d34600b00192916006cdmr35802234plk.13.1672994924239;
-        Fri, 06 Jan 2023 00:48:44 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.13])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170903210900b0017fe9b038fdsm469840ple.14.2023.01.06.00.48.41
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 06 Jan 2023 00:48:43 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH] bpf: skip task with pid=1 in send_signal_common()
-Date:   Fri,  6 Jan 2023 16:48:38 +0800
-Message-Id: <20230106084838.12690-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Fri, 6 Jan 2023 03:53:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A8669A5;
+        Fri,  6 Jan 2023 00:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1672995210; x=1704531210;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MmxryeLxcxvGAqL6Nh+RI2p670mn6TUZTzuDuWcR2Io=;
+  b=Y3zWSA5ZOzFWl68UFbi3q7bZ3t1BE93RIqk/DJu9qlONHSjGcGd2Y9TB
+   bH/XMAlnrkO+tyMZb3qdELd1MRCCjSBvf+E0Nazwmq4IN7Vlw+jzL/Aqg
+   emt3Uzf2e1Wr4p8vnB3uFkZepiolIEk5R9QeuRPdhMg/GkZzEIEgMLfKm
+   lZkuP7L4sMVqwMg2c5pj1+4z+08LptK6klhzGPtGzbdUcA6EIqpjbJOFl
+   97mV4ZsfNSVWLqM0skTXX1IlUiZ3hMsk22/c/8IeSFlxkeWmWDY0bc1Dx
+   63qy42SNSRxOAw4NZCiUl5e3RYlvsYm/qIA+5IZG3Oh9R18RZ7uMNOXKQ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
+   d="scan'208";a="131114169"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2023 01:53:29 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 6 Jan 2023 01:53:27 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 01:53:24 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next v2 0/8] Add support for two classes of VCAP rules
+Date:   Fri, 6 Jan 2023 09:53:09 +0100
+Message-ID: <20230106085317.1720282-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,53 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following kernel panic can be triggered when a task with pid=1
-attach a prog that attempts to send killing signal to itself, also
-see [1] for more details:
+This adds support for two classes of VCAP rules:
 
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-CPU: 3 PID: 1 Comm: systemd Not tainted 6.1.0-09652-g59fe41b5255f #148
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0x100/0x178 lib/dump_stack.c:106
-panic+0x2c4/0x60f kernel/panic.c:275
-do_exit.cold+0x63/0xe4 kernel/exit.c:789
-do_group_exit+0xd4/0x2a0 kernel/exit.c:950
-get_signal+0x2460/0x2600 kernel/signal.c:2858
-arch_do_signal_or_restart+0x78/0x5d0 arch/x86/kernel/signal.c:306
-exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
-exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
-__syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
-syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
-do_syscall_64+0x44/0xb0 arch/x86/entry/common.c:86
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+- Permanent rules (added e.g. for PTP support)
+- TC user rules (added by the TC userspace tool)
 
-So skip task with pid=1 in bpf_send_signal_common() to avoid the panic.
+For this to work the VCAP Loopups must be enabled from boot, so that the
+"internal" clients like PTP can add rules that are always active.
 
-[1] https://lore.kernel.org/bpf/20221222043507.33037-1-sunhao.th@gmail.com
+When the TC tool add a flower filter the VCAP rule corresponding to this
+filter will be disabled (kept in memory) until a TC matchall filter creates
+a link from chain 0 to the chain (lookup) where the flower filter was
+added.
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- kernel/trace/bpf_trace.c | 3 +++
- 1 file changed, 3 insertions(+)
+When the flower filter is enabled it will be written to the appropriate
+VCAP lookup and become active in HW.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 23ce498bca97..ed21ab9fe846 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -844,6 +844,9 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type)
- 	 */
- 	if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
- 		return -EPERM;
-+	/* Task should not be pid=1 to avoid kernel panic. */
-+	if (unlikely(is_global_init(current)))
-+		return -EPERM;
- 	if (unlikely(!nmi_uaccess_okay()))
- 		return -EPERM;
- 
+Likewise the flower filter will be disabled if there is no link from chain
+0 to the chain of the filter (lookup), and when that happens the
+corresponding VCAP rule will be read from the VCAP instance and stored in
+memory until it is deleted or enabled again.
 
-base-commit: 4aea86b4033f92f01547e6d4388d4451ae9b0980
+Version History:
+================
+v2      Adding a missing goto exit in vcap_add_rule (Dan Carpenter).
+        Added missing checks for error returns in vcap_enable_rule.
+
+v1      Initial version
+
+Steen Hegelund (8):
+  net: microchip: vcap api: Erase VCAP cache before encoding rule
+  net: microchip: sparx5: Reset VCAP counter for new rules
+  net: microchip: vcap api: Always enable VCAP lookups
+  net: microchip: vcap api: Convert multi-word keys/actions when
+    encoding
+  net: microchip: vcap api: Use src and dst chain id to chain VCAP
+    lookups
+  net: microchip: vcap api: Check chains when adding a tc flower filter
+  net: microchip: vcap api: Add a storage state to a VCAP rule
+  net: microchip: vcap api: Enable/Disable rules via chains in VCAP HW
+
+ .../ethernet/microchip/lan966x/lan966x_goto.c |  10 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |   3 +-
+ .../microchip/lan966x/lan966x_tc_flower.c     |  30 +-
+ .../microchip/lan966x/lan966x_tc_matchall.c   |  16 +-
+ .../microchip/lan966x/lan966x_vcap_impl.c     |  24 +-
+ .../microchip/sparx5/sparx5_tc_flower.c       |  28 +-
+ .../microchip/sparx5/sparx5_tc_matchall.c     |  16 +-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |   2 +-
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  29 +-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 762 +++++++++++++-----
+ .../net/ethernet/microchip/vcap/vcap_api.h    |   5 -
+ .../ethernet/microchip/vcap/vcap_api_client.h |   8 +-
+ .../microchip/vcap/vcap_api_debugfs.c         |  57 +-
+ .../microchip/vcap/vcap_api_debugfs_kunit.c   |  10 +-
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |  32 +-
+ .../microchip/vcap/vcap_api_private.h         |  12 +-
+ 16 files changed, 694 insertions(+), 350 deletions(-)
+
 -- 
 2.39.0
 
