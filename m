@@ -2,68 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E1C65F9C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 03:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0DD65F9CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 Jan 2023 04:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjAFC7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 Jan 2023 21:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S231434AbjAFDAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 Jan 2023 22:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbjAFC7M (ORCPT
+        with ESMTP id S229994AbjAFDAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 Jan 2023 21:59:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E534D6E;
-        Thu,  5 Jan 2023 18:59:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3131661BE9;
-        Fri,  6 Jan 2023 02:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D088C433D2;
-        Fri,  6 Jan 2023 02:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1672973950;
-        bh=9iIG1jjU+cVTa0DXtA/OdBSV7ZjX8LTbLAr0Q7d3PZE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bz2w4rhzobDqBZ+3D9oM3QCJuycDcgpASYh8SwLG6eDAMHrwgtlykxcUYfTZNa89D
-         AQilsK0RNFrUl70fxFHUSBDmB4mR4PiUJ3Nr61ej0hz59AvWqMoLPdXQbcXFAEfnnv
-         AJ3D4yZM1WVhHKgliO3uqnMA8s/Rwcxc10RGlHSA=
-Date:   Thu, 5 Jan 2023 18:59:09 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        Thu, 5 Jan 2023 22:00:12 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9B4671AD;
+        Thu,  5 Jan 2023 19:00:10 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DC94F24DDB2;
+        Fri,  6 Jan 2023 11:00:03 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
+ 2023 11:00:03 +0800
+Received: from wyh-VirtualBox.starfivetech.com (171.223.208.138) by
+ EXMBX173.cuchost.com (172.16.6.93) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 6 Jan 2023 11:00:02 +0800
+From:   Yanhong Wang <yanhong.wang@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] pipe: use __pipe_{lock,unlock} instead of spinlock
-Message-Id: <20230105185909.c77ce4d136279ec46a204d61@linux-foundation.org>
-In-Reply-To: <20230103063303.23345-1-zhanghongchen@loongson.cn>
-References: <20230103063303.23345-1-zhanghongchen@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: [PATCH v3 0/7] Add Ethernet driver for StarFive JH7110 SoC
+Date:   Fri, 6 Jan 2023 10:59:54 +0800
+Message-ID: <20230106030001.1952-1-yanhong.wang@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 Jan 2023 14:33:03 +0800 Hongchen Zhang <zhanghongchen@loongson.cn> wrote:
+This series adds ethernet support for the StarFive JH7110 RISC-V SoC. The series
+includes MAC driver. The MAC version is dwmac-5.20 (from Synopsys DesignWare).
+For more information and support, you can visit RVspace wiki[1].
+	
+This patchset should be applied after the patchset [2], [3], [4].
+[1] https://wiki.rvspace.org/
+[2] https://lore.kernel.org/all/20221118010627.70576-1-hal.feng@starfivetech.com/
+[3] https://lore.kernel.org/all/20221118011108.70715-1-hal.feng@starfivetech.com/
+[4] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
 
-> Use spinlock in pipe_read/write cost too much time,IMO
-> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
-> On the other hand, we can use __pipe_lock/unlock to protect the
-> pipe->head/tail in pipe_resize_ring and post_one_notification.
+Changes in v3:
+- Renamed the dt-bindings 'starfive,jh71x0-dwmac.yaml' to 'starfive,jh7110-dwmac.yaml'.
+- Reworded the commit messages.
+- Reworded the example context in the dt-binding 'starfive,jh7110-dwmac.yaml'.
+- Removed "starfive,jh7100-dwmac" compatible string and special initialization of jh7100.
+- Removed the parts of YT8531,so dropped patch 5 and 6.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
 
-Can you please test this with the test code in Linus's 0ddad21d3e99 and
-check that performance is good?
+Previous versions:
+v1 - https://patchwork.kernel.org/project/linux-riscv/cover/20221201090242.2381-1-yanhong.wang@starfivetech.com/
+v2 - https://patchwork.kernel.org/project/linux-riscv/cover/20221216070632.11444-1-yanhong.wang@starfivetech.com/
+
+Emil Renner Berthing (2):
+  dt-bindings: net: snps,dwmac: Add dwmac-5.20 version
+  net: stmmac: platform: Add snps,dwmac-5.20 IP compatible string
+
+Yanhong Wang (5):
+  dt-bindings: net: snps,dwmac: Update the maxitems number of resets and
+    reset-names
+  dt-bindings: net: Add support StarFive dwmac
+  net: stmmac: Add glue layer for StarFive JH7110 SoCs
+  riscv: dts: starfive: jh7110: Add ethernet device node
+  riscv: dts: starfive: visionfive-v2: Enable gmac device tree node
+
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  41 ++++--
+ .../bindings/net/starfive,jh7110-dwmac.yaml   | 113 ++++++++++++++++
+ MAINTAINERS                                   |   6 +
+ .../jh7110-starfive-visionfive-v2.dts         |  10 ++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  93 +++++++++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../stmicro/stmmac/dwmac-starfive-plat.c      | 123 ++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |   3 +-
+ 9 files changed, 393 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+prerequisite-patch-id: 8ebfffa09b478904bf7c516f76e2d824ddb60140
+prerequisite-patch-id: e8dd8258a4c4062eee2cf07c4607d52baea71f3a
+prerequisite-patch-id: d050d884d7b091ff30508a70f5ce5164bb3b72e5
+prerequisite-patch-id: 0e41f8cfd4861fcbf6f2e6a2559ce28f0450299e
+prerequisite-patch-id: 6e1652501859b85f101ff3b15ced585d43c71c1b
+prerequisite-patch-id: 587628a67adad5c655e5f998bf6c4a368ec07d3c
+prerequisite-patch-id: 596490c0e397df6c0249c1306fbb1d5bf00b5b83
+prerequisite-patch-id: dc873317826b50364344b25ac5cd74e811403f3d
+prerequisite-patch-id: a50150f41d8e874553023187e22eb24dffae8d16
+prerequisite-patch-id: 735e62255c75801bdc4c0b4107850bce821ff7f5
+prerequisite-patch-id: 9d2e83a2dd43e193f534283fab73e90b4f435043
+prerequisite-patch-id: 7a43e0849a9afa3c6f83547fd16d9271b07619e5
+prerequisite-patch-id: e7aa6fb05314bad6d94c465f3f59969871bf3d2e
+prerequisite-patch-id: 6276b2a23818c65ff2ad3d65b562615690cffee9
+prerequisite-patch-id: d834ece14ffb525b8c3e661e78736692f33fca9b
+prerequisite-patch-id: 4c17a3ce4dae9b788795d915bf775630f5c43c53
+prerequisite-patch-id: dabb913fd478e97593e45c23fee4be9fd807f851
+prerequisite-patch-id: ba61df106fbe2ada21e8f22c3d2cfaf7809c84b6
+prerequisite-patch-id: 287572fb64f83f5d931034f7c75674907584a087
+prerequisite-patch-id: 536114f0732646095ef5302a165672b3290d4c75
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: e09e995700a814a763aa304ad3881a7222acf556
+prerequisite-patch-id: 841cd71b556b480d6a5a5e332eeca70d6a76ec3f
+prerequisite-patch-id: d074c7ffa2917a9f754d5801e3f67bc980f9de4c
+prerequisite-patch-id: 5f59bc7cbbf1230e5ff4761fa7c1116d4e6e5d71
+prerequisite-patch-id: d5da3475c6a3588e11a1678feb565bdd459b548e
+-- 
+2.17.1
 
