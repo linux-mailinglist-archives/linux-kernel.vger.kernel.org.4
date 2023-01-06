@@ -2,87 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35187660A80
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD93660A84
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbjAFX6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S236565AbjAFX7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbjAFX6H (ORCPT
+        with ESMTP id S236498AbjAFX67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:58:07 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223387D9D1;
-        Fri,  6 Jan 2023 15:58:06 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Fri, 6 Jan 2023 18:58:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FB57D9D1
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:58:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9C1991EC04E2;
-        Sat,  7 Jan 2023 00:58:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673049484;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=N1uU3JL/AsQjSJUQMe3X4Bn6CDUQwr8KVnWN9T4MLD0=;
-        b=HFiFHjDg7gC2nadwkUOj7Ky7+z+n9LzRZpJpQk4BYBjnFwZRNC+klNuXT8mHTwqJuGgbrm
-        WgxOZWqO3nMtEb1DmBqiGxsc0lLRKnfV6CCF34W6BVHXcjUU5QNR7+7vSQu+DX4kFQ+u3+
-        ZLOBHUoEUYxQARClJf9LPWuymxkJd14=
-Date:   Sat, 7 Jan 2023 00:57:59 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-Message-ID: <Y7i1h3lCMKfxB532@zn.tnic>
-References: <202212272003.rgQDX8DQ-lkp@intel.com>
- <Y6r4mXz5NS0+HVXo@zn.tnic>
- <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id B0706CE1E86
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 23:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 021DFC433F0;
+        Fri,  6 Jan 2023 23:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673049535;
+        bh=lMKFu5xWuSdRIIkmnpI9oHW1WdMDHiHMOnC+rzvj168=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=axmJJlag9IGKwD8ZShDwWKbl8y/HoKYuWoaz5UDqd+6o12m+JfTJJg5j3GTrM8mZo
+         0QJmewHxraDRZ6S4RU8C/jMWbXB3IgGFJeU8I0jAGcVCYwuQYfTRa+25xX3ZShyR0R
+         oMYJb2NVablQstCdT3T9EHvrGB4WNPm0yjW1mJPwcVpVRzanLAR2JyAcE6v7tWIVrO
+         6sNF9td2xPsBVLrgSb4hNaxHPUkbAacKk/uEKD3NPsXTA/G7ulyVeL3dmjBaflz9Qs
+         axFAGkeWp+r480FdmzYnLx0PNeWUnpZ4UMh0oZ65Lk6QWrJ4yziTO09tyqCX0P/qAM
+         nS1f9yR20XuHw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E37A8E57254;
+        Fri,  6 Jan 2023 23:58:54 +0000 (UTC)
+Subject: Re: [PULL] drm-fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y7ipHUfN00F3abQf@phenom.ffwll.local>
+References: <Y7ipHUfN00F3abQf@phenom.ffwll.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y7ipHUfN00F3abQf@phenom.ffwll.local>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-06
+X-PR-Tracked-Commit-Id: 5193326c4c5a656c733b6d2c6537e3f36319bcac
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0a71553536d270e988580a3daa9fc87535908221
+Message-Id: <167304953492.14412.12257948405064175208.pr-tracker-bot@kernel.org>
+Date:   Fri, 06 Jan 2023 23:58:54 +0000
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dave Airlie <airlied@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 07, 2023 at 12:25:17AM +0100, Miguel Ojeda wrote:
-> Yeah, note the x86_64-rhel-8.3-rust config name. It is a config the
-> kernel test robot added for testing with Rust enabled (which explains
-> the version text you saw for `rustc`).
+The pull request you sent on Sat, 7 Jan 2023 00:05:01 +0100:
 
-I figured as much.
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-06
 
-As I said:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0a71553536d270e988580a3daa9fc87535908221
 
-"These reproduction instructions look insufficient to me."
-
-> The script is meant to be called as a Make target, e.g. `make LLVM=1
-> rustavailable`. Perhaps we can put a message if the script was called
-> directly.
-
-No need - I ran it by hand just to show that I don't have a rust compiler
-installed.
-
-Bottom line is: if I get a build report involving a rust compiler, there better
-be in the reproduction instructions a hint how to install one so that I can
-reproduce. Alternatively, I can always simply ignore it.
-
-And while we're reporting bugs: the error message from the compiler itself could
-use some "humanization" - I have zero clue what it is trying to tell me.
-
-Thx.
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
