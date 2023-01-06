@@ -2,87 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F9C660A66
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B53660A6D
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 00:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbjAFXtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 18:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S236448AbjAFXxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 18:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbjAFXtG (ORCPT
+        with ESMTP id S236293AbjAFXx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 18:49:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF713C0C9;
-        Fri,  6 Jan 2023 15:49:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5C4761D03;
-        Fri,  6 Jan 2023 23:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE83C433D2;
-        Fri,  6 Jan 2023 23:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673048945;
-        bh=Kzq2tlfGPQr0fgmnls2K0N6TO37vkS9PveZIdQUSA5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvBZEnjTKvt1+MQ/2U0lSDzK9fveRIQcTWkCZdUNJ/bEaOJp9jYeyBqIGkBDhuBaQ
-         lT0/Z4D/eycBC24N7aLjvfTkpWGClQ4hbxSf326i/rPJF3Eym920csAswsMipvzMre
-         dLBVbvA+ZO8fKKUGNoNqdYuopDTWBLkjdyk5vOBIHS3u/f42APyq69UxcGdZJB00OS
-         PGRh1vljtO6oZofqky7mydSqbyzuZOFxNOmzGXo1hFg4juMLRXYsgCivC4bw1JW86H
-         VzsEHdr2aJt1spcmTsCu08V4eGZgFDPHwYIWhwYxOZMl2ioQk936m0KFkTz7nKKydb
-         qpyC9BOmbfS4w==
-Date:   Fri, 6 Jan 2023 23:49:00 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:ARM/RISC-V/RENESAS ARCHITECTURE" 
-        <linux-renesas-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v6 6/6] soc: renesas: Kconfig: Select the required
- configs for RZ/Five SoC
-Message-ID: <Y7izbPKsN+wn5h+H@spud>
-References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230106185526.260163-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 6 Jan 2023 18:53:26 -0500
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBC377ADE
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 15:53:23 -0800 (PST)
+Received: from myt5-8800bd68420f.qloud-c.yandex.net (myt5-8800bd68420f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:4615:0:640:8800:bd68])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 006F4603D8;
+        Sat,  7 Jan 2023 02:53:21 +0300 (MSK)
+Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:a411::1:0])
+        by myt5-8800bd68420f.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id GrjGHk1QfmI1-jOsvmmwv;
+        Sat, 07 Jan 2023 02:53:20 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1673049200; bh=/XBs1WOG92WdqAPsxP3UvFcRV9WrH7qoeiWMRR4XqwU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=D9peeyCopzp39Z4vZ8aLrE1BZhLXdnat20tJuI7JEUnNvQ6qEAETcZAEPluWH0pjz
+         4rk1xvKhcfya3QoG50pRULVgsT2o1Rm6cWEHK0blHTA0kbnt0XJamnojRCQNS93N6u
+         ZAt1EgzVbbh4CaRW0ygNxaErqhGNnfaU+WDMBUuY=
+Authentication-Results: myt5-8800bd68420f.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Robert Moore <robert.moore@intel.com>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v0] ACPICA: nsrepair: handle cases without a return value correctly
+Date:   Sat,  7 Jan 2023 02:53:08 +0300
+Message-Id: <20230106235308.99999-1-d-tatianin@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="v1LPmyRPbeBSxE7s"
-Content-Disposition: inline
-In-Reply-To: <20230106185526.260163-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Previously acpi_ns_simple_repair() would crash if expected_btypes
+contained any combination of ACPI_RTYPE_NONE with a different type,
+e.g | ACPI_RTYPE_INTEGER because of slightly incorrect logic in the
+!return_object branch, which wouldn't return AE_AML_NO_RETURN_VALUE
+for such cases.
 
---v1LPmyRPbeBSxE7s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Found by Linux Verification Center (linuxtesting.org) with the SVACE
+static analysis tool.
 
-FWIW:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://github.com/acpica/acpica/pull/811
+Fixes: 61db45ca2163 ("ACPICA: Restore code that repairs NULL package elements in return values.")
+Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+---
+ drivers/acpi/acpica/nsrepair.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/acpi/acpica/nsrepair.c b/drivers/acpi/acpica/nsrepair.c
+index 367fcd201f96..ec512e06a48e 100644
+--- a/drivers/acpi/acpica/nsrepair.c
++++ b/drivers/acpi/acpica/nsrepair.c
+@@ -181,8 +181,9 @@ acpi_ns_simple_repair(struct acpi_evaluate_info *info,
+ 	 * Try to fix if there was no return object. Warning if failed to fix.
+ 	 */
+ 	if (!return_object) {
+-		if (expected_btypes && (!(expected_btypes & ACPI_RTYPE_NONE))) {
+-			if (package_index != ACPI_NOT_PACKAGE_ELEMENT) {
++		if (expected_btypes) {
++			if (!(expected_btypes & ACPI_RTYPE_NONE) &&
++			    package_index != ACPI_NOT_PACKAGE_ELEMENT) {
+ 				ACPI_WARN_PREDEFINED((AE_INFO,
+ 						      info->full_pathname,
+ 						      ACPI_WARN_ALWAYS,
+@@ -196,14 +197,15 @@ acpi_ns_simple_repair(struct acpi_evaluate_info *info,
+ 				if (ACPI_SUCCESS(status)) {
+ 					return (AE_OK);	/* Repair was successful */
+ 				}
+-			} else {
++			}
++
++			if (expected_btypes != ACPI_RTYPE_NONE) {
+ 				ACPI_WARN_PREDEFINED((AE_INFO,
+ 						      info->full_pathname,
+ 						      ACPI_WARN_ALWAYS,
+ 						      "Missing expected return value"));
++				return (AE_AML_NO_RETURN_VALUE);
+ 			}
+-
+-			return (AE_AML_NO_RETURN_VALUE);
+ 		}
+ 	}
+ 
+-- 
+2.25.1
 
---v1LPmyRPbeBSxE7s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7izbAAKCRB4tDGHoIJi
-0klAAP97oktxsaN4kInuxSaUJvtvvXt/XZX7Qmi6ZoSD7PODwgEAsiM+60J9pPE0
-OrQO3VB6rJXbxSaCq1Q5Doo9Iky/0AU=
-=2Hi1
------END PGP SIGNATURE-----
-
---v1LPmyRPbeBSxE7s--
