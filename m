@@ -2,237 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244FB660BA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A45660BAC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235727AbjAGBxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S236463AbjAGBzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAGBxc (ORCPT
+        with ESMTP id S236224AbjAGBzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:53:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17C87932;
-        Fri,  6 Jan 2023 17:53:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8942B81EFF;
-        Sat,  7 Jan 2023 01:53:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A27C433D2;
-        Sat,  7 Jan 2023 01:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673056408;
-        bh=6XskKwH1CcZPB6O4nU/7JgwwAU5XHZ3lVHzF1vTq5Hw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BGkNH17nlSOCeDY+Hd+W1EEpFyZlxMLfAvXiMTK+K5HQFZg/AQlzgt1GEfK48zDHQ
-         sSDnIFVhaSWC8da37uqt8M91WVQYg2pKPh69uh8Pt+PpUd/xgOT/HIH6GROlrF0sh2
-         4SCThLZe1wi3HZ8U7b3qklyxU+hDq5Fddxg6XrB5l2z3B2igCRPsy6bkYmEO9wWYJ/
-         sFi5kkO3Ul1WXeuruMUaeyI0CTwNJPgseXnnljALc3zvSercpjxgZOJQKisHzkAPxR
-         l5nz9YgRmbCFJ+iLK31bbHlA+vVOSl9RCTwfY9+TG8DJEY3cD5txwLc7NO+jrsKsqt
-         4/IeHxnwZMvIQ==
-Date:   Fri, 6 Jan 2023 17:53:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+        Fri, 6 Jan 2023 20:55:23 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E826F87932;
+        Fri,  6 Jan 2023 17:55:21 -0800 (PST)
+Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Npjsz4cX9zRqsF;
+        Sat,  7 Jan 2023 09:53:43 +0800 (CST)
+Received: from [10.67.101.184] (10.67.101.184) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 7 Jan 2023 09:55:18 +0800
+Subject: Re: [PATCH] crypto: hisilicon: Wipe entire pool on error
+To:     Kees Cook <keescook@chromium.org>
+References: <20230106041945.never.831-kees@kernel.org>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] crypto: Introduce crypto_pool
-Message-ID: <20230106175326.2d6a4dcd@kernel.org>
-In-Reply-To: <20230103184257.118069-2-dima@arista.com>
-References: <20230103184257.118069-1-dima@arista.com>
-        <20230103184257.118069-2-dima@arista.com>
+        <linux-crypto@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <linux-hardening@vger.kernel.org>
+From:   Weili Qian <qianweili@huawei.com>
+Message-ID: <7c9e9870-2456-01af-177f-1af62a0055e3@huawei.com>
+Date:   Sat, 7 Jan 2023 09:55:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20230106041945.never.831-kees@kernel.org>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.101.184]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 Jan 2023 18:42:53 +0000 Dmitry Safonov wrote:
-> Introduce a per-CPU pool of async crypto requests that can be used
-> in bh-disabled contexts (designed with net RX/TX softirqs as users in
-> mind). Allocation can sleep and is a slow-path.
-> Initial implementation has only ahash as a backend and a fix-sized array
-> of possible algorithms used in parallel.
+
+On 2023/1/6 12:19, Kees Cook wrote:
+> To work around a Clang __builtin_object_size bug that shows up under
+> CONFIG_FORTIFY_SOURCE and UBSAN_BOUNDS, move the per-loop-iteration
+> mem_block wipe into a single wipe of the entire pool structure after
+> the loop.
 > 
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1780
+> Cc: Weili Qian <qianweili@huawei.com>
+> Cc: Zhou Wang <wangzhou1@hisilicon.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/crypto/hisilicon/sgl.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+> index 2b6f2281cfd6..0974b0041405 100644
+> --- a/drivers/crypto/hisilicon/sgl.c
+> +++ b/drivers/crypto/hisilicon/sgl.c
+> @@ -124,9 +124,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
+>  	for (j = 0; j < i; j++) {
+>  		dma_free_coherent(dev, block_size, block[j].sgl,
+>  				  block[j].sgl_dma);
+> -		memset(block + j, 0, sizeof(*block));
+>  	}
+> -	kfree(pool);
+> +	kfree_sensitive(pool);
+>  	return ERR_PTR(-ENOMEM);
+>  }
+>  EXPORT_SYMBOL_GPL(hisi_acc_create_sgl_pool);
+> 
+Thanks for your patch.
 
-> +config CRYPTO_POOL
-> +	tristate "Per-CPU crypto pool"
-> +	default n
-> +	help
-> +	  Per-CPU pool of crypto requests ready for usage in atomic contexts.
+There is no sensitive data in the pool, so memset zero can be deleted directly.
 
-Let's make it a hidden symbol? It seems like a low-level library
-which gets select'ed, so no point bothering users with questions.
-
-config CRYPTO_POOL
-	tristate
-
-that's it.
-
-> +static int crypto_pool_scratch_alloc(void)
-
-This isn't called by anything in this patch..
-crypto_pool_alloc_ahash() should call it I'm guessing?
-
-> +{
-> +	int cpu;
-> +
-> +	lockdep_assert_held(&cpool_mutex);
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		void *scratch = per_cpu(crypto_pool_scratch, cpu);
-> +
-> +		if (scratch)
-> +			continue;
-> +
-> +		scratch = kmalloc_node(scratch_size, GFP_KERNEL,
-> +				       cpu_to_node(cpu));
-> +		if (!scratch)
-> +			return -ENOMEM;
-> +		per_cpu(crypto_pool_scratch, cpu) = scratch;
-> +	}
-> +	return 0;
-> +}
-
-> +out_free:
-> +	if (!IS_ERR_OR_NULL(hash) && e->needs_key)
-> +		crypto_free_ahash(hash);
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (*per_cpu_ptr(e->req, cpu) == NULL)
-> +			break;
-> +		hash = crypto_ahash_reqtfm(*per_cpu_ptr(e->req, cpu));
-
-Could you use a local variable here instead of @hash?
-That way you won't need the two separate free_ahash()
-one before and one after the loop..
-
-> +		ahash_request_free(*per_cpu_ptr(e->req, cpu));
-
-I think using @req here would be beneficial as well :S
-
-> +		if (e->needs_key) {
-> +			crypto_free_ahash(hash);
-> +			hash = NULL;
-> +		}
-> +	}
-> +
-> +	if (hash)
-> +		crypto_free_ahash(hash);
-
-This error handling is tricky as hell, please just add a separate
-variable to hold the 
-
-> +out_free_req:
-> +	free_percpu(e->req);
-> +out_free_alg:
-> +	kfree(e->alg);
-> +	e->alg = NULL;
-> +	return ret;
-> +}
-> +
-> +/**
-> + * crypto_pool_alloc_ahash - allocates pool for ahash requests
-> + * @alg: name of async hash algorithm
-> + */
-> +int crypto_pool_alloc_ahash(const char *alg)
-> +{
-> +	int i, ret;
-> +
-> +	/* slow-path */
-> +	mutex_lock(&cpool_mutex);
-> +
-> +	for (i = 0; i < cpool_populated; i++) {
-> +		if (cpool[i].alg && !strcmp(cpool[i].alg, alg)) {
-> +			if (kref_read(&cpool[i].kref) > 0) {
-
-In the current design we can as well resurrect a pool waiting to 
-be destroyed, right? Just reinit the ref and we're good.
-
-Otherwise the read() + get() looks quite suspicious to a reader.
-
-> +				kref_get(&cpool[i].kref);
-> +				ret = i;
-> +				goto out;
-> +			} else {
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < cpool_populated; i++) {
-> +		if (!cpool[i].alg)
-> +			break;
-> +	}
-> +	if (i >= CPOOL_SIZE) {
-> +		ret = -ENOSPC;
-> +		goto out;
-> +	}
-> +
-> +	ret = __cpool_alloc_ahash(&cpool[i], alg);
-> +	if (!ret) {
-> +		ret = i;
-> +		if (i == cpool_populated)
-> +			cpool_populated++;
-> +	}
-> +out:
-> +	mutex_unlock(&cpool_mutex);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(crypto_pool_alloc_ahash);
-
-> +/**
-> + * crypto_pool_add - increases number of users (refcounter) for a pool
-> + * @id: crypto_pool that was previously allocated by crypto_pool_alloc_ahash()
-> + */
-> +void crypto_pool_add(unsigned int id)
-> +{
-> +	if (WARN_ON_ONCE(id > cpool_populated || !cpool[id].alg))
-> +		return;
-> +	kref_get(&cpool[id].kref);
-> +}
-> +EXPORT_SYMBOL_GPL(crypto_pool_add);
-> +
-> +/**
-> + * crypto_pool_get - disable bh and start using crypto_pool
-> + * @id: crypto_pool that was previously allocated by crypto_pool_alloc_ahash()
-> + * @c: returned crypto_pool for usage (uninitialized on failure)
-> + */
-> +int crypto_pool_get(unsigned int id, struct crypto_pool *c)
-
-Is there a precedent somewhere for the _add() and _get() semantics
-you're using here? I don't think I've seen _add() for taking a
-reference, maybe _get() -> start(), _add() -> _get()?
-
-> +{
-> +	struct crypto_pool_ahash *ret = (struct crypto_pool_ahash *)c;
-> +
-> +	local_bh_disable();
-> +	if (WARN_ON_ONCE(id > cpool_populated || !cpool[id].alg)) {
-> +		local_bh_enable();
-> +		return -EINVAL;
-> +	}
-> +	ret->req = *this_cpu_ptr(cpool[id].req);
-> +	ret->base.scratch = this_cpu_read(crypto_pool_scratch);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(crypto_pool_get);
-
+Thanks,
+Weili
