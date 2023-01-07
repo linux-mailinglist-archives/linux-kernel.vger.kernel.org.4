@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC84660DF5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71D1660DFC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbjAGKhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S232355AbjAGKk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236855AbjAGKhT (ORCPT
+        with ESMTP id S231728AbjAGKkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:37:19 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3A955AE
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:37:17 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g13so5524774lfv.7
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:37:17 -0800 (PST)
+        Sat, 7 Jan 2023 05:40:49 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E784435939;
+        Sat,  7 Jan 2023 02:40:47 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id g10so2677891wmo.1;
+        Sat, 07 Jan 2023 02:40:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k6Ains2IyyIGAKSJrkJg0fmJTUKO0DhSMOSlG6bdPAc=;
-        b=MO+XsRHQ0Q/PY3V+RQGxibDU6e9FpEL9kvYqlqU4qUdiPPm5Edvv29ARrUoAMZoNH+
-         z01ckEQ9xmjVQiCYqi8UdWu/w77BaieGUrvEyHrLs3ohyHjIenPBm8FrwbicaMSRRERv
-         BN97CxfsR/WVyjbyl4ZF04OHM09OqBiqhwQN5pQSwWxkRtaCYdjOtKlM+ZEjxmqrtiaK
-         nE3n+nySB6h8Qmg7P4nrBlncmtUK8ziwlDXV7+4hY+ERtvuxYOHpOMIP1hixNRxQpRm5
-         rCJ8tYR7tSk273NDb9f7hzHY7bHl+Z9SKVrBqCUPIEI6lloPlHGr/2iTESQTtP95Ozjr
-         1FHA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q7wsnRffu5O2RWgyv3GZ3K8cLeYYuVq6dZD0H2Sa32E=;
+        b=ZLxygyA9kLt9+RMfDbWEaTfO6aYKJ113bhDgVMRWwq+CqNgPufmOTCjuVZ+r9LkSQF
+         TlFH4dlUugnM3xwRicIx+ni1A6QtYpvbkcGMzIkOEFa5tyZhwsrdc2Gk7wULwUa1T/TD
+         k3mW7KKISxXn1Z3ujcubF278OW8DVEveZuiowjPSwzAR5ePpY6gj9GBpPMbv5w0wPNFe
+         pMCi+EH+X2fGAuR4dMac2XNWHrOC/ZOmtfZvqMDPP91zVNtn/0GxU5Cnk/AMgT+uc8yX
+         pF8IEuW6wBJOVfwmp9zFTtNzdk5LmSQRHTsmJKj1R/Vr1dQQicljNxp3p9qsPwGgIuWa
+         CevA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k6Ains2IyyIGAKSJrkJg0fmJTUKO0DhSMOSlG6bdPAc=;
-        b=r4IesS+f5PTgjyq3cgLb8yXOOV/c+6mhr95T9trdy09NI8cyLJormiJB9u6HJr4Lcj
-         Gp/XJDRbe1uJtlZhrI3SDmkkouy1utOamEHnV9X5UZfEx0vwkuBbHEzz0Lpvuic9FtMw
-         PYTwG2a1tn2yK3CeEDkcwjDVztAu1ker0QiiZeZlKOOL854zbRiTNstyRyPqiSIPzI01
-         Ao2T/6u9OyiJgCNmjjDEFD8pNkZs4zyGPS6H4PFjx5WXfbqDZ0HolZTU6P3p8sP+dG8R
-         kEHUiL2806J1S4CNb7/0XwXSe2kAyfqV4BHT89rFa1nft6bqGGeZd6hILy9lTVJL73Ry
-         bUeQ==
-X-Gm-Message-State: AFqh2krbBN+kuLfNH74EfAaEJLWmh83CU0whh/N55kQb7vRF4Rgz/7cA
-        eQ/AQDLt9EvHSlNID3m4LzUExQ==
-X-Google-Smtp-Source: AMrXdXtjiiV34Qha1tBZrc4MK+8pBUHjP7gSZB3hDUkq0XWqnLidCz6vz5i0VML7dS+jEXLajszIug==
-X-Received: by 2002:a05:6512:15a3:b0:4b1:3970:43da with SMTP id bp35-20020a05651215a300b004b1397043damr27015288lfb.51.1673087835981;
-        Sat, 07 Jan 2023 02:37:15 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id p36-20020a05651213a400b00492b494c4e8sm525919lfa.298.2023.01.07.02.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 02:37:15 -0800 (PST)
-Message-ID: <05f56641-04c2-63f2-3c17-b2acf3f1d601@linaro.org>
-Date:   Sat, 7 Jan 2023 11:37:14 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q7wsnRffu5O2RWgyv3GZ3K8cLeYYuVq6dZD0H2Sa32E=;
+        b=qyp6pnPTwm5VAR3P6v3vW2w+Q2IStFV7AiFhUyYM4OKzDmrBU+5rn3zHO7hxSCOEWC
+         h+FNEO3/G+EG2DPh+LDHknJX0izsoCZmSU1mJoNW33SfYrlo3JVTGa6ac3sCBFjmTSG2
+         1c1rumLJOKy21t/bGdO9gA3940OVUf35axuicI6USLzqkLuSu5QlIq834hqTF8TPfUeM
+         UicyaI66JRRhNVOXaX0Eq3eAx5QssV9FAzdrAuCIhGRXaXhtEYlY0HG2PShF6msH2QMs
+         7VHpnwPlxGFzh/k29gEpqhjmv7XhJnxWzFzR78UikMAdL0/j3LAxwNxVpxSQU8QMIwuW
+         ZHiQ==
+X-Gm-Message-State: AFqh2kpFoZwrUyMIeEiRg0hj4vsbbDj0ikAc2YZsy40Tne6F8jDlmIuM
+        oovAcftJJFoPN22BmQH8Lvs=
+X-Google-Smtp-Source: AMrXdXuq+EWlBkcohRlbrPONGYn5FEPQFIlh1f/oLALicT3AP+m1ni8UQ+QudfRzNpxDC72kSlEnnw==
+X-Received: by 2002:a05:600c:2d07:b0:3d3:5841:e8b4 with SMTP id x7-20020a05600c2d0700b003d35841e8b4mr40607615wmf.35.1673088046544;
+        Sat, 07 Jan 2023 02:40:46 -0800 (PST)
+Received: from gmail.com (1F2EF507.nat.pool.telekom.hu. [31.46.245.7])
+        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b003d01b84e9b2sm5377974wms.27.2023.01.07.02.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 02:40:43 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 7 Jan 2023 11:40:42 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Liam Ni <zhiguangni01@gmail.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: [PATCH] x86/boot: Check if the input parameter (buffer) of the
+ function is a null pointer
+Message-ID: <Y7lMKhXSQvwvLq7L@gmail.com>
+References: <20221206125929.12237-1-zhiguangni01@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: Add device tree for Samsung
- Galaxy Tab A 8.0 (2015)
-Content-Language: en-US
-To:     Nikita Travkin <nikita@trvn.ru>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Siddharth Manthan <siddharth.manthan@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230106122532.3310265-1-nikita@trvn.ru>
- <20230106122532.3310265-4-nikita@trvn.ru>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230106122532.3310265-4-nikita@trvn.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206125929.12237-1-zhiguangni01@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,124 +77,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+* Liam Ni <zhiguangni01@gmail.com> wrote:
 
-On 6.01.2023 13:25, Nikita Travkin wrote:
-> From: Siddharth Manthan <siddharth.manthan@gmail.com>
+> If the variable buffer is a null pointer, it may cause the kernel to crash.
 > 
-> Galaxy Tab A 8.0 is a tablet, very similar to Tab A 9.7 with major
-> differences being the display and touchscreen.
-> 
-> Add it's devicetree reusing a common dtsi from gt510.
-> 
-> Signed-off-by: Siddharth Manthan <siddharth.manthan@gmail.com>
-> [Squashed multiple commits]
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile             |  1 +
->  .../boot/dts/qcom/msm8916-samsung-gt58.dts    | 78 +++++++++++++++++++
->  2 files changed, 79 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
+>  arch/x86/boot/cmdline.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 70e3b109aeff..062561db33f1 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -20,6 +20,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-gt510.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-gt58.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-> new file mode 100644
-> index 000000000000..fcf516888739
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/dts-v1/;
-> +
-> +#include "msm8916-samsung-gt5-common.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy Tab A 8.0 (2015)";
-> +	compatible = "samsung,gt58", "qcom,msm8916";
-> +	chassis-type = "tablet";
-> +
-> +	reg_vdd_tsp: regulator-vdd-tsp {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_tsp";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		gpio = <&msmgpio 73 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-0 = <&reg_tsp_en_default>;
-> +		pinctrl-names = "default";
-> +	};
-> +
-> +	vibrator {
-> +		compatible = "gpio-vibrator";
-> +		enable-gpios = <&msmgpio 76 GPIO_ACTIVE_HIGH>;
-> +
-> +		pinctrl-0 = <&vibrator_en_default>;
-> +		pinctrl-names = "default";
-> +	};
-> +};
-> +
-> +&blsp_i2c5 {
-> +	status = "okay";
-> +
-> +	touchscreen@20 {
-> +		compatible = "zinitix,bt532";
-> +		reg = <0x20>;
-> +		interrupt-parent = <&msmgpio>;
-> +		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +		touchscreen-size-x = <768>;
-> +		touchscreen-size-y = <1024>;
-> +
-> +		vcca-supply = <&reg_vdd_tsp>;
-> +		vdd-supply = <&pm8916_l6>;
-> +
-> +		pinctrl-0 = <&tsp_int_default>;
-> +		pinctrl-names = "default";
-> +	};
-> +};
-> +
-> +&msmgpio {
-> +	reg_tsp_en_default: reg-tsp-en-default-state {
-> +		pins = "gpio73";
-> +		function = "gpio";
-> +
-Stray newlines, please remove.
+> diff --git a/arch/x86/boot/cmdline.c b/arch/x86/boot/cmdline.c
+> index 21d56ae83cdf..d0809f66054c 100644
+> --- a/arch/x86/boot/cmdline.c
+> +++ b/arch/x86/boot/cmdline.c
+> @@ -39,7 +39,7 @@ int __cmdline_find_option(unsigned long cmdline_ptr, const char *option, char *b
+>  		st_bufcpy	/* Copying this to buffer */
+>  	} state = st_wordstart;
+>  
+> -	if (!cmdline_ptr)
+> +	if (!cmdline_ptr || buffer == NULL)
+>  		return -1;      /* No command line */
 
-With that:
+Can this ever happen?
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Thanks,
 
-Konrad
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	tsp_int_default: tsp-int-default-state {
-> +		pins = "gpio13";
-> +		function = "gpio";
-> +
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	vibrator_en_default: vibrator-en-default-state {
-> +		pins = "gpio76";
-> +		function = "gpio";
-> +
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +};
+	Ingo
