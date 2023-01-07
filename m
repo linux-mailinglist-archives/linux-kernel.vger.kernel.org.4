@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1E2660D98
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017B0660D9E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237189AbjAGJ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S231209AbjAGKEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbjAGJ4C (ORCPT
+        with ESMTP id S232413AbjAGKDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:56:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA6687F18
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:55:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673085304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bjgH27JdKO/sZ8DGa3k4Uhxw/OWXTUQI5Lk0Hm906aw=;
-        b=KYY3cJutHiMc0pbCqFG3ozCjkoDcjZVGlwAjt+wjg6j/nFxTIynPTX/f/N5lxQUf3CiDdu
-        ebATiRbKuMgAAFQjWbH0nsiS/9UeOJn9NYzd+PEl4LtgtjNoaNZQY7kKRSwObDRXhaXjOK
-        +5YUf0uuT1ma1J907x6tnsZmavdU4ZY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-B8r6_snUMzCWs2lywUhKGg-1; Sat, 07 Jan 2023 04:55:00 -0500
-X-MC-Unique: B8r6_snUMzCWs2lywUhKGg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21103858F09;
-        Sat,  7 Jan 2023 09:55:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A04842203;
-        Sat,  7 Jan 2023 09:54:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net 19/19] rxrpc: Fix incoming call setup race
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Sat, 07 Jan 2023 09:54:58 +0000
-Message-ID: <167308529885.1538866.3268052932281950211.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167308517118.1538866.3440481802366869065.stgit@warthog.procyon.org.uk>
-References: <167308517118.1538866.3440481802366869065.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Sat, 7 Jan 2023 05:03:12 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44BB40C3D
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:59:26 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id m21so5431786edc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 01:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/G9FcPlsL/ZYj6GpUzWdxZcsGx3VidjRMEnUyipGwTQ=;
+        b=ycWZqSuFZ74To3dd3tRCQ6yRVxeq0UgluFKJfCwP7NMrAi4WhtdoXJFHq0fmn1PcGZ
+         BidASz6yKHGfquMRO74r2wrv8n+3X0DaZHkvkUeed47LjYLFsCzlUSCcaNFJrkFwxmoe
+         XAHqOJ+UooXB9uvMJr8qlJIPmNmP37tWffvmpi4nX/A3FuNHaVXj1ce3Qn+8CeG8GX3Y
+         MbyMb8D/6efptMLg4LLEfs6zzrHmW6u41Vva+hK3pWH/RbLaTmU0G1JtluVSjaq/fitt
+         rTRyEpJadF8DorfLe9vcUfJby2JEfhmaVxAxCymp+VXVioibcnYNPo8pOZlOma6G5xX6
+         DZ9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/G9FcPlsL/ZYj6GpUzWdxZcsGx3VidjRMEnUyipGwTQ=;
+        b=rrEvQiw62KaN8ImIxNEwZI93Vp+HOb7oavbOVpgXTyUv/Ps4AuEHdchd7/7r8Cb65G
+         L2zHJ9beTVjIqahza/v1vSGvFQW5vcjGXnGGKf0vJzwkA75rjyqPT3Bvj5EVcaYL5fZG
+         eLK/kEWiICBpSI5QTEnuXmLUppmZMa8l3wi46h+aQHMTVgMB9v6ZV4AW7xLaR8/fp6Ng
+         mumQDiRTwvnUeXQPAGNXlJ+PIBWtgHlaOHmvPyhDdkQnVUXLnDZNbYwJTIEXW2m/hBUd
+         PHxFLjlrZ0tNz9iEM0KwtaFqVvr7LlvEOBdewbVG+zj+A55VgIvF35fYZdYP8Qs5R16a
+         i1Xw==
+X-Gm-Message-State: AFqh2krVHAEyrWMx4GGVyXPzXuPgRUUqvKLpbNFHPQ4a2jrZX7DW355n
+        1+N/NEfHcPQZVSEWHt53Hn/ce0ggvCNqtxo6domXXg==
+X-Google-Smtp-Source: AMrXdXtLzFeJ9Ad5w+6FMr/1aURZJ28sV0J+AoE7j06eU9sJC8r/2qmYF8xl4P6NBEVpO98LES7s9yYkIY+u5wURJzM=
+X-Received: by 2002:a05:6402:43cf:b0:48d:5b18:b009 with SMTP id
+ p15-20020a05640243cf00b0048d5b18b009mr2154665edc.49.1673085498197; Sat, 07
+ Jan 2023 01:58:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1> <20230105003813.1770367-5-paulmck@kernel.org>
+In-Reply-To: <20230105003813.1770367-5-paulmck@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sat, 7 Jan 2023 15:28:06 +0530
+Message-ID: <CAAhSdy1VsT48WPQHZ5Pj5WNZRPUQvciFPF2LySawVv27tehD+g@mail.gmail.com>
+Subject: Re: [PATCH rcu 05/27] arch/riscv/kvm: Remove "select SRCU"
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,181 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An incoming call can race with rxrpc socket destruction, leading to a
-leaked call.  This may result in an oops when the call timer eventually
-expires:
+On Thu, Jan 5, 2023 at 6:08 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> Now that the SRCU Kconfig option is unconditionally selected, there is
+> no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> Kconfig statements.
+>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Atish Patra <atishp@atishpatra.org>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: <kvm@vger.kernel.org>
+> Cc: <kvm-riscv@lists.infradead.org>
+> Cc: <linux-riscv@lists.infradead.org>
 
-   BUG: kernel NULL pointer dereference, address: 0000000000000874
-   RIP: 0010:_raw_spin_lock_irqsave+0x2a/0x50
-   Call Trace:
-    <IRQ>
-    try_to_wake_up+0x59/0x550
-    ? __local_bh_enable_ip+0x37/0x80
-    ? rxrpc_poke_call+0x52/0x110 [rxrpc]
-    ? rxrpc_poke_call+0x110/0x110 [rxrpc]
-    ? rxrpc_poke_call+0x110/0x110 [rxrpc]
-    call_timer_fn+0x24/0x120
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
 
-with a warning in the kernel log looking something like:
+Thanks,
+Anup
 
-   rxrpc: Call 00000000ba5e571a still in use (1,SvAwtACK,1061d,0)!
-
-incurred during rmmod of rxrpc.  The 1061d is the call flags:
-
-   RECVMSG_READ_ALL, RX_HEARD, BEGAN_RX_TIMER, RX_LAST, EXPOSED,
-   IS_SERVICE, RELEASED
-
-but no DISCONNECTED flag (0x800), so it's an incoming (service) call and
-it's still connected.
-
-The race appears to be that:
-
- (1) rxrpc_new_incoming_call() consults the service struct, checks sk_state
-     and allocates a call - then pauses, possibly for an interrupt.
-
- (2) rxrpc_release_sock() sets RXRPC_CLOSE, nulls the service pointer,
-     discards the prealloc and releases all calls attached to the socket.
-
- (3) rxrpc_new_incoming_call() resumes, launching the new call, including
-     its timer and attaching it to the socket.
-
-Fix this by read-locking local->services_lock to access the AF_RXRPC socket
-providing the service rather than RCU in rxrpc_new_incoming_call().
-There's no real need to use RCU here as local->services_lock is only
-write-locked by the socket side in two places: when binding and when
-shutting down.
-
-Fixes: 5e6ef4f1017c ("rxrpc: Make the I/O thread take over the call and local processor work")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
----
-
- net/rxrpc/af_rxrpc.c    |    8 ++++----
- net/rxrpc/ar-internal.h |    2 +-
- net/rxrpc/call_accept.c |   14 +++++++-------
- net/rxrpc/security.c    |    6 +++---
- 4 files changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index cf200e4e0eae..ebbd4a1c3f86 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -155,10 +155,10 @@ static int rxrpc_bind(struct socket *sock, struct sockaddr *saddr, int len)
- 
- 		if (service_id) {
- 			write_lock(&local->services_lock);
--			if (rcu_access_pointer(local->service))
-+			if (local->service)
- 				goto service_in_use;
- 			rx->local = local;
--			rcu_assign_pointer(local->service, rx);
-+			local->service = rx;
- 			write_unlock(&local->services_lock);
- 
- 			rx->sk.sk_state = RXRPC_SERVER_BOUND;
-@@ -875,9 +875,9 @@ static int rxrpc_release_sock(struct sock *sk)
- 
- 	sk->sk_state = RXRPC_CLOSE;
- 
--	if (rx->local && rcu_access_pointer(rx->local->service) == rx) {
-+	if (rx->local && rx->local->service == rx) {
- 		write_lock(&rx->local->services_lock);
--		rcu_assign_pointer(rx->local->service, NULL);
-+		rx->local->service = NULL;
- 		write_unlock(&rx->local->services_lock);
- 	}
- 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 007258538bee..433060cade03 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -283,7 +283,7 @@ struct rxrpc_local {
- 	struct socket		*socket;	/* my UDP socket */
- 	struct task_struct	*io_thread;
- 	struct completion	io_thread_ready; /* Indication that the I/O thread started */
--	struct rxrpc_sock __rcu	*service;	/* Service(s) listening on this endpoint */
-+	struct rxrpc_sock	*service;	/* Service(s) listening on this endpoint */
- 	struct rw_semaphore	defrag_sem;	/* control re-enablement of IP DF bit */
- 	struct sk_buff_head	rx_queue;	/* Received packets */
- 	struct list_head	conn_attend_q;	/* Conns requiring immediate attention */
-diff --git a/net/rxrpc/call_accept.c b/net/rxrpc/call_accept.c
-index 3fbf2fcaaf9e..3e8689fdc437 100644
---- a/net/rxrpc/call_accept.c
-+++ b/net/rxrpc/call_accept.c
-@@ -343,13 +343,13 @@ bool rxrpc_new_incoming_call(struct rxrpc_local *local,
- 	if (sp->hdr.type != RXRPC_PACKET_TYPE_DATA)
- 		return rxrpc_protocol_error(skb, rxrpc_eproto_no_service_call);
- 
--	rcu_read_lock();
-+	read_lock(&local->services_lock);
- 
- 	/* Weed out packets to services we're not offering.  Packets that would
- 	 * begin a call are explicitly rejected and the rest are just
- 	 * discarded.
- 	 */
--	rx = rcu_dereference(local->service);
-+	rx = local->service;
- 	if (!rx || (sp->hdr.serviceId != rx->srx.srx_service &&
- 		    sp->hdr.serviceId != rx->second_service)
- 	    ) {
-@@ -399,7 +399,7 @@ bool rxrpc_new_incoming_call(struct rxrpc_local *local,
- 	spin_unlock(&conn->state_lock);
- 
- 	spin_unlock(&rx->incoming_lock);
--	rcu_read_unlock();
-+	read_unlock(&local->services_lock);
- 
- 	if (hlist_unhashed(&call->error_link)) {
- 		spin_lock(&call->peer->lock);
-@@ -413,20 +413,20 @@ bool rxrpc_new_incoming_call(struct rxrpc_local *local,
- 	return true;
- 
- unsupported_service:
--	rcu_read_unlock();
-+	read_unlock(&local->services_lock);
- 	return rxrpc_direct_abort(skb, rxrpc_abort_service_not_offered,
- 				  RX_INVALID_OPERATION, -EOPNOTSUPP);
- unsupported_security:
--	rcu_read_unlock();
-+	read_unlock(&local->services_lock);
- 	return rxrpc_direct_abort(skb, rxrpc_abort_service_not_offered,
- 				  RX_INVALID_OPERATION, -EKEYREJECTED);
- no_call:
- 	spin_unlock(&rx->incoming_lock);
--	rcu_read_unlock();
-+	read_unlock(&local->services_lock);
- 	_leave(" = f [%u]", skb->mark);
- 	return false;
- discard:
--	rcu_read_unlock();
-+	read_unlock(&local->services_lock);
- 	return true;
- }
- 
-diff --git a/net/rxrpc/security.c b/net/rxrpc/security.c
-index cd66634dffe6..cb8dd1d3b1d4 100644
---- a/net/rxrpc/security.c
-+++ b/net/rxrpc/security.c
-@@ -178,9 +178,9 @@ struct key *rxrpc_look_up_server_security(struct rxrpc_connection *conn,
- 		sprintf(kdesc, "%u:%u",
- 			sp->hdr.serviceId, sp->hdr.securityIndex);
- 
--	rcu_read_lock();
-+	read_lock(&conn->local->services_lock);
- 
--	rx = rcu_dereference(conn->local->service);
-+	rx = conn->local->service;
- 	if (!rx)
- 		goto out;
- 
-@@ -202,6 +202,6 @@ struct key *rxrpc_look_up_server_security(struct rxrpc_connection *conn,
- 	}
- 
- out:
--	rcu_read_unlock();
-+	read_unlock(&conn->local->services_lock);
- 	return key;
- }
-
-
+> ---
+>  arch/riscv/kvm/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+> index f36a737d5f96d..6bc9b290c1283 100644
+> --- a/arch/riscv/kvm/Kconfig
+> +++ b/arch/riscv/kvm/Kconfig
+> @@ -27,7 +27,6 @@ config KVM
+>         select KVM_XFER_TO_GUEST_WORK
+>         select HAVE_KVM_VCPU_ASYNC_IOCTL
+>         select HAVE_KVM_EVENTFD
+> -       select SRCU
+>         help
+>           Support hosting virtualized guest machines.
+>
+> --
+> 2.31.1.189.g2e36527f23
+>
