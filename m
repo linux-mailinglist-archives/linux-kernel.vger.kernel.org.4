@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BD5660B4C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9B6660B4E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbjAGBKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S236690AbjAGBK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjAGBKh (ORCPT
+        with ESMTP id S236798AbjAGBKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:10:37 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242FF84BFC
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:10:34 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id y19-20020a056a00191300b0058217bbc6ceso1588118pfi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 17:10:34 -0800 (PST)
+        Fri, 6 Jan 2023 20:10:38 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00542848D5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:10:35 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id z4-20020a17090ab10400b002195a146546so3826217pjq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 17:10:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=mibFabzzccOWFHvZzF9gZjAvnGdqXXCNlOd7ibqPXMo=;
-        b=Ac3GJ2XIaMCOKz2fcIHHYQLW4or003PbEuf++u+IVgYr2HL+LiuZcIIM1SXtpitPrh
-         /xQQvLFf/T6VMH7a+N7WDihvBlECtJGztYHKh0+bsf7ZWzhNBdBn2CWi8hf0lDSBa2T2
-         zlTWlUuhoIFGr+FQuypFSa50VeHC34+hU4r3D+g1nbraUxMx5A/eIrrs8KdjzDSHklXx
-         7Il1KDBtRt9fUCrLZ7D3XL5akPfN5IlAOgpkrfNSVbdEXeR35X7oPoetzr8d0TJrDQfx
-         aqQ52f6PFyGbUYLMD7hKoDGVUpFt1y3gHe3Wp3IvDOLC8A2A1LKB0ihM/K2j4SYqkm4s
-         +2dw==
+        bh=ytl00DlerGscM1Z2s2nAhDtn5opR5GZn7robSFrZWZY=;
+        b=MfxUKpWUJ1zSJQHSCeUHIcVc8OawjLuZjKMS1fzXz+zYl32lKol+qKMauguiR5vYqV
+         cHCSulvbxQhF8LgBzOWfgUBdV4zhhP6CWfEUnCQrWOT5RdvEap0UkoClBPPocPiFBoUl
+         L4F+KvkbcGk/adXM0WZTWqXuXJbGB90vh9gNpB9i3fVF5CwsgoFZQWg1jzTI1yVan/rj
+         8kNYdDdaiBTVKubzEv6eexqqceQRZHZy0Pfj7ibPF8TM8fZeesp4Bs2qtTycaPeG/bSZ
+         hrLWtIOC1n4oZ2TIq0+19Fba5y+230omi0hagx+ythej4bk2tfzK7H5XpVUUXDe7zkUE
+         r+5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mibFabzzccOWFHvZzF9gZjAvnGdqXXCNlOd7ibqPXMo=;
-        b=Dr1AB0D2iERyANH9zRC+uuC9mcI6nPbruqdnLUBOry1bL+oRPk1alGL9+hHGHmivx4
-         npbkFesddR9iCos0wi4Espyd1vkn2I+fuaw4R1oElbQSBeGz4ugqLPpO8V7tRL5eVG8m
-         Lyb1q0MadWVlpaPLNGwBqRBvVHr4p9wVGErIGXaQB0GCaY2LfGWjmkdyKghY1PW9kjr2
-         EZBydiGIbWDzo1x8A3jlTQG8/g5j1H6zx/4deVjpiaclUMHjthU28kQ6QxESNiIL4p10
-         VI48Lv0TMq13N4HMGRTE857bq4/FKutK0sheYYFIOIUiwyJSEWcCeu+cQamgxbfCSMgT
-         zk2Q==
-X-Gm-Message-State: AFqh2krgk9gL/03Kf+WnZbmeVXYAEPkgp0A0g6LXBNbZYDv9IIFSts26
-        2/RFXtpvh8EFmMaKQM3TvYWsXnzLhWg=
-X-Google-Smtp-Source: AMrXdXtb521S+skxNdLCASba5/s6+7XUmXir8cXXJat7hoNvT81DlgQ+AnnER0uVGwjLdN/JINI3h82Kr/w=
+        bh=ytl00DlerGscM1Z2s2nAhDtn5opR5GZn7robSFrZWZY=;
+        b=Hbi6Ouqm3IbNeRcGhFKUDD0s3o55vrNdICgjprHxqQmqoUxsibCunrsKDJ76M664G2
+         ZWrbYihai0uLNuT9yIx2PWm/BGRL6DPAgTRsa+voC7eoZPN6AlN1s0uc4W652kZMSdw0
+         D/+8kCJEKM0V3+bsvfSIhsJ8QkwJfGAPvSMmkPIszU8J0Py5skI2EWCIAxNMOkZXwkFf
+         bIqsxopMP+2n0HKO2xCa4cy+uVy4UUq96gxJjY32P6XnKiKRkiMuhbe8ETL8WAW0J9sz
+         PNmJE5whAnrYqbIkZUQXPELRE/pzhIHoGRGJnsomK6a6WBhHtLBxN7T5ZggRbVOnOhz0
+         xMvQ==
+X-Gm-Message-State: AFqh2krdgbB/OHFXe2jxVfZ3By4xXEJET/diQ/96ER0nbKVeR/MoF/Dz
+        NEnxu3aYLXPant+aUpa8Ap9hoZadUZU=
+X-Google-Smtp-Source: AMrXdXtQ4Ak35Lb34wlJ+kqfXpwqQmaTB1EiKJZqxY0/z0Y2spI3fFkKlj6H7g+5x+h8/JI+XU3gIl+YQd4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:dacb:b0:192:e0b2:2358 with SMTP id
- q11-20020a170902dacb00b00192e0b22358mr1216401plx.164.1673053833715; Fri, 06
- Jan 2023 17:10:33 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:f985:b0:223:9019:6996 with SMTP id
+ cq5-20020a17090af98500b0022390196996mr4325710pjb.204.1673053835513; Fri, 06
+ Jan 2023 17:10:35 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  7 Jan 2023 01:10:22 +0000
+Date:   Sat,  7 Jan 2023 01:10:23 +0000
 In-Reply-To: <20230107011025.565472-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230107011025.565472-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230107011025.565472-4-seanjc@google.com>
-Subject: [PATCH 3/6] KVM: x86: Mark x2APIC DFR reg as non-existent for x2APIC
+Message-ID: <20230107011025.565472-5-seanjc@google.com>
+Subject: [PATCH 4/6] KVM: x86: Split out logic to generate "readable" APIC
+ regs mask to helper
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -72,55 +73,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark APIC_DFR as being invalid/non-existent in x2APIC mode instead of
-handling it as a one-off check in kvm_x2apic_msr_read().  This will allow
-reusing "valid_reg_mask" to generate VMX's interception bitmaps for
-x2APIC.  Handling DFR in the common read path may also fix the Hyper-V
-PV MSR interface, if that can coexist with x2APIC.
+Move the generation of the readable APIC regs bitmask to a standalone
+helper so that VMX can use the mask for its MSR interception bitmaps.
+
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/lapic.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ arch/x86/kvm/lapic.c | 34 +++++++++++++++++++++-------------
+ arch/x86/kvm/lapic.h |  2 ++
+ 2 files changed, 23 insertions(+), 13 deletions(-)
 
 diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index bf53e4752f30..c49b13418638 100644
+index c49b13418638..19697fe9b2c7 100644
 --- a/arch/x86/kvm/lapic.c
 +++ b/arch/x86/kvm/lapic.c
-@@ -1541,7 +1541,6 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
- 		APIC_REG_MASK(APIC_TASKPRI) |
- 		APIC_REG_MASK(APIC_PROCPRI) |
- 		APIC_REG_MASK(APIC_LDR) |
--		APIC_REG_MASK(APIC_DFR) |
- 		APIC_REG_MASK(APIC_SPIV) |
- 		APIC_REGS_MASK(APIC_ISR, APIC_ISR_NR) |
- 		APIC_REGS_MASK(APIC_TMR, APIC_ISR_NR) |
-@@ -1562,12 +1561,13 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+@@ -1529,12 +1529,9 @@ static inline struct kvm_lapic *to_lapic(struct kvm_io_device *dev)
+ #define APIC_REGS_MASK(first, count) \
+ 	(APIC_REG_MASK(first) * ((1ull << (count)) - 1))
+ 
+-static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+-			      void *data)
++u64 kvm_lapic_readable_reg_mask(struct kvm_lapic *apic)
+ {
+-	unsigned char alignment = offset & 0xf;
+-	u32 result;
+-	/* this bitmask has a bit cleared for each reserved register */
++	/* Leave bits '0' for reserved and write-only registers. */
+ 	u64 valid_reg_mask =
+ 		APIC_REG_MASK(APIC_ID) |
+ 		APIC_REG_MASK(APIC_LVR) |
+@@ -1560,22 +1557,33 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+ 	if (kvm_lapic_lvt_supported(apic, LVT_CMCI))
  		valid_reg_mask |= APIC_REG_MASK(APIC_LVTCMCI);
  
- 	/*
--	 * ARBPRI and ICR2 are not valid in x2APIC mode.  WARN if KVM reads ICR
--	 * in x2APIC mode as it's an 8-byte register in x2APIC and needs to be
--	 * manually handled by the caller.
-+	 * ARBPRI, DFR, and ICR2 are not valid in x2APIC mode.  WARN if KVM
-+	 * reads ICR in x2APIC mode as it's an 8-byte register in x2APIC and
-+	 * needs to be manually handled by the caller.
- 	 */
+-	/*
+-	 * ARBPRI, DFR, and ICR2 are not valid in x2APIC mode.  WARN if KVM
+-	 * reads ICR in x2APIC mode as it's an 8-byte register in x2APIC and
+-	 * needs to be manually handled by the caller.
+-	 */
++	/* ARBPRI, DFR, and ICR2 are not valid in x2APIC mode. */
  	if (!apic_x2apic_mode(apic))
  		valid_reg_mask |= APIC_REG_MASK(APIC_ARBPRI) |
-+				  APIC_REG_MASK(APIC_DFR) |
+ 				  APIC_REG_MASK(APIC_DFR) |
  				  APIC_REG_MASK(APIC_ICR2);
- 	else
- 		WARN_ON_ONCE(offset == APIC_ICR);
-@@ -3141,9 +3141,6 @@ int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data)
- 	if (!lapic_in_kernel(vcpu) || !apic_x2apic_mode(apic))
+-	else
+-		WARN_ON_ONCE(offset == APIC_ICR);
++
++	return valid_reg_mask;
++}
++EXPORT_SYMBOL_GPL(kvm_lapic_readable_reg_mask);
++
++static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
++			      void *data)
++{
++	unsigned char alignment = offset & 0xf;
++	u32 result;
++
++	/*
++	 * WARN if KVM reads ICR in x2APIC mode, as it's an 8-byte register in
++	 * x2APIC and needs to be manually handled by the caller.
++	 */
++	WARN_ON_ONCE(apic_x2apic_mode(apic) && offset == APIC_ICR);
+ 
+ 	if (alignment + len > 4)
  		return 1;
  
--	if (reg == APIC_DFR)
--		return 1;
--
- 	return kvm_lapic_msr_read(apic, reg, data);
- }
+-	if (offset > 0x3f0 || !(valid_reg_mask & APIC_REG_MASK(offset)))
++	if (offset > 0x3f0 ||
++	    !(kvm_lapic_readable_reg_mask(apic) & APIC_REG_MASK(offset)))
+ 		return 1;
+ 
+ 	result = __apic_read(apic, offset & ~0xf);
+diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+index df316ede7546..0a0ea4b5dd8c 100644
+--- a/arch/x86/kvm/lapic.h
++++ b/arch/x86/kvm/lapic.h
+@@ -146,6 +146,8 @@ int kvm_hv_vapic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data);
+ int kvm_lapic_set_pv_eoi(struct kvm_vcpu *vcpu, u64 data, unsigned long len);
+ void kvm_lapic_exit(void);
+ 
++u64 kvm_lapic_readable_reg_mask(struct kvm_lapic *apic);
++
+ #define VEC_POS(v) ((v) & (32 - 1))
+ #define REG_POS(v) (((v) >> 5) << 4)
  
 -- 
 2.39.0.314.g84b9a713c41-goog
