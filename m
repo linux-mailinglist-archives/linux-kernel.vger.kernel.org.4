@@ -2,120 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72A266127E
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 00:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0E5661281
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 00:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjAGXGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 18:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S232748AbjAGXIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 18:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAGXGu (ORCPT
+        with ESMTP id S229976AbjAGXIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 18:06:50 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE52271A2;
-        Sat,  7 Jan 2023 15:06:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CBD4BCE0AC8;
-        Sat,  7 Jan 2023 23:06:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BB7C433EF;
-        Sat,  7 Jan 2023 23:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673132806;
-        bh=Lludlr5axsj3b5IQ+wjvPk4q6BAf6EJEp6FTXWpxkXI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NAJGOpjYDPqzh7Gg3BmBmrTG9L24/44l281SMa6bqXcWeFm0ASTVuFBVQXMrvue8z
-         PxxW4QiH9FE+U33YPPpn9WuWBMAm/cFyURtoKTO2gR4xT7fu6gRbWdTGbyYKhjWpbh
-         gPn8nLpb1ixsg/q6BxVxy42D2a/cCXJZLlKDSVJXIzb+86NWpG3xOpAtpeQQ9o9TKR
-         yw0dn9VjL57Vx1lqlOLkEOGylpwKUglCC0l5LPPshugs//3JEJcOn0IixNjDWiLZ0e
-         /e0qQRqxxNsKGauntNZBa5v3ByX4CVrzPVuE9xeI+2k/JN/EJVIpXi6huxHsREkYg8
-         Chg/MQ+YTG48A==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH mm-unstable] selftests/mm: convert missing vm->mm changes
-Date:   Sat,  7 Jan 2023 23:06:43 +0000
-Message-Id: <20230107230643.252273-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 7 Jan 2023 18:08:22 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679CF37510
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 15:08:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673132901; x=1704668901;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cz41W3GXeCjs4/odG5IOUtXa+fbn3N3xDxaxntmso/M=;
+  b=g92qMB6LhFjrI7/Nov3Qkeo9B8mq1T5z0WnjDVsqmIKIL90qUFVO2yok
+   HowFq8OdOwRq4xZ6uT5e5dj5+VS34ccP2WlQVwPfvweKbmRrvXIZu5NoR
+   DHP7tFOs+DtvgzaUZZMaUaXacc8fDHvb3yqamRv62twzL1G/NOxmROYtm
+   EYmLidPyq/wF2TXssWaCVb/6vIa7WxDWggcXHHsRoDW+wI5wrgC8ZKNUP
+   VUEEp6X7sdytzAXb6j1xwF5MgcjSkeuZv25SCNzHMOlOHvs6MBD9dzCh2
+   5YIgpB9UYbs1v57qZrLSqHEe/mLIiVOphNLegau7yUA0mZq+98VeVlyyx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="321384230"
+X-IronPort-AV: E=Sophos;i="5.96,309,1665471600"; 
+   d="scan'208";a="321384230"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2023 15:08:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="686815071"
+X-IronPort-AV: E=Sophos;i="5.96,309,1665471600"; 
+   d="scan'208";a="686815071"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jan 2023 15:08:18 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pEIIU-0004vM-05;
+        Sat, 07 Jan 2023 23:08:18 +0000
+Date:   Sun, 08 Jan 2023 07:07:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/core] BUILD SUCCESS
+ d74f87f37672e71457bfcc14eca5eeb1d61b6438
+Message-ID: <63b9fb28.sL/8EXpyqacO4Ge6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6b380799d251 ("selftests/vm: rename selftests/vm to
-selftests/mm") in mm-unstable is missing some files that need to be
-updated for the renaming.  This commit adds the changes.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+branch HEAD: d74f87f37672e71457bfcc14eca5eeb1d61b6438  selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
 
-Fixes: 6b380799d251 ("selftests/vm: rename selftests/vm to selftests/mm") in mm-unstable
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/Makefile          | 2 +-
- tools/testing/selftests/kselftest_deps.sh | 6 +++---
- tools/testing/selftests/mm/Makefile       | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+elapsed time: 723m
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 41b649452560..56a29f2de8e6 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -85,7 +85,7 @@ TARGETS += tmpfs
- TARGETS += tpm2
- TARGETS += user
- TARGETS += vDSO
--TARGETS += vm
-+TARGETS += mm
- TARGETS += x86
- TARGETS += zram
- #Please keep the TARGETS list alphabetically sorted
-diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
-index 7424a1f5babc..4bc14d9e8ff1 100755
---- a/tools/testing/selftests/kselftest_deps.sh
-+++ b/tools/testing/selftests/kselftest_deps.sh
-@@ -12,9 +12,9 @@ usage()
- 
- echo -e "Usage: $0 -[p] <compiler> [test_name]\n"
- echo -e "\tkselftest_deps.sh [-p] gcc"
--echo -e "\tkselftest_deps.sh [-p] gcc vm"
-+echo -e "\tkselftest_deps.sh [-p] gcc mm"
- echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc"
--echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc vm\n"
-+echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc mm\n"
- echo "- Should be run in selftests directory in the kernel repo."
- echo "- Checks if Kselftests can be built/cross-built on a system."
- echo "- Parses all test/sub-test Makefile to find library dependencies."
-@@ -120,7 +120,7 @@ l1_tests=$(grep -r --include=Makefile "^LDLIBS" | \
- # Level 2
- # Some tests have multiple valid LDLIBS lines for individual sub-tests
- # that need dependency checks. Find them and append them to the tests
--# e.g: vm/Makefile:$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
-+# e.g: mm/Makefile:$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
- # Filter out VAR_LDLIBS to discard the following:
- # 	memfd/Makefile:$(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
- # Append space at the end of the list to append more tests.
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 89c14e41bd43..6a4b639b2b2b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
--# Makefile for vm selftests
-+# Makefile for mm selftests
- 
--LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-+LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
- 
- include local_config.mk
- 
+configs tested: 81
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+x86_64                           rhel-8.3-bpf
+alpha                               defconfig
+x86_64                           rhel-8.3-syz
+ia64                             allmodconfig
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a001
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a003
+um                             i386_defconfig
+x86_64                              defconfig
+s390                                defconfig
+um                           x86_64_defconfig
+i386                          randconfig-a005
+m68k                             allyesconfig
+i386                                defconfig
+m68k                             allmodconfig
+x86_64                        randconfig-a004
+arc                              allyesconfig
+x86_64                        randconfig-a002
+s390                             allyesconfig
+x86_64                               rhel-8.3
+alpha                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20230107
+arm                                 defconfig
+i386                          randconfig-a014
+x86_64                           allyesconfig
+arm64                            allyesconfig
+i386                          randconfig-a012
+arm                              allyesconfig
+i386                          randconfig-a016
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a015
+mips                             allyesconfig
+arc                  randconfig-r043-20230106
+riscv                randconfig-r042-20230107
+i386                             allyesconfig
+sh                               allmodconfig
+arm                  randconfig-r046-20230106
+s390                 randconfig-r044-20230107
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+xtensa                  cadence_csp_defconfig
+sh                           se7722_defconfig
+mips                            gpr_defconfig
+arm                        trizeps4_defconfig
+nios2                         3c120_defconfig
+s390                       zfcpdump_defconfig
+arm                           imxrt_defconfig
+arc                            hsdk_defconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a013
+x86_64                        randconfig-a014
+x86_64                        randconfig-a003
+arm                  randconfig-r046-20230107
+i386                          randconfig-a011
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+i386                          randconfig-a015
+hexagon              randconfig-r041-20230107
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20230107
+hexagon              randconfig-r041-20230106
+s390                 randconfig-r044-20230106
+riscv                randconfig-r042-20230106
+hexagon              randconfig-r045-20230106
+x86_64                        randconfig-k001
+arm                       imx_v4_v5_defconfig
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
