@@ -2,48 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4442B660B91
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FFE660B93
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjAGBmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S236463AbjAGBmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:42:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAGBmr (ORCPT
+        with ESMTP id S229550AbjAGBmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:42:47 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449EE84603;
-        Fri,  6 Jan 2023 17:42:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2F4724AE;
-        Sat,  7 Jan 2023 02:42:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673055764;
-        bh=e4/eoP/GXgSVuVnU4PKwIE/nMkRK+kad77/FzccPTkQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tgqO+dmE6Mgrn8RCGwguBtHCyRix9GZXsH6cxzwainhR9pgBG1Is3cMHCfrJHr0lW
-         YG+O5OQ9eyfGmqiWJcr+i4XjUQbQ1zdady0nBKkxMgMUq7/KhUaTXfUten+7mJ/c48
-         Qv4gexVVe8dR2bBSYO6t29c1si1f3WI3wPg2V+GQ=
-Date:   Sat, 7 Jan 2023 03:42:38 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>, ionut_n2001@yahoo.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: Silence memcpy() run-time false
- positive warnings
-Message-ID: <Y7jODnbUqCwfwwHI@pendragon.ideasonboard.com>
-References: <20230106061659.never.817-kees@kernel.org>
- <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
- <202301061217.816FC0313D@keescook>
+        Fri, 6 Jan 2023 20:42:49 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC1848CB;
+        Fri,  6 Jan 2023 17:42:47 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 0B2CD604F1;
+        Sat,  7 Jan 2023 02:42:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673055766; bh=MPp03RqFDDII3pCxtM5zY007hKOOyd2B13p3wePRZJc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sMTZqWtoMERYQ9T5OH8Ogmqf3oUwJqtnqnhvj5YhgAGif1v3v+V86Q3e4dgklrHn6
+         9ux9zSQM3JaQgzUDvwgowOaFYWPwNpI7i1SfpQPiu3IVciVcQI5cDhaLgOdEQX+5p7
+         HH/G02np9lHHrJxR1Dxy85v5rJ3xm07cJQp4pXPRfeeNXY77+Rl+C9AOMMougkzz9n
+         Fh7blIASQJwhavKY281V/omQj7BV80373fD2PKHYMpYVZg8DfAd0EDtotmK91Byh78
+         p8mkFf529BMiSivm01BFcxYDVpBB2oy/NswYWocWFkWYxuOs24Uak+Oy7nZZzdR6IP
+         N25cUyWmJ2DiQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6pKu9zfMkWMh; Sat,  7 Jan 2023 02:42:43 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 977FA604F0;
+        Sat,  7 Jan 2023 02:42:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673055763; bh=MPp03RqFDDII3pCxtM5zY007hKOOyd2B13p3wePRZJc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZOXL44W8XCvgvcmBpDdiadLc+g5dzvw+A34JgUHNnblAr1eOU+1NHjpZRSYJgLxqV
+         ulFAmGcrurQOaBmL7cYjC8BT6Y7mUiggyRoil8a6K9zcwvvDAVcYoVTFeYXfNx07kf
+         52d60jW8YSy7Fxu3Zy0/T5fM4kQYgwQQt326JqdULcMIKChXx6zbXMxEhQspfufije
+         eG6UJCqh0hKj/wYcP4MomKmNfSXLzvS/6MapRdPgaUyE0FJZ3x4WIJvbaBtDWmGJg5
+         d05V905aAUwbtoQx/BVT6Uqt7wj5UYxu7z6eUHrMf/a9xlhGH34hZdIHchqdvLyGlU
+         nTXfy3AHWi3fw==
+Message-ID: <8fb1a2c5-ee35-67eb-ef3c-e2673061850d@alu.unizg.hr>
+Date:   Sat, 7 Jan 2023 02:42:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202301061217.816FC0313D@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net v2] af_unix: selftest: Fix the size of the parameter
+ to connect()
+Content-Language: en-US, hr
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
+        edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+ <20230106175828.13333-1-kuniyu@amazon.com>
+ <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>
+ <20230106161450.1d5579bf@kernel.org>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230106161450.1d5579bf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,78 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, Jan 06, 2023 at 12:19:01PM -0800, Kees Cook wrote:
-> On Fri, Jan 06, 2023 at 12:43:44PM +0100, Ricardo Ribalda wrote:
-> > On Fri, 6 Jan 2023 at 07:19, Kees Cook wrote:
-> > >
-> > > The memcpy() in uvc_video_decode_meta() intentionally copies across the
-> > > length and flags members and into the trailing buf flexible array.
-> > > Split the copy so that the compiler can better reason about (the lack
-> > > of) buffer overflows here. Avoid the run-time false positive warning:
-> > >
-> > >   memcpy: detected field-spanning write (size 12) of single field "&meta->length" at drivers/media/usb/uvc/uvc_video.c:1355 (size 1)
-> > >
-> > > Additionally fix a typo in the documentation for struct uvc_meta_buf.
-> > >
-> > > Reported-by: ionut_n2001@yahoo.com
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216810
-> > > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > > Cc: linux-media@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_video.c | 4 +++-
-> > >  include/uapi/linux/uvcvideo.h     | 2 +-
-> > >  2 files changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > > index d2eb9066e4dc..b67347ab4181 100644
-> > > --- a/drivers/media/usb/uvc/uvc_video.c
-> > > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > > @@ -1352,7 +1352,9 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
-> > >         if (has_scr)
-> > >                 memcpy(stream->clock.last_scr, scr, 6);
-> > >
-> > > -       memcpy(&meta->length, mem, length);
-> > > +       meta->length = mem[0];
-> > > +       meta->flags  = mem[1];
-> > > +       memcpy(meta->buf, &mem[2], length - 2);
-> > >         meta_buf->bytesused += length + sizeof(meta->ns) + sizeof(meta->sof);
-> > >
-> > >         uvc_dbg(stream->dev, FRAME,
-> > > diff --git a/include/uapi/linux/uvcvideo.h b/include/uapi/linux/uvcvideo.h
-> > > index 8288137387c0..a9d0a64007ba 100644
-> > > --- a/include/uapi/linux/uvcvideo.h
-> > > +++ b/include/uapi/linux/uvcvideo.h
-> > > @@ -86,7 +86,7 @@ struct uvc_xu_control_query {
-> > >   * struct. The first two fields are added by the driver, they can be used for
-> > >   * clock synchronisation. The rest is an exact copy of a UVC payload header.
-> > >   * Only complete objects with complete buffers are included. Therefore it's
-> > > - * always sizeof(meta->ts) + sizeof(meta->sof) + meta->length bytes large.
-> > > + * always sizeof(meta->ns) + sizeof(meta->sof) + meta->length bytes large.
-> > >   */
-> > >  struct uvc_meta_buf {
-> > >         __u64 ns;
-> > [...]
-> >
-> > Would it make more sense to replace *mem with a structure/union. Something like:
-> > https://patchwork.linuxtv.org/project/linux-media/patch/20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org/
+On 07. 01. 2023. 01:14, Jakub Kicinski wrote:
+> On Fri, 6 Jan 2023 20:28:33 +0100 Mirsad Goran Todorovac wrote:
+>> The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+>> (Tested to apply against net.git tree.)
 > 
-> I wasn't sure -- it seemed like this routine was doing the serializing
-> into a struct already and an additional struct overlay wasn't going to
-> improve readability. But I can certainly do that if it's preferred!
+> This kind of info belongs outside of the commit message (under the
+> --- line).
+> 
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Paolo Abeni <pabeni@redhat.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+>> Cc: Florian Westphal <fw@strlen.de>
+>> Reviewed-by: Florian Westphal <fw@strlen.de>
+>> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>
+> 
+> no new line here
+> 
+>> ---
+> 
+> still doesn't apply, probably because there are two email footers
 
-I'm not sure to see how using an additional struct or union would help.
-We can't use struct assignment as the data may be unaligned, so memcpy()
-is required. The issue isn't with the source operand of the memcpy() but
-with the destination operand. Ricardo, if I'm missing something, please
-submit an alternative patch to explain what you meant.
+Thank you for the guidelines to make your robots happy :), the next
+time I will assume all these from start, provided that I find and
+patch another bug or issue.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thanks,
+Mirsad
 
 -- 
-Regards,
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
-Laurent Pinchart
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
