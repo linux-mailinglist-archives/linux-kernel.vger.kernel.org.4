@@ -2,119 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170476610C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 19:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A196610FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 19:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjAGSYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 13:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S232956AbjAGS06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 13:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjAGSYL (ORCPT
+        with ESMTP id S232585AbjAGS0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 13:24:11 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E2A1E3C4;
-        Sat,  7 Jan 2023 10:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=rbaU3zKYZQm8LWw+XTHjZPw1N0FWGhaOeYaSMW68DXI=; b=Pgp7KRtqGgcqKUSYc8VypUf5Zo
-        nqiB4kHecWiWtl+zcdAwGdeeR7Q23CyBJ/QA48OHhpRkCC6nKh7+PJkxsXJQSrtySWqFT97xl8soE
-        vUGX1azwTQgKWbdfWhz+hMAOQDIATH53xlOsMQqGB0Ed3ta8NlUymPSnzuhBizY2XT0U=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pEDrL-001RC1-5S; Sat, 07 Jan 2023 19:23:59 +0100
-Date:   Sat, 7 Jan 2023 19:23:59 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org
-Subject: Re: [PATCH v2 net-next 5/5] drivers/net/phy: add driver for the
- onsemi NCN26000 10BASE-T1S PHY
-Message-ID: <Y7m4v8nLEc4bVBDf@lunn.ch>
-References: <cover.1673030528.git.piergiorgio.beruto@gmail.com>
- <b15b3867233c7adf33870460ea442ff9a4f6ad41.1673030528.git.piergiorgio.beruto@gmail.com>
+        Sat, 7 Jan 2023 13:26:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF73FA25;
+        Sat,  7 Jan 2023 10:26:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71F18B8047E;
+        Sat,  7 Jan 2023 18:26:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15737C433F0;
+        Sat,  7 Jan 2023 18:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673115981;
+        bh=2NgRSukIsXpmr4ezznzNGR723w5oZTyOcLNPLclIT8w=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+        b=rlMftI1JL5hJ/vKUK6hgp9gjqtc3W7HcF+9QURm5qT53z5i/VXxG69OkwpfgZGbTR
+         ZVpNJGFKTfRa8zjCHKjYYcs7m7TmL7OEfI7xyG9CsORNNiOvUsNUjEI7IXpd05JSHG
+         YTt3BDLf1OGm6npZG9f0n1bFdbh0u/PprR0zcYL/enO+X84iEaGLlAktqThawoxhkj
+         /R/4nBSt0qLZJ/AU5ssdZjnZKdozQqiZtjlXmta12H7oTa7Oqfbenh8YDkr2AnwMfK
+         AzuPmmFgkbijCVt5UPeuA+6c0oh4f6aexZ0PqPZi2LyYYJVIfTWVwsKXqjoFJWGH7e
+         v5dB2Z0T0y+iA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id EB3F6C54EBC;
+        Sat,  7 Jan 2023 18:26:20 +0000 (UTC)
+From:   Sam Ravnborg via B4 Submission Endpoint 
+        <devnull+sam.ravnborg.org@kernel.org>
+Date:   Sat, 07 Jan 2023 19:26:15 +0100
+Subject: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight handling
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b15b3867233c7adf33870460ea442ff9a4f6ad41.1673030528.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+In-Reply-To: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, Stephen Kitt <steve@sk2.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673115978; l=2641;
+ i=sam@ravnborg.org; s=20230107; h=from:subject:message-id;
+ bh=00kGRCWi8cuXpKBxkvC737vLzE0DLWF6H/syUZozYj0=; =?utf-8?q?b=3Dn0gLcHxryjYg?=
+ =?utf-8?q?M/3rj8DxmkGGgj+kqUIxzuWt9FYoauHAwjD31UB8ShIRk/2wtjXq9fNHAF2YAhlJ?=
+ YGxA/gk7AfjT/Ak1jBRmIYhfO1fh+3b+KaplQZMvBeYtU5vrsyPE
+X-Developer-Key: i=sam@ravnborg.org; a=ed25519;
+ pk=R0+pqV7BRYOAeOIGkyOrSNke7arx5y3LkEuNi37YEyU=
+X-Endpoint-Received: by B4 Submission Endpoint for sam@ravnborg.org/20230107 with auth_id=22
+X-Original-From: Sam Ravnborg <sam@ravnborg.org>
+Reply-To: <sam@ravnborg.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +++ b/drivers/net/phy/Kconfig
-> @@ -264,6 +264,13 @@ config NATIONAL_PHY
->  	help
->  	  Currently supports the DP83865 PHY.
->  
-> +config NCN26000_PHY
-> +	tristate "onsemi 10BASE-T1S Ethernet PHY"
-> +	help
-> +	  Adds support for the onsemi 10BASE-T1S Ethernet PHY.
-> +	  Currently supports the NCN26000 10BASE-T1S Industrial PHY
-> +	  with MII interface.
-> +
->  config NXP_C45_TJA11XX_PHY
->  	tristate "NXP C45 TJA11XX PHYs"
+From: Sam Ravnborg <sam@ravnborg.org>
 
-These are actually sorted by the tristate string, which is what you
-see when you use
+The atmel_lcdfb had code to save/restore power state.
+This is not needed so drop it.
 
-make menuconfig
+Introduce backlight_is_brightness() to make logic simpler.
 
-So 'onsemi' should be after 'NXP TJA11xx PHYs support'. Also, all the
-other entries capitalise the first word.
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc: linux-fbdev@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
->  	depends on PTP_1588_CLOCK_OPTIONAL
-> diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-> index f7138d3c896b..b5138066ba04 100644
-> --- a/drivers/net/phy/Makefile
-> +++ b/drivers/net/phy/Makefile
-> @@ -77,6 +77,7 @@ obj-$(CONFIG_MICROCHIP_T1_PHY)	+= microchip_t1.o
->  obj-$(CONFIG_MICROSEMI_PHY)	+= mscc/
->  obj-$(CONFIG_MOTORCOMM_PHY)	+= motorcomm.o
->  obj-$(CONFIG_NATIONAL_PHY)	+= national.o
-> +obj-$(CONFIG_NCN26000_PHY)	+= ncn26000.o
->  obj-$(CONFIG_NXP_C45_TJA11XX_PHY)	+= nxp-c45-tja11xx.o
->  obj-$(CONFIG_NXP_TJA11XX_PHY)	+= nxp-tja11xx.o
->  obj-$(CONFIG_QSEMI_PHY)		+= qsemi.o
+diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/atmel_lcdfb.c
+index 1fc8de4ecbeb..d297b3892637 100644
+--- a/drivers/video/fbdev/atmel_lcdfb.c
++++ b/drivers/video/fbdev/atmel_lcdfb.c
+@@ -49,7 +49,6 @@ struct atmel_lcdfb_info {
+ 	struct clk		*lcdc_clk;
+ 
+ 	struct backlight_device	*backlight;
+-	u8			bl_power;
+ 	u8			saved_lcdcon;
+ 
+ 	u32			pseudo_palette[16];
+@@ -109,32 +108,18 @@ static u32 contrast_ctr = ATMEL_LCDC_PS_DIV8
+ static int atmel_bl_update_status(struct backlight_device *bl)
+ {
+ 	struct atmel_lcdfb_info *sinfo = bl_get_data(bl);
+-	int			power = sinfo->bl_power;
+-	int			brightness = bl->props.brightness;
++	int brightness;
+ 
+-	/* REVISIT there may be a meaningful difference between
+-	 * fb_blank and power ... there seem to be some cases
+-	 * this doesn't handle correctly.
+-	 */
+-	if (bl->props.fb_blank != sinfo->bl_power)
+-		power = bl->props.fb_blank;
+-	else if (bl->props.power != sinfo->bl_power)
+-		power = bl->props.power;
+-
+-	if (brightness < 0 && power == FB_BLANK_UNBLANK)
+-		brightness = lcdc_readl(sinfo, ATMEL_LCDC_CONTRAST_VAL);
+-	else if (power != FB_BLANK_UNBLANK)
+-		brightness = 0;
++	brightness = backlight_get_brightness(bl);
+ 
+ 	lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_VAL, brightness);
++
+ 	if (contrast_ctr & ATMEL_LCDC_POL_POSITIVE)
+ 		lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_CTR,
+ 			brightness ? contrast_ctr : 0);
+ 	else
+ 		lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_CTR, contrast_ctr);
+ 
+-	bl->props.fb_blank = bl->props.power = sinfo->bl_power = power;
+-
+ 	return 0;
+ }
+ 
+@@ -155,8 +140,6 @@ static void init_backlight(struct atmel_lcdfb_info *sinfo)
+ 	struct backlight_properties props;
+ 	struct backlight_device	*bl;
+ 
+-	sinfo->bl_power = FB_BLANK_UNBLANK;
+-
+ 	if (sinfo->backlight)
+ 		return;
+ 
+@@ -173,7 +156,6 @@ static void init_backlight(struct atmel_lcdfb_info *sinfo)
+ 	sinfo->backlight = bl;
+ 
+ 	bl->props.power = FB_BLANK_UNBLANK;
+-	bl->props.fb_blank = FB_BLANK_UNBLANK;
+ 	bl->props.brightness = atmel_bl_get_brightness(bl);
+ }
+ 
 
-This is sorted by CONFIG_ symbol, so is correct.
-
-> +
-> +// driver callbacks --------------------------------------------------------- //
-
-Comments like this don't really add any value.
-
-> +static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
-> +{
-> +	int ret;
-> +
-> +	// read and aknowledge the IRQ status register
-> +	ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-> +
-> +	// check only link status changes
-> +	if (unlikely(ret < 0) || (ret & NCN26000_REG_IRQ_STATUS) == 0)
-> +		return IRQ_NONE;
-
-More usage of unlikely(). If this was on the hot path, handling 10M
-frames a second, then maybe unlikley() could be justified. But how
-often do you get PHY interrupts? Once a day?
-
-      Andrew
+-- 
+2.34.1
