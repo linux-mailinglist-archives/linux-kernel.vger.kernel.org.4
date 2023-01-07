@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37FB660D0E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EFE660D16
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjAGIpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 03:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S229475AbjAGIvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 03:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjAGIpr (ORCPT
+        with ESMTP id S229550AbjAGIu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 03:45:47 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F41861445
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 00:45:46 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso2600128wmp.3
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 00:45:46 -0800 (PST)
+        Sat, 7 Jan 2023 03:50:57 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDE44C71D;
+        Sat,  7 Jan 2023 00:50:56 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so2232107otk.8;
+        Sat, 07 Jan 2023 00:50:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lt9W0zTmSfnJ2L+6b3nzdRY70GeMsclpC2RCJP1f6Oc=;
-        b=o1dHo9I7Mg7cY2PH33Rv0uczDOpn/IfMYwEF51AMsebUkm6u/S5FX9ul/D7voM0k/N
-         eKS+hjzDcLaN4+WNAjAANp2+lodYsC4hBnMFs3kImwpoNwKFzeiF3S0VSqBCLXg1jF+d
-         r04Lb6Ei5Rhn6D4AfJIh8BPiYoWCJUTyD8mUXIIU4y1pq7+2bV8WmZ6W52CxY27czXdn
-         lYy0USwSVJb7gJIjVEmbtzWNO/C9CKnetYVe0W65X/Bs/DNzuxRCUJ35Hsd2DZg7xjrk
-         TGR8n7QztAEJFCaZjafgrS7TPA5bnXu921v8lfevP17hW11ZP/Mi5YqxPm5dUXveiO8w
-         mlKw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LADuRwb6ovNl/LfjytZ8zY/PQtuxARdpECOSArb7aQ=;
+        b=ZaHhsyqaNnxp6f5YnLXBYAbT3doBNgnA15cfozMxa+7L9lu4gWO0lp3VkYgyQaOYel
+         Cfhs7ULl+WN0PN54as3xTJNMrtVkZx0tThmlDHfUrpzR/4YHbYDd2r7IbvjE8NFzL5kl
+         U4e1nQavrqzFUqDARk6NziKSvJ9qvRh0D8TlRf8HAkMp13uxw4JnqF6C6jGKDDIrK+c4
+         1LxS8TowSJoNh7r3vzdthzvbdpcCnQDdcLG2rvpqpEWvdLzdqqllK+5n4U51Hq42EfOl
+         jqPDMWtDq3ntC73Ult6mF9rKsNuKx7mjHUKHBvxhOl4M4FknAfyPNtkhFDLp32I/CX3R
+         N85w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lt9W0zTmSfnJ2L+6b3nzdRY70GeMsclpC2RCJP1f6Oc=;
-        b=i3k8+2TPZGFKKaB9usUK0mH03Eok1CttYtluuzLTqxg26EMTQ/EKuzTiXDmLEaesqA
-         uyQeb44gcu9EYwK9XHUvLJif3Rh0v6jSjuc9UHQwlZLAFMmP1vaFEyAwNP1jqVDYgprx
-         UsIT/7XV8KqhVB/cK4UH8S+ktczVbHJkych/wLq1EdaSj+F1tWSShzeXXNOCnULQBYlF
-         VHntBKtS9klhaNNbsXFDiKXR0EKtJw/njVT23niz/Vd+l1wZ/k5p02nreCUT9RvNgZV2
-         rRoRwvTTIfbZzaOA9c9Yymr5UHf5GkLRe18NSGvwt+E9N+qrWi9lONMcf8wUf3EkwecT
-         JM6Q==
-X-Gm-Message-State: AFqh2kpAHYR5sDzz8mYKBR1yjA587BMKiYyz3dbu9tnHv9x+eIB2Y7Xr
-        DRFBOL6wuN6rW9aIwi6Z+QCZPRd1tBCmVb+Q
-X-Google-Smtp-Source: AMrXdXvsQtGXFJhQfrrkI4KgBRY4dHbLotWADHTfRdRUkZs9u76mJuVMer8RobFSGwcS+je1KPj/Ow==
-X-Received: by 2002:a05:600c:3b2a:b0:3d9:7950:dc6d with SMTP id m42-20020a05600c3b2a00b003d97950dc6dmr31010228wms.40.1673081145145;
-        Sat, 07 Jan 2023 00:45:45 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c4fcb00b003c6f3f6675bsm9855943wmq.26.2023.01.07.00.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 00:45:44 -0800 (PST)
-Date:   Sat, 7 Jan 2023 11:45:39 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:275
- vcap_show_admin() warn: passing zero to 'PTR_ERR'
-Message-ID: <202301071222.ef1ERM6s-lkp@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7LADuRwb6ovNl/LfjytZ8zY/PQtuxARdpECOSArb7aQ=;
+        b=1ADjCbPnTBYL3kGAgqBPhpr4Jq6i+TBOWHLbw/SPVFcc2HMF9EdVUEtjnHJMVt08ZZ
+         DaUsLWizABtXuZCOeWjoYTrHWnjmT8BpWJJ9ctbxB1tYn7Fa+dkRl08KBmEfagJCgVft
+         P4EfaIrLtCFjTijfZvwi/mEeQ0uc+IEERX8AbUDZXfA9S8kHY/bGS+CG5j+yKi/sd5rz
+         98a0Ber/KbE7GcBu4pvHEr8eCs63hndm04XIISwvh27IhIAn802J7wmnOvbeUasS5Cfc
+         g/WQqPgrIQOm/tavQwtUgtJiAEuphFJZm6KORBpNVWyiv2ayKy9QLIVpaTKoyYF4+fUr
+         aOSA==
+X-Gm-Message-State: AFqh2kqrnrhfeFwyAgv8rwam6gS6jZmhriJHLvEvFn5VFE4l6x++K5/q
+        OGLHtzfEYe3FIiW4BVJNitIEHI4PSOq+rg5UW90=
+X-Google-Smtp-Source: AMrXdXuCFuhDil9Ij7dbnBVJR9U+yQm8C8Vz9C+2xD+CeZLU6pTLbxQa42maNr6SnEwr4qV+1aWGRhBiU0DBQ0w+WNc=
+X-Received: by 2002:a9d:4d05:0:b0:677:2cef:6417 with SMTP id
+ n5-20020a9d4d05000000b006772cef6417mr3127074otf.357.1673081455470; Sat, 07
+ Jan 2023 00:50:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1> <Y7bT0OL8RAWkCu0Z@kroah.com>
+ <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+ <Y7bg5sxEZDIaGoXK@kroah.com> <Y7dypc4sFcmYlXQQ@ziqianlu-desk2> <Y7kqx5cBCVojq6QJ@kroah.com>
+In-Reply-To: <Y7kqx5cBCVojq6QJ@kroah.com>
+From:   Pavel Boldin <boldin.pavel@gmail.com>
+Date:   Sat, 7 Jan 2023 10:50:44 +0200
+Message-ID: <CABohvEPWBHmrRpZcQejTkZ+CYtYCyu6rFMd4doNn_CMk35um+g@mail.gmail.com>
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Igor Seletskiy <i@cloudlinux.com>, Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0a71553536d270e988580a3daa9fc87535908221
-commit: 610c32b2ce66d4aaa07b3a77a709bd4d2b268bb1 net: microchip: vcap: Add vcap_get_rule
-config: arc-randconfig-m041-20230106
-compiler: arc-elf-gcc (GCC) 12.1.0
+On Sat, Jan 07, 2023 at 10:18, Greg KH <gregkh@linuxfoundation.org>:
+>
+> On Fri, Jan 06, 2023 at 09:00:21AM +0800, Aaron Lu wrote:
+> > If you do not trust what I've done is what I've claimed, now the
+> > original author Pavel Boldin has given the patch a "LGTM" tag, does that
+> > address your concern?
+>
+> I don't see that anywhere on lore.kernel.org, have a link to it?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+LGTM.
 
-New smatch warnings:
-drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:275 vcap_show_admin() warn: passing zero to 'PTR_ERR'
+Cc: Igor Seletskiy <i@cloudlinux.com>
 
-Old smatch warnings:
-drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:103 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'value'.
-drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c:106 vcap_debugfs_show_rule_keyfield() error: uninitialized symbol 'mask'.
+--
+Pavel Boldin
 
-vim +/PTR_ERR +275 drivers/net/ethernet/microchip/vcap/vcap_api_debugfs.c
-
-3a7921560d2fd3 Steen Hegelund 2022-11-17  263  static int vcap_show_admin(struct vcap_control *vctrl,
-3a7921560d2fd3 Steen Hegelund 2022-11-17  264  			   struct vcap_admin *admin,
-3a7921560d2fd3 Steen Hegelund 2022-11-17  265  			   struct vcap_output_print *out)
-3a7921560d2fd3 Steen Hegelund 2022-11-17  266  {
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  267  	struct vcap_rule_internal *elem;
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  268  	struct vcap_rule *vrule;
-3a7921560d2fd3 Steen Hegelund 2022-11-17  269  	int ret = 0;
-3a7921560d2fd3 Steen Hegelund 2022-11-17  270  
-3a7921560d2fd3 Steen Hegelund 2022-11-17  271  	vcap_show_admin_info(vctrl, admin, out);
-3a7921560d2fd3 Steen Hegelund 2022-11-17  272  	list_for_each_entry(elem, &admin->rules, list) {
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  273  		vrule = vcap_get_rule(vctrl, elem->data.id);
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  274  		if (IS_ERR_OR_NULL(vrule)) {
-610c32b2ce66d4 Horatiu Vultur 2022-12-03 @275  			ret = PTR_ERR(vrule);
-
-This isn't right.  The error pointer and the NULL should be handled
-differently.  I haven't looked at vcap_get_rule() but if it really
-returns both then it should be something like:
-
-	vrule = vcap_get_rule(vctrl, elem->data.id);
-	if (IS_ERR(vrule))
-		return PTR_ERR(vrule);
-	if (!vrule)
-		continue;
-
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  276  			break;
-682f560b8a87bf Dan Carpenter  2022-11-29  277  		}
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  278  
-3a7921560d2fd3 Steen Hegelund 2022-11-17  279  		out->prf(out->dst, "\n");
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  280  		vcap_show_admin_rule(vctrl, admin, out, to_intrule(vrule));
-610c32b2ce66d4 Horatiu Vultur 2022-12-03  281  		vcap_free_rule(vrule);
-3a7921560d2fd3 Steen Hegelund 2022-11-17  282  	}
-3a7921560d2fd3 Steen Hegelund 2022-11-17  283  	return ret;
-3a7921560d2fd3 Steen Hegelund 2022-11-17  284  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+P.S.: Sorry for the mess, gmail app can't send plaintext.
