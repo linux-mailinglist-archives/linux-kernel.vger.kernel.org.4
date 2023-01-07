@@ -2,82 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CADA660F50
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E3C660F52
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjAGOGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S232439AbjAGOHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjAGOGl (ORCPT
+        with ESMTP id S230240AbjAGOHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:06:41 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0CA272A
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 06:06:40 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id h26so4464962qtu.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 06:06:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hYW0KpUefNbsb+TIFKxeaN6DvLsZYHJVc8Ee1/aXPzM=;
-        b=bQGXeIZW5oR0Xgm9INOjEISApHRJhKuQMZxH0BMSBJDIHro/NvuShx/iK5xBt/qULl
-         PPUFLBPBaqDch6IDcq1cj+nJaITeKkDPEUnFgjaonrCr3dJWzVJX4lo9S+I8rJx5fFUQ
-         n+xdSMgaKQBl7COeyNfCFRMv5OMQ+yjGwOg7jMgAGtKOjm51OC7/ti1lSpdqzbiRw2Vc
-         oTFQsufVmzxprv5l+3qoptQ30tEmmn/V0VwqJS9vPp5l6jHzcR35SDp1RVO33R0VaM/V
-         uwnpHFzepOffvsG7IBjq5Cd7yuN+8DUZ6HCMSyvfXujIDbYlPmNO7qtwI6YpOPlzzrxB
-         BlOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hYW0KpUefNbsb+TIFKxeaN6DvLsZYHJVc8Ee1/aXPzM=;
-        b=Io90wbUHrhJGqpPEqOuLC+b9NQ3fLZgaxbotGcWxnpAf27JGyHX41qJYcMX0QBqlwl
-         KvJyfj4E/MuecQBF4WSRhdY6B9HDHyB0Kd5iPZEPgHFdo3ddnDRP89hjscns7upuuSPl
-         Q1vv+YWwSIM3WCkhXBzqP+2e4u6nuLZQUPaKjXRSDjyPjJP3cQaayTTeL7qWK65eZ2OF
-         j2Cmxe+GShnCSNtzg2Y0PXtJp731xZA6oChFOXMr8xlLHpxuJ8t4QiDjfvspmIG7CQgo
-         HNGTNhWUFTB5iMTJg4VR6ZR58nwpnxdMzIRuZdI6lLSBAZQceJxP1K/KRN/9OPhkJz1x
-         NGBg==
-X-Gm-Message-State: AFqh2kqo+2HZYHP5FnK43zoX21Cuopx5MW6LR5dUPWscjrEItYZ1wzRM
-        k2agE5L/UHZcQ+92lXJLUVCTywWMBBYzoiOaw4M=
-X-Google-Smtp-Source: AMrXdXv7H+7RQ/kfMW0F60dp6T4yZtERE2LOpL1afbncXT1mXXxoYmRUWCy5slNrTyHVRV7H4O+sSVTFXkfFGo8GNdM=
-X-Received: by 2002:ac8:708e:0:b0:3a7:ed31:a60c with SMTP id
- y14-20020ac8708e000000b003a7ed31a60cmr2389463qto.636.1673100399447; Sat, 07
- Jan 2023 06:06:39 -0800 (PST)
+        Sat, 7 Jan 2023 09:07:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E4A1DA;
+        Sat,  7 Jan 2023 06:07:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A980FB810B3;
+        Sat,  7 Jan 2023 14:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619F9C433F0;
+        Sat,  7 Jan 2023 14:07:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673100433;
+        bh=F1hP8g2fzdDqRR2w8HNEctZh13x2gOYdrnKuo+tRbq8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J7onqgmwPR0ivFaP4KIaTdgxxD1J/fTSy6XVPr87B9Ez0lH6Nv4DgP2Cf6sn09+Kf
+         RBZj2BkvO7U8RLZKLmP3u/j9m1YsMn112RwB55VVawGHsunj+2/moF9wQkWJyzddpi
+         TT6ytGRVPNP7iXm2gbL83qbUlLaNMmuVcaeIkyCjFl2PBMFuBfgKDUHZyARczqEBLY
+         zAf6m6UHpd6Uja9iovde5nFi3DT+HYjYulUdp6QNwaWhMdypNxoosz+RVzfpZ0JyXs
+         4Mx9azyG7AkbfOLNmVMrf311WAMd9YVazgKuN+uKQ+xyA92AqZpsqOsTCk4p0BAtbq
+         ZisA6IdPjLbbA==
+Received: by mail-ed1-f54.google.com with SMTP id v30so5944424edb.9;
+        Sat, 07 Jan 2023 06:07:13 -0800 (PST)
+X-Gm-Message-State: AFqh2krm19acHfZzxOx5xu523UCQv47S8V0joud6tNV8J3eqIgzbqZw7
+        wAGwhMaQcRkMoV4OlTKvX2zvJljnGJLXkoQodOs=
+X-Google-Smtp-Source: AMrXdXu3fbi11GqZl1RyUp6JPcz+JbDhnHRVbhhN+VoBiGErX7+96Vu5wFXrEMs6Pf/5erfI8shRQKZnuF1zeRVZ0hM=
+X-Received: by 2002:a50:cc0a:0:b0:470:44ed:aff2 with SMTP id
+ m10-20020a50cc0a000000b0047044edaff2mr6824154edi.103.1673100431593; Sat, 07
+ Jan 2023 06:07:11 -0800 (PST)
 MIME-Version: 1.0
-Sender: umorsalif@gmail.com
-Received: by 2002:a05:620a:25cb:0:0:0:0 with HTTP; Sat, 7 Jan 2023 06:06:38
- -0800 (PST)
-From:   Ousman Omar <mromarousman@gmail.com>
-Date:   Sat, 7 Jan 2023 06:06:38 -0800
-X-Google-Sender-Auth: LnFvcpvnGV0orXJrLlQTSaSmssc
-Message-ID: <CAEnUKdTeGuMcN3UqEywvOThNqW+PHrJ1fw8kRx_aNtXVTFABrQ@mail.gmail.com>
-Subject: If you are interested--___,!!!;-
-To:     undisclosed-recipients:;
+References: <20230107113838.3969149-5-guoren@kernel.org> <202301072027.oxrCrTTy-lkp@intel.com>
+In-Reply-To: <202301072027.oxrCrTTy-lkp@intel.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 7 Jan 2023 22:07:00 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQDQgWuj4fUTXMdqoLzJD7=pMFkGtqDSdr2e4ss6BxvNg@mail.gmail.com>
+Message-ID: <CAJF2gTQDQgWuj4fUTXMdqoLzJD7=pMFkGtqDSdr2e4ss6BxvNg@mail.gmail.com>
+Subject: Re: [PATCH -next V13 4/7] riscv: entry: Convert to generic entry
+To:     kernel test robot <lkp@intel.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, oe-kbuild-all@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MILLION_USD,MONEY_FORM_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm Mr. Omar a regional managing director (CORIS BANK INTERNATIONAL)
-Ouagadougou Burkina Faso, in my department we have US$ 9.5 million
-united state dollars, to transfer into your account as a dormant
-fund,If you are interested to use this fund to help the orphans around
-the world contact me with my email address (mromarousman@gmail.com)
-and your personal information's below..
+Yes, these are caused by W=1, and I would wait a while to update the
+next version of the patchset.
 
-Your Full names.
-Your Country of origin.
-Your Occupation.
-Your Mobile Number.
+Here is the fix:
 
-My Regards.
+diff --git a/arch/riscv/include/asm/asm-prototypes.h
+b/arch/riscv/include/asm/asm-prototypes.h
+index ef386fcf3939..61ba8ed43d8f 100644
+--- a/arch/riscv/include/asm/asm-prototypes.h
++++ b/arch/riscv/include/asm/asm-prototypes.h
+@@ -27,5 +27,7 @@ DECLARE_DO_ERROR_INFO(do_trap_break);
+
+ asmlinkage unsigned long get_overflow_stack(void);
+ asmlinkage void handle_bad_stack(struct pt_regs *regs);
++asmlinkage void do_page_fault(struct pt_regs *regs);
++asmlinkage void do_irq(struct pt_regs *regs);
+
+ #endif /* _ASM_RISCV_PROTOTYPES_H */
+diff --git a/arch/riscv/include/asm/entry-common.h
+b/arch/riscv/include/asm/entry-common.h
+index 994ed48e8eb8..6e4dee49d84b 100644
+--- a/arch/riscv/include/asm/entry-common.h
++++ b/arch/riscv/include/asm/entry-common.h
+@@ -5,6 +5,7 @@
+
+ #include <asm/stacktrace.h>
+
+-extern void handle_page_fault(struct pt_regs *regs);
++void handle_page_fault(struct pt_regs *regs);
++void handle_break(struct pt_regs *regs);
+
+ #endif /* _ASM_RISCV_ENTRY_COMMON_H */
+diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
+index 726731ada534..a556fdaafed9 100644
+--- a/arch/riscv/kernel/head.h
++++ b/arch/riscv/kernel/head.h
+@@ -10,7 +10,6 @@
+
+ extern atomic_t hart_lottery;
+
+-asmlinkage void do_page_fault(struct pt_regs *regs);
+ asmlinkage void __init setup_vm(uintptr_t dtb_pa);
+ #ifdef CONFIG_XIP_KERNEL
+ asmlinkage void __init __copy_data(void);
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index a7b6bd0df497..2e365084417e 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -12,6 +12,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/resume_user_mode.h>
+ #include <linux/linkage.h>
++#include <linux/entry-common.h>
+
+ #include <asm/ucontext.h>
+ #include <asm/vdso.h>
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index e04593c6cfe3..a44e7d15311c 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -15,6 +15,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/kprobes.h>
+ #include <linux/kfence.h>
++#include <linux/entry-common.h>
+
+ #include <asm/ptrace.h>
+ #include <asm/tlbflush.h>
+~
+
+On Sat, Jan 7, 2023 at 8:58 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on next-20230106]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/compiler_types-h-Add-__noinstr_section-for-noinstr/20230107-194127
+> patch link:    https://lore.kernel.org/r/20230107113838.3969149-5-guoren%40kernel.org
+> patch subject: [PATCH -next V13 4/7] riscv: entry: Convert to generic entry
+> config: riscv-allyesconfig
+> compiler: riscv64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/82d3616db033b052abe2dc3b1481ef5ce474b7ab
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review guoren-kernel-org/compiler_types-h-Add-__noinstr_section-for-noinstr/20230107-194127
+>         git checkout 82d3616db033b052abe2dc3b1481ef5ce474b7ab
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ arch/riscv/mm/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> arch/riscv/kernel/signal.c:277:6: warning: no previous prototype for 'arch_do_signal_or_restart' [-Wmissing-prototypes]
+>      277 | void arch_do_signal_or_restart(struct pt_regs *regs)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> --
+> >> arch/riscv/kernel/traps.c:196:6: warning: no previous prototype for 'handle_break' [-Wmissing-prototypes]
+>      196 | void handle_break(struct pt_regs *regs)
+>          |      ^~~~~~~~~~~~
+>    arch/riscv/kernel/traps.c:264:35: warning: no previous prototype for 'do_page_fault' [-Wmissing-prototypes]
+>      264 | asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
+>          |                                   ^~~~~~~~~~~~~
+>    arch/riscv/kernel/traps.c:275:35: warning: no previous prototype for 'do_irq' [-Wmissing-prototypes]
+>      275 | asmlinkage __visible noinstr void do_irq(struct pt_regs *regs)
+>          |                                   ^~~~~~
+> --
+> >> arch/riscv/mm/fault.c:207:6: warning: no previous prototype for 'handle_page_fault' [-Wmissing-prototypes]
+>      207 | void handle_page_fault(struct pt_regs *regs)
+>          |      ^~~~~~~~~~~~~~~~~
+>
+>
+> vim +/arch_do_signal_or_restart +277 arch/riscv/kernel/signal.c
+>
+>    276
+>  > 277  void arch_do_signal_or_restart(struct pt_regs *regs)
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
+
+
+
+-- 
+Best Regards
+ Guo Ren
