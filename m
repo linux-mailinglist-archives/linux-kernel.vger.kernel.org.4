@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98343660FD7
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43921660FDB
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjAGPLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 10:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S232528AbjAGPMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 10:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjAGPLt (ORCPT
+        with ESMTP id S230114AbjAGPMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 10:11:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3365AD6;
-        Sat,  7 Jan 2023 07:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cq3Tcm7OLVA1me+kKR9zka8dfFlwNGfvdQ54sCCOFy0=; b=ZNxGrxfYZ18g+iYGTFB+S1ko54
-        lj1sxWXhAn78Z3mSPVR2VNhutJKCAxFaz7EvlYN14xY1q6+NBT5BmqFVf/nJJRXx3rkyJLyzNsotg
-        p2AncToaCGxm00OtMsKBilhhcwdZaLAT92+SGg+aiYltEWGvShClAy8z/ZR/bi7VI7vE5J+bt26Am
-        gl2QLP2YD9kfgP/iz1ffl1HiLzGCokiMepgI+S3Woob+xpPYF/t/jYpqc9CydIc1SEn5K9QJfINJB
-        3kqKLKrmueMObbikddZ9gvcsiGZattD6U4HvI2cIcSbuPAQJI15Mvcrjjs0mZKc3oACChoxW3lSC/
-        5B9rSMTQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEArM-000dly-Pt; Sat, 07 Jan 2023 15:11:48 +0000
-Date:   Sat, 7 Jan 2023 15:11:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Rohith Surabattula <rohiths.msft@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
-        linux-ext4@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] mm: Merge
- folio_has_private()/filemap_release_folio() call pairs
-Message-ID: <Y7mLtPpRz8boODVX@casper.infradead.org>
-References: <167172131368.2334525.8569808925687731937.stgit@warthog.procyon.org.uk>
- <167172132272.2334525.13617516784050484518.stgit@warthog.procyon.org.uk>
+        Sat, 7 Jan 2023 10:12:36 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202846C290;
+        Sat,  7 Jan 2023 07:12:35 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4b6255ce5baso58598837b3.11;
+        Sat, 07 Jan 2023 07:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lZ+M87fM3OC8ADWh+asZe0Znlz2AE5Sx1l9VbP98k4=;
+        b=V8lP6HTKKTqb5Sv1FQFYQmNk2m90VJmKLCYgfid7m2v8MtZIQ8bf+pNKPRapSqIeKh
+         ojeFEmY57v4gbu8amvrJ/pYYc6LJUZUVYaxXu7z5rI7q0ng7wr1ur3dpJ100FNtmUynP
+         qf5RcN5LR9ElXzsvR0P7BZCQm85ubZS0wqZe5uSn4dJ42t+9q896Hy2118L6hF/+awDk
+         i7K5vVzuyeF5/vQqj+tihq/KdcwziXDaGULicEu2UhDWykrWFKuirFAyo3eUYIA2q07S
+         t35qYQsF7fYZ7B5Ew4GLuQmTJPJfqIO/uRIvNjmQ5PTxQJTXILcb5mnZFdFv/CkLQZ+V
+         nUOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2lZ+M87fM3OC8ADWh+asZe0Znlz2AE5Sx1l9VbP98k4=;
+        b=pgyaCGTeWD+rQ5QnKchH/FT4p3sbb41JqUcUc+LoSabW8vFca05+k0XDVAcXJiUf58
+         6VdLxcsN7ReqmTmyJAMfemDZ5ifXaDKpXzrN5aqeCf5+anPhLemiPKmNB4rDO99e0sz7
+         lTYM2Ej638PFRf8iqayYYxQlq7Yt9ccbOgvREnWWuOBO2Q+u5LrvfMdyW4odQjoWLOUE
+         Udzy1ATx5J8usNQ8iN6c8JNxIBpm/QzYuSQUs3lCmgDQpQZJrhL06TqU4+0jtislOz/Q
+         uRdCCrWZGVVUVuPuVvwGIElW2eQqeSytcfx5R3yKo7o6aIKAAp/dKVxl0IxC06v13p8z
+         SkgA==
+X-Gm-Message-State: AFqh2krqufmfo+mJD90IdxWy8x9vkj5RQHZ9+hB3JaGT/dwRrLZtd06L
+        ZYI5zo0hfbt8Wv95skH2acOdZzlMoj72JAAPUAQ=
+X-Google-Smtp-Source: AMrXdXu7TDFj4AQFL2MK3k2kqI7w7EQzHTOFeKBMoJ5n/8Ho5xlJK1pCtddeDiyk2b8bPgR6heiOSJgzghp1ooCFdB8=
+X-Received: by 2002:a0d:f601:0:b0:3d8:8c0e:6d48 with SMTP id
+ g1-20020a0df601000000b003d88c0e6d48mr565622ywf.462.1673104354305; Sat, 07 Jan
+ 2023 07:12:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167172132272.2334525.13617516784050484518.stgit@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230107091820.3382134-1-masahiroy@kernel.org>
+In-Reply-To: <20230107091820.3382134-1-masahiroy@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 7 Jan 2023 16:12:23 +0100
+Message-ID: <CANiq72nY9X1cyu=3MwfRKTcxMUNHRTUGPFC7VR=OtL8V-NPQog@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] kbuild: refactor host*_flags
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 03:02:02PM +0000, David Howells wrote:
-> Make filemap_release_folio() check folio_has_private().  Then, in most
-> cases, where a call to folio_has_private() is immediately followed by a
-> call to filemap_release_folio(), we can get rid of the test in the pair.
-> 
-> The same is done to page_has_private()/try_to_release_page() call pairs.
+On Sat, Jan 7, 2023 at 10:18 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Remove _host*_flags.
+>
+> This will change the -Wp,-MMD,$(depfile) order in the command line
+> but no functional change is intended.
 
-This line is now obsolete.
+Looks fine to me. I gave it a quick test with just this patch on top
+of v6.2-rc2 and checked that the order indeed changed (was there a
+reason to not keep it the same?).
 
-> There are a couple of sites in mm/vscan.c that this can't so easily be
-> done.  In shrink_folio_list(), there are actually three cases (something
-> different is done for incompletely invalidated buffers), but
-> filemap_release_folio() elides two of them.
-> 
-> In shrink_active_list(), we don't have have the folio lock yet, so the
-> check allows us to avoid locking the page unnecessarily.
-> 
-> A wrapper function to check if a folio needs release is provided for those
-> places that still need to do it in the mm/ directory.  This will acquire
-> additional parts to the condition in a future patch.
-> 
-> After this, the only remaining caller of folio_has_private() outside of mm/
-> is a check in fuse.
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-But there are a few remaining places which check page_has_private().
-I think they're all wrong and should be PagePrivate(), but I'll look
-at them more next week.
+Thanks!
 
+Cheers,
+Miguel
