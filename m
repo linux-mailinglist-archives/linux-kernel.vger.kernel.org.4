@@ -2,153 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D3C660C8E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 06:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA16660C99
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 06:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjAGF1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 00:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S229795AbjAGFoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 00:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjAGF1Q (ORCPT
+        with ESMTP id S229454AbjAGFoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 00:27:16 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5515530B;
-        Fri,  6 Jan 2023 21:27:15 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id bp44so4047348qtb.0;
-        Fri, 06 Jan 2023 21:27:15 -0800 (PST)
+        Sat, 7 Jan 2023 00:44:10 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3EE840A9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 21:44:08 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id i185so3579425vsc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 21:44:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVOvUXIxXHGoJc1RNEJDnYnyJOQ4H4zXliT+/36ft90=;
+        b=ZyG0V7jq7NAy8AJxDI7/EU2U+MZeRpD+iXBRi4jxWLTU0lxeRWudQndiBFDYPtnxlt
+         8378mG02AEC93Al/JchoTCV23LIeNhqCC+3Qa/8WDACdymL54TpZ1FKVShbpIwKc9PNB
+         2Rfrid6d49f9U9z2kFkhNa4adGILwKueoAIPc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c6PynqUW6l4kS1lyZqH/R8YKL1BlPuz4Tj3BtK4Od38=;
-        b=rfBv17Pjz7e2dZYCgBo+07Pejt8JxeObkzEHJDzss7dIQltXvf919JyVI/n+EF1bpW
-         tcqj2yS8ZNXGbeyu2uQDzdVmDX+IoFdQfcZvwMCsuheJ5OhPPbxrSkV7D5yjUv9z7HKH
-         IdMpMJPPNW2Z5QZln5HX4z4r7P2QJSKz+09zuouGlULdig6FmbaxHN0+uZ9hbRHfsNcI
-         5ujs5KUHNhhgtTmdf2PZadgjLp9nTjiXUgwORSitXuLccWuJJK8IBMutIuES4ySh37Ge
-         YlPbAc03va/gKkpDFo+q5cXL75D45keV6d01uZS36nmSXgunlpUTcA0WTKNincB7tR41
-         iWTw==
-X-Gm-Message-State: AFqh2kqSbUwiXFh2vnGK6+blMcewVZsSKaRUha1l1j8QfaL/Xfv59dPG
-        SjDjad3FNIasg45hfiG+fV0=
-X-Google-Smtp-Source: AMrXdXvgXIUmalVwluvtioyOMwoumtB20yKUMWQY6rWB9kVHyfMj8kT4X4sSvpPZSSYd5d23sNKthw==
-X-Received: by 2002:ac8:73c7:0:b0:3a7:f3e7:5149 with SMTP id v7-20020ac873c7000000b003a7f3e75149mr73224654qtp.61.1673069234169;
-        Fri, 06 Jan 2023 21:27:14 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:c7d8])
-        by smtp.gmail.com with ESMTPSA id q5-20020a05620a0d8500b006eee3a09ff3sm1688602qkl.69.2023.01.06.21.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 21:27:13 -0800 (PST)
-Date:   Fri, 6 Jan 2023 23:27:14 -0600
-From:   David Vernet <void@manifault.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 0/3] Annotate kfuncs with new __bpf_kfunc macro
-Message-ID: <Y7kCsjBZ/FrsWW/e@maniforge.lan>
-References: <20230106195130.1216841-1-void@manifault.com>
- <CAKH8qBuakT6qtY5TZomWEAB=1ZJfdgXYt2A7WVOjtHAYsdbrVA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xVOvUXIxXHGoJc1RNEJDnYnyJOQ4H4zXliT+/36ft90=;
+        b=shfbdBKJbtG52/NcVZ7MrgBE5xblrWax1G4Pu/4qRvmeClAlDjppoYnUQxrlOnxuXX
+         LekqAGjUh3dPiAzNwgd41+YRpz4oYmktE0AX74UPPRzGc1piz+KIrTiD5KoAwekMLYVg
+         hiT9BB6I3vMiQZ4VVcrX/tgDZA3T1jutKxMJ6C+izAganFIavZfULQPp+mrJ4L55KI0Z
+         GYFfng59O23KugImaqpamwKGk3ry15elD4O8uMpkIYnsSudTpDYiyG5PQopn5RSCbiOK
+         wWjxWRYsYrUgCFEDYmsFVUoEB0meuiATFpC0xcGeuRSWwpf65Z6eh4RRnOg6i1SxNvkw
+         lo8w==
+X-Gm-Message-State: AFqh2kpnWWjrxKH0EaPYiDgLipyL3CxM1khk9yor/52DdDrq7yTkswsr
+        qiC7IvF7/0MFvLYyGOqitBiip6uYi4cxvr3wDTtuaA==
+X-Google-Smtp-Source: AMrXdXtvfHpboGi3+kQNwiHMAefcbd5zPgsZn5cmMiEll6r3JYwBIs6oorMmBBWfIYDvWi+By4kLIePyNBkdA2HLIY0=
+X-Received: by 2002:a67:fbc2:0:b0:3cc:fb59:8c71 with SMTP id
+ o2-20020a67fbc2000000b003ccfb598c71mr3384556vsr.65.1673070248034; Fri, 06 Jan
+ 2023 21:44:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKH8qBuakT6qtY5TZomWEAB=1ZJfdgXYt2A7WVOjtHAYsdbrVA@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230106045537.1243887-1-wenst@chromium.org> <Y7flCydDtLVwsXIJ@google.com>
+In-Reply-To: <Y7flCydDtLVwsXIJ@google.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Sat, 7 Jan 2023 13:43:57 +0800
+Message-ID: <CAGXv+5Gnc6tCjO95VjBJ4F5p5bnS+M96at3ErpSX==3qPwNUsg@mail.gmail.com>
+Subject: Re: [PATCH] platform/chromeos: cros_ec: Use per-device lockdep key
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 04:47:35PM -0800, Stanislav Fomichev wrote:
-> On Fri, Jan 6, 2023 at 11:51 AM David Vernet <void@manifault.com> wrote:
+On Fri, Jan 6, 2023 at 5:08 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Fri, Jan 06, 2023 at 12:55:37PM +0800, Chen-Yu Tsai wrote:
+> > Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
+> > the following lock sequences:
 > >
-> > BPF kfuncs are kernel functions that can be invoked by BPF programs.
-> > kfuncs can be kernel functions which are also called elsewhere in the
-> > main kernel (such as crash_kexec()), or may be functions that are only
-> > meant to be used by BPF programs, such as bpf_task_acquire(), and which
-> > are not called from anywhere else in the kernel.
+> > 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
+> > 2. lock(&ec_dev->lock); lock(prepare_lock);
 > >
-> > While thus far we haven't observed any issues such as kfuncs being
-> > elided by the compiler, at some point we could easily run into problems
-> > such as the following:
+> > The actual dependency chains are much longer. The shortened version
+> > looks somewhat like:
 > >
-> > - static kernel functions that are also used as kfuncs could be inlined
-> >   and/or elided by the compiler.
-> > - BPF-specific kfuncs with external linkage may at some point be elided
-> >   by the compiler in LTO builds, when it's determined that they aren't
-> >   called anywhere.
+> > 1. cros-ec-rpmsg on mtk-scp
+> >    ec_dev->lock -> prepare_lock
+> > 2. In rt5682_i2c_probe() on native I2C bus:
+> >    prepare_lock -> regmap->lock -> (possibly) i2c_adapter->bus_lock
+> > 3. In rt5682_i2c_probe() on native I2C bus:
+> >    regmap->lock -> i2c_adapter->bus_lock
+> > 4. In sbs_probe() on cros-ec-i2c (passthrough) I2C bus on cros-ec
+> >    i2c_adapter->bus_lock -> ec_dev->lock
 > >
-> > To address this, this patch set introduces a new __bpf_kfunc macro which
-> > should be added to all kfuncs, and which will protect kfuncs from such
-> > problems. Note that some kfuncs kind of try to do this already by
-> > specifying noinline or __used. We are inconsistent in how this is
-> > applied. __bpf_kfunc should provide a uniform and more-future-proof way
-> > to do this.
-> 
-> The series looks reasonable to me. Would be nice if we can somehow
-> prevent (with a checkpatch?) adding new kfuncs without this new tag,
-> but I don't see an easy way.
-> I was waiting in case other would like to comment, but if nothing to discuss:
-
-Thanks for the review, Stanislav. I agree that it would be nice to have
-some automation to prevent forgetting the tag. I thought about ways to
-possibly do it, including playing around with putting the kfuncs into a
-separate section for post-processing which we could check against
-.BTF_ids, but it felt like a lot of complexity / possibly controversial
-changes that I'm hesitant to bring into the patch set which should be
-pretty non-controversial otherwise.
-
-With respect to validating the presence of kfunc "tags" (i.e. the
-__diag_push() / __diag_pop() we were doing before), we're in the same
-state after this patch as we were before, so my preference is to defer
-improving that until a later time when we've fried some of the bigger
-kfunc fish. Does that sound ok?
-
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-
-Thanks! FYI, I'm planning on sending a v2 with Alexei's suggestion [0]
-
-[0]: https://lore.kernel.org/all/CAADnVQLpK7WXTjF6GS1hcfPXf=8iERJmEeVFfvmG75mJj0DdaA@mail.gmail.com/
-
-I'll go ahead and preemptively leave off your Acked-by for that, as the
-patches will have changed enough that it probably warrants another
-read through.
-
-- David
-
-> 
-> 
-> 
-> 
-> > David Vernet (3):
-> >   bpf: Add __bpf_kfunc tag for marking kernel functions as kfuncs
-> >   bpf: Document usage of the new __bpf_kfunc macro
-> >   bpf: Add __bpf_kfunc tag to all kfuncs
+> > While lockdep is correct that the shared lockdep classes have a circular
+> > dependency, it is bogus because
 > >
-> >  Documentation/bpf/kfuncs.rst                  | 18 +++++
-> >  Documentation/conf.py                         |  3 +
-> >  include/linux/btf.h                           |  9 +++
-> >  kernel/bpf/helpers.c                          | 19 +++++
-> >  kernel/cgroup/rstat.c                         |  2 +
-> >  kernel/kexec_core.c                           |  2 +
-> >  kernel/trace/bpf_trace.c                      |  4 +
-> >  net/bpf/test_run.c                            | 76 ++++++++++++-------
-> >  net/ipv4/tcp_bbr.c                            |  8 ++
-> >  net/ipv4/tcp_cong.c                           |  5 ++
-> >  net/ipv4/tcp_cubic.c                          |  6 ++
-> >  net/ipv4/tcp_dctcp.c                          |  6 ++
-> >  net/netfilter/nf_conntrack_bpf.c              | 14 +++-
-> >  net/netfilter/nf_nat_bpf.c                    |  1 +
-> >  net/xfrm/xfrm_interface_bpf.c                 |  4 +-
-> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  2 +-
-> >  16 files changed, 146 insertions(+), 33 deletions(-)
+> >   a) 2+3 happen on a native I2C bus
+> >   b) 4 happens on the actual EC on ChromeOS devices
+> >   c) 1 happens on the SCP coprocessor on MediaTek Chromebooks that just
+> >      happen to expose a cros-ec interface, but do not have a passthrough
+> >      I2C bus
 > >
-> > --
-> > 2.39.0
-> >
+> > In short, the "dependencies" are actually on different devices.
+>
+> Path of 4 looks weird to me.
+>
+> Could you point out where sbs_probe() gets to acquire ec_dev->lock?
+
+sbs_probe() calls sbs_get_battery_presence_and_health(), which
+
+  -> does an I2C transfer. This SBS instance is connected on the I2C bus
+     on the EC, so the I2C transfer
+
+     -> acquires i2c_adapter->bus_lock, and
+
+       -> calls ec_i2c_xfer(), which
+
+          -> calls cros_ec_cmd_xfer_status(), which
+
+             -> calls cros_ec_cmd_xfer(), which
+
+               -> acquires ec_dev->lock
+
+
+> I may misunderstand: I thought there is no such I2C bus for passthrough
+> from kernel's point of view (as the bus and devices behind the EC).
+> See also [2].
+
+It is an I2C adapter on the EC, also known as i2c-cros-ec-tunnel.
+Passthrough probably isn't the right word.
+
+> [2]: https://elixir.bootlin.com/linux/v6.2-rc2/source/drivers/platform/chrome/cros_ec.c#L241
+>
+>
+> On a related note, for the commit title: s/chromeos/chrome/ if it gets
+> chance to have next version.
+
+OK.
+
+
+Thanks
+ChenYu
