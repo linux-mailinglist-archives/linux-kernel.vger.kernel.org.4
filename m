@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA10660D31
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBA5660D37
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjAGJS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
+        id S231992AbjAGJT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbjAGJSu (ORCPT
+        with ESMTP id S231905AbjAGJSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:18:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C8885CA1;
-        Sat,  7 Jan 2023 01:18:38 -0800 (PST)
+        Sat, 7 Jan 2023 04:18:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D654B87902;
+        Sat,  7 Jan 2023 01:18:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 890F4B81E27;
-        Sat,  7 Jan 2023 09:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDF0C433EF;
-        Sat,  7 Jan 2023 09:18:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 844F2B81F74;
+        Sat,  7 Jan 2023 09:18:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9051C433F1;
+        Sat,  7 Jan 2023 09:18:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673083116;
-        bh=3blh9oSLoNamYh9NWhbTPvhef5a0zDqGldGZ48E9Mzo=;
+        s=k20201202; t=1673083121;
+        bh=Gydwsigs3s+UcKgjKjO+8mlNk6k/2GkoKY1BjgMibbo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aYFrVZsSxtozAFBliQDD+/luTh0CNzwFpi7rWPds/UZKlSWGjyYgOvdKxJhDSQ+np
-         gJM4hFTHTQEF8rKIc7gkHohVr+/7cisXwIeURF3GCQHRHB0igW58rslk9dz4Xr/HOE
-         x7Nm8wYipQLXGRATGpDsBoqBe4OPy2PwwXgxk6LvNeC158W2le0NVcoTBs21inxxgc
-         yGZZOwEJEXiXiyJo2wXUDrZEOBh9jEe763vpel6hjZ3AT2xumHeNdnGNF9GFk0VLxn
-         FDWv/ESfxPMgZ7lHMR3XEuE1yJxcQOAxLyx1+C4d6Bfn0WOoKfX0xeeir0x1S9lUvV
-         erLPkTGrfvgGQ==
+        b=U/ETtaOtHHRMupIDCoDQClmyyS1Xhi7LQgTA/ixQVGgyw8c7DHOZtx+gNMx3DDmQ9
+         xo/N5kdIQXblY+sPnJ5sBRNscHwtKeFIGhMFT4KXlE2Nd9f+nD1erBi9Y36Z6DC8e2
+         8RkM7W1ZlyFFyuMFNURCGw7VXAXQ9EZQaJ44EOOyUgZCyJbCzWY64HU2IhqnJzuAGx
+         z2uv8RXGSTMB9JNa3J6davMmbPHg+QLczxGW6gIco0M8p/58/y8P1siTuJcj76M3uN
+         m0RuNWtzKjQgLWm8vsT67Vc9XhyowUTj9TitP7fWWyMtmfli9Db/on3obOHHp3q0je
+         gJtnVpU6JFa4A==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
@@ -41,13 +41,14 @@ Cc:     linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         rust-for-linux@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
         llvm@lists.linux.dev
-Subject: [PATCH v2 3/7] fixdep: parse Makefile more correctly to handle comments etc.
-Date:   Sat,  7 Jan 2023 18:18:16 +0900
-Message-Id: <20230107091820.3382134-3-masahiroy@kernel.org>
+Subject: [PATCH v2 4/7] kbuild: remove sed commands after rustc rules
+Date:   Sat,  7 Jan 2023 18:18:17 +0900
+Message-Id: <20230107091820.3382134-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230107091820.3382134-1-masahiroy@kernel.org>
 References: <20230107091820.3382134-1-masahiroy@kernel.org>
@@ -62,239 +63,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fixdep parses dependency files (*.d) emitted by the compiler.
+rustc may put comments in dep-info, so sed is used to drop them before
+passing it to fixdep.
 
-*.d files are Makefiles describing the dependencies of the main source
-file.
-
-fixdep understands minimal Makefile syntax. It works well enough for
-GCC and Clang, but not for rustc.
-
-This commit improves the parser a little more for better processing
-comments, escape sequences, etc.
-
-My main motivation is to drop comments. rustc may output comments
-(e.g. env-dep). Currentyly, rustc build rules invoke sed to remove
-comments, but it is more efficient to do it in fixdep.
+Now that fixdep can remove comments, Makefiles do not need to run sed.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 ---
 
-Changes in v2:
-  - Rename searching_colon -> is_target
-  - More comments
+(no changes since v1)
 
- scripts/basic/fixdep.c | 173 ++++++++++++++++++++++++++++-------------
- 1 file changed, 119 insertions(+), 54 deletions(-)
+ rust/Makefile          |  6 ++----
+ scripts/Makefile.build | 18 ++++--------------
+ scripts/Makefile.host  |  3 +--
+ 3 files changed, 7 insertions(+), 20 deletions(-)
 
-diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-index 37782a632494..f5a51770eb74 100644
---- a/scripts/basic/fixdep.c
-+++ b/scripts/basic/fixdep.c
-@@ -94,6 +94,7 @@
- #include <unistd.h>
- #include <fcntl.h>
- #include <string.h>
-+#include <stdbool.h>
- #include <stdlib.h>
- #include <stdio.h>
- #include <ctype.h>
-@@ -251,75 +252,139 @@ static int is_ignored_file(const char *s, int len)
-  * assignments are parsed not only by make, but also by the rather simple
-  * parser in scripts/mod/sumversion.c.
-  */
--static void parse_dep_file(char *m, const char *target)
-+static void parse_dep_file(char *p, const char *target)
- {
--	char *p;
--	int is_last, is_target;
--	int saw_any_target = 0;
--	int is_first_dep = 0;
--	void *buf;
--
--	while (1) {
--		/* Skip any "white space" */
--		while (*m == ' ' || *m == '\\' || *m == '\n')
--			m++;
--
--		if (!*m)
-+	bool saw_any_target = false;
-+	bool is_target = true;
-+	bool is_source = false;
-+	bool need_parse;
-+	char *q, saved_c;
-+
-+	while (*p) {
-+		/* handle some special characters first. */
-+		switch (*p) {
-+		case '#':
-+			/*
-+			 * skip comments.
-+			 * rustc may emit comments to dep-info.
-+			 */
-+			p++;
-+			while (*p != '\0' && *p != '\n') {
-+				/*
-+				 * escaped newlines continue the comment across
-+				 * multiple lines.
-+				 */
-+				if (*p == '\\')
-+					p++;
-+				p++;
-+			}
-+			continue;
-+		case ' ':
-+		case '\t':
-+			/* skip whitespaces */
-+			p++;
-+			continue;
-+		case '\\':
-+			/*
-+			 * backslash/newline combinations continue the
-+			 * statement. Skip it just like a whitespace.
-+			 */
-+			if (*(p + 1) == '\n') {
-+				p += 2;
-+				continue;
-+			}
- 			break;
--
--		/* Find next "white space" */
--		p = m;
--		while (*p && *p != ' ' && *p != '\\' && *p != '\n')
-+		case '\n':
-+			/*
-+			 * Makefiles use a line-based syntax, where the newline
-+			 * is the end of a statement. After seeing a newline,
-+			 * we expect the next token is a target.
-+			 */
- 			p++;
--		is_last = (*p == '\0');
--		/* Is the token we found a target name? */
--		is_target = (*(p-1) == ':');
--		/* Don't write any target names into the dependency file */
--		if (is_target) {
--			/* The /next/ file is the first dependency */
--			is_first_dep = 1;
--		} else if (!is_ignored_file(m, p - m)) {
--			*p = '\0';
--
-+			is_target = true;
-+			continue;
-+		case ':':
- 			/*
--			 * Do not list the source file as dependency, so that
--			 * kbuild is not confused if a .c file is rewritten
--			 * into .S or vice versa. Storing it in source_* is
--			 * needed for modpost to compute srcversions.
-+			 * assume the first dependency after a colon as the
-+			 * source file.
- 			 */
--			if (is_first_dep) {
-+			p++;
-+			is_target = false;
-+			is_source = true;
-+			continue;
-+		}
-+
-+		/* find the end of the token */
-+		q = p;
-+		while (*q != ' ' && *q != '\t' && *q != '\n' && *q != '#' && *q != ':') {
-+			if (*q == '\\') {
- 				/*
--				 * If processing the concatenation of multiple
--				 * dependency files, only process the first
--				 * target name, which will be the original
--				 * source name, and ignore any other target
--				 * names, which will be intermediate temporary
--				 * files.
-+				 * backslash/newline combinations work like as
-+				 * a whitespace, so this is the end of token.
- 				 */
--				if (!saw_any_target) {
--					saw_any_target = 1;
--					printf("source_%s := %s\n\n",
--					       target, m);
--					printf("deps_%s := \\\n", target);
-+				if (*(q + 1) == '\n')
-+					break;
-+
-+				/* escaped special characters */
-+				if (*(q + 1) == '#' || *(q + 1) == ':') {
-+					memmove(p + 1, p, q - p);
-+					p++;
- 				}
--				is_first_dep = 0;
--			} else {
--				printf("  %s \\\n", m);
-+
-+				q++;
- 			}
+diff --git a/rust/Makefile b/rust/Makefile
+index 865afb87bc9b..f403b79cae5a 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -333,8 +333,7 @@ quiet_cmd_rustc_procmacro = $(RUSTC_OR_CLIPPY_QUIET) P $@
+ 	$(RUSTC_OR_CLIPPY) $(rust_common_flags) \
+ 		--emit=dep-info=$(depfile) --emit=link=$@ --extern proc_macro \
+ 		--crate-type proc-macro \
+-		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<; \
+-	sed -i '/^\#/d' $(depfile)
++		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<
  
--			buf = read_file(m);
--			parse_config_file(buf);
--			free(buf);
-+			if (*q == '\0')
-+				break;
-+			q++;
- 		}
+ # Procedural macros can only be used with the `rustc` that compiled it.
+ # Therefore, to get `libmacros.so` automatically recompiled when the compiler
+@@ -350,8 +349,7 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
+ 		--emit=dep-info=$(depfile) --emit=obj=$@ \
+ 		--emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
+ 		--crate-type rlib -L$(objtree)/$(obj) \
+-		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
+-	sed -i '/^\#/d' $(depfile) \
++		--crate-name $(patsubst %.o,%,$(notdir $@)) $< \
+ 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
  
--		if (is_last)
--			break;
-+		/* Just discard the target */
-+		if (is_target) {
-+			p = q;
-+			continue;
-+		}
-+
-+		saved_c = *q;
-+		*q = '\0';
-+		need_parse = false;
+ rust-analyzer:
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 40de20246e50..76323201232a 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -289,9 +289,6 @@ rust_common_cmd = \
+ 	--crate-name $(basename $(notdir $@)) \
+ 	--emit=dep-info=$(depfile)
  
- 		/*
--		 * Start searching for next token immediately after the first
--		 * "whitespace" character that follows this token.
-+		 * Do not list the source file as dependency, so that kbuild is
-+		 * not confused if a .c file is rewritten into .S or vice versa.
-+		 * Storing it in source_* is needed for modpost to compute
-+		 * srcversions.
- 		 */
--		m = p + 1;
-+		if (is_source) {
-+			/*
-+			 * The DT build rule concatenates multiple dep files.
-+			 * When processing them, only process the first source
-+			 * name, which will be the original one, and ignore any
-+			 * other source names, which will be intermediate
-+			 * temporary files.
-+			 */
-+			if (!saw_any_target) {
-+				saw_any_target = true;
-+				printf("source_%s := %s\n\n", target, p);
-+				printf("deps_%s := \\\n", target);
-+				need_parse = true;
-+			}
-+		} else if (!is_ignored_file(p, q - p)) {
-+			printf("  %s \\\n", p);
-+			need_parse = true;
-+		}
-+
-+		if (need_parse) {
-+			void *buf;
-+
-+			buf = read_file(p);
-+			parse_config_file(buf);
-+			free(buf);
-+		}
-+
-+		is_source = false;
-+		*q = saved_c;
-+		p = q;
- 	}
+-rust_handle_depfile = \
+-	sed -i '/^\#/d' $(depfile)
+-
+ # `--emit=obj`, `--emit=asm` and `--emit=llvm-ir` imply a single codegen unit
+ # will be used. We explicitly request `-Ccodegen-units=1` in any case, and
+ # the compiler shows a warning if it is not 1. However, if we ever stop
+@@ -301,9 +298,7 @@ rust_handle_depfile = \
+ # would not match each other.
  
- 	if (!saw_any_target) {
+ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+-      cmd_rustc_o_rs = \
+-	$(rust_common_cmd) --emit=obj=$@ $<; \
+-	$(rust_handle_depfile)
++      cmd_rustc_o_rs = $(rust_common_cmd) --emit=obj=$@ $<
+ 
+ $(obj)/%.o: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,rustc_o_rs)
+@@ -311,24 +306,19 @@ $(obj)/%.o: $(src)/%.rs FORCE
+ quiet_cmd_rustc_rsi_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+       cmd_rustc_rsi_rs = \
+ 	$(rust_common_cmd) -Zunpretty=expanded $< >$@; \
+-	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@; \
+-	$(rust_handle_depfile)
++	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@
+ 
+ $(obj)/%.rsi: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,rustc_rsi_rs)
+ 
+ quiet_cmd_rustc_s_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+-      cmd_rustc_s_rs = \
+-	$(rust_common_cmd) --emit=asm=$@ $<; \
+-	$(rust_handle_depfile)
++      cmd_rustc_s_rs = $(rust_common_cmd) --emit=asm=$@ $<
+ 
+ $(obj)/%.s: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,rustc_s_rs)
+ 
+ quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+-      cmd_rustc_ll_rs = \
+-	$(rust_common_cmd) --emit=llvm-ir=$@ $<; \
+-	$(rust_handle_depfile)
++      cmd_rustc_ll_rs = $(rust_common_cmd) --emit=llvm-ir=$@ $<
+ 
+ $(obj)/%.ll: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,rustc_ll_rs)
+diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+index 67ef852712d4..a45a97b027d1 100644
+--- a/scripts/Makefile.host
++++ b/scripts/Makefile.host
+@@ -145,8 +145,7 @@ $(host-cxxobjs): $(obj)/%.o: $(src)/%.cc FORCE
+ # host-rust -> Executable
+ quiet_cmd_host-rust	= HOSTRUSTC $@
+       cmd_host-rust	= \
+-	$(HOSTRUSTC) $(hostrust_flags) --emit=link=$@ $<; \
+-	sed -i '/^\#/d' $(depfile)
++	$(HOSTRUSTC) $(hostrust_flags) --emit=link=$@ $<
+ $(host-rust): $(obj)/%: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,host-rust)
+ 
 -- 
 2.34.1
 
