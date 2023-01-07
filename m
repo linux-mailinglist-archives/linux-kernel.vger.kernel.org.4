@@ -2,89 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD4566105F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7890B661067
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjAGRP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 12:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S232641AbjAGRS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 12:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAGRPz (ORCPT
+        with ESMTP id S231785AbjAGRSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 12:15:55 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4083327190;
-        Sat,  7 Jan 2023 09:15:52 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B14895C00E7;
-        Sat,  7 Jan 2023 12:15:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 07 Jan 2023 12:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1673111749; x=
-        1673198149; bh=pVAVln8jiL3s0HnVxaXSDqHWt311rVoxDwijHRxLD+c=; b=V
-        NsHgHX7lAmWWw/ST0jf+ZWstVsi6EIUwqO6T6R80Yrrhtqb7TQbmm4POeCrTqF+I
-        SdKpNu0f6v6scNrXKQeBvm1XS5vcvy0LK8kaAj+q8oyEJjD8rPMJ13PFjuvQrE0H
-        /oWshcIgmKH9LYxzqJo+hKQOp3Gxtby2pvqeQcbk2UIsxSBvU6O299D9aFDvFvzh
-        rV6CDasSh0RJaAKedrWXgBZ6cCChmqJAohAP7N/boOT2jhkBa3cbnJKJK/iMiVgX
-        gNuwYqf5U4nnm0E/JxRMkeDtwkQX1Mm9d5UrLlHW5ok3OpaZ9aOwiLRUKVXPx6q2
-        Qr0HATYGJqeYHUI8K/2Mw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1673111749; x=
-        1673198149; bh=pVAVln8jiL3s0HnVxaXSDqHWt311rVoxDwijHRxLD+c=; b=n
-        1uZ8GPTCRKMlSsbD4Z493R9pXcNFUMbVNFeP1OxQ6WoRcVgtpoJM1edZl9Fx3jR5
-        8Qa0zbpBBRfyMrXhmzOjBNBBLiUprZgtmVhhHDdyv40dqzGh/n3H6zCSDuoqcoXQ
-        O0kpSEbv5uUI51+fnsdwMnItYrqt+mBfrwv1gCqxG4ZIdfmy8UVttm9OR734xAeh
-        FTsIEGkE4T4mRmkN4Prj3sn9CNjQi0P2eOa8pe3ECQhM7Ovu9mt6kafPbI6ah6NC
-        QAHZL7dVydOKvhG+KHAMgMyKjRcdACQW0Z9YaS5F+AygovwAX2LiMJq36edMl9lh
-        q0oBYEwOANeiD0H4Mz2EA==
-X-ME-Sender: <xms:xKi5YyDd05-IPJUEuhbV1RgmXwoucsGE8cccQSk7_l5EW3I1PkS7hg>
-    <xme:xKi5Y8gCVkcTNXEEsIWY_xvdNrNxBV92eaDtctIj7zcRF1B1EhnRhAR_Tfd5ulmD9
-    lpal3EJ_YSosKcmVQ>
-X-ME-Received: <xmr:xKi5Y1k3351369-b5MN3DsFfRRrYjxqQX1m6FQC-co3XVc2zkTq-jzj_QeDjPef3_-yxbNQMIqZDnpVDNa5spXoPhGQYjxoYH3J6JSazOoz5hbYZ9Q9dxJUcKQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedvgdelgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeffgfdv
-    ffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:xai5Ywzzszzkbran3aMMuqeQ_AFD6dkkwkYd5mS0tMWqCAbxLmi44Q>
-    <xmx:xai5Y3QITzhfxpdhMw1ZwveWkLFr2S9gcx_CQle8nfJzoUoPlRNKzA>
-    <xmx:xai5Y7ZtFd9mRx5VsUidyajAZVV9-W3UdfgoO2M8K0gexk6v1c5CBw>
-    <xmx:xai5Y2HKchong3Y_c8retkkTfYqkN_JaJbDyOeubSBlsLSks9fCXjA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 7 Jan 2023 12:15:48 -0500 (EST)
-Message-ID: <5c20af59-5fb5-8f7d-f6af-2b3984d79595@sholland.org>
-Date:   Sat, 7 Jan 2023 11:15:47 -0600
+        Sat, 7 Jan 2023 12:18:46 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D669445657;
+        Sat,  7 Jan 2023 09:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ApdrS3tSWj75Jx4ozDcfURvKE8QjJ1d5AVnSBy/AzuQ=; b=c2T+A4Qv0SjXNNHpM3dbOAlQfA
+        Dbolq53uUXvu8D6DU5Y/CydTxr0o3b4/oo3V2H2vz1fZ5KxB4iTRi981LfK+n7sbTr5OfouKAva1t
+        /sND2MtNQLPAfaenVae4HskA/G89pIJCp6FCpZhiigxJUpw5AGK3VAMj+WCnfn4fbz5w=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pECps-001R2T-1u; Sat, 07 Jan 2023 18:18:24 +0100
+Date:   Sat, 7 Jan 2023 18:18:24 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] Revert "ARM: dts: armada-38x: Fix compatible
+ string for gpios"
+Message-ID: <Y7mpYFsvLrqpEp7W@lunn.ch>
+References: <20230107144149.5743-1-klaus.kudielka@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20221229184011.62925-1-samuel@sholland.org>
- <8201852.NyiUUSuA9g@jernej-laptop>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/2] rtc: sun6i: Prevent an out-of-bounds read
-In-Reply-To: <8201852.NyiUUSuA9g@jernej-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230107144149.5743-1-klaus.kudielka@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,53 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
-
-On 1/5/23 11:26, Jernej Škrabec wrote:
-> Dne četrtek, 29. december 2022 ob 19:40:10 CET je Samuel Holland napisal(a):
->> If there is more than one parent clock in the devicetree, the
->> driver sets .num_parents to a larger value than the number of array
->> elements, which causes an out-of-bounds read in the clock framework.
+On Sat, Jan 07, 2023 at 03:41:48PM +0100, Klaus Kudielka wrote:
+> This reverts commit c4de4667f15d04ef5920bacf41e514ec7d1ef03d, which causes
+> a regression on Turris Omnia (Armada 385): GPIO interrupts cease to work,
+> ending up in the DSA switch being non-functional.
 > 
-> Is there any DT with more than one parent? I think more fixes are needed if 
-> this is the case.
-
-H616 and newer expect more than one parent, to accurately represent the
-RTC clock tree, but they use the CCU driver instead of this code.
-
-This bug is preventing us from relaxing `maxItems` in the binding for H6
-and older SoCs, even if Linux does not use the additional parent clocks.
-I want to fix this bug now, to give us the option (if beneficial) of
-relaxing the binding in the long-term future.
-
-Regards,
-Samuel
-
->> Fix this by coercing the parent count to a Boolean value, like the
->> driver expects.
->>
->> Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/rtc/rtc-sun6i.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
->> index ed5516089e9a..a22358a44e32 100644
->> --- a/drivers/rtc/rtc-sun6i.c
->> +++ b/drivers/rtc/rtc-sun6i.c
->> @@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct device_node
->> *node,
->>
->>  	init.parent_names = parents;
->>  	/* ... number of clock parents will be 1. */
->> -	init.num_parents = of_clk_get_parent_count(node) + 1;
->> +	init.num_parents = !!of_clk_get_parent_count(node) + 1;
->>  	of_property_read_string_index(node, "clock-output-names", 0,
->>  				      &init.name);
+> The blamed commit is incorrect in the first place:
+> If compatible = "marvell,armadaxp-gpio", the second (address, size) pair
+> of the reg property must to point to the per-CPU interrupt registers
+> <0x18800 0x30> / <0x18840 0x30>, and not to the blink enable registers
+> <0x181c0 0x08> / <0x181c8 0x08>.
 > 
+> But even fixing that leaves the GPIO interrupts broken on the Omnia.
 > 
+> Furthermore:
+> Commit 5f79c651e81e explains very well, why the gpio-mvebu driver does not
+> work reliably with per-CPU interrupts.
+> Commit 988c8c0cd04d deprecates compatible = marvell,armadaxp-gpio for this
+> reason.
 > 
+> Fixes: c4de4667f15d ("ARM: dts: armada-38x: Fix compatible string for gpios")
+> Reported-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+> Link: https://lore.kernel.org/r/f24474e70c1a4e9692bd596ef6d97ceda9511245.camel@gmail.com/
 > 
+> Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
 
+Hi Klaus
+
+I was hoping Pali would comment, maybe fix it. But i think enough time
+has passed, we should accept your reverts.
+
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew
