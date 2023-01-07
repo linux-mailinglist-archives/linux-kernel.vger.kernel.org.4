@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB95A660E7B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76F9660E7F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjAGMEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 07:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S232416AbjAGMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 07:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjAGMEk (ORCPT
+        with ESMTP id S230298AbjAGMGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:04:40 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D9C59F9C
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:04:39 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id x37so4077707ljq.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 04:04:39 -0800 (PST)
+        Sat, 7 Jan 2023 07:06:10 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FFB559F2
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:06:02 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5318369wmb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 04:06:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wz4wfE/YkxeRpDHi0xsr/1VlzIloR8P1Orz6mqqqXdI=;
-        b=u5hZHU1DLWiMN3icESMKB+5pSnFsgMiK1TNUvkhYeA/oYjnbU7bLdklGIoyE3tITOA
-         6+y7o0p79rP8BvhRs7D9GVhWp/IPOJ23Ax6ukxewGzbhmXMTsnqnaIkxEwGEL01sN4B2
-         4cJCjppRhAuSB52Xs8f8/hLJue+ELy3xsGZM/fxhL/oKcKm+74GdpMipf2MfFyNOXGuu
-         JuY47z6jD4RrDi7YkI4Wg+GitcZKHkSjBg0TA9PeIP4dvBD43GM5dkQoNE+A73noUMYT
-         TTtnkz6qlBrJYyyrlCtnwYZbAI1u+ZaXX9AflawLIJVvkb37xH2qsf3CSf+tl4ru8R0c
-         7wag==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZLjHqFbROXlE+sbQ3Mi0YQwdit1/ACHkltZB2eIp6ZY=;
+        b=VZ5LC/sHAOIR5huRKj2y+0d40HWTG5UTtD8WCG8STyZQlXt4fYxcz2D61c7EiDK6+x
+         1iq1BqhEjdpRL68bguKTkMX/H/fNo0BFSKZA5L7Sh7kAEIsM4f9s77WkVIFxDZOxdX4p
+         yh1QQk2Nn0mdoUl0yg72fRnItYVKI0RJ5/Pmc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wz4wfE/YkxeRpDHi0xsr/1VlzIloR8P1Orz6mqqqXdI=;
-        b=r8OP8ear0ot8JW6bTV1tYNs56iMsaeUJPFS/9JAKbng2cL2EpSczmbznho1Vlw0QpN
-         YWSZW8qWSMTGF2Wfgj0JeQxOxB/7MdxzGVdXeQbba6JJMnPo59eCZj34t7CG+JXE3J24
-         yAdsVyRPoh0t94LRhCzz3U6KPckBc9ZbkQCqVUulb+aDMEQ3Utv4KX2JYJKW8NMlydiW
-         52jZBVRYc5rqYMOZ874YfZBGIOVZ38V0zgEghh+4K49c8mfTW9+tHyORRP9lePwCvAHb
-         cxtgOgM8P7E7CcSuiOKkJFYJfIyJhd+OCuA5OvN2L3CDdJZN9pT+EnvkeJMvoMAr2R8R
-         gBig==
-X-Gm-Message-State: AFqh2kq4AKkoAhYoqHFOEeNBdSpcgKwAl3pp97cWL2ytTYTUY1ttDsjb
-        9o+zo86Uj8PUnBkibe8vRbRAQQ==
-X-Google-Smtp-Source: AMrXdXu8hqdGKJPcfqsVB/g+ExpJckzz1eBU6hDjGOXRZM631RBaYm3VGB0ibYEB4gGKjA7gKcR9tQ==
-X-Received: by 2002:a2e:8606:0:b0:280:c06f:1f52 with SMTP id a6-20020a2e8606000000b00280c06f1f52mr3539180lji.11.1673093077381;
-        Sat, 07 Jan 2023 04:04:37 -0800 (PST)
-Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id g3-20020a2ea4a3000000b0027fdd6ded99sm343521ljm.4.2023.01.07.04.04.36
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLjHqFbROXlE+sbQ3Mi0YQwdit1/ACHkltZB2eIp6ZY=;
+        b=WE6zRsvLI18g+6WonoZO7/NclG5FeCgm1RL6PzNozCBbieV/98c7EZunxyNb7IFcwW
+         OjUnTLB88hyzBAdh61UgB7IUKifiLZ7OfPpFnuEFm9a6kwORZLEqn56KUBzzuSVW05Ow
+         YfJ2bwzL/R37Ncd5cQvpUegUA9+Py3OBbG523R6vJGHleo8PMB9w0cYLxIl5akDFLN5I
+         wDvtMDS++adDn19Bvv+ICiEqovqXWy1pizhJ1uEMMaXMOWEcG8dBLQf8Q9JfC3Cple9S
+         tOWVx6adUZz4iHQlQfHcR1ZgWujY0B8BBQDu/XkkjqrB4wJ+0G8mO2gIEnzmpIUfKC++
+         71Fw==
+X-Gm-Message-State: AFqh2kqO5PolfxbblH1L3fWACg06EOCcMaI3u2Cg3MRy7TR8DnPwM26z
+        5KRU+/PvPconok43vknrm8UItg==
+X-Google-Smtp-Source: AMrXdXvG2OKBklPVU/w7yJTB6p28qUxxhsgOsf2xdlo6IBSDgcIEZZbPsf9QYXqEN76wJsjC57mQNQ==
+X-Received: by 2002:a7b:ca4f:0:b0:3c6:edc0:5170 with SMTP id m15-20020a7bca4f000000b003c6edc05170mr40747291wml.25.1673093160874;
+        Sat, 07 Jan 2023 04:06:00 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm10842896wms.31.2023.01.07.04.05.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 04:04:36 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: camcc-sm6350: Make camcc_sm6350_hws static
-Date:   Sat,  7 Jan 2023 13:04:34 +0100
-Message-Id: <20230107120434.1902666-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
+        Sat, 07 Jan 2023 04:05:59 -0800 (PST)
+Date:   Sat, 7 Jan 2023 13:05:57 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] drm/atomic: Allow vblank-enabled + self-refresh
+ "disable"
+Message-ID: <Y7lgJVP7hVtHpWTB@phenom.ffwll.local>
+Mail-Followup-To: Brian Norris <briannorris@chromium.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230106172310.v2.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+ <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no reason for it not to be static, and some compilers don't
-like not it being that way. Make it so.
+On Fri, Jan 06, 2023 at 05:27:33PM -0800, Brian Norris wrote:
+> On Fri, Jan 6, 2023 at 5:23 PM Brian Norris <briannorris@chromium.org> wrote:
+> > v2:
+> >  * add 'ret != 0' warning case for self-refresh
+> >  * describe failing test case and relation to drm/rockchip patch better
+> 
+> Ugh, there's always something you remember right after you hit send: I
+> forgot to better summarize some of the other discussion from v1, and
+> alternatives we didn't entertain. I'll write that up now (not sure
+> whether in patch 1 or 2) and plan on sending a v3 for next week, in
+> case there are any other comments I should address at the same time.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 80f5451d9a7c ("clk: qcom: Add camera clock controller driver for SM6350")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/camcc-sm6350.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/qcom/camcc-sm6350.c b/drivers/clk/qcom/camcc-sm6350.c
-index ea8600530046..acba9f99d960 100644
---- a/drivers/clk/qcom/camcc-sm6350.c
-+++ b/drivers/clk/qcom/camcc-sm6350.c
-@@ -1742,7 +1742,7 @@ static struct gdsc titan_top_gdsc = {
- 	.pwrsts = PWRSTS_OFF_ON,
- };
- 
--struct clk_hw *camcc_sm6350_hws[] = {
-+static struct clk_hw *camcc_sm6350_hws[] = {
- 	[CAMCC_PLL2_OUT_EARLY] = &camcc_pll2_out_early.hw,
- };
- 
+For me it needs to be in the helper patch, since anyone not doing rockchip
+work will otherwise never find it. But you can also duplicate the
+discussion summary into the 2nd patch, doesn't really hurt.
+-Daniel
 -- 
-2.39.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
