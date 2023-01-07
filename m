@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF183660DE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1983A660DE7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjAGKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S237017AbjAGK0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbjAGKYm (ORCPT
+        with ESMTP id S230509AbjAGKZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:24:42 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04FB76ECB
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:23:36 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so7757410pjk.3
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:23:36 -0800 (PST)
+        Sat, 7 Jan 2023 05:25:37 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DA98CBED
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:24:14 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bt23so5487174lfb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:24:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9iAqigrmRtbOwkIjEJ3yqHcs8IpEn5bVcl0Fnp8oBxA=;
-        b=WN3zrvFSlELs9m4ZuKhj1hctQGx8Nv5UIRRrQD/PwzqTZFn7siVkjN1OwMiV5/+7oB
-         vgDjYyPC0IWf9JqbZeEmGB0Xdm7HKZNBSY3LsrVdZdXPx1GynEaJTtUr5fNzLQCM1O2l
-         +LZJ+/jQ43zRLQj4ZVN9xWfI1SpqkVX0z62hY=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g2EMcV+onqhOTA0NwBZpgQeCm+8rt/XlSXm0iVjEXzA=;
+        b=sMsbA5ceEzxqI4auYIpk66bzzaDA5L9CHd/ekkCqtHpypoezA6zth5wU8n6w5YwYxW
+         O2be8Lr/qejknQP2Iq63sXEjPDNRJ6ijZHEIwoODsX/LoOe38uldTDdH1KznmzQ6Pu2r
+         gcX2ftSzGQNuV43Hm21hsCxHF6yckL8lfG/rqzHv+u2Y6hYNUkf7/mPGquz7/VktMy8L
+         WDHOjVhyHWt8NF0Oc8Z5GHzNWxt8uvNjC3UrMtIaMDHYdZakKgNHzRBKLpwCZcgb+4XH
+         9toHokcyaGJbhVNmyXisbzWf0s9F9Rgw20bEkYzi7ad75UReZv6hqRwP3U3e52saeTwG
+         xK5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9iAqigrmRtbOwkIjEJ3yqHcs8IpEn5bVcl0Fnp8oBxA=;
-        b=KDzn49hagIbbU4uwZV0ow1aQPbv3oRgirmGXgSUrpAWeml2cG8F4qG1R8JtDOw2R4l
-         RCFhEEV/Q4Qwd4yuQ1LpRSp2rGokoJL3mwh/+7vXw8tDh/H9iDux5HuPe3Q1pnrVpRqf
-         bJXz6T09MyLchQk1gn3Vg9T7ZW50CDxkyZIzKSHJ/w6+BlQPIPpjP+FC78zr00nx5NhA
-         WmlFdWCe6coOufpbznKODMvoF5St/bF39L9e9X0kj3LBKhYuLW0YUl/Jge01xrG3+gGk
-         fbr9KUJ07avxxKMA18XnMcnoCnunb4EHwH2ogHyYkRuV7VWOmHRsD/JfgXtXJFu9A/tU
-         7BPA==
-X-Gm-Message-State: AFqh2kq7vxQTKYh+raT6iTOl9XASGLMZV7sTq8X9cxNskvmURPc6A1lx
-        G2ct0bO/aXZaIRwj/q7q+7tqsA==
-X-Google-Smtp-Source: AMrXdXsV4jBycZUjtpCb2Nsgq3gc3HppHE5R3JF24MZ9VrdcTkbKg61wchczu3Mvp63LxQbTS99bOw==
-X-Received: by 2002:a17:903:230c:b0:192:64a9:62f5 with SMTP id d12-20020a170903230c00b0019264a962f5mr74135437plh.29.1673087016188;
-        Sat, 07 Jan 2023 02:23:36 -0800 (PST)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:180d:95e8:f4:84fb])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170903228100b001892af9472esm2366362plh.261.2023.01.07.02.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 02:23:35 -0800 (PST)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Lyude Paul <lyude@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Xin Ji <xji@analogixsemi.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        Marek Vasut <marex@denx.de>, linux-acpi@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH v8 9/9] drm/bridge: it6505: Register Type C mode switches
-Date:   Sat,  7 Jan 2023 18:22:31 +0800
-Message-Id: <20230107102231.23682-10-treapking@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230107102231.23682-1-treapking@chromium.org>
-References: <20230107102231.23682-1-treapking@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2EMcV+onqhOTA0NwBZpgQeCm+8rt/XlSXm0iVjEXzA=;
+        b=O+FsE20PJTH7QEhLq4zPzLP4IW5M5yni9c0hINr/bzJpUsOWod7hvsN9aTunyz4C+f
+         GZLob3jK5ayzTQBRU5Fx+FyGq4B2vUiYbWGK5VUaTtUpEmhBjx5Zqd2ZENUAVLpcQIJR
+         zj75btXoTCrhVX+G9Pa8kphXYnrir1bkvjW2QZqJv+b1pQlXMuq5nJtVN15zf8Ry8QSq
+         WnwqjRP63xs+Udw68deLiHENqpCThZgQBdPOJ2MkSei9eZ45S/CRcMlVHAHR3rQzp8CO
+         z7J1Ckifd1LsPR9z1vYXrL1AfwzDBvxH9pbYqL8PAGtyPWS39gUuAlUwnrk5EALL4xco
+         McYw==
+X-Gm-Message-State: AFqh2kpPwcjyZlJ51YrRlKVjXKM0lbxR6yCP8MFvPTGhuodczPqBb363
+        UH00N5kkjlI0dD5lKEdCuzJduQ==
+X-Google-Smtp-Source: AMrXdXt1YkoJc2KNUQwZUtm4Q9Mad6+0kFRCHSU8Y0Oi5MbMUA+IkVBFBLR35D4bWgp2lBG4rLWCxQ==
+X-Received: by 2002:ac2:50ca:0:b0:4cc:6f42:a082 with SMTP id h10-20020ac250ca000000b004cc6f42a082mr1302346lfm.4.1673087052911;
+        Sat, 07 Jan 2023 02:24:12 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id cf33-20020a056512282100b004a05767bc07sm528921lfb.28.2023.01.07.02.24.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 02:24:12 -0800 (PST)
+Message-ID: <1b5f35ac-05ee-eae5-e17a-d34e2d988e43@linaro.org>
+Date:   Sat, 7 Jan 2023 11:24:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org
+References: <20221215094532.589291-1-bhupesh.sharma@linaro.org>
+ <20221215094532.589291-4-bhupesh.sharma@linaro.org>
+ <20230106174640.ndis3zm5heoa5wpb@builder.lan>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230106174640.ndis3zm5heoa5wpb@builder.lan>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,219 +80,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register USB Type-C mode switches when the "mode-switch" property and
-relevant port are available in Device Tree. Configure the "lane_swap"
-state based on the entered alternate mode for a specific Type-C
-connector, which ends up updating the lane swap registers of the it6505
-chip.
 
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
----
+On 6.01.2023 18:46, Bjorn Andersson wrote:
+> On Thu, Dec 15, 2022 at 03:15:32PM +0530, Bhupesh Sharma wrote:
+>> Add USB superspeed qmp phy node to dtsi.
+>> Make sure that the oneplus board dts (which includes the
+>> sm4250.dtsi) continues to work as intended.
+>>
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
+>>  arch/arm64/boot/dts/qcom/sm6115.dtsi          | 37 ++++++++++++++++++-
+>>  2 files changed, 38 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+>> index 3f39f25e0721e..4f0d65574448b 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+>> @@ -232,6 +232,9 @@ &usb {
+>>  &usb_dwc3 {
+>>  	maximum-speed = "high-speed";
+>>  	dr_mode = "peripheral";
+>> +
+>> +	phys = <&usb_hsphy>;
+>> +	phy-names = "usb2-phy";
+>>  };
+>>  
+>>  &usb_hsphy {
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>> index e4ce135264f3d..030763187cc3f 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>> @@ -579,6 +579,39 @@ usb_hsphy: phy@1613000 {
+>>  			status = "disabled";
+>>  		};
+>>  
+>> +		usb_qmpphy: phy@1615000 {
+>> +			compatible = "qcom,sm6115-qmp-usb3-phy";
+>> +			reg = <0x01615000 0x200>;
+>> +			clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+>> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+>> +				 <&gcc GCC_AHB2PHY_USB_CLK>;
+>> +			clock-names = "com_aux",
+>> +				      "ref",
+>> +				      "cfg_ahb";
+>> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+>> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+>> +			reset-names = "phy", "phy_phy";
+>> +			status = "disabled";
+>> +			#clock-cells = <1>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +
+>> +			usb_ssphy: phy@1615200 {
+> 
+> These patches looks good, but before introducing any
+> qcom,sm6115-qmp-usb3-phy in any DT, could we please update the binding
+> and driver to the new flattened format - to avoid having to revisit this
+> when we try to introduce DP (which I'm guessing this instance has?)
+FWIW there's only a single DSI intf (and a single disabled one) on this SoC.
 
-(no changes since v7)
-
-Changes in v7:
-- Fixed style issues in it6505 driver
-- Removed the redundant sleep in it6505 driver
-- Removed DT property validation in it6505 driver
-- Rebased to drm-misc-next
-- Extracted common codes to another commit
-
-Changes in v6:
-- Changed it6505_typec_mux_set callback function to accommodate with
-  the latest drm-misc patches
-- Changed the driver implementation to accommodate with the new binding
-- Squashed to a single patch
-
- drivers/gpu/drm/bridge/Kconfig      |   1 +
- drivers/gpu/drm/bridge/ite-it6505.c | 119 +++++++++++++++++++++++++++-
- 2 files changed, 116 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index 737578dd57ed..33803f581562 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -87,6 +87,7 @@ config DRM_FSL_LDB
- config DRM_ITE_IT6505
- 	tristate "ITE IT6505 DisplayPort bridge"
- 	depends on OF
-+	depends on TYPEC || TYPEC=n
- 	select DRM_DISPLAY_DP_HELPER
- 	select DRM_DISPLAY_HDCP_HELPER
- 	select DRM_DISPLAY_HELPER
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 9cda2df21b88..d9be09e889e2 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -17,6 +17,8 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/types.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
- #include <linux/wait.h>
- 
- #include <crypto/hash.h>
-@@ -28,6 +30,7 @@
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_edid.h>
-+#include <drm/drm_of.h>
- #include <drm/drm_print.h>
- #include <drm/drm_probe_helper.h>
- 
-@@ -455,6 +458,7 @@ struct it6505 {
- 	struct delayed_work delayed_audio;
- 	struct it6505_audio_data audio;
- 	struct dentry *debugfs;
-+	struct drm_dp_typec_switch_desc switch_desc;
- 
- 	/* it6505 driver hold option */
- 	bool enable_drv_hold;
-@@ -3346,12 +3350,105 @@ static void it6505_shutdown(struct i2c_client *client)
- 		it6505_lane_off(it6505);
- }
- 
-+static void it6505_typec_ports_update(struct it6505 *it6505)
-+{
-+	struct drm_dp_typec_switch_desc switch_desc = it6505->switch_desc;
-+
-+	/* Check if both ports available and do nothing to retain the current one */
-+	if (switch_desc.typec_ports[0].dp_connected && switch_desc.typec_ports[1].dp_connected)
-+		return;
-+
-+	if (switch_desc.typec_ports[0].dp_connected)
-+		it6505->lane_swap = false;
-+	else if (switch_desc.typec_ports[1].dp_connected)
-+		it6505->lane_swap = true;
-+}
-+
-+static int it6505_typec_mux_set(struct typec_mux_dev *mux,
-+				struct typec_mux_state *state)
-+{
-+	struct drm_dp_typec_port_data *port_data = typec_mux_get_drvdata(mux);
-+	struct it6505 *it6505 = (struct it6505 *) port_data->data;
-+	struct device *dev = &it6505->client->dev;
-+	struct drm_dp_typec_switch_desc switch_desc = it6505->switch_desc;
-+	bool old_dp_connected, new_dp_connected;
-+
-+	if (switch_desc.num_typec_switches == 1)
-+		return 0;
-+
-+	mutex_lock(&it6505->extcon_lock);
-+
-+	old_dp_connected = switch_desc.typec_ports[0].dp_connected ||
-+			   switch_desc.typec_ports[1].dp_connected;
-+
-+	port_data->dp_connected = state->alt &&
-+				  state->alt->svid == USB_TYPEC_DP_SID &&
-+				  state->alt->mode == USB_TYPEC_DP_MODE;
-+
-+	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
-+		switch_desc.typec_ports[0].dp_connected, switch_desc.typec_ports[1].dp_connected);
-+
-+	new_dp_connected = switch_desc.typec_ports[0].dp_connected ||
-+			   switch_desc.typec_ports[1].dp_connected;
-+
-+	if (it6505->enable_drv_hold) {
-+		dev_dbg(dev, "enable driver hold\n");
-+		goto unlock;
-+	}
-+
-+	it6505_typec_ports_update(it6505);
-+
-+	if (!old_dp_connected && new_dp_connected) {
-+		int ret = pm_runtime_get_sync(dev);
-+
-+		/*
-+		 * pm_runtime_force_suspend() disables runtime PM when the
-+		 * system enters suspend state. But on system resume, mux_set
-+		 * can be triggered before pm_runtime_force_resume() re-enables
-+		 * runtime PM. This makes the bridge stay powered off if the
-+		 * downstream display is connected when the system is suspended.
-+		 * Handling the error here to make sure the bridge is powered
-+		 * on, and leave the PM runtime usage count incremented so
-+		 * the future runtime PM calls is balanced.
-+		 */
-+		if (ret < 0)
-+			it6505_poweron(it6505);
-+
-+		complete_all(&it6505->extcon_completion);
-+	}
-+
-+	if (old_dp_connected && !new_dp_connected) {
-+		reinit_completion(&it6505->extcon_completion);
-+		pm_runtime_put_sync(dev);
-+		if (it6505->bridge.dev)
-+			drm_helper_hpd_irq_event(it6505->bridge.dev);
-+		memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
-+	}
-+
-+unlock:
-+	mutex_unlock(&it6505->extcon_lock);
-+	return 0;
-+}
-+
-+static void it6505_unregister_typec_switches(struct it6505 *it6505)
-+{
-+	drm_dp_unregister_typec_switches(&it6505->switch_desc);
-+}
-+
-+static int it6505_register_typec_switches(struct device *dev, struct it6505 *it6505)
-+{
-+	struct device_node *port = of_graph_get_port_by_id(dev->of_node, 1);
-+
-+	return drm_dp_register_typec_switches(dev, port, &it6505->switch_desc,
-+					      it6505, it6505_typec_mux_set);
-+}
-+
- static int it6505_i2c_probe(struct i2c_client *client)
- {
- 	struct it6505 *it6505;
- 	struct device *dev = &client->dev;
- 	struct extcon_dev *extcon;
--	int err, intp_irq;
-+	int err, intp_irq, ret;
- 
- 	it6505 = devm_kzalloc(&client->dev, sizeof(*it6505), GFP_KERNEL);
- 	if (!it6505)
-@@ -3371,11 +3468,24 @@ static int it6505_i2c_probe(struct i2c_client *client)
- 	if (PTR_ERR(extcon) == -EPROBE_DEFER)
- 		return -EPROBE_DEFER;
- 	if (IS_ERR(extcon)) {
--		dev_err(dev, "can not get extcon device!");
--		return PTR_ERR(extcon);
-+		if (PTR_ERR(extcon) != -ENODEV)
-+			dev_warn(dev, "Cannot get extcon device: %ld\n",
-+				 PTR_ERR(extcon));
-+		it6505->extcon = NULL;
-+	} else {
-+		it6505->extcon = extcon;
- 	}
- 
--	it6505->extcon = extcon;
-+	ret = it6505_register_typec_switches(dev, it6505);
-+	if (ret) {
-+		if (ret != -ENODEV)
-+			dev_warn(dev, "Didn't register Type-C switches, err: %d\n",
-+				 ret);
-+		if (!it6505->extcon) {
-+			dev_err(dev, "Both extcon and typec-switch are not registered.\n");
-+			return -EINVAL;
-+		}
-+	}
- 
- 	it6505->regmap = devm_regmap_init_i2c(client, &it6505_regmap_config);
- 	if (IS_ERR(it6505->regmap)) {
-@@ -3447,6 +3557,7 @@ static void it6505_i2c_remove(struct i2c_client *client)
- 	it6505_debugfs_remove(it6505);
- 	it6505_poweroff(it6505);
- 	it6505_remove_edid(it6505);
-+	it6505_unregister_typec_switches(it6505);
- }
- 
- static const struct i2c_device_id it6505_id[] = {
--- 
-2.39.0.314.g84b9a713c41-goog
-
+Konrad
+> 
+> Regards,
+> Bjorn
+> 
+>> +				reg = <0x01615200 0x200>,
+>> +				      <0x01615400 0x200>,
+>> +				      <0x01615c00 0x400>,
+>> +				      <0x01615600 0x200>,
+>> +				      <0x01615800 0x200>,
+>> +				      <0x01615a00 0x100>;
+>> +				#phy-cells = <0>;
+>> +				#clock-cells = <1>;
+>> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+>> +				clock-names = "pipe0";
+>> +				clock-output-names = "usb3_phy_pipe_clk_src";
+>> +			};
+>> +		};
+>> +
+>>  		qfprom@1b40000 {
+>>  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+>>  			reg = <0x01b40000 0x7000>;
+>> @@ -1023,8 +1056,8 @@ usb_dwc3: usb@4e00000 {
+>>  				compatible = "snps,dwc3";
+>>  				reg = <0x04e00000 0xcd00>;
+>>  				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+>> -				phys = <&usb_hsphy>;
+>> -				phy-names = "usb2-phy";
+>> +				phys = <&usb_hsphy>, <&usb_ssphy>;
+>> +				phy-names = "usb2-phy", "usb3-phy";
+>>  				iommus = <&apps_smmu 0x120 0x0>;
+>>  				snps,dis_u2_susphy_quirk;
+>>  				snps,dis_enblslpm_quirk;
+>> -- 
+>> 2.38.1
+>>
