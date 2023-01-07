@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A45660BAC
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE0F660BAA
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbjAGBzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S235888AbjAGBzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbjAGBzX (ORCPT
+        with ESMTP id S229542AbjAGBzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:55:23 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E826F87932;
-        Fri,  6 Jan 2023 17:55:21 -0800 (PST)
-Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Npjsz4cX9zRqsF;
-        Sat,  7 Jan 2023 09:53:43 +0800 (CST)
-Received: from [10.67.101.184] (10.67.101.184) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 7 Jan 2023 09:55:18 +0800
-Subject: Re: [PATCH] crypto: hisilicon: Wipe entire pool on error
-To:     Kees Cook <keescook@chromium.org>
-References: <20230106041945.never.831-kees@kernel.org>
-CC:     Nathan Chancellor <nathan@kernel.org>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        <linux-crypto@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, <linux-hardening@vger.kernel.org>
-From:   Weili Qian <qianweili@huawei.com>
-Message-ID: <7c9e9870-2456-01af-177f-1af62a0055e3@huawei.com>
-Date:   Sat, 7 Jan 2023 09:55:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Fri, 6 Jan 2023 20:55:18 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988EB87932;
+        Fri,  6 Jan 2023 17:55:17 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id g20so2356372pfb.3;
+        Fri, 06 Jan 2023 17:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=WiE9aq7CtTSo+zZrwgXjM5Sx1ReRFTbH7Mc82mkzs20=;
+        b=mMEQ/pwviizJe18JUOm1/S2YKaL2JKZpjNiKiXEPxmqsg9fc27mMD9PB9u3KdYhx13
+         AkN1vj2CT+tUm0wy31frMUr09Ouw8zxRxXal2ARX2gBrSCSajsquJNgxrRob9vc6qEp+
+         Bt7yJDfpUT646dmlh77nDspeWAMhwk6AU3W0Z5wLyYJFV08YcSorA/CeL5G3sQlg8IQF
+         dF7FyUxqwDIIzrTfRAc2/wfBOuYrX6ezsj3rLxKs/1MontPjS5Lmrm0daTo8SAUHhppx
+         eVqfBFe5o7iFsxRaRUDRz9hU+TgDyluC5xgR4BU0hdAcTc7yb861DjanivtyZQSRooXR
+         q8sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WiE9aq7CtTSo+zZrwgXjM5Sx1ReRFTbH7Mc82mkzs20=;
+        b=4gSOLJSG7P8mcwY74HL0XwUF/3ZQtlMAMwCSiwrpYnmeG8C98FQAO+4SMiUfEGH/kI
+         6ZtiYGxjNSlwAyQWLMAcGFlf4og4YxZRpLu1Ux9NZJiVqKVbSeladEy3ciz14Om3QOpv
+         QM5Y1QKKJeEsAXDv+nJBML2sPqVS1Hmp0ihp1oTZIUZhlchEgVn/C5PVqwahJ52Xa+5+
+         KbOEfRm7rofcCkiGkMZpNXA6Rw+W7yj2mB4NAR/mUicM3UXIt+XnrN1ajYwGsSS86Al/
+         sK3zIXS97+3eTMnQbkPZ0OhTLPc+ithp4REc/4DGlhtUFrb752vQAvoiZOo7Nzqb/rH4
+         VZhA==
+X-Gm-Message-State: AFqh2kozCTSyUZrnkCfnDjBoXvdRTSnNNnF//EMke9D8vWCrJtUNHdlq
+        JsDGYPK5EydFNmO40rk2e4l/sYQUpKM=
+X-Google-Smtp-Source: AMrXdXvXYRXodb/IUBqtghKjdnhIX/k2TeWhcXrSVP7Ygcs6auTKhP5F05034vpm/4riXTuOl93R5A==
+X-Received: by 2002:a62:1d96:0:b0:575:e8c5:eb14 with SMTP id d144-20020a621d96000000b00575e8c5eb14mr56028702pfd.18.1673056516596;
+        Fri, 06 Jan 2023 17:55:16 -0800 (PST)
+Received: from ?IPV6:2602:47:d48c:8101:9d81:5b04:51d7:acae? ([2602:47:d48c:8101:9d81:5b04:51d7:acae])
+        by smtp.googlemail.com with ESMTPSA id z67-20020a626546000000b005833f0e58b7sm1687716pfb.130.2023.01.06.17.55.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 17:55:16 -0800 (PST)
+Sender: Richard Henderson <rth7680@gmail.com>
+Message-ID: <84c0d4ea-09e2-4907-d03d-939d40fa3c96@twiddle.net>
+Date:   Fri, 6 Jan 2023 17:55:14 -0800
 MIME-Version: 1.0
-In-Reply-To: <20230106041945.never.831-kees@kernel.org>
-Content-Type: text/plain; charset="windows-1252"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] alpha: fix FEN fault handling
+To:     Al Viro <viro@zeniv.linux.org.uk>, linux-alpha@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <Y7jD8XDZGnQkTvMI@ZenIV>
+Content-Language: en-US
+From:   Richard Henderson <rth@twiddle.net>
+In-Reply-To: <Y7jD8XDZGnQkTvMI@ZenIV>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.184]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2023/1/6 12:19, Kees Cook wrote:
-> To work around a Clang __builtin_object_size bug that shows up under
-> CONFIG_FORTIFY_SOURCE and UBSAN_BOUNDS, move the per-loop-iteration
-> mem_block wipe into a single wipe of the entire pool structure after
-> the loop.
+On 1/6/23 16:59, Al Viro wrote:
+> Type 3 instruction fault (FPU insn with FPU disabled) is handled
+> by quietly enabling FPU and returning.  Which is fine, except that
+> we need to do that both for fault in userland and in the kernel;
+> the latter *can* legitimately happen - all it takes is this:
 > 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1780
-> Cc: Weili Qian <qianweili@huawei.com>
-> Cc: Zhou Wang <wangzhou1@hisilicon.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: linux-crypto@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/crypto/hisilicon/sgl.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> .global _start
+> _start:
+> 	call_pal 0xae
+> 	lda $0, 0
+> 	ldq $0, 0($0)
 > 
-> diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
-> index 2b6f2281cfd6..0974b0041405 100644
-> --- a/drivers/crypto/hisilicon/sgl.c
-> +++ b/drivers/crypto/hisilicon/sgl.c
-> @@ -124,9 +124,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
->  	for (j = 0; j < i; j++) {
->  		dma_free_coherent(dev, block_size, block[j].sgl,
->  				  block[j].sgl_dma);
-> -		memset(block + j, 0, sizeof(*block));
->  	}
-> -	kfree(pool);
-> +	kfree_sensitive(pool);
->  	return ERR_PTR(-ENOMEM);
->  }
->  EXPORT_SYMBOL_GPL(hisi_acc_create_sgl_pool);
+> - call_pal CLRFEN to clear "FPU enabled" flag and arrange for
+> a signal delivery (SIGSEGV in this case).
 > 
-Thanks for your patch.
+> Fixed by moving the handling of type 3 into the common part of
+> do_entIF(), before we check for kernel vs. user mode.
+> 
+> Incidentally, check for kernel mode is unidiomatic; the normal
+> way to do that is !user_mode(regs).  The difference is that
+> the open-coded variant treats any of bits 63..3 of regs->ps being
+> set as "it's user mode" while the normal approach is to check just
+> the bit 3.  PS is a 4-bit register and regs->ps always will have
+> bits 63..4 clear, so the open-code variant here is actually equivalent
+> to !user_mode(regs).  Harder to follow, though...
+> 
+> Reproducer above will crash any box where CLRFEN is not ignored by
+> PAL (== any actual hardware, AFAICS; PAL used in qemu doesn't
+> bother implementing that crap).
 
-There is no sensitive data in the pool, so memset zero can be deleted directly.
+I didn't realize I'd forgotten this in qemu.  Anyway,
 
-Thanks,
-Weili
+Reviewed-by: Richard Henderson <rth@twiddle.net>
+
+
+r~
