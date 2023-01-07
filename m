@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C28D660C74
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 05:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB934660C76
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 05:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236647AbjAGEmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 23:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S236590AbjAGEor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 23:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAGEl4 (ORCPT
+        with ESMTP id S229542AbjAGEon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 23:41:56 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA7684635;
-        Fri,  6 Jan 2023 20:41:56 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3072vWtZ003726;
-        Fri, 6 Jan 2023 20:41:45 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=BVxoW8PmXFMv3h+4qTBfZny95ISCtWzgZuWh5HvWCfM=;
- b=Xbs5d+9ytUe6Agj6Tue9c4UDHCAhdNc30SYEDcwbQIDNTJLXXdew1XNx69H4Oj+hKIIz
- anZXwCOtNshZ3ES/GP1B8D3jTR7t1G/jaidDf5UcFloAPl8shj0FGTx7aZ3ruIdIIYa2
- la1AggW241uAtz7tEvQDb0WgrfFsnhfKMays3CKq/ffZ924lJFWHPMo24axLgoSzRpkH
- q+4kAdpYIgx9EtJOp/vW/cUfav+I9uGmHixDVq7s9jzcxoEi4iE3uaBncDFSNJCwShsk
- 0LYArjDdEFY+aQu18GUaPD+ONCFozcUN2LaJXVBqjrQai/U2sOlBbdFbYSuBHYVsaYw3 6Q== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mx4hhbf6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 06 Jan 2023 20:41:45 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
- 2023 20:41:43 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Fri, 6 Jan 2023 20:41:43 -0800
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 4084B5B72F4;
-        Fri,  6 Jan 2023 20:41:40 -0800 (PST)
-From:   Geetha sowjanya <gakula@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <pabeni@redhat.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <sbhatta@marvell.com>, <hkelam@marvell.com>,
-        <gakula@marvell.com>, <sgoutham@marvell.com>
-Subject: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic context
-Date:   Sat, 7 Jan 2023 10:11:39 +0530
-Message-ID: <20230107044139.25787-1-gakula@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 6 Jan 2023 23:44:43 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A2084BD6
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 20:44:40 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v23so3453420pju.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 20:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZeUPS2iKNE5OrN4vW8ZJQleZwh3WJYgGdDBNvXHEJYc=;
+        b=OGcIprLg/imeJCuDYwJBLKaKHytu+oosVJno5w7Yr3wgiFgmnzXnr1Nl+0w6dZkuyj
+         bVWz/aMUwD5CuH5eRpIOyK9e60S5jbQ8rDUhqFOksAKbNucMI6FMlI6PuVkyS847mbQS
+         lYrSoXAVHGN8q9pRHISuHJO2Dmf1gDsJ/8tILU2M10Jm3/73zvNFOJ61PUtHJX5c7tF7
+         B6YLPAHPVtXAsti0eDHGXuyKa4kCHvyeoLqkTBM/b5YXCi+SMlSSvdIPh96dTo02SLVq
+         hsWCrzmn0M0liCwxM2oJDLgOLTk9d0X2uG4kYtSCQftSFfueOy3Q65jwAGwlUV7sH4SP
+         8LMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZeUPS2iKNE5OrN4vW8ZJQleZwh3WJYgGdDBNvXHEJYc=;
+        b=nDaVHzS0jupfeULIZ+EFA238efNPXqV554fCy0GBX79558N0qg5M+wnDXfNRtABy8P
+         Pt/fHBcP1esETSn9JJNjbUmsG/0iRJ4HnbBCQPh9IbzuIXq6Y0zze08losHNS97rkD+R
+         V2Z2hdsZ3uCI1bFewEzjbyCswAh7wKbmW00J2ZyMNKE4BIbtA605AjT103G69VY9KAhk
+         MCadGgxK0WOupU/MwzwN6oeTvcqV0LEHApd50zZXw7fu123V6+qpxzlXA2oKpWtZok60
+         fwSFVahreJdZde+LYYcYh93+9nwkz/ui1iTucOZONiKWysphnWACF2lkgYA65M5judhz
+         0Hyg==
+X-Gm-Message-State: AFqh2kqbRnSuEEHQ9m4PZoyQZp4zzx+Hv4ROZOO5BSrtambkLDbwBarf
+        b1U4e4zWX4NuvHte6ZKCg3gC542ZB9JeJf+/Slv5hQ==
+X-Google-Smtp-Source: AMrXdXtXiqi91oaCK8p4McWzuikKF9pIEcPcAY6x5BQyBDS6NQ0R2lbIDYHL/bt6PClbzNw4gptUOw==
+X-Received: by 2002:a05:6a20:3d16:b0:9d:efbf:48c7 with SMTP id y22-20020a056a203d1600b0009defbf48c7mr84529944pzi.11.1673066680306;
+        Fri, 06 Jan 2023 20:44:40 -0800 (PST)
+Received: from [10.255.208.163] ([139.177.225.230])
+        by smtp.gmail.com with ESMTPSA id t1-20020a170902d14100b00186b3c3e2dasm1722418plt.155.2023.01.06.20.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 20:44:40 -0800 (PST)
+Message-ID: <e499f088-8ed9-2e19-b2e5-efaa4f9738f0@bytedance.com>
+Date:   Sat, 7 Jan 2023 12:44:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: O1jxXlW2LUljYUlLuwIwi4j2VulCaoBy
-X-Proofpoint-ORIG-GUID: O1jxXlW2LUljYUlLuwIwi4j2VulCaoBy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-06_14,2023-01-06_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
+ queues for blk-throtl
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <20230105161854.GA1259@blackbody.suse.cz>
+ <20230106153813.4ttyuikzaagkk2sc@quack3> <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
+ <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
+ <Y7hlX4T1UOmQHiGf@slm.duckdns.org>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <Y7hlX4T1UOmQHiGf@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use GFP_ATOMIC flag instead of GFP_KERNEL while allocating memory
-in atomic context.
 
-Fixes: 4af1b64f80fb ("octeontx2-pf: Fix lmtst ID used in aura free")
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: Geetha sowjanya <gakula@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 88f8772a61cd..12e4365d53df 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -886,7 +886,7 @@ static int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura)
- 	}
- 
- 	sq->sqe_base = sq->sqe->base;
--	sq->sg = kcalloc(qset->sqe_cnt, sizeof(struct sg_list), GFP_KERNEL);
-+	sq->sg = kcalloc(qset->sqe_cnt, sizeof(struct sg_list), GFP_ATOMIC);
- 	if (!sq->sg)
- 		return -ENOMEM;
- 
-@@ -1378,7 +1378,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
- 
- 		sq = &qset->sq[qidx];
- 		sq->sqb_count = 0;
--		sq->sqb_ptrs = kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_KERNEL);
-+		sq->sqb_ptrs = kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_ATOMIC);
- 		if (!sq->sqb_ptrs) {
- 			err = -ENOMEM;
- 			goto err_mem;
--- 
-2.25.1
+在 2023/1/7 上午2:15, Tejun Heo 写道:
+> Hello,
+> 
+> On Sat, Jan 07, 2023 at 02:07:38AM +0800, hanjinke wrote:
+>> In our internal scenario, iocost has been deployed as the main io isolation
+>> method and is gradually spreading。
+> 
+> Ah, glad to hear. If you don't mind sharing, how are you configuring iocost
+> currently? How do you derive the parameters?
+> 
+
+For cost.model setting, We first use the tools iocost provided to test 
+the benchmark model parameters of different types of disks online, and 
+then save these benchmark parameters to a parametric Model Table. During 
+the deployment process, pull and set the corresponding model parameters 
+according to the type of disk.
+
+The setting of cost.qos should be considered slightly more，we need to 
+make some compromises between overall disk throughput and io latency.
+The average disk utilization of the entire disk on a specific business 
+and the RLA（if it is io sensitive） of key businesses will be taken as 
+important input considerations. The cost.qos will be dynamically 
+fine-tuned according to the health status monitoring of key businesses.
+
+For cost.weight setting, high-priority services  will gain greater 
+advantages through weight settings to deal with a large number of io 
+requests in a short period of time. It works fine as work-conservation
+of iocost works well according to our observation.
+
+These practices can be done better and I look forward to your better 
+suggestions.
+
+
+> blk-throttle has a lot of issues which may be difficult to address. Even the
+> way it's configured is pretty difficult to scale across different hardware /
+> application combinations and we've neglected its control performance and
+> behavior (like handling of shared IOs) for quite a while.
+> 
+> While iocost's work-conserving control does address a lot of the use cases
+> we see today, it's likely that we'll need hard limits more in the future
+> too. I've been thinking about implementing io.max on top of iocost. There
+> are some challenges around dynamic vrate adj semantics but it's kinda
+> attractive because iocost already has the concept of total device capacity.
+
+Indeed in our multi-tenancy scenario, the hard limits are necessary.
+
+Jinke
+Thanks.
 
