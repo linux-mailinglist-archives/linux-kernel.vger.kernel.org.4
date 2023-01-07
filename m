@@ -2,166 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36E266119E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 21:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBA36611A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 21:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbjAGUhD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 Jan 2023 15:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S232841AbjAGUog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 15:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAGUg7 (ORCPT
+        with ESMTP id S232479AbjAGUo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 15:36:59 -0500
-X-Greylist: delayed 86859 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 07 Jan 2023 12:36:57 PST
-Received: from 3.mo583.mail-out.ovh.net (3.mo583.mail-out.ovh.net [46.105.40.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481156324
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 12:36:57 -0800 (PST)
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.16.31])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4149D20A90
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 20:36:55 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-lxtls (unknown [10.110.115.90])
-        by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id BD8F71FE98;
-        Sat,  7 Jan 2023 20:36:50 +0000 (UTC)
-Received: from sk2.org ([37.59.142.105])
-        by ghost-submission-6684bf9d7b-lxtls with ESMTPSA
-        id eSsCKuLXuWPI3wUAubRvvA
-        (envelope-from <steve@sk2.org>); Sat, 07 Jan 2023 20:36:50 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-105G0067839b063-0764-4415-809e-52a6ec1d72ef,
-                    DAE31E0ADBCC733EDB52157E78EF0D9B49FF90DC) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 37.167.110.121
-Date:   Sat, 07 Jan 2023 21:36:47 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     sam@ravnborg.org,
-        Sam Ravnborg via B4 Submission Endpoint 
-        <devnull+sam.ravnborg.org@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-CC:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, Sam Ravnborg <sam@ravnborg.org>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_01/15=5D_video=3A_fbdev=3A_atm?= =?US-ASCII?Q?el=5Flcdfb=3A_Rework_backlight_handling?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org> <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
-Message-ID: <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
+        Sat, 7 Jan 2023 15:44:27 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E5A3DBC2;
+        Sat,  7 Jan 2023 12:44:26 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id p12so2390038qkm.0;
+        Sat, 07 Jan 2023 12:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v91NOW33Yw4ld/8hrWNvp88PBg4HhV/z+jC8/6Hxg/g=;
+        b=fZ54oarpBPjAErlsUXRhoViKjxS+Cn/Z4UkwKhEcRGsQDW4RJIJGXfbAoqE2KMfT5Z
+         mtzUWGbDpzL+U2fJAyQ2Bc5Ccei++KTSWP4KT2QaNJWASRx9wjAjBuNsppuntANxPDE5
+         EBGIcqdIoSm3nvswcInG0XGOIAG/LpLwfpYjM0PKqfMVyBbegDMMI2EsM7YRWsr8PYB0
+         bt9AxzZ3WSvpTveM6PESRVHeCr6l83+hi0j7+0vyjo7U9JiX3VmUHpBErsd/rI37PUSc
+         vTP8BDwvD6Fq8izxU3I0okzgZLMeFfe9VLSubS+S/xXzegRG4FuY4VtCFEzJfJc2Zi0g
+         Q8EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v91NOW33Yw4ld/8hrWNvp88PBg4HhV/z+jC8/6Hxg/g=;
+        b=aoeBTqT87Pbj7BYSIWZmaVwPrVMHZD6wvBuxUrxTzacWmj0MkhUy5mQtuauq3MhmBY
+         z4d1KKom3n2B942YhEbMT7oo07jYR8P93ovnr1+8Z51YY03p//PtLgBIzDp69thzuRN0
+         RjY52j+CjJJBLJe7CoL/CFH992X9fH75Hyg/euaF7NKsctbKwrgtk6XBkrlZR4803/Z1
+         OhTLaLQjwbsVC9Yt4ulmhhYlXlQg0neyTmFMj3nx6RkMrzeC7LCQgF46RgjEFVj3DQ+9
+         9/kRxsLB1D9i3/JHaGxKNKnyuf8Xmr49mLk0/tDKZLpi5emcitNF1u+ENDmgFmRlzfNL
+         nlSg==
+X-Gm-Message-State: AFqh2kpVAUzHyk2sv+9cKnOALkfWt2bQMqYYYbPb0B+pHvbzKr7eQ1wh
+        ioWz1lrbnvlhNRl2MvDzdbO+E9TutkZDJglmosDyH5ZFkSUFIg==
+X-Google-Smtp-Source: AMrXdXueMgeOelADEFUHqX0SiYMVBoF5mWwpL5jyMWhIhE/iVeSWmNE99SCl+Gxh0Q60C5zbuPWE2aryRDkuCqQ+oa0=
+X-Received: by 2002:a37:38f:0:b0:6ff:b5c2:9c88 with SMTP id
+ 137-20020a37038f000000b006ffb5c29c88mr2926548qkd.575.1673124265987; Sat, 07
+ Jan 2023 12:44:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Ovh-Tracer-Id: 15557403441115072134
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedvgddufeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevufgfjghfkfggtgfgsehtqhhmtddtreejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeekvddvteekgedtkefgueefheetheefffdtfeeuveettdejjeeutdetkefggeegleenucffohhmrghinheplhhkmhhlrdhorhhgnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y7iYZqKcoRycsoTg@spud>
+In-Reply-To: <Y7iYZqKcoRycsoTg@spud>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 7 Jan 2023 20:43:59 +0000
+Message-ID: <CA+V-a8uBDx42o12UUwP=bBjeGzJJSP=jPcQr0xgkvkkoA7_vFA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] dt-bindings: cache: r9a07g043f-l2-cache: Add DT
+ binding documentation for L2 cache controller
+To:     Conor Dooley <conor@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint <devnull+sam.ravnborg.org@kernel.org> wrote:
->From: Sam Ravnborg <sam@ravnborg.org>
->
->The atmel_lcdfb had code to save/restore power state.
->This is not needed so drop it.
->
->Introduce backlight_is_brightness() to make logic simpler.
->
->Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
->Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
->Cc: linux-fbdev@vger.kernel.org
->Cc: linux-arm-kernel@lists.infradead.org
->---
-> drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
-> 1 file changed, 3 insertions(+), 21 deletions(-)
->
->diff --git a/drivers/video/fbdev/atmel_lcdfb.c b/drivers/video/fbdev/atmel_lcdfb.c
->index 1fc8de4ecbeb..d297b3892637 100644
->--- a/drivers/video/fbdev/atmel_lcdfb.c
->+++ b/drivers/video/fbdev/atmel_lcdfb.c
->@@ -49,7 +49,6 @@ struct atmel_lcdfb_info {
-> 	struct clk		*lcdc_clk;
-> 
-> 	struct backlight_device	*backlight;
->-	u8			bl_power;
-> 	u8			saved_lcdcon;
-> 
-> 	u32			pseudo_palette[16];
->@@ -109,32 +108,18 @@ static u32 contrast_ctr = ATMEL_LCDC_PS_DIV8
-> static int atmel_bl_update_status(struct backlight_device *bl)
-> {
-> 	struct atmel_lcdfb_info *sinfo = bl_get_data(bl);
->-	int			power = sinfo->bl_power;
->-	int			brightness = bl->props.brightness;
->+	int brightness;
-> 
->-	/* REVISIT there may be a meaningful difference between
->-	 * fb_blank and power ... there seem to be some cases
->-	 * this doesn't handle correctly.
->-	 */
->-	if (bl->props.fb_blank != sinfo->bl_power)
->-		power = bl->props.fb_blank;
->-	else if (bl->props.power != sinfo->bl_power)
->-		power = bl->props.power;
->-
->-	if (brightness < 0 && power == FB_BLANK_UNBLANK)
->-		brightness = lcdc_readl(sinfo, ATMEL_LCDC_CONTRAST_VAL);
->-	else if (power != FB_BLANK_UNBLANK)
->-		brightness = 0;
->+	brightness = backlight_get_brightness(bl);
-> 
-> 	lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_VAL, brightness);
->+
-> 	if (contrast_ctr & ATMEL_LCDC_POL_POSITIVE)
-> 		lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_CTR,
-> 			brightness ? contrast_ctr : 0);
-> 	else
-> 		lcdc_writel(sinfo, ATMEL_LCDC_CONTRAST_CTR, contrast_ctr);
-> 
->-	bl->props.fb_blank = bl->props.power = sinfo->bl_power = power;
->-
-> 	return 0;
-> }
-> 
->@@ -155,8 +140,6 @@ static void init_backlight(struct atmel_lcdfb_info *sinfo)
-> 	struct backlight_properties props;
-> 	struct backlight_device	*bl;
-> 
->-	sinfo->bl_power = FB_BLANK_UNBLANK;
->-
-> 	if (sinfo->backlight)
-> 		return;
-> 
->@@ -173,7 +156,6 @@ static void init_backlight(struct atmel_lcdfb_info *sinfo)
-> 	sinfo->backlight = bl;
-> 
-> 	bl->props.power = FB_BLANK_UNBLANK;
->-	bl->props.fb_blank = FB_BLANK_UNBLANK;
-> 	bl->props.brightness = atmel_bl_get_brightness(bl);
-> }
-> 
->
+Hi Conor,
 
-Hi Sam,
+Thank you for the review.
 
-I’d submitted quite a few more of these previously (and you’d reviewed them), see e.g. the thread starting at https://lkml.org/lkml/2022/6/7/4365, and yesterday, https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/656, https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/643, and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can find them if it’s any use.
+On Fri, Jan 6, 2023 at 9:53 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Jan 06, 2023 at 06:55:24PM +0000, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+> >
+> > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> > describes the L2 cache block.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> > v5 -> v6
+> > * Included RB tag from Geert
+>
+> I think not!
+>
+Sorry that was a typo. I meant Rob  :)
 
-Regards,
+> > v4 -> v5
+> > * Dropped L2 cache configuration properties
+> > * Dropped PMA configuration properties
+> > * Ordered the required list to match the properties list
+> >
+> > RFC v3 -> v4
+> > * Dropped l2 cache configuration parameters
+> > * s/larger/large
+> > * Added minItems/maxItems for andestech,pma-regions
+> > ---
+> >  .../cache/andestech,ax45mp-cache.yaml         | 81 +++++++++++++++++++
+> >  1 file changed, 81 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > new file mode 100644
+> > index 000000000000..9f0be4835ad7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > @@ -0,0 +1,81 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2022 Renesas Electronics Corp.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Andestech AX45MP L2 Cache Controller
+> > +
+> > +maintainers:
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +description:
+> > +  A level-2 cache (L2C) is used to improve the system performance by providing
+> > +  a large amount of cache line entries and reasonable access delays. The L2C
+> > +  is shared between cores, and a non-inclusive non-exclusive policy is used.
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - andestech,ax45mp-cache
+> > +
+> > +  required:
+> > +    - compatible
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: andestech,ax45mp-cache
+> > +      - const: cache
+>
+> You might find value in a specific compatible for your SoC & enforce
+> constraints for it. Or you might not & I don't care either way :)
+>
+Good point actually. Geert what do you think?
 
-Stephen
+Cheers,
+Prabhakar
