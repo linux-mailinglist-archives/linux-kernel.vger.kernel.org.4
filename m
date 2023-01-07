@@ -2,94 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A088660C43
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79905660C45
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbjAGDkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S236855AbjAGDkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbjAGDkU (ORCPT
+        with ESMTP id S236776AbjAGDk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:40:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456D6392FA;
-        Fri,  6 Jan 2023 19:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2574B81F69;
-        Sat,  7 Jan 2023 03:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A130AC43398;
-        Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673062816;
-        bh=UpPvmBZ/3uKf6H9B1YivTCuwPZPhCdDuPzTR9p3eAh0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DT7+qx0hVXR2+wbBiTIeGD4lF0LROCBh/jtgLJ2u3MfC7ExL3diexmaWMLiD6pM9+
-         mJ1sHsgiZdqBy5ypq/V4zhsf4u0w6UzNmO9X+uNgNv2sbRIVLLLSJ4LNJy+VLRTsDR
-         aMOtAEL1GFqkUdwYVCrogyycJAuShdJ7qy7zyP7FfAbDTUgtAO7Iro8MOGPEnXd4Oo
-         q9ig6D4QwhtM0hDaElfZI9+32ScU7KSv7wu8Rn7bGVMQ35LLmQ3MyohGLoUAf3FHRh
-         CtcrfH/OWwfymOHDkJhjkE78XNdeVH5grCyPDq8zapU+6fPEnq6XNBSpgfPZ8UDv1h
-         WujaBK6uEtVTg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 878AEE270ED;
-        Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 6 Jan 2023 22:40:26 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACA18D5C8;
+        Fri,  6 Jan 2023 19:40:24 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 43B47604F1;
+        Sat,  7 Jan 2023 04:40:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1673062823; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=fcu4HcuzuZ/P9jRH6RNpZubOP0xy9Tqn4dSo6j3CGQxmFZGhjfQG+Mys9uGCWCBKm
+         DJ3c5FaRZ/EbntEbtvzYQW2PTdtLUtDko9Vz0/x/crn5Fwepklv3JyyF4C/+L4UZXI
+         CseqPJig+KY5aAMgg+eQaDFIvEta/MJNLMyeDEsRNX1r16KTZJPj9UiTvwFmVtUwf/
+         4WnucXvoS0K+/HthKcQ+jmop+lK7NWPdlJF+54CpbGndAM5xmPjk46Bb1kmA/mEgKl
+         XninS0jUdwYpuYlTZxA0DHd1dbMa2RObEIFDihr4vYKb/py8UchrMDUdyhu03fPJri
+         bBuy1yVAs6YeQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UgvktLthh6J8; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
+Received: by domac.alu.hr (Postfix, from userid 1014)
+        id AB762604F2; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1673062820; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Byfgq7kO0qX1Vp0niERdxBYNDVVrBuM1JUY1zAaDnpV7uFjrb3E4+eeTJC1e/FaaS
+         I3Nnk0lqf+oV7rcFMYzeiPX+rkQwcwos2p9HGhpGUPz7l73/BhawOFKxVXVnisQeqj
+         nYT+5H8Js9zUElqI/sZhpWk7kHe/6ec5O0RlC4jw8MrzMt5a0HCZc67leIYxbAEx8v
+         B6/VPQ+6YaOw+ui2NxisGHBesc2GM9KTteqwzPYRiVXEiWU8/VPxWQmPlsJ0oUlVf7
+         NZYZFBqlf6nwJ+8GJRANkR6/O1Y/Ef14KqMsEryghQrP4NyqSyaawOOuEX3w+jFX65
+         cujLnUJ3hy72w==
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A612E604F1;
+        Sat,  7 Jan 2023 04:40:20 +0100 (CET)
+Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
+        edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
+Subject: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to
+ connect()
+In-Reply-To: <20230106180808.51550e82@kernel.org>
+Message-ID: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>        <20230106175828.13333-1-kuniyu@amazon.com>        <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>        <20230106161450.1d5579bf@kernel.org>        <8fb1a2c5-ee35-67eb-ef3c-e2673061850d@alu.unizg.hr>
+ <20230106180808.51550e82@kernel.org>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ipv6: rpl_iptunnel: Replace 0-length arrays with
- flexible arrays
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167306281655.4583.686951198014366097.git-patchwork-notify@kernel.org>
-Date:   Sat, 07 Jan 2023 03:40:16 +0000
-References: <20230105221533.never.711-kees@kernel.org>
-In-Reply-To: <20230105221533.never.711-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gustavoars@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="899744747-660964784-1673062820=:26826"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu,  5 Jan 2023 14:15:37 -0800 you wrote:
-> Zero-length arrays are deprecated[1]. Replace struct ipv6_rpl_sr_hdr's
-> "segments" union of 0-length arrays with flexible arrays. Detected with
-> GCC 13, using -fstrict-flex-arrays=3:
-> 
-> In function 'rpl_validate_srh',
->     inlined from 'rpl_build_state' at ../net/ipv6/rpl_iptunnel.c:96:7:
-> ../net/ipv6/rpl_iptunnel.c:60:28: warning: array subscript <unknown> is outside array bounds of 'struct in6_addr[0]' [-Warray-bounds=]
->    60 |         if (ipv6_addr_type(&srh->rpl_segaddr[srh->segments_left - 1]) &
->       |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from ../include/net/rpl.h:12,
->                  from ../net/ipv6/rpl_iptunnel.c:13:
-> ../include/uapi/linux/rpl.h: In function 'rpl_build_state':
-> ../include/uapi/linux/rpl.h:40:33: note: while referencing 'addr'
->    40 |                 struct in6_addr addr[0];
->       |                                 ^~~~
-> 
-> [...]
-
-Here is the summary with links:
-  - net: ipv6: rpl_iptunnel: Replace 0-length arrays with flexible arrays
-    https://git.kernel.org/netdev/net-next/c/e8d283b6cf0e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--899744747-660964784-1673062820=:26826
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
 
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+Adjust size parameter in connect() to match the type of the parameter, to
+fix "No such file or directory" error in selftests/net/af_unix/
+test_oob_unix.c:127.
+
+The existing code happens to work provided that the autogenerated pathname
+is shorter than sizeof (struct sockaddr), which is why it hasn't been
+noticed earlier.
+
+Visible from the trace excerpt:
+
+bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+
+BUG: The filename is trimmed to sizeof (struct sockaddr).
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Florian Westphal <fw@strlen.de>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+
+The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
+(Tested and applies against the net.git tree.)
+
+
+ tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index b57e91e1c3f2..532459a15067 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+ 
+ 	wait_for_signal(pipefd[0]);
+ 	if (connect(cfd, (struct sockaddr *)consumer_addr,
+-		     sizeof(struct sockaddr)) != 0) {
++		     sizeof(*consumer_addr)) != 0) {
+ 		perror("Connect failed");
+ 		kill(0, SIGTERM);
+ 		exit(1);
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+--899744747-660964784-1673062820=:26826--
