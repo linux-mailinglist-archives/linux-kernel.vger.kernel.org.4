@@ -2,189 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A96A660AD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4A0660AE7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbjAGAeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S236812AbjAGAfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235233AbjAGAe2 (ORCPT
+        with ESMTP id S234683AbjAGAfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:34:28 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F92C8B77D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673051659; x=1704587659;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5pZZygw2dIXv7UEhsAfmXYF4ld7/K+U4dCheRi3HVIQ=;
-  b=WTQnOmoRwgZmKjd2vQ0gbdi+cQMcxMZ+4XCAN9j+HpKFBJEXsCw4iYPt
-   wngm8OKXCkxuTF8fLAPptsWKIBrGq3BVP2cQ2jeizcf+OystHxayZjbgu
-   /Y3A9cQ8o1OwxedynOz5rU54Lt+gEwYICX9v7obSdycdd2O1sPdtHk3n5
-   1LydSPkHvAaJ1CYLrzsNtrR58HgwfRxeDL/3zPsZJOloVr6Bn7ZqZL6S2
-   XuAJ1aDrkhnhStQJjoE4pRepfsuNtsMRISIXSRv4LGD0nS9SD9HiY13K+
-   8+xmw+rrN2xjackDwGc+B/53pi1QFh9Hg89LzZMhJ4kwlPukeYPymTgeA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="384896814"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="384896814"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 16:34:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="798444170"
-X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
-   d="scan'208";a="798444170"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jan 2023 16:34:13 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pDxA4-00042A-1N;
-        Sat, 07 Jan 2023 00:34:12 +0000
-Date:   Sat, 07 Jan 2023 08:33:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 47cdfb7b0a2733c157b27f772d852bfb9075384b
-Message-ID: <63b8bde7.1vuT0rqEz2EnMTvN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 6 Jan 2023 19:35:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2803D840BB
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673051628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+rn1xIi/vXf3GjGf1plHZZuBGr8pnhw47cogm7ndTTY=;
+        b=QjW2ditcLQ+rwf5xBoj5EplO+VLKZO92KeOm7AZHFvCiYYAYjJshtW9r/e4BaPLt0z6jt6
+        bf7WIaP3Y6lTZC8IWy6c6Rm+or9QH7SqjrgvI0QOBM+Ew5eQp+q2PcwDaKlPOBDW9kmYRj
+        EgRyxRA8rQf2QjfB6un24yve7qIi694=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-jruMMBWuPKiacu8jmOLVxQ-1; Fri, 06 Jan 2023 19:33:47 -0500
+X-MC-Unique: jruMMBWuPKiacu8jmOLVxQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 700813C11A01;
+        Sat,  7 Jan 2023 00:33:46 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B9CC140EBF5;
+        Sat,  7 Jan 2023 00:33:45 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v4 2/7] iov_iter: Use the direction in the iterator functions
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 07 Jan 2023 00:33:44 +0000
+Message-ID: <167305162465.1521586.18077838937455153675.stgit@warthog.procyon.org.uk>
+In-Reply-To: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
+References: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 47cdfb7b0a2733c157b27f772d852bfb9075384b  x86/boot/e820: Fix typo in e820.c comment
+Use the direction in the iterator functions rather than READ/WRITE.
 
-elapsed time: 722m
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+---
 
-configs tested: 107
-configs skipped: 67
+ include/linux/uio.h |   22 +++++++++++-----------
+ lib/iov_iter.c      |   46 +++++++++++++++++++++++-----------------------
+ 2 files changed, 34 insertions(+), 34 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index 4b0f4a773d90..acb1ae3324ed 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -261,16 +261,16 @@ bool iov_iter_is_aligned(const struct iov_iter *i, unsigned addr_mask,
+ 			unsigned len_mask);
+ unsigned long iov_iter_alignment(const struct iov_iter *i);
+ unsigned long iov_iter_gap_alignment(const struct iov_iter *i);
+-void iov_iter_init(struct iov_iter *i, unsigned int direction, const struct iovec *iov,
++void iov_iter_init(struct iov_iter *i, enum iter_dir direction, const struct iovec *iov,
+ 			unsigned long nr_segs, size_t count);
+-void iov_iter_kvec(struct iov_iter *i, unsigned int direction, const struct kvec *kvec,
++void iov_iter_kvec(struct iov_iter *i, enum iter_dir direction, const struct kvec *kvec,
+ 			unsigned long nr_segs, size_t count);
+-void iov_iter_bvec(struct iov_iter *i, unsigned int direction, const struct bio_vec *bvec,
++void iov_iter_bvec(struct iov_iter *i, enum iter_dir direction, const struct bio_vec *bvec,
+ 			unsigned long nr_segs, size_t count);
+-void iov_iter_pipe(struct iov_iter *i, unsigned int direction, struct pipe_inode_info *pipe,
++void iov_iter_pipe(struct iov_iter *i, enum iter_dir direction, struct pipe_inode_info *pipe,
+ 			size_t count);
+-void iov_iter_discard(struct iov_iter *i, unsigned int direction, size_t count);
+-void iov_iter_xarray(struct iov_iter *i, unsigned int direction, struct xarray *xarray,
++void iov_iter_discard(struct iov_iter *i, enum iter_dir direction, size_t count);
++void iov_iter_xarray(struct iov_iter *i, enum iter_dir direction, struct xarray *xarray,
+ 		     loff_t start, size_t count);
+ ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
+ 		size_t maxsize, unsigned maxpages, size_t *start,
+@@ -360,19 +360,19 @@ size_t hash_and_copy_to_iter(const void *addr, size_t bytes, void *hashp,
+ struct iovec *iovec_from_user(const struct iovec __user *uvector,
+ 		unsigned long nr_segs, unsigned long fast_segs,
+ 		struct iovec *fast_iov, bool compat);
+-ssize_t import_iovec(int type, const struct iovec __user *uvec,
++ssize_t import_iovec(enum iter_dir direction, const struct iovec __user *uvec,
+ 		 unsigned nr_segs, unsigned fast_segs, struct iovec **iovp,
+ 		 struct iov_iter *i);
+-ssize_t __import_iovec(int type, const struct iovec __user *uvec,
++ssize_t __import_iovec(enum iter_dir direction, const struct iovec __user *uvec,
+ 		 unsigned nr_segs, unsigned fast_segs, struct iovec **iovp,
+ 		 struct iov_iter *i, bool compat);
+-int import_single_range(int type, void __user *buf, size_t len,
++int import_single_range(enum iter_dir direction, void __user *buf, size_t len,
+ 		 struct iovec *iov, struct iov_iter *i);
+ 
+-static inline void iov_iter_ubuf(struct iov_iter *i, unsigned int direction,
++static inline void iov_iter_ubuf(struct iov_iter *i, enum iter_dir direction,
+ 			void __user *buf, size_t count)
+ {
+-	WARN_ON(direction & ~(READ | WRITE));
++	WARN_ON(!iov_iter_dir_valid(direction));
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_UBUF,
+ 		.user_backed = true,
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index f9a3ff37ecd1..fec1c5513197 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -421,11 +421,11 @@ size_t fault_in_iov_iter_writeable(const struct iov_iter *i, size_t size)
+ }
+ EXPORT_SYMBOL(fault_in_iov_iter_writeable);
+ 
+-void iov_iter_init(struct iov_iter *i, unsigned int direction,
++void iov_iter_init(struct iov_iter *i, enum iter_dir direction,
+ 			const struct iovec *iov, unsigned long nr_segs,
+ 			size_t count)
+ {
+-	WARN_ON(direction & ~(READ | WRITE));
++	WARN_ON(!iov_iter_dir_valid(direction));
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_IOVEC,
+ 		.nofault = false,
+@@ -994,11 +994,11 @@ size_t iov_iter_single_seg_count(const struct iov_iter *i)
+ }
+ EXPORT_SYMBOL(iov_iter_single_seg_count);
+ 
+-void iov_iter_kvec(struct iov_iter *i, unsigned int direction,
++void iov_iter_kvec(struct iov_iter *i, enum iter_dir direction,
+ 			const struct kvec *kvec, unsigned long nr_segs,
+ 			size_t count)
+ {
+-	WARN_ON(direction & ~(READ | WRITE));
++	WARN_ON(!iov_iter_dir_valid(direction));
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_KVEC,
+ 		.data_source = direction,
+@@ -1010,11 +1010,11 @@ void iov_iter_kvec(struct iov_iter *i, unsigned int direction,
+ }
+ EXPORT_SYMBOL(iov_iter_kvec);
+ 
+-void iov_iter_bvec(struct iov_iter *i, unsigned int direction,
++void iov_iter_bvec(struct iov_iter *i, enum iter_dir direction,
+ 			const struct bio_vec *bvec, unsigned long nr_segs,
+ 			size_t count)
+ {
+-	WARN_ON(direction & ~(READ | WRITE));
++	WARN_ON(!iov_iter_dir_valid(direction));
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_BVEC,
+ 		.data_source = direction,
+@@ -1026,15 +1026,15 @@ void iov_iter_bvec(struct iov_iter *i, unsigned int direction,
+ }
+ EXPORT_SYMBOL(iov_iter_bvec);
+ 
+-void iov_iter_pipe(struct iov_iter *i, unsigned int direction,
++void iov_iter_pipe(struct iov_iter *i, enum iter_dir direction,
+ 			struct pipe_inode_info *pipe,
+ 			size_t count)
+ {
+-	BUG_ON(direction != READ);
++	BUG_ON(direction != ITER_DEST);
+ 	WARN_ON(pipe_full(pipe->head, pipe->tail, pipe->ring_size));
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_PIPE,
+-		.data_source = false,
++		.data_source = ITER_DEST,
+ 		.pipe = pipe,
+ 		.head = pipe->head,
+ 		.start_head = pipe->head,
+@@ -1057,10 +1057,10 @@ EXPORT_SYMBOL(iov_iter_pipe);
+  * from evaporation, either by taking a ref on them or locking them by the
+  * caller.
+  */
+-void iov_iter_xarray(struct iov_iter *i, unsigned int direction,
++void iov_iter_xarray(struct iov_iter *i, enum iter_dir direction,
+ 		     struct xarray *xarray, loff_t start, size_t count)
+ {
+-	BUG_ON(direction & ~1);
++	WARN_ON(!iov_iter_dir_valid(direction));
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_XARRAY,
+ 		.data_source = direction,
+@@ -1079,14 +1079,14 @@ EXPORT_SYMBOL(iov_iter_xarray);
+  * @count: The size of the I/O buffer in bytes.
+  *
+  * Set up an I/O iterator that just discards everything that's written to it.
+- * It's only available as a READ iterator.
++ * It's only available as a destination iterator.
+  */
+-void iov_iter_discard(struct iov_iter *i, unsigned int direction, size_t count)
++void iov_iter_discard(struct iov_iter *i, enum iter_dir direction, size_t count)
+ {
+-	BUG_ON(direction != READ);
++	BUG_ON(direction != ITER_DEST);
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_DISCARD,
+-		.data_source = false,
++		.data_source = ITER_DEST,
+ 		.count = count,
+ 		.iov_offset = 0
+ 	};
+@@ -1447,7 +1447,7 @@ static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
+ 		unsigned long addr;
+ 		int res;
+ 
+-		if (iov_iter_rw(i) != WRITE)
++		if (iov_iter_is_dest(i))
+ 			gup_flags |= FOLL_WRITE;
+ 		if (i->nofault)
+ 			gup_flags |= FOLL_NOFAULT;
+@@ -1784,7 +1784,7 @@ struct iovec *iovec_from_user(const struct iovec __user *uvec,
+ 	return iov;
+ }
+ 
+-ssize_t __import_iovec(int type, const struct iovec __user *uvec,
++ssize_t __import_iovec(enum iter_dir direction, const struct iovec __user *uvec,
+ 		 unsigned nr_segs, unsigned fast_segs, struct iovec **iovp,
+ 		 struct iov_iter *i, bool compat)
+ {
+@@ -1823,7 +1823,7 @@ ssize_t __import_iovec(int type, const struct iovec __user *uvec,
+ 		total_len += len;
+ 	}
+ 
+-	iov_iter_init(i, type, iov, nr_segs, total_len);
++	iov_iter_init(i, direction, iov, nr_segs, total_len);
+ 	if (iov == *iovp)
+ 		*iovp = NULL;
+ 	else
+@@ -1836,7 +1836,7 @@ ssize_t __import_iovec(int type, const struct iovec __user *uvec,
+  *     into the kernel, check that it is valid, and initialize a new
+  *     &struct iov_iter iterator to access it.
+  *
+- * @type: One of %READ or %WRITE.
++ * @direction: One of %ITER_SOURCE or %ITER_DEST.
+  * @uvec: Pointer to the userspace array.
+  * @nr_segs: Number of elements in userspace array.
+  * @fast_segs: Number of elements in @iov.
+@@ -1853,16 +1853,16 @@ ssize_t __import_iovec(int type, const struct iovec __user *uvec,
+  *
+  * Return: Negative error code on error, bytes imported on success
+  */
+-ssize_t import_iovec(int type, const struct iovec __user *uvec,
++ssize_t import_iovec(enum iter_dir direction, const struct iovec __user *uvec,
+ 		 unsigned nr_segs, unsigned fast_segs,
+ 		 struct iovec **iovp, struct iov_iter *i)
+ {
+-	return __import_iovec(type, uvec, nr_segs, fast_segs, iovp, i,
++	return __import_iovec(direction, uvec, nr_segs, fast_segs, iovp, i,
+ 			      in_compat_syscall());
+ }
+ EXPORT_SYMBOL(import_iovec);
+ 
+-int import_single_range(int rw, void __user *buf, size_t len,
++int import_single_range(enum iter_dir direction, void __user *buf, size_t len,
+ 		 struct iovec *iov, struct iov_iter *i)
+ {
+ 	if (len > MAX_RW_COUNT)
+@@ -1872,7 +1872,7 @@ int import_single_range(int rw, void __user *buf, size_t len,
+ 
+ 	iov->iov_base = buf;
+ 	iov->iov_len = len;
+-	iov_iter_init(i, rw, iov, 1, len);
++	iov_iter_init(i, direction, iov, 1, len);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(import_single_range);
 
-gcc tested configs:
-x86_64                            allnoconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                          randconfig-a012
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                              defconfig
-i386                          randconfig-a016
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                                defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                        randconfig-a006
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-i386                             allyesconfig
-ia64                             allmodconfig
-sh                ecovec24-romimage_defconfig
-sh                        dreamcast_defconfig
-sh                           se7619_defconfig
-mips                            gpr_defconfig
-sh                                  defconfig
-x86_64                           alldefconfig
-mips                         rt305x_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-sh                         apsh4a3a_defconfig
-sh                          sdk7786_defconfig
-arc                    vdk_hs38_smp_defconfig
-sparc                            alldefconfig
-arc                      axs103_smp_defconfig
-arm                            lart_defconfig
-arm                        cerfcube_defconfig
-mips                         db1xxx_defconfig
-powerpc                      ppc6xx_defconfig
-mips                         cobalt_defconfig
-sparc64                             defconfig
-powerpc                       ppc64_defconfig
-sh                            titan_defconfig
-ia64                             alldefconfig
-powerpc                     mpc83xx_defconfig
-powerpc                      ppc40x_defconfig
-arc                              alldefconfig
-mips                           ci20_defconfig
-m68k                        mvme147_defconfig
-i386                          randconfig-c001
-ia64                        generic_defconfig
-nios2                            allyesconfig
-sh                           sh2007_defconfig
-powerpc                   currituck_defconfig
-powerpc                      pasemi_defconfig
-powerpc                 linkstation_defconfig
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-x86_64                        randconfig-a016
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-s390                 randconfig-r044-20230106
-hexagon              randconfig-r041-20230106
-hexagon              randconfig-r045-20230106
-riscv                randconfig-r042-20230106
-powerpc                   bluestone_defconfig
-mips                       rbtx49xx_defconfig
-arm                              alldefconfig
-hexagon                             defconfig
-arm                       cns3420vb_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                          g5_defconfig
-arm                          ixp4xx_defconfig
-x86_64                        randconfig-k001
-arm                          moxart_defconfig
-arm                        neponset_defconfig
-hexagon              randconfig-r041-20230107
-hexagon              randconfig-r045-20230107
-arm                  randconfig-r046-20230107
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
