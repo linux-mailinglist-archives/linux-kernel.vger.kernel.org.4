@@ -2,167 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E92660FEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A15660FF7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjAGPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 10:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S232156AbjAGPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 10:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAGPWV (ORCPT
+        with ESMTP id S230360AbjAGPcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 10:22:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DF35937;
-        Sat,  7 Jan 2023 07:22:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A102C60064;
-        Sat,  7 Jan 2023 15:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D4FC433EF;
-        Sat,  7 Jan 2023 15:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673104940;
-        bh=Zi2+Rs+9NgOOhyZDWo4R1QQ5HZsFFSieUonNtvcIErw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RsCbenW3T9OIRWsg2zkm1j6xq6VmYmSMn1LmKbf0BSkxt0LnnF4kMb4ghn91m79/L
-         pg0N2YSC3DJB/iwvoh8Jl6mw+Dpv2MN2UhIVzyb6TcdspXIzubG67GaoHO/d4trgw9
-         5eDHYk0k4pj1eK/4nJ6bt/M7ygkgmkvuXrZTLN8m7GzlFv3gg8qPOg2Uaz8aItRiSW
-         wTNx45J3qulAe2gD0wWutJeZ3dyxWFooR6ZILMsl8harkUqPk5rh5eLvXzavHb7YD1
-         v5LMNcviurNkuFn5vYb9Pe9B/3APqFNZ1whP8t9pj/aLCycNrXBq5jekElIvcotpGh
-         +xHuy/dH5S5SQ==
-Date:   Sun, 8 Jan 2023 00:22:15 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        mhiramat@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
-        ndesaulniers@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        joel@joelfernandes.org, quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-Id: <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
-In-Reply-To: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sat, 7 Jan 2023 10:32:09 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410A642621
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 07:32:07 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o15so3000954wmr.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 07:32:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YHckjjOEvZSFADImnJ7KXWMu9c8067aGfxjgXUsE4X0=;
+        b=XARL9Xw432069q9ug7AmT2ii/721KOOex76uOSQ5Ej91v8uVly0JvVpRHv+l42opvX
+         oxLRgOTF6IfaMlvAE5ugFkDsciEL0LMmSkrPTiUueafFX43KPTtMnTAp/s2HnFvT9SRr
+         YtF3U/D4hHQ1n7ZdGqeqtC+HD5MSlAiHIfTpTnro953jmyya2xBKkWxQFy/tuERmB7zR
+         FpV8aHqVfYlMs5BIrWBX106lF+CSTZ29ieBT76WFbz/Z+bCuuNjToc2ihC8tkxpWcu09
+         Zphue/rbHyxsRWyyqafC6IOIEVUE9G4HUjfjnl6FhiFjalXpgeM0BRjb5VoG9MtcY9HP
+         vYWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YHckjjOEvZSFADImnJ7KXWMu9c8067aGfxjgXUsE4X0=;
+        b=L3lCHOKhrMpCwIcWRlbbDI2BQOR5T4WePpVcw/V9RiT5XqaJoBWUMNNDLzUJWfnGam
+         92f2wODZoCseufAQ8F+2ukRDYfZiEye23fKJWa2tS8lIySkjcYje/SGbtsclUM47ffiN
+         myZIzLVhWa92uoTtmuu4DWggEGCCoRR+gSAAKEOE8qnOgFfwKpcUHByh0HZE+NQDRJhl
+         GI7O8+CC7Y+StIlTAyxaCbyANb2/mf7zSBRuN0IILAkHlOmrFYe6ENFzMdLImS5dXsNA
+         Ix3b3cew5allb4mcjmwaXsnB0Z7YWsVywKJ0rGoWnD8iDFbfSdJmUGtZYNHUZgJ2Whzz
+         sYSQ==
+X-Gm-Message-State: AFqh2koe54aq/Fz/QfWg9nR1DiVgQ5Hx0AGaTxrhEFbV8QYrz6V44x0h
+        asrvOy8bNZWFeki8GlHBRvlzpA==
+X-Google-Smtp-Source: AMrXdXvDiGSfEvCPjtCCxt7V6mSTslc3oth6qqA2ZR6xvpY8QqB8opH2ImO7Gq7PgtVhcK4ymxr99g==
+X-Received: by 2002:a05:600c:1c27:b0:3cf:a83c:184a with SMTP id j39-20020a05600c1c2700b003cfa83c184amr43073046wms.24.1673105525806;
+        Sat, 07 Jan 2023 07:32:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b003d99a39b846sm6230720wmg.5.2023.01.07.07.32.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 07:32:05 -0800 (PST)
+Message-ID: <0581eeed-f7d1-caf2-0dba-be14a01d7c05@linaro.org>
+Date:   Sat, 7 Jan 2023 16:32:03 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 01/16] dt-bindings: spi: Convert bcm63xx-hsspi bindings to
+ json-schema
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-2-william.zhang@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230106200809.330769-2-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 16:58:38 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> containing kernel boot parameters to be embedded into an initrd or into
-> the kernel itself.  This can be extremely useful when deploying kernels
-> in cases where some of the boot parameters depend on the kernel version
-> rather than on the server hardware, firmware, or workload.
+On 06/01/2023 21:07, William Zhang wrote:
+> This is the preparation for updates on the bcm63xx hsspi driver. Convert
+> the text based bindings to json-schema per new dts requirement.
 > 
-> Unfortunately, the "bootconfig" kernel parameter must be specified in
-> order to cause the kernel to look for the embedded bootconfig file,
-> and it clearly does not help to embed this "bootconfig" kernel parameter
-> into that file.
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
 > 
-> Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> kernel to act as if the "bootconfig" kernel parameter had been specified.
-> In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> for the embedded bootconfig file even when the "bootconfig" kernel
-> parameter is omitted.  This permits kernel-version-dependent kernel
-> boot parameters to be embedded into the kernel image without the need to
-> (for example) update large numbers of boot loaders.
+>  .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 52 +++++++++++++++++++
+>  .../bindings/spi/spi-bcm63xx-hsspi.txt        | 33 ------------
+>  2 files changed, 52 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-bcm63xx-hsspi.txt
 > 
-
-I like this because this is a simple solution. We have another option
-to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-bootloader. Thus, it is better to have this option so that user can
-always enable bootconfig.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-(or at least recommend to enable this)
-
-Thank you!
-
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: <linux-doc@vger.kernel.org>
-> 
-> diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-> index 9355c525fbe0a..91339efdcb541 100644
-> --- a/Documentation/admin-guide/bootconfig.rst
-> +++ b/Documentation/admin-guide/bootconfig.rst
-> @@ -201,6 +201,8 @@ To remove the config from the image, you can use -d option as below::
->  
->  Then add "bootconfig" on the normal kernel command line to tell the
->  kernel to look for the bootconfig at the end of the initrd file.
-> +Alternatively, build your kernel with the ``CONFIG_BOOT_CONFIG_FORCE``
-> +Kconfig option selected.
->  
->  Embedding a Boot Config into Kernel
->  -----------------------------------
-> @@ -217,7 +219,9 @@ path to the bootconfig file from source tree or object tree.
->  The kernel will embed it as the default bootconfig.
->  
->  Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
-> -option on the kernel command line to enable the embedded bootconfig.
-> +option on the kernel command line to enable the embedded bootconfig, or,
-> +alternatively, build your kernel with the ``CONFIG_BOOT_CONFIG_FORCE``
-> +Kconfig option selected.
->  
->  Note that even if you set this option, you can override the embedded
->  bootconfig by another bootconfig which attached to the initrd.
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 7e5c3ddc341de..f894fb004bad4 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1376,6 +1376,18 @@ config BOOT_CONFIG
->  
->  	  If unsure, say Y.
->  
-> +config BOOT_CONFIG_FORCE
-> +	bool "Force unconditional bootconfig processing"
-> +	depends on BOOT_CONFIG
-> +	help
-> +	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> +	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> +	  In fact, with this Kconfig option set, there is no way to
-> +	  make the kernel ignore the BOOT_CONFIG-supplied kernel-boot
-> +	  parameters.
+> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+> new file mode 100644
+> index 000000000000..45f1417b1213
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	  If unsure, say N.
+> +title: Broadcom BCM6328 High Speed SPI controller
 > +
->  config BOOT_CONFIG_EMBED
->  	bool "Embed bootconfig file in the kernel"
->  	depends on BOOT_CONFIG
-> diff --git a/init/main.c b/init/main.c
-> index e1c3911d7c707..669cb892e6c17 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -156,7 +156,7 @@ static char *extra_init_args;
->  
->  #ifdef CONFIG_BOOT_CONFIG
->  /* Is bootconfig on command line? */
-> -static bool bootconfig_found;
-> +static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
->  static size_t initargs_offs;
->  #else
->  # define bootconfig_found false
+> +maintainers:
+> +  - Jonas Gorski <jonas.gorski@gmail.com>
+> +
+
+Missing reference to spi-controller.
+
+> +properties:
+> +  compatible:
+> +    const: brcm,bcm6328-hsspi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: spi master reference clock
+> +      - description: spi master pll clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: hsspi
+> +      - const: pll
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+
+This is for cases when you have reference to other schema.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best regards,
+Krzysztof
+
