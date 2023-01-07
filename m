@@ -2,158 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52632660A9B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B85660AB2
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbjAGAL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S236564AbjAGAPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbjAGALj (ORCPT
+        with ESMTP id S230269AbjAGAPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:11:39 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E344BD54;
-        Fri,  6 Jan 2023 16:11:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B13BF4AE;
-        Sat,  7 Jan 2023 01:11:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673050295;
-        bh=x8pzsewZWxr/vcdPPfkmHtSjn4WeCTlmgfotf/DK77o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BiSJsOZHaq3Strt7jLItKZPFvIWEvEUGzf5p6pEklUQO18aa0GL+Bd9fII2DGjth6
-         e0yi2eOLZG/hIJ3dNDxhyurJBbMXEPkAr1ry4s08UL8SaYfr/eHH5oG4M2oJCYdE/X
-         smh0EFDI0dpkmmOp+ttrI6SGMfBFeI73zHYsuKgI=
-Date:   Sat, 7 Jan 2023 02:11:30 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ai Chao <aichao@kylinos.cn>
-Cc:     mchehab@kernel.org, ribalda@chromium.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] media: uvcvideo: Fix bandwidth error for Alcor camera
-Message-ID: <Y7i4skTM/DBXpgca@pendragon.ideasonboard.com>
-References: <20221122084833.1241078-1-aichao@kylinos.cn>
+        Fri, 6 Jan 2023 19:15:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D666473E1F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:14:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673050488;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LhnMM7fQD+toq0uk/bI2+XqyJ3TS/+0YVHHH9iY5RqE=;
+        b=FDWco2ejNAHskSAisOM8Zn4AXtUuuc+pNzR/bSEK1Mft0Na/Ehc37kQ2t96mgz7cM1+XZB
+        +67qoiDqrWFm1H92vMrHOyoSSkfRXFHxsjoOpt/V5QFSghPylxDbqGBCh32kqn6w1RaYKS
+        pEkODf4krvDUkT3Et4R89J5Tlg/IT24=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-152-1tEsJEFJPIGgHLXSlwJUaw-1; Fri, 06 Jan 2023 19:14:46 -0500
+X-MC-Unique: 1tEsJEFJPIGgHLXSlwJUaw-1
+Received: by mail-qt1-f197.google.com with SMTP id z16-20020ac84550000000b003a807d816b2so1413516qtn.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 16:14:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LhnMM7fQD+toq0uk/bI2+XqyJ3TS/+0YVHHH9iY5RqE=;
+        b=BHOhsFJie1o0vT8VNt+vtUKqiW7Ya3PzZM56vw1nF3dTL8I0QrvcZfemmtOR1PmBR2
+         wDdF7x+6xghvRJbRoWeF6BrV/iq0SOL2NmJ+4j0cer8z8t5l/o/GjL8/o+iobZl0JOIf
+         sQ72LGE6Z+trMAvQ8t7xIVEd9aEC1i2X4l75Ugsie5Ik5uiSSpEMb9RVuyTZhWGx40aS
+         aCLVRlZrESIgT87fDMXV2+YT6CJNjJrn6VeeUteSjFk59PUef/K0MWJjCeqqdNacrr2/
+         84LK2TYzaSUjZWbEMgRF7ORxlf8YeHmbDw3iQ+fEjPZ+70Jplr/vRhmK4tDV3FK/2yS2
+         bJdA==
+X-Gm-Message-State: AFqh2krxwWyuAP/SvRZY8NWEG7fofyoqFp1cNtvWD3b79PdZn11UDVcT
+        tPL0pSrs7nq4i6uRD9hl2gm+UU/6xVXNoicaz2z5VhsB+U7vemKS9NWd2b1l++Hnh7r951tagCD
+        LdgOjeoa8qL5S5WuXM6FTiMlF
+X-Received: by 2002:a05:622a:199e:b0:3a8:1947:3e38 with SMTP id u30-20020a05622a199e00b003a819473e38mr101090297qtc.31.1673050486523;
+        Fri, 06 Jan 2023 16:14:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt5pXym6h5UUuv4FRgsYP4KQoKWlKJuI0AixlVnJ08wan3o8pObcywtBAqxHWxXhiuqsfxSKA==
+X-Received: by 2002:a05:622a:199e:b0:3a8:1947:3e38 with SMTP id u30-20020a05622a199e00b003a819473e38mr101090274qtc.31.1673050486242;
+        Fri, 06 Jan 2023 16:14:46 -0800 (PST)
+Received: from debian (2a01cb058918ce00e3192ce9ffef0fc4.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:e319:2ce9:ffef:fc4])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05620a0e9a00b006eeca296c00sm1316613qkm.104.2023.01.06.16.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 16:14:45 -0800 (PST)
+Date:   Sat, 7 Jan 2023 01:14:41 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
+ when selftest restarted
+Message-ID: <Y7i5cT1AlyC53hzN@debian>
+References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221122084833.1241078-1-aichao@kylinos.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+On Fri, Jan 06, 2023 at 02:44:11AM +0100, Mirsad Goran Todorovac wrote:
+> [root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+> ┌────────┬───────┬───────┬──────────────┬──────────────┬───────┬────────┐
+> ├────────┼───────┼───────┼──────────────┼──────────────┼───────┼────────┤
+> │  Type  │ outer | inner │     tos      │      ttl     │  vlan │ result │
+> ├────────┼───────┼───────┼──────────────┼──────────────┼───────┼────────┤
+> │    gre │     4 │     4 │ inherit 0xc4 │  inherit 116 │ false │Cannot create namespace file "/var/run/netns/testing": File exists
+> RTNETLINK answers: File exists
+> RTNETLINK answers: File exists
+> RTNETLINK answers: File exists
 
-On Tue, Nov 22, 2022 at 04:48:33PM +0800, Ai Chao wrote:
-> For Alcor Corp. Slave camera(1b17:6684/2017:0011), it support to output
->  compressed video data, and it return a wrong dwMaxPayloadTransferSize
->  fields. This is a fireware issue, but the manufacturer cannot provide
->  a const return fieldsby the fireware. For some device, it requested
->  2752512 B/frame bandwidth. For normally device, it requested 3072 or 1024
->  B/frame bandwidth. so we check the dwMaxPayloadTransferSize fields,if it
->  large than 0x1000, reset dwMaxPayloadTransferSize to 1024, and the camera
->  preview normally.
-> 
-> Signed-off-by: Ai Chao <aichao@kylinos.cn>
-> 
-> ---
-> change for v4
-> - Change usb_match_one_id to usb_match_id
-> - Modify the discription
-> 
-> change for v3
-> - Add VID/PID 2017:0011
-> 
-> change for v2
-> - Used usb_match_one_id to check VID and PID
-> ---
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index d2eb9066e4dc..75bdd71d0e5a 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -135,6 +135,11 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
->  	static const struct usb_device_id elgato_cam_link_4k = {
->  		USB_DEVICE(0x0fd9, 0x0066)
->  	};
-> +	static const struct usb_device_id alcor_corp_slave_cam[] = {
-> +		{ USB_DEVICE(0x2017, 0x0011) },
-> +		{ USB_DEVICE(0x1b17, 0x6684) },
-> +		{ }
-> +	};
->  	struct uvc_format *format = NULL;
->  	struct uvc_frame *frame = NULL;
->  	unsigned int i;
-> @@ -234,6 +239,13 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
->  
->  		ctrl->dwMaxPayloadTransferSize = bandwidth;
->  	}
-> +
-> +	/* Alcor Corp. Slave camera return wrong dwMaxPayloadTransferSize */
+You probably have leftovers from a previous test case. In particular
+the "testing" network name space already exists, which prevents the
+script from creating it. You can delete it manually with
+"ip netns del testing". If this netns is there because of a previous
+incomplete run of l2_tos_ttl_inherit.sh, then you'll likely need to
+also remove the tunnel interface it created in your current netns
+("ip link del tep0").
 
-Let's add a bit more documentation:
+Ideally this script wouldn't touch the current netns and would clean up
+its environment in all cases upon exit. I have a patch almost ready
+that does just that.
 
-	/*
-	 * Another issue is with devices that report a transfer size that
-	 * greatly exceeds the maximum supported by any existing USB version.
-	 * For instance, the "Slave camera" devices from Alcor Corp. (2017:0011
-	 * and 1b17:66B8) request 2752512 bytes per interval.
-	 */
-
-I would also take this as an opportunity to document the previous fixup,
-just above the UVC_QUIRK_FIX_BANDWIDTH check, with
-
-	/*
-	 * Many devices report an incorrect dwMaxPayloadTransferSize value. The
-	 * most common issue is devices requesting the maximum possible USB
-	 * bandwidth (3072 bytes per interval for high-speed, high-bandwidth
-	 * isochronous endpoints) while they actually require less, preventing
-	 * multiple cameras from being used at the same time due to bandwidth
-	 * overallocation.
-	 *
-	 * For those devices, replace the dwMaxPayloadTransferSize value based
-	 * on an estimation calculated from the frame format and size. This is
-	 * only possible for uncompressed formats, as not enough information is
-	 * available to reliably estimate the bandwidth requirements for
-	 * compressed formats.
-	 */
-
-> +	if ((format->flags & UVC_FMT_FLAG_COMPRESSED) &&
-> +	    (ctrl->dwMaxPayloadTransferSize > 0x1000) &&
-
-Given that the highest bandwidth supported by high-speed, high bandwidth
-devices is 3072 bytes per interval, I would check
-
-	    (ctrl->dwMaxPayloadTransferSize > 3072) &&
-
-here.
-
-> +	    usb_match_id(stream->dev->intf, alcor_corp_slave_cam)) {
-
-I'm also wondering if we could enable this fixup for all devices using
-isochronous endpoints (as for bulk endpoints the transfer size can be
-higher), without checking the VID:PID. No isochronous high-speed,
-high-bandwidth device should have a swMaxPayloadTransferSize value
-higher than 3072.  For super-speed devices I'm not entirely sure if the
-maximum transfer size covers multiple transfers in a burst. Ricardo, do
-you know anything about that ?
-
-I can send a v5 that does all this.
-
-> +		ctrl->dwMaxPayloadTransferSize = 1024;
-> +	}
->  }
->  
->  static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
-
--- 
-Regards,
-
-Laurent Pinchart
