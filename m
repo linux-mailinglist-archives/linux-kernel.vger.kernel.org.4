@@ -2,100 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A26B660FA5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBFE660FA8
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjAGOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S231800AbjAGO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjAGOxe (ORCPT
+        with ESMTP id S229621AbjAGO41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:53:34 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130EE3D5F0;
-        Sat,  7 Jan 2023 06:53:33 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qk9so9687305ejc.3;
-        Sat, 07 Jan 2023 06:53:33 -0800 (PST)
+        Sat, 7 Jan 2023 09:56:27 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9B23AB36;
+        Sat,  7 Jan 2023 06:56:27 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id l184so4367689vsc.0;
+        Sat, 07 Jan 2023 06:56:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W0kQdEWzRpszG8s93+6SCtv6ZFhZz1XMPwhp4yY8Nt0=;
-        b=o7+jcXXYD57KsUrkWZfu+BXXBBmYh1iSJ/u+jLNtUeOKvgEtEXAberPDm73JjJFy6/
-         vjuA0udOQUwPKFKZ+tejxT3baUhHQigvpA7lUYksVrw6fL1dS6ecMFOhmDNqJvD8LI7G
-         aa8/57IOiiFb3HWXbjMgEjDfP5VGA8dv2ZpQ9fPPnH5AehjUrRZufTQMcZzQRQf3yB0P
-         bABgyCIl6zmiimkYNNuWYdY/A92Zh971B6dnbRzPWqEvzd6PKlp8v2xgxb5prxHtC3tV
-         E4KxJs9QZzHwnmquy39yTQaKlD8Vg17Mr7+6Tgtev3u/PxV1lqzh1jsg/mbU9bEmBt2X
-         4yOA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dFyLUIx8VXvv71DzGWZEEjL5hj6rPhYAH4n7XJ6OnbU=;
+        b=ooXLw1zSzyjR8WV8a1SL5uV4hNdB567FCOLxUPAvYIu0IbfF79B+FPKP+QNnAKaeCE
+         /xJuOTC+4evgPpENIFNGaFn3ZnfBToFYoUZwF+5kabwSTs0c4mr1czfBj0fmtdxBthPX
+         LXwXbsYVB1oqJ0sBOxV+GVQkosHX+xogHXy+RJaKx8lQyVrr795FbJmRVfr6a22wt40C
+         0XGkyuWl+O0kXoLzPAQZuxWnZTjjH51h640x0m0fUSnPhDti0efpZChBfAsSt0TUb9CX
+         KGbATst2J89nrnZP45Jj/0BmcRvYhY3vZRIP9/5Ixc+97q8qgMPjkrTMoXLY/RWUTRu3
+         ht9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0kQdEWzRpszG8s93+6SCtv6ZFhZz1XMPwhp4yY8Nt0=;
-        b=yObUyWfkUkk4/GYnDa9NgWYlkvsSGVbrGQq2WkSohYHgWBPUpyRlB4b4qa27HzBr/i
-         aO1kzEpC25pWO3UrQIyKqqYBhzzC4OaBFQ+cJbgz/eKRm9qbKBZhBKcl2l5oPZpBqZZd
-         r8srqPgcOSh1lcU2pkZ1J9goII8505r8ZNZ1+FZvPMjcjWpGgWOnF2lhgEnNC60CtYv5
-         aYjJNaM0xHWswZDGb0Q0vab7F23chn9x9UGZYzGSjVJ+Pp3PzOtdKoLs0tmG5FaGM3LE
-         aPSOUOxzttC6OOep+ZN//cukGFVA1tXRTNWgBM2gUnrLdG4jK6V7ZRHfWdjTdYqYUAIq
-         fIyg==
-X-Gm-Message-State: AFqh2kqrLuUdXtLueiclJMoKJr1rH0YqJVHMS9g3TZ3TDJcZUpN/2Wcx
-        V3xWh00ddhtHtr8uUN+C5fE=
-X-Google-Smtp-Source: AMrXdXus3hVj1/+R5sPy7RVf+N6SWVxEiqYjmF7uGL7atpt8Vbkp9zi2N/QrBORdjW68/z6WHa0brA==
-X-Received: by 2002:a17:906:c0ce:b0:7c1:6151:34c0 with SMTP id bn14-20020a170906c0ce00b007c1615134c0mr46524675ejb.6.1673103211624;
-        Sat, 07 Jan 2023 06:53:31 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.114])
-        by smtp.gmail.com with ESMTPSA id b6-20020a17090630c600b007c0d0dad9c6sm1513827ejb.108.2023.01.07.06.53.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 06:53:31 -0800 (PST)
-Message-ID: <85019785-dc58-0826-8362-cd2deca6a32e@gmail.com>
-Date:   Sat, 7 Jan 2023 16:53:29 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dFyLUIx8VXvv71DzGWZEEjL5hj6rPhYAH4n7XJ6OnbU=;
+        b=Uyts/zx+X/f22xsyJe1X5N3xtFDa8jl0sehMm/S1Me4YrsSiRseaHp7itTauNPdh+v
+         WcWltWeaUTNWqW13AIOx2FRrCQf3EePtsa+VEWFTqrBA76okUI7pQXw9C9oMxibhXS4r
+         ES/wAZKsOkWzuTOYKwPjcZ9WhPOGBw+AqF1knffrDDkONKEFHsvTeFC+OS8iDLw70Qww
+         VY75O0LaY09z7h5eIyD2rjQFs7HAB7G7FggYucv2UYtWerhgKYOIk2tjDzhwhDknrO1G
+         2siAvhMU5miEulD3f7++CWQ2Z3LGFXdGKJ6GybCUHIZeZVVxDo6JzpXpFmPsF2hwRvPW
+         8p4w==
+X-Gm-Message-State: AFqh2kpOFKmgIM3tDfPZSDdSbVi60960zP6X/5FAvdmuSX7HPl0jfXzp
+        1X5kIBcTTzGBkXk7q+dWnRsk7sczm8xncbhvkWA=
+X-Google-Smtp-Source: AMrXdXtwgQnBccAmp5deA8Qb6NaBwtu2mLi/Xeu599Y9cfSvJcQOgMPGlzs0i9INqGyGNOHhdAp7Q/uoH2RT3ShqOaU=
+X-Received: by 2002:a67:5c03:0:b0:3ce:a7c5:3757 with SMTP id
+ q3-20020a675c03000000b003cea7c53757mr2460727vsb.63.1673103386173; Sat, 07 Jan
+ 2023 06:56:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH v1 19/19] rtw88: Add support for the SDIO based
- RTL8821CS chipset
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
- <20221227233020.284266-20-martin.blumenstingl@googlemail.com>
- <63b4b3e1.050a0220.791fb.767c@mx.google.com>
- <0acf173d-a425-dcca-ad2f-f0f0f13a9f5e@gmail.com>
- <2b839329-7816-722d-cb57-649fc5bf8816@lwfinger.net>
-Content-Language: en-US
-From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <2b839329-7816-722d-cb57-649fc5bf8816@lwfinger.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <CANAwSgTS+j_oRrckwmi60afX6-D=OP0oy05m3eQga_gEZJJ_mg@mail.gmail.com>
+ <CANAwSgTc=uGyZ0H_-ZckYoKztMB--DRfx7apBtP9zAbAU1XTvA@mail.gmail.com> <2188024.ZfL8zNpBrT@steina-w>
+In-Reply-To: <2188024.ZfL8zNpBrT@steina-w>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Sat, 7 Jan 2023 20:26:09 +0530
+Message-ID: <CANAwSgT1xo1Nt84p2ruXBQ+Aq+aAr62VL8Gf8iRU8u_09y8BaA@mail.gmail.com>
+Subject: Re: [PATCH v1 03/11] arm64: dts: amlogic: Used onboard usb hub reset
+ on odroid c2
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 22:14, Larry Finger wrote:
-> On 1/4/23 13:59, Bitterblue Smith wrote:
->> I tested with https://github.com/lwfinger/rtw88/ which should have the
->> same code as wireless-next currently.
-> 
-> I just rechecked. My repo was missing some changes from wireless-next. It now matches.
-> 
-> Larry
-> 
-> 
-Did you mean to push some commits? The latest one is still from December.
+Hi Alexander,
+
+Thanks for your review comments.
+
+On Wed, 4 Jan 2023 at 15:06, Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Am Mittwoch, 4. Januar 2023, 09:13:21 CET schrieb Anand Moon:
+> > Hi Martin,
+> >
+> > On Wed, 28 Dec 2022 at 20:14, Anand Moon <linux.amoon@gmail.com> wrote:
+> > > Hi Martin,
+> > >
+> > > On Wed, 28 Dec 2022 at 18:21, Martin Blumenstingl
+> > >
+> > > <martin.blumenstingl@googlemail.com> wrote:
+> > > > Hi Anand,
+> > >
+> > > Thanks for your review comments.
+> > >
+> > > > thank you for working on this topic!
+> > > >
+> > > > On Wed, Dec 28, 2022 at 11:05 AM Anand Moon <linux.amoon@gmail.com>
+> > > > wrote:
+> > > > [...]
+> > > >
+> > > > > +       usb {
+> > > > > +               dr_mode = "host";
+> > > > > +               #address-cells = <1>;
+> > > > > +               #size-cells = <0>;
+> > > > > +
+> > > > > +               hub@1 {
+> > > > > +                       /* Genesys Logic GL852G-OHG usb hub */
+> > > > > +                       compatible = "genesys,usb5e3,610";
+> > > > > +                       reg = <1>;
+> > > > > +                       vdd-supply = <&usb_otg_pwr>;
+> > > > > +                       reset-gpio = <&gpio_ao GPIOAO_4
+> > > > > GPIO_ACTIVE_LOW>;
+> > > > > +               };
+> > > > > +       };
+> > > >
+> > > > My understanding is that the hub@1 node should be part of the
+> > > > corresponding USB controller node, not a new node.
+> > > > In this case hub@1 should go into the existing &usb1 node. That way we
+> > > > describe the way the hardware is set up (meaning: hub@1 is connected
+> > > > to &usb1).
+> > >
+> > > Ok, I will move this code under &usb0 and &usb1 nodes.
+> > >
+> > > onboard_usb_hub module just assists in usb hub reset.
+> > > so these changes are meant to replace the gpio-hog.
+> > >
+> > > $ dmesg | grep onboard
+> > > [    5.405558] usbcore: registered new device driver onboard-usb-hub
+> > > [    6.383428] onboard-usb-hub 1-1: reset high-speed USB device number
+> > > 2 using dwc2
+> > >
+> > > Here is the boot log of the odroid c2 [0] https://pastebin.com/PFy5waPb
+> >
+> > Moving the usb hub into usb subnode usb0 or usb1 does not work
+> > on Odroid n2 and c4, we have a combo phys of usb 2.0 and usb 3.0
+> > so the onboard usb hub reset does not get initialized until both the PHY
+> > and USB nodes are brought up by the drivers.
+> >
+> > # On Odroid n2 has a combo hub
+> > alarm@odroid-n2:~$ lsusb -tv
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+> >     ID 1d6b:0003 Linux Foundation 3.0 root hub
+> >
+> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+> >
+> >         ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
+> >
+> >         |__ Port 1: Dev 5, If 0, Class=Mass Storage, Driver=usb-storage,
+> >         |5000M
+> >
+> >             ID 174c:5106 ASMedia Technology Inc. ASM1051 SATA 3Gb/s bridge
+> > /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
+> >     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> >
+> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+> >
+> >         ID 05e3:0610 Genesys Logic, Inc. Hub
+> >
+> >         |__ Port 2: Dev 4, If 0, Class=Vendor Specific Class,
+> >
+> > Driver=ax88179_178a, 480M
+> >             ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+> >
+> > # Odroid C4 also has a combo hub
+> >
+> > alarm@odroid-c4:~$ lsusb -tv
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+> >     ID 1d6b:0003 Linux Foundation 3.0 root hub
+> >
+> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+> >
+> >         ID 2109:0817 VIA Labs, Inc.
+> > /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
+> >     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> >
+> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+> >
+> >         ID 2109:2817 VIA Labs, Inc.
+> >
+> > So I will continue to work with this usb hub node to do a proper reset
+> > of the USB hub.
+>
+> If your USB hub does both USB2.0 and USB3.0 you need to add both devices in DT
+> and reference them using 'peer-hub'property. See ca69b6c78d5d ("arm64: dts:
+> tqma8mpql: add support for 2nd USB (host) interface") for a reference.
+>
+
+Yes, I have updated the DTS example for using peer-hub for both devices.
+
+> Best regards,
+> Alexander
+>
+Thanks
+
+
+
+-Anand
