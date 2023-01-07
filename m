@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD1B660DC9
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C07660DCD
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjAGKXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S232165AbjAGKX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjAGKWy (ORCPT
+        with ESMTP id S231723AbjAGKXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:22:54 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C45988DE0
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:22:53 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so7784781pjj.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:22:53 -0800 (PST)
+        Sat, 7 Jan 2023 05:23:01 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6427F8BF10
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:23:00 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso2597494pjl.2
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nT9gdnbLGuBpWnVg5M2Oo4GmVRIc3FKsY2Rh+Wszh3E=;
-        b=g/GC21wmf8/MD5LCSsmqw0UM9NPshE0aYYzre7tVqamk7Oyn+DzAMclqiKsgTKXDn4
-         ywWy0J6TrILXWq2wgD5zZuI0dwqPYzwix1l72zqSd+PXFJ7gGJM4Pov4BnzTglck6Q9C
-         qgRfAuZogdAtS3kDGHsmijJT2ErxmhKQYDAXs=
+        bh=vk6NGcipu/mOeHU6ZjpOH7eJ5ckPZsNgiu0Kdi+7+sc=;
+        b=KKueoDmdumc0cBC0mDXZqEtJsgGxOy9pJBdnxVjLUxIqhad/6daWqIpnlHC4R4NEny
+         S+N3Kpbbavrh8TMPf/+uXsbsLfYiDSlti2GancnZPs2gDxPX8dTYpMFZWBCbDe8rE7CY
+         E5TzrkPGfkQb+BiwDuDC25Phut4a3okYC5aa8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nT9gdnbLGuBpWnVg5M2Oo4GmVRIc3FKsY2Rh+Wszh3E=;
-        b=0+05QmTOIEFI2R0CWsvELkndNqXgQOycpIRebSmYFtzF+auB4faub2w3MQrzU9Eu/s
-         Kp0oKrPDnhLpoDQGSKC+N3c8JTjBMNxzRMMLJrdk7JWH41X7gaPNk1J6eWonlLWpgEVL
-         e3JMniTeComEWiPOUT1X7QSaiCTW7+LCqcoxiCYsVDwUYjOxLUOLWqYWJ22g1mQFJPx+
-         RTLgMBPN8f53iJaAJHvw6OBD5ywwvuAWzHlp2j2zerspamSlbcHGzFmlPtmT7JXqERVF
-         KrXYGYOqni8HBF/FbALzPtMZ8egfmgCy814iyh8nIKJRaDYD1O4thS66JDdu/87ZdJbF
-         ePvQ==
-X-Gm-Message-State: AFqh2kq9qWA1dBbuA7yKD+saoEs/BhBKxnmIuPcAha4BUNJd7ayQmYSn
-        xpBjQXWdosC9CtTggqRkZgQ0Ww==
-X-Google-Smtp-Source: AMrXdXshQueVSSjO1qfCj7EmNNm2bUD58eRfmn/kGRv+NVvqzWZPI1/73g/Jc2D6nYXH7+8ktZI3oA==
-X-Received: by 2002:a17:902:edc5:b0:192:c882:703e with SMTP id q5-20020a170902edc500b00192c882703emr20430020plk.43.1673086973113;
-        Sat, 07 Jan 2023 02:22:53 -0800 (PST)
+        bh=vk6NGcipu/mOeHU6ZjpOH7eJ5ckPZsNgiu0Kdi+7+sc=;
+        b=TTpy9fbhh+I0+c7mEfAy81BiiEXmuJwuy//22et6btVezUKZnCRkX97Zeqb8fTpE0w
+         CVB7nl5nTvxUOA0idfxQ5wiS2shKJnKqqEBMqk8X7H56OETsrrzzvxbEkb1BysCbDlea
+         VrT9Eh/JYZ5LJkA0SiQm6cXns5i6gdh2yXe8eNx0jHmB8vvQK7FCZuyk+l4hBLGiOq6Z
+         jv9HU1VLK55IHdSSJKL5pU3hVHAOtWo0g82Z0WoVhZfMEWqOCOocNi8sXtDyG38598Nk
+         KR3/wLpA9Aj9inENdetmBW/H6ojaatd8oGEhatc8PzqzGive1yEUS0WCBYWw8WpoBClr
+         Xv/A==
+X-Gm-Message-State: AFqh2kqTo1MUo3EdEJNBdrOkOfzP5zyEUcs9MdLLW4ybB9IV1zX4czkw
+        WTquYXKeF2NtG3MyhqcZZ/yPAg==
+X-Google-Smtp-Source: AMrXdXvHbfhPl8qGKDebh6WMK2833EcJ579689/BiMFK/DuoxCNRAnIaFZU7x7cJj2l7EeDiywXfHA==
+X-Received: by 2002:a17:902:82c4:b0:192:622a:ff9c with SMTP id u4-20020a17090282c400b00192622aff9cmr56080716plz.39.1673086979783;
+        Sat, 07 Jan 2023 02:22:59 -0800 (PST)
 Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:180d:95e8:f4:84fb])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170903228100b001892af9472esm2366362plh.261.2023.01.07.02.22.48
+        by smtp.gmail.com with ESMTPSA id b1-20020a170903228100b001892af9472esm2366362plh.261.2023.01.07.02.22.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 02:22:52 -0800 (PST)
+        Sat, 07 Jan 2023 02:22:59 -0800 (PST)
 From:   Pin-yen Lin <treapking@chromium.org>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -80,10 +80,17 @@ Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
         <nfraprado@collabora.com>, devicetree@vger.kernel.org,
         Marek Vasut <marex@denx.de>, linux-acpi@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH v8 2/9] platform/chrome: cros_ec_typec: Purge blocking switch devlinks
-Date:   Sat,  7 Jan 2023 18:22:24 +0800
-Message-Id: <20230107102231.23682-3-treapking@chromium.org>
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: [PATCH v8 3/9] drm/display: Add Type-C switch helpers
+Date:   Sat,  7 Jan 2023 18:22:25 +0800
+Message-Id: <20230107102231.23682-4-treapking@chromium.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20230107102231.23682-1-treapking@chromium.org>
 References: <20230107102231.23682-1-treapking@chromium.org>
@@ -91,69 +98,212 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prashant Malani <pmalani@chromium.org>
+Add helpers to register and unregister Type-C "switches" for bridges
+capable of switching their output between two downstream devices.
 
-When using OF graph, the fw_devlink code will create links between the
-individual port driver (cros-ec-typec here) and the parent device for
-a Type-C switch (like mode-switch). Since the mode-switch will in turn
-have the usb-c-connector (i.e the child of the port driver) as a
-supplier, fw_devlink will not be able to resolve the cyclic dependency
-correctly.
+The helper registers USB Type-C mode switches when the "mode-switch"
+and the "data-lanes" properties are available in Device Tree.
 
-As a result, the mode-switch driver probe() never runs, so mode-switches
-are never registered. Because of that, the port driver probe constantly
-fails with -EPROBE_DEFER, because the Type-C connector class requires all
-switch devices to be registered prior to port registration.
-
-To break this deadlock and allow the mode-switch registration to occur,
-purge all the usb-c-connector nodes' absent suppliers. This eliminates
-the connector as a supplier for a switch and allows it to be probed.
-
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
 Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
 ---
 
-(no changes since v7)
+Changes in v8:
+- Fixed the build issue when CONFIG_TYPEC=m
+- Fixed some style issues
 
 Changes in v7:
-- Fix the long comment lines
+- Extracted the common codes to a helper function
+- New in v7
 
-Changes in v6:
-- New in v6
+ drivers/gpu/drm/display/drm_dp_helper.c | 132 ++++++++++++++++++++++++
+ include/drm/display/drm_dp_helper.h     |  16 +++
+ 2 files changed, 148 insertions(+)
 
- drivers/platform/chrome/cros_ec_typec.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 2a7ff14dc37e..302474a647cc 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -382,6 +382,16 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 		return -EINVAL;
- 	}
+diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+index 16565a0a5da6..fb9e23744c08 100644
+--- a/drivers/gpu/drm/display/drm_dp_helper.c
++++ b/drivers/gpu/drm/display/drm_dp_helper.c
+@@ -30,11 +30,13 @@
+ #include <linux/sched.h>
+ #include <linux/seq_file.h>
+ #include <linux/string_helpers.h>
++#include <linux/usb/typec_mux.h>
+ #include <linux/dynamic_debug.h>
  
-+	/*
-+	 * OF graph may have set up some device links with switches,
-+	 * since connectors have their own compatible. Purge these
-+	 * to avoid a deadlock in switch probe (the switch mistakenly
-+	 * assumes the connector is a supplier).
-+	 */
-+	if (dev_of_node(dev))
-+		device_for_each_child_node(dev, fwnode)
-+			fw_devlink_purge_absent_suppliers(fwnode);
+ #include <drm/display/drm_dp_helper.h>
+ #include <drm/display/drm_dp_mst_helper.h>
+ #include <drm/drm_edid.h>
++#include <drm/drm_of.h>
+ #include <drm/drm_print.h>
+ #include <drm/drm_vblank.h>
+ #include <drm/drm_panel.h>
+@@ -3891,3 +3893,133 @@ int drm_panel_dp_aux_backlight(struct drm_panel *panel, struct drm_dp_aux *aux)
+ EXPORT_SYMBOL(drm_panel_dp_aux_backlight);
+ 
+ #endif
 +
- 	/* DT uses "reg" to specify port number. */
- 	port_prop = dev->of_node ? "reg" : "port-number";
- 	device_for_each_child_node(dev, fwnode) {
++#if IS_REACHABLE(CONFIG_TYPEC)
++static int drm_dp_register_mode_switch(struct device *dev, struct device_node *node,
++				       struct drm_dp_typec_switch_desc *switch_desc,
++				       void *data, void *mux_set)
++{
++	struct drm_dp_typec_port_data *port_data;
++	struct typec_mux_desc mux_desc = {};
++	char name[32];
++	u32 dp_lanes[2];
++	int ret, num_lanes, port_num = -1;
++
++	num_lanes = drm_of_get_data_lanes_count(node, 0, 2);
++	if (num_lanes <= 0) {
++		dev_err(dev, "Error on getting data lanes count: %d\n",
++			num_lanes);
++		return num_lanes;
++	}
++
++	ret = of_property_read_u32_array(node, "data-lanes", dp_lanes, num_lanes);
++	if (ret) {
++		dev_err(dev, "Failed to read the data-lanes variable: %d\n",
++			ret);
++		return ret;
++	}
++
++	port_num = dp_lanes[0] / 2;
++
++	port_data = &switch_desc->typec_ports[port_num];
++	port_data->data = data;
++	mux_desc.fwnode = &node->fwnode;
++	mux_desc.drvdata = port_data;
++	snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
++	mux_desc.name = name;
++	mux_desc.set = mux_set;
++
++	port_data->typec_mux = typec_mux_register(dev, &mux_desc);
++	if (IS_ERR(port_data->typec_mux)) {
++		ret = PTR_ERR(port_data->typec_mux);
++		dev_err(dev, "Mode switch register for port %d failed: %d\n",
++			port_num, ret);
++	}
++
++	return ret;
++}
++
++/**
++ * drm_dp_register_typec_switches() - register Type-C switches
++ * @dev: Device that registers Type-C switches
++ * @port: Device node for the switch
++ * @switch_desc: A Type-C switch descriptor
++ * @data: Private data for the switches
++ * @mux_set: Callback function for typec_mux_set
++ *
++ * This function registers USB Type-C switches for DP bridges that can switch
++ * the output signal between their output pins.
++ *
++ * Currently only mode switches are implemented, and the function assumes the
++ * given @port device node has endpoints with "mode-switch" property.
++ * Register the endpoint as port 0 if the "data-lanes" property falls in 0/1,
++ * and register it as port 1 if "data-lanes" falls in 2/3.
++ */
++int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
++				   struct drm_dp_typec_switch_desc *switch_desc,
++				   void *data, void *mux_set)
++{
++	struct device_node *sw;
++	int ret;
++
++	for_each_child_of_node(port, sw) {
++		if (of_property_read_bool(sw, "mode-switch"))
++			switch_desc->num_typec_switches++;
++	}
++
++	if (!switch_desc->num_typec_switches) {
++		dev_warn(dev, "No Type-C switches node found\n");
++		return 0;
++	}
++
++	switch_desc->typec_ports = devm_kcalloc(
++		dev, switch_desc->num_typec_switches,
++		sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
++
++	if (!switch_desc->typec_ports)
++		return -ENOMEM;
++
++	/* Register switches for each connector. */
++	for_each_child_of_node(port, sw) {
++		if (!of_property_read_bool(sw, "mode-switch"))
++			continue;
++		ret = drm_dp_register_mode_switch(dev, sw, switch_desc, data, mux_set);
++		if (ret)
++			goto err_unregister_typec_switches;
++	}
++
++	return 0;
++
++err_unregister_typec_switches:
++	of_node_put(sw);
++	drm_dp_unregister_typec_switches(switch_desc);
++	dev_err(dev, "Failed to register mode switch: %d\n", ret);
++	return ret;
++}
++EXPORT_SYMBOL(drm_dp_register_typec_switches);
++
++/**
++ * drm_dp_unregister_typec_switches() - unregister Type-C switches
++ * @switch_desc: A Type-C switch descriptor
++ */
++void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
++{
++	int i;
++
++	for (i = 0; i < switch_desc->num_typec_switches; i++)
++		typec_mux_unregister(switch_desc->typec_ports[i].typec_mux);
++}
++EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
++#else
++void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
++{
++}
++EXPORT_SYMBOL(drm_dp_register_typec_switches);
++int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
++				   struct drm_dp_typec_switch_desc *switch_desc,
++				   void *data, void *mux_set)
++{
++	return 0;
++}
++EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
++#endif
+diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
+index ab55453f2d2c..fef0a9a0d8ea 100644
+--- a/include/drm/display/drm_dp_helper.h
++++ b/include/drm/display/drm_dp_helper.h
+@@ -763,4 +763,20 @@ bool drm_dp_downstream_rgb_to_ycbcr_conversion(const u8 dpcd[DP_RECEIVER_CAP_SIZ
+ 					       const u8 port_cap[4], u8 color_spc);
+ int drm_dp_pcon_convert_rgb_to_ycbcr(struct drm_dp_aux *aux, u8 color_spc);
+ 
++struct drm_dp_typec_port_data {
++	struct typec_mux_dev *typec_mux;
++	void *data;
++	bool dp_connected;
++};
++
++struct drm_dp_typec_switch_desc {
++	int num_typec_switches;
++	struct drm_dp_typec_port_data *typec_ports;
++};
++
++void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc);
++int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
++				   struct drm_dp_typec_switch_desc *switch_desc,
++				   void *data, void *mux_set);
++
+ #endif /* _DRM_DP_HELPER_H_ */
 -- 
 2.39.0.314.g84b9a713c41-goog
 
