@@ -2,158 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07C6660CBE
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 08:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95369660CBF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 08:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjAGHTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 02:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
+        id S230300AbjAGHXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 02:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjAGHTy (ORCPT
+        with ESMTP id S229468AbjAGHXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 02:19:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C44132278;
-        Fri,  6 Jan 2023 23:19:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1880B81E24;
-        Sat,  7 Jan 2023 07:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FEAC433D2;
-        Sat,  7 Jan 2023 07:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673075989;
-        bh=7FDbppzvbiFIiiadfrwRJOnbjnq8tWEucXEm0OYgd3g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o+5hzIq88WaQsOqDeyAsSswDHTuInQN0GHksVjwCt+HSzMJLp0xD/E6x2dXAKQ6eu
-         IfMSZ1fhAJtbRZpUMOMAVNK1UPqH6kH/xtjMW8dyW6LUInlC4E2jF/S6PgRNbUFR5P
-         sftCG37UuomCgrk7Vt+FApYepppBTNSjOIic9khOLHHSjUHRYGLJ001m6yhJYgq+Rc
-         JlFq208GA1zaswE4TXfbK26uxVFvnG1uN62fTekrGSLbpTUjsq5h2M+Ww97JhVQjeg
-         SVKzeMUR/BT24S/5nv7JKEaylvMfgj2vnMr+gM+hekDRKlp/a1lJcYB3aEWbIkqJRV
-         FOyT+weBQyzsw==
-Received: by mail-oi1-f173.google.com with SMTP id r130so2875359oih.2;
-        Fri, 06 Jan 2023 23:19:49 -0800 (PST)
-X-Gm-Message-State: AFqh2kr+QNX8yx4AEDOhF8x2PX/8OtHaie3M8HqTd9wIP/aW11XroRMW
-        d6uQLx2j7gRDIEZA0fWCt6Hau62r9JXYjCCDwcU=
-X-Google-Smtp-Source: AMrXdXsTmZX3dFVSV8zYsIDGs77XAPqLQS1H4NW9g0iHyphPn/tdjHsDJHb6NIxapq8BtwjSdegqzvpCqr1CEYIymzc=
-X-Received: by 2002:aca:3755:0:b0:35e:7c55:b015 with SMTP id
- e82-20020aca3755000000b0035e7c55b015mr3430462oia.287.1673075988693; Fri, 06
- Jan 2023 23:19:48 -0800 (PST)
+        Sat, 7 Jan 2023 02:23:31 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C01E13DBEF;
+        Fri,  6 Jan 2023 23:23:29 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxvOrwHblj4TUAAA--.700S3;
+        Sat, 07 Jan 2023 15:23:28 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr7vHbljN5oVAA--.46918S3;
+        Sat, 07 Jan 2023 15:23:28 +0800 (CST)
+Subject: Re: [PATCH v5 0/4] perf: Add more syscalls to benchmark
+To:     Namhyung Kim <namhyung@kernel.org>
+References: <1668052208-14047-1-git-send-email-yangtiezhu@loongson.cn>
+ <c71e9666-c62a-83ae-0d7b-580dc717e9f1@loongson.cn>
+ <dbf82707-df17-466b-f882-aa4e25d4f629@loongson.cn>
+ <CAM9d7cgH0zK-DUmUV7yw1BJBvgyxWys9zPuB5Q7dQQwta=XcGA@mail.gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <06c8a265-0120-c4e1-6032-7bb3190df90a@loongson.cn>
+Date:   Sat, 7 Jan 2023 15:23:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <Y7i8+EjwdnhHtlrr@dev-arch.thelio-3990X>
-In-Reply-To: <Y7i8+EjwdnhHtlrr@dev-arch.thelio-3990X>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 7 Jan 2023 16:19:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASkC3j5=cy7efMC=pFjgXMucBOVNrMCTMCUkJSLj8i=Dg@mail.gmail.com>
-Message-ID: <CAK7LNASkC3j5=cy7efMC=pFjgXMucBOVNrMCTMCUkJSLj8i=Dg@mail.gmail.com>
-Subject: Re: nm vmlinux error in arch/arm reappears after upgrade to make 4.4
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7cgH0zK-DUmUV7yw1BJBvgyxWys9zPuB5Q7dQQwta=XcGA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Bxzr7vHbljN5oVAA--.46918S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF13Cr4DJFW3KFyUur18AFb_yoW8Wr1DpF
+        9xCF45Gr4rXryavasIqr10qF9xt3WfA34Fqry7trWUuw1qqry3tr1xJay5GFyDWryxKFyF
+        9r4vqFy3u3WrAaDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
+        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIY
+        CTnIWIevJa73UjIFyTuYvjxUc0eHDUUUU
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 7, 2023 at 9:29 AM Nathan Chancellor <nathan@kernel.org> wrote:
+
+
+On 01/07/2023 05:04 AM, Namhyung Kim wrote:
+> Hello,
 >
-> Hi Masahiro,
+> On Thu, Jan 5, 2023 at 5:23 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>>
+>>
+>> On 12/03/2022 05:19 PM, Tiezhu Yang wrote:
+>>>
+>>>
+>>> On 11/10/2022 11:50 AM, Tiezhu Yang wrote:
+>>>> Tested on x86_64, arm64, mips64 and loongarch64.
+>>>>
+>>>> Tiezhu Yang (4):
+>>>>   tools x86: Keep list sorted by number in unistd_{32,64}.h
+>>>>   perf bench syscall: Introduce bench_syscall_common()
+>>>>   perf bench syscall: Add getpgid syscall benchmark
+>>>>   perf bench syscall: Add execve syscall benchmark
+>>>>
+>>>>  tools/arch/x86/include/uapi/asm/unistd_32.h | 23 ++++++---
+>>>>  tools/arch/x86/include/uapi/asm/unistd_64.h | 23 ++++++---
+>>>>  tools/perf/bench/bench.h                    |  2 +
+>>>>  tools/perf/bench/syscall.c                  | 76
+>>>> +++++++++++++++++++++++++++--
+>>>>  tools/perf/builtin-bench.c                  |  2 +
+>>>>  5 files changed, 108 insertions(+), 18 deletions(-)
+>>>>
+>>>
+>>> Ping, any more comments?
+>>>
+>>> Thanks,
+>>> Tiezhu
+>>
+>> Hi all,
+>>
+>> If this patch series has no value and is not acceptable,
+>> or what should I do to update, please let me know.
 >
-> My distribution recently updated their version of make to 4.4 from 4.3,
-> after which I notice the following error from nm when building ARCH=arm
-> kernels, which I thought that this was supposed to be resolved with
-> commit 3ec8a5b33dea ("kbuild: do not export LDFLAGS_vmlinux") but the
-> tree clearly has this and it is not visible while just running clean (I
-> have to build zImage to see it):
-
-
-Presumably, this is a different issue than 3ec8a5b33dea
-
-
+> I'm so sorry about being late a lot.
+> I don't have any objection to this series.
 >
->   $ git show -s --format='%h ("%s")'
->   512dee0c00ad ("Merge tag 'x86-urgent-2023-01-04' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip")
+> For the execve bench, I think it's actually fork + execve
+> then maybe it makes sense to have a fork only bench
+> to compare the execve part precisely.
 >
->   $ make --version | head -1
->   GNU Make 4.4
+> But it can be added later, so
 >
->   $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
->   arm-linux-gnueabi-nm: 'arch/arm/boot/compressed/../../../../vmlinux': No such file
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 >
-> vs.
+> Thanks,
+> Namhyung
 >
->   $ make --version | head -1
->   GNU Make 4.3
->
->   $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
->
-> I bisected make to see what change causes this and I landed on
-> commit 98da874c ("[SV 10593] Export variables to $(shell ...)
-> commands") [1], which certainly seems like a reasonable commit to
-> blame but I am not sure how exactly it factors in here.
->
-> If you need any more information on reproducing this, I am happy to
-> provide it (CROSS_COMPILE is just the toolchains from kernel.org).
->
-> [1]: https://git.savannah.gnu.org/cgit/make.git/commit/?id=98da874c43035a490cdca81331724f233a3d0c9a
->
-> Cheers,
-> Nathan
 
+Hi Namhyung,
 
+Thank you very much. I will submit another single patch
+to benchmark fork after this series is applied.
 
-Confirmed, but I still do not understand what
-is triggering this.
+Thanks,
+Tiezhu
 
-These are my findings:
-
- - O= option is needed to reproduce it.
-
- - allnoconfig still produces it.
-
- - I do not see it in the incremental builds.
-   I see it again in the full build after "git clean -fdx".
-
-
-
-If I slightly cleaned the code like follows,
-this issue disappeared.
-($(obj)/../../../../vmlinux is the same as vmlinux)
-
-
-
-
-diff --git a/arch/arm/boot/compressed/Makefile
-b/arch/arm/boot/compressed/Makefile
-index 2ef651a78fa2..726ecabcef09 100644
---- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -107,7 +107,7 @@ ccflags-remove-$(CONFIG_FUNCTION_TRACER) += -pg
- asflags-y := -DZIMAGE
-
- # Supply kernel BSS size to the decompressor via a linker symbol.
--KBSS_SZ = $(shell echo $$(($$($(NM) $(obj)/../../../../vmlinux | \
-+KBSS_SZ = $(shell echo $$(($$($(NM) vmlinux | \
-                sed -n -e 's/^\([^ ]*\) [ABD] __bss_start$$/-0x\1/p' \
-                       -e 's/^\([^ ]*\) [ABD] __bss_stop$$/+0x\1/p') )) )
- LDFLAGS_vmlinux = --defsym _kernel_bss_size=$(KBSS_SZ)
-
-
-
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
