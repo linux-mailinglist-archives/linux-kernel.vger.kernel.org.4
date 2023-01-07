@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B97660DB8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C79660DB9
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjAGKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S231651AbjAGKWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjAGKVR (ORCPT
+        with ESMTP id S231521AbjAGKVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:21:17 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CDA3C0EA
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:21:15 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bq39so5544025lfb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:21:14 -0800 (PST)
+        Sat, 7 Jan 2023 05:21:46 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6046B585
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:21:43 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id ja17so2648171wmb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9PznVjfd3B/ZmrH40OQITBZTOBnAxAksocBkNKDAfKY=;
-        b=IzYijjztQ/k7BxPIpYTpfFtRhIcYe4oVXWjVXwgRfqcJM3Q/DOajytwc5ZK9sK9WVK
-         GS1jhCONErzWS7uvcr5bCcUihxra7OyJo7iSh+edOM3JSO2FQYRTI9h3hrqTjqeBrk+W
-         m9PNQPZ8rXEhNT5+GwHLLeuTrDeD6rC2yzGlHxxXyjdlZ4+YSqc7DeFp5vygscj5qfJN
-         ot00PWvjtxENUGlv8rHnGOT+A/9sj/UFU925pb3F3tVDf335/hAKkYsY1fgNSUcQouxX
-         AoYABrR/IUNLpm4e9SV32tW3tP/OVnjTa4x34HQa7pzj5Aav36lKDIA5NV3TpWD6VgBR
-         gLRg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bwZ6DNVnfIB+W/mkRCm0E3L/QObg6wnuFzYCkYmf6wI=;
+        b=Q/e2KnuzjAKgdUkzAT7lO6QdIpWGQHJT8Xf7hjGBNvxWtNbdy66cKdafcqqs+seXr7
+         P52Rjc6hF503T23rooeXa43iLYeK9CtJcLxd2pfuzYuMyFtw2pP6JXT4noaTFK3rvPO1
+         GnWFjCDBLgxAz5sqVfiIknbgcozxG3Oa3vXcmSr0OvcWUgScoW1SkhE0P0HLGO3OKVGV
+         yDP/SG+EaYDUnPp4FcyQPyqTpG2OJS5cn1SegSDHMCRmuup2N2Ufmq2OHxUZ8YEPLXxj
+         oHQjy6+o/xzVA4qOJnU24VpAPGC3jO2NCAq2LQKAgQfyd7tfVj4gxH0OVr7fx9VSUuft
+         /7xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9PznVjfd3B/ZmrH40OQITBZTOBnAxAksocBkNKDAfKY=;
-        b=FNVKvEXDL3903AEVHdxfZmSIh6g97wwAyCFOSDBCR7XmFDpLzln/av82n2uqSL8mYn
-         mxiYdCWYHk8yIDMDimBUrsf1yWll9FVPTK62673fDEo+VhHvDt2q5kUoclAojg8KMoq5
-         OQCVL3D3ZNk2GtAUkNCuoBJCN2BCjIBPLERG3naSkxi5yfX4gwBYH52zhqw6vnoMqQeu
-         pXoFtpsO5KX9meI+2JaiGX1odeoDTaG91BYyHd4CnEzn/eODt2mH5eTPZdoqa4EXmnat
-         LSkKHT45NPfka5RG493eKKGr+aKcDCq2Ehqx26vohfKN5fbhkjaOc/vwKxEZXIpbpe93
-         Be5A==
-X-Gm-Message-State: AFqh2krm9Ilw3Gr4AJ/8gkzkRuwakKvo9P2cLBAEKagwCXuav1RIW4Ge
-        jhy1+gm8wKZT0IwflgMbZlIzOQ==
-X-Google-Smtp-Source: AMrXdXtcpppwmWOHrHPYd5u2zJ9iw7R1EIkpliKjIk+7iCO/JsVL5HPXHmyUygkJIdAziw+gimNd3w==
-X-Received: by 2002:a05:6512:3901:b0:4a4:68b7:f892 with SMTP id a1-20020a056512390100b004a468b7f892mr19676009lfu.54.1673086873397;
-        Sat, 07 Jan 2023 02:21:13 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id c18-20020a196552000000b004b567e1f8e5sm528300lfj.125.2023.01.07.02.21.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 02:21:13 -0800 (PST)
-Message-ID: <dab1227b-2ffb-5a8e-9c7b-f2a31d100b16@linaro.org>
-Date:   Sat, 7 Jan 2023 11:21:11 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bwZ6DNVnfIB+W/mkRCm0E3L/QObg6wnuFzYCkYmf6wI=;
+        b=EDVBENuR/58Fi7V+sENBb5k28q4TYDSpG08zKaCeFpHHXzlxh3g0PqIOpynlF6t9W6
+         2Se8pJRTC50Jz/FqtIMFa7j7em0EX/dauArS0qOQnqMiVhmzlhDWpw8XyFZCd8Dchcgl
+         0TrsuUIDxc0cFDG9gRxA7WOhV1ix0yPw/ymC5j9b/akPF+Sq+XzExzdVXETz378C96zQ
+         0ZAJd+2q5nHiVv7HJO4sin1eQUP06nChPMZHXDx5b+VG7fhm5K/w+plMJV/uGpHpebth
+         J08Y55XtbRxX8gOLPiiu7m+xClNWwSz0+n1xzw13sDE7zMEXTPsDTRpgS8tao+dhZpxQ
+         pKuA==
+X-Gm-Message-State: AFqh2ko2cbltbVpn+TWPi7z1xz/RdXLfMgxYUHcEXdF3VspnQys+6Cbe
+        riFzo7VzU5r8q3E3SWz5fkA=
+X-Google-Smtp-Source: AMrXdXvgj7WJXgL/O/krYz60H4JU969uB0AKG+nlWVdeOrcW5xNqfH+0SfSwFQ+JYOrTORDecb7Z5Q==
+X-Received: by 2002:a1c:4c12:0:b0:3c6:e63e:89a6 with SMTP id z18-20020a1c4c12000000b003c6e63e89a6mr41596718wmf.2.1673086901829;
+        Sat, 07 Jan 2023 02:21:41 -0800 (PST)
+Received: from gmail.com (1F2EF507.nat.pool.telekom.hu. [31.46.245.7])
+        by smtp.gmail.com with ESMTPSA id j1-20020a05600c1c0100b003cfaae07f68sm10255499wms.17.2023.01.07.02.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 02:21:41 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 7 Jan 2023 11:21:39 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        jpoimboe@redhat.com, peterz@infradead.org, aik@ozlabs.ru,
+        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        sfr@canb.auug.org.au, naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH] objtool: continue if find_insn() fails in
+ decode_instructions()
+Message-ID: <Y7lHsw4diDgVc9ip@gmail.com>
+References: <20221208072813.25799-1-sv@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: pm7250b: Add BAT_ID vadc channel
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230106-pm7250b-bat_id-v1-0-82ca8f2db741@fairphone.com>
- <20230106-pm7250b-bat_id-v1-2-82ca8f2db741@fairphone.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230106-pm7250b-bat_id-v1-2-82ca8f2db741@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208072813.25799-1-sv@linux.ibm.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,36 +78,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+* Sathvika Vasireddy <sv@linux.ibm.com> wrote:
 
-On 6.01.2023 16:39, Luca Weiss wrote:
-> Add a node describing the ADC5_BAT_ID_100K_PU channel with the
-> properties taken from downstream kernel.
+> Currently, decode_instructions() is failing if it is not able to find
+> instruction, and this is happening since commit dbcdbdfdf137b4
+> ("objtool: Rework instruction -> symbol mapping") because it is
+> expecting instruction for STT_NOTYPE symbols.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Due to this, the following objtool warnings are seen:
+>  [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+>  [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+>  [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
+> 
+> The warnings are thrown because find_insn() is failing for symbols that
+> are at the end of the file, or at the end of the section. Given how
+> STT_NOTYPE symbols are currently handled in decode_instructions(),
+> continue if the instruction is not found, instead of throwing warning
+> and returning.
+> 
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
 
-Konrad
->  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> index 61f7a6345150..d709d955a2f5 100644
-> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> @@ -110,6 +110,14 @@ adc-chan@1e {
->  				label = "chg_mid";
->  			};
->  
-> +			adc-chan@4b {
-> +				reg = <ADC5_BAT_ID_100K_PU>;
-> +				qcom,hw-settle-time = <200>;
-> +				qcom,pre-scaling = <1 1>;
-> +				qcom,ratiometric;
-> +				label = "bat_id";
-> +			};
-> +
->  			adc-chan@83 {
->  				reg = <ADC5_VPH_PWR>;
->  				qcom,pre-scaling = <1 3>;
-> 
+The SOB chain doesn't look valid: is Naveen N. Rao, the first SOB line, the 
+author of the patch? If yes then a matching From: line is needed.
+
+Or if two people developed the patch, then Co-developed-by should be used:
+
+        Co-developed-by: First Co-Author <first@coauthor.example.org>
+        Signed-off-by: First Co-Author <first@coauthor.example.org>
+        Co-developed-by: Second Co-Author <second@coauthor.example.org>
+        Signed-off-by: Second Co-Author <second@coauthor.example.org>
+
+[ In this SOB sequence "Second Co-Author" is the one who submits the patch. ]
+
+[ Please only use Co-developed-by if actual lines of code were written by 
+  the co-author that created copyrightable material - it's not a courtesy 
+  tag. Reviewed-by/Acked-by/Tested-by can be used to credit non-code 
+  contributions. ]
+
+Thanks,
+
+	Ingo
