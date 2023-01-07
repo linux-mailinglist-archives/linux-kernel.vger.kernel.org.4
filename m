@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E59660F2D
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 14:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705C7660F2F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 14:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjAGNdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 08:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S231305AbjAGNdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 08:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjAGNdS (ORCPT
+        with ESMTP id S232491AbjAGNda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 08:33:18 -0500
-Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E01D5D431
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 05:33:17 -0800 (PST)
-Date:   Sat, 07 Jan 2023 13:33:05 +0000
+        Sat, 7 Jan 2023 08:33:30 -0500
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B6E5DE5B;
+        Sat,  7 Jan 2023 05:33:29 -0800 (PST)
+Date:   Sat, 07 Jan 2023 13:33:20 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1673098395; x=1673357595;
-        bh=3JUH9jgxvrO6pX2/oOfyUckL9ueEpdJEpOBuvzO+l/o=;
+        s=protonmail3; t=1673098407; x=1673357607;
+        bh=pZqBx8JCAkeYcPAdWXRIi74S0JqcHdu0E5A9iWrKaZ0=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=diOEoydaVZmCYysTxD5/KrOEVRhpEHtmL6kSS96L00n7sPMVVFcc1wEqrhXwTvFE9
-         qv9O3QyLXn8MjzPoN77ZMECvFMPVU4qO2Z7C7nl+axxR610QaEtwl9kPVBeIWQKeSx
-         WPT9mSyc1Tkk97YdkR+JwoVOGzTryOlrjRmhzQa0zISh4sEb7bKQpq4SKedFsqX/Er
-         p6OitWIw1sA8taIE16W027qppXkVWNxSXb025eRo9ompr0DJsOKvQyhWO59DHNFg1Y
-         adu9ST5NX2jIwQJ5BqqmLjsjwIJPc+ymZIkKFSi3dSHs5r93V2OMYxsv3dwwnzb2SK
-         LdgqrijTIO1/Q==
+        b=iwAYvSsjrQSZuFbs2zt+tiSusDB2d8hfwq8/9fFHEO4sCXF6sxCQ4P/CTlahI7uJm
+         nngNB0rN4GrRIA+hGFE0z2nl4vnG5KXqbv7w8tXYMfuL1gOC3TXs4tYNqL+vFtXZrV
+         of1Fvxqvy5u3AdTv4SIytFGDcMMNiWIuiJMFETEeza9UDgayz8c6P9XGaomq3nvKP1
+         j373SK7vwHMMPMJE+mrk+lpQeQddmflWo00lH21z7yY27X875cYEpt5Y1AfZnxqygo
+         oM5YckNNNlqHVOLjKW1YYBEgb9y0rEe3IgkB/IXNCX5mt7tWWJXNDxQoRYqa/QtFp8
+         By28DbQIB8JyA==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -44,8 +44,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v6 4/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add touchscreen
-Message-ID: <20230107133223.139893-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v6 5/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add flash LED
+Message-ID: <20230107133235.139947-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20230107132932.139669-1-linmengbo0689@protonmail.com>
 References: <20230107132932.139669-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -62,75 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FL8005A uses a Focaltech FT5402 touchscreen that is connected to
-blsp_i2c5. Add it to the device tree.
+FL8005A uses Qualcomm GPIO flash LEDs which is compatible with
+SGM3140 Flash LED driver. Add it to the device tree.
 
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm6=
 4/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-index a8c36c9f5d9d..b44c30a72784 100644
+index b44c30a72784..a0e520edde02 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -63,6 +63,32 @@ usb_id: usb-id {
+@@ -21,6 +21,22 @@ chosen {
+ =09=09stdout-path =3D "serial0";
  =09};
- };
 =20
-+&blsp_i2c5 {
-+=09status =3D "okay";
++=09flash-led-controller {
++=09=09/* Actually qcom,leds-gpio-flash */
++=09=09compatible =3D "sgmicro,sgm3140";
++=09=09enable-gpios =3D <&msmgpio 31 GPIO_ACTIVE_HIGH>;
++=09=09flash-gpios =3D <&msmgpio 32 GPIO_ACTIVE_HIGH>;
 +
-+=09touchscreen@38 {
-+=09=09/* Actually ft5402 */
-+=09=09compatible =3D "edt,edt-ft5406";
-+=09=09reg =3D <0x38>;
-+
-+=09=09interrupt-parent =3D <&msmgpio>;
-+=09=09interrupts =3D <13 IRQ_TYPE_EDGE_FALLING>;
-+
-+=09=09reset-gpios =3D <&msmgpio 12 GPIO_ACTIVE_LOW>;
-+
-+=09=09vcc-supply =3D <&pm8916_l17>;
-+=09=09iovcc-supply =3D <&pm8916_l6>;
-+
-+=09=09touchscreen-size-x =3D <800>;
-+=09=09touchscreen-size-y =3D <500>;
-+=09=09touchscreen-inverted-x;
-+=09=09touchscreen-swapped-x-y;
-+
-+=09=09pinctrl-0 =3D <&touchscreen_default>;
++=09=09pinctrl-0 =3D <&camera_flash_default>;
 +=09=09pinctrl-names =3D "default";
-+=09};
-+};
 +
- &blsp1_uart2 {
- =09status =3D "okay";
- };
-@@ -225,6 +251,22 @@ gpio_leds_default: gpio-led-default-state {
- =09=09bias-disable;
- =09};
++=09=09flash_led: led {
++=09=09=09function =3D LED_FUNCTION_FLASH;
++=09=09=09color =3D <LED_COLOR_ID_WHITE>;
++=09=09=09flash-max-timeout-us =3D <250000>;
++=09=09};
++=09};
++
+ =09gpio-keys {
+ =09=09compatible =3D "gpio-keys";
 =20
-+=09touchscreen_default: touchscreen-default-state {
-+=09=09reset-pins {
-+=09=09=09pins =3D "gpio12";
-+=09=09=09function =3D "gpio";
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-disable;
-+=09=09};
-+
-+=09=09touchscreen-pins {
-+=09=09=09pins =3D "gpio13";
-+=09=09=09function =3D "gpio";
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-pull-up;
-+=09=09};
+@@ -237,6 +253,13 @@ l18 {
+ };
+=20
+ &msmgpio {
++=09camera_flash_default: camera-flash-default-state {
++=09=09pins =3D "gpio31", "gpio32";
++=09=09function =3D "gpio";
++=09=09drive-strength =3D <2>;
++=09=09bias-disable;
 +=09};
 +
- =09usb_id_default: usb-id-default-state {
- =09=09pins =3D "gpio110";
+ =09gpio_keys_default: gpio-keys-default-state {
+ =09=09pins =3D "gpio107";
  =09=09function =3D "gpio";
 --=20
 2.30.2
