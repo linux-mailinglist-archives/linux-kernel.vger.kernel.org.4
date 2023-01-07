@@ -2,220 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF467660D26
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99049660D2A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjAGJQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S231521AbjAGJQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjAGJQR (ORCPT
+        with ESMTP id S229552AbjAGJQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:16:17 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524F984098;
-        Sat,  7 Jan 2023 01:16:15 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Npvg51rfMzJrF7;
-        Sat,  7 Jan 2023 17:14:57 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 7 Jan 2023 17:16:11 +0800
-Subject: Re: [PATCH v2] jbd2: Fix data missing when reusing bh which is ready
- to be checkpointed
-To:     Jan Kara <jack@suse.cz>
-CC:     <tytso@mit.edu>, <jack@suse.com>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <libaokun1@huawei.com>, <zhanchengbin1@huawei.com>
-References: <20230106115603.2624644-1-chengzhihao1@huawei.com>
- <20230106142255.fqnzgw5tqr77mdzj@quack3>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <09622c2f-6cf7-79c9-2624-c0c0835d125d@huawei.com>
-Date:   Sat, 7 Jan 2023 17:16:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sat, 7 Jan 2023 04:16:48 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0EE8409A
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:16:47 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id bp26so2206549ilb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 01:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RW3tgbxJ4a2R6Lr3hH31QiBztWxbB+zFWSFDhcB5PzA=;
+        b=KKfAvH6c6JEgsJOT6JY3oShOZFTY6igTfAUjUAfOvO3ZTBJILFDvW/q3p4JG0BSbDr
+         K+YbSwq/zOnsJrBIbou5SGfbimt6dioyluqbq/pPcOoA+YAVcadHQdaZXpG9VwkfjrXq
+         p0GnhAoCy+/LFON2ea16s1HP+P1sjTyceRnXM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RW3tgbxJ4a2R6Lr3hH31QiBztWxbB+zFWSFDhcB5PzA=;
+        b=u2wQjykZTLPX3e5MaF641Db125kJf1S50zvgPzmb5XqtzrTSJxG3uI6WbQWu0AhufP
+         j9yPOT8dgo/caauIGtmPkCmKjti//B/HD1iBvnqlHiGa/yysQF3xa45uelgBNzVYOPzf
+         +xaCW6oreIk494xMQhSbED2WSvdz3/muTwqQbmxIp0twu+vAPUYR+jX0iy9s7vgaqZeE
+         wQxjxs12X5oOuqw8OEHBa+QoGTKaSqLcq7JV+a6j5M9badIsINIHfcN/oygQ6IWDnraB
+         Y4YFSWl+6FlzEDzsDHfG1+hHMm7Q8RaXqt6KRTZJ4W6UhxR2fdiNS5dTDvJTycye9btw
+         JR4Q==
+X-Gm-Message-State: AFqh2koDFOTo00AZnqQwJ/dxI5DPvtYYOOxZEqTglHAtP3VHQ4KzBSRa
+        kYNcZnESv+/NCewvuJLepbm112F/09cSbkQjOTMkFg==
+X-Google-Smtp-Source: AMrXdXtBMzB4lO1Yn6qSZ1CSDd89k7nZTSy0I48BAfgZ30l48dPrz+xuh/08ZScwMOp5MGwUZ1rNJl0wH1TYIiXt25E=
+X-Received: by 2002:a05:6e02:2141:b0:30d:8aeb:9b11 with SMTP id
+ d1-20020a056e02214100b0030d8aeb9b11mr588524ilv.293.1673083006788; Sat, 07 Jan
+ 2023 01:16:46 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230106142255.fqnzgw5tqr77mdzj@quack3>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230105132457.4125372-1-treapking@chromium.org>
+ <20230105132457.4125372-4-treapking@chromium.org> <Y7bvnOLcuJvvp/v1@smile.fi.intel.com>
+In-Reply-To: <Y7bvnOLcuJvvp/v1@smile.fi.intel.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Sat, 7 Jan 2023 17:16:35 +0800
+Message-ID: <CAEXTbpdg9C5pFVXo7fKSc_vWAczv_OthjbRA7DZVnENuNfwQfA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/9] drm/display: Add Type-C switch helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Khaled Almahallawy <khaled.almahallawy@intel.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2023/1/6 22:22, Jan Kara Ð´µÀ:
+Hi Andy,
 
-Hi Jan, thanks for reviewing.Some discussions below:
+Thanks for the review.
 
+On Thu, Jan 5, 2023 at 11:41 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jan 05, 2023 at 09:24:51PM +0800, Pin-yen Lin wrote:
+> > Add helpers to register and unregister Type-C "switches" for bridges
+> > capable of switching their output between two downstream devices.
+> >
+> > The helper registers USB Type-C mode switches when the "mode-switch"
+> > and the "data-lanes" properties are available in Device Tree.
+>
+> ...
+>
+> > +     port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+> > +     if (IS_ERR(port_data->typec_mux)) {
+> > +             ret = PTR_ERR(port_data->typec_mux);
+> > +             dev_err(dev, "Mode switch register for port %d failed: %d\n",
+> > +                     port_num, ret);
+> > +     }
+> > +
+> > +     return ret;
+>
+> ...
+>
+> > +     struct device_node *sw;
+>
+> > +     int ret = 0;
+>
+> It's easy to break things if you squeeze more code in the future in this
+> function, so I recommend to split assignment to be closer to its first user
+> (see below).
+>
+> > +     for_each_child_of_node(port, sw) {
+> > +             if (of_property_read_bool(sw, "mode-switch"))
+> > +                     switch_desc->num_typec_switches++;
+> > +     }
+> > +
+> > +     if (!switch_desc->num_typec_switches) {
+> > +             dev_warn(dev, "No Type-C switches node found\n");
+>
+> > +             return ret;
+>
+> return 0;
 
->> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
->> index 6a404ac1c178..06a5e7961ef2 100644
->> --- a/fs/jbd2/transaction.c
->> +++ b/fs/jbd2/transaction.c
->> @@ -1010,36 +1010,37 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
->>   	 * ie. locked but not dirty) or tune2fs (which may actually have
->>   	 * the buffer dirtied, ugh.)  */
->>   
->> -	if (buffer_dirty(bh)) {
->> +	if (buffer_dirty(bh) && jh->b_transaction) {
->>   		/*
->>   		 * First question: is this buffer already part of the current
->>   		 * transaction or the existing committing transaction?
->>   		 */
->> -		if (jh->b_transaction) {
->> -			J_ASSERT_JH(jh,
->> -				jh->b_transaction == transaction ||
->> -				jh->b_transaction ==
->> -					journal->j_committing_transaction);
->> -			if (jh->b_next_transaction)
->> -				J_ASSERT_JH(jh, jh->b_next_transaction ==
->> -							transaction);
->> -			warn_dirty_buffer(bh);
->> -		}
->> +		J_ASSERT_JH(jh, jh->b_transaction == transaction ||
->> +			jh->b_transaction == journal->j_committing_transaction);
->> +		if (jh->b_next_transaction)
->> +			J_ASSERT_JH(jh, jh->b_next_transaction == transaction);
->> +		warn_dirty_buffer(bh);
->>   		/*
->> -		 * In any case we need to clean the dirty flag and we must
->> -		 * do it under the buffer lock to be sure we don't race
->> -		 * with running write-out.
->> +		 * We need to clean the dirty flag and we must do it under the
->> +		 * buffer lock to be sure we don't race with running write-out.
->>   		 */
->>   		JBUFFER_TRACE(jh, "Journalling dirty buffer");
->>   		clear_buffer_dirty(bh);
->> +		/*
->> +		 * Setting jbddirty after clearing buffer dirty is necessary.
->> +		 * Function jbd2_journal_restart() could keep buffer on
->> +		 * BJ_Reserved list until the transaction committing, then the
->> +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
->> +		 * after committing, the buffer couldn't fall on disk even
->> +		 * last checkpoint finished, which may corrupt filesystem.
->> +		 */
->>   		set_buffer_jbddirty(bh);
->>   	}
-> 
-> So I think the sequence:
-> 
-> 	if (buffer_dirty(bh)) {
-> 		warn_dirty_buffer(bh);
-> 		JBUFFER_TRACE(jh, "Journalling dirty buffer");
-> 		clear_buffer_dirty(bh);
-> 		set_buffer_jbddirty(bh);
-> 	}
-> 
-> can be moved into the branch
-> 
->    	if (jh->b_transaction == transaction ||
-> 	    jh->b_next_transaction == transaction) {
-> 
-> below. That way you can drop the assertions as well because they happen
-> later in do_get_write_access() again anyway.
+Thanks for the suggestion. I'll update this in v8.
+>
+> > +     }
+> > +
+> > +     switch_desc->typec_ports = devm_kcalloc(
+> > +             dev, switch_desc->num_typec_switches,
+> > +             sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
+> > +
+> > +     if (!switch_desc->typec_ports)
+> > +             return -ENOMEM;
+>
+> > +     /* Register switches for each connector. */
+> > +     for_each_child_of_node(port, sw) {
+> > +             if (!of_property_read_bool(sw, "mode-switch"))
+> > +                     continue;
+> > +             ret = drm_dp_register_mode_switch(dev, sw, switch_desc, data, mux_set);
+> > +             if (ret) {
+> > +                     dev_err(dev, "Failed to register mode switch: %d\n", ret);
+> > +                     of_node_put(sw);
+> > +                     break;
+> > +             }
+> > +     }
+>
+> > +     if (ret)
+> > +             drm_dp_unregister_typec_switches(switch_desc);
+> > +
+> > +     return ret;
+>
+> Why not adding a goto label?
 
-1. If we move the squence:
-  	if (buffer_dirty(bh)) {
-  		warn_dirty_buffer(bh);
-  		JBUFFER_TRACE(jh, "Journalling dirty buffer");
-  		clear_buffer_dirty(bh);
-  		set_buffer_jbddirty(bh);
-  	}
+I didn't know that goto label is preferred even when there are no
+duplicated code blocks in the function.
 
-into the branch
-
-         if (jh->b_transaction == transaction ||
-  	    jh->b_next_transaction == transaction) {
-
-, then we have a new situation(jh->b_transaction == 
-journal->j_committing_transaction) to clear buffer dirty, so we need to 
-add an else-branch like(based on v2 patch):
---- a/fs/jbd2/transaction.c
-+++ b/fs/jbd2/transaction.c
-@@ -1092,6 +1092,10 @@ do_get_write_access(handle_t *handle, struct 
-journal_head *jh,
-                 spin_unlock(&journal->j_list_lock);
-                 unlock_buffer(bh);
-                 goto done;
-+       } else if (test_clear_buffer_dirty(bh)) {
-+               warn_dirty_buffer(bh);
-+               JBUFFER_TRACE(jh, "Journalling dirty buffer");
-+               set_buffer_jbddirty(bh);
-         }
-         unlock_buffer(bh);
-
-I think we'd better not to move the sequence?
-
-2. I agree that the assertions in branch 'if (jh->b_transaction)' are 
-redundant, I will remove them in v3. Thanks for pointing that.
-
-> Also I don't quite understand the new comment you have added. Do you mean
-> we need to not only clear BH_Dirty bit but also set BH_JBDdirty as dirtying
-> (through jbd2_journal_dirty_metadata()) does not have to follow after
-> do_get_write_access()?
-> 
-
-Yes.
-I think one reason we have non-empty commit_transaction->t_reserved_list 
-is that: jbd2_journal_restart() could let jh attach to transaction_1 and 
-dirty jh in transaction_2.
-
-buffer is dirty after trans_0 committed
-do_get_write_access() =>  jh->trans = old_handle->trans_1, clear buffer 
-dirty & set jbddirty, BJ_Reserved
-jbd2_journal_restart()  => stop old_handle && may jbd2_log_start_commit 
-&& start new_handle with trans_2
-jbd2_journal_commit_transaction() => clear jbddirty & set buffer dirty & 
-set jh->b_transaction = NULL
-do_checkpoint  => buffer is fell on disk. If do_get_write_access() not 
-mark jbddirty, buffer won't be fell on disk after checkpoint, which 
-could corrupt filesystem.
-
-I'm not sure whether we have the above path in realworld. I guess it 
-exists in theory according to the comments:
-        /* 
-
-         * First thing we are allowed to do is to discard any remaining 
-
-         * BJ_Reserved buffers.  Note, it is _not_ permissible to assume 
-
-         * that there are no such buffers: if a large filesystem 
-
-         * operation like a truncate needs to split itself over multiple 
-
-         * transactions, then it may try to do a jbd2_journal_restart() 
-while
-          * there are still BJ_Reserved buffers outstanding.  These must 
-
-          * be released cleanly from the current transaction. 
-
-          * 
-
-          * In this case, the filesystem must still reserve write access 
-
-          * again before modifying the buffer in the new transaction, 
-but
-          * we do not require it to remember exactly which old buffers 
-it
-          * has reserved.  This is consistent with the existing 
-behaviour
-          * that multiple jbd2_journal_get_write_access() calls to the 
-same
-          * buffer are perfectly permissible. 
-
-          * We use journal->j_state_lock here to serialize processing of 
-
-          * t_reserved_list with eviction of buffers from 
-journal_unmap_buffer().
-          */ 
-
-         while (commit_transaction->t_reserved_list) {  [...]
+I'll update this accordingly in v8.
+>
+>                 ret = drm_dp_register_mode_switch(dev, sw, switch_desc, data, mux_set);
+>                 if (ret)
+>                         goto err_unregister_typec_switches;
+>
+>         return 0;
+>
+> err_unregister_typec_switches:
+>         of_node_put(sw);
+>         drm_dp_unregister_typec_switches(switch_desc);
+>         dev_err(dev, "Failed to register mode switch: %d\n", ret);
+>         return ret;
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+Best regards,
+Pin-yen
