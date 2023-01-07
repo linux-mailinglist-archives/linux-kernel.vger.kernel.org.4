@@ -2,262 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088CC660AF5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92A8660AF9
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbjAGAi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S235751AbjAGAj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbjAGAif (ORCPT
+        with ESMTP id S236980AbjAGAjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:38:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1275284BD9;
-        Fri,  6 Jan 2023 16:37:24 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 604C34AE;
-        Sat,  7 Jan 2023 01:37:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673051842;
-        bh=1yPY6zLuxUhJr2heWCr2QRw7KxBcGsyvQJyxUF//dK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tm5IE0cu4JhHxJgBiNmyRkVcmrGXqERTccrZp9tCQ7BbzFlQyjImdQpQRjfcM30Al
-         wg5O0Td2bTY0rNWgUpbBE80Bc95eFY2YoXxGOLp4n96omMBiL29auLkEILNXLJ+ffx
-         i0QMT0KJa3ZVYXBWH0n0254hoQGFNBDGeC72BFGs=
-Date:   Sat, 7 Jan 2023 02:37:17 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Staudt <mstaudt@google.com>,
-        Yunke Cao <yunkec@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v7] media: uvcvideo: Fix race condition with usb_kill_urb
-Message-ID: <Y7i+vfJxtcxZFgf/@pendragon.ideasonboard.com>
-References: <20221212-uvc-race-v7-0-e2517c66a55a@chromium.org>
+        Fri, 6 Jan 2023 19:39:09 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E41540C35;
+        Fri,  6 Jan 2023 16:38:54 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4a2f8ad29d5so43156497b3.8;
+        Fri, 06 Jan 2023 16:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3T5+vkdDUBoeLGN/6qIPSZEz0UxeEHwFDr5I00a5ELc=;
+        b=aRA37KV9nFjN80IZjR663QXLZuI+r54he1H6y2Mu8NKpT63jSS3MZcU8XAEy7eT587
+         87ybQHZqKxtAsgvqw6TQqVxhGvXrfwLuCUfTnbYZFQJeK15eozN01Q2sBvWV5VPxllgS
+         BTKsX7j54UA5VF4ehhVlpiOKG/PHIoTcWGnVwIZTZvcSRFh2JeBhzASh9gaAA0Oo7SQh
+         tOfAWpnFxiPTHNtqTGvIyN0LZDHBhvMO2dzy9Z9XyiKij8lWcgZgHVnM3T9xYASLUFQ2
+         bnBEZEtSnyHgjW8IwlFtV1FX8jzF4slWiBWQgYaFrGWZQwwgf85VRKMbJRyjPWnbtKJV
+         ddKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3T5+vkdDUBoeLGN/6qIPSZEz0UxeEHwFDr5I00a5ELc=;
+        b=46iXFSajqsUMQKuYQ7XkDNr5nG7NGp082wu7QjsR5DVwoAGWoL+ufX00mEmDVEm+jb
+         L6uaatxCgik0/7oMMBqyiiLS6KrnVu2pgeR6mAsrIjrm8tSgyeejQJ6TUDdJvCT8qCRl
+         vyo8Qxt0cW4FCJKc4LxdhxP32zYAdujG/K/KwDVBAWoiJby566Ll/6CAE7tHKSMmIsHH
+         w1jjLwECuchMMhG6hoszffaD/mjMkXVVSPJjMqunmcb+JfA08/FIp4viU3HoSsZjtHY+
+         WuTCJOgrmYyobz1Z+BCtVeCSQX/jG/+4Q0Q3tdDjmNb3t5nfihkYBB/QHaIv86znrr3x
+         Clnw==
+X-Gm-Message-State: AFqh2krE1yDTz+AT7oWpA9MqnvQNOvSfioodpuzhyOI+5x9Vv55VCfpC
+        M5nHnx5i/2fI40DP4Iy4a8E/YGaqOCVOKXPARg8=
+X-Google-Smtp-Source: AMrXdXsF14XmZpGxMy3fsCklF8Jh5dIPj40AvU6xzV9wFEG4ll4hbwxoKY+yyltn3NzQlGawQIzPwKkR9l+z5TLDUsk=
+X-Received: by 2002:a81:de43:0:b0:45c:d900:f30c with SMTP id
+ o3-20020a81de43000000b0045cd900f30cmr7999094ywl.256.1673051933795; Fri, 06
+ Jan 2023 16:38:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221212-uvc-race-v7-0-e2517c66a55a@chromium.org>
+References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
+ <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com> <Y7i1h3lCMKfxB532@zn.tnic>
+In-Reply-To: <Y7i1h3lCMKfxB532@zn.tnic>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 7 Jan 2023 01:38:42 +0100
+Message-ID: <CANiq72khMLU6tF8vGD9fs7mLNAAQu8wJ2n1SLM3th2QMMfGPPA@mail.gmail.com>
+Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
+ transitively contain a `#[repr(align)]` type
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yujie Liu <yujie.liu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+On Sat, Jan 7, 2023 at 12:58 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> I figured as much.
 
-Thank you for the patch.
+Sorry, I didn't mean otherwise, I should have quoted the next paragraph.
 
-On Thu, Jan 05, 2023 at 03:31:29PM +0100, Ricardo Ribalda wrote:
-> usb_kill_urb warranties that all the handlers are finished when it
-> returns, but does not protect against threads that might be handling
-> asynchronously the urb.
-> 
-> For UVC, the function uvc_ctrl_status_event_async() takes care of
-> control changes asynchronously.
-> 
->  If the code is executed in the following order:
-> 
-> CPU 0					CPU 1
-> ===== 					=====
-> uvc_status_complete()
-> 					uvc_status_stop()
-> uvc_ctrl_status_event_work()
-> 					uvc_status_start() -> FAIL
-> 
-> Then uvc_status_start will keep failing and this error will be shown:
-> 
-> <4>[    5.540139] URB 0000000000000000 submitted while active
-> drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
-> 
-> Let's improve the current situation, by not re-submiting the urb if
-> we are stopping the status event. Also process the queued work
-> (if any) during stop.
-> 
-> CPU 0					CPU 1
-> ===== 					=====
-> uvc_status_complete()
-> 					uvc_status_stop()
-> 					uvc_status_start()
-> uvc_ctrl_status_event_work() -> FAIL
-> 
-> Hopefully, with the usb layer protection this should be enough to cover
-> all the cases.
+You are of course right that the instructions are not complete, I just
+meant to add a bit of context, i.e. that Rust got enabled due to the
+config, but as far as I understand, it shouldn't be getting enabled in
+the other ones for the moment.
 
-For some reason the word "hopefully" in a bug fix doesn't make me very
-hopeful ;-)
+> No need - I ran it by hand just to show that I don't have a rust compiler
+> installed.
 
-> Cc: stable@vger.kernel.org
-> Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
-> Reviewed-by: Yunke Cao <yunkec@chromium.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> uvc: Fix race condition on uvc
-> 
-> Make sure that all the async work is finished when we stop the status urb.
-> 
-> To: Hillf Danton <hdanton@sina.com>
-> To: Yunke Cao <yunkec@chromium.org>
-> To: Sergey Senozhatsky <senozhatsky@chromium.org>
-> To: Max Staudt <mstaudt@google.com>
-> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
-> Changes in v7:
-> - Use smp_store_release. (Thanks Hilf!)
-> - Rebase on top of uvc/next.
-> - Link to v6: https://lore.kernel.org/r/20221212-uvc-race-v6-0-2a662f8de011@chromium.org
-> 
-> Changes in v6:
-> - Improve comments. (Thanks Laurent).
-> - Use true/false instead of 1/0 (Thanks Laurent).
-> - Link to v5: https://lore.kernel.org/r/20221212-uvc-race-v5-0-3db3933d1608@chromium.org
-> 
-> Changes in v5:
-> - atomic_t do not impose barriers, use smp_mb() instead. (Thanks Laurent)
-> - Add an extra cancel_work_sync().
-> - Link to v4: https://lore.kernel.org/r/20221212-uvc-race-v4-0-38d7075b03f5@chromium.org
-> 
-> Changes in v4:
-> - Replace bool with atomic_t to avoid compiler reordering.
-> - First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
-> - Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
-> 
-> Changes in v3:
-> - Remove the patch for dev->status, makes more sense in another series, and makes
->   the zero day less nervous.
-> - Update reviewed-by (thanks Yunke!).
-> - Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
-> 
-> Changes in v2:
-> - Add a patch for not kalloc dev->status
-> - Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
-> - Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c   |  5 +++++
->  drivers/media/usb/uvc/uvc_status.c | 33 +++++++++++++++++++++++++++++++++
->  drivers/media/usb/uvc/uvcvideo.h   |  1 +
->  3 files changed, 39 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index e07b56bbf853..30c417768376 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -6,6 +6,7 @@
->   *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
->   */
->  
-> +#include <asm/barrier.h>
->  #include <linux/bitops.h>
->  #include <linux/kernel.h>
->  #include <linux/list.h>
-> @@ -1509,6 +1510,10 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
->  
->  	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
->  
-> +	/* The barrier is needed to synchronize with uvc_status_stop(). */
-> +	if (smp_load_acquire(&dev->flush_status))
-> +		return;
-> +
->  	/* Resubmit the URB. */
->  	w->urb->interval = dev->int_ep->desc.bInterval;
->  	ret = usb_submit_urb(w->urb, GFP_KERNEL);
-> diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-> index 602830a8023e..21e13b8441da 100644
-> --- a/drivers/media/usb/uvc/uvc_status.c
-> +++ b/drivers/media/usb/uvc/uvc_status.c
-> @@ -6,6 +6,7 @@
->   *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
->   */
->  
-> +#include <asm/barrier.h>
->  #include <linux/kernel.h>
->  #include <linux/input.h>
->  #include <linux/slab.h>
-> @@ -311,5 +312,37 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
->  
->  void uvc_status_stop(struct uvc_device *dev)
->  {
-> +	struct uvc_ctrl_work *w = &dev->async_ctrl;
-> +
-> +	/*
-> +	 * Prevent the asynchronous control handler from requeing the URB. The
-> +	 * barrier is needed so the flush_status change is visible to other
-> +	 * CPUs running the asynchronous handler before usb_kill_urb() is
-> +	 * called below.
-> +	 */
-> +	smp_store_release(&dev->flush_status, true);
-> +
-> +	/* If there is any status event on the queue, process it. */
+My point was that the script expects some variables set by `Makefile`,
+similar to `$CC` etc., so that output does not imply you have (or not)
+a suitable Rust toolchain installed (i.e. it will currently also fail
+if you have it installed).
 
-	/*
-	 * Cancel any pending asynchronous work. If any status event was queued,
-	 * process it synchronously.
-	 */
+> Bottom line is: if I get a build report involving a rust compiler, there better
+> be in the reproduction instructions a hint how to install one so that I can
+> reproduce. Alternatively, I can always simply ignore it.
 
-> +	if (cancel_work_sync(&w->work))
-> +		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> +
-> +	/* Kill the urb. */
->  	usb_kill_urb(dev->int_urb);
-> +
-> +	/*
-> +	 * The URB completion handler may have queued asynchronous work. This
-> +	 * won't resubmit the URB as flush_status is set, but it needs to be
-> +	 * cancelled before returning or it could then race with a future
-> +	 * uvc_status_start() call.
-> +	 */
-> +	if (cancel_work_sync(&w->work))
-> +		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
-> +
-> +	/*
-> +	 * From this point, there are no events on the queue and the status URB
-> +	 * is dead, this is, no events will be queued until uvc_status_start()
-> +	 * is called. The barrier is needed to make sure that it is written to
-> +	 * memory before uvc_status_start() is called again.
+Cc'ing Yujie for the robot instructions. Once I reported something
+missing in the instructions (unrelated to Rust) and they were happy to
+get the report, so I assume they will want to improve it here too.
 
-With data races, the concept of "written to memory" doesn't make much
-sense anymore.
+Meanwhile (of course it is not the same as proper reproduction
+instructions since the LKP team may do something different), the
+documentation on how to set it up for a normal developer is at:
+https://www.kernel.org/doc/html/latest/rust/quick-start.html, in case
+it helps (if you are up for it... :)
 
-	* From this point, there are no events on the queue and the status URB
-	* is dead. No events will be queued until uvc_status_start() is called.
-	* The barrier is needed to make sure that flush_status is visible to
-	* uvc_ctrl_status_event_work() when uvc_status_start() will be called
-	* again.
+> And while we're reporting bugs: the error message from the compiler itself could
+> use some "humanization" - I have zero clue what it is trying to tell me.
 
-I'll update the comments locally.
+What would you want to see? We can ask the relevant Rust team to see
+if they can improve it.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+In general, note that you can ask `rustc` to further explain an error
+giving it the code with `--explain`. The compiler suggests this
+itself, but sadly the robot cut it out :(
 
-> +	 */
-> +	smp_store_release(&dev->flush_status, false);
->  }
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index ae0066eceffd..b2b277cccbdb 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -578,6 +578,7 @@ struct uvc_device {
->  	struct usb_host_endpoint *int_ep;
->  	struct urb *int_urb;
->  	struct uvc_status *status;
-> +	bool flush_status;
->  
->  	struct input_dev *input;
->  	char input_phys[64];
-> 
-> ---
-> base-commit: fb1316b0ff3fc3cd98637040ee17ab7be753aac7
-> change-id: 20221212-uvc-race-09276ea68bf8
+    For more information about this error, try `rustc --explain E0588`
 
--- 
-Regards,
+In this case, it gives:
 
-Laurent Pinchart
+    A type with `packed` representation hint has a field with `align`
+    representation hint.
+
+    Erroneous code example:
+
+    ```
+    #[repr(align(16))]
+    struct Aligned(i32);
+
+    #[repr(packed)] // error!
+    struct Packed(Aligned);
+    ```
+
+    Just like you cannot have both `align` and `packed` representation
+hints on a
+    same type, a `packed` type cannot contain another type with the `align`
+    representation hint. However, you can do the opposite:
+
+    ```
+    #[repr(packed)]
+    struct Packed(i32);
+
+    #[repr(align(16))] // ok!
+    struct Aligned(Packed);
+    ```
+
+You can also see it rendered in
+https://doc.rust-lang.org/error_codes/E0588.html, which is also useful
+if you don't have the toolchain around. Another option if you don't
+remember the URL is going to Compiler Explorer, e.g.
+https://godbolt.org/z/Ec17xnGsT.
+
+Yujie: perhaps the robot could avoid dropping that line? Or even
+better, you could automatically add a URL like above and/or run the
+compiler with `--explain` and add it directly to the output (with a
+size limit I guess)? That could probably be very helpful for kernel
+developers that receive a Rust report.
+
+Cheers,
+Miguel
