@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E8566127A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 00:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E72A266127E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 00:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjAGXDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 18:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S232050AbjAGXGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 18:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAGXDX (ORCPT
+        with ESMTP id S229785AbjAGXGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 18:03:23 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA6E34D6F;
-        Sat,  7 Jan 2023 15:03:17 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g20so3623862pfb.3;
-        Sat, 07 Jan 2023 15:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghLtHCxEHQN0G4J8VZiZj3ppzJlMdwxuQQiALlB0bi8=;
-        b=PLZ+fpox0EVHAsl/kse4VxOpAI/itllww8vvFZz4QlOJnDgg38OJlVJQTYWeGMI/JT
-         vr3rhlMRPRmsyoaj0ymPqZephZ1JzxYx+fouUUF9V24Wem+dY+QWHBddh2hb7dw/Dk5y
-         N4to1k0IwLP5M95xE0Czpv+B+in/EvQjr7uUbOFKFRX+S+Ik+Ob3+u2SthZlnG5WEap9
-         DxEaZG7oYh1At1gW/Mvgc6BWIUS7UC/8xGJnKmyS/s2OSX16OzDM2QxnUoTAPCGA75oI
-         aNBxCLVQtVwUj1cv+RwriCZnQ0i41doPgYlNLFhBxKdw3oS2wI+Wr1CysiDdx7nCXRCW
-         5V9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ghLtHCxEHQN0G4J8VZiZj3ppzJlMdwxuQQiALlB0bi8=;
-        b=r/ulGJC+2nILbMMOUUkLI7lPDM80b9bN4TPxlRejPjsV2K3XJV0K8vws927M47vWQd
-         W6+TOXmLhlQkqJd1So3ySMDkgAN4+4w87MGUkA0w4FRa6jf0QrSsB6T8PSd1DuVHzBum
-         Otpp50r9gYdSNobkbL5/qaowW7BIzviBOrPPrL8z5CVvHSKZUHeWzDbRWH8AV4KFt8uI
-         AnxXJqjOa9H46cTYRtU3ajgBo58zzwSi5psQHr4BOyUNKP4LsPucC5DJ3WbRPW2FOTF1
-         GtkfSaj/oZhdOFay76BzTlKwmpnqiUx6pwompzvU+pjjqqSfGzEAl6y3woqPa0kFvNsi
-         Tlrg==
-X-Gm-Message-State: AFqh2koVz0tMAlpEn99XWcWZrJy/Ikyiwt5titzy/BylOm6UD8vEO0jp
-        rl/zT2MbRwJEjAAKVjvfr1IOc68/9qs=
-X-Google-Smtp-Source: AMrXdXtaYPXPcJhOlF3D5Ggj6ZpYWpwqNOwLh7+OYGnZbLIBfy9qbkqCBj9C7+mZQRJLjw5VkzIxlQ==
-X-Received: by 2002:a62:1d57:0:b0:581:6979:5e with SMTP id d84-20020a621d57000000b005816979005emr43365172pfd.15.1673132597170;
-        Sat, 07 Jan 2023 15:03:17 -0800 (PST)
-Received: from ?IPV6:2602:47:d48c:8101:8a2d:2011:f402:6f82? ([2602:47:d48c:8101:8a2d:2011:f402:6f82])
-        by smtp.googlemail.com with ESMTPSA id r4-20020aa79624000000b0056bd1bf4243sm3311428pfg.53.2023.01.07.15.03.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 15:03:16 -0800 (PST)
-Sender: Richard Henderson <rth7680@gmail.com>
-Message-ID: <f1de15a5-1713-70e7-81af-a0090583d888@twiddle.net>
-Date:   Sat, 7 Jan 2023 15:03:14 -0800
+        Sat, 7 Jan 2023 18:06:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE52271A2;
+        Sat,  7 Jan 2023 15:06:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CBD4BCE0AC8;
+        Sat,  7 Jan 2023 23:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BB7C433EF;
+        Sat,  7 Jan 2023 23:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673132806;
+        bh=Lludlr5axsj3b5IQ+wjvPk4q6BAf6EJEp6FTXWpxkXI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NAJGOpjYDPqzh7Gg3BmBmrTG9L24/44l281SMa6bqXcWeFm0ASTVuFBVQXMrvue8z
+         PxxW4QiH9FE+U33YPPpn9WuWBMAm/cFyURtoKTO2gR4xT7fu6gRbWdTGbyYKhjWpbh
+         gPn8nLpb1ixsg/q6BxVxy42D2a/cCXJZLlKDSVJXIzb+86NWpG3xOpAtpeQQ9o9TKR
+         yw0dn9VjL57Vx1lqlOLkEOGylpwKUglCC0l5LPPshugs//3JEJcOn0IixNjDWiLZ0e
+         /e0qQRqxxNsKGauntNZBa5v3ByX4CVrzPVuE9xeI+2k/JN/EJVIpXi6huxHsREkYg8
+         Chg/MQ+YTG48A==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH mm-unstable] selftests/mm: convert missing vm->mm changes
+Date:   Sat,  7 Jan 2023 23:06:43 +0000
+Message-Id: <20230107230643.252273-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] alpha: fix FEN fault handling
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y7jD8XDZGnQkTvMI@ZenIV>
- <84c0d4ea-09e2-4907-d03d-939d40fa3c96@twiddle.net> <Y7jdARsEQXPugR0t@ZenIV>
- <Y7nj80buxCO3u69l@ZenIV>
-From:   Richard Henderson <rth@twiddle.net>
-In-Reply-To: <Y7nj80buxCO3u69l@ZenIV>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/23 13:28, Al Viro wrote:
-> On Sat, Jan 07, 2023 at 02:46:26AM +0000, Al Viro wrote:
-> 
->> Not sure it's worth bothering with in palcode-clipper - for Linux it's
->> useless (run out of timeslice and FEN will end up set, no matter what),
->> nothing in NetBSD or OpenBSD trees generates that call_pal, current
->> FreeBSD doesn't support alpha and their last version to do so hadn't
->> generated that call_pal either...  What else is out there?  OSF?
-> 
-> BTW, out of curiosity - what was
->                case 5: /* illoc */
->                default: /* unexpected instruction-fault type */
-> about in that switch in do_entIF()?
-> 
-> All documentation I'd been able to find had only 0..4 as expected
-> values (bpt/bugcheck/gentrap/fen/opdec)...
+Commit 6b380799d251 ("selftests/vm: rename selftests/vm to
+selftests/mm") in mm-unstable is missing some files that need to be
+updated for the renaming.  This commit adds the changes.
 
-No idea.
+Fixes: 6b380799d251 ("selftests/vm: rename selftests/vm to selftests/mm") in mm-unstable
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ tools/testing/selftests/Makefile          | 2 +-
+ tools/testing/selftests/kselftest_deps.sh | 6 +++---
+ tools/testing/selftests/mm/Makefile       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Historical git (cd52cb6178a7, v2.4.8 -> v2.4.8.1) suggests it's related to shark_mv, so 
-perhaps a later revision of DEC PALcode.  But I have no corresponding documentation.
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 41b649452560..56a29f2de8e6 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -85,7 +85,7 @@ TARGETS += tmpfs
+ TARGETS += tpm2
+ TARGETS += user
+ TARGETS += vDSO
+-TARGETS += vm
++TARGETS += mm
+ TARGETS += x86
+ TARGETS += zram
+ #Please keep the TARGETS list alphabetically sorted
+diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
+index 7424a1f5babc..4bc14d9e8ff1 100755
+--- a/tools/testing/selftests/kselftest_deps.sh
++++ b/tools/testing/selftests/kselftest_deps.sh
+@@ -12,9 +12,9 @@ usage()
+ 
+ echo -e "Usage: $0 -[p] <compiler> [test_name]\n"
+ echo -e "\tkselftest_deps.sh [-p] gcc"
+-echo -e "\tkselftest_deps.sh [-p] gcc vm"
++echo -e "\tkselftest_deps.sh [-p] gcc mm"
+ echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc"
+-echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc vm\n"
++echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc mm\n"
+ echo "- Should be run in selftests directory in the kernel repo."
+ echo "- Checks if Kselftests can be built/cross-built on a system."
+ echo "- Parses all test/sub-test Makefile to find library dependencies."
+@@ -120,7 +120,7 @@ l1_tests=$(grep -r --include=Makefile "^LDLIBS" | \
+ # Level 2
+ # Some tests have multiple valid LDLIBS lines for individual sub-tests
+ # that need dependency checks. Find them and append them to the tests
+-# e.g: vm/Makefile:$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
++# e.g: mm/Makefile:$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+ # Filter out VAR_LDLIBS to discard the following:
+ # 	memfd/Makefile:$(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
+ # Append space at the end of the list to append more tests.
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 89c14e41bd43..6a4b639b2b2b 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+-# Makefile for vm selftests
++# Makefile for mm selftests
+ 
+-LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
++LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
+ 
+ include local_config.mk
+ 
+-- 
+2.25.1
 
-
-r~
