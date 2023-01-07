@@ -2,346 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DCE661081
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC2D66106C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjAGR0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 12:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S232225AbjAGRXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 12:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbjAGR0V (ORCPT
+        with ESMTP id S229785AbjAGRXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 12:26:21 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481B64D73A
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 09:25:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673112192; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=OvJ/K1tYG9hrdhNSFaZhuNFES0p5ZVbnbuofdK0Vf7V6TpS7x4DxktgL1/cynCo5h5Ia4g+pcUl7Dg8fQvkCl1OPEwkv47fv91vyCsW7bSU0mEwY5rwMfk4NDKLbNQCbFfKA0kcnqN8NbfVTHNqCi39WMU43sR9HfMZDf+xgcDw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1673112192; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=4B/yhGIoBjfbicria+SnqvD0RZrkccqeOcCw0+ipmeg=; 
-        b=Ih5VfdGZWWJ/lqFZQEDBvDPnAoXJRWSHd7IKPUT96/o5HrbKIAZkgT5BZtXDLrGt4P9KG/lE9H4ZT73pC6dUz58rN9I8vug0FzSNiW+ktHiB+g+s8MNWAiswXYyeO15nab5fB3MXRG8Y14aYwJVjUZ6uExt0grLwG6aqSf0gW+k=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673112192;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=4B/yhGIoBjfbicria+SnqvD0RZrkccqeOcCw0+ipmeg=;
-        b=i6+6PGK+w7l/HhrUNhQ1WoycvuRU2Wm24uLeyRFkHu9AzwimY63c/LDverKKoNNf
-        NnnM+lqkmd7e7Abl6o8WpSAbeAD4ZTmWcmdLrhpVk1bVkbr9yxL1rSAtoMuZX0IKnOr
-        N+EoQ0siZFIBJgR/ePW7/bfog6lkxMVI/XKYL/gU=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1673112190429279.6322489615774; Sat, 7 Jan 2023 22:53:10 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>,
-        Jim Cromie <jim.cromie@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <e6a6580b44cd2a1b2ed4946fce010172777033b5.1673110890.git.code@siddh.me>
-Subject: [PATCH v5 10/10] drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
-Date:   Sat,  7 Jan 2023 22:52:30 +0530
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1673110890.git.code@siddh.me>
-References: <cover.1673110890.git.code@siddh.me>
+        Sat, 7 Jan 2023 12:23:32 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9D4BD7A;
+        Sat,  7 Jan 2023 09:23:31 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M5wgF-1p7tG73pxT-007SSJ; Sat, 07 Jan 2023 18:23:12 +0100
+Message-ID: <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
+Date:   Sat, 7 Jan 2023 18:23:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
+ driver
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+ <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:9k4z94OJ4aeGNpmmKJukA+X6dACJBSUpe+xiHwmIKPnn1vDwQHX
+ avkaV4ZKVuz+yIEEJo2oaWjZHowER5VkWlC+DgRpwsDDeoP2ojQu6/M2+2SnEyjk41eF6st
+ BBmCVOjJMKsSQP2aATyiS5Gu369T55ZmYkaJSoJlLjluW7qM3BW5ZjFeriQvl28qxwKQdqa
+ 2/uuiwWY3wU7JG5FDGZow==
+UI-OutboundReport: notjunk:1;M01:P0:QAVfzearRYM=;rrdYSFGcF+8+bs+DKW7lbU4La9b
+ sK+cISQBxyLljpR1ss4EPuvRrr0/iLRCh0YADBjG7N0LSXCKN2YBUG905A9pbVtTydBK6GpQb
+ IWFYzJRajt9tOA70B36qKhVSdpzr08SjSGB6zrUqPWgXkIZmgP0EXwSSVnDggptTXDwrIOwCD
+ ZD5c97tNOeRMtnzq9QXxE0q71Y/exUfQRz80zoGlECnwoPdyUxlB2sl6CI12Whu2bOYNNCs9A
+ nM7igJay8hkyI5Q3InFEEKHeBmqqa9bL9mKum+v7pl5eMtLNQ9L3Ek1dLK6f8orf8ZQER95GQ
+ xhF5Xgy2izDsmi1JAhhAiCAbittvb0zjPmUACJy2aCZqf+Je43XFwl8YLOgycEvYYz7QjYEht
+ 8kNqemj0uSRwfY8rhdKUWdrv0WrlcG9zbfyySfser51jfhnqUrfWJ4AE9u9yDpX8rp4AGdcVw
+ JT783eNXROFZYyfHvU9dSN2i1ZVfTVy/snoWqkH13su9qjKj1sOLVPrh7JpcBt0yhgKsTEbEq
+ wsdN16n0JxqKSYJSsrnjLUhY3wh7KNRNLjilwWWOP8WUR2enoPmcwkGAc1IvdjgnHh4boG6oU
+ asdAsDEBXpJm36N0nOeTMHXcxkGyePHkijve79mUSdATYp1epVzyMfDaNh2UvLMzFeA4VI9vu
+ rsE/hevrFHsyyCtWvI3UW2mPQko/mY6k80KJGxFzpg==
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print.h says DRM_DEBUG_LEASE is deprecated in favor of
-drm_dbg_lease().
+Hi Matthias,
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Reviewed-by: Simon Ser <contact@emersion.fr>
----
- drivers/gpu/drm/drm_lease.c | 64 ++++++++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 30 deletions(-)
+Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
+> Currently each onboard_hub platform device owns an 'attach' work,
+> which is scheduled when the device probes. With this deadlocks
+> have been reported on a Raspberry Pi 3 B+ [1], which has nested
+> onboard hubs.
+>
+> The flow of the deadlock is something like this (with the onboard_hub
+> driver built as a module) [2]:
+>
+> - USB root hub is instantiated
+> - core hub driver calls onboard_hub_create_pdevs(), which creates the
+>    'raw' platform device for the 1st level hub
+> - 1st level hub is probed by the core hub driver
+> - core hub driver calls onboard_hub_create_pdevs(), which creates
+>    the 'raw' platform device for the 2nd level hub
+>
+> - onboard_hub platform driver is registered
+> - platform device for 1st level hub is probed
+>    - schedules 'attach' work
+> - platform device for 2nd level hub is probed
+>    - schedules 'attach' work
+>
+> - onboard_hub USB driver is registered
+> - device (and parent) lock of hub is held while the device is
+>    re-probed with the onboard_hub driver
+>
+> - 'attach' work (running in another thread) calls driver_attach(), which
+>     blocks on one of the hub device locks
+>
+> - onboard_hub_destroy_pdevs() is called by the core hub driver when one
+>    of the hubs is detached
+> - destroying the pdevs invokes onboard_hub_remove(), which waits for the
+>    'attach' work to complete
+>    - waits forever, since the 'attach' work can't acquire the device lock
+>
+> Use a single work struct for the driver instead of having a work struct
+> per onboard hub platform driver instance. With that it isn't necessary
+> to cancel the work in onboard_hub_remove(), which fixes the deadlock.
+> The work is only cancelled when the driver is unloaded.
 
-diff --git a/drivers/gpu/drm/drm_lease.c b/drivers/gpu/drm/drm_lease.c
-index c442d5e766d1..08b4f29f8b61 100644
---- a/drivers/gpu/drm/drm_lease.c
-+++ b/drivers/gpu/drm/drm_lease.c
-@@ -213,11 +213,11 @@ static struct drm_master *drm_lease_create(struct drm=
-_master *lessor, struct idr
- =09int id;
- =09void *entry;
-=20
--=09DRM_DEBUG_LEASE("lessor %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "lessor %d\n", lessor->lessee_id);
-=20
- =09lessee =3D drm_master_create(lessor->dev);
- =09if (!lessee) {
--=09=09DRM_DEBUG_LEASE("drm_master_create failed\n");
-+=09=09drm_dbg_lease(dev, "drm_master_create failed\n");
- =09=09return ERR_PTR(-ENOMEM);
- =09}
-=20
-@@ -231,7 +231,7 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
- =09=09=09error =3D -EBUSY;
-=20
- =09=09if (error !=3D 0) {
--=09=09=09DRM_DEBUG_LEASE("object %d failed %d\n", object, error);
-+=09=09=09drm_dbg_lease(dev, "object %d failed %d\n", object, error);
- =09=09=09goto out_lessee;
- =09=09}
- =09}
-@@ -249,7 +249,8 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
-=20
- =09/* Move the leases over */
- =09lessee->leases =3D *leases;
--=09DRM_DEBUG_LEASE("new lessee %d %p, lessor %d %p\n", lessee->lessee_id, =
-lessee, lessor->lessee_id, lessor);
-+=09drm_dbg_lease(dev, "new lessee %d %p, lessor %d %p\n",
-+=09=09      lessee->lessee_id, lessee, lessor->lessee_id, lessor);
-=20
- =09mutex_unlock(&dev->mode_config.idr_mutex);
- =09return lessee;
-@@ -268,7 +269,7 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy %d\n", master->lessee_id);
-=20
- =09/* This master is referenced by all lessees, hence it cannot be destroy=
-ed
- =09 * until all of them have been
-@@ -277,7 +278,8 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09/* Remove this master from the lessee idr in the owner */
- =09if (master->lessee_id !=3D 0) {
--=09=09DRM_DEBUG_LEASE("remove master %d from device list of lessees\n", ma=
-ster->lessee_id);
-+=09=09drm_dbg_lease(dev, "remove master %d from device list of lessees\n",
-+=09=09=09      master->lessee_id);
- =09=09idr_remove(&(drm_lease_owner(master)->lessee_idr), master->lessee_id=
-);
- =09}
-=20
-@@ -292,7 +294,7 @@ void drm_lease_destroy(struct drm_master *master)
- =09=09drm_master_put(&master->lessor);
- =09}
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy done %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy done %d\n", master->lessee_id);
- }
-=20
- static void _drm_lease_revoke(struct drm_master *top)
-@@ -308,7 +310,8 @@ static void _drm_lease_revoke(struct drm_master *top)
- =09 * the tree is fully connected, we can do this without recursing
- =09 */
- =09for (;;) {
--=09=09DRM_DEBUG_LEASE("revoke leases for %p %d\n", master, master->lessee_=
-id);
-+=09=09drm_dbg_lease(master->dev, "revoke leases for %p %d\n",
-+=09=09=09      master, master->lessee_id);
-=20
- =09=09/* Evacuate the lease */
- =09=09idr_for_each_entry(&master->leases, entry, object)
-@@ -408,7 +411,7 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09ret =3D validate_lease(dev, object_count, objects, universal_planes);
- =09if (ret) {
--=09=09DRM_DEBUG_LEASE("lease validation failed\n");
-+=09=09drm_dbg_lease(dev, "lease validation failed\n");
- =09=09goto out_free_objects;
- =09}
-=20
-@@ -418,7 +421,7 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09struct drm_mode_object *obj =3D objects[o];
- =09=09u32 object_id =3D objects[o]->id;
-=20
--=09=09DRM_DEBUG_LEASE("Adding object %d to lease\n", object_id);
-+=09=09drm_dbg_lease(dev, "Adding object %d to lease\n", object_id);
-=20
- =09=09/*
- =09=09 * We're using an IDR to hold the set of leased
-@@ -430,8 +433,8 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09 */
- =09=09ret =3D idr_alloc(leases, &drm_lease_idr_object , object_id, object_=
-id + 1, GFP_KERNEL);
- =09=09if (ret < 0) {
--=09=09=09DRM_DEBUG_LEASE("Object %d cannot be inserted into leases (%d)\n"=
-,
--=09=09=09=09=09object_id, ret);
-+=09=09=09drm_dbg_lease(dev, "Object %d cannot be inserted into leases (%d)=
-\n",
-+=09=09=09=09      object_id, ret);
- =09=09=09goto out_free_objects;
- =09=09}
- =09=09if (obj->type =3D=3D DRM_MODE_OBJECT_CRTC && !universal_planes) {
-@@ -439,15 +442,15 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->primary->b=
-ase.id, crtc->primary->base.id + 1, GFP_KERNEL);
- =09=09=09if (ret < 0) {
--=09=09=09=09DRM_DEBUG_LEASE("Object primary plane %d cannot be inserted in=
-to leases (%d)\n",
--=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09drm_dbg_lease(dev, "Object primary plane %d cannot be inserted=
- into leases (%d)\n",
-+=09=09=09=09=09      object_id, ret);
- =09=09=09=09goto out_free_objects;
- =09=09=09}
- =09=09=09if (crtc->cursor) {
- =09=09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->cursor-=
->base.id, crtc->cursor->base.id + 1, GFP_KERNEL);
- =09=09=09=09if (ret < 0) {
--=09=09=09=09=09DRM_DEBUG_LEASE("Object cursor plane %d cannot be inserted =
-into leases (%d)\n",
--=09=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09=09drm_dbg_lease(dev, "Object cursor plane %d cannot be insert=
-ed into leases (%d)\n",
-+=09=09=09=09=09=09      object_id, ret);
- =09=09=09=09=09goto out_free_objects;
- =09=09=09=09}
- =09=09=09}
-@@ -490,14 +493,14 @@ int drm_mode_create_lease_ioctl(struct drm_device *de=
-v,
- =09=09return -EOPNOTSUPP;
-=20
- =09if (cl->flags && (cl->flags & ~(O_CLOEXEC | O_NONBLOCK))) {
--=09=09DRM_DEBUG_LEASE("invalid flags\n");
-+=09=09drm_dbg_lease(dev, "invalid flags\n");
- =09=09return -EINVAL;
- =09}
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
- =09/* Do not allow sub-leases */
- =09if (lessor->lessor) {
--=09=09DRM_DEBUG_LEASE("recursive leasing not allowed\n");
-+=09=09drm_dbg_lease(dev, "recursive leasing not allowed\n");
- =09=09ret =3D -EINVAL;
- =09=09goto out_lessor;
- =09}
-@@ -520,7 +523,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09=09=09      object_count, object_ids);
- =09=09kfree(object_ids);
- =09=09if (ret) {
--=09=09=09DRM_DEBUG_LEASE("lease object lookup failed: %i\n", ret);
-+=09=09=09drm_dbg_lease(dev, "lease object lookup failed: %i\n", ret);
- =09=09=09idr_destroy(&leases);
- =09=09=09goto out_lessor;
- =09=09}
-@@ -534,7 +537,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09goto out_lessor;
- =09}
-=20
--=09DRM_DEBUG_LEASE("Creating lease\n");
-+=09drm_dbg_lease(dev, "Creating lease\n");
- =09/* lessee will take the ownership of leases */
- =09lessee =3D drm_lease_create(lessor, &leases);
-=20
-@@ -545,7 +548,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09}
-=20
- =09/* Clone the lessor file to create a new file for us */
--=09DRM_DEBUG_LEASE("Allocating lease file\n");
-+=09drm_dbg_lease(dev, "Allocating lease file\n");
- =09lessee_file =3D file_clone_open(lessor_file);
- =09if (IS_ERR(lessee_file)) {
- =09=09ret =3D PTR_ERR(lessee_file);
-@@ -560,7 +563,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09lessee_priv->authenticated =3D 1;
-=20
- =09/* Pass fd back to userspace */
--=09DRM_DEBUG_LEASE("Returning fd %d id %d\n", fd, lessee->lessee_id);
-+=09drm_dbg_lease(dev, "Returning fd %d id %d\n", fd, lessee->lessee_id);
- =09cl->fd =3D fd;
- =09cl->lessee_id =3D lessee->lessee_id;
-=20
-@@ -568,7 +571,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09fd_install(fd, lessee_file);
-=20
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl succeeded\n");
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl succeeded\n");
- =09return 0;
-=20
- out_lessee:
-@@ -579,7 +582,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
-=20
- out_lessor:
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl failed: %d\n", ret);
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl failed: %d\n", ret);
- =09return ret;
- }
-=20
-@@ -601,7 +604,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
--=09DRM_DEBUG_LEASE("List lessees for %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "List lessees for %d\n", lessor->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -610,7 +613,8 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09/* Only list un-revoked leases */
- =09=09if (!idr_is_empty(&lessee->leases)) {
- =09=09=09if (count_lessees > count) {
--=09=09=09=09DRM_DEBUG_LEASE("Add lessee %d\n", lessee->lessee_id);
-+=09=09=09=09drm_dbg_lease(dev, "Add lessee %d\n",
-+=09=09=09=09=09      lessee->lessee_id);
- =09=09=09=09ret =3D put_user(lessee->lessee_id, lessee_ids + count);
- =09=09=09=09if (ret)
- =09=09=09=09=09break;
-@@ -619,7 +623,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09}
- =09}
-=20
--=09DRM_DEBUG_LEASE("Lessor leases to %d\n", count);
-+=09drm_dbg_lease(dev, "Lessor leases to %d\n", count);
- =09if (ret =3D=3D 0)
- =09=09arg->count_lessees =3D count;
-=20
-@@ -651,7 +655,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessee =3D drm_file_get_master(lessee_priv);
--=09DRM_DEBUG_LEASE("get lease for %d\n", lessee->lessee_id);
-+=09drm_dbg_lease(dev, "get lease for %d\n", lessee->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -665,7 +669,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09count =3D 0;
- =09idr_for_each_entry(object_idr, entry, object) {
- =09=09if (count_objects > count) {
--=09=09=09DRM_DEBUG_LEASE("adding object %d\n", object);
-+=09=09=09drm_dbg_lease(dev, "adding object %d\n", object);
- =09=09=09ret =3D put_user(object, object_ids + count);
- =09=09=09if (ret)
- =09=09=09=09break;
-@@ -696,7 +700,7 @@ int drm_mode_revoke_lease_ioctl(struct drm_device *dev,
- =09struct drm_master *lessee;
- =09int ret =3D 0;
-=20
--=09DRM_DEBUG_LEASE("revoke lease for %d\n", arg->lessee_id);
-+=09drm_dbg_lease(dev, "revoke lease for %d\n", arg->lessee_id);
-=20
- =09/* Can't lease without MODESET */
- =09if (!drm_core_check_feature(dev, DRIVER_MODESET))
---=20
-2.39.0
+i applied both patches for this series on top of v6.1 
+(multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
 
+Best regards
 
+>
+> [1] https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+> [2] https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
+> Link: https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
+> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+>   drivers/usb/misc/onboard_usb_hub.c | 19 +++++++++++++------
+>   1 file changed, 13 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index db0844b30bbd..8bc4deb465f0 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -27,7 +27,10 @@
+>   
+>   #include "onboard_usb_hub.h"
+>   
+> +static void onboard_hub_attach_usb_driver(struct work_struct *work);
+> +
+>   static struct usb_device_driver onboard_hub_usbdev_driver;
+> +static DECLARE_WORK(attach_usb_driver_work, onboard_hub_attach_usb_driver);
+>   
+>   /************************** Platform driver **************************/
+>   
+> @@ -45,7 +48,6 @@ struct onboard_hub {
+>   	bool is_powered_on;
+>   	bool going_away;
+>   	struct list_head udev_list;
+> -	struct work_struct attach_usb_driver_work;
+>   	struct mutex lock;
+>   };
+>   
+> @@ -270,9 +272,15 @@ static int onboard_hub_probe(struct platform_device *pdev)
+>   	 *
+>   	 * This needs to be done deferred to avoid self-deadlocks on systems
+>   	 * with nested onboard hubs.
+> +	 *
+> +	 * If the work is already running wait for it to complete, then
+> +	 * schedule it again to ensure that the USB devices of this onboard
+> +	 * hub instance are bound to the USB driver.
+>   	 */
+> -	INIT_WORK(&hub->attach_usb_driver_work, onboard_hub_attach_usb_driver);
+> -	schedule_work(&hub->attach_usb_driver_work);
+> +	while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
+> +		msleep(10);
+> +
+> +	schedule_work(&attach_usb_driver_work);
+>   
+>   	return 0;
+>   }
+> @@ -285,9 +293,6 @@ static int onboard_hub_remove(struct platform_device *pdev)
+>   
+>   	hub->going_away = true;
+>   
+> -	if (&hub->attach_usb_driver_work != current_work())
+> -		cancel_work_sync(&hub->attach_usb_driver_work);
+> -
+>   	mutex_lock(&hub->lock);
+>   
+>   	/* unbind the USB devices to avoid dangling references to this device */
+> @@ -449,6 +454,8 @@ static void __exit onboard_hub_exit(void)
+>   {
+>   	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
+>   	platform_driver_unregister(&onboard_hub_driver);
+> +
+> +	cancel_work_sync(&attach_usb_driver_work);
+>   }
+>   module_exit(onboard_hub_exit);
+>   
