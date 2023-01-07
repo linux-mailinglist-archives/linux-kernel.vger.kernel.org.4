@@ -2,191 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEA9660FF1
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E92660FEF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjAGPWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 10:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S230350AbjAGPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 10:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAGPWu (ORCPT
+        with ESMTP id S229488AbjAGPWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 10:22:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FB164C1;
-        Sat,  7 Jan 2023 07:22:48 -0800 (PST)
+        Sat, 7 Jan 2023 10:22:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DF35937;
+        Sat,  7 Jan 2023 07:22:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9D97B819A5;
-        Sat,  7 Jan 2023 15:22:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76BE3C433D2;
-        Sat,  7 Jan 2023 15:22:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A102C60064;
+        Sat,  7 Jan 2023 15:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D4FC433EF;
+        Sat,  7 Jan 2023 15:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673104965;
-        bh=UakUyERlTyZBT8h8wzrzHPSFjoJiTVN0dE25GLCjihE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Srsk7Gy2AglmbzwpETlP6uwNk/Z6/qlNaDkyYUqP372XMV3PDIG9SMrZ0gtPDHdW6
-         UPhzDQByMrrJkAQHSEar3YjCXlY1X7888Vg6wsytumTFMQeQH6IjJSKUkyvW/isI+G
-         O2j55ALgwecA6AxeEst16a354k9CA6DzzmnCYbM8VpyoES2wTQ9fNl3mMWxt1O3ATr
-         toWmJolNvFN/EBemUYtIs8yt/urABPro6IrzbOvdubocRidLvw1h0w/PELSPL5hbey
-         Q4uKeSJ5t53n4/7NOwqqdm6yGcL59k22nmqctjcmZMRLVWy9mjvTG1nBVkWc9Vsclb
-         xDFNusQihIUCg==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-14ffd3c5b15so4498351fac.3;
-        Sat, 07 Jan 2023 07:22:45 -0800 (PST)
-X-Gm-Message-State: AFqh2kpsHGao38v9winGcNBCO1zkhj3vzZqSVNVPiIsJJFUeARNynFK6
-        rUIw5OclbwLWykLloq0S18WaYCdGrAKHPdrbuJM=
-X-Google-Smtp-Source: AMrXdXtl2xLUsg4F2xCoDjfsPVhBqYP6xVGsvlk1dhpHyyIubFEkP5wVXn2iyfBa/CpewGOKlVHeIJtV5nW72vaBc4I=
-X-Received: by 2002:a05:6870:cc89:b0:150:39e2:c688 with SMTP id
- ot9-20020a056870cc8900b0015039e2c688mr2679007oab.287.1673104964711; Sat, 07
- Jan 2023 07:22:44 -0800 (PST)
-MIME-Version: 1.0
-References: <Y7i8+EjwdnhHtlrr@dev-arch.thelio-3990X> <CAK7LNASkC3j5=cy7efMC=pFjgXMucBOVNrMCTMCUkJSLj8i=Dg@mail.gmail.com>
-In-Reply-To: <CAK7LNASkC3j5=cy7efMC=pFjgXMucBOVNrMCTMCUkJSLj8i=Dg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 8 Jan 2023 00:22:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARpdAywWZCLC0a78SbDA1TSMMgZU4HK5akWivM=Z5y+iA@mail.gmail.com>
-Message-ID: <CAK7LNARpdAywWZCLC0a78SbDA1TSMMgZU4HK5akWivM=Z5y+iA@mail.gmail.com>
-Subject: Re: nm vmlinux error in arch/arm reappears after upgrade to make 4.4
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1673104940;
+        bh=Zi2+Rs+9NgOOhyZDWo4R1QQ5HZsFFSieUonNtvcIErw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RsCbenW3T9OIRWsg2zkm1j6xq6VmYmSMn1LmKbf0BSkxt0LnnF4kMb4ghn91m79/L
+         pg0N2YSC3DJB/iwvoh8Jl6mw+Dpv2MN2UhIVzyb6TcdspXIzubG67GaoHO/d4trgw9
+         5eDHYk0k4pj1eK/4nJ6bt/M7ygkgmkvuXrZTLN8m7GzlFv3gg8qPOg2Uaz8aItRiSW
+         wTNx45J3qulAe2gD0wWutJeZ3dyxWFooR6ZILMsl8harkUqPk5rh5eLvXzavHb7YD1
+         v5LMNcviurNkuFn5vYb9Pe9B/3APqFNZ1whP8t9pj/aLCycNrXBq5jekElIvcotpGh
+         +xHuy/dH5S5SQ==
+Date:   Sun, 8 Jan 2023 00:22:15 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        mhiramat@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        ndesaulniers@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        joel@joelfernandes.org, quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-Id: <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+In-Reply-To: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 7, 2023 at 4:19 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Jan 7, 2023 at 9:29 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Masahiro,
-> >
-> > My distribution recently updated their version of make to 4.4 from 4.3,
-> > after which I notice the following error from nm when building ARCH=arm
-> > kernels, which I thought that this was supposed to be resolved with
-> > commit 3ec8a5b33dea ("kbuild: do not export LDFLAGS_vmlinux") but the
-> > tree clearly has this and it is not visible while just running clean (I
-> > have to build zImage to see it):
->
->
-> Presumably, this is a different issue than 3ec8a5b33dea
->
+On Wed, 4 Jan 2023 16:58:38 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
+> The BOOT_CONFIG family of Kconfig options allows a bootconfig file
+> containing kernel boot parameters to be embedded into an initrd or into
+> the kernel itself.  This can be extremely useful when deploying kernels
+> in cases where some of the boot parameters depend on the kernel version
+> rather than on the server hardware, firmware, or workload.
+> 
+> Unfortunately, the "bootconfig" kernel parameter must be specified in
+> order to cause the kernel to look for the embedded bootconfig file,
+> and it clearly does not help to embed this "bootconfig" kernel parameter
+> into that file.
+> 
+> Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
+> kernel to act as if the "bootconfig" kernel parameter had been specified.
+> In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
+> for the embedded bootconfig file even when the "bootconfig" kernel
+> parameter is omitted.  This permits kernel-version-dependent kernel
+> boot parameters to be embedded into the kernel image without the need to
+> (for example) update large numbers of boot loaders.
+> 
 
-My bad.
+I like this because this is a simple solution. We have another option
+to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
+bootloader. Thus, it is better to have this option so that user can
+always enable bootconfig.
 
-3ec8a5b33dea unexported LDFLAGS_vmlinux
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
+BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+(or at least recommend to enable this)
 
-However,
+Thank you!
 
-5d4aeffbf709 exported LDFLAGS_vmlinux again.
-
-
-
-> >
-> >   $ git show -s --format='%h ("%s")'
-> >   512dee0c00ad ("Merge tag 'x86-urgent-2023-01-04' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip")
-> >
-> >   $ make --version | head -1
-> >   GNU Make 4.4
-> >
-> >   $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
-> >   arm-linux-gnueabi-nm: 'arch/arm/boot/compressed/../../../../vmlinux': No such file
-> >
-> > vs.
-> >
-> >   $ make --version | head -1
-> >   GNU Make 4.3
-> >
-> >   $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
-> >
-> > I bisected make to see what change causes this and I landed on
-> > commit 98da874c ("[SV 10593] Export variables to $(shell ...)
-> > commands") [1], which certainly seems like a reasonable commit to
-> > blame but I am not sure how exactly it factors in here.
-> >
-> > If you need any more information on reproducing this, I am happy to
-> > provide it (CROSS_COMPILE is just the toolchains from kernel.org).
-> >
-> > [1]: https://git.savannah.gnu.org/cgit/make.git/commit/?id=98da874c43035a490cdca81331724f233a3d0c9a
-> >
-> > Cheers,
-> > Nathan
->
->
->
-> Confirmed, but I still do not understand what
-> is triggering this.
-
-
-I figured out the reason.
-
-I will send a patch later.
-
-
-
-
-
-
-
-
->
-> These are my findings:
->
->  - O= option is needed to reproduce it.
->
->  - allnoconfig still produces it.
->
->  - I do not see it in the incremental builds.
->    I see it again in the full build after "git clean -fdx".
->
->
->
-> If I slightly cleaned the code like follows,
-> this issue disappeared.
-> ($(obj)/../../../../vmlinux is the same as vmlinux)
->
->
->
->
-> diff --git a/arch/arm/boot/compressed/Makefile
-> b/arch/arm/boot/compressed/Makefile
-> index 2ef651a78fa2..726ecabcef09 100644
-> --- a/arch/arm/boot/compressed/Makefile
-> +++ b/arch/arm/boot/compressed/Makefile
-> @@ -107,7 +107,7 @@ ccflags-remove-$(CONFIG_FUNCTION_TRACER) += -pg
->  asflags-y := -DZIMAGE
->
->  # Supply kernel BSS size to the decompressor via a linker symbol.
-> -KBSS_SZ = $(shell echo $$(($$($(NM) $(obj)/../../../../vmlinux | \
-> +KBSS_SZ = $(shell echo $$(($$($(NM) vmlinux | \
->                 sed -n -e 's/^\([^ ]*\) [ABD] __bss_start$$/-0x\1/p' \
->                        -e 's/^\([^ ]*\) [ABD] __bss_stop$$/+0x\1/p') )) )
->  LDFLAGS_vmlinux = --defsym _kernel_bss_size=$(KBSS_SZ)
->
->
->
->
->
->
->
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
-
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: <linux-doc@vger.kernel.org>
+> 
+> diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
+> index 9355c525fbe0a..91339efdcb541 100644
+> --- a/Documentation/admin-guide/bootconfig.rst
+> +++ b/Documentation/admin-guide/bootconfig.rst
+> @@ -201,6 +201,8 @@ To remove the config from the image, you can use -d option as below::
+>  
+>  Then add "bootconfig" on the normal kernel command line to tell the
+>  kernel to look for the bootconfig at the end of the initrd file.
+> +Alternatively, build your kernel with the ``CONFIG_BOOT_CONFIG_FORCE``
+> +Kconfig option selected.
+>  
+>  Embedding a Boot Config into Kernel
+>  -----------------------------------
+> @@ -217,7 +219,9 @@ path to the bootconfig file from source tree or object tree.
+>  The kernel will embed it as the default bootconfig.
+>  
+>  Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
+> -option on the kernel command line to enable the embedded bootconfig.
+> +option on the kernel command line to enable the embedded bootconfig, or,
+> +alternatively, build your kernel with the ``CONFIG_BOOT_CONFIG_FORCE``
+> +Kconfig option selected.
+>  
+>  Note that even if you set this option, you can override the embedded
+>  bootconfig by another bootconfig which attached to the initrd.
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 7e5c3ddc341de..f894fb004bad4 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1376,6 +1376,18 @@ config BOOT_CONFIG
+>  
+>  	  If unsure, say Y.
+>  
+> +config BOOT_CONFIG_FORCE
+> +	bool "Force unconditional bootconfig processing"
+> +	depends on BOOT_CONFIG
+> +	help
+> +	  With this Kconfig option set, BOOT_CONFIG processing is carried
+> +	  out even when the "bootconfig" kernel-boot parameter is omitted.
+> +	  In fact, with this Kconfig option set, there is no way to
+> +	  make the kernel ignore the BOOT_CONFIG-supplied kernel-boot
+> +	  parameters.
+> +
+> +	  If unsure, say N.
+> +
+>  config BOOT_CONFIG_EMBED
+>  	bool "Embed bootconfig file in the kernel"
+>  	depends on BOOT_CONFIG
+> diff --git a/init/main.c b/init/main.c
+> index e1c3911d7c707..669cb892e6c17 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -156,7 +156,7 @@ static char *extra_init_args;
+>  
+>  #ifdef CONFIG_BOOT_CONFIG
+>  /* Is bootconfig on command line? */
+> -static bool bootconfig_found;
+> +static bool bootconfig_found = IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE);
+>  static size_t initargs_offs;
+>  #else
+>  # define bootconfig_found false
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
