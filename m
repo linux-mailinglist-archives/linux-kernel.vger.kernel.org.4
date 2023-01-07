@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E1660CF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8A0660CF5
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjAGIN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 03:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S229899AbjAGIS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 03:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjAGIN5 (ORCPT
+        with ESMTP id S229517AbjAGISX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 03:13:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF69B840BD;
-        Sat,  7 Jan 2023 00:13:54 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 7 Jan 2023 03:18:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6557243D83;
+        Sat,  7 Jan 2023 00:18:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NptJc2Rqzz4xxJ;
-        Sat,  7 Jan 2023 19:13:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673079233;
-        bh=INp7h11ApBNNIpcU5O7lBDeC8Cm27wzbBsdKK1Bm4cc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QzEIWZ8VPTHWJcqKn85S08QiYyVc6Ncpf6qzCFmYfn+gqgAz0l1agUr8jxPvx1hCV
-         Y9AQUNXKbLbdMutOt+n7D4Mwjj2s+9RqCLbXK572r/5kAZU20e84Adzmn1xSvuXbgF
-         rKefRsCmexz0ysal63XwirLO/VWWEd1FOUqk+2QS7SrsqcqOnHKWlRkht+6Htu8qT+
-         cg9HOtGxbw5GvSVUH+D1UiJ1g+3XyDuTh0euZgnn1UPlsMKD7cqtU7Mvq6lp9bKfV/
-         xBs/5gev0TZLEhmGqy8/iSGpHCf+zUam3rKXcuQBudSxXY6xIgaKC9c/tI7LmDnM6C
-         GZCs2xCEoBvNw==
-Date:   Sat, 7 Jan 2023 19:13:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [GIT PULL] SCSI fixes for 6.1-rc2
-Message-ID: <20230107191331.57ccf298@canb.auug.org.au>
-In-Reply-To: <20230107182826.1ae7b32c@canb.auug.org.au>
-References: <f0bc7090c04bc6c0b08471494324a3a577c2d2a1.camel@HansenPartnership.com>
-        <20230107182826.1ae7b32c@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5670606A0;
+        Sat,  7 Jan 2023 08:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C968AC433EF;
+        Sat,  7 Jan 2023 08:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673079498;
+        bh=xlMaUzyepTFKgxnx6MHHMVyG0I9ArG8xZVtxSfImJtc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=04hXZynvlsY+ZFyyY4CJtuLZemYb5t5y//487GKiQaO1KCupFGJWy8xthSfNDIc8p
+         Ka1iRe+SkZloqpCU31xpqOCyeb3sOQ6wWlNhOZu6aPiewxW4kyFAEg8kVsdccdm965
+         T/Hn9VLBpDyVBkcyJEndE2RnhFZXQ+o2ye5zHHuI=
+Date:   Sat, 7 Jan 2023 09:18:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Igor Seletskiy <i@cloudlinux.com>,
+        Pavel Boldin <boldin.pavel@gmail.com>,
+        Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+Message-ID: <Y7kqx5cBCVojq6QJ@kroah.com>
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
+ <Y7bT0OL8RAWkCu0Z@kroah.com>
+ <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+ <Y7bg5sxEZDIaGoXK@kroah.com>
+ <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9tsCmtXOeBNO0j8bRxAkmBI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9tsCmtXOeBNO0j8bRxAkmBI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 06, 2023 at 09:00:21AM +0800, Aaron Lu wrote:
+> If you do not trust what I've done is what I've claimed, now the
+> original author Pavel Boldin has given the patch a "LGTM" tag, does that
+> address your concern?
 
-Hi all,
+I don't see that anywhere on lore.kernel.org, have a link to it?
 
-On Sat, 7 Jan 2023 18:28:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Hi James,
->=20
-> On Fri, 06 Jan 2023 22:37:10 -0500 James Bottomley <James.Bottomley@Hanse=
-nPartnership.com> wrote:
-> >
-> > Lukas Bulwahn (1):
-> >       scsi: core: Remove leftovers due to pktcdvd being removed =20
->=20
-> I thought that this one was to be removed as the pktcdvd drivers
-> removal is being reverted in the block tree in linux-next (and the
-> revert caused a build failure in linux-next due to this scsi commit).
+thanks,
 
-And I see that driver revert is now in Linus' tree ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9tsCmtXOeBNO0j8bRxAkmBI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO5KasACgkQAVBC80lX
-0Gywnwf+PNYhvHNw48IOuDXMqVgDhSKWm9obi1vk+48sGZKVAN2Fz7HnoyPcbzoa
-sHR5ZUi50E1jDQnzudcy2iCLfvqvQgYFzr2U5sBjm9tGJuJPBfcmshcRvzE8Azlh
-eZoLX7xX2B6O2rX0RvRnVP7g5PMX1fxccWOeLA4uWwAvCurMFmYfHW77x0ejSbWW
-Ci2WLKmebY2g1fJ2A82fXyvrKubLpkS0yWTng9Nrx3QOypDbnBPSyaICbb+dDQLO
-gwkyHOxUTB1ydCtS8o63qCUAWW6+2yEZCG+AkoGmyiTNFai5bj/jkS6GSkFLP6Y9
-YyC+IUkhm1XsxyhKP9EIluMcd33i6w==
-=7n6P
------END PGP SIGNATURE-----
-
---Sig_/9tsCmtXOeBNO0j8bRxAkmBI--
+greg k-h
