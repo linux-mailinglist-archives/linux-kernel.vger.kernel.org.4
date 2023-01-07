@@ -2,187 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC2D66106C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342F9661083
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjAGRXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 12:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S232677AbjAGR2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 12:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAGRXc (ORCPT
+        with ESMTP id S232890AbjAGR1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 12:23:32 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9D4BD7A;
-        Sat,  7 Jan 2023 09:23:31 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M5wgF-1p7tG73pxT-007SSJ; Sat, 07 Jan 2023 18:23:12 +0100
-Message-ID: <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
-Date:   Sat, 7 Jan 2023 18:23:12 +0100
+        Sat, 7 Jan 2023 12:27:44 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22AA197;
+        Sat,  7 Jan 2023 09:27:40 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bu8so6523705lfb.4;
+        Sat, 07 Jan 2023 09:27:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5GCJe9ke2QjQRcbjx6nWqRbP0VKN7ctT7Z85awWgZcM=;
+        b=Sn/EhkKtJSd+QTIsyaesfiBepjAh4TjF8JT6tMmC7WdehJ+IFwpGyRlVHWXTE89Z8q
+         Xn5/wELRlMOx1oj9/6w3QB2gJma2GFCJMQbmz96kN9Pzc3V7pS+scl3wm9WPLcA5281f
+         qRsFprK7cGl4HFXNDjwq1ur7GsCMLddfWAMx4GRgUQTRW4t1+7o7gneQ9QE0CE5hFpD0
+         llPeBOKZ6t2uWwQbXDm0ApN2SI28CaQ0WRdRl93dXDBVaqLBfY9RBdUZvC1N62geZa3+
+         Zr9ZA05VnpuvM2X6lWstW79UQkduTEA7iUIYv7hq0UGmJenPP0VNR7HFEvhMsccoFXBq
+         TSRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5GCJe9ke2QjQRcbjx6nWqRbP0VKN7ctT7Z85awWgZcM=;
+        b=X8MRHm3IV2nQldvX9Y8lO/qm81M+BebnEsRZp6yMoa73+ZdhZfcSYm4qYxtZrAaQsd
+         8MkCboIJqPAdMoyjBtte6m2nLMQCDtwo8eqXtnDvv9qfbIbsTplSNR08HXUWyXwPgwKm
+         4vYxO/oRp9Hs4Ryvzifnea84fYoZFyoxGVTIpkviKrgEZJERy6U8Pv82SzIrqaEz4Q8c
+         izkyMMNKJV76jvLkVzDMghM+3no/P//ZNM0HOzwQVOlXU/s8GBL3sucL2lGq/W6W4PL5
+         0a1fZmEsTCEiJRqGN59zXzXST4dDwRotdd0hB+nQAOhPh+wWB8TyvnCWYsI9JFt4IuT7
+         I+ww==
+X-Gm-Message-State: AFqh2kpNhmUHxJaW9Tqp1iwsasUPEyMXHSnniNe2RkUZ435fvrjC7h4s
+        8zfkBfkHDhInZCQ/dkVjd5Wy9od44uw2l/bCbDkSyMyxu6k=
+X-Google-Smtp-Source: AMrXdXulGR01P3dcnO+LTUxocecMPbRySynADmih5p92Fs60dD42gSomJpDhl7mNhisdU26eOBOh3FC6rN9Snpuc5UI=
+X-Received: by 2002:ac2:42ce:0:b0:4cc:5e97:d35b with SMTP id
+ n14-20020ac242ce000000b004cc5e97d35bmr350613lfl.403.1673112458997; Sat, 07
+ Jan 2023 09:27:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
- driver
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
- <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:9k4z94OJ4aeGNpmmKJukA+X6dACJBSUpe+xiHwmIKPnn1vDwQHX
- avkaV4ZKVuz+yIEEJo2oaWjZHowER5VkWlC+DgRpwsDDeoP2ojQu6/M2+2SnEyjk41eF6st
- BBmCVOjJMKsSQP2aATyiS5Gu369T55ZmYkaJSoJlLjluW7qM3BW5ZjFeriQvl28qxwKQdqa
- 2/uuiwWY3wU7JG5FDGZow==
-UI-OutboundReport: notjunk:1;M01:P0:QAVfzearRYM=;rrdYSFGcF+8+bs+DKW7lbU4La9b
- sK+cISQBxyLljpR1ss4EPuvRrr0/iLRCh0YADBjG7N0LSXCKN2YBUG905A9pbVtTydBK6GpQb
- IWFYzJRajt9tOA70B36qKhVSdpzr08SjSGB6zrUqPWgXkIZmgP0EXwSSVnDggptTXDwrIOwCD
- ZD5c97tNOeRMtnzq9QXxE0q71Y/exUfQRz80zoGlECnwoPdyUxlB2sl6CI12Whu2bOYNNCs9A
- nM7igJay8hkyI5Q3InFEEKHeBmqqa9bL9mKum+v7pl5eMtLNQ9L3Ek1dLK6f8orf8ZQER95GQ
- xhF5Xgy2izDsmi1JAhhAiCAbittvb0zjPmUACJy2aCZqf+Je43XFwl8YLOgycEvYYz7QjYEht
- 8kNqemj0uSRwfY8rhdKUWdrv0WrlcG9zbfyySfser51jfhnqUrfWJ4AE9u9yDpX8rp4AGdcVw
- JT783eNXROFZYyfHvU9dSN2i1ZVfTVy/snoWqkH13su9qjKj1sOLVPrh7JpcBt0yhgKsTEbEq
- wsdN16n0JxqKSYJSsrnjLUhY3wh7KNRNLjilwWWOP8WUR2enoPmcwkGAc1IvdjgnHh4boG6oU
- asdAsDEBXpJm36N0nOeTMHXcxkGyePHkijve79mUSdATYp1epVzyMfDaNh2UvLMzFeA4VI9vu
- rsE/hevrFHsyyCtWvI3UW2mPQko/mY6k80KJGxFzpg==
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 7 Jan 2023 11:27:27 -0600
+Message-ID: <CAH2r5muwatnq0rkQzeeWw9pYdd4fZJTMLAiW2j_44cfyMYs1ag@mail.gmail.com>
+Subject: [GIT PULL] cifs/smb3 fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+Please pull the following changes since commit
+88603b6dc419445847923fcb7fe5080067a30f98:
 
-Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
-> Currently each onboard_hub platform device owns an 'attach' work,
-> which is scheduled when the device probes. With this deadlocks
-> have been reported on a Raspberry Pi 3 B+ [1], which has nested
-> onboard hubs.
->
-> The flow of the deadlock is something like this (with the onboard_hub
-> driver built as a module) [2]:
->
-> - USB root hub is instantiated
-> - core hub driver calls onboard_hub_create_pdevs(), which creates the
->    'raw' platform device for the 1st level hub
-> - 1st level hub is probed by the core hub driver
-> - core hub driver calls onboard_hub_create_pdevs(), which creates
->    the 'raw' platform device for the 2nd level hub
->
-> - onboard_hub platform driver is registered
-> - platform device for 1st level hub is probed
->    - schedules 'attach' work
-> - platform device for 2nd level hub is probed
->    - schedules 'attach' work
->
-> - onboard_hub USB driver is registered
-> - device (and parent) lock of hub is held while the device is
->    re-probed with the onboard_hub driver
->
-> - 'attach' work (running in another thread) calls driver_attach(), which
->     blocks on one of the hub device locks
->
-> - onboard_hub_destroy_pdevs() is called by the core hub driver when one
->    of the hubs is detached
-> - destroying the pdevs invokes onboard_hub_remove(), which waits for the
->    'attach' work to complete
->    - waits forever, since the 'attach' work can't acquire the device lock
->
-> Use a single work struct for the driver instead of having a work struct
-> per onboard hub platform driver instance. With that it isn't necessary
-> to cancel the work in onboard_hub_remove(), which fixes the deadlock.
-> The work is only cancelled when the driver is unloaded.
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
-i applied both patches for this series on top of v6.1 
-(multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
+are available in the Git repository at:
 
-Best regards
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc2-smb3-client-fixes
 
->
-> [1] https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-> [2] https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
->
-> Cc: stable@vger.kernel.org
-> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-> Link: https://lore.kernel.org/all/Y6OrGbqaMy2iVDWB@google.com/
-> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->
->   drivers/usb/misc/onboard_usb_hub.c | 19 +++++++++++++------
->   1 file changed, 13 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> index db0844b30bbd..8bc4deb465f0 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.c
-> +++ b/drivers/usb/misc/onboard_usb_hub.c
-> @@ -27,7 +27,10 @@
->   
->   #include "onboard_usb_hub.h"
->   
-> +static void onboard_hub_attach_usb_driver(struct work_struct *work);
-> +
->   static struct usb_device_driver onboard_hub_usbdev_driver;
-> +static DECLARE_WORK(attach_usb_driver_work, onboard_hub_attach_usb_driver);
->   
->   /************************** Platform driver **************************/
->   
-> @@ -45,7 +48,6 @@ struct onboard_hub {
->   	bool is_powered_on;
->   	bool going_away;
->   	struct list_head udev_list;
-> -	struct work_struct attach_usb_driver_work;
->   	struct mutex lock;
->   };
->   
-> @@ -270,9 +272,15 @@ static int onboard_hub_probe(struct platform_device *pdev)
->   	 *
->   	 * This needs to be done deferred to avoid self-deadlocks on systems
->   	 * with nested onboard hubs.
-> +	 *
-> +	 * If the work is already running wait for it to complete, then
-> +	 * schedule it again to ensure that the USB devices of this onboard
-> +	 * hub instance are bound to the USB driver.
->   	 */
-> -	INIT_WORK(&hub->attach_usb_driver_work, onboard_hub_attach_usb_driver);
-> -	schedule_work(&hub->attach_usb_driver_work);
-> +	while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
-> +		msleep(10);
-> +
-> +	schedule_work(&attach_usb_driver_work);
->   
->   	return 0;
->   }
-> @@ -285,9 +293,6 @@ static int onboard_hub_remove(struct platform_device *pdev)
->   
->   	hub->going_away = true;
->   
-> -	if (&hub->attach_usb_driver_work != current_work())
-> -		cancel_work_sync(&hub->attach_usb_driver_work);
-> -
->   	mutex_lock(&hub->lock);
->   
->   	/* unbind the USB devices to avoid dangling references to this device */
-> @@ -449,6 +454,8 @@ static void __exit onboard_hub_exit(void)
->   {
->   	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
->   	platform_driver_unregister(&onboard_hub_driver);
-> +
-> +	cancel_work_sync(&attach_usb_driver_work);
->   }
->   module_exit(onboard_hub_exit);
->   
+for you to fetch changes up to cc7d79d4fad6a4eab3f88c4bb237de72be4478f1:
+
+  cifs: fix interface count calculation during refresh (2023-01-04
+23:18:07 -0600)
+
+----------------------------------------------------------------
+6 cifs/smb3 client fixes, 3 for stable
+- 2 multichannel fixes
+- 3 reconnect fixes
+- unmap fix
+----------------------------------------------------------------
+Ira Weiny (1):
+      cifs: Fix kmap_local_page() unmapping
+
+Paulo Alcantara (3):
+      cifs: ignore ipc reconnect failures during dfs failover
+      cifs: fix race in assemble_neg_contexts()
+      cifs: protect access of TCP_Server_Info::{dstaddr,hostname}
+
+Shyam Prasad N (2):
+      cifs: refcount only the selected iface during interface update
+      cifs: fix interface count calculation during refresh
+
+ fs/cifs/dfs.c     | 25 ++++++++++++-------------
+ fs/cifs/misc.c    |  2 ++
+ fs/cifs/sess.c    |  3 ++-
+ fs/cifs/smb2ops.c | 12 ++++--------
+ fs/cifs/smb2pdu.c | 11 +++++++----
+ 5 files changed, 27 insertions(+), 26 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve
