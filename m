@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E4F660D4A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D73A660D4F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjAGJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S230496AbjAGJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjAGJgg (ORCPT
+        with ESMTP id S229500AbjAGJny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:36:36 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A187CBDD
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:36:26 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bk16so3305583wrb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 01:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RDJKgyIyO2UXr7CrAfsDllc88gRt2ZKj/J0suyfMPL8=;
-        b=TLDDT3lhbvwE5i2u0vta/FX9oB16gdBUm6xwRmq+nmnTpK6o6wAsILYF8LoQAou0Ub
-         CFQsk42dpbxzGjRSh5k2rsYzHUOySPGo3y/o2T4oCPZOIsWcbB/yxYSxH8NNB9Zr9X9h
-         JVTwXubfClY3AAJM4OnWB2F0WfxXhkitcV/bZmLVzfvA8PumCe5LU3M9U86H4sjOtsbO
-         xUz9k4F+sGySkn7AmLWbBH8mlqA5Bm6M8TZMLsP2k0grtnL+OcjDyZ6mOdqroDNbsUZ4
-         4BxknWr96sEySMlNFm9dJGD5uw7Mrnqg1ARw9hlicYTZGLLZuwUZdyTq/W5vTtx97Hle
-         2dhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RDJKgyIyO2UXr7CrAfsDllc88gRt2ZKj/J0suyfMPL8=;
-        b=UguMqa+JcegCbAljmZgHk4zuy15rNIsohn55KAYoBldv06ToI8l+8GUaiupCSPcuZo
-         IELcHIDMgSFgBYDDLqeB8bIuXLXK5WA5DYmMLjVowRnPcDYs0ngCtHuu1FiLJ3aBaKnd
-         /1VRyv8WVK18cE0cyLVubEsUF4qw3wsLUJWqqDBU/gUYiVl8khwKB2OUNYwj4kD8r0dp
-         5dtj/Po/UKOOH/vtdQuchdauP9+plfrpyTEyJnzK7/qm9jiPTFlhtfQmlx4RnU54WNuV
-         449Q4/Omgh1BqIT5d1tNXLYKbYG1Xlb9ZBpQhPJBERWZod7uWPfWhywvXw2eENzndQ2D
-         P2Kw==
-X-Gm-Message-State: AFqh2krJ0rf3noCjXl4mxHuVcx4SjD6GgdufYz5w8GZZ9SL7FhCJedeC
-        g5KDqOLv7hfwbTfZ1Q7eePE/wEWKXmQ=
-X-Google-Smtp-Source: AMrXdXvvr7ZP8eJVZD6VZJNWJ39LkbcpPn1YzGb+WeX08GXI0jhb7GIbh5bbtTn9CU5PtDphW6hAcA==
-X-Received: by 2002:a5d:5304:0:b0:2a8:e91d:ad2f with SMTP id e4-20020a5d5304000000b002a8e91dad2fmr7796552wrv.35.1673084185143;
-        Sat, 07 Jan 2023 01:36:25 -0800 (PST)
-Received: from gmail.com (1F2EF507.nat.pool.telekom.hu. [31.46.245.7])
-        by smtp.gmail.com with ESMTPSA id j14-20020adff00e000000b0024cb961b6aesm3335811wro.104.2023.01.07.01.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 01:36:24 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 7 Jan 2023 10:36:22 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v3 3/6] x86/microcode: Display revisions only when update
- is successful
-Message-ID: <Y7k9DNz//vqBAvZK@gmail.com>
-References: <20230103180212.333496-1-ashok.raj@intel.com>
- <20230103180212.333496-4-ashok.raj@intel.com>
- <Y7XMtWqSrs0uGkD7@zn.tnic>
- <Y7h5qD43kdPeEgQ7@a4bf019067fa.jf.intel.com>
- <Y7h8dpIQHnL93RdC@zn.tnic>
- <Y7iEjDrXLRlwoz0W@a4bf019067fa.jf.intel.com>
- <Y7iIZHa0fuJkHHjz@zn.tnic>
+        Sat, 7 Jan 2023 04:43:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6558B66989;
+        Sat,  7 Jan 2023 01:43:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA34A60A3B;
+        Sat,  7 Jan 2023 09:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A9E7C43392;
+        Sat,  7 Jan 2023 09:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673084632;
+        bh=PhOJCYOc7RcUqVJNPzLzdYaEQtAZoKVd9doNS0XxjFU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=e5wkBL0D+aLU604jZHXa+QI84X1B9dGPwBSoYAG6mtaREU/e94nVQ62a/sLc3HwFP
+         tw0DePUa/hh9yxURGkuMWalcPgxqpNFZa/TaBtog9Kd6ISIgKjarScBDv2qNV8E4AR
+         xzXJ+/SnmLuGJUsz06LUHE9N/v777RIkWnh1UxZH7Z+8z2M3uRsbj3eeau5w/78Y6X
+         obWKmFLZ5nC5wCFDZVq1dKJRheL4CYKrnrYJHX/nq4V6nFWGNG9ka03GwAv6k5Eygh
+         2D5JoDBEfO39VGTW33kgD6ACaWaHXNHhcFNKx0F6OwO2/9yIh/AbC4oetfzm8VWfMe
+         eczNoG175VPZQ==
+Received: by mail-oi1-f176.google.com with SMTP id r205so3025199oib.9;
+        Sat, 07 Jan 2023 01:43:52 -0800 (PST)
+X-Gm-Message-State: AFqh2kqiugRbG7JX2qvY279b/WVOuof9J+5+3he3KML3R3GIbw9DwWKU
+        CMsjWMQT8pZBiH5tIf1kl8LPJxOfem1JEpL78UM=
+X-Google-Smtp-Source: AMrXdXvf13JhvOcKgxVFlmLtSuMDh/N3kFiICVwvyUGsaYjNLIl7Aiwly8PqFbncHD/inPs8IfGIVfiEIiKJUiQ/a8o=
+X-Received: by 2002:aca:2b17:0:b0:361:24b6:466c with SMTP id
+ i23-20020aca2b17000000b0036124b6466cmr2392654oik.194.1673084631503; Sat, 07
+ Jan 2023 01:43:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7iIZHa0fuJkHHjz@zn.tnic>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221231083028.1635698-1-masahiroy@kernel.org>
+ <CANiq72n3Hs3T5uFXBBCapnopp_EOwkc7n9QVtP3DguEytU9WKg@mail.gmail.com>
+ <CAK7LNARkyqwEf=xte8Q2BjPkkrvO2-c5_6dmrh=MP527TocuLQ@mail.gmail.com> <CANiq72=vgQRsBQO8Wwucj2aEout4hzbecgZcgg-W+e5s2WyaDQ@mail.gmail.com>
+In-Reply-To: <CANiq72=vgQRsBQO8Wwucj2aEout4hzbecgZcgg-W+e5s2WyaDQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 7 Jan 2023 18:43:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARKUX9S3K0TiQuRnnYB=WwQMuYjygGwyGMBYWwW5UbtQQ@mail.gmail.com>
+Message-ID: <CAK7LNARKUX9S3K0TiQuRnnYB=WwQMuYjygGwyGMBYWwW5UbtQQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: rust: move rust/target.json to scripts/
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Borislav Petkov <bp@suse.de>, David Gow <davidgow@google.com>,
+        Helge Deller <deller@gmx.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jan 1, 2023 at 12:08 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Dec 31, 2022 at 3:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > No.
+> > scripts/target.json is a generated file.
+> > It is generated in objtree, not in srctree.
+>
+> I meant `$(objtree)`, i.e. I meant if we should use a $(...)` prefix
+> for clarity/consistency (even if it is just `.`).
 
-* Borislav Petkov <bp@alien8.de> wrote:
 
-> On Fri, Jan 06, 2023 at 12:29:00PM -0800, Ashok Raj wrote:
-> > Yes, that makes sense, Do you think we can add a note that the loading
-> > failed? since the old -> new, new is coming from new microcode rev.
-> 
-> It has failed when
-> 
-> old == new.
-> 
-> I.e.,
-> 
-> 	"microcode revision: 0x1a -> 0x1a"
-> 
-> when the current revision on the CPU is 0x1a.
+I usually do not add $(objtree)/.
 
-So wouldn't it make sense to also display the fact that the microcode 
-loading failed?
 
-Seeing '0x1a -> 0x1a' one might naively assume from the wording alone that 
-it got "reloaded" or somehow reset, or that there's some sub-revision 
-update that isn't visible in the revision version - when in fact nothing 
-happened, right?
+include/config/auto.conf is also a generated file.
 
-The kernel usually tries to tell users unambigiously when some requested 
-operation didn't succeed - not just hint at it somewhat 
-passive-aggressively.
+It is inconsistent to add $(objtree)/
+to scripts/generate_rust_target,
+but not to include/config/auto.conf.
 
-Thanks,
 
-	Ingo
+
+(obj)/target.json: $(objtree)/scripts/generate_rust_target
+$(objtree)/include/config/auto.conf FORCE
+          $(call filechk,rust_target)
+
+is annoying.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
