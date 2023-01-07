@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F16661215
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 23:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEFF66121B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 23:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjAGWqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 17:46:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S232564AbjAGWv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 17:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjAGWqM (ORCPT
+        with ESMTP id S229785AbjAGWvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 17:46:12 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A80B1BC9F;
-        Sat,  7 Jan 2023 14:46:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kjsLY2CJM0UH0OtHt1fM8GbfTU2jRRvFCGh77JHKYFF+0pmsEjUHxWPGYsHohO//n63HVfvx86VAc2hw3AcJcrWptbhQESB7y7Gom8tTk2KuE1DG2UK8J/v030rWLKpvdUqlr/oBdvVtq0RKIJf7TALrEwpvSNiuZTQ2NgGthJpnhI3CztiilXPVOCPZharFDZwwXpnKHS0jtwta7qWymRbXTeHZuEndOJ3DOPnVvriRLiPK1qitjX54U05X/euvrQgaXGqoenTkLsaUtzcieOgKPZt3V0MfP81wvtTblOFYWmAzZeW9TUKNZI3ePrmJV3xTNOutc4BkhdpIt7h75A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jPZqDCFp/4OriRWD0Qw9BaBsAvX4JgHWhsp4XzuqFbw=;
- b=VO2qfy1cDHq7dOV5PVQF3iovjxYZ8J11I8ZzZUyK/TFnGZNAdtb6tFV6gGlom5C/AdliDm6Kr56617Uf7w/heBS97I865/PMySge2M+fvVqG7UhwdZIm88q56tTxUbRRscyDfNokoXhhGvpQ5Au0vtfCF+JEbmaTBkl7xKFWXdSJmQHBb69AUup8hRJwiFQEemXu8/VDoEbEysRrTJcdUp17nuPiL0d4vWsjohhHdL8IL5bCtTytbBHTcyArWRWfZFY8oxe+hFelmJtgw0lMqIMKVf4AW5Vt/fQSAKoNT31/Y71VtJZwAXFb0ZKPJ2PlDJ51C0ZQccrSq6xbwrXUmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jPZqDCFp/4OriRWD0Qw9BaBsAvX4JgHWhsp4XzuqFbw=;
- b=kTgP7M/ALZ0aXOaV0FHH1tXuMpybh7ko1XjXO9HkZiel0aStTHFfg4dsYy8SujgZFbtbgBtUU3jeS3Pm3b1C/ugD/8P9vQ4snUp7WWlBiv4qzWv/GOflOZcTfIdRmf1yRY+7WFEpGfWYEE6k8PWWsGQMTOyAzAdEC4uvsZn10FyyE/LxJwDRUfjCFMP494xPSnyk0k/ZX3JqEd/hSaKECudtGTKT+AdCnmHt9Tn6fj12vWglQ/ck0JD6pNj6FziGjd+pTtukbZ3ouYe42XO/rsUIRgQnTr+1QTuaiRVFuQUYwe8LV5ghOtB7NxgLOXJoyy1xC+V8R/B8PGGna8C+pg==
-Received: from MW4P222CA0017.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::22)
- by DS0PR12MB6605.namprd12.prod.outlook.com (2603:10b6:8:d3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Sat, 7 Jan
- 2023 22:46:06 +0000
-Received: from CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::49) by MW4P222CA0017.outlook.office365.com
- (2603:10b6:303:114::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18 via Frontend
- Transport; Sat, 7 Jan 2023 22:46:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT114.mail.protection.outlook.com (10.13.174.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.14 via Frontend Transport; Sat, 7 Jan 2023 22:46:05 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sat, 7 Jan 2023
- 14:45:54 -0800
-Received: from yaviefel (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sat, 7 Jan 2023
- 14:45:51 -0800
-References: <20230105232224.never.150-kees@kernel.org>
- <87v8lk7x9r.fsf@nvidia.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Petr Machata <petrm@nvidia.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] mlxsw: spectrum_router: Replace 0-length array with
- flexible array
-Date:   Sat, 7 Jan 2023 23:44:52 +0100
-In-Reply-To: <87v8lk7x9r.fsf@nvidia.com>
-Message-ID: <87eds67ylf.fsf@nvidia.com>
+        Sat, 7 Jan 2023 17:51:25 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0121DDF0
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 14:51:23 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so1300027wma.1
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 14:51:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fOKkQl332/KMyUkOBbDdjywetIj7rvU1Tibnhf65dW4=;
+        b=iYL+ue72Rh5jq/13fMm/7HRI2HVfNwcbS+X+gFbahVq/Rv+VrWs3C9uBmC9IEnvPcy
+         e1UV54eyQCBNYDcj+piiokTuXaGJwNYhYEVFdeSpQAZSTJikm2as14ajUMduyW+oQADp
+         GAb1/Rc27dx06yFd9TBbZGuDMNNIzLULkD1wV91MZLqK5XUgsRVHAgZqrGnM4+Ttl5RE
+         76Qcu1w1hIcnvH2vIUWFiGFgTpUsv4vwhTlpL7Ycs3wvWLl1SqkmEJcTpyciZL5hTYYo
+         ExTsp/Bq/VDl3gGEI+btFEoSigl/6FLRiNdrwrBLnWUwIgOCRpUVKa8/rxerfCo++3f/
+         atDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fOKkQl332/KMyUkOBbDdjywetIj7rvU1Tibnhf65dW4=;
+        b=R+FKrNyqleQIgKiypwf+QSRrGyUR1R5gPrkLusza7+vK4/ZxzcANu/USSVVM5vDWEG
+         91jHj9UAyAFKVIjrfKcAYUO1KkxhksGpyagTGmlWIycwC9cdl+HWDWh4xSYKEWo+KeZ0
+         evQF5cfLrTDfRW513BqLqSG4jz9UGjrQup4e9dJLPxRrRNhlazlgZoLsvQU8nrOp7ktW
+         9gjAuJRkZ/KR4sgeOJiwOR336YA9dF4CydoOON4lIjo0YS8phxJxbKeuBIS3Vp+PI0wc
+         b/4i5c6wB9qfgpm82jyz1uaENpCFyjYUwZlEJOY2IL8FHbejSt1OlGOAIMLpJhafF10J
+         olxA==
+X-Gm-Message-State: AFqh2kp81O6rgZ0wf6f+joKq5FhDMS97emExqTisWwmHVE0s8mbsoDvs
+        xEN3Suqp0HTzb/tmjnE4xgxSjA==
+X-Google-Smtp-Source: AMrXdXsa0i7acT+hld5/zUZxm8h+jgNoU4o2b6B3Boir7+Bwo8FSpw0ObVN7xutAJhH9CbpBb/gdZQ==
+X-Received: by 2002:a7b:c7ca:0:b0:3d3:4cbf:3a51 with SMTP id z10-20020a7bc7ca000000b003d34cbf3a51mr42474919wmk.14.1673131881801;
+        Sat, 07 Jan 2023 14:51:21 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id l27-20020a05600c2cdb00b003a84375d0d1sm11705997wmc.44.2023.01.07.14.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 14:51:20 -0800 (PST)
+Message-ID: <dd8ce88f-63ab-274a-7992-268003411da1@linaro.org>
+Date:   Sat, 7 Jan 2023 23:51:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT114:EE_|DS0PR12MB6605:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04193b49-a12f-4840-bbb8-08daf100f62e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yiCQb1DYqOlvLrLA9gT8cokGmzchoLIi3JY8Ap8KBCV7444FO29pTMy/DeVG8RqHwYZqERFT2Xdx59nf1zzfa5yLwRKTaWwQEIoDrlOZ4tB455fTI5xsQgXBc4kUuN3a8hs3+nZvIgyua6hlruE87gMb18SR8r1C8TIfcY3nJXF36hDz4SehbqU1ZQgi40Rz5/+1J5SI6RMXYK7ofZnpkbPY7N/So2z822b94ifBHrd2tOidttXfoGfqDVA1XgU7PLpZemqV1Vxw/azpS9XRF7A3s2B/euQL4Q3cmCUk/v/BJcgAJ6cxvlpbHEBCgPtLp/PfchzWArmXTx9YC8F1XfSiK9mJ/HwN/eV/OVnumKYuh3LbWW4ZrK8R1X9rSc9VNdUEWhQzh/RDZTTckpI6+U7r+xrEc9KAEcnVTKmWVxDOuSNx3Z/9YdJSqIaTJx2eZvONoS5OcuEC4OKSbJArrGTOeatsxXL7SQfFyi3bXnY4zGi6PaocDokgUDVa+/tB74yhyr8JGLPF9s54lzLTsVXUm1ZdfinjqUEhHS0XE3NyAa7gi0M/kHbXwWHRo4uv9sian2qz8txRKxKklKLyOJx3nnC3OYD8IV6VIxBoxhP782X5uooWsCPPbUsdn9S8qIpJq9x6RlunIyv6r1DjjVNlPNIxGujHc1dTx2YhI848ZbaR0babcbqV0EeEZ9+uaPw8sreuE48ZJTa3e+ex7Q==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199015)(40470700004)(46966006)(36840700001)(4326008)(70206006)(8676002)(40460700003)(70586007)(86362001)(7636003)(356005)(478600001)(36756003)(316002)(82310400005)(37006003)(82740400003)(54906003)(2616005)(6200100001)(426003)(4744005)(6862004)(5660300002)(41300700001)(336012)(186003)(36860700001)(8936002)(2906002)(26005)(16526019)(40480700001)(47076005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2023 22:46:05.7960
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04193b49-a12f-4840-bbb8-08daf100f62e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6605
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Annoying message on the console for the db845c board
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
+ <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
+ <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org>
+ <CAA8EJprcVT=vyEhU0Nbtr4Wu1YxcGs+NLNxtpTaFtaJSTqvgYw@mail.gmail.com>
+ <3afcb445-7a62-ced7-eb54-1b2d8a9085ce@linaro.org>
+ <CAA8EJpp8jnZV1Wkw1T6g95s0QNZLKKN_ve+tqmNsFVCFo0wudg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAA8EJpp8jnZV1Wkw1T6g95s0QNZLKKN_ve+tqmNsFVCFo0wudg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/01/2023 23:07, Dmitry Baryshkov wrote:
 
-Petr Machata <petrm@nvidia.com> writes:
+[ ... ]
 
-> Kees Cook <keescook@chromium.org> writes:
->
->> Zero-length arrays are deprecated[1]. Replace struct
->> mlxsw_sp_nexthop_group_info's "nexthops" 0-length array with a flexible
->> array.
+> I've tested the v6.2-rc1. With the firmware from linux-firmware I do
+> not see these message. I posted the output of savedefconfig for my
+> .config to https://pastebin.ubuntu.com/p/t4KzQ4QWSF/
+> 
+> Could you please recheck with this input? Maybe something is missing?
 
-[...]
+Yes, with your config, that has been fixed
 
-> Thanks. I'll pass this through our nightly and report back.
+Thanks!
 
-Looking good.
+Would it make sense to ensure defconfig has the same options to run this 
+platform ?
 
-Tested-by: Petr Machata <petrm@nvidia.com>
+BTW I noted a lock issue: https://pastebin.com/274Xz7Aa
+
+Thanks again for your help
+
+   -- Daniel
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
