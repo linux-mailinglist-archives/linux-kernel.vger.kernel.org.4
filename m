@@ -2,73 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BAB660DE9
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71AA660DEC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjAGK3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S231770AbjAGKcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237111AbjAGK2c (ORCPT
+        with ESMTP id S231651AbjAGKcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:28:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899B87F33;
-        Sat,  7 Jan 2023 02:27:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4186F60B72;
-        Sat,  7 Jan 2023 10:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1591CC433EF;
-        Sat,  7 Jan 2023 10:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673087271;
-        bh=9aSwaVo2ASINUIF5kxH/VwbRD8ciZ/eswbsN74JDSOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IFqULiuqPuR7caQBBJhPi0uCa02+SSlhQpb8HRgRRV32XmQABwjCsMyf90jSDtD6f
-         v9CxmAN42nEdBgUKed619kswN9VLOBSP4PRjaxNRlc349ixrLH9Pu0WqIQUEN5iR9i
-         /diqwXucno0TdkY5Pxvs38jSD/YjthrW2tHdTGag=
-Date:   Sat, 7 Jan 2023 11:27:48 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     nathan@kernel.org, marcus.folkesson@gmail.com,
-        cuigaosheng1@huawei.com, andriy.shevchenko@linux.intel.com,
-        m.szyprowski@samsung.com, jack@suse.cz, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.9 000/251] 4.9.337-rc1 review
-Message-ID: <Y7lJJEhK3W3joZv6@kroah.com>
-References: <20230105125334.727282894@linuxfoundation.org>
- <Y7cpWKbQlNW5qEeO@duo.ucw.cz>
+        Sat, 7 Jan 2023 05:32:10 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22F285CB2;
+        Sat,  7 Jan 2023 02:32:08 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6EE2C1883903;
+        Sat,  7 Jan 2023 10:32:07 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 4924E250007B;
+        Sat,  7 Jan 2023 10:32:07 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 3743E91201E4; Sat,  7 Jan 2023 10:32:07 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7cpWKbQlNW5qEeO@duo.ucw.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sat, 07 Jan 2023 11:32:06 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20230106164112.qwpqszvrmb5uv437@skbuf>
+References: <20230106160529.1668452-1-netdev@kapio-technology.com>
+ <20230106160529.1668452-4-netdev@kapio-technology.com>
+ <20230106164112.qwpqszvrmb5uv437@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <6abb27f946d39602bd05cdcbea21766c@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 08:47:36PM +0100, Pavel Machek wrote:
-> This one is okay in mainline, but contains wrong error handling in the
-> 4.9 backport. 4.19 seems okay. It needs to "goto out_unlock", not
-> return directly.
+On 2023-01-06 17:41, Vladimir Oltean wrote:
+> On Fri, Jan 06, 2023 at 05:05:29PM +0100, Hans J. Schultz wrote:
+>> This implementation for the Marvell mv88e6xxx chip series is based on
+>> handling ATU miss violations occurring when packets ingress on a port
+>> that is locked with learning on. This will trigger a
+>> SWITCHDEV_FDB_ADD_TO_BRIDGE event, which will result in the bridge 
+>> module
+>> adding a locked FDB entry. This bridge FDB entry will not age out as
+>> it has the extern_learn flag set.
+>> 
+>> Userspace daemons can listen to these events and either accept or deny
+>> access for the host, by either replacing the locked FDB entry with a
+>> simple entry or leave the locked entry.
+>> 
+>> If the host MAC address is already present on another port, a ATU
+>> member violation will occur, but to no real effect, and the packet 
+>> will
+>> be dropped in hardware. Statistics on these violations can be shown 
+>> with
+>> the command and example output of interest:
+>> 
+>> ethtool -S ethX
+>> NIC statistics:
+>> ...
+>>      atu_member_violation: 5
+>>      atu_miss_violation: 23
+>> ...
+>> 
+>> Where ethX is the interface of the MAB enabled port.
+>> 
+>> Furthermore, as added vlan interfaces where the vid is not added to 
+>> the
+>> VTU will cause ATU miss violations reporting the FID as
+>> MV88E6XXX_FID_STANDALONE, we need to check and skip the miss 
+>> violations
+>> handling in this case.
+>> 
+>> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+>> ---
 > 
-> > Jan Kara <jack@suse.cz>
-> >     ext4: initialize quota before expanding inode in setproject ioctl
+> Please add Acked-by/Reviewed-by tags when posting new versions. 
+> However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
+> 
+> If a tag was not added on purpose, please state why and what changed.
+> 
+> Missing tags:
+> 
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> 
+> 
+> Please allow at least 24 hours between patch submissions to give time
+> for other review comments.
 
-I've fixed this up, good catch.  The rest I've left as they seem
-reasonable to be in the tree as-is.
-
-thanks,
-
-greg k-h
+I presume that since I move the exit tag 'out' to this patch, it has 
+changed and the review tag is reset?
