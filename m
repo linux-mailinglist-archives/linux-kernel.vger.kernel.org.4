@@ -2,114 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A418D660FC3
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F55660FC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbjAGPB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 10:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S232764AbjAGPCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 10:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232531AbjAGPBT (ORCPT
+        with ESMTP id S232605AbjAGPBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 10:01:19 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B760CB7;
-        Sat,  7 Jan 2023 07:01:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7zgd0lbRdB3sPABnhmH1sTmDt7hs8UM+QInSldgAUns=; b=qP8IRVdKGiOer2vs894ih2yguC
-        Pw/vx/hApVCpQvKfZRId2yV42Pv1U6OesMeNwqG8sIafGzx09QMfYW40Ywp5e9z9ZoR0ZZRRwOhY0
-        ErlL8ZvkLLSW2p8kKYV9mCqvhNL7iYXC4kFME2EypUvk3ov8/au30gZECNqDYc3VS8l7umMOtvFBO
-        6xq5plXHVyHN2RMiAQjMOh4U74Nw5AU8LvlHAcpnWNnaDzvrmlpyU5KuEd0d21qxHmGJFabgFqgC0
-        XzGfn0nxD44yonCv83aKquQ1S6naYJXuDDZl+511M1/aKjXnZteyiRaXv549WCtDBRW7Y4d6qkhso
-        7TXUEefw==;
-Received: from p200300ccff2fec001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2f:ec00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pEAh1-0005EM-2T; Sat, 07 Jan 2023 16:01:07 +0100
-Date:   Sat, 7 Jan 2023 16:01:05 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
- combinations
-Message-ID: <20230107160105.66df4136@aktux>
-In-Reply-To: <0ab84fb8-6173-54e0-abad-a0e0e4ba82e7@linaro.org>
-References: <20230105213856.1828360-1-andreas@kemnade.info>
-        <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
-        <20230106203358.14878660@aktux>
-        <967cc7b7-f0bb-de37-52b9-7bfab05eadd7@linaro.org>
-        <20230107144336.2ecff4f9@aktux>
-        <123d1a56-8134-dc75-8b2a-b3836e727d4a@linaro.org>
-        <20230107150740.0ba34aa1@aktux>
-        <0ab84fb8-6173-54e0-abad-a0e0e4ba82e7@linaro.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 7 Jan 2023 10:01:41 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B33E40C22;
+        Sat,  7 Jan 2023 07:01:40 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id e2so983000uar.11;
+        Sat, 07 Jan 2023 07:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UkMPSY5sKQ0G3VOrU/JYEQvYOS+As5T7ufct2VUi/QM=;
+        b=TNZk6gqUjOVJBmU7O/HMCzxN8LPAaAMpUKP+epKD9obgPAaNCz/sjeJriQazNYDTgI
+         4Uf16VtaoRiBGkXEpp/+MJQRPGsidRVksdPATT0ooxmKWLwueysUXMFgMCuYDXM4ru/9
+         Fh7sJe1YY8VU+8bxWJ0pSbs3Hp6oU/vJhJCoNqU8GSQvLyS2+mBiv7MhJV1tFg8ZQJYt
+         UOF7izKu6Mq8Ee8zHLPvbF5uUi35UOfGU9MZoxiQWsMieCC5S8u1rvoXH9HFAbPbUBO0
+         mU/YyS6weew+OFwoEZDdDRE1S8vMgcNQusx8y6m/+e/P2vpR5XonQcgOrYK97m3MTGth
+         itaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UkMPSY5sKQ0G3VOrU/JYEQvYOS+As5T7ufct2VUi/QM=;
+        b=4qp1ZdoawckuGB1mvbeAFt5X6VaS7xY8ZcSIuOYXXjnUwpym1lrcqcEe8MS955f1M8
+         +pEpMMgUJ5j89oDQPlp5RGHfmYIKQ7Kn56GPrMDPnRK3IHwj20KOj70iDrJxbODQqScl
+         su9WWbD6F/1VoZNqv2NwDkY6wlnPpoAxg6OIQi7648KiCbaInJvNUtL+uD1vlKQftKrd
+         nG4fOGQbt2xtMyjqdE4AYYGnZbSoRs5iGh/wmlb/2V1H4WxSp9EnQVnICcjZvRB1gWBD
+         O5LINaAHjnwuSa9d0c/SV7mbUr3RRW1bAXD49KUHIsF7+2V0hjEd/pWs+r5mBHV8XIlB
+         EbGA==
+X-Gm-Message-State: AFqh2kr1nKHcw4DwpP7oWaeNGKiuvROpS+CxMG5yHHBgXpDbWsPDMnNA
+        sYCN/nRxc+OCAnjsrFpWULt58fvn5tCYTcWcKW0zNvGvDk0=
+X-Google-Smtp-Source: AMrXdXtpIdeGO3n0jLF4X9cDlM+2Oq6/kcUAXyuQTzqP0oBwwKEFDlsROPij5X64Oy6R89WuzpgNZUFDF7TVhjEZqNk=
+X-Received: by 2002:ab0:4566:0:b0:418:b66a:6f26 with SMTP id
+ r93-20020ab04566000000b00418b66a6f26mr6268456uar.21.1673103699191; Sat, 07
+ Jan 2023 07:01:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-2-linux.amoon@gmail.com>
+ <ef20a7dfa027f1a5a24a515e347af10c06a4da85.camel@icenowy.me>
+ <CANAwSgSJ1SQXUovgM6FHUozr46C_CogLaAD4gf4ANNHXoav6ag@mail.gmail.com> <Y7YDwJX6aqa8vbQK@google.com>
+In-Reply-To: <Y7YDwJX6aqa8vbQK@google.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Sat, 7 Jan 2023 20:31:23 +0530
+Message-ID: <CANAwSgTVnQXGoOfuxmwT7zCMJMY0Hw+uyQx126kNPL2WKGR8Hg@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys
+ Logic hub controller
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Icenowy Zheng <uwu@icenowy.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 Jan 2023 15:09:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Hi Matthias,
 
-> On 07/01/2023 15:07, Andreas Kemnade wrote:
-> > On Sat, 7 Jan 2023 15:00:56 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> > 
-> > [...]  
-> >>>> I asked to remove half-compatible. Not to enforce.
-> >>>>    
-> > so you are saying that allowing
-> > compatible = "A", "B" 
-> > is not ok, if B is not fully compatible. I agree with that
-> > one.  
-> 
-> I did not say that. It's not related to this problem.
-> 
-You said "I asked to remove half-compatible" that means to me
-remove "B" if not fully compatible with A which sounds sane to me.
+Thanks for the review comments
 
-> Again - you cannot have device which is and is not compatible with
-> something else. It's not a Schroedinger's cat to be in two states,
-> unless you explicitly document the cases (there are exception). If this
-> is such exception, it requires it's own documentation.
-> 
-so conclusion:
-If having A and B half-compatible with A:
+On Thu, 5 Jan 2023 at 04:25, Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Wed, Dec 28, 2022 at 03:59:17PM +0530, Anand Moon wrote:
+> > Hi Icenowy,
+> >
+> > Thanks for the review comments
+> >
+> > On Wed, 28 Dec 2022 at 15:38, Icenowy Zheng <uwu@icenowy.me> wrote:
+> > >
+> > > =E5=9C=A8 2022-12-28=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:03 +0000=
+=EF=BC=8CAnand Moon=E5=86=99=E9=81=93=EF=BC=9A
+> > > > Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub USB 2.=
+0
+> > > > root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
+>
+> nit: QFN 76 is one of the package options of the GL3523, I expect this
+> binding to be applicable as well for other GL3523 variants, so I'd sugges=
+t
+> to drop the suffix. Not sure what 'OHG' stands for, the Genesys website
+> only lists a GL852G hub with different package types (none of them 'OHG')=
+,
+> so I'd say drop the suffix unless it is known that 'OHG' variant uses
+> a different product id than other GL852G variants
+>
 
-compatible = "A" only: is allowed to specifiy it the binding (status quo),
-  but not allowed to make the actual dtsi match the binding documentation
-  https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
-  and
-  https://lore.kernel.org/linux-devicetree/20210924091439.2561931-5-andreas@kemnade.info/
+Yes, I will be sure to do this reference, I just picked these from the
+board schematics.
 
-compatible = "A", "B" in the binding definition: is not allowed ("I asked to remove
-   half-compatible" (= removing B))
+> > > >
+> > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > index a9f831448cca..db009f3ef438 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > @@ -16,6 +16,8 @@ properties:
+> > > >    compatible:
+> > > >      enum:
+> > > >        - usb5e3,608
+> > > > +      - genesys,usb5e3,610
+> > > > +      - genesys,usb5e3,620
+> > >
+> > > I don't think genesys, is needed here because usb5e3 means USB VID
+> > > 0x05e3, which is already linked to Genesys Logic.
+> > >
+> >
+> > Ok, I added this as genesys, is it part of the manufacturer or vendor n=
+ame
+> > which is most commonly used for adding vendor-specific compatible strin=
+gs.
+>
+> That doesn't follow the generic USB binding, please drop 'genesys,'.
+>
 
-having mismatch between binding definition and devicetree causes dtbs_check errors
-   -> also not nice.
+Yes, I will drop this in the next version.
 
-I rather drop this patch and learn to live with dtbs_check errors
-for this one since I have no idea how to proceed. All roads are blocked.
-This all causes too much churn.
+> > > In addition, the control logic of these two hubs are needed to be
+> > > verified.
+> >
+> > We were using gpio-hog to reset the USB hub, so now switch to USB onboa=
+rd hub
+> >
+> > >
+> > > And what's the status of the companion hub of the USB3 hub? Is it
+> > > really a USB3-only hub, or is its USB2 part just equal to another USB=
+3
+> > > hub?
+> > >
+> > usb5e3,610 is USB 2.0 port hub present on Odroid C1 and Odroid C2 board
+> >
+> > usb5e3,620 is USB 3.1 port hub present on Odroid N2.
+>
+> Like Icenowy I would expect the GL3523 to provide also a 2.0 hub.
+>
+> What is the output of 'lsusb' on the Odroid N2?
 
-Regards,
-Andreas
+alarm@odroid-n2:~$ lsusb -tv
+/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/1p, 5000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
+        ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/2p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+        ID 05e3:0610 Genesys Logic, Inc. Hub
+
+Thanks
+
+-Anand
