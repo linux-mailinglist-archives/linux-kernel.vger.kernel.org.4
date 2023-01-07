@@ -2,252 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6FC660AEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB77A660AF2
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbjAGAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S236382AbjAGAhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236584AbjAGAfU (ORCPT
+        with ESMTP id S236784AbjAGAg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:35:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB6A84BC9
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673051668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OhwJrX+/uggIQK7yrDCabQsdugOCpi4Tzwg2wYNTyQg=;
-        b=GeEcMfq/mZi+5kdD4iJvuPJpg/Ri5mIo8fGNRLeMQ3sc6HI3XPrNV9twCpqUWQYOz0jTXh
-        Z0XxsZHSL4FJd2SKZhBBcl8POcbvnv1xsqW4InPSIx8KgpeDUtTqeGCb2cUyzgTekrxZCw
-        v9YXOKRgarvP9czZ5peJw2C5KVImY7o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-Cddw6XzOOKa2Yet_lD6Qbw-1; Fri, 06 Jan 2023 19:34:23 -0500
-X-MC-Unique: Cddw6XzOOKa2Yet_lD6Qbw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 640A7802D19;
-        Sat,  7 Jan 2023 00:34:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17AD1492B07;
-        Sat,  7 Jan 2023 00:34:21 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v4 7/7] iov_iter,
- block: Make bio structs pin pages rather than ref'ing if appropriate
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>, dhowells@redhat.com,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 07 Jan 2023 00:34:21 +0000
-Message-ID: <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
-References: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Fri, 6 Jan 2023 19:36:28 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A2E6C29C;
+        Fri,  6 Jan 2023 16:35:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673051751; x=1704587751;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aOAUFsSLQRTZY0xZlfuNr828MZiMICWj/1uXvVg70Ks=;
+  b=NUF83tS+HBzeHi5imnQXwPWzFLbxdbzH9paPJgOXtZHWUVG5ugIcFn2k
+   s7doXD6nTT312Y4OD+97sGJXgzaCUryE7XgCzxdLa5pUfjx3NiwUIqbf4
+   trcbL2GzsYls+LJ8iTJq4f6kmzdhZ4UZJQgrE3LPcbjMjD1FXqpJXsO62
+   SLANRo2QYb7V25RVd2dS8+hYlJ6uemUuFQQLISm4I+2gZl4miNODsbh0w
+   DvHDLf+dxTrFe2aeUTqGQz97r9Q6Q99etYvnQid84EYbQdOkKhI2YqCj+
+   NJ6x1eTu1TBxmIfLojLkgIE/PeBa4IDNRzUZf5nKaty+NmOOxJrb8auxK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="349805294"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="349805294"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 16:35:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="688460597"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="688460597"
+Received: from xiangyuy-mobl.amr.corp.intel.com (HELO [10.212.251.186]) ([10.212.251.186])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 16:35:50 -0800
+Message-ID: <ba0fdee9-148b-b0b9-ecde-2610eff02ba1@intel.com>
+Date:   Fri, 6 Jan 2023 16:35:49 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 15/16] x86/virt/tdx: Flush cache in kexec() when TDX is
+ enabled
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <ee5185e1727c3cd8bd51dbf9fcec95d432100d12.1670566861.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ee5185e1727c3cd8bd51dbf9fcec95d432100d12.1670566861.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the block layer's bio code to use iov_iter_extract_pages() instead
-of iov_iter_get_pages().  This will pin pages or leave them unaltered
-rather than getting a ref on them as appropriate to the source iterator.
+On 12/8/22 22:52, Kai Huang wrote:
+> There are two problems in terms of using kexec() to boot to a new kernel
+> when the old kernel has enabled TDX: 1) Part of the memory pages are
+> still TDX private pages (i.e. metadata used by the TDX module, and any
+> TDX guest memory if kexec() happens when there's any TDX guest alive).
+> 2) There might be dirty cachelines associated with TDX private pages.
+> 
+> Because the hardware doesn't guarantee cache coherency among different
+> KeyIDs, the old kernel needs to flush cache (of those TDX private pages)
+> before booting to the new kernel.  Also, reading TDX private page using
+> any shared non-TDX KeyID with integrity-check enabled can trigger #MC.
+> Therefore ideally, the kernel should convert all TDX private pages back
+> to normal before booting to the new kernel.
 
-A field, bi_cleanup_mode, is added to the bio struct that gets set by
-iov_iter_extract_pages() with FOLL_* flags indicating what cleanup is
-necessary.  FOLL_GET -> put_page(), FOLL_PIN -> unpin_user_page().  Other
-flags could also be used in future.
+This is just talking about way too many things that just don't apply.
 
-Newly allocated bio structs have bi_cleanup_mode set to FOLL_GET to
-indicate that attached pages are ref'd by default.  Cloning sets it to 0.
-__bio_iov_iter_get_pages() overrides it to what iov_iter_extract_pages()
-indicates.
+Let's focus on the *ACTUAL* problem that's being addressed instead of
+the 15 problems that aren't actual practical problems.
 
-[!] Note that this is tested a bit with ext4, but nothing else.
+> However, this implementation doesn't convert TDX private pages back to
+> normal in kexec() because of below considerations:
+> 
+> 1) Neither the kernel nor the TDX module has existing infrastructure to
+>    track which pages are TDX private pages.
+> 2) The number of TDX private pages can be large, and converting all of
+>    them (cache flush + using MOVDIR64B to clear the page) in kexec() can
+>    be time consuming.
+> 3) The new kernel will almost only use KeyID 0 to access memory.  KeyID
+>    0 doesn't support integrity-check, so it's OK.
+> 4) The kernel doesn't (and may never) support MKTME.  If any 3rd party
+>    kernel ever supports MKTME, it can/should do MOVDIR64B to clear the
+>    page with the new MKTME KeyID (just like TDX does) before using it.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
----
+Yeah, why are we getting all worked up about MKTME when there is not
+support?
 
- block/bio.c               |   47 +++++++++++++++++++++++++++++++++------------
- include/linux/blk_types.h |    1 +
- 2 files changed, 35 insertions(+), 13 deletions(-)
+The only thing that matters here is dirty cacheline writeback.  There
+are two things the kernel needs to do to mitigate that:
 
-diff --git a/block/bio.c b/block/bio.c
-index 5f96fcae3f75..eafcbeba0bab 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -243,6 +243,11 @@ static void bio_free(struct bio *bio)
-  * Users of this function have their own bio allocation. Subsequently,
-  * they must remember to pair any call to bio_init() with bio_uninit()
-  * when IO has completed, or when the bio is released.
-+ *
-+ * We set the initial assumption that pages attached to the bio will be
-+ * released with put_page() by setting bi_cleanup_mode to FOLL_GET, but this
-+ * should be set to FOLL_PIN if the page should be unpinned instead; if the
-+ * pages should not be put or unpinned, this should be set to 0
-  */
- void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
- 	      unsigned short max_vecs, blk_opf_t opf)
-@@ -274,6 +279,7 @@ void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
- #ifdef CONFIG_BLK_DEV_INTEGRITY
- 	bio->bi_integrity = NULL;
- #endif
-+	bio->bi_cleanup_mode = FOLL_GET;
- 	bio->bi_vcnt = 0;
- 
- 	atomic_set(&bio->__bi_remaining, 1);
-@@ -302,6 +308,7 @@ void bio_reset(struct bio *bio, struct block_device *bdev, blk_opf_t opf)
- {
- 	bio_uninit(bio);
- 	memset(bio, 0, BIO_RESET_BYTES);
-+	bio->bi_cleanup_mode = FOLL_GET;
- 	atomic_set(&bio->__bi_remaining, 1);
- 	bio->bi_bdev = bdev;
- 	if (bio->bi_bdev)
-@@ -814,6 +821,7 @@ static int __bio_clone(struct bio *bio, struct bio *bio_src, gfp_t gfp)
- 	bio_set_flag(bio, BIO_CLONED);
- 	bio->bi_ioprio = bio_src->bi_ioprio;
- 	bio->bi_iter = bio_src->bi_iter;
-+	bio->bi_cleanup_mode = 0;
- 
- 	if (bio->bi_bdev) {
- 		if (bio->bi_bdev == bio_src->bi_bdev &&
-@@ -1168,6 +1176,18 @@ bool bio_add_folio(struct bio *bio, struct folio *folio, size_t len,
- 	return bio_add_page(bio, &folio->page, len, off) > 0;
- }
- 
-+/*
-+ * Clean up a page according to the mode indicated by iov_iter_extract_pages(),
-+ * where the page is may be pinned or may have a ref taken on it.
-+ */
-+static void bio_release_page(struct bio *bio, struct page *page)
-+{
-+	if (bio->bi_cleanup_mode & FOLL_PIN)
-+		unpin_user_page(page);
-+	if (bio->bi_cleanup_mode & FOLL_GET)
-+		put_page(page);
-+}
-+
- void __bio_release_pages(struct bio *bio, bool mark_dirty)
- {
- 	struct bvec_iter_all iter_all;
-@@ -1176,7 +1196,7 @@ void __bio_release_pages(struct bio *bio, bool mark_dirty)
- 	bio_for_each_segment_all(bvec, bio, iter_all) {
- 		if (mark_dirty && !PageCompound(bvec->bv_page))
- 			set_page_dirty_lock(bvec->bv_page);
--		put_page(bvec->bv_page);
-+		bio_release_page(bio, bvec->bv_page);
- 	}
- }
- EXPORT_SYMBOL_GPL(__bio_release_pages);
-@@ -1213,7 +1233,7 @@ static int bio_iov_add_page(struct bio *bio, struct page *page,
- 	}
- 
- 	if (same_page)
--		put_page(page);
-+		bio_release_page(bio, page);
- 	return 0;
- }
- 
-@@ -1227,7 +1247,7 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
- 			queue_max_zone_append_sectors(q), &same_page) != len)
- 		return -EINVAL;
- 	if (same_page)
--		put_page(page);
-+		bio_release_page(bio, page);
- 	return 0;
- }
- 
-@@ -1238,10 +1258,10 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
-  * @bio: bio to add pages to
-  * @iter: iov iterator describing the region to be mapped
-  *
-- * Pins pages from *iter and appends them to @bio's bvec array. The
-- * pages will have to be released using put_page() when done.
-- * For multi-segment *iter, this function only adds pages from the
-- * next non-empty segment of the iov iterator.
-+ * Pins pages from *iter and appends them to @bio's bvec array.  The pages will
-+ * have to be released using put_page() or unpin_user_page() when done as
-+ * according to bi_cleanup_mode.  For multi-segment *iter, this function only
-+ * adds pages from the next non-empty segment of the iov iterator.
-  */
- static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- {
-@@ -1273,9 +1293,10 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- 	 * result to ensure the bio's total size is correct. The remainder of
- 	 * the iov data will be picked up in the next bio iteration.
- 	 */
--	size = iov_iter_get_pages(iter, pages,
--				  UINT_MAX - bio->bi_iter.bi_size,
--				  nr_pages, &offset, gup_flags);
-+	size = iov_iter_extract_pages(iter, &pages,
-+				      UINT_MAX - bio->bi_iter.bi_size,
-+				      nr_pages, gup_flags,
-+				      &offset, &bio->bi_cleanup_mode);
- 	if (unlikely(size <= 0))
- 		return size ? size : -EFAULT;
- 
-@@ -1308,7 +1329,7 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- 	iov_iter_revert(iter, left);
- out:
- 	while (i < nr_pages)
--		put_page(pages[i++]);
-+		bio_release_page(bio, pages[i++]);
- 
- 	return ret;
- }
-@@ -1489,8 +1510,8 @@ void bio_set_pages_dirty(struct bio *bio)
-  * the BIO and re-dirty the pages in process context.
-  *
-  * It is expected that bio_check_pages_dirty() will wholly own the BIO from
-- * here on.  It will run one put_page() against each page and will run one
-- * bio_put() against the BIO.
-+ * here on.  It will run one put_page() or unpin_user_page() against each page
-+ * and will run one bio_put() against the BIO.
-  */
- 
- static void bio_dirty_fn(struct work_struct *work);
-diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-index 99be590f952f..883f873a01ef 100644
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@ -289,6 +289,7 @@ struct bio {
- #endif
- 	};
- 
-+	unsigned int		bi_cleanup_mode; /* How to clean up pages */
- 	unsigned short		bi_vcnt;	/* how many bio_vec's */
- 
- 	/*
+ 1. Stop accessing TDX private memory mappings
+  1a. Stop making TDX module calls (uses global private KeyID)
+  1b. Stop TDX guests from running (uses per-guest KeyID)
+ 2. Flush any cachelines from previous private KeyID writes
 
+There are a couple of ways we can do #2.  We do *NOT* need to convert
+*ANYTHING* back to KeyID 0.  Page conversion doesn't even come into play
+in any way as far as I can tell.
+
+I think you're also saying that since all CPUs go through this path and
+there is no TDX activity between the WBINVD and the native_halt() that
+1a and 1b basically happen for "free" without needing to do theme
+explicitly.
+
+> Therefore, this implementation just flushes cache to make sure there are
+> no stale dirty cachelines associated with any TDX private KeyIDs before
+> booting to the new kernel, otherwise they may silently corrupt the new
+> kernel.
+
+That's fine.  So, this patch kinda happens to land in the right spot
+even after thrashing about about a while.
+
+> Following SME support, use wbinvd() to flush cache in stop_this_cpu().
+> Theoretically, cache flush is only needed when the TDX module has been
+> initialized.  However initializing the TDX module is done on demand at
+> runtime, and it takes a mutex to read the module status.  Just check
+> whether TDX is enabled by BIOS instead to flush cache.
+
+Yeah, close enough.
+
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index c21b7347a26d..0cc84977dc62 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -765,8 +765,14 @@ void __noreturn stop_this_cpu(void *dummy)
+>  	 *
+>  	 * Test the CPUID bit directly because the machine might've cleared
+>  	 * X86_FEATURE_SME due to cmdline options.
+> +	 *
+> +	 * Similar to SME, if the TDX module is ever initialized, the
+> +	 * cachelines associated with any TDX private KeyID must be flushed
+> +	 * before transiting to the new kernel.  The TDX module is initialized
+> +	 * on demand, and it takes the mutex to read its status.  Just check
+> +	 * whether TDX is enabled by BIOS instead to flush cache.
+>  	 */
+
+There's too much detail here.  Let's up-level it a bit.  We don't need
+to be talking about TDX locking here.
+
+	/*
+	 * The TDX module or guests might have left dirty cachelines
+	 * behind.  Flush them to avoid corruption from later writeback.
+	 * Note that this flushes on all systems where TDX is possible,
+	 * but does not actually check that TDX was in use.
+	 */
+
+> -	if (cpuid_eax(0x8000001f) & BIT(0))
+> +	if (cpuid_eax(0x8000001f) & BIT(0) || platform_tdx_enabled())
+>  		native_wbinvd();
+>  	for (;;) {
+>  		/*
 
