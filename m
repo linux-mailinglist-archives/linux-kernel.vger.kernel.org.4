@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76F9660E7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF17A660E81
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjAGMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 07:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S232577AbjAGMGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 07:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjAGMGK (ORCPT
+        with ESMTP id S230298AbjAGMGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:06:10 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FFB559F2
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:06:02 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5318369wmb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 04:06:02 -0800 (PST)
+        Sat, 7 Jan 2023 07:06:37 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7725C904
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:06:33 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bf43so5710101lfb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 04:06:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZLjHqFbROXlE+sbQ3Mi0YQwdit1/ACHkltZB2eIp6ZY=;
-        b=VZ5LC/sHAOIR5huRKj2y+0d40HWTG5UTtD8WCG8STyZQlXt4fYxcz2D61c7EiDK6+x
-         1iq1BqhEjdpRL68bguKTkMX/H/fNo0BFSKZA5L7Sh7kAEIsM4f9s77WkVIFxDZOxdX4p
-         yh1QQk2Nn0mdoUl0yg72fRnItYVKI0RJ5/Pmc=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JSXHQVsWHUKcPua78jzq0240G90YXX9B3puQSrtRzlQ=;
+        b=aLdS8WIwVzUnKD3OOVothsU8cRSe6i6WTTXfxdghfKAToc/EgJYF1t8itxIyi+FAJm
+         +6G7fO4NXfpM2AelD6ehE03hjEzxiHU9fglq4FoaMd4VqIThfPQLP00eWEwF32GWd0Zq
+         maDhd1rtLt766qfv9KOVdxZDyuVIZcaRr6DBEaR/25YCHKvhJHA9Gd8iZkMe/4AjWAxi
+         6hvL7Wlr0jQxShhlymwDGqtVMEIJTOX9VnWhfp69RDIZq5c37kQG8Xm8EsfCr0MM3dJx
+         qwh7OLEk5syf9nhI/wpmcPUKOlfXcGhKLl87yxGpa6WCcZ0xrCofqy+V80fPfJc5sDeN
+         Jxhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLjHqFbROXlE+sbQ3Mi0YQwdit1/ACHkltZB2eIp6ZY=;
-        b=WE6zRsvLI18g+6WonoZO7/NclG5FeCgm1RL6PzNozCBbieV/98c7EZunxyNb7IFcwW
-         OjUnTLB88hyzBAdh61UgB7IUKifiLZ7OfPpFnuEFm9a6kwORZLEqn56KUBzzuSVW05Ow
-         YfJ2bwzL/R37Ncd5cQvpUegUA9+Py3OBbG523R6vJGHleo8PMB9w0cYLxIl5akDFLN5I
-         wDvtMDS++adDn19Bvv+ICiEqovqXWy1pizhJ1uEMMaXMOWEcG8dBLQf8Q9JfC3Cple9S
-         tOWVx6adUZz4iHQlQfHcR1ZgWujY0B8BBQDu/XkkjqrB4wJ+0G8mO2gIEnzmpIUfKC++
-         71Fw==
-X-Gm-Message-State: AFqh2kqO5PolfxbblH1L3fWACg06EOCcMaI3u2Cg3MRy7TR8DnPwM26z
-        5KRU+/PvPconok43vknrm8UItg==
-X-Google-Smtp-Source: AMrXdXvG2OKBklPVU/w7yJTB6p28qUxxhsgOsf2xdlo6IBSDgcIEZZbPsf9QYXqEN76wJsjC57mQNQ==
-X-Received: by 2002:a7b:ca4f:0:b0:3c6:edc0:5170 with SMTP id m15-20020a7bca4f000000b003c6edc05170mr40747291wml.25.1673093160874;
-        Sat, 07 Jan 2023 04:06:00 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm10842896wms.31.2023.01.07.04.05.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JSXHQVsWHUKcPua78jzq0240G90YXX9B3puQSrtRzlQ=;
+        b=HqB82nOh9XKsbT0DObeGXbhcZY+J5hT0orSdKhaGDski8/Q9G8XMDPnKufHDZONBfc
+         wTrkW/cyIlZvFVbMDA3DbSCEQtHycEOkjbLtpUl6fVKJud7FlzyEThEng2SfQ9tef0z/
+         tgcLIuqstln+foNS141lWDpCgeisYpXNoi20PWq+1saFozoKrvhrDYWjTVR3eVJlkPUK
+         etKk+x8N62eqd6LMi+Du3CbtIhHTOBOJsa4UMezpKhAd2Te7K3HK1CDZGKoq0LHhU6nT
+         H49zIWDm476218zy13BaI9xTKXDAX9v3sWvThg9z+zObhDNrl+1RlMAQTLQJKkF9b32A
+         Alpw==
+X-Gm-Message-State: AFqh2krgrxxvpng0TRppC1KrV+MUWu4okH+e2/dcQkz0uTFrfISqCj6n
+        G7i5uRGXESTRk6KJPq+XifVezg==
+X-Google-Smtp-Source: AMrXdXv+MwwoUNTU1/fdQD7I+AkcMbJbgndrHq5o4DAdMA5y3spl/MTsijx6tZHTYgMpXquYKW7q2Q==
+X-Received: by 2002:a05:6512:3b2a:b0:4b5:5efb:7d26 with SMTP id f42-20020a0565123b2a00b004b55efb7d26mr20499266lfv.37.1673093192087;
+        Sat, 07 Jan 2023 04:06:32 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056512114200b004caf992bba9sm551424lfg.268.2023.01.07.04.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 04:05:59 -0800 (PST)
-Date:   Sat, 7 Jan 2023 13:05:57 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
-        Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] drm/atomic: Allow vblank-enabled + self-refresh
- "disable"
-Message-ID: <Y7lgJVP7hVtHpWTB@phenom.ffwll.local>
-Mail-Followup-To: Brian Norris <briannorris@chromium.org>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Sean Paul <seanpaul@chromium.org>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
-        Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230106172310.v2.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
- <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
+        Sat, 07 Jan 2023 04:06:31 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: remoteproc: qcom,sm6350-pas: Add SM6375 ADSP
+Date:   Sat,  7 Jan 2023 13:06:21 +0100
+Message-Id: <20230107120623.1903056-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,23 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 05:27:33PM -0800, Brian Norris wrote:
-> On Fri, Jan 6, 2023 at 5:23 PM Brian Norris <briannorris@chromium.org> wrote:
-> > v2:
-> >  * add 'ret != 0' warning case for self-refresh
-> >  * describe failing test case and relation to drm/rockchip patch better
-> 
-> Ugh, there's always something you remember right after you hit send: I
-> forgot to better summarize some of the other discussion from v1, and
-> alternatives we didn't entertain. I'll write that up now (not sure
-> whether in patch 1 or 2) and plan on sending a v3 for next week, in
-> case there are any other comments I should address at the same time.
+Add entries for SM6375 ADSP, as it's essentially identical to the one
+on SM6350.
 
-For me it needs to be in the helper patch, since anyone not doing rockchip
-work will otherwise never find it. But you can also duplicate the
-discussion summary into the 2nd patch, doesn't really hurt.
--Daniel
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+v1 -> v2:
+- Rebase on top of recent changes, move to 6350 pas yaml
+
+ .../devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml        | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+index 911529400142..a225f54de424 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+@@ -19,6 +19,7 @@ properties:
+       - qcom,sm6350-adsp-pas
+       - qcom,sm6350-cdsp-pas
+       - qcom,sm6350-mpss-pas
++      - qcom,sm6375-adsp-pas
+ 
+   reg:
+     maxItems: 1
+@@ -49,6 +50,7 @@ allOf:
+           enum:
+             - qcom,sm6350-adsp-pas
+             - qcom,sm6350-cdsp-pas
++            - qcom,sm6375-adsp-pas
+     then:
+       properties:
+         interrupts:
+@@ -67,6 +69,7 @@ allOf:
+         compatible:
+           enum:
+             - qcom,sm6350-adsp-pas
++            - qcom,sm6375-adsp-pas
+     then:
+       properties:
+         power-domains:
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.39.0
+
