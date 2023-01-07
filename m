@@ -2,155 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6693660C07
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 03:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EAB660C11
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 03:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjAGCsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 21:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S236293AbjAGCyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 21:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjAGCsm (ORCPT
+        with ESMTP id S229521AbjAGCyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 21:48:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD768B535
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 18:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673059721; x=1704595721;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jeI+tFkLh+++AU1LMUIzjlxVEKuYd/d2QZDYvn5z6VU=;
-  b=MFTcESiUkgK7HY3aj4DrKcOiOIqdHS0rYPrpJ8FeG/u2bSPzlFpgbY2n
-   SZUi+wc9wAxz7BR96hVXOZRCFRctv9JtOlw+63ahKdTyd3t8x/uxu1lDb
-   mJBwU1PZaXPUJ7m5fFxUEK95lJsk9gr47dgvagJTuUGiFfgjaX6N6bGwO
-   XKDgD65+jREeREIaBwDxDJsK/t0Lz31VzB221P47HInNPgQCjMvnPNEDQ
-   VLXHlGMRY/4HRspjAARVRKmZ+XmnS0EsBrJKkJdbqSrW4U6uT1yPE2fzD
-   qnCEhctnYRR7kRuju7lZG4AeJfqbLMjViT/lvXvezsxJTLpyipOEOg4yn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="387062688"
-X-IronPort-AV: E=Sophos;i="5.96,307,1665471600"; 
-   d="scan'208";a="387062688"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 18:48:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="984854342"
-X-IronPort-AV: E=Sophos;i="5.96,307,1665471600"; 
-   d="scan'208";a="984854342"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.209.158]) ([10.254.209.158])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 18:48:33 -0800
-Message-ID: <5ce5a6a4-9397-9665-7352-862d89b3f228@linux.intel.com>
-Date:   Sat, 7 Jan 2023 10:48:31 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 10/19] iommu: Add set_platform_dma_ops iommu ops
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Rob Clark <robdclark@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230104125725.271850-1-baolu.lu@linux.intel.com>
- <20230104125725.271850-11-baolu.lu@linux.intel.com>
- <Y7V8bcUF5zvGvCAP@nvidia.com>
- <1ef288af-885a-f724-ea37-199f181e4937@linux.intel.com>
- <Y7bNidP/px0NmvR+@nvidia.com>
- <0f6426c9-71bb-826a-78f0-bc8851b6468e@linux.intel.com>
- <Y7gveMpxJWmpYkk2@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <Y7gveMpxJWmpYkk2@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 Jan 2023 21:54:43 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484A28B538
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 18:54:41 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id y8-20020a170902b48800b00192a600df83so2353736plr.15
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 18:54:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/LXD7bWn6Jkwh9hHWJBLtYnysPLbu62uMIUKDSw+zHg=;
+        b=D/axEx4FkjtSzhj6GtMgJ/eJNW2W8y+wGrdJ6WK+JKRibRRQcNB02GD5Ej+HMaYzOn
+         I4r8jetP7aQCigvNTyA+nvW63VqQ2V6lagidpSk2Wc6g3eMvIVBCfLScXdMjhdGhYnS2
+         gZdq4p+zvacBigitPU1lyIDbtuDurtbuBWboWKzVSJylU00HTdVPoEFrfKombEw7cYgp
+         fkl7HePlLnEugAAkQqbvJFIge9bxGIJIlNcDBXdTB4qpZZSDOGPLVcMmn64hFW/w8vgf
+         8UdkiTCNLip4UgwFTTGJyht9/eGWnzVCemsh9yUucwUUbZONP3ieq5KhQWJigpJdk5M1
+         VWag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/LXD7bWn6Jkwh9hHWJBLtYnysPLbu62uMIUKDSw+zHg=;
+        b=AhUw+VtgoFQTpvgWyScEDx6P1nxEAU+x/ozLM1JE1BISfYE2+r/4kns1D4nLwovLT3
+         hesacZ+1BL5z1/qWycZlvaOQcVNONudjWyVOwNtvOZvBumWXBVVciGqlSXJo/KzbG84q
+         J7KgWTvtY4tmrHfY7OXou3G/V5IDR1VC+qI2i3mBrDt8cpRol5TCAVBZqViPOUJvDv1w
+         CZbrBdclOMATwkbQk5OQr7hp17XfJDyhxtX06+gI03uGb9tU+5Ll0AkyNMDRDq7PQGoZ
+         WZaeb3N1mxMxkaA6UNy9Rza/RY80c0clT4d81Jq9er/1TetcsdgVbMBCr5fcceHaGLIj
+         q9mQ==
+X-Gm-Message-State: AFqh2kqcfSiU8m87x8otJYXF/2S6wYGGcKujkC1fMev86KulAmq1DniW
+        +MBfXi5dbhqg9F6N5G5r7Mq6AX2nqgrm
+X-Google-Smtp-Source: AMrXdXuGpkSqOris5d+pibbC28QA9/oo3sbz/IB0DzZeTVqkNYBWIuBFM7QwHx+JujDwlaS/nrNsSF5P8JLU
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:a05:6a00:440b:b0:583:860:7a30 with SMTP id
+ br11-20020a056a00440b00b0058308607a30mr906809pfb.1.1673060080726; Fri, 06 Jan
+ 2023 18:54:40 -0800 (PST)
+Date:   Sat,  7 Jan 2023 02:53:31 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230107025331.3240536-1-connoro@google.com>
+Subject: [PATCH bpf-next v3] bpf: btf: limit logging of ignored BTF mismatches
+From:   "Connor O'Brien" <connoro@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel@vger.kernel.org, "Connor O'Brien" <connoro@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/2023 10:26 PM, Jason Gunthorpe wrote:
-> On Fri, Jan 06, 2023 at 02:07:32PM +0800, Baolu Lu wrote:
-> 
->> Above looks good to me. Thanks! I have updated this part of code like
->> below:
->>
->> @@ -2177,10 +2188,20 @@ static int __iommu_group_set_domain(struct
->> iommu_group *group,
->>           * platform specific behavior.
->>           */
->>          if (!new_domain) {
->> -               if (WARN_ON(!group->domain->ops->detach_dev))
->> -                       return -EINVAL;
->> -               __iommu_group_for_each_dev(group, group->domain,
->> -                                          iommu_group_do_detach_device);
->> +               struct group_device *grp_dev;
->> +
->> +               grp_dev = list_first_entry(&group->devices,
->> +                                          struct group_device, list);
-> It seems OK - I hope we naturally can't ever get in a situation where
-> a group has disjoint iommu drivers.
+Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
+mismatches are expected and module loading should proceed
+anyway. Logging with pr_warn() on every one of these "benign"
+mismatches creates unnecessary noise when many such modules are
+loaded. Instead, handle this case with a single log warning that BTF
+info may be unavailable.
 
-The final code after cleanup looks like below. We will WARN_ON the lack
-of callback in the iommu_group_do_set_platform_dma() helper.
+Mismatches also result in calls to __btf_verifier_log() via
+__btf_verifier_log_type() or btf_verifier_log_member(), adding several
+additional lines of logging per mismatched module. Add checks to these
+paths to skip logging for module BTF mismatches in the "allow
+mismatch" case.
 
-2152 static int iommu_group_do_set_platform_dma(struct device *dev, void 
-*data)
-2153 {
-2154         const struct iommu_ops *ops = dev_iommu_ops(dev);
-2155
-2156         if (!WARN_ON(!ops->set_platform_dma_ops))
-2157                 ops->set_platform_dma_ops(dev);
-2158
-2159         return 0;
-2160 }
-2161
-2162 static int __iommu_group_set_domain(struct iommu_group *group,
-2163                                     struct iommu_domain *new_domain)
-2164 {
-2165         int ret;
-2166
-2167         if (group->domain == new_domain)
-2168                 return 0;
-2169
-2170         /*
-2171          * New drivers should support default domains, so 
-set_platform_dma()
-2172          * op will never be called. Otherwise the NULL domain 
-represents some
-2173          * platform specific behavior.
-2174          */
-2175         if (!new_domain) {
-2176                 __iommu_group_for_each_dev(group, NULL,
-2177 
-iommu_group_do_set_platform_dma);
-2178                 group->domain = NULL;
-2179                 return 0;
-2180         }
+All existing logging behavior is preserved in the default
+CONFIG_MODULE_ALLOW_BTF_MISMATCH=n case.
 
-How do you like this?
+Signed-off-by: Connor O'Brien <connoro@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+v3:
+- fix commenting style
+- reuse existing "log->level == BPF_LOG_KERNEL" check for kernel BTF
 
---
-Best regards,
-baolu
+v2:
+- Use pr_warn_once instead of skipping logging entirely
+- Also skip btf verifier logs for ignored mismatches
+
+v1: https://lore.kernel.org/bpf/20221109024155.2810410-1-connoro@google.com/
+---
+ kernel/bpf/btf.c | 38 +++++++++++++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f7dd8af06413..67eee2d83dc8 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1397,12 +1397,18 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
+ 	if (!bpf_verifier_log_needed(log))
+ 		return;
+ 
+-	/* btf verifier prints all types it is processing via
+-	 * btf_verifier_log_type(..., fmt = NULL).
+-	 * Skip those prints for in-kernel BTF verification.
+-	 */
+-	if (log->level == BPF_LOG_KERNEL && !fmt)
+-		return;
++	if (log->level == BPF_LOG_KERNEL) {
++		/* btf verifier prints all types it is processing via
++		 * btf_verifier_log_type(..., fmt = NULL).
++		 * Skip those prints for in-kernel BTF verification.
++		 */
++		if (!fmt)
++			return;
++
++		/* Skip logging when loading module BTF with mismatches permitted */
++		if (env->btf->base_btf && IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++			return;
++	}
+ 
+ 	__btf_verifier_log(log, "[%u] %s %s%s",
+ 			   env->log_type_id,
+@@ -1441,8 +1447,15 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
+ 	if (!bpf_verifier_log_needed(log))
+ 		return;
+ 
+-	if (log->level == BPF_LOG_KERNEL && !fmt)
+-		return;
++	if (log->level == BPF_LOG_KERNEL) {
++		if (!fmt)
++			return;
++
++		/* Skip logging when loading module BTF with mismatches permitted */
++		if (env->btf->base_btf && IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++			return;
++	}
++
+ 	/* The CHECK_META phase already did a btf dump.
+ 	 *
+ 	 * If member is logged again, it must hit an error in
+@@ -7260,11 +7273,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		}
+ 		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
+ 		if (IS_ERR(btf)) {
+-			pr_warn("failed to validate module [%s] BTF: %ld\n",
+-				mod->name, PTR_ERR(btf));
+ 			kfree(btf_mod);
+-			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
++				pr_warn("failed to validate module [%s] BTF: %ld\n",
++					mod->name, PTR_ERR(btf));
+ 				err = PTR_ERR(btf);
++			} else {
++				pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
++			}
+ 			goto out;
+ 		}
+ 		err = btf_alloc_id(btf);
+-- 
+2.39.0.314.g84b9a713c41-goog
+
