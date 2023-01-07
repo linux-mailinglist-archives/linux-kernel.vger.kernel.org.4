@@ -2,136 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E806611F2
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 23:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7856611FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 23:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbjAGWHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 17:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S232634AbjAGWLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 17:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjAGWHj (ORCPT
+        with ESMTP id S230205AbjAGWL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 17:07:39 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E823DBE8
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 14:07:36 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-476e643d1d5so67553497b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 14:07:36 -0800 (PST)
+        Sat, 7 Jan 2023 17:11:28 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918919C12;
+        Sat,  7 Jan 2023 14:11:24 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id 4so629300qky.12;
+        Sat, 07 Jan 2023 14:11:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=elw7qXq3jOpumA43FBwxV0SpG8sodKmSNxzQDO4jMU4=;
-        b=z5qLcx4Rda0EtjxiYKuYQ80g5u8WAO2qP8Hj2jA2dlyrCxO2m/mW9wx6mgDu3+vA24
-         HPng71YXsusAW/mLho5cPdBVVmb0ujAWkhnG2mNk/YhegetEM8ABzRuq28HdKe2z4nAK
-         CfWgvapRGzrFiACUnvZ8Lzuw+42+my7tTsZPRuYRzjZAa0arYqcicKMSZXaLhrCiZ594
-         kZkAuecAYkx3nKb2HvBo5NCopVl+MteBZS8SAqqKXS6D32h6XAqG2gQWRxgZq6fv1FCT
-         5nB8rcwgPDo1/oVUc205jKK8A5YBrtg8QGinKH34pDeG0Gciw9xs4b6OLR2r5lfDv3HH
-         hsLQ==
+        bh=gwxE7Q9iHOTdeXe9x0xc4tBxUf+n7UexqnsTO4hvkXM=;
+        b=ZbAbVUr3Lpgd9HbMzmrplqDRU7F9ZmhdS/WOWnrm5QsA3ZHS8H/q8AXtl2apXFcB2i
+         4fH94d8P3kMe47oEKid2CHFmkhKfp52TKQp9r/M9WgUGgB3me5MnXNrJu5G31xOOCQ9W
+         SL47eG/cvrJ4InF8P+G+QAkxgehYitj3zhkIrs+Ke9F8OtjYk17GHueH4S2cTQ/vK425
+         WsLs9JEOS+sQmzjuxS5BdE3OeaL5kyIFtd1By6S/SFvh7Sl5eki59VTItoqlTwO7mR8V
+         upPvg7+XN8W7vTxMy4Z/j0WTt871+if9bcSmJcmdYQimwNYvE9/RTEKaQ/KyT89wxo8W
+         guIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=elw7qXq3jOpumA43FBwxV0SpG8sodKmSNxzQDO4jMU4=;
-        b=THbtTn/moP1TwQSQ7WwRhWC63KPxM4ycs8fz/HuulqjuFqgPq7kBvjH02wR0mY/amT
-         IF/GLo6q/bPTk+jjq9C7jc+8FMDyKiL8AgTT99SFXTSaCDUjvQvt8ZultCZIEWRb8CG6
-         pSmHi6J+l/nlFRFfNp24DvhZmA+bYvB+23Vo8UGBBFPFIEMkkiaXi+00Y1f/WTCqkTOl
-         Gbqr7nSWyJdSxiABq3+824gBsgJgM+CUj17rMzqLWp+HoNB+rWE7fZjtelGiUjs7cCYK
-         SZvhVsZ3qaO5f5BDPMjhmarKbuoTRfLeCgiBkQVN6fJ4OEfZDlyle69iznTBQ7mahhmr
-         N4Tg==
-X-Gm-Message-State: AFqh2krXsJxAerNe2LjgiTxb1hvOzMmr+kZ0pJ0GY2HzJjFpX1ffVrfp
-        vHHFHcKlnx9kAFseVnTErqj5crc3MMQmKTgqwbNKQA==
-X-Google-Smtp-Source: AMrXdXvKV0OXLtA0FmnMOsCtGIAb7aEQlTUjBiU06PetpNO14N0IJBQJiS1NZOLiK4iCi8M79AQj1NQehnnW+E93Lsg=
-X-Received: by 2002:a05:690c:fd5:b0:4a4:7135:9214 with SMTP id
- dg21-20020a05690c0fd500b004a471359214mr4049303ywb.378.1673129255954; Sat, 07
- Jan 2023 14:07:35 -0800 (PST)
+        bh=gwxE7Q9iHOTdeXe9x0xc4tBxUf+n7UexqnsTO4hvkXM=;
+        b=24WvVmap8ThanIVN4zA3zd1gdc0pdyZPBvP/lO3eO+9xz5ezwyHjMBqJyc4b2x1EAc
+         7y0TNHSAQlIYeEY06umf+kLqCyJOft6PZIJQDyFKwmpfPzhMkdlfSaMcztdQ7nWD/k1N
+         xWx0piuYJc8hyl2phDX3GPUQGjMFZ4jmlyQzOn2Mc3idDwIfx57c/Jgl7h9Cn2g1RoUO
+         VbJ4sGXbLqWs1xVvS6Huej7yr07RU6o+plVLIZYlSbNysDXhHV+YCq97AggoWXYCNU/u
+         MC3SqEz6i6dRFR6QcQR+ePR5SLKjtJoMKbMvKQekE+AlQd8OWzChbJEUy/mY8HYThlWq
+         pQsQ==
+X-Gm-Message-State: AFqh2komNA8rjlVmJItNQPm93FXY0/ICoHI3z34tzuR836qAuT1oP4bH
+        VWsMVlEGwQAvijEG5/HFMAzzAZkF3jDRrTUwkWM=
+X-Google-Smtp-Source: AMrXdXsGq9t66hmuzI/M0mMAcEzSLxsW8Tlr4bV9dcdBHyP4rLAzUQIyzj0Vr1yYjXpyUg4Z+9UmgY50jq6QXOeTXD8=
+X-Received: by 2002:ae9:e8d1:0:b0:702:257f:74fc with SMTP id
+ a200-20020ae9e8d1000000b00702257f74fcmr2323663qkg.519.1673129483571; Sat, 07
+ Jan 2023 14:11:23 -0800 (PST)
 MIME-Version: 1.0
-References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
- <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
- <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org> <CAA8EJprcVT=vyEhU0Nbtr4Wu1YxcGs+NLNxtpTaFtaJSTqvgYw@mail.gmail.com>
- <3afcb445-7a62-ced7-eb54-1b2d8a9085ce@linaro.org>
-In-Reply-To: <3afcb445-7a62-ced7-eb54-1b2d8a9085ce@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 8 Jan 2023 00:07:24 +0200
-Message-ID: <CAA8EJpp8jnZV1Wkw1T6g95s0QNZLKKN_ve+tqmNsFVCFo0wudg@mail.gmail.com>
-Subject: Re: Annoying message on the console for the db845c board
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
+In-Reply-To: <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 7 Jan 2023 22:10:56 +0000
+Message-ID: <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using
+ function pointers for cache management
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 Jan 2023 at 21:01, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+Hi Arnd,
+
+Thank you for the review.
+
+On Fri, Jan 6, 2023 at 10:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
->
-> Hi Dmitry,
->
-> thanks for your help
->
-> On 07/01/2023 15:11, Dmitry Baryshkov wrote:
-> > On Fri, 6 Jan 2023 at 22:08, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 06/01/2023 19:14, Dmitry Baryshkov wrote:
-> >>> On Fri, 6 Jan 2023 at 18:37, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>>
-> >>>> Hi all,
-> >>>>
-> >>>> Does anyone have an idea on how to fix these timeout messages ? They are
-> >>>> displayed again and again every 5 seconds and that saturates the
-> >>>> filesystem after awhile.
-> >>>
-> >>> Could you please check that you have CONFIG_QCOM_RMTFS_MEM enabled and
-> >>> the rmtfs daemon running?
-> >>> I think that's the usual cause of such messages.
-> >>
-> >> Yes, I have the option and the daemon running:
-> >>
-> >> zcat /proc/config.gz | grep CONFIG_QCOM_RMTFS_MEM
-> >> CONFIG_QCOM_RMTFS_MEM=y
-> >>
-> >> ps -ef | grep rmtfs
-> >> root      9888     1  2 20:07 ?        00:00:00 /usr/bin/rmtfs -r -P -s
+> On Fri, Jan 6, 2023, at 19:55, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > >
-> > I don't seem to be able to reproduce it here. Could you please share
-> > your kernel commit, .config and md5sums of
-> > /lib/firmware/qcom/sdm845/m*
+> > The current implementation of CMO was handled using the ALTERNATIVE_X()
+> > macro; this was manageable when there were a limited number of platforms
+> > using this. Now that we are having more and more platforms coming through
+> > with the CMO the use of the ALTERNATIVE_X() macro becomes unmanageable.
 > >
-> > Thank you.
+> > To avoid such issues this patch switches to use of function pointers
+> > instead of ALTERNATIVE_X() macro for cache management (the only draw being
+> > performance over the previous approach).
+> >
+> > void (*clean_range)(unsigned long addr, unsigned long size);
+> > void (*inv_range)(unsigned long addr, unsigned long size);
+> > void (*flush_range)(unsigned long addr, unsigned long size);
+> >
+> > The above function pointers are provided to be overridden where platforms
+> > using standard approach and for platforms who want handle the operation
+> > based on the operation the below function pointer is provided:
+> >
+> > void (*riscv_dma_noncoherent_cmo_ops)(void *vaddr, size_t size,
+> >                                       enum dma_data_direction dir,
+> >                                       enum dma_noncoherent_ops ops);
+> >
+> > In the current patch we have moved the ZICBOM and T-Head CMO to use
+> > function pointers.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> I have this message since I began to use the board, so v6.2-rc2 is the
-> latest commit where the message appears.
+> This looks like a nice improvement! I have a few suggestions
+> for improvements, but no objections here.
 >
-> Here are the checksums:
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index fac5742d1c1e..826b2ba3e61e 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> ...
+> > @@ -44,6 +106,15 @@ static bool errata_probe_cmo(unsigned int stage,
+> >
+> >       riscv_cbom_block_size = L1_CACHE_BYTES;
+> >       riscv_noncoherent_supported();
+> > +
+> > +     memset(&thead_cmo_ops, 0x0, sizeof(thead_cmo_ops));
+> > +     if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO)) {
+> > +             thead_cmo_ops.clean_range = &thead_cmo_clean_range;
+> > +             thead_cmo_ops.inv_range = &thead_cmo_inval_range;
+> > +             thead_cmo_ops.flush_range = &thead_cmo_flush_range;
+> > +             riscv_noncoherent_register_cache_ops(&thead_cmo_ops);
+> > +     }
 >
-> 5533fa7714fb3cce82e87f53ef176f2b  /lib/firmware/qcom/sdm845/mba.mbn
+> The implementation here looks reasonable, just wonder whether
+> the classification as an 'errata' makes sense. I would probably
+> consider this a 'driver' at this point, but that's just
+> a question of personal preference.
+>
+zicbom is a CPU feature that doesn't have any DT node and hence no
+driver and similarly for T-HEAD SoC. Also the arch_setup_dma_ops()
+happens quite early before driver probing due to which we get WARN()
+messages during bootup hence I have implemented it as errata; as
+errata patching happens quite early.
 
-This doesn't correspond to the firmware I know. Could you please your
-/lib/firmware to the firmware files we have released to the
-linux-firmware archive?
+> For the operations structure, I think a 'static const struct
+> riscv_cache_ops' is more intuitive than assigning the
+> members individually.
+OK.
 
-[skipped the rest of md5sums]
+> > +
+> > +enum dma_noncoherent_ops {
+> > +     NON_COHERENT_SYNC_DMA_FOR_DEVICE = 0,
+> > +     NON_COHERENT_SYNC_DMA_FOR_CPU,
+> > +     NON_COHERENT_DMA_PREP,
+> > +     NON_COHERENT_DMA_PMEM,
+> > +};
+> > +
+> > +/*
+> > + * struct riscv_cache_ops - Structure for CMO function pointers
+> > + * @clean_range: Function pointer for clean cache
+> > + * @inv_range: Function pointer for invalidate cache
+> > + * @flush_range: Function pointer for flushing the cache
+> > + * @riscv_dma_noncoherent_cmo_ops: Function pointer for platforms who
+> > want
+> > + *  to handle CMO themselves. If this function pointer is set rest of
+> > the
+> > + *  function pointers will be NULL.
+> > + */
+> > +struct riscv_cache_ops {
+> > +     void (*clean_range)(unsigned long addr, unsigned long size);
+> > +     void (*inv_range)(unsigned long addr, unsigned long size);
+> > +     void (*flush_range)(unsigned long addr, unsigned long size);
+> > +     void (*riscv_dma_noncoherent_cmo_ops)(void *vaddr, size_t size,
+> > +                                           enum dma_data_direction dir,
+> > +                                           enum dma_noncoherent_ops ops);
+> > +};
+>
+> I don't quite see how the fourth operation is used here.
+> Are there cache controllers that need something beyond
+> clean/inv/flush?
+>
+This is for platforms that dont follow standard cache operations (like
+done in patch 5/6) and there drivers decide on the operations
+depending on the ops and dir.
 
-I've tested the v6.2-rc1. With the firmware from linux-firmware I do
-not see these message. I posted the output of savedefconfig for my
-.config to https://pastebin.ubuntu.com/p/t4KzQ4QWSF/
+> > +
+> > +#else
+> > +
+> > +static void riscv_noncoherent_register_cache_ops(struct
+> > riscv_cache_ops *ops) {}
+> > +
+> > +static inline void riscv_dma_noncoherent_clean(void *vaddr, size_t
+> > size) {}
+> > +
+> > +static inline void riscv_dma_noncoherent_flush(void *vaddr, size_t
+> > size) {}
+> > +
+> > +static inline void riscv_dma_noncoherent_inval(void *vaddr, size_t
+> > size) {}
+>
+> I think you can drop the #else path here: if there is no
+> noncoherent DMA, then nothing should ever call these
+> functions, right?
+>
+Yes it shouldn't be called.
 
-Could you please recheck with this input? Maybe something is missing?
+> > +
+> > +#ifdef CONFIG_RISCV_ISA_ZICBOM
+> ...
+> > +struct riscv_cache_ops zicbom_cmo_ops = {
+> > +     .clean_range = &zicbom_cmo_clean_range,
+> > +     .inv_range = &zicbom_cmo_inval_range,
+> > +     .flush_range = &zicbom_cmo_flush_range,
+> > +};
+> > +#else
+> > +struct riscv_cache_ops zicbom_cmo_ops = {
+> > +     .clean_range = NULL,
+> > +     .inv_range = NULL,
+> > +     .flush_range = NULL,
+> > +     .riscv_dma_noncoherent_cmo_ops = NULL,
+> > +};
+> > +#endif
+> > +EXPORT_SYMBOL(zicbom_cmo_ops);
+>
+> Same here: If the ZICBOM ISA is disabled, nothing should
+> reference zicbom_cmo_ops.
+OK.
 
--- 
-With best wishes
-Dmitry
+Cheers,
+Prabhakar
