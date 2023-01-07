@@ -2,199 +2,817 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B855660C55
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57974660C58
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbjAGDwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S229620AbjAGDzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236799AbjAGDwj (ORCPT
+        with ESMTP id S229488AbjAGDze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:52:39 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60624E43C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 19:52:38 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id g10so2303785qvo.12
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 19:52:38 -0800 (PST)
+        Fri, 6 Jan 2023 22:55:34 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433494D730;
+        Fri,  6 Jan 2023 19:55:32 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9so3728169pll.9;
+        Fri, 06 Jan 2023 19:55:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=+NPgz3HIYCrIcHx1siZWi54JjpW2xpnJVQwbKNCPbBY=;
-        b=gddlkMvjGAUKtb3S/WmXXdZDyAiPxj8w90Xb/jwN3JKUpxwjRpsHeL/P/Avm6mMLvQ
-         KtPnegdnQoPXydbQcdp2Nj0yLCgep3sKLKny8WXprcX/n5BiwIjQPb77JPpfxUGl5Bo5
-         wCPW/vxkmPSEVpUf09WsCS9z/ESwTMFaB1iVs=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Io9JV291pxD3lEyIZIhO/R7JWlvh5Do6VoY1gpyqZj0=;
+        b=CgtI0SnEE6qOT2lbitacGUfbZ9jO6TghWCNGKN0DHkb9hjJJYfx/9JALIpYeGNIII8
+         ++T2oBRCT74f9VeUpn9nAatJWR9xD8GNGY06E6/sEJpr+dtRrYq9aPLMJJOsuT36eiuE
+         RjQlqgzrxGEWLT5uTWEBO7+0YbNTy0DnVQPJs7WVALHkgmBQDsC0UCZ+AxA7uHlUEbHc
+         jXa9dB5fzVZqrgXzaznN7pGMF40RYDjgZZEjbQ+tzav0RS5rlHZxOSWZA9pLNFGFmuZu
+         FcuUtMpVUSF03BTxWaUOr5xt59UFBw1gx2/SppfjmnYThpiPw/B1A7oVi1DL80r41US+
+         rS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+NPgz3HIYCrIcHx1siZWi54JjpW2xpnJVQwbKNCPbBY=;
-        b=zbIyTYKJONWhjavZlt23PoCvF6AEh0kRsgTISnDO5h8OM8iBCS99IALgDwJ0RzU4FQ
-         8NYpBBRpzXp57b1Wq5dwRFAzyLcY/kBnfPp7VjQss3qmJGVuaTXyVHqNFrgZDiOHLdW1
-         YDqVYfeXA9neB8BdL8ld3aVRqwNBAZWtF67WHGaNsHjmkVrsKwt/p6yGe1IigBIGCT/g
-         YT2Akvrl0bFZJzN6+2Fb1qmLHj5GeH9DGzlYhThzIsfvwfUxhqjvIcq9hsP5RVj+H7Pg
-         jN584Tzxc/nnvQuSjrYwii/wK6/c56M4iLTp2OJ61XDqbnYWiwFu4HlHuISlh/75qkVi
-         6riA==
-X-Gm-Message-State: AFqh2koze9erH+bajxn0fuVXRI9A+XMOGzwN/mx2KedP+8IVhX3ueIcI
-        bEAduqOQfqN+VzPDye4qYMr+wzyI4p9Twsg/IeYi4LfRaekcy1oaTlgjkwrqPtLgrzrcvlJHFmZ
-        7ACsbmyyu4dCP9FEfNRcKjjFZcKFu15Xh4yRu8DxhaLX/jKCufs30C1qMKqbgSFZWWUTZmPfXza
-        EJZAGVtvq1qCk=
-X-Google-Smtp-Source: AMrXdXvss1Egca1hzcPaH2/XRmeKRAmopcCYpOiGWMADXU/H4t3yW1vlkYlrJKKfGconf+BEmcBWRw==
-X-Received: by 2002:a0c:fac4:0:b0:531:c0a1:5bf1 with SMTP id p4-20020a0cfac4000000b00531c0a15bf1mr31040136qvo.12.1673063557592;
-        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006cebda00630sm1591951qkp.60.2023.01.06.19.52.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
-Date:   Fri, 6 Jan 2023 19:52:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Io9JV291pxD3lEyIZIhO/R7JWlvh5Do6VoY1gpyqZj0=;
+        b=qf64QkCdEcNN+Hj85G+5/nB044ETjwkgJZjfLEs6sXtwOcrW9Jz+FNgg3QKo0q+Krk
+         gmnC18u3Vgx0xK6ITJpwImbkQG9JI0nYDtuQbJEaQxWck9H6hCK/Imgbx+bXw4ntiHGw
+         Qw2yJqUpD1rBdOjnZvImeACBB5LcVjDL6bEA7xdIHAo9EgeXwNsWVQAbkgWLYwHRIzLz
+         XrKitcjqilW35/bTmj5T9t+zJUJrkfnE3KzlkQ4jUmDQs0SNiBuuzhm7cpxG+e5Op/VG
+         IAPH00dVv40RGy7NtUyD+esO1HQgt3erwf3oCVK/aBnaZDZ0C905gM2m1qW6G7UVszfJ
+         89/g==
+X-Gm-Message-State: AFqh2koLItjzBETM5UGoGXzX3LRG7GGjIU3yl118MPt4y6lIeG1rA9GP
+        THxHZeE55q0LK22tmO3BSkM=
+X-Google-Smtp-Source: AMrXdXsLxMilmYx4W0Ui2dbRrEANhbvyboNwyJ4krBoAF3tXUaciJDBTR+vYZaXAwJQWWdea2olW0Q==
+X-Received: by 2002:a17:902:c401:b0:189:ba1f:b168 with SMTP id k1-20020a170902c40100b00189ba1fb168mr89754778plk.1.1673063731416;
+        Fri, 06 Jan 2023 19:55:31 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-93.three.co.id. [180.214.232.93])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090341c300b0018f6900a183sm1687448ple.140.2023.01.06.19.55.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 19:55:30 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 565AF104F52; Sat,  7 Jan 2023 10:55:27 +0700 (WIB)
+Date:   Sat, 7 Jan 2023 10:55:26 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 2/2] docs/mm: Physical Memory: add structure,
+ introduction and nodes description
+Message-ID: <Y7jtLoPrj71tOWwY@debian.me>
+References: <20230101094523.1522109-1-rppt@kernel.org>
+ <20230101094523.1522109-3-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Y7iaEOBP4TRBoDYy@sirena.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000f1a5b05f1a47750"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4/vQIDFuqyuXOkFi"
+Content-Disposition: inline
+In-Reply-To: <20230101094523.1522109-3-rppt@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000000f1a5b05f1a47750
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 
+--4/vQIDFuqyuXOkFi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Sun, Jan 01, 2023 at 11:45:23AM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>=20
 
-On 01/06/2023 02:00 PM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
->> Multiple transfers within a SPI message may be combined into one
->> transfer to the controller using its prepend feature. A SPI message is
->> prependable only if the following are all true:
->>    * One or more half duplex write transfer
->>    * Optional full duplex read/write at the end
->>    * No delay and cs_change between transfers
-> 
-> There is nothing driver specific here, this should be implemented in the
-> core - we have existing logic to rewrite messages to match driver
-> constraints, this could be added there possibly with flags to allow
-> drivers to disable or enable the merging if they've got special
-> requirements.
-> 
-My understanding of combining the spi transfer in the core level does 
-not quite work out to our controller.  For example, for a spi message 
-with three transfers, tx, tx and rx. We can possibly combine them in 
-single duplex tx/rx transfer in the core. But this will be treated as 
-duplex transaction in our controller level which require tx and rx data 
-happens at the same time. Obviously this won't work when rx depends on 
-tx happening first. We can not differentiate this combined duplex 
-transfer from the true duplex transfer unless there is some flag to 
-indicate that. Also there is limit of max tx length as the prepend 
-buffer so maybe another parameter.  And another reason to be done in the 
-driver level is this prepend mode has dependency on dummy cs workaround 
-which is driver level parameter currently.  I am not sure how practical 
-and useful this is to factor them out to the core level?  Maybe I didn't 
-fully understand your comments and appreciate if you can elaborate or 
-point me to the related core code.
+No patch description really?
 
---0000000000000f1a5b05f1a47750
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> +Each node may be divided up into a number of blocks called zones which
+> +represent ranges within memory. These ranges are usually determined by
+> +architectural constraints for accessing the physical memory. A zone is
+> +described by a ``struct zone_struct``, typedeffed to ``zone_t`` and each=
+ zone
+> +has one of the types described below.
+> +
+> +`ZONE_DMA` and `ZONE_DMA32`
+> +  represent memory suitable for DMA by peripheral devices that cannot
+> +  access all of the addressable memory. Depending on the architecture,
+> +  either of these zone types or even they both can be disabled at build
+> +  time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32`` configuration
+> +  options. Some 64-bit platforms may need both zones as they support
+> +  peripherals with different DMA addressing limitations.
+> +
+> +`ZONE_NORMAL`
+> +  is for normal memory that can be accessed by the kernel all the time. =
+DMA
+> +  operations can be performed on pages in this zone if the DMA devices s=
+upport
+> +  transfers to all addressable memory. ZONE_NORMAL is always enabled.
+> +
+> +`ZONE_HIGHMEM`
+> +  is the part of the physical memory that is not covered by a permanent =
+mapping
+> +  in the kernel page tables. The memory in this zone is only accessible =
+to the
+> +  kernel using temporary mappings. This zone is available only some 32-b=
+it
+> +  architectures and is enabled with ``CONFIG_HIGHMEM``.
+> +
+> +`ZONE_MOVABLE`
+> +  is for normal accessible memory, just like ZONE_NORMAL. The difference=
+ is
+> +  that most pages in ZONE_MOVABLE are movable. That means that while vir=
+tual
+> +  addresses of these pages do not change, their content may move between
+> +  different physical pages. ZONE_MOVABLE is only enabled when one of
+> +  `kernelcore`, `movablecore` and `movable_node` parameters is present i=
+n the
+> +  kernel command line. See :ref:`Page migration <page_migration>` for
+> +  additional details.
+> +
+> +`ZONE_DEVICE`
+> +  represents memory residing on devices such as PMEM and GPU. It has dif=
+ferent
+> +  characteristics than RAM zone types and it exists to provide :ref:`str=
+uct
+> +  page <Pages>` and memory map services for device driver identified phy=
+sical
+> +  address ranges. ZONE_DEVICE is enabled with configuration option
+> +  ``CONFIG_ZONE_DEVICE``.
 
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOkzfXRPNIeqdVwZLsSH44VeYyEC
-HRFznBfosYqb1hI+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwNzAzNTIzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCiMbKfvPslnk4o9ND0u/ZU+cAw6ZgbAXSwdOu+yZG3d3YO
-GT89FmSjns+eAiGx50rjS5EtRYW0FF46wsXLqc3aCTCfK6o7HrnBzar0taDN4ck4TIreF2KYTnbW
-hfON+Cjc/am/PVRU/iOwEC8sSnx8psSwhC074CQnnhb9u0o5vAHkCyGZuP+0XMAISLEpBi/4mklN
-sOEB9VQZVKi15d42wcEMXyj6+0Z7CFPELEfAmEEGPGtkyaD0N5mauYMPLtK7q/iYR4kJ+fwFoPkA
-t/Y7BZH5YJGkSabK11z4b+WvCi4+tY/O+t4N2rl3nHu7mNF95Y9qcfR6Xgt/IRJgZztd
---0000000000000f1a5b05f1a47750--
+I think bullet lists should do the job better, since the zone names are
+connected directly to their representations:
+
+---- >8 ----
+
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physic=
+al_memory.rst
+index fcf52f1db16b71..d308b11cfcf7f0 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -35,40 +35,36 @@ architectural constraints for accessing the physical me=
+mory. A zone is
+ described by a ``struct zone_struct``, typedeffed to ``zone_t`` and each z=
+one
+ has one of the types described below.
+=20
+-`ZONE_DMA` and `ZONE_DMA32`
+-  represent memory suitable for DMA by peripheral devices that cannot
+-  access all of the addressable memory. Depending on the architecture,
+-  either of these zone types or even they both can be disabled at build
+-  time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32`` configuration
+-  options. Some 64-bit platforms may need both zones as they support
+-  peripherals with different DMA addressing limitations.
++* `ZONE_DMA` and `ZONE_DMA32` represent memory suitable for DMA by periphe=
+ral
++  devices that cannot access all of the addressable memory. Depending on t=
+he
++  architecture, either of these zone types or even they both can be disabl=
+ed
++  at build time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32``
++  configuration options. Some 64-bit platforms may need both zones as they
++  support peripherals with different DMA addressing limitations.
+=20
+-`ZONE_NORMAL`
+-  is for normal memory that can be accessed by the kernel all the time. DMA
+-  operations can be performed on pages in this zone if the DMA devices sup=
+port
+-  transfers to all addressable memory. ZONE_NORMAL is always enabled.
++* `ZONE_NORMAL` is for normal memory that can be accessed by the kernel all
++  the time. DMA operations can be performed on pages in this zone if the D=
+MA
++  devices support transfers to all addressable memory. ZONE_NORMAL is alwa=
+ys
++  enabled.
+=20
+-`ZONE_HIGHMEM`
+-  is the part of the physical memory that is not covered by a permanent ma=
+pping
+-  in the kernel page tables. The memory in this zone is only accessible to=
+ the
+-  kernel using temporary mappings. This zone is available only some 32-bit
+-  architectures and is enabled with ``CONFIG_HIGHMEM``.
++* `ZONE_HIGHMEM` is the part of the physical memory that is not covered by=
+ a
++  permanent mapping in the kernel page tables. The memory in this zone is =
+only
++  accessible to the kernel using temporary mappings. This zone is available
++  only on some 32-bit architectures and is enabled with ``CONFIG_HIGHMEM``.
+=20
+-`ZONE_MOVABLE`
+-  is for normal accessible memory, just like ZONE_NORMAL. The difference is
+-  that most pages in ZONE_MOVABLE are movable. That means that while virtu=
+al
+-  addresses of these pages do not change, their content may move between
+-  different physical pages. ZONE_MOVABLE is only enabled when one of
++* `ZONE_MOVABLE` is for normal accessible memory, just like ZONE_NORMAL. T=
+he
++  difference is that most pages in ZONE_MOVABLE are movable. That means th=
+at
++  while virtual addresses of these pages do not change, their content may =
+move
++  between different physical pages. ZONE_MOVABLE is only enabled when one =
+of
+   `kernelcore`, `movablecore` and `movable_node` parameters is present in =
+the
+   kernel command line. See :ref:`Page migration <page_migration>` for
+   additional details.
+=20
+-`ZONE_DEVICE`
+-  represents memory residing on devices such as PMEM and GPU. It has diffe=
+rent
+-  characteristics than RAM zone types and it exists to provide :ref:`struct
+-  page <Pages>` and memory map services for device driver identified physi=
+cal
+-  address ranges. ZONE_DEVICE is enabled with configuration option
+-  ``CONFIG_ZONE_DEVICE``.
++* `ZONE_DEVICE` represents memory residing on devices such as PMEM and GPU.
++  It has different characteristics than RAM zone types and it exists to pr=
+ovide
++  :ref:`struct page <Pages>` and memory map services for device driver
++  identified physical address ranges. ZONE_DEVICE is enabled with configur=
+ation
++  option ``CONFIG_ZONE_DEVICE``.
+=20
+ It is important to note that many kernel operations can only take place us=
+ing
+ ZONE_NORMAL so it is the most performance critical zone. Zones are discuss=
+ed
+
+> +For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of R=
+AM the
+> +entire memory will be on node 0 and there will be three zones: ZONE_DMA,
+> +ZONE_NORMAL and ZONE_HIGHMEM::
+> +
+> +  0                                                            2G
+> +  +-------------------------------------------------------------+
+> +  |                            node 0                           |
+> +  +-------------------------------------------------------------+
+> +
+> +  0         16M                    896M                        2G
+> +  +----------+-----------------------+--------------------------+
+> +  | ZONE_DMA |      ZONE_NORMAL      |       ZONE_HIGHMEM       |
+> +  +----------+-----------------------+--------------------------+
+> +
+> +
+> +With a kernel built with ZONE_DMA disabled and ZONE_DMA32 enabled and bo=
+oted
+> +with `movablecore=3D80%` parameter on an arm64 machine with 16 Gbytes of=
+ RAM
+> +equally split between two nodes, there will be ZONE_DMA32, ZONE_NORMAL a=
+nd
+> +ZONE_MOVABLE on node 0, and ZONE_NORMAL and ZONE_MOVABLE on node 1::
+> +
+> +
+> +  1G                                9G                         17G
+> +  +--------------------------------+ +--------------------------+
+> +  |              node 0            | |          node 1          |
+> +  +--------------------------------+ +--------------------------+
+> +
+> +  1G       4G        4200M          9G          9320M          17G
+> +  +---------+----------+-----------+ +------------+-------------+
+> +  |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
+> +  +---------+----------+-----------+ +------------+-------------+
+
+I see inconsistency of formatting keywords: some are in inline code and some
+are not. I'm leaning towards inlining them all:
+
+---- >8 ----
+
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physic=
+al_memory.rst
+index d308b11cfcf7f0..83e13166508a20 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -19,14 +19,14 @@ a bank of memory very suitable for DMA near peripheral =
+devices.
+=20
+ Each bank is called a node and the concept is represented under Linux by a
+ ``struct pglist_data`` even if the architecture is UMA. This structure is
+-always referenced to by it's typedef ``pg_data_t``. A pg_data_t structure
++always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` struct=
+ure
+ for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
+ ``nid`` is the ID of that node.
+=20
+ For NUMA architectures, the node structures are allocated by the architect=
+ure
+ specific code early during boot. Usually, these structures are allocated
+ locally on the memory bank they represent. For UMA architectures, only one
+-static pg_data_t structure called ``contig_page_data`` is used. Nodes will
++static ``pg_data_t`` structure called ``contig_page_data`` is used. Nodes =
+will
+ be discussed further in Section :ref:`Nodes <nodes>`
+=20
+ Each node may be divided up into a number of blocks called zones which
+@@ -35,48 +35,49 @@ architectural constraints for accessing the physical me=
+mory. A zone is
+ described by a ``struct zone_struct``, typedeffed to ``zone_t`` and each z=
+one
+ has one of the types described below.
+=20
+-* `ZONE_DMA` and `ZONE_DMA32` represent memory suitable for DMA by periphe=
+ral
+-  devices that cannot access all of the addressable memory. Depending on t=
+he
+-  architecture, either of these zone types or even they both can be disabl=
+ed
+-  at build time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32``
+-  configuration options. Some 64-bit platforms may need both zones as they
+-  support peripherals with different DMA addressing limitations.
++* ``ZONE_DMA` and ``ZONE_DMA32`` represent memory suitable for DMA by
++  peripheral devices that cannot access all of the addressable memory.
++  Depending on the architecture, either of these zone types or even they b=
+oth
++  can be disabled at build time using ``CONFIG_ZONE_DMA`` and
++  ``CONFIG_ZONE_DMA32`` configuration options. Some 64-bit platforms may n=
+eed
++  both zones as they support peripherals with different DMA addressing
++  limitations.
+=20
+-* `ZONE_NORMAL` is for normal memory that can be accessed by the kernel all
++* ``ZONE_NORMAL`` is for normal memory that can be accessed by the kernel =
+all
+   the time. DMA operations can be performed on pages in this zone if the D=
+MA
+-  devices support transfers to all addressable memory. ZONE_NORMAL is alwa=
+ys
+-  enabled.
++  devices support transfers to all addressable memory. ``ZONE_NORMAL`` is
++  always enabled.
+=20
+-* `ZONE_HIGHMEM` is the part of the physical memory that is not covered by=
+ a
++* ``ZONE_HIGHMEM`` is the part of the physical memory that is not covered =
+by a
+   permanent mapping in the kernel page tables. The memory in this zone is =
+only
+   accessible to the kernel using temporary mappings. This zone is available
+   only on some 32-bit architectures and is enabled with ``CONFIG_HIGHMEM``.
+=20
+-* `ZONE_MOVABLE` is for normal accessible memory, just like ZONE_NORMAL. T=
+he
+-  difference is that most pages in ZONE_MOVABLE are movable. That means th=
+at
+-  while virtual addresses of these pages do not change, their content may =
+move
+-  between different physical pages. ZONE_MOVABLE is only enabled when one =
+of
+-  `kernelcore`, `movablecore` and `movable_node` parameters is present in =
+the
+-  kernel command line. See :ref:`Page migration <page_migration>` for
+-  additional details.
++* ``ZONE_MOVABLE`` is for normal accessible memory, just like ``ZONE_NORMA=
+L``.
++  The difference is that most pages in ``ZONE_MOVABLE`` are movable. That =
+means
++  that while virtual addresses of these pages do not change, their content=
+ may
++  move between different physical pages. ``ZONE_MOVABLE`` is only enabled =
+when
++  one of ``kernelcore``, ``movablecore`` and ``movable_node`` parameters is
++  present in the kernel command line. See :ref:`Page migration
++  <page_migration>` for additional details.
+=20
+-* `ZONE_DEVICE` represents memory residing on devices such as PMEM and GPU.
++* ``ZONE_DEVICE`` represents memory residing on devices such as PMEM and G=
+PU.
+   It has different characteristics than RAM zone types and it exists to pr=
+ovide
+   :ref:`struct page <Pages>` and memory map services for device driver
+-  identified physical address ranges. ZONE_DEVICE is enabled with configur=
+ation
+-  option ``CONFIG_ZONE_DEVICE``.
++  identified physical address ranges. ``ZONE_DEVICE`` is enabled with
++  configuration option ``CONFIG_ZONE_DEVICE``.
+=20
+ It is important to note that many kernel operations can only take place us=
+ing
+-ZONE_NORMAL so it is the most performance critical zone. Zones are discuss=
+ed
+-further in Section :ref:`Zones <zones>`.
++``ZONE_NORMAL`` so it is the most performance critical zone. Zones are
++discussed further in Section :ref:`Zones <zones>`.
+=20
+ The relation between node and zone extents is determined by the physical m=
+emory
+ map reported by the firmware, architectural constraints for memory address=
+ing
+ and certain parameters in the kernel command line.
+=20
+ For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of RAM=
+ the
+-entire memory will be on node 0 and there will be three zones: ZONE_DMA,
+-ZONE_NORMAL and ZONE_HIGHMEM::
++entire memory will be on node 0 and there will be three zones: ``ZONE_DMA`=
+`,
++``ZONE_NORMAL`` and ``ZONE_HIGHMEM``::
+=20
+   0                                                            2G
+   +-------------------------------------------------------------+
+@@ -89,10 +90,11 @@ ZONE_NORMAL and ZONE_HIGHMEM::
+   +----------+-----------------------+--------------------------+
+=20
+=20
+-With a kernel built with ZONE_DMA disabled and ZONE_DMA32 enabled and boot=
+ed
+-with `movablecore=3D80%` parameter on an arm64 machine with 16 Gbytes of R=
+AM
+-equally split between two nodes, there will be ZONE_DMA32, ZONE_NORMAL and
+-ZONE_MOVABLE on node 0, and ZONE_NORMAL and ZONE_MOVABLE on node 1::
++With a kernel built with ``ZONE_DMA`` disabled and ``ZONE_DMA32`` enabled =
+and
++booted with ``movablecore=3D80%`` parameter on an arm64 machine with 16 Gb=
+ytes of
++RAM equally split between two nodes, there will be ``ZONE_DMA32``,
++``ZONE_NORMAL`` and ``ZONE_MOVABLE`` on node 0, and ``ZONE_NORMAL`` and
++``ZONE_MOVABLE`` on node 1::
+=20
+=20
+   1G                                9G                         17G
+@@ -116,7 +118,7 @@ Linux uses a node-local allocation policy to allocate m=
+emory from the node
+ closest to the running CPU. As processes tend to run on the same CPU, it is
+ likely the memory from the current node will be used. The allocation polic=
+y can
+ be controlled by users as described in
+-`Documentation/admin-guide/mm/numa_memory_policy.rst`.
++Documentation/admin-guide/mm/numa_memory_policy.rst.
+=20
+ Most NUMA architectures maintain an array of pointers to the node
+ structures. The actual structures are allocated early during boot when
+@@ -127,21 +129,21 @@ boot process by free_area_init() function, described =
+later in Section
+=20
+=20
+ Along with the node structures, kernel maintains an array of ``nodemask_t``
+-bitmasks called `node_states`. Each bitmask in this array represents a set=
+ of
+-nodes with particular properties as defined by `enum node_states`:
++bitmasks called ``node_states``. Each bitmask in this array represents a s=
+et of
++nodes with particular properties as defined by ``enum node_states``:
+=20
+-`N_POSSIBLE`
++``N_POSSIBLE``
+   The node could become online at some point.
+-`N_ONLINE`
++``N_ONLINE``
+   The node is online.
+-`N_NORMAL_MEMORY`
++``N_NORMAL_MEMORY``
+   The node has regular memory.
+-`N_HIGH_MEMORY`
++``N_HIGH_MEMORY``
+   The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
+-  aliased to `N_NORMAL_MEMORY`.
+-`N_MEMORY`
++  aliased to ``N_NORMAL_MEMORY``.
++``N_MEMORY``
+   The node has memory(regular, high, movable)
+-`N_CPU`
++``N_CPU``
+   The node has one or more CPUs
+=20
+ For each node that has a property described above, the bit corresponding t=
+o the
+@@ -160,7 +162,7 @@ For various operations possible with nodemasks please r=
+efer to
+ <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
+nclude/linux/nodemask.h>`_.
+=20
+ Among other things, nodemasks are used to provide macros for node traversa=
+l,
+-namely `for_each_node()` and `for_each_online_node()`.
++namely ``for_each_node()`` and ``for_each_online_node()``.
+=20
+ For instance, to call a function foo() for each online node::
+=20
+@@ -180,126 +182,130 @@ Here we briefly describe fields of this structure:
+ General
+ ~~~~~~~
+=20
+-`node_zones`
++``node_zones``
+   The zones for this node.  Not all of the zones may be populated, but it =
+is
+   the full list. It is referenced by this node's node_zonelists as well as
+   other node's node_zonelists.
+=20
+-`node_zonelists` The list of all zones in all nodes. This list defines the
+-  order of zones that allocations are preferred from. The `node_zonelists`=
+ is
+-  set up by build_zonelists() in mm/page_alloc.c during the initialization=
+ of
++``node_zonelists``
++  The list of all zones in all nodes. This list defines the order of zones
++  that allocations are preferred from. The ``node_zonelists`` is set up by
++  ``build_zonelists()`` in ``mm/page_alloc.c`` during the initialization of
+   core memory management structures.
+=20
+-`nr_zones`
++``nr_zones``
+   Number of populated zones in this node.
+=20
+-`node_mem_map`
++``node_mem_map``
+   For UMA systems that use FLATMEM memory model the 0's node (and the only)
+-  `node_mem_map` is array of struct pages representing each physical frame.
++  ``node_mem_map`` is array of struct pages representing each physical fra=
+me.
+=20
+-`node_page_ext`
++``node_page_ext``
+   For UMA systems that use FLATMEM memory model the 0's (and the only) node
+-  `node_mem_map` is array of extensions of struct pages. Available only in=
+ the
++  ``node_mem_map`` is array of extensions of struct pages. Available only =
+in the
+   kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
+=20
+-`node_start_pfn`
++``node_start_pfn``
+   The page frame number of the starting page frame in this node.
+=20
+-`node_present_pages`
++``node_present_pages``
+   Total number of physical pages present in this node.
+=20
+-`node_spanned_pages`
++``node_spanned_pages``
+   Total size of physical page range, including holes.
+=20
+-`node_size_lock`
++``node_size_lock``
+   A lock that protects the fields defining the node extents. Only defined =
+when
+   at least one of ``CONFIG_MEMORY_HOTPLUG`` or
+   ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` configuration options are enabled.
++  ``pgdat_resize_lock()`` and ``pgdat_resize_unlock()`` are provided to
++  manipulate ``node_size_lock`` without checking for ``CONFIG_MEMORY_HOTPL=
+UG``
++  or ``CONFIG_DEFERRED_STRUCT_PAGE_INIT``.
+=20
+-  pgdat_resize_lock() and pgdat_resize_unlock() are provided to manipulate
+-  node_size_lock without checking for CONFIG_MEMORY_HOTPLUG or
+-  CONFIG_DEFERRED_STRUCT_PAGE_INIT.
+-
+-`node_id`
++``node_id``
+   The Node ID (NID) of the node, starts at 0.
+=20
+-`totalreserve_pages`
++``totalreserve_pages``
+   This is a per~node reserve of pages that are not available to userspace
+   allocations.
+=20
+-`first_deferred_pfn`
++``first_deferred_pfn``
+   If memory initialization on large machines is deferred then this is the =
+first
+   PFN that needs to be initialized. Defined only when
+   ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` is enabled
+=20
+-`deferred_split_queue`
++``deferred_split_queue``
+   Per-node queue of huge pages that their split was deferred. Defined only=
+ when ``CONFIG_TRANSPARENT_HUGEPAGE`` is enabled.
+=20
+-`__lruvec`
+-  Per-node lruvec holding LRU lists and related parameters. Used only when=
+ memory cgroups are disabled. Should not be accessed directly, use mem_cgro=
+up_lruvec() to look up lruvecs instead.
++``__lruvec``
++  Per-node lruvec holding LRU lists and related parameters. Used only when
++  memory cgroups are disabled. It should not be accessed directly, use
++  ``mem_cgroup_lruvec()`` to look up lruvecs instead.
+=20
+ Reclaim control
+ ~~~~~~~~~~~~~~~
+=20
+ See also :ref:`Page Reclaim <page_reclaim>`.
+=20
+-`kswapd`
++``kswapd``
+   Per-node instance of kswapd kernel thread.
+=20
+-`kswapd_wait`, `pfmemalloc_wait`, `reclaim_wait`
++``kswapd_wait``, ``pfmemalloc_wait``, ``reclaim_wait``
+   Workqueues used to synchronize memory reclaim tasks
+=20
+-`nr_writeback_throttled`
++``nr_writeback_throttled``
+   Number of tasks that are throttled waiting on dirty pages to clean.
+=20
+-`nr_reclaim_start`
++``nr_reclaim_start``
+   Number of pages written while reclaim is throttled waiting for writeback.
+=20
+-`kswapd_order`
++``kswapd_order``
+   Controls the order kswapd tries to reclaim
+=20
+-`kswapd_highest_zoneidx`
++``kswapd_highest_zoneidx``
+   The highest zone index to be reclaimed by kswapd
+=20
+-`kswapd_failures`
++``kswapd_failures``
+   Number of runs kswapd was unable to reclaim any pages
+=20
+-`min_unmapped_pages`
+-  Minimal number of unmapped file backed pages that cannot be reclaimed. D=
+etermined by vm.min_unmapped_ratio sysctl.
+-  Only defined when ``CONFIG_NUMA`` is enabled.
++``min_unmapped_pages``
++  Minimal number of unmapped file backed pages that cannot be reclaimed.
++  Determined by ``vm.min_unmapped_ratio`` sysctl. Only defined when
++  ``CONFIG_NUMA`` is enabled.
+=20
+-`min_slab_pages`
+-  Minimal number of SLAB pages that cannot be reclaimed. Determined by vm.=
+min_slab_ratio sysctl.
+-  Only defined when ``CONFIG_NUMA`` is enabled
++``min_slab_pages``
++  Minimal number of SLAB pages that cannot be reclaimed. Determined by
++  ``vm.min_slab_ratio sysctl``. Only defined when ``CONFIG_NUMA`` is enabl=
+ed
+=20
+-`flags`
++``flags``
+   Flags controlling reclaim behavior.
+=20
+ Compaction control
+ ~~~~~~~~~~~~~~~~~~
+=20
+-`kcompactd_max_order`
++``kcompactd_max_order``
+   Page order that kcompactd should try to achieve.
+=20
+-`kcompactd_highest_zoneidx`
++``kcompactd_highest_zoneidx``
+   The highest zone index to be compacted by kcompactd.
+=20
+-`kcompactd_wait`
++``kcompactd_wait``
+   Workqueue used to synchronizes memory compaction tasks.
+=20
+-`kcompactd`
++``kcompactd``
+   Per-node instance of kcompactd kernel thread.
+=20
+-`proactive_compact_trigger`
+-  Determines if proactive compaction is enabled. Controlled by vm.compacti=
+on_proactiveness sysctl.
++``proactive_compact_trigger``
++  Determines if proactive compaction is enabled. Controlled by
++  ``vm.compaction_proactiveness`` sysctl.
+=20
+ Statistics
+ ~~~~~~~~~~
+=20
+-`per_cpu_nodestats`
++``per_cpu_nodestats``
+   Per-CPU VM statistics for the node
+=20
+-`vm_stat`
++``vm_stat``
+   VM statistics for the node.
+=20
+ .. _zones:
+
+> +For various operations possible with nodemasks please refer to
+> +`include/linux/nodemask.h
+> +<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/include/linux/nodemask.h>`_.
+
+Instead of linking to Linus's tree, just inline the source path:
+
+---- >8 ----
+
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physic=
+al_memory.rst
+index 83e13166508a20..130880e5c369de 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -158,8 +158,7 @@ For example, for node 2 with normal memory and CPUs, bi=
+t 2 will be set in ::
+   node_states[N_CPU]
+=20
+ For various operations possible with nodemasks please refer to
+-`include/linux/nodemask.h
+-<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
+nclude/linux/nodemask.h>`_.
++``include/linux/nodemask.h``.
+=20
+ Among other things, nodemasks are used to provide macros for node traversa=
+l,
+ namely ``for_each_node()`` and ``for_each_online_node()``.
+@@ -175,9 +174,8 @@ For instance, to call a function foo() for each online =
+node::
+ Node structure
+ --------------
+=20
+-The struct pglist_data is declared in `include/linux/mmzone.h
+-<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
+nclude/linux/mmzone.h>`_.
+-Here we briefly describe fields of this structure:
++The struct pglist_data is declared in ``include/linux/mmzone.h``. Here we
++briefly describe fields of this structure:
+=20
+ General
+ ~~~~~~~
+
+> +.. _zones:
+> +
+> +Zones
+> +=3D=3D=3D=3D=3D
+> +
+> +.. _pages:
+> +
+> +Pages
+> +=3D=3D=3D=3D=3D
+> +
+> +.. _folios:
+> +
+> +Folios
+> +=3D=3D=3D=3D=3D=3D
+> +
+> +.. _initialization:
+> +
+> +Initialization
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Are these sections stubs (no fields list for each types)? If so, add
+admonitions to inform readers:
+
+---- >8 ----
+
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physic=
+al_memory.rst
+index 130880e5c369de..cf61725d93b229 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -311,17 +311,33 @@ Statistics
+ Zones
+ =3D=3D=3D=3D=3D
+=20
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fi=
+elds.
++
+ .. _pages:
+=20
+ Pages
+ =3D=3D=3D=3D=3D
+=20
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fi=
+elds.
++
+ .. _folios:
+=20
+ Folios
+ =3D=3D=3D=3D=3D=3D
+=20
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fi=
+elds.
++
+ .. _initialization:
+=20
+ Initialization
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fi=
+elds.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--4/vQIDFuqyuXOkFi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY7jtJwAKCRD2uYlJVVFO
+o9QTAQDbBGodyBP5HP2nmRJkZPAFx271nHvGVnAVDjsAVWJ3GgD/RwnTB5Jh9L1h
+J03PG3rNO47DCo3XvjX7SaZGH4FzRwk=
+=jc5d
+-----END PGP SIGNATURE-----
+
+--4/vQIDFuqyuXOkFi--
