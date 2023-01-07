@@ -2,142 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79905660C45
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFA1660C48
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236855AbjAGDkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S236693AbjAGDnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236776AbjAGDk0 (ORCPT
+        with ESMTP id S231470AbjAGDnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:40:26 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACA18D5C8;
-        Fri,  6 Jan 2023 19:40:24 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 43B47604F1;
-        Sat,  7 Jan 2023 04:40:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1673062823; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=fcu4HcuzuZ/P9jRH6RNpZubOP0xy9Tqn4dSo6j3CGQxmFZGhjfQG+Mys9uGCWCBKm
-         DJ3c5FaRZ/EbntEbtvzYQW2PTdtLUtDko9Vz0/x/crn5Fwepklv3JyyF4C/+L4UZXI
-         CseqPJig+KY5aAMgg+eQaDFIvEta/MJNLMyeDEsRNX1r16KTZJPj9UiTvwFmVtUwf/
-         4WnucXvoS0K+/HthKcQ+jmop+lK7NWPdlJF+54CpbGndAM5xmPjk46Bb1kmA/mEgKl
-         XninS0jUdwYpuYlTZxA0DHd1dbMa2RObEIFDihr4vYKb/py8UchrMDUdyhu03fPJri
-         bBuy1yVAs6YeQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UgvktLthh6J8; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id AB762604F2; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1673062820; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Byfgq7kO0qX1Vp0niERdxBYNDVVrBuM1JUY1zAaDnpV7uFjrb3E4+eeTJC1e/FaaS
-         I3Nnk0lqf+oV7rcFMYzeiPX+rkQwcwos2p9HGhpGUPz7l73/BhawOFKxVXVnisQeqj
-         nYT+5H8Js9zUElqI/sZhpWk7kHe/6ec5O0RlC4jw8MrzMt5a0HCZc67leIYxbAEx8v
-         B6/VPQ+6YaOw+ui2NxisGHBesc2GM9KTteqwzPYRiVXEiWU8/VPxWQmPlsJ0oUlVf7
-         NZYZFBqlf6nwJ+8GJRANkR6/O1Y/Ef14KqMsEryghQrP4NyqSyaawOOuEX3w+jFX65
-         cujLnUJ3hy72w==
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A612E604F1;
-        Sat,  7 Jan 2023 04:40:20 +0100 (CET)
-Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
-        edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
-Subject: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to
- connect()
-In-Reply-To: <20230106180808.51550e82@kernel.org>
-Message-ID: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
-References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>        <20230106175828.13333-1-kuniyu@amazon.com>        <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>        <20230106161450.1d5579bf@kernel.org>        <8fb1a2c5-ee35-67eb-ef3c-e2673061850d@alu.unizg.hr>
- <20230106180808.51550e82@kernel.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 6 Jan 2023 22:43:45 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C5521B3;
+        Fri,  6 Jan 2023 19:43:44 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so7208697pjj.2;
+        Fri, 06 Jan 2023 19:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5qWs5TiJGPW/EDw2KXWPEsaSCWYGVrAbslcVFl/3Fs=;
+        b=eBc5KvTLSvzQmnGq6Ti5p9SaLEb8oHku7eo/zzrqvPHTnNWD7jPCH+IScPF2BiNV66
+         nIUI0DzOJlWwcBfvU91z77YvvWx6Zv5gDgEJLcPf+JVJi9RtvLDTAnG4QrbNARik2DcH
+         WCeESg4DeUQ5Te1iO+nU1RXf1QT1OkBA53U6Jjwse32cXDc2HXHDv6FpGakEvEnUrm+U
+         YyUt0MiWq8BkkuJ84FDwH93HZVJifRA6zzm3hPHG5EIxCA3OtanmKRG2mOGzeKrUKWOE
+         GWZiId5RfycshJr2c3mAi8zhU2Tru9kyy96ew5kAJ6/Rr/UlHtuE4+dCcUgSglfObrZZ
+         Qrvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G5qWs5TiJGPW/EDw2KXWPEsaSCWYGVrAbslcVFl/3Fs=;
+        b=vkkxkESNayWuSyR0NAsUAdhaki0XUGme0Jvw9zVUErpu0SI9ukQVsmdSloz6U190wI
+         ztvbuhi0zhyoYiSVjb6W+pkw8l6xfKZjMOe7O5toXzFZe35VkrPtUOcM3QbZ1rhR8e6w
+         dd37JoBodNygrnY5JAYwRTCpIu0zWsemmFfmRteQj9299hDPBPTlpPCJGIak8xu544vW
+         WE5ch4kEGJ9tlzJiwggQiSnk489XDZETPf9AnjeCfMkRhjajG3Pn6QsrxW6qpqLohrP3
+         jiVfA7bJ6z4s4DqxL3l+5mwPj+kUgUb4AROieWMQFoT7NdpS4N6sZ3VBVrajY9KIDXF5
+         wYPQ==
+X-Gm-Message-State: AFqh2krBXSk/jckYN1vutfMPN9HsYmqAMvT0q2p2uxsfmzBKeqcHCMIu
+        sHLabYYeOqKCx1qFg4T/ZIOhKSbgxJg=
+X-Google-Smtp-Source: AMrXdXuVM9mF8FyJ4YSOfu0Of5hD4h5YbR1HDHqeCefSgGqYrJ2V0v7uJ72IhJYLeZRVNasunpYtVg==
+X-Received: by 2002:a17:902:f80c:b0:185:441e:90dd with SMTP id ix12-20020a170902f80c00b00185441e90ddmr64501798plb.67.1673063023979;
+        Fri, 06 Jan 2023 19:43:43 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id jd9-20020a170903260900b00186727e5f5csm1597728plb.248.2023.01.06.19.43.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 19:43:43 -0800 (PST)
+From:   Quanfa Fu <quanfafu@gmail.com>
+To:     rostedt@goodmis.or, mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Quanfa Fu <quanfafu@gmail.com>
+Subject: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
+Date:   Sat,  7 Jan 2023 11:43:35 +0800
+Message-Id: <20230107034335.1154374-1-quanfafu@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="899744747-660964784-1673062820=:26826"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Since this memory will be filled soon below, I feel that there is
+no need for a memory of all zeros here. 'snprintf' does not return
+negative num according to ISO C99, so I feel that no judgment is
+needed here.
 
---899744747-660964784-1673062820=:26826
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+No functional change intended.
 
-
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-Adjust size parameter in connect() to match the type of the parameter, to
-fix "No such file or directory" error in selftests/net/af_unix/
-test_oob_unix.c:127.
-
-The existing code happens to work provided that the autogenerated pathname
-is shorter than sizeof (struct sockaddr), which is why it hasn't been
-noticed earlier.
-
-Visible from the trace excerpt:
-
-bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
-
-BUG: The filename is trimmed to sizeof (struct sockaddr).
-
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc: Florian Westphal <fw@strlen.de>
-Reviewed-by: Florian Westphal <fw@strlen.de>
-Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
 ---
+ kernel/trace/trace_eprobe.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
-(Tested and applies against the net.git tree.)
-
-
- tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-index b57e91e1c3f2..532459a15067 100644
---- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-+++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 352b65e2b910..cd1d271a74e7 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
+ 	for (i = 0; i < argc; i++)
+ 		len += strlen(argv[i]) + 1;
  
- 	wait_for_signal(pipefd[0]);
- 	if (connect(cfd, (struct sockaddr *)consumer_addr,
--		     sizeof(struct sockaddr)) != 0) {
-+		     sizeof(*consumer_addr)) != 0) {
- 		perror("Connect failed");
- 		kill(0, SIGTERM);
- 		exit(1);
+-	ep->filter_str = kzalloc(len, GFP_KERNEL);
++	ep->filter_str = kmalloc(len, GFP_KERNEL);
+ 	if (!ep->filter_str)
+ 		return -ENOMEM;
+ 
+ 	p = ep->filter_str;
+ 	for (i = 0; i < argc; i++) {
+ 		ret = snprintf(p, len, "%s ", argv[i]);
+-		if (ret < 0)
+-			goto error;
+ 		if (ret > len) {
+ 			ret = -E2BIG;
+ 			goto error;
+-- 
+2.31.1
 
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
---899744747-660964784-1673062820=:26826--
