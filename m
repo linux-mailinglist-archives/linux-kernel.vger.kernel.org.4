@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57F3660EB1
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D20F660EAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjAGMYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 07:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S231785AbjAGMYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 07:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjAGMYb (ORCPT
+        with ESMTP id S229475AbjAGMYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:24:31 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B20360CE8;
-        Sat,  7 Jan 2023 04:24:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1673094231;
-        bh=zv9DFz2jFU7cwgarhZpClLtUvJqk7GOMCDtGW4naVT4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=hbAOPRtSb4588GuGdrreMXwPNKZzA8qLj0qIC6pxdDTQB8M+r5wxb8kCPYrrf/0UW
-         x+BOek4gnxBmzNEdiZ170bcM+j41CLvtvGVJtzLYRKeOAbW+tLCpZva0Rsqg4+qzdL
-         +ovfeXt0aToUj+rRFcBqMuTcmMnMrPEN1qncGGIbm8pOURdl4tZ4e8oZfaFPOVXAqu
-         0HoqcyUZ0bZjICnAPO303ej8Tia+MRrdNe4TDk1v99ca6OewdpAq4MCuFZSA1BdSD7
-         ++yHyddhAX4MiCbTPijTZ21oNhmfX+rCPZ7tc+63wKu5ha5zllyMwX4AMsT4lnXi3g
-         77phW1xspdWLw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.149.37] ([217.61.149.37]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Sat, 7 Jan 2023
- 13:23:50 +0100
+        Sat, 7 Jan 2023 07:24:11 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4183760CE0;
+        Sat,  7 Jan 2023 04:24:09 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4b718cab0e4so55626657b3.9;
+        Sat, 07 Jan 2023 04:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bjlh/y4ujWrlLj4f+D4wuvbyCFuV7BwnHdo20MJ4gnE=;
+        b=LbS0b9zD5+ZsN/uxd7ehSsSqvJpNP7iADK/9yo6qGTPrCwoKuy0FqjYDDG9YTHS7yB
+         dQA3PAsRow5BQBV6XqIJBIzMQPn9R/n6X2n4bq2gZYezB+KM1ooDPjYgmKET61QynJX7
+         /J5b+15XUWLK6kqERVLhLD7y6GNnL3JsZ1Y5flvjzc2EjC9BwG9k/GN2bZ0JFfg0Y1lS
+         hZrHOle9KZ8eui734mS/Dmt8mRvhagWmRNQFzLUI2toyOVeze6qJK7TqyOrohRjC31Is
+         ZnyLjselJtIvQ4sWAE6PqkUTvjxwvsKCAgPSckoK67bDP7++V4XE4bdZPf+9+TJxPvgc
+         4aSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bjlh/y4ujWrlLj4f+D4wuvbyCFuV7BwnHdo20MJ4gnE=;
+        b=RD1jsU1w+cWDigpJf64g/Yow7Wf/bru4wNjQheXLEqQHh+D/22CWqGQP/8m3o0TeK6
+         LgDSksUHdsVNL5/cc/MujgSSFeuBZhJrK+8jCxdFamKV99qZQCVRNkin+ez2Qm8QlpXf
+         dldmDp6jGzQeJay76TgQ4ZL6DA/t43JiI1IJbeXo4aNmxmdMURhNGFQemK4QBo8/S1vP
+         zaSkxFTatHdqB2HiCnA93ktZ52XfsvGpOxovvZ/9eVA5tSeZjO+Pcp8FXd3yoQ2DOCuy
+         GvOCP/t3I//QALrkMI1wTF3e6qMo/80IIKDaqFBv/kU+lZnKPpgArxR1X2Yqg8rrSxjk
+         ENZQ==
+X-Gm-Message-State: AFqh2ko3d+iXxeSmoknrQGKYnxqTXjl9caqxAS3lFxHIJ8ah9IYV4laM
+        8LvlS2uQ5vzqR6zY+/tA/vFS26qPvO1Tocz3DfvkxMWA5Rk=
+X-Google-Smtp-Source: AMrXdXvj03+QNFlwghM7LrKQ08KhCNVoUEYXpOEhBslBtXf8OmWT+FXOZXf4h4w5+VEgNrvSc+cUiwVnKSlqqtMYIV8=
+X-Received: by 2002:a0d:ea47:0:b0:47d:d0f4:3c92 with SMTP id
+ t68-20020a0dea47000000b0047dd0f43c92mr4787543ywe.500.1673094248462; Sat, 07
+ Jan 2023 04:24:08 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <trinity-88ad03e9-e830-4898-93f0-106af8b753bd-1673094230865@3c-app-gmx-bap38>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Aw: Re:  Re: Re: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc:
- drop generic vlan rx offload, only use DSA untagging
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 7 Jan 2023 13:23:50 +0100
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:wP4TMKG2DaLks5PJfrg2GiHqrg61/W8XG98+sNB3yE8BNT7gs3jeY2pXQVQKnB7KxWyUS
- K5gRCfuJyh+1XkzUHJYtYdCyz12l1Zrq2nJXf2uy7GIx4Q+0TfZ86VV7pbS+KPUjhTZu3RMng/up
- gr67XmEPFWRWirGMyy0KXX0dDCBELBUm7bo1YDH/eomd69m06ar2+5LgUiPk0bRdVWPlIGFV2yCX
- 3WwyLlARITSboIzUqWrkF0qDjrmaOJrdwkB9XVL61jT7xuBZdAgg4eSrrYmhGW+coaew3xGIpP9K
- Gc=
-UI-OutboundReport: notjunk:1;M01:P0:UIrRf/JzP+0=;92GAdljAG5pcOdjgtJXbJhVbr1z
- MYRfKTlAMm+8VBnPWol1WaUFOO1zKpSY0/vTXsjeXWhxiWax0Zc5vbK7M2Fq4EXosoZHKfVjf
- 1A/n7THFpjvoALbpfzC4WZU/2vHhXNeHCbLDy3NtWq85bgwvidRz4P9tDUTrNvRB9YgAlvYbQ
- b58NB5HVVLMqwS/Fxhp29FtMG3cvehpBLxN0lVf+1dcldosd0CoW3zRvSOC2ctkfY4VlfoMFp
- 7k1fVyVfar+ZSC+HKnXeuLEZF2QHYQSmOQMQXAEpOiXfaqaq+wBWsIZFfnc/iEyELv7WbTurm
- ijROU15BsZDdARYwMbWm4X6ZmLE6/UnXIxvN6hoBMb7ycKSRQbOAvAml5Ql0hv3ir2IOK56Ms
- n9+t32zdTlMfu1NaXEPsaqKR7QSI+bWGRAfp/iDjg9YOQjISAQ1zeR9CuZtPnGF1Qp+F6lUWx
- 3i2vNr8XzOMM71xklgjniMh74y4ze56L+f9l4cs0+5Mn1EmKjQt5Tes7c91j3qnvPTSYO2gwC
- FXKp6eBexPneP/Bq/6d6iwQHslBfprX5KcGo9qD43mbOTTOrYnN1eA1vKouXjzQp+Q42cu2gr
- Seykp6axgvDcl5BSp2ox2hBzcUA64d6Bt/ak391zvTvHDK02U7wjJIE1TrzQzE0dKJFjOSajK
- T2Vq110SDrT3xQTIiKvHDAsaunF+wB5eyQmHbGD/S/TAsHn343zPDTSB/YuBE9ajoVpAktw2U
- 7g6pBEpje75bGYB6xnF38GpTayoo7CGOZRgE6My4CfWg4YpGcdqRW8B84OCdOI17PVQXrkXxn
- 13v2RlCe0Gs/pw4G9T9Cnu+Zj3lCekIcISIecUcklGlUI=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230107034557.1156022-1-quanfafu@gmail.com> <30dd32b4-cd74-77a1-d9ad-84e361680dac@wanadoo.fr>
+In-Reply-To: <30dd32b4-cd74-77a1-d9ad-84e361680dac@wanadoo.fr>
+From:   Quanfa Fu <quanfafu@gmail.com>
+Date:   Sat, 7 Jan 2023 20:23:57 +0800
+Message-ID: <CAM4UoyqAGUbLaaoDyvFSTKvgpq9Oz7HuxKLMf3ryOsjHofcpVw@mail.gmail.com>
+Subject: Re: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,22 +69,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Jan 7, 2023 at 4:42 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Le 07/01/2023 =C3=A0 04:45, Quanfa Fu a =C3=A9crit :
+> > Since this memory will be filled soon below, I feel that there is
+> > no need for a memory of all zeros here. 'snprintf' does not return
+> > negative num according to ISO C99, so I feel that no judgment is
+> > needed here.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
+> > ---
+> >   kernel/trace/trace_eprobe.c | 4 +---
+> >   1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> > index 352b65e2b910..cd1d271a74e7 100644
+> > --- a/kernel/trace/trace_eprobe.c
+> > +++ b/kernel/trace/trace_eprobe.c
+> > @@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace=
+_eprobe *ep, int argc, const ch
+> >       for (i =3D 0; i < argc; i++)
+> >               len +=3D strlen(argv[i]) + 1;
+> >
+> > -     ep->filter_str =3D kzalloc(len, GFP_KERNEL);
+> > +     ep->filter_str =3D kmalloc(len, GFP_KERNEL);
+> >       if (!ep->filter_str)
+> >               return -ENOMEM;
+> >
+> >       p =3D ep->filter_str;
+> >       for (i =3D 0; i < argc; i++) {
+> >               ret =3D snprintf(p, len, "%s ", argv[i]);
+> > -             if (ret < 0)
+> > -                     goto error;
+> >               if (ret > len) {
+>
+> Hi,
+>
+> as per [1]:
+>   * The return value is the number of characters which would be
+>   * generated for the given input, excluding the trailing null,
+>   * as per ISO C99.  If the return is greater than *or equal* to
+>   * @size, the resulting string is truncated.
+>
+> So, should this test be:
+>      if (ret >=3D len)
+>             ~~~~
+>
+>
+> Also, isn't the p[-1] =3D '\0' after the loop eating the last character?
+>     argc =3D 1;
+>     argv[0] =3D "a";
+>
+>     Before the loop:
+>     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     len =3D 1 + 1 =3D 2;
+>     ep->filter_str =3D 0x00 0x00
+>                      ^
+>                      |___ p
+>
+>     After the loop:
+>     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     ep->filter_str =3D 0x61 0x00
+>                           ^
+>                           |___ p
+>     len =3D 1;
+>
+>     After p[-1]:
+>     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     ep->filter_str =3D 0x00 0x00
+>                        ~~ ^
+>                           |___ p
+>
+> Did I miss something obvious?
+> I don't know the intent here, or if it is an issue at all, but it looks o=
+dd.
+>
+> CJ
+>
+>
+> [1]: https://elixir.bootlin.com/linux/v6.2-rc1/source/lib/vsprintf.c#L292=
+5
+> >                       ret =3D -E2BIG;
+> >                       goto error;
+>
 
-FYI, opened a systemd issue on github
+I think that:
 
-https://github.com/systemd/systemd/issues/25970
+for example, argc =3D 2, argv =3D {"a", "b"};
 
----
+Before the loop
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+len =3D (1 + 1) + (1 + 1) =3D 4;
+ep->filter_str =3D 0x00 0x00 0x00 0x00
+                       ^
+                        |__ p
 
-regards Frank
+After the loop:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+i =3D 1, snprintf write: 'a' and ' ', so ret =3D 2
+i =3D 2, snprintf write: 'b' and ' ', so ret =3D 2
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ Since the length of the last argv is not enough
+to write, the space is replaced by null
 
-Hi,
+ep->filter_str =3D 0x61 0x20 0x62 0x00
+                                                          ^
+                                                          |__ p
+p =3D ep->fiter_str + 2 (ret1) +2 (ret2) =3D ep->filter_str + 4
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+so After p[-1] =3D *(ep->filter_str + 3) =3D '\0';
+ep->filter_str =3D 0x61 0x20 0x62 0x00
 
-update on my tests...something in my systemd-networkd breaks vlan on dsa-port.
+According to ISO C99: " If the output was truncated due to this limit
+then the return value is the number of characters (excluding the
+terminating null byte) which would have been written to the final
+string if enough  space  had been available"
 
-if i boot with this disabled vlan added manually works on dsa-port and gmac too. so felix you can keep my tested-by.
-
-if vlan is working and i activate networkd afterwards vlans are still working...i guess systemd puts the wan-interface into some kind of non-vlan-mode (vlan-filtering?).
-
-...
+The last snprintf will end with 'NULL', so I think p[-1] =3D '\0' can
+also be deleted
