@@ -2,92 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A49660EE5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B486E660EE7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 13:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjAGMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 07:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S231867AbjAGMva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 07:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjAGMtd (ORCPT
+        with ESMTP id S229974AbjAGMv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:49:33 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023E972D2A;
-        Sat,  7 Jan 2023 04:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1673095769;
-        bh=J9tEidszI5OSDhNzxxshU4pDGQyqa/HcrqWXQLTX1+Q=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=oU41UjFYG+eCt7E7Qi19rAuNq3fOT/3mL/J0KltS9wIbPzqrWI4rSwgtL5OdagsNd
-         mzgzDVwGEHf7gOTadqCKosXxc/DJUCC0SuU3/6KyRI7HsHMLR1EW7vAHCOJ3S8/jn1
-         hDE3E4LbuHXLMMXGFJDHMeFIF5fisC+nFgNEMGu0=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ECA671286196;
-        Sat,  7 Jan 2023 07:49:29 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id i4Z1xiuT9A2D; Sat,  7 Jan 2023 07:49:29 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1673095769;
-        bh=J9tEidszI5OSDhNzxxshU4pDGQyqa/HcrqWXQLTX1+Q=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=oU41UjFYG+eCt7E7Qi19rAuNq3fOT/3mL/J0KltS9wIbPzqrWI4rSwgtL5OdagsNd
-         mzgzDVwGEHf7gOTadqCKosXxc/DJUCC0SuU3/6KyRI7HsHMLR1EW7vAHCOJ3S8/jn1
-         hDE3E4LbuHXLMMXGFJDHMeFIF5fisC+nFgNEMGu0=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1AD161286190;
-        Sat,  7 Jan 2023 07:49:29 -0500 (EST)
-Message-ID: <cefe7e4b604c11dfd3f8b934d53307c364e28d97.camel@HansenPartnership.com>
-Subject: Re: [GIT PULL] SCSI fixes for 6.1-rc2
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Date:   Sat, 07 Jan 2023 07:49:27 -0500
-In-Reply-To: <yq1h6x2zj3f.fsf@ca-mkp.ca.oracle.com>
-References: <f0bc7090c04bc6c0b08471494324a3a577c2d2a1.camel@HansenPartnership.com>
-         <20230107182826.1ae7b32c@canb.auug.org.au>
-         <yq1h6x2zj3f.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Sat, 7 Jan 2023 07:51:28 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331DE76EC7
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 04:51:27 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso5355968wmb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 04:51:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6kmoQ/u+G9G8zOvmN8BbgXLEcMlL+8PUMUot4O7oTYU=;
+        b=dknDOhZiOZx6N8mxrLxmzfEGaVB/HnbxjqdFLw5Hh5lat8whsxNiUpbrXJZ/QpNuZB
+         qxj8EEWJevM9ZkMVPw+waMFv57StmKbYPk4Y56hgENFawyjqMFfRepcGBA4wa2kHiZ/h
+         nAXHcCudu/yMVDIzK3pSaZsHrswTHjIGjy+CWstzt05koUq9ojtEFJMtspNz0AN0H6xs
+         864Z5C/7YNZDXaUED4BNaxlPiHWVbh2MC2qxeCwk67RDvpqSJQPQrthlwkbV6LbQtt6H
+         1v4mRqOJS/SiOdb8OAQDaehKloUKa4AKZtgNc+52YOo60MV+ykMlbEoyFkWxF3BPe4T2
+         uDCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6kmoQ/u+G9G8zOvmN8BbgXLEcMlL+8PUMUot4O7oTYU=;
+        b=BhXblo7VkJx3HefhyR81hpkh8yHXAJq7a5X+8lYfiqihPFhlxGPyBcUaExZIMS6xHm
+         KoIAol6BdX5XmJlbUnCzUa187293UcAzQxI3Aryhs4sG0jAv6cwV6/0DKoDxTkHNyjfN
+         9McH0R0BNc1LPG0VpLuxxaH0vAL6dDAErr0uAP/Sw7bJJaqmBi46TDDpeh2D9tYHedFX
+         GjbcLmc1k7rLDkfs0WAICm/6EL5HyrozyP/X+YMUrNU+Ugm4E9SCCWX8ol8vngW7J54W
+         v2SZTQ/sEhWm+niWrnLhDu+Rf1d3aOlB2Dq5nYUKZXGxiF4bCYLoDB+k7eW1KliM+3cQ
+         rEhA==
+X-Gm-Message-State: AFqh2koKyF2jQpscny3B82H3F/+S7e5CKvINx4AuvYJLg9cdzFoMh/5d
+        O6uMd+SDGwFG72nBsHpJTFSh/Q==
+X-Google-Smtp-Source: AMrXdXtsspADlUPwT3zNqefHd0aEud7EVXUZY6ZyOJcd15kj/Gbaw0+SfMbh9vvJtXz+AvbtR6APXQ==
+X-Received: by 2002:a7b:cb8a:0:b0:3d2:7e0:3d51 with SMTP id m10-20020a7bcb8a000000b003d207e03d51mr44260530wmi.17.1673095885793;
+        Sat, 07 Jan 2023 04:51:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003d990372dd5sm10691037wmq.20.2023.01.07.04.51.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 04:51:25 -0800 (PST)
+Message-ID: <2b2abd3f-469b-91ff-12ed-c8422c50ba6f@linaro.org>
+Date:   Sat, 7 Jan 2023 13:51:23 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 2
+To:     Andy Yan <andyshrk@163.com>, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc:     lasstp5011@gmail.com
+References: <20230107115159.2125308-1-andyshrk@163.com>
+ <20230107115221.2125368-1-andyshrk@163.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230107115221.2125368-1-andyshrk@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-07 at 06:50 -0500, Martin K. Petersen wrote:
+On 07/01/2023 12:52, Andy Yan wrote:
+> Add EmbedFire LubanCat 2>
+> Signed-off-by: Andy Yan <andyshrk@163.com>
 > 
-> Stephen,
+> ---
 > 
-> > I thought that this one was to be removed as the pktcdvd drivers
-> > removal is being reverted in the block tree in linux-next (and the
-> > revert caused a build failure in linux-next due to this scsi
-> > commit).
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Yep, my bad. Got sidetracked debugging a few unrelated issues
-> yesterday and didn't get to the point where I finish up and push my
-> trees out.
-> 
-> I have dropped the offending commit and pushed 6.2/scsi-fixes
-> separately.
+> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> index 058ed707f3cd..870c32f8574b 100644
+> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> @@ -100,6 +100,12 @@ properties:
+>            - const: embedfire,lubancat-1
+>            - const: rockchip,rk3566
+>  
+> +      - description: EmbedFire LubanCat 2
+> +        items:
+> +          - const: embedfire,lubancat-2
+> +          - const: rockchip,rk3568
+> +
+> +
 
-OK, I've got the new tree queued up.  Since the removal caused quite a
-bit of patch motion, let's give it at least one -next run, so I won't
-resend the pull request until Tuesday.
+Only one blank line.
+With above:
 
-James
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+>        - description: Engicam PX30.Core C.TOUCH 2.0
+>          items:
+>            - const: engicam,px30-core-ctouch2
+
+Best regards,
+Krzysztof
 
