@@ -2,368 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A55E660D23
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF467660D26
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjAGJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
+        id S230300AbjAGJQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjAGJKg (ORCPT
+        with ESMTP id S229552AbjAGJQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:10:36 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AA084615
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:10:35 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id E43095C00F8;
-        Sat,  7 Jan 2023 04:10:31 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 07 Jan 2023 04:10:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673082631; x=1673169031; bh=FK
-        nmdOzVKyy4kJvBw0IGAezSRAC3ERJEoigxCSqnGug=; b=m6VsE3BUrlajoN5ueg
-        vZ3St5gMBp+f8AA0vN+wHs4a92eQPZzLpP76K2D8UFcVRjfqYp/pREE2urBNYsbY
-        EbbhWX0cuk1Hqr9YXGAC0l8JrWDeyyi9F5/6lggFXWVPbwT8RsAzQEsaUl77SO4q
-        YcsLFK1jXMOpkORWEuQlLplDr8DoyoFPMCeiInOX2BtZ0tj+ezE0TpSzw/nHGaLX
-        LgLKWyqgxESMdHElIQ5gjKfZtBncafGjoXydDmNrVZwduQm5AEj3L4x7/EqKTX4O
-        zIyJ4dyKN+edhTM47dkMAe16UUPV7cR3nrehaODwrGq87Oy0zx1Kd0gUdqgUbY7d
-        fpyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1673082631; x=1673169031; bh=FKnmdOzVKyy4kJvBw0IGAezSRAC3
-        ERJEoigxCSqnGug=; b=IB9KbeGD7Isjbc1Eokh4i+VTPBvpIknJu+J3RyGnkJH/
-        uk8GPbCzJ0crQpqzQroofvNgFRUiZHubVpRQCU8TTwvwsbQvO18QAryGqLNpViTb
-        2SlruqbfnE4kyB3yS6i/BpgWSOAPQshQy1ikfYe+dFfUg3A8X6C1i3I9Lrv/fg18
-        aKmy+EiKugiesUpg5z1YGTDHUMpqRLXXv+GMMs5wjt++qcIcw35UoIot70drUfAn
-        4qwVlG6lSUkQ+sHYEQFE4GQLehrBabVw02vb4HXomftLKjw2tiAauWSDZXbX+WAq
-        vuG10b2MJq2dCNiuuajD/yM63IrEvOroEf3oWuJcBg==
-X-ME-Sender: <xms:Bje5Y2t5nbBzt0reEKXFn5T7lryP0GtVAHwQI6-Q3M-Hrwg5pHQjlw>
-    <xme:Bje5Y7fwvK60AJuvMQ6eBQyo8QJnq1Sj4u2bYSYGUzv_ka7W9RzTOe4-5EU8w6L4Q
-    Ni6hoh42L68EHseQzI>
-X-ME-Received: <xmr:Bje5YxxAy7h291sW2w0TSKoS0g6HtKQC-lPPDJV3AZqIyx2ynUR6YWumEA8tNNeeLMnQ6Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedugdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeduveeluefghfeugfegjeeffeduvedugfevtdeu
-    keevkedtgefhjeejffdvueffjeenucffohhmrghinhepghgvthhushgvrhdrshgspdhpuh
-    htuhhsvghrrdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:Bje5YxPg1vAGEf1TjiYEhO_vMJL6Enq44lH3umHo4_pxwGM7v4gCLQ>
-    <xmx:Bje5Y28-luDnRpVBE7JU5D-lMPuYsDFuYUf06XGAA6dMc9jpccztqQ>
-    <xmx:Bje5Y5XrSu1P9Ocjv5B0YV0zyG3PCwzeZAscgjtIrf1EzRdHbwoh4Q>
-    <xmx:Bze5Y50uGBkphq18InwAFlzHeyz5sajeIOGqZZyUXuok9955ihhQrQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 7 Jan 2023 04:10:30 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 8CF9D104373; Sat,  7 Jan 2023 12:10:27 +0300 (+03)
-Date:   Sat, 7 Jan 2023 12:10:27 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Message-ID: <20230107091027.xbikgiizkeegofdd@box.shutemov.name>
-References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
- <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
- <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
- <20221231001029.5nckrhtmwahb65jo@box>
- <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
+        Sat, 7 Jan 2023 04:16:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524F984098;
+        Sat,  7 Jan 2023 01:16:15 -0800 (PST)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Npvg51rfMzJrF7;
+        Sat,  7 Jan 2023 17:14:57 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 7 Jan 2023 17:16:11 +0800
+Subject: Re: [PATCH v2] jbd2: Fix data missing when reusing bh which is ready
+ to be checkpointed
+To:     Jan Kara <jack@suse.cz>
+CC:     <tytso@mit.edu>, <jack@suse.com>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <libaokun1@huawei.com>, <zhanchengbin1@huawei.com>
+References: <20230106115603.2624644-1-chengzhihao1@huawei.com>
+ <20230106142255.fqnzgw5tqr77mdzj@quack3>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <09622c2f-6cf7-79c9-2624-c0c0835d125d@huawei.com>
+Date:   Sat, 7 Jan 2023 17:16:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230106142255.fqnzgw5tqr77mdzj@quack3>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 04:42:05PM -0800, Linus Torvalds wrote:
-> The one thing that that "shift by 63 and bitwise or" trick does
-> require is that the _ASM_EXTABLE_UA() thing for getuser/putuser would
-> have to have an extra annotation to shut up the
+ÔÚ 2023/1/6 22:22, Jan Kara Ð´µÀ:
+
+Hi Jan, thanks for reviewing.Some discussions below:
+
+
+>> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
+>> index 6a404ac1c178..06a5e7961ef2 100644
+>> --- a/fs/jbd2/transaction.c
+>> +++ b/fs/jbd2/transaction.c
+>> @@ -1010,36 +1010,37 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
+>>   	 * ie. locked but not dirty) or tune2fs (which may actually have
+>>   	 * the buffer dirtied, ugh.)  */
+>>   
+>> -	if (buffer_dirty(bh)) {
+>> +	if (buffer_dirty(bh) && jh->b_transaction) {
+>>   		/*
+>>   		 * First question: is this buffer already part of the current
+>>   		 * transaction or the existing committing transaction?
+>>   		 */
+>> -		if (jh->b_transaction) {
+>> -			J_ASSERT_JH(jh,
+>> -				jh->b_transaction == transaction ||
+>> -				jh->b_transaction ==
+>> -					journal->j_committing_transaction);
+>> -			if (jh->b_next_transaction)
+>> -				J_ASSERT_JH(jh, jh->b_next_transaction ==
+>> -							transaction);
+>> -			warn_dirty_buffer(bh);
+>> -		}
+>> +		J_ASSERT_JH(jh, jh->b_transaction == transaction ||
+>> +			jh->b_transaction == journal->j_committing_transaction);
+>> +		if (jh->b_next_transaction)
+>> +			J_ASSERT_JH(jh, jh->b_next_transaction == transaction);
+>> +		warn_dirty_buffer(bh);
+>>   		/*
+>> -		 * In any case we need to clean the dirty flag and we must
+>> -		 * do it under the buffer lock to be sure we don't race
+>> -		 * with running write-out.
+>> +		 * We need to clean the dirty flag and we must do it under the
+>> +		 * buffer lock to be sure we don't race with running write-out.
+>>   		 */
+>>   		JBUFFER_TRACE(jh, "Journalling dirty buffer");
+>>   		clear_buffer_dirty(bh);
+>> +		/*
+>> +		 * Setting jbddirty after clearing buffer dirty is necessary.
+>> +		 * Function jbd2_journal_restart() could keep buffer on
+>> +		 * BJ_Reserved list until the transaction committing, then the
+>> +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
+>> +		 * after committing, the buffer couldn't fall on disk even
+>> +		 * last checkpoint finished, which may corrupt filesystem.
+>> +		 */
+>>   		set_buffer_jbddirty(bh);
+>>   	}
 > 
->         WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in
-> user access. Non-canonical address?");
+> So I think the sequence:
 > 
-> in ex_handler_uaccess() for the GP trap that users can now cause by
-> giving a non-canonical address with the high bit clear. So we'd
-> probably just want a new EX_TYPE_* for these cases, but that still
-> looks fairly straightforward.
+> 	if (buffer_dirty(bh)) {
+> 		warn_dirty_buffer(bh);
+> 		JBUFFER_TRACE(jh, "Journalling dirty buffer");
+> 		clear_buffer_dirty(bh);
+> 		set_buffer_jbddirty(bh);
+> 	}
+> 
+> can be moved into the branch
+> 
+>    	if (jh->b_transaction == transaction ||
+> 	    jh->b_next_transaction == transaction) {
+> 
+> below. That way you can drop the assertions as well because they happen
+> later in do_get_write_access() again anyway.
 
-Plain _ASM_EXTABLE() seems does the trick.
+1. If we move the squence:
+  	if (buffer_dirty(bh)) {
+  		warn_dirty_buffer(bh);
+  		JBUFFER_TRACE(jh, "Journalling dirty buffer");
+  		clear_buffer_dirty(bh);
+  		set_buffer_jbddirty(bh);
+  	}
 
-> Hmm?
+into the branch
 
-Here's what I've come up with:
+         if (jh->b_transaction == transaction ||
+  	    jh->b_next_transaction == transaction) {
 
-diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
-index b70d98d79a9d..3e69e3727769 100644
---- a/arch/x86/lib/getuser.S
-+++ b/arch/x86/lib/getuser.S
-@@ -37,22 +37,22 @@
- 
- #define ASM_BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
- 
--#ifdef CONFIG_X86_5LEVEL
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rdx), \
--		    __stringify(mov $((1 << 56) - 4096 - (n)),%rdx), X86_FEATURE_LA57
--#else
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	mov $(TASK_SIZE_MAX - (n)),%_ASM_DX
--#endif
-+.macro check_range size:req
-+.if IS_ENABLED(CONFIG_X86_64)
-+	mov %rax, %rdx
-+	shr $63, %rdx
-+	or %rdx, %rax
-+.else
-+	cmp $TASK_SIZE_MAX-\size+1, %eax
-+	jae .Lbad_get_user
-+	sbb %edx, %edx		/* array_index_mask_nospec() */
-+	and %edx, %eax
-+.endif
-+.endm
- 
- 	.text
- SYM_FUNC_START(__get_user_1)
--	LOAD_TASK_SIZE_MINUS_N(0)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=1
- 	ASM_STAC
- 1:	movzbl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -62,11 +62,7 @@ SYM_FUNC_END(__get_user_1)
- EXPORT_SYMBOL(__get_user_1)
- 
- SYM_FUNC_START(__get_user_2)
--	LOAD_TASK_SIZE_MINUS_N(1)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=2
- 	ASM_STAC
- 2:	movzwl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -76,11 +72,7 @@ SYM_FUNC_END(__get_user_2)
- EXPORT_SYMBOL(__get_user_2)
- 
- SYM_FUNC_START(__get_user_4)
--	LOAD_TASK_SIZE_MINUS_N(3)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=4
- 	ASM_STAC
- 3:	movl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -90,30 +82,17 @@ SYM_FUNC_END(__get_user_4)
- EXPORT_SYMBOL(__get_user_4)
- 
- SYM_FUNC_START(__get_user_8)
--#ifdef CONFIG_X86_64
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=8
- 	ASM_STAC
-+#ifdef CONFIG_X86_64
- 4:	movq (%_ASM_AX),%rdx
--	xor %eax,%eax
--	ASM_CLAC
--	RET
- #else
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user_8
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
--	ASM_STAC
- 4:	movl (%_ASM_AX),%edx
- 5:	movl 4(%_ASM_AX),%ecx
-+#endif
- 	xor %eax,%eax
- 	ASM_CLAC
- 	RET
--#endif
- SYM_FUNC_END(__get_user_8)
- EXPORT_SYMBOL(__get_user_8)
- 
-@@ -166,7 +145,7 @@ EXPORT_SYMBOL(__get_user_nocheck_8)
- 
- SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
- 	ASM_CLAC
--bad_get_user:
-+.Lbad_get_user:
- 	xor %edx,%edx
- 	mov $(-EFAULT),%_ASM_AX
- 	RET
-@@ -184,23 +163,23 @@ SYM_CODE_END(.Lbad_get_user_8_clac)
- #endif
- 
- /* get_user */
--	_ASM_EXTABLE_UA(1b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(2b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(3b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(1b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(2b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(3b, .Lbad_get_user_clac)
- #ifdef CONFIG_X86_64
--	_ASM_EXTABLE_UA(4b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(4b, .Lbad_get_user_clac)
- #else
--	_ASM_EXTABLE_UA(4b, .Lbad_get_user_8_clac)
--	_ASM_EXTABLE_UA(5b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(4b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(5b, .Lbad_get_user_8_clac)
- #endif
- 
- /* __get_user */
--	_ASM_EXTABLE_UA(6b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(7b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(8b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(6b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(7b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(8b, .Lbad_get_user_clac)
- #ifdef CONFIG_X86_64
--	_ASM_EXTABLE_UA(9b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(9b, .Lbad_get_user_clac)
- #else
--	_ASM_EXTABLE_UA(9b, .Lbad_get_user_8_clac)
--	_ASM_EXTABLE_UA(10b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(9b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(10b, .Lbad_get_user_8_clac)
- #endif
-diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
-index 32125224fcca..0ec57997a764 100644
---- a/arch/x86/lib/putuser.S
-+++ b/arch/x86/lib/putuser.S
-@@ -33,20 +33,20 @@
-  * as they get called from within inline assembly.
-  */
- 
--#ifdef CONFIG_X86_5LEVEL
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rbx), \
--		    __stringify(mov $((1 << 56) - 4096 - (n)),%rbx), X86_FEATURE_LA57
--#else
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	mov $(TASK_SIZE_MAX - (n)),%_ASM_BX
--#endif
-+.macro check_range size:req
-+.if IS_ENABLED(CONFIG_X86_64)
-+	movq %rcx, %rbx
-+	shrq $63, %rbx
-+	orq %rbx, %rcx
-+.else
-+	cmp $TASK_SIZE_MAX-\size+1, %ecx
-+	jae .Lbad_put_user
-+.endif
-+.endm
- 
- .text
- SYM_FUNC_START(__put_user_1)
--	LOAD_TASK_SIZE_MINUS_N(0)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=1
- 	ASM_STAC
- 1:	movb %al,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -66,9 +66,7 @@ SYM_FUNC_END(__put_user_nocheck_1)
- EXPORT_SYMBOL(__put_user_nocheck_1)
- 
- SYM_FUNC_START(__put_user_2)
--	LOAD_TASK_SIZE_MINUS_N(1)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=2
- 	ASM_STAC
- 3:	movw %ax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -88,9 +86,7 @@ SYM_FUNC_END(__put_user_nocheck_2)
- EXPORT_SYMBOL(__put_user_nocheck_2)
- 
- SYM_FUNC_START(__put_user_4)
--	LOAD_TASK_SIZE_MINUS_N(3)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=4
- 	ASM_STAC
- 5:	movl %eax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -110,9 +106,7 @@ SYM_FUNC_END(__put_user_nocheck_4)
- EXPORT_SYMBOL(__put_user_nocheck_4)
- 
- SYM_FUNC_START(__put_user_8)
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=8
- 	ASM_STAC
- 7:	mov %_ASM_AX,(%_ASM_CX)
- #ifdef CONFIG_X86_32
-@@ -144,15 +138,15 @@ SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
- 	RET
- SYM_CODE_END(.Lbad_put_user_clac)
- 
--	_ASM_EXTABLE_UA(1b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(1b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(2b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(3b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(4b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(5b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(6b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(7b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(9b, .Lbad_put_user_clac)
- #ifdef CONFIG_X86_32
--	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(8b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(10b, .Lbad_put_user_clac)
- #endif
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+, then we have a new situation(jh->b_transaction == 
+journal->j_committing_transaction) to clear buffer dirty, so we need to 
+add an else-branch like(based on v2 patch):
+--- a/fs/jbd2/transaction.c
++++ b/fs/jbd2/transaction.c
+@@ -1092,6 +1092,10 @@ do_get_write_access(handle_t *handle, struct 
+journal_head *jh,
+                 spin_unlock(&journal->j_list_lock);
+                 unlock_buffer(bh);
+                 goto done;
++       } else if (test_clear_buffer_dirty(bh)) {
++               warn_dirty_buffer(bh);
++               JBUFFER_TRACE(jh, "Journalling dirty buffer");
++               set_buffer_jbddirty(bh);
+         }
+         unlock_buffer(bh);
+
+I think we'd better not to move the sequence?
+
+2. I agree that the assertions in branch 'if (jh->b_transaction)' are 
+redundant, I will remove them in v3. Thanks for pointing that.
+
+> Also I don't quite understand the new comment you have added. Do you mean
+> we need to not only clear BH_Dirty bit but also set BH_JBDdirty as dirtying
+> (through jbd2_journal_dirty_metadata()) does not have to follow after
+> do_get_write_access()?
+> 
+
+Yes.
+I think one reason we have non-empty commit_transaction->t_reserved_list 
+is that: jbd2_journal_restart() could let jh attach to transaction_1 and 
+dirty jh in transaction_2.
+
+buffer is dirty after trans_0 committed
+do_get_write_access() =>  jh->trans = old_handle->trans_1, clear buffer 
+dirty & set jbddirty, BJ_Reserved
+jbd2_journal_restart()  => stop old_handle && may jbd2_log_start_commit 
+&& start new_handle with trans_2
+jbd2_journal_commit_transaction() => clear jbddirty & set buffer dirty & 
+set jh->b_transaction = NULL
+do_checkpoint  => buffer is fell on disk. If do_get_write_access() not 
+mark jbddirty, buffer won't be fell on disk after checkpoint, which 
+could corrupt filesystem.
+
+I'm not sure whether we have the above path in realworld. I guess it 
+exists in theory according to the comments:
+        /* 
+
+         * First thing we are allowed to do is to discard any remaining 
+
+         * BJ_Reserved buffers.  Note, it is _not_ permissible to assume 
+
+         * that there are no such buffers: if a large filesystem 
+
+         * operation like a truncate needs to split itself over multiple 
+
+         * transactions, then it may try to do a jbd2_journal_restart() 
+while
+          * there are still BJ_Reserved buffers outstanding.  These must 
+
+          * be released cleanly from the current transaction. 
+
+          * 
+
+          * In this case, the filesystem must still reserve write access 
+
+          * again before modifying the buffer in the new transaction, 
+but
+          * we do not require it to remember exactly which old buffers 
+it
+          * has reserved.  This is consistent with the existing 
+behaviour
+          * that multiple jbd2_journal_get_write_access() calls to the 
+same
+          * buffer are perfectly permissible. 
+
+          * We use journal->j_state_lock here to serialize processing of 
+
+          * t_reserved_list with eviction of buffers from 
+journal_unmap_buffer().
+          */ 
+
+         while (commit_transaction->t_reserved_list) {  [...]
