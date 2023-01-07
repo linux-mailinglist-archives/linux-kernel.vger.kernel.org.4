@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFA1660C48
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176C6660C4A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbjAGDnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S229797AbjAGDqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjAGDnp (ORCPT
+        with ESMTP id S229488AbjAGDqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:43:45 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C5521B3;
-        Fri,  6 Jan 2023 19:43:44 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so7208697pjj.2;
-        Fri, 06 Jan 2023 19:43:44 -0800 (PST)
+        Fri, 6 Jan 2023 22:46:07 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E7A479F4;
+        Fri,  6 Jan 2023 19:46:06 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id s67so2429453pgs.3;
+        Fri, 06 Jan 2023 19:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=G5qWs5TiJGPW/EDw2KXWPEsaSCWYGVrAbslcVFl/3Fs=;
-        b=eBc5KvTLSvzQmnGq6Ti5p9SaLEb8oHku7eo/zzrqvPHTnNWD7jPCH+IScPF2BiNV66
-         nIUI0DzOJlWwcBfvU91z77YvvWx6Zv5gDgEJLcPf+JVJi9RtvLDTAnG4QrbNARik2DcH
-         WCeESg4DeUQ5Te1iO+nU1RXf1QT1OkBA53U6Jjwse32cXDc2HXHDv6FpGakEvEnUrm+U
-         YyUt0MiWq8BkkuJ84FDwH93HZVJifRA6zzm3hPHG5EIxCA3OtanmKRG2mOGzeKrUKWOE
-         GWZiId5RfycshJr2c3mAi8zhU2Tru9kyy96ew5kAJ6/Rr/UlHtuE4+dCcUgSglfObrZZ
-         Qrvw==
+        b=ENOpYNSHLdAw8M7jVxZB36nReGHj1lYS24BKg3kFkBwK8ulOg3Pm9toeeS/Hi9t0Wd
+         8qazqF0YRhSFRo/IHR6B0lofhKUECIGpVQl4IpZBgY8aG4iXlYkaeCKXG2vqpvjjh+cD
+         ZlC8g0/jno0r2vAmUVYhHkMMsod79vob9vmZrC4o7aqOKegqKtcRwKTFv4625k7jYUOt
+         qRbMIaRPtDoTN7e/bo6k6S/y17bo+uWdWYlsAYy0fo8WCH7rCw2DO/NwhItbRUefXniY
+         QQUJIud7vFlnVSccMoNrPHh6tXvxd1SNcvicU1NSAf++SypGt+SSxJ4T/cdyYW3xhgEA
+         I44Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=G5qWs5TiJGPW/EDw2KXWPEsaSCWYGVrAbslcVFl/3Fs=;
-        b=vkkxkESNayWuSyR0NAsUAdhaki0XUGme0Jvw9zVUErpu0SI9ukQVsmdSloz6U190wI
-         ztvbuhi0zhyoYiSVjb6W+pkw8l6xfKZjMOe7O5toXzFZe35VkrPtUOcM3QbZ1rhR8e6w
-         dd37JoBodNygrnY5JAYwRTCpIu0zWsemmFfmRteQj9299hDPBPTlpPCJGIak8xu544vW
-         WE5ch4kEGJ9tlzJiwggQiSnk489XDZETPf9AnjeCfMkRhjajG3Pn6QsrxW6qpqLohrP3
-         jiVfA7bJ6z4s4DqxL3l+5mwPj+kUgUb4AROieWMQFoT7NdpS4N6sZ3VBVrajY9KIDXF5
-         wYPQ==
-X-Gm-Message-State: AFqh2krBXSk/jckYN1vutfMPN9HsYmqAMvT0q2p2uxsfmzBKeqcHCMIu
-        sHLabYYeOqKCx1qFg4T/ZIOhKSbgxJg=
-X-Google-Smtp-Source: AMrXdXuVM9mF8FyJ4YSOfu0Of5hD4h5YbR1HDHqeCefSgGqYrJ2V0v7uJ72IhJYLeZRVNasunpYtVg==
-X-Received: by 2002:a17:902:f80c:b0:185:441e:90dd with SMTP id ix12-20020a170902f80c00b00185441e90ddmr64501798plb.67.1673063023979;
-        Fri, 06 Jan 2023 19:43:43 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id jd9-20020a170903260900b00186727e5f5csm1597728plb.248.2023.01.06.19.43.42
+        b=a1p1gyGLssG6IOSHJUPAs+XJNfg1cVix/ZEl1lYuoS/FUARPCE+YBhVByHhbchxVX3
+         8NZ9cbi2k/0Q+2qHWsg7B46Yd6WeI+K6T46BNOZjVs2gmQiSGHZDd3/ai6p9KJ5aZDBB
+         Tcv34EQ+25aL56gdglmhGKBrhcHq3AYYkcv+mgEz7HncrA+IUpjn/FMaB7OJU155y6i8
+         6xya/uuBfrF6saJS/4zKTNsaA7rCOInzxmflnQOd2NbJY4+xA8pPVE6jmVxpx6UBFxVa
+         Dz/Eg2m0S8OPUK+cwoxxSHIwvcJXNWzcCa+A4TXanJB0Kzwe7Oq0ejE5BrmTVI6G7dTD
+         beCQ==
+X-Gm-Message-State: AFqh2kpQgkcVJ8uxYgVkoCmBcqrZTidLvnOL05LHilRvC003K5qMCPCu
+        wS1MhKEQcoo98LVdWkeng9qwjEdLI1jlLA==
+X-Google-Smtp-Source: AMrXdXuR1f31pwTbK0sCnbcwpIHLCVlNIyMugsZvi/LSaGtkdI0bkMgkpj2w0VaXnyVG337iMubWUw==
+X-Received: by 2002:a62:19cd:0:b0:580:9935:ffdb with SMTP id 196-20020a6219cd000000b005809935ffdbmr45809242pfz.20.1673063166296;
+        Fri, 06 Jan 2023 19:46:06 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id r2-20020aa79882000000b0057447bb0ddcsm1802669pfl.49.2023.01.06.19.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 19:43:43 -0800 (PST)
+        Fri, 06 Jan 2023 19:46:05 -0800 (PST)
 From:   Quanfa Fu <quanfafu@gmail.com>
-To:     rostedt@goodmis.or, mhiramat@kernel.org
+To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Quanfa Fu <quanfafu@gmail.com>
 Subject: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
-Date:   Sat,  7 Jan 2023 11:43:35 +0800
-Message-Id: <20230107034335.1154374-1-quanfafu@gmail.com>
+Date:   Sat,  7 Jan 2023 11:45:57 +0800
+Message-Id: <20230107034557.1156022-1-quanfafu@gmail.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
