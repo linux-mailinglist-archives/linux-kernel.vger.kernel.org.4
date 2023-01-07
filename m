@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E042660F5F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FFF660F63
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjAGOL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S232604AbjAGORL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjAGOLz (ORCPT
+        with ESMTP id S229621AbjAGORJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:11:55 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33DF3C713
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 06:11:51 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g4so4627087ybg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 06:11:51 -0800 (PST)
+        Sat, 7 Jan 2023 09:17:09 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE7D4859C;
+        Sat,  7 Jan 2023 06:17:04 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id v6so5973196edd.6;
+        Sat, 07 Jan 2023 06:17:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6LvDFrCDqXrDdNZrnNjxL8kkjxccK3YMI3z/Q6Pw1gY=;
-        b=pVJ3XW1isQV0BdXebNNNiXrBOtNFPXLLsav2dPlKzieH7sqtfGkSwslQ99bL9cMjw4
-         ig1G3VQIU54/Vr4Zg9GKlNgVH4rQutIrWlTdiGuhlBqy9f18GEdxrk1EJeoSXakoVPBd
-         frzm9bctQ1qYxKkZy2SLmkKy7SwuTZzNzpvRm6GlL3FzQ1XkeRHF1gf/AuF9pBV4ZGpw
-         DLGzxS9J+qL9VtOkutNl4ZqaRCKXx8hMPJp6IbIX4+NLOZlIXb0edslmpmSNWOPvdckw
-         V2QX7O6qhDf0y7Al/zfS0OrFuKOOYZ3IwfiMJaFNdaLMnzPfLUNRRAbJ16RXN4U7TjQZ
-         YAOQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OhSst57QklQ/s1OdeaurUei9fLgv+a0PdBl46HD5IBk=;
+        b=NgI1bKafS6/mLKXlcaYG5kpsVWLUkxAIjG/1A9d9Ye7uprk5Iq2Lx7FLKKCWk25LEv
+         Yf9qR6vV4A7Dmmd0LaEWtfyiJHnPDzAq4m3AQfU/yMiC/Ahq3YyF55QoZ6iVZv3fL5Xa
+         CP/KB9oKZGHq1JpqwkSpHqucdZcwaaGzaXBP4rbtqmHeqYuyT6qm2fvuMC+d/b+HMSf5
+         5d/G5cunL4EkZX7FOSXDk9Kp65t+ZYkT1/qBIk1lzyR0+GKwrKG7fxBXKwARRz7Pg/OP
+         1ixF1ITAIaS3hoEUj2gg+C0lkLXt//7qS8hlti1gFY1j88HYvhQiXD2PF8Ynf7CIRpwg
+         yBXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6LvDFrCDqXrDdNZrnNjxL8kkjxccK3YMI3z/Q6Pw1gY=;
-        b=vR0V0N4lPZbexpSMKNFg0u8ehzz5EdlaW7DZ7Jt6uiBQCtnEaQTESRxN/U1qnhydVi
-         cdFWUlmzAgt7SI1XxxN6L6elxlocosfrJi4XLxDNn6AECjZtQ5LlfOLYd8V9ApLQUHnq
-         nm7ojpoIiIUexFdlZTZd0U+n9lu7YHfXX99+4k0u/sAMc4L36Evf5FrpO8MMwURv24tA
-         /MtubQzW++DlHdA/svUuaZMaMs8RJL6vByajae8DbQWIEQE1ssgPtQb7VLNuWy+udx4S
-         /8Bz7FRACj+NFOix6l0DNKS9fURbfklU8iWpoUHElgovH7UjeNQA8rUtotBFoLfshZFC
-         WB+A==
-X-Gm-Message-State: AFqh2krsDk4BpvVXDFz08/RDGWtZ8JIva28IgTbJISW1rUKCz1+lp5Pu
-        /Etwe/GhhHBGNXv8B2teu2tcUwnGOzCnY9Lefvtxlw==
-X-Google-Smtp-Source: AMrXdXsvNPVQ8osWNCSBDbgr0/CRLqZ02x0UJg56e+eC7no6psBYuHFJSL86LGzwVzsU3fP5Wb6V+NUpKBpVgTijmt4=
-X-Received: by 2002:a25:c404:0:b0:757:591e:cee3 with SMTP id
- u4-20020a25c404000000b00757591ecee3mr6481129ybf.15.1673100711080; Sat, 07 Jan
- 2023 06:11:51 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OhSst57QklQ/s1OdeaurUei9fLgv+a0PdBl46HD5IBk=;
+        b=1/r4Q/N0IkJShJ1XFkGEzlvsm61gXiOJkl9bdYcHuR+X4ToWLEVqPL+WrXHrYPc0nj
+         5UgKrQT90gRrlUTaN7yJDvZEQIWwsGPuRQVRGaFnY4CyoSzrcL98E6w75FB39xh2avmt
+         x3WgOWuVaAHwPgl0Phn76d6OPiNZSQ6KW8Q8aYm8xLR0N2t3RLCmAdMQoA5z22S88QJG
+         JK6ur78Vs36fFdalOw1mjrc1WOA9aB4d5CgnlRhBbDm5OJiWb1GQWzlnPkbUp8qtON86
+         eTac3gGCtjWAHItaQ/EVribwswwwRmwqQrHTlqWWijNnL7IJi0nwZ1kzU6I6FgrSu3dL
+         oayg==
+X-Gm-Message-State: AFqh2kpVZq1QxzELy4Ibdul+tsNEK6zfB15fIi2jvyTHHUCv7zxqfJaE
+        CI7FZydS2sZAzNd7PJ84fZI=
+X-Google-Smtp-Source: AMrXdXs2wTwrYKKqPdz2KeIfEoCQ9buukpeu3vsS4/NZi88+rUo94bsuopXCML25Q7KWqI/3992gxQ==
+X-Received: by 2002:a05:6402:220b:b0:475:32d2:74a5 with SMTP id cq11-20020a056402220b00b0047532d274a5mr45692428edb.42.1673101022590;
+        Sat, 07 Jan 2023 06:17:02 -0800 (PST)
+Received: from [192.168.1.50] ([79.119.240.114])
+        by smtp.gmail.com with ESMTPSA id v15-20020a056402184f00b0046c5baa1f58sm1490888edy.97.2023.01.07.06.17.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 06:17:01 -0800 (PST)
+Message-ID: <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
+Date:   Sat, 7 Jan 2023 16:17:00 +0200
 MIME-Version: 1.0
-References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
- <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com> <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org>
-In-Reply-To: <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 7 Jan 2023 16:11:39 +0200
-Message-ID: <CAA8EJprcVT=vyEhU0Nbtr4Wu1YxcGs+NLNxtpTaFtaJSTqvgYw@mail.gmail.com>
-Subject: Re: Annoying message on the console for the db845c board
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
+To:     Jun ASAKA <JunASAKA@zzy040330.moe>, Jes.Sorensen@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
+Content-Language: en-US
+From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
+In-Reply-To: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 Jan 2023 at 22:08, Daniel Lezcano <daniel.lezcano@linaro.org> wro=
-te:
->
-> On 06/01/2023 19:14, Dmitry Baryshkov wrote:
-> > On Fri, 6 Jan 2023 at 18:37, Daniel Lezcano <daniel.lezcano@linaro.org>=
- wrote:
-> >>
-> >>
-> >> Hi all,
-> >>
-> >> Does anyone have an idea on how to fix these timeout messages ? They a=
-re
-> >> displayed again and again every 5 seconds and that saturates the
-> >> filesystem after awhile.
-> >
-> > Could you please check that you have CONFIG_QCOM_RMTFS_MEM enabled and
-> > the rmtfs daemon running?
-> > I think that's the usual cause of such messages.
->
-> Yes, I have the option and the daemon running:
->
-> zcat /proc/config.gz | grep CONFIG_QCOM_RMTFS_MEM
-> CONFIG_QCOM_RMTFS_MEM=3Dy
->
-> ps -ef | grep rmtfs
-> root      9888     1  2 20:07 ?        00:00:00 /usr/bin/rmtfs -r -P -s
+On 17/12/2022 05:06, Jun ASAKA wrote:
+> Fixing transmission failure which results in
+> "authentication with ... timed out". This can be
+> fixed by disable the REG_TXPAUSE.
+> 
+> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+> ---
+>  drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> index a7d76693c02d..9d0ed6760cb6 100644
+> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
+>  	val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
+>  	val8 &= ~BIT(0);
+>  	rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
+> +
+> +	/*
+> +	 * Fix transmission failure of rtl8192e.
+> +	 */
+> +	rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
+>  }
+>  
+>  static s8 rtl8192e_cck_rssi(struct rtl8xxxu_priv *priv, u8 cck_agc_rpt)
 
-I don't seem to be able to reproduce it here. Could you please share
-your kernel commit, .config and md5sums of
-/lib/firmware/qcom/sdm845/m*
-
-Thank you.
-
->
->
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
-
-
---=20
-With best wishes
-Dmitry
+By the way, you should get this into the stable kernels too:
+https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
