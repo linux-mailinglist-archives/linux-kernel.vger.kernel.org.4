@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD4D660FAC
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECCF660FB0
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjAGO6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S232200AbjAGO7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjAGO63 (ORCPT
+        with ESMTP id S232050AbjAGO7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:58:29 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F60F5BA28;
-        Sat,  7 Jan 2023 06:58:28 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id q7so1924752vkn.3;
-        Sat, 07 Jan 2023 06:58:28 -0800 (PST)
+        Sat, 7 Jan 2023 09:59:39 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84A83AB36;
+        Sat,  7 Jan 2023 06:59:38 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id l184so4372440vsc.0;
+        Sat, 07 Jan 2023 06:59:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=etuGUMlz1OGZPLC3N2dsybJcv0GF1qcAGisyjEZpP/U=;
-        b=Nqs0hq7qEOd9Wbfvi1Sh+OsqVulVM5R3Hi7j1ddD1/VVE46t62ThnjyqG/x0vMge8B
-         5l1CK4KFBBqnkaS/Z9Kopo10udHZC3W6tYB+ac/fHrUtdoeCNfg8wlXc009nETgXURbf
-         VnJYJcCFGr+h5qEid9ddza63RqwQF8k0FgxprXvBEhQ7M6IXIdmkOe1i4sLNf/H64pWI
-         ZqWTBzF1f/ckyspS8rl6lk7oK9vdvXLPfae0TwcDzFKHF16CEM1q8CvGJ2e3UMac5LHu
-         B2fETbhvAmoaz1jPYHmcKnhc2A/kFptrQgArKiTxXnbv6sUhrzyV4t8QPF7M6TqZEKp9
-         NT4A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ifhz4k4RvVQRROiBmQhqZMFI/gQRGOwvv+dCEJY7ups=;
+        b=oNN52TyIaEqppiUBzhnfEZ2EPtrjybrqfacMaGByapzK5ORfo4GNy2K0uM0Jt0J5SY
+         /Udu+x+3fMORcRP3u1ysg0nx9fg6tCBgCLy53p3VdwmQMH4KP9SwmcQBE/P2IWA091TF
+         Ta0AqgpXidUu3aKa1y54/eTg0vX19Dgwpc+kVLC21BcOCl/d05xJj7hMysgam7m0mKqr
+         jwP78g3VkOBvvQO0Eb8QYKjhYtpw7eXyodiEZYnFuru43NBNs4aTTJST6kqdkLntTiIW
+         cjWjhg0jKsxhGs4RON7ZBYsUmKU3Tc+rtl2/IM7wzmImdD8SYrrJnqPKhnk5LR1m7iJS
+         qQoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=etuGUMlz1OGZPLC3N2dsybJcv0GF1qcAGisyjEZpP/U=;
-        b=RqaJLjeCyH/uvnVtM3CKMkAJZnwJOYLK1yqhMaTsc7OA50R1/R9qIGxaGHzrideHv9
-         ZV+ER9+csfw2VFEveo5Dtebia37EKR1uV3tlofpK19XJaGp3wr3E8C2hTazVeqT6TadM
-         SkSq6JkEUK/WlgkNjfoweNfTmY9KJlZg4A/GaBxL8BRFsSZx3Sy/6lbO/aUer6FseRG2
-         03u7E6Yq0Ra/73ufMcVk/xYncRDzrb0yYSSLYZ3Th/m3z4NuHDyOcFRFweJioy4Tqkz8
-         7bcBAMXpPSFjP1yDeB4Rwuk5XbbajIZ1UdFzaXgYuhEORULVkUeQ4Pq9P82Nt1eUTtlS
-         fhRQ==
-X-Gm-Message-State: AFqh2kpd77GVTg8o7bo91tY0hRwwTE1yueHYIBC6qP9xLvi1upXbgfSs
-        oZSCrgLZWepYHLuZGgsNDo3l66D/8ZZbiVQYOzY=
-X-Google-Smtp-Source: AMrXdXsYRMv57sqBsp8WHzBL5A35b5HiFMXzzy9cTFHvCMaCiRc6CewnLg/TqNYduCrsvnNlAbDka61FZvrmhD1sOkA=
-X-Received: by 2002:a1f:2189:0:b0:3d5:8603:a96f with SMTP id
- h131-20020a1f2189000000b003d58603a96fmr4338822vkh.22.1673103507209; Sat, 07
- Jan 2023 06:58:27 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ifhz4k4RvVQRROiBmQhqZMFI/gQRGOwvv+dCEJY7ups=;
+        b=iMu643XOsvADO8gxYRE40240T3wj1fO/vCusfY6MHNpkk1XG5K8dGqLoA1nlcnUSwU
+         bZ1swirAfBpEMWTNi8S6A7pnrhVieuXLZRmfCi93iW1tRmQmfkSVG2y3hQpka6uBU40l
+         HM6Yufb45pU7kS+Ba4ZGcqQSRkf2g8CPZuV5EYwI6MU/Mf+9n7FWID62jE8cX9E0UDTX
+         pk04ayuXgDVpOgDsulaJFY0fTkan/VJAnNnt8yQmI4+yLfII3qNN6dAmTAjmYp/MGd1t
+         u2feHZSZNgr5DYqZDcscz7juxWBgZtXHBkuXqubqoyIh8WHvgCKQIibYORQPSUrnjJUp
+         J53w==
+X-Gm-Message-State: AFqh2kp65wfQEQzyopLGLlLJ5fRdlO7C0VvWNFojd9fEFZzQTjdEb0Oj
+        bfqOnV4AfeHRE9GbsrWKiLvYd2G501QlI2PfScg=
+X-Google-Smtp-Source: AMrXdXuDChX+sgH5LBiE4Tvb58gSe0MpmgTJ7NVHsb4/MuSNW1o/09jLO6adWzht1g+B0vAN5g4RMvG89TTjIAA1Skc=
+X-Received: by 2002:a67:1703:0:b0:3ce:f9ed:ad70 with SMTP id
+ 3-20020a671703000000b003cef9edad70mr384547vsx.76.1673103577869; Sat, 07 Jan
+ 2023 06:59:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-7-linux.amoon@gmail.com>
- <Y7Xk/lPUshC+U8OQ@google.com>
-In-Reply-To: <Y7Xk/lPUshC+U8OQ@google.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-11-linux.amoon@gmail.com>
+ <Y7Xf/92iCHD5WhpA@google.com>
+In-Reply-To: <Y7Xf/92iCHD5WhpA@google.com>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Sat, 7 Jan 2023 20:28:11 +0530
-Message-ID: <CANAwSgTySFm3o-9JcTTiKMHN-8w510DKNFKKxwz3PjA6DDQwHQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] usb: misc: onboard_usb_hub: add Genesys Logic
- GL3523-QFN76 hub support
+Date:   Sat, 7 Jan 2023 20:29:20 +0530
+Message-ID: <CANAwSgQijsKkjd6NJ7GMpph-cVpch6yXCdimyCjhQj5RKV_Cvw@mail.gmail.com>
+Subject: Re: [PATCH v1 10/11] usb: misc: onboard_usb_hub: add VIA LAB VL817Q7
+ hub support
 To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,117 +72,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Matthias,
 
-Thanks for your review comments,
+Thanks for your review comments.
 
-On Thu, 5 Jan 2023 at 02:13, Matthias Kaehlcke <mka@chromium.org> wrote:
+On Thu, 5 Jan 2023 at 01:52, Matthias Kaehlcke <mka@chromium.org> wrote:
 >
-> Hi Anand,
+> Hi Andand,
 >
-> On Wed, Dec 28, 2022 at 10:03:15AM +0000, Anand Moon wrote:
-> > Genesys Logic GL3523-QFN76 is a 4-port USB 3.1 hub that has a reset pin=
- to
+> On Wed, Dec 28, 2022 at 10:03:19AM +0000, Anand Moon wrote:
+> > VIA LAB VL817Q7 is a 4-port USB 3.1 hub that has a reset pin to
 > > toggle and a 5.0V core supply exported though an integrated LDO is
 > > available for powering it.
 > >
-> > Add the support for this hub, for controlling the reset pin and the cor=
-e
+> > Add the support for this hub, for controlling the reset pin and the core
 > > power supply.
 > >
 > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 > > ---
-> >  drivers/usb/misc/onboard_usb_hub.c | 1 +
-> >  drivers/usb/misc/onboard_usb_hub.h | 1 +
-> >  2 files changed, 2 insertions(+)
+> >  drivers/usb/misc/onboard_usb_hub.c | 2 ++
+> >  drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+> >  2 files changed, 7 insertions(+)
 > >
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onbo=
-ard_usb_hub.c
-> > index c0e8e6f4ec0a..699050eb3f17 100644
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> > index 699050eb3f17..025572019d16 100644
 > > --- a/drivers/usb/misc/onboard_usb_hub.c
 > > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > @@ -410,6 +410,7 @@ static void onboard_hub_usbdev_disconnect(struct us=
-b_device *udev)
-> >  static const struct usb_device_id onboard_hub_id_table[] =3D {
-> >       { USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850=
-G USB 2.0 */
-> >       { USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852=
-G-OHG USB 2.0 */
-> > +     { USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL352=
-3-QFN76 USB 3.1 */
+> > @@ -335,6 +335,7 @@ static struct platform_driver onboard_hub_driver = {
+> >  #define VENDOR_ID_MICROCHIP  0x0424
+> >  #define VENDOR_ID_REALTEK    0x0bda
+> >  #define VENDOR_ID_TI         0x0451
+> > +#define VENDOR_ID_VIA                0x2109
+> >
+> >  /*
+> >   * Returns the onboard_hub platform device that is associated with the USB
+> > @@ -418,6 +419,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
+> >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+> >       { USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+> >       { USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+> > +     { USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817Q7 3.1 */
 >
-> Please drop the '-QFN76' suffix. The GL3523 comes in different packages, =
-'QFN76'
-> is one of them, I'd expect the other packages to use the same product id.
->
-> The GL3523 is a single IC, however like the TI USB8041 or the RTS5414 it
-> provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry f=
-or
+> The VL817Q7 is a single IC, however like the TI USB8041 or the RTS5414 it
+> provides both a USB 3.1 and a USB 2.0 hub. You should also add an entry for
 > the USB 2.0 hub here.
 >
-
 Ok,
 
-> >       { USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 =
-*/
-> >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
-> >       { USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onbo=
-ard_usb_hub.h
-> > index 2ee1b0032d23..b32fad3a70f9 100644
+>
+> >       {}
+> >  };
+> >  MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> > index b32fad3a70f9..1fb3371ebdae 100644
 > > --- a/drivers/usb/misc/onboard_usb_hub.h
 > > +++ b/drivers/usb/misc/onboard_usb_hub.h
-> > @@ -32,6 +32,7 @@ static const struct of_device_id onboard_hub_match[] =
-=3D {
-> >       { .compatible =3D "usb451,8142", .data =3D &ti_tusb8041_data, },
-> >       { .compatible =3D "usb5e3,608", .data =3D &genesys_gl850g_data, }=
-,
-> >       { .compatible =3D "genesys,usb5e3,610", .data =3D &genesys_gl850g=
-_data, },
-> > +     { .compatible =3D "genesys,usb5e3,620", .data =3D &genesys_gl850g=
-_data, },
->
-> s/genesys,//
->
-> This reuses the settings of the GL850G hub, which doesn't seem correct in
-> this case. For the GL850G a (minimum) reset time of 3us is configured. Th=
-e
-> data sheet of the GL3523 says:
->
->   "The (internal) reset will be released after approximately 40 =CE=BCS a=
-fter
->    power good.
->
->    To fully control the reset process of GL3523, we suggest the reset tim=
-e
->    applied in the external reset circuit should longer than that of the
->    internal reset circuit."
->
-> Since it is 'approximately 40 =CE=BCS' I'd say make the external reset 50=
- =CE=BCS
-> to be on the safe side, it's a very short time in any case.
->
-
-Thanks for this input will update this in the next version.
-
-> Please also add an entry for the USB 2.0 part of the IC.
-
-alarm@odroid-n2:~$ lsusb -tv
-/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/1p, 5000M
-    ID 1d6b:0003 Linux Foundation 3.0 root hub
-    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-        ID 05e3:0620 Genesys Logic, Inc. GL3523 Hub
-/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/2p, 480M
-    ID 1d6b:0002 Linux Foundation 2.0 root hub
-    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-        ID 05e3:0610 Genesys Logic, Inc. Hub
-
-So earlier patch adds support for this device ID.
->
-> >       { .compatible =3D "usbbda,411", .data =3D &realtek_rts5411_data, =
-},
-> >       { .compatible =3D "usbbda,5411", .data =3D &realtek_rts5411_data,=
- },
-> >       { .compatible =3D "usbbda,414", .data =3D &realtek_rts5411_data, =
-},
-> > --
-> > 2.38.1
+> > @@ -26,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
+> >       .reset_us = 3,
+> >  };
 > >
+> > +static const struct onboard_hub_pdata vialab_vl817q7_data = {
+> > +     .reset_us = 3,
+> > +};
+> > +
+> >  static const struct of_device_id onboard_hub_match[] = {
+> >       { .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+> >       { .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+> > @@ -37,6 +41,7 @@ static const struct of_device_id onboard_hub_match[] = {
+> >       { .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+> >       { .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
+> >       { .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
+> > +     { .compatible = "vialab,usb2109", .data = &vialab_vl817q7_data, },
+>
+> ditto
+>
+> Actually you added the device id entry for the 3.1 hub and a compatible string
+> of the 2.0 hub (or vice versa). Above the device id is 0x0817, here it is
+> 0x2109. Please add both USB 3.1 and 2.0 and make sure the device id and the USB
+> version in the comment for the device id table match.
+
+Yes I messed up the compatible string
+On Odrodi C4
+alarm@odroid-c4:~$ lsusb -tv
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+        ID 2109:0817 VIA Labs, Inc.
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/2p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        ID 2109:2817 VIA Labs, Inc.
+
+vendor ID is 0x2109 and the device ID is 0817,
+So I have fixed the compatible string as below.
+      compatible = "usb2109,2817";  /* USB 2.0 hub */
+      compatible = "usb2109,817";   /* USB 3.1 hub */
+
+Thanks
+
+
+-Anand
