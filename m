@@ -2,127 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39E660C65
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 05:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AB6660C70
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 05:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbjAGEI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 23:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S230096AbjAGEg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 23:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjAGEIt (ORCPT
+        with ESMTP id S229488AbjAGEgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 23:08:49 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC4B714B6
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 20:08:34 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so2246007iln.21
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 20:08:34 -0800 (PST)
+        Fri, 6 Jan 2023 23:36:53 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B948461D;
+        Fri,  6 Jan 2023 20:36:52 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-150debe2b7cso3774394fac.0;
+        Fri, 06 Jan 2023 20:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3/dKals/u5D+/6Pld/lkPkgV1DxDZq2eowycP708Hyc=;
+        b=fYcDjhoqIkZoXzyZl/4BX18B0uT7l1EqaMeTAhKox62aR/ITgJ/WadedH3NH/BokFT
+         /2t3GiR9ec+b+IJoupvxln9tUsSabZfQTE236t9IAbjZ77HB72df6o/dZnTmzx41e9k1
+         Lsh39X7xQbw3TXjcAMWwf5ULlJFX9y7Sgv0Jc6/B7+p4m6kwXzjnWpgGfPIclusfhFCD
+         vZ3lNqJgwIfTxuNPCo/eWkW4kUNWCyudbkSLwB9TnZb8AovsLgY8dM76/DWsDGuTY94J
+         LV0xmX3vEV2YsmWkLjrRIL5qVZgzWuLFrju5obyvQo4KcLj2jmD1XESQWBlNBc3A/6Rx
+         rv4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pJnD3ig7sUZlgkQL2QrvIKL261gXu5lismF55Zm2ACA=;
-        b=cXgdWwvdz1h+Q4d2ekPDgQ4NHsp3IKo5YWC2vd1UazJ/IuIuMPOPfjPDrVML//G7zB
-         1J1IN6Qk/uZJdS/duZl+Hl1aXWw2S9RZkzSpDMa6v4oCiZmG89YAahius7UzU3lCJp9+
-         JgkkUxpH4P9saKTQbS177KZA2e/aktpOyFttWoxcTyaEzz30h/jLyNnqoj7U3GU/QmOc
-         fQ0kXLgLljP47QxiY80CaBHhnksEGe1Rapc6BRNGnpm90Rje2lKuSTVY/2QqXMWrYPVP
-         Izdcjw+rT0Pzo9TRM2MUoPgJ36NWozxi4N6vADWcJ6vHfzHdXBUOnzz/011I1wZQJzGw
-         mL4Q==
-X-Gm-Message-State: AFqh2kqogv1Ocu9Gt+UTL1kwFOtwpjRtYkPyjHse9a/QsrCFJxZXUFrs
-        rT59hk/4YSUDA6+lwEM4wmdHIM8UHfuDvTerCU3OkrW3OurO
-X-Google-Smtp-Source: AMrXdXuy2euMsQQ9E+WhqIqXIrYNKIm2eQXpddY48B0jZjLjqK9OhbKlswuaMNR4xBrzYX/el6ZDwiNoQoiPSFTLq7kvUgFwCfp9
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3/dKals/u5D+/6Pld/lkPkgV1DxDZq2eowycP708Hyc=;
+        b=s1nnIiRMl9k49RZ5KQTpVTTAME0H+pArXx2+RWnISwFaSSS/y9UIVrkOAyZeI7wJel
+         VSaKEda1oia19O2fL2NIQA0M6X5w7nQw02J/B05P6tUEnXtf0L4VPbWcMmP6d6vqanW4
+         0/N0+atGhfp08bzIEzxpMIIxaYcgF84Y+Qmqwd4goHpHFWoRaULU7Y/lA5/6AK45G2Ih
+         1PO+p6VgBPmSjSp8JNcmsDgP54BM/po1KhinixjIDPVIRJGg0oDavzaroCl32ldFHkCy
+         oybZQbwsFTxwIQn4LuFhZTotaj+drNi4Y+2HDCryIOHGGNCg7ZaIY6kFhMb+I7bmnYEO
+         3AHA==
+X-Gm-Message-State: AFqh2kqLkJOPdmFy51UT15JoHqOIDYri49iDy1mj4Spd4wtkuiH8oTTW
+        DfrRIBz4QV0CrANUyYf91EA=
+X-Google-Smtp-Source: AMrXdXs2UMAwXRmnln7Rz3Uk4aTGJ01ih6jlqapJU6F0D4hBZjzBrG4Zm/Sq/y7M+4OLMeSCXTmQcg==
+X-Received: by 2002:a05:6870:8294:b0:157:ded4:d8f6 with SMTP id q20-20020a056870829400b00157ded4d8f6mr504124oae.40.1673066209842;
+        Fri, 06 Jan 2023 20:36:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y6-20020a4ad646000000b004d89527a54bsm1260578oos.20.2023.01.06.20.36.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 20:36:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 6 Jan 2023 20:36:47 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: memcpy: Split slow memcpy tests into
+ MEMCPY_SLOW_KUNIT_TEST
+Message-ID: <20230107043647.GA605829@roeck-us.net>
+References: <20230107040203.never.112-kees@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c00c:0:b0:6a2:8015:afef with SMTP id
- u12-20020a5ec00c000000b006a28015afefmr4726761iol.149.1673064513949; Fri, 06
- Jan 2023 20:08:33 -0800 (PST)
-Date:   Fri, 06 Jan 2023 20:08:33 -0800
-In-Reply-To: <20230107020600.4739-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000a5b5805f1a4b0c4@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in p9_client_disconnect
-From:   syzbot <syzbot+ea8b28e8dca42fc3bcbe@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230107040203.never.112-kees@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jan 06, 2023 at 08:02:07PM -0800, Kees Cook wrote:
+> Since the long memcpy tests may stall a system for tens of seconds
+> in virtualized architecture environments, split those tests off under
+> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/lkml/20221226195206.GA2626419@roeck-us.net
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Guenter, does this give you the needed flexibility to turn on the memcpy
+> kunit tests again in your slower environments?
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-BUG: unable to handle kernel paging request in p9_client_disconnect
+I'll be traveling this weekend. Give me until early next week to give
+it a try.
 
-Unable to handle kernel paging request at virtual address 0032503900080052
-Mem abort info:
-  ESR = 0x0000000096000044
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000044
-  CM = 0, WnR = 1
-[0032503900080052] address between user and kernel address ranges
-Internal error: Oops: 0000000096000044 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3496 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : p9_client_disconnect+0x1c/0x30 net/9p/client.c:1067
-lr : p9_client_disconnect+0x18/0x30 net/9p/client.c:1065
-sp : ffff800010f83ca0
-x29: ffff800010f83ca0 x28: ffff0000c684cec0 x27: 0000000000000000
-x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d37d050
-x23: ffff80000d379000 x22: 0000000000000000 x21: 0000000000000000
-x20: ffff0000cfaf5f00 x19: 3032503900080002 x18: 00000000000002aa
-x17: ffff80000c0cd83c x16: 00000000000003fa x15: 0000000000000150
-x14: 0000000001ef2008 x13: 0000000000000120 x12: 0000000000000000
-x11: ff8080000be79558 x10: 0000000000000000 x9 : ffff80000be79558
-x8 : 0000000000000002 x7 : 0000000000000000 x6 : ffff80000c036518
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0000c684cec0 x1 : 0000000000000000 x0 : 3032503900080002
-Call trace:
- p9_client_disconnect+0x1c/0x30
- v9fs_session_cancel+0x2c/0x44 fs/9p/v9fs.c:534
- v9fs_kill_super+0x2c/0x50 fs/9p/vfs_super.c:225
- deactivate_locked_super+0x70/0xe8 fs/super.c:331
- deactivate_super+0xd0/0xd4 fs/super.c:362
- cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0x100/0x148 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: 910003fd aa0003f3 9710b6ef 52800048 (b9005268) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	910003fd 	mov	x29, sp
-   4:	aa0003f3 	mov	x19, x0
-   8:	9710b6ef 	bl	0xfffffffffc42dbc4
-   c:	52800048 	mov	w8, #0x2                   	// #2
-* 10:	b9005268 	str	w8, [x19, #80] <-- trapping instruction
+Thanks,
+Guenter
 
-
-Tested on:
-
-commit:         247f34f7 Linux 6.1-rc2
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15b8a776480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=ea8b28e8dca42fc3bcbe
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17c64f3a480000
-
+> ---
+>  lib/Kconfig.debug  |  9 +++++++++
+>  lib/memcpy_kunit.c | 17 +++++++++++++----
+>  2 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index c2c78d0e761c..b5e94807f41c 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2621,6 +2621,15 @@ config MEMCPY_KUNIT_TEST
+>  
+>  	  If unsure, say N.
+>  
+> +config MEMCPY_SLOW_KUNIT_TEST
+> +	tristate "Include exhaustive memcpy tests" if !KUNIT_ALL_TESTS
+> +	depends on MEMCPY_KUNIT_TEST
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Some memcpy tests are quite exhaustive in checking for overlaps
+> +	  and bit ranges. These can be very slow, so they are split out
+> +	  as a separate config.
+> +
+>  config IS_SIGNED_TYPE_KUNIT_TEST
+>  	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 89128551448d..cc1f36335a9b 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -307,8 +307,12 @@ static void set_random_nonzero(struct kunit *test, u8 *byte)
+>  	}
+>  }
+>  
+> -static void init_large(struct kunit *test)
+> +static int init_large(struct kunit *test)
+>  {
+> +	if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST)) {
+> +		kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
+> +		return -EBUSY;
+> +	}
+>  
+>  	/* Get many bit patterns. */
+>  	get_random_bytes(large_src, ARRAY_SIZE(large_src));
+> @@ -319,6 +323,8 @@ static void init_large(struct kunit *test)
+>  
+>  	/* Explicitly zero the entire destination. */
+>  	memset(large_dst, 0, ARRAY_SIZE(large_dst));
+> +
+> +	return 0;
+>  }
+>  
+>  /*
+> @@ -327,7 +333,9 @@ static void init_large(struct kunit *test)
+>   */
+>  static void copy_large_test(struct kunit *test, bool use_memmove)
+>  {
+> -	init_large(test);
+> +
+> +	if (init_large(test))
+> +		return;
+>  
+>  	/* Copy a growing number of non-overlapping bytes ... */
+>  	for (int bytes = 1; bytes <= ARRAY_SIZE(large_src); bytes++) {
+> @@ -472,7 +480,8 @@ static void memmove_overlap_test(struct kunit *test)
+>  	static const int bytes_start = 1;
+>  	static const int bytes_end = ARRAY_SIZE(large_src) + 1;
+>  
+> -	init_large(test);
+> +	if (init_large(test))
+> +		return;
+>  
+>  	/* Copy a growing number of overlapping bytes ... */
+>  	for (int bytes = bytes_start; bytes < bytes_end;
+> @@ -549,8 +558,8 @@ static void strtomem_test(struct kunit *test)
+>  static struct kunit_case memcpy_test_cases[] = {
+>  	KUNIT_CASE(memset_test),
+>  	KUNIT_CASE(memcpy_test),
+> -	KUNIT_CASE(memcpy_large_test),
+>  	KUNIT_CASE(memmove_test),
+> +	KUNIT_CASE(memcpy_large_test),
+>  	KUNIT_CASE(memmove_large_test),
+>  	KUNIT_CASE(memmove_overlap_test),
+>  	KUNIT_CASE(strtomem_test),
+> -- 
+> 2.34.1
+> 
