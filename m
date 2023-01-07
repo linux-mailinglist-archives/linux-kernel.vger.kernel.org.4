@@ -2,110 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E6F660E1F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6610A660E20
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbjAGKxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S230147AbjAGKzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjAGKxP (ORCPT
+        with ESMTP id S229500AbjAGKzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:53:15 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E725A1AA35;
-        Sat,  7 Jan 2023 02:53:13 -0800 (PST)
-Date:   Sat, 07 Jan 2023 10:53:12 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673088792;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2IG2g6yfdzj3v6AzxV31vJmclu07XKAtOZiLHWzNUv8=;
-        b=uYKFVjejgctGX8iRO6cdRK3X3cDeq1VvUhjHH+1FcARi/B+hZRgeOby4W/OkDsQP4Q2dpf
-        XIWcKxgZRT7JqLUMJyyovetjYCQS36k1TtaHOz+NhumulSBe4AVmMBP1vuO8w0DuRoT2CM
-        Uo1lecLjxjDvNDvQmZ3fYsupfFdbTPgQkRnilIDRD/Pv3r2yyUaeHuC6IkwgHci+oOsJ3R
-        iQB36L+IcscXz0ZOhONZWTvULedSVZ/0SLs0CGDdP8OfkysVB9RivAJQIftgfrUgK97OK3
-        S+/eyip5GTPQCdslk8oErHRwWMbbDcQ1zeCZxqNoqc4WCtg5cUv4cAWSqJaiuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673088792;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2IG2g6yfdzj3v6AzxV31vJmclu07XKAtOZiLHWzNUv8=;
-        b=gh9PitinoVHwIX58N3Wlk/tFUxlI7cvCJ4z193dSgONJ8UbORYQQHp/q4fe8Oi7sH3O6aD
-        qz5NUNEM1WWLYmCQ==
-From:   "tip-bot2 for Miaoqian Lin" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Fix memory leak in create_static_call_sections()
-Cc:     Miaoqian Lin <linmq006@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221205080642.558583-1-linmq006@gmail.com>
-References: <20221205080642.558583-1-linmq006@gmail.com>
+        Sat, 7 Jan 2023 05:55:46 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46131A230;
+        Sat,  7 Jan 2023 02:55:44 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id v14so4227389qtq.3;
+        Sat, 07 Jan 2023 02:55:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wr4uS2V33mv2mSI2SJ9um1YZoYCEkmng9DTBKggir08=;
+        b=ytxrhFajmf5N5TZepGqFoddXdKsyCgiwYNZcjOX6aBajl7VNDLSRJYGhAIaN7hhKD1
+         PzYmqQtbzedyZz299TvgO88jj+10ByP6o3aXHzpwm5vpGmd5u81CYeqoqF0F4yVt3yy9
+         YMOKgduQjbbV4hOzwJY/KuRa1rG1bnlG0b0bT/+E6e1qsVy7A3797hetr61mvWvcrqg2
+         7indwqUh6I5K3+KxRibWoHERXHBYSKFPJh18Ngj4ThgV+p9e6kPzYk0eiO9TtoerTwhZ
+         hMBfe8ksxvE9ZL+POeJdQRk41aXT1hBZmHwtGZG9DO2f7h8YrS6siDfeD6UBOPOBQ975
+         jP0g==
+X-Gm-Message-State: AFqh2kqERaGMn2bS3AagRS05FRC55OkqRVH3wUkeV7/bm3Lt4xBADEWS
+        uToDidx5gnHd0e9r5AYiHAHTDYiM46410A==
+X-Google-Smtp-Source: AMrXdXtJpcS4NIBmGgsDaZpo9OaNIXQ1UlU/ErM9ZHM94eINVNBChY6vU6UAE7G1rDj1TPpd8jynWg==
+X-Received: by 2002:ac8:4689:0:b0:3a9:9c6a:afdf with SMTP id g9-20020ac84689000000b003a99c6aafdfmr87850210qto.50.1673088943506;
+        Sat, 07 Jan 2023 02:55:43 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id x14-20020a05620a258e00b006e07228ed53sm1993735qko.18.2023.01.07.02.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 02:55:42 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id j206so4363246ybj.1;
+        Sat, 07 Jan 2023 02:55:41 -0800 (PST)
+X-Received: by 2002:a25:d103:0:b0:75d:3ecb:1967 with SMTP id
+ i3-20020a25d103000000b0075d3ecb1967mr4975308ybg.604.1673088941335; Sat, 07
+ Jan 2023 02:55:41 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167308879222.4906.1093835434113126695.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230107040203.never.112-kees@kernel.org>
+In-Reply-To: <20230107040203.never.112-kees@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sat, 7 Jan 2023 11:55:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdURtDNzzaoBM4DpEHKiDsgnA-7Yc9QO=5gsmwz9PHWK5w@mail.gmail.com>
+Message-ID: <CAMuHMdURtDNzzaoBM4DpEHKiDsgnA-7Yc9QO=5gsmwz9PHWK5w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: memcpy: Split slow memcpy tests into MEMCPY_SLOW_KUNIT_TEST
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/core branch of tip:
+Hi Kees,
 
-Commit-ID:     3da73f102309fe29150e5c35acd20dd82063ff67
-Gitweb:        https://git.kernel.org/tip/3da73f102309fe29150e5c35acd20dd82063ff67
-Author:        Miaoqian Lin <linmq006@gmail.com>
-AuthorDate:    Mon, 05 Dec 2022 12:06:42 +04:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sat, 07 Jan 2023 11:45:24 +01:00
+On Sat, Jan 7, 2023 at 5:02 AM Kees Cook <keescook@chromium.org> wrote:
+> Since the long memcpy tests may stall a system for tens of seconds
+> in virtualized architecture environments, split those tests off under
+> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
+>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/lkml/20221226195206.GA2626419@roeck-us.net
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-objtool: Fix memory leak in create_static_call_sections()
+Thanks for your patch!
 
-strdup() allocates memory for key_name. We need to release the memory in
-the following error paths. Add free() to avoid memory leak.
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2621,6 +2621,15 @@ config MEMCPY_KUNIT_TEST
+>
+>           If unsure, say N.
+>
+> +config MEMCPY_SLOW_KUNIT_TEST
+> +       tristate "Include exhaustive memcpy tests" if !KUNIT_ALL_TESTS
 
-Fixes: 1e7e47883830 ("x86/static_call: Add inline static call implementation for x86-64")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20221205080642.558583-1-linmq006@gmail.com
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- tools/objtool/check.c | 2 ++
- 1 file changed, 2 insertions(+)
+Why the tristate?
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 4350be7..cab1a16 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -679,6 +679,7 @@ static int create_static_call_sections(struct objtool_file *file)
- 		if (strncmp(key_name, STATIC_CALL_TRAMP_PREFIX_STR,
- 			    STATIC_CALL_TRAMP_PREFIX_LEN)) {
- 			WARN("static_call: trampoline name malformed: %s", key_name);
-+			free(key_name);
- 			return -1;
- 		}
- 		tmp = key_name + STATIC_CALL_TRAMP_PREFIX_LEN - STATIC_CALL_KEY_PREFIX_LEN;
-@@ -688,6 +689,7 @@ static int create_static_call_sections(struct objtool_file *file)
- 		if (!key_sym) {
- 			if (!opts.module) {
- 				WARN("static_call: can't find static_call_key symbol: %s", tmp);
-+				free(key_name);
- 				return -1;
- 			}
- 
+> +       depends on MEMCPY_KUNIT_TEST
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Some memcpy tests are quite exhaustive in checking for overlaps
+> +         and bit ranges. These can be very slow, so they are split out
+> +         as a separate config.
+> +
+>  config IS_SIGNED_TYPE_KUNIT_TEST
+>         tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+>         depends on KUNIT
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 89128551448d..cc1f36335a9b 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -307,8 +307,12 @@ static void set_random_nonzero(struct kunit *test, u8 *byte)
+>         }
+>  }
+>
+> -static void init_large(struct kunit *test)
+> +static int init_large(struct kunit *test)
+>  {
+> +       if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST)) {
+> +               kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
+
+So I can't make the slower tests available for when I need them,
+but not run them by default?
+I guess that's why you made MEMCPY_SLOW_KUNIT_TEST tristate originally,
+to have a separate module with the slow tests?
+
+> +               return -EBUSY;
+> +       }
+>
+>         /* Get many bit patterns. */
+>         get_random_bytes(large_src, ARRAY_SIZE(large_src));
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
