@@ -2,197 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA25660B79
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D0F660B7C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjAGBZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S236149AbjAGB1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjAGBZQ (ORCPT
+        with ESMTP id S229863AbjAGB1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:25:16 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2EC625F1;
-        Fri,  6 Jan 2023 17:25:15 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6A2D64AE;
-        Sat,  7 Jan 2023 02:25:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673054713;
-        bh=G037BmUVvwh5YBMu1UbJn13gS1sSbOPUAKSwXAi4qHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mOuZB96JOy408V+FgGb2xlodO8HggV+Y+yYX36PpeRMULdH6viFemLYdrUlFkTdVc
-         YVPZxr8XBfHcdEMrdHayJOYyZqaz/HeVWBtJvF9HuooM4mDBMEbTKCVTAbEMka0kAq
-         tA5lck+aRf2yu0ItGiKXQE+PZbAlvJjuMMxxJQZ4=
-Date:   Sat, 7 Jan 2023 03:25:08 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 5/8] media: uvcvideo: Quirk for autosuspend in
- Logitech B910 and C910
-Message-ID: <Y7jJ9GeFCsPvAH12@pendragon.ideasonboard.com>
-References: <20220920-resend-hwtimestamp-v3-0-db9faee7f47d@chromium.org>
- <20220920-resend-hwtimestamp-v3-5-db9faee7f47d@chromium.org>
+        Fri, 6 Jan 2023 20:27:48 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004B96E40C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:27:47 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id h21so3548742qta.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 17:27:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZmW57ZvRkRR4S/DXyoGDrnsp4/+X8umxttq9HRE8mw=;
+        b=ZT39AOGH4oWdTOUwUMNz1C/sCmOKV8oI3/I+ZIQIT65hOVRjnbTbx/NqCGL+AD/Mmy
+         sQkvFtaeUPVtoEvyIZClUSmQaI+xyqEBUWRiMC+ooXyWWVt6mZDnEw2yBYnZYKjn0OY3
+         FxETHbWF0lc/oVngvKSRSXim4a5bVSRjedJ+A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YZmW57ZvRkRR4S/DXyoGDrnsp4/+X8umxttq9HRE8mw=;
+        b=Yt8sEAC4xwvrYagHeu/RrYT+krCZvMLuJ0UtiOKcCG0kENthieFTdNjYOJWWzJZpWK
+         BpVl6UIbV+gWOTz7IVZs2oJZuusq/3xuFqpL8U/w5Mz3/6mrpL/Uco/8ROcTszBUoJQy
+         zjG0j9Lk55SR0ePvUQewRt3urn1oJZYg/ITgUS10NK5OTDX4uzKFh++uVXBkfLEt8G+c
+         iOfX7qD7egZ+B30Fv2/+eavMbdV+0xLWiVb7yVJuhyxJQ0NL80QaCB4+bdIMjqPRCsP5
+         mnn/LnvSQJvhVTyW1sA11TaG0XZAPHYtoU7dxVjqR0W71tug//sMQfUfzdLBBkZ3bKeR
+         cIOA==
+X-Gm-Message-State: AFqh2kqkxN8qUXCDUTwGf3N1hz9LCEGlPbveWdtJP7rbFuZc1Wq7SXep
+        KLAVyXVZi7JXS6TjQ875sL6+rA78B9ly1xY0
+X-Google-Smtp-Source: AMrXdXuD42zcVFVJiIK82ntDGyxaPT3btmccSeH8Bm+YAA3dVIQdGovr8gKqiBCI8NC4w9FzfnIcDw==
+X-Received: by 2002:a05:622a:997:b0:3a6:a750:7295 with SMTP id bw23-20020a05622a099700b003a6a7507295mr88319145qtb.4.1673054867034;
+        Fri, 06 Jan 2023 17:27:47 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006faf76e7c9asm1440545qkl.115.2023.01.06.17.27.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 17:27:45 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-4c24993965eso37897847b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 17:27:45 -0800 (PST)
+X-Received: by 2002:a0d:d912:0:b0:36a:d4df:c6b6 with SMTP id
+ b18-20020a0dd912000000b0036ad4dfc6b6mr752702ywe.18.1673054864827; Fri, 06 Jan
+ 2023 17:27:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920-resend-hwtimestamp-v3-5-db9faee7f47d@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106172310.v2.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+In-Reply-To: <20230106172310.v2.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Fri, 6 Jan 2023 17:27:33 -0800
+X-Gmail-Original-Message-ID: <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
+Message-ID: <CA+ASDXNBDkzz_xRDbE9gNZZN5kSfxksh0EN01_CxNgyog_BZOg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] drm/atomic: Allow vblank-enabled + self-refresh "disable"
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+On Fri, Jan 6, 2023 at 5:23 PM Brian Norris <briannorris@chromium.org> wrote:
+> v2:
+>  * add 'ret != 0' warning case for self-refresh
+>  * describe failing test case and relation to drm/rockchip patch better
 
-Thank you for the patch.
+Ugh, there's always something you remember right after you hit send: I
+forgot to better summarize some of the other discussion from v1, and
+alternatives we didn't entertain. I'll write that up now (not sure
+whether in patch 1 or 2) and plan on sending a v3 for next week, in
+case there are any other comments I should address at the same time.
 
-On Wed, Jan 04, 2023 at 11:45:23AM +0100, Ricardo Ribalda wrote:
-> Logitech B910 and C910 firmware are unable to recover from an USB
-
-s/an USB/a USB/
-
-> autosuspend. When it resumes, the device is in a state where it only produces
-> invalid frames. Eg:
-> 
-> $ echo 0xFFFF > /sys/module/uvcvideo/parameters/trace # enable verbose log
-> $ yavta -c1 -n1 --file='frame#.jpg' --format MJPEG --size=1920x1080 /dev/video1
-> [350438.435219] uvcvideo: uvc_v4l2_open
-> [350438.529794] uvcvideo: Resuming interface 2
-> [350438.529801] uvcvideo: Resuming interface 3
-> [350438.529991] uvcvideo: Trying format 0x47504a4d (MJPG): 1920x1080.
-> [350438.529996] uvcvideo: Using default frame interval 33333.3 us (30.0 fps).
-> [350438.551496] uvcvideo: uvc_v4l2_mmap
-> [350438.555890] uvcvideo: Device requested 3060 B/frame bandwidth.
-> [350438.555896] uvcvideo: Selecting alternate setting 11 (3060 B/frame bandwidth).
-> [350438.556362] uvcvideo: Allocated 5 URB buffers of 32x3060 bytes each.
-> [350439.316468] uvcvideo: Marking buffer as bad (error bit set).
-> [350439.316475] uvcvideo: Frame complete (EOF found).
-> [350439.316477] uvcvideo: EOF in empty payload.
-> [350439.316484] uvcvideo: frame 1 stats: 149/261/417 packets, 1/149/417 pts (early initial), 416/417 scr, last pts/stc/sof 2976325734/2978107243/249
-> [350439.384510] uvcvideo: Marking buffer as bad (error bit set).
-> [350439.384516] uvcvideo: Frame complete (EOF found).
-> [350439.384518] uvcvideo: EOF in empty payload.
-> [350439.384525] uvcvideo: frame 2 stats: 265/379/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2979524454/2981305193/316
-> [350439.448472] uvcvideo: Marking buffer as bad (error bit set).
-> [350439.448478] uvcvideo: Frame complete (EOF found).
-> [350439.448480] uvcvideo: EOF in empty payload.
-> [350439.448487] uvcvideo: frame 3 stats: 265/377/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2982723174/2984503144/382
-> ...(loop)...
-> 
-> The devices can leave this invalid state if the alternate setting of
-> the streaming interface is toggled.
-> 
-> This patch adds a quirk for this device so it can be autosuspended
-> properly.
-> 
-> lsusb -v:
-> Bus 001 Device 049: ID 046d:0821 Logitech, Inc. HD Webcam C910
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0        64
->   idVendor           0x046d Logitech, Inc.
->   idProduct          0x0821 HD Webcam C910
->   bcdDevice            0.10
->   iManufacturer           0
->   iProduct                0
->   iSerial                 1 390022B0
->   bNumConfigurations      1
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 18 ++++++++++++++++++
->  drivers/media/usb/uvc/uvc_video.c  | 10 ++++++++++
->  drivers/media/usb/uvc/uvcvideo.h   |  1 +
->  3 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index c89a1eebe91c..be6ad9b732a2 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2525,6 +2525,24 @@ static const struct usb_device_id uvc_ids[] = {
->  	  .bInterfaceSubClass	= 1,
->  	  .bInterfaceProtocol	= 0,
->  	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_minmax },
-> +	/* Logitech, Webcam C910 */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x046d,
-> +	  .idProduct		= 0x0821,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
-> +	/* Logitech, Webcam B910 */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x046d,
-> +	  .idProduct		= 0x0823,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
->  	/* Logitech Quickcam Fusion */
->  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
->  				| USB_DEVICE_ID_MATCH_INT_INFO,
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index bc75c7c40251..fe5c7b465adf 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -1984,6 +1984,16 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
->  			"Selecting alternate setting %u (%u B/frame bandwidth)\n",
->  			altsetting, best_psize);
->  
-> +		/*
-> +		 * Some devices, namely the Logitech C910 and B910, are unable
-> +		 * to recover from an USB autosuspend, unless the alternate
-
-Same here.
-
-> +		 * setting of the streaming interface is toggled.
-> +		 */
-> +		if (stream->dev->quirks & UVC_QUIRK_WAKE_AUTOSUSPEND) {
-> +			usb_set_interface(stream->dev->udev, intfnum,
-> +					  altsetting);
-> +			usb_set_interface(stream->dev->udev, intfnum, 0);
-> +		}
-
-Missing blank line.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-I'll apply this patch to my tree independently from the rest of this
-series with these small issues fixed locally.
-
->  		ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
->  		if (ret < 0)
->  			return ret;
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 88d1790e6695..24c3e9411415 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -76,6 +76,7 @@
->  #define UVC_QUIRK_FORCE_BPP		0x00001000
->  #define UVC_QUIRK_IGNORE_EMPTY_TS	0x00002000
->  #define UVC_QUIRK_INVALID_DEVICE_SOF	0x00004000
-> +#define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00008000
->  
->  /* Format flags */
->  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+Sorry for the noise,
+Brian
