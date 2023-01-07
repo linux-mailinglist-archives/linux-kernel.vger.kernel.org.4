@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA168660D55
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B248660D56
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjAGJqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S231771AbjAGJqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjAGJqk (ORCPT
+        with ESMTP id S231765AbjAGJqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:46:40 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE3D7CBCF
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:46:39 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso7769780pjt.0
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 01:46:39 -0800 (PST)
+        Sat, 7 Jan 2023 04:46:47 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6B87CBE4
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:46:44 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id p24so4218131plw.11
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 01:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nDiSSUCXyfTxgSY9w0A6cnWBkOKJja5kzfazSGhDk+s=;
-        b=Ip9Fl0k1pj40UoY+CGobxiY7Cb+1N2wjCHxGSMm+/IGkJbHoHvYlHh9isCjXM6EYbS
-         uYU63Wve+S4jpifnghRtL7kd3WflrBwh3ewvMkoPRgWyadCiC/fK8XtXA9ABONYlraHH
-         H5+qiphc39Pcnh5CPLvVweuQB6KVkf62uqYq4VP+3A9IzulQJBBeRToU4TMkrupx6yG1
-         gY3IhrlZ8V1zCR8JXMja5X1cV0jUZ2U8FjERPU1meMnTd8SBruQNkYFYuxV3KO23FQQQ
-         ElMN75eyjKeoaEgs84MOvHjxLXbZGa1jMV2iWjz0TDxOIu7m7T0XnEleWV6dJxbEIhqc
-         W1eQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kb7WlyMl1q/VPJpFF+X4TfNx6Lfb11fY4VoBIq7ymlo=;
+        b=AqPORj3k62mpcxB7NdBDjopWyyNb5AJfYksrKqYZ8SduFvlN6kk1lK58RTrTPHP73D
+         eJf6pkgUiDlGkzbU81ofZ3d2XGwosFeIafV+SYjltN9RsdgD4nxNFJ1NdzVCbYFd49fK
+         8dop9omAdGIGlSmtluLbQcU6Z9DJKnRnnRvIhCQ8L2U6m7hoNew+YRm7OVd0L7lb/F2/
+         53a/NxL7tlX/8IF4gVOONrKr6AXFIZPFnHBKCAk1OV9ua2nIMwK2oSwvzAaBG+Xl1Rsy
+         PKoZvBnDKubcHrcALi1OVoFhST+8207mOGcvae3z3NXKVt9BQSqP5gqT8d19m3pV3giw
+         GaqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nDiSSUCXyfTxgSY9w0A6cnWBkOKJja5kzfazSGhDk+s=;
-        b=DYKIBl78bExjpYNFH/HxdA3YMqBUj75j3TxHjX47cWkO2P9uSPONs7EXNJyk7arVuh
-         g+CyzHjhIsBsPEwOPWHxMDvZqrJT3S6SRIghxeU+eJH9I8jOCzutu0l3KwhzKAVvX6cC
-         ENazor7TRoOyaLWnFWTUbuBLRwZmIOyGASNK4zl2ieUGf49R7detzXW1VFVuMxDa80tx
-         L4VvbaHP32ZNG6HSUeB+hkKDz2+RTP1Z1koKaPMuRYyaO7hml/bXel7WexEyz9lbUQ8V
-         06R/2wtTka6Vw1mlSC7BGkxWtLX3Cf+dYWbXGNfXIcY69IEkyrJSNvLC5hSjuYqq1J7f
-         nQ6Q==
-X-Gm-Message-State: AFqh2kqmnL8suGa4nflXVwDAUhXMV0/w/KyaTTOp6ytK9smxmR/FLT4W
-        BFYfLMdi1y5RVu7Y7ytN2nfZpw==
-X-Google-Smtp-Source: AMrXdXvo+rexBnZY1QlfA2EAy1F/HDKl7+wrHDMpE1Bhi7y2UBror3BjgD1EIrqM70vva4yt50Esag==
-X-Received: by 2002:a17:902:f78d:b0:192:ae36:f760 with SMTP id q13-20020a170902f78d00b00192ae36f760mr32857238pln.47.1673084799038;
-        Sat, 07 Jan 2023 01:46:39 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kb7WlyMl1q/VPJpFF+X4TfNx6Lfb11fY4VoBIq7ymlo=;
+        b=V/+iRh9QIit8QrKIZQ07cxUTtBYa9bOKzCO3wDzxltEcGoUwVT2W7wMCzEZJsiiWbU
+         Tx+UHTrMikXQXJzyDd2jvD1zrW5zjgJVqB+VVYWvBOqHgx63AYq5B9MA+5v3QIRtSO66
+         u4pSkVs3Omzfb2dHOJ4iewnm/Xs2cTvvDYL86UPGOriastlGKYwfRbvvqjfHAbiFZsfY
+         eGzDLPMZ6w7EO/xvel/2VkhTpKBw2tC3clE5dX5kPYKXgaEALAU1xA7nXkV6iqZEeaik
+         oiqF+Yt7J5Xn+KpUrRN824P20DPvc5K8BoKWygoN2hDOQNaf8JKv3LIKn9AT/vxRkq23
+         pYkQ==
+X-Gm-Message-State: AFqh2kotaXCDj9WIOx9wzDS1yu0ZDwym6SeLi4unN884FJEWM/dbqxL0
+        e1TUoqRpKvpaW2EN0LGqYUnUsQ==
+X-Google-Smtp-Source: AMrXdXv2MV05CqQ25JMP8AE4lcoTf8VGAHYFqdK+gs3TuWYKAJT4CkVIYnxDYPsdwXkraKiJk5c9bA==
+X-Received: by 2002:a17:902:a601:b0:192:910e:6083 with SMTP id u1-20020a170902a60100b00192910e6083mr41156529plq.15.1673084803547;
+        Sat, 07 Jan 2023 01:46:43 -0800 (PST)
 Received: from fedora.flets-east.jp ([2400:4050:a840:1e00:d54:e521:8bac:7bed])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902d2c900b00183c6784704sm2263449plc.291.2023.01.07.01.46.34
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902d2c900b00183c6784704sm2263449plc.291.2023.01.07.01.46.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 01:46:38 -0800 (PST)
+        Sat, 07 Jan 2023 01:46:43 -0800 (PST)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
         linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
@@ -63,11 +64,13 @@ Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
         asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Sven Peter <sven@svenpeter.dev>,
         Hector Martin <marcan@marcan.st>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v6 0/7] KVM: arm64: Normalize cache configuration
-Date:   Sat,  7 Jan 2023 18:46:22 +0900
-Message-Id: <20230107094629.181236-1-akihiko.odaki@daynix.com>
+        Akihiko Odaki <akihiko.odaki@gmail.com>
+Subject: [PATCH v6 1/7] arm64: Allow the definition of UNKNOWN system register fields
+Date:   Sat,  7 Jan 2023 18:46:23 +0900
+Message-Id: <20230107094629.181236-2-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230107094629.181236-1-akihiko.odaki@daynix.com>
+References: <20230107094629.181236-1-akihiko.odaki@daynix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,79 +83,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this change, the cache configuration of the physical CPU was
-exposed to vcpus. This is problematic because the cache configuration a
-vcpu sees varies when it migrates between vcpus with different cache
-configurations.
+From: Marc Zyngier <maz@kernel.org>
 
-Fabricate cache configuration from the sanitized value, which holds the
-CTR_EL0 value the userspace sees regardless of which physical CPU it
-resides on.
+The CCSIDR_EL1 register contains an UNKNOWN field (which replaces
+fields that were actually defined in previous revisions of the
+architecture).
 
-V5 -> V6:
-- Add a comment to get_min_cache_line_size()
+Define an 'Unkn' field type modeled after the Res0/Res1 types
+to allow such description. This allows the generation of
 
-V4 -> V5:
-- Noted why cache level existence check is unnecessary when fabricating
-  CCSIDR_EL1 value.
-- Removed FWB check. It is necessary as CLIDR_EL1.{LoUU, LoIUS} on the
-  host are {0, 0} if FWB is enabled, and such a CLIDR_EL1 value sets
-  the IDC bit of the sanitized CTR_EL0 value, which is already checked.
-- Removed UNDEF injection when reading CCSIDR_EL1 with an invalid
-  CSSELR_EL1 value.
-- Added a check for CLIDR_EL1.{LoUU,LoC,LoUIS} values set from the
-  userspace.
+  #define CCSIDR_EL1_UNKN     (UL(0) | GENMASK_ULL(31, 28))
 
-V3 -> V4:
-- Implemented UNKNOWN system register definition for CCSIDR_EL1
-- Added a comment about the relation between CCSIDR_EL1 and FEAT_CCIDX
-- Squashed "Normalize cache configuration" and "Allow user to set
-  CCSIDR_EL1"
-  The intermediate state between them did not make much sense.
-- Introduced FIELD_GET to extract CCSIDR_EL1_LineSize.
+which may have its use one day. Hopefully the architecture doesn't
+add too many of those in the future.
 
-V2 -> V3:
-- Corrected message for patch "Normalize cache configuration"
-- Split patch "Normalize cache configuration"
-- Added handling for CSSELR_EL1.TnD
-- Added code to ignore RES0 in CSSELR_EL1
-- Replaced arm64_ftr_reg_ctrel0.sys_val with
-  read_sanitised_ftr_reg(SYS_CTR_EL0)
-- Fixed vcpu->arch.ccsidr initialziation
-- Added CCSIDR_EL1 sanitization
-- Added FWB check
-- Added a comment for CACHE_TYPE_SEPARATE
-- Added MTE tag cache creation code for CLIDR_EL1 fabrication
-- Removed CLIDR_EL1 reset code for reset caused by guest
-- Added a comment for CCSIDR2
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/tools/gen-sysreg.awk | 20 +++++++++++++++++++-
+ arch/arm64/tools/sysreg         |  2 ++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-V2: https://lore.kernel.org/lkml/20221211051700.275761-2-akihiko.odaki@daynix.com/
-V1: https://lore.kernel.org/lkml/525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com/
-
-Akihiko Odaki (6):
-  arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
-  arm64/sysreg: Add CCSIDR2_EL1
-  arm64/cache: Move CLIDR macro definitions
-  KVM: arm64: Always set HCR_TID2
-  KVM: arm64: Mask FEAT_CCIDX
-  KVM: arm64: Normalize cache configuration
-
-Marc Zyngier (1):
-  arm64: Allow the definition of UNKNOWN system register fields
-
- arch/arm64/include/asm/cache.h             |   9 +
- arch/arm64/include/asm/kvm_arm.h           |   3 +-
- arch/arm64/include/asm/kvm_emulate.h       |   4 -
- arch/arm64/include/asm/kvm_host.h          |   6 +-
- arch/arm64/include/asm/sysreg.h            |   1 -
- arch/arm64/kernel/cacheinfo.c              |   5 -
- arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h |   2 -
- arch/arm64/kvm/reset.c                     |   1 +
- arch/arm64/kvm/sys_regs.c                  | 263 +++++++++++++--------
- arch/arm64/tools/gen-sysreg.awk            |  20 +-
- arch/arm64/tools/sysreg                    |  17 ++
- 11 files changed, 219 insertions(+), 112 deletions(-)
-
+diff --git a/arch/arm64/tools/gen-sysreg.awk b/arch/arm64/tools/gen-sysreg.awk
+index c350164a3955..e1df4b956596 100755
+--- a/arch/arm64/tools/gen-sysreg.awk
++++ b/arch/arm64/tools/gen-sysreg.awk
+@@ -98,6 +98,7 @@ END {
+ 
+ 	res0 = "UL(0)"
+ 	res1 = "UL(0)"
++	unkn = "UL(0)"
+ 
+ 	next_bit = 63
+ 
+@@ -112,11 +113,13 @@ END {
+ 
+ 	define(reg "_RES0", "(" res0 ")")
+ 	define(reg "_RES1", "(" res1 ")")
++	define(reg "_UNKN", "(" unkn ")")
+ 	print ""
+ 
+ 	reg = null
+ 	res0 = null
+ 	res1 = null
++	unkn = null
+ 
+ 	next
+ }
+@@ -134,6 +137,7 @@ END {
+ 
+ 	res0 = "UL(0)"
+ 	res1 = "UL(0)"
++	unkn = "UL(0)"
+ 
+ 	define("REG_" reg, "S" op0 "_" op1 "_C" crn "_C" crm "_" op2)
+ 	define("SYS_" reg, "sys_reg(" op0 ", " op1 ", " crn ", " crm ", " op2 ")")
+@@ -161,7 +165,9 @@ END {
+ 		define(reg "_RES0", "(" res0 ")")
+ 	if (res1 != null)
+ 		define(reg "_RES1", "(" res1 ")")
+-	if (res0 != null || res1 != null)
++	if (unkn != null)
++		define(reg "_UNKN", "(" unkn ")")
++	if (res0 != null || res1 != null || unkn != null)
+ 		print ""
+ 
+ 	reg = null
+@@ -172,6 +178,7 @@ END {
+ 	op2 = null
+ 	res0 = null
+ 	res1 = null
++	unkn = null
+ 
+ 	next
+ }
+@@ -190,6 +197,7 @@ END {
+         next_bit = 0
+ 	res0 = null
+ 	res1 = null
++	unkn = null
+ 
+ 	next
+ }
+@@ -215,6 +223,16 @@ END {
+ 	next
+ }
+ 
++/^Unkn/ && (block == "Sysreg" || block == "SysregFields") {
++	expect_fields(2)
++	parse_bitdef(reg, "UNKN", $2)
++	field = "UNKN_" msb "_" lsb
++
++	unkn = unkn " | GENMASK_ULL(" msb ", " lsb ")"
++
++	next
++}
++
+ /^Field/ && (block == "Sysreg" || block == "SysregFields") {
+ 	expect_fields(3)
+ 	field = $3
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index 184e58fd5631..f754265aec5f 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -15,6 +15,8 @@
+ 
+ # Res1	<msb>[:<lsb>]
+ 
++# Unkn	<msb>[:<lsb>]
++
+ # Field	<msb>[:<lsb>]	<name>
+ 
+ # Enum	<msb>[:<lsb>]	<name>
 -- 
 2.38.1
 
