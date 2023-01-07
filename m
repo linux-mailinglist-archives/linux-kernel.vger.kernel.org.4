@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B156660DFF
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42242660E03
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbjAGKlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S232018AbjAGKnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbjAGKlT (ORCPT
+        with ESMTP id S236839AbjAGKmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:41:19 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB6D2703
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:41:15 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id q2so3929332ljp.6
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:41:15 -0800 (PST)
+        Sat, 7 Jan 2023 05:42:53 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F32FEBC
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 02:42:50 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m6so5507654lfj.11
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 02:42:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oltHV3xaiJRNkm48kKrVJwnasCXR4K2YIGWYLIQBEnA=;
-        b=aY+xIzsS1z4eaPzLTWWkq42A4ESmq5QZ4lilbu9FHLX4Db17YC1AdVkH7Qa5xkDsYA
-         qiHk0pmjNnUb7ZDAivl8NV01/5Hqhogk12v3VVPH1pMhNIWf3VJR1cvxUWuCKDgU4xPm
-         3PCNHQbx97hQgheBV51io2bsUIFYCkmXBEFVroWpr862jyGsaTQDH0eeuNW+b7snnncb
-         MXW5s9VuJxtauJFRm3yUKWAsACAEXvzEhTZUIuV0KZNuE2hOfPxvM0Ma90CBbf39XqOL
-         Mme9bGZa8JnfVpofroX17Ui7gvcs1QgGRFX/N7FotqAgu1WFH2auVvgJykxHJX3LNWSG
-         +rqw==
+        bh=kGN16aqYn7nnEFzLqCDtMXfMmc5KaVn18pKv+2l0zPs=;
+        b=VY6oNvkmWjhRGic3GpIAfMU1yEMK3tGNHwnDzV6wHrhp4Fbe0g3dAEcc9NRFRQseSh
+         ZiXkGIpNBi7jMJVNVqJ5Di9K2HNXRajJFPm9WNpbonRZhzJ2m5Sevy5n7EIbo/14Jc33
+         67tISzYCv6Jrrjnjk9e72nOwg45IaCKlU8LwTRpvNtBS/VoIHXgR2EjIURaao6Co7suX
+         y94J3fb1pvMglACkQGj4mUjhJz5TR4YoES4lmvxEqZKPAyqBAc84wkvIumBUAr4ddLgr
+         yXFAyC9exRV2N2DuV9s2UK6JV0V0Uhy55fddnnQU3RSbUXcmfU/+XWiVOeN5zuiUvO6R
+         QePw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oltHV3xaiJRNkm48kKrVJwnasCXR4K2YIGWYLIQBEnA=;
-        b=AUNyyGleLkwzJG6fCN5UK1gmJLAxGzpkxsFsUwijf4QhvxmWzLcu5KHgsCLA2Ze1Ey
-         3r0Xp43dEk9cw1tV3KXBnlJh2JDNLllNmzE1xjRiP2zBUiJY7HTMwnC5nw9J4iBi9Hec
-         Dg5jxJPsRcm39L2CYw55prDVT91mbnfa6Uq2TOJpgj7Q6zGUnBjLkTT+0AmdfgL7n3UF
-         +t+8vGoqKaqR3zTiOYK3mp4Hk3aoTJ9fyVa0mIZgbyBwbAxw0Cyziz14ItrnG2cniegt
-         JEK92nJrxuX+C1D2rfc7Fc6jsWc+Q6HSpzbRC8PBXXhIK3tNnohh+ZIIVSDspjV42ISG
-         85qg==
-X-Gm-Message-State: AFqh2kqAyaS6psxHvR11ukc/1yRAvKsqBtr2ugAlqy1xXdrfZAnPPg5E
-        j2h3dPAOZ0zXvOodHoCK4B0gww==
-X-Google-Smtp-Source: AMrXdXuIJtyCeFPVcjcmFGVFCKHFj5XnXuUAP16P3oV5cofSg5PqOOMfZQQgoR8ak47QFMbenbWpcw==
-X-Received: by 2002:a2e:3210:0:b0:282:1326:78b6 with SMTP id y16-20020a2e3210000000b00282132678b6mr1357738ljy.31.1673088074183;
-        Sat, 07 Jan 2023 02:41:14 -0800 (PST)
+        bh=kGN16aqYn7nnEFzLqCDtMXfMmc5KaVn18pKv+2l0zPs=;
+        b=ByKqsXKnJG0AVWrsVFvYfPWpmfn5LYHeVtV/qRrCKDKcCN6JDyIWBTx2OC2/W2o2Wu
+         lfV/bl0CxGYh48AwMDV6lV6oBbh5F4m0/4IjEkZTHiIPLW06aVl/U8zXoIet6CHIWmFG
+         ytVrgQckdCHTa1A7AnDEr+taHZ2LlE8OJjaJRKGgnxR7oCNQsUb7bnkruklWpTptzrEW
+         O3s2jNlGGg3YIs6m5IYqshvibnz/BbRh7Q0CmhUpXhlvDaMSYeNJ80f8cUI1VYJou0RM
+         FLUuMAOFd8RYmSImjYHa8PdgozCu3gdnPloV/ZT7YzocvXcrtEXkKwk8sQQ6fPX0HMH3
+         YLtA==
+X-Gm-Message-State: AFqh2kpBWlkKJbQZmxKKDAzBrh1z2EuGg0oRBvpKkpQZl/AkBrgi7ENi
+        Gi0OnRvBIVo/HIhHk0LdPzEOVg==
+X-Google-Smtp-Source: AMrXdXvCBCR/iCDguU7sLHfJxkX+3TX2Kf/NNCLnyW6RQirRqdHF7YJwwhhzcrCpPLB2CmMni/Nn9Q==
+X-Received: by 2002:a05:6512:2987:b0:4a4:68b7:d642 with SMTP id du7-20020a056512298700b004a468b7d642mr16526215lfb.41.1673088169031;
+        Sat, 07 Jan 2023 02:42:49 -0800 (PST)
 Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id a1-20020a2eb541000000b002770fb5722fsm316778ljn.123.2023.01.07.02.41.13
+        by smtp.gmail.com with ESMTPSA id m17-20020a056512015100b004cb45148027sm529467lfo.203.2023.01.07.02.42.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 02:41:13 -0800 (PST)
-Message-ID: <e82c70e1-5541-82c3-9c22-37ce1a43ee8c@linaro.org>
-Date:   Sat, 7 Jan 2023 11:41:12 +0100
+        Sat, 07 Jan 2023 02:42:48 -0800 (PST)
+Message-ID: <c9d22563-ed9c-7fba-e00d-02eb1cdfbef8@linaro.org>
+Date:   Sat, 7 Jan 2023 11:42:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: apq8026-samsung-matisse-wifi: Add
- display backlight
+Subject: Re: [PATCH v2 1/2] dt-bindings: reserved-memory: rmtfs: Document
+ qcom,assign-to-nav
 Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230106114403.275865-1-matti.lehtimaki@gmail.com>
- <20230106114403.275865-4-matti.lehtimaki@gmail.com>
+References: <20230102165034.830620-1-konrad.dybcio@linaro.org>
+ <20230106175558.7sfutxaishdlwhoe@builder.lan>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230106114403.275865-4-matti.lehtimaki@gmail.com>
+In-Reply-To: <20230106175558.7sfutxaishdlwhoe@builder.lan>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,106 +82,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6.01.2023 12:44, Matti Lehtimäki wrote:
-> Uses ti,lp8556 backlight with clk-pwm.
+On 6.01.2023 18:55, Bjorn Andersson wrote:
+> On Mon, Jan 02, 2023 at 05:50:33PM +0100, Konrad Dybcio wrote:
+>> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
+>> others really don't want that. Since it has to be conditional, add a
+>> bool property to toggle this behavior.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>> v1 -> v2:
+>> - Rewrite the newly added description
+>>
+>>  .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>> index 2998f1c8f0db..4026788a4e40 100644
+>> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>> @@ -31,6 +31,12 @@ properties:
+>>      description: >
+>>        vmid of the remote processor, to set up memory protection
+>>  
+>> +  qcom,assign-to-nav:
+>> +    type: boolean
+>> +    description:
+>> +      Whether to also assign the region to a third (NAV) VM, as opposed to
+>> +      the usual 2.
 > 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->  .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> index 15b9590ba07b..848cfda64e5a 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> @@ -23,6 +23,14 @@ aliases {
->  		display0 = &framebuffer0;
->  	};
->  
-> +	backlight_pwm: pwm {
-This should be sorted alphabetically.
-
-
-> +		compatible = "clk-pwm";
-> +		#pwm-cells = <2>;
-> +		clocks = <&mmcc CAMSS_GP0_CLK>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&backlight_pwm_default_state>;
-> +	};
-> +
->  	chosen {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
-> @@ -80,6 +88,45 @@ key-volume-up {
->  		};
->  	};
->  
-> +	i2c-backlight {
-> +		compatible = "i2c-gpio";
-> +		sda-gpios = <&tlmm 20 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +		scl-gpios = <&tlmm 21 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&backlight_i2c_default_state>;
-Please reorder these two properties.
-
-> +
-> +		i2c-gpio,delay-us = <4>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		backlight@2c {
-> +			compatible = "ti,lp8556";
-> +			reg = <0x2c>;
-> +
-> +			dev-ctrl = /bits/ 8 <0x80>;
-> +			init-brt = /bits/ 8 <0x3f>;
-> +			pwm-period = <100000>;
-> +
-> +			pwms = <&backlight_pwm 0 100000>;
-> +			pwm-names = "lp8556";
-> +
-> +			rom-a0h {
-> +				rom-addr = /bits/ 8 <0xa0>;
-> +				rom-val = /bits/ 8 <0x44>;
-> +			};
-Please add a newline between each subnode.
-
-Otherwise I think this looks good..
+> For better or worse, the binding currently takes the vmid of the first
+> instance in qcom,vmid. Would it not be cleaner to turn qcom,vmid into an
+> array and pass the nav vmid as a second element in that array?
+I suppose I could do that..
 
 Konrad
-
-> +			rom-a1h {
-> +				rom-addr = /bits/ 8 <0xa1>;
-> +				rom-val = /bits/ 8 <0x6c>;
-> +			};
-> +			rom-a5h {
-> +				rom-addr = /bits/ 8 <0xa5>;
-> +				rom-val = /bits/ 8 <0x24>;
-> +			};
-> +		};
-> +	};
-> +
->  	reg_tsp_1p8v: regulator-tsp-1p8v {
->  		compatible = "regulator-fixed";
->  		regulator-name = "tsp_1p8v";
-> @@ -418,6 +465,18 @@ accel_int_default_state: accel-int-default-state {
->  		bias-disable;
->  	};
->  
-> +	backlight_i2c_default_state: backlight-i2c-default-state {
-> +		pins = "gpio20", "gpio21";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	backlight_pwm_default_state: backlight-pwm-default-state {
-> +		pins = "gpio33";
-> +		function = "gp0_clk";
-> +	};
-> +
->  	muic_int_default_state: muic-int-default-state {
->  		pins = "gpio67";
->  		function = "gpio";
+> 
+> Regards,
+> Bjorn
+> 
+>> +
+>>  required:
+>>    - qcom,client-id
+>>  
+>> -- 
+>> 2.39.0
+>>
