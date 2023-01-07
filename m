@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DE4660C44
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D386660C42
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbjAGDkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S236779AbjAGDk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbjAGDkU (ORCPT
+        with ESMTP id S231335AbjAGDkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:40:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEBF392CF;
-        Fri,  6 Jan 2023 19:40:19 -0800 (PST)
+        Fri, 6 Jan 2023 22:40:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5688392DF;
+        Fri,  6 Jan 2023 19:40:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFA55B81F67;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BF061FD6;
         Sat,  7 Jan 2023 03:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94473C43392;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B05B3C433A7;
         Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673062816;
-        bh=thCvlrZlqYnb3OcMTSgDe+HD0TYa2VCQSo8wYGdOx+k=;
+        bh=oL+dRXExPO7YXiNQX2vljFYDBKWQGLkRctQfgGREsTs=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SWo1F1QRf87ubl4G+5lNxhy7yP3ESba33DNXRRPqdREH0HRaRy4DUuXbAZ6Y6Ytz9
-         p90x5lH4o2JcCCfGEzTCgWHR/oQyfGmF9od5217tXgqPcYHxK7oMN4qwKjl1fvGYsv
-         F38ZVwEokM20M6hRaYAJogZi8cbuEG96gD/4Vrskm49icSvykz3l3ICG10r28rFTgI
-         yp/RHvScyK777ZqRwihvodkJW9t5CF0VA3/204kwhw7OafyZpbxOTKTJCnB0CnbD9C
-         /aV4QUDYpjuQCU05vtV8xsoPR0p4nkGe2qgqaWuyzaA5bZMnQFJ0P/lJOhBzDr+wBg
-         4IZVivf29zvng==
+        b=ufVbgk1rgjOszByvAKqE5I1miYqtT2kVDBgvsSMKjpOYLc324MdrEIe+IAvqgM4gY
+         lRYh2Qu+IYEWtFdL7o9WodFgd9TfozoLx+FQ8BNdzGwKkU57WGurjlw1/PAYs01vuR
+         pSqVje/8bh9pK4mbFgqgJY1aBRgqfhd7amvMxhNqIpxOZjjpis6T/IqdCLvekYLw4k
+         iCwXkqRlHxqSTvrs4rMD26N8FgRVcLTNF/7Y+9Kubh1kATYdROpEqMJpQooK6KWtKv
+         Vl5z4CdYzTY7q1abTqX8PkjZTurMeEGw9quAveWsX9bOgb5SImrhjJAnDFISSIwVip
+         Ptev+jfoWyosQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F80BC395DF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97684E270F0;
         Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ipv6: ioam: Replace 0-length array with flexible array
+Subject: Re: [PATCH v3] ethtool: Replace 0-length array with flexible array
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167306281651.4583.5175258501631877655.git-patchwork-notify@kernel.org>
+Message-Id: <167306281661.4583.3241877198480570363.git-patchwork-notify@kernel.org>
 Date:   Sat, 07 Jan 2023 03:40:16 +0000
-References: <20230105222115.never.661-kees@kernel.org>
-In-Reply-To: <20230105222115.never.661-kees@kernel.org>
+References: <20230106042844.give.885-kees@kernel.org>
+In-Reply-To: <20230106042844.give.885-kees@kernel.org>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, justin.iurman@uliege.be,
-        edumazet@google.com, pabeni@redhat.com, gustavoars@kernel.org,
+Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        lkp@intel.com, linux@rempel-privat.de, sean.anderson@seco.com,
+        alexandru.tachici@analog.com, amcohen@nvidia.com,
+        gustavoars@kernel.org, mailhol.vincent@wanadoo.fr,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,26 +65,29 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu,  5 Jan 2023 14:21:16 -0800 you wrote:
-> Zero-length arrays are deprecated[1]. Replace struct ioam6_trace_hdr's
-> "data" 0-length array with a flexible array. Detected with GCC 13,
+On Thu,  5 Jan 2023 20:28:48 -0800 you wrote:
+> Zero-length arrays are deprecated[1]. Replace struct ethtool_rxnfc's
+> "rule_locs" 0-length array with a flexible array. Detected with GCC 13,
 > using -fstrict-flex-arrays=3:
 > 
-> net/ipv6/ioam6_iptunnel.c: In function 'ioam6_build_state':
-> net/ipv6/ioam6_iptunnel.c:194:37: warning: array subscript <unknown> is outside array bounds of '__u8[0]' {aka 'unsigned char[]'} [-Warray-bounds=]
->   194 |                 tuninfo->traceh.data[trace->remlen * 4] = IPV6_TLV_PADN;
->       |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-> In file included from include/linux/ioam6.h:11,
->                  from net/ipv6/ioam6_iptunnel.c:13:
-> include/uapi/linux/ioam6.h:130:17: note: while referencing 'data'
->   130 |         __u8    data[0];
->       |                 ^~~~
+> net/ethtool/common.c: In function 'ethtool_get_max_rxnfc_channel':
+> net/ethtool/common.c:558:55: warning: array subscript i is outside array bounds of '__u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+>   558 |                         .fs.location = info->rule_locs[i],
+>       |                                        ~~~~~~~~~~~~~~~^~~
+> In file included from include/linux/ethtool.h:19,
+>                  from include/uapi/linux/ethtool_netlink.h:12,
+>                  from include/linux/ethtool_netlink.h:6,
+>                  from net/ethtool/common.c:3:
+> include/uapi/linux/ethtool.h:1186:41: note: while referencing
+> 'rule_locs'
+>  1186 |         __u32                           rule_locs[0];
+>       |                                         ^~~~~~~~~
 > 
 > [...]
 
 Here is the summary with links:
-  - ipv6: ioam: Replace 0-length array with flexible array
-    https://git.kernel.org/netdev/net-next/c/0b5dfa35da03
+  - [v3] ethtool: Replace 0-length array with flexible array
+    https://git.kernel.org/netdev/net-next/c/b466a25c930f
 
 You are awesome, thank you!
 -- 
