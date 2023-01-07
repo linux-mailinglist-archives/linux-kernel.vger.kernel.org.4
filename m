@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43423660E1A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E6F660E1F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 11:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjAGKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 05:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S235686AbjAGKxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 05:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjAGKxF (ORCPT
+        with ESMTP id S232161AbjAGKxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 05:53:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DF41AA01;
-        Sat,  7 Jan 2023 02:53:02 -0800 (PST)
-Date:   Sat, 07 Jan 2023 10:53:00 -0000
+        Sat, 7 Jan 2023 05:53:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E725A1AA35;
+        Sat,  7 Jan 2023 02:53:13 -0800 (PST)
+Date:   Sat, 07 Jan 2023 10:53:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673088780;
+        s=2020; t=1673088792;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zotIngnfFjUCAlEXnwMFZZiKtOu852+3JcwkGFgHyGI=;
-        b=D7SFbj7iRON1xym7pO2Yd5j+VZDjiza5Oe29ZLm7s6HpVmrLojMMWx4q/DK8y332jKiC8O
-        1M48+emaXZ2vB/JUAj7n04lrGTjHdx7PEfgNuFpBPYGjQ9lxSdoDv5ItRuAIxDjE+nBcYu
-        o2eHXw0+97SRH6gmlOyvM97wOH7UOh16TH3xaX3yD+yT39Ew2f0JlQ55s2bcTvOR5S7/5j
-        033/ETHZZmjQycLscJOeO1OuoXLXVRKiPVOhakm/chKxbcWuPPGS6e0DppeG07goavsJD8
-        RuRuqaWs/sJWp29Slfz4/rExzHJ6oOHYxd0IMHM5gu5bwICwh0AUpJsxw+ZwpA==
+        bh=2IG2g6yfdzj3v6AzxV31vJmclu07XKAtOZiLHWzNUv8=;
+        b=uYKFVjejgctGX8iRO6cdRK3X3cDeq1VvUhjHH+1FcARi/B+hZRgeOby4W/OkDsQP4Q2dpf
+        XIWcKxgZRT7JqLUMJyyovetjYCQS36k1TtaHOz+NhumulSBe4AVmMBP1vuO8w0DuRoT2CM
+        Uo1lecLjxjDvNDvQmZ3fYsupfFdbTPgQkRnilIDRD/Pv3r2yyUaeHuC6IkwgHci+oOsJ3R
+        iQB36L+IcscXz0ZOhONZWTvULedSVZ/0SLs0CGDdP8OfkysVB9RivAJQIftgfrUgK97OK3
+        S+/eyip5GTPQCdslk8oErHRwWMbbDcQ1zeCZxqNoqc4WCtg5cUv4cAWSqJaiuA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673088780;
+        s=2020e; t=1673088792;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zotIngnfFjUCAlEXnwMFZZiKtOu852+3JcwkGFgHyGI=;
-        b=FIxCSEoj7dUot1ZPrumcwqzfSAL+it4aJCc2PTGDkyGua3d2gU1lccgjayrc/6Qdzyvecv
-        A5g9FiwjlwQERfCw==
-From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
+        bh=2IG2g6yfdzj3v6AzxV31vJmclu07XKAtOZiLHWzNUv8=;
+        b=gh9PitinoVHwIX58N3Wlk/tFUxlI7cvCJ4z193dSgONJ8UbORYQQHp/q4fe8Oi7sH3O6aD
+        qz5NUNEM1WWLYmCQ==
+From:   "tip-bot2 for Miaoqian Lin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/core: Reorganize ttwu_do_wakeup() and
- ttwu_do_activate()
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+Subject: [tip: objtool/core] objtool: Fix memory leak in create_static_call_sections()
+Cc:     Miaoqian Lin <linmq006@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221223103257.4962-2-zhouchengming@bytedance.com>
-References: <20221223103257.4962-2-zhouchengming@bytedance.com>
+In-Reply-To: <20221205080642.558583-1-linmq006@gmail.com>
+References: <20221205080642.558583-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Message-ID: <167308878040.4906.10135833329024897698.tip-bot2@tip-bot2>
+Message-ID: <167308879222.4906.1093835434113126695.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,134 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     160fb0d83f206b3429fc495864a022110f9e4978
-Gitweb:        https://git.kernel.org/tip/160fb0d83f206b3429fc495864a022110f9e4978
-Author:        Chengming Zhou <zhouchengming@bytedance.com>
-AuthorDate:    Fri, 23 Dec 2022 18:32:57 +08:00
+Commit-ID:     3da73f102309fe29150e5c35acd20dd82063ff67
+Gitweb:        https://git.kernel.org/tip/3da73f102309fe29150e5c35acd20dd82063ff67
+Author:        Miaoqian Lin <linmq006@gmail.com>
+AuthorDate:    Mon, 05 Dec 2022 12:06:42 +04:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sat, 07 Jan 2023 10:48:38 +01:00
+CommitterDate: Sat, 07 Jan 2023 11:45:24 +01:00
 
-sched/core: Reorganize ttwu_do_wakeup() and ttwu_do_activate()
+objtool: Fix memory leak in create_static_call_sections()
 
-ttwu_do_activate() is used for a complete wakeup, in which we will
-activate_task() and use ttwu_do_wakeup() to mark the task runnable
-and perform wakeup-preemption, also call class->task_woken() callback
-and update the rq->idle_stamp.
+strdup() allocates memory for key_name. We need to release the memory in
+the following error paths. Add free() to avoid memory leak.
 
-Since ttwu_runnable() is not a complete wakeup, don't need all those
-done in ttwu_do_wakeup(), so we can move those to ttwu_do_activate()
-to simplify ttwu_do_wakeup(), making it only mark the task runnable
-to be reused in ttwu_runnable() and try_to_wake_up().
-
-This patch should not have any functional changes.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Fixes: 1e7e47883830 ("x86/static_call: Add inline static call implementation for x86-64")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20221223103257.4962-2-zhouchengming@bytedance.com
+Link: https://lore.kernel.org/r/20221205080642.558583-1-linmq006@gmail.com
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/core.c | 64 +++++++++++++++++++++-----------------------
- 1 file changed, 31 insertions(+), 33 deletions(-)
+ tools/objtool/check.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 255a318..03b8529 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3625,14 +3625,39 @@ ttwu_stat(struct task_struct *p, int cpu, int wake_flags)
- }
- 
- /*
-- * Mark the task runnable and perform wakeup-preemption.
-+ * Mark the task runnable.
-  */
--static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
--			   struct rq_flags *rf)
-+static inline void ttwu_do_wakeup(struct task_struct *p)
- {
--	check_preempt_curr(rq, p, wake_flags);
- 	WRITE_ONCE(p->__state, TASK_RUNNING);
- 	trace_sched_wakeup(p);
-+}
-+
-+static void
-+ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
-+		 struct rq_flags *rf)
-+{
-+	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
-+
-+	lockdep_assert_rq_held(rq);
-+
-+	if (p->sched_contributes_to_load)
-+		rq->nr_uninterruptible--;
-+
-+#ifdef CONFIG_SMP
-+	if (wake_flags & WF_MIGRATED)
-+		en_flags |= ENQUEUE_MIGRATED;
-+	else
-+#endif
-+	if (p->in_iowait) {
-+		delayacct_blkio_end(p);
-+		atomic_dec(&task_rq(p)->nr_iowait);
-+	}
-+
-+	activate_task(rq, p, en_flags);
-+	check_preempt_curr(rq, p, wake_flags);
-+
-+	ttwu_do_wakeup(p);
- 
- #ifdef CONFIG_SMP
- 	if (p->sched_class->task_woken) {
-@@ -3662,31 +3687,6 @@ static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
- #endif
- }
- 
--static void
--ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
--		 struct rq_flags *rf)
--{
--	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
--
--	lockdep_assert_rq_held(rq);
--
--	if (p->sched_contributes_to_load)
--		rq->nr_uninterruptible--;
--
--#ifdef CONFIG_SMP
--	if (wake_flags & WF_MIGRATED)
--		en_flags |= ENQUEUE_MIGRATED;
--	else
--#endif
--	if (p->in_iowait) {
--		delayacct_blkio_end(p);
--		atomic_dec(&task_rq(p)->nr_iowait);
--	}
--
--	activate_task(rq, p, en_flags);
--	ttwu_do_wakeup(rq, p, wake_flags, rf);
--}
--
- /*
-  * Consider @p being inside a wait loop:
-  *
-@@ -3728,8 +3728,7 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
- 			update_rq_clock(rq);
- 			check_preempt_curr(rq, p, wake_flags);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 4350be7..cab1a16 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -679,6 +679,7 @@ static int create_static_call_sections(struct objtool_file *file)
+ 		if (strncmp(key_name, STATIC_CALL_TRAMP_PREFIX_STR,
+ 			    STATIC_CALL_TRAMP_PREFIX_LEN)) {
+ 			WARN("static_call: trampoline name malformed: %s", key_name);
++			free(key_name);
+ 			return -1;
  		}
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		ret = 1;
- 	}
- 	__task_rq_unlock(rq, &rf);
-@@ -4095,8 +4094,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 			goto out;
- 
- 		trace_sched_waking(p);
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		goto out;
- 	}
+ 		tmp = key_name + STATIC_CALL_TRAMP_PREFIX_LEN - STATIC_CALL_KEY_PREFIX_LEN;
+@@ -688,6 +689,7 @@ static int create_static_call_sections(struct objtool_file *file)
+ 		if (!key_sym) {
+ 			if (!opts.module) {
+ 				WARN("static_call: can't find static_call_key symbol: %s", tmp);
++				free(key_name);
+ 				return -1;
+ 			}
  
