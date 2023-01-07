@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6672D660F91
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1B660F8C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjAGOno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S231218AbjAGOnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjAGOn2 (ORCPT
+        with ESMTP id S229475AbjAGOnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:43:28 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F758F99;
-        Sat,  7 Jan 2023 06:43:27 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so679165wma.1;
-        Sat, 07 Jan 2023 06:43:27 -0800 (PST)
+        Sat, 7 Jan 2023 09:43:14 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D62574F0
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 06:43:13 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ud5so9656456ejc.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 06:43:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KflpauUnWgC57RkikrRwZ2S6zi1pavAFyzypxpmWhoY=;
-        b=Tqv56ClWmcwHVhAUExXSWB5Pp3P0Zu7LJIe/Bl+SGUESQ/WQIHSuKzg0Y3jwA2+IIs
-         QKJknyep1mSJ3Z0JDDEyCYB9+fdRAnBJAiz1t43ArrxDA6AcMDGlkgyVfV74tHt1KciO
-         EwWyxR2hAXrAaG+1EkG1yWvv8R9YxCShXQADAMcPTzms3xTr5S7Us2mmyO0P6BHx8eBH
-         eYgEZ+JXQ5tQvNr4xzuCPuVQIPSo87Zf6XL47R11boJZw/PAKNoLNwyi34NISpNqwQOH
-         W8/shlStEn+YnhUgCerNn/lYkf16RtZC2sIit3L9cSJLGft1fBwCp8ZdK47vLIR5f3KA
-         EDOQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgTeE/ilKFXjW4rpM0/pwB/gOCs1EJ+FHjaXKd4NQ38=;
+        b=KE/rQcdLtQ44b7xN2W6AEUpSpkLL0Z9ZprvxYW8/FDw3xsA7kcwgtsYheilWpAyPAs
+         iIbiLdcPNIqbcBCqbeUUcsGVoR0F0GedkHyJAOtFx9MwSB1yAri72jQF99/3ZU2JCrDE
+         X/2nZ5UcDT8HaVNRLG7Ldns/PUdV6cjuSD2kFHF3wHLQogZHRzW2J+/dOGbS0pTUscBE
+         i76EkIguxJTul6LjcJ57TTzKiSP4vBK/9/G2pBhmMRmNpBdKasXHZlD2KkHGsFvDPmZh
+         aeNfVhAs+doLXqbf0K6qkWz3jQwRuTC5Dr/PsDlw0DHUC82zJe+cMb+ypl7LxXkl2eEk
+         lFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KflpauUnWgC57RkikrRwZ2S6zi1pavAFyzypxpmWhoY=;
-        b=Hkf8vewL6UW2KwlesxT/ePueDO9yMQ1jMMQxiBdzSYV6hDItD6zvsX986zBDkwJBTM
-         V7GTsbq2TAENVdBN/Pr/MvZxZ8IG9pVQa0XfpKydQyUYUZlbKhsCyaelDKPbCnZVHoKD
-         hV7fBI8ic0qJ+15pkFw6ac3zD4YbCclirBagDIQCtVJf2w3I9gglcdXlWXVNKapyTZ6P
-         GmwactD8uKmxuPdyIBPm0OZkVRFDYQSWAtVR/Exe918ptIa5C1z9a039P7se21WHwovL
-         +xInBd/FoqB/pRa/+20ascNgRyTSO0GyQQbgJnacCcY0ZLpiw5x5dbI7RX87ZLD2vaJK
-         xGFQ==
-X-Gm-Message-State: AFqh2kq/JGekBoB/Doi0Trm4+fXX0BeLX7m5lYGiRg4Ed2GCC59pdu8O
-        Bk3QjoNoiEkg/trRP/Z8QW4=
-X-Google-Smtp-Source: AMrXdXugbobdJRCM/3Fbu5r/3k2S8rpVOY4LyMoUQ1NuYbYL5zwd0A/ZbX0xojfBzW3C4wk+iHiWtQ==
-X-Received: by 2002:a05:600c:42c7:b0:3d2:3ae8:885b with SMTP id j7-20020a05600c42c700b003d23ae8885bmr41848980wme.28.1673102605972;
-        Sat, 07 Jan 2023 06:43:25 -0800 (PST)
-Received: from mars.. ([2a02:168:6806:0:40f6:41b6:8914:e80b])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05600c351300b003d9a86a13bfsm6056106wmq.28.2023.01.07.06.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 06:43:25 -0800 (PST)
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-To:     "Andrew Lunn" <andrew@lunn.ch>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Klaus Kudielka <klaus.kudielka@gmail.com>
-Subject: [PATCH v2 2/2] Revert "ARM: dts: armada-39x: Fix compatible string for gpios"
-Date:   Sat,  7 Jan 2023 15:41:49 +0100
-Message-Id: <20230107144149.5743-2-klaus.kudielka@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230107144149.5743-1-klaus.kudielka@gmail.com>
-References: <20230107144149.5743-1-klaus.kudielka@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgTeE/ilKFXjW4rpM0/pwB/gOCs1EJ+FHjaXKd4NQ38=;
+        b=DNi0rKAI/5Rvh5hGkogTTGDEmx9yfx0L2bJAeeT2Sli7bGBMNyJ9dEokhqON/qiDJs
+         Bw/pkvwVbSHlWXC5W/wHqAW5OMF6Y0LNjZIgBLROAke8JvmFa4SL9v8OIrivCNfqB2T1
+         0PHUiCDjI9s+3qxltq7UdnXivAKAbaoqzeBWwkCRyzOVdLU/F5hGj3tVtwypD1ht2wHl
+         PlzWr7xYcGak5xdIMRL0d8z2wRCNoFRiydVL6/MlthMLyHDGPpoywZM9kt4BnL8FfIRM
+         cko9l6etDjvWCmgNNvpzlS2jFGAH1QTqMYEtiNOm4plFemJK3WknRLzx/jZOpmD4tEQV
+         OHoA==
+X-Gm-Message-State: AFqh2koUNf6F35sZu4eOH4eMCyK7EqO93zmVGzTaKf9yOXDK9UxkrQnQ
+        ajWraZ2DlDlS4csBTP7uqeGJ+9RcNZEW6UdZPtrxRekS
+X-Google-Smtp-Source: AMrXdXtlGS/h/hAKOjzFrOA6KACDNtzJaabe/2jpHBvPxZHHBbI6qQafMU2aYnRNbfaMmWSroGrl+Ld4jb7vNoFLtRs=
+X-Received: by 2002:a17:907:82af:b0:84d:b4b:d97d with SMTP id
+ mr47-20020a17090782af00b0084d0b4bd97dmr724380ejc.481.1673102591858; Sat, 07
+ Jan 2023 06:43:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <alpine.DEB.2.21.2209260132340.29493@angie.orcam.me.uk> <alpine.DEB.2.21.2301060111330.54090@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2301060111330.54090@angie.orcam.me.uk>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Sat, 7 Jan 2023 14:42:35 +0000
+Message-ID: <CADVatmOArD_fSU4cG__DZ2HUqH9m3hf=+aOoYUqQjY31Sfb9qQ@mail.gmail.com>
+Subject: Re: [PATCH][PATCH] parport_pc: Limit the number of PCI BAR pairs to 2
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -82,47 +66,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit d10886a4e6f85ee18d47a1066a52168461370ded.
+On Fri, 6 Jan 2023 at 01:12, Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> On Wed, 16 Nov 2022, Maciej W. Rozycki wrote:
+>
+> > Decrease the number of PCI BAR pair slots allocated for port subdrivers
+> > from 4 to 2 as none wants more than 2 at this time, reducing the memory
+> > footprint a little.  No functional change.
+>
+>  Ping for:
+> <https://lore.kernel.org/lkml/alpine.DEB.2.21.2209260132340.29493@angie.orcam.me.uk/>.
 
-If compatible = "marvell,armadaxp-gpio", the reg property requires a
-second (address, size) pair, which points to the per-CPU interrupt
-registers <0x18800 0x30> / <0x18840 0x30>.
+Sorry for the delay. Had to dig out my hardwares for the other series.
+This and the other series
+looks ok. Will test tonight and I will send it to Greg.
 
-Furthermore:
-Commit 5f79c651e81e explains very well, why the gpio-mvebu driver does not
-work reliably with per-CPU interrupts.
-Commit 988c8c0cd04d deprecates compatible = marvell,armadaxp-gpio for this
-reason.
 
-Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
----
-v1->v2: Be more explicit about the reg property.
-
- arch/arm/boot/dts/armada-39x.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/armada-39x.dtsi b/arch/arm/boot/dts/armada-39x.dtsi
-index 1e05208d9f..9d1cac49c0 100644
---- a/arch/arm/boot/dts/armada-39x.dtsi
-+++ b/arch/arm/boot/dts/armada-39x.dtsi
-@@ -213,7 +213,7 @@ nand_pins: nand-pins {
- 			};
- 
- 			gpio0: gpio@18100 {
--				compatible = "marvell,armadaxp-gpio", "marvell,orion-gpio";
-+				compatible = "marvell,orion-gpio";
- 				reg = <0x18100 0x40>;
- 				ngpios = <32>;
- 				gpio-controller;
-@@ -227,7 +227,7 @@ gpio0: gpio@18100 {
- 			};
- 
- 			gpio1: gpio@18140 {
--				compatible = "marvell,armadaxp-gpio", "marvell,orion-gpio";
-+				compatible = "marvell,orion-gpio";
- 				reg = <0x18140 0x40>;
- 				ngpios = <28>;
- 				gpio-controller;
 -- 
-2.39.0
-
+Regards
+Sudip
