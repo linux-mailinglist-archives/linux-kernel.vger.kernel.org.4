@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4521661052
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E895E661056
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjAGQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 11:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S229904AbjAGRCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 12:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAGQ74 (ORCPT
+        with ESMTP id S229542AbjAGRCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 11:59:56 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76313DBD3;
-        Sat,  7 Jan 2023 08:59:55 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id u3so1048385uae.0;
-        Sat, 07 Jan 2023 08:59:55 -0800 (PST)
+        Sat, 7 Jan 2023 12:02:12 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E47740C14;
+        Sat,  7 Jan 2023 09:02:12 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id x65so4499497vsb.13;
+        Sat, 07 Jan 2023 09:02:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wuuEdP1jV/IJ6+m7T8W/2mjhQd285LO9rN5Efm0s4XM=;
-        b=dUbt8moScTy5Aj/ZgCaUsKM0Ek8ZT79W/Bbm287mIp7OIQcXsLXEYKM7b7RURozV9F
-         PBG02rCAihkmLlap+ILaG3pvfvaSVDhY0V01ZousKP62ZIuBwt7wogzqcHajRcjvnNo2
-         1y7sfH1q/CHDiJYbx0+1J1hZjPFDPMKLAvSIn5YXaMndHXVIMm3RIHtdlh9KqKqHIDts
-         H5NRGN1HM3GM34E4cKO0UDFINqveJdi/elMcnGa6DjzHkvEU+Tf1O7IG5QHusZyjugmB
-         U+nfKtBZ4E2OTE/1tnC8RMvzLJJdItU/8f8JvsISGTOmXyMD8MYPfEKQvkEd4UJ982/Y
-         +d3A==
+        bh=Ut7y6LwE6+TXt94aDe6UhDlh2RKFMtpvXvxQcoIWjvk=;
+        b=Z5pPnl0gUaN3fIqaMg1NYm9RBEWAlz+S9VpBNUssb7IRBFMlJm7DZ/vJrZntBLJYr2
+         OBDc7qvP2nGGfbW16FXtdjboZZu5uKxIuVQb3MxQ4KySaC/898uQNbogVvy0i0hboFlw
+         cz9xkgyjCWTWGiSUL2TTzKWwEFJhMjBiGnx6TAF4o7SgylAVGQIrHzr/I91L0iXjhQKc
+         ajPCH4dLNbfW+Ib4LMRrKdIJVKY+9Mt8yhawJcEjux6di8SO2FyliZ3RV87FARkNEjAx
+         YMnsGnbvQv6w9QU67VrZHoawWS7WMS8Wu/T1Y50XOY4qM6kfFpooPgL9M2Fx6/7Lla4E
+         auvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wuuEdP1jV/IJ6+m7T8W/2mjhQd285LO9rN5Efm0s4XM=;
-        b=t39mwonipa1jsF9ns8VK/vl4tDwuzALqe6KaWewnXPCg69eHsLKaSV7pF5ui/3xlVc
-         kf5QfUSPgexhIYjSpAtbyfcxBBv6hV43DpGQOinXfDR+RLG3EdTJhvHkMHcukCZcNUAZ
-         SkYs9QBa/oZWKgkwmH+wHS0I8zDSZUR7IguBnlfrNnm7LnKb3S21io3oOLlV6GmkM91J
-         iA5AylERGsyb5orQQGH1MBcrjtTFPTALnXem+CXFYo1qtlE7q02UTvD2J4ElpyKYLvvx
-         S4ROVgQ3AxjEskpCepU07WyJl5jwmgIfIw/q2tAms7qhv1ezT8gSsSYHkzLVEUvV+o3E
-         K4SA==
-X-Gm-Message-State: AFqh2koB9+7s8v0uaHBRw+LQTJevMXb+iST5jhP3+hN/OEnQOnsFuaBo
-        IvHeLYYAx7YaPfcYKZ1bloZ+oMjW9ygrtyRmyNA=
-X-Google-Smtp-Source: AMrXdXscY4+Jc4RPKoIYNLHbDOLVdMVnIkGr2x8PCbBCET9DVX+AVU8EVMt4SwNCL4DpM83OdgYM9HRNpYy3wihXMWQ=
-X-Received: by 2002:ab0:624a:0:b0:5cb:ae3d:8c72 with SMTP id
- p10-20020ab0624a000000b005cbae3d8c72mr1123920uao.120.1673110794845; Sat, 07
- Jan 2023 08:59:54 -0800 (PST)
+        bh=Ut7y6LwE6+TXt94aDe6UhDlh2RKFMtpvXvxQcoIWjvk=;
+        b=UNySeMp3PloKpIgv0VnN6lB3bQIoNDvgzW3qT7xL4686qSLt7TTYa5c0uBPRXWn/y/
+         J4HhRfz/hu0lYYzdPNQLMjXsyrbT/QmkOKp8zP00sBHiSR1d531Nhz0BrtgyGDNhUQzV
+         /vGrtvc85V+/ShfFuQlQE/EUHhAeG6VABrZJtGusyqGF+26yWt0h+YMDhvm4qxnADxXK
+         2lzHZaAF8VSNohaqmF0HDKuGMdrLWoY1DvdQS/7bR5oHu3E/KMZTLReXCDTlfaSV2u12
+         NDoiPPzTk4SSyMDrHrP/OHwlQ9tD7BPyk8XiOU1RTV2Oo2oxx6hzt0PtZ92fMAxnWqR6
+         oNAA==
+X-Gm-Message-State: AFqh2kpqo7BYKvhbpXmPAaqwFBkO+mn6FdIwSjaPBz7IuKdI0hX6xUQ1
+        4bF1f3x/y4d/LdvF13X9bGPNy4iG8/MtAud6uNkrBAaQL+vUgA==
+X-Google-Smtp-Source: AMrXdXvHJf9VqlQ5TbDfSXStJGdwwfclPy09+mhcqjnlIfuQFjHOGYpbLKLzsiPMLb1gh8akE7Ud6e8/1waMevuBPvo=
+X-Received: by 2002:a67:5c03:0:b0:3ce:a7c5:3757 with SMTP id
+ q3-20020a675c03000000b003cea7c53757mr2541058vsb.63.1673110931272; Sat, 07 Jan
+ 2023 09:02:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-5-hugo@hugovil.com>
-In-Reply-To: <20221215150214.1109074-5-hugo@hugovil.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-6-hugo@hugovil.com>
+In-Reply-To: <20221215150214.1109074-6-hugo@hugovil.com>
 From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Sat, 7 Jan 2023 17:59:38 +0100
-Message-ID: <CAH+2xPA6x_RcN7Z0h6DtsAY9KgrHTgixpB_fFZR_S=16+sRt-A@mail.gmail.com>
-Subject: Re: [PATCH v3 04/14] rtc: pcf2127: adapt for WD registers at any offset
+Date:   Sat, 7 Jan 2023 18:01:55 +0100
+Message-ID: <CAH+2xPBAQ0vYfLNHSmVBt8hRotzot-Cs7OSEu+q2Bv3eA+5Nsg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/14] rtc: pcf2127: adapt for CLKOUT register at any offset
 To:     Hugo Villeneuve <hugo@hugovil.com>
 Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -79,79 +79,54 @@ Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
 > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
 Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-Tested-by: Bruno Thomsen <bruno.thomsen@gmail.com>
 
 > ---
->  drivers/rtc/rtc-pcf2127.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+>  drivers/rtc/rtc-pcf2127.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
 > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index db0cb784c0c9..5d8c06e32dce 100644
+> index 5d8c06e32dce..38816ad065eb 100644
 > --- a/drivers/rtc/rtc-pcf2127.c
 > +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -114,6 +114,8 @@ struct pcf21xx_config {
->         unsigned int has_bit_wd_ctl_cd0:1;
->         u8 regs_td_base; /* Time/data base registers. */
+> @@ -116,6 +116,7 @@ struct pcf21xx_config {
 >         u8 regs_alarm_base; /* Alarm function base registers. */
-> +       u8 reg_wd_ctl; /* Watchdog control register. */
-> +       u8 reg_wd_val; /* Watchdog value register. */
+>         u8 reg_wd_ctl; /* Watchdog control register. */
+>         u8 reg_wd_val; /* Watchdog value register. */
+> +       u8 reg_clkout; /* Clkout register. */
 >  };
 >
 >  struct pcf2127 {
-> @@ -297,7 +299,7 @@ static int pcf2127_wdt_ping(struct watchdog_device *wdd)
->  {
->         struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
->
-> -       return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL, wdd->timeout);
-> +       return regmap_write(pcf2127->regmap, pcf2127->cfg->reg_wd_val, wdd->timeout);
->  }
->
->  /*
-> @@ -331,7 +333,7 @@ static int pcf2127_wdt_stop(struct watchdog_device *wdd)
->  {
->         struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
->
-> -       return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL,
-> +       return regmap_write(pcf2127->regmap, pcf2127->cfg->reg_wd_val,
->                             PCF2127_WD_VAL_STOP);
->  }
->
-> @@ -380,7 +382,7 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
->         watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
->
->         /* Test if watchdog timer is started by bootloader */
-> -       ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
-> +       ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_wd_val, &wdd_timeout);
->         if (ret)
->                 return ret;
->
-> @@ -664,6 +666,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .has_bit_wd_ctl_cd0 = 1,
->                 .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> @@ -668,6 +669,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
 >                 .regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> +               .reg_wd_ctl = PCF2127_REG_WD_CTL,
-> +               .reg_wd_val = PCF2127_REG_WD_VAL,
+>                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
+>                 .reg_wd_val = PCF2127_REG_WD_VAL,
+> +               .reg_clkout = PCF2127_REG_CLKOUT,
 >         },
 >         [PCF2129] = {
 >                 .max_register = 0x19,
-> @@ -671,6 +675,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .has_bit_wd_ctl_cd0 = 0,
->                 .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> @@ -677,6 +679,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
 >                 .regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> +               .reg_wd_ctl = PCF2127_REG_WD_CTL,
-> +               .reg_wd_val = PCF2127_REG_WD_VAL,
+>                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
+>                 .reg_wd_val = PCF2127_REG_WD_VAL,
+> +               .reg_clkout = PCF2127_REG_CLKOUT,
 >         },
 >  };
 >
-> @@ -772,7 +778,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->          * as T. Bits labeled as T must always be written with
->          * logic 0.
->          */
-> -       ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
-> +       ret = regmap_update_bits(pcf2127->regmap, pcf2127->cfg->reg_wd_ctl,
->                                  PCF2127_BIT_WD_CTL_CD1 |
->                                  PCF2127_BIT_WD_CTL_CD0 |
->                                  PCF2127_BIT_WD_CTL_TF1 |
+> @@ -756,12 +759,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+>                                 PCF2127_BIT_CTRL1_POR_OVRD);
+>
+> -       ret = regmap_read(pcf2127->regmap, PCF2127_REG_CLKOUT, &val);
+> +       ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+>         if (ret < 0)
+>                 return ret;
+>
+>         if (!(val & PCF2127_BIT_CLKOUT_OTPR)) {
+> -               ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
+> +               ret = regmap_set_bits(pcf2127->regmap, pcf2127->cfg->reg_clkout,
+>                                       PCF2127_BIT_CLKOUT_OTPR);
+>                 if (ret < 0)
+>                         return ret;
 > --
 > 2.30.2
 >
