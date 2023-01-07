@@ -2,239 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC97661173
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 21:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0396661176
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 21:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjAGUCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 15:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S232537AbjAGUEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 15:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAGUCs (ORCPT
+        with ESMTP id S229785AbjAGUEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 15:02:48 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8956A958F;
-        Sat,  7 Jan 2023 12:02:46 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id i127so3821918oif.8;
-        Sat, 07 Jan 2023 12:02:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Y6wqDn5CqaAzAfXghJKhjP3SloXU1oeIIGLXVsqIWo=;
-        b=RruZuuZpvO1dPjO69khzGwvXX8s0OS6kNbbKPl/VCcXeqYhxdWl6cCVWZn3Q+8haDE
-         z9TVWUQ6ojmUH8Vld9aoRApkRGyaZ0r3YvnVcwPv5P69FvUCbQqftQevr3AcKiPi9ecc
-         u30hb/evjfymw0+KPgcAXe+6hAMZddE6pZC2JR2V6lx58BA8v+lf1PhW1qeTLwOCdtuI
-         CFkPQ4hiaSsUBc9C17Ije/Q+u3jIVwoSMeL0U7AAVdsqz/aLSFfrRirE/RI6nZlIZOTS
-         CnAFsXczlfbxz+bUXbBBF9rwqj50dKZXJ6+w16bXSScVu4iGXsCzqFhgAM59ymNV2c+V
-         +ZQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Y6wqDn5CqaAzAfXghJKhjP3SloXU1oeIIGLXVsqIWo=;
-        b=oJceNBv8y7dHLdoJKdfCEOmOrp5BWMcBQN3i3o1CuXHLCV9LH8XsUlw3U0NYitZN+U
-         YsmDh2X7PB73mJv+sFI+ViK4g97DyTyMiPBJb7T1qjdQZmGer81lVad1vXjkeI02tFZC
-         MI6yo9AzyovfT24jUugeY+sAzn7HtLaJ21V10+n/ETJkbNUuGRCtkW++y3hE+LWPimR1
-         OnrMKl/nMkfxk1HurL7qfzpznEbEUlK2o+FP+XQQVNcBcYUpuC5hfk8LjGjyFneXNpxi
-         PTqlaYePosALr0KZxO3YoRhbdkZ9VXCFj6WXtWSxSyXl9CZPRPTogX7sEGzP65hQSx+2
-         tclg==
-X-Gm-Message-State: AFqh2kp/brvmNSac0XIKYweDf6QF+x+3JLe+tNg4ivaRZZDWznDKEphY
-        Mgdi1yz3kpSbnljUPMMVhm+Nmgz7Y5o=
-X-Google-Smtp-Source: AMrXdXtNbjEC8VmDq7VtZRnMMoqLLIfSyzWWZ0HvEqM48n5rZthSfkZ4qdI0qSIdjHO//p5sLEYtaw==
-X-Received: by 2002:a05:6808:212a:b0:35e:bc7c:59a1 with SMTP id r42-20020a056808212a00b0035ebc7c59a1mr38021839oiw.47.1673121765721;
-        Sat, 07 Jan 2023 12:02:45 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:d403:a631:b9f0:eacb])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056808098700b0034d9042758fsm1799526oic.24.2023.01.07.12.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 12:02:44 -0800 (PST)
-Date:   Sat, 7 Jan 2023 12:02:44 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Yunhui Cui <cuiyunhui@bytedance.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kuniyu@amazon.com, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3] sock: add tracepoint for send recv length
-Message-ID: <Y7nP5PAGxWZ+2GHN@pop-os.localdomain>
-References: <20230107035923.363-1-cuiyunhui@bytedance.com>
+        Sat, 7 Jan 2023 15:04:09 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBBBBE31
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 12:04:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673121832; bh=qvSMD/w2DQNAF9ACqwomgKEylFg7d9LZDFbLkAkAiEM=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=fjricY/vc4two4jGlMogMR9BT4DY3F5oI1AWTTzRuMJ9cFzogpuA7rFOni4I1BpSz
+         /koZH4GQATaywou+Ntd9FgyuljEpg6oWqyrl1PiduLjyt02W9SFPzEDUs6JF2tNE4G
+         ogXF3sPPAsU8JetEjXCMbAdptRpVXk9nEmd/Zy84=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat,  7 Jan 2023 21:03:52 +0100 (CET)
+X-EA-Auth: 3CfAlWsYnllX1G5Xz+iwFZSWEvjzz9Hk0nK4oLPYYp4TtmOmNTCnjCKf7MKgCPgnp1UUMLMVXlXiZCm2kh4NwfbxZSA2uh/P
+Date:   Sun, 8 Jan 2023 01:33:41 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Nicolai Stange <nicstange@gmail.com>,
+        Julia Lawall <Julia.Lawall@lip6.fr>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
+ attributes
+Message-ID: <Y7nQHfbKNmZ1sRbO@ubun2204.myguest.virtualbox.org>
+References: <Y6qmNW6cOHjGwn03@qemulion>
+ <Y6sn1BmhFJFssW0h@intel.com>
+ <Y6s0FSK9+F+/oKSf@qemulion>
+ <Y6wl9NhYZG5RjJL7@intel.com>
+ <Y7PG5Hx5dDE7aHSx@qemulion>
+ <alpine.DEB.2.22.394.2301041850570.7216@hadrien>
+ <Y7XABJ9MWCWO5IUA@intel.com>
+ <991ac2b4-f458-f6f2-f494-648ed61efcff@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230107035923.363-1-cuiyunhui@bytedance.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <991ac2b4-f458-f6f2-f494-648ed61efcff@inria.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 07, 2023 at 11:59:23AM +0800, Yunhui Cui wrote:
-> Add 2 tracepoints to monitor the tcp/udp traffic
-> of per process and per cgroup.
-> 
-> Regarding monitoring the tcp/udp traffic of each process, there are two
-> existing solutions, the first one is https://www.atoptool.nl/netatop.php.
-> The second is via kprobe/kretprobe.
-> 
-> Netatop solution is implemented by registering the hook function at the
-> hook point provided by the netfilter framework.
-> 
-> These hook functions may be in the soft interrupt context and cannot
-> directly obtain the pid. Some data structures are added to bind packets
-> and processes. For example, struct taskinfobucket, struct taskinfo ...
-> 
-> Every time the process sends and receives packets it needs multiple
-> hashmaps,resulting in low performance and it has the problem fo inaccurate
-> tcp/udp traffic statistics(for example: multiple threads share sockets).
-> 
-> We can obtain the information with kretprobe, but as we know, kprobe gets
-> the result by trappig in an exception, which loses performance compared
-> to tracepoint.
-> 
-> We compared the performance of tracepoints with the above two methods, and
-> the results are as follows:
-> 
-> ab -n 1000000 -c 1000 -r http://127.0.0.1/index.html
-> without trace:
-> Time per request: 39.660 [ms] (mean)
-> Time per request: 0.040 [ms] (mean, across all concurrent requests)
-> 
-> netatop:
-> Time per request: 50.717 [ms] (mean)
-> Time per request: 0.051 [ms] (mean, across all concurrent requests)
-> 
-> kr:
-> Time per request: 43.168 [ms] (mean)
-> Time per request: 0.043 [ms] (mean, across all concurrent requests)
-> 
-> tracepoint:
-> Time per request: 41.004 [ms] (mean)
-> Time per request: 0.041 [ms] (mean, across all concurrent requests
-> 
-> It can be seen that tracepoint has better performance.
-> 
-> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
+On Thu, Jan 05, 2023 at 09:13:35AM +0100, Julia Lawall wrote:
+> > Hi Julia, thanks for helping here.
+> >
+> > So, my question is why this
+> >
+> > make coccicheck M=drivers/gpu/drm/i915/ MODE=context COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+> >
+> > didn't catch this chunck:
+> >
+> > -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
+> > -				    fbc, &intel_fbc_debugfs_false_color_fops);
+> > +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
+> > +					   fbc, &intel_fbc_debugfs_false_color_fops);
+> >
+> > When I run it it only catches and replaces this:
+> >
+> > - DEFINE_SIMPLE_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
+> > + DEFINE_DEBUGFS_ATTRIBUTE(dsa_fops, dsa_get, dsa_set, dsa_fmt);
+>
+> There is something strange in your question.  You have MODE=context but
+> you show the output for MODE=patch.  The rule dcf matches a call to
+> debugfs_create_file, and the context rule matching DEFINE_SIMPLE_ATTRIBUTE
+> is only activated if dcf succeeds.  So when the context rule gives a
+> report, there is always a corresponding call to debugfs_create_file in the
+> same file, it is just not highlighted.  So the request is that it should
+> be highlighted as well?
 
-Thanks for the numbers, they help a lot.
+Hello Rodrigo,
+Not trying to speak for you, but I think Julia's comment appears to be the
+correct interpretation of your observation. Would you mind confirming/clarifying
+and suggest next steps for this proposal?
 
-Acked-by: Cong Wang <cong.wang@bytedance.com>
+Thank you,
+./drv
 
-A few minor issues below.
+>
+> julia
+>
 
 
-> ---
->  include/trace/events/sock.h | 49 +++++++++++++++++++++++++++++++++++++
->  net/socket.c                | 20 +++++++++++++--
->  2 files changed, 67 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
-> index 777ee6cbe933..16092c0406a2 100644
-> --- a/include/trace/events/sock.h
-> +++ b/include/trace/events/sock.h
-> @@ -263,6 +263,55 @@ TRACE_EVENT(inet_sk_error_report,
->  		  __entry->error)
->  );
->  
-> +/*
-> + * sock send/recv msg length
-> + */
-> +DECLARE_EVENT_CLASS(sock_msg_length,
-> +
-> +	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
-> +		 int flags),
-> +
-> +	TP_ARGS(sk, family, protocol, ret, flags),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(void *, sk)
-> +		__field(__u16, family)
-> +		__field(__u16, protocol)
-> +		__field(int, length)
-> +		__field(int, error)
-> +		__field(int, flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->sk = sk;
-> +		__entry->family = sk->sk_family;
-> +		__entry->protocol = sk->sk_protocol;
-> +		__entry->length = ret > 0 ? ret : 0;
-> +		__entry->error = ret < 0 ? ret : 0;
-> +		__entry->flags = flags;
-> +	),
-> +
-> +	TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
-> +			__entry->sk,
-> +			show_family_name(__entry->family),
-> +			show_inet_protocol_name(__entry->protocol),
-> +			__entry->length,
-> +			__entry->error, __entry->flags)
-
-Please align and pack those parameters properly.
-
-
-> +);
-> +
-> +DEFINE_EVENT(sock_msg_length, sock_sendmsg_length,
-> +	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
-> +		 int flags),
-> +
-> +	TP_ARGS(sk, family, protocol, ret, flags)
-> +);
-> +
-> +DEFINE_EVENT(sock_msg_length, sock_recvmsg_length,
-> +	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
-> +		 int flags),
-> +
-> +	TP_ARGS(sk, family, protocol, ret, flags)
-> +);
-
-It might be a better idea to remove "msg" from the tracepoint names, in
-case of any confusion with "sendpage". So
-s/sock_sendmsg_length/sock_send_length/ ?
-
-
->  #endif /* _TRACE_SOCK_H */
->  
->  /* This part must be outside protection */
-> diff --git a/net/socket.c b/net/socket.c
-> index 888cd618a968..37578e8c685b 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -106,6 +106,7 @@
->  #include <net/busy_poll.h>
->  #include <linux/errqueue.h>
->  #include <linux/ptp_clock_kernel.h>
-> +#include <trace/events/sock.h>
->  
->  #ifdef CONFIG_NET_RX_BUSY_POLL
->  unsigned int sysctl_net_busy_read __read_mostly;
-> @@ -715,6 +716,9 @@ static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
->  				     inet_sendmsg, sock, msg,
->  				     msg_data_left(msg));
->  	BUG_ON(ret == -EIOCBQUEUED);
-> +
-> +	trace_sock_sendmsg_length(sock->sk, sock->sk->sk_family,
-> +				  sock->sk->sk_protocol, ret, 0);
->  	return ret;
->  }
->  
-> @@ -992,9 +996,16 @@ INDIRECT_CALLABLE_DECLARE(int inet6_recvmsg(struct socket *, struct msghdr *,
->  static inline int sock_recvmsg_nosec(struct socket *sock, struct msghdr *msg,
->  				     int flags)
->  {
-> -	return INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-> +	int ret = INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
->  				  inet_recvmsg, sock, msg, msg_data_left(msg),
->  				  flags);
-
-Please adjust the indentations properly.
-
-Thanks.
