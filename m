@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328D3660F57
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B77660F5C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 15:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjAGOJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 09:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S232730AbjAGOJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 09:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjAGOI4 (ORCPT
+        with ESMTP id S232494AbjAGOJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 09:08:56 -0500
-Received: from smtp.smtpout.orange.fr (smtp-11.smtpout.orange.fr [80.12.242.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CAEB1C3
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 06:08:54 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id E9sRpKyqPRTYIE9sRpsN7c; Sat, 07 Jan 2023 15:08:53 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 07 Jan 2023 15:08:53 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <340cf324-29a1-a0c4-638d-b820f6cb3473@wanadoo.fr>
-Date:   Sat, 7 Jan 2023 15:08:51 +0100
+        Sat, 7 Jan 2023 09:09:28 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35656398
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 06:09:27 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso5444903wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 06:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hTkxCHIheyNTVL7VydMOU8yLlFfEZgD4uztibkHROUs=;
+        b=pPCDkW/wC3N3XkRh44F/mw4FVFibhSDoyP3GvliH4+QEb45EU9nZWmHa2Br/icn8sz
+         eQi7UKn5aO1sP3wKFUhz5oP+jZhHFPZ8SEtLAjlYWm9tHVKUFH5R2Yd07coSodK4Ix12
+         yjazvQ/KHxR277XPrswnjJUJPqdP1Q3MNRARalP4MCoBvyWH0laPV1jvda11Jvw7llLX
+         //4o9lGM3RJA5HDDAuUrswNdO/Y2tSwQE2pJRSCt06sHs7ack1rcpQIORFNWN+B1rFCk
+         nWkplHDqBOmfEeoAaoP/rOyYyZm/pR2mbq3XJnCTE8RK4Ur4Fjd/41N9doNycm7QjuiH
+         jnQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTkxCHIheyNTVL7VydMOU8yLlFfEZgD4uztibkHROUs=;
+        b=4WywIP9b2CnZahPWEMRy+mPYX6jyMXgYhkondnIY+8Ux0g6pmumxC4X+W0CC0y/Nvn
+         s+CjMLRxZrf2yefUQczvjuqH7QWsOW9Lm05bTCXieN38nr96IXp+GPgLYlFDHRgpEgv/
+         SxUTbDXavAfqff8C7+VQmGmpQdXiF2LiJe/LHJhWH5iA2yv3ofXP+clCh1c8utPv9r4/
+         ev8fsgP6uXTBQ7G5web3kY+f4GNxHUvvb1UPp2jcq8Ji6v+dPtOyZl50QJtt3kv+IymH
+         vpgawPtEjR6SjnmpBa9k8SS9BwTOvGP37z8zUdEYW0vYWSSqZYwKuMF4Uowgvur4UoRY
+         k88A==
+X-Gm-Message-State: AFqh2kqTDi4Dk/fODZ4UXTVq+DjwUp0azERGtsgsYvpm5wz8P5SA4ZJI
+        9AZc1eeOEFFpNelhPo6n2nzQcQ==
+X-Google-Smtp-Source: AMrXdXtgyk1FFYnTGg0G6YSmSgCxjvtllGOOCra9Efk6HYqQMQ/5QPxNnQqaERO+Ep7bL0Vg7uITQQ==
+X-Received: by 2002:a05:600c:1d1d:b0:3cf:81af:8b73 with SMTP id l29-20020a05600c1d1d00b003cf81af8b73mr41729069wms.23.1673100566549;
+        Sat, 07 Jan 2023 06:09:26 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003d34faca949sm5419825wmb.39.2023.01.07.06.09.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 06:09:26 -0800 (PST)
+Message-ID: <0ab84fb8-6173-54e0-abad-a0e0e4ba82e7@linaro.org>
+Date:   Sat, 7 Jan 2023 15:09:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
-Content-Language: fr
-To:     Quanfa Fu <quanfafu@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230107034557.1156022-1-quanfafu@gmail.com>
- <30dd32b4-cd74-77a1-d9ad-84e361680dac@wanadoo.fr>
- <CAM4UoyqAGUbLaaoDyvFSTKvgpq9Oz7HuxKLMf3ryOsjHofcpVw@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAM4UoyqAGUbLaaoDyvFSTKvgpq9Oz7HuxKLMf3ryOsjHofcpVw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
+ combinations
+Content-Language: en-US
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230105213856.1828360-1-andreas@kemnade.info>
+ <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
+ <20230106203358.14878660@aktux>
+ <967cc7b7-f0bb-de37-52b9-7bfab05eadd7@linaro.org>
+ <20230107144336.2ecff4f9@aktux>
+ <123d1a56-8134-dc75-8b2a-b3836e727d4a@linaro.org>
+ <20230107150740.0ba34aa1@aktux>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230107150740.0ba34aa1@aktux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 07/01/2023 à 13:23, Quanfa Fu a écrit :
-> On Sat, Jan 7, 2023 at 4:42 PM Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr> wrote:
->>
->> Le 07/01/2023 à 04:45, Quanfa Fu a écrit :
->>> Since this memory will be filled soon below, I feel that there is
->>> no need for a memory of all zeros here. 'snprintf' does not return
->>> negative num according to ISO C99, so I feel that no judgment is
->>> needed here.
->>>
->>> No functional change intended.
->>>
->>> Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
->>> ---
->>>    kernel/trace/trace_eprobe.c | 4 +---
->>>    1 file changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
->>> index 352b65e2b910..cd1d271a74e7 100644
->>> --- a/kernel/trace/trace_eprobe.c
->>> +++ b/kernel/trace/trace_eprobe.c
->>> @@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
->>>        for (i = 0; i < argc; i++)
->>>                len += strlen(argv[i]) + 1;
->>>
->>> -     ep->filter_str = kzalloc(len, GFP_KERNEL);
->>> +     ep->filter_str = kmalloc(len, GFP_KERNEL);
->>>        if (!ep->filter_str)
->>>                return -ENOMEM;
->>>
->>>        p = ep->filter_str;
->>>        for (i = 0; i < argc; i++) {
->>>                ret = snprintf(p, len, "%s ", argv[i]);
->>> -             if (ret < 0)
->>> -                     goto error;
->>>                if (ret > len) {
->>
+On 07/01/2023 15:07, Andreas Kemnade wrote:
+> On Sat, 7 Jan 2023 15:00:56 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> I think that:
-> 
-> for example, argc = 2, argv = {"a", "b"};
-> 
-> Before the loop
-> ===============
-> len = (1 + 1) + (1 + 1) = 4;
-> ep->filter_str = 0x00 0x00 0x00 0x00
->                         ^
->                          |__ p
-> 
-> After the loop:
-> ===============
-> i = 1, snprintf write: 'a' and ' ', so ret = 2
-> i = 2, snprintf write: 'b' and ' ', so ret = 2
-> ===============
+> [...]
+>>>> I asked to remove half-compatible. Not to enforce.
+>>>>  
+> so you are saying that allowing
+> compatible = "A", "B" 
+> is not ok, if B is not fully compatible. I agree with that
+> one.
 
-Ok, I missed the space after the %s.
+I did not say that. It's not related to this problem.
 
-Sorry for the noise.
+Again - you cannot have device which is and is not compatible with
+something else. It's not a Schroedinger's cat to be in two states,
+unless you explicitly document the cases (there are exception). If this
+is such exception, it requires it's own documentation.
 
->   Since the length of the last argv is not enough
-> to write, the space is replaced by null
-> 
-> ep->filter_str = 0x61 0x20 0x62 0x00
->                                                            ^
->                                                            |__ p
-> p = ep->fiter_str + 2 (ret1) +2 (ret2) = ep->filter_str + 4
-> ===============
-> so After p[-1] = *(ep->filter_str + 3) = '\0';
-> ep->filter_str = 0x61 0x20 0x62 0x00
-> 
-> According to ISO C99: " If the output was truncated due to this limit
-> then the return value is the number of characters (excluding the
-> terminating null byte) which would have been written to the final
-> string if enough  space  had been available"
-> 
-> The last snprintf will end with 'NULL', so I think p[-1] = '\0' can
-> also be deleted
-
-Hmm, now that I see it, I think that it is there to remove the last 
-space (even if there shouldn't be any because the last snprintf will be 
-truncated).
-
-Code LGTM as-is, even if puzzling.
-
-CJ
-
-> 
+Best regards,
+Krzysztof
 
