@@ -2,127 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3036C660D22
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A55E660D23
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 10:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjAGJKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 04:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S231594AbjAGJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 04:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjAGJKb (ORCPT
+        with ESMTP id S231521AbjAGJKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 04:10:31 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392F66B585
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:10:28 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 8922224E004;
-        Sat,  7 Jan 2023 17:10:24 +0800 (CST)
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 7 Jan
- 2023 17:10:24 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Sat, 7 Jan 2023 17:10:24 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Conor Dooley <conor@kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH 0/3] RISC-V Hibernation Support
-Thread-Topic: [PATCH 0/3] RISC-V Hibernation Support
-Thread-Index: AQHZIZTqwYypoX0My0ChYWYlFtUmh66Qm80AgAG96pA=
-Date:   Sat, 7 Jan 2023 09:10:24 +0000
-Message-ID: <31b303a394f24b04b3aa81c64be6855f@EXMBX066.cuchost.com>
-References: <20230106060535.104321-1-jeeheng.sia@starfivetech.com>
- <E0CEA20A-7D53-4766-AB5D-48A06D7E3991@kernel.org>
-In-Reply-To: <E0CEA20A-7D53-4766-AB5D-48A06D7E3991@kernel.org>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.16.6.8]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 7 Jan 2023 04:10:36 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AA084615
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 01:10:35 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E43095C00F8;
+        Sat,  7 Jan 2023 04:10:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sat, 07 Jan 2023 04:10:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673082631; x=1673169031; bh=FK
+        nmdOzVKyy4kJvBw0IGAezSRAC3ERJEoigxCSqnGug=; b=m6VsE3BUrlajoN5ueg
+        vZ3St5gMBp+f8AA0vN+wHs4a92eQPZzLpP76K2D8UFcVRjfqYp/pREE2urBNYsbY
+        EbbhWX0cuk1Hqr9YXGAC0l8JrWDeyyi9F5/6lggFXWVPbwT8RsAzQEsaUl77SO4q
+        YcsLFK1jXMOpkORWEuQlLplDr8DoyoFPMCeiInOX2BtZ0tj+ezE0TpSzw/nHGaLX
+        LgLKWyqgxESMdHElIQ5gjKfZtBncafGjoXydDmNrVZwduQm5AEj3L4x7/EqKTX4O
+        zIyJ4dyKN+edhTM47dkMAe16UUPV7cR3nrehaODwrGq87Oy0zx1Kd0gUdqgUbY7d
+        fpyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1673082631; x=1673169031; bh=FKnmdOzVKyy4kJvBw0IGAezSRAC3
+        ERJEoigxCSqnGug=; b=IB9KbeGD7Isjbc1Eokh4i+VTPBvpIknJu+J3RyGnkJH/
+        uk8GPbCzJ0crQpqzQroofvNgFRUiZHubVpRQCU8TTwvwsbQvO18QAryGqLNpViTb
+        2SlruqbfnE4kyB3yS6i/BpgWSOAPQshQy1ikfYe+dFfUg3A8X6C1i3I9Lrv/fg18
+        aKmy+EiKugiesUpg5z1YGTDHUMpqRLXXv+GMMs5wjt++qcIcw35UoIot70drUfAn
+        4qwVlG6lSUkQ+sHYEQFE4GQLehrBabVw02vb4HXomftLKjw2tiAauWSDZXbX+WAq
+        vuG10b2MJq2dCNiuuajD/yM63IrEvOroEf3oWuJcBg==
+X-ME-Sender: <xms:Bje5Y2t5nbBzt0reEKXFn5T7lryP0GtVAHwQI6-Q3M-Hrwg5pHQjlw>
+    <xme:Bje5Y7fwvK60AJuvMQ6eBQyo8QJnq1Sj4u2bYSYGUzv_ka7W9RzTOe4-5EU8w6L4Q
+    Ni6hoh42L68EHseQzI>
+X-ME-Received: <xmr:Bje5YxxAy7h291sW2w0TSKoS0g6HtKQC-lPPDJV3AZqIyx2ynUR6YWumEA8tNNeeLMnQ6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkedugdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeduveeluefghfeugfegjeeffeduvedugfevtdeu
+    keevkedtgefhjeejffdvueffjeenucffohhmrghinhepghgvthhushgvrhdrshgspdhpuh
+    htuhhsvghrrdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:Bje5YxPg1vAGEf1TjiYEhO_vMJL6Enq44lH3umHo4_pxwGM7v4gCLQ>
+    <xmx:Bje5Y28-luDnRpVBE7JU5D-lMPuYsDFuYUf06XGAA6dMc9jpccztqQ>
+    <xmx:Bje5Y5XrSu1P9Ocjv5B0YV0zyG3PCwzeZAscgjtIrf1EzRdHbwoh4Q>
+    <xmx:Bze5Y50uGBkphq18InwAFlzHeyz5sajeIOGqZZyUXuok9955ihhQrQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Jan 2023 04:10:30 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 8CF9D104373; Sat,  7 Jan 2023 12:10:27 +0300 (+03)
+Date:   Sat, 7 Jan 2023 12:10:27 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
+ tags before address check
+Message-ID: <20230107091027.xbikgiizkeegofdd@box.shutemov.name>
+References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
+ <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
+ <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
+ <20221231001029.5nckrhtmwahb65jo@box>
+ <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgmGqwDD0kvjZxekU6uYR2x6+QgRHeMKy3snL2XYEzwEw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQ29ub3IgRG9vbGV5IDxj
-b25vckBrZXJuZWwub3JnPg0KPiBTZW50OiBGcmlkYXksIDYgSmFudWFyeSwgMjAyMyA1OjM4IFBN
-DQo+IFRvOiBKZWVIZW5nIFNpYSA8amVlaGVuZy5zaWFAc3RhcmZpdmV0ZWNoLmNvbT47IHBhdWwu
-d2FsbXNsZXlAc2lmaXZlLmNvbTsNCj4gcGFsbWVyQGRhYmJlbHQuY29tOyBhb3VAZWVjcy5iZXJr
-ZWxleS5lZHUNCj4gQ2M6IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEplZUhlbmcgU2lhDQo+IDxqZWVoZW5nLnNpYUBzdGFyZml2
-ZXRlY2guY29tPjsgTGV5Zm9vbiBUYW4NCj4gPGxleWZvb24udGFuQHN0YXJmaXZldGVjaC5jb20+
-OyBNYXNvbiBIdW8NCj4gPG1hc29uLmh1b0BzdGFyZml2ZXRlY2guY29tPg0KPiBTdWJqZWN0OiBS
-ZTogW1BBVENIIDAvM10gUklTQy1WIEhpYmVybmF0aW9uIFN1cHBvcnQNCj4gDQo+IEhleSBmb2xr
-cywNCj4gSnVzdCBwYXNzaW5nIG9uIHNvbWUgaXNzdWVzIHRoYXQgYXV0b21hdGlvbiBwaWNrZWQg
-dXAuDQpUaGFua3MuIFdpbGwgc3VibWl0IGEgbmV3IHBhdGNoZXMgc2VyaWVzIHRvIGFkZHJlc3Mg
-dGhlIGlzc3Vlcy4NCj4gDQo+IA0KPiBPbiA2IEphbnVhcnkgMjAyMyAwNjowNTozMiBHTVQsIFNp
-YSBKZWUgSGVuZw0KPiA8amVlaGVuZy5zaWFAc3RhcmZpdmV0ZWNoLmNvbT4gd3JvdGU6DQo+ID5U
-aGlzIHNlcmllcyBhZGRzIFJJU0MtViBIaWJlcm5hdGlvbi9zdXNwZW5kIHRvIGRpc2sgc3VwcG9y
-dC4NCj4gPkxvdyBsZXZlbCBBcmNoIGZ1bmN0aW9ucyB3ZXJlIGNyZWF0ZWQgdG8gc3VwcG9ydCBo
-aWJlcm5hdGlvbi4NCj4gPnN3c3VzcF9hcmNoX3N1c3BlbmQoKSByZWxpZXMgY29kZSBmcm9tIF9f
-Y3B1X3N1c3BlbmRfZW50ZXIoKSB0byB3cml0ZQ0KPiA+Y3B1IHN0YXRlIG9udG8gdGhlIHN0YWNr
-LCB0aGVuIGNhbGxpbmcgc3dzdXNwX3NhdmUoKSB0byBzYXZlIHRoZSBtZW1vcnkNCj4gPmltYWdl
-Lg0KPiA+DQo+ID5hcmNoX2hpYmVybmF0aW9uX2hlYWRlcl9yZXN0b3JlKCkgYW5kIGFyY2hfaGli
-ZXJuYXRpb25faGVhZGVyX3NhdmUoKQ0KPiA+ZnVuY3Rpb25zIGFyZSBpbXBsZW1lbnRlZCB0byBw
-cmV2ZW50IGtlcm5lbCBjcmFzaCB3aGVuIHJlc3VtZSwNCj4gPnRoZSBrZXJuZWwgYnVpbHQgdmVy
-c2lvbiBpcyBzYXZlZCBpbnRvIHRoZSBoaWJlcm5hdGlvbiBpbWFnZSBoZWFkZXINCj4gPnRvIG1h
-a2luZyBzdXJlIG9ubHkgdGhlIHNhbWUga2VybmVsIGlzIHJlc3RvcmUgd2hlbiByZXN1bWUuDQo+
-ID4NCj4gPnN3c3VzcF9hcmNoX3Jlc3VtZSgpIGNyZWF0ZXMgYSB0ZW1wb3JhcnkgcGFnZSB0YWJs
-ZSB0aGF0IGNvdmVyaW5nIG9ubHkNCj4gPnRoZSBsaW5lYXIgbWFwLCBjb3BpZXMgdGhlIHJlc3Rv
-cmUgY29kZSB0byBhICdzYWZlJyBwYWdlLCB0aGVuIHN0YXJ0IHRvDQo+ID5yZXN0b3JlIHRoZSBt
-ZW1vcnkgaW1hZ2UuIE9uY2UgY29tcGxldGVkLCBpdCByZXN0b3JlcyB0aGUgb3JpZ2luYWwNCj4g
-Pmtlcm5lbCdzIHBhZ2UgdGFibGUuIEl0IHRoZW4gY2FsbHMgaW50byBfX2hpYmVybmF0ZV9jcHVf
-cmVzdW1lKCkNCj4gPnRvIHJlc3RvcmUgdGhlIENQVSBjb250ZXh0LiBGaW5hbGx5LCBpdCBmb2xs
-b3dzIHRoZSBub3JtYWwgaGliZXJuYXRpb24NCj4gPnBhdGggYmFjayB0byB0aGUgaGliZXJuYXRp
-b24gY29yZS4NCj4gPg0KPiA+VG8gZW5hYmxlIGhpYmVybmF0aW9uL3N1c3BlbmQgdG8gZGlzayBp
-bnRvIFJJU0NWLCB0aGUgYmVsb3cgY29uZmlnDQo+ID5uZWVkIHRvIGJlIGVuYWJsZWQ6DQo+ID4t
-IENPTkZJR19BUkNIX0hJQkVSTkFUSU9OX0hFQURFUg0KPiA+LSBDT05GSUdfQVJDSF9ISUJFUk5B
-VElPTl9QT1NTSUJMRQ0KPiA+DQo+ID4NCj4gPkF0IGhpZ2gtbGV2ZWwsIHRoaXMgc2VyaWVzIGlu
-Y2x1ZGVzIHRoZSBmb2xsb3dpbmcgY2hhbmdlczoNCj4gPjEpIENoYW5nZSBzdXNwZW5kX3NhdmVf
-Y3NycygpIGFuZCBzdXNwZW5kX3Jlc3RvcmVfY3NycygpDQo+ID4gICB0byBwdWJsaWMgZnVuY3Rp
-b24gYXMgdGhlc2UgZnVuY3Rpb25zIGFyZSBjb21tb24gdG8NCj4gPiAgIHN1c3BlbmQvaGliZXJu
-YXRpb24uIChwYXRjaCAxKQ0KPiA+MikgRW5oYW5jZSBrZXJuZWxfcGFnZV9wcmVzZW50KCkgZnVu
-Y3Rpb24gdG8gc3VwcG9ydCBodWdlIHBhZ2UuIChwYXRjaCAyKQ0KPiA+MykgQWRkIGFyY2gvcmlz
-Y3YgbG93IGxldmVsIGZ1bmN0aW9ucyB0byBzdXBwb3J0DQo+ID4gICBoaWJlcm5hdGlvbi9zdXNw
-ZW5kIHRvIGRpc2suIChwYXRjaCAzKQ0KPiA+DQo+ID5UaGUgYWJvdmUgcGF0Y2hlcyBhcmUgYmFz
-ZWQgb24ga2VybmVsIHY2LjItcmMyIGFuZCBhcmUgdGVzdGVkIG9uDQo+ID5TdGFyZml2ZSBWRjIg
-U0JDIGJvYXJkLg0KPiA+DQo+ID5TaWEgSmVlIEhlbmcgKDMpOg0KPiA+ICBSSVNDLVY6IENoYW5n
-ZSBzdXNwZW5kX3NhdmVfY3NycyBhbmQgc3VzcGVuZF9yZXN0b3JlX2NzcnMgdG8gcHVibGljDQo+
-ID4gICAgZnVuY3Rpb24NCj4gPiAgUklTQy1WOiBtbTogRW5hYmxlIGh1Z2UgcGFnZSBzdXBwb3J0
-IHRvIGtlcm5lbF9wYWdlX3ByZXNlbnQoKSBmdW5jdGlvbg0KPiANCj4gVW5mb3J0dW5hdGVseSB0
-aGlzIGJyZWFrcyBydjMyX2RlZmNvbmZpZw0KPiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3Jn
-L3Byb2plY3QvbGludXgtDQo+IHJpc2N2L3BhdGNoLzIwMjMwMTA2MDYwNTM1LjEwNDMyMS0zLWpl
-ZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20vDQo+IA0KPiA+ICBSSVNDLVY6IEFkZCBhcmNoIGZ1
-bmN0aW9ucyB0byBzdXBwb3J0IGhpYmVybmF0aW9uL3N1c3BlbmQtdG8tZGlzaw0KPiANCj4gVGhp
-cyBvbmUgdGhlbiBicmVha3MgcnY2NCBhbGxtb2Rjb25maWcgdG9vIDovDQo+IA0KPiBodHRwczov
-L3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtDQo+IHJpc2N2L3BhdGNoLzIwMjMw
-MTA2MDYwNTM1LjEwNDMyMS00LWplZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20vDQo+IA0KPiBU
-aGFua3MsDQo+IENvbm9yLg0KPiANCj4gPg0KPiA+IGFyY2gvcmlzY3YvS2NvbmZpZyAgICAgICAg
-ICAgICAgICB8ICAgNyArDQo+ID4gYXJjaC9yaXNjdi9pbmNsdWRlL2FzbS9zdXNwZW5kLmggIHwg
-IDIzICsrDQo+ID4gYXJjaC9yaXNjdi9rZXJuZWwvTWFrZWZpbGUgICAgICAgIHwgICAyICstDQo+
-ID4gYXJjaC9yaXNjdi9rZXJuZWwvYXNtLW9mZnNldHMuYyAgIHwgICA1ICsNCj4gPiBhcmNoL3Jp
-c2N2L2tlcm5lbC9oaWJlcm5hdGUtYXNtLlMgfCAxMjMgKysrKysrKysrKysNCj4gPiBhcmNoL3Jp
-c2N2L2tlcm5lbC9oaWJlcm5hdGUuYyAgICAgfCAzNTMgKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrDQo+ID4gYXJjaC9yaXNjdi9rZXJuZWwvc3VzcGVuZC5jICAgICAgIHwgICA0ICstDQo+
-ID4gYXJjaC9yaXNjdi9tbS9wYWdlYXR0ci5jICAgICAgICAgIHwgICA2ICsNCj4gPiA4IGZpbGVz
-IGNoYW5nZWQsIDUyMCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiA+IGNyZWF0ZSBt
-b2RlIDEwMDY0NCBhcmNoL3Jpc2N2L2tlcm5lbC9oaWJlcm5hdGUtYXNtLlMNCj4gPiBjcmVhdGUg
-bW9kZSAxMDA2NDQgYXJjaC9yaXNjdi9rZXJuZWwvaGliZXJuYXRlLmMNCj4gPg0KPiA+DQo+ID5i
-YXNlLWNvbW1pdDogMWY1YWJiZDc3ZTJjMTc4N2U3NGI3YzJjYWZmYWM5N2RlZjc4YmE1Mg0K
+On Fri, Dec 30, 2022 at 04:42:05PM -0800, Linus Torvalds wrote:
+> The one thing that that "shift by 63 and bitwise or" trick does
+> require is that the _ASM_EXTABLE_UA() thing for getuser/putuser would
+> have to have an extra annotation to shut up the
+> 
+>         WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in
+> user access. Non-canonical address?");
+> 
+> in ex_handler_uaccess() for the GP trap that users can now cause by
+> giving a non-canonical address with the high bit clear. So we'd
+> probably just want a new EX_TYPE_* for these cases, but that still
+> looks fairly straightforward.
+
+Plain _ASM_EXTABLE() seems does the trick.
+
+> Hmm?
+
+Here's what I've come up with:
+
+diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
+index b70d98d79a9d..3e69e3727769 100644
+--- a/arch/x86/lib/getuser.S
++++ b/arch/x86/lib/getuser.S
+@@ -37,22 +37,22 @@
+ 
+ #define ASM_BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
+ 
+-#ifdef CONFIG_X86_5LEVEL
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rdx), \
+-		    __stringify(mov $((1 << 56) - 4096 - (n)),%rdx), X86_FEATURE_LA57
+-#else
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	mov $(TASK_SIZE_MAX - (n)),%_ASM_DX
+-#endif
++.macro check_range size:req
++.if IS_ENABLED(CONFIG_X86_64)
++	mov %rax, %rdx
++	shr $63, %rdx
++	or %rdx, %rax
++.else
++	cmp $TASK_SIZE_MAX-\size+1, %eax
++	jae .Lbad_get_user
++	sbb %edx, %edx		/* array_index_mask_nospec() */
++	and %edx, %eax
++.endif
++.endm
+ 
+ 	.text
+ SYM_FUNC_START(__get_user_1)
+-	LOAD_TASK_SIZE_MINUS_N(0)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=1
+ 	ASM_STAC
+ 1:	movzbl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -62,11 +62,7 @@ SYM_FUNC_END(__get_user_1)
+ EXPORT_SYMBOL(__get_user_1)
+ 
+ SYM_FUNC_START(__get_user_2)
+-	LOAD_TASK_SIZE_MINUS_N(1)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=2
+ 	ASM_STAC
+ 2:	movzwl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -76,11 +72,7 @@ SYM_FUNC_END(__get_user_2)
+ EXPORT_SYMBOL(__get_user_2)
+ 
+ SYM_FUNC_START(__get_user_4)
+-	LOAD_TASK_SIZE_MINUS_N(3)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=4
+ 	ASM_STAC
+ 3:	movl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -90,30 +82,17 @@ SYM_FUNC_END(__get_user_4)
+ EXPORT_SYMBOL(__get_user_4)
+ 
+ SYM_FUNC_START(__get_user_8)
+-#ifdef CONFIG_X86_64
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=8
+ 	ASM_STAC
++#ifdef CONFIG_X86_64
+ 4:	movq (%_ASM_AX),%rdx
+-	xor %eax,%eax
+-	ASM_CLAC
+-	RET
+ #else
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user_8
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
+-	ASM_STAC
+ 4:	movl (%_ASM_AX),%edx
+ 5:	movl 4(%_ASM_AX),%ecx
++#endif
+ 	xor %eax,%eax
+ 	ASM_CLAC
+ 	RET
+-#endif
+ SYM_FUNC_END(__get_user_8)
+ EXPORT_SYMBOL(__get_user_8)
+ 
+@@ -166,7 +145,7 @@ EXPORT_SYMBOL(__get_user_nocheck_8)
+ 
+ SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
+ 	ASM_CLAC
+-bad_get_user:
++.Lbad_get_user:
+ 	xor %edx,%edx
+ 	mov $(-EFAULT),%_ASM_AX
+ 	RET
+@@ -184,23 +163,23 @@ SYM_CODE_END(.Lbad_get_user_8_clac)
+ #endif
+ 
+ /* get_user */
+-	_ASM_EXTABLE_UA(1b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(2b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(3b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(1b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(2b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(3b, .Lbad_get_user_clac)
+ #ifdef CONFIG_X86_64
+-	_ASM_EXTABLE_UA(4b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(4b, .Lbad_get_user_clac)
+ #else
+-	_ASM_EXTABLE_UA(4b, .Lbad_get_user_8_clac)
+-	_ASM_EXTABLE_UA(5b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(4b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(5b, .Lbad_get_user_8_clac)
+ #endif
+ 
+ /* __get_user */
+-	_ASM_EXTABLE_UA(6b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(7b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(8b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(6b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(7b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(8b, .Lbad_get_user_clac)
+ #ifdef CONFIG_X86_64
+-	_ASM_EXTABLE_UA(9b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(9b, .Lbad_get_user_clac)
+ #else
+-	_ASM_EXTABLE_UA(9b, .Lbad_get_user_8_clac)
+-	_ASM_EXTABLE_UA(10b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(9b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(10b, .Lbad_get_user_8_clac)
+ #endif
+diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
+index 32125224fcca..0ec57997a764 100644
+--- a/arch/x86/lib/putuser.S
++++ b/arch/x86/lib/putuser.S
+@@ -33,20 +33,20 @@
+  * as they get called from within inline assembly.
+  */
+ 
+-#ifdef CONFIG_X86_5LEVEL
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rbx), \
+-		    __stringify(mov $((1 << 56) - 4096 - (n)),%rbx), X86_FEATURE_LA57
+-#else
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	mov $(TASK_SIZE_MAX - (n)),%_ASM_BX
+-#endif
++.macro check_range size:req
++.if IS_ENABLED(CONFIG_X86_64)
++	movq %rcx, %rbx
++	shrq $63, %rbx
++	orq %rbx, %rcx
++.else
++	cmp $TASK_SIZE_MAX-\size+1, %ecx
++	jae .Lbad_put_user
++.endif
++.endm
+ 
+ .text
+ SYM_FUNC_START(__put_user_1)
+-	LOAD_TASK_SIZE_MINUS_N(0)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=1
+ 	ASM_STAC
+ 1:	movb %al,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -66,9 +66,7 @@ SYM_FUNC_END(__put_user_nocheck_1)
+ EXPORT_SYMBOL(__put_user_nocheck_1)
+ 
+ SYM_FUNC_START(__put_user_2)
+-	LOAD_TASK_SIZE_MINUS_N(1)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=2
+ 	ASM_STAC
+ 3:	movw %ax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -88,9 +86,7 @@ SYM_FUNC_END(__put_user_nocheck_2)
+ EXPORT_SYMBOL(__put_user_nocheck_2)
+ 
+ SYM_FUNC_START(__put_user_4)
+-	LOAD_TASK_SIZE_MINUS_N(3)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=4
+ 	ASM_STAC
+ 5:	movl %eax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -110,9 +106,7 @@ SYM_FUNC_END(__put_user_nocheck_4)
+ EXPORT_SYMBOL(__put_user_nocheck_4)
+ 
+ SYM_FUNC_START(__put_user_8)
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=8
+ 	ASM_STAC
+ 7:	mov %_ASM_AX,(%_ASM_CX)
+ #ifdef CONFIG_X86_32
+@@ -144,15 +138,15 @@ SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
+ 	RET
+ SYM_CODE_END(.Lbad_put_user_clac)
+ 
+-	_ASM_EXTABLE_UA(1b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(1b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(2b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(3b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(4b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(5b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(6b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(7b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(9b, .Lbad_put_user_clac)
+ #ifdef CONFIG_X86_32
+-	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(8b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(10b, .Lbad_put_user_clac)
+ #endif
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
