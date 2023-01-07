@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8A0660CF5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205E4660CF8
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjAGIS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 03:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S230028AbjAGITY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 03:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjAGISX (ORCPT
+        with ESMTP id S229517AbjAGITU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 03:18:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6557243D83;
-        Sat,  7 Jan 2023 00:18:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5670606A0;
-        Sat,  7 Jan 2023 08:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C968AC433EF;
-        Sat,  7 Jan 2023 08:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673079498;
-        bh=xlMaUzyepTFKgxnx6MHHMVyG0I9ArG8xZVtxSfImJtc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=04hXZynvlsY+ZFyyY4CJtuLZemYb5t5y//487GKiQaO1KCupFGJWy8xthSfNDIc8p
-         Ka1iRe+SkZloqpCU31xpqOCyeb3sOQ6wWlNhOZu6aPiewxW4kyFAEg8kVsdccdm965
-         T/Hn9VLBpDyVBkcyJEndE2RnhFZXQ+o2ye5zHHuI=
-Date:   Sat, 7 Jan 2023 09:18:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Igor Seletskiy <i@cloudlinux.com>,
-        Pavel Boldin <boldin.pavel@gmail.com>,
-        Moritz Lipp <github@mlq.me>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Michael Schwarz <michael.schwarz91@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
-Message-ID: <Y7kqx5cBCVojq6QJ@kroah.com>
-References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
- <Y7bT0OL8RAWkCu0Z@kroah.com>
- <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
- <Y7bg5sxEZDIaGoXK@kroah.com>
- <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
+        Sat, 7 Jan 2023 03:19:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63943D8B
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 00:19:19 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673079557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rEtFGluSGdI0YRGC/pB7hK3o7LkcSyHnrGSCqsxNZjc=;
+        b=3N910OaNJxa5H8/FsmRWy7qD4aUYC4jBL058TBKaJK7/zpT4LTJrpKegtEVeG/fbwoQ3qz
+        uAOtGzCyxsyvLCi54AqTl74vbFlaPpweIKTXHicGxyAYuaWU60jVCE938CF5SC7GilF7l3
+        M64KD+k62/dBjls0CYt7RxDO6znKJLaoYVYfvDABmb/11HtdVTafG4AvFTzAKuALifDVUd
+        MreJq4EAew7VlYmTe1tvRSKK52JYKPKL1piH0x7IaPHY7VvIRhEu4I6QZOgVGBIx2AjM7a
+        8VVTTulrVHDN0zi8+3l4Z12imaa4S0XJGGewg11xoIUT8k+vZTy2sjJoZkd2iA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673079557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rEtFGluSGdI0YRGC/pB7hK3o7LkcSyHnrGSCqsxNZjc=;
+        b=hoST8no3FWhOC7ZjBsoiBQP2fregLZcsrYgUXp7aOSQWmRrl5TGd2IU4ljLrKivoBvqwbA
+        1a4igsbYgSpK1xAw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v4 0/8] printk: cleanup buffer handling
+In-Reply-To: <Y7gEVpMTvI0WzPH7@alley>
+References: <20230105103735.880956-1-john.ogness@linutronix.de>
+ <Y7gEVpMTvI0WzPH7@alley>
+Date:   Sat, 07 Jan 2023 09:24:35 +0106
+Message-ID: <87zgaudag4.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 09:00:21AM +0800, Aaron Lu wrote:
-> If you do not trust what I've done is what I've claimed, now the
-> original author Pavel Boldin has given the patch a "LGTM" tag, does that
-> address your concern?
+On 2023-01-06, Petr Mladek <pmladek@suse.com> wrote:
+> On Thu 2023-01-05 11:43:27, John Ogness wrote:
+> I see three ways how to move forward:
+>
+> 1. Respin the entire patchset.
+> 2. Respin only 7th patch + send the follow up fix seperately
+> 3. Push first 6 patches and handle the rest separately.
 
-I don't see that anywhere on lore.kernel.org, have a link to it?
+I will respin the entire patchset. That is easist for me and makes
+things quite straight forward for you.
 
-thanks,
+I still am looking into and will to respond to your comments on patch
+7/8 before I do the respin.
 
-greg k-h
+John
