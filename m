@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3D0660D08
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D03660D0A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 09:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjAGIhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 03:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S230288AbjAGIki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 03:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjAGIg7 (ORCPT
+        with ESMTP id S229550AbjAGIkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 03:36:59 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A020D62E4;
-        Sat,  7 Jan 2023 00:36:57 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m3so2571368wmq.0;
-        Sat, 07 Jan 2023 00:36:57 -0800 (PST)
+        Sat, 7 Jan 2023 03:40:37 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC61219F
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 00:40:36 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id z5so2194542wrt.6
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 00:40:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Kpmp5ViMXQZaBwFWZ1zqfOIbWm4lMVj5MdpfVpHf2I=;
-        b=neQVFbf4EoP+oScH8OC24LRifXnt+vY6/gyroJsaeg7+8njaUfvkAzQzZcikIwpYHb
-         TJW7EhnLmpstDJbkKfIIQUyRnquhzoj5hfSd7kXrq2XXjKldHl/oUzwvZrz2fydTai8P
-         DWj+nicLFA6CEV1Qyf8UnSFTMjhh+DNtPE4Am7BiPk7p2s0juXtRp2JgTrX8O3c3/Keo
-         g8gS+nTrzRJSbxHrGfcCCGpefvS/UoX3W1UYWJOtGx0LYKa9oFfbiepYx83wCs+8zViT
-         eu6+smHsrGLdKdYZhwIxTmi1gQMI09DR+kYNzgQS7lOMrXS/EUCJ7jXhlewyEadsUDTU
-         kbLQ==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qQ5P1wDbIcvebvDNJyCuZSz2c6UHJpFAi9orkbFi7MM=;
+        b=leCqRXHHtvImpioKXuPmV+IOcy9SOb9wS4z6tvDWf6KqJrNlJsprvE7e/xdY9fzttA
+         naIyN9VOqlMaKRUOcBzXjLF2O7u1Snti9SoKcLmTPo+uG8nlQ/jdq+ZeZ9JHasgzsnm7
+         iXG6UzXbNLUgg1ScTdSStVdVC8jk3OY9mofzNW3HUL/QzLbguCuJv0227/WDlUJBkgGM
+         XFBk/akCv84yLse7uCMD98IaUWDnSfavsxXazVRw9AxQDCkKa32T982i8/6fgMSX4oX5
+         7oQcwCdl4K0HQD6iRTWpZ4J3cv0fBlUTy/MobXazYwypMo/WdBVegXPBgGk6+x6I/bQl
+         IIag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Kpmp5ViMXQZaBwFWZ1zqfOIbWm4lMVj5MdpfVpHf2I=;
-        b=WfalXUyW4aeVCQg5PmpBijlod1UVX1DvBrvTDbtDG3R1YVpjpXHIG02vpzEuwbJHCY
-         H65rzq6ACw6q5nF/i5HsQIVINYYm9Tfv5hP1HqQ8EHNf13dXo98biqrRRlB2iqA3mBpg
-         vyiYQMUojGAtWs/jiduUaCvuTB+jsFEmjUVzJeWulY3LKurAqsUjc8JxqpEeX5sK3b7R
-         2G/6fki0EhhhPrWZJK3nIbTKicFdfQOvnHA4YUKv8LYhvIwCGK76+kuydtWbFmtFxsn5
-         GJzjV/7h4Q10rtfOOteM2b0Y0JCg1A+SyT+iwTCFRMjgeCq8D0JuHbg9gHGXq6IBYe7O
-         VFWA==
-X-Gm-Message-State: AFqh2kpXvO2VozFxjp20E4ERLGCtEE+ULYRYX14q3uEPlz/i4OawUmLf
-        C1LFnTepcY41HC6mT1ktuBg=
-X-Google-Smtp-Source: AMrXdXu+1UTGj9TxEIS1UXUF4nUQzygqcPHzx2yn1IcguqEi74bhpVFdZDeTbsu7IAO+wDxMcH96jA==
-X-Received: by 2002:a05:600c:22ca:b0:3d1:ebdf:d586 with SMTP id 10-20020a05600c22ca00b003d1ebdfd586mr41267755wmg.29.1673080616209;
-        Sat, 07 Jan 2023 00:36:56 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQ5P1wDbIcvebvDNJyCuZSz2c6UHJpFAi9orkbFi7MM=;
+        b=jbJPS9bRQ1Lo7X0Y+6CkCVjtfqEIKjg/wQryT+EXUA9+NzhKNCZ2fUn1RNBVfA8SYr
+         7rGnHaDpAsibuxRmwc+zXJN0Im327qJPlWpaha0dc/FRzu7yP0S4Yi8ZZ+KWhLTV+AVI
+         8drstSd6mjlgo5opdBHmgY6IbgVcRYkUUNBuaJY7k2Hxpv3TIG/XIO8TMAZiKWsxXnnA
+         Gt/ff+avoW+SRs5vVtK8xXD2DPeGJv+bfYH0B+n1eOQwRuP/ZLtwsd4iJYQ1KmOzLIT9
+         o757os/UeUQg56DbCcFxdhQzcxUtY7r1AuK4iqwY/bcAHMNTAQ++oPu3VOiewl1rxwMd
+         oJIw==
+X-Gm-Message-State: AFqh2kq4qByN0LKzbICzgcThEY2Mf+dFptLpZ4d8ou4vWi3WpmAEMbYf
+        +hfHe3CFEGpiGVVq2BMa+AclOo0o+gEtRBzl
+X-Google-Smtp-Source: AMrXdXsFmifkZg4c4qh6fMJNAdtI0zXint4Zh6ArKFnFKBJ1HmcLjjvCz7WZOpw2l4AAvqYO0xE8jA==
+X-Received: by 2002:a05:6000:982:b0:2a3:6f99:17d4 with SMTP id by2-20020a056000098200b002a36f9917d4mr8895076wrb.5.1673080834727;
+        Sat, 07 Jan 2023 00:40:34 -0800 (PST)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm4419716wmb.47.2023.01.07.00.36.54
+        by smtp.gmail.com with ESMTPSA id g8-20020a5d5408000000b0027973315213sm3233092wrv.89.2023.01.07.00.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 00:36:55 -0800 (PST)
-Date:   Sat, 7 Jan 2023 11:36:51 +0300
+        Sat, 07 Jan 2023 00:40:34 -0800 (PST)
+Date:   Sat, 7 Jan 2023 11:40:30 +0300
 From:   Dan Carpenter <error27@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep()
- from blk_put_queue()
-Message-ID: <Y7kvI5BKiONibGow@kadam>
-References: <Y7g3L6fntnTtOm63@kili>
- <Y7hbYPSdLqW++y/p@slm.duckdns.org>
- <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
- <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
- <Y7iIWA6h88cYjhcO@bombadil.infradead.org>
+To:     oe-kbuild@lists.linux.dev,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c:143
+ primary_codec_init() warn: missing error code? 'ret'
+Message-ID: <202301070814.uxRqe1Ox-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7iIWA6h88cYjhcO@bombadil.infradead.org>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,22 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 12:45:12PM -0800, Luis Chamberlain wrote:
-> > Signed-off-by: Tejun Heo <tj@kernel.org>
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Link: https://lkml.kernel.org/r/Y7g3L6fntnTtOm63@kili
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Fixes: e8c7d14ac6c3 ("block: revert back to synchronous request_queue removal") # v5.9+
-> 
-> *tons* has changed since e8c7d14ac6c3 and so the bots might think that
-> *if* this patch is applied upstream it is justified for older kernels
-> and I don't think that's yet been verified and doubt it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
+commit: e14657c0f0022e02c8f25fa9c56afae3d3db9e77 ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs case
+config: microblaze-randconfig-m041-20230106
+compiler: microblaze-linux-gcc (GCC) 12.1.0
 
-If you enable the correct debug option then the might_sleep() causes a
-stack trace.  Eventually syzbot will find it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-I would backport it.
+smatch warnings:
+sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c:143 primary_codec_init() warn: missing error code? 'ret'
 
-regards,
-dan carpenter
+vim +/ret +143 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
+
+e14657c0f0022e Ajye Huang 2022-11-02  127  static int primary_codec_init(struct snd_soc_pcm_runtime *rtd)
+e14657c0f0022e Ajye Huang 2022-11-02  128  {
+e14657c0f0022e Ajye Huang 2022-11-02  129  	struct snd_soc_card *card = rtd->card;
+e14657c0f0022e Ajye Huang 2022-11-02  130  	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(card);
+e14657c0f0022e Ajye Huang 2022-11-02  131  	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
+e14657c0f0022e Ajye Huang 2022-11-02  132  	int ret;
+e14657c0f0022e Ajye Huang 2022-11-02  133  
+e14657c0f0022e Ajye Huang 2022-11-02  134  	ret = mt8186_mt6366_init(rtd);
+e14657c0f0022e Ajye Huang 2022-11-02  135  
+e14657c0f0022e Ajye Huang 2022-11-02  136  	if (ret) {
+e14657c0f0022e Ajye Huang 2022-11-02  137  		dev_err(card->dev, "mt8186_mt6366_init failed: %d\n", ret);
+e14657c0f0022e Ajye Huang 2022-11-02  138  		return ret;
+e14657c0f0022e Ajye Huang 2022-11-02  139  	}
+e14657c0f0022e Ajye Huang 2022-11-02  140  
+e14657c0f0022e Ajye Huang 2022-11-02  141  	if (!priv->dmic_sel) {
+e14657c0f0022e Ajye Huang 2022-11-02  142  		dev_info(card->dev, "dmic_sel is null\n");
+e14657c0f0022e Ajye Huang 2022-11-02 @143  		return ret;
+
+return -EIVNAL;?  return 0;?
+
+e14657c0f0022e Ajye Huang 2022-11-02  144  	}
+e14657c0f0022e Ajye Huang 2022-11-02  145  
+e14657c0f0022e Ajye Huang 2022-11-02  146  	ret = snd_soc_dapm_new_controls(&card->dapm, dmic_widgets,
+e14657c0f0022e Ajye Huang 2022-11-02  147  					ARRAY_SIZE(dmic_widgets));
+e14657c0f0022e Ajye Huang 2022-11-02  148  	if (ret) {
+e14657c0f0022e Ajye Huang 2022-11-02  149  		dev_err(card->dev, "DMic widget addition failed: %d\n", ret);
+e14657c0f0022e Ajye Huang 2022-11-02  150  		/* Don't need to add routes if widget addition failed */
+e14657c0f0022e Ajye Huang 2022-11-02  151  		return ret;
+e14657c0f0022e Ajye Huang 2022-11-02  152  	}
+e14657c0f0022e Ajye Huang 2022-11-02  153  
+e14657c0f0022e Ajye Huang 2022-11-02  154  	ret = snd_soc_dapm_add_routes(&card->dapm, dmic_map,
+e14657c0f0022e Ajye Huang 2022-11-02  155  				      ARRAY_SIZE(dmic_map));
+e14657c0f0022e Ajye Huang 2022-11-02  156  
+e14657c0f0022e Ajye Huang 2022-11-02  157  	if (ret)
+e14657c0f0022e Ajye Huang 2022-11-02  158  		dev_err(card->dev, "DMic map addition failed: %d\n", ret);
+e14657c0f0022e Ajye Huang 2022-11-02  159  
+e14657c0f0022e Ajye Huang 2022-11-02  160  	return ret;
+e14657c0f0022e Ajye Huang 2022-11-02  161  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
