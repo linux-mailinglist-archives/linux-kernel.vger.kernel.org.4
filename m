@@ -2,113 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557BB660B57
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A5F660B5A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjAGBPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S229780AbjAGBQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjAGBPM (ORCPT
+        with ESMTP id S229521AbjAGBQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:15:12 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6108D1
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 17:15:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673054110; x=1704590110;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A1l9nLxqa/QgP6et14ncprz/Qiq1w5jVWtdRAUx+0/E=;
-  b=EdJCl53BsWiAKK285EvkAFYhbzINpL24v8jjLBe5Y2GYmIRG08ZwrSaE
-   1Sir7hsXXygtD3/hRhmihq3HLK+Xa81Zt0cUsHOo2TpIxZVMha/+MmJQV
-   OBv90UfBp8u0OQg2qlaC6Rfj4KeHo7E6X3ztM/fyWFKs2iKeGAzCx+kD9
-   Bguy35un2s/ENhOwJIuNbg4HIQPjGR64AiRe9deU1ouEsVviJ5N12o1F0
-   UQ5EfTmALXgrTT4E0RovyQ+tk4adTJLBIX5YwSmXDN1dLfXBLcyuTKUV6
-   t+a4lrZlbhc6/BSNYkTbe/F6yOIbS5LF9r8j643rC4L/oX3Xk7RAvWty8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="322671666"
-X-IronPort-AV: E=Sophos;i="5.96,307,1665471600"; 
-   d="scan'208";a="322671666"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 17:15:09 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="649474201"
-X-IronPort-AV: E=Sophos;i="5.96,307,1665471600"; 
-   d="scan'208";a="649474201"
-Received: from apbaezbo-mobl2.amr.corp.intel.com (HELO [10.212.60.153]) ([10.212.60.153])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 17:15:07 -0800
-Message-ID: <fe30d88f-fe03-f77b-7f34-2b8a063214b9@linux.intel.com>
-Date:   Fri, 6 Jan 2023 19:15:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC] Sound support for Huawei line of AMD laptops using ACP and
- ES8336 codec
-Content-Language: en-US
-To:     Marian Postevca <posteuca@mutex.one>, alsa-devel@alsa-project.org,
+        Fri, 6 Jan 2023 20:16:17 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07A5FE2;
+        Fri,  6 Jan 2023 17:16:15 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1A7F44AE;
+        Sat,  7 Jan 2023 02:16:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673054174;
+        bh=ozKgACQ1++JdleonmKbsfK9MnhV9o2UAJaf2OqIwaOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EERUQWhrvHv7hw0THsE6DEwnLs1rFYdyna5eZUagUnLm7gQtw2bCzMTyKJlZBn390
+         98Si27KA6OUPe/y4pCl5uZicVz57bDCrMGsiCjY1vAzSSd4Mtc0KovX4YRH9RjNbqm
+         iVOt+5AZOLHirZDbKJaYwqlI0y/CopJGxApJpbyc=
+Date:   Sat, 7 Jan 2023 03:16:08 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        syed sabakareem <Syed.SabaKareem@amd.com>,
-        "Chehab, Mauro" <mauro.chehab@intel.com>,
-        David Yang <yangxiaohua@everest-semi.com>
-References: <871qo7fqjp.fsf@mutex.one>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <871qo7fqjp.fsf@mutex.one>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RESEND v2 3/8] media: uvc: Create
+ UVC_QUIRK_IGNORE_EMPTY_TS quirk
+Message-ID: <Y7jH2NnzszhW46QY@pendragon.ideasonboard.com>
+References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
+ <20220920-resend-hwtimestamp-v2-3-0d7978a817cc@chromium.org>
+ <Y67raFd19OH4w2Fx@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y67raFd19OH4w2Fx@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ricardo,
 
+Another comment.
 
-> I have a Huawei Matebook 14 AMD 2021 laptop for which the sound isn't
-> supported on Linux. On further investigation in Windows and ACPI tables
-> I could determine that this particular SKU has an ES8336 codec connected
-> to the CPU ACP module.
-> The CPU of my laptop is an AMD Ryzen 5 5500U which seems to be codenamed
-> Lucienne and is a derivation of the Renoir family.
-> Acording to lspci the ACP is revision 1:
+On Fri, Dec 30, 2022 at 03:45:12PM +0200, Laurent Pinchart wrote:
+> On Fri, Dec 02, 2022 at 06:02:43PM +0100, Ricardo Ribalda wrote:
+> > Some Sunplus cameras took a borderline interpretation of the UVC 1.5
+> > standard, and fill the PTS and SCR fields with invalid data if the
+> > package does not contain data.
+> > 
+> > "STC must be captured when the first video data of a video frame is put
+> > on the USB bus."
+> > 
+> > Eg:
+> > 
+> > buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
+> > buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
+> > buffer: 0xa7755c00 len 000668 header:0x8c stc 73779dba sof 070c pts 7376d37a
+> > 
+> > This borderline/buggy interpretation has been implemented in a variety
+> > of devices, from directly Sunplus and from other OEMs that rebrand
+> > Sunplus products.
+> > 
+> > Luckily we can identify the affected modules by looking at the guid of
+> > one of the extension units:
+> > 
+> > VideoControl Interface Descriptor:
+> >   guidExtensionCode         {82066163-7050-ab49-b8cc-b3855e8d221d}
+> > 
+> > This patch adds a new quirk to take care of this.
+> > 
+> > Complete lsusb of one of the affected cameras:
 > 
-> 03:00.5 Multimedia controller [0480]: Advanced Micro Devices, Inc. [AMD] Raven/Raven2/FireFlight/Renoir Audio Processor [1022:15e2] (rev 01)
-> 	Subsystem: Device [1e83:3e4d]
-> 	Kernel driver in use: snd_rn_pci_acp3x
-> 	Kernel modules: snd_pci_acp3x, snd_rn_pci_acp3x, snd_pci_acp5x,
-> 	snd_pci_acp6x, snd_acp_pci, snd_rpl_pci_acp6x,
-> 	snd_sof_amd_renoir
+> That's not complete (but that's fine from a commit message point of
+> view, the full descriptors would be too long). Can you share the full
+> descriptors for all the devices you know are affected by this ?
 > 
-> I have written a machine driver for this platform and managed to make
-> the sound and internal microphone work. I am looking to integrate this
-> support but there are some issues with the current implementation of ACP
-> support.
+> > Bus 001 Device 003: ID 1bcf:2a01 Sunplus Innovation Technology Inc.
+> > Device Descriptor:
+> >   bLength                18
+> >   bDescriptorType         1
+> >   bcdUSB               2.01
+> >   bDeviceClass          239 Miscellaneous Device
+> >   bDeviceSubClass         2 ?
+> >   bDeviceProtocol         1 Interface Association
+> >   bMaxPacketSize0        64
+> >   idVendor           0x1bcf Sunplus Innovation Technology Inc.
+> >   idProduct          0x2a01
+> >   bcdDevice            0.02
+> >   iManufacturer           1 SunplusIT Inc
+> >   iProduct                2 HanChen Wise Camera
+> >   iSerial                 3 01.00.00
+> >   bNumConfigurations      1
+> > 
+> > Tested-by: HungNien Chen <hn.chen@sunplusit.com>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  drivers/media/usb/uvc/uvc_driver.c | 11 +++++++++++
+> >  drivers/media/usb/uvc/uvc_video.c  |  8 ++++++++
+> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> >  3 files changed, 20 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index c63ecfd4617d..80ef0f0e04b0 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -1497,6 +1497,17 @@ static const struct uvc_entity_quirk {
+> >  	u8 guid[16];
+> >  	u32 quirks;
+> >  } uvc_entity_quirk[] = {
+> > +	/*
+> > +	 * Some SunPlus uvc 1.5 device firmware expects that packages with
 > 
-> As far as I can tell there are 4 directions I could take to add support:
+> s/uvc/UVC/
 > 
-> 1. A standalone machine driver in sound/soc/amd that uses the platform
->   drivers from sound/soc/amd/raven/
+> > +	 * no frame data are ignored by the host.
 > 
-> 2. An embedded driver in sound/soc/amd/acp/acp-legacy-mach.c
+> If it's two paragraphs, you need a blank line in-between. If it's a
+> single paragraph, you must not add a line break.
 > 
-> 3. A standalone machine driver in sound/soc/amd that uses the platform
->   drivers from sound/soc/amd/renoir
+> > +	 * Therefore it does not clear the PTS/SCR bits in the header, and
+> > +	 * breaks the timestamp decode algorithm.
+> > +	 */
+> > +	{
+> > +		.guid = {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49,
+> > +			 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1d},
+> > +		.quirks = UVC_QUIRK_IGNORE_EMPTY_TS,
+> > +	},
+> >  };
+> >  
+> >  static void uvc_entity_quirks(struct uvc_device *dev)
+> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > index ab56e65ca324..a5b184e71ad7 100644
+> > --- a/drivers/media/usb/uvc/uvc_video.c
+> > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > @@ -500,6 +500,14 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+> >  	if (len < header_size)
+> >  		return;
+> >  
+> > +	/*
+> > +	 * Ignore the hardware timestamp on frames with no data on
+> > +	 * miss-behaving devices.
+> > +	 */
 > 
-> 4. Use the SOF infrastructure
+> Could you please expand this comment to explain the issue ? Having to
+> use git blame and read the commit message to understand why the check is
+> here isn't very convenient.
+> 
+> > +	if (stream->dev->quirks & UVC_QUIRK_IGNORE_EMPTY_TS &&
+> > +	    len == header_size)
+> > +		return;
 
-The main issue with this codec is the mind-blowing proliferation of
-configurations and quirks.
-I can't comment on AMD-specific stuff, but would recommend you take a
-look at the GitHub PR we've been reviewing to extract as much
-information as possible from ACPI _DSM tables (as done by the Windows
-driver). see https://github.com/thesofproject/linux/pull/4112 (credits
-to Mauro Chehab for fixing and testing on real hardware and David Yang
-for providing the DSM information and comments).
+Given that there may be no guarantee that the above GUID won't be used
+by devices that don't exhibit this problem, I'm wondering if we couldn't
+use a heuristics instead of a quirk. I'm thinking about something along
+the lines of
+
+	if (buf->bytesused == 0 && len == header_size && has_scr &&
+	    stc == 0 && sof == 0)
+
+This will catch suspicious SCR values (stc == 0 && sof == 0) on empty
+packets (len == header_size) sent before any data packet (buf->bytesused
+== 0), which should handle the devices you have to support, and avoid
+false positives (the stc == 0 && sof == 0 check is already quite
+restrictive, adding buf->bytesused == 0 would limit the workaround to
+packets before the first data packet).
+
+With this we could drop patch 2/8.
+
+> > +
+> >  	/*
+> >  	 * Extract the timestamps:
+> >  	 *
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 24c911aeebce..f395b67fe95a 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -212,6 +212,7 @@
+> >  #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
+> >  #define UVC_QUIRK_FORCE_Y8		0x00000800
+> >  #define UVC_QUIRK_FORCE_BPP		0x00001000
+> > +#define UVC_QUIRK_IGNORE_EMPTY_TS	0x00002000
+> >  
+> >  /* Format flags */
+> >  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+> > 
+
+-- 
+Regards,
+
+Laurent Pinchart
