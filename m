@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E58660C3B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73B6660C40
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 04:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbjAGDkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 22:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S236790AbjAGDk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 22:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjAGDkR (ORCPT
+        with ESMTP id S230293AbjAGDkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:40:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E47A392CF;
+        Fri, 6 Jan 2023 22:40:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8B8392D9;
         Fri,  6 Jan 2023 19:40:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8E3161FD0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EEA461FD5;
+        Sat,  7 Jan 2023 03:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA49EC4339B;
         Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED967C433EF;
-        Sat,  7 Jan 2023 03:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673062816;
-        bh=03/0uSF//ZjR3l96pCWsMFZupR/B/mAAKueX6kQfr3g=;
+        bh=iL1zQgdqfFHz2uikqYZASk9ArPq/tgbaQNSC5l2L1XQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X85cQ30O65NJn09H+cWSO0vaTu0Dvrjr3AiisgxJwf693Ijd4sKEaeb0aGV6bn5zF
-         CjcIFEwHLaxkwzkJPyu+ZW7DQ8UDXzmv3wlXRPxxVCVjrBuHYZ9h0TmmLziPpshQSe
-         Jg+ngAZ9Sa32DmiN9pKLN6abNvy3tKOFQVwTdEeHv7b9gf2IzTO6w3Iu07AjlVy12U
-         GLkyMhzJOI1/tGzAb5JfR+aSh59NGitNwkesb/QRQuHETHzP9UVsldU9z+tVYYsnb4
-         tWEfUndbFg5nw2xIAHpAsvWN7kvHAfDRhi+UYCg5VRLIme88nMMk9qQh8ItwdQ0TbT
-         DrkkvvWbvSJ4g==
+        b=jyxT4Nmd7gkAVrRNMhJs0y0UGNreSfIVFSrTJsaB6kpcytHTtiDsAbR8Zn4HWr2K1
+         +3rf1sASgHRb/jGdRMMADltet3A2EHzKM0DcPeMV8zEAaTPIe5VEkU8iiAwdxxFSwo
+         dXMfUVzuAJYuZCFYK6sIkdJ81olH29SK43pHog2BlZUcfDaLNOFAPnhjhN9Pn/gUhh
+         Yb6bU9jLyzv24FiBGaQKZVDuP8GwPo/ypjDwcvnrcjkXmAwocZkt6MXM4BFsKgEA8B
+         N87nJY/1PFoID3Y12eTvIiYj/RFz6K+8lAi5dIyDZtqafK5frQ9Y1ESBCodymj4evg
+         jHtjGyF8zTuDQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3C0BE5724D;
-        Sat,  7 Jan 2023 03:40:15 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F690E57254;
+        Sat,  7 Jan 2023 03:40:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net PATCHV2] octeontx2-af: Fix LMAC config in cgx_lmac_rx_tx_enable
+Subject: Re: [PATCH net-next] net: phy: micrel: Change handler interrupt for
+ lan8814
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167306281586.4583.4461621412411548875.git-patchwork-notify@kernel.org>
-Date:   Sat, 07 Jan 2023 03:40:15 +0000
-References: <20230105160107.17638-1-hkelam@marvell.com>
-In-Reply-To: <20230105160107.17638-1-hkelam@marvell.com>
-To:     Hariprasad Kelam <hkelam@marvell.com>
+Message-Id: <167306281658.4583.1807795313935970592.git-patchwork-notify@kernel.org>
+Date:   Sat, 07 Jan 2023 03:40:16 +0000
+References: <20230104194218.3785229-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20230104194218.3785229-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        edumazet@google.com, sgoutham@marvell.com, lcherian@marvell.com,
-        gakula@marvell.com, jerinj@marvell.com, sbhatta@marvell.com
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,22 +61,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 5 Jan 2023 21:31:07 +0530 you wrote:
-> From: Angela Czubak <aczubak@marvell.com>
-> 
-> PF netdev can request AF to enable or disable reception and transmission
-> on assigned CGX::LMAC. The current code instead of disabling or enabling
-> 'reception and transmission' also disables/enable the LMAC. This patch
-> fixes this issue.
+On Wed, 4 Jan 2023 20:42:18 +0100 you wrote:
+> The lan8814 represents a package of 4 PHYs. All of them are sharing the
+> same interrupt line. So when a link was going down/up or a frame was
+> timestamped, then the interrupt handler of all the PHYs was called.
+> Which is all fine and expected but the problem is the way the handler
+> interrupt works.
+> Basically if one of the PHYs timestamp a frame, then all the other 3
+> PHYs were polling the status of the interrupt until that PHY actually
+> cleared the interrupt by reading the timestamp.
+> The reason of polling was in case another PHY was also timestamping a
+> frame at the same time, it could miss this interrupt. But this is not
+> the right approach, because it is the interrupt controller who needs to
+> call the interrupt handlers again if the interrupt line is still
+> active.
+> Therefore change this such when the interrupt handler is called check
+> only if the interrupt is for itself, otherwise just exit. In this way
+> save CPU usage.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,PATCHV2] octeontx2-af: Fix LMAC config in cgx_lmac_rx_tx_enable
-    https://git.kernel.org/netdev/net/c/b4e9b8763e41
+  - [net-next] net: phy: micrel: Change handler interrupt for lan8814
+    https://git.kernel.org/netdev/net-next/c/7abd92a5b98f
 
 You are awesome, thank you!
 -- 
