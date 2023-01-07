@@ -2,130 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4913660AFE
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0409660AFF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbjAGAmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S236444AbjAGAmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAGAmL (ORCPT
+        with ESMTP id S236382AbjAGAmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:42:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597A368787;
-        Fri,  6 Jan 2023 16:42:10 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9D584AE;
-        Sat,  7 Jan 2023 01:42:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673052128;
-        bh=VXio3V1G2wHCgVDVIyaGGzU/pYcByF5l5Yyhd3vd5VQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZAspDIx2BD51CwtgDrDBBAXc/IssFnYI+8wQ/Kehwy/4+yQi/GDkZSARvvUoEWV3F
-         1r+taOA0CyyaXe6rctxS3pYyjR6tbNoiSOucdD/6gURGcFmawIHO9FK3GDZ/5N+pDK
-         BOL+faf4BihmtaLclc5d5UuhmR2lei5M/MfSRiIw=
-Date:   Sat, 7 Jan 2023 02:42:02 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Harini Katakam <harini.katakam@amd.com>,
-        David Heidelberg <david@ixit.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Tanmay Shah <tanmay.shah@amd.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: dts: zynqmp: Add xlnx prefix to GEM compatible
- string
-Message-ID: <Y7i/2g8Awnb2DyA4@pendragon.ideasonboard.com>
-References: <578a4fcbb4143888af954996a45f5e1110e0ee50.1672909426.git.michal.simek@amd.com>
+        Fri, 6 Jan 2023 19:42:37 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543446AD8A;
+        Fri,  6 Jan 2023 16:42:35 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4bf16baa865so42771587b3.13;
+        Fri, 06 Jan 2023 16:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tkm822KFA7O70xjFUbGjoKrxdnp/lV7pa30aR+G6h6I=;
+        b=o9W/gaM3fn47LOd7POMDZ8i9vl9f/OHcWzd7hBhPC0kLKq/s43yB/eN6TAGru9C4d1
+         rUIU+Z+yCDI3L5ZXqRwJz0F6t98I+CEigg33clqSsu5vjSYCaG2516RqOPDslVN7Mr1k
+         FQ+eTK9WRZBmYeCJmKKud2JOLA6BTNcG6aehDGF7EzUmy+HVW2bdwliVsDm0zMQQB5qz
+         erqWjACw11azY4gNrN9djQfA+SJ5ZHU7r9LtT1TtG7NWfXjYS4tDsrPCAlW3DU/Eq+D+
+         C36+Aw0wV4RH+icLmdNqRg2Im2alMtBwRvOVOIM7aY/L7Isf9WJ4f/HtYgFozSlQ+mje
+         lcyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tkm822KFA7O70xjFUbGjoKrxdnp/lV7pa30aR+G6h6I=;
+        b=TXX0O2/1lUCfKSVgQus6ScCn5GcZAHvf5haubQZOM0udE+qDR5q4q/9kZYLUOvZRhQ
+         Ej8t3uhlL9iFmIIp6LfHwr6VPb4hPVi359CaF1WhiLugpRcmevhrNj4wKEGC1yh//Yfk
+         lzDanmsP3iewu5DEXvGTIoRc/j+a4SHVMqU9FqzK2bgCdDPDdU2A2olpOQxN6vLe9bQU
+         St/AM2+rfeqJ7qXLfgYfG4el7iYHFdsQLRnWSMxUxkl61KxHcqZwBIC4H9T+X7hopn6s
+         o0tmzRIRLdTZytbCTkyrmb1A6IMy0AiE+ok7H1lzxrBopAZvKbNlRCMlpkMJviB1AuP7
+         dm0g==
+X-Gm-Message-State: AFqh2kpZ0j3aCHDJPCjDotwb5P35xIWAfTFpbfwHyIdE2yqQIT8nHrBB
+        6RjKdwHqz/QZM90U8mm6Mrc6fenR3KltaL/cm4w=
+X-Google-Smtp-Source: AMrXdXuRmVixv/9TM2vRgBkRFrqbpcZA4QypjP56433k+YSkWJljZtLiG6XZHpJg90uoSrb8bxQ20YmcdXFVROE8/n4=
+X-Received: by 2002:a81:94d:0:b0:3bc:7270:cb70 with SMTP id
+ 74-20020a81094d000000b003bc7270cb70mr6962053ywj.83.1673052154532; Fri, 06 Jan
+ 2023 16:42:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <578a4fcbb4143888af954996a45f5e1110e0ee50.1672909426.git.michal.simek@amd.com>
+References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic> <Y6r+UbfkXruwHU2v@zn.tnic>
+In-Reply-To: <Y6r+UbfkXruwHU2v@zn.tnic>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 7 Jan 2023 01:42:23 +0100
+Message-ID: <CANiq72kqfva8ZcLSLbq7=yGdVUHra=eh3etUo5vh1rGbM+eZug@mail.gmail.com>
+Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
+ transitively contain a `#[repr(align)]` type
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+On Tue, Dec 27, 2022 at 3:16 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> Resending because rust ML doesn't like big messages:
+>
+> Rust folks, you can check out the whole thing here:
+>
+> https://lore.kernel.org/all/202212272003.rgQDX8DQ-lkp@intel.com/
+>
+> (and maybe raise the limit on that ML of yours :))
 
-Thank you for the patch.
+Thanks for the resend, by the way! Yeah, we had trouble with the limit
+for the big initial patches too... I can ask the vger admins if they
+are willing to raise it given we get these reports now.
 
-On Thu, Jan 05, 2023 at 10:03:51AM +0100, Michal Simek wrote:
-> From: Harini Katakam <harini.katakam@amd.com>
-> 
-> cdns,zynq/zynqmp/versal-gem was recently deprecated in Linux in
-> favour of xlnx prefix. Add this new compatible string and remove
-> the existing cdns,zynqmp-gem compatible string.
-> 
-> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> 
-> Changes in v2:
-> - Remove deprecated compatible string
-> - Update commit message
-> 
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 2ff4b788e094..153db59dc4b3 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -540,7 +540,7 @@ nand0: nand-controller@ff100000 {
->  		};
->  
->  		gem0: ethernet@ff0b0000 {
-> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
-> +			compatible = "xlnx,zynqmp-gem", "cdns,gem";
->  			status = "disabled";
->  			interrupt-parent = <&gic>;
->  			interrupts = <0 57 4>, <0 57 4>;
-> @@ -555,7 +555,7 @@ gem0: ethernet@ff0b0000 {
->  		};
->  
->  		gem1: ethernet@ff0c0000 {
-> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
-> +			compatible = "xlnx,zynqmp-gem", "cdns,gem";
->  			status = "disabled";
->  			interrupt-parent = <&gic>;
->  			interrupts = <0 59 4>, <0 59 4>;
-> @@ -570,7 +570,7 @@ gem1: ethernet@ff0c0000 {
->  		};
->  
->  		gem2: ethernet@ff0d0000 {
-> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
-> +			compatible = "xlnx,zynqmp-gem", "cdns,gem";
->  			status = "disabled";
->  			interrupt-parent = <&gic>;
->  			interrupts = <0 61 4>, <0 61 4>;
-> @@ -585,7 +585,7 @@ gem2: ethernet@ff0d0000 {
->  		};
->  
->  		gem3: ethernet@ff0e0000 {
-> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
-> +			compatible = "xlnx,zynqmp-gem", "cdns,gem";
->  			status = "disabled";
->  			interrupt-parent = <&gic>;
->  			interrupts = <0 63 4>, <0 63 4>;
-
--- 
-Regards,
-
-Laurent Pinchart
+Cheers,
+Miguel
