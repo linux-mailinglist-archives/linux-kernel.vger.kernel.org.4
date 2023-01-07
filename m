@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42730660BB3
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 03:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB692660BBA
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 03:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236444AbjAGCEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 21:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S231394AbjAGCFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 21:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjAGCEa (ORCPT
+        with ESMTP id S229521AbjAGCFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 21:04:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3542284BC9;
-        Fri,  6 Jan 2023 18:04:30 -0800 (PST)
+        Fri, 6 Jan 2023 21:05:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EFE84BD9;
+        Fri,  6 Jan 2023 18:05:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA36761FC9;
-        Sat,  7 Jan 2023 02:04:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79737C433EF;
-        Sat,  7 Jan 2023 02:04:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3E1AB81F55;
+        Sat,  7 Jan 2023 02:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4362C433D2;
+        Sat,  7 Jan 2023 02:05:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673057069;
-        bh=eXKo7QYU90F0i+EYDEsUIHPHKJBoRS8xY5pfwKzPS9I=;
+        s=k20201202; t=1673057127;
+        bh=vuRooI/0IKFfiukBgQuJyic73OVaQ9W2FXk647mejH0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UNxJqKKEbdICrNiQVuxmXTG9U7Pdb9HJe5AikMAS2GyghC+PLAyiomDf1ZMN/8b8q
-         wNJ6svHD+OZqPlNv0zLIy1xTsA79xMZmk1BfOJx1x/nGcBBcliM4/uhE/NnA8FXVmy
-         gXZTMbefvBwkZ4o4DK6abTTXvdCnywq1EB8842T+thIgTLZ3DGj+iFfFlKXP8FgS2s
-         6m6qjg+scB2kq+GCa6BUhXidGTKEa75FqC/Aibaev4dvWCVl5M2OEcT8abRloSXkDY
-         DeW8ab8EhcWhrO+OJhOzzv74YEnSWwCP6SaXYtBCp50Bul3vcQUS81Ep6Ze3dPMW4y
-         ZR6/XAuX98ebA==
-Date:   Fri, 6 Jan 2023 18:04:27 -0800
+        b=s0Dme05qM2ZOWJJtuYVBV/KCzIKMnKd7jYhnCnoLup+/RpRcogmN8KK4Zm5P5vm3D
+         8MNgauXeyOS1FC41Kg88QYoj0r8jN/KQdDhpfDYlrDu1OSdrEVx4Jlmm7+nVzhh6yR
+         Q7CXEY38gguw/W3ejNTxaS2BDj6lvvdo/Q0eR1U7lgKSkbj99EpZCrAIx60tnDrYwJ
+         HEv0O2MrPDYloS+BjKkZ+tBQhjskm9BJl8XuG4pTJ+tN8xv7qMWNxUJgbON2mAKE4W
+         KPEN+KfXZYzJIbvU+I4CbHO1v9vAvJHIw7F4SJGNI1sx9t9HwssiDbOXS0G0wKfH0b
+         i8BTstgh2U7yA==
+Date:   Fri, 6 Jan 2023 18:05:26 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     Dmitry Safonov <dima@arista.com>
 Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
@@ -47,11 +47,11 @@ Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Salam Noureddine <noureddine@arista.com>,
         netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] crypto/pool: Add crypto_pool_reserve_scratch()
-Message-ID: <20230106180427.2ccbea51@kernel.org>
-In-Reply-To: <20230103184257.118069-3-dima@arista.com>
+Subject: Re: [PATCH v2 3/5] crypto/net/tcp: Use crypto_pool for TCP-MD5
+Message-ID: <20230106180526.6e65b54d@kernel.org>
+In-Reply-To: <20230103184257.118069-4-dima@arista.com>
 References: <20230103184257.118069-1-dima@arista.com>
-        <20230103184257.118069-3-dima@arista.com>
+        <20230103184257.118069-4-dima@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -64,108 +64,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 Jan 2023 18:42:54 +0000 Dmitry Safonov wrote:
-> Instead of having build-time hardcoded constant, reallocate scratch
-> area, if needed by user. Different algos, different users may need
-> different size of temp per-CPU buffer. Only up-sizing supported for
-> simplicity.
+On Tue,  3 Jan 2023 18:42:55 +0000 Dmitry Safonov wrote:
+> Use crypto_pool API that was designed with tcp_md5sig_pool in mind.
+> The conversion to use crypto_pool will allow:
+> - to reuse ahash_request(s) for different users
+> - to allocate only one per-CPU scratch buffer rather than a new one for
+>   each user
+> - to have a common API for net/ users that need ahash on RX/TX fast path
 
-> -static int crypto_pool_scratch_alloc(void)
-> +/* Slow-path */
-> +/**
-> + * crypto_pool_reserve_scratch - re-allocates scratch buffer, slow-path
-> + * @size: request size for the scratch/temp buffer
-> + */
-> +int crypto_pool_reserve_scratch(unsigned long size)
+>  config TCP_MD5SIG
+>  	bool "TCP: MD5 Signature Option support (RFC2385)"
+> -	select CRYPTO
+> +	select CRYPTO_POOL
 
-Does this have to be a separate call? Can't we make it part of 
-the pool allocation? AFAICT the scratch gets freed when last
-pool is freed, so the user needs to know to allocate the pool
-_first_ otherwise there's a potential race:
+Are you sure we don't need to select CRYPTO any more?
+select does not resolve dependencies.
 
- CPU 1               CPU 2
+>  	select CRYPTO_MD5
+>  	help
+>  	  RFC2385 specifies a method of giving MD5 protection to TCP sessions.
 
- alloc pool
-                    set scratch
- free pool
- [frees scratch]
-                    alloc pool
-
->  {
-> -	int cpu;
-> -
-> -	lockdep_assert_held(&cpool_mutex);
-> +#define FREE_BATCH_SIZE		64
-> +	void *free_batch[FREE_BATCH_SIZE];
-> +	int cpu, err = 0;
-> +	unsigned int i = 0;
+> @@ -749,29 +746,27 @@ static int tcp_v6_md5_hash_skb(char *md5_hash,
+>  		daddr = &ip6h->daddr;
+>  	}
 >  
-> +	mutex_lock(&cpool_mutex);
-> +	if (size == scratch_size) {
-> +		for_each_possible_cpu(cpu) {
-> +			if (per_cpu(crypto_pool_scratch, cpu))
-> +				continue;
-> +			goto allocate_scratch;
-> +		}
-> +		mutex_unlock(&cpool_mutex);
-> +		return 0;
-> +	}
-> +allocate_scratch:
-> +	size = max(size, scratch_size);
-> +	cpus_read_lock();
->  	for_each_possible_cpu(cpu) {
-> -		void *scratch = per_cpu(crypto_pool_scratch, cpu);
-> +		void *scratch, *old_scratch;
+> -	hp = tcp_get_md5sig_pool();
+> -	if (!hp)
+> +	if (crypto_pool_get(tcp_md5_crypto_pool_id, (struct crypto_pool *)&hp))
+
+&hp.base ? To avoid the cast
+
+>  		goto clear_hash_noput;
+> -	req = hp->md5_req;
 >  
-> -		if (scratch)
-> +		scratch = kmalloc_node(size, GFP_KERNEL, cpu_to_node(cpu));
-> +		if (!scratch) {
-> +			err = -ENOMEM;
-> +			break;
-> +		}
-> +
-> +		old_scratch = per_cpu(crypto_pool_scratch, cpu);
-> +		/* Pairs with crypto_pool_get() */
-> +		WRITE_ONCE(*per_cpu_ptr(&crypto_pool_scratch, cpu), scratch);
-
-You're using RCU for protection here, please use rcu accessors.
-
-> +		if (!cpu_online(cpu)) {
-> +			kfree(old_scratch);
->  			continue;
-> +		}
-> +		free_batch[i++] = old_scratch;
-> +		if (i == FREE_BATCH_SIZE) {
-> +			cpus_read_unlock();
-> +			synchronize_rcu();
-> +			while (i > 0)
-> +				kfree(free_batch[--i]);
-> +			cpus_read_lock();
-> +		}
-
-This is a memory allocation routine, can we simplify this by
-dynamically sizing "free_batch" and using call_rcu()?
-
-struct humf_blah {
-	struct rcu_head rcu;
-	unsigned int cnt;
-	void *data[];
-};
-
-cheezit = kmalloc(struct_size(blah, data, num_possible_cpus()));
-
-for_each ..
-	cheezit->data[cheezit->cnt++] = old_scratch;
-
-call_rcu(&cheezit->rcu, my_free_them_scratches)
-
-etc.
-
-Feels like that'd be much less locking, unlocking and general
-carefully'ing.
-
-> +	}
-> +	cpus_read_unlock();
-> +	if (!err)
-> +		scratch_size = size;
+> -	if (crypto_ahash_init(req))
+> +	if (crypto_ahash_init(hp.req))
+>  		goto clear_hash;
+>  
+> -	if (tcp_v6_md5_hash_headers(hp, daddr, saddr, th, skb->len))
+> +	if (tcp_v6_md5_hash_headers(&hp, daddr, saddr, th, skb->len))
+>  		goto clear_hash;
+> -	if (tcp_md5_hash_skb_data(hp, skb, th->doff << 2))
+> +	if (tcp_md5_hash_skb_data(&hp, skb, th->doff << 2))
+>  		goto clear_hash;
+> -	if (tcp_md5_hash_key(hp, key))
+> +	if (tcp_md5_hash_key(&hp, key))
+>  		goto clear_hash;
+> -	ahash_request_set_crypt(req, NULL, md5_hash, 0);
+> -	if (crypto_ahash_final(req))
+> +	ahash_request_set_crypt(hp.req, NULL, md5_hash, 0);
+> +	if (crypto_ahash_final(hp.req))
+>  		goto clear_hash;
+>  
+> -	tcp_put_md5sig_pool();
+> +	crypto_pool_put();
+>  	return 0;
+>  
+>  clear_hash:
+> -	tcp_put_md5sig_pool();
+> +	crypto_pool_put();
+>  clear_hash_noput:
+>  	memset(md5_hash, 0, 16);
+>  	return 1;
 
