@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177C966102A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 17:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77F266102C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 17:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjAGQBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 11:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S230360AbjAGQDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 11:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjAGQBc (ORCPT
+        with ESMTP id S229695AbjAGQDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 11:01:32 -0500
+        Sat, 7 Jan 2023 11:03:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C551F4FCC1;
-        Sat,  7 Jan 2023 08:01:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81124F13F;
+        Sat,  7 Jan 2023 08:03:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87107B80951;
-        Sat,  7 Jan 2023 16:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56549C433D2;
-        Sat,  7 Jan 2023 16:01:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BF6AB80951;
+        Sat,  7 Jan 2023 16:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2920FC433D2;
+        Sat,  7 Jan 2023 16:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673107287;
-        bh=QUKH+nV5nAM3iDCayBAyCxMO7h1lYJlWIjFspuYJpUE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EAyJeXWzaLvdJOHtdfLorpHZj8CCjtm/i+sWNtvPHKiCNQRahEj0cBPeLSi2UetKV
-         InQvd+jra/TGcuKZ8iGMdI/cqO4/2EF8ja7FOPkJZy5XPPX/n1pvpK+/WcV0nZ/B7C
-         La5D8CpvS0Jzd3DZHy9gxVX++CJJoU6jt9c1itx70uz6MG9fl2yWdMTAmfLLhoHLpe
-         84d5Mh4RDrkmoI4NQysZSTAEMhZFwgz5BZcxLkrbi1hgx1CVdP8zt06Zq/mDUWWtgI
-         LIu0+XFnJUsf/enixCl/Ud0vXAIxPE190NUy/UyMF4ZIblTWadMw+3DZIsxyxBhvSb
-         qatJ80Cre6QJg==
-Date:   Sun, 8 Jan 2023 01:01:24 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Quanfa Fu <quanfafu@gmail.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
-Message-Id: <20230108010124.96e4ceb68b8dfb8e291f501d@kernel.org>
-In-Reply-To: <20230107034557.1156022-1-quanfafu@gmail.com>
-References: <20230107034557.1156022-1-quanfafu@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1673107385;
+        bh=1hG2Re5Bx7ubivhRbIbvVITI44UJptNZ8stv4wtQE9s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=l2yG0NujUjGd6IAJ9nY8oZ8h8wCPANX6iws/+UQPV5e98d347cVUVCvPSx45SKYL9
+         Mi3hnDa9JKw42K/N53pLG0Npt4NRsgOyPDOt5ezN/yJO/85pcpGfc2FaVMCLaIWzUv
+         61bRk01JRJay8sAKHDz4LdodS8tpvpfImB/DftGVSUFyODz9Jj2TJg07yTY872Lom+
+         zk/zEL1AZSJdMiMEggIG/oS8yXVkSm3QG7odp8eWJXJ+72ZU8iQD5YoVRZhugEZ+cn
+         EctlV3xHNqOzBD5zj/1h0jE3hsJhxCxXnv/VvpFhphbK4mNogJNBPDhKkXZHtYu48c
+         E47ZUzKxkgwxw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BD5835C09F1; Sat,  7 Jan 2023 08:03:04 -0800 (PST)
+Date:   Sat, 7 Jan 2023 08:03:04 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH rcu 05/27] arch/riscv/kvm: Remove "select SRCU"
+Message-ID: <20230107160304.GZ4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+ <20230105003813.1770367-5-paulmck@kernel.org>
+ <CAAhSdy1VsT48WPQHZ5Pj5WNZRPUQvciFPF2LySawVv27tehD+g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhSdy1VsT48WPQHZ5Pj5WNZRPUQvciFPF2LySawVv27tehD+g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  7 Jan 2023 11:45:57 +0800
-Quanfa Fu <quanfafu@gmail.com> wrote:
-
-> Since this memory will be filled soon below, I feel that there is
-> no need for a memory of all zeros here. 'snprintf' does not return
-> negative num according to ISO C99, so I feel that no judgment is
-> needed here.
+On Sat, Jan 07, 2023 at 03:28:06PM +0530, Anup Patel wrote:
+> On Thu, Jan 5, 2023 at 6:08 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > Now that the SRCU Kconfig option is unconditionally selected, there is
+> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> > Kconfig statements.
+> >
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Anup Patel <anup@brainfault.org>
+> > Cc: Atish Patra <atishp@atishpatra.org>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: <kvm@vger.kernel.org>
+> > Cc: <kvm-riscv@lists.infradead.org>
+> > Cc: <linux-riscv@lists.infradead.org>
 > 
-> No functional change intended.
+> For KVM RISC-V:
+> Acked-by: Anup Patel <anup@brainfault.org>
+
+Thank you, Anup!  I will apply this on my next rebase.
+
+							Thanx, Paul
+
+> Thanks,
+> Anup
 > 
-
-Ah, good catch. I didn't notice that snprintf() doesn't return
-error code. (I confirmed that the linux internal snprintf() also
-doesn't return the error code)
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
-> ---
->  kernel/trace/trace_eprobe.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 352b65e2b910..cd1d271a74e7 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
->  	for (i = 0; i < argc; i++)
->  		len += strlen(argv[i]) + 1;
->  
-> -	ep->filter_str = kzalloc(len, GFP_KERNEL);
-> +	ep->filter_str = kmalloc(len, GFP_KERNEL);
->  	if (!ep->filter_str)
->  		return -ENOMEM;
->  
->  	p = ep->filter_str;
->  	for (i = 0; i < argc; i++) {
->  		ret = snprintf(p, len, "%s ", argv[i]);
-> -		if (ret < 0)
-> -			goto error;
->  		if (ret > len) {
->  			ret = -E2BIG;
->  			goto error;
-> -- 
-> 2.31.1
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  arch/riscv/kvm/Kconfig | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+> > index f36a737d5f96d..6bc9b290c1283 100644
+> > --- a/arch/riscv/kvm/Kconfig
+> > +++ b/arch/riscv/kvm/Kconfig
+> > @@ -27,7 +27,6 @@ config KVM
+> >         select KVM_XFER_TO_GUEST_WORK
+> >         select HAVE_KVM_VCPU_ASYNC_IOCTL
+> >         select HAVE_KVM_EVENTFD
+> > -       select SRCU
+> >         help
+> >           Support hosting virtualized guest machines.
+> >
+> > --
+> > 2.31.1.189.g2e36527f23
+> >
