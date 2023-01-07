@@ -2,119 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9C2660FC9
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1214A660FCF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 16:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbjAGPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 10:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S232007AbjAGPHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 10:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjAGPGZ (ORCPT
+        with ESMTP id S231445AbjAGPHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 10:06:25 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5E63F61;
-        Sat,  7 Jan 2023 07:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FSFM4yR4blaFSxBzfnWN4hnvh0AQgFE6Wy1RI039p5g=; b=jMzef1yLFSyGPSDvT0zTsJnJLd
-        jVFKm63WTul1j9a2Hixsj029wDInokmlFGWT0TUL4M6pxQJQELy5UHFflzNSXG4BQejzDN/DM8CfU
-        JAGbwFHAr3VVnjFLBqM51AwLMSZPZOiup1A2i2YYOnmsvC5JpJYhHYEFn/bgaIigNxXwgmMhowtMO
-        cKK4m2y7lDCYmZW5V55/9UZg+8eHRTTSkq4lPD7dVYjotH0nmZZDQCcHoYsIW+taaamRAIH/z3Rz0
-        dw5IuX/yZZPQAmSfFWpEoS+RnfURgU1PHQ1mOOY8hUdreXoSf7vnD6npmHxNgF0f7Gz36dhMMwTKP
-        v01R9DGA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEAly-000dbw-DB; Sat, 07 Jan 2023 15:06:14 +0000
-Date:   Sat, 7 Jan 2023 15:06:14 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Ilya Dryomov <idryomov@gmail.com>, linux-cachefs@redhat.com,
-        linux-cifs@vger.kernel.org, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, Jeff Layton <jlayton@kernel.org>,
-        linux-erofs@lists.ozlabs.org, linux-ext4@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] mm: Make filemap_release_folio() better inform
- shrink_folio_list()
-Message-ID: <Y7mKZj/RnD2aW5jU@casper.infradead.org>
-References: <167172131368.2334525.8569808925687731937.stgit@warthog.procyon.org.uk>
- <167172134962.2334525.570622889806603086.stgit@warthog.procyon.org.uk>
- <Y6XJwvjKyTgRIiI3@infradead.org>
+        Sat, 7 Jan 2023 10:07:40 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5B0669A9
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 07:07:39 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so5538449wmk.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 07:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+5NdmOy1Ai82n93j2R+2KO8HXukW+/GStni2h9f4Guo=;
+        b=J2grbRRYLvRvHQMNex7quauPQpxtJI12KZZofBJvtRSuVlLdQJ/OeU30i6jI10nCc6
+         U2Hvlg6vgdFkr3qrJvQXio75A+5k/rxuaHC9VFUE6QUIk4YAxjdss1rDu1HJNbyp9CZo
+         1J9QeRwewJg64YAZxER6eiozsN4budlK1N1b+whwLwhNaFNBRO9HdxHLe3gYitFmyjlv
+         6UbNZqD9FuYnjCisYHdG3X7n40fA8diSShoUA1Q1M5sqglvOxK8fRh0SBJs6qIPZXuhU
+         ZIGP152Xk7jk/LhHPqRYzbJ7SrUIhLSFWDO4nQ+XcwxjDViC5YLRohZMy+6uaLyfBRVg
+         +onA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5NdmOy1Ai82n93j2R+2KO8HXukW+/GStni2h9f4Guo=;
+        b=O+hNmFXa8K7GAD5iQI6tmaE6fovL05p/MjLj28mRMSusJWACW87AKV6jzl/mjrDGhV
+         jwGr4RUVu+Zj5PnQpuOpGTCK1PhnZAEG/yVDuVA3ii3YeKeKIXsGnV4b/iqVEoccilAm
+         gsVVyeiz59R2aefNui5kPQuA93F1Ji40bTmemb0nI+I057rCV8DXXTiEr8Pz+4yGN91e
+         4Y5OBNPsKl9f368gtkUtyq/K5JconYbgeH1fhTkRKq6Au1UUiE+LF3WBYT9nfG7thyUs
+         ItIIjAk86X958X7l+WHfJSAw7CkSohbU5OD+5fhaha+RPkuv5UIFpJu97EOJ7xhyofBp
+         ulrQ==
+X-Gm-Message-State: AFqh2kq9TBZD1nKBgOLqrbrZZ/PVZ1YI0x5aHjuXyiLBgkWnTzcjjj/s
+        3QW+R9782ngQjEAP8txn7Cqzpg==
+X-Google-Smtp-Source: AMrXdXtQ+AVqw4FmyKIXZ2qw5rRUUMYF+o2woAsQxnVzG1eBHl9KZ2kRFMIfKUD/kbeeXOvMWwv7iw==
+X-Received: by 2002:a05:600c:1c21:b0:3cf:9844:7b11 with SMTP id j33-20020a05600c1c2100b003cf98447b11mr50993432wms.23.1673104058040;
+        Sat, 07 Jan 2023 07:07:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c310e00b003cf5ec79bf9sm6034449wmo.40.2023.01.07.07.07.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jan 2023 07:07:37 -0800 (PST)
+Message-ID: <e1b1450b-9421-3732-2d74-50c47b5afb0e@linaro.org>
+Date:   Sat, 7 Jan 2023 16:07:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6XJwvjKyTgRIiI3@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
+ combinations
+Content-Language: en-US
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230105213856.1828360-1-andreas@kemnade.info>
+ <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
+ <20230106203358.14878660@aktux>
+ <967cc7b7-f0bb-de37-52b9-7bfab05eadd7@linaro.org>
+ <20230107144336.2ecff4f9@aktux>
+ <123d1a56-8134-dc75-8b2a-b3836e727d4a@linaro.org>
+ <20230107150740.0ba34aa1@aktux>
+ <0ab84fb8-6173-54e0-abad-a0e0e4ba82e7@linaro.org>
+ <20230107160105.66df4136@aktux>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230107160105.66df4136@aktux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 07:31:14AM -0800, Christoph Hellwig wrote:
-> On Thu, Dec 22, 2022 at 03:02:29PM +0000, David Howells wrote:
-> > Make filemap_release_folio() return one of three values:
-> > 
-> >  (0) FILEMAP_CANT_RELEASE_FOLIO
-> > 
-> >      Couldn't release the folio's private data, so the folio can't itself
-> >      be released.
-> > 
-> >  (1) FILEMAP_RELEASED_FOLIO
-> > 
-> >      The private data on the folio was released and the folio can be
-> >      released.
-> > 
-> >  (2) FILEMAP_FOLIO_HAD_NO_PRIVATE
+On 07/01/2023 16:01, Andreas Kemnade wrote:
+> On Sat, 7 Jan 2023 15:09:24 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> These names read really odd, due to the different placementments
-> of FOLIO, the present vs past tense and the fact that 2 also released
-> the folio, and the reliance of callers that one value of an enum
-> must be 0, while no unprecedented, is a bit ugly.
-
-Agreed.  The thing is that it's not the filemap that's being released,
-it's the folio.  So these should be:
-
-	FOLIO_RELEASE_SUCCESS
-	FOLIO_RELEASE_FAILED
-	FOLIO_RELEASE_NO_PRIVATE
-
-... but of course, NO_PRIVATE is also a success.  So it's a really weird
-thing to be reporting.  I'm with you on the latter half of this email:
-
-> But do we even need them?  What abut just open coding
-> filemap_release_folio (which is a mostly trivial function) in
-> shrink_folio_list, which is the only place that cares?
+>> On 07/01/2023 15:07, Andreas Kemnade wrote:
+>>> On Sat, 7 Jan 2023 15:00:56 +0100
+>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> [...]  
+>>>>>> I asked to remove half-compatible. Not to enforce.
+>>>>>>    
+>>> so you are saying that allowing
+>>> compatible = "A", "B" 
+>>> is not ok, if B is not fully compatible. I agree with that
+>>> one.  
+>>
+>> I did not say that. It's not related to this problem.
+>>
+> You said "I asked to remove half-compatible" that means to me
+> remove "B" if not fully compatible with A which sounds sane to me.
 > 
-> 	if (folio_has_private(folio) && folio_needs_release(folio)) {
-> 		if (folio_test_writeback(folio))
-> 			goto activate_locked;
+>> Again - you cannot have device which is and is not compatible with
+>> something else. It's not a Schroedinger's cat to be in two states,
+>> unless you explicitly document the cases (there are exception). If this
+>> is such exception, it requires it's own documentation.
+>>
+> so conclusion:
+> If having A and B half-compatible with A:
 > 
-> 		if (mapping && mapping->a_ops->release_folio) {
-> 			if (!mapping->a_ops->release_folio(folio, gfp))
-> 				goto activate_locked;
-> 		} else {
-> 			if (!try_to_free_buffers(folio))
-> 				goto activate_locked;
-> 		}
+> compatible = "A" only: is allowed to specifiy it the binding (status quo),
+>   but not allowed to make the actual dtsi match the binding documentation
+>   https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
+>   and
+>   https://lore.kernel.org/linux-devicetree/20210924091439.2561931-5-andreas@kemnade.info/
 > 
-> 		if (!mapping && folio_ref_count(folio) == 1) {
-> 			...
-> 
-> alternatively just keep using filemap_release_folio and just add the
-> folio_needs_release in the first branch.  That duplicates the test,
-> but makes the change a one-liner.
+> compatible = "A", "B" in the binding definition: is not allowed ("I asked to remove
+>    half-compatible" (= removing B))
 
-Or just drop patch 3 entirely?
+No, half compatible is the A in such case.
+
+> 
+> having mismatch between binding definition and devicetree causes dtbs_check errors
+>    -> also not nice.
+> 
+> I rather drop this patch and learn to live with dtbs_check errors
+> for this one since I have no idea how to proceed. All roads are blocked.
+> This all causes too much churn.
+
+And why you cannot implement what I asked for?
+
+Best regards,
+Krzysztof
+
