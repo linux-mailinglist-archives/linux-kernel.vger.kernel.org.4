@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2601660B87
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BBC660B8A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 02:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjAGBiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 20:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S236541AbjAGBiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 20:38:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjAGBh6 (ORCPT
+        with ESMTP id S229751AbjAGBiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:37:58 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE927D9FD;
-        Fri,  6 Jan 2023 17:37:56 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NpjQJ3kRbzqTtp;
-        Sat,  7 Jan 2023 09:33:12 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 7 Jan 2023 09:37:54 +0800
-Message-ID: <eb59bd16-d97a-836b-691d-0d72106eccde@huawei.com>
-Date:   Sat, 7 Jan 2023 09:37:53 +0800
+        Fri, 6 Jan 2023 20:38:05 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D755E7FED9;
+        Fri,  6 Jan 2023 17:38:03 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 87274604F1;
+        Sat,  7 Jan 2023 02:38:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673055480; bh=bTNWDnS92qaE79On7aDdfTeVTGKTxcnF2/kwNwT8vww=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vM13FKk1TRwZRY/WzVK9DCCoxoDeJMmMdJ7J/35tqNycP9ixAQPdE9g2zBFLcuDI8
+         su5cz0uzAGKyGQAgRAyYRq7x/3+34ggzZBh54P5ZFnhUcsNkfA0Fx3MN7skTSKyDuy
+         XA/PG/iWOt8cgEdWLAB0G1jPZnEZhbLoiudpSP2GpwHcMQz4GXl3CiZuRHRrKAuHsF
+         SS0IvQcZkpYQHPaHs9/BL1CboBgEV7J8oJ3DEQXfv9OrG4cUHfS088uIFNsSojrY7/
+         0LUOx8ydA7cK7nZs37kU54szglhAc0wYCKAg6LYNDdvhfcvZezFHjJVZuJ2eO6fqXT
+         gYnAL+MWfcn9A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ERq_qlQfZXgt; Sat,  7 Jan 2023 02:37:58 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6CC66604F0;
+        Sat,  7 Jan 2023 02:37:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673055478; bh=bTNWDnS92qaE79On7aDdfTeVTGKTxcnF2/kwNwT8vww=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l+D/NuZZPIcI+ANxTOpvTyeBNJ5pQ7TWC2H5iMKq9jVvYrpuACDn9GMJFSBB59vcL
+         /GnJSzr1pRhahV4qH5DP6V0oMuTNTYygt0PclnAfIq4nfR5qBm4t/kTa1srt7W3arJ
+         VuH7NgNeN2nHRnqG4ojXoeuKxiULdHGKkV9CBF3ywAQfQfo2QaU6jrt29OjRaBsQaw
+         4tuuEdJN89CU4HAXCU9xDTZVp2SjdpTGAAUuNL2feKnpwM3t/FDFzgigm4Wmwi62Td
+         /2O3Zve6njfDswJedKJry6YmgR8/Q+zBAU7PaWAJ3OW38w77DJ1UBMepSN6Pfp4/1v
+         r4mxqbjQVqdPw==
+Message-ID: <2523def7-7fce-9e06-1b99-8fce43708629@alu.unizg.hr>
+Date:   Sat, 7 Jan 2023 02:37:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 1/2] ext4: fail ext4_iget if special inode unallocated
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-References: <20230106104706.2410740-1-libaokun1@huawei.com>
- <20230106104706.2410740-2-libaokun1@huawei.com>
- <20230106142846.rzkflbdedv2oyrro@quack3>
-Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230106142846.rzkflbdedv2oyrro@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: [PATCH net v3] af_unix: selftest: Fix the size of the parameter to
+ connect()
+Content-Language: en-US, hr
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
+        edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+ <20230106175828.13333-1-kuniyu@amazon.com>
+ <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>
+ <20230106161450.1d5579bf@kernel.org>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230106161450.1d5579bf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,71 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/6 22:28, Jan Kara wrote:
-> On Fri 06-01-23 18:47:05, Baokun Li wrote:
->> In ext4_fill_super(), EXT4_ORPHAN_FS flag is cleared after
->> ext4_orphan_cleanup() is executed. Therefore, when __ext4_iget() is
->> called to get an inode whose i_nlink is 0 when the flag exists, no error
->> is returned. If the inode is a special inode, a null pointer dereference
->> may occur. If the value of i_nlink is 0 for any inodes (except boot loader
->> inodes) got by using the EXT4_IGET_SPECIAL flag, the current file system
->> is corrupted. Therefore, make the ext4_iget() function return an error if
->> it gets such an abnormal special inode.
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=199179
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216541
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216539
->> Reported-by: Luís Henriques <lhenriques@suse.de>
->> Suggested-by: Theodore Ts'o <tytso@mit.edu>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Thanks for the patch! A few comments below.
->
->> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
->> index 9d9f414f99fe..3f7cfa91ba89 100644
->> --- a/fs/ext4/inode.c
->> +++ b/fs/ext4/inode.c
->> @@ -4872,13 +4872,6 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
->>   		goto bad_inode;
->>   	raw_inode = ext4_raw_inode(&iloc);
->>   
->> -	if ((ino == EXT4_ROOT_INO) && (raw_inode->i_links_count == 0)) {
->> -		ext4_error_inode(inode, function, line, 0,
->> -				 "iget: root inode unallocated");
->> -		ret = -EFSCORRUPTED;
->> -		goto bad_inode;
->> -	}
->> -
->>   	if ((flags & EXT4_IGET_HANDLE) &&
->>   	    (raw_inode->i_links_count == 0) && (raw_inode->i_mode == 0)) {
->>   		ret = -ESTALE;
->> @@ -4951,10 +4944,13 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
->>   	 * NeilBrown 1999oct15
->>   	 */
->>   	if (inode->i_nlink == 0) {
->> -		if ((inode->i_mode == 0 ||
->> +		if ((inode->i_mode == 0 || (flags & EXT4_IGET_SPECIAL) ||
-> 					   ^ extra parenthesis here  ^
-Indeed, I'll remove the extra parenthesis.
->>   		     !(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_ORPHAN_FS)) &&
->>   		    ino != EXT4_BOOT_LOADER_INO) {
->>   			/* this inode is deleted */
->> +			if (flags & EXT4_IGET_SPECIAL)
->> +				ext4_error_inode(inode, function, line, 0,
->> +						 "iget: special inode unallocated");
-> I think it would be better to return -EFSCORRUPTED and not -ESTALE in this
-> case.
-Totally agree! For special inode, -EFSCORRUPTED is more reasonable.
->>   			ret = -ESTALE;
->>   			goto bad_inode;
->>   		}
-> Otherwise the patch looks good to me.
->
-> 									Honza
->
-Thank you very much for your review！
-I will send a patch V2 with the changes suggested by you.
+
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+Adjust size parameter in connect() to match the type of the parameter, to
+fix "No such file or directory" error in selftests/net/af_unix/
+test_oob_unix.c:127.
+
+The existing code happens to work provided that the autogenerated pathname
+is shorter than sizeof (struct sockaddr), which is why it hasn't been
+noticed earlier.
+
+Visible from the trace excerpt:
+
+bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+
+BUG: The filename is trimmed to sizeof (struct sockaddr).
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Florian Westphal <fw@strlen.de>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+
+The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
+(Tested against the net.git tree.)
+
+  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index b57e91e1c3f2..532459a15067 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+
+         wait_for_signal(pipefd[0]);
+         if (connect(cfd, (struct sockaddr *)consumer_addr,
+-                    sizeof(struct sockaddr)) != 0) {
++                    sizeof(*consumer_addr)) != 0) {
+                 perror("Connect failed");
+                 kill(0, SIGTERM);
+                 exit(1);
 
 -- 
-With Best Regards,
-Baokun Li
-.
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
