@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B96660ABB
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC81660ABF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 01:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjAGAYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 Jan 2023 19:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S230301AbjAGA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 Jan 2023 19:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjAGAYh (ORCPT
+        with ESMTP id S229726AbjAGA3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:24:37 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53C77D9C1
-        for <linux-kernel@vger.kernel.org>; Fri,  6 Jan 2023 16:24:31 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o21so3127549pjw.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 Jan 2023 16:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4c6SeUYCDbLEXf7oCXsnAFwikq8uYLadAzjVq6GC0F4=;
-        b=q0Q085+CxZdSa3SbS1sI89tTVP+wQj71WZRFPpabAK80bLlJAKpEPCNB6NAh0Q5rg8
-         BFOYXRKtoX/7RfELKBJoHsVQxvAE1OQFhJf23nQm2w1pZvpDVG27nL8mgjWTewfxisda
-         LWO//6ZPDjSN7fKwjCbmZAcPxv3ge7qd5RQEPGyyutCTM4WwUd2uxbrBMuoivLnaqgxd
-         4fEYIwEH/L6wWa5+NhFUFd2MKv1UT4ACIvszFsimTc3W76yeXEwZB08sKLPettYsBRAe
-         yWmks053lRurrU3dLlikxiqElYn3dWfc7uiaSvGRsMiU8ZU+b856mphIxURuQor4n5OX
-         e8ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4c6SeUYCDbLEXf7oCXsnAFwikq8uYLadAzjVq6GC0F4=;
-        b=n88BYYTIVsyE/Qcjj7QVVe9oGvVxduK/QgypkKkijJqj9WVl6BrRULJrcWy5YGTOr4
-         9cFXsC/93LMlpXfXvnjNSNBCyuB9oZpFtfflaLhSO3U8mEjkbtPzOHqN74B4FbvPvh4J
-         1ZtLapSA9YXQwUxgZtG3PpoHoc4yOUwvb78K53+3x1vyt8bPYFrp6fT6g7PsDsiZnM8f
-         w2DSY6hxomSl9wbmjlv+dXivzfoAHMb1VUj+qybIY+YlWSwZJ5JnT2qFOrmtu6/crozZ
-         E13Z64J6jHov4ieQkqSudyWtPrLE6jtUOFWzm1MOy5dGfY3+R2fzX8iiY1zvzYH6sD4I
-         yXPw==
-X-Gm-Message-State: AFqh2krYT6/ASkRRrvJ6ATx/HKCF10Cc2z67lPQ5q3ZOyztJ/Mzmtgjl
-        xV2DtcbG0+D3vNuSHf8YSvs=
-X-Google-Smtp-Source: AMrXdXvq/xAcBzUIUUncggYqpTzo9t3kyLIUqvr/KBV02/6Y6XB4gjGlWkGUeTWfXeyc5qqARzrELg==
-X-Received: by 2002:a17:90a:b891:b0:226:eac4:b22e with SMTP id o17-20020a17090ab89100b00226eac4b22emr2332671pjr.8.1673051071003;
-        Fri, 06 Jan 2023 16:24:31 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p6-20020a17090a4f0600b00218f7c1a7d4sm3302138pjh.56.2023.01.06.16.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 16:24:30 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 6 Jan 2023 14:24:29 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Dave Jones <davej@codemonkey.org.uk>,
-        Rik van Riel <riel@surriel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] workqueue: Make show_pwq() use run-length encoding
-Message-ID: <Y7i7vadFAo0z8NoH@slm.duckdns.org>
-References: <20230107001024.GA3893528@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 6 Jan 2023 19:29:00 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7F980625;
+        Fri,  6 Jan 2023 16:28:59 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8063E6602CAC;
+        Sat,  7 Jan 2023 00:28:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673051337;
+        bh=1gl6LsVhIq96ZvOtzi/5rdnwKeeM8tSg6bsAsZ1suWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HFK4hFO7xOyr1PT4XPsBdzM+lun8jkcBY22HYJTak1hsAODkRAS4BLzkgnH2yaucu
+         LBzx+JZ50fIxSmrYF6zzs4j/WCEIgBvJd3bwKZQeL1Fp/SivG9P/nZ14g8mrslBAcf
+         5gNOyBimm+fz+/Xci2nj+EomP4bIGhVHvNohfFS6372Y5mn/vngul42Sts3PsECsqf
+         yKBGv6ub8/mziaMJaBRkrPW7fxlS/6exCGMxYrh3krZAxpgfEc+t9v5dKl22Oeyy/+
+         7w2BfGCe+5GOeflTM0yH/VLSDNH4V3ml+kKMypnpK/WRahGtiyCTEQn5NI+6T3bSac
+         CaWfnsldItLCQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 56ABA1060774; Sat,  7 Jan 2023 01:28:54 +0100 (CET)
+Date:   Sat, 7 Jan 2023 01:28:54 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Christopher Obbard <chris.obbard@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCHv6 4/7] dt-bindings: arm: rockchip: add initial rk3588
+ boards
+Message-ID: <20230107002854.2kok76qdvl4a3hzw@mercury.elektranox.org>
+References: <20221214182247.79824-1-sebastian.reichel@collabora.com>
+ <20221214182247.79824-5-sebastian.reichel@collabora.com>
+ <d12fc3f83ace9285f7e1153003b14bc351ce95de.camel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6j42mnurxmtewttt"
 Content-Disposition: inline
-In-Reply-To: <20230107001024.GA3893528@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <d12fc3f83ace9285f7e1153003b14bc351ce95de.camel@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 04:10:24PM -0800, Paul E. McKenney wrote:
-> The show_pwq() function dumps out a pool_workqueue structure's activity,
-> including the pending work-queue handlers:
-> 
->  Showing busy workqueues and worker pools:
->  workqueue events: flags=0x0
->    pwq 0: cpus=0 node=0 flags=0x1 nice=0 active=10/256 refcnt=11
->      in-flight: 7:test_work_func, 64:test_work_func, 249:test_work_func
->      pending: test_work_func, test_work_func, test_work_func1, test_work_func1, test_work_func1, test_work_func1, test_work_func1
-> 
-> When large systems are facing certain types of hang conditions, it is not
-> unusual for this "pending" list to contain runs of hundreds of identical
-> function names.  This "wall of text" is difficult to read, and worse yet,
-> it can be interleaved with other output such as stack traces.
-> 
-> Therefore, make show_pwq() use run-length encoding so that the above
-> printout instead looks like this:
-> 
->  Showing busy workqueues and worker pools:
->  workqueue events: flags=0x0
->    pwq 0: cpus=0 node=0 flags=0x1 nice=0 active=10/256 refcnt=11
->      in-flight: 7:test_work_func, 64:test_work_func, 249:test_work_func
->      pending: 2*test_work_func, 5*test_work_func1
-> 
-> When no comma would be printed, including the WORK_STRUCT_LINKED case,
-> a new run is started unconditionally.
-> 
-> This output is more readable, places less stress on the hardware,
-> firmware, and software on the console-log path, and reduces interference
-> with other output.
 
-This is fantastic. Applied to wq/for-6.3.
+--6j42mnurxmtewttt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+Hi Chris,
 
--- 
-tejun
+On Thu, Jan 05, 2023 at 07:20:19PM +0000, Christopher Obbard wrote:
+> > +=A0=A0=A0=A0=A0 - description: Radxa Rock 5 Model A
+> > +=A0=A0=A0=A0=A0=A0=A0 items:
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0 - const: radxa,rock-5a
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0 - const: rockchip,rk3588s
+> > +
+> > +=A0=A0=A0=A0=A0 - description: Radxa Rock 5 Model B
+>=20
+> Hi Sebastian,
+>=20
+> To better match other boards from this vendor (e.g. RADXA ROCK 4)
+>=20
+> would it be best to capitalise this (and obviously the model field in
+> the respective DTS patches) the same?
+>=20
+> So it would become "Radxa ROCK 5A" and "Radxa ROCK 5B".
+>=20
+> It's also capitalised this way on the documentation website [1].
+>=20
+> (I think the vendor has specifically dropped the Pi reference from
+> these boards, but I don't know why)
+>=20
+> Thanks!
+> Chris
+>=20
+> [1]: https://wiki.radxa.com/Rock5/5B
+
+The current format has been requested by Radxa:
+
+https://lore.kernel.org/all/892CB3E963AEF095+eaed7498-2324-9476-6a24-f940d6=
+2adb74@radxa.com/
+
+Greetings,
+
+-- Sebastian
+
+--6j42mnurxmtewttt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO4vMIACgkQ2O7X88g7
++ppftRAAlohUlNVG/PaH92svsxQN7OG3repg8J+5tm2b9VZK2n97plcrsMvYLz2F
+UXLJ+iNvKEaMCLRwD/SlMa1mimAZXL64yukEss4Gh3ZAiLHaA5xUB0Jpop5GO+y5
+AGE05YbUoU3c4UfM+9lkNYq5eHphu136CVPrv2H98SxQjA7XZentQ7O94u+Uz11X
+n5J94Rd2RQs2zAvblHEt1yq84bgC+55pdNdMIgUewnFBEOW9Fts+INcjWh2O3gGb
+avgBispVRaoGMQntYcgfKp4b9xaaAkQxC92Yjo3Z22rp9i3s6ab7krZCWLQuplqG
+moSn3xNfLev0N0CWhHgIXVosifWsG9v2RP12MiAZ5xQUfU21svEkFXyn8wvCf78+
+hZM6kxSGWuupwro1s7YCkRnDc1QKSHFjrVptOBHiPwu2szh0XH0s34pFdCcuumT0
+x2oQYfzDViMaIAhF7Q0UOBBLh3P6b0IcDai0MXSMpWohSERba4hi5rmOIdnFIIvg
+ylFmtNB/KKLGEG/H3BveYzY695liF9cQlChU7smVFnRyuytb22jwYZ6qPRuczH1F
+FGs4F28YJg49IjFiugGwDBJOTb2fOFcW613nEUob/vhyVG0TI7sjwL4Y91q00pbO
+UMWxaT8Pp5T4N06k9YmiE2GqAG2lOP1E/7HMSV0HiwDYZtqemJU=
+=UWT0
+-----END PGP SIGNATURE-----
+
+--6j42mnurxmtewttt--
