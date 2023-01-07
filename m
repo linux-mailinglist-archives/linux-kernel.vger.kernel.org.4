@@ -2,84 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A841661093
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989F0661092
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 Jan 2023 18:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjAGRik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 12:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S232272AbjAGRiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 12:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjAGRi3 (ORCPT
+        with ESMTP id S232065AbjAGRiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 12:38:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8E9BF3
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 09:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673113064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7UoklNV81MeruvhksD2tLEyE1RirxLyKZBOM7SqghhQ=;
-        b=PP4ck2B4xeP44YfZuB1LIRXJhN3wxLez9icHyqUz1hOHYppbXcBeLhowdxNqqiDnTHV205
-        K6EHCZKUMJ5GExL1PfHXxyJi9iuyNphp1LUHYutCMZSNhRGbptnlDgE7ef0W2KZLDMIuvs
-        Z2QbZmm9M7ME9H/NtiCZIerCHxCJAIQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-426-CPZgIF68NQKpyJ2QPUCARg-1; Sat, 07 Jan 2023 12:37:43 -0500
-X-MC-Unique: CPZgIF68NQKpyJ2QPUCARg-1
-Received: by mail-wm1-f71.google.com with SMTP id i7-20020a05600c354700b003d62131fe46so4536999wmq.5
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 09:37:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7UoklNV81MeruvhksD2tLEyE1RirxLyKZBOM7SqghhQ=;
-        b=fMIzTHrxIsQaAyXseKdzRY1/xx0wc8c7whckJauA+4s3mdLohjWP8ZdZ+aEf73eShl
-         4YFvfVIuF2TTBfOgzlbXVUsRx03O7PWNH5HIXOSKEnRLFulL4r6vfx5jcYWOX9QutNym
-         wM3922ToXyojHNt7b+q+zIbU6nUL/pSayJlqOPD2oB7Cq1R6ucbmHHDE1xKNspeHcULc
-         Ze/QfFwC3MFouhccckDNYJLXBkMCOX/IcjLAVybsltcGbrQgOdM07foL404uulY/3HHM
-         LUJuIERGfWehuJFj/07Ds1Ar6VqRdZCFS6zaoPa1Y68mY4j1atAUOxA7G9qkNeOe046R
-         0hjw==
-X-Gm-Message-State: AFqh2kp01Hn7+zGy6Qv90auOXMvEqEugO2jV4t+1PeiGMLscAXh29D61
-        5lgHb1UlV+fXtxPz2YTSd6MdwG0VTsANyvwiduhvVmw9vJ42L3x4/CWVQh9VJ4rwadCaI8akLRR
-        EMWJMbmWwq+bhUeKPY6ZrIGCG87bfRYl7z854Z/QYbNQZkmUilY3t6UUvbRjC8pgtaUW1uFoiET
-        E=
-X-Received: by 2002:a5d:5085:0:b0:2bb:de29:5c16 with SMTP id a5-20020a5d5085000000b002bbde295c16mr239687wrt.71.1673113061484;
-        Sat, 07 Jan 2023 09:37:41 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuXSl8k0AQ+AaxiYKIpWccEMhElgIT4iXKymRjmLW3+uJy2TLemfEx8jQfkke3BL6dpkW4FoQ==
-X-Received: by 2002:a5d:5085:0:b0:2bb:de29:5c16 with SMTP id a5-20020a5d5085000000b002bbde295c16mr239674wrt.71.1673113061253;
-        Sat, 07 Jan 2023 09:37:41 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o14-20020a5d58ce000000b002879c013b8asm4292158wrf.42.2023.01.07.09.37.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 09:37:40 -0800 (PST)
-Message-ID: <033857f1-f52d-1fec-b998-a801b04a7033@redhat.com>
-Date:   Sat, 7 Jan 2023 18:37:40 +0100
+        Sat, 7 Jan 2023 12:38:02 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C81C101CE;
+        Sat,  7 Jan 2023 09:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=tGAtb7lLTOzzx1a9MgzHq0QMFVUZM3XHWVDSZH7D/fQ=; b=pCyx/VSTfqd8vlx/GO1BiYvFh1
+        r2sRKxUd9BQBInMhClhBwFNpSzidgP/Kvlonz7OsSfIbtKcyC3o9A4v4GspEAj2rL36qehW7b0dQ+
+        SaydYO6c30uScqBK91/9XaZ2kM57aTNbsbGz93YsISr1DpcdZzdSQkzGQB/SL6oyi6tY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pED8i-001R6c-98; Sat, 07 Jan 2023 18:37:52 +0100
+Date:   Sat, 7 Jan 2023 18:37:52 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org
+Subject: Re: [PATCH v2 net-next 3/5] drivers/net/phy: add connection between
+ ethtool and phylib for PLCA
+Message-ID: <Y7mt8IUUbMv6bt5v@lunn.ch>
+References: <cover.1673030528.git.piergiorgio.beruto@gmail.com>
+ <9a25328bcf2c0d963e34d33ff0968f83755905f4.1673030528.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] drm/mipi-dsi: Add a mipi_dsi_dcs_write_seq() macro
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Sam Ravnborg <sam@ravnborg.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-References: <20230102202542.3494677-1-javierm@redhat.com>
- <20230102202542.3494677-2-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230102202542.3494677-2-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a25328bcf2c0d963e34d33ff0968f83755905f4.1673030528.git.piergiorgio.beruto@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,25 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/23 21:25, Javier Martinez Canillas wrote:
-> Many panel drivers define dsi_dcs_write_seq() and dsi_generic_write_seq()
-> macros to send DCS commands and generic write packets respectively, with
-> the payload specified as a list of parameters instead of using arrays.
-> 
-> There's already a macro for the former, introduced by commit 2a9e9daf75231
-> ("drm/mipi-dsi: Introduce mipi_dsi_dcs_write_seq macro") so drivers can be
-> changed to use that. But there isn't one yet for the latter, let's add it.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
+> +	// if not enabling PLCA, skip a few sanity checks
+> +	if (plca_cfg->enabled <= 0)
+> +		goto apply_cfg;
+> +
+> +	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
+> +			       phydev->advertising)) {
+> +		ret = -EOPNOTSUPP;
+> +		NL_SET_ERR_MSG(extack,
+> +			       "Point to Multi-Point mode is not enabled");
+> +	}
+> +
+> +	// allow setting node_id concurrently with enabled
+> +	if (plca_cfg->node_id >= 0)
+> +		curr_plca_cfg->node_id = plca_cfg->node_id;
+> +
+> +	if (curr_plca_cfg->node_id >= 255) {
+> +		NL_SET_ERR_MSG(extack, "PLCA node ID is not set");
+> +		ret = -EINVAL;
+> +		goto out_drv;
+> +	}
+> +
+> +apply_cfg:
+> +	ret = phydev->drv->set_plca_cfg(phydev, plca_cfg);
 
-Pushed to drm-misc (drm-misc-next). Thanks!
+Goto which don't jump to the end of the function is generally frowned
+upon. I suggest you put these sanity checks into a little helper, so
+you can avoid the goto.
 
--- 
-Best regards,
+With that change make, feel free to add my reviewed-by.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+     Andrew
