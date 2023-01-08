@@ -2,201 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2657F6614AF
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 12:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E57A6614C3
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 12:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbjAHLMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 06:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S233192AbjAHL3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 06:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbjAHLMA (ORCPT
+        with ESMTP id S232364AbjAHL3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 06:12:00 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888FD8FDA
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 03:11:58 -0800 (PST)
-Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 308BBuHl050976;
-        Sun, 8 Jan 2023 20:11:56 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
- Sun, 08 Jan 2023 20:11:56 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
-Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 308BBuDo050973
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 8 Jan 2023 20:11:56 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <45699174-cb58-d57d-4c72-c0ae7622aeac@I-love.SAKURA.ne.jp>
-Date:   Sun, 8 Jan 2023 20:11:55 +0900
+        Sun, 8 Jan 2023 06:29:42 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12630D2CD
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 03:29:41 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id qk9so13544868ejc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 03:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=qKooUu0cR0Q6Kb35Lml+i1nctcRKDXBFIEuTWecR2oAg5gpt8iWCWrVTzR/d0ltIz+
+         N3v4mI+Id5n22IQcOsRNrs3LfLqdT/HvxkxuThnBBMHey7FRBoM71zAIiDMTHnSgpN5Z
+         x3kiNifkBHa67aksnuVhN0ViIH4omkoEA1V/MRsaIxBjjHuMlU8Etutr9d/g3k0VBqS+
+         Gvcs1w6Oyb+6hjEoSfAoX0iu6yv8bOv93HJHe2b0EXqway2L9PMP8z4v5codhy5CVb8Z
+         gUWDwMgHqJCe7GMUzyDwpcS2znrsiSd/kh+kobYvXrnptX2TmVNEgI44vAZpnc1lh6J9
+         XwZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=ObNAcQzMv2rutWCu5WV5k6u+D/wsNq/kun83bTVNzSvNUGHU/rj2VJakmcQJ5qRuxy
+         F1yQIgrI7iESy4kv3acHSO14JWseBscN/2zV7a+9hVWAqkO9XqdVhbJ8T3/EGCtL3JCC
+         HQAPNhnPyEC5LOjevF4wwy8CU6D2LS/vHaf1rV0VEKVuRYa/CfulGafOJdHeETJE/AQl
+         jF/ZxCMGU7EQzjvz/asGINGsT6AvoS1Fz+0tBDHMg7ZYkAbo7up7YlK7Y1jIip2loEtM
+         MX0GLGttgV8K15cR6VQNqkohMRhFff2P/WWta1dvKqH6g1VvMkZ+v530Qfg+Ns3jcguo
+         dP0Q==
+X-Gm-Message-State: AFqh2koSTUuF0+o15ul3y21rp3Z9vuCDSF1HnioltIfC+t9oPKHrzrEn
+        Sam1KdG5oGO+PTEMWkzbpHZ5OcIAP/a6eGzoJfA=
+X-Google-Smtp-Source: AMrXdXv8qNP079N8Ljgdg1YxgYDV453aDSNxK9LIR74YsJCiaWn938eOuW+3voCWEBes5so6o/csZ9cDSEO/Bl+oL2k=
+X-Received: by 2002:a17:906:8381:b0:7c1:57e7:e45a with SMTP id
+ p1-20020a170906838100b007c157e7e45amr3219427ejx.548.1673177379128; Sun, 08
+ Jan 2023 03:29:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [syzbot] INFO: task hung in freeze_super (3)
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>, Tejun Heo <tj@kernel.org>
-Cc:     agruenba@redhat.com, linux-mm@kvack.org,
-        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
-        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+f51cb4b9afbd87ec06f2@syzkaller.appspotmail.com>
-References: <20230104040132.4103-1-hdanton@sina.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230104040132.4103-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:eca7:b0:7c0:dfb2:c37b with HTTP; Sun, 8 Jan 2023
+ 03:29:38 -0800 (PST)
+Reply-To: muhammadabdulrahma999@gmail.com
+From:   muhammad <nnannacollins2019@gmail.com>
+Date:   Sun, 8 Jan 2023 03:29:38 -0800
+Message-ID: <CAPQqOC03wuphQb6NMCpfv7tZrur=MdFAiO_zctdzRwH0PfHa1Q@mail.gmail.com>
+Subject: Re:Re:Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:642 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5093]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nnannacollins2019[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nnannacollins2019[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/01/04 13:01, Hillf Danton wrote:
-> On 09 Dec 2022 01:08:38 -0800
->> syzbot found the following issue on:
->>
->> HEAD commit:    f3e8416619ce Merge tag 'soc-fixes-6.1-5' of git://git.kern..
->> git tree:       upstream
->> console+strace: https://syzkaller.appspot.com/x/log.txt?x=12fb534d880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
->> dashboard link: https://syzkaller.appspot.com/bug?extid=f51cb4b9afbd87ec06f2
->> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123d216b880000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e46f5b880000
->>
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/628abc27cbe7/disk-f3e84166.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/2f19ea836174/vmlinux-f3e84166.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/f2e1347e85a5/bzImage-f3e84166.xz
->> mounted in repro: https://storage.googleapis.com/syzbot-assets/c239a19c8749/mount_0.gz
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+f51cb4b9afbd87ec06f2@syzkaller.appspotmail.com
->>
->> INFO: task kworker/0:1H:120 blocked for more than 143 seconds.
->>       Not tainted 6.1.0-rc8-syzkaller-00035-gf3e8416619ce #0
->> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->> task:kworker/0:1H    state:D stack:23480 pid:120   ppid:2      flags:0x00004000
->> Workqueue: glock_workqueue glock_work_func
->> Call Trace:
->>  <TASK>
->>  context_switch kernel/sched/core.c:5209 [inline]
->>  __schedule+0x8c9/0xd70 kernel/sched/core.c:6521
->>  schedule+0xcb/0x190 kernel/sched/core.c:6597
->>  rwsem_down_write_slowpath+0xfc1/0x1480 kernel/locking/rwsem.c:1190
->>  __down_write_common kernel/locking/rwsem.c:1305 [inline]
->>  __down_write kernel/locking/rwsem.c:1314 [inline]
->>  down_write+0x231/0x270 kernel/locking/rwsem.c:1563
->>  freeze_super+0x45/0x420 fs/super.c:1697
->>  freeze_go_sync+0x178/0x340 fs/gfs2/glops.c:573
->>  do_xmote+0x34d/0x13d0 fs/gfs2/glock.c:776
->>  glock_work_func+0x2c2/0x450 fs/gfs2/glock.c:1082
->>  process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
->>  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
->>  kthread+0x266/0x300 kernel/kthread.c:376
->>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->>  </TASK>
->> INFO: task syz-executor330:3631 blocked for more than 143 seconds.
->>       Not tainted 6.1.0-rc8-syzkaller-00035-gf3e8416619ce #0
->> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->> task:syz-executor330 state:D stack:20176 pid:3631  ppid:3630   flags:0x00004004
->> Call Trace:
->>  <TASK>
->>  context_switch kernel/sched/core.c:5209 [inline]
->>  __schedule+0x8c9/0xd70 kernel/sched/core.c:6521
->>  schedule+0xcb/0x190 kernel/sched/core.c:6597
->>  schedule_timeout+0x98/0x2f0 kernel/time/timer.c:1911
->>  do_wait_for_common+0x3ea/0x560 kernel/sched/completion.c:85
->>  __wait_for_common kernel/sched/completion.c:106 [inline]
->>  wait_for_common kernel/sched/completion.c:117 [inline]
->>  wait_for_completion+0x46/0x60 kernel/sched/completion.c:138
->>  __flush_workqueue+0x74a/0x1680 kernel/workqueue.c:2861
->>  gfs2_gl_hash_clear+0xbe/0x300 fs/gfs2/glock.c:2262
->>  gfs2_fill_super+0x2202/0x2700 fs/gfs2/ops_fstype.c:1307
->>  get_tree_bdev+0x400/0x620 fs/super.c:1324
->>  gfs2_get_tree+0x50/0x210 fs/gfs2/ops_fstype.c:1330
->>  vfs_get_tree+0x88/0x270 fs/super.c:1531
->>  do_new_mount+0x289/0xad0 fs/namespace.c:3040
->>  do_mount fs/namespace.c:3383 [inline]
->>  __do_sys_mount fs/namespace.c:3591 [inline]
->>  __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7f19da3f458a
->> RSP: 002b:00007ffd6b2d69e8 EFLAGS: 00000282 ORIG_RAX: 00000000000000a5
->> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f19da3f458a
->> RDX: 0000000020000040 RSI: 000000002003b300 RDI: 00007ffd6b2d6a00
->> RBP: 00007ffd6b2d6a00 R08: 00007ffd6b2d6a40 R09: 0000000000000002
->> R10: 0000000000000000 R11: 0000000000000282 R12: 0000000000000004
->> R13: 0000555556b0d2c0 R14: 0000000000000000 R15: 00007ffd6b2d6a40
->>  </TASK>
->>
->> Showing all locks held in the system:
->> 1 lock held by rcu_tasks_kthre/12:
->>  #0: ffffffff8d127330 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
->> 1 lock held by rcu_tasks_trace/13:
->>  #0: ffffffff8d127b30 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
->> 1 lock held by khungtaskd/28:
->>  #0: ffffffff8d127160 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
->> 3 locks held by kworker/0:1H/120:
->>  #0: ffff8880194f5d38 ((wq_completion)glock_workqueue){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
->>  #1: ffffc90002587d00 ((work_completion)(&(&gl->gl_work)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
->>  #2: ffff888026c2c0e0 (&type->s_umount_key#42){+.+.}-{3:3}, at: freeze_super+0x45/0x420 fs/super.c:1697
->> 2 locks held by getty/3308:
->>  #0: ffff888028211098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
->>  #1: ffffc900031262f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
->> 1 lock held by syz-executor330/3631:
->>  #0: ffff888026c2c0e0 (&type->s_umount_key#41/1){+.+.}-{3:3}, at: alloc_super+0x212/0x920 fs/super.c:228
->>
-> 
-> 	syz-executor330/3631			kworker/0:1H/120
-> 	---					---
-> 	down_write_nested(&s->s_umount);
-> 						glock_work_func()
-> 						down_write(&sb->s_umount);
-> 	flush_workqueue(glock_workqueue);
-> 
-> 
-> No deadlock is reported yet. Whyyy?
-> See if extending the aperture of wq->lockdep_map can catch it.
+Dear Sir/Madam,
 
-As far as I tested, this patch did not change likeliness of hitting lockdep warning.
-I feel that it was just by chance that this test request was able to hit lockdep warning.
+An open Tender for the supply of your company products to (Doha,
+Qatar). Urgently furnish us in full details about the standard of your
+product. We will appreciate it more if you give us with Details:
+Specification and Catalogs or Price list via Email.To avoid making a
+wrong choice of products before placing an order for it.
 
-> 
-> #syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  master
-> 
-> --- x/kernel/workqueue.c
-> +++ y/kernel/workqueue.c
-> @@ -2807,7 +2807,6 @@ void __flush_workqueue(struct workqueue_
->  		return;
->  
->  	lock_map_acquire(&wq->lockdep_map);
-> -	lock_map_release(&wq->lockdep_map);
->  
->  	mutex_lock(&wq->mutex);
->  
-> @@ -2867,7 +2866,7 @@ void __flush_workqueue(struct workqueue_
->  	 * handling overflow.  Non-first flushers can simply return.
->  	 */
->  	if (READ_ONCE(wq->first_flusher) != &this_flusher)
-> -		return;
-> +		goto out;
->  
->  	mutex_lock(&wq->mutex);
->  
-> @@ -2942,6 +2941,8 @@ void __flush_workqueue(struct workqueue_
->  
->  out_unlock:
->  	mutex_unlock(&wq->mutex);
-> +out:
-> +	lock_map_release(&wq->lockdep_map);
->  }
->  EXPORT_SYMBOL(__flush_workqueue);
->  
-> --
+Terms of payment:An upfront payment of 80% (T/T) will be made to your
+account for production,While 20% will be paid before shipment.
 
+Thanks and Regards
