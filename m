@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF333661985
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F9566198B
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjAHUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S233765AbjAHUwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAHUuW (ORCPT
+        with ESMTP id S231402AbjAHUwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:50:22 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3CAAE4A;
-        Sun,  8 Jan 2023 12:50:21 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v10so8605104edi.8;
-        Sun, 08 Jan 2023 12:50:21 -0800 (PST)
+        Sun, 8 Jan 2023 15:52:15 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A82D101DC;
+        Sun,  8 Jan 2023 12:52:14 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id x10so6953458edd.10;
+        Sun, 08 Jan 2023 12:52:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/l7O+u7hpvwx/CEE2kQt2CxxFAlI3yQgMXXhNMZZ5b8=;
-        b=FDlaf6HuGHd/1r8jZ2JcrzSIODO1aqOOU8QPRxTfVdcd28+Sp/p8K1uUm+WJ66t+eP
-         vCE2BDQT9oyeZYP7xXVs6k6R8l1vDzdKzuMRyGEm/UozYAs/UVVw1E0j49Q5VU5mieZS
-         XHhtpYeJ1mj76AbggBVYA76nx5hKOx5Zt42DflN6fMAPaFsLmRFbj140pFyzKpeCRjOe
-         +8L0vej/ie/lW9+H4QRosHp03GMEiiGwi2SQBscrbeTedyAxkbDD+efVBsxLzLRa5IYv
-         btO9dveEcPLEwR/0o6guaAPLnbul8qG8rhcxCYSVmLb14gZaNp7h/nBb3QGUHMTDWMwj
-         JeSg==
+        bh=/W1ZH7okdp3bC5pjHi5v6nQazt9WUGWbkW62SJcD8hQ=;
+        b=CZSi5VCe45fYPvoueF3Xz9/2f8RQXo4zyAt34wYxgvnxVuDjBRRzHICHSsCVFL9qvD
+         y0k+0LPoVdQjSsrczYbF/yitqgcOmTgTpEhjZtjt3K0/vdqY5X6LE/vA8Fahyg8LBmDb
+         JgHj7ZOPWTu5jVphQgd2X6yMgiB49QeVi3N0e+QyysPEGlgHC2MSxjtVjIIvUA/FAPRj
+         S2/zFCg6UTJiLPOnA34xzSUTpD7z1bpfhFvFx175/mX+wgOxWh3adhrMU+ehQ0Yfx+qm
+         4zBi2y/2PuqdbZfQq8N2IMW2hGoNSPkVsIURkr3reDhJWPsvh63lvhO3Fate3WhzcCbZ
+         oqTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/l7O+u7hpvwx/CEE2kQt2CxxFAlI3yQgMXXhNMZZ5b8=;
-        b=BPokn7S1qtDQF/M3xNEaIwgHu9Fj7A/XSZkOcxrr5/AYesmGwjMOPUTQ65bLvd33gD
-         v0u2bPNSr4Ss9M1HQviHGTU75tB2I/Nkinb765NBK0coEyMhqkb3GFP0AybVpBZOuAZh
-         k9LIC3PdQ/oykPg5KJMNPZOp/koPKJng6AjNCiBlqRMjc28sspqVFj0Ag4lxdNbMGkv0
-         01cZPtAhcpkTcMMt4MWRdptOgOiXNRVJUtaYb8mXEy+HofXDfWc6QnaFBHJDTAOAjsz5
-         saxcrpR0DhQFIrUpGbRxtOJhi/IiNvwWdC89sSaVsAowAISErO5YhDPe1VE805mlZRaL
-         mSAQ==
-X-Gm-Message-State: AFqh2krmFYEgdMsdzSkQHf0QjamSG0XstqYrsUsIurIik4pIzDgA/e+s
-        Re/BSOLS9Po7uFqMPz7FpmE=
-X-Google-Smtp-Source: AMrXdXuI0+C7w/IwZrPvBfTWv8oEhkKKunKLQUym/99Og1HUIuARlIEDjFhaBeEwA8yQ5dkAp4HHLw==
-X-Received: by 2002:aa7:d653:0:b0:47e:15ec:155e with SMTP id v19-20020aa7d653000000b0047e15ec155emr50820952edr.26.1673211019627;
-        Sun, 08 Jan 2023 12:50:19 -0800 (PST)
+        bh=/W1ZH7okdp3bC5pjHi5v6nQazt9WUGWbkW62SJcD8hQ=;
+        b=pRmlAb6i0zyxBrV0PcZcZmTaEFcVY0CdajtFthMXJYou2gegsYIqCn5mhYB+0gVvAq
+         IuSriOLFqVgAxAQknxlbWDb/Uj7PBZlbyzVhTjeob5A/jMh9yFlpTcMWb7ewDIHXluI9
+         p7tGMFtbWgkm9wH9SVn22oimTN5SxTyygiDKV9M/ur422O5bMcNzPtavoYmAW3PFCS5G
+         bAKqhkrcGpCmj8jaMcIPgFl7CX14JA43SdAHXe0ISV7onoBpiTs5KswMFGPCVaKDBa8W
+         ivwch7gboWh7ZBH1GA8vBTK0YoKuq9X/RycL3xJ9jMGY8Wo+3UABHbEd8HFhaTMktvua
+         iHFw==
+X-Gm-Message-State: AFqh2koORUSgiOiUKxVAxOFhEfnDiTocahbcdCYI23X53mEnbEm9N4J4
+        qThAfPAGts/R8ZtW1Uzbnu4=
+X-Google-Smtp-Source: AMrXdXthkxdR5S3Vx/C5pVKc8nmwQsnxhLxbv5FwkjZ/fyeqvLUsh+ZvJxXis6Q2Ef7PtQwkRWND5A==
+X-Received: by 2002:a05:6402:104d:b0:486:ac69:b9e4 with SMTP id e13-20020a056402104d00b00486ac69b9e4mr36935941edu.4.1673211133033;
+        Sun, 08 Jan 2023 12:52:13 -0800 (PST)
 Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id n18-20020a056402061200b004950ef2a09asm2871821edv.61.2023.01.08.12.50.18
+        by smtp.gmail.com with ESMTPSA id k26-20020a508ada000000b00487fc51c532sm3016451edk.33.2023.01.08.12.52.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 12:50:19 -0800 (PST)
+        Sun, 08 Jan 2023 12:52:12 -0800 (PST)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>
 Cc:     Samuel Holland <samuel@sholland.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/4] nvmem: sunxi_sid: Always use 32-bit MMIO reads
-Date:   Sun, 08 Jan 2023 21:50:18 +0100
-Message-ID: <3511184.iIbC2pHGDl@jernej-laptop>
-In-Reply-To: <20220814173656.11856-2-samuel@sholland.org>
-References: <20220814173656.11856-1-samuel@sholland.org>
- <20220814173656.11856-2-samuel@sholland.org>
+        linux-sunxi@lists.linux.dev, stable@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v2 1/2] nvmem: sunxi_sid: Always use 32-bit MMIO reads
+Date:   Sun, 08 Jan 2023 21:52:11 +0100
+Message-ID: <5829449.MhkbZ0Pkbq@jernej-laptop>
+In-Reply-To: <20230101183316.43642-2-samuel@sholland.org>
+References: <20230101183316.43642-1-samuel@sholland.org>
+ <20230101183316.43642-2-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -79,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne nedelja, 14. avgust 2022 ob 19:36:52 CET je Samuel Holland napisal(a):
+Dne nedelja, 01. januar 2023 ob 19:33:15 CET je Samuel Holland napisal(a):
 > The SID SRAM on at least some SoCs (A64 and D1) returns different values
 > when read with bus cycles narrower than 32 bits. This is not immediately
 > obvious, because memcpy_fromio() uses word-size accesses as long as
@@ -94,7 +93,9 @@ Dne nedelja, 14. avgust 2022 ob 19:36:52 CET je Samuel Holland napisal(a):
 > for sysfs ABI compatibility, as noted previously in commit de2a3eaea552
 > ("nvmem: sunxi_sid: Optimize register read-out method").
 > 
+> Cc: stable@vger.kernel.org
 > Fixes: 07ae4fde9efa ("nvmem: sunxi_sid: Add support for D1 variant")
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
