@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD126617CA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12286617D0
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbjAHSIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S236260AbjAHSJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236107AbjAHSID (ORCPT
+        with ESMTP id S236140AbjAHSIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 13:08:03 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E834663A1
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 10:08:01 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c15c4fc8ccso86695667b3.4
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 10:08:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ChnjU9YbuZ13rH7KVo18kVjbNMaQprgxl7zjJjRkWs=;
-        b=toYtzeXXIY+ryyN/f69MbTo8Z5aAe370LB5gvHIxQjmXPMWILeSldYQP6IzvF8oejM
-         /fdLRUQrf+lRX1QTRfBAyVVCTwEQXXVaZEmhDzpLjQArCSHMxB4cU9ZiEsL8emYb1uik
-         r92XRXg9VAgbeXMxwnsKABj74UtVMhCOO5p08U2zZWgOb0AFO/SGKbc+KZQUjj6flgkM
-         qNAR86sMj14ynmE1gzSKh4/rveMur3xaPgKVq3u9cAZ3z/E+h/5JsMbY0V1gwxmJEgzI
-         qK56zVXwbYio5ajXB3psUfc76m+cdnwuGIXeqpZu1M9Xy4aeA/S7miYi0rRnkjVpGwSF
-         U6+A==
+        Sun, 8 Jan 2023 13:08:45 -0500
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E620657F;
+        Sun,  8 Jan 2023 10:08:44 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id o8so3843331ilo.1;
+        Sun, 08 Jan 2023 10:08:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ChnjU9YbuZ13rH7KVo18kVjbNMaQprgxl7zjJjRkWs=;
-        b=pWo/qkgVkRF1aq7J3/R0g7u4ur8RqUM1xKaJt1hRlAj+zOeOoXNf7oNdVyjCxxRuQo
-         uCJW/y8jtf6ea97iMTLWSYdwWDWr40J2ZfJ5s6EPA69xAttHCFAFWN1xa3VQgyVnXpPn
-         3TwK5V4Nzq3lrmitBm2eAAStsmcE5ywLRXzd45aMAebi511cGCMSZBrhjYf+ZOQ6OkHj
-         0P0PrklLLA3H6wEzLF1pH0EC8DUoqSb9J/+zR2Kt21KAXlLnXP25apttXV7hpafmcJ5T
-         U2BLOc4JoAU1MqLGUDWWMjFvLlOhs+7yfvCtmre/qBFJFhM9NRT5XDHVVl+n9Xx10lsm
-         X8Sw==
-X-Gm-Message-State: AFqh2kqsxw27lMxciiigua1Qle6vXlhOgQowU6lrGUCEVB2H/zEGI3YU
-        dIWF0w4FIKGrMIuf/DAgrIP0EmSc9R2+8SwIGYuTGg==
-X-Google-Smtp-Source: AMrXdXvRATLoWrYC/oxApPCf1h7WRndmi9qlr/xuITHgDA0N7uhTKkKTER5n3YAIsXIihhhxzBusmtgzVHB/vs9Yigo=
-X-Received: by 2002:a0d:e3c3:0:b0:432:2458:f6ca with SMTP id
- m186-20020a0de3c3000000b004322458f6camr1262710ywe.138.1673201281164; Sun, 08
- Jan 2023 10:08:01 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7G2aF2Rlg2azVZf2JFJeNKVoMm1OVbhxv0Ci3azN7wE=;
+        b=dpy1TFbdVVJvROIkfWTyE8wiPwbunr+w8+rURH6AyzaCePob0QDwyZHCNKjCkZPC/n
+         eDa95/NOTX4H0qYtq6YUfZ+uZJY1tWjd7KnEfEJX9LyQNiddgr4P1gRUkITOPgVZxbNi
+         qGTvhlo0srIIfgy/qLXD327i+ZmgyyNhC5Ru1iYAxiNei4E9h76RP8wVJ+s3uzhxjFiP
+         f7dJHcKClqWkzTuE1jLzzVfPgn2ng8ARYHUb3rQJzYj+xDF2zLDnEkwh74metDR61ULw
+         T2fsdedpT9uvXTtVoGp3TJ2DReoz75A/twpu0UhjuPeNuEMdy0MHhwyPXZksBY1mnVb5
+         8aBg==
+X-Gm-Message-State: AFqh2kq5wpC72s0pZCU+UYgSSiJthu1f5wTh777fowql5XaUmK2HW62S
+        IfL+kj2zj6Uy1AWBiQAN99EAZNHleA==
+X-Google-Smtp-Source: AMrXdXtwGhnMqe9C2G+mYOvJ/eN9hOjcLZPmAVnaDhw1Q+GPzNfHud/mEjKEJ6nfHLiRx0oZyQ2jJw==
+X-Received: by 2002:a92:d20f:0:b0:303:27a3:8666 with SMTP id y15-20020a92d20f000000b0030327a38666mr42281126ily.28.1673201323881;
+        Sun, 08 Jan 2023 10:08:43 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
+        by smtp.gmail.com with ESMTPSA id e30-20020a02211e000000b00370decbbff3sm2079795jaa.148.2023.01.08.10.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 10:08:43 -0800 (PST)
+Received: (nullmailer pid 151858 invoked by uid 1000);
+        Sun, 08 Jan 2023 18:08:40 -0000
+Date:   Sun, 8 Jan 2023 12:08:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] dt-bindings: clock: qcom,camcc-sm8250: extend clocks and
+ power domains
+Message-ID: <167320131871.151783.4587146709277238289.robh@kernel.org>
+References: <20221224214404.18280-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230108130440.670181-1-robimarko@gmail.com> <20230108130440.670181-2-robimarko@gmail.com>
- <CAA8EJprb1nC6LCbPQ18tU=apxY+8YfvL2uhrVzwgqJ+GXsjEvQ@mail.gmail.com> <CAOX2RU5zSDppy-EsBJDmwQpD=GqXJTPd_m=5RFZFb7WvB5etqA@mail.gmail.com>
-In-Reply-To: <CAOX2RU5zSDppy-EsBJDmwQpD=GqXJTPd_m=5RFZFb7WvB5etqA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 8 Jan 2023 20:07:50 +0200
-Message-ID: <CAA8EJpqFDa-4+0YAHO0s2dZqBX6zLSWir+OgyoN5BZyet1hMyg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: correct USB3 QMP PHY-s
- clock output names
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221224214404.18280-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 Jan 2023 at 20:04, Robert Marko <robimarko@gmail.com> wrote:
->
-> On Sun, 8 Jan 2023 at 18:32, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Sun, 8 Jan 2023 at 15:04, Robert Marko <robimarko@gmail.com> wrote:
-> > >
-> > > It seems that clock-output-names for the USB3 QMP PHY-s where set without
-> > > actually checking what is the GCC clock driver expecting, so clock core
-> > > could never actually find the parents for usb0_pipe_clk_src and
-> > > usb1_pipe_clk_src clocks in the GCC driver.
-> > >
-> > > So, correct the names to be what the driver expects so that parenting
-> > > works.
-> > >
-> > > Before:
-> > > gcc_usb0_pipe_clk_src                0        0        0   125000000          0     0  50000         Y
-> > > gcc_usb1_pipe_clk_src                0        0        0   125000000          0     0  50000         Y
-> > >
-> > > After:
-> > >  usb3phy_0_cc_pipe_clk                1        1        0   125000000          0     0  50000         Y
-> > >     usb0_pipe_clk_src                 1        1        0   125000000          0     0  50000         Y
-> > >        gcc_usb0_pipe_clk              1        1        0   125000000          0     0  50000         Y
-> > >  usb3phy_1_cc_pipe_clk                1        1        0   125000000          0     0  50000         Y
-> > >     usb1_pipe_clk_src                 1        1        0   125000000          0     0  50000         Y
-> > >        gcc_usb1_pipe_clk              1        1        0   125000000          0     0  50000         Y
-> > >
-> > > Fixes: 5e09bc51d07b ("arm64: dts: ipq8074: enable USB support")
-> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >
-> > Nevertheless, could you please add .fw_name to these entries in gcc
-> > driver (as you did for other clocks in 35dc8e101a8e ("clk: qcom:
-> > ipq8074: populate fw_name for all parents")) and add all pipe clocks
-> > to the gcc node? This way you can drop clock-output-names from the PHY
-> > nodes.
->
-> As you noticed they are in the GCC patch already, after the PCI PIPE
-> parenting fixes
-> are merged I plan to add them to the GCC node to avoid global lookup.
 
-Good! I think the pcie fixes are already in Bjorn's tree. And you
-might send the dts fix anyway, in the worst case the driver will just
-ignore the DT clocks.
+On Sat, 24 Dec 2022 22:44:04 +0100, Krzysztof Kozlowski wrote:
+> Add clocks and properties (power-domains, required-opps) already used in
+> SM8250 DTS:
+> 
+>   sm8250-hdk.dtb: clock-controller@ad00000: clocks: [[46, 10], [44, 0], [44, 1], [45]] is too long
+>   sm8250-hdk.dtb: clock-controller@ad00000: clock-names:0: 'bi_tcxo' was expected
+>   sm8250-hdk.dtb: clock-controller@ad00000: 'power-domains', 'required-opps' do not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/clock/qcom,camcc-sm8250.yaml     | 20 +++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+> 
 
-
--- 
-With best wishes
-Dmitry
+Acked-by: Rob Herring <robh@kernel.org>
