@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D7F661A92
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455BD661A96
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjAHWrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 17:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S233036AbjAHWtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 17:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbjAHWqy (ORCPT
+        with ESMTP id S230175AbjAHWt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 17:46:54 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1F4205;
-        Sun,  8 Jan 2023 14:46:52 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id z12so6602400qtv.5;
-        Sun, 08 Jan 2023 14:46:52 -0800 (PST)
+        Sun, 8 Jan 2023 17:49:27 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA156310
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 14:49:26 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d3so7622788plr.10
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 14:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+2EwBkT4ghB1jNt4S3UOpy3yeEZLhAzU9lSbZIAM7I4=;
+        b=IjbxJtzUDxQwTlGXvZfUXOkwvqxSafaHnYeSIIG1WzG669+JyAc4qXN/gkvArxh5SD
+         KsO/Gv3wxOSLuyRYLl7m++Sq+g2drIqTdrxHsBlUpfTotBCSHg6+bVEfSVH1azliE2T6
+         kMuxAfKCDqnPkj6ErNSZQcpYqqgzNbw1dL0XfJp7+zFUEPB+EvTlPWcm9HtX7LUVmzhd
+         ByL2BLxvkd6E8hMF+wBGoDQ8BbnAEINIRyGfhoWVJejIo8RthJBu2RF2L6c+QtHw++DZ
+         CTAC17nlepfakuYDSfZnfsWM8iXclE/CuFhCDYSVdCMCN+ZnCAMp5X+ACqqFzjacfUKi
+         t5iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PP099oZSf8SCM6luMmBu6jrUsbmzqcukwkA4VfOihLg=;
-        b=XdiKP1xIVldgwMzdpDgN1Lp+tIo7XlqYmX62ngYZysPNxspvOKNsDhAx4wshwF+FdF
-         pId8dbXw/05YYsrlwSGThXT3OxYS0ZVLc+QYsdYilpkSE0dFWhxXuQKmpEq80ChPpZPS
-         tqq4N1VAav3njoyKIwrLcWZszYKI3O1a29rVCKJn6Inqz2PZXam4TSObT8UIo6LqL8PS
-         /q6g7CdvvAkjuhxx1x1FP3xSIvBgRqNxcvmY2NfI0m68kG7+K6+cAv3JvmLFgCHh/Jir
-         Lf3bpBjO+HSn90hkWbePvv0h7t1/5fCDgXdZPYdSx//ENYcq2XsyAUKag5XwAbKdGC0K
-         7T7w==
-X-Gm-Message-State: AFqh2kopXLwH3sqhh3a8SUogOSJwstur0LUAg8/F9crUjePBhfWPnQH8
-        ooWioqOslW7IThTZk6BGlA==
-X-Google-Smtp-Source: AMrXdXvOfSkmlZ/ErkCntaZZxlfL3eN5OxSJXJFuKtN4wzYd5eFEzMqw13AzB8uiX/kSI3tdFJ461w==
-X-Received: by 2002:ac8:6b8b:0:b0:3a7:e91e:60fd with SMTP id z11-20020ac86b8b000000b003a7e91e60fdmr85552106qts.62.1673218011726;
-        Sun, 08 Jan 2023 14:46:51 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80a5:9b51:39ae:24d1:33f3:811e])
-        by smtp.gmail.com with ESMTPSA id t11-20020a05620a034b00b006fa31bf2f3dsm4322656qkm.47.2023.01.08.14.46.39
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+2EwBkT4ghB1jNt4S3UOpy3yeEZLhAzU9lSbZIAM7I4=;
+        b=4PUjPipkWWwVlJqJTDzU6sV5iF/fXlKsOIcCkO0jMDMufjFl4gz/knMBTlZJerhtga
+         hUsAq40WPPtC1fGkASXGZw4KGyPhry5bCbZpHAjnAoazZDEjquVfdbsdHh/9Fmy4Mj/C
+         eZLjYvEuR7q7tXMdT5xaNRDh9gm0uafK80p1S9NzUWd2ZQdIjFwZJMCWWemKlSa/kLU8
+         B4jeP+iOErA1knEWcWz5z97jv8yZJWi9qACEXsE42l9Vg2vbIfcjtQ6ys7KlUqi46j0e
+         g2Pw3HS6bHxFfEul4w6HHDnw6+cp8HhZW+yS4QDf048axlhrHc8icQO7td/IJMQ+XXz9
+         VqPw==
+X-Gm-Message-State: AFqh2koxEnDjcrCOP2kQAwyF9oBbPNRlRNQnF4Wr4NdYbYg/6/U7OsJd
+        teoIgCR/RCwT5uRgvKpWv3OYiw==
+X-Google-Smtp-Source: AMrXdXvFomA3pBImLcMEFvQje52p88TQ7bSKJjQem9k+a9RDK9TT4WhVZ39yoEM1TO2IIQGIx51y+w==
+X-Received: by 2002:a17:90b:3d03:b0:226:59d6:8219 with SMTP id pt3-20020a17090b3d0300b0022659d68219mr393178pjb.0.1673218165776;
+        Sun, 08 Jan 2023 14:49:25 -0800 (PST)
+Received: from [2620:15c:29:203:dfeb:5ed2:4968:d28b] ([2620:15c:29:203:dfeb:5ed2:4968:d28b])
+        by smtp.gmail.com with ESMTPSA id r23-20020a17090b051700b002271f55157bsm22569pjz.9.2023.01.08.14.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 14:46:51 -0800 (PST)
-Received: (nullmailer pid 382105 invoked by uid 1000);
-        Sun, 08 Jan 2023 22:46:33 -0000
-Date:   Sun, 8 Jan 2023 16:46:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        ulf.hansson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: allow more compatible
- combinations
-Message-ID: <20230108224633.GA353691-robh@kernel.org>
-References: <d7c407dc-0a6c-97d5-a06f-b432a923d74d@linaro.org>
- <20230106203358.14878660@aktux>
- <967cc7b7-f0bb-de37-52b9-7bfab05eadd7@linaro.org>
- <20230107144336.2ecff4f9@aktux>
- <123d1a56-8134-dc75-8b2a-b3836e727d4a@linaro.org>
- <20230107150740.0ba34aa1@aktux>
- <0ab84fb8-6173-54e0-abad-a0e0e4ba82e7@linaro.org>
- <20230107160105.66df4136@aktux>
- <e1b1450b-9421-3732-2d74-50c47b5afb0e@linaro.org>
- <20230107165457.30f4dddf@aktux>
+        Sun, 08 Jan 2023 14:49:25 -0800 (PST)
+Date:   Sun, 8 Jan 2023 14:49:24 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)" 
+        <kvm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SE..." 
+        <linux-crypto@vger.kernel.org>
+Subject: Re: [PATCH v2] crypto: ccp: Sanitize sev_platform_init() error
+ messages
+In-Reply-To: <20230108202407.104963-1-jarkko@profian.com>
+Message-ID: <30d6aa4c-3af9-9e4c-748e-c7378b519504@google.com>
+References: <20230108202407.104963-1-jarkko@profian.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230107165457.30f4dddf@aktux>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,83 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 07, 2023 at 04:54:57PM +0100, Andreas Kemnade wrote:
-> On Sat, 7 Jan 2023 16:07:35 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
-> > On 07/01/2023 16:01, Andreas Kemnade wrote:
-> > > On Sat, 7 Jan 2023 15:09:24 +0100
-> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> > >   
-> > >> On 07/01/2023 15:07, Andreas Kemnade wrote:  
-> > >>> On Sat, 7 Jan 2023 15:00:56 +0100
-> > >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> > >>>
-> > >>> [...]    
-> > >>>>>> I asked to remove half-compatible. Not to enforce.
-> > >>>>>>      
-> > >>> so you are saying that allowing
-> > >>> compatible = "A", "B" 
-> > >>> is not ok, if B is not fully compatible. I agree with that
-> > >>> one.    
-> > >>
-> > >> I did not say that. It's not related to this problem.
-> > >>  
-> > > You said "I asked to remove half-compatible" that means to me
-> > > remove "B" if not fully compatible with A which sounds sane to me.
-> > >   
-> > >> Again - you cannot have device which is and is not compatible with
-> > >> something else. It's not a Schroedinger's cat to be in two states,
-> > >> unless you explicitly document the cases (there are exception). If this
-> > >> is such exception, it requires it's own documentation.
-> > >>  
-> > > so conclusion:
-> > > If having A and B half-compatible with A:
-> > > 
-> > > compatible = "A" only: is allowed to specifiy it the binding (status quo),
-> > >   but not allowed to make the actual dtsi match the binding documentation
-> > >   https://lore.kernel.org/linux-devicetree/72e1194e10ccb4f87aed96265114f0963e805092.camel@pengutronix.de/
-> > >   and
-> > >   https://lore.kernel.org/linux-devicetree/20210924091439.2561931-5-andreas@kemnade.info/
-> > > 
-> > > compatible = "A", "B" in the binding definition: is not allowed ("I asked to remove
-> > >    half-compatible" (= removing B))  
-> > 
-> > No, half compatible is the A in such case.
-> > 
-> I think that there is some misunderstanding in here. I try once again.
-> 
-> Define compatible with "X" here:
-> To me it means:
-> 
-> device fully works with flags defined in:
-> 
-> static const struct esdhc_soc_data usdhc_X_data = { ... };
-> 
-> with usdhc_X_data referenced in
->         { .compatible = "X", .data = &usdhc_X_data, },
-> 
-> 
-> So if there is only "A" matching with above definition of compatibility
->   compatible = "A" would sound sane to me.
-> 
-> And scrutinizing the flags more and not just wanting to achieve error-free
-> dtbs_check, I think is this in most cases where there is only "A". 
-> 
-> If there is "A" and "B" which match that compatibility definition, you
-> say that only compatible = "A", "B" is allowed, but not compatible = "A".
-> In that case I would have no problem with that.
-> 
-> But if there is only "A" but no "B" matching the above definition, I would expect
-> that only compatible = "A" is allowed but *not* compatible = "A", "B".
+On Sun, 8 Jan 2023, Jarkko Sakkinen wrote:
 
-A is either compatible with B or it isn't. You can look at that from 
-the h/w perspective and client/OS perspective. From the h/w side, is the 
-h/w interface the same or only has additions which can be ignored? On 
-the client side, the question is whether a client that only understands 
-B could use A's h/w without change. Looking at the match data is a 
-good indicator of that for Linux. It's also possible the answer is 
-different for different clients, but we only need 1 client that could 
-benefit from compatibility.
+> The following functions end up calling sev_platform_init() or
+> __sev_platform_init_locked():
+> 
+> * sev_guest_init()
+> * sev_ioctl_do_pek_csr
+> * sev_ioctl_do_pdh_export()
+> * sev_ioctl_do_pek_import()
+> * sev_ioctl_do_pek_pdh_gen()
+> * sev_pci_init()
+> 
+> However, only sev_pci_init() prints out the failed command error code, and
+> even there the error message does not specify, SEV which command failed.
+> 
+> Address this by printing out the SEV command errors inside
+> __sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
+> INIT_EX commands.  As a side-effect, @error can be removed from the
+> parameter list.
+> 
+> This extra information is particularly useful if firmware loading and/or
+> initialization is going to be made more robust, e.g. by allowing firmware
+> loading to be postponed.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
 
-Rob
+Acked-by: David Rientjes <rientjes@google.com>
