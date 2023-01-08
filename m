@@ -2,386 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0C5661633
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69ABF661639
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbjAHPdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 10:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S232624AbjAHPgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 10:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjAHPdm (ORCPT
+        with ESMTP id S231345AbjAHPge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 10:33:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D3F588
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673191974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vkLd/nHNe1oQsB4/AkbibJ6pzG7cY0vYfVKTJREI4y8=;
-        b=X+J2S/1EyLDWE2Kq9GYEbixU7bhOysSqfiz2bU1WyOYqn8l2m/tXvyv+Imbggus721c40z
-        WYqEOngQ6pU290w+W7L387MYieajpwGh1/9Cf7uDc6vEC4HtPfpEkc+NUrDbpNAVJXzhTm
-        lW0I8kPE3InJViU6qfh4AoXymGQySig=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-175-k4ZHTsLVOSSAvcdR-laBrw-1; Sun, 08 Jan 2023 10:32:52 -0500
-X-MC-Unique: k4ZHTsLVOSSAvcdR-laBrw-1
-Received: by mail-ed1-f69.google.com with SMTP id b15-20020a056402350f00b0048477a5114bso3865734edd.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:32:52 -0800 (PST)
+        Sun, 8 Jan 2023 10:36:34 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126EDE08C
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:36:33 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so4729182wms.2
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d0Y9NXW1uR93OzQg0aE5HzcgNDOO8kxrR8xgvwlZmQg=;
+        b=Fq2GBqZV+dO0qub33W4gajEmbdeDSPTSo5gcqjMty85eLhO3UiUDK7Oy6uJMZjXFad
+         GarIRvry7ORaDD4PmTS2xk1esmBDzDruWmN++UHY5MSaF7zpez4dwf/JzBvuY7T0DWPP
+         exzhHKudLSF+Uj7nGTXQtUJuJsCqZFW3fjdHB4IfEAMmivNBbsqPcxS9sHCKx8J3usHv
+         60FxgdCgLn1wOULtb8e/hDD5SMLCrBV44iv0wFtsy7Vec10p8S6KVU5jY9rBuNCvYSye
+         THgRWtarbzVliNpUuQcr/7vbT537cz3DZ6u7Eelg8Gd+wrn7YCUmCZVcaqY6oehwREvY
+         W/oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vkLd/nHNe1oQsB4/AkbibJ6pzG7cY0vYfVKTJREI4y8=;
-        b=UeBIqqRzfvUt4GwSGnGtnjwfs7RFSRNslWzd0X4CgbR5xNJwU3pfeTQAHgT9PgOS7f
-         HvZ5UtEIF9rx2xjB5AyK7Syyaky47IekVz5edvXdIpo4lLj+xnk6Y7T4c3gvy8fr2Noy
-         uXtgTFWqMmCPBSxOX0it9zoFe6EiTT/8ri+5Y2jsY1/pXHIw9yQNw8ksaWJypYQGi3fq
-         86nxP7vEV+/B/F/o/eRWOpIDpEFHVjD37TqCp+jLJ8Gn1lg7x/Jp02Ycr+PHFQv8bWPz
-         yoEEJUduJtAZ7YE1tELOjS0g4c54moM5FQd6yI1LkOo+z0NXBXHSh0MS7R+LZW4GVcHl
-         ps3w==
-X-Gm-Message-State: AFqh2koEC5Sp0hrnpDXGpGKRRcCWutzUWTNhpgixijpZ35P4bC9oGa/N
-        JUfJwLqF8wa1dnWMgsWRh/smb/SDyAdwJhSlQcmi+JiSiYoqQNOj6x2c8O2Yw3Dbe5TIiHupAPO
-        DPk+2Y023lGXFby7waZMvRik1
-X-Received: by 2002:a17:907:3e96:b0:7c4:f501:e5b1 with SMTP id hs22-20020a1709073e9600b007c4f501e5b1mr71157322ejc.51.1673191971415;
-        Sun, 08 Jan 2023 07:32:51 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs2+OE24Y1ENktJS2QZAYKf1yBWYsyQ04nF8EbsLDzDfJhOlSnwwi07p2Vo+AvgoeVl96r4PA==
-X-Received: by 2002:a17:907:3e96:b0:7c4:f501:e5b1 with SMTP id hs22-20020a1709073e9600b007c4f501e5b1mr71157311ejc.51.1673191971173;
-        Sun, 08 Jan 2023 07:32:51 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id y9-20020a1709064b0900b0084d34979423sm1693907eju.127.2023.01.08.07.32.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 07:32:50 -0800 (PST)
-Message-ID: <e90e4c4bd558b9e41acea9f8ce84783e7341c9b4.camel@redhat.com>
-Subject: Re: [PATCH v5 33/33] KVM: x86: Add helpers to recalc physical vs.
- logical optimized APIC maps
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        Greg Edwards <gedwards@ddn.com>
-Date:   Sun, 08 Jan 2023 17:32:48 +0200
-In-Reply-To: <20230106011306.85230-34-seanjc@google.com>
-References: <20230106011306.85230-1-seanjc@google.com>
-         <20230106011306.85230-34-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d0Y9NXW1uR93OzQg0aE5HzcgNDOO8kxrR8xgvwlZmQg=;
+        b=kI3wISz40ZpUuzRzJEVStnYdaIPH2RUEqANnMbeTaypemCc9SXMcy1+J9aeNi6Fsjs
+         Rc13d1BywsZF3bFY6jhN10ChLvWWWlTk9n5sIT4DMObI7sXs3frIkoWRUY6mIaFkhAQg
+         +LEkJQAdaFRhi5IaJkECA6ANXWncdzfICORgGxIngOZwYXBsM96m373CEYnMJmNkMyLn
+         i7Yohf2+KDJ/IYWUNAjiUYOY9VTfE4uMBonwl+QkVf5Ozc8mT1KQ3w9vZ7ILZJDXqb6S
+         +LYvv4Hr7K/mU+2E0uv93wpdsOXVVXKVg6b1thm4wsCTPhjei33po65AHtU0psxaDInF
+         wgfw==
+X-Gm-Message-State: AFqh2koLV8hHKgVvufNBEcf48sp+KwLDCIjkvb/j3lvN1npA3RJW49mu
+        79RT2vaI3kEBbbJVYvzZIEpzug==
+X-Google-Smtp-Source: AMrXdXs7B9K+/qUy69qOI8OZeEAnJUYC7tslNm8V5WNaRoYfPvoX2f4B1yNlMUiw7m6xWYM5pp8mPw==
+X-Received: by 2002:a05:600c:4f11:b0:3d9:ee01:ae5b with SMTP id l17-20020a05600c4f1100b003d9ee01ae5bmr1147386wmq.12.1673192191645;
+        Sun, 08 Jan 2023 07:36:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id az28-20020a05600c601c00b003cf57329221sm12935721wmb.14.2023.01.08.07.36.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Jan 2023 07:36:31 -0800 (PST)
+Message-ID: <c6ea3f37-fe5a-9a61-3a02-99bc036fd23e@linaro.org>
+Date:   Sun, 8 Jan 2023 16:36:29 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] dt-bindings: remoteproc: qcom: sc7280-adsp-pil: Add
+ reg-names and power-domain-names
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        mathieu.poirier@linaro.org, corbet@lwn.net
+References: <1672991425-898-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1672991425-898-1-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-06 at 01:13 +0000, Sean Christopherson wrote:
-> Move the guts of kvm_recalculate_apic_map()'s main loop to two separate
-> helpers to handle recalculating the physical and logical pieces of the
-> optimized map.  Having 100+ lines of code in the for-loop makes it hard
-> to understand what is being calculated where.
+On 06/01/2023 08:50, Srinivasa Rao Mandadapu wrote:
+> Add reg-names and power-domain-names for remoteproc ADSP pheripheral
+> loader. This is to make compatible with remoteproc ADSP PIL driver.
+
+I don't understand the reasoning. Before binding was "incompatible"?
+
+> Also change power domain from LCX to CX.
+
+Why? Hardware changed?
+
 > 
-> No functional change intended.
-> 
-> Suggested-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 > ---
->  arch/x86/kvm/lapic.c | 250 +++++++++++++++++++++++--------------------
->  1 file changed, 133 insertions(+), 117 deletions(-)
+> Changes Since v1:
+>     -- Modify subject line to SoC specific.
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 856e81a2dc64..669ea125b7e2 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -218,6 +218,134 @@ static void kvm_apic_map_free(struct rcu_head *rcu)
->  	kvfree(map);
->  }
+>  .../devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> index 94ca7a0..b5bee2c 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> @@ -23,6 +23,11 @@ properties:
+>        - description: qdsp6ss register
+>        - description: efuse q6ss register
 >  
-> +static int kvm_recalculate_phys_map(struct kvm_apic_map *new,
-> +				    struct kvm_vcpu *vcpu,
-> +				    bool *xapic_id_mismatch)
-> +{
-> +	struct kvm_lapic *apic = vcpu->arch.apic;
-> +	u32 x2apic_id = kvm_x2apic_id(apic);
-> +	u32 xapic_id = kvm_xapic_id(apic);
-> +	u32 physical_id;
+> +  reg-names:
+> +    items:
+> +      - const: qdsp6ss_base
+> +      - const: lpass_efuse
 > +
-> +	/*
-> +	 * Deliberately truncate the vCPU ID when detecting a mismatched APIC
-> +	 * ID to avoid false positives if the vCPU ID, i.e. x2APIC ID, is a
-> +	 * 32-bit value.  Any unwanted aliasing due to truncation results will
-> +	 * be detected below.
-> +	 */
-> +	if (!apic_x2apic_mode(apic) && xapic_id != (u8)vcpu->vcpu_id)
-> +		*xapic_id_mismatch = true;
-> +
-> +	/*
-> +	 * Apply KVM's hotplug hack if userspace has enable 32-bit APIC IDs.
-> +	 * Allow sending events to vCPUs by their x2APIC ID even if the target
-> +	 * vCPU is in legacy xAPIC mode, and silently ignore aliased xAPIC IDs
-> +	 * (the x2APIC ID is truncated to 8 bits, causing IDs > 0xff to wrap
-> +	 * and collide).
-> +	 *
-> +	 * Honor the architectural (and KVM's non-optimized) behavior if
-> +	 * userspace has not enabled 32-bit x2APIC IDs.  Each APIC is supposed
-> +	 * to process messages independently.  If multiple vCPUs have the same
-> +	 * effective APIC ID, e.g. due to the x2APIC wrap or because the guest
-> +	 * manually modified its xAPIC IDs, events targeting that ID are
-> +	 * supposed to be recognized by all vCPUs with said ID.
-> +	 */
-> +	if (vcpu->kvm->arch.x2apic_format) {
-> +		/* See also kvm_apic_match_physical_addr(). */
-> +		if ((apic_x2apic_mode(apic) || x2apic_id > 0xff) &&
-> +			x2apic_id <= new->max_apic_id)
-> +			new->phys_map[x2apic_id] = apic;
-> +
-> +		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
-> +			new->phys_map[xapic_id] = apic;
-> +	} else {
-> +		/*
-> +		 * Disable the optimized map if the physical APIC ID is already
-> +		 * mapped, i.e. is aliased to multiple vCPUs.  The optimized
-> +		 * map requires a strict 1:1 mapping between IDs and vCPUs.
-> +		 */
-> +		if (apic_x2apic_mode(apic))
-> +			physical_id = x2apic_id;
-> +		else
-> +			physical_id = xapic_id;
-> +
-> +		if (new->phys_map[physical_id])
-> +			return -EINVAL;
-Very small nitpick: -EINVAL feels like redundant here,
-I'll say just return -1 or returning boolean would be a tiny bit better.
-But this really doesn't matter much.
-
-> +
-> +		new->phys_map[physical_id] = apic;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void kvm_recalculate_logical_map(struct kvm_apic_map *new,
-> +					struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_lapic *apic = vcpu->arch.apic;
-> +	enum kvm_apic_logical_mode logical_mode;
-> +	struct kvm_lapic **cluster;
-> +	u16 mask;
-> +	u32 ldr;
-> +
-> +	if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED)
-> +		return;
-> +
-> +	if (!kvm_apic_sw_enabled(apic))
-> +		return;
-> +
-> +	ldr = kvm_lapic_get_reg(apic, APIC_LDR);
-> +	if (!ldr)
-> +		return;
-> +
-> +	if (apic_x2apic_mode(apic)) {
-> +		logical_mode = KVM_APIC_MODE_X2APIC;
-> +	} else {
-> +		ldr = GET_APIC_LOGICAL_ID(ldr);
-> +		if (kvm_lapic_get_reg(apic, APIC_DFR) == APIC_DFR_FLAT)
-> +			logical_mode = KVM_APIC_MODE_XAPIC_FLAT;
-> +		else
-> +			logical_mode = KVM_APIC_MODE_XAPIC_CLUSTER;
-> +	}
-> +
-> +	/*
-> +	 * To optimize logical mode delivery, all software-enabled APICs must
-> +	 * be configured for the same mode.
-> +	 */
-> +	if (new->logical_mode == KVM_APIC_MODE_SW_DISABLED) {
-> +		new->logical_mode = logical_mode;
-> +	} else if (new->logical_mode != logical_mode) {
-> +		new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * In x2APIC mode, the LDR is read-only and derived directly from the
-> +	 * x2APIC ID, thus is guaranteed to be addressable.  KVM reuses
-> +	 * kvm_apic_map.phys_map to optimize logical mode x2APIC interrupts by
-> +	 * reversing the LDR calculation to get cluster of APICs, i.e. no
-> +	 * additional work is required.
-> +	 */
-> +	if (apic_x2apic_mode(apic)) {
-> +		WARN_ON_ONCE(ldr != kvm_apic_calc_x2apic_ldr(kvm_x2apic_id(apic)));
-> +		return;
-> +	}
-> +
-> +	if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
-> +							&cluster, &mask))) {
-> +		new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> +		return;
-> +	}
-> +
-> +	if (!mask)
-> +		return;
-> +
-> +	ldr = ffs(mask) - 1;
-> +	if (!is_power_of_2(mask) || cluster[ldr])
-> +		new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> +	else
-> +		cluster[ldr] = apic;
-> +}
-> +
->  /*
->   * CLEAN -> DIRTY and UPDATE_IN_PROGRESS -> DIRTY changes happen without a lock.
->   *
-> @@ -272,128 +400,16 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->  	new->logical_mode = KVM_APIC_MODE_SW_DISABLED;
+>    iommus:
+>      items:
+>        - description: Phandle to apps_smmu node with sid mask
+> @@ -57,7 +62,11 @@ properties:
 >  
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
-> -		struct kvm_lapic *apic = vcpu->arch.apic;
-> -		struct kvm_lapic **cluster;
-> -		enum kvm_apic_logical_mode logical_mode;
-> -		u32 x2apic_id, physical_id;
-> -		u16 mask;
-> -		u32 ldr;
-> -		u8 xapic_id;
-> -
->  		if (!kvm_apic_present(vcpu))
->  			continue;
+>    power-domains:
+>      items:
+> -      - description: LCX power domain
+> +      - description: CX power domain
+> +
+> +  power-domain-names:
+> +    items:
+> +      - const: cx
 >  
-> -		xapic_id = kvm_xapic_id(apic);
-> -		x2apic_id = kvm_x2apic_id(apic);
-> -
-> -		/*
-> -		 * Deliberately truncate the vCPU ID when detecting a mismatched
-> -		 * APIC ID to avoid false positives if the vCPU ID, i.e. x2APIC
-> -		 * ID, is a 32-bit value.  Any unwanted aliasing due to
-> -		 * truncation results will be detected below.
-> -		 */
-> -		if (!apic_x2apic_mode(apic) && xapic_id != (u8)vcpu->vcpu_id)
-> -			xapic_id_mismatch = true;
-> -
-> -		/*
-> -		 * Apply KVM's hotplug hack if userspace has enable 32-bit APIC
-> -		 * IDs.  Allow sending events to vCPUs by their x2APIC ID even
-> -		 * if the target vCPU is in legacy xAPIC mode, and silently
-> -		 * ignore aliased xAPIC IDs (the x2APIC ID is truncated to 8
-> -		 * bits, causing IDs > 0xff to wrap and collide).
-> -		 *
-> -		 * Honor the architectural (and KVM's non-optimized) behavior
-> -		 * if userspace has not enabled 32-bit x2APIC IDs.  Each APIC
-> -		 * is supposed to process messages independently.  If multiple
-> -		 * vCPUs have the same effective APIC ID, e.g. due to the
-> -		 * x2APIC wrap or because the guest manually modified its xAPIC
-> -		 * IDs, events targeting that ID are supposed to be recognized
-> -		 * by all vCPUs with said ID.
-> -		 */
-> -		if (kvm->arch.x2apic_format) {
-> -			/* See also kvm_apic_match_physical_addr(). */
-> -			if ((apic_x2apic_mode(apic) || x2apic_id > 0xff) &&
-> -			    x2apic_id <= new->max_apic_id)
-> -				new->phys_map[x2apic_id] = apic;
-> -
-> -			if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
-> -				new->phys_map[xapic_id] = apic;
-> -		} else {
-> -			/*
-> -			 * Disable the optimized map if the physical APIC ID is
-> -			 * already mapped, i.e. is aliased to multiple vCPUs.
-> -			 * The optimized map requires a strict 1:1 mapping
-> -			 * between IDs and vCPUs.
-> -			 */
-> -			if (apic_x2apic_mode(apic))
-> -				physical_id = x2apic_id;
-> -			else
-> -				physical_id = xapic_id;
-> -
-> -			if (new->phys_map[physical_id]) {
-> -				kvfree(new);
-> -				new = NULL;
-> -				goto out;
-> -			}
-> -			new->phys_map[physical_id] = apic;
-> -		}
-> -
-> -		if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED ||
-> -		    !kvm_apic_sw_enabled(apic))
-> -			continue;
-> -
-> -		ldr = kvm_lapic_get_reg(apic, APIC_LDR);
-> -		if (!ldr)
-> -			continue;
-> -
-> -		if (apic_x2apic_mode(apic)) {
-> -			logical_mode = KVM_APIC_MODE_X2APIC;
-> -		} else {
-> -			ldr = GET_APIC_LOGICAL_ID(ldr);
-> -			if (kvm_lapic_get_reg(apic, APIC_DFR) == APIC_DFR_FLAT)
-> -				logical_mode = KVM_APIC_MODE_XAPIC_FLAT;
-> -			else
-> -				logical_mode = KVM_APIC_MODE_XAPIC_CLUSTER;
-> +		if (kvm_recalculate_phys_map(new, vcpu, &xapic_id_mismatch)) {
-> +			kvfree(new);
-> +			new = NULL;
-> +			goto out;
->  		}
->  
-> -		/*
-> -		 * To optimize logical mode delivery, all software-enabled APICs must
-> -		 * be configured for the same mode.
-> -		 */
-> -		if (new->logical_mode == KVM_APIC_MODE_SW_DISABLED) {
-> -			new->logical_mode = logical_mode;
-> -		} else if (new->logical_mode != logical_mode) {
-> -			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> -			continue;
-> -		}
-> -
-> -		/*
-> -		 * In x2APIC mode, the LDR is read-only and derived directly
-> -		 * from the x2APIC ID, thus is guaranteed to be addressable.
-> -		 * KVM reuses kvm_apic_map.phys_map to optimize logical mode
-> -		 * x2APIC interrupts by reversing the LDR calculation to get
-> -		 * cluster of APICs, i.e. no additional work is required.
-> -		 */
-> -		if (apic_x2apic_mode(apic)) {
-> -			WARN_ON_ONCE(ldr != kvm_apic_calc_x2apic_ldr(x2apic_id));
-> -			continue;
-> -		}
-> -
-> -		if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
-> -								&cluster, &mask))) {
-> -			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> -			continue;
-> -		}
-> -
-> -		if (!mask)
-> -			continue;
-> -
-> -		ldr = ffs(mask) - 1;
-> -		if (!is_power_of_2(mask) || cluster[ldr]) {
-> -			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> -			continue;
-> -		}
-> -		cluster[ldr] = apic;
-> +		kvm_recalculate_logical_map(new, vcpu);
->  	}
->  out:
->  	/*
-
-Looks good, much cleaner now.
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>    resets:
+>      items:
 
 Best regards,
-	Maxim Levitsky
-
+Krzysztof
 
