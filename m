@@ -2,210 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4205366187B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A04661880
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbjAHTUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S233375AbjAHTXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 14:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjAHTUo (ORCPT
+        with ESMTP id S229520AbjAHTX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 14:20:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25C86411
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673205595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UGWOldglTZNuYLIRTUhiHDe8Itvv2F7MA7RR2Udh84E=;
-        b=H0qM/+C7WEg9+1Dd4P6K5lNzRsu8sTPO6kKTEKEAfe5gy6Lrq1DYOkGQyi/a3wcZ8jFQki
-        Wc5s1wiNPslbE3K9Ex1lIDgHl0VjaJfl44evCHlUnUd7zB1Pm/BP0vjvbrrTFqs+RGQc95
-        fV0j+9fFAtFVA46MhENKEeU1sDrRYEc=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-533-X4tkub9TPSCsLRG_0PivSA-1; Sun, 08 Jan 2023 14:19:54 -0500
-X-MC-Unique: X4tkub9TPSCsLRG_0PivSA-1
-Received: by mail-ua1-f71.google.com with SMTP id c1-20020a9f3d81000000b00418b667e367so3345480uai.0
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 11:19:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UGWOldglTZNuYLIRTUhiHDe8Itvv2F7MA7RR2Udh84E=;
-        b=UHvwuXO3MhaJOdQu0naFfOQIySEZuidECNpIvWZPPImHC4nEEkJl270jB2zvc7G6Q6
-         Iowwb0NyYBr9smACV1fwDN/mx5nmsSi68ZGiixtTX0qMzgHC3c8Cd8jTuzu3WdLmol9a
-         sx590bgPvt6XeXv2mV18FUGZ9reIg4mpiPScjUELp6S5JFilstauDIOSMZc3jj13lCYP
-         UrSeRepzxQEs1nBuiB9vATG13G1SwOOKX1QiWdHBjAmhuP+ATXGwwzseA/1AiHo364hR
-         805OY7XmtXm9iSgN+cKe3q0QB8zzqN9Nd6+U3vwiG736qihjUGpAdvSpWzkL7M51sYA1
-         8C6Q==
-X-Gm-Message-State: AFqh2krdv6Gb3IqYN/19oPKjbDnvboOD+1TigDNU5BwRwxAd5xmohXPV
-        ZxDsXy5FIvzqFkS40BTwXXFVELDIPI+HkcJ6XtE/vX/1qLPPR2FScu3iKfSc8kl9g8BCDAC79m0
-        7jw0AYS6Gll9tMvRXyNXMXNE66dt+DiW2xNynMvHC
-X-Received: by 2002:a1f:add4:0:b0:3d5:42a2:5e01 with SMTP id w203-20020a1fadd4000000b003d542a25e01mr5820267vke.17.1673205592821;
-        Sun, 08 Jan 2023 11:19:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvrE0KA+L2UWzyCz8oDv1qyJUvHwkro33C4K3lgEK9XL1Gh3ge6pVg1XYnyBegKhG1mGQ4M7rJKXAAiqBb/Mqo=
-X-Received: by 2002:a1f:add4:0:b0:3d5:42a2:5e01 with SMTP id
- w203-20020a1fadd4000000b003d542a25e01mr5820264vke.17.1673205592530; Sun, 08
- Jan 2023 11:19:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20230108021450.120791-1-yakoyoku@gmail.com> <CAOgh=Fzc3_bCLCKE+6KVzyMbBUOcQ_s9ef6Rw33amD5+yu-_WA@mail.gmail.com>
-In-Reply-To: <CAOgh=Fzc3_bCLCKE+6KVzyMbBUOcQ_s9ef6Rw33amD5+yu-_WA@mail.gmail.com>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Sun, 8 Jan 2023 19:19:36 +0000
-Message-ID: <CAOgh=FxxXQ0UV_3PEGS-_575WNfR2SpKp+i78HtSVX4XO4eC0A@mail.gmail.com>
-Subject: Re: [PATCH v2] scripts: Exclude Rust CUs with pahole
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+        Sun, 8 Jan 2023 14:23:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A39E32B;
+        Sun,  8 Jan 2023 11:23:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30BC460DBC;
+        Sun,  8 Jan 2023 19:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF40C433D2;
+        Sun,  8 Jan 2023 19:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673205804;
+        bh=S/YzwT6FzIsQ1JpAEmE6HfkP5R0JUwVaQei8ou4tv+M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z3QiAklDzI1EDoAzW7fLQ7NRxP8k9spAbJ8CCydGYBEMUNoU8SwLRzfrhikdSiUDV
+         NWN66hRvCe8RLoMDjzNpj16V3uCAm3dYsN7rcOD0gkoB8JTrDFc39HWsZVrmYMAfRl
+         HOV6QGHd0CJ+1D8ITeVrFHxGZqJaedS3qzgePFDqpReJ1yYr77AdrqqxkAV5anClyB
+         tTxj+XezTchSjwk1pQqL8EB8E1vknFSkOU1SwXsiDNZFTEXV4c5aljfNohER13pM8a
+         Ql5p183McoySRfbCLzA3DQ7mCwa9L/wnV0AggCXzJDJlU1RC0Qr2/OfJTBsiH51a1y
+         nzuAgjK5lPxpQ==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Neal Gompa <neal@gompa.dev>, bpf@vger.kernel.org,
-        rust-for-linux@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v3] kbuild: export top-level LDFLAGS_vmlinux only to scripts/Makefile.vmlinux
+Date:   Mon,  9 Jan 2023 04:23:17 +0900
+Message-Id: <20230108192317.2988108-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 Jan 2023 at 15:18, Eric Curtin <ecurtin@redhat.com> wrote:
->
-> On Sun, 8 Jan 2023 at 02:15, Martin Rodriguez Reboredo
-> <yakoyoku@gmail.com> wrote:
-> >
-> > Version 1.24 of pahole has the capability to exclude compilation units
-> > (CUs) of specific languages. Rust, as of writing, is not currently
-> > supported by pahole and if it's used with a build that has BTF debugging
-> > enabled it results in malformed kernel and module binaries (see
-> > Rust-for-Linux/linux#735). So it's better for pahole to exclude Rust
-> > CUs until support for it arrives.
-> >
-> > Reviewed-by: Eric Curtin <ecurtin@redhat.com>
-> > Tested-by: Eric Curtin <ecurtin@redhat.com>
-> > Reviewed-by: Neal Gompa <neal@gompa.dev>
-> > Tested-by: Neal Gompa <neal@gompa.dev>
-> > Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> > ---
-> > V1 -> V2: Removed dependency on auto.conf
-> >
-> >  init/Kconfig              | 2 +-
-> >  lib/Kconfig.debug         | 9 +++++++++
-> >  scripts/Makefile.modfinal | 4 ++++
-> >  scripts/link-vmlinux.sh   | 4 ++++
-> >  4 files changed, 18 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 694f7c160c9c..360aef8d7292 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1913,7 +1913,7 @@ config RUST
-> >         depends on !MODVERSIONS
-> >         depends on !GCC_PLUGINS
-> >         depends on !RANDSTRUCT
-> > -       depends on !DEBUG_INFO_BTF
-> > +       depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
-> >         select CONSTRUCTORS
-> >         help
-> >           Enables Rust support in the kernel.
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index ea4c903c9868..d473d491e709 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -364,6 +364,15 @@ config PAHOLE_HAS_BTF_TAG
-> >           btf_decl_tag) or not. Currently only clang compiler implements
-> >           these attributes, so make the config depend on CC_IS_CLANG.
-> >
-> > +config PAHOLE_HAS_LANG_EXCLUDE
-> > +       def_bool PAHOLE_VERSION >= 124
-> > +       help
-> > +         Support for the --lang_exclude flag which makes pahole exclude
-> > +         compilation units from the supplied language. Used in Kbuild to
-> > +         omit Rust CUs which are not supported in version 1.24 of pahole,
-> > +         otherwise it would emit malformed kernel and module binaries when
-> > +         using DEBUG_INFO_BTF_MODULES.
-> > +
-> >  config DEBUG_INFO_BTF_MODULES
-> >         def_bool y
-> >         depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
-> > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> > index 25bedd83644b..a880f2d6918f 100644
-> > --- a/scripts/Makefile.modfinal
-> > +++ b/scripts/Makefile.modfinal
-> > @@ -30,6 +30,10 @@ quiet_cmd_cc_o_c = CC [M]  $@
-> >
-> >  ARCH_POSTLINK := $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postlink)
-> >
-> > +ifdef CONFIG_RUST
-> > +PAHOLE_FLAGS += --lang_exclude=rust
-> > +endif
-> > +
-> >  quiet_cmd_ld_ko_o = LD [M]  $@
-> >        cmd_ld_ko_o +=                                                   \
-> >         $(LD) -r $(KBUILD_LDFLAGS)                                      \
-> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> > index 918470d768e9..69eb0bea89bf 100755
-> > --- a/scripts/link-vmlinux.sh
-> > +++ b/scripts/link-vmlinux.sh
-> > @@ -122,6 +122,10 @@ gen_btf()
-> >                 return 1
-> >         fi
-> >
-> > +       if is_enabled CONFIG_RUST; then
-> > +               PAHOLE_FLAGS="${PAHOLE_FLAGS} --lang_exclude=rust"
-> > +       fi
->
-> If it was me, I would do things more like v1 of the patch (instead
-> just checking pahole version), because this is the only flag set in
-> scripts/Makefile.modfinal, which is a little confusing and
-> inconsistent. It's ok to set --lang_exclude=rust in all cases, as long
-> as pahole_ver is recent enough.
->
-> +if [ "${pahole_ver}" -ge "124" ]; then
-> +       # see PAHOLE_HAS_LANG_EXCLUDE
-> +       extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
-> +fi
->
-> But I'm not too opinionated either on this so...
->
-> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
->
-> can be reapplied. I'm gonna test this again to see if it works in a
-> Fedora Asahi rpm build.
+Nathan Chancellor reports that $(NM) emits an error message when
+GNU Make 4.4 is used to build the ARM zImage.
 
-After testing I probably have to retract my Reviewed-by tag,
-apologies, bpf and all that did not work with this patch when I built
-in the fedora way, but, the good news is when I alter v1 of the patch
-to just check pahole version like so (instead of the is_enabled
-check):
+  $ make-4.4 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
+    [snip]
+    LD      vmlinux
+    NM      System.map
+    SORTTAB vmlinux
+    OBJCOPY arch/arm/boot/Image
+    Kernel: arch/arm/boot/Image is ready
+  arm-linux-gnueabi-nm: 'arch/arm/boot/compressed/../../../../vmlinux': No such file
+  /bin/sh: 1: arithmetic expression: expecting primary: " "
+    LDS     arch/arm/boot/compressed/vmlinux.lds
+    AS      arch/arm/boot/compressed/head.o
+    GZIP    arch/arm/boot/compressed/piggy_data
+    AS      arch/arm/boot/compressed/piggy.o
+    CC      arch/arm/boot/compressed/misc.o
 
-+if [ "${pahole_ver}" -ge "124" ]; then
-+        # see PAHOLE_HAS_LANG_EXCLUDE
-+        extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
-+fi
+This occurs since GNU Make commit 98da874c4303 ("[SV 10593] Export
+variables to $(shell ...) commands"), and the O= option is needed to
+reproduce it. The generated zImage is correct despite the error message.
 
-it worked just fine, and that should satisfy the testbot and all the
-other ways we build too. Could we change to that @Martin Rodriguez
-Reboredo ?
+As the commit description of 98da874c4303 [1] says, exported variables
+are passed down to $(shell ) functions, which means exported recursive
+variables might be expanded earlier than before, in the parse stage.
 
->
->
-> > +
-> >         vmlinux_link ${1}
-> >
-> >         info "BTF" ${2}
-> > --
-> > 2.39.0
-> >
+The following test code demonstrates the change for GNU Make 4.4.
+
+[Test Makefile]
+
+  $(shell echo hello > foo)
+  export foo = $(shell cat bar/../foo)
+  $(shell mkdir bar)
+
+  all:
+          @echo $(foo)
+
+[GNU Make 4.3]
+
+  $ rm -rf bar; make-4.3
+  hello
+
+[GNU Make 4.4]
+
+  $ rm -rf bar; make-4.4
+  cat: bar/../foo: No such file or directory
+  hello
+
+The 'foo' is a resursively expanded (i.e. lazily expanded) variable.
+
+GNU Make 4.3 expands 'foo' just before running the recipe '@echo $(foo)',
+at this point, the directory 'bar' exists.
+
+GNU Make 4.4 expands 'foo' to evaluate $(shell mkdir bar) because it is
+exported. At this point, the directory 'bar' does not exit yet. The cat
+command cannot resolve the bar/../foo path, hence the error message.
+
+Let's get back to the kernel Makefile.
+
+In arch/arm/boot/compressed/Makefile, KBSS_SZ is referenced by
+LDFLAGS_vmlinux, which is recursive and also exported by the top
+Makefile.
+
+GNU Make 4.3 expands KBSS_SZ just before running the recipes, so no
+error message.
+
+GNU Make 4.4 expands KBSS_SZ in the parse stage, where the directory
+arm/arm/boot/compressed does not exit yet. When compiled with O=,
+the output directory is created by $(shell mkdir -p $(obj-dirs))
+in scripts/Makefile.build.
+
+There are two ways to fix this particular issue:
+
+ - change "$(obj)/../../../../vmlinux" in KBSS_SZ to "vmlinux"
+ - unexport LDFLAGS_vmlinux
+
+This commit takes the latter course because it is what I originally
+intended.
+
+Commit 3ec8a5b33dea ("kbuild: do not export LDFLAGS_vmlinux")
+unexported LDFLAGS_vmlinux.
+
+Commit 5d4aeffbf709 ("kbuild: rebuild .vmlinux.export.o when its
+prerequisite is updated") accidentally exported it again.
+
+We can clean up arch/arm/boot/compressed/Makefile later.
+
+[1]: https://git.savannah.gnu.org/cgit/make.git/commit/?id=98da874c43035a490cdca81331724f233a3d0c9a
+
+Link: https://lore.kernel.org/all/Y7i8+EjwdnhHtlrr@dev-arch.thelio-3990X/
+Fixes: 5d4aeffbf709 ("kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+---
+
+Changes in v3:
+  - Minimize the scope of exporting.
+    LDFLAGS_vmlinux is only exported to scripts/Makefile.vmlinux
+
+Changes in v2:
+  - Postpone the change for arch/arm/boot/compressed/Makefile
+  - Update the commit description
+
+ Makefile | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index dfba294ae790..9eed3e9b3657 100644
+--- a/Makefile
++++ b/Makefile
+@@ -549,7 +549,7 @@ LDFLAGS_MODULE  =
+ CFLAGS_KERNEL	=
+ RUSTFLAGS_KERNEL =
+ AFLAGS_KERNEL	=
+-export LDFLAGS_vmlinux =
++LDFLAGS_vmlinux =
+ 
+ # Use USERINCLUDE when you must reference the UAPI directories only.
+ USERINCLUDE    := \
+@@ -1248,6 +1248,18 @@ vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
+ 	@:
+ 
+ PHONY += vmlinux
++# LDFLAGS_vmlinux in the top Makefile defines linker flags for the top vmlinux,
++# not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
++# unrelated; the decompressors just happen to have the same base name,
++# arch/*/boot/compressed/vmlinux.
++# Export LDFLAGS_vmlinux only to scripts/Makefile.vmlinux.
++#
++# _LDFLAGS_vmlinux is an indirection to work around the bug:
++#   https://savannah.gnu.org/bugs/?61463
++# For Make > 4.4, the following simple code will work:
++#  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
++vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
++vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
+ vmlinux: vmlinux.o $(KBUILD_LDS) modpost
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
+ 
+-- 
+2.34.1
 
