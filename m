@@ -2,71 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D0E6619D6
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA636619E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236307AbjAHVOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S233863AbjAHVVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbjAHVNh (ORCPT
+        with ESMTP id S230334AbjAHVVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:13:37 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FC5DED8;
-        Sun,  8 Jan 2023 13:13:37 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id tz12so15611065ejc.9;
-        Sun, 08 Jan 2023 13:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W6iCeauKtAdV4BHRnRbqupjiQnftMeTdF0kVtH3hB+E=;
-        b=G9lcAMCTgFzpB/3Dm9t/28beZyeu4Nte6d9/pPXfwO2I2wqHIopt9W+893yGZNEuNq
-         pCMS7rORqej2jzzTQgup0eL9ELK4CGyo3T7Hyy6y6DP5irJYlcvUT6ywGOnDGA/Btm2w
-         T/++gQMnez8Uz1dh+/G0uMIeZTp1ESuQJQarot7SIiq0KzQmJfszGjmbNrdN9mRV/shc
-         hRhtSvaf9Fpspe6YvBVdV+07wk5aEA8HjbIy/GtPKB5ZMVPT1DRNLgpXYNW4WLXLU/t8
-         uor6zPu8ZZC9L/Aliv9+ux7KY3myaN28Xg3E09mG0SDbLQCM7Vc/T9DCZ5an3evdxc/V
-         o7dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W6iCeauKtAdV4BHRnRbqupjiQnftMeTdF0kVtH3hB+E=;
-        b=GhRQlfF5INrn/NVsgryA2sof5D6/DJ0NOq3t5to3UWjpxI+U3wo+Ub11/gRFGQCGZc
-         +GN+8F1jScCFGNU/TnhJRt833fkkT7TUeBeHMulNhTEJnEs9X2VEJDNWUytIZiyVNV6d
-         ls0ZiYfE1MN2K5g6agVbIuJv5imkqpIoz4KWVp1sMGYRM4zxLOUPnc1dJ6uFiA5HQ48h
-         GDu2bqKeOJMFrdtHMXDR+nzUu/Vx5k5UofB5iy0fIQLr8L3roOgOkP0ogtzggqhnYWjV
-         z2c2OLL6bjcwGqE1re3XV+N1OauJpVFyC9uJjS7R7k//YX6cV35UjWxQVhx1y99ZhiH5
-         p7yw==
-X-Gm-Message-State: AFqh2krAgNkaUSLqmNQOY5Tn4TWM4iGZ26Aox36YibhZR1pwjgJfOTkW
-        1Bk0CvhEXdCVVu98FLxZtFpQN4lXmK4=
-X-Google-Smtp-Source: AMrXdXuMazg5jY6xTFm581wcDdAoeMxptf7hyehgj6rhH0L+UWBeBgT6q+wjdyQZNzmOgcG1+O4VLg==
-X-Received: by 2002:a17:907:d68e:b0:7c1:37:421c with SMTP id wf14-20020a170907d68e00b007c10037421cmr55961135ejc.32.1673212415338;
-        Sun, 08 Jan 2023 13:13:35 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c485-2500-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c485:2500::e63])
-        by smtp.googlemail.com with ESMTPSA id x25-20020a170906b09900b0080345493023sm2847997ejy.167.2023.01.08.13.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 13:13:35 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-wireless@vger.kernel.org
-Cc:     tony0620emma@gmail.com, kvalo@kernel.org, pkshih@realtek.com,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v3 3/3] wifi: rtw88: Use non-atomic sta iterator in rtw_ra_mask_info_update()
-Date:   Sun,  8 Jan 2023 22:13:24 +0100
-Message-Id: <20230108211324.442823-4-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230108211324.442823-1-martin.blumenstingl@googlemail.com>
-References: <20230108211324.442823-1-martin.blumenstingl@googlemail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 8 Jan 2023 16:21:20 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8514E00A
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:21:18 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9F3A43200034;
+        Sun,  8 Jan 2023 16:21:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 08 Jan 2023 16:21:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673212876; x=
+        1673299276; bh=ZeFov28lEub7mZ5pYUsWFjtk3T4pDigrhvJlK0Umr70=; b=c
+        z0IjIePHJkOIsYPUzRvCGFajitWXAEimQAIK8gLuIYKLsp+OWW85yqsJjtaz3Yi6
+        iK1F9g5bLQNTyLkD85vvRuq/Vza/+7eIYhATrzotBRMEJlHrvXVFpfTSQG3In9z3
+        EE7DrUew3XZWklL4PsK6fdyAjWuVp1qKlWniwoTidS198C2mEY3klYn3yQA82Wq2
+        SCbBVfS9SyjZ0e7llMb+9BdNBB2JkHaVjvaArcKL+szsCWsPw0hmspbFIh4nCUN/
+        xICd5/zlFx/ZznpiLnt6CGR6sR1mdLVzVvbshlGDQXjSDAik+mMWzR1tufHQTLsY
+        JbFVbUdgTFA6hr3xp/JYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673212876; x=
+        1673299276; bh=ZeFov28lEub7mZ5pYUsWFjtk3T4pDigrhvJlK0Umr70=; b=e
+        0Q94dGW596tfWCa7LjODoe88Y5mUHaewW7NKglzno2iaaMyujB5OE6RxxHDTb5wM
+        jPmqAv0uzE1IT6xyEqo9gAAnZ2sdaAtP5Y6vkE+1+ZAQdUZew45ekAKKh7Exqwzg
+        2rUgRfTC2KghgERFWETsXyt/MCkj7dFC0yGJ0lZnbV/rLXzQhbP21PVf+CGEfAaw
+        H/M/4jGO9hGiRFOSVOR/MDrhJdyWBkyW6IVwKf03WOysTZ3mCJTlew+LhgxB3NA0
+        +OcCnZJTRImk6A9snu+DR5DYfF2zJaUj25Dim26U43iODULj3yrn5UL0VV6T6TfT
+        M4aONRzGVFWbp5eVgUU4g==
+X-ME-Sender: <xms:yzO7Y2W9uV50Qz7UA4CfXUdvIZcW-ObxJ4nFLRVlpLpfZ9Gc4q-4Zg>
+    <xme:yzO7Yyl-UKz3N-ltMNEX3hoCmO16uIlUneA_4tycCDSDN_6HSQ6Tlkm05xnWD5KXw
+    gN62kzC0dvLpXikb24>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeggdduheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:yzO7Y6blyoIpkalCUhzR3oSX-F8fS1kKg5i8dd9GO0qAmbk0HPxCwg>
+    <xmx:yzO7Y9VXouiEkOeW7xKxNf-hOxjMdZLJAp_Q4Fysb2G66OZv12xQBg>
+    <xmx:yzO7YwmIqNITfFpfc-RZgb49FGMQpZQI5Dw0Zuoa6puX6swi9ZnyYA>
+    <xmx:zDO7Y2sY66u5NermH-mvFeQUGS_zDOPxm6z3WDQNH-p68zO3XC-jRA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3DB4BB60089; Sun,  8 Jan 2023 16:21:15 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <e10a1b03-9dc3-4c1e-865b-a47b26438c8b@app.fastmail.com>
+In-Reply-To: <CALT56yOu=Kxxc=xUYvRpy5bD5XGB01cky_ppK8LbS4AC_ra5Bw@mail.gmail.com>
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-2-arnd@kernel.org>
+ <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
+ <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
+ <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
+ <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
+ <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com>
+ <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
+ <7a57b319-a774-4f97-af06-fe1a637a45ce@app.fastmail.com>
+ <CALT56yOu=Kxxc=xUYvRpy5bD5XGB01cky_ppK8LbS4AC_ra5Bw@mail.gmail.com>
+Date:   Sun, 08 Jan 2023 22:20:55 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dmitry Baryshkov" <dbaryshkov@gmail.com>
+Cc:     "Richard Purdie" <richard.purdie@linuxfoundation.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Daniel Mack" <daniel@zonque.org>,
+        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Ales Bardorfer" <ales@i-tech.si>,
+        "Ales Snuparek" <snuparek@atlas.cz>,
+        "Alex Osborne" <ato@meshy.org>,
+        "Alex Osborne" <bobofdoom@gmail.com>,
+        "Dirk Opfer" <dirk@opfer-online.de>, "Ian Molton" <spyro@f2s.com>,
+        "Lennert Buytenhek" <kernel@wantstofly.org>,
+        "Marek Vasut" <marek.vasut@gmail.com>,
+        "Michael Petchkovsky" <mkpetch@internode.on.net>,
+        "Nick Bane" <nick@cecomputing.co.uk>,
+        "Paul Parsons" <lost.distance@yahoo.com>,
+        "Philipp Zabel" <philipp.zabel@gmail.com>,
+        "Sergey Lapin" <slapin@ossfans.org>,
+        "Tomas Cech" <sleep_walker@suse.cz>,
+        "Linus Walleij" <linusw@kernel.org>,
+        "Marc Zyngier" <maz@kernel.org>
+Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,55 +114,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB and (upcoming) SDIO support may sleep in the read/write handlers.
-Use non-atomic rtw_iterate_stas() in rtw_ra_mask_info_update() because
-the iterator function rtw_ra_mask_info_update_iter() needs to read and
-write registers from within rtw_update_sta_info(). Using the non-atomic
-iterator ensures that we can sleep during USB and SDIO register reads
-and writes. This fixes "scheduling while atomic" or "Voluntary context
-switch within RCU read-side critical section!" warnings as seen by SDIO
-card users (but it also affects USB cards).
+On Sun, Jan 8, 2023, at 22:12, Dmitry Baryshkov wrote:
+> =D0=B2=D1=81, 8 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 23:05, Arnd Be=
+rgmann <arnd@arndb.de>:
+>>
+>> At least locomo and sa1111 are both private to mach-sa1100
+>> now and no longer shared with pxa, so this should get
+>> a little easier. When I had last looking into cleaning up
+>> sa1100, my impression was that the main work would be converting
+>> most of the drivers to use dynamic resources instead of
+>> hardcoded addresses and interrupts. Looking at locomo again,
+>> my feeling is that this could remain largely unchanged,
+>> as the locomo downstream drivers (led, keyboard, lcd)
+>> are already abstracted enough and locomo itself can
+>> just be an mfd or soc driver.
+>
+> locomo has been used on Sharp Poodle, if I'm not mistaken. And sa1111
+> is used on the lubbock, one of the crazy devkits.
 
-Fixes: 78d5bf925f30 ("wifi: rtw88: iterate over vif/sta list non-atomically")
-Suggested-by: Ping-Ke Shih <pkshih@realtek.com>
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
-Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-v1 -> v2:
-- Added Ping-Ke's Reviewed-by (thank you!)
+Right, and both of these are on the way out.
 
-v2 -> v3:
-- Added Sascha's Tested-by (thank you!)
-- added "wifi" prefix to the subject and reworded the title accordingly
-
-
- drivers/net/wireless/realtek/rtw88/mac80211.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/realtek/rtw88/mac80211.c b/drivers/net/wireless/realtek/rtw88/mac80211.c
-index 776a9a9884b5..3b92ac611d3f 100644
---- a/drivers/net/wireless/realtek/rtw88/mac80211.c
-+++ b/drivers/net/wireless/realtek/rtw88/mac80211.c
-@@ -737,7 +737,7 @@ static void rtw_ra_mask_info_update(struct rtw_dev *rtwdev,
- 	br_data.rtwdev = rtwdev;
- 	br_data.vif = vif;
- 	br_data.mask = mask;
--	rtw_iterate_stas_atomic(rtwdev, rtw_ra_mask_info_update_iter, &br_data);
-+	rtw_iterate_stas(rtwdev, rtw_ra_mask_info_update_iter, &br_data);
- }
- 
- static int rtw_ops_set_bitrate_mask(struct ieee80211_hw *hw,
-@@ -746,7 +746,9 @@ static int rtw_ops_set_bitrate_mask(struct ieee80211_hw *hw,
- {
- 	struct rtw_dev *rtwdev = hw->priv;
- 
-+	mutex_lock(&rtwdev->mutex);
- 	rtw_ra_mask_info_update(rtwdev, vif, mask);
-+	mutex_unlock(&rtwdev->mutex);
- 
- 	return 0;
- }
--- 
-2.39.0
-
+      Arnd
