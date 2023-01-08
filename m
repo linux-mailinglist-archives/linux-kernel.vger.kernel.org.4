@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBB8661A42
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6105661A4D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236341AbjAHV5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S233278AbjAHWCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 17:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236244AbjAHV5M (ORCPT
+        with ESMTP id S231410AbjAHWBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:57:12 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530C9A1BF
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:57:11 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id ja17so4992541wmb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 13:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eOkszWL1f9GVml0746jDT8yMPEtjrokgHcFXyXEm/8s=;
-        b=gHvlwGyyqfbIoMsGj5XtztPSaWHbWKuWNYBVEPCt6YD/lvMyYgWpMagqH0fvxj4b8f
-         DRhYN2LHpPxKxBNvTs5KFhe/pPNinrNMkwsGgM/AGr4Rb4dazkLfv9kplmGO4SSUkNwC
-         wqKbkCwPrU0yJtEI5adnM3b9NQD45fOSqUqnXHz8OW+CAuafP2Kb/I/XLoe9Twi3RbBH
-         8oA8DkjMjMNGDsMfp8DwkH3NGspLV7MC2pe/dh0vDEpYFoWeJLEsf+y/8iDhu9iAl5cf
-         n6K5ohp/2WKkUHhbWuHTjWeANMpWfHq0rYv827OMzlOT7J636eAgcPjCMUusVnn+6t29
-         153g==
+        Sun, 8 Jan 2023 17:01:31 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86997DFB6;
+        Sun,  8 Jan 2023 14:01:30 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id v14so6577297qtq.3;
+        Sun, 08 Jan 2023 14:01:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eOkszWL1f9GVml0746jDT8yMPEtjrokgHcFXyXEm/8s=;
-        b=14F2XeViVBplE6YHdvrMGdz1CaDyXRH8ktqDexh+MWQxtHoSzSYUqg9+THZCdyO7By
-         Np7OVG+0uhUZWk0RH+yuZzhV0l27mBLjZRcus0NdeC8QSlYIyVo1Ce/HI1cnyoOSQs0J
-         PBvn6c7512FstbLpSXw71cfJ3lws6y8IibUjiwXrwksB66pbXsOxKgQ2AKnUZBe96Uy3
-         wHV871itpsAx+cd0jTqb5SFp7bJuVU3nIsrLtb3/sTFBeXmWi7AQasAhPW1D0/L6v+VI
-         2Thf7nDGJOckjVgvWK0zbBU5UFxJ7Uc02KtUTNdPZVNBqKuwNtyxXxv31w8Ngw96RTim
-         7kNg==
-X-Gm-Message-State: AFqh2kqI/8hSxmMmO2tvhsITtd45IFeD8mhPP4rZ8M6HVKELdN4FV8VA
-        EkUgmb6LYvLG7oHlAwvA4NA=
-X-Google-Smtp-Source: AMrXdXtVfoEpBgeNekkkNi55q7SX/k+Pmu7LFSOvEqslPJsI9x1RuNB61fEPLJKybrzzQwaeSW2EyQ==
-X-Received: by 2002:a05:600c:3ba7:b0:3d3:4dac:aa69 with SMTP id n39-20020a05600c3ba700b003d34dacaa69mr44428516wms.36.1673215029870;
-        Sun, 08 Jan 2023 13:57:09 -0800 (PST)
-Received: from localhost.localdomain ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b003d99469ece1sm14654071wmo.24.2023.01.08.13.57.09
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tqvkg+sv6uRRogNZ+vALt28IuW9OZ+Dw5Ea/2cbdCrM=;
+        b=kRppF5io3Vm493Ib2882zSWV9u2yDH/lZ8Jt37B1hAJnTyptcVU3sjBMj/F04hZqTw
+         uoS3xwgwnODV3msGtpH+Cakic96k80vpyNvvNOtYOSb0oJ20A7GaYvFLcNzYXSbj5FC9
+         dTM/AA26xwDIWfUvfnc5qakHFkOei221WyIawyJEdmyvap+utpwFX1lT1oAfQDmQqu4K
+         rawfqJDuzcMsV88ysQEcZ0b9RIyYs5ic39lGi2gTTKiRFZcFsEW93kExUx3rpif/Xs+d
+         Fg1sQQI1pX8hpihf9sp+pcqmoThh0us5VtCxx2GtLgj93ulZ32ASS3dnpLXwJUGYn4X7
+         iY1Q==
+X-Gm-Message-State: AFqh2krrMG4TCz1ZNKI0rDpRIxNMqWMFB8rwwwJAstdjCNQ7/+Dr0uj6
+        s5NKf0mAGieHj6+vhFOpVg==
+X-Google-Smtp-Source: AMrXdXssWVIkNhWI3KyO4Hgm/UiCqGRkmY9NOyHK5Nu3I/UZWQ9ZJyq3F5UOKdWBGal2v67GNFFU8Q==
+X-Received: by 2002:ac8:5401:0:b0:3ac:aef8:bcaa with SMTP id b1-20020ac85401000000b003acaef8bcaamr3661547qtq.18.1673215289669;
+        Sun, 08 Jan 2023 14:01:29 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80a5:9b51:39ae:24d1:33f3:811e])
+        by smtp.gmail.com with ESMTPSA id b3-20020ac86bc3000000b003ab7aee56a0sm3718441qtt.39.2023.01.08.14.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 13:57:09 -0800 (PST)
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 7/7] parport_pc: Limit the number of PCI BAR pairs to 2
-Date:   Sun,  8 Jan 2023 21:56:56 +0000
-Message-Id: <20230108215656.6433-7-sudipm.mukherjee@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230108215656.6433-1-sudipm.mukherjee@gmail.com>
-References: <20230108215656.6433-1-sudipm.mukherjee@gmail.com>
+        Sun, 08 Jan 2023 14:01:29 -0800 (PST)
+Received: (nullmailer pid 338823 invoked by uid 1000);
+        Sun, 08 Jan 2023 22:01:24 -0000
+Date:   Sun, 8 Jan 2023 16:01:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        linux-media@vger.kernel.org,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Mike Pagano <mpagano@gentoo.org>
+Subject: Re: [PATCH v6 3/8] dt-bindings: media: add TI DS90UB913 FPD-Link III
+ Serializer
+Message-ID: <167321528352.338760.2086491919796597688.robh@kernel.org>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-4-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105140307.272052-4-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 
-Decrease the number of PCI BAR pair slots allocated for port subdrivers
-from 4 to 2 as none wants more than 2 at this time, reducing the memory
-footprint a little.  No functional change.
+On Thu, 05 Jan 2023 16:03:02 +0200, Tomi Valkeinen wrote:
+> Add DT bindings for TI DS90UB913 FPD-Link III Serializer.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  .../bindings/media/i2c/ti,ds90ub913.yaml      | 133 ++++++++++++++++++
+>  1 file changed, 133 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+> 
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
----
- drivers/parport/parport_pc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
-index 9b4fe9a2b549..88e125e36230 100644
---- a/drivers/parport/parport_pc.c
-+++ b/drivers/parport/parport_pc.c
-@@ -2657,7 +2657,7 @@ static struct parport_pc_pci {
- 		int lo;
- 		int hi;
- 		/* -1 if not there, >6 for offset-method (max BAR is 6) */
--	} addr[4];
-+	} addr[2];
- 
- 	/* Bit field of parport modes to exclude. */
- 	unsigned int mode_mask;
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
