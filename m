@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC660661394
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 05:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43E966139D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 05:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjAHEau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 23:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S232576AbjAHEvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 23:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjAHEaq (ORCPT
+        with ESMTP id S232242AbjAHEvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 23:30:46 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8789E10B63
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 20:30:44 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-4a2f8ad29d5so73036247b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 20:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kt9p2IMAmrSyERl3/U7i0v+zp4np9fq2eUdHApu7VTU=;
-        b=pT9oB3gCOh9Olem1CL4ZptIfhZu3ih/w0CHNl5txBD6uDO8QZc5/YamNprQliZoQdn
-         GpMmZH9faKqCTcf00MjGdwIdvu2ugw44fia5VL8KMrIBfoKtwN6FKALj0Yc7NuCpRIU9
-         UyOZgNyiirnDctamK78u0sveWraO+Ewj4rbQI6m6+7eNdqtDIn4bSHzPaGobOvTv36IG
-         9Uz7PKhWZr6+2WCYNS0TMyIz8TzykOMZv+mQXS9+6awNyr5m015mtPN+8GIMMfPj/EoB
-         EN/4PcxZ7z/SYHaX/bXg7leyo1MY2W6JXSP8RDyPe4EDyO6YH98fFqG19PNe+Tx6CerP
-         5xQA==
+        Sat, 7 Jan 2023 23:51:41 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4AB1A381
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 20:51:39 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso3608796ilj.17
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 20:51:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kt9p2IMAmrSyERl3/U7i0v+zp4np9fq2eUdHApu7VTU=;
-        b=1f6OvTjZh0ge3Q/BuARCilrCBraljbUqrZpYXvSmgy8/JXPA8IVaC6Dgv0roYF7tSI
-         5v/8XZFriVdbrX7HhXPes4F3V+cyD0WqwjPnqhgBpH41vcVwn1nn+/N+kxkqmo4ByFCL
-         6PY3qXbejPyqCSMvo5kihEz1IiSHJDFvlRTfyCaITpkjDcKiMtBBfrNyaNqDtMCmVuHJ
-         iJ+vbHcuRZCawn7MSpGRScC5em5rCJb+Gs0VcOLoxZV1vJbyornamW8yVqbTeihikpzz
-         QAIhYT6qmI7+bCZoclZv/pejYJtRBuOENIKPtXBhoks0E+O2m3TlchWkO3pHBye2+fJy
-         UmFw==
-X-Gm-Message-State: AFqh2kpdnatDuft7YpCaC9FtXAld28RbzHaLTKAjNf2iVr26It2fTUb5
-        //CUEQAEA9jrie207nd5kfkhoYekSpTT3bPmpmiP9A==
-X-Google-Smtp-Source: AMrXdXupKOrz3kfWpdoIVvgaHEW/1EFkbbRv7qhXGij2SiXMJYFOMgAAq+lAoxnV+wvlFubmGSDdQAW+GkFJDC7oHQk=
-X-Received: by 2002:a81:6702:0:b0:477:b56e:e1d6 with SMTP id
- b2-20020a816702000000b00477b56ee1d6mr5927657ywc.188.1673152243641; Sat, 07
- Jan 2023 20:30:43 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AbFd39ngrFpRMqyekThyz3zElZJUT2Ew/ay9zgHXVA8=;
+        b=WPVmjxSzPt2UoEF+sfHqiny+CsE2V7YOIXyaUDyoTVkxUb6fKTExkCEmTK65QFZ0i+
+         wzMGu78HUhNKIPWLKd3/A61CqzdVR9ivRkVhyBKUb59uyyhtANpqNxGCT6No64Oo89g4
+         iFeuR6FR4YKwgz269Srr3lnUH43DgMnsMewTtyQW8zEurNnwqUtJ0EdXjYC7LRz8YeGV
+         Ibgmg5n6vvZaIz07nlamrjyajOMyYJ6EiY5L3EzCjDpR97EjDnJGE61MXpf87YHwiYe2
+         vWS1DvyFacjxOnm0nwFlXMTTljAexGFfOaQNw3q1elmszqBe78xltbLgO0NgRlhLIzjr
+         Lcog==
+X-Gm-Message-State: AFqh2komc8VHJgSOqc/oPJMdAzKipudqBK9VSS8mcuZW4o4JXY2WV9nN
+        UV2biRv3dUw8s3eRyxngLu3PLSZqWqRxOqgAyaO+sPIqGKeA
+X-Google-Smtp-Source: AMrXdXszQvO80kN+MXUAMYHImEwu3N8KRoM9cwX8fB5ZM3jcqcsJAcGvihkyaQhnX+FNbVTmMXSlnT7cAIkhCb62aMQvNQWLOULM
 MIME-Version: 1.0
-References: <e0ced334-e6c1-caeb-322a-f67a23ee58da@linaro.org>
- <CAA8EJpr0A=VjWEv6NPaZ-t_3TgNaWpsVO8_inJhxqoThry_zZA@mail.gmail.com>
- <17e2d99d-31e5-b29a-e729-4f4d70b2efbc@linaro.org> <CAA8EJprcVT=vyEhU0Nbtr4Wu1YxcGs+NLNxtpTaFtaJSTqvgYw@mail.gmail.com>
- <3afcb445-7a62-ced7-eb54-1b2d8a9085ce@linaro.org> <CAA8EJpp8jnZV1Wkw1T6g95s0QNZLKKN_ve+tqmNsFVCFo0wudg@mail.gmail.com>
- <dd8ce88f-63ab-274a-7992-268003411da1@linaro.org>
-In-Reply-To: <dd8ce88f-63ab-274a-7992-268003411da1@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 8 Jan 2023 06:30:32 +0200
-Message-ID: <CAA8EJprG9e_wHrM3BNs5bc+8dFbB22iYbJk7MWb8SZwuF=s5+w@mail.gmail.com>
-Subject: Re: Annoying message on the console for the db845c board
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6638:441a:b0:38a:b1dd:85e9 with SMTP id
+ bp26-20020a056638441a00b0038ab1dd85e9mr3555033jab.25.1673153498757; Sat, 07
+ Jan 2023 20:51:38 -0800 (PST)
+Date:   Sat, 07 Jan 2023 20:51:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f2c33c05f1b967dc@google.com>
+Subject: [syzbot] [reiserfs?] WARNING: locking bug in lockref_put_or_lock
+From:   syzbot <syzbot+12a2ecec8db1d853fc33@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 Jan 2023 at 00:51, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 07/01/2023 23:07, Dmitry Baryshkov wrote:
->
-> [ ... ]
->
-> > I've tested the v6.2-rc1. With the firmware from linux-firmware I do
-> > not see these message. I posted the output of savedefconfig for my
-> > .config to https://pastebin.ubuntu.com/p/t4KzQ4QWSF/
-> >
-> > Could you please recheck with this input? Maybe something is missing?
->
-> Yes, with your config, that has been fixed
->
-> Thanks!
->
-> Would it make sense to ensure defconfig has the same options to run this
-> platform ?
+Hello,
 
-Yes, please send a patch. We might have missed something in the defconfig.
+syzbot found the following issue on:
 
->
-> BTW I noted a lock issue: https://pastebin.com/274Xz7Aa
->
-> Thanks again for your help
+HEAD commit:    69b41ac87e4a Merge tag 'for-6.2-rc2-tag' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1386ac9a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+dashboard link: https://syzkaller.appspot.com/bug?extid=12a2ecec8db1d853fc33
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10256734480000
 
-You are welcome.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d3aac1573b20/disk-69b41ac8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/31f5a860f3b3/vmlinux-69b41ac8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d4a7091814ba/bzImage-69b41ac8.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/d2780fe6fae0/mount_0.gz
 
--- 
-With best wishes
-Dmitry
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+12a2ecec8db1d853fc33@syzkaller.appspotmail.com
+
+REISERFS (device loop5): Created .reiserfs_priv - reserved for xattr storage.
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 5314 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4729 [inline]
+WARNING: CPU: 0 PID: 5314 at kernel/locking/lockdep.c:231 __lock_acquire+0xac2/0x1f60 kernel/locking/lockdep.c:5005
+Modules linked in:
+CPU: 0 PID: 5314 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00010-g69b41ac87e4a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:hlock_class kernel/locking/lockdep.c:231 [inline]
+RIP: 0010:check_wait_context kernel/locking/lockdep.c:4729 [inline]
+RIP: 0010:__lock_acquire+0xac2/0x1f60 kernel/locking/lockdep.c:5005
+Code: 2b 0d 00 0f 85 2b fa ff ff 31 db 48 c7 c7 80 ba ed 8a 48 c7 c6 20 bd ed 8a 31 c0 e8 08 b0 e7 ff 48 ba 00 00 00 00 00 fc ff df <0f> 0b e9 25 fa ff ff e8 12 f2 cf 02 85 c0 0f 84 b1 06 00 00 48 c7
+RSP: 0018:ffffc900058a7628 EFLAGS: 00010046
+RAX: 3bc84842428cc400 RBX: 0000000000000000 RCX: ffff888027ef0000
+RDX: dffffc0000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816f2c9d R09: ffffed1017304f5b
+R10: ffffed1017304f5b R11: 1ffff11017304f5a R12: 0000000000040000
+R13: ffff888027ef0000 R14: 0000000000041770 R15: ffff888027ef0a80
+FS:  00007f1c2429f700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000280 CR3: 000000002195c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ lockref_put_or_lock+0x22/0xb0 lib/lockref.c:148
+ fast_dput fs/dcache.c:775 [inline]
+ dput+0x20e/0x410 fs/dcache.c:900
+ path_put fs/namei.c:558 [inline]
+ terminate_walk+0x1b1/0x5d0 fs/namei.c:680
+ path_openat+0x24c9/0x2dd0 fs/namei.c:3715
+ do_filp_open+0x264/0x4f0 fs/namei.c:3741
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __x64_sys_openat+0x243/0x290 fs/open.c:1337
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1c2348c0a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1c2429f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007f1c235abf80 RCX: 00007f1c2348c0a9
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
