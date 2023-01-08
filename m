@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174D9661675
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E559F661678
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjAHQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 11:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S233127AbjAHQSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 11:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjAHQQq (ORCPT
+        with ESMTP id S229487AbjAHQSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 11:16:46 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03579C746;
-        Sun,  8 Jan 2023 08:16:46 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso6849558pjf.1;
-        Sun, 08 Jan 2023 08:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=szYh6U0O4rdLlceJ5Mu6MCo8pZSXN9nW69RUcTj6eOg=;
-        b=eQ17HwrDwgeacRtKTqwxN1n2e/wUA7mAJCFKxVKjpEzf10u0tAzClpbcfAs9DPOXVW
-         8RfySBmBTKsqPit8vpMWlMlCLC1yFya1dNLgkcPZN20e22QXpczWQrQw4CNGyfvD6V0c
-         ERPpzOfkO/pUnOO+26Dy1IoJei2J3Fa6Aw16tMsACasSKJ/UE7llGMuFTNaTwWuS+1Pm
-         6GenGBab5wBH7OwrAi8wbY/BHeV9Ylqk8r9Oj8aBX1Vev0mHuvdi+HENA1ZUuiD2qJTk
-         KkiLhPnC099HK30wJBWZsuYdtoYfrDC7+Rbb8yRO2oWLb0yFkBvUk6mtH7Y8Kk7sjtrz
-         azFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=szYh6U0O4rdLlceJ5Mu6MCo8pZSXN9nW69RUcTj6eOg=;
-        b=yaiLMTGdO4yJKujYuiJKnBIjl3qz+JHqYwPTx++lqkRKWduJkyduNBBfHQz4ksRJD0
-         x5etSaBKKjNn9IeSOkfN3T/Wf6+cN9EAzZbWPw4MXDuVPH8cDplq0lKTMAJRBP5dGIJK
-         C68QDUtZJNevd4YwR0/AqFxHNY1qphDeFCG+NzmfAvRkrY/4jgvxVpC8vpxEr1npQU2q
-         YyuN7EIM+I0ak6UZWobNLqKtm+URx8rvizYnuwmCFOiKhvpMcXoR4u5uPucqlvWw2/Fl
-         Kx3hZGAM3KuThd/dp+JpdUVzd1JeJSJnodyf/Wgc/U3flTQk9RI5xxjN6DkU03hiavIF
-         OtkQ==
-X-Gm-Message-State: AFqh2kppPyPdGm563wk26rPq3GrAe2qfMq3dhvkBcuiaO3K4fOoxnnlI
-        DVKLpwFQ6ITqMmrFil3KyNlfS3STrJ5RjlCN1pKEjE7V
-X-Google-Smtp-Source: AMrXdXulkLpHFTttJIn7bRE+8oIM0Vjee34mqKwknjgOSnTSYKVB3NwmesfeeSB8CT9N0TBf+bLSdrB79V1cQr8VEu0=
-X-Received: by 2002:a17:903:2694:b0:192:9f8a:2e38 with SMTP id
- jf20-20020a170903269400b001929f8a2e38mr2697598plb.84.1673194604915; Sun, 08
- Jan 2023 08:16:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20230104141245.8407-1-aford173@gmail.com>
-In-Reply-To: <20230104141245.8407-1-aford173@gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 8 Jan 2023 10:16:33 -0600
-Message-ID: <CAHCN7xJ3eyZZm6or0N9WsGV8vsnyOBDWEoVAFyb1iamNe_AF2A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arm64: dts: beacon-renesom: Fix gpio expander reference
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     aford@beaconembedded.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Sun, 8 Jan 2023 11:18:40 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFB0C746;
+        Sun,  8 Jan 2023 08:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1673194714; bh=FU9rbHk25+mFU8BoKNbkZeDeFsJK6e8cHJ/ZUq4XqWA=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date;
+        b=Hl2k1wlo9QEQbOdkFtv/5SXmtBUgwVpsO+iKvTuGDEZmYkRgbPthhxK9rg/zXfYKQ
+         igOg/fH0QUlVHCaFaEQm/ZQKwGkrgGC1qULPO37FtHRCw+0ZYaOsDW+OuXNu+u/pQO
+         ps1AN04ItlX9ZyhqZnG6zwp/AVQrUOGjkuY/OznLvYEqoBO4hNGNc+e0RKP5i9QqOE
+         KVgUPwsVnF4bOFh7oGF1CIp11DRu0MoEYAB31uFi+8VRr9vaG7SUWxMgjqxnUT8TDj
+         id0FJQZrie0r8u+n51D67VkoJxZ8WHq/LBT6Z2veeugmTUrqXLGdbRyss6SwZC510c
+         DSohSYXt6oiFA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.191.216.48]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89Gt-1p9to93Te7-005KsW; Sun, 08
+ Jan 2023 17:18:34 +0100
+Message-ID: <509b8748971fd988c5dd623adc6db97617a50fb5.camel@gmx.de>
+Subject: brcmfmac regression - cfg80211_set_channel: set chanspec 0x????
+ fail, reason -52 spew
+From:   Mike Galbraith <efault@gmx.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Wright Feng <wright.feng@cypress.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>
+Date:   Sun, 08 Jan 2023 17:18:34 +0100
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:UppHptmFmtfaieEaaerob428Bj/3qZaoacinygYOj1QlqfSfAAa
+ mU1da5wuAgj4Zf38XCnK6RgL/sT6o0VydcKJomErCxaICtnDRUARV5Mwp4RrC/zQJfHNs35
+ ET2g96wDqIhYye3qRfOXHyA1w5tAOAv9PoHSndAvXVaNezmmmBJU08nrYRXmNe9yNh2dTN9
+ y36jHxazo31G16wtxQm6w==
+UI-OutboundReport: notjunk:1;M01:P0:VxFEUpf4KRU=;CmfQteOB+rFn51UrrH1z7rgkvkp
+ 8cIoxcaXAiMgy6CG7P3AOV9jMfiy6Hx6gh0RH7E9WTd7jIf/4Mbw9gOlSMRTSbkOYL3BU0mLw
+ 9Gdqbr5n24i1Z+BWpM45TX2FXBcSIqCevFu2x93gTS0t8OiMMcHW1tbj4xphvTKVF/B39a6E/
+ xAcfHDIQF25rQOJFwkhLtQZ61bwACOj/hhPv4hvc3HXoqL/kuAAmu1oeblBvuW6BEN11752qy
+ yY3+baG5fuVOruFgMLAGonKs0SpYAhzl39CNsx0YtbDYXm1BGBUgsNpII62kWRMcGtygrbPy6
+ luGEZ0oLCGNMXVEPLKugb9zikHFxeCpY7TRkKpcE1IXeGRvb7mOMZScc2af0Ttxe+s/X2JH/1
+ WRa9G+WyWXnOOdPL67lXzrW5qWiuEthbgsvXQlOGQ0ESQPX+tMRGratM3BknxWzFTugN3KEI5
+ Dw+X2ArWhtR2cKbKQ8iNbHHaHMuTGWv6BhW91qBcacXlagSfV5wAdfiJ/vvqMA8H25yWg21BC
+ TZco0HWhjAC2aSziSSK/qashHxuFSTJsdnHKXqwX9OSnax2SfrSzLpDSrTdoWkfy6CscjRY5Z
+ 3zDv5z9GbPETwULaQIdYwdWJW1RKhBPtTOsYj7JIiWQdB9Y7T92rNIlD60KijgGOwQz/NhnFY
+ cc9gLFEfy7xZDJb31eqP8FLMJ/0juh8A5JfUufG5XFLvHo2fHCufpgJDDoUtm68RVqkjxipDs
+ xxjKBxZn/Y3NEWHJlznzgnYdem+19Qt93PdPYqqkSUXKozJMyYhWkeMXBl96dGvTMxdiwPWBo
+ g9cuUc5B1NNQh/n8DY5oBaI65vLl5qHvH9AR7B+ghabnJZhz89/8mM1T4oTTb0vhAmhNWBkxC
+ ron50vPGuY/JJa5YTA8Cl/1UURJ1B+wJ9VTfuQwUznmaJ/ixH6mXMTZ5WifUXzRGcPXwXaMRj
+ zo104g==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,78 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 8:12 AM Adam Ford <aford173@gmail.com> wrote:
->
-> The board used to originally introduce the Beacon Embedded
-> RZ/G2[M/N/H] boards had a GPIO expander with address 20, but
-> this was change when the final board went to production.
->
-> The production boards changed both the part itself and
-> the address.  With the incorrect address, the LCD cannot
-> come up.  If the LCD fails, the rcar-du driver fails to come up,
-> and that also breaks HDMI.
->
-> Pre-release board were not shipped to the general public, so it
-> should be safe to push this as a fix.  Anyone with a production
-> board would have video fail due to this GPIO expander change.
->
-Geert,
+Greetings,
 
-Is this patch OK as-is? This is more critical to me than the other
-patches in the series.
+6c04deae1438 "brcmfmac: Add dump_survey cfg80211 ops for HostApd AutoChannelSelection"
 
-adam
+This commit seems to inspire my little raspberrypi 4b to moan
+endlessly, though it seems to work.  Brute force revert silenced it.
 
-> Fixes: a1d8a344f1ca ("arm64: dts: renesas: Introduce r8a774a1-beacon-rzg2m-kit")
-> Signed-off-by: Adam Ford <aford173@gmail.com>
->
-> diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> index 8166e3c1ff4e..8b6fe235a8f0 100644
-> --- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> @@ -437,20 +437,6 @@ wm8962_endpoint: endpoint {
->                 };
->         };
->
-> -       /* 0 - lcd_reset */
-> -       /* 1 - lcd_pwr */
-> -       /* 2 - lcd_select */
-> -       /* 3 - backlight-enable */
-> -       /* 4 - Touch_shdwn */
-> -       /* 5 - LCD_H_pol */
-> -       /* 6 - lcd_V_pol */
-> -       gpio_exp1: gpio@20 {
-> -               compatible = "onnn,pca9654";
-> -               reg = <0x20>;
-> -               gpio-controller;
-> -               #gpio-cells = <2>;
-> -       };
-> -
->         touchscreen@26 {
->                 compatible = "ilitek,ili2117";
->                 reg = <0x26>;
-> @@ -482,6 +468,21 @@ hd3ss3220_out_ep: endpoint {
->                         };
->                 };
->         };
-> +
-> +       gpio_exp1: gpio@70 {
-> +               compatible = "onnn,pca9654";
-> +               reg = <0x70>;
-> +               gpio-controller;
-> +               #gpio-cells = <2>;
-> +               gpio-line-names =
-> +                       "lcd_reset",
-> +                       "lcd_pwr",
-> +                       "lcd_select",
-> +                       "backlight-enable",
-> +                       "Touch_shdwn",
-> +                       "LCD_H_pol",
-> +                       "lcd_V_pol";
-> +       };
->  };
->
->  &lvds0 {
-> --
-> 2.34.1
->
+[    7.917448] brcmfmac: F1 signature read @0x18000000=0x15264345
+[    7.974270] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    8.326846] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: Jan  4 2021 19:56:29 version 7.45.229 (617f1f5 CY) FWID 01-2dbd9d2e
+[   10.799571] brcmfmac: brcmf_cfg80211_set_power_mgmt: power save enabled
+[   15.078022] brcmfmac: cfg80211_set_channel: set chanspec 0x100e fail, reason -52
+[   15.078347] brcmfmac: cfg80211_set_channel: set chanspec 0xd022 fail, reason -52
+[   15.185674] brcmfmac: cfg80211_set_channel: set chanspec 0xd026 fail, reason -52
+[   15.289609] brcmfmac: cfg80211_set_channel: set chanspec 0xd02a fail, reason -52
+[   15.393796] brcmfmac: cfg80211_set_channel: set chanspec 0xd02e fail, reason -52
+[   17.066478] brcmfmac: cfg80211_set_channel: set chanspec 0xd090 fail, reason -52
+[   17.066923] brcmfmac: cfg80211_set_channel: set chanspec 0xd095 fail, reason -52
+[   17.070632] brcmfmac: cfg80211_set_channel: set chanspec 0xd099 fail, reason -52
+[   17.071080] brcmfmac: cfg80211_set_channel: set chanspec 0xd09d fail, reason -52
+[   17.071653] brcmfmac: cfg80211_set_channel: set chanspec 0xd0a1 fail, reason -52
+[   17.072197] brcmfmac: cfg80211_set_channel: set chanspec 0xd0a5 fail, reason -52
+
