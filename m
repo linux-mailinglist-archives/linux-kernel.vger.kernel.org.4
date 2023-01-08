@@ -2,139 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFBE661342
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A18CA661344
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjAHCzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 21:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S229785AbjAHC4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 21:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjAHCzf (ORCPT
+        with ESMTP id S232971AbjAHC4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 21:55:35 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32353631F
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 18:55:34 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id z12so5368960qtv.5
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 18:55:34 -0800 (PST)
+        Sat, 7 Jan 2023 21:56:00 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B8D381
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 18:55:58 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d3so5878364plr.10
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 18:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=94VSKeewKQqz3/G+JzLpoWpxUxDnKLtB9JPUkyqWDYY=;
-        b=jSGmaf2LjAm4LbCT4TUN3tOjD6YzGbMeXFn2kCYtuo2jVWeVr5VgCLN/h51cZUnIsI
-         J37RC47iZoFPsVLcjMn1hNzIEh6sIdqtJnA43ZEXyXLBu5vClsT8AfAmCN5X+Mm1ysOE
-         MoSKz+N1GiJ5d6yYf6HwFXKMIVFFr71vS1FyE=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXg+vv59QSuw+Uy/EXAO3ekbxtavTAVYFpKKeLjSexE=;
+        b=H0T10m7Yj1DxhRaZz4cjXDWIQ9dtTl1WGS09KN1maA2YIInqbK4dLDuAErGtKL/zA4
+         WgfynpXHEzn+VKGpI3WbNA1/bbqB75BJzWM3ce5XN0Dz7fhJ/3w6sHBEM4iJGaSA+NkK
+         /cA5Or+YTnLKbHR0ud9CFOrAi1djgQS/dzeNGOR9+DjGvSIQrOSgeu9AVDG5agc6FLh3
+         /008AQgqbqP+Y/64dkz554F90RAcM+y6BG7ZrrNRjrcD/vqCpJj+ljXTITIq7fSSBPeZ
+         vr+PcdEnK2hvkhKmY131DE8AmTZp8nKnJr3/89L0skt3qVcmouBIqSl8XXxHYn48pcF7
+         VzrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=94VSKeewKQqz3/G+JzLpoWpxUxDnKLtB9JPUkyqWDYY=;
-        b=tRz9jQiRl8+pgeDLA3xuiEACWHdU1AILfWVX/aGHZFOZQ+7bBAQpLjqpntqw1/3vwu
-         aoxtIJXVdBo+p2jlsVqYIpvtD3c5tGFJb3XgenC1NeaDgpQXr44YN8pbychEeNvoxeRs
-         fwrbS9YT0XOY30raQofwJ5/JiScCU23+1peiYG4cFP5PMxDq7OfSQPwgkY6MjmG9lAhi
-         pZJHvqG0FNeD9bgPs/Z3WcZh99Z1KQXTz8JsgDKKuXHtGYeMPNuIGiLozAfdHbyHoD3y
-         g/uj3rTH4odpdZE+Hnb+kTOrbQWTLhuxrviX9QlCGIhzJPgEmTWn8rUEWg3dnj2iJC6i
-         q6kg==
-X-Gm-Message-State: AFqh2koOgFWVGbxt7HrHuJ7Om4Cac3zChFSI6aJSZxj1IkPaN+sUFwrv
-        hsgvu/Du0ZSlLYKNj7q3ELnAhw==
-X-Google-Smtp-Source: AMrXdXuyn/qox9tbjXom/kxe34t7sYA3lHGzPubUtOj0H5bzQSk8e89U+tEsuNczLqtQQAbuw+Nw4g==
-X-Received: by 2002:ac8:7ed8:0:b0:3a7:ed21:ac47 with SMTP id x24-20020ac87ed8000000b003a7ed21ac47mr83673227qtj.18.1673146533997;
-        Sat, 07 Jan 2023 18:55:33 -0800 (PST)
-Received: from smtpclient.apple ([2600:1003:b86e:d9d2:d5be:1589:426a:b60])
-        by smtp.gmail.com with ESMTPSA id l13-20020ac8724d000000b00399fe4aac3esm2677044qtp.50.2023.01.07.18.55.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 18:55:33 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
-Date:   Sat, 7 Jan 2023 21:55:22 -0500
-Message-Id: <D445A93C-8315-4407-A8E4-C377BF63058A@joelfernandes.org>
-References: <0BF2065B-1E02-498C-B999-EB52F005B62E@joelfernandes.org>
-Cc:     paulmck@kernel.org, Zqiang <qiang1.zhang@intel.com>,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <0BF2065B-1E02-498C-B999-EB52F005B62E@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXg+vv59QSuw+Uy/EXAO3ekbxtavTAVYFpKKeLjSexE=;
+        b=NrqdtVznsSY8SrEv0VDvzkExnSfQTLUT/3eOvWcgJZrPpzZKNhXBgWPt1Zco6RcKne
+         QRRyvKjEFkBuocV6gwhOZikmvWa7EqJkgp+97r1P5K33o13CTCm9zn4v/4o/fTnw9cXH
+         yiNIZXWGJbPrW9dJnrtG7LU3hRNUgCbXxaxM4pFQSC3sy6C3E3ojpUK6N7p2SklT8s89
+         Pic+BuSL6IxyytD7p7TD5/v6soU7bRJLxQYTdUshxsD+WYH9d19gmrUE213/f3JNfsP2
+         CCxX/s79rEIsAco6dB7HygLqV30jCJGJIy1a7VlXbPiG/6/x4/Lx+HKJ8qbglGW4fY2U
+         eaqQ==
+X-Gm-Message-State: AFqh2kqM0jUORhI68IM0IxVzHlQr+kG4KbgJqxwnsazsdEowNL6Bo6Yo
+        pEhd4EjznaefCNCaTQi73yCm6g==
+X-Google-Smtp-Source: AMrXdXsrPjfKLb/sg7286G4XaW4ngFzjaMNzzk0ZlbFN2v6BiFrNT6+ts/EbJos2brW9joBPq8A2og==
+X-Received: by 2002:a17:902:a40b:b0:193:234:443a with SMTP id p11-20020a170902a40b00b001930234443amr9523482plq.45.1673146558331;
+        Sat, 07 Jan 2023 18:55:58 -0800 (PST)
+Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id u14-20020a170902e5ce00b00189371b5971sm3392859plf.220.2023.01.07.18.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 18:55:57 -0800 (PST)
+From:   Yunhui Cui <cuiyunhui@bytedance.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        kuniyu@amazon.com, xiyou.wangcong@gmail.com,
+        duanxiongchun@bytedance.com, cuiyunhui@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v4] sock: add tracepoint for send recv length
+Date:   Sun,  8 Jan 2023 10:55:45 +0800
+Message-Id: <20230108025545.338-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.37.3.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add 2 tracepoints to monitor the tcp/udp traffic
+of per process and per cgroup.
 
+Regarding monitoring the tcp/udp traffic of each process, there are two
+existing solutions, the first one is https://www.atoptool.nl/netatop.php.
+The second is via kprobe/kretprobe.
 
-> On Jan 7, 2023, at 9:48 PM, Joel Fernandes <joel@joelfernandes.org> wrote:=
+Netatop solution is implemented by registering the hook function at the
+hook point provided by the netfilter framework.
 
->=20
-> =EF=BB=BF
->>> On Jan 7, 2023, at 5:11 PM, Frederic Weisbecker <frederic@kernel.org> wr=
-ote:
->>>=20
->>> =EF=BB=BFOn Fri, Jan 06, 2023 at 07:01:28PM -0500, Joel Fernandes wrote:=
+These hook functions may be in the soft interrupt context and cannot
+directly obtain the pid. Some data structures are added to bind packets
+and processes. For example, struct taskinfobucket, struct taskinfo ...
 
->>> (lost html content)
->=20
-> My problem is the iPhone wises up when I put a web link in an email. I wan=
-t to look into smtp relays but then if I spent time on fixing that, I might n=
-ot get time to learn from emails like these...=20
->=20
->> I can't find a place where the exp grace period sends an IPI to
->> CPUs slow to report a QS. But anyway you really need the tick to poll
->> periodically on the CPU to chase a quiescent state.
->=20
-> Ok.
->=20
->> Now arguably it's probably only useful when CONFIG_PREEMPT_COUNT=3Dy
->> and rcu_exp_handler() has interrupted a preempt-disabled or bh-disabled
->> section. Although rcu_exp_handler() sets TIF_RESCHED, which is handled
->> by preempt_enable() and local_bh_enable() when CONFIG_PREEMPT=3Dy.
->> So probably it's only useful when CONFIG_PREEMPT_COUNT=3Dy and CONFIG_PRE=
-EMPT=3Dn
->> (and there is also PREEMPT_DYNAMIC to consider).
->=20
-> Makes sense. I think I was missing this use case and was going by the gene=
-ral design of exp grace periods.  I was incorrectly assuming the IPIs were b=
-eing sent repeatedly for hold out CPUs, which is not the case I think. But t=
-hat would another way to fix it?
->=20
-> But yeah I get your point, the first set of IPIs missed it, so we need the=
- rescue-tick for long non-rcu_read_lock() implicit critical sections..=20
->=20
->> If CONFIG_PREEMPT_COUNT=3Dn, the tick can only report idle and user
->> as QS, but those are already reported explicitly on ct_kernel_exit() ->
->> rcu_preempt_deferred_qs().
->=20
-> Oh hmm, because that function is a NOOP for PREEMPT_COUNT=3Dy and PREEMPT=3D=
-n and will not report the deferred QS?  Maybe it should then. However I thin=
-k the tick is still useful if after the preempt disabled section, will still=
- did not exit the kernel.
+Every time the process sends and receives packets it needs multiple
+hashmaps,resulting in low performance and it has the problem fo inaccurate
+tcp/udp traffic statistics(for example: multiple threads share sockets).
 
-I think meant I here, an atomic section (like bh or Irq disabled). There is n=
-o such thing as disabling preemption for CONFIG_PREEMPT=3Dn. Or maybe I am c=
-onfused again.  This RCU thing=E2=80=A6
+We can obtain the information with kretprobe, but as we know, kprobe gets
+the result by trappig in an exception, which loses performance compared
+to tracepoint.
 
-Thanks.
+We compared the performance of tracepoints with the above two methods, and
+the results are as follows:
 
+ab -n 1000000 -c 1000 -r http://127.0.0.1/index.html
+without trace:
+Time per request: 39.660 [ms] (mean)
+Time per request: 0.040 [ms] (mean, across all concurrent requests)
 
->=20
-> We ought to start another Google doc on all of this if we have not yet=E2=80=
-=A6
->=20
-> Thanks!
->=20
-> - Joel
->=20
->>=20
->> Thanks.
->>=20
->>=20
+netatop:
+Time per request: 50.717 [ms] (mean)
+Time per request: 0.051 [ms] (mean, across all concurrent requests)
+
+kr:
+Time per request: 43.168 [ms] (mean)
+Time per request: 0.043 [ms] (mean, across all concurrent requests)
+
+tracepoint:
+Time per request: 41.004 [ms] (mean)
+Time per request: 0.041 [ms] (mean, across all concurrent requests
+
+It can be seen that tracepoint has better performance.
+
+Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
+---
+ include/trace/events/sock.h | 48 +++++++++++++++++++++++++++++++++++++
+ net/socket.c                | 23 ++++++++++++++----
+ 2 files changed, 67 insertions(+), 4 deletions(-)
+
+diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
+index 777ee6cbe933..d00a5b272404 100644
+--- a/include/trace/events/sock.h
++++ b/include/trace/events/sock.h
+@@ -263,6 +263,54 @@ TRACE_EVENT(inet_sk_error_report,
+ 		  __entry->error)
+ );
+ 
++/*
++ * sock send/recv msg length
++ */
++DECLARE_EVENT_CLASS(sock_msg_length,
++
++	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
++		 int flags),
++
++	TP_ARGS(sk, family, protocol, ret, flags),
++
++	TP_STRUCT__entry(
++		__field(void *, sk)
++		__field(__u16, family)
++		__field(__u16, protocol)
++		__field(int, length)
++		__field(int, error)
++		__field(int, flags)
++	),
++
++	TP_fast_assign(
++		__entry->sk = sk;
++		__entry->family = sk->sk_family;
++		__entry->protocol = sk->sk_protocol;
++		__entry->length = ret > 0 ? ret : 0;
++		__entry->error = ret < 0 ? ret : 0;
++		__entry->flags = flags;
++	),
++
++	TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
++		  __entry->sk, show_family_name(__entry->family),
++		  show_inet_protocol_name(__entry->protocol),
++		  __entry->length,
++		  __entry->error, __entry->flags)
++);
++
++DEFINE_EVENT(sock_msg_length, sock_send_length,
++	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
++		 int flags),
++
++	TP_ARGS(sk, family, protocol, ret, flags)
++);
++
++DEFINE_EVENT(sock_msg_length, sock_recv_length,
++	TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
++		 int flags),
++
++	TP_ARGS(sk, family, protocol, ret, flags)
++);
+ #endif /* _TRACE_SOCK_H */
+ 
+ /* This part must be outside protection */
+diff --git a/net/socket.c b/net/socket.c
+index 888cd618a968..60a1ff95b4b1 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -106,6 +106,7 @@
+ #include <net/busy_poll.h>
+ #include <linux/errqueue.h>
+ #include <linux/ptp_clock_kernel.h>
++#include <trace/events/sock.h>
+ 
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ unsigned int sysctl_net_busy_read __read_mostly;
+@@ -715,6 +716,9 @@ static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
+ 				     inet_sendmsg, sock, msg,
+ 				     msg_data_left(msg));
+ 	BUG_ON(ret == -EIOCBQUEUED);
++
++	trace_sock_send_length(sock->sk, sock->sk->sk_family,
++			       sock->sk->sk_protocol, ret, 0);
+ 	return ret;
+ }
+ 
+@@ -992,9 +996,15 @@ INDIRECT_CALLABLE_DECLARE(int inet6_recvmsg(struct socket *, struct msghdr *,
+ static inline int sock_recvmsg_nosec(struct socket *sock, struct msghdr *msg,
+ 				     int flags)
+ {
+-	return INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+-				  inet_recvmsg, sock, msg, msg_data_left(msg),
+-				  flags);
++	int ret = INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
++				     inet_recvmsg, sock, msg,
++				     msg_data_left(msg), flags);
++
++	trace_sock_recv_length(sock->sk, sock->sk->sk_family,
++			       sock->sk->sk_protocol,
++			       !(flags & MSG_PEEK) ? ret :
++			       (ret < 0 ? ret : 0), flags);
++	return ret;
+ }
+ 
+ /**
+@@ -1044,6 +1054,7 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
+ {
+ 	struct socket *sock;
+ 	int flags;
++	int ret;
+ 
+ 	sock = file->private_data;
+ 
+@@ -1051,7 +1062,11 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
+ 	/* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
+ 	flags |= more;
+ 
+-	return kernel_sendpage(sock, page, offset, size, flags);
++	ret = kernel_sendpage(sock, page, offset, size, flags);
++
++	trace_sock_send_length(sock->sk, sock->sk->sk_family,
++			       sock->sk->sk_protocol, ret, 0);
++	return ret;
+ }
+ 
+ static ssize_t sock_splice_read(struct file *file, loff_t *ppos,
+-- 
+2.20.1
+
