@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89AC661908
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5996566190C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjAHUIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S233375AbjAHUIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbjAHUI3 (ORCPT
+        with ESMTP id S233795AbjAHUId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:08:29 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73266DF4D;
-        Sun,  8 Jan 2023 12:08:28 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x10so6848409edd.10;
-        Sun, 08 Jan 2023 12:08:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SfAqEk6Cnz3wz96nFjB9/0XtkQDtrkyzMilGj3K5kcc=;
-        b=l+P3T/rc63Dk1hu+Zklkl14XXrxB1jeun5TSVBOd+i8BMhesz3gLBssP3l10+iF50Q
-         7mbPnP/D2Rj9MpB5Huwa+EueQG3kuSw/y3aOhj7jPkoaOJi2GVFtxtN2GeC6fh4nOszv
-         +9L8bG3wrVgHF4/x8A4MRX+Mxt0cVK6515FCi6HeE3TFqFvJcS7ZLeln7pwxTYzTmW4S
-         LyAw+z9c+6o80pwm6XNC1n07FKxybG5Zoq+szQT3wYDjlUkvwukzkUMY1DYak0A1VVDe
-         a3RavT65tQknYqGQ/M1vjOzKpPXzLduHaEANq4p4Be3GJHJCm34KMCSRK9Ln2zgxVvYO
-         82wg==
+        Sun, 8 Jan 2023 15:08:33 -0500
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38F2DF9F;
+        Sun,  8 Jan 2023 12:08:32 -0800 (PST)
+Received: by mail-il1-f172.google.com with SMTP id i16so3420584ilq.9;
+        Sun, 08 Jan 2023 12:08:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SfAqEk6Cnz3wz96nFjB9/0XtkQDtrkyzMilGj3K5kcc=;
-        b=bXoWNeHhODSxQW5XznmwBaqrKLv2NvlGLSlBtSjTur9cBZkR4ThnK8v6y9zPgDuMQl
-         q/hiNhJhvklTOrS2fuc4+XuerkXdJ+IyJN4cFv4MLwwUengsYQYE/EYnl8amapv3RVQW
-         HMAamHr6SlwW1M6i5nNxcOy/C8Qy42mJynwvqvnqKv1tKMQG2Y4kPtBxmiBzKUBXWPlP
-         t1XlbyoJQmbXMS4qQbpIkfEjf/TdeT8nLhTjovt8Vh3e3S/66KiaeMuFylsmk5nqJy8E
-         lsgtPyCTIT1SYb5ZPlfn6DGu+03ElmwdbJgTGampdcZ4imYrWD/EhTgOd8zk4RLYIkd2
-         4JdQ==
-X-Gm-Message-State: AFqh2kpqtJMnvMS1720kRfBbbB1en1/+hGVnPtXIZYwKZlS5StTpVcyS
-        U6LEt2756DpcdmPGnEBPkKE=
-X-Google-Smtp-Source: AMrXdXtha5ZnOvivJfTEpoecJn3Pj1c4rtqTe3te3Nqi8REjGrYlLvRd+Q6FAJIGr98dh3jnixatSw==
-X-Received: by 2002:a05:6402:646:b0:499:b582:8414 with SMTP id u6-20020a056402064600b00499b5828414mr1096018edx.8.1673208507013;
-        Sun, 08 Jan 2023 12:08:27 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id m20-20020aa7c2d4000000b00495f4535a33sm2919484edp.74.2023.01.08.12.08.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e6qFMj8l+ipPL83CwbU3UOHpDArXzes4bLrB2i8j8C0=;
+        b=7ilri7i6r8qvT1mkNBj/pqMMnfOPRy/kXWLcWC4/Mo1ca+MR4RnYqcEl7KY5oME6ZJ
+         EsFmF+/lQPufLPS6YMnIoR3l39//XypU2NzsN/fNfLnjA10GIXD1saQ66eHEQlZQQdJ+
+         LIi6u/vyt5nCYf1qCHWaBjCCcWd1UiLtqMyHyudqkf57skQAAQk+lTWhVnn4fwaZVDFV
+         S3DbmExRMDeNVuC49lb2+CpiMV2DFGCQo42JSYAoqXmyD/ODJKIgCA3ZsD1CHEdyTkKg
+         ybiwOREYXeUZT5K8KWTIjllH5ZUm1MXN4gyL/4GPlyB+rFSNLqiXiP1zNkchNbcIMUzS
+         HnjQ==
+X-Gm-Message-State: AFqh2kqsM6N7UvSJp1BDc4G8TL1pJB2/BNeFeZeN7lRaZjsp/8WgH08b
+        voUe+zJFalk72pZ+/YPIOQ==
+X-Google-Smtp-Source: AMrXdXvTkWGHCGzQ0jeyIBp5MoDkQ1m6A/r1AhuDG3PVHNXHTZwOWX8rnUo7yhgV2FIj9xuZxwbnvw==
+X-Received: by 2002:a92:870d:0:b0:307:739a:db47 with SMTP id m13-20020a92870d000000b00307739adb47mr45025387ild.27.1673208511869;
+        Sun, 08 Jan 2023 12:08:31 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
+        by smtp.gmail.com with ESMTPSA id j7-20020a056e020ee700b0030c463d743esm1071801ilk.85.2023.01.08.12.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 12:08:26 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
+        Sun, 08 Jan 2023 12:08:31 -0800 (PST)
+Received: (nullmailer pid 212759 invoked by uid 1000);
+        Sun, 08 Jan 2023 20:08:26 -0000
+Date:   Sun, 8 Jan 2023 14:08:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 0/2] iNet U70B Rev 01 Tablet Support
-Date:   Sun, 08 Jan 2023 21:08:24 +0100
-Message-ID: <2165851.irdbgypaU6@jernej-laptop>
-In-Reply-To: <20221229224547.25225-1-samuel@sholland.org>
-References: <20221229224547.25225-1-samuel@sholland.org>
+        Andy Gross <agross@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Iskren Chernev <me@iskren.info>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org,
+        Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH 1/9] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi:
+ correct pins pattern
+Message-ID: <167320850561.212688.17704162807220133540.robh@kernel.org>
+References: <20221230135645.56401-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230135645.56401-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 29. december 2022 ob 23:45:45 CET je Samuel Holland napis=
-al(a):
-> This series adds a binding and devicetree for yet another A33-based
-> tablet board. The devicetree currently fails validation because I have
-> no idea what compatible string to use for the DPI panel. Neither the
-> hardware nor the software provide any clues about a manufacturer or
-> model -- the driver used by the vendor Android is called "default_lcd".
 
-Can you drop the node until this is figured out? Otherwise DT file looks fi=
-ne.
+On Fri, 30 Dec 2022 14:56:37 +0100, Krzysztof Kozlowski wrote:
+> SC8280XP LPASS LPI pin controller has GPIO 0-18:
+> 
+>   sa8540p-ride.dtb: pinctrl@33c0000: tx-swr-default-state: 'oneOf' conditional failed, one must be fixed:
+>     'pins' is a required property
+>     'function' is a required property
+>     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
+>     'bias-bus-hold' does not match any of the regexes: 'pinctrl-[0-9]+'
+>     'gpio2' does not match '^gpio([0-1]|1[0-8])$'
+> 
+> Fixes: 958bb025f5b3 ("dt-bindings: pinctrl: qcom: Add sc8280xp lpass lpi pinctrl bindings")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml       | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Best regards,
-Jernej
-
->=20
-> Link: https://linux-sunxi.org/Inet_U70B
->=20
->=20
-> Samuel Holland (2):
->   dt-bindings: arm: sunxi: Add iNet U70B Rev 01 Tablet
->   ARM: dts: sun8i: A33: Add iNet U70B Rev 01
->=20
->  .../devicetree/bindings/arm/sunxi.yaml        |   5 +
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/sun8i-a33-inet-u70b-rev01.dts    | 172 ++++++++++++++++++
->  3 files changed, 178 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun8i-a33-inet-u70b-rev01.dts
-
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
