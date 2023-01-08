@@ -2,45 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5855166196A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8466196D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbjAHUin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S236066AbjAHUj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbjAHUii (ORCPT
+        with ESMTP id S233542AbjAHUjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:38:38 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C53B7CB;
-        Sun,  8 Jan 2023 12:38:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673210308; bh=W+GnkAId60B8+kx0qvRInY7BmXQ5CWhNPxJNlVxnWps=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=WO8xqzGC5rsnJJdsnSP6uUJG+ofmj5qDZXnzRzc/SLs2pt1Ov/ZN4l4DCVvtoWO21
-         8T5KPzjrQ6P21iP69LyeqB5CAdt/YR/1SmJGKM1bWYO4R8OetQKjq2kEGB9QE/qsBX
-         PdbVrWh3kG28Hb4gTLGjLByPc2osXE6lUEk6gLaM=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sun,  8 Jan 2023 21:38:28 +0100 (CET)
-X-EA-Auth: RDzrUikqaR2vh1gQOWWDaBwjRimXsJMMIR4iHIYZyDQbTtUHXyag5PB6pfZf1T3uhwuhbmm6qlgjgxxm5+SLT+gno3cQLH6p
-Date:   Mon, 9 Jan 2023 02:08:24 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH] scsi: qla2xxx: Use a variable for repeated mem_size
- computation
-Message-ID: <Y7spwF8HTt0c0l7y@ubun2204.myguest.virtualbox.org>
+        Sun, 8 Jan 2023 15:39:11 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F06B7CB;
+        Sun,  8 Jan 2023 12:39:10 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9FA1F5FD04;
+        Sun,  8 Jan 2023 23:39:08 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1673210348;
+        bh=iOSW3XOkz3vBuWBorAhdOl6FUa5r6JrH7kwqFKyZgWc=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=pyPHzIVXFcJ8xl6A8vXhxv1KudWLzMBJjp1Jz3k6Qq8srPamSkJKvCp8MpTfrRK/m
+         vDrGKqCHHSQgI4Z8iHObErLksM6gJnOdCPyNsbQXRxV3N+zprQbinwrrc4aiHetwBI
+         TQZyKk45ByRcsdi6MobVqBT4AifOVrpyiodmhh0EqHd8eztbE0kNyqNvtNByJat/uH
+         cD4sp3QpXt4x21BFy/25mBKncE4qFKaDhhZ+WoFc+b9Exe1faw2N5gJjsz4NToNgUt
+         3W4tfovaC9P+9xetYQJPUhPttclj2ajCxXqumptQoyoLN/c+68DC5BNHsVJkdVDuro
+         oiLQQsWq5REBg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun,  8 Jan 2023 23:39:08 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+Subject: [PATCH net-next v6 1/4] vsock: return errors other than -ENOMEM to
+ socket
+Thread-Topic: [PATCH net-next v6 1/4] vsock: return errors other than -ENOMEM
+ to socket
+Thread-Index: AQHZI6FBMAzTipZPIkK5jsNMAwReeQ==
+Date:   Sun, 8 Jan 2023 20:39:07 +0000
+Message-ID: <ebd09c5b-667b-6908-90af-8f0fd4dfc53d@sberdevices.ru>
+In-Reply-To: <9ad41d2b-bbe9-fe55-3aba-6a1281b6aa1b@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B4B4B13E6A928A4BADCDCBB308C4179B@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/01/08 17:38:00 #20747751
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -50,53 +77,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a variable to upfront compute memory size to be allocated, instead of
-repeatedly computing the memory size at different instructions. The reduced
-instruction length also allows to tidy up the code. Issue identified using
-the array_size_dup Coccinelle semantic patch.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/qla2xxx/tcm_qla2xxx.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-index 8fa0056b56dd..8024322c9c5a 100644
---- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-+++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-@@ -1552,6 +1552,7 @@ static const struct qla_tgt_func_tmpl tcm_qla2xxx_template = {
- static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
- {
- 	int rc;
-+	size_t map_sz;
- 
- 	rc = btree_init32(&lport->lport_fcport_map);
- 	if (rc) {
-@@ -1559,17 +1560,15 @@ static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
- 		return rc;
- 	}
- 
--	lport->lport_loopid_map =
--		vzalloc(array_size(65536,
--				   sizeof(struct tcm_qla2xxx_fc_loopid)));
-+	map_sz = array_size(65536, sizeof(struct tcm_qla2xxx_fc_loopid));
-+
-+	lport->lport_loopid_map = vzalloc(map_sz);
- 	if (!lport->lport_loopid_map) {
--		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n",
--		    sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-+		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n", map_sz);
- 		btree_destroy32(&lport->lport_fcport_map);
- 		return -ENOMEM;
- 	}
--	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n",
--	       sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-+	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n", map_sz);
- 	return 0;
- }
- 
--- 
-2.34.1
-
-
-
+RnJvbTogQm9iYnkgRXNobGVtYW4gPGJvYmJ5LmVzaGxlbWFuQGJ5dGVkYW5jZS5jb20+DQoNClRo
+aXMgcmVtb3ZlcyBiZWhhdmlvdXIsIHdoZXJlIGVycm9yIGNvZGUgcmV0dXJuZWQgZnJvbSBhbnkg
+dHJhbnNwb3J0DQp3YXMgYWx3YXlzIHN3aXRjaGVkIHRvIEVOT01FTS4gRm9yIGV4YW1wbGUgd2hl
+biB1c2VyIHRyaWVzIHRvIHNlbmQgdG9vDQpiaWcgbWVzc2FnZSB2aWEgU0VRUEFDS0VUIHNvY2tl
+dCwgdHJhbnNwb3J0IGxheWVycyByZXR1cm4gRU1TR1NJWkUsIGJ1dA0KdGhpcyBlcnJvciBjb2Rl
+IHdhcyBhbHdheXMgcmVwbGFjZWQgd2l0aCBFTk9NRU0gYW5kIHJldHVybmVkIHRvIHVzZXIuDQoN
+ClNpZ25lZC1vZmYtYnk6IEJvYmJ5IEVzaGxlbWFuIDxib2JieS5lc2hsZW1hbkBieXRlZGFuY2Uu
+Y29tPg0KU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmlj
+ZXMucnU+DQpSZXZpZXdlZC1ieTogU3RlZmFubyBHYXJ6YXJlbGxhIDxzZ2FyemFyZUByZWRoYXQu
+Y29tPg0KLS0tDQogbmV0L3Ztd192c29jay9hZl92c29jay5jIHwgMyArKy0NCiAxIGZpbGUgY2hh
+bmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9uZXQv
+dm13X3Zzb2NrL2FmX3Zzb2NrLmMgYi9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMNCmluZGV4IGQ1
+OTNkNWI2ZDRiMS4uMTlhZWE3Y2JhMjZlIDEwMDY0NA0KLS0tIGEvbmV0L3Ztd192c29jay9hZl92
+c29jay5jDQorKysgYi9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMNCkBAIC0xODYxLDggKzE4NjEs
+OSBAQCBzdGF0aWMgaW50IHZzb2NrX2Nvbm5lY3RpYmxlX3NlbmRtc2coc3RydWN0IHNvY2tldCAq
+c29jaywgc3RydWN0IG1zZ2hkciAqbXNnLA0KIAkJCXdyaXR0ZW4gPSB0cmFuc3BvcnQtPnN0cmVh
+bV9lbnF1ZXVlKHZzaywNCiAJCQkJCW1zZywgbGVuIC0gdG90YWxfd3JpdHRlbik7DQogCQl9DQor
+DQogCQlpZiAod3JpdHRlbiA8IDApIHsNCi0JCQllcnIgPSAtRU5PTUVNOw0KKwkJCWVyciA9IHdy
+aXR0ZW47DQogCQkJZ290byBvdXRfZXJyOw0KIAkJfQ0KIA0KLS0gDQoyLjI1LjENCg==
