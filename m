@@ -2,236 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854756617AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB866617B3
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbjAHR7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 12:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S233278AbjAHSAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAHR66 (ORCPT
+        with ESMTP id S233376AbjAHSAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 12:58:58 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001C264D9;
-        Sun,  8 Jan 2023 09:58:55 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 308Hwg9X020774;
-        Sun, 8 Jan 2023 18:58:42 +0100
-Date:   Sun, 8 Jan 2023 18:58:42 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 0/5] nolibc signal handling support
-Message-ID: <20230108175842.GB18859@1wt.eu>
-References: <20230108135904.851762-1-ammar.faizi@intel.com>
+        Sun, 8 Jan 2023 13:00:52 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395255F51;
+        Sun,  8 Jan 2023 10:00:51 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id l1-20020a17090a384100b00226f05b9595so4967780pjf.0;
+        Sun, 08 Jan 2023 10:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ng9Gr1gYRwK5vNJRL60sb9VXFUxVbbixwT/syyuNq4=;
+        b=l9eP+VBu4hhhlcaXjk+bP9h/4ECNSarc3fgEVwQidAWu+ldqCXjjWX3qWqsGHC44wJ
+         6103/aENAEqV3c+tLGKUhn9e8Fin0Nz642lZPsinGUoDJjffOcnTKr+7LgNdz0sML4c0
+         o+f/SO7ZaM7XHNJZTf0FVH/dxJ3MJ407H+eo6qH+ZS5Qg3lDmsAEemHNQIK/+4+JfApc
+         1HQYvVVqHYqlTUPsPgaZ2oelzFUSzAP2DvoPyGdV0p1tD2I2296yEGYYQ7GJ5RqGjLA0
+         0vdw1MRSz5eR8v89rcgw/DKWmk8ye0nOWePEP+g8XDj2GTAvrHCs7Rag87TlgPlJss90
+         XlLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ng9Gr1gYRwK5vNJRL60sb9VXFUxVbbixwT/syyuNq4=;
+        b=TRi1aC8rLGMLXtEhs7IMx0XOz+jzrsEeASZrMYhTKufJO0mjwiEirsrUydYk7qBItP
+         W0KxsbXNVL7JE45HLZhimxd7Y5ns25N9wlC8b99cDWD3KpvM83dmGjHWr4F5ZZmRY1LA
+         UF8+uvDilHYOiV8s3bbnrajvmk1xpKzoG1J1IoD0aAlCHjAU8GQJa2u3J8dTOS3PpZR6
+         p/+4e6sZSIp+SnNiaL4vhyUMkThmbLmjzWq/+w+Ayvti9aTsHEaMeT9+P8Ia5bTUyEA2
+         Y1H7RPB5uyBmkxbIvLrechL8uzXuV7wjmwQchXyaYEXSJzizAzC2a20YOpx9k+DLCW6u
+         m9BQ==
+X-Gm-Message-State: AFqh2kr+IxzUGpUVLzcTpMSRCMzDvx8IQY0T62y5TAnnNnh7KaFgFqaD
+        QGW1PW8qf0o1SZClG0+rwf2rTB0pbGgZnXkyhK4=
+X-Google-Smtp-Source: AMrXdXvCQY64/Qfang/RtUtn9MlrQYL56huSKMOB9PhktnzHAsXmXMUSPJ/Cq2qq39FQSUVEhJhV5+ueZ0gQmC1Z0QQ=
+X-Received: by 2002:a17:903:1204:b0:192:fe7e:c41b with SMTP id
+ l4-20020a170903120400b00192fe7ec41bmr1076772plh.57.1673200850655; Sun, 08 Jan
+ 2023 10:00:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108135904.851762-1-ammar.faizi@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108130440.670181-1-robimarko@gmail.com> <CAA8EJpqR9w2maBB_ABXk7ggxD34WKvQS+m79-ua-nN50H79nOw@mail.gmail.com>
+In-Reply-To: <CAA8EJpqR9w2maBB_ABXk7ggxD34WKvQS+m79-ua-nN50H79nOw@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Sun, 8 Jan 2023 19:00:39 +0100
+Message-ID: <CAOX2RU6aqrK-dXhzduxHdwE94L1w5Pc3cBTt8iYRotxQ9cWBjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] clk: qcom: ipq8074: populate fw_name for usb3phy-s
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ammar,
+On Sun, 8 Jan 2023 at 18:34, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Sun, 8 Jan 2023 at 15:04, Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > Having only .name populated in parent_data for clocks which are only
+> > globally searchable currently will not work as the clk core won't copy
+> > that name if there is no .fw_name present as well.
+> >
+> > So, populate .fw_name for usb3phy clocks in parent_data as they were
+> > missed by me in ("clk: qcom: ipq8074: populate fw_name for all parents").
+> >
+> > Fixes: ae55ad32e273 ("clk: qcom: ipq8074: convert to parent data")
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+>
+> Ah, excuse me, this is what I asked for in the other patch. We can
+> only hope to see these clocks added to the gcc DT node.
 
-On Sun, Jan 08, 2023 at 08:58:59PM +0700, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> 
-> Hi Willy,
-> 
-> On top of the series titled "nolibc auxiliary vector retrieval support".
-> The prerequisite patches of this series are in that series.
-> 
-> This is v2 of nolibc signal handling support. It adds signal handling
-> support to the nolibc subsystem:
-> 
-> 1)  Initial implementation of nolibc sigaction(2) function.
-> 
->     `sigaction()` needs an architecture-dependent "signal trampoline"
->     function that invokes __rt_sigreturn syscall to resume the process
->     after a signal gets handled.
-> 
->     The "signal trampoline" function is called `__restore_rt` in this
->     implementation. The naming `__restore_rt` is important for GDB. It
->     also has to be given a special optimization attribute
->     "omit-frame-pointer" to prevent the compiler from creating a stack
->     frame that makes the `%rsp` value no longer points to the `struct
->     rt_sigframe` that the kernel constructed.
-> 
-> 
-> 2)  signal(2) function.
-> 
->     signal() function is the simpler version of sigaction(). Unlike
->     sigaction(), which fully controls the struct sigaction, the caller
->     only cares about the sa_handler when calling the signal() function.
->     signal() internally calls sigaction().
-> 
-> 
-> 3)  More selftests.
-> 
->     This series also adds selftests for:
->       - fork(2)
->       - sigaction(2)
->       - signal(2)
-> 
-> 
-> Side note for __restore_rt:
-> This has been tested on x86-64 arch and `__restore_rt` generates the
-> correct code. The `__restore_rt` codegen correctness on other
-> architectures need to be evaluated as well. If it can't generate the
-> correct code, it has to be written in inline Assembly.
+Yes, there are PCI pipe parenting fixes waiting for review, so I plan to add
+both to GCC node after that.
 
-I'm currently testing it on various archs. For now:
+It would be great if you can take a look at the IPQ8074 PCI support series.
 
-  - x86_64 and arm64 pass the test
-
-  - i386 and arm fail:
-      59 sigactiontest_sigaction_sig(2): Failed to set a signal handler
-       = -1 EINVAL                [FAIL]
-      60 signaltest_signal_sig(2): Failed to set a signal handler
-       = -1 EINVAL                   [FAIL]
-
-  - riscv and mips build are now broken:
-      sysroot/riscv/include/sys.h:1110:18: error: 'struct sigaction' has no member named 'sa_restorer'
-       1110 |         if (!act2.sa_restorer) {
-            |                  ^
-      sysroot/riscv/include/sys.h:1111:34: error: 'SA_RESTORER' undeclared (first use in this function); did you mean 'SA_RESTART'?
-       1111 |                 act2.sa_flags |= SA_RESTORER;
-            |                                  ^~~~~~~~~~~
-            |                                  SA_RESTART
-
-  - s390 segfaults:
-      58 select_fault = -1 EFAULT              [OK]
-      59 sigactionqemu: uncaught target signal 11 (Segmentation fault) - core dumped
-      Segmentation fault
-
-    It dies in __restore_rt at 1006ba4 while performing the syscall,
-    I don't know why, maybe this arch requires an alt stack or whatever :
-
-      0000000001006ba0 <__restore_rt>:
-       1006ba0:       a7 19 00 ad             lghi    %r1,173
-       1006ba4:       0a 00                   svc     0
-       1006ba6:       07 07                   nopr    %r7
-
-At the very least we need to make sure we don't degrade existing tests,
-which means making sure that it builds everywhere and that all those
-which build do work.
-
-It would be nice to figure what's failing on i386. Given that both it
-and arm fail on EINVAL while both x86_64 and arm64 work, I suspect that
-once you figure what breaks i386 it'll fix the problem on arm at the
-same time. I had a quick look but didn't spot anything suspicious.
-Once we've figured this, we could decide to tag archs supporting
-sig_action() and condition the functions definition and the tests to
-these.
-
-The advantage of trying with i386 is that your regular tools and the
-debugger you used for x86_64 will work. I'm proceeding like this with
-the toolchains from https://mirrors.edge.kernel.org/pub/tools/crosstool/ :
-
- $ make nolibc-test LDFLAGS=-g CFLAGS=-g ARCH=i386 CC=/path/to/gcc-11.3.0-nolibc/i386-linux/bin/i386-linux-gcc
- $ gdb ./nolibc-test
- > b sigaction
- > run
- > s
- ...
- 
-Note that the code looks correct at first glance:
-
-0804b4a0 <__restore_rt>:
- 804b4a0:       b8 ad 00 00 00          mov    $0xad,%eax
- 804b4a5:       cd 80                   int    $0x80
-
-I also think that the printf() in test_sigaction_sig() are not welcome
-as they corrupt the output. Maybe one thing you could do to preserve the
-info would be to prepend a space in front of the message and remove the
-LF. For example the simple patch below:
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index a1883467451a..42f794c646b7 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -535,7 +535,7 @@ static int test_sigaction_sig(int sig)
-         */
-        ret = sigaction(sig, &new, &old);
-        if (ret) {
--               printf("test_sigaction_sig(%d): Failed to set a signal handler\n", sig);
-+               printf(" (failed to set handler for signal %d)", sig);
-                return ret;
-        }
- 
-@@ -549,7 +549,7 @@ static int test_sigaction_sig(int sig)
-         * test_signal_handler() must set @g_test_sig to @sig.
-         */
-        if (g_test_sig != sig) {
--               printf("test_sigaction_sig(%d): Invalid g_test_sig value (%d != %d)\n", sig, g_test_sig, sig);
-+               printf(" (invalid g_test_sig value (%d != %d))", sig, g_test_sig);
-                return -1;
-        }
- 
-@@ -558,7 +558,7 @@ static int test_sigaction_sig(int sig)
-         */
-        ret = sigaction(sig, &old, NULL);
-        if (ret) {
--               printf("test_sigaction_sig(%d): Failed to restore the signal handler\n", sig);
-+               printf(" (Failed to restore handler for signal %d)", sig);
-                return ret;
-        }
- 
-@@ -574,7 +574,7 @@ static int test_signal_sig(int sig)
-         */
-        old = signal(sig, test_signal_handler);
-        if (old == SIG_ERR) {
--               printf("test_signal_sig(%d): Failed to set a signal handler\n", sig);
-+               printf(" (failed to set handler for signal %d)", sig);
-                return -1;
-        }
- 
-@@ -588,7 +588,7 @@ static int test_signal_sig(int sig)
-         * test_signal_handler() must set @g_test_sig to @sig.
-         */
-        if (g_test_sig != sig) {
--               printf("test_signal_sig(%d): Invalid g_test_sig value (%d != %d)\n", sig, g_test_sig, sig);
-+               printf(" (invalid g_test_sig value (%d != %d))", sig, g_test_sig);
-                return -1;
-        }
- 
-@@ -597,7 +597,7 @@ static int test_signal_sig(int sig)
-         */
-        old = signal(sig, old);
-        if (old == SIG_ERR) {
--               printf("test_signal_sig(%d): Failed to restore the signal handler\n", sig);
-+               printf(" (Failed to restore handler for signal %d)", sig);
-                return -1;
-        }
- 
-Gives me this:
-
-...
-56 select_null = 0                       [OK]
-57 select_stdout = 1                     [OK]
-58 select_fault = -1 EFAULT              [OK]
-59 sigaction (failed to set handler for signal 2) = -1 EINVAL                [FAIL]
-60 signal (failed to set handler for signal 2) = -1 EINVAL                   [FAIL]
-61 stat_blah = -1 ENOENT                 [OK]
-62 stat_fault = -1 EFAULT                [OK]
-63 symlink_root = -1 EEXIST              [OK]
-...
-
-Which is way more readable and still grep-friendly.
-
-Thanks!
-Willy
+Regards,
+Robert
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>
+>
+> --
+> With best wishes
+> Dmitry
