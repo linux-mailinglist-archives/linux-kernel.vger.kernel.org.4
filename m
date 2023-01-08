@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E066615D0
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D813E6615D6
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjAHOZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S233196AbjAHObz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjAHOZx (ORCPT
+        with ESMTP id S229637AbjAHObv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:25:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C34FFAC4
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:25:06 -0800 (PST)
+        Sun, 8 Jan 2023 09:31:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC45FAE2
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:31:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673187905;
+        s=mimecast20190719; t=1673188262;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ksiCTFiq5acBPWOANtiLHvB+WxH84jzu0HNhRmaLORc=;
-        b=LdQj2i78B3aMDuv7490Bs232YR7seWopaPYFlGWI7rWquxoH9SA/dSCFR95WzBi5Rt9Qy6
-        7BCr74ezk1QZRYwXNsIGoqxFPUlWnWac3tKEc7ivPmz59KFCiqp4QwhVZ3C4/Ra5VO2yew
-        4medSYgupIAu5JfiBuAyzl+SvFjz4Pg=
+        bh=3nT7QhLV9ERePs+cJNtRsiYJ+edIDsUQwY0QAkWMtfE=;
+        b=AvUyze1FyZxkD5U4X1T8lSeVpQAu730YaTSXTcYWSgcHm8ufHx5ZevCjeMMhxE5SZHneG2
+        nanCQQTglsEbAGe4ZWFw5zgmeE+i2uEIV1pYyp0zl6Puxn4z9g1HehmfZSYu/7KMaqUhv2
+        IsX2fAzF6NuYHzSUTSkvSzzwNv/kRqM=
 Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
  [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-659-pchQpAJ1PZaKxLnGmjNf-A-1; Sun, 08 Jan 2023 09:25:04 -0500
-X-MC-Unique: pchQpAJ1PZaKxLnGmjNf-A-1
-Received: by mail-ej1-f70.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso3889670ejb.14
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:25:03 -0800 (PST)
+ us-mta-22-jmpE6K4yNX2BAZdShLczXQ-1; Sun, 08 Jan 2023 09:31:01 -0500
+X-MC-Unique: jmpE6K4yNX2BAZdShLczXQ-1
+Received: by mail-ej1-f70.google.com with SMTP id dr5-20020a170907720500b00808d17c4f27so3859704ejc.6
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:31:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:user-agent:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ksiCTFiq5acBPWOANtiLHvB+WxH84jzu0HNhRmaLORc=;
-        b=fN+Ai8xrA0kqzNXON1P9LIB4eKqrVLS05O8ZzowyPFX5r+zdgWAi/8pWer5YTeuBV8
-         dnCA0OoqmdusbBBPFqg3UZi7KhUYDBni/EljxSBx0/12PY403eJbUpK+GN2GTAs8ONSj
-         g9XY63qnjbdT/0XDElDK8kiHPUhvQs9Fz5Ejezbq+o9+t/M4OPxnbUbLGKzw/5+mik83
-         J7XdTgHKwj6m//JgLwkau1gAY6ux8I50aJ0mc/aNf6/k4qNjvOxBiK6aGSJpI9MGYszU
-         2eiudj+3zDwlByPGWndIQXk53S03vUjBOCToaiMp9lcTz6oC3zJmPRvN8QyhOgKe8RoY
-         O/cQ==
-X-Gm-Message-State: AFqh2kq/b+nShybGzafPwpJtC5WAvBYr+DPTV1M/Jr73ubQDiZuI+W+d
-        JQr11e3E2lpOOmaq4vhk+uqQcBiMim3O6RbBVL/6mn2VBgwQD624MYpPuu2OUGHZP8BB1qWCkIs
-        2KeV1TY/JC3M/AScXnPy71xdO
-X-Received: by 2002:a17:907:c71b:b0:7c1:67ca:56f5 with SMTP id ty27-20020a170907c71b00b007c167ca56f5mr58723209ejc.15.1673187903070;
-        Sun, 08 Jan 2023 06:25:03 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuSOtqdC4idlnrW13cj2BA8d1/Io1UUTNfkqZjvpPpxfSYnUWJWJLNJVX1E+OmlahEQx9AuMw==
-X-Received: by 2002:a17:907:c71b:b0:7c1:67ca:56f5 with SMTP id ty27-20020a170907c71b00b007c167ca56f5mr58723202ejc.15.1673187902915;
-        Sun, 08 Jan 2023 06:25:02 -0800 (PST)
+        bh=3nT7QhLV9ERePs+cJNtRsiYJ+edIDsUQwY0QAkWMtfE=;
+        b=GP4aY01lC0D/Dk0zWythcgvG1fGUQ8JvqPH1nVzwJazz0cxm5iVolK7SENNqdJm/2H
+         CK1WsloA62mdAC+N4ag5thSV8NuENt3nGoOm3i4oSAIq1yZ67w/Fa8KSz98HNvaEeLj6
+         ANUUvWUh2D/LJ+NCw1VcQTHbN97HuYjwayYGlPHww8RUw2GTyy+rQMFnuJfX9z0oqY6c
+         N0pPJiuH/zNY9zEKX0nJ3Hg55K4Kk4D2AcjuTxbbpJx7ZtGbIFwjE+kR+Xe0R+2Z+2Ym
+         eyAQyCjY1/LdX5WTCIKJP3S7xqe86+fcLdjmHYIpjeEPojrDg+vMEaqDCk5f2q/wmMVM
+         lz1A==
+X-Gm-Message-State: AFqh2krlAtcMnHgeXEbLbItropkZ0eHAK5GQ1rSC5IWY3qAjyb2emQZw
+        UddUlQijo9SF0rgDUzqHcHg3I6VI4EIslOS3V82QS3AQrIeRYOeB7P5Pg1KJNEN+Q951q3G5td9
+        0OeXoCN2hOBrW1XBIo3hf9n/L
+X-Received: by 2002:a17:907:9b06:b0:83f:8e58:6427 with SMTP id kn6-20020a1709079b0600b0083f8e586427mr51526590ejc.63.1673188259859;
+        Sun, 08 Jan 2023 06:30:59 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtjlljJLOtsM9UMM5jbWvD/b2O1uB8sXlOSXZ50ZcG0Xs4mrklvVvV2Dgpq8BBeyyenLcBCZA==
+X-Received: by 2002:a17:907:9b06:b0:83f:8e58:6427 with SMTP id kn6-20020a1709079b0600b0083f8e586427mr51526582ejc.63.1673188259577;
+        Sun, 08 Jan 2023 06:30:59 -0800 (PST)
 Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm2563068ejg.174.2023.01.08.06.25.01
+        by smtp.gmail.com with ESMTPSA id c39-20020a509faa000000b00483cccdfeaesm2638521edf.38.2023.01.08.06.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 06:25:02 -0800 (PST)
-Message-ID: <85f6ece15147bac18468662c411f266374365ed3.camel@redhat.com>
-Subject: Re: [PATCH v5 03/33] KVM: SVM: Flush the "current" TLB when
- activating AVIC
+        Sun, 08 Jan 2023 06:30:59 -0800 (PST)
+Message-ID: <f192d615be72ea186debb92ce3b0d8ce344d3695.camel@redhat.com>
+Subject: Re: [PATCH v5 10/33] KVM: x86: Inhibit APIC memslot if x2APIC and
+ AVIC are enabled
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -67,17 +67,17 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Li RongQing <lirongqing@baidu.com>,
         Greg Edwards <gedwards@ddn.com>
-Date:   Sun, 08 Jan 2023 16:25:00 +0200
-In-Reply-To: <20230106011306.85230-4-seanjc@google.com>
+Date:   Sun, 08 Jan 2023 16:30:57 +0200
+In-Reply-To: <20230106011306.85230-11-seanjc@google.com>
 References: <20230106011306.85230-1-seanjc@google.com>
-         <20230106011306.85230-4-seanjc@google.com>
+         <20230106011306.85230-11-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,43 +86,261 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 2023-01-06 at 01:12 +0000, Sean Christopherson wrote:
-> Flush the TLB when activating AVIC as the CPU can insert into the TLB
-> while AVIC is "locally" disabled.  KVM doesn't treat "APIC hardware
-> disabled" as VM-wide AVIC inhibition, and so when a vCPU has its APIC
-> hardware disabled, AVIC is not guaranteed to be inhibited.  As a result,
-> KVM may create a valid NPT mapping for the APIC base, which the CPU can
-> cache as a non-AVIC translation.
+> Free the APIC access page memslot if any vCPU enables x2APIC and SVM's
+> AVIC is enabled to prevent accesses to the virtual APIC on vCPUs with
+> x2APIC enabled.  On AMD, if its "hybrid" mode is enabled (AVIC is enabled
+> when x2APIC is enabled even without x2AVIC support), keeping the APIC
+> access page memslot results in the guest being able to access the virtual
+> APIC page as x2APIC is fully emulated by KVM.  I.e. hardware isn't aware
+> that the guest is operating in x2APIC mode.
 > 
-> Note, Intel handles this in vmx_set_virtual_apic_mode().
+> Exempt nested SVM's update of APICv state from the new logic as x2APIC
+> can't be toggled on VM-Exit.  In practice, invoking the x2APIC logic
+> should be harmless precisely because it should be a glorified nop, but
+> play it safe to avoid latent bugs, e.g. with dropping the vCPU's SRCU
+> lock.
 > 
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: stable@vger.kernel.org
+> Intel doesn't suffer from the same issue as APICv has fully independent
+> VMCS controls for xAPIC vs. x2APIC virtualization.
+Nit: Intel and AMD with X2AVIC.
+
+
+>   Technically, KVM
+> should provide bus error semantics and not memory semantics for the APIC
+> page when x2APIC is enabled, but KVM already provides memory semantics in
+> other scenarios, e.g. if APICv/AVIC is enabled and the APIC is hardware
+> disabled (via APIC_BASE MSR).
+> 
+> Note, checking apic_access_memslot_enabled without taking locks relies
+> it being set during vCPU creation (before kvm_vcpu_reset()).  vCPUs can
+> race to set the inhibit and delete the memslot, i.e. can get false
+> positives, but can't get false negatives as apic_access_memslot_enabled
+> can't be toggled "on" once any vCPU reaches KVM_RUN.
+> 
+> Opportunistically drop the "can" while updating avic_activate_vmcb()'s
+> comment, i.e. to state that KVM _does_ support the hybrid mode.  Move
+> the "Note:" down a line to conform to preferred kernel/KVM multi-line
+> comment style.
+> 
+> Opportunistically update the apicv_update_lock comment, as it isn't
+> actually used to protect apic_access_memslot_enabled (which is protected
+> by slots_lock).
+> 
+> Fixes: 0e311d33bfbe ("KVM: SVM: Introduce hybrid-AVIC mode")
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/x86/kvm/svm/avic.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  arch/x86/include/asm/kvm_host.h | 10 +++++----
+>  arch/x86/kvm/lapic.c            | 38 ++++++++++++++++++++++++++++++++-
+>  arch/x86/kvm/lapic.h            |  1 +
+>  arch/x86/kvm/svm/avic.c         | 12 +++++------
+>  arch/x86/kvm/svm/nested.c       |  2 +-
+>  arch/x86/kvm/svm/svm.c          |  2 ++
+>  arch/x86/kvm/x86.c              | 27 +++++++++++++++++++++--
+>  7 files changed, 78 insertions(+), 14 deletions(-)
 > 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index c70690b2c82d..1d92c148e799 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1249,10 +1249,11 @@ struct kvm_arch {
+>  	struct kvm_apic_map __rcu *apic_map;
+>  	atomic_t apic_map_dirty;
+>  
+> -	/* Protects apic_access_memslot_enabled and apicv_inhibit_reasons */
+> -	struct rw_semaphore apicv_update_lock;
+> -
+>  	bool apic_access_memslot_enabled;
+> +	bool apic_access_memslot_inhibited;
+> +
+> +	/* Protects apicv_inhibit_reasons */
+> +	struct rw_semaphore apicv_update_lock;
+>  	unsigned long apicv_inhibit_reasons;
+>  
+>  	gpa_t wall_clock;
+> @@ -1599,6 +1600,7 @@ struct kvm_x86_ops {
+>  	void (*enable_irq_window)(struct kvm_vcpu *vcpu);
+>  	void (*update_cr8_intercept)(struct kvm_vcpu *vcpu, int tpr, int irr);
+>  	bool (*check_apicv_inhibit_reasons)(enum kvm_apicv_inhibit reason);
+> +	bool allow_apicv_in_x2apic_without_x2apic_virtualization;
+>  	void (*refresh_apicv_exec_ctrl)(struct kvm_vcpu *vcpu);
+>  	void (*hwapic_irr_update)(struct kvm_vcpu *vcpu, int max_irr);
+>  	void (*hwapic_isr_update)(int isr);
+> @@ -1973,7 +1975,7 @@ gpa_t kvm_mmu_gva_to_gpa_system(struct kvm_vcpu *vcpu, gva_t gva,
+>  
+>  bool kvm_apicv_activated(struct kvm *kvm);
+>  bool kvm_vcpu_apicv_activated(struct kvm_vcpu *vcpu);
+> -void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu);
+> +void __kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu);
+>  void __kvm_set_or_clear_apicv_inhibit(struct kvm *kvm,
+>  				      enum kvm_apicv_inhibit reason, bool set);
+>  void kvm_set_or_clear_apicv_inhibit(struct kvm *kvm,
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index e73386c26d2c..355ea688df4a 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2442,7 +2442,8 @@ int kvm_alloc_apic_access_page(struct kvm *kvm)
+>  	int ret = 0;
+>  
+>  	mutex_lock(&kvm->slots_lock);
+> -	if (kvm->arch.apic_access_memslot_enabled)
+> +	if (kvm->arch.apic_access_memslot_enabled ||
+> +	    kvm->arch.apic_access_memslot_inhibited)
+>  		goto out;
+>  
+>  	hva = __x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT,
+> @@ -2470,6 +2471,41 @@ int kvm_alloc_apic_access_page(struct kvm *kvm)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_alloc_apic_access_page);
+>  
+> +void kvm_inhibit_apic_access_page(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm *kvm = vcpu->kvm;
+> +
+> +	if (!kvm->arch.apic_access_memslot_enabled)
+> +		return;
+> +
+> +	kvm_vcpu_srcu_read_unlock(vcpu);
+> +
+> +	mutex_lock(&kvm->slots_lock);
+> +
+> +	if (kvm->arch.apic_access_memslot_enabled) {
+> +		__x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT, 0, 0);
+> +		/*
+> +		 * Clear "enabled" after the memslot is deleted so that a
+> +		 * different vCPU doesn't get a false negative when checking
+> +		 * the flag out of slots_lock.  No additional memory barrier is
+> +		 * needed as modifying memslots requires waiting other vCPUs to
+> +		 * drop SRCU (see above), and false positives are ok as the
+> +		 * flag is rechecked after acquiring slots_lock.
+> +		 */
+> +		kvm->arch.apic_access_memslot_enabled = false;
+> +
+> +		/*
+> +		 * Mark the memslot as inhibited to prevent reallocating the
+> +		 * memslot during vCPU creation, e.g. if a vCPU is hotplugged.
+> +		 */
+> +		kvm->arch.apic_access_memslot_inhibited = true;
+> +	}
+> +
+> +	mutex_unlock(&kvm->slots_lock);
+> +
+> +	kvm_vcpu_srcu_read_lock(vcpu);
+> +}
+> +
+>  void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  {
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+> index 8c6442751dab..df316ede7546 100644
+> --- a/arch/x86/kvm/lapic.h
+> +++ b/arch/x86/kvm/lapic.h
+> @@ -113,6 +113,7 @@ int kvm_apic_set_irq(struct kvm_vcpu *vcpu, struct kvm_lapic_irq *irq,
+>  int kvm_apic_local_deliver(struct kvm_lapic *apic, int lvt_type);
+>  void kvm_apic_update_apicv(struct kvm_vcpu *vcpu);
+>  int kvm_alloc_apic_access_page(struct kvm *kvm);
+> +void kvm_inhibit_apic_access_page(struct kvm_vcpu *vcpu);
+>  
+>  bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
+>  		struct kvm_lapic_irq *irq, int *r, struct dest_map *dest_map);
 > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 6919dee69f18..712330b80891 100644
+> index ec28ba4c5f1b..0a75993afed6 100644
 > --- a/arch/x86/kvm/svm/avic.c
 > +++ b/arch/x86/kvm/svm/avic.c
-> @@ -86,6 +86,12 @@ static void avic_activate_vmcb(struct vcpu_svm *svm)
->  		/* Disabling MSR intercept for x2APIC registers */
->  		svm_set_x2apic_msr_interception(svm, false);
->  	} else {
-> +		/*
-> +		 * Flush the TLB, the guest may have inserted a non-APIC
-> +		 * mapping into the TLB while AVIC was disabled.
-> +		 */
-> +		kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, &svm->vcpu);
+> @@ -72,12 +72,12 @@ static void avic_activate_vmcb(struct vcpu_svm *svm)
+>  
+>  	vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
+>  
+> -	/* Note:
+> -	 * KVM can support hybrid-AVIC mode, where KVM emulates x2APIC
+> -	 * MSR accesses, while interrupt injection to a running vCPU
+> -	 * can be achieved using AVIC doorbell. The AVIC hardware still
+> -	 * accelerate MMIO accesses, but this does not cause any harm
+> -	 * as the guest is not supposed to access xAPIC mmio when uses x2APIC.
+> +	/*
+> +	 * Note: KVM supports hybrid-AVIC mode, where KVM emulates x2APIC MSR
+> +	 * accesses, while interrupt injection to a running vCPU can be
+> +	 * achieved using AVIC doorbell.  KVM disables the APIC access page
+> +	 * (deletes the memslot) if any vCPU has x2APIC enabled, thus enabling
+> +	 * AVIC in hybrid mode activates only the doorbell mechanism.
+>  	 */
+>  	if (apic_x2apic_mode(svm->vcpu.arch.apic) &&
+>  	    avic_mode == AVIC_MODE_X2) {
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index bc9cd7086fa9..34ac03969f28 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -1106,7 +1106,7 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>  	 * to benefit from it right away.
+>  	 */
+>  	if (kvm_apicv_activated(vcpu->kvm))
+> -		kvm_vcpu_update_apicv(vcpu);
+> +		__kvm_vcpu_update_apicv(vcpu);
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 26044e1d2422..7651d665723e 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -5028,6 +5028,8 @@ static __init int svm_hardware_setup(void)
+>  		svm_x86_ops.vcpu_blocking = NULL;
+>  		svm_x86_ops.vcpu_unblocking = NULL;
+>  		svm_x86_ops.vcpu_get_apicv_inhibit_reasons = NULL;
+> +	} else if (avic_mode == AVIC_MODE_X1) {
+> +		svm_x86_ops.allow_apicv_in_x2apic_without_x2apic_virtualization = true;
+>  	}
+>  
+>  	if (vls) {
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 39b8dd37bc40..1abe3f1e821c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10045,7 +10045,7 @@ void kvm_make_scan_ioapic_request(struct kvm *kvm)
+>  	kvm_make_all_cpus_request(kvm, KVM_REQ_SCAN_IOAPIC);
+>  }
+>  
+> -void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+> +void __kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+>  	bool activate;
+> @@ -10080,7 +10080,30 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+>  	preempt_enable();
+>  	up_read(&vcpu->kvm->arch.apicv_update_lock);
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_vcpu_update_apicv);
+> +EXPORT_SYMBOL_GPL(__kvm_vcpu_update_apicv);
 > +
->  		/* For xAVIC and hybrid-xAVIC modes */
->  		vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->  		/* Enabling MSR intercept for x2APIC registers */
+> +static void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+> +{
+> +	if (!lapic_in_kernel(vcpu))
+> +		return;
+> +
+> +	/*
+> +	 * Due to sharing page tables across vCPUs, the xAPIC memslot must be
+> +	 * deleted if any vCPU has xAPIC virtualization and x2APIC enabled, but
+> +	 * and hardware doesn't support x2APIC virtualization.  E.g. some AMD
+> +	 * CPUs support AVIC but not x2APIC.  KVM still allows enabling AVIC in
+> +	 * this case so that KVM can the AVIC doorbell to inject interrupts to
+> +	 * running vCPUs, but KVM must not create SPTEs for the APIC base as
+> +	 * the vCPU would incorrectly be able to access the vAPIC page via MMIO
+> +	 * despite being in x2APIC mode.  For simplicity, inhibiting the APIC
+> +	 * access page is sticky.
+> +	 */
+> +	if (apic_x2apic_mode(vcpu->arch.apic) &&
+> +	    kvm_x86_ops.allow_apicv_in_x2apic_without_x2apic_virtualization)
+> +		kvm_inhibit_apic_access_page(vcpu);
+> +
+> +	__kvm_vcpu_update_apicv(vcpu);
+> +}
+>  
+>  void __kvm_set_or_clear_apicv_inhibit(struct kvm *kvm,
+>  				      enum kvm_apicv_inhibit reason, bool set)
 
 
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
 Best regards,
 	Maxim Levitsky
+
 
