@@ -2,105 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731126612AC
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 00:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D1A6612B3
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 01:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjAGX65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 18:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S231533AbjAHAIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 19:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjAGX6u (ORCPT
+        with ESMTP id S229627AbjAHAIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 18:58:50 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874D31A21A
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 15:58:49 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4c15c4fc8ccso69234367b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 15:58:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LASr4G5hxiyIVkS42J/7KQN5U5E2hhaLbz6J/xvH/2E=;
-        b=ZZUxnGGyIdZf514X/wSMh4xFDXIon/TWXIlgZ0R2hqbJKUrJNjY4wLSu1ReOSF3IGn
-         Yw4q+Iek2uNeSwXjZKsih/ll0arQX3vHmae87pYmhfmlIr+C+ITIXZ3Ptm3rV+5ZUhci
-         na7If2Dzv4Y3XujFR5fJxHa+zr7rCx5lgRfzqjfwy0UhLLGhe766pk1w23ReOY58OvC2
-         HqGdjsllVvxa2SNknaF0tGY/TPcviQcFTKjAT83M4IquFAkpX4XCCg0bXEOjej3SQxgY
-         F2ZEIDogADGv1tJnym8a7DsBtV5UHdABzHZvaCjI/wml8mW1hBYa+K3+ywUQJJpuTLlz
-         HOOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LASr4G5hxiyIVkS42J/7KQN5U5E2hhaLbz6J/xvH/2E=;
-        b=Hzq3c2ql3TYtSijLu6Q+yCJp8FyJtR6gVxDt0kEA1R2OItQqAuA3z3am5zob/FGESD
-         jbU8mfv+YCHdq5pPtFqUaYO9q50gaQnK3GaBqaThQ8D223JBYuxj2sWDj8KO2+MkVvNG
-         X7UTQwuCJVB3MOPjl7XYtdSS+4QefbMKI+KM7zMamIqFSrzm5l0gqtAMznAMnhbvT+41
-         VKQkhIHfJme8KCUMUFYFAYZVyXVas3KRAsFHvtpcAx1ZNUxwnnZeXmW28n+tp1d+muSw
-         BUoVB9oNUv1xd0yuKIXxpHZ5Zyb3bsBIwGPcY62sp7Zq2fWatxRZquw9RrytJ3Ql3O++
-         jKaQ==
-X-Gm-Message-State: AFqh2kp3PKblux3WIh9WyIfUZOO2W11mQkl2Q/CsSqH41ib2pgHRQGA1
-        6O6OOLKjan4Lw7H+YQPdMz1ZANjamyG8CP5FAL1DGhT43QYOYg==
-X-Google-Smtp-Source: AMrXdXsVVgiXpJxiyg4qpmZSmee3Udce/r+t9JdGI5jOiQNEqKcQT77BaK0FyjA0gDy/zd7fX2yRvnvMyct9Xp9Iq6g=
-X-Received: by 2002:a81:484c:0:b0:36a:de9d:825e with SMTP id
- v73-20020a81484c000000b0036ade9d825emr898057ywa.477.1673135928778; Sat, 07
- Jan 2023 15:58:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230105215706.never.027-kees@kernel.org>
-In-Reply-To: <20230105215706.never.027-kees@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 8 Jan 2023 00:58:37 +0100
-Message-ID: <CACRpkdYfsY7K8GksccDunCfKHbq_Df8ddrYGRg2gmeu6CVCF5w@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ixp4xx: Replace 0-length arrays with flexible arrays
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Krzysztof Halasa <khalasa@piap.pl>, Arnd Bergmann <arnd@arndb.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 7 Jan 2023 19:08:16 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F271EEE4;
+        Sat,  7 Jan 2023 16:08:14 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D339E5C007D;
+        Sat,  7 Jan 2023 19:08:10 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 07 Jan 2023 19:08:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673136490; x=1673222890; bh=w6+aDVc5tr
+        2uIs4oPoROJd4fXpjR6GDvnU6vXcUl8+E=; b=cp64SsHubAH99xcKXc31E50owr
+        wlsfwwUfDFasgRONy24xanJJNwofyBrCQqq9yrDSayVGnfvqKHD8N5J8mJ1zsjMk
+        m2HbIOo0QgUqKJDUoekJs0ZvySSR8ZynasP6zia1kY5qGTsWYi1JD1ipfD3GP9Q/
+        FAUQ1u9x7k/Ev1jVOG80iHbowRRMSeQkdpVvp22gh5e/69eW0NBGKFYS9V6+GHFJ
+        C4hHjhy/3p80AYxUb/JFgEVxtQnRx6aCTDHQoILBz/NWhFRD/ho24bBB7lHGuVx/
+        chuK/pREqTqrM15AI5vS8397gk/YVLPsKflFCTO7f8NC3xOOyyAbFK9TEEQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1673136490; x=1673222890; bh=w6+aDVc5tr2uIs4oPoROJd4fXpjR
+        6GDvnU6vXcUl8+E=; b=SBqtoaNdbDoKgboEpLb+w8tienE1p0Z5u9EOif9FMYLL
+        gjkQ2YAh+3v8zpK2Fksde3wHXh5Hnj6Z/dv/QEVXbG01tyV3ImVYSTr4DNa5ATnR
+        4mFmhWKLEnYJ3Ce8XIItTkjRrbEgm05DJMfFqkpMWIcCxz6huTNffz9sl6zevzd0
+        YyjqLKJHjVSAAxySj5Ow1OnicIN3aTVy2zu26qhvSGkh5bl5ggCloCCo+SCljGQs
+        XvVbEv4ZuywZrF5TgOVlOWVQvtXX5aIvGkMhPmnWscQ/xV+0+lVyWd8pbUKt+B4R
+        fdHYcpY/CSFVzOTPxnrNnrdR0IUtARA+w4kHIRbeDQ==
+X-ME-Sender: <xms:aQm6Y4_ryqD8BpqAQQcuSQ21_xzOSl1ISNuu3-QA49AIm0uKE17rXw>
+    <xme:aQm6Ywvi0jeQJcua8t31x9QB-B-Ay11huBm5prp4LPDMi0budjHGIXW26uRhfR_z9
+    xMfU-MkOxStiwCYphQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeefgddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:aQm6Y-B4ZB89sZ7EKIiSHGOVdE1LqS9AHBXIbnwKxJBL0XaRlU7g2g>
+    <xmx:aQm6Y4cjxJXsG45Fj_Mnht2OgohcwF5K28V9PvytOe8jqG87Ale0bQ>
+    <xmx:aQm6Y9MuJgu2AOYLAsn9T38V5S1zGjUSIFfNYIl7CBmBrrlLvfVO1A>
+    <xmx:agm6Y4FI8JHKzIIkHWeSYWwUhqj16ZmlP57-fZ_V5jzLUc3TuxOemg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3FA10B60086; Sat,  7 Jan 2023 19:08:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com>
+In-Reply-To: <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
+ <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
+Date:   Sun, 08 Jan 2023 01:07:48 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Philipp Tomsich" <philipp.tomsich@vrull.eu>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Atish Patra" <atishp@rivosinc.com>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Tsukasa OI" <research_trasio@irq.a4lg.com>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Mayuresh Chitale" <mchitale@ventanamicro.com>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 10:57 PM Kees Cook <keescook@chromium.org> wrote:
+On Sat, Jan 7, 2023, at 23:10, Lad, Prabhakar wrote:
 
-> Zero-length arrays are deprecated[1]. Replace npe_load_firmware's
-> union of 0-length arrays with flexible arrays. Detected with GCC 13,
-> using -fstrict-flex-arrays=3:
->
-> drivers/soc/ixp4xx/ixp4xx-npe.c: In function 'npe_load_firmware':
-> drivers/soc/ixp4xx/ixp4xx-npe.c:570:60: warning: array subscript i is outside array bounds of 'u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
->   570 |                         image->data[i] = swab32(image->data[i]);
-> include/uapi/linux/swab.h:115:54: note: in definition of macro '__swab32'
->   115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
->       |                                                      ^
-> drivers/soc/ixp4xx/ixp4xx-npe.c:570:42: note: in expansion of macro 'swab32'
->   570 |                         image->data[i] = swab32(image->data[i]);
->       |                                          ^~~~~~
-> drivers/soc/ixp4xx/ixp4xx-npe.c:522:29: note: while referencing 'data'
->   522 |                         u32 data[0];
->       |                             ^~~~
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
->
-> Cc: Krzysztof Halasa <khalasa@piap.pl>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+>> > +
+>> > +     memset(&thead_cmo_ops, 0x0, sizeof(thead_cmo_ops));
+>> > +     if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO)) {
+>> > +             thead_cmo_ops.clean_range = &thead_cmo_clean_range;
+>> > +             thead_cmo_ops.inv_range = &thead_cmo_inval_range;
+>> > +             thead_cmo_ops.flush_range = &thead_cmo_flush_range;
+>> > +             riscv_noncoherent_register_cache_ops(&thead_cmo_ops);
+>> > +     }
+>>
+>> The implementation here looks reasonable, just wonder whether
+>> the classification as an 'errata' makes sense. I would probably
+>> consider this a 'driver' at this point, but that's just
+>> a question of personal preference.
+>>
+> zicbom is a CPU feature that doesn't have any DT node and hence no
+> driver and similarly for T-HEAD SoC.
 
-Looks good to me:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+A driver does not have to be a 'struct platform_driver' that
+matches to a device node, my point was more about what to
+name it, regardless of how the code is entered.
 
-Do you need me to funnel this to the SoC tree or do you have
-some quickpath for fixes like this?
+> Also the arch_setup_dma_ops()
+> happens quite early before driver probing due to which we get WARN()
+> messages during bootup hence I have implemented it as errata; as
+> errata patching happens quite early.
 
-Yours,
-Linus Walleij
+But there is no more patching here, just setting the
+function pointers, right?
+
+>> > +struct riscv_cache_ops {
+>> > +     void (*clean_range)(unsigned long addr, unsigned long size);
+>> > +     void (*inv_range)(unsigned long addr, unsigned long size);
+>> > +     void (*flush_range)(unsigned long addr, unsigned long size);
+>> > +     void (*riscv_dma_noncoherent_cmo_ops)(void *vaddr, size_t size,
+>> > +                                           enum dma_data_direction dir,
+>> > +                                           enum dma_noncoherent_ops ops);
+>> > +};
+>>
+>> I don't quite see how the fourth operation is used here.
+>> Are there cache controllers that need something beyond
+>> clean/inv/flush?
+>>
+> This is for platforms that dont follow standard cache operations (like
+> done in patch 5/6) and there drivers decide on the operations
+> depending on the ops and dir.
+
+My feeling is that the set of operations that get called should
+not depend on the cache controller but at best the CPU. I tried to
+enumerate how zicbom and ax45 differ here, and how that compares
+to other architectures:
+
+                  zicbom      ax45,mips,arc      arm           arm64
+fromdevice      clean/flush   inval/inval   inval/inval   clean/inval
+todevice        clean/-       clean/-       clean/-       clean/-
+bidi            flush/flush   flush/inval   clean/inval   clean/inval
+
+So everyone does the same operation for DMA_TO_DEVICE, but
+they differ in the DMA_FROM_DEVICE handling, for reasons I
+don't quite see:
+
+Your ax45 code does the same as arc and mips. arm and
+arm64 skip invalidating the cache before bidi mappings,
+but arm has a FIXME comment about that. arm64 does a
+'clean' instead of 'inval' when mapping a fromdevice
+page, which seems valid but slower than necessary.
+
+Could the zicbom operations be changed to do the same
+things as the ax45/mips/arc ones, or are there specific
+details in the zicbom spec that require this?
+
+     Arnd
