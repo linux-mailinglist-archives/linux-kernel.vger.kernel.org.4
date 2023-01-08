@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80391661822
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7805661827
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbjAHS3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S236289AbjAHSaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbjAHS3N (ORCPT
+        with ESMTP id S234377AbjAHSaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 13:29:13 -0500
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D8A60DF;
-        Sun,  8 Jan 2023 10:29:13 -0800 (PST)
-Received: by mail-il1-f172.google.com with SMTP id bp26so3860613ilb.3;
-        Sun, 08 Jan 2023 10:29:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vMhFbySGrPohTwiXX3TAkbMAqqH438aTvo1KuJo04VQ=;
-        b=VIC16Hd/k75CSTXP6E4cnA0VIgRYtDCpVl+cYns4MwxAij6EOZ5XZgwxeS+V8XMPf3
-         m2YwfC8GmKQ3FIqZS3z1nxMKloSk9xVtlJr5QOIwCfCDt/mgIdZHaTcs6g1eDYk8Tq5H
-         l6yeg+zRjNw2FqbSl8BZ7E8NYSfG7apVH3rm9RAq99EFlpxH/bSGezVO6Y4nPlCi0lsF
-         vjYx4CDXH/kVDQ85LlesOxJGpu1PN6PAAcq6P68qVLNvGo/7P6S3mzU7+OyWaYtqLIa8
-         W0W8owZAGbSXYcY3BrZLhEe9WoItXISw1mAURtZqWg4d2jeKEBK3i/TdxiOWfa02f59A
-         JlFg==
-X-Gm-Message-State: AFqh2kqoJrwka2qddgFGstra/eoCZ4RPR6bhtVzclapIS6ghOYvMZgCM
-        uA731o0DXtEJsyGFGDrLrA==
-X-Google-Smtp-Source: AMrXdXscl7NVSbdD6hIptcgu+AoJe4I5lmFCyA4jcxP2LE8xaf+gZBUiRRe8sFV5vHIJW9StFOiDCw==
-X-Received: by 2002:a92:8747:0:b0:30d:6d40:aaa0 with SMTP id d7-20020a928747000000b0030d6d40aaa0mr15019018ilm.5.1673202552270;
-        Sun, 08 Jan 2023 10:29:12 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
-        by smtp.gmail.com with ESMTPSA id p18-20020a056638217200b0039e80b510e1sm579616jak.157.2023.01.08.10.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 10:29:11 -0800 (PST)
-Received: (nullmailer pid 175231 invoked by uid 1000);
-        Sun, 08 Jan 2023 18:28:57 -0000
-Date:   Sun, 8 Jan 2023 12:28:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alsa-devel@alsa-project.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rohit kumar <rohitkr@codeaurora.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: qcom,lpass-cpu: Fix DAI children
- pattern
-Message-ID: <167320253755.175169.16665151163621062615.robh@kernel.org>
-References: <20221227163135.102559-1-krzysztof.kozlowski@linaro.org>
- <20221227163135.102559-2-krzysztof.kozlowski@linaro.org>
+        Sun, 8 Jan 2023 13:30:18 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAC4B486;
+        Sun,  8 Jan 2023 10:30:16 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pEaQx-0001Os-9I; Sun, 08 Jan 2023 19:30:15 +0100
+Message-ID: <05449f93-1d2f-e678-dc9b-5cc8956149b4@leemhuis.info>
+Date:   Sun, 8 Jan 2023 19:30:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227163135.102559-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: brcmfmac regression - cfg80211_set_channel: set chanspec 0x????
+ fail, reason -52 spew
+Content-Language: en-US, de-DE
+To:     Mike Galbraith <efault@gmx.de>, LKML <linux-kernel@vger.kernel.org>
+Cc:     Chi-hsien Lin <chi-hsien.lin@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>, KalleValo <kvalo@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>
+References: <509b8748971fd988c5dd623adc6db97617a50fb5.camel@gmx.de>
+ <6ff1691d505630f3cc7bc1d5c128a7252f66bf71.camel@gmx.de>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <6ff1691d505630f3cc7bc1d5c128a7252f66bf71.camel@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673202617;7c80e34b;
+X-HE-SMSGID: 1pEaQx-0001Os-9I
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08.01.23 17:29, Mike Galbraith wrote:
+> Geez.  Sorry for multiple copies, let's see if any of the CCs work.
+> 
+> On Sun, 2023-01-08 at 17:18 +0100, Mike Galbraith wrote:
+>> Greetings,
+>>
+>> 6c04deae1438 "brcmfmac: Add dump_survey cfg80211 ops for HostApd AutoChannelSelection"
+>>
+>> This commit seems to inspire my little raspberrypi 4b to moan
+>> endlessly, though it seems to work.  Brute force revert silenced it.
 
-On Tue, 27 Dec 2022 17:31:34 +0100, Krzysztof Kozlowski wrote:
-> DAI children (as subnodes) can come with two-digit unit addresses:
-> 
->   sc7280-herobrine-crd.dtb: audio@3987000: Unevaluated properties are not allowed ('dai-link@19', 'dai-link@25' were unexpected)
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Not my area of expertise, but I'd guess this patch might fix your problem:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+https://lore.kernel.org/all/20230103124117.271988-2-arend.vanspriel@broadcom.com/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+>> [    7.917448] brcmfmac: F1 signature read @0x18000000=0x15264345
+>> [    7.974270] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43455-sdio for chip BCM4345/6
+>> [    8.326846] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: Jan  4 2021 19:56:29 version 7.45.229 (617f1f5 CY) FWID 01-2dbd9d2e
+>> [   10.799571] brcmfmac: brcmf_cfg80211_set_power_mgmt: power save enabled
+>> [   15.078022] brcmfmac: cfg80211_set_channel: set chanspec 0x100e fail, reason -52
+>> [   15.078347] brcmfmac: cfg80211_set_channel: set chanspec 0xd022 fail, reason -52
+>> [   15.185674] brcmfmac: cfg80211_set_channel: set chanspec 0xd026 fail, reason -52
+>> [   15.289609] brcmfmac: cfg80211_set_channel: set chanspec 0xd02a fail, reason -52
+>> [   15.393796] brcmfmac: cfg80211_set_channel: set chanspec 0xd02e fail, reason -52
+>> [   17.066478] brcmfmac: cfg80211_set_channel: set chanspec 0xd090 fail, reason -52
+>> [   17.066923] brcmfmac: cfg80211_set_channel: set chanspec 0xd095 fail, reason -52
+>> [   17.070632] brcmfmac: cfg80211_set_channel: set chanspec 0xd099 fail, reason -52
+>> [   17.071080] brcmfmac: cfg80211_set_channel: set chanspec 0xd09d fail, reason -52
+>> [   17.071653] brcmfmac: cfg80211_set_channel: set chanspec 0xd0a1 fail, reason -52
+>> [   17.072197] brcmfmac: cfg80211_set_channel: set chanspec 0xd0a5 fail, reason -52
+>>
+> 
