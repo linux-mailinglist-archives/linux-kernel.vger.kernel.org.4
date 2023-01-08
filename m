@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA524661921
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C589661926
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbjAHUL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S234193AbjAHUNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236107AbjAHULl (ORCPT
+        with ESMTP id S236101AbjAHUNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:11:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CC2DFB1
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:11:38 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B9981EC01A9;
-        Sun,  8 Jan 2023 21:11:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673208697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UPk59aPmcy0l3XMwNeO5y6KIq0NZNlOrlUTVcdd+O9Q=;
-        b=fgMVBZFgGIIcir4/E+UrYUYuEeFN4tnA4lzQlb9wA+BTaLk1R++hQI0E5qkLXbFli3inEl
-        xN8qRnvQu7xddW9ZU8YmGlzP7DYj7DSjMuFitkEb29xfd43+8AUKqbTUTIc3lYGKKm2HsU
-        Os9iiKg0JG3M/FFbPd5utYaueNyEcYw=
-Date:   Sun, 8 Jan 2023 21:11:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] x86: Disable kernel stack offset randomization for !TSC
-Message-ID: <Y7sjdYeS4WNOW7pu@zn.tnic>
-References: <alpine.DEB.2.21.2301081919550.65308@angie.orcam.me.uk>
- <Y7sfdxJ5/2DSQK/l@zn.tnic>
- <alpine.DEB.2.21.2301082001540.65308@angie.orcam.me.uk>
+        Sun, 8 Jan 2023 15:13:30 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6BD2671;
+        Sun,  8 Jan 2023 12:13:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673208800; bh=KK4gdVcPkbx53T8nteORF7wE5stV6jTMnhmIKRwioCA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=dRTEpHbsiYQnW5JX9HHf9oPr/RwLZMwAjIML/ixJCvuIvGypC9YkeQHaLFlB7S3L8
+         ZB1FdlF/qZBaXWT/RP9Eu7U533mC3H10H0gU7/8UbmFmM09tAAmZagLElGobhM4Gyy
+         kzmuQtpvvG9wlXxddJ2dGC8llZqZwAFGby635P6U=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun,  8 Jan 2023 21:13:20 +0100 (CET)
+X-EA-Auth: QzJkpgvuklnVpan+KktYI8NBrX6wZ9giHA77fbQ68+m9op63iHv+LC14cxn1CgsqZjmbUJuY99opuOT3wCTFk/NNnuhjtTP9
+Date:   Mon, 9 Jan 2023 01:43:15 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: [PATCH v2] scsi: Replace printk+WARN_ON by WARN macro
+Message-ID: <Y7sj22gCmnYqTzP4@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2301082001540.65308@angie.orcam.me.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -55,24 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 08:04:14PM +0000, Maciej W. Rozycki wrote:
-> processor	: 0
-> vendor_id	: GenuineIntel
-> cpu family	: 4
-> model		: 3
-> model name	: 486 DX/2
-> stepping	: 5
+A combination of printk() followed by WARN_ON() macro can be simplified
+using a single WARN(1, ...) macro. Patch change suggested by warn.cocci
+Coccinelle semantic patch.
 
-Real hw?
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Changes in v2:
+   - Remove printk() from the WARN macro to avoid build warning
+   - I missed to build the change before sending the earlier version which
+     results in a build error due to incorrect brace balancing. Fixed it.
 
-If so, LOL, amazing that a box like that still even boots.
+ drivers/scsi/initio.c   | 3 +--
+ drivers/scsi/scsi_lib.c | 6 ++----
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-A modern phone is likely orders of magnitudes more powerful than this relic.
-
-:-)
-
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 375261d67619..fea591d9d292 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -2738,8 +2738,7 @@ static void i91uSCBPost(u8 * host_mem, u8 * cblk_mem)
+ 	host = (struct initio_host *) host_mem;
+ 	cblk = (struct scsi_ctrl_blk *) cblk_mem;
+ 	if ((cmnd = cblk->srb) == NULL) {
+-		printk(KERN_ERR "i91uSCBPost: SRB pointer is empty\n");
+-		WARN_ON(1);
++		WARN(1, KERN_ERR "i91uSCBPost: SRB pointer is empty\n");
+ 		initio_release_scb(host, cblk);	/* Release SCB for current channel */
+ 		return;
+ 	}
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 9ed1ebcb7443..0f1e9ee4591b 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -3009,10 +3009,8 @@ void *scsi_kmap_atomic_sg(struct scatterlist *sgl, int sg_count,
+ 	}
+ 
+ 	if (unlikely(i == sg_count)) {
+-		printk(KERN_ERR "%s: Bytes in sg: %zu, requested offset %zu, "
+-			"elements %d\n",
+-		       __func__, sg_len, *offset, sg_count);
+-		WARN_ON(1);
++		WARN(1, KERN_ERR "%s: Bytes in sg: %zu, requested offset %zu, elements %d\n",
++				__func__, sg_len, *offset, sg_count);
+ 		return NULL;
+ 	}
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+
