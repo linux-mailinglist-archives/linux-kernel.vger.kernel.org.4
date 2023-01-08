@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82D666144C
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A211066144E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjAHJ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 04:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S230435AbjAHJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 04:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjAHJ3g (ORCPT
+        with ESMTP id S229520AbjAHJay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:29:36 -0500
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:404::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FC010B6D
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:29:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Oybl0kFzJk1OHKBfarCPAX+ldUYM8qIDtwFbpLc8Wqg=;
-        b=OMBp7D4Q1taCLAC26KHZDvW1MnN8LDDXjmMIinVqeHcS40c2e/r5bEtpEA1YOrQKsE8uJwyy+dzX1
-         4JKIKJwtxexTCDBai/T/gN1pQFF6GZA/r8/jGnp3ACvSRRpcV8FriJldv+JY/8nNw3PBeN3zBHgAQS
-         gqwLkZC+F6kFgl05fAfdYG8tRkpCGkZwSL5dkqVYiQSgQQ/aMCdQHrSn/VegiB4aoijKO5TFJ9bump
-         HWqdwba3Kn4ZlYTE9d0fRPV50RONoQmTzzLdRTRPjJ82VVzJsAfRc4taGrrIqPH/zeF2yTJogJvsBY
-         Akt7pBD48e76OSMuArRnMD0vHtnM3jw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Oybl0kFzJk1OHKBfarCPAX+ldUYM8qIDtwFbpLc8Wqg=;
-        b=1bH+enBd3Rzx4lTdU2Ew/3w4RNpW2B4i5DDhzGEZCxhwTP59EcA+tuKMI2XuhVP+RWekbgj/wgKSQ
-         SVYt0YTBw==
-X-HalOne-ID: f2a3e065-8f36-11ed-9179-7703b0afff57
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay5 (Halon) with ESMTPSA
-        id f2a3e065-8f36-11ed-9179-7703b0afff57;
-        Sun, 08 Jan 2023 09:29:30 +0000 (UTC)
-Date:   Sun, 8 Jan 2023 10:29:29 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Robin van der Gracht <robin@protonic.nl>
-Cc:     Stephen Kitt <steve@sk2.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH 12/15] auxdisplay: ht16k33: Introduce
- backlight_get_brightness()
-Message-ID: <Y7qM+ZlG5gQiOW4K@ravnborg.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
- <20230107-sam-video-backlight-drop-fb_blank-v1-12-1bd9bafb351f@ravnborg.org>
- <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
+        Sun, 8 Jan 2023 04:30:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2342F263B
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:30:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DFE60C3D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 09:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F24C433EF;
+        Sun,  8 Jan 2023 09:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673170251;
+        bh=kOhhVFFhBDGqUh/brGt5JGVkand7yI9Pjr/HEe7Ulxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IjJc/c5QE4w+O313L9gvAEilkwzuGR/fSlK3BYDNEfErYiMj/NtW3FY+cdzFkw6Tg
+         MS7k2+l+NpX3KRqD25fLUNAmaUrEpiiEFt2KrW6G6I/Y7xR4CNC/T1U+x6bLoemMbm
+         ihpgySs8fLdY0dB7VgLOk2AuqQHowoOCh7ogBL0rdNGscutqrzJeULgKjU09XpuJTI
+         cbmLSUQTCBqjzgg+3pwggUWwx0BbKiiMnk3BRLh1NaBcMOISfuun6PwLqoubUx0HQJ
+         80gKJzjLAADutN5LLyyZCxyQ25xo19wAx9zC7D3IPCBXoQbs5KOgLBhC4G9ZPxHIVC
+         z99fZB9Gp70fg==
+Date:   Sun, 8 Jan 2023 11:30:37 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/6] mm: discard __GFP_ATOMIC
+Message-ID: <Y7qNPfvlTZKBXIEe@kernel.org>
+References: <20221129151701.23261-1-mgorman@techsingularity.net>
+ <20221129151701.23261-7-mgorman@techsingularity.net>
+ <Y7bVeE1gtSmS25td@kernel.org>
+ <20230106093524.ck5otyaopd724een@techsingularity.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230106093524.ck5otyaopd724een@techsingularity.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin.
+On Fri, Jan 06, 2023 at 09:35:24AM +0000, Mel Gorman wrote:
+> On Thu, Jan 05, 2023 at 03:49:44PM +0200, Mike Rapoport wrote:
+> > Hi Mel,
+> > 
+> > On Tue, Nov 29, 2022 at 03:17:01PM +0000, Mel Gorman wrote:
+> > > From: NeilBrown <neilb@suse.de>
+> > > 
+> > > __GFP_ATOMIC serves little purpose.  Its main effect is to set
+> > > ALLOC_HARDER which adds a few little boosts to increase the chance of an
+> > > allocation succeeding, one of which is to lower the water-mark at which it
+> > > will succeed.
+> > > 
+> > > It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
+> > > adjusts this watermark.  It is probable that other users of __GFP_HIGH
+> > > should benefit from the other little bonuses that __GFP_ATOMIC gets.
+> > > 
+> > > __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
+> > > There is little point to this.  We already get a might_sleep() warning if
+> > > __GFP_DIRECT_RECLAIM is set.
+> > > 
+> > > __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
+> > > probable that testing ALLOC_HARDER is a better fit here.
+> > > 
+> > > __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
+> > > sleep.  This should test __GFP_DIRECT_RECLAIM instead.
+> > > 
+> > > This patch:
+> > >  - removes __GFP_ATOMIC
+> > >  - allows __GFP_HIGH allocations to ignore watermark boosting as well
+> > >    as GFP_ATOMIC requests.
+> > >  - makes other adjustments as suggested by the above.
+> > > 
+> > > The net result is not change to GFP_ATOMIC allocations.  Other
+> > > allocations that use __GFP_HIGH will benefit from a few different extra
+> > > privileges.  This affects:
+> > >   xen, dm, md, ntfs3
+> > >   the vermillion frame buffer
+> > >   hibernation
+> > >   ksm
+> > >   swap
+> > > all of which likely produce more benefit than cost if these selected
+> > > allocation are more likely to succeed quickly.
+> > > 
+> > > [mgorman: Minor adjustments to rework on top of a series]
+> > > Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
+> > > Signed-off-by: NeilBrown <neilb@suse.de>
+> > > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> > > ---
+> > >  Documentation/mm/balance.rst   |  2 +-
+> > 
+> > Documentation/core-api/memory-allocation.rst needs an update as well, and
+> > there are other mentions of GFP_ATOMIC in Documentation/
+> > 
+> 
+> What part do you think needs updating in that file?
+>
+> There are two references to GFP_ATOMIC in that file, one about accessing
+> reserves and another about non-sleeping allocations and the accuracy
+> does not change after the series.
 
-On Sat, Jan 07, 2023 at 10:02:38PM +0100, Miguel Ojeda wrote:
-> On Sat, Jan 7, 2023 at 7:26 PM Sam Ravnborg via B4 Submission Endpoint
-> <devnull+sam.ravnborg.org@kernel.org> wrote:
-> >
-> > Introduce backlight_get_brightness() to simplify logic
-> > and avoid direct access to backlight properties.
-> 
-> Note: Stephen sent this one too a while ago (with some more details in
-> the commit message, which is always nice); and then he sent yesterday
-> v2 [1] (to mention the functional change with `BL_CORE_SUSPENDED`
-> [2]).
-Thanks for the pointers. I will try to move forward with Stephen's
-patches.
-> 
-> Anyway, if it goes via drm-misc, feel free to have my:
-> 
->     Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> 
-> Though it would be nice to have Robin test the change.
+You are right, I got confused.
 
-Robin - can I get your ack to apply Stephen's original v2 patch to
-drm-misc?
+> If anything, this statement should change because it invites GFP_ATOMIC
+> abuse for spurious reasons
+> 
+>   * If you think that accessing memory reserves is justified and the kernel
+>     will be stressed unless allocation succeeds, you may use ``GFP_ATOMIC``.
 
-	Sam
+Care to send a patch? ;-)
+ 
+> There are other references to GFP_ATOMIC in Documentation/ that are are a
+> little inaccurate but not in a way that is harmful and is not changed by
+> the series. For example;
+> 
+> 	GFP_ATOMIC requests are kernel internal allocations that must
+> 	be satisfied, immediately.  The kernel may drop some request,
+> 	in rare cases even panic, if a GFP_ATOMIC alloc fails.
+> 
+> This is a stronger statement than GFP_ATOMIC deserves but it's close enough
+> in the given context.
+> 
+> -- 
+> Mel Gorman
+> SUSE Labs
+> 
 
-> 
-> Thanks!
-> 
-> [1] https://lore.kernel.org/lkml/20230106143002.1434266-1-steve@sk2.org/
-> [2] https://lore.kernel.org/lkml/CANiq72kRhmT37H1FAGYGny83ONYXeqJuO8ZPbym0ajQOWKY4Kw@mail.gmail.com/
-> 
-> Cheers,
-> Miguel
+-- 
+Sincerely yours,
+Mike.
