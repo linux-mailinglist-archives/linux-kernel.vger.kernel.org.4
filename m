@@ -2,87 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7147B6612F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4782D6612FA
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjAHCMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 21:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S231701AbjAHCM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 21:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjAHCML (ORCPT
+        with ESMTP id S232106AbjAHCMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 21:12:11 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0370615838;
-        Sat,  7 Jan 2023 18:12:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NqLDk1z0xz4xZj;
-        Sun,  8 Jan 2023 13:12:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673143926;
-        bh=1oKPFLHqdn30Ox6mUZqixgNSVvy6nl5u8u5zh5Sy5BI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hnCOU+8Y8HJGFazSlmrxDgWilVob9GRltOCUDbVA978BpweQ5VZVFywJDuhrdQuwv
-         n6VuEkJ8K/xHaLP+W/rbe4fXGAuizP3dkqSKHS+8VvserxmOy7ZDzRT0SRUhiCdN+C
-         WzxfHKTwJEZxX8GQCuPtOE3iwoZ1MvtgLAqUcVCaYZpPBh43/rF+82rAPwGLuxvXlm
-         NGaQox7nVRN10HxwYfbWGh2Fg+TrKXzLGD2w/AeTIhNTduMZvF3n9S+PtBuXmXPmJ2
-         1ll2YitMJKss2kWx9RfwC66k4IavB7J8JjtR+zQ4Ib5JVZFDLoyAG4vh/Wq/qXLvl2
-         OqUFMt82WmOcw==
-Date:   Sun, 8 Jan 2023 13:12:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the amdgpu tree
-Message-ID: <20230108131205.353f96e9@canb.auug.org.au>
+        Sat, 7 Jan 2023 21:12:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB215F02;
+        Sat,  7 Jan 2023 18:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Lma7iRko69ZPpeW5xrn6KMqpGCw11zniVvr/dJegD0Q=; b=a8N02rIfT7KykuX+7Xs0Up/JV0
+        P56+5z3gyWyUG/JcsolpKVzPnqT02M2l4Un+4yHhAWQf9oSVOHzJ4zOgnIe86xsg96ah1QiXT0t3S
+        RTq5fxAmJjZEZc2XHB3EYI6dqHNx3tLU60wFOhPnWYZudM1SY1Uhk5Agcbrgf4FfuMgXzsPejw+ut
+        liLmGDIw0EHZGQuoWZiY6LigcDB4nXvnpq+8jKuPyaZm3YTKtM9+ufcNukOGmrwBhU8XnWQFSoHSp
+        Q182LUdfObJh7sJKFTOQWJs7OZLrU5HxxerxES952WwgL40ZztozDGLA7zZ7TOoEWUs4lbYoVvuxR
+        vbln4wQQ==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pELAa-00Aq0G-D6; Sun, 08 Jan 2023 02:12:20 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: [PATCH] cgroup/cpuset: fix a few kernel-doc warnings & coding style
+Date:   Sat,  7 Jan 2023 18:12:17 -0800
+Message-Id: <20230108021217.15491-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Uo6e7+AAU8ykiSj22Ink=CC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Uo6e7+AAU8ykiSj22Ink=CC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fix kernel-doc notation warnings:
 
-Hi all,
+kernel/cgroup/cpuset.c:1309: warning: Excess function parameter 'cpuset' description in 'update_parent_subparts_cpumask'
+kernel/cgroup/cpuset.c:3909: warning: expecting prototype for cpuset_mem_spread_node(). Prototype was for cpuset_spread_node() instead
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Also drop a blank line before EXPORT_SYMBOL_GPL() to be consistent
+with kernel coding style.
 
-  1f9d1ff1c3c1 ("drm/amdkfd: Fix kernel warning during topology setup")
-  878a3c004c0e ("drm/amd/display: Uninitialized variables causing 4k60 UCLK=
- to stay at DPM1 and not DPM0")
-  4243c84aa082 ("Revert "drm/amd/display: Enable Freesync Video Mode by def=
-ault"")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: cgroups@vger.kernel.org
+---
+ kernel/cgroup/cpuset.c |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Uo6e7+AAU8ykiSj22Ink=CC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO6JnUACgkQAVBC80lX
-0GygZwf/bP2Y6zkRqSJFQ3kgTwW05K+qmI8xs3UhvWA6kn6NQXDwtnX+5eRYgE3Q
-QcBLnnjgPvsG+hY3/4ngodYsJWeF5ApaRWPljrHx8dd8zB+1Rinjo1jWfzYehL95
-nFvZmHnNQWcCHiWQZvbKmEW2y/x+YttLJeGza3LInyZZTUyXnj93HvfA0Wu5XQrS
-Rqzaf1xRe+ZSYPithZi0oxTCb4zmrS9NFkdadz+Rfyh3BHbtQDiSZJc2uprkGLKe
-+qOZemOFhCnV+SMUlETO6kZFFhWM3kMDHVPL7HmmwoxQp2hYD5pax0BPjkucgm/T
-JkEhxyDwlkQKDZhLdek+8VAZDkrjrQ==
-=aSYm
------END PGP SIGNATURE-----
-
---Sig_/Uo6e7+AAU8ykiSj22Ink=CC--
+diff -- a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1267,7 +1267,7 @@ static int update_flag(cpuset_flagbits_t
+ 		       int turning_on);
+ /**
+  * update_parent_subparts_cpumask - update subparts_cpus mask of parent cpuset
+- * @cpuset:  The cpuset that requests change in partition root state
++ * @cs:      The cpuset that requests change in partition root state
+  * @cmd:     Partition root state change command
+  * @newmask: Optional new cpumask for partcmd_update
+  * @tmp:     Temporary addmask and delmask
+@@ -3879,8 +3879,7 @@ bool __cpuset_node_allowed(int node, gfp
+ }
+ 
+ /**
+- * cpuset_mem_spread_node() - On which node to begin search for a file page
+- * cpuset_slab_spread_node() - On which node to begin search for a slab page
++ * cpuset_spread_node() - On which node to begin search for a page
+  *
+  * If a task is marked PF_SPREAD_PAGE or PF_SPREAD_SLAB (as for
+  * tasks in a cpuset with is_spread_page or is_spread_slab set),
+@@ -3904,12 +3903,14 @@ bool __cpuset_node_allowed(int node, gfp
+  * is passed an offline node, it will fall back to the local node.
+  * See kmem_cache_alloc_node().
+  */
+-
+ static int cpuset_spread_node(int *rotor)
+ {
+ 	return *rotor = next_node_in(*rotor, current->mems_allowed);
+ }
+ 
++/**
++ * cpuset_mem_spread_node() - On which node to begin search for a file page
++ */
+ int cpuset_mem_spread_node(void)
+ {
+ 	if (current->cpuset_mem_spread_rotor == NUMA_NO_NODE)
+@@ -3919,6 +3920,9 @@ int cpuset_mem_spread_node(void)
+ 	return cpuset_spread_node(&current->cpuset_mem_spread_rotor);
+ }
+ 
++/**
++ * cpuset_slab_spread_node() - On which node to begin search for a slab page
++ */
+ int cpuset_slab_spread_node(void)
+ {
+ 	if (current->cpuset_slab_spread_rotor == NUMA_NO_NODE)
+@@ -3927,7 +3931,6 @@ int cpuset_slab_spread_node(void)
+ 
+ 	return cpuset_spread_node(&current->cpuset_slab_spread_rotor);
+ }
+-
+ EXPORT_SYMBOL_GPL(cpuset_mem_spread_node);
+ 
+ /**
