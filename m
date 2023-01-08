@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F87A6618B9
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C33A6618CB
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbjAHTnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S233831AbjAHTnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 14:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbjAHTm6 (ORCPT
+        with ESMTP id S234373AbjAHTnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 14:42:58 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D361324
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:42:56 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 0D1CC92009C; Sun,  8 Jan 2023 20:42:55 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 08EF392009B;
-        Sun,  8 Jan 2023 19:42:55 +0000 (GMT)
-Date:   Sun, 8 Jan 2023 19:42:54 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86: Disable kernel stack offset randomization for !TSC
-Message-ID: <alpine.DEB.2.21.2301081919550.65308@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 8 Jan 2023 14:43:07 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364E3657B;
+        Sun,  8 Jan 2023 11:43:06 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id cf18so8954097ejb.5;
+        Sun, 08 Jan 2023 11:43:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8y9U81icQc5CymJqCVNwmS2br5KE7MjRQmToRytln/U=;
+        b=TeyAYieX6SiWKoHyEcjf8oabC/ITVVbpLSDqecBNKgMpfnMU+SXf7lJq0QFIjSnZp3
+         okvL7+uUz69DfPUveXiluSx5hMuFvHlEVsg4UEXlF6qslEDN6B1icXt2x4jWoXm543ch
+         kXLq3mfSJI8yAbyYBG1kej8gULczB7QPCZJQ2uIRYwJrhiZ5OPiuoFy+NyT+JLV5u7UB
+         N2VTh3oITYNwZpz6jC9cYzPDmDbQ4cM2j1lJLC5ecWrVS/nv4UV7EzCE/+BWjBQU1Kzl
+         PVIsPin/ObDqyKYPwq4ahWrfesB5IkVsPkFEQ0lL6zLu3yMUAcyfbPqT/x8P/AGfAnaS
+         orew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8y9U81icQc5CymJqCVNwmS2br5KE7MjRQmToRytln/U=;
+        b=nrnd0ItYzCVBsoXMrf60XFWTDVUyqnDMvuX++vN+Gm8joSiAGjBRV7flJJN9DuYRYM
+         T7GKbrX6tyD5lLku9jyyxtIXsTwLX7C0S3dk3skyRI7X3821gxD6kMQBQTCsZmCKuGVc
+         5zGoiQP/HZfxzp+mTGRD3LchjR5u5NSi7E8/eivObsq9E0FZteEco/1LiBWgyIL4Lomz
+         RJCyIoSmKa+bNN2jEEq/WmlGgkF/5I1jolzgb9ucHGVztcOZXY21oEFzoRiwQNnbFASG
+         gbMAMQnltDc6N9iUSUHJBt1EkTCBj6bdXcTGGH2A8eO5eSNs55RtShdRBxHjJl5VVXH7
+         oaoQ==
+X-Gm-Message-State: AFqh2kruh1LClCqCZcCVUGj37t+d1Qe1OdSrggNJa/y6cTlFbOp09B3B
+        XJ4b6I3nhemlaH+t7LrVncc=
+X-Google-Smtp-Source: AMrXdXtUsksWth0ExwrvDVj11kAs1zImOH59i8k04fs2sSx5LdUhMM+u3csRML6CgOjcKRMOA36L7A==
+X-Received: by 2002:a17:907:cc1c:b0:84d:207d:c008 with SMTP id uo28-20020a170907cc1c00b0084d207dc008mr6065742ejc.69.1673206984840;
+        Sun, 08 Jan 2023 11:43:04 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id q22-20020a17090676d600b0084d42b9819dsm952055ejn.28.2023.01.08.11.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 11:43:04 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] rtc: sun6i: Always export the internal oscillator
+Date:   Sun, 08 Jan 2023 20:43:03 +0100
+Message-ID: <2303942.ElGaqSPkdT@jernej-laptop>
+In-Reply-To: <20221229215319.14145-1-samuel@sholland.org>
+References: <20221229215319.14145-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_HDRS_LCASE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For x86 kernel stack offset randomization uses the RDTSC instruction, 
-which causes an invalid opcode exception with hardware that does not 
-implement this instruction:
+Dne =C4=8Detrtek, 29. december 2022 ob 22:53:19 CET je Samuel Holland napis=
+al(a):
+> On all variants of the hardware, the internal oscillator is one possible
+> parent for the AR100 clock. It needs to be exported so we can model that
+> relationship correctly in the devicetree.
+>=20
+> Fixes: c56afc1844d6 ("rtc: sun6i: Expose internal oscillator through devi=
+ce
+> tree") Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-process '/sbin/init' started with executable stack
-invalid opcode: 0000 [#1]
-CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc4+ #1
-EIP: exit_to_user_mode_prepare+0x90/0xe1
-Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
-EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
-ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
-CR0: 80050033 CR2: bfe8659b CR3: 012e0000 CR4: 00000000
-Call Trace:
- ? rest_init+0x72/0x72
- syscall_exit_to_user_mode+0x15/0x27
- ret_from_fork+0x10/0x30
-EIP: 0xb7f74800
-Code: Unable to access opcode bytes at 0xb7f747d6.
-EAX: 00000000 EBX: 00000000 ECX: 00000000 EDX: 00000000
-ESI: 00000000 EDI: 00000000 EBP: 00000000 ESP: bfe864b0
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00000200
----[ end trace 0000000000000000 ]---
-EIP: exit_to_user_mode_prepare+0x90/0xe1
-Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
-EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
-ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
-CR0: 80050033 CR2: b7f747d6 CR3: 012e0000 CR4: 00000000
-Kernel panic - not syncing: Fatal exception
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Therefore do not offer the option for CPU configurations that do not 
-guarantee the presence of this instruction.
+Best regards,
+Jernej
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
- arch/x86/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-linux-x86-randomize-kstack-offset-tsc.diff
-Index: linux-macro/arch/x86/Kconfig
-===================================================================
---- linux-macro.orig/arch/x86/Kconfig
-+++ linux-macro/arch/x86/Kconfig
-@@ -186,7 +186,7 @@ config X86
- 	select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
- 	select HAVE_ARCH_USERFAULTFD_MINOR	if X86_64 && USERFAULTFD
- 	select HAVE_ARCH_VMAP_STACK		if X86_64
--	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-+	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET	if X86_TSC
- 	select HAVE_ARCH_WITHIN_STACK_FRAMES
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CMPXCHG_DOUBLE
