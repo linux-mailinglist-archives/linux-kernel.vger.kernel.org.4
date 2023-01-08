@@ -2,125 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68228661422
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 09:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83A6661425
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 09:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjAHIU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 03:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S232576AbjAHIiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 03:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjAHIUZ (ORCPT
+        with ESMTP id S229716AbjAHIiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 03:20:25 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A0313DEC;
-        Sun,  8 Jan 2023 00:20:24 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pEQuk-00071S-Dt; Sun, 08 Jan 2023 09:20:22 +0100
-Message-ID: <d073942d-f6b6-81c4-5058-04d99185929a@leemhuis.info>
-Date:   Sun, 8 Jan 2023 09:20:21 +0100
+        Sun, 8 Jan 2023 03:38:03 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E761B9C2
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 00:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673167079; bh=n5LRA4xogm/DbAoVIExL77S4gpSBRT9b3XGfbP91leg=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=E6vMA6yufk5zVDk8BQrVf4+izu5VlHgiomZnMNI53sPtdAIssezDB1bswE+A0+yZo
+         lfeNl+eRV7Cto4aAnyPWZQIlGtNp6yhF/0ZXWLKx+GShOYBFEgln4A49kdRc8/qbql
+         73mGmp56iDlHtGnZO0Oc77jHEOo4Jdh8iwbktZls=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun,  8 Jan 2023 09:37:58 +0100 (CET)
+X-EA-Auth: zkWt+ZKOkwWGE4LZNGDR//ZgxIDMIWcVzkgB2aX/mP7cbZmdyCQir7H+K2CqCBH72N2xynL6TzTbyXKv6xUM/k2lZU5z6ZtS
+Date:   Sun, 8 Jan 2023 14:07:54 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Deepak R Varma <drv@mailo.com>
+Subject: incorrect git diff output
+Message-ID: <Y7qA4o/JoWhfpvfk@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: =?UTF-8?Q?Re=3a_=5bregression=5d_Bug=c2=a0216894_-_brcmfmac_stopped?=
- =?UTF-8?Q?_working_due_to_missing_firmware=3b_brcmf=5fpcie=5finit=5fringbuf?=
- =?UTF-8?Q?fers=3a_invalid_max=5fflowrings=28264=29?=
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Wright Feng <wright.feng@infineon.com>
-Cc:     Ian Lin <ian.lin@infineon.com>, Kalle Valo <kvalo@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        Christian Marillat <marillat@debian.org>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Double Lo <double.lo@infineon.com>,
-        Kurt Lee <kurt.lee@infineon.com>
-References: <ef8861dc-33df-0e35-4205-c8c666a3f4ba@leemhuis.info>
-In-Reply-To: <ef8861dc-33df-0e35-4205-c8c666a3f4ba@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673166024;38e4f42d;
-X-HE-SMSGID: 1pEQuk-00071S-Dt
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sending this once more as a reply to myself, as I forgot to CC the
-maintainers for the driver. And now I'm also using the current email
-address for Wright Feng (my earlier mail used the one used for the
-culprit, but that bounced).
+Hello,
+I tried to remove an extra semicolon on line number 1153 of this file
+drivers/scsi/qlogicpti.c and attempted a git diff to confirm my edits. To my
+surprise, the diff contained few other unrelated changes that I did not do. I
+tied to set aurocr git attribute in the .gitconfig file, but that did not help
+either.
 
-Sorry for the noise, seem I need more tea.
+Does anyone know about this behavior and how to correct it?
 
-On 08.01.23 08:59, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216894 :
+Thank you,
+./drv
 
-Subject for that bug report is "Regression in commit
-2aca4f3734bd717e04943ddf340d49ab62299a00"
 
->>  Christian Marillat 2023-01-06 10:58:26 UTC
->>
->> Hi,
->>
->> With this commit the kernel doesn't load the firmware and I lost my wifi device, But without this commit the firmware load fine without a kernel panic.
->>
->> kernel 6.0.15/6.1.3
->> brcmfmac 0000:02:00.0: brcmf_pcie_init_ringbuffers: invalid max_flowrings(264)
->>
->> kernel 6.0.17
->> brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac4366c-pcie for chip BCM4366/4
->> brcmfmac: brcmf_c_process_clm_blob: no clm_blob available (err=-2), device may have limited channels available
->> brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4366/4 wl0: Nov  5 2018 03:19:56 version 10.28.2 (r769115) FWID 01-d2cbb8fd
->>
->> PCI info :
->>
->> 02:00.0 Network controller: Broadcom Inc. and subsidiaries Device 43c3 (rev 04)
->> 	Subsystem: ASUSTeK Computer Inc. Device 86fb
->> 	Flags: bus master, fast devsel, latency 0, IRQ 45
->> 	Memory at f7000000 (64-bit, non-prefetchable) [size=32K]
->> 	Memory at f6800000 (64-bit, non-prefetchable) [size=8M]
->> 	Memory at f2400000 (64-bit, prefetchable) [size=4M]
->> 	Capabilities: <access denied>
->> 	Kernel driver in use: brcmfmac
->> 	Kernel modules: brcmfmac
->>
->> Christian
->>
->> [reply] [−] Comment 1 Christian Marillat 2023-01-06 11:00:21 UTC
->>
->> kernel version should be  6.0.17/6.1.3 and 6.0.15
->>
->> Christian
->>
-> 
-> See the ticket for more details.
-> 
-> BTW, let me use this mail to also add the report to the list of tracked
-> regressions to ensure it's doesn't fall through the cracks:
-> 
-> #regzbot introduced: 2aca4f3734bd717e04943
-> https://bugzilla.kernel.org/show_bug.cgi?id=216894
-> #regzbot title: net: wifi: brcmfmac stopped working as firmware is not
-> loaded anymore
-> #regzbot ignore-activity
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
