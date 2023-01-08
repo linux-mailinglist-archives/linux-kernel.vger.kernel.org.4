@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26300661610
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3753661616
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbjAHPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 10:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S230052AbjAHPQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 10:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjAHPOw (ORCPT
+        with ESMTP id S233007AbjAHPQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 10:14:52 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391FCDEFC
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:14:51 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so7192270wmb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:14:51 -0800 (PST)
+        Sun, 8 Jan 2023 10:16:29 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652CD2BE3
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:16:28 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z5so4745458wrt.6
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kum/h3WoydN+pm7yzyrAbYktEmQZxXZIgzMlKqIfzRs=;
-        b=B17dgkv12M5xpcm41prkaN1pTZSj1sIvPdyYkNeyGu+fVlfcN/UNBd5Vfr+PCgtrrR
-         uUyGKa5hIjxm6nWEFQflNI8Z/T0BePImhtKOOfq0ha7YhJVOacTw7oCFowQx3vvsBCC8
-         Jo09Ga6boCwekrTRdjCBRLlPPmVUa0epePP9gvYMzROlxMU+gUA4d+xJGRzCVE4ndqDL
-         dSpwiyEnbx9uwnCHMIiOBrJI1YuNqedHnVuzroaYBVPuvGhAMh26mXwwgcC1yaxghFqu
-         B4V9ZbTaoq2T1ov47NvIJB9QQDKVH8rJCoBQwxFxCjOqBsdav6y1Bnr7APW0nkjfg99T
-         vIQg==
+        bh=BXw9KAygztT5jDGimnXGtcc/RXt5y1LZ6kVLW6bynMM=;
+        b=tpTCz4ws4jY+X1l3CQZUYaPGZa/EpzKs+yq2hYz6I47CqYW66cl+bAfI4BbsrWfmGs
+         wtQgtBjyGmpB2lgMW0B1jgg3XLN9/ToR1pRqizZcEcj14V864ktX4fOpZODMiqs4QVlE
+         89UDXaMWkCdVIeWxrbTMXsbvD5Hi55UcJXWyAUya0Ad5cGzzO9UkgL3JPCRYHinRUwoJ
+         MuLaN18LU1Pm+aAZQDXbiTxX4s7eb9ALHtsSAS30swbfEvafY2NlTrmy/rpV5N+6dMDq
+         pRGu/DUepZ8mhJShTxyIljbBeZfAscuPDkR3GYSyzWUEZdDqbobrRMhAg6jYvjyFBa/M
+         98kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kum/h3WoydN+pm7yzyrAbYktEmQZxXZIgzMlKqIfzRs=;
-        b=kws/OdI6dWz0pfULuVfxvAt4FuzMN6I8i6w+/ly7c5hQPbjxwjuQbNYUPCugfGOFNF
-         UhA0l0xNgK4hPathuoQW041TeC4NxGhGDY/TH7fSMbaXhIDbklQyvAy291d9kOonNVss
-         1iCP7e+QDmDTlXQmeIintRq9c3zblcnDzU7W17FKjbulfX0WFcVzwgSWoIuvsG26hVht
-         zS8/Rf3YmI17/YUE2qpT3W+FcVwByxJeSjpoz0H5yxlyZ4EARlST/Lq2IO4Ewa7GmSq/
-         rRfNmgGlsH//yhs3xvv+27FjZ12h8SYgCW+eF7L0jiEqrrYPdf+dFUbvzY+dKhQgEi9b
-         axmA==
-X-Gm-Message-State: AFqh2kpLva2+fIk0IidX0/iCzQzE5niHuhG/WqL6iF96gsGFkKlC2jyP
-        Yzd8cg1vg6yTZ13ztG8ty7HKuQ==
-X-Google-Smtp-Source: AMrXdXsEQW0bDV9OZcom7tmbUrlLwDsgiDLU21uXmHqGTahcowbhAAYwsT+7Wijlz/86kxWzzUwtZg==
-X-Received: by 2002:a05:600c:22c4:b0:3cf:8ed7:712d with SMTP id 4-20020a05600c22c400b003cf8ed7712dmr48239469wmg.14.1673190889730;
-        Sun, 08 Jan 2023 07:14:49 -0800 (PST)
+        bh=BXw9KAygztT5jDGimnXGtcc/RXt5y1LZ6kVLW6bynMM=;
+        b=4PP5dBZBWSBTXoAZWp/oedVu/TzXDn4IsldPiczAkyScTJye/aaSFkxoxUWZMVa7ri
+         Ra3D5QiTj2AY736hPfhVQaE02WNysBCJHONyJko25+8Pxa2pPs4wccbO/i6KEQ37gse/
+         wBQpiATmwtQXQ0F/XYLYTRhNaEAXQ3SfQO+P94nzJROCCt1WgCHWc3lISBbKKbKwd4TJ
+         Wej/AGJgsbPFu4JGh1k6lu2EoZikZfiF9Njdi9/ua4fLeiupi3rzqn2YaW3WEhCQbA2/
+         S4nfHksyR3SUjqoadB34YF1OjGy0DCPPgSA6FgZv8ObjTS7K9wgEj4Uoa/tZXG6qOF0/
+         YAPw==
+X-Gm-Message-State: AFqh2krnryq9oLPQ5I8hXnShloTMw7BjcMpzeSTWoXc0F/kLVzsh6V+o
+        pFHAHtgghBGGXBy5Pct16pPskw==
+X-Google-Smtp-Source: AMrXdXviZdBmClnb6Toply9D3tNh+sz2JLSNoU9T04Iga71AMgdwS3TaY1guKipjbFqDnRnrIwrRUA==
+X-Received: by 2002:a5d:5e81:0:b0:244:e704:df2c with SMTP id ck1-20020a5d5e81000000b00244e704df2cmr44150318wrb.57.1673190986931;
+        Sun, 08 Jan 2023 07:16:26 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b002a6f329203esm6356517wrw.61.2023.01.08.07.14.48
+        by smtp.gmail.com with ESMTPSA id w4-20020a5d4b44000000b002366dd0e030sm6261986wrs.68.2023.01.08.07.16.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 07:14:49 -0800 (PST)
-Message-ID: <76077f5f-fbda-800b-b8d8-6a3f6600f4d1@linaro.org>
-Date:   Sun, 8 Jan 2023 16:14:47 +0100
+        Sun, 08 Jan 2023 07:16:26 -0800 (PST)
+Message-ID: <c393e532-d466-366b-a390-65de47c58b6a@linaro.org>
+Date:   Sun, 8 Jan 2023 16:16:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
+Subject: Re: [PATCH v2 08/10] dt-bindings: sound: Add support for QMC audio
 Content-Language: en-US
 To:     Herve Codina <herve.codina@bootlin.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
@@ -78,9 +77,9 @@ Cc:     linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20230106163746.439717-1-herve.codina@bootlin.com>
- <20230106163746.439717-6-herve.codina@bootlin.com>
+ <20230106163746.439717-9-herve.codina@bootlin.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106163746.439717-6-herve.codina@bootlin.com>
+In-Reply-To: <20230106163746.439717-9-herve.codina@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,98 +92,58 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 06/01/2023 17:37, Herve Codina wrote:
-> Add support for the QMC (QUICC Multichannel Controller)
-> available in some PowerQUICC SoC such as MPC885 or MPC866.
+> The QMC (QUICC mutichannel controller) is a controller
+> present in some PowerQUICC SoC such as MPC885.
+> The QMC audio is an ASoC component that uses the QMC
+> controller to transfer the audio data.
 > 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
->  .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      | 167 ++++++++++++++++++
->  1 file changed, 167 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+>  .../bindings/sound/fsl,qmc-audio.yaml         | 110 ++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+> diff --git a/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
 > new file mode 100644
-> index 000000000000..caf71f3a3f3f
+> index 000000000000..b3774be36c19
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
-> @@ -0,0 +1,167 @@
+> +++ b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+> @@ -0,0 +1,110 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,qmc.yaml#
+> +$id: http://devicetree.org/schemas/sound/fsl,qmc-audio.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
+> +title: QMC audio
 > +
 > +maintainers:
 > +  - Herve Codina <herve.codina@bootlin.com>
 > +
 > +description: |
-> +  The QMC (QUICC Multichannel Controller) emulates up to 64 channels within
-> +  one serial controller using the same TDM physical interface routed from
-> +  TSA.
+> +  The QMC audio is an ASoC component which uses QMC (QUICC Multichannel
+> +  Controller) channels to transfer the audio data.
+> +  It provides as many DAI as the number of QMC channel used.
 > +
 > +properties:
 > +  compatible:
 > +    items:
-> +      - enum:
-> +          - fsl,mpc885-scc-qmc
-> +          - fsl,mpc866-scc-qmc
-> +      - const: fsl,cpm1-scc-qmc
-> +
-> +  reg:
-> +    items:
-> +      - description: SCC (Serial communication controller) register base
-> +      - description: SCC parameter ram base
-> +      - description: Dual port ram base
-> +
-> +  reg-names:
-> +    items:
-> +      - const: scc_regs
-> +      - const: scc_pram
-> +      - const: dpram
-> +
-> +  interrupts:
-> +    description: SCC interrupt line in the CPM interrupt controller
 
-Missing constraints.
+Drop items.
 
-> +
-> +  fsl,cpm-command:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Cf. soc/fsl/cpm_qe/cpm.txt
-
-Missing description.
-
-> +
-> +  tsa:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the TSA
-
-Missing vendor prefix. Does not look like a generic property.
-
-> +
-> +  tsa-cell-id:
-> +    enum: [1, 2, 3]
-> +    description: |
-> +      TSA cell ID (dt-bindings/soc/fsl-tsa.h defines these values)
-> +       - 1: SCC2
-> +       - 2: SCC3
-> +       - 3: SCC4
+> +      - const: fsl,qmc-audio
 > +
 > +  '#address-cells':
 > +    const: 1
-> +
 > +  '#size-cells':
 > +    const: 0
-> +
-> +  '#chan-cells':
+> +  '#sound-dai-cells':
 > +    const: 1
 > +
 > +patternProperties:
-> +  "^channel@([0-9]|[1-5][0-9]|6[0-3])$":
+> +  "^dai@([0-9]|[1-5][0-9]|6[0-3])$":
 > +    description:
-> +      A channel managed by this controller
+> +      A DAI managed by this controller
 > +    type: object
 > +
 > +    properties:
@@ -192,93 +151,49 @@ Missing vendor prefix. Does not look like a generic property.
 > +        minimum: 0
 > +        maximum: 63
 > +        description:
-> +          The channel number
+> +          The DAI number
 > +
-> +      fsl,mode:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        enum: [transparent, hdlc]
-> +        default: transparent
-> +        description: Operational mode
-
-And what do they mean?
-
-> +
-> +      fsl,reverse-data:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description:
-> +          The bit order as seen on the channels is reversed,
-> +          transmitting/receiving the MSB of each octet first.
-> +          This flag is used only in 'transparent' mode.
-> +
-> +      tx-ts-mask:
+> +      qmc-chan:
 
 Missing vendor prefix.
 
-> +        $ref: /schemas/types.yaml#/definitions/uint64
-> +        description:
-> +          Channel assigned Tx time-slots within the Tx time-slots routed
-> +          by the TSA to this cell.
-> +
-> +      rx-ts-mask:
-> +        $ref: /schemas/types.yaml#/definitions/uint64
-> +        description:
-> +          Channel assigned Rx time-slots within the Rx time-slots routed
-> +          by the TSA to this cell.
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+
+Why this is not a phandle?
+
+> +        description: phandle to the QMC channel> +        maxItems: 1
 > +
 > +    required:
 > +      - reg
-> +      - tx-ts-mask
-> +      - rx-ts-mask
+> +      - qmc-chan
 > +
 > +required:
 > +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - tsa
-> +  - tsa-cell-id
 > +  - '#address-cells'
 > +  - '#size-cells'
-> +  - '#chan-cells'
+> +  - '#sound-dai-cells'
 > +
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/soc/fsl-tsa.h>
-> +
-> +    scc_qmc@a60 {
+> +    qmc_audio: qmc_audio {
 
-No underscores in node names.
+Same problem as in previous patch.
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +        compatible = "fsl,mpc885-scc-qmc", "fsl,cpm1-scc-qmc";
-> +        reg = <0xa60 0x20>,
-> +              <0x3f00 0xc0>,
-> +              <0x2000 0x1000>;
-> +        reg-names = "scc_regs", "scc_pram", "dpram";
-> +        interrupts = <27>;
-> +        interrupt-parent = <&CPM_PIC>;
-> +        fsl,cpm-command = <0xc0>;
-> +
+> +        compatible = "fsl,qmc-audio";
 > +        #address-cells = <1>;
 > +        #size-cells = <0>;
-> +        #chan-cells = <1>;
-> +
-> +        tsa = <&tsa>;
-> +        tsa-cell-id = <FSL_CPM_TSA_SCC4>;
-> +
-> +        channel@16 {
-> +            /* Ch16 : First 4 even TS from all routed from TSA */
+> +        #sound-dai-cells = <1>;
+> +        dai@16 {
 > +            reg = <16>;
-> +            fsl,mode = "transparent";
-> +            fsl,reverse-data;
-> +            tx-ts-mask = <0x00000000 0x000000AA>;
-> +            rx-ts-mask = <0x00000000 0x000000AA>;
-
-Keep case consistent. lower-case hex.
+> +            qmc-chan = <&scc_qmc 16>;
+> +        };
+> +        dai@17 {
+> +            reg = <17>;
+> +            qmc-chan = <&scc_qmc 17>;
+> +        };
+> +    };
 
 Best regards,
 Krzysztof
