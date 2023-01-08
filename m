@@ -2,53 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78853661451
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96867661462
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjAHJeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 04:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
+        id S232993AbjAHJum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 04:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjAHJel (ORCPT
+        with ESMTP id S229520AbjAHJuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:34:41 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5293EFD28
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:34:40 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3089YaL6017919;
-        Sun, 8 Jan 2023 10:34:36 +0100
-Date:   Sun, 8 Jan 2023 10:34:36 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Warner Losh <imp@bsdimp.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tools/nolibc: Fix S_ISxxx macros
-Message-ID: <20230108093436.GC17754@1wt.eu>
-References: <20230106171834.41532-1-imp@bsdimp.com>
+        Sun, 8 Jan 2023 04:50:32 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26527186AD;
+        Sun,  8 Jan 2023 01:50:29 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E40A118838D4;
+        Sun,  8 Jan 2023 09:50:26 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D6B48250007B;
+        Sun,  8 Jan 2023 09:50:26 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BF62F9EC000E; Sun,  8 Jan 2023 09:50:26 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 6B23891201DF;
+        Sun,  8 Jan 2023 09:50:26 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 net-next 0/3] mv88e6xxx: Add MAB offload support
+Date:   Sun,  8 Jan 2023 10:48:46 +0100
+Message-Id: <20230108094849.1789162-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106171834.41532-1-imp@bsdimp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Warner,
+This patch-set adds MAB [1] offload support in mv88e6xxx.
 
-On Fri, Jan 06, 2023 at 10:18:34AM -0700, Warner Losh wrote:
-> The mode field has the type encoded as an value in a field, not as a bit
-> mask. Mask the mode with S_IFMT instead of each type to test. Otherwise,
-> false positives are possible: eg S_ISDIR will return true for block
-> devices because S_IFDIR = 0040000 and S_IFBLK = 0060000 since mode is
-> masked with S_IFDIR instead of S_IFMT. These macros now match the
-> similar definitions in tools/include/uapi/linux/stat.h.
+Patch #1: Correct default return value for mv88e6xxx_port_bridge_flags.
 
-I'm impressed to see how I managed to make that gross a mistake!
-Thanks for catching it and for the fix, its now queued.
+Patch #2: Shorten the locked section in
+          mv88e6xxx_g1_atu_prob_irq_thread_fn().
 
-Willy
+Patch #3: The MAB implementation for mv88e6xxx.
+
+LOG:
+        V2:     -FID reading patch already applied, so dropped here. [1]
+                -Patch #2 here as separate patch instead of part of MAB
+                 implementation patch.
+                -Check if fid is MV88E6XXX_FID_STANDALONE, and not if
+                 fid is zero, as that is the correct check. Do not
+                 report an error.
+        V3:     -Fixed an overlooked mistake and reworded the commit
+                 message for patch #2.
+        V4:     -Moved exit tag 'out' from patch #2 to Patch #3.
+
+[1] https://git.kernel.org/netdev/net-next/c/4bf24ad09bc0
+
+Hans J. Schultz (3):
+  net: dsa: mv88e6xxx: change default return of
+    mv88e6xxx_port_bridge_flags
+  net: dsa: mv88e6xxx: shorten the locked section in
+    mv88e6xxx_g1_atu_prob_irq_thread_fn()
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
+
+ drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
+ drivers/net/dsa/mv88e6xxx/chip.c        | 20 +++---
+ drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 24 ++++---
+ drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
+ 6 files changed, 148 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
+
+-- 
+2.34.1
+
