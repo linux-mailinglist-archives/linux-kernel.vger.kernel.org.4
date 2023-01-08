@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211EF6612ED
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 02:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515346612F0
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 02:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbjAHBfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 20:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S230120AbjAHBwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 20:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjAHBfH (ORCPT
+        with ESMTP id S229627AbjAHBwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 20:35:07 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D2F37246
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 17:34:43 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id g10so3733224wmo.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 17:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nt8bf7yY2IA0nhwlnQJ7DuxvVX3dIEzslwGHOn83FJo=;
-        b=CS2UnOpOHf41jr69bJneaWCGkc8bk32YP0s5iK4rEO0z+NR20cpaMGNGx+ftFR4c8e
-         Y1dVMxrTUwLMLPZrDukwtYMsE+Shzn9eMPEYDe+cD5BmLzxV3NICUI36LHwOsn1hX3DK
-         +2OJic1oF4odTJ15gsbB7TfvacN8oX1iwnAaBFpcn9zbP/FtnpqoftUQ4FRr1kxJrCdX
-         JhdgyNpPGxD/6xGFcWcjSP+hmEH8tNJXXXLAN/BqBiLIGRZ8Kk/gG/8izubxx35IecE/
-         N0rwdUiysbBAm2oj858eukW2Ala14qlJ+n0WspOsqKtk0/8S9PSzyvKMaYFSM2GVFJzW
-         rXoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nt8bf7yY2IA0nhwlnQJ7DuxvVX3dIEzslwGHOn83FJo=;
-        b=zwPHyVXnRwHNBa6lc1iW1pqlkebqhdUPi7E+rF2qW523SJzyJlTK7RvvIAw1pRdyDb
-         bAovYG0TSc+QApCVoYB7jznGf9WIjpjOP+zjeV6mDsiMDtlfiXtbtAntgrUskPoN3AAs
-         kz6KEy8KcZAuOM1kF5pZENTjzslwteJ8RCFlkxtIijTaU0fgUz7uL91Aamt8FJwsJw4s
-         KVCH52JkWoWkZ3Kqa/PzGL5ol7+THrhA/Nqg2hfbaKl6GG2jaSI3yNOnZshkWJpin3Aw
-         t1CPYR5QUAHmuTXMf1mby8fkFBnAg3ltni1YQg/DiwNEdwDcwFBNB+wNBnTxoMxpjD1L
-         KJqw==
-X-Gm-Message-State: AFqh2kpv+1btm7xixGYYA7r20ceja4ZAxDMNyw5Vbyp8+kbSTN87AN0X
-        QmL7XyUJFnG1p78lEADODalopZ2H87ElMqIYnUNAOA==
-X-Google-Smtp-Source: AMrXdXu18jMQ566qkDjxqWcKsWO1kZvjAfxTKcA3J0VYERPSPKNK4p4VC0MLRdmYP3+hj9t4CxeB8XkMYa2uiHhmpnc=
-X-Received: by 2002:a7b:c5d6:0:b0:3cf:70a0:f689 with SMTP id
- n22-20020a7bc5d6000000b003cf70a0f689mr2997475wmk.161.1673141681640; Sat, 07
- Jan 2023 17:34:41 -0800 (PST)
+        Sat, 7 Jan 2023 20:52:20 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4FED44;
+        Sat,  7 Jan 2023 17:52:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NqKnl6l4Kz4xND;
+        Sun,  8 Jan 2023 12:52:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673142732;
+        bh=T5uEKpoCTrKRPB+aFMQNCJS5mshS0phU/iIzgdeGttE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=C1MEQkmCCO1+8siH9BXKRjQ2K/aUaFE8y0pm0xAPRy0dwjBs/1r/PHDWmdPZLe8eN
+         Nek9HTelvevy5ZUviNAupqj7lzoKBW6Pee3loVtvK3RCCqW4+xUGg+u2MQh885K8Nv
+         os0xA12gpr1vSUFpZCx81rdYJY0nMFr1txMCMkxOSYqaH83p0N3T2hFa8qX9E51VmU
+         5y9pbu8x8kfzCVosvKUfGaQ6G3pRKHk/WJy9rUEVBQTjz+gQGQ/a2gO6PIGp40rzVa
+         VGzF5tSz8dW2zFDCv+EPLs9vDWpXeZbuPDZynBAjX5VElYnXw0UUEiH7BSTlR4gKP2
+         EYr5AivRqDENw==
+Date:   Sun, 8 Jan 2023 12:51:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the ext3 tree
+Message-ID: <20230108125156.30578c00@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230107035923.363-1-cuiyunhui@bytedance.com> <Y7nP5PAGxWZ+2GHN@pop-os.localdomain>
-In-Reply-To: <Y7nP5PAGxWZ+2GHN@pop-os.localdomain>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Sun, 8 Jan 2023 09:34:30 +0800
-Message-ID: <CAEEQ3wm3iZ1e3w=-Q_C19LbGsR_iDhWc_M-0KfmbPwUzqNVE=g@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v3] sock: add tracepoint for send recv length
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kuniyu@amazon.com, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yFJvQNP9JlskX_SLzDr6pHS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 8, 2023 at 4:03 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+--Sig_/yFJvQNP9JlskX_SLzDr6pHS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
->
-> Thanks for the numbers, they help a lot.
->
-> Acked-by: Cong Wang <cong.wang@bytedance.com>
->
-> A few minor issues below.
+Hi all,
 
-Ok, Thanks for your suggestion, I'll update these on v4.
+The following commits are also in Linus Torvalds' tree as different commits
+(but the same patches):
 
-> > +
-> > +     TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
-> > +                     __entry->sk,
-> > +                     show_family_name(__entry->family),
-> > +                     show_inet_protocol_name(__entry->protocol),
-> > +                     __entry->length,
-> > +                     __entry->error, __entry->flags)
->
-> Please align and pack those parameters properly.
+  ae9e9c7ff062 ("udf: Fix extension of the last extent in the file")
+  6d5ab7c2f7cf ("udf: initialize newblock to 0")
 
-OK, thanks.
+--=20
+Cheers,
+Stephen Rothwell
 
-> > +
-> > +DEFINE_EVENT(sock_msg_length, sock_recvmsg_length,
-> > +     TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
-> > +              int flags),
-> > +
-> > +     TP_ARGS(sk, family, protocol, ret, flags)
-> > +);
->
-> It might be a better idea to remove "msg" from the tracepoint names, in
-> case of any confusion with "sendpage". So
-> s/sock_sendmsg_length/sock_send_length/ ?
+--Sig_/yFJvQNP9JlskX_SLzDr6pHS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-OK, I'll rename both to sock_send_length/sock_recv_length.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO6IbwACgkQAVBC80lX
+0GxO0gf/SDZUt2IuObQaBCvxicZakpXt+53PBRVYdr3BcOZvK1VYM9t3nKjTdQ4c
+ki8yLH43x7wl3N5Woe+zlVX6PMFQMCha92HBVwOsJ8dyfVegeBKU5WHUhkICDDS9
+IHjjw1Y7IwPeTXh4GmDTUH00vNR+FcJPm9e/K5wAIHJXo6TeZw0fidoCq17H4er5
+Nc9eJfcwZtxXrlAlKyiQyvl8r3IOybEFEds5HB0kVYd6GKxbSqagkp5GwjbXFXEJ
+OOBpv5YVMD6HnKMfhojU5yFOaIxe+LkJHbOJ97LAorXjcLEvIfqJJmpjM5f75F2d
+13D5DjdVkyOEM6b/xuR9w9qUXzvObA==
+=OW+p
+-----END PGP SIGNATURE-----
 
-> > -     return INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-> > +     int ret = INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-> >                                 inet_recvmsg, sock, msg, msg_data_left(msg),
-> >                                 flags);
->
-> Please adjust the indentations properly.
-
-Roger that!
-
-Thanks,
-Yunhui
+--Sig_/yFJvQNP9JlskX_SLzDr6pHS--
