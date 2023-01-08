@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E08661418
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 09:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D100661416
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 08:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbjAHIEW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 8 Jan 2023 03:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S232204AbjAHH7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 02:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjAHIEU (ORCPT
+        with ESMTP id S231269AbjAHH7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 03:04:20 -0500
-X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 00:04:18 PST
-Received: from 17.mo561.mail-out.ovh.net (17.mo561.mail-out.ovh.net [87.98.178.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FFC12AD1
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 00:04:18 -0800 (PST)
-Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.138.180])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 280C123EDF
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:47:29 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-p7xcs (unknown [10.110.208.152])
-        by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 23C671FEA6;
-        Sun,  8 Jan 2023 07:47:24 +0000 (UTC)
-Received: from sk2.org ([37.59.142.102])
-        by ghost-submission-6684bf9d7b-p7xcs with ESMTPSA
-        id GxvpAgx1umMSjQcAO+84Ug
-        (envelope-from <steve@sk2.org>); Sun, 08 Jan 2023 07:47:24 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-102R004f3b2dc6e-40e0-46d7-b496-fab2440419aa,
-                    5128B599F7D401446F64D4771BE19AB2B9CD7A8B) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 37.167.47.239
-Date:   Sun, 08 Jan 2023 08:47:21 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-CC:     Sam Ravnborg via B4 Submission Endpoint 
-        <devnull+sam.ravnborg.org@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_01/15=5D_video=3A_fbdev=3A_atm?= =?US-ASCII?Q?el=5Flcdfb=3A_Rework_backlight_handling?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org> <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org> <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org> <Y7nb2q6SDota/rTU@ravnborg.org> <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
-Message-ID: <0342789A-88E6-4A3C-84DF-0F1FEB21F25C@sk2.org>
+        Sun, 8 Jan 2023 02:59:48 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ACEFCF7;
+        Sat,  7 Jan 2023 23:59:46 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pEQal-0000BF-FD; Sun, 08 Jan 2023 08:59:43 +0100
+Message-ID: <ef8861dc-33df-0e35-4205-c8c666a3f4ba@leemhuis.info>
+Date:   Sun, 8 Jan 2023 08:59:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Ovh-Tracer-Id: 8435523578534069894
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeefgdduuddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevufgfjghfkfggtgfgsehtqhhmtddtreejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevieelieekfeelhfduffdvgfduvdegkeeljeejhfdtkeeujeeileekgeeugefhhfenucffohhmrghinheplhhkmhhlrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Wright Feng <wright.feng@cypress.com>
+Cc:     Chi-hsien Lin <chi-hsien.lin@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>, Kalle Valo <kvalo@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        Christian Marillat <marillat@debian.org>
+Subject: =?UTF-8?Q?=5bregression=5d_Bug=c2=a0216894_-_brcmfmac_stopped_worki?=
+ =?UTF-8?Q?ng_due_to_missing_firmware=3b_brcmf=5fpcie=5finit=5fringbuffers?=
+ =?UTF-8?Q?=3a_invalid_max=5fflowrings=28264=29?=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673164786;7d83932b;
+X-HE-SMSGID: 1pEQal-0000BF-FD
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8 January 2023 08:45:46 CET, Stephen Kitt <steve@sk2.org> wrote:
->On 7 January 2023 21:53:46 CET, Sam Ravnborg <sam@ravnborg.org> wrote:
->>Hi Stephen.
->>
->>On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote:
->>> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint <devnull+sam.ravnborg.org@kernel.org> wrote:
->>> >From: Sam Ravnborg <sam@ravnborg.org>
->>> >
->>> >The atmel_lcdfb had code to save/restore power state.
->>> >This is not needed so drop it.
->>> >
->>> >Introduce backlight_is_brightness() to make logic simpler.
->>> >
->>> >Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->>> >Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
->>> >Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->>> >Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
->>> >Cc: linux-fbdev@vger.kernel.org
->>> >Cc: linux-arm-kernel@lists.infradead.org
->>> >---
->>> > drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
->>> > 1 file changed, 3 insertions(+), 21 deletions(-)
->>...
->>> 
->>> Hi Sam,
->>> 
->>> I’d submitted quite a few more of these previously (and you’d reviewed them), see e.g. the thread starting at https://lkml.org/lkml/2022/6/7/4365, and yesterday, https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/656, https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/643, and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can find them if it’s any use.
->>
->>The patches from yesterday was what triggered me to resurrect an old
->>branch of mine where I had done something similar. I had lost all
->>memory of reviewing similar patches from you.
->>
->>
->>Helge - could you pick the reviewed patches from:
->>https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
->>[This is the same mail as Stephen refer to above - looked up via lore].
->>
->>Stephen - I expect Daniel/Lee to take care of the patches from yesterday.
->>If you can look up other pending patches from you please do so, so we
->>can have them applied.
->>Preferably with links to lore - as this makes it easier to apply them.
->>
->>Review of what is unique in this set would be appreciated.
->>
->>	Sam
->
->Hi Sam,
->
->Here are my pending patches from last June on lore:
->
->* https://lore.kernel.org/lkml/20220607190925.1134737-1-steve@sk2.org/
->* https://lore.kernel.org/lkml/20220608205623.2106113-1-steve@sk2.org/
->* https://lore.kernel.org/lkml/20220607192335.1137249-1-steve@sk2.org/
->* https://lore.kernel.org/lkml/20220616170425.1346081-1-steve@sk2.org/
->
->I’ll send reviews of your other patches later today or tomorrow.
->
->Regards,
->
->Stephen
+Hi, this is your Linux kernel regression tracker.
 
-And the auxdisplay patch, v1:
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216894 :
 
-https://lore.kernel.org/lkml/20220607180406.1116277-1-steve@sk2.org/
+>  Christian Marillat 2023-01-06 10:58:26 UTC
+> 
+> Hi,
+> 
+> With this commit the kernel doesn't load the firmware and I lost my wifi device, But without this commit the firmware load fine without a kernel panic.
+> 
+> kernel 6.0.15/6.1.3
+> brcmfmac 0000:02:00.0: brcmf_pcie_init_ringbuffers: invalid max_flowrings(264)
+> 
+> kernel 6.0.17
+> brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac4366c-pcie for chip BCM4366/4
+> brcmfmac: brcmf_c_process_clm_blob: no clm_blob available (err=-2), device may have limited channels available
+> brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4366/4 wl0: Nov  5 2018 03:19:56 version 10.28.2 (r769115) FWID 01-d2cbb8fd
+> 
+> PCI info :
+> 
+> 02:00.0 Network controller: Broadcom Inc. and subsidiaries Device 43c3 (rev 04)
+> 	Subsystem: ASUSTeK Computer Inc. Device 86fb
+> 	Flags: bus master, fast devsel, latency 0, IRQ 45
+> 	Memory at f7000000 (64-bit, non-prefetchable) [size=32K]
+> 	Memory at f6800000 (64-bit, non-prefetchable) [size=8M]
+> 	Memory at f2400000 (64-bit, prefetchable) [size=4M]
+> 	Capabilities: <access denied>
+> 	Kernel driver in use: brcmfmac
+> 	Kernel modules: brcmfmac
+> 
+> Christian
+> 
+> [reply] [−] Comment 1 Christian Marillat 2023-01-06 11:00:21 UTC
+> 
+> kernel version should be  6.0.17/6.1.3 and 6.0.15
+> 
+> Christian
+> 
 
-and v2:
+See the ticket for more details.
 
-https://lore.kernel.org/lkml/20230106143002.1434266-1-steve@sk2.org/
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
 
-Regards,
+#regzbot introduced: 2aca4f3734bd717e04943
+https://bugzilla.kernel.org/show_bug.cgi?id=216894
+#regzbot title: net: wifi: brcmfmac stopped working as firmware is not
+loaded anymore
+#regzbot ignore-activity
 
-Stephen
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
