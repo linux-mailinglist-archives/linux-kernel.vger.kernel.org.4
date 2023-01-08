@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03A5661448
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BC266145C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjAHJZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 04:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S232712AbjAHJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 04:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjAHJZJ (ORCPT
+        with ESMTP id S229520AbjAHJoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:25:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFF4101CB;
-        Sun,  8 Jan 2023 01:25:06 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88EB36CF;
-        Sun,  8 Jan 2023 10:25:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673169903;
-        bh=sJs7Ppbi3G3hierAzEkA9g+MrKJHmMhM9EkUX5dPlbo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=COiQYSvTDJ4eI66dEg8pn830E3GipuNZ9pv5wWRYbwyFD6o59MmCRcAeT/a51d951
-         ZeEzxCPdLVEmnto3g3C+0boWZ1uFQrlrjlq7Ij3km5HZOCRklTBEe+ii0ARPAhI5+x
-         mnFpgElC0+Uab2/r/m3spRX/L+X316krgOCFRyAc=
-Message-ID: <90bc0464-fa49-bd57-5460-d7d2a4bb6b65@ideasonboard.com>
-Date:   Sun, 8 Jan 2023 11:24:59 +0200
+        Sun, 8 Jan 2023 04:44:34 -0500
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 01:44:33 PST
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A94E167FA;
+        Sun,  8 Jan 2023 01:44:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673170159; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ApJxBsFagfLBZ6g2WdlZTDoPz3csRVAiiOmHpWyB6Hl1glwhII2HhkoqfrLhN/l/xglnyOR3128FJ1bryu8xvASJbs7wqgB9e/hH1SS5ncFBVLoNXIDyfz1cMJrn+NaPjWGcCJ932NCsOdqSNKIrKXoQNd9lye/Jgote+TOGPBM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1673170159; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=5s6CMT1pjxwEQCq3cglEI3dDGlHe9K+JZV8PKzcZTY4=; 
+        b=ERvBZQWbVwPjE0ztx9Jo5rI6D5iKxa2Ij/oRj516WmgP1Du1pvmfEfKbNQIqriySJk3Le7Ccd/ZwZ7Yq5iUMEGDkPPdFCMeuecTf7Llte3mFJiHKW4C8IVLGcu19xFKMQvvcE01utZG8gKiRQPCZe9p0ZhC9SJvl9aaF5imEmKM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zzy040330.moe;
+        spf=pass  smtp.mailfrom=JunASAKA@zzy040330.moe;
+        dmarc=pass header.from=<JunASAKA@zzy040330.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673170159;
+        s=zmail; d=zzy040330.moe; i=JunASAKA@zzy040330.moe;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=5s6CMT1pjxwEQCq3cglEI3dDGlHe9K+JZV8PKzcZTY4=;
+        b=C1vCVKNcdlY0H52Hwttp0bZ6KbGqBVtuMAu29qZFxVG4xqDKxb/HtfcGKAxPXtnF
+        HLb0lhTDFXz49NIzbSjccUmA5+D3Uvm2KKzJFYyhL//VoPFJadgknizutqOCrF88xDL
+        GgVhb3aKgze9PZrMGJXsuScPClP6/JF6cJu3E5p4=
+Received: from [10.8.0.2] (convallaria.eternalshinra.com [103.201.131.226]) by mx.zohomail.com
+        with SMTPS id 1673170158209761.6004763996474; Sun, 8 Jan 2023 01:29:18 -0800 (PST)
+Message-ID: <56a335f1-3558-e496-4b0b-b024a935f881@zzy040330.moe>
+Date:   Sun, 8 Jan 2023 17:29:14 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 1/8] i2c: core: let adapters be notified of client
- attach/detach
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-2-tomi.valkeinen@ideasonboard.com>
- <Y7o0zn9WdsLr15r9@pendragon.ideasonboard.com>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
 Content-Language: en-US
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y7o0zn9WdsLr15r9@pendragon.ideasonboard.com>
+To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>, Jes.Sorensen@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
+ <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+In-Reply-To: <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/01/2023 05:13, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Jan 05, 2023 at 04:03:00PM +0200, Tomi Valkeinen wrote:
->> From: Luca Ceresoli <luca@lucaceresoli.net>
+On 07/01/2023 22:17, Bitterblue Smith wrote:
+
+> On 17/12/2022 05:06, Jun ASAKA wrote:
+>> Fixing transmission failure which results in
+>> "authentication with ... timed out". This can be
+>> fixed by disable the REG_TXPAUSE.
 >>
->> An adapter might need to know when a new device is about to be
->> added. This will soon bee needed to implement an "I2C address
->> translator" (ATR for short), a device that propagates I2C transactions
->> with a different slave address (an "alias" address). An ATR driver
->> needs to know when a slave is being added to find a suitable alias and
->> program the device translation map.
+>> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+>> ---
+>>   drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
 >>
->> Add an attach/detach callback pair to allow adapter drivers to be
->> notified of clients being added and removed.
-> 
-> I've asked in the review of v6 if we could instead use the
-> BUS_NOTIFY_ADD_DEVICE and BUS_NOTIFY_DEL_DEVICE bus notifiers. There's
-> been a follow up discussion with Andy, but no reply from you AFAICS.
-> Have you given this a try ? It's not a mandatory requirement, but if it
-> can't be done (or shouldn't be done), I'd like to know why.
+>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> index a7d76693c02d..9d0ed6760cb6 100644
+>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
+>>   	val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
+>>   	val8 &= ~BIT(0);
+>>   	rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
+>> +
+>> +	/*
+>> +	 * Fix transmission failure of rtl8192e.
+>> +	 */
+>> +	rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
+>>   }
+>>   
+>>   static s8 rtl8192e_cck_rssi(struct rtl8xxxu_priv *priv, u8 cck_agc_rpt)
+> By the way, you should get this into the stable kernels too:
+> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
 
-Sorry, I meant to mention this in the cover letter, but forgot:
+I see.
 
-I haven't looked at the bus notifiers yet, but will have a look. I 
-wanted to send a new revision due to the large amount of changes already 
-done.
+But since this patch has not been merged into Linus' tree yet, so should 
+I wait until this patch is merged or I should issue a v2 patch here and 
+Cc it to "table@vger.kernel.org"?
 
-  Tomi
+
+Jun ASAKA.
 
