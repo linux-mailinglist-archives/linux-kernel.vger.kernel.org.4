@@ -2,264 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23328661944
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2918661947
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjAHUYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:24:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S236066AbjAHUYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbjAHUYU (ORCPT
+        with ESMTP id S235659AbjAHUYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:24:20 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8532AF5A6
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:24:19 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id cf42so10039173lfb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 12:24:19 -0800 (PST)
+        Sun, 8 Jan 2023 15:24:25 -0500
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:404::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D255F5AB
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:24:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RKhBj64YrGDgXaenCnk38khEC4PTOlAR4b5SORehLE=;
-        b=crYBvuwx12qdFGVvrOl8neMcQdVhQqr4cNtM4ua/EAUTmz34scR0o8RS3bqgt+nLwP
-         2UI+Euz+1y7j6bKfkCXMhCwkMl32Y8xts17IAgYYt6w0Td+nd7mcLJHByn44gDwCM2Ek
-         SYE6adNKxCxeBB630mbJF+xM5YZZpZQFYRgG29iCW9EkICfeoxFlljkyK9d/mN/j5a73
-         QrZuBhXO1I4LdLILxPJY4wK/LrQcZDcKxpE6PM+wXuKfwL+ntm3JCU1jGKqa2yc2ic4C
-         g2qKeDDYONNoxXjhz2xVifhrGnEN+qN6RWo0YTx2eN5LwU+6MLnP9C1MvGpWqC6e/Ydc
-         2eQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9RKhBj64YrGDgXaenCnk38khEC4PTOlAR4b5SORehLE=;
-        b=ScJYp0K2YBRu0hAX+xlehdjHyQrN3ReR+t+aYFZ38tk4Qll4xKubwETfcfS5LtBHPY
-         Ycg9Uec15qOvnTinmbUd0XJhctJD7HLHAqh4RaDwZix7RdogTf0lliC80b/RZmAp1v0N
-         XQCJgW0bKqPfFDD7ES3F8Y56EhFHhBYBVkMlBpvSDYDc2YZ9wua1RoX8D06RIVo7pWbJ
-         HDFz/8Q0aN2Tx9ZDoIJVmUR5BifPTPjuyn+f35lbaM4FF+InJvt4npypJY7aUhEhfL2i
-         Rm+ieWW3opJvpxOxvJSHP+XeNQlq+vRSZJrMx3OdihXouv8IdyBbqRqdSami6pCekC0N
-         z6aQ==
-X-Gm-Message-State: AFqh2kqdlFItChXgZCafvHrIcpVjYP/CT3nsR+gkDoWH9TdJGthCGpWW
-        iALPLC0k5r19eyeAuiGw9KHTsg==
-X-Google-Smtp-Source: AMrXdXuhcg3GB/YJ2ZoVGa+/QfQ8Ub5XkF/qxTJtW1ugMW8laWqeK9Eh47TMdV/0NgiXYCuLiMnb3A==
-X-Received: by 2002:a05:6512:22c1:b0:4cb:783:54cd with SMTP id g1-20020a05651222c100b004cb078354cdmr15534958lfu.17.1673209457817;
-        Sun, 08 Jan 2023 12:24:17 -0800 (PST)
-Received: from localhost ([85.202.81.211])
-        by smtp.gmail.com with ESMTPSA id u7-20020ac258c7000000b004a100c21eaesm1213445lfo.97.2023.01.08.12.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 12:24:17 -0800 (PST)
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     David Rientjes <rientjes@google.com>,
-        Jarkko Sakkinen <jarkko@profian.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT)),
-        linux-crypto@vger.kernel.org (open list:AMD CRYPTOGRAPHIC COPROCESSOR
-        (CCP) DRIVER - SE...)
-Subject: [PATCH v2] crypto: ccp: Sanitize sev_platform_init() error messages
-Date:   Sun,  8 Jan 2023 20:24:05 +0000
-Message-Id: <20230108202407.104963-1-jarkko@profian.com>
-X-Mailer: git-send-email 2.38.1
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=9OaC5fUVjOcmXpBQANWBWYj1FAjD2dw4nLoh5knK1rQ=;
+        b=a3Tr/5THw9+sAm+Z+Gy/e4LPnpKQjtoLtN8tz6vefonrvI2Pg0DkrGp7CRZv9nUmr2A1eqptG9QOW
+         1f/HZoXSd3iAonj5rqD6hm8MfIqs+HGA74YZTEWBqQ8zPgFaXkRXZXdnxCyMaH5GiAqtxqK9Df6AX9
+         3m+LbJKf5IvUctgd9+rBTMF5HCdyq41ptarJEFEIxZnSoPgNbm9JF71Uqwz6qa4eukWv6jkTxzMAYs
+         0ekB9siEZdEjgGlQRCnZjJI9Gm+DPZrbVZFfhiiBbLrw2rGTdikvsqCerKtoliTSrMwPUfeZ8oSV+u
+         SlL0aFFxR/YyVglkXoExkwRnS6zazdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=9OaC5fUVjOcmXpBQANWBWYj1FAjD2dw4nLoh5knK1rQ=;
+        b=kycKAXjH4J9Dm+t0vV22ddvwFXvBpt2IbPP9ed4AbUh/FX4raML677FAsMHuNHPU0gcasnEY0VNwR
+         z0AhnIABQ==
+X-HalOne-ID: 6e82c542-8f92-11ed-a2f5-7703b0afff57
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay5 (Halon) with ESMTPSA
+        id 6e82c542-8f92-11ed-a2f5-7703b0afff57;
+        Sun, 08 Jan 2023 20:24:21 +0000 (UTC)
+Date:   Sun, 8 Jan 2023 21:24:20 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-staging@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sam Ravnborg via B4 Submission Endpoint 
+        <devnull+sam.ravnborg.org@kernel.org>,
+        Antonino Daplas <adaplas@gmail.com>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight
+ handling
+Message-ID: <Y7smdFs2xgJwwVQO@ravnborg.org>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
+ <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
+ <Y7nb2q6SDota/rTU@ravnborg.org>
+ <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following functions end up calling sev_platform_init() or
-__sev_platform_init_locked():
+Hi Stephen.
 
-* sev_guest_init()
-* sev_ioctl_do_pek_csr
-* sev_ioctl_do_pdh_export()
-* sev_ioctl_do_pek_import()
-* sev_ioctl_do_pek_pdh_gen()
-* sev_pci_init()
+ 
+> Here are my pending patches from last June on lore:
+> 
 
-However, only sev_pci_init() prints out the failed command error code, and
-even there the error message does not specify, SEV which command failed.
+All patches are handled I think except this:
+> * https://lore.kernel.org/lkml/20220608205623.2106113-1-steve@sk2.org/
 
-Address this by printing out the SEV command errors inside
-__sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
-INIT_EX commands.  As a side-effect, @error can be removed from the
-parameter list.
+Can I ask you to drop the assignment that is not needed, and resend with
+the collected acks/r-b.
 
-This extra information is particularly useful if firmware loading and/or
-initialization is going to be made more robust, e.g. by allowing firmware
-loading to be postponed.
+With this, then all fbdev patches are handled.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
----
-v2:
-* Address David Rientjes's feedback:
-  https://lore.kernel.org/all/6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com/
-* Remove @error.
-* Remove "SEV_" prefix: it is obvious from context so no need to make klog
-  line longer.
----
- arch/x86/kvm/svm/sev.c       |  2 +-
- drivers/crypto/ccp/sev-dev.c | 33 +++++++++++++++++----------------
- include/linux/psp-sev.h      |  4 +---
- 3 files changed, 19 insertions(+), 20 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index efaaef2b7ae1..42e6bd637896 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -254,7 +254,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 		goto e_no_asid;
- 	sev->asid = asid;
- 
--	ret = sev_platform_init(&argp->error);
-+	ret = sev_platform_init();
- 	if (ret)
- 		goto e_free;
- 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 06fc7156c04f..3b66cb1495d4 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -440,7 +440,7 @@ static int __sev_init_ex_locked(int *error)
- 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
- }
- 
--static int __sev_platform_init_locked(int *error)
-+static int __sev_platform_init_locked(void)
- {
- 	struct psp_device *psp = psp_master;
- 	struct sev_device *sev;
-@@ -476,19 +476,21 @@ static int __sev_platform_init_locked(int *error)
- 		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
- 		rc = init_function(&psp_ret);
- 	}
--	if (error)
--		*error = psp_ret;
--
--	if (rc)
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: %s failed error %#x",
-+			sev_init_ex_buffer ? "CMD_INIT_EX" : "CMD_INIT", psp_ret);
- 		return rc;
-+	}
- 
- 	sev->state = SEV_STATE_INIT;
- 
- 	/* Prepare for first SEV guest launch after INIT */
- 	wbinvd_on_all_cpus();
--	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
--	if (rc)
-+	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: CMD_DF_FLUSH failed error %#x", psp_ret);
- 		return rc;
-+	}
- 
- 	dev_dbg(sev->dev, "SEV firmware initialized\n");
- 
-@@ -498,12 +500,12 @@ static int __sev_platform_init_locked(int *error)
- 	return 0;
- }
- 
--int sev_platform_init(int *error)
-+int sev_platform_init(void)
- {
- 	int rc;
- 
- 	mutex_lock(&sev_cmd_mutex);
--	rc = __sev_platform_init_locked(error);
-+	rc = __sev_platform_init_locked();
- 	mutex_unlock(&sev_cmd_mutex);
- 
- 	return rc;
-@@ -610,7 +612,7 @@ static int sev_ioctl_do_pek_pdh_gen(int cmd, struct sev_issue_cmd *argp, bool wr
- 		return -EPERM;
- 
- 	if (sev->state == SEV_STATE_UNINIT) {
--		rc = __sev_platform_init_locked(&argp->error);
-+		rc = __sev_platform_init_locked();
- 		if (rc)
- 			return rc;
- 	}
-@@ -653,7 +655,7 @@ static int sev_ioctl_do_pek_csr(struct sev_issue_cmd *argp, bool writable)
- 
- cmd:
- 	if (sev->state == SEV_STATE_UNINIT) {
--		ret = __sev_platform_init_locked(&argp->error);
-+		ret = __sev_platform_init_locked();
- 		if (ret)
- 			goto e_free_blob;
- 	}
-@@ -849,7 +851,7 @@ static int sev_ioctl_do_pek_import(struct sev_issue_cmd *argp, bool writable)
- 
- 	/* If platform is not in INIT state then transition it to INIT */
- 	if (sev->state != SEV_STATE_INIT) {
--		ret = __sev_platform_init_locked(&argp->error);
-+		ret = __sev_platform_init_locked();
- 		if (ret)
- 			goto e_free_oca;
- 	}
-@@ -973,7 +975,7 @@ static int sev_ioctl_do_pdh_export(struct sev_issue_cmd *argp, bool writable)
- 		if (!writable)
- 			return -EPERM;
- 
--		ret = __sev_platform_init_locked(&argp->error);
-+		ret = __sev_platform_init_locked();
- 		if (ret)
- 			return ret;
- 	}
-@@ -1335,10 +1337,9 @@ void sev_pci_init(void)
- 		return;
- 
- 	/* Initialize the platform */
--	rc = sev_platform_init(&error);
-+	rc = sev_platform_init();
- 	if (rc)
--		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
--			error, rc);
-+		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
- 
- 	return;
- 
-diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-index 1595088c428b..2f8681b753d0 100644
---- a/include/linux/psp-sev.h
-+++ b/include/linux/psp-sev.h
-@@ -536,8 +536,6 @@ struct sev_data_attestation_report {
- /**
-  * sev_platform_init - perform SEV INIT command
-  *
-- * @error: SEV command return code
-- *
-  * Returns:
-  * 0 if the SEV successfully processed the command
-  * -%ENODEV    if the SEV device is not available
-@@ -545,7 +543,7 @@ struct sev_data_attestation_report {
-  * -%ETIMEDOUT if the SEV command timed out
-  * -%EIO       if the SEV returned a non-zero return code
-  */
--int sev_platform_init(int *error);
-+int sev_platform_init(void);
- 
- /**
-  * sev_platform_status - perform SEV PLATFORM_STATUS command
--- 
-2.38.1
-
+	Sam
