@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9B066192D
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF004661930
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbjAHUPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:15:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
+        id S233375AbjAHURw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbjAHUPK (ORCPT
+        with ESMTP id S229487AbjAHURu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:15:10 -0500
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C919DFE1;
-        Sun,  8 Jan 2023 12:15:07 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id m15so3961404ilq.2;
-        Sun, 08 Jan 2023 12:15:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JLlUIpZ0yRF5inoLVaECHxmgQGy5BGFowv/igmFsU9s=;
-        b=L+nJisr4aFR+nD49f5cJTdAitV/FzJX5ngQmow15aL2kjbqiL9NbDG/5ePoAXc5ZIJ
-         AeXJX+xEas9i9F/01cd5wv/DytbWzhoKYuUe7KcBl3pXizf6KHBvf804VJRuf4l/dK6g
-         qrMmoYMUXbgX1BQaSXl/r1WmulT/qw5QNpiaR7rocruLfSxN41GZt6C/X9/KBT1P1tUP
-         h5TSSuWgQ40yF1IoPlqJpYxNVyo8Xc3cJKhfOR8jTGyQmFUXLwviDBDIvDmSxt+AA7YT
-         yvOmAyv0LQKd7SzyIreaXfECcnS2vZOUQRK6IOJozAZ2mqQK1AaueTSn2Dkm7C8tSrQI
-         LMjw==
-X-Gm-Message-State: AFqh2kpmsOq5rlUXrGpJvHSkA4MBYgU4dftZauFuqvdanW17FBqhWw4A
-        Z9rCZrj7xdIjZAOdqVw4eQi86C6AEw==
-X-Google-Smtp-Source: AMrXdXt+l2Cwca4cuUyaO+DlZLxTsM4wlJRK+RtREIPn2jPU65LC3w7wpndBn5rpd0775jRjQGjhYA==
-X-Received: by 2002:a92:d94a:0:b0:30b:f4af:b32f with SMTP id l10-20020a92d94a000000b0030bf4afb32fmr38771210ilq.23.1673208906726;
-        Sun, 08 Jan 2023 12:15:06 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
-        by smtp.gmail.com with ESMTPSA id z17-20020a027a51000000b0039e296bf18esm2202153jad.167.2023.01.08.12.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 12:15:06 -0800 (PST)
-Received: (nullmailer pid 220563 invoked by uid 1000);
-        Sun, 08 Jan 2023 20:15:03 -0000
-Date:   Sun, 8 Jan 2023 14:15:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lux Aliaga <they@mint.lgbt>
-Cc:     linux-phy@lists.infradead.org, marijn.suijten@somainline.org,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        martin.botka@somainline.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] dt-bindings: phy: Add QMP UFS PHY compatible for
- SM6125
-Message-ID: <167320890262.220493.12109738826337104873.robh@kernel.org>
-References: <20221231222420.75233-1-they@mint.lgbt>
- <20221231222420.75233-3-they@mint.lgbt>
+        Sun, 8 Jan 2023 15:17:50 -0500
+Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8FAF02F
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=PODDs8JDufzZ5a9dupsEdgaudxmeqyPeKP5ITgSRl68=;
+        b=nBJo32bQiToZqdwB6CPRHuCJyPXi9tZMgvcrXF7vWhSIw7x4LfzX1kEgyU6pZhHCE+MrGZRIKneGu
+         0xhUarLzRrzg6q1lNz9W+nEGr57in/yjz4lNHZOC0uofaf04NEXEHDNBPKYZEPplSs27985GpcpgPI
+         qF+kOZrElEOZFKfY/CcQ7P1xZxS9MpPGYtrhbvp8FiRl/iiztjxYlHKQUgUF+kUyRNDM1aCjmWY1hT
+         JfCzjW9vKX8XEaMuzf/p3jq/PDkUISjK90kPjjuYg86yFOtpgWPSk/dHY0dByW2FLHTNMm6GHfEPON
+         BacDviJrBLTbV2ko8XMUrQiERLNY0rA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=PODDs8JDufzZ5a9dupsEdgaudxmeqyPeKP5ITgSRl68=;
+        b=6IctTMa76KOnO4IvloCnpEUgy/yBpRV0cPD9/N/HRaXCs/MtK1AklBan9+oNUjcARf6AjTLKbnCYO
+         8JWZTp2DQ==
+X-HalOne-ID: 8170d7cb-8f91-11ed-b31b-cde5ad41a1dd
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay6 (Halon) with ESMTPSA
+        id 8170d7cb-8f91-11ed-b31b-cde5ad41a1dd;
+        Sun, 08 Jan 2023 20:17:45 +0000 (UTC)
+Date:   Sun, 8 Jan 2023 21:17:43 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Kitt <steve@sk2.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] auxdisplay: ht16k33: Use backlight helper
+Message-ID: <Y7sk51V5d3P+Uk8x@ravnborg.org>
+References: <20230106143002.1434266-1-steve@sk2.org>
+ <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+ <CANiq72nnyxq_JhCETL+v1zQuU=HHjsS66Lt=0bzQ6Xy6CPKN2Q@mail.gmail.com>
+ <CAMuHMdUNze0mL=2VOLPj5kE3Lsa3B3bzN_WipC_v=CddNNSJfQ@mail.gmail.com>
+ <CANiq72=8T4=NhxLqeV0vgynRB0+gy9VnddZNTKXP75UfVPnc+Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221231222420.75233-3-they@mint.lgbt>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CANiq72=8T4=NhxLqeV0vgynRB0+gy9VnddZNTKXP75UfVPnc+Q@mail.gmail.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all.
 
-On Sat, 31 Dec 2022 19:24:16 -0300, Lux Aliaga wrote:
-> Document the QMP UFS PHY compatible for SM6125.
+On Sun, Jan 08, 2023 at 08:11:52PM +0100, Miguel Ojeda wrote:
+> On Sun, Jan 8, 2023 at 7:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Oh, I sent it here because of
+> > https://lore.kernel.org/all/Y7qM+ZlG5gQiOW4K@ravnborg.org ?
 > 
-> Signed-off-by: Lux Aliaga <they@mint.lgbt>
-> ---
->  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
+> Yeah, sorry. I mentioned it just in case, since Sam asked for Robin's
+> Ack in that thread, but I should have probably just Cc'd him here
+> (done!)...
 
-Acked-by: Rob Herring <robh@kernel.org>
+Stephen notified me that the patch is already applied - so no need for
+anything now. Sorry for the noise!
+
+	Sam
