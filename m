@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FB466146A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B978661471
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 11:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjAHJ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 04:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S232883AbjAHKDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 05:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjAHJ7I (ORCPT
+        with ESMTP id S229716AbjAHKDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:59:08 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D791B7DD
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:59:06 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id c7so5657566qtw.8
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 01:59:06 -0800 (PST)
+        Sun, 8 Jan 2023 05:03:51 -0500
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13718D11F
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 02:03:50 -0800 (PST)
+Received: by mail-qt1-f174.google.com with SMTP id h21so5602747qta.12
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 02:03:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e2B9MnY4Z0fXaBruSpv14G2A2gTAMp4GjLVqp6oCb+0=;
-        b=8LCUQlGzPC+BIKx26XU+DS/Jj0jBiLs2/qZLCxqesAg9lB9tT/TSdd3OwfaykfrrDM
-         a877J+lcVT402ZIwzX41TAtk3IyjzbhekC6XNvkwICJ+eQEoQl5xd/vrkjngOFkMRqGS
-         QyAjR9hSgV25U++4SDku0XdLlEtFGy5r+e0wrkfuGx+dvayDBinEQWC1U/x5LQdr/ou9
-         U7tLM+HloajEOl0/h4KmO11lLEUb7H8aDam+CPR6N4JBQBdWyd8sDTPDKb0PZ+KQMSmT
-         XjOsX9iPp5N0dOf+MtI0dI5c7wLisqP9fJzzO3NBiHVsP8YBKYg+RrG2qOnekpEMwBt/
-         UVrA==
-X-Gm-Message-State: AFqh2kr8cCtDy8akdAUzAkn3kbRZh40qldR5cbRLnrMkWsN37MItmOpC
-        YuzDCDwd7JbVw35bVDAEIhNczWBjlGUMqw==
-X-Google-Smtp-Source: AMrXdXtRTcH5p5P4TObuXSfHB+VmQd/mJwVYjESWssYBNtS2gylJF2UtMOVzEsIMqFWagSrYK+S2+A==
-X-Received: by 2002:ac8:4d1d:0:b0:3a7:e1aa:727c with SMTP id w29-20020ac84d1d000000b003a7e1aa727cmr77814951qtv.17.1673171945577;
-        Sun, 08 Jan 2023 01:59:05 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05620a2a0500b006fcc437c2e8sm3540006qkp.44.2023.01.08.01.59.04
+        bh=qp2Y/oZcaRM1jCxieWIWnVWN7O8i1Vi5kHffRAbB8Ac=;
+        b=u8arBepIR0wh9daP0F2ElSHEyV0vEAJSov/UfLNTQUmCPtBSbsWeB6Dg1XciiHxGUe
+         V3d6JyTR9hBj7Yq+oDSdNwGQ6gWjkRYptIz6WANnfqTU6U+6Mv9UjTz4y+2bjhELAuLr
+         221kU6U+JsxmGJHvTgtG69Wtr2zbnylWNev/YZsLWWJiEz1MAUiGeLEkrXMlGXAATPUH
+         sW6XqFuISn52iORSs/lDXbU69K7Lhs8XmtFvQZ9KHDIQUezie5VBfv6vXBKxMPSF/WY+
+         SLSJwA3sR6NkMF8cKeeGIa7LGeOli1bTT0CaRkUYzj5NyETINrVfo+pJ07a8jyvPtqrD
+         HFZg==
+X-Gm-Message-State: AFqh2koaKVncB0WLt5ZO2CtGDWUvqo0nRWOmOl2gBq8tE7waJ92SX28E
+        kb9xyrUBEsCodss+cW6Y7c5gOaG+s3gldg==
+X-Google-Smtp-Source: AMrXdXssztVrIvx2tchyNo34NS1QpYa06/fQZsBC3vffcd93juKxykY9IfaiEvrdbpkByR3Xxy3CLA==
+X-Received: by 2002:ac8:4792:0:b0:3a9:7ab8:a962 with SMTP id k18-20020ac84792000000b003a97ab8a962mr95170412qtq.40.1673172229035;
+        Sun, 08 Jan 2023 02:03:49 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id r3-20020ac84243000000b003a5430ee366sm3033337qtm.60.2023.01.08.02.03.47
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 01:59:05 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id o75so6078141yba.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 01:59:04 -0800 (PST)
-X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
- j64-20020a25d243000000b0070290b42e24mr4322992ybg.365.1673171944632; Sun, 08
- Jan 2023 01:59:04 -0800 (PST)
+        Sun, 08 Jan 2023 02:03:48 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id l139so6023110ybl.12
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 02:03:47 -0800 (PST)
+X-Received: by 2002:a25:d84e:0:b0:7b4:6a33:d89f with SMTP id
+ p75-20020a25d84e000000b007b46a33d89fmr887470ybg.543.1673172227766; Sun, 08
+ Jan 2023 02:03:47 -0800 (PST)
 MIME-Version: 1.0
-References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu> <Y7pzbnlXgv+asekg@amd.ucw.cz>
-In-Reply-To: <Y7pzbnlXgv+asekg@amd.ucw.cz>
+References: <20230106143002.1434266-1-steve@sk2.org>
+In-Reply-To: <20230106143002.1434266-1-steve@sk2.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 8 Jan 2023 10:58:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
-Message-ID: <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
-Subject: Re: Dhrystone -- userland version
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@osdl.org>
+Date:   Sun, 8 Jan 2023 11:03:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+Message-ID: <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+Subject: Re: [PATCH v2] auxdisplay: ht16k33: Use backlight helper
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -67,47 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+On Fri, Jan 6, 2023 at 4:10 PM Stephen Kitt <steve@sk2.org> wrote:
+> backlight_properties.fb_blank is deprecated. The states it represents
+> are handled by other properties; but instead of accessing those
+> properties directly, drivers should use the helpers provided by
+> backlight.h.
+>
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
+>
+> This means that BL_CORE_SUSPENDED is now taken into account, as it
+> should be.
+>
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-On Sun, Jan 8, 2023 at 8:40 AM Pavel Machek <pavel@ucw.cz> wrote:
-> > > Distributions do not usually carry dhrystone, and I don't think anyone
-> > > really maintains it. It is useful tool, and it seems we'll maintain
-> > > it.
-> > >
-> > > I'd like to add enough glue so that it would be runnable from
-> > > userspace, too? Userland version is what is actually useful to me, and
-> > > it should not be hard.
-> >
-> > I don't see whatever message you were replying to, and it doesn't seem
-> > to be archived in lore[1], so I'm not sure about the context.  But you
-> > are talking about the Dhrystone benchmark[2], right?
-> >
-> > [1] https://lore.kernel.org/all/Y7nyd4hPeXsdiibH@duo.ucw.cz/T/#u
-> > [2] https://wiki.cdot.senecacollege.ca/wiki/Dhrystone_howto
-> >
-> > If so, I'm confused what you mean by "add enough glue so that it would
-> > be runnable from userspace" --- Dhrystone is a userspace benchmark,
-> > dating from the 1980's, although what it benchmarks is often more about
-> > the compiler than the CPU's performace.
->
-> Yes, I'm talking about Dhrystone benchmark. We are carrying
-> kernel-only version in lib/dhry_*.c, it is in -next now.
->
-> commit cfbd4cc940275240e97f8b922c8f18a44fe15c07
-> Author: Geert Uytterhoeven <geert+renesas@glider.be>
-> Date:   Thu Dec 8 15:31:28 2022 +0100
->
->     lib: add Dhrystone benchmark test
->
-> I'd like userspace-too version, at the same place :-).
-
-So you want to add some glue code to tools/testing/, for building a
-userspace version?
-
-However, as this is not Linux-specific, how hard can it be to convince
-your distro to include https://github.com/qris/dhrystone-deb.git?
-Usually, when I have a full userspace available, I just clone the above,
-and debuild it myself.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
 Gr{oetje,eeting}s,
 
