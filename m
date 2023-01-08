@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B54661A54
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468B7661A55
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbjAHWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 17:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S234729AbjAHWH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 17:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbjAHWHP (ORCPT
+        with ESMTP id S233690AbjAHWHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 17:07:15 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C036FAD1;
-        Sun,  8 Jan 2023 14:07:14 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id bp44so6701491qtb.0;
-        Sun, 08 Jan 2023 14:07:14 -0800 (PST)
+        Sun, 8 Jan 2023 17:07:54 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7019BFAD1
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 14:07:53 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id lc27so6570162ejc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 14:07:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kIWT89hhIMpld/zeWPd7+BrMWFhTf5eLmGaqICxZdAY=;
+        b=B+0o+U9S6yBB8lTCzXe0paj68/ya/QWt60z/QLt70o8YKolohtCD+7TLI9ny3C/B03
+         Qb+juOdrlvrC31S2fmOJNup/PCgReSUXuSJDDxbt5RrSOjXjqRlSKuCzqCQ35Dek9wgw
+         XG6rE3P2aj4KUCWF7fB3qsnuFqQEzj2FpUipiHEHVRvCWPJ2zqGU3qv0aYuENsskPJ5Y
+         2KQybIKOMRSXXpMOLz9dWaB4FGGCl4aCvnkRwBjxNySEshmqVHS2+Osy5cuMBaZkOwpo
+         EnhlgJlc/7YriOmYGo6qEXOFBiqPtnoZolDb+PxL3eiiCbjBuyDjLj8xyMJPcckXobQ4
+         0IeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DSyezriUL/lNJCBbCnrFB5rH1MXCIbx1ORje4SC5K9Q=;
-        b=ydqolkvVvu9YoYP7/TWRgRzpaqA+Yks9k/ynlRXN+iH6Lrksvq3gglfMAWOAs1bCZW
-         mEAJDmgpNYW06d/OftAQdnPiwxmJrROrrmyoooHbC9XTZXiD8kLU25KfFUKQBO7ltJCU
-         QO8tEk0U+1OsAPKgmuSqrmC+U6eyQCFfQoHtiKt7m5SL297W0gfv+hbVy6fPxlBOYGDx
-         drY32nUNlHOCGcKXnjDb+OVD7CmLoAT3FvHuTxZWnZrVrgms7J6f5l9v3vHibpNM8nau
-         pi6Si7B9XZhGpfqx4smxRff/C9CT42Q726itZMpoj204buNx4repOrv+fXxstyQDaYXE
-         MBRw==
-X-Gm-Message-State: AFqh2kpuhUi390dC6jRHBne4GkGNPTkqkroA9/Fa0Zg47LQPxh0Fpjng
-        Ghcoyed7F91ZBqlpRLDt3Q==
-X-Google-Smtp-Source: AMrXdXtiEZ+bMuMU+KeikknktjQhAuTk6bddM96Sps6T8MQGto5OfixHJF2B/USv9hnPuMQKfyfn5g==
-X-Received: by 2002:ac8:4e04:0:b0:3ab:5dc7:6bf0 with SMTP id c4-20020ac84e04000000b003ab5dc76bf0mr85234496qtw.36.1673215633610;
-        Sun, 08 Jan 2023 14:07:13 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80a5:9b51:39ae:24d1:33f3:811e])
-        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b00705b4001fbasm1425450qkb.128.2023.01.08.14.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 14:07:13 -0800 (PST)
-Received: (nullmailer pid 345158 invoked by uid 1000);
-        Sun, 08 Jan 2023 22:07:07 -0000
-Date:   Sun, 8 Jan 2023 16:07:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, Fabien Parent <parent.f@gmail.com>,
-        linux-kernel@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 1/8] dt-bindings: power: Add MT8365 power domains
-Message-ID: <167321562678.345108.18031842904012970078.robh@kernel.org>
-References: <20230105170735.1637416-1-msp@baylibre.com>
- <20230105170735.1637416-2-msp@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kIWT89hhIMpld/zeWPd7+BrMWFhTf5eLmGaqICxZdAY=;
+        b=TPJ39SX1KS26vB1iVlURtMXHwPJaLMgLhGavkI6vSgS7QttQmHt4ushueyVayijwSB
+         DlLNx2tV1WeGpa2mmXQN/WrN1dnRaSmNrwOHH0PMy3ieONgN+GaSDMG5ln+uDDJaDmTU
+         zSiEZL15dJRzvDKlqO0GJjjIf6/IETf/zrcOu0QvYZPOqjuCX6zA/9+UCxq7h1IoHgO+
+         jy3qZzwmD4E9cNXops93aa8Bei//8OYIPuE/M6mJGjvEmmmCwPMEx9OI9Req2HN9P/ke
+         qAEp+Isf5mY66iPv145lBL1w2Ks+PDKWXRl4v8sVkNuRx2LqeU5GHpdLqkIUmCqbxlgS
+         7J7A==
+X-Gm-Message-State: AFqh2kp9YWvYoV6jaLRUV8/4YtpJrNI3+WgUasSyCiKIUyQ0Ms8yPtqn
+        dZaDt3yp0Bru/Dkx8bC0utN4B1dsy/17K1nemAQ=
+X-Google-Smtp-Source: AMrXdXv1QWvQ0rkvovyAlYa5xGOhR3R2ydanqLBLkAgJruWrqOGcVxwWsvDKos39CPV2GwBUGHKJusHMFZRA2l5oHn0=
+X-Received: by 2002:a17:906:2649:b0:84d:45cc:3247 with SMTP id
+ i9-20020a170906264900b0084d45cc3247mr122622ejc.481.1673215672046; Sun, 08 Jan
+ 2023 14:07:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105170735.1637416-2-msp@baylibre.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230105141549.2252550-1-arnd@kernel.org>
+In-Reply-To: <20230105141549.2252550-1-arnd@kernel.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Sun, 8 Jan 2023 22:07:16 +0000
+Message-ID: <CADVatmNPCGVyrYhSU-v3VU4X-_=CeT1_eDuTGffBV-GXXdn=iw@mail.gmail.com>
+Subject: Re: [PATCH] parport: remove ax88796 driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-parport@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 05 Jan 2023 18:07:28 +0100, Markus Schneider-Pargmann wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Add power domains dt-bindings for MT8365.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+On Thu, 5 Jan 2023 at 14:15, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The s3c24xx bast platform was removed, so this driver has no
+> users any more and can be removed as well.
+>
+> Cc: linux-parport@lists.infradead.org
+> Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> 
-> Notes:
->     Changes in v4:
->     - Add infracfg_nao as it is used by mt8365
-> 
->     Changes in v3:
->     - Renamed mt8365-power.h to mediatek,mt8365-power.h
-> 
->     Changes in v2:
->     - Made include/dt-bindings/power/mt8365-power.h dual-license.
-> 
->  .../power/mediatek,power-controller.yaml      |  6 ++++++
->  .../dt-bindings/power/mediatek,mt8365-power.h | 19 +++++++++++++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 include/dt-bindings/power/mediatek,mt8365-power.h
-> 
+> I have a series for removing the s3c24xx platform to be queued for
+> 6.3. This patch was missing when I originally posted it, and it can
+> either go through the same branch, or get merged seperately through
+> the parport tree, as there are no direct dependencies.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+There is no separate parport tree. Please feel free to take it via the
+same branch.
+And, with that:
+
+Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+
+
+-- 
+Regards
+Sudip
