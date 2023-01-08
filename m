@@ -2,134 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D42B6618FA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE806618FF
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbjAHT6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S233117AbjAHUAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbjAHT5n (ORCPT
+        with ESMTP id S231378AbjAHT7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 14:57:43 -0500
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673816268
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:57:42 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id EbnXp9wpvqMfREbnXp8wYD; Sun, 08 Jan 2023 20:57:40 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 08 Jan 2023 20:57:40 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <d11ebb6e-91b1-aed5-2b16-61ebf5e75855@wanadoo.fr>
-Date:   Sun, 8 Jan 2023 20:57:39 +0100
+        Sun, 8 Jan 2023 14:59:52 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA048DBA
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:59:50 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id C996192009C; Sun,  8 Jan 2023 20:59:49 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id C290592009B;
+        Sun,  8 Jan 2023 19:59:49 +0000 (GMT)
+Date:   Sun, 8 Jan 2023 19:59:49 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+cc:     x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND^3][PATCH v3] x86/PCI: Add support for the Intel 82378ZB/82379AB
+ (SIO/SIO.A) PIRQ router
+Message-ID: <alpine.DEB.2.21.2301081956290.65308@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] fs/dcache: Remove unneeded math.h and rculist.h includes
-Content-Language: fr
-To:     kernel test robot <lkp@intel.com>, viro@zeniv.linux.org.uk
-Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <028298a8b70a67a70bc7b7eb0b07d9780fc1e5f3.1673181086.git.christophe.jaillet@wanadoo.fr>
- <202301082130.LXMj5qkD-lkp@intel.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <202301082130.LXMj5qkD-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 08/01/2023 à 15:01, kernel test robot a écrit :
-> Hi Christophe,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.2-rc2 next-20230106]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/fs-dcache-Remove-unneeded-math-h-and-rculist-h-includes/20230108-203341
-> patch link:    https://lore.kernel.org/r/028298a8b70a67a70bc7b7eb0b07d9780fc1e5f3.1673181086.git.christophe.jaillet%40wanadoo.fr
-> patch subject: [PATCH] fs/dcache: Remove unneeded math.h and rculist.h includes
-> config: arc-buildonly-randconfig-r004-20230108
-> compiler: arc-elf-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/91f2fb9c6cb473dcca5bec7ebe0c813252b97d7d
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Christophe-JAILLET/fs-dcache-Remove-unneeded-math-h-and-rculist-h-includes/20230108-203341
->          git checkout 91f2fb9c6cb473dcca5bec7ebe0c813252b97d7d
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/ecryptfs/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     In file included from include/linux/list_bl.h:6,
->                      from include/linux/rculist_bl.h:8,
->                      from include/linux/dcache.h:7,
->                      from fs/ecryptfs/dentry.c:11:
->     include/linux/bit_spinlock.h: In function 'bit_spin_lock':
->>> include/linux/bit_spinlock.h:30:25: error: implicit declaration of function 'cpu_relax' [-Werror=implicit-function-declaration]
->        30 |                         cpu_relax();
->           |                         ^~~~~~~~~
->     cc1: some warnings being treated as errors
-> 
-> 
-> vim +/cpu_relax +30 include/linux/bit_spinlock.h
-> 
-> 626d607435617c Nicholas Piggin 2011-01-07   9
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  10  /*
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  11   *  bit-based spin_lock()
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  12   *
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  13   * Don't use this unless you really need to: spin_lock() and spin_unlock()
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  14   * are significantly faster.
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  15   */
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  16  static inline void bit_spin_lock(int bitnum, unsigned long *addr)
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  17  {
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  18  	/*
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  19  	 * Assuming the lock is uncontended, this never enters
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  20  	 * the body of the outer loop. If it is contended, then
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  21  	 * within the inner loop a non-atomic test is used to
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  22  	 * busywait with less bus contention for a good time to
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  23  	 * attempt to acquire the lock bit.
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  24  	 */
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  25  	preempt_disable();
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  26  #if defined(CONFIG_SMP) || defined(CONFIG_DEBUG_SPINLOCK)
-> b8dc93cbe91324 Nicholas Piggin 2007-10-18  27  	while (unlikely(test_and_set_bit_lock(bitnum, addr))) {
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  28  		preempt_enable();
-> 3dd2ee4824b668 Linus Torvalds  2011-04-25  29  		do {
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10 @30  			cpu_relax();
-> 3dd2ee4824b668 Linus Torvalds  2011-04-25  31  		} while (test_bit(bitnum, addr));
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  32  		preempt_disable();
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  33  	}
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  34  #endif
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  35  	__acquire(bitlock);
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  36  }
-> fb1c8f93d869b3 Ingo Molnar     2005-09-10  37
-> 
+The Intel 82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO.A) 
+ISA bridges implement PCI interrupt steering with a PIRQ router[1][2] 
+that is exactly the same as that of the PIIX and ICH southbridges (or 
+actually the other way round, given that the SIO ASIC was there first).
 
-I've sent a fix in [1].
+An earlier version of the SIO, the 82378IB[3][4], does not implement PCI 
+interrupt steering however, so we need to exclude it by checking the low 
+nibble of the PCI Revision Identification Register[5][6] for being at 
+least 3.
 
-I'll re-test harder the patch against <inux/dcache.h> and repost it 
-if/when [1] is merged.
+There is a note in the 82379AB specification update[7] saying that the 
+device ID for that chip is 0x7, rather than 0x484 as stated in the 
+datasheet[8].  It looks like a red herring however, for no report has 
+been ever seen with that value quoted and it matches the documented 
+default value of the PCI Command Register, which comes next after the 
+PCI Device Identification Register, so it looks like a copy-&-paste 
+editorial mistake.
 
-CJ
+NB the 82378ZB has been commonly used with smaller DEC Alpha systems 
+with the contents of the Revision Identification Register reported as 
+one of 0x3, 0x43, or 0x84, so the masking of the high nibble seems 
+indeed right by empirical observation.  The value in the high nibble 
+might be either random, or depend on the batch, or correspond to some 
+other state such as reset straps.
 
-[1]: 
-https://lore.kernel.org/all/8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr/
+References:
+
+[1] "82378 System I/O (SIO)", Intel Corporation, Order Number: 
+    290473-004, December 1994, Section 4.1.26 "PIRQ[3:0]#--PIRQ Route 
+    Control Registers"
+
+[2] "82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO.A)",
+    Intel Corporation, Order Number: 290571-001, March 1996, Section 
+    3.1.25. "PIRQ[3:0]#--PIRQ Route Control Registers", p. 48
+
+[3] "82378IB System I/O (SIO)", Intel Corporation, Order Number:
+    290473-002, April 1993, Section 5.8.7.7 "Edge and Level Triggered
+    Modes"
+
+[4] "82378IB to 82378ZB Errata Fix and Feature Enhancement Conversion
+    FOL933002-01",
+    <https://web.archive.org/web/19990421045433/http://support.intel.com/support/chipsets/420/8511.htm>
+
+[5] "82378 System I/O (SIO)", Intel Corporation, Order Number: 
+    290473-004, December 1994, Section 4.1.5. "RID--Revision 
+    Identification Register"
+
+[6] "82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO.A)",
+    Intel Corporation, Order Number: 290571-001, March 1996, Section 
+    3.1.5. "RID--Revision Identification Register", p. 34
+
+[7] "Intel 82379AB (SIO.A) System I/O Component Specification Update", 
+    Intel Corporation, Order Number: 297734-001, May, 1996, "Component 
+    Identification via Programming Interface", p. 5
+
+[8] "82378ZB System I/O (SIO) and 82379AB System I/O APIC (SIO.A)",
+    Intel Corporation, Order Number: 290571-001, March 1996, Section 
+    3.1.2. "DID--Device Identification Register", p. 33
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+Hi,
+
+ This patch was dropped from x86/irq due to a bug in a follow-up patch and 
+when resent it was not re-picked up along with the other patches for some 
+reason.  It applies unchanged to 6.2.0-rc3.
+
+ Please apply.
+
+  Maciej
+
+Changes from v2:
+
+- Regenerate for a merge conflict.
+
+Changes from v1:
+
+- Add [PATCH] annotation (umm...).
+
+- Fix RID values listed to include 0x84 rather than 0x83 (braino).
+---
+ arch/x86/pci/irq.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+linux-x86-pirq-router-sio.diff
+Index: linux-macro/arch/x86/pci/irq.c
+===================================================================
+--- linux-macro.orig/arch/x86/pci/irq.c
++++ linux-macro/arch/x86/pci/irq.c
+@@ -974,11 +974,18 @@ static __init int intel_router_probe(str
+ 		return 0;
+ 
+ 	switch (device) {
++		u8 rid;
+ 	case PCI_DEVICE_ID_INTEL_82375:
+ 		r->name = "PCEB/ESC";
+ 		r->get = pirq_esc_get;
+ 		r->set = pirq_esc_set;
+ 		return 1;
++	case PCI_DEVICE_ID_INTEL_82378:
++		pci_read_config_byte(router, PCI_REVISION_ID, &rid);
++		/* Tell 82378IB (rev < 3) and 82378ZB/82379AB apart.  */
++		if ((rid & 0xfu) < 3)
++			break;
++		fallthrough;
+ 	case PCI_DEVICE_ID_INTEL_82371FB_0:
+ 	case PCI_DEVICE_ID_INTEL_82371SB_0:
+ 	case PCI_DEVICE_ID_INTEL_82371AB_0:
+@@ -1020,7 +1027,7 @@ static __init int intel_router_probe(str
+ 	case PCI_DEVICE_ID_INTEL_ICH10_3:
+ 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_0:
+ 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_1:
+-		r->name = "PIIX/ICH";
++		r->name = "SIO/PIIX/ICH";
+ 		r->get = pirq_piix_get;
+ 		r->set = pirq_piix_set;
+ 		return 1;
+@@ -1039,7 +1046,7 @@ static __init int intel_router_probe(str
+ 	     device <= PCI_DEVICE_ID_INTEL_DH89XXCC_LPC_MAX)
+ 	||  (device >= PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MIN &&
+ 	     device <= PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MAX)) {
+-		r->name = "PIIX/ICH";
++		r->name = "SIO/PIIX/ICH";
+ 		r->get = pirq_piix_get;
+ 		r->set = pirq_piix_set;
+ 		return 1;
