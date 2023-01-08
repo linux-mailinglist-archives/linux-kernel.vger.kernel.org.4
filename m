@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D2266143B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9723166143D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjAHJES convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 8 Jan 2023 04:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S232204AbjAHJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 04:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjAHJEP (ORCPT
+        with ESMTP id S229520AbjAHJK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:04:15 -0500
-X-Greylist: delayed 4603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 01:04:14 PST
-Received: from 15.mo561.mail-out.ovh.net (15.mo561.mail-out.ovh.net [87.98.150.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E6DF3C
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:04:13 -0800 (PST)
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.16.8])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 464B923733
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:45:54 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-dlrtv (unknown [10.109.156.99])
-        by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 9B5F31FEF4;
-        Sun,  8 Jan 2023 07:45:49 +0000 (UTC)
-Received: from sk2.org ([37.59.142.106])
-        by ghost-submission-6684bf9d7b-dlrtv with ESMTPSA
-        id XCz1Hq10umNDGgAAuoryaQ
-        (envelope-from <steve@sk2.org>); Sun, 08 Jan 2023 07:45:49 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-106R0063ead8ad9-a798-4b11-941a-dcd5f5867b68,
-                    5128B599F7D401446F64D4771BE19AB2B9CD7A8B) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 37.167.47.239
-Date:   Sun, 08 Jan 2023 08:45:46 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-CC:     Sam Ravnborg via B4 Submission Endpoint 
-        <devnull+sam.ravnborg.org@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
+        Sun, 8 Jan 2023 04:10:28 -0500
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A50DF9E
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:10:27 -0800 (PST)
+Received: from SOPL295.local (unknown [IPv6:2a01:e0a:a6a:5f90:5959:63b1:9783:3e26])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp3-g21.free.fr (Postfix) with ESMTPSA id 959D313F838;
+        Sun,  8 Jan 2023 10:09:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1673169025;
+        bh=NmaAlFlb+Pj+1xRu2ZWQZxN5Tp4D5hg7k59Xcd0406Q=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=QhrX3ICiqDzJkLYpH4ykT7+Hd+PImCj6UPqM0b0mQgIl75j7z0h6gQtYLGk8QKr30
+         RGLV6ht+b5WPAj0LB/t0KJT12Z61abQ3Z/q8/i3kOtqYvJNRWF++BjogYoiLvHyHIc
+         foAebWQISOyfHsmY/yEU7nhDhl3SVYTJ6kPRz2OiIntCjovcj3WXphixHaGrdGSJaV
+         2WnoNtVB3e1U7CGgQbNCrt8LTW/kvOj84Rr9PLYXs01jytsGWs8Cs3xZNSCVi/C7y0
+         QgKlcVRQJSsvIvNf4CbBVgBmAyoiA9ihGzFAIyJ2vyoSgQqk18gcLmmdKiCA1n8xIm
+         97Apljy7gEn/g==
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-2-arnd@kernel.org>
+ <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
+ <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
+ <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
+ <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
+ <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com>
+ <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Richard Purdie <richard.purdie@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Baryshkov <dbaryshkov@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_01/15=5D_video=3A_fbdev=3A_atm?= =?US-ASCII?Q?el=5Flcdfb=3A_Rework_backlight_handling?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y7nb2q6SDota/rTU@ravnborg.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org> <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org> <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org> <Y7nb2q6SDota/rTU@ravnborg.org>
-Message-ID: <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
+        Ales Bardorfer <ales@i-tech.si>,
+        Ales Snuparek <snuparek@atlas.cz>,
+        Alex Osborne <ato@meshy.org>,
+        Alex Osborne <bobofdoom@gmail.com>,
+        Dirk Opfer <dirk@opfer-online.de>, Ian Molton <spyro@f2s.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Michael Petchkovsky <mkpetch@internode.on.net>,
+        Nick Bane <nick@cecomputing.co.uk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Tomas Cech <sleep_walker@suse.cz>,
+        Linus Walleij <linusw@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
+Date:   Sun, 08 Jan 2023 10:06:39 +0100
+In-reply-to: <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
+Message-ID: <m2o7r9gzoc.fsf@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Ovh-Tracer-Id: 8408783456216778374
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeefgdduuddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevufgfjghfkfggtgfgsehtqhhmtddtreejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevieelieekfeelhfduffdvgfduvdegkeeljeejhfdtkeeujeeileekgeeugefhhfenucffohhmrghinheplhhkmhhlrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddruddtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7 January 2023 21:53:46 CET, Sam Ravnborg <sam@ravnborg.org> wrote:
->Hi Stephen.
->
->On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote:
->> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint <devnull+sam.ravnborg.org@kernel.org> wrote:
->> >From: Sam Ravnborg <sam@ravnborg.org>
->> >
->> >The atmel_lcdfb had code to save/restore power state.
->> >This is not needed so drop it.
->> >
->> >Introduce backlight_is_brightness() to make logic simpler.
->> >
->> >Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->> >Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
->> >Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->> >Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
->> >Cc: linux-fbdev@vger.kernel.org
->> >Cc: linux-arm-kernel@lists.infradead.org
->> >---
->> > drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
->> > 1 file changed, 3 insertions(+), 21 deletions(-)
->...
->> 
->> Hi Sam,
->> 
->> I’d submitted quite a few more of these previously (and you’d reviewed them), see e.g. the thread starting at https://lkml.org/lkml/2022/6/7/4365, and yesterday, https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/656, https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/643, and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can find them if it’s any use.
->
->The patches from yesterday was what triggered me to resurrect an old
->branch of mine where I had done something similar. I had lost all
->memory of reviewing similar patches from you.
->
->
->Helge - could you pick the reviewed patches from:
->https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
->[This is the same mail as Stephen refer to above - looked up via lore].
->
->Stephen - I expect Daniel/Lee to take care of the patches from yesterday.
->If you can look up other pending patches from you please do so, so we
->can have them applied.
->Preferably with links to lore - as this makes it easier to apply them.
->
->Review of what is unique in this set would be appreciated.
->
->	Sam
+>> > Is there any conversion to DT you can easily point at as an 
+>> > example of
+>> > the kinds of changes needed?
+Hi Richard,
 
-Hi Sam,
+There is:
+https://lkml.kernel.org/lkml/20180830195941.6118-1-robert.jarzmik@free.fr/t/
 
-Here are my pending patches from last June on lore:
+This is a rather complete example of a pxa27x board working in DT 
+:
+(audio, camera, cpufreq, sd, screen, uarts, udc, keypad).
 
-* https://lore.kernel.org/lkml/20220607190925.1134737-1-steve@sk2.org/
-* https://lore.kernel.org/lkml/20220608205623.2106113-1-steve@sk2.org/
-* https://lore.kernel.org/lkml/20220607192335.1137249-1-steve@sk2.org/
-* https://lore.kernel.org/lkml/20220616170425.1346081-1-steve@sk2.org/
+Cheers.
 
-I’ll send reviews of your other patches later today or tomorrow.
-
-Regards,
-
-Stephen
+--
+Robert
