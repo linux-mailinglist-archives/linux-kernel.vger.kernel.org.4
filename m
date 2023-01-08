@@ -2,200 +2,1102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0364B661380
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 04:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897C1661387
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 05:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjAHDri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 22:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S232147AbjAHEGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 23:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjAHDrf (ORCPT
+        with ESMTP id S229745AbjAHEGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 22:47:35 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A727190
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 19:47:34 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id y5-20020a056e021be500b0030bc4f23f0aso3573967ilv.3
-        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 19:47:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qQLB00WQd68qrRQA672AQnBNiJMOAPfrMUg3muGLgrI=;
-        b=VP8nDCx1Tg6NwvkV7lSG5zUfZ65zOb5ZuXBh9i17docdLqRcViDRkxFWuwvUnJ3sps
-         lUJsn8wIf/dR8JHqSRDw3qwzF22U61I6GMU++DSLgjhvEgDf8CbkYCgGiuvPl7P5Eerm
-         IdjL3fMdOyM6F4wZvLrpjtC0uj9xvLjU+ApWahpOIOJrrC7sGLP64Vlz1t3qbYpBI0OT
-         QkAJbsW+FPrtl4BVNwByPnhDygtExJrlTsHFTAcXyDEIHGiKW+JSYKaQ0uCQEwZAA0an
-         +fDiscx1OgtsOur0VVXHqxWP3NDkStY0HLq1MN99hKC/w1ueH6zynKNmKAL2szU/rbmW
-         E75g==
-X-Gm-Message-State: AFqh2kqslTmryUHY9BfXPhuwzcuYAv8pXv6ZFJWDckMFf21x8L9s/ldg
-        Cf/KZ9hF35zRKt8FZpPSqGNr8+mrimMZvzvxKMNYp1uoOCbP
-X-Google-Smtp-Source: AMrXdXtJwWRh9AmqZokyge7qrJ1NmFx/4vhVVD25IeDrdNbbW/1FRGWQ38yqwe18R+oTrKsBNKWh31xbJ2J11gVjrrokguqh3tf0
+        Sat, 7 Jan 2023 23:06:46 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486F2643;
+        Sat,  7 Jan 2023 20:06:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8884A6CF;
+        Sun,  8 Jan 2023 05:06:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673150798;
+        bh=9Lqy+NcIedw5MdJvzuw0jPw1qIoFlxn5y12W768mAtk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooSIKoKIVJ2djfOQbkC/cDo4NgN3vIf5yLxsOslAFL7kRHufDQU+s+EScIVHk2NGY
+         sgLxQCU/giGbjSmc1Obwt3BFSNaonhnq4cTmpLxqMKa9c6CjuglDBPdQMt1Pjb03f+
+         r22oJO+ZMJ+i97ATDThOC84qZ9W+B8LVftbG+Jgs=
+Date:   Sun, 8 Jan 2023 06:06:34 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Message-ID: <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ee:b0:30c:baf:6dee with SMTP id
- l14-20020a056e0212ee00b0030c0baf6deemr4057182iln.232.1673149653822; Sat, 07
- Jan 2023 19:47:33 -0800 (PST)
-Date:   Sat, 07 Jan 2023 19:47:33 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c5b55505f1b882d2@google.com>
-Subject: [syzbot] [ext4?] INFO: task hung in find_inode_fast
-From:   syzbot <syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Tomi,
 
-syzbot found the following issue on:
+Thank you for the patch.
 
-HEAD commit:    512dee0c00ad Merge tag 'x86-urgent-2023-01-04' of git://gi..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15646c8c480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=77d6fcc37bbb92f26048
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11aec6fa480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17af7d38480000
+On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
+> Add driver for TI DS90UB913 FPD-Link III Serializer.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/i2c/Kconfig     |  13 +
+>  drivers/media/i2c/Makefile    |   2 +-
+>  drivers/media/i2c/ds90ub913.c | 871 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 885 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/media/i2c/ds90ub913.c
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index f95a54454e17..eb312d6e9cf6 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1601,6 +1601,19 @@ endmenu
+>  
+>  menu "Video serializers and deserializers"
+>  
+> +config VIDEO_DS90UB913
+> +	tristate "TI DS90UB913 Serializer"
+> +	depends on OF && I2C && VIDEO_DEV
+> +	select MEDIA_CONTROLLER
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	select V4L2_FWNODE
+> +	select REGMAP_I2C
+> +	select OF_GPIO
+> +	select I2C_ATR
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/bfe07129fec8/disk-512dee0c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b694f4342135/vmlinux-512dee0c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dcea4a460ec2/bzImage-512dee0c.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6b86252caf20/mount_0.gz
+Maybe alphabetical order ?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com
+> +	help
+> +	  Device driver for the Texas Instruments DS90UB913
+> +	  FPD-Link III Serializer.
+> +
+>  config VIDEO_DS90UB960
+>  	tristate "TI DS90UB960 Deserializer"
+>  	depends on OF && I2C && VIDEO_DEV
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index 2735b00437bb..c4875ec8c3b9 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -142,5 +142,5 @@ obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
+>  obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
+>  obj-$(CONFIG_VIDEO_WM8739) += wm8739.o
+>  obj-$(CONFIG_VIDEO_WM8775) += wm8775.o
+> +obj-$(CONFIG_VIDEO_DS90UB913)	+= ds90ub913.o
+>  obj-$(CONFIG_VIDEO_DS90UB960)	+= ds90ub960.o
+> -
 
-INFO: task syz-executor232:5073 blocked for more than 143 seconds.
-      Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor232 state:D stack:21024 pid:5073  ppid:5072   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- __wait_on_freeing_inode fs/inode.c:2196 [inline]
- find_inode_fast+0x35a/0x4c0 fs/inode.c:950
- iget_locked+0xb1/0x830 fs/inode.c:1273
- __ext4_iget+0x22e/0x3ed0 fs/ext4/inode.c:4861
- ext4_xattr_inode_iget+0x68/0x4e0 fs/ext4/xattr.c:389
- ext4_xattr_inode_dec_ref_all+0x1a7/0xe50 fs/ext4/xattr.c:1148
- ext4_xattr_delete_inode+0xb04/0xcd0 fs/ext4/xattr.c:2880
- ext4_evict_inode+0xd7c/0x10b0 fs/ext4/inode.c:296
- evict+0x2a4/0x620 fs/inode.c:664
- ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
- __ext4_fill_super fs/ext4/super.c:5516 [inline]
- ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
- get_tree_bdev+0x400/0x620 fs/super.c:1282
- vfs_get_tree+0x88/0x270 fs/super.c:1489
- do_new_mount+0x289/0xad0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa5406fd5ea
-RSP: 002b:00007ffc7232f968 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fa5406fd5ea
-RDX: 0000000020000440 RSI: 0000000020000000 RDI: 00007ffc7232f970
-RBP: 00007ffc7232f970 R08: 00007ffc7232f9b0 R09: 0000000000000432
-R10: 0000000000804a03 R11: 0000000000000202 R12: 0000000000000004
-R13: 0000555556a7a2c0 R14: 00007ffc7232f9b0 R15: 0000000000000000
- </TASK>
+Don't add the blank line in 6/8 if you remove it here :-)
 
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/12:
- #0: ffffffff8d326f50 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by rcu_tasks_trace/13:
- #0: ffffffff8d327750 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by khungtaskd/28:
- #0: ffffffff8d326d80 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-2 locks held by getty/4743:
- #0: ffff88814bdd0098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
- #1: ffffc900015a02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
-2 locks held by syz-executor232/5073:
- #0: ffff88802a5380e0 (&type->s_umount_key#28/1){+.+.}-{3:3}, at: alloc_super+0x212/0x920 fs/super.c:228
- #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: __sb_start_write include/linux/fs.h:1811 [inline]
- #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: sb_start_intwrite include/linux/fs.h:1933 [inline]
- #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: ext4_evict_inode+0x4cd/0x10b0 fs/ext4/inode.c:240
+> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
+> new file mode 100644
+> index 000000000000..0a60afb09cd3
+> --- /dev/null
+> +++ b/drivers/media/i2c/ds90ub913.c
+> @@ -0,0 +1,871 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for the Texas Instruments DS90UB913 video serializer
+> + *
+> + * Based on a driver from Luca Ceresoli <luca@lucaceresoli.net>
+> + *
+> + * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
+> + * Copyright (c) 2022 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-=============================================
+Happy new year :-)
 
-NMI backtrace for cpu 1
-CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
- watchdog+0xcd5/0xd20 kernel/hung_task.c:377
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 4421 Comm: klogd Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:vsnprintf+0x3cd/0x1cb0 lib/vsprintf.c:2829
-Code: e8 08 92 e0 f6 48 83 fb 28 4c 8b 7c 24 08 0f 87 80 08 00 00 e8 d4 8d e0 f6 48 8b 7c 24 30 48 89 f8 48 c1 e8 03 42 80 3c 28 00 <74> 05 e8 ac 37 36 f7 89 d8 49 03 5e 10 44 8d 78 08 48 8b 44 24 10
-RSP: 0018:ffffc90002f6f7a0 EFLAGS: 00000246
-RAX: 1ffff920005edf22 RBX: 0000000000000010 RCX: ffff88807d8e1d40
-RDX: 0000000000000000 RSI: 0000000000000010 RDI: ffffc90002f6f910
-RBP: ffffc90002f6f890 R08: ffffffff8aab4d78 R09: ffffffff8aab4b6e
-R10: 0000000000000012 R11: ffff88807d8e1d40 R12: ffff0a0000000509
-R13: dffffc0000000000 R14: ffffc90002f6f900 R15: ffffc90082f6fae2
-FS:  00007f99d0120800(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005630c40b8a40 CR3: 000000002b714000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- sprintf+0xc7/0x110 lib/vsprintf.c:3000
- print_time kernel/printk/printk.c:1357 [inline]
- info_print_prefix+0x153/0x2e0 kernel/printk/printk.c:1383
- record_print_text+0x12e/0x430 kernel/printk/printk.c:1432
- syslog_print+0x3a0/0x5e0 kernel/printk/printk.c:1643
- do_syslog+0x815/0x8f0 kernel/printk/printk.c:1762
- __do_sys_syslog kernel/printk/printk.c:1854 [inline]
- __se_sys_syslog kernel/printk/printk.c:1852 [inline]
- __x64_sys_syslog+0x78/0x90 kernel/printk/printk.c:1852
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f99d02bb8b7
-Code: 73 01 c3 48 8b 0d c1 05 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 67 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 91 05 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffec1edf228 EFLAGS: 00000206 ORIG_RAX: 0000000000000067
-RAX: ffffffffffffffda RBX: 00007f99d0448490 RCX: 00007f99d02bb8b7
-RDX: 00000000000003ff RSI: 00007f99d0448490 RDI: 0000000000000002
-RBP: 0000000000000000 R08: 0000000000000007 R09: 000055d7b192cd50
-R10: 0000000000004000 R11: 0000000000000206 R12: 00007f99d0448490
-R13: 00007f99d044850e R14: 00007f99d044850e R15: 0000000000000000
- </TASK>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/i2c-atr.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <media/i2c/ds90ub9xx.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#define UB913_PAD_SINK			0
+> +#define UB913_PAD_SOURCE		1
+> +
+> +/*
+> + * UB913 has 4 gpios, but gpios 3 and 4 are reserved for external oscillator
+> + * mode. Thus we only support 2 gpios for now.
+> + */
+> +#define UB913_NUM_GPIOS			2
+> +
+> +#define UB913_REG_RESET_CTL			0x01
+> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
+> +#define UB913_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
+> +
+> +#define UB913_REG_GENERAL_CFG			0x03
+> +#define UB913_REG_GENERAL_CFG_CRC_ERR_RESET	BIT(5)
+> +#define UB913_REG_GENERAL_CFG_PCLK_RISING	BIT(0)
+> +
+> +#define UB913_REG_MODE_SEL			0x05
+> +#define UB913_REG_MODE_SEL_MODE_UP_TO_DATE	BIT(4)
+> +#define UB913_REG_MODE_SEL_MODE_OVERRIDE	BIT(5)
+> +
+> +#define UB913_REG_CRC_ERRORS_LSB		0x0a
+> +#define UB913_REG_CRC_ERRORS_MSB		0x0b
+> +
+> +#define UB913_REG_GENERAL_STATUS		0x0c
+> +
+> +#define UB913_REG_GPIO_CFG(n)			(0x0d + (n))
+> +#define UB913_REG_GPIO_CFG_ENABLE(n)		BIT(0 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_DIR_INPUT(n)		BIT(1 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_REMOTE_EN(n)		BIT(2 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_OUT_VAL(n)		BIT(3 + (n) * 4)
+> +#define UB913_REG_GPIO_CFG_MASK(n)		(0xf << ((n) * 4))
+> +
+> +#define UB913_REG_SCL_HIGH_TIME			0x11
+> +#define UB913_REG_SCL_LOW_TIME			0x12
+> +
+> +#define UB913_REG_PLL_OVR			0x35
+> +
+> +struct ub913_data {
+> +	struct i2c_client	*client;
+> +	struct regmap		*regmap;
+> +	struct clk		*clkin;
+> +
+> +	struct gpio_chip	gpio_chip;
+> +	char			gpio_chip_name[64];
+> +
+> +	struct v4l2_subdev	sd;
+> +	struct media_pad	pads[2];
+> +
+> +	struct v4l2_async_notifier	notifier;
+> +
+> +	struct v4l2_subdev	*source_sd;
+> +
+> +	u64			enabled_source_streams;
+> +
+> +	struct device_node	*tx_ep_np;
+> +
+> +	struct clk_hw		*clkout_clk_hw;
+> +
+> +	struct ds90ub9xx_platform_data *plat_data;
+> +
+> +	u32			pclk_polarity;
+> +};
+> +
+> +static inline struct ub913_data *sd_to_ub913(struct v4l2_subdev *sd)
+> +{
+> +	return container_of(sd, struct ub913_data, sd);
+> +}
+> +
+> +static int ub913_read(const struct ub913_data *priv, u8 reg, u8 *val)
+> +{
+> +	unsigned int v;
+> +	int ret;
+> +
+> +	ret = regmap_read(priv->regmap, reg, &v);
+> +	if (ret < 0) {
+> +		dev_err(&priv->client->dev,
+> +			"Cannot read register 0x%02x: %d!\n", reg, ret);
+> +		return ret;
+> +	}
+> +
+> +	*val = v;
+> +	return 0;
+> +}
+> +
+> +static int ub913_write(const struct ub913_data *priv, u8 reg, u8 val)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_write(priv->regmap, reg, val);
+> +	if (ret < 0)
+> +		dev_err(&priv->client->dev,
+> +			"Cannot write register 0x%02x: %d!\n", reg, ret);
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * GPIO chip
+> + */
+> +static int ub913_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	return GPIO_LINE_DIRECTION_OUT;
+> +}
+> +
+> +static int ub913_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
+> +				    int value)
+> +{
+> +	struct ub913_data *priv = gpiochip_get_data(gc);
+> +	unsigned int reg_idx;
+> +	unsigned int field_idx;
+> +	int ret;
+> +
+> +	reg_idx = offset / 2;
+> +	field_idx = offset % 2;
 
+You could initialize those two variables when declaring them, up to you.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +
+> +	ret = regmap_update_bits(
+> +		priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
+> +		UB913_REG_GPIO_CFG_MASK(field_idx),
+> +		UB913_REG_GPIO_CFG_ENABLE(field_idx) |
+> +			(value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
+> +
+> +	return ret;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+No need for a ret variable, you can write
+
+	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
+				  UB913_REG_GPIO_CFG_MASK(field_idx),
+				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
+				  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
+
+> +}
+> +
+> +static void ub913_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	ub913_gpio_direction_out(gc, offset, value);
+> +}
+> +
+> +static int ub913_gpio_of_xlate(struct gpio_chip *gc,
+> +			       const struct of_phandle_args *gpiospec,
+> +			       u32 *flags)
+> +{
+> +	if (flags)
+> +		*flags = gpiospec->args[1];
+> +
+> +	return gpiospec->args[0];
+> +}
+> +
+> +static int ub913_gpiochip_probe(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct gpio_chip *gc = &priv->gpio_chip;
+> +	int ret;
+> +
+> +	/* Initialize GPIOs 0 and 1 to local control, tri-state */
+> +	ub913_write(priv, UB913_REG_GPIO_CFG(0), 0);
+> +
+> +	scnprintf(priv->gpio_chip_name, sizeof(priv->gpio_chip_name), "%s",
+> +		  dev_name(dev));
+
+I think you can use strscpy().
+
+> +
+> +	gc->label = priv->gpio_chip_name;
+> +	gc->parent = dev;
+> +	gc->owner = THIS_MODULE;
+> +	gc->base = -1;
+> +	gc->can_sleep = 1;
+
+can_sleep is a bool,
+
+	gc->can_sleep = true;
+
+> +	gc->ngpio = UB913_NUM_GPIOS;
+> +	gc->get_direction = ub913_gpio_get_direction;
+> +	gc->direction_output = ub913_gpio_direction_out;
+> +	gc->set = ub913_gpio_set;
+> +	gc->of_xlate = ub913_gpio_of_xlate;
+> +	gc->of_node = priv->client->dev.of_node;
+> +	gc->of_gpio_n_cells = 2;
+> +
+> +	ret = gpiochip_add_data(gc, priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ub913_gpiochip_remove(struct ub913_data *priv)
+> +{
+> +	gpiochip_remove(&priv->gpio_chip);
+> +}
+> +
+> +static const struct regmap_config ub913_regmap_config = {
+> +	.name = "ds90ub913",
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.reg_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +	.val_format_endian = REGMAP_ENDIAN_DEFAULT,
+> +};
+> +
+> +/*
+> + * V4L2
+> + */
+> +
+> +static int ub913_enable_streams(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *state, u32 pad,
+> +				u64 streams_mask)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct media_pad *remote_pad;
+> +	u64 sink_streams;
+> +	int ret;
+> +
+> +	if (streams_mask & priv->enabled_source_streams)
+> +		return -EALREADY;
+
+I may recall incorrectly, but doesn't the subdev core already prevent
+this from happening ?
+
+> +
+> +	sink_streams = v4l2_subdev_state_xlate_streams(
+> +		state, UB913_PAD_SOURCE, UB913_PAD_SINK, &streams_mask);
+> +
+> +	remote_pad = media_pad_remote_pad_first(&priv->pads[UB913_PAD_SINK]);
+
+As the remote pad should never change, how about caching it in the
+ub913_data structrue at probe time and using it here and in other
+functions below ? You already cache the source subdev.
+
+> +
+> +	ret = v4l2_subdev_enable_streams(priv->source_sd, remote_pad->index,
+> +					 sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams |= streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_disable_streams(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *state, u32 pad,
+> +				 u64 streams_mask)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct media_pad *remote_pad;
+> +	int ret;
+> +	u64 sink_streams;
+
+Swap ret and sink_streams.
+
+> +
+> +	if ((streams_mask & priv->enabled_source_streams) != streams_mask)
+> +		return -EALREADY;
+> +
+> +	sink_streams = v4l2_subdev_state_xlate_streams(
+> +		state, UB913_PAD_SOURCE, UB913_PAD_SINK, &streams_mask);
+> +
+> +	remote_pad = media_pad_remote_pad_first(&priv->pads[UB913_PAD_SINK]);
+> +
+> +	ret = v4l2_subdev_disable_streams(priv->source_sd, remote_pad->index,
+> +					  sink_streams);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->enabled_source_streams &= ~streams_mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int _ub913_set_routing(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_state *state,
+> +			      struct v4l2_subdev_krouting *routing)
+> +{
+> +	static const struct v4l2_mbus_framefmt format = {
+> +		.width = 640,
+> +		.height = 480,
+> +		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+> +		.field = V4L2_FIELD_NONE,
+> +		.colorspace = V4L2_COLORSPACE_SRGB,
+> +		.ycbcr_enc = V4L2_YCBCR_ENC_601,
+> +		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
+> +		.xfer_func = V4L2_XFER_FUNC_SRGB,
+> +	};
+> +	int ret;
+> +
+> +	/*
+> +	 * Note: we can only support up to V4L2_FRAME_DESC_ENTRY_MAX, until
+> +	 * frame desc is made dynamically allocated.
+> +	 */
+> +
+> +	if (routing->num_routes > V4L2_FRAME_DESC_ENTRY_MAX)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_routing_validate(sd, routing,
+> +					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_set_routing(struct v4l2_subdev *sd,
+> +			     struct v4l2_subdev_state *state,
+> +			     enum v4l2_subdev_format_whence which,
+> +			     struct v4l2_subdev_krouting *routing)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +
+> +	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && priv->enabled_source_streams)
+> +		return -EBUSY;
+> +
+> +	return _ub913_set_routing(sd, state, routing);
+> +}
+> +
+> +static int ub913_get_source_frame_desc(struct ub913_data *priv,
+> +				       struct v4l2_mbus_frame_desc *desc)
+> +{
+> +	struct media_pad *pad;
+> +	int ret;
+> +
+> +	pad = media_pad_remote_pad_first(&priv->pads[UB913_PAD_SINK]);
+> +	if (!pad)
+> +		return -EPIPE;
+> +
+> +	ret = v4l2_subdev_call(priv->source_sd, pad, get_frame_desc, pad->index,
+> +			       desc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +				struct v4l2_mbus_frame_desc *fd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	const struct v4l2_subdev_krouting *routing;
+> +	struct v4l2_mbus_frame_desc source_fd;
+> +	struct v4l2_subdev_route *route;
+> +	struct v4l2_subdev_state *state;
+> +	int ret;
+> +
+> +	if (pad != UB913_PAD_SOURCE)
+> +		return -EINVAL;
+> +
+> +	ret = ub913_get_source_frame_desc(priv, &source_fd);
+> +	if (ret)
+> +		return ret;
+> +
+> +	state = v4l2_subdev_lock_and_get_active_state(sd);
+> +
+> +	routing = &state->routing;
+> +
+> +	memset(fd, 0, sizeof(*fd));
+> +
+> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
+
+These two lines can be moved up, before locking the state.
+
+> +
+> +	for_each_active_route(routing, route) {
+> +		unsigned int i;
+> +
+> +		if (route->source_pad != pad)
+> +			continue;
+> +
+> +		for (i = 0; i < source_fd.num_entries; ++i)
+
+Curly braces.
+
+> +			if (source_fd.entry[i].stream == route->sink_stream)
+> +				break;
+> +
+> +		if (i == source_fd.num_entries) {
+> +			dev_err(&priv->client->dev,
+> +				"Failed to find stream from source frame desc\n");
+> +			ret = -EPIPE;
+> +			goto out;
+> +		}
+> +
+> +		fd->entry[fd->num_entries].stream = route->source_stream;
+> +		fd->entry[fd->num_entries].flags = source_fd.entry[i].flags;
+> +		fd->entry[fd->num_entries].length = source_fd.entry[i].length;
+> +		fd->entry[fd->num_entries].pixelcode =
+> +			source_fd.entry[i].pixelcode;
+> +
+> +		fd->num_entries++;
+
+Looks like we'll need helpers to simplify implementation of
+.get_frame_desc(). Not a candidate for this series.
+
+> +	}
+> +
+> +out:
+> +	v4l2_subdev_unlock_state(state);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ub913_set_fmt(struct v4l2_subdev *sd,
+> +			 struct v4l2_subdev_state *state,
+> +			 struct v4l2_subdev_format *format)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct v4l2_mbus_framefmt *fmt;
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
+> +	    priv->enabled_source_streams)
+> +		return -EBUSY;
+> +
+> +	/* No transcoding, source and sink formats must match. */
+> +	if (format->pad == UB913_PAD_SOURCE)
+> +		return v4l2_subdev_get_fmt(sd, state, format);
+> +
+> +	/* Set sink format */
+> +	fmt = v4l2_subdev_state_get_stream_format(state, format->pad,
+> +						  format->stream);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	*fmt = format->format;
+> +
+> +	/* Propagate to source format */
+> +	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
+> +							   format->stream);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	*fmt = format->format;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_init_cfg(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *state)
+> +{
+> +	struct v4l2_subdev_route routes[] = {
+> +		{
+> +			.sink_pad = UB913_PAD_SINK,
+> +			.sink_stream = 0,
+> +			.source_pad = UB913_PAD_SOURCE,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +	};
+> +
+> +	struct v4l2_subdev_krouting routing = {
+> +		.num_routes = ARRAY_SIZE(routes),
+> +		.routes = routes,
+> +	};
+> +
+> +	return _ub913_set_routing(sd, state, &routing);
+> +}
+> +
+> +static int ub913_log_status(struct v4l2_subdev *sd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +	struct device *dev = &priv->client->dev;
+> +	u8 v, v1, v2;
+> +
+> +	ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> +	dev_info(dev, "MODE_SEL %#x\n", v);
+
+%#02x ? Same below.
+
+> +
+> +	ub913_read(priv, UB913_REG_CRC_ERRORS_LSB, &v1);
+> +	ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &v2);
+
+Looks racy, but if it's for debugging only, I suppose it's fine.
+
+> +	dev_info(dev, "CRC errors %u\n", v1 | (v2 << 8));
+> +
+> +	ub913_read(priv, UB913_REG_GENERAL_STATUS, &v);
+> +	dev_info(dev, "GENERAL_STATUS %#x\n", v);
+> +
+> +	ub913_read(priv, UB913_REG_PLL_OVR, &v);
+> +	dev_info(dev, "PLL_OVR %#x\n", v);
+> +
+> +	/* clear CRC errors */
+> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v | UB913_REG_GENERAL_CFG_CRC_ERR_RESET);
+
+Line wrap.
+
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+
+Move this just after reading the number of CRC errors to avoid dropping
+some errors.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_core_ops ub913_subdev_core_ops = {
+> +	.log_status = ub913_log_status,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops ub913_pad_ops = {
+> +	.enable_streams = ub913_enable_streams,
+> +	.disable_streams = ub913_disable_streams,
+> +	.set_routing = ub913_set_routing,
+> +	.get_frame_desc	= ub913_get_frame_desc,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+> +	.set_fmt = ub913_set_fmt,
+> +	.init_cfg = ub913_init_cfg,
+> +};
+> +
+> +static const struct v4l2_subdev_ops ub913_subdev_ops = {
+> +	.core = &ub913_subdev_core_ops,
+> +	.pad = &ub913_pad_ops,
+> +};
+> +
+> +static const struct media_entity_operations ub913_entity_ops = {
+> +	.link_validate = v4l2_subdev_link_validate,
+> +};
+> +
+> +static int ub913_notify_bound(struct v4l2_async_notifier *notifier,
+> +			      struct v4l2_subdev *source_subdev,
+> +			      struct v4l2_async_subdev *asd)
+> +{
+> +	struct ub913_data *priv = sd_to_ub913(notifier->sd);
+> +	struct device *dev = &priv->client->dev;
+> +	unsigned int src_pad;
+> +	int ret;
+> +
+> +	ret = media_entity_get_fwnode_pad(&source_subdev->entity,
+> +					  source_subdev->fwnode,
+> +					  MEDIA_PAD_FL_SOURCE);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to find pad for %s\n",
+> +			source_subdev->name);
+> +		return ret;
+> +	}
+> +
+> +	priv->source_sd = source_subdev;
+> +	src_pad = ret;
+> +
+> +	ret = media_create_pad_link(&source_subdev->entity, src_pad,
+> +				    &priv->sd.entity, UB913_PAD_SINK,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +				    MEDIA_LNK_FL_IMMUTABLE);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to link %s:%u -> %s:0\n",
+> +			source_subdev->name, src_pad, priv->sd.name);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_async_notifier_operations ub913_notify_ops = {
+> +	.bound = ub913_notify_bound,
+> +};
+> +
+> +static int ub913_v4l2_notifier_register(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct v4l2_async_subdev *asd;
+> +	struct device_node *ep_node;
+> +	int ret;
+> +
+> +	ep_node = of_graph_get_endpoint_by_regs(dev->of_node, 0, 0);
+> +	if (!ep_node) {
+> +		dev_err(dev, "No graph endpoint\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	v4l2_async_nf_init(&priv->notifier);
+> +
+> +	asd = v4l2_async_nf_add_fwnode_remote(&priv->notifier,
+> +					      of_fwnode_handle(ep_node),
+> +					      struct v4l2_async_subdev);
+> +
+> +	of_node_put(ep_node);
+> +
+> +	if (IS_ERR(asd)) {
+> +		dev_err(dev, "Failed to add subdev: %ld", PTR_ERR(asd));
+> +		v4l2_async_nf_cleanup(&priv->notifier);
+> +		return PTR_ERR(asd);
+> +	}
+> +
+> +	priv->notifier.ops = &ub913_notify_ops;
+> +
+> +	ret = v4l2_async_subdev_nf_register(&priv->sd, &priv->notifier);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register subdev_notifier");
+> +		v4l2_async_nf_cleanup(&priv->notifier);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ub913_v4l2_nf_unregister(struct ub913_data *priv)
+> +{
+> +	v4l2_async_nf_unregister(&priv->notifier);
+> +	v4l2_async_nf_cleanup(&priv->notifier);
+> +}
+> +
+> +static int ub913_register_clkout(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	const char *name;
+> +	int ret;
+> +
+> +	name = kasprintf(GFP_KERNEL, "ds90ub913.%s.clk_out", dev_name(dev));
+
+	if (!name)
+		return -ENOMEM;
+
+> +
+> +	priv->clkout_clk_hw = devm_clk_hw_register_fixed_factor(dev, name,
+> +		__clk_get_name(priv->clkin), 0, 1, 2);
+> +
+> +	kfree(name);
+> +
+> +	if (IS_ERR(priv->clkout_clk_hw))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clkout_clk_hw),
+> +				     "Cannot register clkout hw\n");
+> +
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
+> +					  priv->clkout_clk_hw);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Cannot add OF clock provider\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_i2c_master_init(struct ub913_data *priv)
+> +{
+> +	/* i2c fast mode */
+> +	u32 scl_high = 600 + 300; /* high period + rise time, ns */
+> +	u32 scl_low = 1300 + 300; /* low period + fall time, ns */
+> +	unsigned long ref;
+> +	int ret;
+> +
+> +	ref = clk_get_rate(priv->clkin) / 2;
+> +
+> +	scl_high = div64_u64((u64)scl_high * ref, 1000000000);
+> +	scl_low = div64_u64((u64)scl_low * ref, 1000000000);
+> +
+> +	ret = ub913_write(priv, UB913_REG_SCL_HIGH_TIME, scl_high);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ub913_write(priv, UB913_REG_SCL_LOW_TIME, scl_low);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_add_i2c_adapter(struct ub913_data *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct fwnode_handle *i2c_handle;
+> +	int ret;
+> +
+> +	i2c_handle = device_get_named_child_node(dev, "i2c");
+> +	if (!i2c_handle)
+> +		return 0;
+> +
+> +	ret = i2c_atr_add_adapter(priv->plat_data->atr, priv->plat_data->port,
+> +				  i2c_handle);
+> +
+> +	fwnode_handle_put(i2c_handle);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_parse_dt(struct ub913_data *priv)
+> +{
+> +	struct device_node *np = priv->client->dev.of_node;
+> +	struct device *dev = &priv->client->dev;
+> +	int ret;
+> +	struct device_node *ep_np;
+
+Swap ret and ep_np.
+
+> +
+> +	if (!np) {
+> +		dev_err(dev, "OF: no device tree node!\n");
+> +		return -ENOENT;
+> +	}
+
+Can this happen ?
+
+> +
+> +	ep_np = of_graph_get_endpoint_by_regs(np, 0, 0);
+> +	if (!ep_np) {
+> +		dev_err(dev, "OF: no endpoint\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	ret = of_property_read_u32(ep_np, "pclk-sample", &priv->pclk_polarity);
+> +
+> +	of_node_put(ep_np);
+> +
+> +	if (ret) {
+> +		dev_err(dev, "OF: failed to parse pclk-sample: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ub913_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct ub913_data *priv;
+> +	int ret;
+> +	u8 v;
+> +	bool mode_override;
+> +	u8 mode;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->client = client;
+> +
+> +	priv->plat_data = dev_get_platdata(&client->dev);
+> +	if (!priv->plat_data) {
+> +		dev_err(dev, "Platform data missing\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+> +	if (IS_ERR(priv->regmap)) {
+> +		dev_err(dev, "Failed to init regmap\n");
+> +		return PTR_ERR(priv->regmap);
+> +	}
+> +
+> +	/* ub913 can also work without ext clock, but that is not supported */
+
+Maybe "not supported by the driver yet." to make it clear it could be
+added ?
+
+> +	priv->clkin = devm_clk_get(dev, "clkin");
+> +	if (IS_ERR(priv->clkin)) {
+> +		ret = PTR_ERR(priv->clkin);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Cannot get CLKIN (%d)", ret);
+
+Use dev_err_probe().
+
+> +		return ret;
+> +	}
+> +
+> +	ret = ub913_parse_dt(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(v & UB913_REG_MODE_SEL_MODE_UP_TO_DATE)) {
+> +		dev_err(dev, "Mode value not stabilized\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	mode_override = v & UB913_REG_MODE_SEL_MODE_OVERRIDE;
+> +	mode = v & 0xf;
+
+A macro for the 0xf would be nice.
+
+> +
+> +	dev_dbg(dev, "mode from %s: %#x\n",
+> +		mode_override ? "reg" : "deserializer", mode);
+> +
+> +	ret = ub913_i2c_master_init(priv);
+> +	if (ret) {
+> +		dev_err(dev, "i2c master init failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = ub913_gpiochip_probe(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to init gpiochip\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = ub913_register_clkout(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register clkout\n");
+> +		goto err_gpiochip_remove;
+> +	}
+> +
+> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> +	v &= ~UB913_REG_GENERAL_CFG_PCLK_RISING;
+> +	v |= priv->pclk_polarity ? UB913_REG_GENERAL_CFG_PCLK_RISING : 0;
+> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+
+We're completely missing power management, but I suppose that can be
+done later.
+
+Should this be grouped with the UB913_REG_MODE_SEL check above, and
+maybe moved to a hardware init function ?
+
+> +
+> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub913_subdev_ops);
+> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
+> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> +	priv->sd.entity.ops = &ub913_entity_ops;
+> +
+> +	priv->pads[0].flags = MEDIA_PAD_FL_SINK;
+> +	priv->pads[1].flags = MEDIA_PAD_FL_SOURCE;
+> +
+> +	ret = media_entity_pads_init(&priv->sd.entity, 2, priv->pads);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to init pads\n");
+> +		goto err_gpiochip_remove;
+> +	}
+> +
+> +	priv->tx_ep_np = of_graph_get_endpoint_by_regs(dev->of_node, 1, 0);
+> +	if (priv->tx_ep_np)
+> +		priv->sd.fwnode = of_fwnode_handle(priv->tx_ep_np);
+
+Can we meaningfully continue with tx_ep_np is NULL, or should that be an
+error ?
+
+> +
+> +	ret = v4l2_subdev_init_finalize(&priv->sd);
+> +	if (ret)
+> +		goto err_entity_cleanup;
+> +
+> +	ret = ub913_v4l2_notifier_register(priv);
+> +	if (ret) {
+> +		dev_err(dev, "v4l2 subdev notifier register failed: %d\n", ret);
+> +		goto err_free_state;
+> +	}
+> +
+> +	ret = v4l2_async_register_subdev(&priv->sd);
+> +	if (ret) {
+> +		dev_err(dev, "v4l2_async_register_subdev error: %d\n", ret);
+> +		goto err_unreg_notif;
+> +	}
+> +
+> +	ret = ub913_add_i2c_adapter(priv);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add remote i2c adapter\n");
+> +		goto err_unreg_async_subdev;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unreg_async_subdev:
+> +	v4l2_async_unregister_subdev(&priv->sd);
+> +err_unreg_notif:
+> +	ub913_v4l2_nf_unregister(priv);
+> +err_free_state:
+
+I'd name this err_subdev_cleanup.
+
+> +	v4l2_subdev_cleanup(&priv->sd);
+> +err_entity_cleanup:
+> +	if (priv->tx_ep_np)
+> +		of_node_put(priv->tx_ep_np);
+
+of_node_put() is a no-op when called with NULL, you can drop the check.
+Same below.
+
+> +
+> +	media_entity_cleanup(&priv->sd.entity);
+> +err_gpiochip_remove:
+> +	ub913_gpiochip_remove(priv);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ub913_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct ub913_data *priv = sd_to_ub913(sd);
+> +
+> +	i2c_atr_del_adapter(priv->plat_data->atr,
+> +			    priv->plat_data->port);
+> +
+> +	v4l2_async_unregister_subdev(&priv->sd);
+> +
+> +	ub913_v4l2_nf_unregister(priv);
+> +
+> +	v4l2_subdev_cleanup(&priv->sd);
+> +
+> +	if (priv->tx_ep_np)
+> +		of_node_put(priv->tx_ep_np);
+> +
+> +	media_entity_cleanup(&priv->sd.entity);
+> +
+> +	ub913_gpiochip_remove(priv);
+> +}
+> +
+> +static const struct i2c_device_id ub913_id[] = { { "ds90ub913a-q1", 0 }, {} };
+> +MODULE_DEVICE_TABLE(i2c, ub913_id);
+> +
+> +#ifdef CONFIG_OF
+
+The driver depends on CONFIG_OF so I would drop this, as well as the
+of_match_ptr().
+
+> +static const struct of_device_id ub913_dt_ids[] = {
+> +	{ .compatible = "ti,ds90ub913a-q1", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ub913_dt_ids);
+> +#endif
+> +
+> +static struct i2c_driver ds90ub913_driver = {
+> +	.probe_new	= ub913_probe,
+> +	.remove		= ub913_remove,
+> +	.id_table	= ub913_id,
+> +	.driver = {
+> +		.name	= "ds90ub913a",
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = of_match_ptr(ub913_dt_ids),
+> +	},
+> +};
+> +
+> +module_i2c_driver(ds90ub913_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Texas Instruments DS90UB913 serializer driver");
+> +MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+> +MODULE_AUTHOR("Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>");
+> +MODULE_IMPORT_NS(I2C_ATR);
+
+-- 
+Regards,
+
+Laurent Pinchart
