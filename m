@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190BB661A3C
+	by mail.lfdr.de (Postfix) with ESMTP id B9B33661A3E
 	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbjAHV5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S236325AbjAHV5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236231AbjAHV5J (ORCPT
+        with ESMTP id S236235AbjAHV5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:57:09 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02907662
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:57:08 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so7714786wmb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 13:57:08 -0800 (PST)
+        Sun, 8 Jan 2023 16:57:10 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8877677
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:57:09 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l26so4989946wme.5
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 13:57:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Pmu+ooljm/HGcSlkAl7hxuicOXpBLsPaLMjXgjubWRw=;
-        b=hbFFDMrUQuk+KC+ExU005L22CrNW+1MV0BI63KaiQtchIoe3kQ/wZvXXJaUjFlFZPX
-         rcef4uZRtvacGDNzChEkD4iX+A3uGIAB77Eh2h1d4IsaGLzL4RGbaSdstuZAbSETkDyE
-         azzyVy6X6xfPOlTQDRRLERNlXF+5/IT1dPqYcwUKZ9WeYx+w3BuGcDaNWPx1TOgvzPle
-         3Q8H09oSOu6VEoQZI7Rcty/ynbAR9dSYId6530Iu4LVwDnx1pD+AdiwlaC3XgbhoTGN0
-         ef9PbV+xtMAoUaW3A4VsBMBwPXqi6ruV8ZFFSMm1FnhujBLCf6GjWncB7nghKev/Obwc
-         bEXg==
+        bh=HQpX0128CCnGU+qDUpUU498cMch/d898rzRC4KudPfQ=;
+        b=PIIvrKELxWqdkL8YTQTCAmMKZlufIQIy90RYM0Fadeh7r5M5U6Vggmr9RqD2ZMSJAd
+         daQEfhW+p8U4SxDxaAOys5lorDDbNvvDtYke1ae3fxSqj3OqLs1y/KA2hmsZ33Zo948N
+         JzUA3GJDETwenqI4uix3TGMwo6Cmwji9TCGZunCQFGzI60+uQT5nAJ90ttL1bs8ksoxx
+         TCXRyuuICQGl6yo1CM+psMJc7vQ8nzVjynbilBuLcZGnpIgYGIqWyrteYUypDpTSXfTL
+         66KpSKt170HsCPMXGKpxfxSwt3aqX2CDF4126UPW1RAPe8YNsfAES90miOlJsXi30VMm
+         igBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Pmu+ooljm/HGcSlkAl7hxuicOXpBLsPaLMjXgjubWRw=;
-        b=jETMWlFc7cIm2qjNwdtauHJHTVCgEFUURrr0hOg5N9wye4cB9YUxqz3BqxhgPyYgjD
-         siTdylSZx0w8yyopiMne9vUQLi5cZm8qpnwhKIbISTDoOLoYgpWQ98EpR5nQncWIHdc1
-         QMvyPwu7qA7mTPYV0gluJ9B+rq3vWFhmTwSkTs+Vj856V+ARdFniROMT6skwrAh1WHZu
-         atLD0+9t666t278xtWgXfeyeNOcw0lFvvxWt6IsoRdQ8tNlZbbCN2UDHg4hTFDdoUg62
-         4PzBvOeGy6CxjquCrxvvDwreNRZ3CTM93t8q/J6Q8p4LsYIqpwEh2piWBBCg+UOhHKOG
-         GT0w==
-X-Gm-Message-State: AFqh2kpvjHUlHcAqn1sXV3vjOwRUKghQh+ePJ/oUzEzy0KDFKmHzcVor
-        Bz6ZiWOX89nML6wU3bo3/7ShiyB9Shs=
-X-Google-Smtp-Source: AMrXdXs5lnZunvg0o51m8Ep+zqGRh+l17LS2RQ7MRrEVR4uqwbfPdeLNAhoyyLSfUMarIDJRSw7S8Q==
-X-Received: by 2002:a05:600c:3d1b:b0:3d0:6a57:66a5 with SMTP id bh27-20020a05600c3d1b00b003d06a5766a5mr43683098wmb.0.1673215027288;
+        bh=HQpX0128CCnGU+qDUpUU498cMch/d898rzRC4KudPfQ=;
+        b=xwPka45U/zr0aTxO2r/LgfYO3puP7ibc5ZFYf99dBzv1oTS8x+ydWO3tmESb94viSz
+         NNVg9nO6U4jB8J8j8v8PQ1a27XiUbNnGEMhlN+snIXUzvYHqSprxWVXkj3pLGlWkfeb1
+         HTZ0bEAQ8ymBgASzytn+fsm/EyeKE31n/DQXj49tRRXdripGfc9+lkENndI/axCzWbeu
+         NaSsW6l9kHpNVa9D1QeYDUpUM0vRjF+jZAIBCG9omKeby/TDfTf5mCbdoIPGUSvP1Wbv
+         hwNVbgneZZLqArVgKpMhe4tt0WCzNmyVMFcE/Aq0wSWKpvU6cRlgO7HOZEl4m15nsQ7p
+         lqXA==
+X-Gm-Message-State: AFqh2kq7brwA1A14xofZoGd67lDQnjDP/sABFvOLQLiD7eaSWkLXwNpn
+        evJlmuv9fFKwzJCuD3q57qE=
+X-Google-Smtp-Source: AMrXdXu+icj/lDXOsWDGIAp46Eqa2F49Po0MHSY4gC2kjqhlZ48nHOdUrnU3iNsToSIkMQviPntB1A==
+X-Received: by 2002:a05:600c:254:b0:3d2:2c86:d2b2 with SMTP id 20-20020a05600c025400b003d22c86d2b2mr55039647wmj.24.1673215027907;
         Sun, 08 Jan 2023 13:57:07 -0800 (PST)
 Received: from localhost.localdomain ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b003d99469ece1sm14654071wmo.24.2023.01.08.13.57.06
+        by smtp.gmail.com with ESMTPSA id h15-20020a05600c314f00b003d99469ece1sm14654071wmo.24.2023.01.08.13.57.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 13:57:06 -0800 (PST)
+        Sun, 08 Jan 2023 13:57:07 -0800 (PST)
 From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 3/7] parport_pc: Let chipset drivers mask ECR bits on writes
-Date:   Sun,  8 Jan 2023 21:56:52 +0000
-Message-Id: <20230108215656.6433-3-sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4/7] parport_pc: Add a mode mask field for PCI devices
+Date:   Sun,  8 Jan 2023 21:56:53 +0000
+Message-Id: <20230108215656.6433-4-sudipm.mukherjee@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230108215656.6433-1-sudipm.mukherjee@gmail.com>
 References: <20230108215656.6433-1-sudipm.mukherjee@gmail.com>
@@ -75,143 +75,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 
-Provide an `ecr_writable' parameter to `__parport_pc_probe_port' so that
-callers can specify a mask of bits to modify on ECR writes.
-
-To avoid the need for separate bit set and bit clear masks always set
-bit 0 whenever a non-zero mask has been set, as all the currently known
-cases where a mask is required, that is Oxford Semiconductor devices, do
-require this bit to be set.  If further cases are discovered where the
-bit is required to be clear, we can update code accordingly, but chances
-are very low as the bit is supposed to be read-only[1].
-
-Skip ECR probing, which can be problematic as the Oxford Semiconductor
-OX12PCI840 part has been reported to lock up on setting bit 2, whenever
-a non-zero mask has been requested by a port subdriver, assuming that
-the ECR must be there if the subdriver has requested a specific way to
-access it.
-
-References:
-
-[1] "Extended Capabilities Port Protocol and ISA Interface Standard",
-    Microsoft Corporation, Revision: 1.14, July 14, 1993, Table 14
-    "Extended Control Register"
+Add a mode mask field for PCI devices and use `__parport_pc_probe_port'
+in place of `parport_pc_probe_port' to apply it.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 ---
- drivers/parport/parport_pc.c | 46 +++++++++++++++++++++++-------------
- include/linux/parport_pc.h   |  3 +++
- 2 files changed, 32 insertions(+), 17 deletions(-)
+ drivers/parport/parport_pc.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
-index 9daaaaa305e6..ad49fd356c7b 100644
+index ad49fd356c7b..2928f36e05ff 100644
 --- a/drivers/parport/parport_pc.c
 +++ b/drivers/parport/parport_pc.c
-@@ -106,15 +106,22 @@ static int pnp_registered_parport;
- static void frob_econtrol(struct parport *pb, unsigned char m,
- 			   unsigned char v)
- {
-+	const struct parport_pc_private *priv = pb->physport->private_data;
-+	unsigned char ecr_writable = priv->ecr_writable;
- 	unsigned char ectr = 0;
-+	unsigned char new;
+@@ -2659,6 +2659,9 @@ static struct parport_pc_pci {
+ 		/* -1 if not there, >6 for offset-method (max BAR is 6) */
+ 	} addr[4];
  
- 	if (m != 0xff)
- 		ectr = inb(ECONTROL(pb));
- 
--	pr_debug("frob_econtrol(%02x,%02x): %02x -> %02x\n",
--		 m, v, ectr, (ectr & ~m) ^ v);
-+	new = (ectr & ~m) ^ v;
-+	if (ecr_writable)
-+		/* All known users of the ECR mask require bit 0 to be set. */
-+		new = (new & ecr_writable) | 1;
- 
--	outb((ectr & ~m) ^ v, ECONTROL(pb));
-+	pr_debug("frob_econtrol(%02x,%02x): %02x -> %02x\n", m, v, ectr, new);
++	/* Bit field of parport modes to exclude. */
++	unsigned int mode_mask;
 +
-+	outb(new, ECONTROL(pb));
- }
- 
- static inline void frob_set_mode(struct parport *p, int mode)
-@@ -1479,21 +1486,24 @@ static int parport_ECR_present(struct parport *pb)
- 	struct parport_pc_private *priv = pb->private_data;
- 	unsigned char r = 0xc;
- 
--	outb(r, CONTROL(pb));
--	if ((inb(ECONTROL(pb)) & 0x3) == (r & 0x3)) {
--		outb(r ^ 0x2, CONTROL(pb)); /* Toggle bit 1 */
-+	if (!priv->ecr_writable) {
-+		outb(r, CONTROL(pb));
-+		if ((inb(ECONTROL(pb)) & 0x3) == (r & 0x3)) {
-+			outb(r ^ 0x2, CONTROL(pb)); /* Toggle bit 1 */
- 
--		r = inb(CONTROL(pb));
--		if ((inb(ECONTROL(pb)) & 0x2) == (r & 0x2))
--			goto no_reg; /* Sure that no ECR register exists */
--	}
-+			r = inb(CONTROL(pb));
-+			if ((inb(ECONTROL(pb)) & 0x2) == (r & 0x2))
-+				/* Sure that no ECR register exists */
-+				goto no_reg;
-+		}
- 
--	if ((inb(ECONTROL(pb)) & 0x3) != 0x1)
--		goto no_reg;
-+		if ((inb(ECONTROL(pb)) & 0x3) != 0x1)
-+			goto no_reg;
- 
--	ECR_WRITE(pb, 0x34);
--	if (inb(ECONTROL(pb)) != 0x35)
--		goto no_reg;
-+		ECR_WRITE(pb, 0x34);
-+		if (inb(ECONTROL(pb)) != 0x35)
-+			goto no_reg;
-+	}
- 
- 	priv->ecr = 1;
- 	outb(0xc, CONTROL(pb));
-@@ -2005,7 +2015,8 @@ static struct parport *__parport_pc_probe_port(unsigned long int base,
- 					       int irq, int dma,
- 					       struct device *dev,
- 					       int irqflags,
--					       unsigned int mode_mask)
-+					       unsigned int mode_mask,
-+					       unsigned char ecr_writable)
- {
- 	struct parport_pc_private *priv;
- 	struct parport_operations *ops;
-@@ -2054,6 +2065,7 @@ static struct parport *__parport_pc_probe_port(unsigned long int base,
- 	priv->ctr = 0xc;
- 	priv->ctr_writable = ~0x10;
- 	priv->ecr = 0;
-+	priv->ecr_writable = ecr_writable;
- 	priv->fifo_depth = 0;
- 	priv->dma_buf = NULL;
- 	priv->dma_handle = 0;
-@@ -2256,7 +2268,7 @@ struct parport *parport_pc_probe_port(unsigned long int base,
- 				      int irqflags)
- {
- 	return __parport_pc_probe_port(base, base_hi, irq, dma,
--				       dev, irqflags, 0);
-+				       dev, irqflags, 0, 0);
- }
- EXPORT_SYMBOL(parport_pc_probe_port);
- 
-diff --git a/include/linux/parport_pc.h b/include/linux/parport_pc.h
-index 3d6fc576d6a1..f1ec5c10c3b3 100644
---- a/include/linux/parport_pc.h
-+++ b/include/linux/parport_pc.h
-@@ -26,6 +26,9 @@ struct parport_pc_private {
- 	/* Whether or not there's an ECR. */
- 	int ecr;
- 
-+	/* Bitmask of writable ECR bits. */
-+	unsigned char ecr_writable;
-+
- 	/* Number of PWords that FIFO will hold. */
- 	int fifo_depth;
- 
+ 	/* If set, this is called immediately after pci_enable_device.
+ 	 * If it returns non-zero, no probing will take place and the
+ 	 * ports will not be used. */
+@@ -2862,9 +2865,10 @@ static int parport_pc_pci_probe(struct pci_dev *dev,
+ 			       id->vendor, id->device, io_lo, io_hi, irq);
+ 		}
+ 		data->ports[count] =
+-			parport_pc_probe_port(io_lo, io_hi, irq,
+-					       PARPORT_DMA_NONE, &dev->dev,
+-					       IRQF_SHARED);
++			__parport_pc_probe_port(io_lo, io_hi, irq,
++						PARPORT_DMA_NONE, &dev->dev,
++						IRQF_SHARED,
++						cards[i].mode_mask, 0);
+ 		if (data->ports[count])
+ 			count++;
+ 	}
 -- 
 2.30.2
 
