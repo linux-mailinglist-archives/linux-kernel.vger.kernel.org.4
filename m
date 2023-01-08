@@ -2,157 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B076613C2
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 07:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CAA6613C5
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 07:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjAHGEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 01:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S231338AbjAHGYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 01:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjAHGEd (ORCPT
+        with ESMTP id S229627AbjAHGYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 01:04:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C77018E1A;
-        Sat,  7 Jan 2023 22:04:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 058E760BEA;
-        Sun,  8 Jan 2023 06:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5B3C433EF;
-        Sun,  8 Jan 2023 06:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673157870;
-        bh=sxLgw656KnRhuwO4+fEm20uaNlzK9/wJ1eViWMHL/MA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VG2FzlZrQ0OylbElYkju0RS8ASh09uSSC7uLeSmk8vsATiLviUHQENieO5eibnks9
-         71YMNRswTO9P6iXKurRoDf2dE+3s7sJh+JbOpup3uzN0g88ZUoqUKJbuzBjPyRta/6
-         n1yRH8f6ZkASgF9E3AjVita7rB/ODS+OPzpZ/47ER9sMuRZxyYPGilbVOkBizpWddz
-         V7DjefuZA0JgdRhx8HB8tqnPK68XGcC6m25vSoQI6ttF1YxzmS0zJa8sXQ4qVrRH92
-         s13D5of+gnIgK11XvGluW1lKfENXinkdwzm+0AhDRRy9CNxOxP4349nNmd13QCBs8Q
-         DTyEnwImx0PIA==
-Date:   Sun, 8 Jan 2023 15:04:25 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-Id: <20230108150425.426f2861e9db1152fa84508f@kernel.org>
-In-Reply-To: <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
-        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 8 Jan 2023 01:24:18 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1181EADF
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 22:24:16 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id q64so5638522pjq.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 22:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QeoGX28pohH6YTyGGTvoqbUNJvhignnE3xBPpX1iJkM=;
+        b=oPpOYvzGEBhoEz7H0UVS3gcV6apwfYI5SqyEAXBIMM2i0CZVkACiJXbX4PeL0h0kw+
+         7ufDhbcnKdFJL8ZA6DdJfaFkzvg8ZHoCoXKL3n0sP4UlUBkggg9o5BJkGso6Idvh1p7P
+         YNmzdHPDRHEgf7Iw1aIQlPlk3vNzAGNFHhHes/m5V0Uu3VYnMDjJSAcQQLAQPqiDqL8n
+         NZj3MbWLlaUSIg8NZCnHnrsUVUJ4S8GMbWhr+IT2NZmJq9UFn0cJ1EH4qZJ2gH+2TMKg
+         yhESY87lPfYMASmA1h0/1Hf3xsvKxzsQSFroPnCa2ndPVgfVV1Y/2xQnBFYgEaR0pA2S
+         vN0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QeoGX28pohH6YTyGGTvoqbUNJvhignnE3xBPpX1iJkM=;
+        b=tLcrATiIg1uTxqsXzN3zcMfBFq6x8iZIHNlXwwIsnboq3dVg6Vovttm5xXSDgEMvRz
+         aXySbvKt86wyNTlZWoCo3yBt1/JBEfvwvTIycuBKPdWp9x4ysWEgTb4oCCkd4ltR+YpT
+         vDjxNI9xezdu5bZH6ObDXcfERtLkY4wzBKNIsMOEh9xXBpjoHzaGpFNOnaKeUhCxSpxd
+         3ur4Pnk5z45cCvuXIXCsRtecuFQi3Uz9xMbecev4DG+V2kGsjrSR8h2CDZnymE/WoPlx
+         dXBynH0PkltImGrWwQo2FUH7EAd/AS9gwT32z/2JhF/XuH5K4yTa3W9xg8t8sJ9r3hW+
+         Cbvw==
+X-Gm-Message-State: AFqh2kpkrqxhkonkG+N590/rLNOBleoHFA54IlGxUHCzpqUNNi/NdG4l
+        fka5F7CQkAdH/OcFYDQk5cMn8w==
+X-Google-Smtp-Source: AMrXdXuEN83eo4arhdl41y+r3Sf3C3PBc9q2D2A1PoEVnQEOKl5QVjk3oK4XpcrvDjXvpLztpbNBSQ==
+X-Received: by 2002:a05:6a20:d38c:b0:af:a276:2f94 with SMTP id iq12-20020a056a20d38c00b000afa2762f94mr77308581pzb.35.1673159055712;
+        Sat, 07 Jan 2023 22:24:15 -0800 (PST)
+Received: from leoy-huanghe.lan (211-23-48-221.hinet-ip.hinet.net. [211.23.48.221])
+        by smtp.gmail.com with ESMTPSA id s1-20020a63f041000000b004784cdc196dsm3146510pgj.24.2023.01.07.22.24.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 22:24:15 -0800 (PST)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH 1/2] perf kmem: Support legacy tracepoints
+Date:   Sun,  8 Jan 2023 14:23:59 +0800
+Message-Id: <20230108062400.250690-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 Jan 2023 08:22:02 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+Commit 11e9734bcb6a ("mm/slab_common: unify NUMA and UMA version of
+tracepoints") removed tracepoints 'kmalloc_node' and
+'kmem_cache_alloc_node', these two tracepoints have disappeared in the
+latest kernel, but we also need to consider the tool should be backward
+compatible with old kernels.
 
-> On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > On Wed, 4 Jan 2023 16:58:38 -0800
-> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > 
-> > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > containing kernel boot parameters to be embedded into an initrd or into
-> > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > in cases where some of the boot parameters depend on the kernel version
-> > > rather than on the server hardware, firmware, or workload.
-> > > 
-> > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > order to cause the kernel to look for the embedded bootconfig file,
-> > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > into that file.
-> > > 
-> > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > boot parameters to be embedded into the kernel image without the need to
-> > > (for example) update large numbers of boot loaders.
-> > 
-> > I like this because this is a simple solution. We have another option
-> > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > bootloader. Thus, it is better to have this option so that user can
-> > always enable bootconfig.
-> 
-> Glad you like it!
-> 
-> In addition, if the help text is accurate, another shortcoming of
-> CONFIG_CMDLINE is that its semantics vary from one architecture to
-> another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> parameters, and others differ in the order in which the parameters
-> are processed.
+If detects the tracepoint "kmem:kmalloc_node" is existed on a system,
+this patch enables the legacy tracepoints, otherwise, it will ignore
+them for the new kernels.
 
-Yes, that differences confuse us...
+Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Fixes: 11e9734bcb6a ("mm/slab_common: unify NUMA and UMA version of tracepoints")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+ tools/perf/builtin-kmem.c | 29 ++++++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
-> 
-> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Thank you!
-> 
-> > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > (or at least recommend to enable this)
-> 
-> Like this?
-
-Yes! Thanks.
-
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> commit d09a1505c51a70da38b34ac38062977299aef742
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Sat Jan 7 08:09:22 2023 -0800
-> 
->     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
->     
->     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
->     will normally be to unconditionally provide the specified kernel-boot
->     arguments to the kernel, as opposed to requiring a separately provided
->     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
->     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
->     
->     The old semantics may be obtained by manually overriding this default.
->     
->     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 0fb19fa0edba9..97a0f14d9020d 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
->  config BOOT_CONFIG_FORCE
->  	bool "Force unconditional bootconfig processing"
->  	depends on BOOT_CONFIG
-> +	default y if BOOT_CONFIG_EMBED
->  	help
->  	  With this Kconfig option set, BOOT_CONFIG processing is carried
->  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-
-
+diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
+index e20656c431a4..50a3df5dc18a 100644
+--- a/tools/perf/builtin-kmem.c
++++ b/tools/perf/builtin-kmem.c
+@@ -1824,6 +1824,19 @@ static int parse_line_opt(const struct option *opt __maybe_unused,
+ 	return 0;
+ }
+ 
++static bool slab_legacy_tp_is_exposed(void)
++{
++	/*
++	 * The tracepoints "kmem:kmalloc_node" and
++	 * "kmem:kmem_cache_alloc_node" have been removed on the latest
++	 * kernel, if the tracepoint "kmem:kmalloc_node" is existed it
++	 * means the tool is running on an old kernel, we need to
++	 * rollback to support these legacy tracepoints.
++	 */
++	return IS_ERR(trace_event__tp_format("kmem", "kmalloc_node")) ?
++		false : true;
++}
++
+ static int __cmd_record(int argc, const char **argv)
+ {
+ 	const char * const record_args[] = {
+@@ -1831,22 +1844,28 @@ static int __cmd_record(int argc, const char **argv)
+ 	};
+ 	const char * const slab_events[] = {
+ 	"-e", "kmem:kmalloc",
+-	"-e", "kmem:kmalloc_node",
+ 	"-e", "kmem:kfree",
+ 	"-e", "kmem:kmem_cache_alloc",
+-	"-e", "kmem:kmem_cache_alloc_node",
+ 	"-e", "kmem:kmem_cache_free",
+ 	};
++	const char * const slab_legacy_events[] = {
++	"-e", "kmem:kmalloc_node",
++	"-e", "kmem:kmem_cache_alloc_node",
++	};
+ 	const char * const page_events[] = {
+ 	"-e", "kmem:mm_page_alloc",
+ 	"-e", "kmem:mm_page_free",
+ 	};
+ 	unsigned int rec_argc, i, j;
+ 	const char **rec_argv;
++	unsigned int slab_legacy_tp_exposed = slab_legacy_tp_is_exposed();
+ 
+ 	rec_argc = ARRAY_SIZE(record_args) + argc - 1;
+-	if (kmem_slab)
++	if (kmem_slab) {
+ 		rec_argc += ARRAY_SIZE(slab_events);
++		if (slab_legacy_tp_exposed)
++			rec_argc += ARRAY_SIZE(slab_legacy_events);
++	}
+ 	if (kmem_page)
+ 		rec_argc += ARRAY_SIZE(page_events) + 1; /* for -g */
+ 
+@@ -1861,6 +1880,10 @@ static int __cmd_record(int argc, const char **argv)
+ 	if (kmem_slab) {
+ 		for (j = 0; j < ARRAY_SIZE(slab_events); j++, i++)
+ 			rec_argv[i] = strdup(slab_events[j]);
++		if (slab_legacy_tp_exposed) {
++			for (j = 0; j < ARRAY_SIZE(slab_legacy_events); j++, i++)
++				rec_argv[i] = strdup(slab_legacy_events[j]);
++		}
+ 	}
+ 	if (kmem_page) {
+ 		rec_argv[i++] = strdup("-g");
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
