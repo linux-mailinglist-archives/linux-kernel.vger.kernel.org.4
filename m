@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDE96618FC
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42B6618FA
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbjAHT6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S233758AbjAHT6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 14:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjAHT5n (ORCPT
+        with ESMTP id S233863AbjAHT5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 8 Jan 2023 14:57:43 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F4C6176
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673816268
         for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:57:42 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id y25so9940413lfa.9
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 11:57:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jwMbo3jZwfzrxPAlrx2iocMxlsap6lAjNhHYy958phg=;
-        b=B9LBMt+FOLmA/fahhqUqnasBWh4kgAk/a985k6HdSmC38eRp4yhdBaTl7sJjj6W5vG
-         25nAMGL7754E7ONiiB3KKGIXPKrT4S+1qpAiXrGCwSf8wSH8yUHyPIY1MNGqTV+eA2jy
-         pdKbZbbiS4ASIgfErAFDpRyCb1MnmIlPEyaQbvywTntiZ6R/nbygbxM1VvwHbUxxz+C/
-         70v8wPuju2kg373UmaTxY3b5uIUOCk8PbNR/oYFRh1ImjOzU+s3zs02BNa0IXdCjSYvT
-         +Zevjp/aFfw0Iz3U5sXMsM3KFzGtpX44dEwGIaOCYjPSOvMznerptwZYEyWp6w7e3Lq5
-         9Gaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwMbo3jZwfzrxPAlrx2iocMxlsap6lAjNhHYy958phg=;
-        b=FwuDJcB31QIG9k1yD7ZXuRbsqxVEiNK82l5PG91IgGRkYRUz1qeYyTEViIaB+PXbas
-         B41otU5rwhe12ZzFxPBFnuH42Ty3glT2h2WylGcfN6mhWOAP8SCYRyszKgXYXIaln3l3
-         7Tx2c7zHnw0fTf/JhbUBauMsyaTTiTo7h54lL2DRJOiaXO5irGm1820dF541Qo0Fr/gN
-         XP2y73iNuSP8Rw7hK9OTdCw4tGm+7akQhB0GYakCCzrYvVQmpWUw0tmCI8NXoLIADme0
-         78p4NV+nvqSZuj3GllPzip4Vx0kTXBbUNpPi1/5R4Tb8r6/4ooX76YdW0EQO0a8PVKVU
-         1STQ==
-X-Gm-Message-State: AFqh2krgSpKU3GjBuasVIVFf4lgLVt4swuvX/ysd7YZKLeqyt68Zf5BO
-        NR2BmjXNZ28PKqTdazutVvRAMp/Xo2o=
-X-Google-Smtp-Source: AMrXdXtqEIhK0FSbCGD0wd7TGiB+ySlFDihf2JNIwpAR3lEvvd28P1CZTgWFVgWB5vLgRs8ArWN05w==
-X-Received: by 2002:ac2:50d9:0:b0:4cb:2c19:ec21 with SMTP id h25-20020ac250d9000000b004cb2c19ec21mr8188083lfm.0.1673207860199;
-        Sun, 08 Jan 2023 11:57:40 -0800 (PST)
-Received: from ?IPV6:2a00:1370:8180:6b00:a1a8:4887:1af4:637a? ([2a00:1370:8180:6b00:a1a8:4887:1af4:637a])
-        by smtp.gmail.com with ESMTPSA id d7-20020ac25447000000b004b40c1f1c70sm1205176lfn.212.2023.01.08.11.57.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 11:57:39 -0800 (PST)
-Message-ID: <ab4727b9-69c1-ba8d-38d8-6a3c721ba2aa@gmail.com>
-Date:   Sun, 8 Jan 2023 22:57:39 +0300
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id EbnXp9wpvqMfREbnXp8wYD; Sun, 08 Jan 2023 20:57:40 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 08 Jan 2023 20:57:40 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <d11ebb6e-91b1-aed5-2b16-61ebf5e75855@wanadoo.fr>
+Date:   Sun, 8 Jan 2023 20:57:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 06/13] staging: r8188eu: make rtl8188eu_inirp_init a void
- function
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230108185738.597105-1-martin@kaiser.cx>
- <20230108185738.597105-7-martin@kaiser.cx>
-Content-Language: en-US
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20230108185738.597105-7-martin@kaiser.cx>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] fs/dcache: Remove unneeded math.h and rculist.h includes
+Content-Language: fr
+To:     kernel test robot <lkp@intel.com>, viro@zeniv.linux.org.uk
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <028298a8b70a67a70bc7b7eb0b07d9780fc1e5f3.1673181086.git.christophe.jaillet@wanadoo.fr>
+ <202301082130.LXMj5qkD-lkp@intel.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <202301082130.LXMj5qkD-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-Martin Kaiser <martin@kaiser.cx> says:
-> rtl8188eu_inirp_init's return value is not checked by its caller. Make
-> rtl8188eu_inirp_init a void function.
+Le 08/01/2023 à 15:01, kernel test robot a écrit :
+> Hi Christophe,
 > 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->   drivers/staging/r8188eu/hal/usb_halinit.c  | 14 +++-----------
->   drivers/staging/r8188eu/include/hal_intf.h |  2 +-
->   2 files changed, 4 insertions(+), 12 deletions(-)
+> Thank you for the patch! Yet something to improve:
 > 
-> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-> index d28b4dc2a767..afa24a59fbb3 100644
-> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
-> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-> @@ -851,29 +851,21 @@ u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
->   	return _SUCCESS;
->    }
->   
-> -unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
-> +void rtl8188eu_inirp_init(struct adapter *Adapter)
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.2-rc2 next-20230106]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/fs-dcache-Remove-unneeded-math-h-and-rculist-h-includes/20230108-203341
+> patch link:    https://lore.kernel.org/r/028298a8b70a67a70bc7b7eb0b07d9780fc1e5f3.1673181086.git.christophe.jaillet%40wanadoo.fr
+> patch subject: [PATCH] fs/dcache: Remove unneeded math.h and rculist.h includes
+> config: arc-buildonly-randconfig-r004-20230108
+> compiler: arc-elf-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/91f2fb9c6cb473dcca5bec7ebe0c813252b97d7d
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Christophe-JAILLET/fs-dcache-Remove-unneeded-math-h-and-rculist-h-includes/20230108-203341
+>          git checkout 91f2fb9c6cb473dcca5bec7ebe0c813252b97d7d
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/ecryptfs/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     In file included from include/linux/list_bl.h:6,
+>                      from include/linux/rculist_bl.h:8,
+>                      from include/linux/dcache.h:7,
+>                      from fs/ecryptfs/dentry.c:11:
+>     include/linux/bit_spinlock.h: In function 'bit_spin_lock':
+>>> include/linux/bit_spinlock.h:30:25: error: implicit declaration of function 'cpu_relax' [-Werror=implicit-function-declaration]
+>        30 |                         cpu_relax();
+>           |                         ^~~~~~~~~
+>     cc1: some warnings being treated as errors
+> 
+> 
+> vim +/cpu_relax +30 include/linux/bit_spinlock.h
+> 
+> 626d607435617c Nicholas Piggin 2011-01-07   9
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  10  /*
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  11   *  bit-based spin_lock()
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  12   *
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  13   * Don't use this unless you really need to: spin_lock() and spin_unlock()
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  14   * are significantly faster.
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  15   */
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  16  static inline void bit_spin_lock(int bitnum, unsigned long *addr)
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  17  {
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  18  	/*
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  19  	 * Assuming the lock is uncontended, this never enters
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  20  	 * the body of the outer loop. If it is contended, then
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  21  	 * within the inner loop a non-atomic test is used to
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  22  	 * busywait with less bus contention for a good time to
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  23  	 * attempt to acquire the lock bit.
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  24  	 */
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  25  	preempt_disable();
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  26  #if defined(CONFIG_SMP) || defined(CONFIG_DEBUG_SPINLOCK)
+> b8dc93cbe91324 Nicholas Piggin 2007-10-18  27  	while (unlikely(test_and_set_bit_lock(bitnum, addr))) {
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  28  		preempt_enable();
+> 3dd2ee4824b668 Linus Torvalds  2011-04-25  29  		do {
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10 @30  			cpu_relax();
+> 3dd2ee4824b668 Linus Torvalds  2011-04-25  31  		} while (test_bit(bitnum, addr));
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  32  		preempt_disable();
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  33  	}
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  34  #endif
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  35  	__acquire(bitlock);
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  36  }
+> fb1c8f93d869b3 Ingo Molnar     2005-09-10  37
+> 
 
-Hm, shouldn't we actually check return value on caller side?
+I've sent a fix in [1].
 
-This thing is called from netdev_open and issues urbs to read data from 
-the device. So let's imagine that we fail on 1st iteration (for some 
-reason): netdev_open() says all is OK, but driver does not communicate 
-with the device.
+I'll re-test harder the patch against <inux/dcache.h> and repost it 
+if/when [1] is merged.
 
+CJ
 
-Maybe these urbs are not that important, tho..
-
-
-With regards,
-Pavel Skripkin
+[1]: 
+https://lore.kernel.org/all/8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr/
