@@ -2,153 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F96266176B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425C2661775
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbjAHR1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 12:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S233454AbjAHRcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 12:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjAHR06 (ORCPT
+        with ESMTP id S229520AbjAHRc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 12:26:58 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0104CE12;
-        Sun,  8 Jan 2023 09:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1673198777; bh=7v/7zj2Ysz+/w95b1kVq+oD2bzqjczc2L3mL7k87WRA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=mSEqKLllgfaugEUfwK1DpPrKag9byMTMLILVvzboSZPDzN7DwyzMSecpRQMcjBYxj
-         pj0rdSo5U+fSPsljmVc1C0LFpIrSqT5w6GQQEg6m4+o2U+egvvGryWEidj9Z/drf/H
-         guX99U+MmRRs1DE6MyCFachtRZamU6Can45Erl7Smo9trEl/NAdVk+l2hGvseDGxWv
-         /M95xPilavrfcFC9obqbWatVy3RU29HQJA0QvQp6dbs8gwmdoRcNfNxZwWPiwgEfYu
-         ca8AHIT5Aev1OAO29txxakpsD1NwmxZ6ZTlt+dRXHASiC7ZTMP/+PeeBVO1v5rH3Y7
-         tDSPYx2XGQBjA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.135.194]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mel3n-1ogbfA2j3d-00amNL; Sun, 08
- Jan 2023 18:26:17 +0100
-Message-ID: <811a392a-d634-5557-dd58-57f1580e28f2@gmx.de>
-Date:   Sun, 8 Jan 2023 18:26:12 +0100
+        Sun, 8 Jan 2023 12:32:29 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8DD2DC
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 09:32:28 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4b718cab0e4so85776157b3.9
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 09:32:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TvkKknClsarpzrsfEH80urfgT4kkN9N8ybMD6NkCtCc=;
+        b=kxTzlg6Vo3FrM2pPq+SB5Udy4doR6X7fBxp83+Ui1CXqCYmoSp06jEQC8tl+BVLVTI
+         4KIE4C/yXdtwYG/zw15HelLMsMEW1P3I45ZWgc5Ui+HFpptaLU4jWZ1yLzZFtiIbXVjt
+         hBubMzDnR04aUTvTgrChqJyOmtAfEWuJHoSdlTpECsB1WOriTeW/lnAkSAOXqxcvMSZQ
+         qkOZXI+rO8+M1Hr3yaIO+kVsDdy3BLtQIgpfeMArSU7z3HgcoRzZPw0ig5GGMRNkTpfL
+         /KxU50WbVS5O8MRoxlAOE3/Wfy9NhwZe4KWZzjR3Ifh1meT8dk+HAnxHOnqZlnGJXNrH
+         bqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TvkKknClsarpzrsfEH80urfgT4kkN9N8ybMD6NkCtCc=;
+        b=2te/1BP23HH0cWJK1wojvTYbA5p7VjIRIei03pE+Big+trnxbBTtjyDZgWqlpoZ3X3
+         SCYE0CjVeYABHssEkl3VtUnD7eYzy0iVoRDy2oFz0A/sNYtsJdlJOtSctxFIG3zrHpEv
+         DeOwPv9vknmVCQgxPvnOm0z+0DC+VcuPtYLextbkKaQCa4R4TF9+eE6fnC3jKf6jnXes
+         LS7Ri80lxdwjb3ee+ZnTW8g8V5EEaFy7DpeCpGUYhS1kSmt24XakhvsHzk8us/OaoUXs
+         9lzAo1WHXcdPAT2lcjZBEeTVwImz3TZSsf0jYbhmmvWPm4q4BdlQYjp8Rk1zhXxg9IPw
+         TYcQ==
+X-Gm-Message-State: AFqh2kpXtBMtgmhMPjZ05fJFijnfS61w01wvzSeLx9tq9/ptStr8/t7o
+        SOkK6JcoN5DQ+ULQsLJy5LVs3pCRRvlbN5eCTcI+lQ==
+X-Google-Smtp-Source: AMrXdXsRG2S7gwyYvnW8SYhJ5xNwoNVTDuZ1v2EuPmPCFFhFO0/xL9Lx2lfiRL7XQbuUC75D/YeFd7p/Eji77DVqPd4=
+X-Received: by 2002:a81:c56:0:b0:490:89c3:21b0 with SMTP id
+ 83-20020a810c56000000b0049089c321b0mr5145799ywm.132.1673199147627; Sun, 08
+ Jan 2023 09:32:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight
- handling
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>, Stephen Kitt <steve@sk2.org>
-Cc:     Sam Ravnborg via B4 Submission Endpoint 
-        <devnull+sam.ravnborg.org@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
- <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
- <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
- <Y7nb2q6SDota/rTU@ravnborg.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <Y7nb2q6SDota/rTU@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:T9uileinKOrfmfXULyUKIEJ7Q5sw2pWalYogfbz1gtzJSOq1Nnk
- V1Zd+9ekAM/oEwNZj1ns1vPVvUAvy44ZTl/BH109UTdaVmWLFROcAvtyBj2aiXsnhpoNIYK
- f6LsM16mV7xk2n5D7VSkS/fvq9QrFB+Qsr4JdY1dEhwACqZ+EY+1G3NYsfmX6ypM+wH5gFE
- /7WyOoTkU98Aw7Eoh7DaA==
-UI-OutboundReport: notjunk:1;M01:P0:6EvwsDxHCUk=;/ufhnGN+zI+oDWZwCc4k4w2CiV6
- QrBtAZx6984DADkmIhmphyAOMnO+EsKjlmNqXIClAaw7V8tj9JPpHNARsM246kng951NRk2oi
- /byMbKSDYi8rsJz7nXc/8KdnxSv+1burzS9rBLLQM/SSTUMuQUByG7DylwBo981H4z994LqZg
- KLx+5Rc+JTjZRTHm7FAkEiXfexyhIuoMWuFoc8+oJtEX8HPb5zhB5OYNiVjMNrPqGx2C+3K7v
- sAZWfQ7gadJK+ycK0a+DF6ZK6q1LsCz+1WRS2kTIc9PJ8/LSLnFu85kOu+o+9tCNP4DY5zQ5p
- NhGfVTn5bxnME9Sfjeg+9Tr9u6dO9obRYORwJqPjaDTe9+CZNal/yd1ZwaAro20jGQk4TVyDa
- LkGBCsyMdaLmZYKdXXuZBayAMT8PyJ9HI4w/2Y3jeySKFTrrCPt2MgKeLt5Cqy6vUEvLdAXC6
- y0Ril9BxeR4vpeFvuNrwd4GuHDQngvSxVPqvMgf9aMfVU/HTZ0ND9Ff0zHT5k+CYIfU9ozKXw
- WAJ9oQAhGTIpHa1DGlP6FNxdU0ewRRtrxDez7r0n0fX2Zesqdwb93PvYFJUz/NaUPU2MoemBZ
- PtnNHPXybe5g2TGiVP5ruaDYkd/2yG87qwT269V9l+B2aBIckWPR8RiFPdO+VgqKSSRILZAvu
- Xcsx1fp/7/gviRZ9yGN1JlA8f+Dfko5WDu+R0kGU1IgSRGJ3aNB9IlxTKhDshTXZ446gME2//
- HQlzmCrV6kWA+h8ISQpNIPgwhV/sb1/m7HSHW3yfdftuO+AaZA0FhJ/kKMk+6QHaigTShvBIA
- dfiV4QG0v6WifGj7P5cbgofBhvUlZ3ZDqiloZyOB5ccr4M3sIufP2OCBfjm0AXFsWAIChC2Cg
- bC7QBlhaNveFAmYsdFSSPtz2++nCIfoAnf+6cNmVDXN3eAGT4HtkCZDEmS/w+OGm4ZNZAzGPW
- BztdIqZ4VB6gHHWaPzjmxy5jaag=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108130440.670181-1-robimarko@gmail.com> <20230108130440.670181-2-robimarko@gmail.com>
+In-Reply-To: <20230108130440.670181-2-robimarko@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 8 Jan 2023 19:32:16 +0200
+Message-ID: <CAA8EJprb1nC6LCbPQ18tU=apxY+8YfvL2uhrVzwgqJ+GXsjEvQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: correct USB3 QMP PHY-s
+ clock output names
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/23 21:53, Sam Ravnborg wrote:
-> Hi Stephen.
+On Sun, 8 Jan 2023 at 15:04, Robert Marko <robimarko@gmail.com> wrote:
 >
-> On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote:
->> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint=
- <devnull+sam.ravnborg.org@kernel.org> wrote:
->>> From: Sam Ravnborg <sam@ravnborg.org>
->>>
->>> The atmel_lcdfb had code to save/restore power state.
->>> This is not needed so drop it.
->>>
->>> Introduce backlight_is_brightness() to make logic simpler.
->>>
->>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->>> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
->>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->>> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
->>> Cc: linux-fbdev@vger.kernel.org
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> ---
->>> drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
->>> 1 file changed, 3 insertions(+), 21 deletions(-)
-> ...
->>
->> Hi Sam,
->>
->> I=E2=80=99d submitted quite a few more of these previously (and you=E2=
-=80=99d reviewed them), see e.g. the thread starting at https://lkml.org/l=
-kml/2022/6/7/4365, and yesterday, https://lkml.org/lkml/2023/1/6/520, http=
-s://lkml.org/lkml/2023/1/6/656, https://lkml.org/lkml/2023/1/6/970, https:=
-//lkml.org/lkml/2023/1/6/643, and https://lkml.org/lkml/2023/1/6/680. Ther=
-e are a few more, I can find them if it=E2=80=99s any use.
+> It seems that clock-output-names for the USB3 QMP PHY-s where set without
+> actually checking what is the GCC clock driver expecting, so clock core
+> could never actually find the parents for usb0_pipe_clk_src and
+> usb1_pipe_clk_src clocks in the GCC driver.
 >
-> The patches from yesterday was what triggered me to resurrect an old
-> branch of mine where I had done something similar. I had lost all
-> memory of reviewing similar patches from you.
+> So, correct the names to be what the driver expects so that parenting
+> works.
 >
+> Before:
+> gcc_usb0_pipe_clk_src                0        0        0   125000000          0     0  50000         Y
+> gcc_usb1_pipe_clk_src                0        0        0   125000000          0     0  50000         Y
 >
-> Helge - could you pick the reviewed patches from:
-> https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
-> [This is the same mail as Stephen refer to above - looked up via lore].
+> After:
+>  usb3phy_0_cc_pipe_clk                1        1        0   125000000          0     0  50000         Y
+>     usb0_pipe_clk_src                 1        1        0   125000000          0     0  50000         Y
+>        gcc_usb0_pipe_clk              1        1        0   125000000          0     0  50000         Y
+>  usb3phy_1_cc_pipe_clk                1        1        0   125000000          0     0  50000         Y
+>     usb1_pipe_clk_src                 1        1        0   125000000          0     0  50000         Y
+>        gcc_usb1_pipe_clk              1        1        0   125000000          0     0  50000         Y
+>
+> Fixes: 5e09bc51d07b ("arm64: dts: ipq8074: enable USB support")
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-I just pulled those 7 patches into fbdev/for-next.
-If you need more, please let me know,
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks!
-Helge
+Nevertheless, could you please add .fw_name to these entries in gcc
+driver (as you did for other clocks in 35dc8e101a8e ("clk: qcom:
+ipq8074: populate fw_name for all parents")) and add all pipe clocks
+to the gcc node? This way you can drop clock-output-names from the PHY
+nodes.
 
+> ---
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
->
-> Stephen - I expect Daniel/Lee to take care of the patches from yesterday=
-.
-> If you can look up other pending patches from you please do so, so we
-> can have them applied.
-> Preferably with links to lore - as this makes it easier to apply them.
->
-> Review of what is unique in this set would be appreciated.
->
-> 	Sam
+[skipped]
 
+-- 
+With best wishes
+Dmitry
