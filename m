@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBE36616D0
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890CA6616D2
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbjAHQoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 11:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
+        id S234019AbjAHQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 11:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233807AbjAHQnv (ORCPT
+        with ESMTP id S233282AbjAHQon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 11:43:51 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E851092
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 08:43:50 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id u19so14558582ejm.8
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 08:43:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1qSYeheKKTbQuWeKS3E1J2NUuqVJNCq9nE1pOULvlwM=;
-        b=aNuD7uCbHuJoZneb2RVkRnwWJdXhlI73o+lHiIYSEpgau+fmrV7l0Sdtmx3XqXRvav
-         bUhaxz1I4RFj9RCWNR9DKnybIi1XI/Dq5YPVQ0FoWwBUr2sgl/GSd9+f/5VqHjmBveiI
-         dE1ImhM0gY5IORmeyQX7F+BKSXp5sXhwCwdsaZse7TI8awAzR0vteiVE+w8FNn1big+t
-         9Z7sZR8WWcwYRMqMoc52AFAKeTt4ByAAH5ix84hoRVF92+6f5h7ZorjbJaicBaTsm+tx
-         errbaMIxMGeFEJ5sjyI0PgWqBgds0rpk/1ti3TXoydmnGS73SS/F3xdoEw9S8ne3/h/c
-         xrNA==
+        Sun, 8 Jan 2023 11:44:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66CF1092
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 08:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673196238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3N60ZM47durAt2eYzES+eC+6e822LLlnoCx24xYvH/s=;
+        b=WQDzvMUZMLZ6006FbXeME9K6lsfbPuFzofAkQI5XuIqpPZANVgoT1W+o6sAm5rYOxDj7mQ
+        n/ksCQwpnEg5qw8a52DdzIrATCZpGV48ZqerC+EVGvLKDo/vd6+1UrTzzfy48xSNp8M7HK
+        AhzsSFs4bLmWOogOYtslNvb5ySi9XT4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-383-3jMnyVmGNp2D2S91xz-V6g-1; Sun, 08 Jan 2023 11:43:56 -0500
+X-MC-Unique: 3jMnyVmGNp2D2S91xz-V6g-1
+Received: by mail-ej1-f71.google.com with SMTP id hd17-20020a170907969100b007c117851c81so4016561ejc.10
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 08:43:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1qSYeheKKTbQuWeKS3E1J2NUuqVJNCq9nE1pOULvlwM=;
-        b=4s3Z1zyJwCXi2uD1mYS/NR7U/8Uj1fERyg/jK9Z+DzXNxZqSgjjE7Y1gI73Lnee1sL
-         Zjy7S981RscZe6Rodu0Wtv8+n9cyRMBe8w0MhyfTe0FOpJ0zRANCtaQcnRFdlHGlJdBG
-         NpAxBA9sfDugjYFVAKID4q2iyKYZFP2vjsxlF/qINxVLslipcgPLXrzzb1jKIohTFPuh
-         NE18WoBjikaS1P7XU53pQp04KyETP4y20AzE1jY8Sa4Emg5wZ2Wrv0067E1aRFTt9i4/
-         rB4kpf+4gl6OicrBq8dOoKoNAqdaKNtRvneS8Gxgy0ZCmf8MA9B5QehG+Tlyp3sJUYEC
-         kEWQ==
-X-Gm-Message-State: AFqh2kpaAhOdzwzotVhkZCcaKAH97qSqZ6iCBj5A53Dv6rF/OHFf6UqU
-        RjJsUdgCswqRD+BPaabzdAU=
-X-Google-Smtp-Source: AMrXdXuDaO6OKioHRedbTGXTeBvgg0JrRgP7fUZfb/Z6HiTyvxSnxUj7oQ5cRRAARl9Q4AZpcU1AAA==
-X-Received: by 2002:a17:907:9d0e:b0:7c1:6433:90ab with SMTP id kt14-20020a1709079d0e00b007c1643390abmr12791367ejc.5.1673196228600;
-        Sun, 08 Jan 2023 08:43:48 -0800 (PST)
-Received: from [192.168.1.102] (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id ja25-20020a170907989900b0084d1160a19dsm2701040ejc.98.2023.01.08.08.43.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 08:43:48 -0800 (PST)
-Message-ID: <47aa174f-d284-6dad-c684-5ee42c736ada@gmail.com>
-Date:   Sun, 8 Jan 2023 17:43:47 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3N60ZM47durAt2eYzES+eC+6e822LLlnoCx24xYvH/s=;
+        b=MnQ39n+lAojJ51Ny/512t3/q3rU1nxPzp+Vbq+IHycWuKF3GViM+1a77fREjM6Np3r
+         plFJ1qqh9/SxQJ6oWL3BeNH471ViKar1MZjGNcDvfGe+0P6+pGU3zzmyjwY4KH6bsWY0
+         YeM4puvx6VE4RD/CyuNvSWlUUhdCaqVhC1OFnwe9yeswbbhwCz5hg2VLH02W+7Jadt5L
+         lcoUg+a1tRHGkTh5eOWBFwjgcvpJqgx/GJuQyrphE1eGIBSEtIVrzMf9A+lTggE4t0eL
+         FCzmGfHTaailKI1QZK/S1em9FlUBiqJ+Gc0we0D1LZ3GEi85HjaLgquTaJIGb73RjG+v
+         NVpg==
+X-Gm-Message-State: AFqh2krXsrvL4KEMl6sEC7KQisa99GoWV3cpvpakB928M+NSU7G0G+DD
+        HX+a8nFr7K9qkZDMN1WjI96/uHj3TiPszT5XzPWIJR/WZM8llHgbkAdAwJEBShJc3pSgu7cQGzr
+        iRyFfff8iCj6IpEnigR9INOiE
+X-Received: by 2002:a17:906:3a85:b0:7c4:f0b5:fedc with SMTP id y5-20020a1709063a8500b007c4f0b5fedcmr52650428ejd.65.1673196235833;
+        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsyCEFH40Wu7vN3fEiG8h91Ev3TxQ4PGRLsJ7MMAsL9JzoRs+qc4MgF8mePuVUJhiyTZEbyiw==
+X-Received: by 2002:a17:906:3a85:b0:7c4:f0b5:fedc with SMTP id y5-20020a1709063a8500b007c4f0b5fedcmr52650420ejd.65.1673196235689;
+        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
+Received: from starship ([89.237.103.62])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170906078600b0084d381d0528sm1443478ejc.180.2023.01.08.08.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
+Message-ID: <5e3d6e7c1039d79a867eadd6c849717f71e34024.camel@redhat.com>
+Subject: Re: [PATCH 3/6] KVM: x86: Mark x2APIC DFR reg as non-existent for
+ x2APIC
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
+        Venkatesh Srinivas <venkateshs@chromium.org>
+Date:   Sun, 08 Jan 2023 18:43:53 +0200
+In-Reply-To: <20230107011025.565472-4-seanjc@google.com>
+References: <20230107011025.565472-1-seanjc@google.com>
+         <20230107011025.565472-4-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] staging: r8188eu: convert rtw_writeN() to common error
- logic
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230108123804.3754-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20230108123804.3754-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +83,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/8/23 13:38, Michael Straube wrote:
-> Convert the function rtw_writeN() away from returning _FAIL or
-> _SUCCESS which uses inverted error logic. Use the common error logic
-> instead. Return 0 for success and negative values for failure.
+On Sat, 2023-01-07 at 01:10 +0000, Sean Christopherson wrote:
+> Mark APIC_DFR as being invalid/non-existent in x2APIC mode instead of
+> handling it as a one-off check in kvm_x2apic_msr_read().  This will allow
+> reusing "valid_reg_mask" to generate VMX's interception bitmaps for
+> x2APIC.  Handling DFR in the common read path may also fix the Hyper-V
+> PV MSR interface, if that can coexist with x2APIC.
 > 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
-> Tested on x86_64 with Inter-Tech DMG-02.
+>  arch/x86/kvm/lapic.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 > 
->   drivers/staging/r8188eu/core/rtw_fw.c       | 10 ++++------
->   drivers/staging/r8188eu/hal/usb_ops_linux.c |  7 ++-----
->   2 files changed, 6 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-> index 682c65b1e04c..1e4baf74ecd5 100644
-> --- a/drivers/staging/r8188eu/core/rtw_fw.c
-> +++ b/drivers/staging/r8188eu/core/rtw_fw.c
-> @@ -89,9 +89,8 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
->   		addr = FW_8188E_START_ADDRESS + i * block_size;
->   		data = buffer + i * block_size;
->   
-> -		ret = rtw_writeN(padapter, addr, block_size, data);
-> -		if (ret == _FAIL)
-> -			goto exit;
-> +		if (rtw_writeN(padapter, addr, block_size, data))
-> +			return _FAIL;
->   	}
->   
->   	if (remain) {
-> @@ -105,9 +104,8 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
->   			addr = FW_8188E_START_ADDRESS + offset + i * block_size;
->   			data = buffer + offset + i * block_size;
->   
-> -			ret = rtw_writeN(padapter, addr, block_size, data);
-> -			if (ret == _FAIL)
-> -				goto exit;
-> +			if (rtw_writeN(padapter, addr, block_size, data))
-> +				return _FAIL;
->   		}
->   	}
->   
-> diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-> index 7c72f5e04d9b..f02f8568cdcf 100644
-> --- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
-> +++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-> @@ -179,14 +179,11 @@ int rtw_writeN(struct adapter *adapter, u32 addr, u32 length, u8 *data)
->   	struct io_priv *io_priv = &adapter->iopriv;
->   	struct intf_hdl *intf = &io_priv->intf;
->   	u16 value = addr & 0xffff;
-> -	int ret;
->   
->   	if (length > VENDOR_CMD_MAX_DATA_LEN)
-> -		return _FAIL;
-> +		return -EINVAL;
->   
-> -	ret = usb_write(intf, value, data, length);
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index bf53e4752f30..c49b13418638 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1541,7 +1541,6 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+>  		APIC_REG_MASK(APIC_TASKPRI) |
+>  		APIC_REG_MASK(APIC_PROCPRI) |
+>  		APIC_REG_MASK(APIC_LDR) |
+> -		APIC_REG_MASK(APIC_DFR) |
+>  		APIC_REG_MASK(APIC_SPIV) |
+>  		APIC_REGS_MASK(APIC_ISR, APIC_ISR_NR) |
+>  		APIC_REGS_MASK(APIC_TMR, APIC_ISR_NR) |
+> @@ -1562,12 +1561,13 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+>  		valid_reg_mask |= APIC_REG_MASK(APIC_LVTCMCI);
+>  
+>  	/*
+> -	 * ARBPRI and ICR2 are not valid in x2APIC mode.  WARN if KVM reads ICR
+> -	 * in x2APIC mode as it's an 8-byte register in x2APIC and needs to be
+> -	 * manually handled by the caller.
+> +	 * ARBPRI, DFR, and ICR2 are not valid in x2APIC mode.  WARN if KVM
+> +	 * reads ICR in x2APIC mode as it's an 8-byte register in x2APIC and
+> +	 * needs to be manually handled by the caller.
+>  	 */
+>  	if (!apic_x2apic_mode(apic))
+>  		valid_reg_mask |= APIC_REG_MASK(APIC_ARBPRI) |
+> +				  APIC_REG_MASK(APIC_DFR) |
+>  				  APIC_REG_MASK(APIC_ICR2);
+>  	else
+>  		WARN_ON_ONCE(offset == APIC_ICR);
+> @@ -3141,9 +3141,6 @@ int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data)
+>  	if (!lapic_in_kernel(vcpu) || !apic_x2apic_mode(apic))
+>  		return 1;
+>  
+> -	if (reg == APIC_DFR)
+> -		return 1;
 > -
-> -	return RTW_STATUS_CODE(ret);
-> +	return usb_write(intf, value, data, length);
->   }
->   
->   static void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
+>  	return kvm_lapic_msr_read(apic, reg, data);
+>  }
+>  
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Best regards,
+	Maxim Levitsky
+
