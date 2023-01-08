@@ -2,74 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50DE6612FD
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCA56612FF
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 03:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjAHCNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 21:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S232711AbjAHCPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 21:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbjAHCMt (ORCPT
+        with ESMTP id S231551AbjAHCPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 21:12:49 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1555A15FE1
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 18:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=n8y8MQVrWNjH6e1zcN2SX7rByEyJkNoM8CrUWsOVDAY=; b=gkJ2fdgsn8WnxrFLKMJNn5o1DN
-        TB6pHxuKAdPUBAbvUecqKAu0V13l7uYgRIaqIsZOhuWs2DVcotefEL0s+KRIa7IY7iaPsrpCaILK1
-        9laEOh2VFdykkXhrums5Ldd/1u+MsKr67OgjloFv5x6BEMIi9Az0sk0DTrrlT4z0G296AQfE/n1wo
-        Ky11QOkTTjEQk6k8WTHDBH4u07WvtjbcvXvyRJKEJoQ+j34Ac4Ry8txS17imo0e02S19GPIIN9AOB
-        GY0eM0Y3SVE7PfVZ7IRyF0W5FLbfGs/I3gFB8c/K0taIuRg206D1Y4PCLVaKheOTB6UCROJAnyYI8
-        gXU+GDUw==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pELAz-00Aq8o-Gw; Sun, 08 Jan 2023 02:12:45 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
+        Sat, 7 Jan 2023 21:15:01 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A731215F01;
+        Sat,  7 Jan 2023 18:15:00 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-14fb7fdb977so5575670fac.12;
+        Sat, 07 Jan 2023 18:15:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TySYhQ0Jtcrqk14K9ELuTQHEFCCUvE5Ry0vMrhn1yNY=;
+        b=JziVO8erlR05YSjzCQZt0BCL2ljqtoT13d1EiOPj3llCyuuzbjSXJ7y60dww0xtf5F
+         gQqzj9T0z/iX+z5of9StpzewndFGf9XIqaIrDIOWPRBN2AWQgSv/wRC0BrfsLJelyowA
+         odUSwyqGGkDxy/Scnm19JB+EapDjJzHjeFPfr8v+/5Jt/YUmg/JnJICbSRLoXtHxbAcV
+         uU3PCSG5Ee9AW4mpw9vUUI5zdO+qc1y1dIP0ZlBZOpY1DbCmSt1HAgaEDfQLxJsInJ7D
+         KbVhrKA0fF4HopRBbM4a8Lvdv2ytGiNx9rlzurPfQ3WHSJGWG9h5Zi2a04g1BtEh+TTk
+         MdCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TySYhQ0Jtcrqk14K9ELuTQHEFCCUvE5Ry0vMrhn1yNY=;
+        b=f9N2BknGMSTewWobKq10uEVqhc32s+R2z3qpq0sPWomHhekWDWEqdxH1q3PI8EsuG4
+         8AqA4/jJdGw09wL1yl6BEw0BfM58+TJPCKohjRN9+CT081Yc/10dVX9ytIS431D7RL6t
+         KCf+vpLzH1x6yl8qhJdKxKcI1Ot6SB/3UdW77nmgzrNT4OSoevUgQXoVFhJgdEOQ2Z1g
+         9XEOd3x15xW8hi/R4rqxSHMzIfn1AV8cMBfP7M6KIaeRrdp4g9bk8vUP209mQKfd2ARI
+         4K6S97YEkAUWKrDUP399N1vlg/MO0rOEdFd9rZfDuLi3kihyF6N2rb9RnISe/qIMqhot
+         390Q==
+X-Gm-Message-State: AFqh2kqBrG94okBqAVe3CWxwup0KvEB0H8arLjLwUdEz7D4yv56XClDa
+        tcQd+TTupl2f67sU35NZfjELNSJKlnI=
+X-Google-Smtp-Source: AMrXdXtvNAu/InEEZMh2ZA3QZA6lOgsvAL9gQeIyyXVpSYtju1tqLGs1k6LfnSyqsvvT9pMVy4No8w==
+X-Received: by 2002:a05:6870:8a0a:b0:144:1ba:3c67 with SMTP id p10-20020a0568708a0a00b0014401ba3c67mr33940922oaq.51.1673144099655;
+        Sat, 07 Jan 2023 18:14:59 -0800 (PST)
+Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id y6-20020a056870418600b00144e18d8525sm2367553oac.25.2023.01.07.18.14.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 18:14:59 -0800 (PST)
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] userns: fix a struct's kernel-doc notation
-Date:   Sat,  7 Jan 2023 18:12:43 -0800
-Message-Id: <20230108021243.16683-1-rdunlap@infradead.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Eric Curtin <ecurtin@redhat.com>, Neal Gompa <neal@gompa.dev>,
+        bpf@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Subject: [PATCH v2] scripts: Exclude Rust CUs with pahole
+Date:   Sat,  7 Jan 2023 23:14:50 -0300
+Message-Id: <20230108021450.120791-1-yakoyoku@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the 'struct' keyword for a struct's kernel-doc notation to avoid
-a kernel-doc warning:
+Version 1.24 of pahole has the capability to exclude compilation units
+(CUs) of specific languages. Rust, as of writing, is not currently
+supported by pahole and if it's used with a build that has BTF debugging
+enabled it results in malformed kernel and module binaries (see
+Rust-for-Linux/linux#735). So it's better for pahole to exclude Rust
+CUs until support for it arrives.
 
-kernel/user_namespace.c:232: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * idmap_key struct holds the information necessary to find an idmapping in a
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+Tested-by: Eric Curtin <ecurtin@redhat.com>
+Reviewed-by: Neal Gompa <neal@gompa.dev>
+Tested-by: Neal Gompa <neal@gompa.dev>
+Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 ---
- kernel/user_namespace.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V1 -> V2: Removed dependency on auto.conf
 
-diff -- a/kernel/user_namespace.c b/kernel/user_namespace.c
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -229,7 +229,7 @@ void __put_user_ns(struct user_namespace
- EXPORT_SYMBOL(__put_user_ns);
+ init/Kconfig              | 2 +-
+ lib/Kconfig.debug         | 9 +++++++++
+ scripts/Makefile.modfinal | 4 ++++
+ scripts/link-vmlinux.sh   | 4 ++++
+ 4 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 694f7c160c9c..360aef8d7292 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1913,7 +1913,7 @@ config RUST
+ 	depends on !MODVERSIONS
+ 	depends on !GCC_PLUGINS
+ 	depends on !RANDSTRUCT
+-	depends on !DEBUG_INFO_BTF
++	depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+ 	select CONSTRUCTORS
+ 	help
+ 	  Enables Rust support in the kernel.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ea4c903c9868..d473d491e709 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -364,6 +364,15 @@ config PAHOLE_HAS_BTF_TAG
+ 	  btf_decl_tag) or not. Currently only clang compiler implements
+ 	  these attributes, so make the config depend on CC_IS_CLANG.
  
- /**
-- * idmap_key struct holds the information necessary to find an idmapping in a
-+ * struct idmap_key - holds the information necessary to find an idmapping in a
-  * sorted idmap array. It is passed to cmp_map_id() as first argument.
-  */
- struct idmap_key {
++config PAHOLE_HAS_LANG_EXCLUDE
++	def_bool PAHOLE_VERSION >= 124
++	help
++	  Support for the --lang_exclude flag which makes pahole exclude
++	  compilation units from the supplied language. Used in Kbuild to
++	  omit Rust CUs which are not supported in version 1.24 of pahole,
++	  otherwise it would emit malformed kernel and module binaries when
++	  using DEBUG_INFO_BTF_MODULES.
++
+ config DEBUG_INFO_BTF_MODULES
+ 	def_bool y
+ 	depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 25bedd83644b..a880f2d6918f 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -30,6 +30,10 @@ quiet_cmd_cc_o_c = CC [M]  $@
+ 
+ ARCH_POSTLINK := $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postlink)
+ 
++ifdef CONFIG_RUST
++PAHOLE_FLAGS += --lang_exclude=rust
++endif
++
+ quiet_cmd_ld_ko_o = LD [M]  $@
+       cmd_ld_ko_o +=							\
+ 	$(LD) -r $(KBUILD_LDFLAGS)					\
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 918470d768e9..69eb0bea89bf 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -122,6 +122,10 @@ gen_btf()
+ 		return 1
+ 	fi
+ 
++	if is_enabled CONFIG_RUST; then
++		PAHOLE_FLAGS="${PAHOLE_FLAGS} --lang_exclude=rust"
++	fi
++
+ 	vmlinux_link ${1}
+ 
+ 	info "BTF" ${2}
+-- 
+2.39.0
+
