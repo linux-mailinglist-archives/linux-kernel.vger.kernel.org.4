@@ -2,106 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CED66140D
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 08:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E08661418
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 09:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjAHHkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 02:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S232448AbjAHIEW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 8 Jan 2023 03:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjAHHke (ORCPT
+        with ESMTP id S230390AbjAHIEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 02:40:34 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61F8BE18
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 23:40:32 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id D771D1C09F4; Sun,  8 Jan 2023 08:40:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1673163630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyp3UEEKF+h3KLwkYlIyErX4/yhvSv1NJSCucbp5NKo=;
-        b=BZcTP13DxPc60Pe8afTZWqmTssQx01RaUw+jiPFzLk2eMw8m0zAJYomow55yGVRSzwfaSX
-        u7z3/gu/f+bsQi7xbk8afx980BRBP6MJrnQY87rfXXD8+I+jNRsYxgtuionaBT5GJvq9V8
-        wYotgCPjXUBrU060O47keiWuzsr/Mfw=
-Date:   Sun, 8 Jan 2023 08:40:30 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        geert+renesas@glider.be, Andrew Morton <akpm@osdl.org>
-Subject: Re: Dhrystone -- userland version
-Message-ID: <Y7pzbnlXgv+asekg@amd.ucw.cz>
-References: <Y7nyd4hPeXsdiibH@duo.ucw.cz>
- <Y7pRw47hidw+s6+g@mit.edu>
+        Sun, 8 Jan 2023 03:04:20 -0500
+X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 00:04:18 PST
+Received: from 17.mo561.mail-out.ovh.net (17.mo561.mail-out.ovh.net [87.98.178.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FFC12AD1
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 00:04:18 -0800 (PST)
+Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.138.180])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 280C123EDF
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:47:29 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-p7xcs (unknown [10.110.208.152])
+        by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 23C671FEA6;
+        Sun,  8 Jan 2023 07:47:24 +0000 (UTC)
+Received: from sk2.org ([37.59.142.102])
+        by ghost-submission-6684bf9d7b-p7xcs with ESMTPSA
+        id GxvpAgx1umMSjQcAO+84Ug
+        (envelope-from <steve@sk2.org>); Sun, 08 Jan 2023 07:47:24 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004f3b2dc6e-40e0-46d7-b496-fab2440419aa,
+                    5128B599F7D401446F64D4771BE19AB2B9CD7A8B) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 37.167.47.239
+Date:   Sun, 08 Jan 2023 08:47:21 +0100
+From:   Stephen Kitt <steve@sk2.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+CC:     Sam Ravnborg via B4 Submission Endpoint 
+        <devnull+sam.ravnborg.org@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_01/15=5D_video=3A_fbdev=3A_atm?= =?US-ASCII?Q?el=5Flcdfb=3A_Rework_backlight_handling?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org> <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org> <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org> <Y7nb2q6SDota/rTU@ravnborg.org> <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
+Message-ID: <0342789A-88E6-4A3C-84DF-0F1FEB21F25C@sk2.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="i3UURa/w1L52u2HJ"
-Content-Disposition: inline
-In-Reply-To: <Y7pRw47hidw+s6+g@mit.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Ovh-Tracer-Id: 8435523578534069894
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeefgdduuddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevufgfjghfkfggtgfgsehtqhhmtddtreejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevieelieekfeelhfduffdvgfduvdegkeeljeejhfdtkeeujeeileekgeeugefhhfenucffohhmrghinheplhhkmhhlrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8 January 2023 08:45:46 CET, Stephen Kitt <steve@sk2.org> wrote:
+>On 7 January 2023 21:53:46 CET, Sam Ravnborg <sam@ravnborg.org> wrote:
+>>Hi Stephen.
+>>
+>>On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote:
+>>> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint <devnull+sam.ravnborg.org@kernel.org> wrote:
+>>> >From: Sam Ravnborg <sam@ravnborg.org>
+>>> >
+>>> >The atmel_lcdfb had code to save/restore power state.
+>>> >This is not needed so drop it.
+>>> >
+>>> >Introduce backlight_is_brightness() to make logic simpler.
+>>> >
+>>> >Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>>> >Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+>>> >Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>> >Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+>>> >Cc: linux-fbdev@vger.kernel.org
+>>> >Cc: linux-arm-kernel@lists.infradead.org
+>>> >---
+>>> > drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
+>>> > 1 file changed, 3 insertions(+), 21 deletions(-)
+>>...
+>>> 
+>>> Hi Sam,
+>>> 
+>>> I’d submitted quite a few more of these previously (and you’d reviewed them), see e.g. the thread starting at https://lkml.org/lkml/2022/6/7/4365, and yesterday, https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/656, https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/643, and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can find them if it’s any use.
+>>
+>>The patches from yesterday was what triggered me to resurrect an old
+>>branch of mine where I had done something similar. I had lost all
+>>memory of reviewing similar patches from you.
+>>
+>>
+>>Helge - could you pick the reviewed patches from:
+>>https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
+>>[This is the same mail as Stephen refer to above - looked up via lore].
+>>
+>>Stephen - I expect Daniel/Lee to take care of the patches from yesterday.
+>>If you can look up other pending patches from you please do so, so we
+>>can have them applied.
+>>Preferably with links to lore - as this makes it easier to apply them.
+>>
+>>Review of what is unique in this set would be appreciated.
+>>
+>>	Sam
+>
+>Hi Sam,
+>
+>Here are my pending patches from last June on lore:
+>
+>* https://lore.kernel.org/lkml/20220607190925.1134737-1-steve@sk2.org/
+>* https://lore.kernel.org/lkml/20220608205623.2106113-1-steve@sk2.org/
+>* https://lore.kernel.org/lkml/20220607192335.1137249-1-steve@sk2.org/
+>* https://lore.kernel.org/lkml/20220616170425.1346081-1-steve@sk2.org/
+>
+>I’ll send reviews of your other patches later today or tomorrow.
+>
+>Regards,
+>
+>Stephen
 
---i3UURa/w1L52u2HJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+And the auxdisplay patch, v1:
 
-Hi!
+https://lore.kernel.org/lkml/20220607180406.1116277-1-steve@sk2.org/
 
-> > Distributions do not usually carry dhrystone, and I don't think anyone
-> > really maintains it. It is useful tool, and it seems we'll maintain
-> > it.
-> >=20
-> > I'd like to add enough glue so that it would be runnable from
-> > userspace, too? Userland version is what is actually useful to me, and
-> > it should not be hard.
->=20
-> I don't see whatever message you were replying to, and it doesn't seem
-> to be archived in lore[1], so I'm not sure about the context.  But you
-> are talking about the Dhrystone benchmark[2], right?
->=20
-> [1] https://lore.kernel.org/all/Y7nyd4hPeXsdiibH@duo.ucw.cz/T/#u
-> [2] https://wiki.cdot.senecacollege.ca/wiki/Dhrystone_howto
->=20
-> If so, I'm confused what you mean by "add enough glue so that it would
-> be runnable from userspace" --- Dhrystone is a userspace benchmark,
-> dating from the 1980's, although what it benchmarks is often more about
-> the compiler than the CPU's performace.
+and v2:
 
-Yes, I'm talking about Dhrystone benchmark. We are carrying
-kernel-only version in lib/dhry_*.c, it is in -next now.
+https://lore.kernel.org/lkml/20230106143002.1434266-1-steve@sk2.org/
 
-commit cfbd4cc940275240e97f8b922c8f18a44fe15c07
-Author: Geert Uytterhoeven <geert+renesas@glider.be>
-Date:   Thu Dec 8 15:31:28 2022 +0100
+Regards,
 
-    lib: add Dhrystone benchmark test
-
-I'd like userspace-too version, at the same place :-).
-
-Best regards,
-								Pavel
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---i3UURa/w1L52u2HJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY7pzbQAKCRAw5/Bqldv6
-8mBdAKCB+s9skaJn7bwxrK8IvAap0mNecQCfUp6TUf7qXFHU4dIVVxn4vsKdZa0=
-=DGt3
------END PGP SIGNATURE-----
-
---i3UURa/w1L52u2HJ--
+Stephen
