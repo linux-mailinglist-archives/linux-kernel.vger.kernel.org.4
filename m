@@ -2,73 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044AF6615BA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4696615BE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjAHOLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S233176AbjAHONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233178AbjAHOLN (ORCPT
+        with ESMTP id S230478AbjAHONB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:11:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E246DFAB
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:11:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CF360C70
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 14:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 32022C433D2;
-        Sun,  8 Jan 2023 14:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673187072;
-        bh=wWoyI8cGkdSrSyjkE2bFbFrETQ6VJ7n9DreCOGIemVI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HwAywhrnYuHaeFBZBrhy6kAbPc+lUgGbHadhWtqsgM/oI34ESXtmEt7ZhoM1na3ef
-         okpfopC7l5QVtPG0hiiNP8Y5RcS8tS2/nAeFjwmYijY0v4Ym1uxcQOeKCO9gmVJOFL
-         vNeGuclR8RUZFZhAikdBzjp+HKoziQAJwWvMqgxtrcQU22ObHtL97diO6OfQFLZCoH
-         p0HLs0CvTIiI3NlGSdwJuPdZ+iSNab5nLEhCkrQy9bzFZ64LrRAjkRk6BKu+tgSe9E
-         wdcoSUJ4MyZNHiIzRJsAg0rlhhb3wGYYzAgv8BS4CmTeVDf3q18xiAT15LNWu7mm/l
-         jPqS0mzuSVr9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1FD53E5724A;
-        Sun,  8 Jan 2023 14:11:12 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.2-2 tag
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87tu11gped.fsf@mpe.ellerman.id.au>
-References: <87tu11gped.fsf@mpe.ellerman.id.au>
-X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <87tu11gped.fsf@mpe.ellerman.id.au>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.2-2
-X-PR-Tracked-Commit-Id: be5f95c8779e19779dd81927c8574fec5aaba36c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 93928d485d9df12be724cbdf1caa7d197b65001e
-Message-Id: <167318707211.25303.15442437836280597984.pr-tracker-bot@kernel.org>
-Date:   Sun, 08 Jan 2023 14:11:12 +0000
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 8 Jan 2023 09:13:01 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DC8DFB2;
+        Sun,  8 Jan 2023 06:13:00 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id i9so8906855edj.4;
+        Sun, 08 Jan 2023 06:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrbqCrEQg21nkq8Yyz5Fr5Sfv2oN6ivy3M6K8VJvciM=;
+        b=exCDx1jnXH5u/B+L4J0whChijivpRrjtq58V04wHvUHbYUwKVEldSqGell8h6lCNHk
+         cek/aHqMPQtX78RZJaAZ/r161+BLhg/B8DjQN151tTt098KeNAsQ4EYZxQLJUqr5igmr
+         CyV+MuFpkFUPYKi+QFsmsriInLigbfmEqigFAnrRYUrGGruUhQdlHpj7lGmVvdVVq/tk
+         8RaN5kUDIeJSw2Va+ZzP9r+05OfbEEV4anVC3CpUMuKr8i7kUIhnUBUO+tRRlE8eTyaC
+         DP0zKnwIYySxZTrSEBujCo8n0ELDYhuUdTZmcat5286zEjprG6vPeb9lBk0VXsT+X7kI
+         tmrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZrbqCrEQg21nkq8Yyz5Fr5Sfv2oN6ivy3M6K8VJvciM=;
+        b=3bIjY/yQpLfOvy6plb561jSTvdBbT+j+QRglg21PpV2RyN0ZZMN0499e/cG5uAqwx9
+         eGnDHPxSrxILARhUlS1luBwRAkGia88bkgXzdsIn2cahrXrRCZn7kSdISns6MvQKNj/5
+         hR/XxR5vhkRS4AIKNYgjBvtwqxMGzIha+8xZdSguhH4THsYRo5sU86pkmmRutjw5f44x
+         UoJAAPFh1rdNvp2gWSG4KsGPy2mmVu2/YS5H8DmnDkPf+0Zwq7ssBkF+dZ88gYpTghPo
+         QE+Xdx9rGZhWz8SWz9T82u1hWBdBGs7yyg7yvi9PPW5UmNOmVucg5/BVMHIJYySH95kM
+         KkfA==
+X-Gm-Message-State: AFqh2krnlX5mncH4rYBBXIie5MN02f9S5OyELe2na+rixVJkHDThlIH+
+        msBYjn8FQ3tAiOcvH2hk0ngLMHX5KwA=
+X-Google-Smtp-Source: AMrXdXu2zIzl2KwrBE8X16Uqk95LlkTXLaFHcY2YaAdjHDjnpjt5mM0cPMcf5IkA6WY7c+EFOPcQ2A==
+X-Received: by 2002:a05:6402:501f:b0:461:5e1b:85b5 with SMTP id p31-20020a056402501f00b004615e1b85b5mr64736007eda.2.1673187179092;
+        Sun, 08 Jan 2023 06:12:59 -0800 (PST)
+Received: from krava ([83.240.63.181])
+        by smtp.gmail.com with ESMTPSA id s1-20020aa7c541000000b00495c3573b36sm2603184edr.32.2023.01.08.06.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 06:12:58 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 8 Jan 2023 15:12:55 +0100
+To:     Sohom Datta <sohomdatta1@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sohom Datta <sohomdatta1+git@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Prevent normalize() from reading into undefined memory
+Message-ID: <Y7rPZ21J2mnWiIcx@krava>
+References: <20221204105836.1012885-1-sohomdatta1+git@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221204105836.1012885-1-sohomdatta1+git@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 08 Jan 2023 23:51:54 +1100:
+On Sun, Dec 04, 2022 at 04:28:35PM +0530, Sohom Datta wrote:
+> The current implementation does not account for a
+> trailing backslash followed by a null-byte. If a
+> null-byte is encountered following a backslash,
+> normalize() will continue reading (and potentially
+> writing) into garbage memory ignoring the EOS
+> null-byte.
+> 
+> Signed-off-by: Sohom Datta <sohomdatta1+git@gmail.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.2-2
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/93928d485d9df12be724cbdf1caa7d197b65001e
+thanks,
+jirka
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> ---
+>  tools/perf/util/expr.l | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
+> index 0168a9637330..d47de5f270a8 100644
+> --- a/tools/perf/util/expr.l
+> +++ b/tools/perf/util/expr.l
+> @@ -42,8 +42,11 @@ static char *normalize(char *str, int runtime)
+>  	char *dst = str;
+>  
+>  	while (*str) {
+> -		if (*str == '\\')
+> +		if (*str == '\\') {
+>  			*dst++ = *++str;
+> +			if (!*str)
+> +				break;
+> +		}
+>  		else if (*str == '?') {
+>  			char *paramval;
+>  			int i = 0;
+> -- 
+> 2.38.1
+> 
