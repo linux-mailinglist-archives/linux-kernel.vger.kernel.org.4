@@ -2,189 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50027661B23
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 00:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B935661B25
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 00:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbjAHXcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 18:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S230175AbjAHXey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 18:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjAHXcB (ORCPT
+        with ESMTP id S230445AbjAHXew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 18:32:01 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A741410051
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 15:32:00 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m6so10465822lfj.11
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 15:32:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XMahuRHUyby9cTVuxiS45czpMUwY4cTgnEghJo22NtM=;
-        b=B/zmp25lbiHXTxa0KspeA4G9eLR4vSmqAyhrfaXFRjd3WVLbQRAe2lZfY5pJ4437A1
-         LcCrbGZ2uTfBcGW6PAxHJnh0d4YC/FkcoKM2x/lPFs52aTtPySUiC6Dk7w4uQjP02RcS
-         j5Bt/G1fw95wzs/SFoE0xKOCii56DHs65oM8TbdwooGdgO6vqaMGehI3gLUN57d2cFBj
-         65V82y669Y7JZbh/MDcRlmMAEbsDT0d7KeN3JHqC9u+OakcIAouKLJRvG5F2IcyOZL2X
-         Ws9j6AjM3YU+MAHK7E0TRgykek/OzpqESX9VmUGfyyxsKmnow40uSGf2r6JuKb5SiLEf
-         pDHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMahuRHUyby9cTVuxiS45czpMUwY4cTgnEghJo22NtM=;
-        b=tmiJ9BBFFdbKqwFGi6+aEh/K5LdHrox0cAqi/2UV6Ujb0LwHGVnuFnAgc+V3eFH6eh
-         7awo3rAwpKfoFN6p+x672DfZuTw7l3JSelEw9rhlAgwo5P4dWc00Ek4fCYRtr41sNqvd
-         M8nyDhE8N6R4n/N24CKx7VbIPW77a1W8EwBzt+L/Sl0OhZWo52hUgpjA2lLK0PoTDuvK
-         nUcy6q9mHUVhGMGVOkKwUDvLP9SzADHmnOJmDsgC9OT9Uab1/LhILssBtS+E14wIV8EL
-         zj6TPHKcRdwh4XLAK1BzJUo5q/2CZszQZTOlf8MCjAKma5r9NKTR7EzdigT6zXberBDk
-         6c+Q==
-X-Gm-Message-State: AFqh2kqDJDpmh0kxKa+NP5M+yIUhk1EtUQA2rf6odBOI6/WNyfO0BlpZ
-        tJX60L1AH4xygv3HhzDvPkZPig==
-X-Google-Smtp-Source: AMrXdXsAP/6HHrzQYlZxu6VJANy0ySDdGi0ykUte9WZ5AYM3cntDWvUcoLeugwDSlwNH2vdWcbCVWQ==
-X-Received: by 2002:a05:6512:e89:b0:4b5:b7be:136b with SMTP id bi9-20020a0565120e8900b004b5b7be136bmr18592394lfb.69.1673220719050;
-        Sun, 08 Jan 2023 15:31:59 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u15-20020a19790f000000b004cb344a8c77sm1286960lfc.54.2023.01.08.15.31.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 15:31:58 -0800 (PST)
-Message-ID: <42b45762-7fb9-2694-9fab-039ee09e4709@linaro.org>
-Date:   Mon, 9 Jan 2023 01:31:57 +0200
+        Sun, 8 Jan 2023 18:34:52 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E716F03A
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 15:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673220891; x=1704756891;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=oBpAHHXmTGDsYovXPRtYJAb4yr2fncmWitZMe1N0bmE=;
+  b=cVCuViEyzHjo55oBCQo8lpXF/x7xes0zi+DYHyyN1pK0PIMWCctrcjZR
+   k0EaUZVBbSbh3azFg7bkZzO4/0HnZt7h2fcijwGAsj8uBMuPD8IctN4kq
+   TtiObKRFjtIkcQgwD4rshVLW3/ryILUrW+YMvI1zs0/eDDQqvPnT6gv5v
+   ODVzNzsuDl7I/kbrY4r07/ynQ8wRdcVTg7u80/IIzLygPYm/3o2S2H1ia
+   SvK1lV+uIXC6lg2KKA7GTCA9/I3AVBiCMYqPkL1Tjn6B6Q/0teKK8Bsfw
+   j3/kyubjFH9Fl6Ws3lwCj+Caw6h6UpkulM5uixkbIRwQ1Dbjggti1pQDL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="321468316"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="321468316"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 15:34:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="634026795"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="634026795"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 15:34:46 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH 4/8] migrate_pages: split unmap_and_move() to _unmap()
+ and _move()
+References: <20221227002859.27740-1-ying.huang@intel.com>
+        <20221227002859.27740-5-ying.huang@intel.com>
+        <Y7cWb2aP1+wAWR8N@dev-arch.thelio-3990X>
+        <202301051056.9D8CB1C24@keescook>
+Date:   Mon, 09 Jan 2023 07:33:45 +0800
+In-Reply-To: <202301051056.9D8CB1C24@keescook> (Kees Cook's message of "Thu, 5
+        Jan 2023 10:57:16 -0800")
+Message-ID: <87pmbo7g9y.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 6/8] drm/msm/dpu: Remove num_enc from topology struct
- in favour of num_dsc
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221221231943.1961117-1-marijn.suijten@somainline.org>
- <20221221231943.1961117-7-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221221231943.1961117-7-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2022 01:19, Marijn Suijten wrote:
-> Downstream calls this num_enc yet the DSC patches introduced a new
-> num_dsc struct member, leaving num_enc effectively unused.
-> 
-> Fixes: 7e9cc175b159 ("drm/msm/disp/dpu1: Add support for DSC in topology")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 9 ++++-----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      | 4 ++--
->   drivers/gpu/drm/msm/msm_drv.h               | 2 --
->   3 files changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 9c6817b5a194..a158cd502d38 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -579,19 +579,18 @@ static struct msm_display_topology dpu_encoder_get_topology(
->   			topology.num_dspp = topology.num_lm;
->   	}
->   
-> -	topology.num_enc = 0;
->   	topology.num_intf = intf_count;
->   
->   	if (dpu_enc->dsc) {
-> -		/* In case of Display Stream Compression (DSC), we would use
-> -		 * 2 encoders, 2 layer mixers and 1 interface
-> +		/*
-> +		 * In case of Display Stream Compression (DSC), we would use
-> +		 * 2 DSC encoders, 2 layer mixers and 1 interface
->   		 * this is power optimal and can drive up to (including) 4k
->   		 * screens
->   		 */
-> -		topology.num_enc = 2;
->   		topology.num_dsc = 2;
-> -		topology.num_intf = 1;
->   		topology.num_lm = 2;
-> +		topology.num_intf = 1;
+Kees Cook <keescook@chromium.org> writes:
 
-Unless there is a reason, please move num_intf assignment back while 
-preparing v3.
+> On Thu, Jan 05, 2023 at 11:26:55AM -0700, Nathan Chancellor wrote:
+>> Hi Ying,
+>> 
+>> On Tue, Dec 27, 2022 at 08:28:55AM +0800, Huang Ying wrote:
+>> > This is a preparation patch to batch the folio unmapping and moving.
+>> > 
+>> > In this patch, unmap_and_move() is split to migrate_folio_unmap() and
+>> > migrate_folio_move().  So, we can batch _unmap() and _move() in
+>> > different loops later.  To pass some information between unmap and
+>> > move, the original unused dst->mapping and dst->private are used.
+>> > 
+>> > Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> > Cc: Zi Yan <ziy@nvidia.com>
+>> > Cc: Yang Shi <shy828301@gmail.com>
+>> > Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> > Cc: Oscar Salvador <osalvador@suse.de>
+>> > Cc: Matthew Wilcox <willy@infradead.org>
+>> > Cc: Bharata B Rao <bharata@amd.com>
+>> > Cc: Alistair Popple <apopple@nvidia.com>
+>> > Cc: haoxin <xhao@linux.alibaba.com>
+>> > ---
+>> >  include/linux/migrate.h |   1 +
+>> >  mm/migrate.c            | 162 +++++++++++++++++++++++++++++-----------
+>> >  2 files changed, 121 insertions(+), 42 deletions(-)
+>> > 
+>> > diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+>> > index 3ef77f52a4f0..7376074f2e1e 100644
+>> > --- a/include/linux/migrate.h
+>> > +++ b/include/linux/migrate.h
+>> > @@ -18,6 +18,7 @@ struct migration_target_control;
+>> >   * - zero on page migration success;
+>> >   */
+>> >  #define MIGRATEPAGE_SUCCESS		0
+>> > +#define MIGRATEPAGE_UNMAP		1
+>> >  
+>> >  /**
+>> >   * struct movable_operations - Driver page migration
+>> > diff --git a/mm/migrate.c b/mm/migrate.c
+>> > index 97ea0737ab2b..e2383b430932 100644
+>> > --- a/mm/migrate.c
+>> > +++ b/mm/migrate.c
+>> > @@ -1009,11 +1009,29 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
+>> >  	return rc;
+>> >  }
+>> >  
+>> > -static int __unmap_and_move(struct folio *src, struct folio *dst,
+>> > +static void __migrate_folio_record(struct folio *dst,
+>> > +				   unsigned long page_was_mapped,
+>> > +				   struct anon_vma *anon_vma)
+>> > +{
+>> > +	dst->mapping = (struct address_space *)anon_vma;
+>> > +	dst->private = (void *)page_was_mapped;
+>> > +}
+>> > +
+>> > +static void __migrate_folio_extract(struct folio *dst,
+>> > +				   int *page_was_mappedp,
+>> > +				   struct anon_vma **anon_vmap)
+>> > +{
+>> > +	*anon_vmap = (struct anon_vma *)dst->mapping;
+>> > +	*page_was_mappedp = (unsigned long)dst->private;
+>> > +	dst->mapping = NULL;
+>> > +	dst->private = NULL;
+>> > +}
+>> 
+>> This patch as commit 42871c600cad ("migrate_pages: split
+>> unmap_and_move() to _unmap() and _move()") in next-20230105 causes the
+>> following error with clang when CONFIG_RANDSTRUCT is enabled, which is
+>> the case with allmodconfig:
+>> 
+>>   ../mm/migrate.c:1041:15: error: casting from randomized structure pointer type 'struct address_space *' to 'struct anon_vma *'
+>>           *anon_vmap = (struct anon_vma *)dst->mapping;
+>>                        ^
+>>   1 error generated.
+>> 
+>> With GCC, there is only a note:
+>> 
+>>   ../mm/migrate.c: In function '__migrate_folio_extract':
+>>   ../mm/migrate.c:1041:20: note: randstruct: casting between randomized structure pointer types (ssa): 'struct anon_vma' and 'struct address_space'
+>> 
+>>    1041 |         *anon_vmap = (struct anon_vma *)dst->mapping;
+>>         |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> 
+>> Kees has done fixes for warnings and errors like this in the past (I
+>> just ran
+>> 
+>>   $ git log -p --grep='randomized structure pointer type'
+>> 
+>> to find them) but I did not see any that would seem appropriate here
+>> hence just the report :)
+>
+> If this struct is literally just a scratch space and the original struct
+> layout doesn't matter, it may be possible to silence this cast by using
+> "(void *)" instead of the explicit struct type pointer.
 
-With that fixed:
+It works!  Thank you very much!
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
->   	}
->   
->   	return topology;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> index dcbf03d2940a..5e7aa0f3a31c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> @@ -548,8 +548,8 @@ static int _dpu_rm_populate_requirements(
->   {
->   	reqs->topology = req_topology;
->   
-> -	DRM_DEBUG_KMS("num_lm: %d num_enc: %d num_intf: %d\n",
-> -		      reqs->topology.num_lm, reqs->topology.num_enc,
-> +	DRM_DEBUG_KMS("num_lm: %d num_dsc: %d num_intf: %d\n",
-> +		      reqs->topology.num_lm, reqs->topology.num_dsc,
->   		      reqs->topology.num_intf);
->   
->   	return 0;
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index d4e0ef608950..74626a271f46 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -82,14 +82,12 @@ enum msm_event_wait {
->   /**
->    * struct msm_display_topology - defines a display topology pipeline
->    * @num_lm:       number of layer mixers used
-> - * @num_enc:      number of compression encoder blocks used
->    * @num_intf:     number of interfaces the panel is mounted on
->    * @num_dspp:     number of dspp blocks used
->    * @num_dsc:      number of Display Stream Compression (DSC) blocks used
->    */
->   struct msm_display_topology {
->   	u32 num_lm;
-> -	u32 num_enc;
->   	u32 num_intf;
->   	u32 num_dspp;
->   	u32 num_dsc;
-
--- 
-With best wishes
-Dmitry
-
+Best Regards,
+Huang, Ying
