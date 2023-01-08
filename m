@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D8E6614D5
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 12:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817866614E6
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 13:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbjAHLoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 06:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S233053AbjAHMJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 07:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAHLoB (ORCPT
+        with ESMTP id S229822AbjAHMI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 06:44:01 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DA6DF70
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 03:44:00 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id q64so5998410pjq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 03:44:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9nsM9ze7/IVAFeNx2iL5lzz62WyvKhiLwvesPkswPc=;
-        b=JZNPMaVecw2wAD9otYPnQHFnTEF+Tu1oNbEjp5STAi+ECzfPFA8tIGA1EaSGNqEFrN
-         q99Ew5DTqSFV+jxLC3M0ei6NrX7va83Dl5iMGSsI2y7CRsF9HRFz1yjOD6rUi2VVACUm
-         +lha5iN9Gy5GpL/Orqm0pYrc3I/xgNghbMUdB4UhvbH1zjeCwwJQqeKAlQvTePXNYF8E
-         OLQ1ArR9wP6GVMf8VAAirh5vi4NxEnIdFGll43fgy/tKoMSvOu7ySrizB65Zz/5xTSUz
-         px2pPVv0AaRBhv+eEV4VoPXXz6fFjs0JHWI4d1Fkg+SZ4tt+hcdLQuEW3jSSvz26IkWo
-         pgzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K9nsM9ze7/IVAFeNx2iL5lzz62WyvKhiLwvesPkswPc=;
-        b=tAFrERC4CEHxlqjzEsDzawRoqz44XCzBvJvnYyS6jE03+Ea5Cx9hO2Shpw7xmwiOJC
-         l+fTFDVnZr6aOojzzmVtePQWWresMCfqh4qb8zwzxDU+psyBke3Sm3OVvMTcrovtCvYs
-         kEBHdks2hablTwQty5ROvEKKsy6iIXJnsgGrJ9889i8UO0WDxqS7rEawLcy2u9xO+x8V
-         dzl+9d5hnhzhVFmdfkJdD8SXUFOBIdkFRa1fXRE8BP2wg0d4ig49YptWkA8E8iTx0ye/
-         45CAr+qYNU9x930ZfCG1Uxi4CaYPViwn0ejNCw57QpdOqmALnqFuWERxNJmsKhAXvlb3
-         Ij+A==
-X-Gm-Message-State: AFqh2kr+XKAJefexWxproIqfq1KmfZm25aFvL3UuWRZ+jja/aEZs7l9G
-        zx1WU1dwcN1dDp7U4Cxud5uu6xL1umOv0rge/7Q=
-X-Google-Smtp-Source: AMrXdXsNwzNBN2wYlF9q0MVzJwVapvLJ3KcrR9ulqvMDas5TSQuWTmnHqjbmnPNZCS5CFVDxoRNluw==
-X-Received: by 2002:a17:90b:310f:b0:226:876c:4c57 with SMTP id gc15-20020a17090b310f00b00226876c4c57mr20464874pjb.39.1673178239277;
-        Sun, 08 Jan 2023 03:43:59 -0800 (PST)
-Received: from localhost.localdomain (36-226-16-237.dynamic-ip.hinet.net. [36.226.16.237])
-        by smtp.gmail.com with ESMTPSA id j23-20020a17090a061700b002262fcd92desm5621521pjj.7.2023.01.08.03.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 03:43:58 -0800 (PST)
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sean Paul <sean@poorly.run>,
-        Terry Cheong <htcheong@chromium.org>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Ryan Lee <ryan.lee.analog@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Patches Robot 
-        <linux-patches-robot@chromeos-missing-patches.google.com.iam.gserviceaccount.com>,
-        amadeuszx.slawinski@linux.intel.com, alsa-devel@alsa-project.org,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v1] ASoC: nau8315: remove dependency on GPIOLIB
-Date:   Sun,  8 Jan 2023 19:43:51 +0800
-Message-Id: <20230108114351.539786-1-ajye_huang@compal.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 8 Jan 2023 07:08:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033B410075;
+        Sun,  8 Jan 2023 04:08:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8710260C4C;
+        Sun,  8 Jan 2023 12:08:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A38C433D2;
+        Sun,  8 Jan 2023 12:08:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673179736;
+        bh=Ax1j9O9mEQL53XYkMPEizE6+XiCM7vjlJy2j1m9CZAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S39uT1bK99n2VZ3TLxgWoezGcP6IxsCG6rjj5aYHK4nmWeMR18nKZurW4Zn7emPJO
+         Xlq7m2QwpSTkMkftYgazFw+ercjMssKPsj3WbTPqytEhVCfDZi0K7BkmYVltkohhPl
+         X9DnP28tkL3UNsK7pkQcpauUDf9RcUH7r2i0DvGkFRuk9Ubyn9sOW7qwLN9WTiMFhP
+         5y6gvL0Gi7AEiOkmQ+z9C1P8z/VNhyRJ2d7MW9+qDK4F01IvgGOb5if6ZGRh4zqZo9
+         qnIkr3YNkzlKICTJiFrzLCfshDQyODisI16qB5drS15A5yRJJ1fY0WPi/PT7s5gym4
+         iFN872MT4zt1w==
+Date:   Sun, 8 Jan 2023 14:08:52 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Potnuri Bharat Teja <bharat@chelsio.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] RDMA/cxgb4: Replace 0-length arrays with flexible arrays
+Message-ID: <Y7qyVPlNBQaGbInf@unreal>
+References: <20230105223225.never.252-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105223225.never.252-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit dcc2c012c7691 ("ASoC: Fix gpiolib dependencies") removed a
-series of unnecessary dependencies on GPIOLIB when the gpio was
-optional.
+On Thu, Jan 05, 2023 at 02:32:32PM -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace all remaining
+> 0-length arrays with flexible arrays. Detected with GCC 13, using
+> -fstrict-flex-arrays=3:
+> 
+> In function 'build_rdma_write',
+>     inlined from 'c4iw_post_send' at ../drivers/infiniband/hw/cxgb4/qp.c:1173:10:
+> ../drivers/infiniband/hw/cxgb4/qp.c:597:38: warning: array subscript 0 is outside array bounds of 'struct fw_ri_immd[0]' [-Warray-bounds=]
+>   597 |                 wqe->write.u.immd_src[0].r2 = 0;
+>       |                 ~~~~~~~~~~~~~~~~~~~~~^~~
+> ../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h: In function 'c4iw_post_send':
+> ../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:567:35: note: while referencing 'immd_src'
+>   567 |                 struct fw_ri_immd immd_src[0];
+>       |                                   ^~~~~~~~
+> 
+> Additionally drop the unused C99_NOT_SUPPORTED ifndef lines.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Cc: Potnuri Bharat Teja <bharat@chelsio.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-rdma@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/infiniband/hw/cxgb4/t4fw_ri_api.h | 26 ++++++-----------------
+>  1 file changed, 6 insertions(+), 20 deletions(-)
 
-A similar simplification seems valid for nau8315, so remove the
-dependency as well. This will avoid the following warning
+<...>
 
-  WARNING: unmet direct dependencies detected for SND_SOC_NAU8315
+>  #define FW_RI_SEND_WR_SENDOP_S		0
+> @@ -618,12 +606,10 @@ struct fw_ri_rdma_write_cmpl_wr {
+>  		struct fw_ri_isgl isgl_src;
+>  	} u_cmpl;
+>  	__be64 r3;
+> -#ifndef C99_NOT_SUPPORTED
+>  	union fw_ri_write {
+> -		struct fw_ri_immd immd_src[0];
+> -		struct fw_ri_isgl isgl_src[0];
+> +		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
+> +		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
 
-   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] &&
-                   GPIOLIB [=n]
-   Selected by [y]:
+smatch built from commit 40351132df3b ("strlen: add __builtin and
+__fortify functions") produces the following warning:
+drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:575:17: warning: array of flexible structures
 
-     - SND_SOC_INTEL_SOF_NAU8825_MACH [=y] && SOUND [=y] && !UML &&
-       SND [=y] && SND_SOC [=y] && SND_SOC_INTEL_MACH [=y] &&
-       (SND_SOC_SOF_HDA_LINK [=y] || SND_SOC_SOF_BAYTRAIL [=n]) &&
-       I2C [=y] && ACPI [=y] && SND_HDA_CODEC_HDMI [=y] &&
-       SND_SOC_SOF_HDA_AUDIO_CODEC [=y] && (MFD_INTEL_LPSS [=n] ||
-       COMPILE_TEST [=y])
+Is it expected? What will prevent from getting this warning from 0-day
+build bots?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
----
- sound/soc/codecs/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+Thanks
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index bbd401e52be1..e165addec25f 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -1863,7 +1863,6 @@ config SND_SOC_MT6660
- 
- config SND_SOC_NAU8315
- 	tristate "Nuvoton Technology Corporation NAU8315 CODEC"
--	depends on GPIOLIB
- 
- config SND_SOC_NAU8540
- 	tristate "Nuvoton Technology Corporation NAU85L40 CODEC"
--- 
-2.25.1
 
+>  	} u;
+> -#endif
+>  };
+>  
+>  struct fw_ri_rdma_read_wr {
+> -- 
+> 2.34.1
+> 
