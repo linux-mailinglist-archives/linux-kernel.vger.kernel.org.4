@@ -2,77 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65096615EF
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF186615F8
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbjAHOwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S233466AbjAHO4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbjAHOwb (ORCPT
+        with ESMTP id S233301AbjAHO4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:52:31 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C65B1E8
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:52:29 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so4660037wms.4
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:52:29 -0800 (PST)
+        Sun, 8 Jan 2023 09:56:18 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A736248
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:56:17 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h16so5752631wrz.12
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:56:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XTPm22szfEgP2USzyDubKCBhEisV4thL30XHBSbnE2g=;
-        b=Id63Ng+QurBcI5owy8mPHWunVXGkmUQKEDc5nhp9256GKznn/qgp8RNp9fzaopQGTs
-         Lw5KN58+w6J+sZEY1wXxX/zkBn4RYxm4lKD2fP8itRn14HgWLrcpZcanfVNYrAApuj4t
-         Nj6+sWwoR2WoUJAP844/sOU7g6qAYEeftDcHOrYwYL02qDJgyqsEq0lzYktWrSxhIHIX
-         iy+4MXBBXu5PuO7XqE651g+PIAFUSZD/dB3tj41ORUJah4k/UHQmXbEACaIAHqbvgGHP
-         YarnGy7EeSSCjwsCspIaDwhJbr8pEDoPvVON8uCR/OXK64HYI18OA2w4nYTYfAGwIJDm
-         IIMQ==
+        bh=faUR7WXI3JJAlq5Fj/7y4nlra1VV+37QFyTpQC1/6Os=;
+        b=UhMMC5LDsUxyd0s+U1tiT9D2xjSpDzkdVdvSkLIr4Nyf04n0IWW5JprfKC0gxkLFvF
+         NnyOUGVPxWGC2OAqsoXhifV+cGpbPvdnpuaIyRIpPw0mb1c5hDIfsK7A8Pvd/A4ErLfA
+         EmVn3SZhrBNAAtmzlMdYbz9eurNx/Lg8XPuXjbigIAigh9cd19NvIfQPCDj25KaMOnfu
+         F1Ujoco3nSOEgTVmI5ZTfF/8tordADV1/A7i13oog3WRXMQPyHXX+LxeDCxniqCMNLoB
+         0+7+mMamyDfmzgII9sLYWIxzJ1uaeaEBHJMp67wNb5TpseFlaPp+/KhKTyWwKMuGuHXL
+         r25g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XTPm22szfEgP2USzyDubKCBhEisV4thL30XHBSbnE2g=;
-        b=MQxpQRpBfRSLfqdakuTssHdGUVGglRVV5E9did/AN3GL6OYA2+/xuGLnWUBlgZ12Pw
-         xPnd4CX4JagNWO5Wq2zI3a6/Xo4fcce5UsoCReqOTmqxfiNk5q1GdlSUAKIr8prtrYpO
-         FmfphcBzhd2UcjDaSkanE4P3iEhF++akMSQjABEuU1TKOO3Yrby43cJ0GAVhx4pV43GP
-         tvDlvPnGLGo6Lkyo76vQQ1tDdGlG1R12oS+iKqqav9RMRVzR5zPoPy4VmzUDdyVWwi2P
-         ea3fH8yl5PQ6njulmg3N5uRg00Tl+KD1fNRAK/gn9DpDzJsDI6kPC5XdqavQbf9fyHJV
-         S9dQ==
-X-Gm-Message-State: AFqh2ko86Efbu3fp6M85g0LTpg9FYUrMjipSXX13WaDXv92+1Gwlns7+
-        +8Hhid4443xiWk2FyGz10GtOJQ==
-X-Google-Smtp-Source: AMrXdXsdekKuhU814b0ntj6vl2m5cp1iTya2rl8g8E9ks0gbmjFTyaS1duJ3r70lPhq8NWJP+2BeMg==
-X-Received: by 2002:a05:600c:3b29:b0:3cf:d18e:528b with SMTP id m41-20020a05600c3b2900b003cfd18e528bmr44997779wms.39.1673189547794;
-        Sun, 08 Jan 2023 06:52:27 -0800 (PST)
+        bh=faUR7WXI3JJAlq5Fj/7y4nlra1VV+37QFyTpQC1/6Os=;
+        b=GkuU3KDUbqs8KYZb/hB2MdinOtyOl4VVpGU62GnPoSgCDhFTgkNbvsahuae3MIJuyE
+         9+Tig81n0BEGdUZg4MfSsBeHmmCJIMdrvq9fCP2SE72Div2YTTbGOfbcSSpXzzUrDNeF
+         4E4dazG75hi/MyTaxMgbHBSixbK2T5dx9JZhnIN1D5kU2dH+tGrOUvRe1bgbVislftgL
+         YaMPiRbnPjhVOu54DRBOVeijUhsHHr48R54h0jSzmIGC2EBpYOvUDC8QG4457sB8Q/qO
+         VFccA135wCUkncl2WOY2D/FqSZA5tSu7TFQ2akTV3T6QCndAQnIblxebPpO7KDD56Wwc
+         dLxg==
+X-Gm-Message-State: AFqh2ko+dcpLF7Hjyletxc/J+pIHy6uBwf0onYdIMF2GuiZXwYZvhQWR
+        jNCBL+hvMnaLtvo48nXcg8rpGA==
+X-Google-Smtp-Source: AMrXdXvypNaFaV4VApj/5n5B4KrLo6cyzJa/11iv0JfanR3VXSlrcyN4o5PjaNplkSLduvwAAY0GyA==
+X-Received: by 2002:a05:6000:10f:b0:286:ad19:731f with SMTP id o15-20020a056000010f00b00286ad19731fmr24871172wrx.19.1673189775638;
+        Sun, 08 Jan 2023 06:56:15 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003d9b87296a9sm14057028wmo.25.2023.01.08.06.52.25
+        by smtp.gmail.com with ESMTPSA id v13-20020a5d678d000000b002bbe8686d6fsm2046811wru.117.2023.01.08.06.56.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 06:52:27 -0800 (PST)
-Message-ID: <dc23b376-6f1a-21d9-5d26-2ccde563fb34@linaro.org>
-Date:   Sun, 8 Jan 2023 15:52:25 +0100
+        Sun, 08 Jan 2023 06:56:15 -0800 (PST)
+Message-ID: <3f7e1afa-d445-453d-12fb-7c87b04c8756@linaro.org>
+Date:   Sun, 8 Jan 2023 15:56:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
+Subject: Re: [PATCH v8 4/9] dt-bindings: display: bridge: anx7625: Add
+ mode-switch support
 Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, Lyude Paul <lyude@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        Marek Vasut <marex@denx.de>, linux-acpi@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20230107102231.23682-1-treapking@chromium.org>
+ <20230107102231.23682-5-treapking@chromium.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106200809.330769-4-william.zhang@broadcom.com>
+In-Reply-To: <20230107102231.23682-5-treapking@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,26 +107,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 21:07, William Zhang wrote:
-> brcm,no-clk-gate is a Broadcom Broadband HS SPI controller specific
-> property for certain SPI device such as Broadcom ISI voice daughtercard
-> to work properly. It disables the clock gating feature when the chip
-> select is deasserted for any device that wants to keep the clock
-> running.
+On 07/01/2023 11:22, Pin-yen Lin wrote:
+> Analogix 7625 can be used in systems to switch the DP traffic between
+> two downstreams, which can be USB Type-C DisplayPort alternate mode
+> lane or regular DisplayPort output ports.
+> 
+> Update the binding to accommodate this usage by introducing a
+> data-lanes and a mode-switch property on endpoints.
+> 
+> Also include the link to the product brief in the bindings.
+> 
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> 
+> ---
 
 
-> +additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> index ead2cccf658f..f85d777c7b67 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -108,5 +108,6 @@ allOf:
->    - $ref: cdns,qspi-nor-peripheral-props.yaml#
->    - $ref: samsung,spi-peripheral-props.yaml#
->    - $ref: nvidia,tegra210-quad-peripheral-props.yaml#
-> +  - $ref: brcm,bcm63xx-hsspi-peripheral-props.yaml#
-
-Don't break the order.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
