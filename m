@@ -2,41 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC5266186B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68501661874
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjAHTE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S233036AbjAHTMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 14:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjAHTE4 (ORCPT
+        with ESMTP id S229520AbjAHTME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 14:04:56 -0500
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439B3E00B
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:04:54 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id EayQpvONwvuBYEayQps48G; Sun, 08 Jan 2023 20:04:52 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 08 Jan 2023 20:04:52 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Dan Carpenter <error27@gmail.com>
-Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] bit_spinlock: Include <asm/processor.h>
-Date:   Sun,  8 Jan 2023 20:04:44 +0100
-Message-Id: <8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 8 Jan 2023 14:12:04 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFBB6145
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:12:03 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4b718cab0e4so87665707b3.9
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 11:12:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VshpOCuS+UE23TdIO1FCKgFBaQRs5UhY8qOX5hQq0Vk=;
+        b=fJd7KDBaNWGJpWuACbh63+7ivXz4CUzo7tBKHOBX0aI5WfmcjbQqIrugwqkrWwYSlM
+         8tlpuciwCBdTVhOiQDVjPJIOQlcVb2JGKkSNJ7cSHwNhd9CSa5QvCSWfBGO638bM9N6v
+         AU9FeTmFJxw6YUAD+nrknyYqm8HE5M8I+98b67MB1nThhrcOHLataFR/1cwynUQQ3s++
+         BxDYa8JGY/Dp/jGg4ro5aHqoHDU71yrTdYmYBtokZYIpFh4ynJtZ2KwbC0NkZ3a6Erdl
+         Fti5m7PBl0c68TK466GUH1f9S7rPKBbcS61wS6ewAY5F3SsNduFmJLPbxZmhrzIeY+ty
+         5jWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VshpOCuS+UE23TdIO1FCKgFBaQRs5UhY8qOX5hQq0Vk=;
+        b=dKsSb+e5zMq8FliaK8C5efiKeiIgPnxyZMZGrhW41wEstNCO8BIePbVwLOoQRnMNj2
+         AQ6qYMUfgkMtpZlvN8p+AlOzKc273xqoBCGSO504Jx47FcczvmQ5LAn0Ui5qhnFtVBuu
+         /TgD8wikq9K7CKdhnHDWJ1d94xTWMVhbeRBYvTLwUfnZFml8KWKn2UAo2hHp/EYdULPL
+         jyt4NGQJLVF1ZHOp68I6Wi4LGsgVvN0fQ4RP1aRidx1jF8suU8KbrJHTtLbqvMnXOOeb
+         0ZUPcilWKTsiUwrjLI1TQjNgJEfRpssZZNzjzJ14w2lLu0GvZMAWgNAKFb3EiSD5sHmx
+         HQPQ==
+X-Gm-Message-State: AFqh2krJGL+fcLVqQwbymWTXsevG/P+S7vVXlXjOJueR65eDEwiKXzXu
+        P1ol0gcuoMHfe85iKVGQm5NAuhDMPxJFq9EqtMWHT0m4AGOvGL/xF4w=
+X-Google-Smtp-Source: AMrXdXvBMqebyIRoA12dvwZvOSFfYukFthzmFP/Y1ARGVSIb7jwgZ9wL1ddob35YUT/M21nuVZcoMbtSpmz+Abm2+20=
+X-Received: by 2002:a81:484f:0:b0:3ed:90d2:2ab8 with SMTP id
+ v76-20020a81484f000000b003ed90d22ab8mr778931ywa.67.1673205123163; Sun, 08 Jan
+ 2023 11:12:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+References: <20230106143002.1434266-1-steve@sk2.org> <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+ <CANiq72nnyxq_JhCETL+v1zQuU=HHjsS66Lt=0bzQ6Xy6CPKN2Q@mail.gmail.com> <CAMuHMdUNze0mL=2VOLPj5kE3Lsa3B3bzN_WipC_v=CddNNSJfQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUNze0mL=2VOLPj5kE3Lsa3B3bzN_WipC_v=CddNNSJfQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 8 Jan 2023 20:11:52 +0100
+Message-ID: <CANiq72=8T4=NhxLqeV0vgynRB0+gy9VnddZNTKXP75UfVPnc+Q@mail.gmail.com>
+Subject: Re: [PATCH v2] auxdisplay: ht16k33: Use backlight helper
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Stephen Kitt <steve@sk2.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,41 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an attempt to simplify some includes in <include/dcache.h>, it
-appeared, when compiling fs/ecryptfs/dentry.c, that <linux/bit_spinlock.h>
-was relying on other includes to get the definition of cpu_relax().
-(see [1])
+On Sun, Jan 8, 2023 at 7:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Oh, I sent it here because of
+> https://lore.kernel.org/all/Y7qM+ZlG5gQiOW4K@ravnborg.org ?
 
-It broke on arc.
+Yeah, sorry. I mentioned it just in case, since Sam asked for Robin's
+Ack in that thread, but I should have probably just Cc'd him here
+(done!)...
 
-Include <asm/processor.h> in <linux/bit_spinlock.h> to fix the issue.
-This will help remove some un-needed includes from <include/dcache.h>.
-
-[1]: https://lore.kernel.org/all/202301082130.LXMj5qkD-lkp@intel.com/
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Not sure who to send this to.
-get_maintainer.pl is of no help, and the file is untouched from a too long
-time.
-
-Greg? Dan? Any pointer?
----
- include/linux/bit_spinlock.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/bit_spinlock.h b/include/linux/bit_spinlock.h
-index bbc4730a6505..d0fd2a7afca2 100644
---- a/include/linux/bit_spinlock.h
-+++ b/include/linux/bit_spinlock.h
-@@ -2,6 +2,7 @@
- #ifndef __LINUX_BIT_SPINLOCK_H
- #define __LINUX_BIT_SPINLOCK_H
- 
-+#include <asm/processor.h>
- #include <linux/kernel.h>
- #include <linux/preempt.h>
- #include <linux/atomic.h>
--- 
-2.34.1
-
+Cheers,
+Miguel
