@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC2F661A1E
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18927661A23
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbjAHVmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S235027AbjAHVoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbjAHVmf (ORCPT
+        with ESMTP id S233381AbjAHVoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:42:35 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F24654F;
-        Sun,  8 Jan 2023 13:42:31 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NqrC169l6z4xP3;
-        Mon,  9 Jan 2023 08:42:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673214146;
-        bh=Md+/1V9BYTxro8zIrhgN/qAxG28rNuZo6a1LSFcjcB4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Es2/rRafc93kbcN1tRou+GrTZPzdG/+9lEZsu3QerEYIYVtF8LKjz1X/lYg+CH57W
-         OsPtA3778Fq4GwDRepv3yZDi9V6KIrQtiDYLmSz0I2Skd0/bl19qAfNBVjrY/HtGXG
-         5dZRq5I5G0m8qAkELEUBsnEIBD4jQyNn62ViJxaHAjhUUo5+awYf9b/fthOOfhJIlK
-         k2SGN+6mo9PBJ/0Vd5StzKcQ/Q+MHK6UNMa9sTWoRL/KHZ48zZFTYx58KA/l8b/Ya7
-         aNq9WqBGcEvcvQ3PAHFc1ncvMlWEWmI/QnvMXsaZIbUCFNt4y7VDa6DnawQPvBlxuk
-         9XE5Zx9IbMhTw==
-Date:   Mon, 9 Jan 2023 08:42:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20230109084220.61314353@canb.auug.org.au>
+        Sun, 8 Jan 2023 16:44:06 -0500
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48418654F;
+        Sun,  8 Jan 2023 13:44:06 -0800 (PST)
+Received: by mail-qv1-f49.google.com with SMTP id q10so4982446qvt.10;
+        Sun, 08 Jan 2023 13:44:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f6T43D0FupTceOalhCbxQCz5TRvmC2lIXz6LXAPPXOo=;
+        b=OnUlqoRrqRwZB/vgIZFbQh1qnk6+8vALZiKA5sQ6+2axoEt4pNzfTZx6lFYug9Fm3w
+         8kJduUifQNaYm9FaTcVsIH7kYBk2yAwK1PjFi6gwwIaLVaD2g5ef9+R2rnN30zXwHlf5
+         oZS7SLDnO9SvvrH47p6vkLosUQ+x3lnkMovtPhmCKNHExIHHMv6y9snzofocTnVZQBT3
+         Ql86V38EF+cq05WDadcRJCxzPyw4L6t9N8cwXFPJiJL1j2mdaS6pu6OZKIO7RghDDxeE
+         qRX3IKAelTgEJqNgp82Smz+qkgfxCcA+bFLUzq8Oi5bxviaHy5E8NVvwTjHi+TUbrZmg
+         QyJw==
+X-Gm-Message-State: AFqh2kpz0TTSt/8fZBvT6jx+mvrcHeMAnce0GFdB3iFWYSkwOmT1nrQS
+        sY7mjSbull4oogKJjGf6oQ==
+X-Google-Smtp-Source: AMrXdXuU6fv5RU/0vsc0XkLOlOxceJbfILEYGJ/eGd9SquRgy6qEKKGgFaPLC1tNzfV6JiA6aCIa8w==
+X-Received: by 2002:a05:6214:5bc2:b0:4c7:62eb:145d with SMTP id lr2-20020a0562145bc200b004c762eb145dmr103551507qvb.25.1673214245388;
+        Sun, 08 Jan 2023 13:44:05 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80a5:9b51:39ae:24d1:33f3:811e])
+        by smtp.gmail.com with ESMTPSA id bk25-20020a05620a1a1900b006ff8ac9acfdsm4316145qkb.49.2023.01.08.13.44.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 13:44:05 -0800 (PST)
+Received: (nullmailer pid 320040 invoked by uid 1000);
+        Sun, 08 Jan 2023 21:43:57 -0000
+Date:   Sun, 8 Jan 2023 15:43:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jiri Valek - 2N <jiriv@axis.com>
+Cc:     devicetree@vger.kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH v2 1/2] dt-bindings: input: microchip,cap11xx: add
+ cap1203, cap1293 and cap1298
+Message-ID: <20230108214357.GA318729-robh@kernel.org>
+References: <20230103134105.736346-3-jiriv@axis.com>
+ <20230104135951.930783-1-jiriv@axis.com>
+ <20230104135951.930783-2-jiriv@axis.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J+l4581dVH4QLQCZ1=yhnNN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104135951.930783-2-jiriv@axis.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/J+l4581dVH4QLQCZ1=yhnNN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 04, 2023 at 02:59:50PM +0100, Jiri Valek - 2N wrote:
+> Add support for cap1203, cap1293 and cap1298.
+> 
+> Signed-off-by: Jiri Valek - 2N <jiriv@axis.com>
+> ---
+>  Documentation/devicetree/bindings/input/microchip,cap11xx.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> index 67d4d8f86a2d..08ca993b94c4 100644
+> --- a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> +++ b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> @@ -20,6 +20,9 @@ properties:
+>        - microchip,cap1126
+>        - microchip,cap1188
+>        - microchip,cap1206
+> +      - microchip,cap1203
+> +      - microchip,cap1293
+> +      - microchip,cap1298
 
-Hi all,
+Maintain alphabetical order please.
 
-Today's linux-next merge of the risc-v tree got a conflict in:
-
-  arch/riscv/kernel/probes/simulate-insn.h
-
-between commit:
-
-  b2d473a6019e ("riscv, kprobes: Stricter c.jr/c.jalr decoding")
-
-from Linus' tree and commits:
-
-  ec5f90877516 ("RISC-V: Move riscv_insn_is_* macros into a common header")
-  c9c1af3f186a ("RISC-V: rename parse_asm.h to insn.h")
-
-from the risc-v tree.
-
-I fixed it up (The changes from the former are contained in the latter)
-and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/J+l4581dVH4QLQCZ1=yhnNN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO7OLwACgkQAVBC80lX
-0GyvnAf/RXxDckV5OYeRq0s/vMcpa268PUreS4PrPxoaGQgEIAMIzZWEnWcBrwCD
-OS2x9/T/cvDzaZMWU46c+huNxHVgX4cLutDWeG5o9UE4+TL2mCYr/moktxERlEm5
-vW1kbRPlSYwuLX6ybKfQCnJ/Z2oAn3AICGXY4k8FHnL8/Nj9D2kFgtRxa2b7p1+K
-iKIkxlFGrb9gFjElLWKPiyFZ4QALy+XolYMQPKLqSJoTnUyugDJDF0jULr9L9I+y
-ES49qrVTdYaLo7kj3c5fEErLfX209FXxtek1JWkKiYkHLKrLKCOVTrjRZXdNYONp
-Gy8/PO0mhaWPLa4uLxRgQfgeS0RqPg==
-=ZEWO
------END PGP SIGNATURE-----
-
---Sig_/J+l4581dVH4QLQCZ1=yhnNN--
+>  
+>    reg:
+>      maxItems: 1
+> -- 
+> 2.25.1
+> 
+> 
