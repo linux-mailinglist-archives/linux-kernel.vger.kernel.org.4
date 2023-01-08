@@ -2,87 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971C16615A9
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0FD6615B1
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbjAHOAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S234233AbjAHODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbjAHOAG (ORCPT
+        with ESMTP id S229483AbjAHODp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:00:06 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A241101D0;
-        Sun,  8 Jan 2023 05:59:55 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id l139so6322229ybl.12;
-        Sun, 08 Jan 2023 05:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/huaWcf/wNot1L+tQ1khzuDXGBVMKYzsCxPwSk2Wd0=;
-        b=kv+yArOYblsaDJGpwaN2kdNSGeGZrb4V9MOO/Z2cTE2lQG3aKpSf0pjAB0fZTkIjOH
-         fitmC/Phz5XwI5sPOkEMdDzhIwhYDNylZGk7/C2uCwosyfacaoAR4zfdey5edUG8mDTo
-         1FqEa/HrrJTSaojUx2rrJzQGO1yqhD6sWEWbdWRUsHb3u6g1HiN5BEM3y+nLF90e6tCY
-         3VX20bUGqgA1nNop7mcNLVcztJZpW5z/B5J9/RZGsVSL/S2yZqGqQjQWXmHVHcu9LOby
-         2C2HXWBhZt1m5FfKjkFAYTwFIFKDzR8EiWyY2puQBDOGh6xL3bgUDlLuSl1EUJY3ydo6
-         4WCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j/huaWcf/wNot1L+tQ1khzuDXGBVMKYzsCxPwSk2Wd0=;
-        b=5/fBjahkEvas82ueP7KHvpVDsQI+bKKcOROwPvLiJjC1BRN7GYk3eVeYl7yhRoxRju
-         vCGgqmcd25bQF8/pTKLO3i+lwJukg9cv3wRODPiyxZWD8buDccYis/JBO9BvICkzmYho
-         PcPaV3CirjTzGMpt+Z423fwNJ7XhpOGTtI0hMmbi08LIiNy33tCQ7QQB7K/5HsZvt+mj
-         vs82LSEBu29cB+1CMr7Uy9ZAy3sta2PQgmogMm5Tu+n2jj3KqceV5IT2nysf4IFZi352
-         1umXULOkrepp+g3Uw3pdVZdF5PoWP8yRhskm41wJXcHtBJGTc09BIM79UXbqv3kgE5ob
-         0MCw==
-X-Gm-Message-State: AFqh2krJt2zRCa6IINry8SqhiQvMXiUNVdqPqloMfnbMWhm7ydtb2t5r
-        NN6eDty6Qv2S9GE5/a1I7PqLiSTAbV3soifODt8fMoGObPmCNdyHKvstYA==
-X-Google-Smtp-Source: AMrXdXuwdsGKbhywEnrM+ME7ZJe9y09eQz+XfNyLKOQ4XmrnS1AS40weI9iuZ56AKMmqnyLKIfkYjFxSDgk19ks1yyQ=
-X-Received: by 2002:a25:bc43:0:b0:7b2:343d:6b11 with SMTP id
- d3-20020a25bc43000000b007b2343d6b11mr1997224ybk.75.1673186394385; Sun, 08 Jan
- 2023 05:59:54 -0800 (PST)
+        Sun, 8 Jan 2023 09:03:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967ECCEE;
+        Sun,  8 Jan 2023 06:03:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E9A860C81;
+        Sun,  8 Jan 2023 14:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3546DC433D2;
+        Sun,  8 Jan 2023 14:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673186622;
+        bh=Yj97AqZZxBvGpmEY52L5FJf1TsB1g8VxchoVSk64F3I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T+t79dS/MHd5l8YxsEceVethO3ZdEQoNIuMOjm67aWQzigid0kwKENoE9JwT8AnNr
+         E0lmknQmfEizax9uP5yQ/M39xhFz6j1iqGCtStGc+vO+EYzV27X6cvjxGTQfHO5VSw
+         ImNskWkzbl2H5hiMPQ/kNQxQciV1O3mvyVa+R4hAn1YS+XrekFlHVglrJuVU7VuQ5v
+         Ee6oUdAgSf5zvZR+fS03l+U4jU3qPEh6x2oIy+1dDCmPkk8hPekwX8IeYrzvwCH8iy
+         1guOGPRCJgMHk6x++5RR1c4z3Knm0de75qElVjerZp8JsP/T2h+yHVfsV/Hj5zxFTH
+         OUWERJMjdE25w==
+Date:   Sun, 8 Jan 2023 15:01:35 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mliska@suse.cz
+Subject: Re: [PATCH] docs: Fix the docs build with Sphinx 6.0
+Message-ID: <20230108150135.060b0c7a@coco.lan>
+In-Reply-To: <cb916eae-fdf6-504f-8f38-7928e0fa8344@gmail.com>
+References: <87wn629ggg.fsf@meer.lwn.net>
+        <cb916eae-fdf6-504f-8f38-7928e0fa8344@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230107094545.3384745-1-masahiroy@kernel.org>
- <CANiq72=q9pk2ZB2K9Zjn-COY1KD3MFAGthx7VJ_2YmtH61tdng@mail.gmail.com> <CAK7LNAQHqMHyX75MAwG6vh0V6Op_EGRXzprnBiNPeDmUuhHD_g@mail.gmail.com>
-In-Reply-To: <CAK7LNAQHqMHyX75MAwG6vh0V6Op_EGRXzprnBiNPeDmUuhHD_g@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 8 Jan 2023 14:59:43 +0100
-Message-ID: <CANiq72=zFqopMpwO1k=ZueGX=85=P4nRU+67bRCq-aS8bMuNyg@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: rust: move rust/target.json to scripts/
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 8, 2023 at 2:49 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Please let me pick this up to my kbuild tree.
->
-> If I have more spare time in this development cycle,
-> perhaps, I may refactor the code a little more.
+Em Sat, 7 Jan 2023 14:17:24 +0900
+Akira Yokosawa <akiyks@gmail.com> escreveu:
 
-Of course. And thanks for all the cleanups again!
+> On Wed, 04 Jan 2023 13:45:35 -0700, Jonathan Corbet wrote:
+> > Sphinx 6.0 removed the execfile_() function, which we use as part of the
+> > configuration process.  They *did* warn us...  Just open-code the
+> > functionality as is done in Sphinx itself.
+> >=20
+> > Tested (using SPHINX_CONF, since this code is only executed with an
+> > alternative config file) on various Sphinx versions from 2.5 through 6.=
+0.
+> >=20
+> > Reported-by: Martin Li=C5=A1ka <mliska@suse.cz>
+> > Signed-off-by: Jonathan Corbet <corbet@lwn.net> =20
+>=20
+> I have tested full builds of documentation with this change
+> with Sphinx versions 1.7.9, 2.4.5, 3.4.3, 4.5.0, 5.3.0, and 6.0.0.
+>=20
+> Tested-by: Akira Yokosawa <akiyks@gmail.com>
+>=20
+> That said, Sphinx 6.0.0 needs much more time and memory than earlier
+> versions.
+>=20
+> FYI, I needed to limit parallel slot to 2 (make -j2) on a 16GB machine.
+> If you are lucky, -j3 and -j4 might succeed. -j5 or more ended up in
+> OOM situations for me:
+>=20
+> Comparison of elapsed time and maxresident with -j2:
+>=20
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>   Sphinx version elapsed time maxresident
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>   5.3.0          10:16.81      937660
+>   6.0.0          17:29.07     5292392
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Cheers,
-Miguel
+=46rom the changelogs:
+	https://www.sphinx-doc.org/en/master/changes.html
+
+It seems that 6.1 came with some performance optimizations, in particular:
+
+    Cache doctrees in the build environment during the writing phase.
+
+    Make all writing phase tasks support parallel execution.
+
+    Cache doctrees between the reading and writing phases.
+
+It would be nice if you could also test and check elapsed time
+there too, as I suspect that 6.0 will have a very short usage, as
+6.1 was released just a few days after it.
+
+Regards,
+Mauro.
+
+
+
+>=20
+>         Thanks, Akira
+>=20
+> > ---
+> >  Documentation/sphinx/load_config.py | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/Documentation/sphinx/load_config.py b/Documentation/sphinx=
+/load_config.py
+> > index eeb394b39e2c..8b416bfd75ac 100644
+> > --- a/Documentation/sphinx/load_config.py
+> > +++ b/Documentation/sphinx/load_config.py
+> > @@ -3,7 +3,7 @@
+> > =20
+> >  import os
+> >  import sys
+> > -from sphinx.util.pycompat import execfile_
+> > +from sphinx.util.osutil import fs_encoding
+> > =20
+> >  # --------------------------------------------------------------------=
+----------
+> >  def loadConfig(namespace):
+> > @@ -48,7 +48,9 @@ def loadConfig(namespace):
+> >              sys.stdout.write("load additional sphinx-config: %s\n" % c=
+onfig_file)
+> >              config =3D namespace.copy()
+> >              config['__file__'] =3D config_file
+> > -            execfile_(config_file, config)
+> > +            with open(config_file, 'rb') as f:
+> > +                code =3D compile(f.read(), fs_encoding, 'exec')
+> > +                exec(code, config)
+> >              del config['__file__']
+> >              namespace.update(config)
+> >          else:
+> > --=20
+> > 2.38.1 =20
+
+
+
+Thanks,
+Mauro
