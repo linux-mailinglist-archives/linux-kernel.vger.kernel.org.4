@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D3366173E
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9080661742
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbjAHRMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 12:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S233558AbjAHRQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 12:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjAHRMq (ORCPT
+        with ESMTP id S233104AbjAHRQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 12:12:46 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873ECBC03;
-        Sun,  8 Jan 2023 09:12:45 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3D49C68AA6; Sun,  8 Jan 2023 18:12:41 +0100 (CET)
-Date:   Sun, 8 Jan 2023 18:12:41 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Keith Busch <kbusch@meta.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, hch@lst.de,
-        io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, davem@davemloft.net,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Paul Moore <paul@paul-moore.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv2 00/12] iov_iter: replace import_single_range with ubuf
-Message-ID: <20230108171241.GA20314@lst.de>
-References: <20230105190741.2405013-1-kbusch@meta.com>
+        Sun, 8 Jan 2023 12:16:01 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E59C0A470;
+        Sun,  8 Jan 2023 09:15:59 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 308HFkWo020532;
+        Sun, 8 Jan 2023 18:15:46 +0100
+Date:   Sun, 8 Jan 2023 18:15:46 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [RESEND PATCH v1 0/3] nolibc auxiliary vector retrieval support
+Message-ID: <20230108171546.GA18859@1wt.eu>
+References: <20230108135809.850210-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105190741.2405013-1-kbusch@meta.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230108135809.850210-1-ammar.faizi@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The entire series looks good to me:
+Hi Ammar,
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On Sun, Jan 08, 2023 at 08:58:06PM +0700, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Hi Willy,
+> 
+> This series is a follow up of our previous discussion about getauxval()
+> and getpagesize() functions.
+> 
+> It will apply cleanly on top of your "20221227-nolibc-weak-4" branch.
+> Base commit: b6887ec8b0b0 ("tools/nolibc: add auxiliary vector
+> retrieval for mips").
+> 
+> I have added a selftest for the getpagesize() function, but I am not
+> sure how to assert the correctness of getauxval(). I think it is fine
+> not to add a selftest for getauxval(). If you think we should, please
+> give some advice on the test mechanism.
+(...)
+
+Thank you! I've applied it to my local queue (will push soon), and
+could test it on all supported archs and it works fine. Thus consider
+it as merged now.
+
+Thanks!
+Willy
