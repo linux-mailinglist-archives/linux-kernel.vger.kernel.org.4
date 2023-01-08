@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DED8661867
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91158661863
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbjAHS6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S236475AbjAHS6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbjAHS6A (ORCPT
+        with ESMTP id S236049AbjAHS6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 13:58:00 -0500
+        Sun, 8 Jan 2023 13:58:02 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DB6E02E
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 10:57:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641BAE0D3
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 10:58:01 -0800 (PST)
 Received: from dslb-188-096-147-053.188.096.pools.vodafone-ip.de ([188.96.147.53] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pEari-0003b8-4b; Sun, 08 Jan 2023 19:57:54 +0100
+        id 1pEarj-0003b8-O0; Sun, 08 Jan 2023 19:57:55 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 05/13] staging: r8188eu: replace switch with if
-Date:   Sun,  8 Jan 2023 19:57:30 +0100
-Message-Id: <20230108185738.597105-6-martin@kaiser.cx>
+Subject: [PATCH 07/13] staging: r8188eu: dir_dev is unused
+Date:   Sun,  8 Jan 2023 19:57:32 +0100
+Message-Id: <20230108185738.597105-8-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230108185738.597105-1-martin@kaiser.cx>
 References: <20230108185738.597105-1-martin@kaiser.cx>
@@ -44,33 +44,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The switch statement in usb_write_port_complete has only one single case.
-Replace it with an if statement.
+dir_dev in struct adapter is not used by the r8188eu driver. It can be
+removed.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/os_dep/usb_ops_linux.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/staging/r8188eu/include/drv_types.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-index 6fe5a4230291..257bcf496012 100644
---- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-@@ -41,13 +41,8 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
- 	struct adapter	*padapter = pxmitbuf->padapter;
- 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
+index 8fef5759c36a..4803d0c77d70 100644
+--- a/drivers/staging/r8188eu/include/drv_types.h
++++ b/drivers/staging/r8188eu/include/drv_types.h
+@@ -187,7 +187,6 @@ struct adapter {
+ 	int bup;
+ 	struct net_device_stats stats;
+ 	struct iw_statistics iwstats;
+-	struct proc_dir_entry *dir_dev;/*  for proc directory */
  
--	switch (pxmitbuf->flags) {
--	case HIGH_QUEUE_INX:
-+	if (pxmitbuf->flags == HIGH_QUEUE_INX)
- 		rtw_chk_hi_queue_cmd(padapter);
--		break;
--	default:
--		break;
--	}
- 
- 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||
- 	    padapter->bWritePortCancel)
+ 	int net_closed;
+ 	u8 bFWReady;
 -- 
 2.30.2
 
