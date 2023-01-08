@@ -2,165 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D069F6619C7
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7365D6619CB
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjAHVMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S233745AbjAHVNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjAHVMU (ORCPT
+        with ESMTP id S233549AbjAHVMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:12:20 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE09DED3
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:12:15 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id k44-20020a9d19af000000b00683e176ab01so4163918otk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 13:12:15 -0800 (PST)
+        Sun, 8 Jan 2023 16:12:51 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA136565
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:12:48 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id g14so6993393ljh.10
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 13:12:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1kKJBYwNUCt9hGCKqI4KeCLjdPj9gRmHwnMJ2E9g1g=;
-        b=qAApsNIDWS6FSUNZDU7BqB1YSIGG77YQ87rZpEcF7vNpMTCF+4gPVg88/ZkZA24h/l
-         RO34JejkpdSUZ8fVC7Ahhm+XsD37GzbJPG7RZIUITTHjQajm6FeUP+twINU8GoqBPzvT
-         KEOdkiEt4hAq/qlk35kjk015U5usJnMQTfL6uysKRAHkB7vCjQHKjpRLAQRSmljEbNHx
-         Ml7QWfp/OMPkNLvXRlrUV/pA4O+YRMttXRC7ywezUBYqUodb7bHlaNKcPBvRG/MwAvbS
-         l3kV+HyK4XlkPu73PuJZTTc62yKXF+axOJoSr6J15sptfGHK5l3AfUsP59UbCRIiWv+O
-         Fh1A==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x53uwOLKbwK81PFlMs31vANCaDhh1Zsvs/a9zuGpPQk=;
+        b=0PDk1gKy7Bf3a6EwyRvCAxmVMnlOtuNpFYpwSfF8y6YltxiIQb7a28VlfLbdiYUi6Z
+         8MUnG9BR3yVVQpLQU8XqLEmftHA2d1Gw5X/S61ZSMcY9nerIvO6sUXlrqj5+Ry8uK6s4
+         9+cxshzjPhDQxmL8A46alekPNVEs72Y5+5WPOa/B1jrup3Id5EloKkFXO0A1+jXx9HcN
+         4DK1RRwIkfvPYHrFAU2H0zcozt4Orl+qAk871SXv+SFwN217D4TvTQj04jycZig2r0f2
+         EQxBzqR9uic9UGoshpdACfObFi9jPenr8z/7THbGN2Te4ymD3Z1yCRA1igE8Ygf8s6Xr
+         +M/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l1kKJBYwNUCt9hGCKqI4KeCLjdPj9gRmHwnMJ2E9g1g=;
-        b=8Gu4loaJ/GZVtjhWB2ymiti1CW1FHPoUR2iwXzGC1iQfvmsUN3NkpdVMJ3kNpkvgXp
-         zQTceNjEoSXqk35ctzjBF7Lov9VGaWf26tgIEzoq3kHSv9TrZmGpyPrZSEfUgJ2nUxPa
-         L7RGq3VD+4pSzEfgT3S0lhsKJyhQKDvxXZkB2a6tTahotGyy3CsLj6YSZC1FgeQbDhcP
-         9SIKz7DcADFWldDy0HuWVpTD/H/bkiA9r8dcXwbeHm5eDF8w1e3UiYTCQbnLLTDw0muC
-         IZbcXYuZJIArIVTSVbq2/OCZ/irn8Gu40SgK07pTNnv5MXfKYPo5UMPEvVicl9suVXBt
-         MqOg==
-X-Gm-Message-State: AFqh2krtz948LPz9yeaPKBZZ6nwlz3yRbcb/5UkMzYRdPBC0T7FQ6LMG
-        EMhSgtpyvXo0tuYEEbiXnyKDh64Dl3MMOnTXwROj1PlV
-X-Google-Smtp-Source: AMrXdXsxK3XffnNPw0pOKvIoo+NZr0mLOpsn2OYmE+jz/ZZvJLI2y/SUEl4pGC3C4C6SoDqwGJCTVyIdW2YsfpUtEOc=
-X-Received: by 2002:a9d:7843:0:b0:678:1eb4:3406 with SMTP id
- c3-20020a9d7843000000b006781eb43406mr3901033otm.237.1673212334960; Sun, 08
- Jan 2023 13:12:14 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x53uwOLKbwK81PFlMs31vANCaDhh1Zsvs/a9zuGpPQk=;
+        b=MMguic+F4N5lFjbHrHjs9r0Y+v+MFjb/XSrGEEFZq/MbGG4yGPUhQ9BanK/DbEzJ7u
+         8e9Lep2jBObUDuU1mySSE6h6vy+xlWcpu4KeKF8MyMyLHBTaz6ahTK54zkA91HGM0WLg
+         RPWzBjOr9sHtyIRRvRD3ES2z0ClA5u3ICCFNxMpLbvWIhVKCyauLKtxnTwHuQvcVPRTt
+         M/56MLXDOAmLAkKWMiCKec8Ju54m0VS2PmLsIIHGR3YzEdOFh59S8JFwfSRyeW3XdonS
+         IxJeP6N4fYNAAWX6wj7f4E8/ZuXgkSljFbCetkMlyX02ZC8UgSz+dTfu1on5OOgoNzW4
+         8hAA==
+X-Gm-Message-State: AFqh2kqENrBIfSKUxCQapVENMecdO1r5Ls/RaDYzIAnyIVIjTLzymF6W
+        InpZHZX8qZLdJSeZJ42XofmSgNkajQTaE4kCqQgl6Q==
+X-Google-Smtp-Source: AMrXdXssLooCUB3JcSjFGQGlVuCaFAVGO6fwtMCDpc/mUlglB++tww+r2xlSFr4vPtbjYEwsLwWpTCjfAlStv55FVrU=
+X-Received: by 2002:a2e:90d2:0:b0:27f:f22d:afe9 with SMTP id
+ o18-20020a2e90d2000000b0027ff22dafe9mr1990761ljg.404.1673212366368; Sun, 08
+ Jan 2023 13:12:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20230105134622.254560-1-arnd@kernel.org> <20230105134622.254560-2-arnd@kernel.org>
- <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
- <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
- <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com> <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
- <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com> <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
- <7a57b319-a774-4f97-af06-fe1a637a45ce@app.fastmail.com>
-In-Reply-To: <7a57b319-a774-4f97-af06-fe1a637a45ce@app.fastmail.com>
-From:   Dmitry Baryshkov <dbaryshkov@gmail.com>
-Date:   Sun, 8 Jan 2023 23:12:02 +0200
-Message-ID: <CALT56yOu=Kxxc=xUYvRpy5bD5XGB01cky_ppK8LbS4AC_ra5Bw@mail.gmail.com>
-Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Richard Purdie <richard.purdie@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ales Bardorfer <ales@i-tech.si>,
-        Ales Snuparek <snuparek@atlas.cz>,
-        Alex Osborne <ato@meshy.org>,
-        Alex Osborne <bobofdoom@gmail.com>,
-        Dirk Opfer <dirk@opfer-online.de>, Ian Molton <spyro@f2s.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Michael Petchkovsky <mkpetch@internode.on.net>,
-        Nick Bane <nick@cecomputing.co.uk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Tomas Cech <sleep_walker@suse.cz>,
-        Linus Walleij <linusw@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
+References: <20230103170058.810597-1-benjamin.gaignard@collabora.com> <20230103170058.810597-14-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230103170058.810597-14-benjamin.gaignard@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Sun, 8 Jan 2023 18:12:34 -0300
+Message-ID: <CAAEAJfBRtBSZt0B3OyQSCHhsseUn6_H+JSvAR3cOH15WUryuNw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] media: verisilicon: Conditionnaly ignore native formats
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=B2=D1=81, 8 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 23:05, Arnd Bergman=
-n <arnd@arndb.de>:
+On Tue, Jan 3, 2023 at 2:01 PM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
 >
-> On Fri, Jan 6, 2023, at 11:06, Dmitry Baryshkov wrote:
-> > =D0=BF=D1=82, 6 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 11:47, Arnd Ber=
-gmann <arnd@arndb.de>:
-> >> > Is there any conversion to DT you can easily point at as an example =
-of
-> >> > the kinds of changes needed?
-> >>
-> >> Robert Jarzmik and Daniel Mack worked on the conversion of the
-> >> PXA platform to DT. Daniel contributed the port for Raumfeld,
-> >> which should be complete, while Robert worked on more driver
-> >> conversions and mentioned[1] that he had converted additional
-> >> boards in the past but did not merge it upstream. They
-> >> can probably point you to whatever is missing. I would expect
-> >> the generic PXA drivers (spi, mmc, nand, i2c, audio, fb, gpio,
-> >> keypad) to  basically work work a correct DT description,
-> >> while the machine specific drivers (scoop and pcmcia mainly)
-> >> will need DT support in the driver.
-> >>
-> >> In addition, Linus Walleij and Marc Zyngier have both expressed
-> >> interest in keeping sa1100 (h3600, collie, assabet, jornada720)
-> >> alive, but those don't have any DT support yet and require
-> >> much more work. Also note that while you can now build a kernel
-> >> that includes support for all little-endian ARMv4T and ARMv5
-> >> machines, StrongARM machine still require a separate kernel
-> >> build.
-> >
-> > I looked into converting collie to use DT several years ago. The major
-> > problem was not in the StrongARM itself , but rather in the locomo
-> > (platform-specific ASIC) and PCMCIA. Unfortunately I abandoned that
-> > work ages ago. RMK didn't seem to be very interested, if I remember
-> > correclty.
+> AV1 film grain feature requires to use the postprocessor to produce
+> valid frames. In such case the driver shouldn't propose native pixels
+> format but only post-processed pixels format.
+> If a codec set need_postproc field in hantro_ctx structure to true
+> native pixel formats will be ignored.
 >
-> At least locomo and sa1111 are both private to mach-sa1100
-> now and no longer shared with pxa, so this should get
-> a little easier. When I had last looking into cleaning up
-> sa1100, my impression was that the main work would be converting
-> most of the drivers to use dynamic resources instead of
-> hardcoded addresses and interrupts. Looking at locomo again,
-> my feeling is that this could remain largely unchanged,
-> as the locomo downstream drivers (led, keyboard, lcd)
-> are already abstracted enough and locomo itself can
-> just be an mfd or soc driver.
-
-locomo has been used on Sharp Poodle, if I'm not mistaken. And sa1111
-is used on the lubbock, one of the crazy devkits.
-
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  drivers/media/platform/verisilicon/hantro.h   |  3 ++
+>  .../media/platform/verisilicon/hantro_drv.c   |  5 ++
+>  .../platform/verisilicon/hantro_postproc.c    |  4 ++
+>  .../media/platform/verisilicon/hantro_v4l2.c  | 46 +++++++++++++------
+>  4 files changed, 45 insertions(+), 13 deletions(-)
 >
-> > I suspect that the platforms might need to be rebootstrapped from the
-> > ground up. This sounds like a fun project for the next Connect demo :D
-> >
-> > BTW: collie is also supported by the qemu (in fact at some point I
-> > mostly used qemu for debugging collie). I don't think that the LCD
-> > emulation works, but the rest should be mostly good.
+> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+> index a98cb40a8d3b..7a5357e810fb 100644
+> --- a/drivers/media/platform/verisilicon/hantro.h
+> +++ b/drivers/media/platform/verisilicon/hantro.h
+> @@ -231,6 +231,8 @@ struct hantro_dev {
+>   * @ctrl_handler:      Control handler used to register controls.
+>   * @jpeg_quality:      User-specified JPEG compression quality.
+>   * @bit_depth:         Bit depth of current frame
+> + * @need_postproc:     Set to true if the bitstream features require to
+> + *                     use the post-processor.
+>   *
+>   * @codec_ops:         Set of operations related to codec mode.
+>   * @postproc:          Post-processing context.
+> @@ -258,6 +260,7 @@ struct hantro_ctx {
+>         struct v4l2_ctrl_handler ctrl_handler;
+>         int jpeg_quality;
+>         int bit_depth;
+> +       bool need_postproc;
 >
-> Good to know about the LCD. The qemu support was clearly a
-> strong reason for keeping this machine vs the others.
-
-sa1100 LCD controller was significantly different and it used some
-special format for the buffers, so I just skipped it at that point.
-
+>         const struct hantro_codec_ops *codec_ops;
+>         struct hantro_postproc_ctx postproc;
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+> index 4fc6dea16ae6..8d7055c0bf3b 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -346,6 +346,11 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
+>                                 return -EINVAL;
 >
->      Arnd
+>                 ctx->bit_depth = bit_depth;
+> +
+> +               if (ctrl->p_new.p_av1_sequence->flags
+> +                   & V4L2_AV1_SEQUENCE_FLAG_FILM_GRAIN_PARAMS_PRESENT)
+> +                       ctx->need_postproc = true;
+> +
+>                 break;
+>         default:
+>                 return -EINVAL;
+> diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+> index 7dc39519a2ee..293e5612e2ce 100644
+> --- a/drivers/media/platform/verisilicon/hantro_postproc.c
+> +++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+> @@ -57,6 +57,10 @@ bool hantro_needs_postproc(const struct hantro_ctx *ctx,
+>  {
+>         if (ctx->is_encoder)
+>                 return false;
+> +
+> +       if (ctx->need_postproc)
+> +               return true;
+> +
+>         return fmt->postprocessed;
+>  }
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index bbe79dbd2cd9..5c381766cca3 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -38,6 +38,11 @@ hantro_get_formats(const struct hantro_ctx *ctx, unsigned int *num_fmts)
+>  {
+>         const struct hantro_fmt *formats;
+>
+> +       if (ctx->need_postproc) {
+> +               *num_fmts = 0;
+> +               return NULL;
+> +       }
+> +
+>         if (ctx->is_encoder) {
+>                 formats = ctx->dev->variant->enc_fmts;
+>                 *num_fmts = ctx->dev->variant->num_enc_fmts;
+> @@ -132,6 +137,15 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
+>                     hantro_check_depth_match(ctx, &formats[i]))
+>                         return &formats[i];
+>         }
+> +
+> +       formats = hantro_get_postproc_formats(ctx, &num_fmts);
+> +       for (i = 0; i < num_fmts; i++) {
+> +               if (bitstream == (formats[i].codec_mode !=
+> +                                 HANTRO_MODE_NONE) &&
+> +                   hantro_check_depth_match(ctx, &formats[i]))
+> +                       return &formats[i];
+> +       }
+> +
+>         return NULL;
+>  }
+>
+> @@ -261,19 +275,6 @@ static int vidioc_g_fmt_out_mplane(struct file *file, void *priv,
+>         return 0;
+>  }
+>
+> -static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
+> -                                  struct v4l2_format *f)
+> -{
+> -       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> -       struct hantro_ctx *ctx = fh_to_ctx(priv);
+> -
+> -       vpu_debug(4, "f->type = %d\n", f->type);
+> -
+> -       *pix_mp = ctx->dst_fmt;
+> -
+> -       return 0;
+> -}
+> -
+>  static int hantro_try_fmt(const struct hantro_ctx *ctx,
+>                           struct v4l2_pix_format_mplane *pix_mp,
+>                           enum v4l2_buf_type type)
+> @@ -353,6 +354,25 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+>         return 0;
+>  }
+>
+> +static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
+> +                                  struct v4l2_format *f)
+> +{
+> +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> +       struct hantro_ctx *ctx = fh_to_ctx(priv);
+> +       int ret;
+> +
+> +       vpu_debug(4, "f->type = %d\n", f->type);
+> +
+> +       ret = hantro_try_fmt(ctx, pix_mp, f->type);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ctx->vpu_dst_fmt = hantro_find_format(ctx, pix_mp->pixelformat);
+> +       ctx->dst_fmt = *pix_mp;
+> +
 
+This looks like the g_fmt is setting some state in the context,
+this looks incorrect.
 
-
---=20
-With best wishes
-Dmitry
+Thanks,
+Ezequiel
