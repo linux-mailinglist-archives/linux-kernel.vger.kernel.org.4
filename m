@@ -2,508 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B565266137B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 04:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0364B661380
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 04:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbjAHDXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 Jan 2023 22:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S231351AbjAHDri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 Jan 2023 22:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjAHDXv (ORCPT
+        with ESMTP id S229745AbjAHDrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 Jan 2023 22:23:51 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B86F140D8;
-        Sat,  7 Jan 2023 19:23:50 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 094216CF;
-        Sun,  8 Jan 2023 04:23:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673148228;
-        bh=mSFaT5w0mBSG5sVqgPKjrZzOnK8S/Y5Ybmzi/uRM3RY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pa1CBHxMmOCwAMPspkl4qsfNZXHuzsRPs8a0m4K9EDBksxA5UYteSvkrXaIU4200b
-         962cYcVQcnCNloNffrriGlUElWHa8hey4Q/0vlKsh0iu5FOCjuROO3Cp5+YZkyVWoh
-         tPtWbHPDFavXUyTC/alh1jftHnUU0mFtTX1cWCEI=
-Date:   Sun, 8 Jan 2023 05:23:44 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
- Deserializer
-Message-ID: <Y7o3QEq9utV8nswA@pendragon.ideasonboard.com>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
+        Sat, 7 Jan 2023 22:47:35 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A727190
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 19:47:34 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id y5-20020a056e021be500b0030bc4f23f0aso3573967ilv.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 Jan 2023 19:47:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qQLB00WQd68qrRQA672AQnBNiJMOAPfrMUg3muGLgrI=;
+        b=VP8nDCx1Tg6NwvkV7lSG5zUfZ65zOb5ZuXBh9i17docdLqRcViDRkxFWuwvUnJ3sps
+         lUJsn8wIf/dR8JHqSRDw3qwzF22U61I6GMU++DSLgjhvEgDf8CbkYCgGiuvPl7P5Eerm
+         IdjL3fMdOyM6F4wZvLrpjtC0uj9xvLjU+ApWahpOIOJrrC7sGLP64Vlz1t3qbYpBI0OT
+         QkAJbsW+FPrtl4BVNwByPnhDygtExJrlTsHFTAcXyDEIHGiKW+JSYKaQ0uCQEwZAA0an
+         +fDiscx1OgtsOur0VVXHqxWP3NDkStY0HLq1MN99hKC/w1ueH6zynKNmKAL2szU/rbmW
+         E75g==
+X-Gm-Message-State: AFqh2kqslTmryUHY9BfXPhuwzcuYAv8pXv6ZFJWDckMFf21x8L9s/ldg
+        Cf/KZ9hF35zRKt8FZpPSqGNr8+mrimMZvzvxKMNYp1uoOCbP
+X-Google-Smtp-Source: AMrXdXtJwWRh9AmqZokyge7qrJ1NmFx/4vhVVD25IeDrdNbbW/1FRGWQ38yqwe18R+oTrKsBNKWh31xbJ2J11gVjrrokguqh3tf0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:12ee:b0:30c:baf:6dee with SMTP id
+ l14-20020a056e0212ee00b0030c0baf6deemr4057182iln.232.1673149653822; Sat, 07
+ Jan 2023 19:47:33 -0800 (PST)
+Date:   Sat, 07 Jan 2023 19:47:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5b55505f1b882d2@google.com>
+Subject: [syzbot] [ext4?] INFO: task hung in find_inode_fast
+From:   syzbot <syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hello,
 
-Thank you for the patch.
+syzbot found the following issue on:
 
-On Thu, Jan 05, 2023 at 04:03:04PM +0200, Tomi Valkeinen wrote:
-> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
->  1 file changed, 402 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> new file mode 100644
-> index 000000000000..664799ae55be
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> @@ -0,0 +1,402 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
-> +
-> +maintainers:
-> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> +
-> +description:
-> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-> +  forwarding.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ds90ub960-q1
-> +      - ti,ds90ub9702-q1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description:
-> +      Reference clock connected to the REFCLK pin.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: refclk
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Specifier for the GPIO connected to the PDB pin.
-> +
-> +  i2c-alias-pool:
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> +    description:
-> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> +      used to access the remote peripherals on the serializer's I2C bus. The
-> +      addresses must be available, not used by any other peripheral. Each
-> +      remote peripheral is assigned an alias from the pool, and transactions to
-> +      that address will be forwarded to the remote peripheral, with the address
-> +      translated to the remote peripheral's real address. This property is not
-> +      needed if there are no I2C addressable remote peripherals.
-> +
-> +  links:
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +      ti,manual-strobe:
-> +        type: boolean
-> +        description:
-> +          Enable manual strobe position and EQ level
-> +
-> +    patternProperties:
-> +      '^link@[0-3]$':
-> +        type: object
-> +        additionalProperties: false
-> +        properties:
-> +          reg:
-> +            description: The link number
-> +            maxItems: 1
-> +
-> +          i2c-alias:
-> +            description:
-> +              The I2C address used for the serializer. Transactions to this
-> +              address on the I2C bus where the deserializer resides are
-> +              forwarded to the serializer.
-> +
-> +          ti,rx-mode:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum:
-> +              - 0 # RAW10
-> +              - 1 # RAW12 HF
-> +              - 2 # RAW12 LF
-> +              - 3 # CSI2 SYNC
-> +              - 4 # CSI2 NON-SYNC
-> +            description:
-> +              FPD-Link Input Mode. This should reflect the hardware and the
-> +              default mode of the connected camera module.
+HEAD commit:    512dee0c00ad Merge tag 'x86-urgent-2023-01-04' of git://gi..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15646c8c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+dashboard link: https://syzkaller.appspot.com/bug?extid=77d6fcc37bbb92f26048
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11aec6fa480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17af7d38480000
 
-As the remote device may not be a camera, I'd write "of the connected
-device" or "of the connected serializer".
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bfe07129fec8/disk-512dee0c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b694f4342135/vmlinux-512dee0c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/dcea4a460ec2/bzImage-512dee0c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/6b86252caf20/mount_0.gz
 
-> +
-> +          ti,cdr-mode:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum:
-> +              - 0 # FPD-Link III
-> +              - 1 # FPD-Link IV
-> +            description:
-> +              FPD-Link CDR Mode. This should reflect the hardware and the
-> +              default mode of the connected camera module.
-> +
-> +          ti,strobe-pos:
-> +            $ref: /schemas/types.yaml#/definitions/int32
-> +            minimum: -13
-> +            maximum: 13
-> +            description: Manual strobe position
-> +
-> +          ti,eq-level:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            maximum: 14
-> +            description: Manual EQ level
-> +
-> +          serializer:
-> +            type: object
-> +            description: FPD-Link Serializer node
-> +
-> +        required:
-> +          - reg
-> +          - i2c-alias
-> +          - ti,rx-mode
-> +          - serializer
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 0
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 1
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
-> +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 2
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
-> +
-> +      port@3:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: FPD-Link input 3
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description:
-> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> +              hsync-active and vsync-active must be defined.
-> +
-> +      port@4:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI-2 Output 0
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +            required:
-> +              - data-lanes
-> +
-> +      port@5:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: CSI-2 Output 1
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +            required:
-> +              - data-lanes
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com
 
-I think you need
+INFO: task syz-executor232:5073 blocked for more than 143 seconds.
+      Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor232 state:D stack:21024 pid:5073  ppid:5072   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ __wait_on_freeing_inode fs/inode.c:2196 [inline]
+ find_inode_fast+0x35a/0x4c0 fs/inode.c:950
+ iget_locked+0xb1/0x830 fs/inode.c:1273
+ __ext4_iget+0x22e/0x3ed0 fs/ext4/inode.c:4861
+ ext4_xattr_inode_iget+0x68/0x4e0 fs/ext4/xattr.c:389
+ ext4_xattr_inode_dec_ref_all+0x1a7/0xe50 fs/ext4/xattr.c:1148
+ ext4_xattr_delete_inode+0xb04/0xcd0 fs/ext4/xattr.c:2880
+ ext4_evict_inode+0xd7c/0x10b0 fs/ext4/inode.c:296
+ evict+0x2a4/0x620 fs/inode.c:664
+ ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+ __ext4_fill_super fs/ext4/super.c:5516 [inline]
+ ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa5406fd5ea
+RSP: 002b:00007ffc7232f968 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fa5406fd5ea
+RDX: 0000000020000440 RSI: 0000000020000000 RDI: 00007ffc7232f970
+RBP: 00007ffc7232f970 R08: 00007ffc7232f9b0 R09: 0000000000000432
+R10: 0000000000804a03 R11: 0000000000000202 R12: 0000000000000004
+R13: 0000555556a7a2c0 R14: 00007ffc7232f9b0 R15: 0000000000000000
+ </TASK>
 
-    required:
-      - port@0
-      - port@1
-      - port@2
-      - port@3
-      - port@4
-      - port@5
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8d326f50 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8d327750 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/28:
+ #0: ffffffff8d326d80 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+2 locks held by getty/4743:
+ #0: ffff88814bdd0098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015a02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
+2 locks held by syz-executor232/5073:
+ #0: ffff88802a5380e0 (&type->s_umount_key#28/1){+.+.}-{3:3}, at: alloc_super+0x212/0x920 fs/super.c:228
+ #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: __sb_start_write include/linux/fs.h:1811 [inline]
+ #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: sb_start_intwrite include/linux/fs.h:1933 [inline]
+ #1: ffff88802a538650 (sb_internal){.+.+}-{0:0}, at: ext4_evict_inode+0x4cd/0x10b0 fs/ext4/inode.c:240
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c {
-> +      clock-frequency = <400000>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      deser@3d {
-> +        compatible = "ti,ds90ub960-q1";
-> +        reg = <0x3d>;
-> +
-> +        clock-names = "refclk";
-> +        clocks = <&fixed_clock>;
-> +
-> +        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
-> +
-> +        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
-> +
-> +        ports {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          /* Port 0, Camera 0 */
-> +          port@0 {
-> +            reg = <0>;
-> +
-> +            ub960_fpd3_1_in: endpoint {
-> +              remote-endpoint = <&ub953_1_out>;
-> +            };
-> +          };
-> +
-> +          /* Port 1, Camera 1 */
-> +          port@1 {
-> +            reg = <1>;
-> +
-> +            ub960_fpd3_2_in: endpoint {
-> +              remote-endpoint = <&ub913_2_out>;
-> +              hsync-active = <0>;
-> +              vsync-active = <1>;
-> +            };
-> +          };
-> +
-> +          /* Port 4, CSI-2 TX */
-> +          port@4 {
-> +            reg = <4>;
-> +            ds90ub960_0_csi_out: endpoint {
-> +              data-lanes = <1 2 3 4>;
-> +              link-frequencies = /bits/ 64 <800000000>;
-> +              remote-endpoint = <&csi2_phy0>;
-> +            };
-> +          };
-> +        };
-> +
-> +        links {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          /* Link 0 has DS90UB953 serializer and IMX274 sensor */
-> +
-> +          link@0 {
-> +            reg = <0>;
-> +            i2c-alias = <0x44>;
-> +
-> +            ti,rx-mode = <3>;
-> +
-> +            serializer1: serializer {
-> +              compatible = "ti,ds90ub953-q1";
-> +
-> +              gpio-controller;
-> +              #gpio-cells = <2>;
-> +
-> +              #clock-cells = <0>;
-> +
-> +              ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                  reg = <0>;
-> +                  ub953_1_in: endpoint {
-> +                    data-lanes = <1 2 3 4>;
-> +                    remote-endpoint = <&sensor_1_out>;
-> +                  };
-> +                };
-> +
-> +                port@1 {
-> +                  reg = <1>;
-> +
-> +                  ub953_1_out: endpoint {
-> +                    remote-endpoint = <&ub960_fpd3_1_in>;
-> +                  };
-> +                };
-> +              };
-> +
-> +              i2c {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                sensor@1a {
-> +                  compatible = "sony,imx274";
-> +                  reg = <0x1a>;
-> +
-> +                  reset-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
-> +
-> +                  port {
-> +                    sensor_1_out: endpoint {
-> +                      remote-endpoint = <&ub953_1_in>;
-> +                    };
-> +                  };
-> +                };
-> +              };
-> +            };
-> +          };  /* End of link@0 */
-> +
-> +          /* Link 1 has DS90UB913 serializer and MT9V111 sensor */
-> +
-> +          link@1 {
-> +            reg = <1>;
-> +            i2c-alias = <0x45>;
-> +
-> +            ti,rx-mode = <0>;
-> +
-> +            serializer2: serializer {
-> +              compatible = "ti,ds90ub913a-q1";
-> +
-> +              gpio-controller;
-> +              #gpio-cells = <2>;
-> +
-> +              clocks = <&clk_cam_48M>;
-> +              clock-names = "clkin";
-> +
-> +              #clock-cells = <0>;
-> +
-> +              ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                  reg = <0>;
-> +                  ub913_2_in: endpoint {
-> +                    remote-endpoint = <&sensor_2_out>;
-> +                    pclk-sample = <1>;
-> +                  };
-> +                };
-> +
-> +                port@1 {
-> +                  reg = <1>;
-> +
-> +                  ub913_2_out: endpoint {
-> +                    remote-endpoint = <&ub960_fpd3_2_in>;
-> +                  };
-> +                };
-> +              };
-> +
-> +              i2c {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                sensor@48 {
-> +                  compatible = "aptina,mt9v111";
-> +                  reg = <0x48>;
-> +
-> +                  clocks = <&serializer2>;
-> +
-> +                  port {
-> +                    sensor_2_out: endpoint {
-> +                      remote-endpoint = <&ub913_2_in>;
-> +                    };
-> +                  };
-> +                };
-> +              };
-> +            };
-> +          }; /* End of link@1 */
-> +        };
-> +      };
-> +    };
-> +...
+=============================================
 
--- 
-Regards,
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xcd5/0xd20 kernel/hung_task.c:377
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 4421 Comm: klogd Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:vsnprintf+0x3cd/0x1cb0 lib/vsprintf.c:2829
+Code: e8 08 92 e0 f6 48 83 fb 28 4c 8b 7c 24 08 0f 87 80 08 00 00 e8 d4 8d e0 f6 48 8b 7c 24 30 48 89 f8 48 c1 e8 03 42 80 3c 28 00 <74> 05 e8 ac 37 36 f7 89 d8 49 03 5e 10 44 8d 78 08 48 8b 44 24 10
+RSP: 0018:ffffc90002f6f7a0 EFLAGS: 00000246
+RAX: 1ffff920005edf22 RBX: 0000000000000010 RCX: ffff88807d8e1d40
+RDX: 0000000000000000 RSI: 0000000000000010 RDI: ffffc90002f6f910
+RBP: ffffc90002f6f890 R08: ffffffff8aab4d78 R09: ffffffff8aab4b6e
+R10: 0000000000000012 R11: ffff88807d8e1d40 R12: ffff0a0000000509
+R13: dffffc0000000000 R14: ffffc90002f6f900 R15: ffffc90082f6fae2
+FS:  00007f99d0120800(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005630c40b8a40 CR3: 000000002b714000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sprintf+0xc7/0x110 lib/vsprintf.c:3000
+ print_time kernel/printk/printk.c:1357 [inline]
+ info_print_prefix+0x153/0x2e0 kernel/printk/printk.c:1383
+ record_print_text+0x12e/0x430 kernel/printk/printk.c:1432
+ syslog_print+0x3a0/0x5e0 kernel/printk/printk.c:1643
+ do_syslog+0x815/0x8f0 kernel/printk/printk.c:1762
+ __do_sys_syslog kernel/printk/printk.c:1854 [inline]
+ __se_sys_syslog kernel/printk/printk.c:1852 [inline]
+ __x64_sys_syslog+0x78/0x90 kernel/printk/printk.c:1852
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f99d02bb8b7
+Code: 73 01 c3 48 8b 0d c1 05 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 67 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 91 05 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffec1edf228 EFLAGS: 00000206 ORIG_RAX: 0000000000000067
+RAX: ffffffffffffffda RBX: 00007f99d0448490 RCX: 00007f99d02bb8b7
+RDX: 00000000000003ff RSI: 00007f99d0448490 RDI: 0000000000000002
+RBP: 0000000000000000 R08: 0000000000000007 R09: 000055d7b192cd50
+R10: 0000000000004000 R11: 0000000000000206 R12: 00007f99d0448490
+R13: 00007f99d044850e R14: 00007f99d044850e R15: 0000000000000000
+ </TASK>
 
-Laurent Pinchart
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
