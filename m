@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B1E661503
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 13:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3337E661509
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 13:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjAHMY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 07:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S233059AbjAHM1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 07:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjAHMY5 (ORCPT
+        with ESMTP id S229716AbjAHM1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 07:24:57 -0500
+        Sun, 8 Jan 2023 07:27:41 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932B6260C;
-        Sun,  8 Jan 2023 04:24:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ED85FF6;
+        Sun,  8 Jan 2023 04:27:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43BB7B801C1;
-        Sun,  8 Jan 2023 12:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B993C433D2;
-        Sun,  8 Jan 2023 12:24:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CCFDB803F1;
+        Sun,  8 Jan 2023 12:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE89CC433D2;
+        Sun,  8 Jan 2023 12:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673180693;
-        bh=AvraLn3xLafT3m5CE80rVhLQyL81EEEpzfFaGD5yBRQ=;
+        s=k20201202; t=1673180858;
+        bh=SysmkJ2JIR01nOEshO/fIKEwvXowTeVYSoVagST5Cpg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZMuNsyRtv7Gqxt0eye/RxHGYBSeo3EPmfRCx6OlfS4Lgfe43gMvAQFXJsOvNZ735i
-         VlH8GuMQz/CdWJgtPwkTWPT5H6BBcMq5yOz0xDb8hn9iX0txZoVQ9zLiW0sCeMntqb
-         XuWifnTZiKSCkZjeg975F8Ll6WFGzPZn9G3QZWsiVueDy94SNmsIQglYcXTTGmnHls
-         yWeV9rNWsWbdjEGeJtCeOSGmf+os3d/Km7ynSZ0/SkJxPxxmj9Fty4Lw8R9IsSCflq
-         uo/FDstStlpaXRF5RZT7E3UZva3UDbHzaT78gejLCt1/rWl7qM2TyLJJe69pxZSpPf
-         KKvDK4DYY58BA==
-Date:   Sun, 8 Jan 2023 12:38:20 +0000
+        b=B0OmM6FuLJMP+S/U9VXdgGJwlah8jcdY+zNTEKHLZZ3bD6krzhav+Y3/kI2vHtFa6
+         qVvE7K+r9Uj/GyL1/QcxXUAj+7QkY9/gQ4Hlvo/+vEG6QZM9BxiRy5MwzcZE0q8PDF
+         I6GMStTpDkCbfgLZxfjpY/6whUoxtyit9d/KdcxuoZRPj4WUN/QFFS4Kv9E33OYAdZ
+         iggZdHjxPBGvD4yQipewfC7QH41fft4i1HwN4M6h7iZw92bqzM0sUz11ts7QY3aqLF
+         PeyqLyGjs9aDslKSBcI45ghzlN3tliOsi4pzP4i7HNI5eWU/pBDwGxN1Nk/A0pW1zX
+         f39ZNtbjKcrUw==
+Date:   Sun, 8 Jan 2023 12:41:05 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new
- sensor BMP580
-Message-ID: <20230108123820.7d917571@jic23-huawei>
-In-Reply-To: <1efee3367f555ffe21895f68f2bdea64a38ba22a.camel@gmail.com>
+Subject: Re: [PATCH v2 1/5] iio: pressure: bmp280: Add enumeration to handle
+ chip variants
+Message-ID: <20230108124105.1cdc5627@jic23-huawei>
+In-Reply-To: <e13c4e3962923994c853b115a5606633387991db.camel@gmail.com>
 References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
-        <c053976f56c3810915ca2ead6c358b5997b782e5.1672062380.git.ang.iglesiasg@gmail.com>
-        <20221230184535.6f684337@jic23-huawei>
-        <1efee3367f555ffe21895f68f2bdea64a38ba22a.camel@gmail.com>
+        <f0368a3f460707417110dffdb0166824da20af15.1672062380.git.ang.iglesiasg@gmail.com>
+        <Y6tlpP2SgsgoVBrK@smile.fi.intel.com>
+        <e13c4e3962923994c853b115a5606633387991db.camel@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -66,27 +66,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 01 Jan 2023 12:04:40 +0100
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-> > > +static const int bmp580_oversampling_avail[] = { 1, 2, 4, 8, 16, 32, 64,
-> > > 128 };
-> > > +static const int bmp580_iir_filter_coeffs_avail[] = { 1, 2, 4, 8, 16, 32,
-> > > 64, 128 };  
+> On Tue, 2022-12-27 at 23:37 +0200, Andy Shevchenko wrote:
+> > On Mon, Dec 26, 2022 at 03:29:20PM +0100, Angel Iglesias wrote:  
+> > > Adds enumeration to improve handling the different supported sensors
+> > > on driver initialization. This avoid collisions if different variants
+> > > share the same device idetifier on ID register.  
 > > 
-> > Up to you, but you could take advantage of the fact this array matches the
-> > bmp380 one.
-> > It is arguable that the code is clearer with it not being reused though so
-> > your choice.  
+> > As per v1, use pointers in the ID tables.
+> >   
 > 
-> Hum yes, I could reuse the array for the BMP380, maybe a should use a more
-> generic name for that array to avoid confusion? Something like
-> bmp280_iir_filter_coeffs_avail, refering to the driver name instead of the
-> concrete sensor?
+> Taking your suggestion and Jonathan's remarks into account seems to me like the
+> best approach here is using chip_info pointer for each driver as the pointer set
+> on the id tables.
 
-Don't worry about the naming. Anything clever just tends to cause
-problems as more parts are added.  Just stick to the name of the first part
-that used it.  We've made the mistake of trying for generic names in the
-past and it bites back!
+Yes.
 
+> As in the i2c and spi drivers, the enum is used to fetch the
+> correct regmap configuration, and later in the shared probe, the chip_info. The
+> logical follow-up would be adding the regmap configuration to the chip_info,
+> right?
+
+Makes sense.
+
+> Or is there a better solution I'm not seeing right now?
+
+If I'm understanding what you have above, then this is exactly what we would
+want to do here.
+
+Thanks,
 
 Jonathan
+
+> 
+> Thanks for your time,
+> Angel
 
