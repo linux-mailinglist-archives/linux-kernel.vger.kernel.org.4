@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12286617D0
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9A56617D3
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbjAHSJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S233244AbjAHSJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236140AbjAHSIp (ORCPT
+        with ESMTP id S236119AbjAHSJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 13:08:45 -0500
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E620657F;
-        Sun,  8 Jan 2023 10:08:44 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id o8so3843331ilo.1;
-        Sun, 08 Jan 2023 10:08:44 -0800 (PST)
+        Sun, 8 Jan 2023 13:09:22 -0500
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935A76579;
+        Sun,  8 Jan 2023 10:09:16 -0800 (PST)
+Received: by mail-il1-f181.google.com with SMTP id g2so3843516ila.4;
+        Sun, 08 Jan 2023 10:09:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7G2aF2Rlg2azVZf2JFJeNKVoMm1OVbhxv0Ci3azN7wE=;
-        b=dpy1TFbdVVJvROIkfWTyE8wiPwbunr+w8+rURH6AyzaCePob0QDwyZHCNKjCkZPC/n
-         eDa95/NOTX4H0qYtq6YUfZ+uZJY1tWjd7KnEfEJX9LyQNiddgr4P1gRUkITOPgVZxbNi
-         qGTvhlo0srIIfgy/qLXD327i+ZmgyyNhC5Ru1iYAxiNei4E9h76RP8wVJ+s3uzhxjFiP
-         f7dJHcKClqWkzTuE1jLzzVfPgn2ng8ARYHUb3rQJzYj+xDF2zLDnEkwh74metDR61ULw
-         T2fsdedpT9uvXTtVoGp3TJ2DReoz75A/twpu0UhjuPeNuEMdy0MHhwyPXZksBY1mnVb5
-         8aBg==
-X-Gm-Message-State: AFqh2kq5wpC72s0pZCU+UYgSSiJthu1f5wTh777fowql5XaUmK2HW62S
-        IfL+kj2zj6Uy1AWBiQAN99EAZNHleA==
-X-Google-Smtp-Source: AMrXdXtwGhnMqe9C2G+mYOvJ/eN9hOjcLZPmAVnaDhw1Q+GPzNfHud/mEjKEJ6nfHLiRx0oZyQ2jJw==
-X-Received: by 2002:a92:d20f:0:b0:303:27a3:8666 with SMTP id y15-20020a92d20f000000b0030327a38666mr42281126ily.28.1673201323881;
-        Sun, 08 Jan 2023 10:08:43 -0800 (PST)
+        bh=bXsurnTQkqDtvp9r1jTD8u+Cgja6sWV8sbpQiCK0ozc=;
+        b=FdcbWIRTelRgvoCeuN0+MiRkov+W2DdZACYWwhq3AqIgOumnzKq94i+GUwx2aoXHkM
+         YYLXLEzm/dsidCdqjS+xbZb5PrlJJoAttHyqW/77dUH1zZlqPbrQrIq7LG09Jot3Jz5I
+         dvA6+LdhS3rKEPeHHYjGeTrygbFkZtuzjPU89ZXY3PWvvjLJtZ5I+ObmpAbJ4bjtmrw4
+         cGklM/uzsX8r54UATiilhgFgUvZcxiwGMIKhFhNgyj7Y5AbJma7/OTZQpLAVhZinrbZl
+         OvSI1ERKbYEwWcTWE7W+iw1UrDiw/FNjiDAJEBmxZRF2YcKJhHkMLbQw+2gDxah+3AvK
+         yxfw==
+X-Gm-Message-State: AFqh2krpF6JbkmBxOFLzbDH8nek3RSJvhmBowqa6d6o/ek1JC84HHE8C
+        9V89g4xytlIdGhawQiAFVA==
+X-Google-Smtp-Source: AMrXdXv3wAOICdNq1RPiqJO8HCMJFqLidp5nT4nWPpEzahC2yfHFyjFRoBkR6WUu63GwD35MlGS+Cg==
+X-Received: by 2002:a05:6e02:2217:b0:30d:84be:725d with SMTP id j23-20020a056e02221700b0030d84be725dmr9994617ilf.22.1673201355793;
+        Sun, 08 Jan 2023 10:09:15 -0800 (PST)
 Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
-        by smtp.gmail.com with ESMTPSA id e30-20020a02211e000000b00370decbbff3sm2079795jaa.148.2023.01.08.10.08.41
+        by smtp.gmail.com with ESMTPSA id c72-20020a02964e000000b00363d6918540sm2067426jai.171.2023.01.08.10.09.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 10:08:43 -0800 (PST)
-Received: (nullmailer pid 151858 invoked by uid 1000);
-        Sun, 08 Jan 2023 18:08:40 -0000
-Date:   Sun, 8 Jan 2023 12:08:40 -0600
+        Sun, 08 Jan 2023 10:09:15 -0800 (PST)
+Received: (nullmailer pid 152523 invoked by uid 1000);
+        Sun, 08 Jan 2023 18:09:11 -0000
+Date:   Sun, 8 Jan 2023 12:09:11 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+Cc:     Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH] dt-bindings: clock: qcom,camcc-sm8250: extend clocks and
- power domains
-Message-ID: <167320131871.151783.4587146709277238289.robh@kernel.org>
-References: <20221224214404.18280-1-krzysztof.kozlowski@linaro.org>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: qcom,lpass-wsa-macro: correct
+ clocks on SM8250
+Message-ID: <167320134913.152434.15549162581347874733.robh@kernel.org>
+References: <20221225115907.55250-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221224214404.18280-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221225115907.55250-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -71,18 +71,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sat, 24 Dec 2022 22:44:04 +0100, Krzysztof Kozlowski wrote:
-> Add clocks and properties (power-domains, required-opps) already used in
-> SM8250 DTS:
+On Sun, 25 Dec 2022 12:59:06 +0100, Krzysztof Kozlowski wrote:
+> SM8250 DTS uses additional "va" clock in WSA macro device node:
 > 
->   sm8250-hdk.dtb: clock-controller@ad00000: clocks: [[46, 10], [44, 0], [44, 1], [45]] is too long
->   sm8250-hdk.dtb: clock-controller@ad00000: clock-names:0: 'bi_tcxo' was expected
->   sm8250-hdk.dtb: clock-controller@ad00000: 'power-domains', 'required-opps' do not match any of the regexes: 'pinctrl-[0-9]+'
+>   sm8250-sony-xperia-edo-pdx203.dtb: codec@3240000: clock-names: ['mclk', 'npl', 'macro', 'dcodec', 'va', 'fsgen'] is too long
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../bindings/clock/qcom,camcc-sm8250.yaml     | 20 +++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
+>  .../bindings/sound/qcom,lpass-wsa-macro.yaml  | 58 +++++++++++++++----
+>  1 file changed, 47 insertions(+), 11 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
