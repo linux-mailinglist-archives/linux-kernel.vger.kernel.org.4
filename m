@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE5B661872
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DE8661873
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbjAHS61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S236539AbjAHS63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbjAHS6C (ORCPT
+        with ESMTP id S236095AbjAHS6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 13:58:02 -0500
+        Sun, 8 Jan 2023 13:58:03 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D418E01D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFACE00F
         for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 10:58:02 -0800 (PST)
 Received: from dslb-188-096-147-053.188.096.pools.vodafone-ip.de ([188.96.147.53] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pEark-0003b8-GJ; Sun, 08 Jan 2023 19:57:56 +0100
+        id 1pEarl-0003b8-JN; Sun, 08 Jan 2023 19:57:57 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 08/13] staging: r8188eu: remove unused hal_xmit_handler define
-Date:   Sun,  8 Jan 2023 19:57:33 +0100
-Message-Id: <20230108185738.597105-9-martin@kaiser.cx>
+Subject: [PATCH 09/13] staging: r8188eu: txirp_cnt is write-only
+Date:   Sun,  8 Jan 2023 19:57:34 +0100
+Message-Id: <20230108185738.597105-10-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230108185738.597105-1-martin@kaiser.cx>
 References: <20230108185738.597105-1-martin@kaiser.cx>
@@ -44,25 +44,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hal_xmit_handler is not used by the r8188eu driver. Remove it.
+txirp_cnt in struct xmit_priv is initialised but never read. Remove it.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/include/rtl8188e_xmit.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c    | 2 --
+ drivers/staging/r8188eu/include/rtw_xmit.h | 1 -
+ 2 files changed, 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_xmit.h b/drivers/staging/r8188eu/include/rtl8188e_xmit.h
-index 82439f52b0c8..230ea191d256 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_xmit.h
-@@ -134,7 +134,6 @@ void rtl8188e_fill_fake_txdesc(struct adapter *padapter, u8 *pDesc,
- s32 rtl8188eu_hal_xmit(struct adapter *padapter, struct xmit_frame *frame);
- s32 rtl8188eu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *frame);
- s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter);
--#define hal_xmit_handler rtl8188eu_xmit_buf_handler
- void rtl8188eu_xmit_tasklet(unsigned long priv);
- bool rtl8188eu_xmitframe_complete(struct adapter *padapter,
- 				 struct xmit_priv *pxmitpriv);
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 8211b858573f..1cd560630de3 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -192,8 +192,6 @@ int _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 	for (i = 0; i < 4; i++)
+ 		pxmitpriv->wmm_para_seq[i] = i;
+ 
+-	pxmitpriv->txirp_cnt = 1;
+-
+ 	pxmitpriv->ack_tx = false;
+ 	mutex_init(&pxmitpriv->ack_tx_mutex);
+ 	rtw_sctx_init(&pxmitpriv->ack_tx_ops, 0);
+diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
+index 7e6cf745d913..50d9311d3e40 100644
+--- a/drivers/staging/r8188eu/include/rtw_xmit.h
++++ b/drivers/staging/r8188eu/include/rtw_xmit.h
+@@ -279,7 +279,6 @@ struct	xmit_priv {
+ 	u8	wmm_para_seq[4];/* sequence for wmm ac parameter strength
+ 				 * from large to small. it's value is 0->vo,
+ 				 * 1->vi, 2->be, 3->bk. */
+-	u8		txirp_cnt;/*  */
+ 	struct tasklet_struct xmit_tasklet;
+ 	struct __queue free_xmitbuf_queue;
+ 	struct __queue pending_xmitbuf_queue;
 -- 
 2.30.2
 
