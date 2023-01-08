@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F5F6619B3
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FD96619C2
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjAHVGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S236355AbjAHVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbjAHVFm (ORCPT
+        with ESMTP id S236516AbjAHVHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:05:42 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F42D12D
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:05:41 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id B30B93200902;
-        Sun,  8 Jan 2023 16:05:35 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 08 Jan 2023 16:05:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673211935; x=
-        1673298335; bh=pUPs+EkCFiCPXYcQoKQVXsqro1oCfJTpGNmhzqFvsCE=; b=b
-        4RYkep8eFUnwHzuX0jJBFm5yZwZ2laJhH2iBe7+CsYKIYLCO/SCjO0NiNisgnU1J
-        u4287rWOEyAaFQApd4n8fq4FeboJZSPEW/uhPPg4F8Yjqaf7IQzQgVq9SoQ+Uw9Q
-        UgQcJAm1i6FQlJAxv/3xP3HLvpopzx1zt+rJ/N7VG+sKaJCc642cmL5OiTU4CmOC
-        MypQDSvWzGivAWTa4y/XDvLQbC67A2cG+wew4G2O1w8Rj2/9FcZYcEtK/QI34vu1
-        b+jVg7b9mx8gzpUa1VyeAtqvh8HJ0Eyek6h9YbfwOny7PB1A6w48USKN4R1jcco0
-        8fETYKfE3vmFc8iibGUgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673211935; x=
-        1673298335; bh=pUPs+EkCFiCPXYcQoKQVXsqro1oCfJTpGNmhzqFvsCE=; b=g
-        lfyPUrPGZ1Uwu4SN32xkOFUHQNIFFiTHBvK4nkTAgAQ4jWORLyvtG+t2U82D4DBz
-        jdKcvxiDmkn7O0QdgMeM0JN2+cYex6Qni5LdkO+NQlpU7D/5+gcQd54NViGscR0o
-        0xo5MJ0pFLBZb9fYHBkgh7njdWfkQmPTMOuBfEyGR7sfJxGfjsocWH4WsrMWOG7e
-        28VDgYrNyn3cOo876xIxC9bNZmCfhT7EA2g85DEg+ehmzJsbUxl0gnD2z3HsDtff
-        Npus1Jfh7vLbW0exL5dxGWoy2+/pXJnI2130zkb2rBOsaA73F61re0t2zJVY6/YJ
-        wF5EUsut9ZO1VIoV/9cjg==
-X-ME-Sender: <xms:HTC7Y_CEW_uLvaJKC2FhCQuRVnL6B40-M1CrpxJ6FqaodMKwvie1mA>
-    <xme:HTC7Y1hWnTRhS5wRAswFRRHz1r1V2nUHKG43sqTpMJSvATQtWUYglKUdpFNK4CaK6
-    lSFSsAy0mopaW-OD1w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeggddugeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:HTC7Y6krEaOyr_AHOikq6Us76cEY1eRpKHj_CsfIZSylHfNVOj2pDg>
-    <xmx:HTC7YxzZOO5MHKFM4LYl6IskqMh1bnG3JMT46jFpoHwWo74FxPb7cQ>
-    <xmx:HTC7Y0RdVysJLL7pm7P6-i7JymW0VK4BWMEc1F0tIuV6w6KPV4AFcw>
-    <xmx:HzC7Y8JasOtAv4M6ztagNAaQjnd0pStOm1Rs7gGO6s5P-42PD9dHWw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 95AE3B60086; Sun,  8 Jan 2023 16:05:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <7a57b319-a774-4f97-af06-fe1a637a45ce@app.fastmail.com>
-In-Reply-To: <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-2-arnd@kernel.org>
- <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
- <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
- <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
- <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
- <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com>
- <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
-Date:   Sun, 08 Jan 2023 22:05:14 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dmitry Baryshkov" <dbaryshkov@gmail.com>
-Cc:     "Richard Purdie" <richard.purdie@linuxfoundation.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Ales Bardorfer" <ales@i-tech.si>,
-        "Ales Snuparek" <snuparek@atlas.cz>,
-        "Alex Osborne" <ato@meshy.org>,
-        "Alex Osborne" <bobofdoom@gmail.com>,
-        "Dirk Opfer" <dirk@opfer-online.de>, "Ian Molton" <spyro@f2s.com>,
-        "Lennert Buytenhek" <kernel@wantstofly.org>,
-        "Marek Vasut" <marek.vasut@gmail.com>,
-        "Michael Petchkovsky" <mkpetch@internode.on.net>,
-        "Nick Bane" <nick@cecomputing.co.uk>,
-        "Paul Parsons" <lost.distance@yahoo.com>,
-        "Philipp Zabel" <philipp.zabel@gmail.com>,
-        "Sergey Lapin" <slapin@ossfans.org>,
-        "Tomas Cech" <sleep_walker@suse.cz>,
-        "Linus Walleij" <linusw@kernel.org>,
-        "Marc Zyngier" <maz@kernel.org>
-Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
-Content-Type: text/plain;charset=utf-8
+        Sun, 8 Jan 2023 16:07:43 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB2811A1A;
+        Sun,  8 Jan 2023 13:06:49 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id u9so15670188ejo.0;
+        Sun, 08 Jan 2023 13:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IqsPmxN00edrHGi0cQNfG1ZlbY68R6DFWjN9C23HMdo=;
+        b=VLyhUT2siNF/GSpeQqo7AyhTHW46LJ63JExQJ9DPEjLKXoAnnbjmcx/ecVZO9VXvhX
+         nmQQ82mcK28Fl39xCf6NLwKIEcdwiX75riNMwp08TbxTa1mU4VGxa1xt2+Nhyv5+MCv2
+         Hc+xIurh3N1XZg0G/o47EnAp3vHlsFZDvdD+bXChWkv8KHoj4sWQWEYHft2h0AlnLm0E
+         jlwvhMGiGD6YkXESMqqe0dtAN82zEKXACnXgbB0WC4w/gRLBcZHpKASu3bTlIzSZJkDX
+         B+mwq+pPR345I7H3/1Oyh6lJ5YB6XiicQ5Z9Y+4vXMjVII5wq8qZQQ0Sx2jQ8BS34IVF
+         PP9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IqsPmxN00edrHGi0cQNfG1ZlbY68R6DFWjN9C23HMdo=;
+        b=tx0AOxtNFhgoN43kaAmGGB/E0iMrklGVPmIgh+g94kge4NbiUV/t5+mmRewEB12SZB
+         rtZM7vINrjVnZKrfLXeU01NkJ5C1ZNG6oxC/h4OsFulP9rW6UGEGurVfy+PIb0j4jckK
+         Gj5SugTmFKeRqGfGEMrNBLFfw/WrVmHN96MwErm1gwfF5w5qQXm96g6EF3+4agagrahG
+         fsLGeKvE/X1XI3Qv++kVQjYmER4yziR3tyHE2W0mA7XFlwe5calfsZmAGs7akHi4Yksw
+         DxbdRG0eYt3/knf0P3kjgpRL1M/10qGLSf9xFWVw6iVqE9p8ggM3Lha+9tgcd3w43yMQ
+         fMaA==
+X-Gm-Message-State: AFqh2kpeXG40cdQNmGJD8gBAPMzYbGQf7/Hn3Hmnp454J5yGCRwzT9Jr
+        Omz7ZzfqZurULjTJSQ+f9V4=
+X-Google-Smtp-Source: AMrXdXuvFsQDJJdexEZkEdb0clbew5BO+rs+TUYwxrWPyE3UnE9MdiC0wJkhwmAFYA0l93S8SSIrrA==
+X-Received: by 2002:a17:906:9d8e:b0:84d:3921:11e2 with SMTP id fq14-20020a1709069d8e00b0084d392111e2mr3481848ejc.58.1673212007713;
+        Sun, 08 Jan 2023 13:06:47 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id d9-20020a1709063ec900b007c0d6b34d54sm2919231ejj.129.2023.01.08.13.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 13:06:47 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 0/6] clk: sunxi-ng: Allwinner R528/T113 clock support
+Date:   Sun, 08 Jan 2023 22:06:46 +0100
+Message-ID: <4275771.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20221231231429.18357-1-samuel@sholland.org>
+References: <20221231231429.18357-1-samuel@sholland.org>
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,57 +83,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023, at 11:06, Dmitry Baryshkov wrote:
-> =D0=BF=D1=82, 6 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 11:47, Arnd Be=
-rgmann <arnd@arndb.de>:
->> > Is there any conversion to DT you can easily point at as an example=
- of
->> > the kinds of changes needed?
->>
->> Robert Jarzmik and Daniel Mack worked on the conversion of the
->> PXA platform to DT. Daniel contributed the port for Raumfeld,
->> which should be complete, while Robert worked on more driver
->> conversions and mentioned[1] that he had converted additional
->> boards in the past but did not merge it upstream. They
->> can probably point you to whatever is missing. I would expect
->> the generic PXA drivers (spi, mmc, nand, i2c, audio, fb, gpio,
->> keypad) to  basically work work a correct DT description,
->> while the machine specific drivers (scoop and pcmcia mainly)
->> will need DT support in the driver.
->>
->> In addition, Linus Walleij and Marc Zyngier have both expressed
->> interest in keeping sa1100 (h3600, collie, assabet, jornada720)
->> alive, but those don't have any DT support yet and require
->> much more work. Also note that while you can now build a kernel
->> that includes support for all little-endian ARMv4T and ARMv5
->> machines, StrongARM machine still require a separate kernel
->> build.
->
-> I looked into converting collie to use DT several years ago. The major
-> problem was not in the StrongARM itself , but rather in the locomo
-> (platform-specific ASIC) and PCMCIA. Unfortunately I abandoned that
-> work ages ago. RMK didn't seem to be very interested, if I remember
-> correclty.
+Dne nedelja, 01. januar 2023 ob 00:14:23 CET je Samuel Holland napisal(a):
+> R528 and T113 are SoCs based on the same design as D1/D1s, but with ARM
+> CPUs instead of RISC-V. They use the same CCU implementation, meaning
+> the CCU has gates/resets for all peripherals present on any SoC in this
+> family. I verified the CAN bus bits are also present on D1/D1s.
+>=20
+> Patches 1-2 clean up the Kconfig in preparation for patch 3, which
+> allows building the driver. Patches 4-6 add the missing binding header
+> and driver bits.
+>=20
+> Changes in v2:
+>  - Expand commit message
+>  - Move dt-bindings header changes to a separate patch
+>=20
+> Andr=C3=A1s Szemz=C5=91 (1):
+>   clk: sunxi-ng: d1: Mark cpux clock as critical
+>=20
+> Fabien Poussin (1):
+>   clk: sunxi-ng: d1: Add CAN bus gates and resets
+>=20
+> Samuel Holland (4):
+>   clk: sunxi-ng: Remove duplicate ARCH_SUNXI dependencies
+>   clk: sunxi-ng: Move SoC driver conditions to dependencies
+>   clk: sunxi-ng: d1: Allow building for R528/T113
+>   dt-bindings: clock: Add D1 CAN bus gates and resets
+>=20
+>  drivers/clk/sunxi-ng/Kconfig              | 71 ++++++++++++-----------
+>  drivers/clk/sunxi-ng/ccu-sun20i-d1.c      | 13 ++++-
+>  drivers/clk/sunxi-ng/ccu-sun20i-d1.h      |  2 +-
+>  include/dt-bindings/clock/sun20i-d1-ccu.h |  2 +
+>  include/dt-bindings/reset/sun20i-d1-ccu.h |  2 +
+>  5 files changed, 53 insertions(+), 37 deletions(-)
 
-At least locomo and sa1111 are both private to mach-sa1100
-now and no longer shared with pxa, so this should get
-a little easier. When I had last looking into cleaning up
-sa1100, my impression was that the main work would be converting
-most of the drivers to use dynamic resources instead of
-hardcoded addresses and interrupts. Looking at locomo again,
-my feeling is that this could remain largely unchanged,
-as the locomo downstream drivers (led, keyboard, lcd)
-are already abstracted enough and locomo itself can
-just be an mfd or soc driver.
+Applied, thanks!
 
-> I suspect that the platforms might need to be rebootstrapped from the
-> ground up. This sounds like a fun project for the next Connect demo :D
->
-> BTW: collie is also supported by the qemu (in fact at some point I
-> mostly used qemu for debugging collie). I don't think that the LCD
-> emulation works, but the rest should be mostly good.
+Best regards,
+Jernej
 
-Good to know about the LCD. The qemu support was clearly a
-strong reason for keeping this machine vs the others.
 
-     Arnd
+
