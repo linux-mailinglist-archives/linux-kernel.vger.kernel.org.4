@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBBD6617F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD30A6617FD
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 19:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236340AbjAHSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 13:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S236206AbjAHSS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 13:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233687AbjAHSSQ (ORCPT
+        with ESMTP id S233790AbjAHSSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 8 Jan 2023 13:18:16 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA52662DA
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 10:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673201891; bh=IgoNEV5yFSKde2udFiWluKLPJ7OsKHGGrG8yniFDmj0=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=nOidRUIvUN+iZDj0pPD/4vHl88ihXA7bhBSMXZoW6266vijwv5pIN8dTopgSLU5bI
-         D+a868RRIN+5twMOajHYXzywxq4tzcMSwN53ml/LYYvO68t4f2zKHNg6KgRePLLxFV
-         0ksX2YGlJo6b9jkEi9iXvbqTbAwfiIlYPxjv1mqU=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sun,  8 Jan 2023 19:18:11 +0100 (CET)
-X-EA-Auth: uSLRv9qm1A2QZhhWGvwGYiljfDZ+2JdiWqJ2qFwUVf6G/CL13xgh6G4tdbTTguHIluCGKvFQHETRz297YmTXSFuT/a4VFyRv
-Date:   Sun, 8 Jan 2023 23:48:07 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     joey.gouly@arm.com
-Subject: Re: incorrect git diff output
-Message-ID: <Y7sI36KCF8LRP8H0@ubun2204.myguest.virtualbox.org>
-References: <Y7qA4o/JoWhfpvfk@ubun2204.myguest.virtualbox.org>
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027672E8;
+        Sun,  8 Jan 2023 10:18:14 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id o8so3850698ilo.1;
+        Sun, 08 Jan 2023 10:18:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7qhxtUq7YNJ7bl3pCYJbfdTHCaAMCit6bh55+/X+rmU=;
+        b=4TwODypv1pnOx//3N5uVFxg7bNVq7BuCVVD7sudY2QTbTShsWblCdwpKFgx2M0YpXA
+         wfDRBsTh2DNdwU2yR35Oxvp9UvydQt0J6LGzNFABWm1svCyO9ycjfMdi2ZJkJrdTYLA0
+         yV20XMnTYxLF70fwjo4sz/h7ex8Sje+Xl3W4tx65M+EL/yTAhBM43Lw5BQ2GCsd5JJll
+         Crlj5l1PhQ/XuDVHAUH9KAcmcrBeyc9b5v2CUDjcNiTrXid7gf3Pc6tnqUWoxsHKeJK5
+         yIbaFd2ibA/UVo4qiYLr0R2T//dmVLkChFe4TzxyLjQ/g8QQkh+4IjPPk58yVFh5KWQ6
+         ZKsg==
+X-Gm-Message-State: AFqh2kpjhKoKynx5XWgbfEc2Alsf4kBuCRWCVDe8onLMWaw/1v5nJiYG
+        nTI1kPBjKdpW3TcXrvLNMqbYv2E2Fg==
+X-Google-Smtp-Source: AMrXdXuvuxlOZv43Hc7jd8DEjfpKrIPqUnXGxYvEFgPC7BV1GuYTYK2rTUEp1jqzy7R/MWzKXM/rdA==
+X-Received: by 2002:a92:cc92:0:b0:2ff:f702:e446 with SMTP id x18-20020a92cc92000000b002fff702e446mr38179990ilo.13.1673201893158;
+        Sun, 08 Jan 2023 10:18:13 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:516a:f2b0:691e:4315:7c0f])
+        by smtp.gmail.com with ESMTPSA id l14-20020a92700e000000b0030c27c9eea4sm2038878ilc.33.2023.01.08.10.18.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 10:18:12 -0800 (PST)
+Received: (nullmailer pid 162937 invoked by uid 1000);
+        Sun, 08 Jan 2023 18:18:09 -0000
+Date:   Sun, 8 Jan 2023 12:18:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/8] media: dt-bindings: qcom,venus: cleanup
+Message-ID: <167320188857.162862.16846104706244476575.robh@kernel.org>
+References: <20221227144102.79391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7qA4o/JoWhfpvfk@ubun2204.myguest.virtualbox.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221227144102.79391-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 02:07:54PM +0530, Deepak R Varma wrote:
-> Hello,
-> I tried to remove an extra semicolon on line number 1153 of this file
-> drivers/scsi/qlogicpti.c and attempted a git diff to confirm my edits. To my
-> surprise, the diff contained few other unrelated changes that I did not do. I
-> tied to set aurocr git attribute in the .gitconfig file, but that did not help
-> either.
+
+On Tue, 27 Dec 2022 15:40:55 +0100, Krzysztof Kozlowski wrote:
+> Cleanup the Qualcomm SoC Venus bindings:
+>  - Drop unneeded blank lines and quotes,
+>  - Fix indentation in example to 4-space (to match DT schema bindings
+>    style),
+>  - Add SoC name in each title.
 > 
-> Does anyone know about this behavior and how to correct it?
-
-
-I had a setting in my .vimrc which auto-removes trailing spaces. Joey helped me
-identify the same.
-
-Thank you Joey!
-
-Regards,
-./drv
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/media/qcom,msm8916-venus.yaml    |  51 ++++----
+>  .../bindings/media/qcom,msm8996-venus.yaml    | 103 ++++++++---------
+>  .../bindings/media/qcom,sc7180-venus.yaml     |  61 +++++-----
+>  .../bindings/media/qcom,sc7280-venus.yaml     |  93 ++++++++-------
+>  .../bindings/media/qcom,sdm660-venus.yaml     | 109 +++++++++---------
+>  .../bindings/media/qcom,sdm845-venus-v2.yaml  |  71 ++++++------
+>  .../bindings/media/qcom,sdm845-venus.yaml     |  69 ++++++-----
+>  .../bindings/media/qcom,sm8250-venus.yaml     |  83 +++++++------
+>  8 files changed, 316 insertions(+), 324 deletions(-)
 > 
-> Thank you,
-> ./drv
 
-
+Reviewed-by: Rob Herring <robh@kernel.org>
