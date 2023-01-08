@@ -2,141 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890CA6616D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D9A6616DD
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbjAHQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 11:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S233171AbjAHQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 11:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjAHQon (ORCPT
+        with ESMTP id S230052AbjAHQvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 11:44:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66CF1092
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 08:43:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673196238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3N60ZM47durAt2eYzES+eC+6e822LLlnoCx24xYvH/s=;
-        b=WQDzvMUZMLZ6006FbXeME9K6lsfbPuFzofAkQI5XuIqpPZANVgoT1W+o6sAm5rYOxDj7mQ
-        n/ksCQwpnEg5qw8a52DdzIrATCZpGV48ZqerC+EVGvLKDo/vd6+1UrTzzfy48xSNp8M7HK
-        AhzsSFs4bLmWOogOYtslNvb5ySi9XT4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-383-3jMnyVmGNp2D2S91xz-V6g-1; Sun, 08 Jan 2023 11:43:56 -0500
-X-MC-Unique: 3jMnyVmGNp2D2S91xz-V6g-1
-Received: by mail-ej1-f71.google.com with SMTP id hd17-20020a170907969100b007c117851c81so4016561ejc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 08:43:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3N60ZM47durAt2eYzES+eC+6e822LLlnoCx24xYvH/s=;
-        b=MnQ39n+lAojJ51Ny/512t3/q3rU1nxPzp+Vbq+IHycWuKF3GViM+1a77fREjM6Np3r
-         plFJ1qqh9/SxQJ6oWL3BeNH471ViKar1MZjGNcDvfGe+0P6+pGU3zzmyjwY4KH6bsWY0
-         YeM4puvx6VE4RD/CyuNvSWlUUhdCaqVhC1OFnwe9yeswbbhwCz5hg2VLH02W+7Jadt5L
-         lcoUg+a1tRHGkTh5eOWBFwjgcvpJqgx/GJuQyrphE1eGIBSEtIVrzMf9A+lTggE4t0eL
-         FCzmGfHTaailKI1QZK/S1em9FlUBiqJ+Gc0we0D1LZ3GEi85HjaLgquTaJIGb73RjG+v
-         NVpg==
-X-Gm-Message-State: AFqh2krXsrvL4KEMl6sEC7KQisa99GoWV3cpvpakB928M+NSU7G0G+DD
-        HX+a8nFr7K9qkZDMN1WjI96/uHj3TiPszT5XzPWIJR/WZM8llHgbkAdAwJEBShJc3pSgu7cQGzr
-        iRyFfff8iCj6IpEnigR9INOiE
-X-Received: by 2002:a17:906:3a85:b0:7c4:f0b5:fedc with SMTP id y5-20020a1709063a8500b007c4f0b5fedcmr52650428ejd.65.1673196235833;
-        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsyCEFH40Wu7vN3fEiG8h91Ev3TxQ4PGRLsJ7MMAsL9JzoRs+qc4MgF8mePuVUJhiyTZEbyiw==
-X-Received: by 2002:a17:906:3a85:b0:7c4:f0b5:fedc with SMTP id y5-20020a1709063a8500b007c4f0b5fedcmr52650420ejd.65.1673196235689;
-        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170906078600b0084d381d0528sm1443478ejc.180.2023.01.08.08.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 08:43:55 -0800 (PST)
-Message-ID: <5e3d6e7c1039d79a867eadd6c849717f71e34024.camel@redhat.com>
-Subject: Re: [PATCH 3/6] KVM: x86: Mark x2APIC DFR reg as non-existent for
- x2APIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
-        Venkatesh Srinivas <venkateshs@chromium.org>
-Date:   Sun, 08 Jan 2023 18:43:53 +0200
-In-Reply-To: <20230107011025.565472-4-seanjc@google.com>
-References: <20230107011025.565472-1-seanjc@google.com>
-         <20230107011025.565472-4-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Sun, 8 Jan 2023 11:51:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9790E646F;
+        Sun,  8 Jan 2023 08:51:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A61EB80B57;
+        Sun,  8 Jan 2023 16:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8226CC433D2;
+        Sun,  8 Jan 2023 16:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673196661;
+        bh=Qe/eO9zN1m73qj2kFmidTrQ9cFufjLEB3fslciiYZs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BtebHmmqrThyQ1nswpd1Xn9WtSyyL3ea2mf1WfLNjmglnsJNbDmuWJ6ko1LEgYmXC
+         PZ4OT6gM2JbWCL67GifNyHhySNe7V3TQ5y8K8/YQHKflYi5khRP52dymRfHWnBcPtk
+         y8YO9CM10bkbTkpZABs3BAQgkdk3nGyPPT97DsyFmfiqF4rSQfVCX1e8HCPaOcsVek
+         bPbh2R+rcX57lUzndqdcxEgM1wFtyKEMjanSZcTBDNzw+cm1L4KCX6rpWr+bRXvPBJ
+         uKS13hWoKkLm8qUTBCwlyNwENMJJgH4SauhiBw0fDEQZfTCVQbA589gPZAZfIOnz0O
+         owXuZ6ha7SgoA==
+Date:   Sun, 8 Jan 2023 18:50:45 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Aaron Thompson <dev@aaront.org>
+Cc:     linux-mm@kvack.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v3 1/1] mm: Always release pages to the buddy allocator
+ in memblock_free_late().
+Message-ID: <Y7r0ZRlwvCK0xOnQ@kernel.org>
+References: <20230106222222.1024-1-dev@aaront.org>
+ <01010185892de53e-e379acfb-7044-4b24-b30a-e2657c1ba989-000000@us-west-2.amazonses.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01010185892de53e-e379acfb-7044-4b24-b30a-e2657c1ba989-000000@us-west-2.amazonses.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-07 at 01:10 +0000, Sean Christopherson wrote:
-> Mark APIC_DFR as being invalid/non-existent in x2APIC mode instead of
-> handling it as a one-off check in kvm_x2apic_msr_read().  This will allow
-> reusing "valid_reg_mask" to generate VMX's interception bitmaps for
-> x2APIC.  Handling DFR in the common read path may also fix the Hyper-V
-> PV MSR interface, if that can coexist with x2APIC.
+On Fri, Jan 06, 2023 at 10:22:44PM +0000, Aaron Thompson wrote:
+> If CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, memblock_free_pages()
+> only releases pages to the buddy allocator if they are not in the
+> deferred range. This is correct for free pages (as defined by
+> for_each_free_mem_pfn_range_in_zone()) because free pages in the
+> deferred range will be initialized and released as part of the deferred
+> init process. memblock_free_pages() is called by memblock_free_late(),
+> which is used to free reserved ranges after memblock_free_all() has
+> run. All pages in reserved ranges have been initialized at that point,
+> and accordingly, those pages are not touched by the deferred init
+> process. This means that currently, if the pages that
+> memblock_free_late() intends to release are in the deferred range, they
+> will never be released to the buddy allocator. They will forever be
+> reserved.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> In addition, memblock_free_pages() calls kmsan_memblock_free_pages(),
+> which is also correct for free pages but is not correct for reserved
+> pages. KMSAN metadata for reserved pages is initialized by
+> kmsan_init_shadow(), which runs shortly before memblock_free_all().
+> 
+> For both of these reasons, memblock_free_pages() should only be called
+> for free pages, and memblock_free_late() should call __free_pages_core()
+> directly instead.
+> 
+> One case where this issue can occur in the wild is EFI boot on
+> x86_64. The x86 EFI code reserves all EFI boot services memory ranges
+> via memblock_reserve() and frees them later via memblock_free_late()
+> (efi_reserve_boot_services() and efi_free_boot_services(),
+> respectively). If any of those ranges happens to fall within the
+> deferred init range, the pages will not be released and that memory will
+> be unavailable.
+> 
+> For example, on an Amazon EC2 t3.micro VM (1 GB) booting via EFI:
+> 
+> v6.2-rc2:
+>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>   Node 0, zone      DMA
+>           spanned  4095
+>           present  3999
+>           managed  3840
+>   Node 0, zone    DMA32
+>           spanned  246652
+>           present  245868
+>           managed  178867
+> 
+> v6.2-rc2 + patch:
+>   # grep -E 'Node|spanned|present|managed' /proc/zoneinfo
+>   Node 0, zone      DMA
+>           spanned  4095
+>           present  3999
+>           managed  3840
+>   Node 0, zone    DMA32
+>           spanned  246652
+>           present  245868
+>           managed  222816   # +43,949 pages
+> 
+> Fixes: 3a80a7fa7989 ("mm: meminit: initialise a subset of struct pages if CONFIG_DEFERRED_STRUCT_PAGE_INIT is set")
+> Signed-off-by: Aaron Thompson <dev@aaront.org>
+
+Applied, thanks!
+
 > ---
->  arch/x86/kvm/lapic.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+>  mm/memblock.c                     | 8 +++++++-
+>  tools/testing/memblock/internal.h | 4 ++++
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index bf53e4752f30..c49b13418638 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -1541,7 +1541,6 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
->  		APIC_REG_MASK(APIC_TASKPRI) |
->  		APIC_REG_MASK(APIC_PROCPRI) |
->  		APIC_REG_MASK(APIC_LDR) |
-> -		APIC_REG_MASK(APIC_DFR) |
->  		APIC_REG_MASK(APIC_SPIV) |
->  		APIC_REGS_MASK(APIC_ISR, APIC_ISR_NR) |
->  		APIC_REGS_MASK(APIC_TMR, APIC_ISR_NR) |
-> @@ -1562,12 +1561,13 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
->  		valid_reg_mask |= APIC_REG_MASK(APIC_LVTCMCI);
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 511d4783dcf1..fc3d8fbd2060 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1640,7 +1640,13 @@ void __init memblock_free_late(phys_addr_t base, phys_addr_t size)
+>  	end = PFN_DOWN(base + size);
 >  
->  	/*
-> -	 * ARBPRI and ICR2 are not valid in x2APIC mode.  WARN if KVM reads ICR
-> -	 * in x2APIC mode as it's an 8-byte register in x2APIC and needs to be
-> -	 * manually handled by the caller.
-> +	 * ARBPRI, DFR, and ICR2 are not valid in x2APIC mode.  WARN if KVM
-> +	 * reads ICR in x2APIC mode as it's an 8-byte register in x2APIC and
-> +	 * needs to be manually handled by the caller.
->  	 */
->  	if (!apic_x2apic_mode(apic))
->  		valid_reg_mask |= APIC_REG_MASK(APIC_ARBPRI) |
-> +				  APIC_REG_MASK(APIC_DFR) |
->  				  APIC_REG_MASK(APIC_ICR2);
->  	else
->  		WARN_ON_ONCE(offset == APIC_ICR);
-> @@ -3141,9 +3141,6 @@ int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data)
->  	if (!lapic_in_kernel(vcpu) || !apic_x2apic_mode(apic))
->  		return 1;
->  
-> -	if (reg == APIC_DFR)
-> -		return 1;
-> -
->  	return kvm_lapic_msr_read(apic, reg, data);
+>  	for (; cursor < end; cursor++) {
+> -		memblock_free_pages(pfn_to_page(cursor), cursor, 0);
+> +		/*
+> +		 * Reserved pages are always initialized by the end of
+> +		 * memblock_free_all() (by memmap_init() and, if deferred
+> +		 * initialization is enabled, memmap_init_reserved_pages()), so
+> +		 * these pages can be released directly to the buddy allocator.
+> +		 */
+> +		__free_pages_core(pfn_to_page(cursor), 0);
+>  		totalram_pages_inc();
+>  	}
 >  }
+> diff --git a/tools/testing/memblock/internal.h b/tools/testing/memblock/internal.h
+> index fdb7f5db7308..85973e55489e 100644
+> --- a/tools/testing/memblock/internal.h
+> +++ b/tools/testing/memblock/internal.h
+> @@ -15,6 +15,10 @@ bool mirrored_kernelcore = false;
 >  
+>  struct page {};
+>  
+> +void __free_pages_core(struct page *page, unsigned int order)
+> +{
+> +}
+> +
+>  void memblock_free_pages(struct page *page, unsigned long pfn,
+>  			 unsigned int order)
+>  {
+> -- 
+> 2.30.2
+> 
 
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Best regards,
-	Maxim Levitsky
-
+-- 
+Sincerely yours,
+Mike.
