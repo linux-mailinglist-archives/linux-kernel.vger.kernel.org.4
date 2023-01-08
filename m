@@ -2,175 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28DB6618D4
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1546618DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 20:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbjAHTvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 14:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S233293AbjAHTyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 14:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbjAHTvC (ORCPT
+        with ESMTP id S233826AbjAHTx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 14:51:02 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C42D102
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:51:01 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so9960579lfb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 11:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aU2zr2iZRkwdiLRZc2HQ0PPfl5aKsrDvsWOmQ2ZkJHg=;
-        b=l8FngI+xGJZlNcTM9+XmMERicEgz/5P3iHfWvWkMRn6LZssTgmJ5JRoi5JWQ/L1hFo
-         AFXrvzTfnw4f/mp7K0uidlDpjw8gPohaXp3K3fLcrDLsaYEIUg2fD7TXh0EK9KE0xdqj
-         ziUIaWWE4spaz4hriq1Rj3+eZyCLs1uHQHVoOyX9LbAzJyQo22pKMh9H6xjX1tlXwDmw
-         NnvsH0lkEBb7vN1I5brydC6WheZYLSHjK524qAd9nCaliS0qlPtVefJiqT6GpZrT7Kzh
-         T56tLkYuh0onrcXgmR/azzCeQeQaLnSDHi6gJ9a4h1cbH+qPCs6DoD++7a3Uj8CkaSOt
-         6ZBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aU2zr2iZRkwdiLRZc2HQ0PPfl5aKsrDvsWOmQ2ZkJHg=;
-        b=FbAFnEcKtuUSFJ7vLq/U6h5iwHuTV+MSTcREvhnHetjUWzDZgQcEcXNor6FQKlvXOW
-         se9U/S2yQ3xT5ugmxXhy0E1H4A78T1jQKzpnorFYBzLUDzgjpxyEN1qJrrvrUGdGL00+
-         OdAqbGDJ0xnVEVvaw2UKCcCqzEEYWsaKIGOiuajYbOg1w8PO0m0632La2mmaCEsR0A7j
-         nHur2eu4YhgX/z8OnWuVbMP3fohlTZf0SExOo21j36f/EFB4JjzylchDNwYLSAeLuYBS
-         YwUpKvonV4zS+Uy3KCx2X98H4qEPY7porH76EszGQ6yrzIJY6wB5FPLOq1lmblrNS6uw
-         l5CQ==
-X-Gm-Message-State: AFqh2koJQl4gIcI0eQ/yUcvEiEIlQXzzxjIZizOaQLCxM7GPeE1n8Dar
-        Jmfs+CcY9UMLsFZo2OAifK3m7A==
-X-Google-Smtp-Source: AMrXdXuRHLdXdNlP7oB+NQEBE/FcVjlDNWgmLu8baXnF3TfOWniqnR4Uz8byWcOB2WEHJt4MHG7fEg==
-X-Received: by 2002:ac2:48a5:0:b0:4b6:ed1d:38e9 with SMTP id u5-20020ac248a5000000b004b6ed1d38e9mr17209222lfg.64.1673207459424;
-        Sun, 08 Jan 2023 11:50:59 -0800 (PST)
-Received: from localhost ([85.202.81.211])
-        by smtp.gmail.com with ESMTPSA id s11-20020a056512314b00b004b592043413sm1202685lfi.12.2023.01.08.11.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 11:50:58 -0800 (PST)
-Date:   Sun, 8 Jan 2023 19:50:56 +0000
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     David Rientjes <rientjes@google.com>
-Cc:     linux-crypto@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: ccp: Improve sev_platform_init() error messages
-Message-ID: <Y7seoGQpTy6LYQZU@profian.com>
-References: <20221231151106.143121-1-jarkko@profian.com>
- <6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com>
+        Sun, 8 Jan 2023 14:53:59 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BB0D138
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 11:53:58 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4Nqnnw6WPxz1S5FP
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 14:53:56 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:mime-version:x-mailer:message-id:date
+        :subject:to:from; s=dkim; t=1673207636; x=1674071637; bh=9dsgbhg
+        A9vnJIYjG6YuVbFl47O4RVEcVJHNR4rpiPy0=; b=pXks/KWScelK/lBld7jZJZo
+        b4I5e0ozw49Dhv0+vcX9G5q9mK1iPpe8mpFMU0CC8M6Kv+qr27mPl1dnTQU6lEXn
+        X95pVy3nMlpLa7nYkcGO0IJx7G5YRTKz603oydBk45+qj4AXQ7mmmPQKhVSfy9c2
+        V+AhsGQAxhCzRwxGVFQf9QNisS0ves8+2wK1lvehW+8M1SXbaCXaYDxWymu/yJmo
+        gBIgAZAqdt5ZNeeCIHlGfKwY8MlOXy7MfXW+5YvbfvpTxF9jyU/0EnzKgVBrG1QL
+        6hBym9KB6RGEHx7N/+WodRy4aJZOOslAl8KJgJSWxcoqQGUaFSo6KlpT+tRUSfg=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id FxydZ2TrYj1r for <linux-kernel@vger.kernel.org>;
+        Sun,  8 Jan 2023 14:53:56 -0500 (EST)
+Received: from dorothy.. (unknown [186.105.5.197])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4Nqnnj34NHz1S56d;
+        Sun,  8 Jan 2023 14:53:45 -0500 (EST)
+From:   Lux Aliaga <they@mint.lgbt>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+Subject: [PATCH v6 0/6] arm64: dts: qcom: sm6125: UFS and xiaomi-laurel-sprout support
+Date:   Sun,  8 Jan 2023 16:53:30 -0300
+Message-Id: <20230108195336.388349-1-they@mint.lgbt>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 07:18:30PM -0800, David Rientjes wrote:
-> On Sat, 31 Dec 2022, Jarkko Sakkinen wrote:
-> 
-> > The following functions end up calling sev_platform_init() or
-> > __sev_platform_init_locked():
-> > 
-> > * sev_guest_init()
-> > * sev_ioctl_do_pek_csr
-> > * sev_ioctl_do_pdh_export()
-> > * sev_ioctl_do_pek_import()
-> > * sev_ioctl_do_pek_pdh_gen()
-> > * sev_pci_init()
-> > 
-> > However, only sev_pci_init() prints out the failed command error code, and
-> > even there the error message does not specify, SEV which command failed.
-> > 
-> > Address this by printing out the SEV command errors inside
-> > __sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
-> > INIT_EX commands.
-> > 
-> > This extra information is particularly useful if firmware loading and/or
-> > initialization is going to be made more robust, e.g. by allowing
-> > firmware loading to be postponed.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
-> > ---
-> >  drivers/crypto/ccp/sev-dev.c | 19 ++++++++++++-------
-> >  1 file changed, 12 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> > index 5350eacaba3a..ac7385c12091 100644
-> > --- a/drivers/crypto/ccp/sev-dev.c
-> > +++ b/drivers/crypto/ccp/sev-dev.c
-> > @@ -963,6 +963,7 @@ static int __sev_init_ex_locked(int *error)
-> >  
-> >  static int __sev_platform_init_locked(int *error)
-> >  {
-> > +	const char *cmd = sev_init_ex_buffer ? "SEV_CMD_INIT_EX" : "SEV_CMD_INIT";
-> >  	struct psp_device *psp = psp_master;
-> >  	struct sev_device *sev;
-> >  	int rc = 0, psp_ret = -1;
-> 
-> I think this can just be handled directly in the dev_err() since it's only 
-> used once.
+Introduce Universal Flash Storage support on SM6125 and add support for t=
+he Xiaomi Mi A3 based on the former platform. Uses the name xiaomi-laurel=
+-sprout instead of the official codename (laurel_sprout) due to naming li=
+mitations in the kernel.
 
-Ack.
+Changes since v5:
+- Drop "non-removable" property from ufs_mem_hc for sm6125 platform
+- Drop "status" and "autorepeat" properties from gpio-keys node for xiaom=
+i-laurel-sprout
+- Rename "key-vol-up" node to "key-volume-up" for xiaomi-laurel-sprout
+- Drop "gpio-key,wakeup" property from key-volume-up node for xiaomi-laur=
+el-sprout
+- Set "linux,input-type" and "wakeup-source" properties on key-volume-up =
+node for xiaomi-laurel-sprout
+- Change "key_vol_up" node name to "vol-up-n-state" and its label to "vol=
+_up_n" in PM6125 GPIO node for xiaomi-laurel-sprout
+- Use labels instead of node names for PM6125 ADC channels in xiaomi laur=
+el-sprout
+- Set "regulator-allow-set-load" properties on l4, l5, l10, l11, l18 and =
+l24 regulators on xiaomi-laurel-sprout
 
-> > @@ -1008,18 +1009,23 @@ static int __sev_platform_init_locked(int *error)
-> >  	if (error)
-> >  		*error = psp_ret;
-> >  
-> > -	if (rc)
-> > +	if (rc) {
-> > +		dev_err(sev->dev, "SEV: %s failed error %#x", cmd, psp_ret);
-> >  		return rc;
-> > +	}
-> >  
-> >  	sev->state = SEV_STATE_INIT;
-> >  
-> >  	/* Prepare for first SEV guest launch after INIT */
-> >  	wbinvd_on_all_cpus();
-> > -	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
-> > -	if (rc)
-> > -		return rc;
-> > +	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
-> > +	if (error)
-> > +		*error = psp_ret;
-> >  
-> > -	dev_dbg(sev->dev, "SEV firmware initialized\n");
-> 
-> Any reason to remove this dbg line?  I assume the following dev_info() 
-> line is deemed sufficient?
+v5: https://lore.kernel.org/linux-devicetree/20221231222420.75233-2-they@=
+mint.lgbt/
 
-Yes, but agreed that it is not in the scope of the patch so I'll remove
-it from the next version.
 
-> 
-> > +	if (rc) {
-> > +		dev_err(sev->dev, "SEV: SEV_CMD_DF_FLUSH failed error %#x", psp_ret);
-> > +		return rc;
-> > +	}
-> >  
-> >  	dev_info(sev->dev, "SEV API:%d.%d build:%d\n", sev->api_major,
-> >  		 sev->api_minor, sev->build);
-> > @@ -2354,8 +2360,7 @@ void sev_pci_init(void)
-> >  	/* Initialize the platform */
-> >  	rc = sev_platform_init(&error);
-> >  	if (rc)
-> > -		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
-> > -			error, rc);
-> > +		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
-> >  
-> >  skip_legacy:
-> >  	dev_info(sev->dev, "SEV%s API:%d.%d build:%d\n", sev->snp_initialized ?
 
-Thank you for the feedback.
-
-BR, Jarkko
