@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D806616C9
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1486616CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 17:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbjAHQla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 11:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S233630AbjAHQmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 11:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbjAHQl2 (ORCPT
+        with ESMTP id S233104AbjAHQmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 11:41:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE872E02F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 08:40:43 -0800 (PST)
+        Sun, 8 Jan 2023 11:42:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6244BDF7D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 08:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673196042;
+        s=mimecast20190719; t=1673196091;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t7OjNeHz+NEQ3CmjYfEiQoiIMQeUbAFEabOhpJDH948=;
-        b=X0yjikOf99ZLEHbyPbCv4+In9Uo/i2rMJ0k/fr4LehZ0J0GDh+ISuBfOfDBrZ2NZWys5q3
-        lNJlTuOxMuULQtV8ELhjoKv5KzK/vpzcc0M2tpllXabCV/EmgWvd/5E7wuUbzHqFG22fV0
-        Qt1AjMnQ/bW9c8O4/CbHfFunnKE0MeI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=KZPrrHbMqSgKL8BLXVN4N8Vx5I+kAphM9nctHUJQUi8=;
+        b=SqqjTneUL79n+Iz1R164jM0I4Qo5bl0l85rtas1OkJOai7PYLfVpmyZXZq+JQVF5YJBBcd
+        pjBim0pmZprbcq7HdCsXoZtcOixZ3B+BDJNiT0bd5ld5nEQ86tMkSKC0J3RIRbAoA3URUJ
+        JEhtmafkiEy407K14saDh5P9NuVvRxU=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-446-wBnpNyv6MyC7AksDQlw_cg-1; Sun, 08 Jan 2023 11:40:41 -0500
-X-MC-Unique: wBnpNyv6MyC7AksDQlw_cg-1
-Received: by mail-ej1-f72.google.com with SMTP id sg39-20020a170907a42700b007c19b10a747so3997805ejc.11
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 08:40:41 -0800 (PST)
+ us-mta-231-2ZbyRfDUNrqV9FjvV5JlvQ-1; Sun, 08 Jan 2023 11:41:29 -0500
+X-MC-Unique: 2ZbyRfDUNrqV9FjvV5JlvQ-1
+Received: by mail-qv1-f70.google.com with SMTP id mf15-20020a0562145d8f00b00531c9c67927so4004706qvb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 08:41:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t7OjNeHz+NEQ3CmjYfEiQoiIMQeUbAFEabOhpJDH948=;
-        b=EQY9/DnKhnWoKElX22p56wmEovt/8penMGvMW8ZQrcZQDgz/ofjZ+Rn2ccWSKnMXDp
-         oCIOCEPgWGOOliN7nOV9lOl4RrCEJkoAKjNvIhJdKZ19mw9YBf2Jcf/8gKcFkhN/ue9O
-         cE6QHCxCQ5WaEFaxl3n1Bhpp5oiBIWBltCwzXKznSyaUTP9Q39WXhTVqTX1vuSBEIAsT
-         8ptR8tIxOWBwylWhIfQsA49dtiHmHkYz5LwhjIwxWteSCzStN2BIoNw0JeqyqK24YL+e
-         nSaxkxp1i1RLAdfnJ2apPJOwkIKpHpIQBusZzSeQzXFCZ8v1wFWyBoqx+9rBXC9Pk62m
-         DtgA==
-X-Gm-Message-State: AFqh2kp8LJl0PEOPGFqJ4hNmh+HsItTKL2YcquhW9c0qmK0QyoVyMJ/X
-        Sz4S4h9PnknluYf0JA/aekEhUVyXgptu7PIgQYklIkXzR5xwpT64vf6tO3l3l20w6B5OOJpP1FV
-        j8JU1hKwUp1ckPJRrKXCpLzY3
-X-Received: by 2002:a05:6402:448f:b0:498:1f8:5378 with SMTP id er15-20020a056402448f00b0049801f85378mr5032176edb.16.1673196040278;
-        Sun, 08 Jan 2023 08:40:40 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs2xEWkswfQMyoaNba5bnrW+TRvuUeNNEzA7IbriOaeFE5wtKM03Paig5Lh5oJMG/aj1gZHlg==
-X-Received: by 2002:a05:6402:448f:b0:498:1f8:5378 with SMTP id er15-20020a056402448f00b0049801f85378mr5032166edb.16.1673196040116;
-        Sun, 08 Jan 2023 08:40:40 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906318900b0080c433a9eeesm2649452ejy.182.2023.01.08.08.40.38
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZPrrHbMqSgKL8BLXVN4N8Vx5I+kAphM9nctHUJQUi8=;
+        b=VLBZOC57Z+AePYrRYr89JDmif5MtjQtbhOiYrHaHFXrRIF1pPr2F756PU4EIH2yFHC
+         i3WyGmqCQ42yFaihNRkZ+CPlCnEen120Qu/RxwJlHaqrR/fMhcaXe7iYPBoofTAAObsv
+         VOJCs4X17Xo6K0WfONucUtqycYu4TP1qQ3cLy6EuX3+Cap9ekUzjYH3TpyEvHTtmL/kY
+         yQwfJfFmjI19zaudK3IG/h+++QlPMeQs31O0tHI+ghz2fM9zbRtK8c2qiCW2omaUaP6r
+         sDDcvhq1UqlVqhLlDUGjpusoqLP7VPUKYiCyHnkiMVI3RZp3zTobHzyxovx542RjjeDb
+         AUaw==
+X-Gm-Message-State: AFqh2kpxMJDM4ter+RVSGvw58vv3VRyc/RgooJeKDJZn7FG5HL9EM7ln
+        dxnh2xaAa8b3szgD9tV4z+PVqBlO+cFTKecmgM3VsSMchHw61VO24O1ttuwap8wYr7uN14l1kOL
+        CvGqgY28pV5e5+5ZD8vSHRM/W
+X-Received: by 2002:a05:6214:3713:b0:531:bb5a:3418 with SMTP id np19-20020a056214371300b00531bb5a3418mr44260853qvb.13.1673196089178;
+        Sun, 08 Jan 2023 08:41:29 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvdyico4iBmiWuyPHZKh2g2tFBMAznUg0tI9GsdDN2jNUzKQ5otucYpEsWESNWm1Ub6TmeuzA==
+X-Received: by 2002:a05:6214:3713:b0:531:bb5a:3418 with SMTP id np19-20020a056214371300b00531bb5a3418mr44260840qvb.13.1673196088944;
+        Sun, 08 Jan 2023 08:41:28 -0800 (PST)
+Received: from debian (2a01cb058918ce0098fed9113971adae.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:98fe:d911:3971:adae])
+        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006feb0007217sm3925779qko.65.2023.01.08.08.41.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 08:40:39 -0800 (PST)
-Message-ID: <ab0e5d5b7f69416d8e39068bbec930dbeafc979e.camel@redhat.com>
-Subject: Re: [PATCH 1/6] KVM: x86: Inject #GP if WRMSR sets reserved bits in
- APIC Self-IPI
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
-        Venkatesh Srinivas <venkateshs@chromium.org>
-Date:   Sun, 08 Jan 2023 18:40:37 +0200
-In-Reply-To: <20230107011025.565472-2-seanjc@google.com>
-References: <20230107011025.565472-1-seanjc@google.com>
-         <20230107011025.565472-2-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Sun, 08 Jan 2023 08:41:28 -0800 (PST)
+Date:   Sun, 8 Jan 2023 17:41:24 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias May <matthias.may@westermo.com>
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
+ when selftest restarted
+Message-ID: <Y7ryNK2sMv+PC6xr@debian>
+References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+ <Y7i5cT1AlyC53hzN@debian>
+ <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
+ <Y7lpO9IHtSIyHVej@debian>
+ <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
+ <Y7rNgPj9WIroPcQ/@debian>
+ <750cd534-1361-4102-67c5-2898814f8b4c@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <750cd534-1361-4102-67c5-2898814f8b4c@alu.unizg.hr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -83,44 +91,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-07 at 01:10 +0000, Sean Christopherson wrote:
-> Inject a #GP if the guest attempts to set reserved bits in the x2APIC-only
-> Self-IPI register.  Bits 7:0 hold the vector, all other bits are reserved.
+On Sun, Jan 08, 2023 at 03:49:05PM +0100, Mirsad Goran Todorovac wrote:
+> On 08. 01. 2023. 15:04, Guillaume Nault wrote:
 > 
-> Reported-by: Marc Orr <marcorr@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: Venkatesh Srinivas <venkateshs@chromium.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/lapic.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+> > For some reasons, your host doesn't accept the VXLAN packets received
+> > over veth0. I guess there are some firewalling rules incompatible with
+> > this tests script.
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 80f92cbc4029..f77da92c6ea6 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2315,10 +2315,14 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
->  		break;
+> That beats me. It is essentially a vanilla desktop AlmaLinux (CentOS fork)
+> installation w 6.2-rc2 vanilla torvalds tree kernel.
+> 
+> Maybe DHCPv4+DHCPv6 assigned address got in the way?
+
+I don't think so. The host sends an administratively prohibited
+error. That's not an IP address conflict (and the script uses reserved
+IP address ranges which shouldn't conflict with those assigned to regular
+host).
+
+The problem looks more like what you get with some firewalling setup
+(like an "iptables XXX -j REJECT --reject-with icmp-admin-prohibited"
+command).
+
+> > I can probably help with the l2tp.sh failure and maybe with the
+> > fcnal-test.sh hang. Please report them in their own mail thread.
+> 
+> Then I will Cc: you for sure on those two.
+> 
+> But I cannot promise that this will be today. In fact, tomorrow is prognosed
+> rain so I'd better use the remaining blue-sky-patched day to do some biking ;-)
+
+No hurry :)
+
+> Anyway, I haven't received feedback from all submitted bug reports, so my stack
+> is near the overload. However, I made the "make kselftest" complete on both boxes
+> (and OSs of Debian and RH lineage), so I already feel some accomplishment :)
+> 
+> Maybe some issues will be fixed in today's release candidate, anyway.
+> 
+> Mirsad 
+> 
+> -- 
+> Mirsad Goran Todorovac
+> Sistem inženjer
+> Grafički fakultet | Akademija likovnih umjetnosti
+> Sveučilište u Zagrebu
 >  
->  	case APIC_SELF_IPI:
-> -		if (apic_x2apic_mode(apic))
-> -			kvm_apic_send_ipi(apic, APIC_DEST_SELF | (val & APIC_VECTOR_MASK), 0);
-> -		else
-> +		/*
-> +		 * Self-IPI exists only when x2APIC is enabled.  Bits 7:0 hold
-> +		 * the vector, everything else is reserved.
-> +		 */
-> +		if (!apic_x2apic_mode(apic) || (val & ~APIC_VECTOR_MASK))
->  			ret = 1;
-> +		else
-> +			kvm_apic_send_ipi(apic, APIC_DEST_SELF | val, 0);
->  		break;
->  	default:
->  		ret = 1;
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> The European Union
+> 
 
