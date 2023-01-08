@@ -2,88 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E754D6619A0
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33936619A1
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjAHVDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S234178AbjAHVFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbjAHVDF (ORCPT
+        with ESMTP id S231279AbjAHVFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:03:05 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B74C771;
-        Sun,  8 Jan 2023 13:03:04 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id gh17so15607485ejb.6;
-        Sun, 08 Jan 2023 13:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/WLT5A0J6hO3d4KVLI6EF1C1Wnk0AtqyO6OnmLJxI90=;
-        b=aXufoqzsAilrFysDcJVYURLOcCAxf1e3KrQ53HuICGeBBXDSetVZ3ZrdyrU6rwW4jb
-         7VrHlw014i0GhnrB7Tij+EbJytkzzNSDf+0Qnm6yls9GMoM6qvXH0oxgGapOTtVBTAId
-         U7nvcpQ74hwlKGOcebnQLfsAwba5sCc4vHaTu2zBEE5nyGNlhRGJbA0k3+FEko1trhe4
-         y7t3JFk0up3uKGJBqP5xYVxaz1r4uEs6UQc0SmndWUcx76wNuFObyJFDg7o6YhqIhTpb
-         2CHpERTyTqzvMrGHOma7mY0T3F0By3DkKqIEqCHLuJAVii7zi+EQ2CVHF5h1LvvbwdQw
-         W8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/WLT5A0J6hO3d4KVLI6EF1C1Wnk0AtqyO6OnmLJxI90=;
-        b=gUisJ+0CB02mrIY4429Zg84/k7p20Y3Zkp4CBWnv20QCgi6/cHYc/O5m/PXX9J/S2p
-         xr3mQPtvhWoTWaWM2dRDbiQHJMMlsl5Wovz9uiO6cjEP41wAhB2rltgvvgDBqbLBZ4QJ
-         9qL/MOJoUyNVVDHcBXWke8TlYl//nKh8qJk17iF60a21hJuwAybvDRSNfBTqMCHkt83p
-         pFJ+8pRloTGrj/cRQVkc6kK5crj5aey6W/qe5FaIHZkw6AXcTa5WsZNE8LgEA46Kx4NR
-         bVmC+DdX5FMsVcZEwgqiXLUeXh8tR7khQB4bv8UkFzauL987oXD7sEPsmEGQtoSpgYvA
-         +faQ==
-X-Gm-Message-State: AFqh2kqpaJa0jRdCnuHa3hGoor1etRPXBwTV9gU4LRM79No1XTL6bUiu
-        +pfJUJr9FlI+Up1GsoiPGis=
-X-Google-Smtp-Source: AMrXdXvLb84qUoRiC4Q8ySgquZqxigGYSzUI/z915ir8dQbQIl+fouYy8pcNuXgmYMRPC2mPwWmrtw==
-X-Received: by 2002:a17:907:7da4:b0:78d:f455:b5dc with SMTP id oz36-20020a1709077da400b0078df455b5dcmr65634196ejc.28.1673211782779;
-        Sun, 08 Jan 2023 13:03:02 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709060cd200b0084c723a626csm2877680ejh.209.2023.01.08.13.03.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 13:03:02 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] ARM: dts: sunxi: Fix GPIO LED node names
-Date:   Sun, 08 Jan 2023 22:03:01 +0100
-Message-ID: <22960501.6Emhk5qWAg@jernej-laptop>
-In-Reply-To: <20221231225854.16320-1-samuel@sholland.org>
-References: <20221231225854.16320-1-samuel@sholland.org>
+        Sun, 8 Jan 2023 16:05:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1FFC771
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:05:08 -0800 (PST)
+Received: from workpc.. (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1A27E6602CBA;
+        Sun,  8 Jan 2023 21:05:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673211906;
+        bh=zSMRvvUXipDPdrB92livtKXWWP8DZB+V6PU+CR6yJrE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aQrAdMC2T48OHmOZTffhELUNaUDwuCku4foUBV5iP0tW8l0N1YYkRKqvElBBr63bm
+         Xo/XGce9U6M062QFHs1IivkaW9CmlgzqjhQzv9WOEby/+3DzU9kZkdnZaIroQq1qLm
+         BQC7GXZr3ZmE50OShH5x/gMGmhb2PjP7ItlTMBnZP1J7sM1YkpU68KCAFzHn1UXmv0
+         saGufqm/lsNpBgHpnZdaZrp5vHFChY2rpQLbAnCvsErL+AwYCJwpOm0PHLdx2iFcoz
+         CjVHIsgC/DJIlfemHM7Q2TRaGeBwokVuY9kt52PBmgKFDQfkziT4RvxP4CenHjHKIg
+         CQ07IHAFVRpyA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+Subject: [PATCH v10 00/11] Add generic memory shrinker to VirtIO-GPU and Panfrost DRM drivers
+Date:   Mon,  9 Jan 2023 00:04:34 +0300
+Message-Id: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 31. december 2022 ob 23:58:53 CET je Samuel Holland napisal(a):
-> These board devicetrees fail to validate because the gpio-leds schema
-> requires its child nodes to have "led" in the node name.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+This series:
 
-Applied both, thanks!
+  1. Makes minor fixes for drm_gem_lru and Panfrost
+  2. Brings refactoring for older code
+  3. Adds common drm-shmem memory shrinker
+  4. Enables shrinker for VirtIO-GPU driver
+  5. Switches Panfrost driver to the common shrinker
 
-Best regards,
-Jernej
+Changelog:
 
+v10:- Rebased on a recent linux-next.
+
+    - Added Rob's ack to MSM "Prevent blocking within shrinker loop" patch.
+
+    - Added Steven's ack/r-b/t-b for the Panfrost patches.
+
+    - Fixed missing export of the new drm_gem_object_evict() function.
+
+    - Added fixes tags to the first two patches that are making minor fixes,
+      for consistency.
+
+v9: - Replaced struct drm_gem_shmem_shrinker with drm_gem_shmem and
+      moved it to drm_device, like was suggested by Thomas Zimmermann.
+
+    - Replaced drm_gem_shmem_shrinker_register() with drmm_gem_shmem_init(),
+      like was suggested by Thomas Zimmermann.
+
+    - Moved evict() callback to drm_gem_object_funcs and added common
+      drm_gem_object_evict() helper, like was suggested by Thomas Zimmermann.
+
+    - The shmem object now is evictable by default, like was suggested by
+      Thomas Zimmermann. Dropped the set_evictable/purgeble() functions
+      as well, drivers will decide whether BO is evictable within theirs
+      madvise IOCTL.
+
+    - Added patches that convert drm-shmem code to use drm_WARN_ON() and
+      drm_dbg_kms(), like was requested by Thomas Zimmermann.
+
+    - Turned drm_gem_shmem_object booleans into 1-bit bit fields, like was
+      suggested by Thomas Zimmermann.
+
+    - Switched to use drm_dev->unique for the shmem shrinker name. Drivers
+      don't need to specify the name explicitly anymore.
+
+    - Re-added dma_resv_test_signaled() that was missing in v8 and also
+      fixed its argument to DMA_RESV_USAGE_READ. See comment to
+      dma_resv_usage_rw().
+
+    - Added new fix for Panfrost driver that silences lockdep warning
+      caused by shrinker. Both Panfrost old and new shmem shrinkers are
+      affected.
+
+v8: - Rebased on top of recent linux-next that now has dma-buf locking
+      convention patches merged, which was blocking shmem shrinker before.
+
+    - Shmem shrinker now uses new drm_gem_lru helper.
+
+    - Dropped Steven Price t-b from the Panfrost patch because code
+      changed significantly since v6 and should be re-tested.
+
+v7: - dma-buf locking convention
+
+v6: https://lore.kernel.org/dri-devel/20220526235040.678984-1-dmitry.osipenko@collabora.com/
+
+Related patches:
+
+Mesa: https://gitlab.freedesktop.org/digetx/mesa/-/commits/virgl-madvise
+igt:  https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/virtio-madvise
+      https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/panfrost-madvise
+
+The Mesa and IGT patches will be sent out once the kernel part will land.
+
+Dmitry Osipenko (11):
+  drm/msm/gem: Prevent blocking within shrinker loop
+  drm/panfrost: Don't sync rpm suspension after mmu flushing
+  drm/gem: Add evict() callback to drm_gem_object_funcs
+  drm/shmem: Put booleans in the end of struct drm_gem_shmem_object
+  drm/shmem: Switch to use drm_* debug helpers
+  drm/shmem-helper: Don't use vmap_use_count for dma-bufs
+  drm/shmem-helper: Switch to reservation lock
+  drm/shmem-helper: Add memory shrinker
+  drm/gem: Add drm_gem_pin_unlocked()
+  drm/virtio: Support memory shrinking
+  drm/panfrost: Switch to generic memory shrinker
+
+ drivers/gpu/drm/drm_gem.c                     |  54 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 646 +++++++++++++-----
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/msm/msm_gem_shrinker.c        |   8 +-
+ drivers/gpu/drm/panfrost/Makefile             |   1 -
+ drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |  34 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.c       |  30 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 -
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 122 ----
+ drivers/gpu/drm/panfrost/panfrost_job.c       |  18 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  21 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.h          |  18 +-
+ drivers/gpu/drm/virtio/virtgpu_gem.c          |  52 ++
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c        |  37 +
+ drivers/gpu/drm/virtio/virtgpu_kms.c          |   8 +
+ drivers/gpu/drm/virtio/virtgpu_object.c       | 132 +++-
+ drivers/gpu/drm/virtio/virtgpu_plane.c        |  22 +-
+ drivers/gpu/drm/virtio/virtgpu_vq.c           |  40 ++
+ include/drm/drm_device.h                      |  10 +-
+ include/drm/drm_gem.h                         |  19 +-
+ include/drm/drm_gem_shmem_helper.h            | 112 +--
+ include/uapi/drm/virtgpu_drm.h                |  14 +
+ 23 files changed, 1010 insertions(+), 409 deletions(-)
+ delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+
+-- 
+2.38.1
 
