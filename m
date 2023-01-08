@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCF1661407
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 08:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CED66140D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 08:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjAHHgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 02:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S231716AbjAHHkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 02:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjAHHgH (ORCPT
+        with ESMTP id S230205AbjAHHke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 02:36:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C625BD4F
-        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 23:36:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D76ECCE068A
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E44C433EF;
-        Sun,  8 Jan 2023 07:35:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673163360;
-        bh=+gaFFdaaw8KpOYzmSDAIAoUflBWBrtH2q3+VuJJusH4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dVNk1OdoAV+hALLxm7wetArvLJ03z60s09MU7uGeUHIJMFs+3KF5JZAQ0HD5acNIK
-         RObbel9wRtJGRa5RLiBeocc2oYIklRblmxGxM++4KUTqymYqwbw44xWXjvgTiARaZm
-         fntOqBYjJmXQ+ivTCKr0jNTws6A2RIuW4CZb0XEdVMXAppGXi7oHWhS7585Gx8mBd+
-         IN1nV2WRUl8RqGHpfmtLAJr0uF0RVUUSQz46UzZ/2mJQVZ7E8TW6eRnDmTQHcVRua/
-         UvtzBI7ZSDB8PD0Q+FPvdRHC7HOgmAcrYsWNMANp8vkkSMJbjHkgzw5o8eOPPcqzfu
-         XB2eoHb8wCc8g==
-Date:   Sun, 8 Jan 2023 09:35:46 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Aaron Thompson <dev@aaront.org>, Miaoqian Lin <linmq006@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock fixes for v6.2-rc3
-Message-ID: <Y7pyUprzAC/9VyNw@kernel.org>
+        Sun, 8 Jan 2023 02:40:34 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61F8BE18
+        for <linux-kernel@vger.kernel.org>; Sat,  7 Jan 2023 23:40:32 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id D771D1C09F4; Sun,  8 Jan 2023 08:40:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1673163630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyp3UEEKF+h3KLwkYlIyErX4/yhvSv1NJSCucbp5NKo=;
+        b=BZcTP13DxPc60Pe8afTZWqmTssQx01RaUw+jiPFzLk2eMw8m0zAJYomow55yGVRSzwfaSX
+        u7z3/gu/f+bsQi7xbk8afx980BRBP6MJrnQY87rfXXD8+I+jNRsYxgtuionaBT5GJvq9V8
+        wYotgCPjXUBrU060O47keiWuzsr/Mfw=
+Date:   Sun, 8 Jan 2023 08:40:30 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        geert+renesas@glider.be, Andrew Morton <akpm@osdl.org>
+Subject: Re: Dhrystone -- userland version
+Message-ID: <Y7pzbnlXgv+asekg@amd.ucw.cz>
+References: <Y7nyd4hPeXsdiibH@duo.ucw.cz>
+ <Y7pRw47hidw+s6+g@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="i3UURa/w1L52u2HJ"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7pRw47hidw+s6+g@mit.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus.
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+--i3UURa/w1L52u2HJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+Hi!
 
-are available in the Git repository at:
+> > Distributions do not usually carry dhrystone, and I don't think anyone
+> > really maintains it. It is useful tool, and it seems we'll maintain
+> > it.
+> >=20
+> > I'd like to add enough glue so that it would be runnable from
+> > userspace, too? Userland version is what is actually useful to me, and
+> > it should not be hard.
+>=20
+> I don't see whatever message you were replying to, and it doesn't seem
+> to be archived in lore[1], so I'm not sure about the context.  But you
+> are talking about the Dhrystone benchmark[2], right?
+>=20
+> [1] https://lore.kernel.org/all/Y7nyd4hPeXsdiibH@duo.ucw.cz/T/#u
+> [2] https://wiki.cdot.senecacollege.ca/wiki/Dhrystone_howto
+>=20
+> If so, I'm confused what you mean by "add enough glue so that it would
+> be runnable from userspace" --- Dhrystone is a userspace benchmark,
+> dating from the 1980's, although what it benchmarks is often more about
+> the compiler than the CPU's performace.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2023-01-08
+Yes, I'm talking about Dhrystone benchmark. We are carrying
+kernel-only version in lib/dhry_*.c, it is in -next now.
 
-for you to fetch changes up to fa81ab49bbe4e1ce756581c970486de0ddb14309:
+commit cfbd4cc940275240e97f8b922c8f18a44fe15c07
+Author: Geert Uytterhoeven <geert+renesas@glider.be>
+Date:   Thu Dec 8 15:31:28 2022 +0100
 
-  memblock: Fix doc for memblock_phys_free (2023-01-04 12:31:22 +0200)
+    lib: add Dhrystone benchmark test
 
-----------------------------------------------------------------
-memblock: small fixes in kernel-doc and tests
+I'd like userspace-too version, at the same place :-).
 
-* Fix kernel-doc for memblock_phys_free() to use correct names for the
-  counterpart allocation methods
-* Fix compilation error in memblock tests
+Best regards,
+								Pavel
 
-----------------------------------------------------------------
-Aaron Thompson (1):
-      memblock tests: Fix compilation error.
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-Miaoqian Lin (1):
-      memblock: Fix doc for memblock_phys_free
+--i3UURa/w1L52u2HJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
- mm/memblock.c                     | 2 +-
- tools/testing/memblock/.gitignore | 1 +
- tools/testing/memblock/Makefile   | 3 ++-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Sincerely yours,
-Mike.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY7pzbQAKCRAw5/Bqldv6
+8mBdAKCB+s9skaJn7bwxrK8IvAap0mNecQCfUp6TUf7qXFHU4dIVVxn4vsKdZa0=
+=DGt3
+-----END PGP SIGNATURE-----
+
+--i3UURa/w1L52u2HJ--
