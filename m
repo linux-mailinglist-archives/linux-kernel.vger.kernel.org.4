@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C523661962
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411F1661967
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 21:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbjAHUhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 15:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S234231AbjAHUhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 15:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjAHUhA (ORCPT
+        with ESMTP id S233996AbjAHUho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 15:37:00 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AC5B7C5
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:37:00 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id 188so6868617ybi.9
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 12:37:00 -0800 (PST)
+        Sun, 8 Jan 2023 15:37:44 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E041FB7C7
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 12:37:42 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bf43so10050304lfb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 12:37:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nz+hlf5DjKki6fN3fwUsggCKBpRE3RxIvk1swq4t900=;
-        b=GlW2isI4+LOC5BcTuYKuZIaz4MKCFiajUsiU92m0Q9Fd4urPHv2cGKTAGYqF1N9A5h
-         HRm/IzlYf067w3QuAEhRbD6dg9Oc5yXXbJo4vDFm2Q0bWyxX5mPNp0Du3sdRI4nJbojn
-         hBZB21MINIRxFcU71kcMBA8jiDkbeG/yKaDFBY8kXsTd2sgELwaNSUGLzuVEHO/uCyaM
-         /dB791sszJqgCq/Kuyp152jYngVPucHSvLpi+GYbgaT/2hgNMYixjpLWdIjrUr+tyZJ9
-         Eh+cL9hL/uB7bbtqF2n7krVw39KLCkOm/JkjqWIFFF8cIKk1YOog+umDHguT8Zi/aAlU
-         T1Pw==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2wjZyCiu39kHUTVUWrdgmj76POWhIfcwRPWfaQQRFjg=;
+        b=r7U+cjr4XjIRJ9ex/9VUYCK6QbDVM2k6XxYJarY5oqgtych3zMU0OX5lHjddibz04M
+         qNApQuNg3HCaTvcp+5ZeDJ79AT5Quf0tsM7GO9marhR3t0bLDVG1TaSHnqamFSFgpYQd
+         LuV1w7WKR0aGgUdI/IfD3JHLKs9HxwE154N641TQQ5HdzUeoqu+abHuDiq2k0ViFYyrS
+         PFOKnb3Xieu0FeOBgDtn/543Wo0jIhIkEbOrW/NqtJKolWDkeqAUQb4aPQx95C/qLplA
+         EGmcov6zshQTAmhSwGALPOmrlBw+WBEALuQcI+BOs/IIz2RE8IQHkzOzl7pPXEf1c/MB
+         P1AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nz+hlf5DjKki6fN3fwUsggCKBpRE3RxIvk1swq4t900=;
-        b=099MUWbzlsu80bkkNHcFLWSg3SdpROGaO2Ooxj1xfRfL/koxGRkI8WpK1kXbLcMkrC
-         G8y36x+50iYRURed5zHgxnfdpZKz0s1araA4zEqlcrlLGA0DJlTYwI+lFW2nnAMKxZoz
-         RZCEuQkMjjR2cUCeWVvJhv+lx2YT6jh6ILmh6Kd9UvhKCHgJ3QjPy276umSZLJ1phLq/
-         C+ndeZR9iYnBuZlOaKaRyAwPuvCSFi/phjmOLmcvCo5Qgjs6WjepWFUeAPs138ok2pgO
-         U16ONWI3UjstPvjK6VMJN5TF+jIF0pHHxRuMpWOTKHjSsSSjj2gWq18yXjCLD2PK8js0
-         VrEQ==
-X-Gm-Message-State: AFqh2kq6CitPjufAF5eet8mKEp2f7Ic5LInUTB+bao7/ljSCmvB/WLMC
-        QqZAMqKw8ZoHzKFpGqOrTUcGfdsuZSFeW8oAquV0hA==
-X-Google-Smtp-Source: AMrXdXu4F12qzvmONeIxn4+t+Y7drEbmQryPsYTflFez6dY38booTX+wa6Dr/IRIW8S8yo04E9mblh3a9WJrsBlIOKU=
-X-Received: by 2002:a25:8e83:0:b0:703:8ada:5e0a with SMTP id
- q3-20020a258e83000000b007038ada5e0amr7021633ybl.210.1673210219491; Sun, 08
- Jan 2023 12:36:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wjZyCiu39kHUTVUWrdgmj76POWhIfcwRPWfaQQRFjg=;
+        b=bFkmV+63sxEWQpTReaN40hsJnI03ctC6NsPITu2yRlR5h3V15KRD0O3YIKVUW05ABO
+         mhCTdNfMNoNxX3bEZJgldQe9he+1dZQMi1x7yh3rUlBU/slPNROK0j2Y/KSswKAhEvMO
+         A9OEp0cCNsyApHkXsn4LxD2T8QlUU1CfvDyKuj3jvjzJoOl85wzIkBQIJpau7Qb9D2G+
+         RN5gzZ1l9I5iL4vPofK+0yv1/75lRfOe5s5vQq24yyf/mXafhelhu5h33EKGfhPHRg8u
+         LtE9/YerH6y2RYU5qPKNuo0B6pM+u7Ei6+8jVadQSnQU5rVez3JdOJ+dS6YNY/5e9/0a
+         /XbQ==
+X-Gm-Message-State: AFqh2kqwUrA71WMAGNSsxBZitjL6GAZkFQz9A5fDN6G/fnCq/F8sIhGN
+        O06W1SjbLbn6gtt/dGQ9yhaKNA==
+X-Google-Smtp-Source: AMrXdXtgtS0VMjYKAzLIJTHfulWhxtMeF0KdIBMpQ/AdWm6YN0w9H1vHgNvF0Y+GlLFsKuiokwi7Ag==
+X-Received: by 2002:a05:6512:1049:b0:4b6:edce:a192 with SMTP id c9-20020a056512104900b004b6edcea192mr19485618lfb.4.1673210261249;
+        Sun, 08 Jan 2023 12:37:41 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05651220d000b004cc8207741fsm295936lfr.93.2023.01.08.12.37.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Jan 2023 12:37:40 -0800 (PST)
+Message-ID: <2f6ea88f-9b84-3a8b-dacf-41af80f8574d@linaro.org>
+Date:   Sun, 8 Jan 2023 22:37:39 +0200
 MIME-Version: 1.0
-References: <20230105134622.254560-1-arnd@kernel.org> <20230105134622.254560-2-arnd@kernel.org>
- <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
- <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
- <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com> <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
- <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com> <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
-In-Reply-To: <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 8 Jan 2023 21:36:48 +0100
-Message-ID: <CACRpkdYGg1nbGhe-+XSr1fWyC5zOSOf0m2RAGxdXaw+xk3XdPg@mail.gmail.com>
-Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
-To:     Dmitry Baryshkov <dbaryshkov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Purdie <richard.purdie@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ales Bardorfer <ales@i-tech.si>,
-        Ales Snuparek <snuparek@atlas.cz>,
-        Alex Osborne <ato@meshy.org>,
-        Alex Osborne <bobofdoom@gmail.com>,
-        Dirk Opfer <dirk@opfer-online.de>, Ian Molton <spyro@f2s.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Michael Petchkovsky <mkpetch@internode.on.net>,
-        Nick Bane <nick@cecomputing.co.uk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Tomas Cech <sleep_walker@suse.cz>,
-        Linus Walleij <linusw@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 04/11] drm/msm/dpu: Add support for SM8350
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        quic_jesszhan@quicinc.com,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
+        quic_vpolimer@quicinc.com, swboyd@chromium.org,
+        dianders@chromium.org, liushixin2@huawei.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org
+References: <20221230153554.105856-1-robert.foss@linaro.org>
+ <20221230153554.105856-5-robert.foss@linaro.org>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221230153554.105856-5-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 11:06 AM Dmitry Baryshkov <dbaryshkov@gmail.com> wrote:
+On 30/12/2022 17:35, Robert Foss wrote:
+> Add compatibles string, "qcom,sm8350-dpu", for the display processing unit
+> used on Qualcomm SM8350 platform.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 1 +
+>   1 file changed, 1 insertion(+)
 
-> I suspect that the platforms might need to be rebootstrapped from the
-> ground up. This sounds like a fun project for the next Connect demo :D
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-When I converted Integrator, Gemini and IXP4xx to device tree I essentially
-bootstrapped them from the ground up beginning with irqchip, timer and
-UART and moved up the foodchain from there, so yes :)
+-- 
+With best wishes
+Dmitry
 
-It's a lot of work but also a lot of fun!
-
-Yours,
-Linus Walleij
