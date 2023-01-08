@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA636619E7
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40046619E9
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 22:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbjAHVVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 16:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S231881AbjAHVWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 16:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAHVVU (ORCPT
+        with ESMTP id S231292AbjAHVWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:21:20 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8514E00A
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 13:21:18 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 9F3A43200034;
-        Sun,  8 Jan 2023 16:21:16 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 08 Jan 2023 16:21:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673212876; x=
-        1673299276; bh=ZeFov28lEub7mZ5pYUsWFjtk3T4pDigrhvJlK0Umr70=; b=c
-        z0IjIePHJkOIsYPUzRvCGFajitWXAEimQAIK8gLuIYKLsp+OWW85yqsJjtaz3Yi6
-        iK1F9g5bLQNTyLkD85vvRuq/Vza/+7eIYhATrzotBRMEJlHrvXVFpfTSQG3In9z3
-        EE7DrUew3XZWklL4PsK6fdyAjWuVp1qKlWniwoTidS198C2mEY3klYn3yQA82Wq2
-        SCbBVfS9SyjZ0e7llMb+9BdNBB2JkHaVjvaArcKL+szsCWsPw0hmspbFIh4nCUN/
-        xICd5/zlFx/ZznpiLnt6CGR6sR1mdLVzVvbshlGDQXjSDAik+mMWzR1tufHQTLsY
-        JbFVbUdgTFA6hr3xp/JYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673212876; x=
-        1673299276; bh=ZeFov28lEub7mZ5pYUsWFjtk3T4pDigrhvJlK0Umr70=; b=e
-        0Q94dGW596tfWCa7LjODoe88Y5mUHaewW7NKglzno2iaaMyujB5OE6RxxHDTb5wM
-        jPmqAv0uzE1IT6xyEqo9gAAnZ2sdaAtP5Y6vkE+1+ZAQdUZew45ekAKKh7Exqwzg
-        2rUgRfTC2KghgERFWETsXyt/MCkj7dFC0yGJ0lZnbV/rLXzQhbP21PVf+CGEfAaw
-        H/M/4jGO9hGiRFOSVOR/MDrhJdyWBkyW6IVwKf03WOysTZ3mCJTlew+LhgxB3NA0
-        +OcCnZJTRImk6A9snu+DR5DYfF2zJaUj25Dim26U43iODULj3yrn5UL0VV6T6TfT
-        M4aONRzGVFWbp5eVgUU4g==
-X-ME-Sender: <xms:yzO7Y2W9uV50Qz7UA4CfXUdvIZcW-ObxJ4nFLRVlpLpfZ9Gc4q-4Zg>
-    <xme:yzO7Yyl-UKz3N-ltMNEX3hoCmO16uIlUneA_4tycCDSDN_6HSQ6Tlkm05xnWD5KXw
-    gN62kzC0dvLpXikb24>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeggdduheduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yzO7Y6blyoIpkalCUhzR3oSX-F8fS1kKg5i8dd9GO0qAmbk0HPxCwg>
-    <xmx:yzO7Y9VXouiEkOeW7xKxNf-hOxjMdZLJAp_Q4Fysb2G66OZv12xQBg>
-    <xmx:yzO7YwmIqNITfFpfc-RZgb49FGMQpZQI5Dw0Zuoa6puX6swi9ZnyYA>
-    <xmx:zDO7Y2sY66u5NermH-mvFeQUGS_zDOPxm6z3WDQNH-p68zO3XC-jRA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3DB4BB60089; Sun,  8 Jan 2023 16:21:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <e10a1b03-9dc3-4c1e-865b-a47b26438c8b@app.fastmail.com>
-In-Reply-To: <CALT56yOu=Kxxc=xUYvRpy5bD5XGB01cky_ppK8LbS4AC_ra5Bw@mail.gmail.com>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-2-arnd@kernel.org>
- <CALT56yPGbMZ7=2=wKzwjBCEtikE+2JmLzWeZgE9QxU5NSSmTyw@mail.gmail.com>
- <edbb150d390bfe9b379593bfb02b010a13183d67.camel@linuxfoundation.org>
- <764e558e-0604-4326-a50e-a39578b58612@app.fastmail.com>
- <8bec242f6f69c87f99309ed5c20e2f0be2b533c7.camel@linuxfoundation.org>
- <0690759c-8e74-429e-a3f9-c20aaac9c92f@app.fastmail.com>
- <CALT56yN9aBn+s5rFB1yBdhGtYa6t=c0JeNmy0T=ckh3bNPgh2Q@mail.gmail.com>
- <7a57b319-a774-4f97-af06-fe1a637a45ce@app.fastmail.com>
- <CALT56yOu=Kxxc=xUYvRpy5bD5XGB01cky_ppK8LbS4AC_ra5Bw@mail.gmail.com>
-Date:   Sun, 08 Jan 2023 22:20:55 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dmitry Baryshkov" <dbaryshkov@gmail.com>
-Cc:     "Richard Purdie" <richard.purdie@linuxfoundation.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Ales Bardorfer" <ales@i-tech.si>,
-        "Ales Snuparek" <snuparek@atlas.cz>,
-        "Alex Osborne" <ato@meshy.org>,
-        "Alex Osborne" <bobofdoom@gmail.com>,
-        "Dirk Opfer" <dirk@opfer-online.de>, "Ian Molton" <spyro@f2s.com>,
-        "Lennert Buytenhek" <kernel@wantstofly.org>,
-        "Marek Vasut" <marek.vasut@gmail.com>,
-        "Michael Petchkovsky" <mkpetch@internode.on.net>,
-        "Nick Bane" <nick@cecomputing.co.uk>,
-        "Paul Parsons" <lost.distance@yahoo.com>,
-        "Philipp Zabel" <philipp.zabel@gmail.com>,
-        "Sergey Lapin" <slapin@ossfans.org>,
-        "Tomas Cech" <sleep_walker@suse.cz>,
-        "Linus Walleij" <linusw@kernel.org>,
-        "Marc Zyngier" <maz@kernel.org>
-Subject: Re: [PATCH 01/27] ARM: pxa: remove unused board files
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 8 Jan 2023 16:22:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6333E017;
+        Sun,  8 Jan 2023 13:22:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76F15B80C03;
+        Sun,  8 Jan 2023 21:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F4BC433EF;
+        Sun,  8 Jan 2023 21:22:25 +0000 (UTC)
+Date:   Sun, 8 Jan 2023 16:22:22 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Quanfa Fu <quanfafu@gmail.com>
+Cc:     rostedt@goodmis.or, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
+Message-ID: <20230108162222.146d136f@rorschach.local.home>
+In-Reply-To: <20230107034335.1154374-1-quanfafu@gmail.com>
+References: <20230107034335.1154374-1-quanfafu@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 8, 2023, at 22:12, Dmitry Baryshkov wrote:
-> =D0=B2=D1=81, 8 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 23:05, Arnd Be=
-rgmann <arnd@arndb.de>:
->>
->> At least locomo and sa1111 are both private to mach-sa1100
->> now and no longer shared with pxa, so this should get
->> a little easier. When I had last looking into cleaning up
->> sa1100, my impression was that the main work would be converting
->> most of the drivers to use dynamic resources instead of
->> hardcoded addresses and interrupts. Looking at locomo again,
->> my feeling is that this could remain largely unchanged,
->> as the locomo downstream drivers (led, keyboard, lcd)
->> are already abstracted enough and locomo itself can
->> just be an mfd or soc driver.
->
-> locomo has been used on Sharp Poodle, if I'm not mistaken. And sa1111
-> is used on the lubbock, one of the crazy devkits.
+On Sat,  7 Jan 2023 11:43:35 +0800
+Quanfa Fu <quanfafu@gmail.com> wrote:
 
-Right, and both of these are on the way out.
+> Since this memory will be filled soon below, I feel that there is
 
-      Arnd
+kzalloc() is also used as a safety measure to make sure nothing is
+accidentally exposed. I rather keep it for safety. Just because it
+doesn't need to be here doesn't mean it should be removed. There is no
+benefit to making this kmalloc(), as this is far from a fast path.
+
+> no need for a memory of all zeros here. 'snprintf' does not return
+> negative num according to ISO C99, so I feel that no judgment is
+> needed here.
+
+Also, it's best to remove "feelings" from change logs. Code updates are
+not made due to how one feels about something (at least it shouldn't
+be), but about having technical reasons for doing so. I do agree
+there's no reason to check snprintf() from returning negative, as
+looking at its implementation, there is no negative return. Thus, the
+change log should be:
+
+ "No need to check for negative return value from snprintf() as the
+ code does not return negative values."
+
+> 
+> No functional change intended.
+
+And this does have functional changes. If the output of a compiler is
+different for a function, then that's a functional change. What we
+consider non functional changes is if functions get moved around, or
+possibly code in a function is moved into a helper function where the
+compiler *should* end up with the same assembly.
+
+Changing what malloc is called is definitely a functional change.
+
+> 
+> Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
+> ---
+>  kernel/trace/trace_eprobe.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 352b65e2b910..cd1d271a74e7 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
+>  	for (i = 0; i < argc; i++)
+>  		len += strlen(argv[i]) + 1;
+>  
+> -	ep->filter_str = kzalloc(len, GFP_KERNEL);
+> +	ep->filter_str = kmalloc(len, GFP_KERNEL);
+>  	if (!ep->filter_str)
+>  		return -ENOMEM;
+>  
+>  	p = ep->filter_str;
+>  	for (i = 0; i < argc; i++) {
+>  		ret = snprintf(p, len, "%s ", argv[i]);
+
+I wonder if this should be a strncat() instead?
+
+> -		if (ret < 0)
+> -			goto error;
+>  		if (ret > len) {
+>  			ret = -E2BIG;
+>  			goto error;
+
+	for (i = 0; i < arcc, i++)
+		strncat(ep->filter_str, argv[i], len);
+
+I mean, before this code we have that loop already determining what len
+is, do we really need to check if it is going to be -E2BIG?
+
+-- Steve
