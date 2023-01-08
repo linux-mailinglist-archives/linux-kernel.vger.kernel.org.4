@@ -2,291 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31E0661A71
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33707661A73
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 23:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234451AbjAHW0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 17:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S233580AbjAHW0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 17:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbjAHW0I (ORCPT
+        with ESMTP id S233873AbjAHW0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 17:26:08 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FF656F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 14:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673216761; x=1704752761;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hmjkaG5JtWML+f7zuCLNQ7QwesTRX59Nke7vCWISpEI=;
-  b=E1rJhZgXx7Ebblbu1NN1HBIYe9L+Hvlo0nDHTxjQcr7vpKfdmK6ZjfOg
-   Do5GcfGn+k9SwLvYtuWpg4AOCRxyiN+nLU2eKDUXOyvvnTr7WOAz0riIZ
-   TaYBHpLHUZUL+tuSmb2px+zINKqBwApxJ779/AgusXGghEuJff0qG80YO
-   w=;
-X-IronPort-AV: E=Sophos;i="5.96,311,1665446400"; 
-   d="scan'208";a="286265019"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 22:25:59 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id DAE5C81AC7;
-        Sun,  8 Jan 2023 22:25:58 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Sun, 8 Jan 2023 22:25:58 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.160.120) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Sun, 8 Jan 2023 22:25:58 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <hdanton@sina.com>
-CC:     <hannes@cmpxchg.org>, <ebiggers@kernel.org>, <mengcc@amazon.com>,
-        <surenb@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: another use-after-free in ep_remove_wait_queue()
-Date:   Sun, 8 Jan 2023 14:25:48 -0800
-Message-ID: <20230108222548.698721-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230107080702.4907-1-hdanton@sina.com>
-References: <20230107080702.4907-1-hdanton@sina.com>
+        Sun, 8 Jan 2023 17:26:36 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB66120;
+        Sun,  8 Jan 2023 14:26:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673216795; x=1704752795;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=15k16tzidb2IcbySRd2AY7XLYEbv33AogqhOPh1NLXY=;
+  b=PrGSsv0GzRG+y4VXsFXeHxANomP2txnQxGWUm/Wy97I5icrOglqu3Onq
+   UMpnkI1b1BVmyiir591H7dAn9j3ICRd8UPEJByq9n3eeKShQhIAJ8yZgs
+   6juqdj5oB2I4xV/gScCTouYTeyqzTZwMZxdHCn7AABDf4ss0O9uWD4VJM
+   DEF+vhxHpoI2shmApnYU6Nb3D50QwID9gHEfsgS19WAJxYM32Icwp4DaM
+   ppy+O3Lw17wKKrbFKeSnJahF0llbGNl/3nN3Hz2lTeUWiHeH/UjpessxP
+   Xah29JM8sSG9YiH8gH3DAaonqysR9I3K7ZqKsht7H85JlBCabpFfqBLGg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="322832683"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="322832683"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 14:26:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="764109923"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="764109923"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jan 2023 14:26:35 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sun, 8 Jan 2023 14:26:34 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sun, 8 Jan 2023 14:26:34 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Sun, 8 Jan 2023 14:26:34 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.42) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sun, 8 Jan 2023 14:26:32 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VQfzMhZgniyk/r5UjtI8An4B34qjZWnePq+dyG081Ivi7v5ATu9STrEkn6p0OrtOQ/tXvvcygHoNqiJmj4iTh+/tJOTNyGLtN7sXB1GlNGFSNhzk7S5WkrnvUD7d/kRb2ls69dfdekvS+j1/XLoNnlQ1rYYVA2OFBsn2ndtsGapuJ6UblAuhY3u/8+n57CrmuyQBSTfnEp4Ab8pkmaw8DDuZ2qPtsvGunRSRdzJteNx308ni5tKnGfYy3ENgYzsa+oEqF6hUoXvuNYoTzL4Ubvr404rXyUX6VZXtsgO7RrLzg3A0XIyqifcmLXYnIqQekm4UpaxatQHGs4VMcGPV1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=15k16tzidb2IcbySRd2AY7XLYEbv33AogqhOPh1NLXY=;
+ b=Y87b7cc13q7FyXDR4wf0SSpxu7t2Jyc+a9GuHUMEDaX1x6Kw+CIPECZy9/2QveNr4TKJ623moj//eS8pCdmSra0YxxoBr7TdmSBfb19KPkBkSlHzwp6S3e5LAi0F1HWn49KgdeNDXAL74yWv7gXVON20JKiWohhOMa69L/KLLBeVE5UETD7Ch5k2mf3UxrBJgk3qCL2wa/hR4Xbe4qeHgiol2PRO08AfL3Wg+cN2Pw9Otvvx1ZZDtjR3dRTiMrw8+NDw/lveDw2szpd/M9rtAz3UVKYeRiOJyyfQtbiQWzHnSQsncI1DY7jUHXK9/GFV5ZEYsnb0FeMCfRxOwdf/wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by MN0PR11MB6183.namprd11.prod.outlook.com (2603:10b6:208:3c5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Sun, 8 Jan
+ 2023 22:26:29 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5986.018; Sun, 8 Jan 2023
+ 22:26:29 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v8 04/16] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Thread-Topic: [PATCH v8 04/16] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Thread-Index: AQHZC5gA7tfEz97ZIEyLnOigH9xmQa6RzYmAgAN7xwA=
+Date:   Sun, 8 Jan 2023 22:26:29 +0000
+Message-ID: <145def74bc800a625d51f528c20c1be4da8c9e27.camel@intel.com>
+References: <cover.1670566861.git.kai.huang@intel.com>
+         <5ea3f199c0d6f9f3e1738fa5c211c52d4d618e84.1670566861.git.kai.huang@intel.com>
+         <b6e72ab7-eb48-22bb-f7f7-6869408d1dda@intel.com>
+In-Reply-To: <b6e72ab7-eb48-22bb-f7f7-6869408d1dda@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|MN0PR11MB6183:EE_
+x-ms-office365-filtering-correlation-id: 6fab6e14-6e1a-447c-224d-08daf1c76332
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KP8Xuhq5s+aSJZZVp+LN5yNDxk4b2XDK4SxT25mUQGMvsdia7lQkRt4cFFwkYAPE3q0xjyg7gSlH/29dmvV1hAHvfihQxdJK/SSPUn9cY1AuRARJgRXHX4OP9tcSkWow2HXIvXYkZGtQ+u2zh+/V8htF2YpOtpJkk5UiHPOQfMsbD0pIS3rZE7i1mp3WQJ4rZZxwnYsq0GVrSkTWxUbadMHWzeLB8wPQlHk0MYl5i547dgkzPhYyfm19WJr9Ntgh7nq1OAD8DsR1I8Ejbz4MYn48DFh216xhoP9TL5P0ephf0d93K3tNyopo7ztOA3J7o2FhRx2jRu7o5dWES/DNz3oEyKHT6VpV6bqWMkE42CXJxE4G+dxsuIsPg/PSmvixvROWc/4mNk6w5nf3r4bW50j8nLZlFnffoJ5CcYBukUTn7CC9O9wPdIA6T0oHk47Y3mEZsUYmlMBj6786DzL4ffROnINE6Rgx/SDbH3ylJLX5N58P6jN04MAcbjqQBjususwmZ4mCQ8QrgLIwNTpAuYlFBbtzffSJwWzaGl5WP2Rc1qQ4jsLDRuUUbfE2q2h+50PNlewtDQrw4UxdVsM4/sjoRgOd0sEfNiJFA5izWxDMAZOjKl4WxEpNmOcN1WmnLionhUVDRXPP2GWgttgUluhyuj0Drqikfd5cypMIF4/dO65FRPhSHBgiV4vqsr0OwP1bcrlrq8g5FlKbo2lyLw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(39860400002)(366004)(376002)(346002)(451199015)(41300700001)(8936002)(5660300002)(36756003)(7416002)(2906002)(8676002)(76116006)(66476007)(91956017)(64756008)(66556008)(66446008)(66946007)(316002)(71200400001)(110136005)(54906003)(6486002)(6506007)(53546011)(478600001)(6512007)(26005)(4326008)(186003)(2616005)(86362001)(38100700002)(82960400001)(122000001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QlJFVnVlRzdjQkFhVGVmNlliazU3UmVLd0Fod2FPVEgveVh0bCsveGp4Z3JU?=
+ =?utf-8?B?TG5PNll0a2hiTm1sVnlneDJyei9KWEFpOEs3N0tkL0x1dXNMRndPMjhsbi9w?=
+ =?utf-8?B?Y2NPZFZ2N2VQUXBudC92eEFiQkNoQmFEMzEzY01ZMUZnb1FadkNPakE3djkr?=
+ =?utf-8?B?cC9oQjJzdVBQL2pTZXJScE9vRHF4eDVIMkV0NHBoVmQ5azQ1V0Fsd1B0UFJS?=
+ =?utf-8?B?cXdQL0M0UWpVQm9KQ1JuNFlMTktOeU5PRjAyNzIra1lXQmx4aUF3R0RjdHVP?=
+ =?utf-8?B?clV5bGEyUnhqNG11Q29mTk5xMjhYcW1aQ1dvM04zWG1nekZqenV4RTJjdVhi?=
+ =?utf-8?B?cFM2cEkzamJlc2kvb0ErMlJaalFSRWFYTTNPeEJEcGFsQWFaUDNJMEd6UU9C?=
+ =?utf-8?B?SGlneWI0R0VHN1R5ZU9JazBuRHB5N3FsK0ZMRFBKNHZMMUtCSFRIc0VSUlZ6?=
+ =?utf-8?B?MUVkQktyZEF4M1dIMDBHK0s0S2xkUHYwV2Y4ZmJtdGdpMTZtQTZRZEtPNWNV?=
+ =?utf-8?B?UDZZWHhZbDNkNk1kU3plSXRqT3QvbzM4Y0VKTVFuSHR6M21NODBhQmRUc1pX?=
+ =?utf-8?B?UUJkQ0xhWS9YRkpYaXFybTlRUndhSW9sd05VRXlYL3MxZURXZXJuWjR3SWxa?=
+ =?utf-8?B?RWNGSmxZWFdvaUd3eU1DNEp0TW1QejB3VnY4Z2svTUc4V21COEZFNjVJcjhr?=
+ =?utf-8?B?RTdVUVBxK0tXTlZpTHFjbE11Uk0xSkV3UVo5eFlvdm1RZ3NOVjIzbzZoNGhN?=
+ =?utf-8?B?a2lkUFVTbXJZV3dTV3lwN3FNbCtKU1FqczVHN3MyQXVWVE9iN1VFUjFHWTNt?=
+ =?utf-8?B?ai9iNU1uczJRM0tSLzRXWWowemNseGJBeHliYk1qcm1HcFhERklhMTFmajh5?=
+ =?utf-8?B?QWZBZmU1ZmhwbWkxcm12SEsxWGlhcFQ0RE9hbllsSFplSVNpN0ZhaTdZMUt3?=
+ =?utf-8?B?a1NKR3VuZ2tsV2laVm10bjRQVkcxMTl3SjliczRmZEJyM0pUSll6TDdSaElq?=
+ =?utf-8?B?Tys3aTdhNGJBcFVuTWxFTVg4VENUeXd3YkZGVFZqa1ZVSXorTG1tRXFDakx2?=
+ =?utf-8?B?V1FtZzRVZmwra3VwR05SdEFYdXZYM0VBTVpoRFAvai85U1gveHVzNmRrcVp4?=
+ =?utf-8?B?eHlLcTI1TmJ4TmowZTU2Tmx5VDZsbzFOWUV1SHhiTS9PaXVIaW9KajR4d0ho?=
+ =?utf-8?B?TXllZDRpcWlsSmE2aUhUSHc5VVNyQ3ZZbUlWNWNIbmNocTVRc21MYzYwQzNZ?=
+ =?utf-8?B?TGZDUm8vdDdmWHpnbzRTYThCekhxRk9INXZFQmJneEYxMHFaK3cvaTZIR1RI?=
+ =?utf-8?B?RTVCaTBtTm5DREtIaWFqMUxmN0VReVVhM3lBTnJaUy9DTVhJL3BCNkQ0VzF3?=
+ =?utf-8?B?ekl3bDNJYldhbkY4Qm5MZE1CZWZ5QThoVW4waW1oS3lOVUxNRDgrODRhZHVu?=
+ =?utf-8?B?Vy9UY2xzNGhXZk9sNEZjblRWekM1SVpGcDBTVzlRQUNpOXFOOWtrRlppaVdr?=
+ =?utf-8?B?TnFqNTMrdzBwTTJTdXduUU9uSFhhMmlhY0lnT2Y1WldQc08yZ3FBeWttcXpz?=
+ =?utf-8?B?dWEvYmFXRVpBOThvMThuRURSVXdQckVmTUp5azVlNEhWa0x6MGVvQmtPRSt6?=
+ =?utf-8?B?aTNMOCtoQmY1SkpGV1orTmdaR0dLeDg1RzhWZ3ZXaDJudmVHTGQ3d2NjaGRv?=
+ =?utf-8?B?T09HbUNITTEvSitSUjg2V0hYU09CQ0o0eGFQZVIxdGE3NC9rYThhUDRVUVRQ?=
+ =?utf-8?B?UmlBYVNoWXo5UG91RGZ4SmhRQSsyWUMwVjV0QTRjU3QyTytXaUlKTi9Cdkw5?=
+ =?utf-8?B?cWE4TFBtYnk3aFBIMEJ0bklrRlRQV1NOQU04RWRiUlF1Yko2WFJvL2U5aGpY?=
+ =?utf-8?B?OFp2K2RKSVUzZ1cvU2VzR1VSOTJWUUJJVGNVVXQyZWV0bm5vTjZHOXVHQjR1?=
+ =?utf-8?B?L2dJZ1Bmb0FQeTkyS1dlN3NrQ2dLa0ZUTWZmZkJtUGp3TmZOdE41M2crcTdH?=
+ =?utf-8?B?UXZwRHRWTks1WnNqSzVwK2U3TytreXl1THA2ZWpQaXdxR051QTExUk14Njhn?=
+ =?utf-8?B?dDRlbW83UFpPOXhrdWV5eFdBVVJsZU5LZVRYaHQ2TEhNUURvUGNReWQyVFl5?=
+ =?utf-8?B?dmQzWEMveFdHNXpJYmxCMldjNHpQUjVjNnkrUkM5UXJUNXY3UW5JZFlVbkln?=
+ =?utf-8?B?ZlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2FF9AA1FB4B50149960DCA1E0900FDE4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.120]
-X-ClientProxiedBy: EX13D45UWA004.ant.amazon.com (10.43.160.151) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fab6e14-6e1a-447c-224d-08daf1c76332
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2023 22:26:29.0893
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0H+pIczWBG6lnB8o9OgW+NCHuU8LnSrJs8L9SPiEliffQeZDLxgt9vTMnOwxykTW7zlrim/Ue4wXUVjFJH/L+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6183
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
-
-On Sat, 2023-01-07 08:07:02 +0000, Hillf Danton <hdanton@sina.com> wrote:
-> On Fri, Jan 6, 2023 at 2:49 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> > Hi,
-> >
-> > We found the following use-after-free with userspace code polling on
-> > a pressure file in a non-root cgroup using epoll.
-> >
-> > [   57.183661] BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x76/0x130
-> > [   57.186662] Write of size 4 at addr ffff888114976428 by task a.out/2426
-> >
-> > [   57.190551] CPU: 0 PID: 2426 Comm: a.out Not tainted 6.2.0-rc2+ #16
-> > [   57.193384] Hardware name: Amazon EC2 c5a.large/, BIOS 1.0 10/16/2017
-> > [   57.196272] Call Trace:
-> > [   57.197565]  <TASK>
-> > [   57.198714]  dump_stack_lvl+0x8f/0xc0
-> > [   57.200494]  print_report+0x16c/0x4e0
-> > [   57.202084]  ? _raw_spin_lock_irqsave+0x76/0x130
-> > [   57.204077]  kasan_report+0xc3/0xf0
-> > [   57.205587]  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [   57.207760]  ? _raw_spin_lock_irqsave+0x76/0x130
-> > [   57.209685]  kasan_check_range+0x2d2/0x310
-> > [   57.211477]  _raw_spin_lock_irqsave+0x76/0x130
-> > [   57.213355]  remove_wait_queue+0x25/0x130
-> > [   57.215102]  ep_free+0x12d/0x220
-> > [   57.216506]  ep_eventpoll_release+0x3c/0x40
-> > [   57.218254]  __fput+0x32b/0x700
-> > [   57.221486]  task_work_run+0x1db/0x230
-> > [   57.224885]  exit_to_user_mode_prepare+0xfd/0x100
-> > [   57.228662]  syscall_exit_to_user_mode+0x20/0x40
-> > [   57.232360]  do_syscall_64+0x52/0x90
-> > [   57.235691]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [   57.239572] RIP: 0033:0x7fadf96e1c44
-> > [   57.242865] Code: 00 00 b8 ff ff ff ff eb 9c b8 ff ff ff ff eb 95 e8 01 e2 01 00 90 8b 05 2a ac 2c 00 48 63 ff 85 c0 75 11 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 3a f3 c3 48 83 ec 18 48 89 7c 24 08 e8 e4 a0
-> > [   57.255244] RSP: 002b:00007ffd1d1b7b98 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> > [   57.261714] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fadf96e1c44
-> > [   57.266293] RDX: 0000000000000000 RSI: 00007ffd1d1b7b60 RDI: 0000000000000004
-> > [   57.270979] RBP: 00007ffd1d1b7bf0 R08: 00000000004007e0 R09: 00007fadf9a0f240
-> > [   57.275856] R10: 00000000000006ba R11: 0000000000000246 R12: 00000000004005e0
-> > [   57.280478] R13: 00007ffd1d1b7cd0 R14: 0000000000000000 R15: 0000000000000000
-> > [   57.285059]  </TASK>
-> >
-> > [   57.290402] Allocated by task 2426:
-> > [   57.293705]  kasan_set_track+0x3d/0x60
-> > [   57.297102]  __kasan_kmalloc+0x85/0x90
-> > [   57.300491]  psi_trigger_create+0x155/0x850
-> > [   57.304040]  pressure_write+0x200/0x510
-> > [   57.307508]  cgroup_file_write+0x1de/0x3e0
-> > [   57.310949]  kernfs_fop_write_iter+0x27d/0x380
-> > [   57.314601]  vfs_write+0x7d7/0xaa0
-> > [   57.317891]  ksys_write+0xd7/0x1a0
-> > [   57.321152]  do_syscall_64+0x43/0x90
-> > [   57.324496]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > [   57.330887] Freed by task 2429:
-> > [   57.334053]  kasan_set_track+0x3d/0x60
-> > [   57.337448]  kasan_save_free_info+0x27/0x40
-> > [   57.340977]  ____kasan_slab_free+0x11d/0x170
-> > [   57.344570]  slab_free_freelist_hook+0x87/0x150
-> > [   57.348236]  __kmem_cache_free+0xcb/0x180
-> > [   57.351710]  psi_trigger_destroy+0x458/0x550
-> > [   57.355274]  cgroup_file_release+0x96/0x110
-> > [   57.358779]  kernfs_drain_open_files+0x238/0x420
-> > [   57.362519]  kernfs_drain+0x191/0x2a0
-> > [   57.365901]  __kernfs_remove+0x3a6/0x600
-> > [   57.369363]  kernfs_remove_by_name_ns+0xc2/0x120
-> > [   57.373073]  cgroup_addrm_files+0x90f/0xcf0
-> > [   57.376610]  cgroup_destroy_locked+0x48a/0x730
-> > [   57.380260]  cgroup_rmdir+0x2b/0x130
-> > [   57.383650]  kernfs_iop_rmdir+0x17a/0x230
-> > [   57.387201]  vfs_rmdir+0x196/0x410
-> > [   57.390442]  do_rmdir+0x1c7/0x3f0
-> > [   57.393651]  __x64_sys_rmdir+0x45/0x50
-> > [   57.397000]  do_syscall_64+0x43/0x90
-> > [   57.400340]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > [   57.406689] The buggy address belongs to the object at ffff888114976400
-> >                 which belongs to the cache kmalloc-128 of size 128
-> > [   57.414907] The buggy address is located 40 bytes inside of
-> >                 128-byte region [ffff888114976400, ffff888114976480)
-> >
-> > [   57.425474] The buggy address belongs to the physical page:
-> > [   57.429541] page:000000008c5ecb31 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x114976
-> > [   57.436725] flags: 0x2fffff80000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-> > [   57.441235] raw: 002fffff80000200 ffff8881000418c0 dead000000000100 dead000000000122
-> > [   57.447793] raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-> > [   57.454274] page dumped because: kasan: bad access detected
-> >
-> > [   57.460990] Memory state around the buggy address:
-> > [   57.464744]  ffff888114976300: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > [   57.471126]  ffff888114976380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > [   57.477447] >ffff888114976400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > [   57.483833]                                   ^
-> > [   57.487541]  ffff888114976480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > [   57.493976]  ffff888114976500: 00 00 00 00 00 00 00 00 00 00 00 00 00 01 fc fc
-> >
-> > Here is the simple repro.
-> >
-> > #include <fcntl.h>
-> > #include <sys/epoll.h>
-> > #include <unistd.h>
-> >
-> > int main(void)
-> > {
-> >         const char trigger_str[] = "some 100000 1000000";
-> >         int fd, epfd;
-> >         struct epoll_event event;
-> >         struct epoll_event events[1];
-> >
-> >         fd = open("/cgroup2/test/cpu.pressure", O_RDWR);
-> >         write(fd, trigger_str, sizeof(trigger_str));
-> >         epfd = epoll_create(1);
-> >         event.events = EPOLLPRI | EPOLLET;
-> >         event.data.fd = fd;
-> >         epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
-> >         epoll_wait(epfd, events, 1, -1); /* returns after rmdir */
-> >         sleep(5);
-> >         close(epfd);
-> >         close(fd);
-> >
-> >         return 0;
-> > }
-> >
-> > # mkdir /cgroup2
-> > # mount -t cgroup2 none /cgroup2
-> > # mkdir /cgroup2/test
-> > # ./a.out &
-> > # rmdir /cgroup2/test
-> >
-> > Looks like calling wake_up_pollfree() in psi_trigger_destroy() can properly
-> > clear the queue and then avoid this use-after-free, but POLLFREE wasn't
-> > considered enough there for the past similar issue[1]. While
-> > wake_up_pollfree() could *also* be called in psi_trigger_destroy(), it may
-> > be awkward and there can be more appropriate solution. It would be great if
-> > experts could have a look.
-> 
-> Thanks for your report.
-> 
-> In the wakeup pattern below,
-> 
-> 	cpu0				cpu2
-> 	---				---
-> 	wake_up(&t->event_wait);
-> 	HZ later
-> 	kfree(t);
-> 					HZ *3 later
-> 					the last sleeper gets on CPU
-> 					remove_wait_queue
-> 
-> waker should wait for every sleeper to go off waitqueue.
-> 
-> See if the diff below could survive your repro.
-
-That patch survived the repro in my original post, however, the waker
-(rmdir) was getting stuck until a file descriptor of the epoll instance or
-the pressure file got closed. So, if the following modified repro runs
-with the patch, the waker never returns (unless the sleeper gets killed)
-while holding cgroup_mutex. This doesn't seem to be what you expected to
-see with the patch, does it? Even wake_up_all() does not appear to empty
-the queue, but wake_up_pollfree() does.
-
-#include <fcntl.h>
-#include <sys/epoll.h>
-#include <unistd.h>
-
-int main(void)
-{
-	const char trigger_str[] = "some 100000 1000000";
-	int fd, epfd;
-	struct epoll_event event;
-	struct epoll_event events[1];
-
-	fd = open("/cgroup2/test/cpu.pressure", O_RDWR);
-	write(fd, trigger_str, sizeof(trigger_str));
-	epfd = epoll_create(1);
-	event.events = EPOLLPRI | EPOLLET;
-	event.data.fd = fd;
-	epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &event);
-	epoll_wait(epfd, events, 1, -1);
-
-	pause();
-
-	return 0;
-}
-
-# mkdir /cgroup2
-# mount -t cgroup2 none /cgroup2
-# mkdir /cgroup2/test
-# ./a.out &
-# rmdir /cgroup2/test
-# klilall a.out
-
-
-Regards,
-Munehisa
-
-> Hillf
-> 
-> --- mainline/kernel/sched/psi.c
-> +++ y/kernel/sched/psi.c
-> @@ -1346,7 +1346,7 @@ void psi_trigger_destroy(struct psi_trig
->  	 * Wakeup waiters to stop polling. Can happen if cgroup is deleted
->  	 * from under a polling process.
->  	 */
-> -	wake_up_interruptible(&t->event_wait);
-> +	wake_up_all(&t->event_wait);
->  
->  	mutex_lock(&group->trigger_lock);
->  
-> @@ -1394,6 +1394,10 @@ void psi_trigger_destroy(struct psi_trig
->  		kthread_stop(task_to_destroy);
->  		atomic_set(&group->poll_scheduled, 0);
->  	}
-> +
-> +	while (wq_has_sleeper(&t->event_wait))
-> +		schedule_timeout_idle(HZ);
-> +
->  	kfree(t);
->  }
->  
-> --
-> 
-> 
+T24gRnJpLCAyMDIzLTAxLTA2IGF0IDA5OjE0IC0wODAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
+T24gMTIvOC8yMiAyMjo1MiwgS2FpIEh1YW5nIHdyb3RlOg0KPiA+IA0KPiA+IFRoZSBURFggbW9k
+dWxlIHdpbGwgYmUgaW5pdGlhbGl6ZWQgaW4gbXVsdGktc3RlcHMgZGVmaW5lZCBieSB0aGUgVERY
+DQo+ID4gbW9kdWxlIGFuZCBtb3N0IG9mIHRob3NlIHN0ZXBzIGludm9sdmUgYSBzcGVjaWZpYyBT
+RUFNQ0FMTDoNCj4gPiANCj4gPiAgMSkgR2V0IHRoZSBURFggbW9kdWxlIGluZm9ybWF0aW9uIGFu
+ZCBURFgtY2FwYWJsZSBtZW1vcnkgcmVnaW9ucw0KPiA+ICAgICAoVERILlNZUy5JTkZPKS4NCj4g
+PiAgMikgQnVpbGQgdGhlIGxpc3Qgb2YgVERYLXVzYWJsZSBtZW1vcnkgcmVnaW9ucy4NCj4gPiAg
+MykgQ29uc3RydWN0IGEgbGlzdCBvZiAiVEQgTWVtb3J5IFJlZ2lvbnMiIChURE1ScykgdG8gY292
+ZXIgYWxsDQo+ID4gICAgIFREWC11c2FibGUgbWVtb3J5IHJlZ2lvbnMuDQo+ID4gIDQpIFBpY2sg
+dXAgb25lIFREWCBwcml2YXRlIEtleUlEIGFzIHRoZSBnbG9iYWwgS2V5SUQuDQo+ID4gIDUpIENv
+bmZpZ3VyZSB0aGUgVERNUnMgYW5kIHRoZSBnbG9iYWwgS2V5SUQgdG8gdGhlIFREWCBtb2R1bGUN
+Cj4gPiAgICAgKFRESC5TWVMuQ09ORklHKS4NCj4gPiAgNikgQ29uZmlndXJlIHRoZSBnbG9iYWwg
+S2V5SUQgb24gYWxsIHBhY2thZ2VzIChUREguU1lTLktFWS5DT05GSUcpLg0KPiA+ICA3KSBJbml0
+aWFsaXplIGFsbCBURE1ScyAoVERILlNZUy5URE1SLklOSVQpLg0KPiANCj4gSSBkb24ndCB0aGlu
+ayB5b3UgcmVhbGx5IG5lZWQgdGhpcyAqQU5EKiB0aGUgIlRPRE8iIGNvbW1lbnRzIGluDQo+IGlu
+aXRfdGR4X21vZHVsZSgpLiAgSnVzdCBzYXk6DQo+IA0KPiAJQWRkIGEgcGxhY2Vob2xkZXIgdGR4
+X2VuYWJsZSgpIHRvIGluaXRpYWxpemUgdGhlIFREWCBtb2R1bGUgb24NCj4gCWRlbWFuZC4gIFRo
+ZSBUT0RPIGxpc3Qgd2lsbCBiZSBwYXJlZCBkb3duIGFzIGZ1bmN0aW9uYWxpdHkgaXMNCj4gCWFk
+ZGVkLg0KDQpZZXMgYWdyZWVkLiAgV2lsbCBkby4gIFRoYW5rcy4NCg==
