@@ -2,34 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CEA66172C
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E663966172E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 18:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjAHRCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 12:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S231134AbjAHRF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 12:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjAHRCr (ORCPT
+        with ESMTP id S229487AbjAHRFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 12:02:47 -0500
+        Sun, 8 Jan 2023 12:05:25 -0500
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18413A6;
-        Sun,  8 Jan 2023 09:02:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C93E10
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 09:05:24 -0800 (PST)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9222E68AA6; Sun,  8 Jan 2023 18:02:40 +0100 (CET)
-Date:   Sun, 8 Jan 2023 18:02:40 +0100
+        id A532E68AA6; Sun,  8 Jan 2023 18:05:20 +0100 (CET)
+Date:   Sun, 8 Jan 2023 18:05:20 +0100
 From:   Christoph Hellwig <hch@lst.de>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     axboe@kernel.dk, josef@toxicpanda.com, hch@lst.de,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] blkcg: Drop unnecessary RCU read [un]locks from
- blkg_conf_prep/finish()
-Message-ID: <20230108170240.GA19165@lst.de>
-References: <20230105212432.289569-1-tj@kernel.org> <20230105212432.289569-2-tj@kernel.org>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: stop nvme matching for nvmem files
+Message-ID: <20230108170520.GA19739@lst.de>
+References: <E1pCkft-004hzL-0Q@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105212432.289569-2-tj@kernel.org>
+In-Reply-To: <E1pCkft-004hzL-0Q@rmk-PC.armlinux.org.uk>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -39,15 +41,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 11:24:29AM -1000, Tejun Heo wrote:
-> Holding the queue lock now implies RCU read lock, so no need to use
-> rcu_read_[un]lock() explicitly. This shouldn't cause any behavior changes.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0cccd40d7801..64cc6947099e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14711,6 +14711,7 @@ T:	git://git.infradead.org/nvme.git
+>  F:	drivers/nvme/host/
+>  F:	drivers/nvme/common/
+>  F:	include/linux/nvme*
+> +X:	include/linux/nvmem*
 
-How so?
+I think the proper thing to do would to just match the right files
+from the start:
 
-> While at it, drop __acquires() annotation on the queue lock too. The
-> __acquires() part was already out of sync and it doesn't catch anything that
-> lockdep can't.
+F:	include/linux/nvme.h
+F:	include/linux/nvme-*.h
 
-This makes sparse even more unhappy than it was before.  For now
-please keep the annotation.
+is it ok if I commit it with your original attributation with that
+change?
