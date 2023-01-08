@@ -2,104 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BC266145C
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82D666144C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 10:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjAHJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 04:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S230421AbjAHJ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 04:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjAHJoe (ORCPT
+        with ESMTP id S229520AbjAHJ3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 04:44:34 -0500
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 01:44:33 PST
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A94E167FA;
-        Sun,  8 Jan 2023 01:44:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673170159; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ApJxBsFagfLBZ6g2WdlZTDoPz3csRVAiiOmHpWyB6Hl1glwhII2HhkoqfrLhN/l/xglnyOR3128FJ1bryu8xvASJbs7wqgB9e/hH1SS5ncFBVLoNXIDyfz1cMJrn+NaPjWGcCJ932NCsOdqSNKIrKXoQNd9lye/Jgote+TOGPBM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1673170159; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5s6CMT1pjxwEQCq3cglEI3dDGlHe9K+JZV8PKzcZTY4=; 
-        b=ERvBZQWbVwPjE0ztx9Jo5rI6D5iKxa2Ij/oRj516WmgP1Du1pvmfEfKbNQIqriySJk3Le7Ccd/ZwZ7Yq5iUMEGDkPPdFCMeuecTf7Llte3mFJiHKW4C8IVLGcu19xFKMQvvcE01utZG8gKiRQPCZe9p0ZhC9SJvl9aaF5imEmKM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zzy040330.moe;
-        spf=pass  smtp.mailfrom=JunASAKA@zzy040330.moe;
-        dmarc=pass header.from=<JunASAKA@zzy040330.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673170159;
-        s=zmail; d=zzy040330.moe; i=JunASAKA@zzy040330.moe;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=5s6CMT1pjxwEQCq3cglEI3dDGlHe9K+JZV8PKzcZTY4=;
-        b=C1vCVKNcdlY0H52Hwttp0bZ6KbGqBVtuMAu29qZFxVG4xqDKxb/HtfcGKAxPXtnF
-        HLb0lhTDFXz49NIzbSjccUmA5+D3Uvm2KKzJFYyhL//VoPFJadgknizutqOCrF88xDL
-        GgVhb3aKgze9PZrMGJXsuScPClP6/JF6cJu3E5p4=
-Received: from [10.8.0.2] (convallaria.eternalshinra.com [103.201.131.226]) by mx.zohomail.com
-        with SMTPS id 1673170158209761.6004763996474; Sun, 8 Jan 2023 01:29:18 -0800 (PST)
-Message-ID: <56a335f1-3558-e496-4b0b-b024a935f881@zzy040330.moe>
-Date:   Sun, 8 Jan 2023 17:29:14 +0800
+        Sun, 8 Jan 2023 04:29:36 -0500
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:404::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FC010B6D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 01:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=Oybl0kFzJk1OHKBfarCPAX+ldUYM8qIDtwFbpLc8Wqg=;
+        b=OMBp7D4Q1taCLAC26KHZDvW1MnN8LDDXjmMIinVqeHcS40c2e/r5bEtpEA1YOrQKsE8uJwyy+dzX1
+         4JKIKJwtxexTCDBai/T/gN1pQFF6GZA/r8/jGnp3ACvSRRpcV8FriJldv+JY/8nNw3PBeN3zBHgAQS
+         gqwLkZC+F6kFgl05fAfdYG8tRkpCGkZwSL5dkqVYiQSgQQ/aMCdQHrSn/VegiB4aoijKO5TFJ9bump
+         HWqdwba3Kn4ZlYTE9d0fRPV50RONoQmTzzLdRTRPjJ82VVzJsAfRc4taGrrIqPH/zeF2yTJogJvsBY
+         Akt7pBD48e76OSMuArRnMD0vHtnM3jw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=Oybl0kFzJk1OHKBfarCPAX+ldUYM8qIDtwFbpLc8Wqg=;
+        b=1bH+enBd3Rzx4lTdU2Ew/3w4RNpW2B4i5DDhzGEZCxhwTP59EcA+tuKMI2XuhVP+RWekbgj/wgKSQ
+         SVYt0YTBw==
+X-HalOne-ID: f2a3e065-8f36-11ed-9179-7703b0afff57
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay5 (Halon) with ESMTPSA
+        id f2a3e065-8f36-11ed-9179-7703b0afff57;
+        Sun, 08 Jan 2023 09:29:30 +0000 (UTC)
+Date:   Sun, 8 Jan 2023 10:29:29 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Robin van der Gracht <robin@protonic.nl>
+Cc:     Stephen Kitt <steve@sk2.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH 12/15] auxdisplay: ht16k33: Introduce
+ backlight_get_brightness()
+Message-ID: <Y7qM+ZlG5gQiOW4K@ravnborg.org>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-12-1bd9bafb351f@ravnborg.org>
+ <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
-Content-Language: en-US
-To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>, Jes.Sorensen@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
- <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
-From:   Jun ASAKA <JunASAKA@zzy040330.moe>
-In-Reply-To: <18907e6b-93b4-d850-8a17-95ad43501136@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2023 22:17, Bitterblue Smith wrote:
+Hi Robin.
 
-> On 17/12/2022 05:06, Jun ASAKA wrote:
->> Fixing transmission failure which results in
->> "authentication with ... timed out". This can be
->> fixed by disable the REG_TXPAUSE.
->>
->> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
->> ---
->>   drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->> index a7d76693c02d..9d0ed6760cb6 100644
->> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
->> @@ -1744,6 +1744,11 @@ static void rtl8192e_enable_rf(struct rtl8xxxu_priv *priv)
->>   	val8 = rtl8xxxu_read8(priv, REG_PAD_CTRL1);
->>   	val8 &= ~BIT(0);
->>   	rtl8xxxu_write8(priv, REG_PAD_CTRL1, val8);
->> +
->> +	/*
->> +	 * Fix transmission failure of rtl8192e.
->> +	 */
->> +	rtl8xxxu_write8(priv, REG_TXPAUSE, 0x00);
->>   }
->>   
->>   static s8 rtl8192e_cck_rssi(struct rtl8xxxu_priv *priv, u8 cck_agc_rpt)
-> By the way, you should get this into the stable kernels too:
-> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+On Sat, Jan 07, 2023 at 10:02:38PM +0100, Miguel Ojeda wrote:
+> On Sat, Jan 7, 2023 at 7:26 PM Sam Ravnborg via B4 Submission Endpoint
+> <devnull+sam.ravnborg.org@kernel.org> wrote:
+> >
+> > Introduce backlight_get_brightness() to simplify logic
+> > and avoid direct access to backlight properties.
+> 
+> Note: Stephen sent this one too a while ago (with some more details in
+> the commit message, which is always nice); and then he sent yesterday
+> v2 [1] (to mention the functional change with `BL_CORE_SUSPENDED`
+> [2]).
+Thanks for the pointers. I will try to move forward with Stephen's
+patches.
+> 
+> Anyway, if it goes via drm-misc, feel free to have my:
+> 
+>     Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> 
+> Though it would be nice to have Robin test the change.
 
-I see.
+Robin - can I get your ack to apply Stephen's original v2 patch to
+drm-misc?
 
-But since this patch has not been merged into Linus' tree yet, so should 
-I wait until this patch is merged or I should issue a v2 patch here and 
-Cc it to "table@vger.kernel.org"?
+	Sam
 
-
-Jun ASAKA.
-
+> 
+> Thanks!
+> 
+> [1] https://lore.kernel.org/lkml/20230106143002.1434266-1-steve@sk2.org/
+> [2] https://lore.kernel.org/lkml/CANiq72kRhmT37H1FAGYGny83ONYXeqJuO8ZPbym0ajQOWKY4Kw@mail.gmail.com/
+> 
+> Cheers,
+> Miguel
