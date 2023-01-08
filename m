@@ -2,128 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF186615F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD8F6615F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbjAHO4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S233646AbjAHO5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbjAHO4S (ORCPT
+        with ESMTP id S233502AbjAHO47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:56:18 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A736248
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:56:17 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h16so5752631wrz.12
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:56:17 -0800 (PST)
+        Sun, 8 Jan 2023 09:56:59 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F246B1EF
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:56:58 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4c131bede4bso83069577b3.5
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=faUR7WXI3JJAlq5Fj/7y4nlra1VV+37QFyTpQC1/6Os=;
-        b=UhMMC5LDsUxyd0s+U1tiT9D2xjSpDzkdVdvSkLIr4Nyf04n0IWW5JprfKC0gxkLFvF
-         NnyOUGVPxWGC2OAqsoXhifV+cGpbPvdnpuaIyRIpPw0mb1c5hDIfsK7A8Pvd/A4ErLfA
-         EmVn3SZhrBNAAtmzlMdYbz9eurNx/Lg8XPuXjbigIAigh9cd19NvIfQPCDj25KaMOnfu
-         F1Ujoco3nSOEgTVmI5ZTfF/8tordADV1/A7i13oog3WRXMQPyHXX+LxeDCxniqCMNLoB
-         0+7+mMamyDfmzgII9sLYWIxzJ1uaeaEBHJMp67wNb5TpseFlaPp+/KhKTyWwKMuGuHXL
-         r25g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k1MT1NvPYIMo2ZLTevFHd6y8JlHD8c2n6t4NL4C3qiU=;
+        b=IimKZGzjyBN/IwOImMFxy1qcpmN2ljyL4mJlQCpNZ6v5qsZm2GJrr32BWkqwcXnDnK
+         1WOMFIETP9sf3wyDw1+gg3MUaMTOYH4DaPU7wV+lrHTeAMSzgmf+1j/aXGmdTKiBYNt5
+         pVMIzTlDf4uuvhlWUDRcnIwJCO01Z28NKldlJSMflgqziCSE891imj6WvK+k6AMgPNZu
+         gXc9wvPKzyGkf/AP/oPnN/Y8sZwOrrw987phYcm8qNtWQ824J0odQW3AX2BTOuDZLvpO
+         p2TbKvxGvLRFw2QaTyk7VVaRfFduZSaOqCX9eL1V6TnqVIvPyNmu4M/AKRHmFvwmf8DB
+         oA5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=faUR7WXI3JJAlq5Fj/7y4nlra1VV+37QFyTpQC1/6Os=;
-        b=GkuU3KDUbqs8KYZb/hB2MdinOtyOl4VVpGU62GnPoSgCDhFTgkNbvsahuae3MIJuyE
-         9+Tig81n0BEGdUZg4MfSsBeHmmCJIMdrvq9fCP2SE72Div2YTTbGOfbcSSpXzzUrDNeF
-         4E4dazG75hi/MyTaxMgbHBSixbK2T5dx9JZhnIN1D5kU2dH+tGrOUvRe1bgbVislftgL
-         YaMPiRbnPjhVOu54DRBOVeijUhsHHr48R54h0jSzmIGC2EBpYOvUDC8QG4457sB8Q/qO
-         VFccA135wCUkncl2WOY2D/FqSZA5tSu7TFQ2akTV3T6QCndAQnIblxebPpO7KDD56Wwc
-         dLxg==
-X-Gm-Message-State: AFqh2ko+dcpLF7Hjyletxc/J+pIHy6uBwf0onYdIMF2GuiZXwYZvhQWR
-        jNCBL+hvMnaLtvo48nXcg8rpGA==
-X-Google-Smtp-Source: AMrXdXvypNaFaV4VApj/5n5B4KrLo6cyzJa/11iv0JfanR3VXSlrcyN4o5PjaNplkSLduvwAAY0GyA==
-X-Received: by 2002:a05:6000:10f:b0:286:ad19:731f with SMTP id o15-20020a056000010f00b00286ad19731fmr24871172wrx.19.1673189775638;
-        Sun, 08 Jan 2023 06:56:15 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v13-20020a5d678d000000b002bbe8686d6fsm2046811wru.117.2023.01.08.06.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 06:56:15 -0800 (PST)
-Message-ID: <3f7e1afa-d445-453d-12fb-7c87b04c8756@linaro.org>
-Date:   Sun, 8 Jan 2023 15:56:11 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k1MT1NvPYIMo2ZLTevFHd6y8JlHD8c2n6t4NL4C3qiU=;
+        b=HTm07hctvBE4hcvB3YEZNQnm3b1+q02V7BwH2sILZeeEcANZkcG3SDrDM6IJ3RVDEi
+         gIN32bpYBdDlii8bnZz2c6ky6Xmq7x1xttpgAsceBelVa2p7cB07scZ9tpNlPemYByWm
+         9KO3T+vSxVkmo6fpTbmFXduVh7bk1LCruZzE+GF8bfLm2S3pym+7RbvPlFmlbE2SeRCX
+         wXF2ZysV8XdSXJwfpz8MMMkIyPNV4Q8/XU+H2oegxVQYJrADtuQ+Ji03+G25gYcr4GHf
+         sx1hE2gsYSfdXeuggeBh5DEz569Lc4FWFLCsbgyv0GWYFxZrq7UlJ6kMIzxo1QaKaHox
+         L/8Q==
+X-Gm-Message-State: AFqh2kqtWipjBRJXqAPc/Ra7OEdbFZl/OgFjK/+7oIdI5S+WiqgX9M16
+        zXuYhV29jGvx6kgtAQvnVrHjBgCt06aV8sEeusV/fNZ/ptgGL8rMvVacAg==
+X-Google-Smtp-Source: AMrXdXuxB5WtL24kqAClguCBU3C9rzgkYpBE0NlO0uD34yj/r6j2lEOVvTXbXMepjjdJ0pc1jRTo7vyx7UuBve6typ4=
+X-Received: by 2002:a81:91d2:0:b0:3b6:bbd4:2769 with SMTP id
+ i201-20020a8191d2000000b003b6bbd42769mr1127812ywg.5.1673189817873; Sun, 08
+ Jan 2023 06:56:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 4/9] dt-bindings: display: bridge: anx7625: Add
- mode-switch support
-Content-Language: en-US
-To:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Lyude Paul <lyude@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        Marek Vasut <marex@denx.de>, linux-acpi@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-References: <20230107102231.23682-1-treapking@chromium.org>
- <20230107102231.23682-5-treapking@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230107102231.23682-5-treapking@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230106143002.1434266-1-steve@sk2.org> <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+In-Reply-To: <CAMuHMdWvOx+K+eQfpC-t2jfkVTQOa+SBorwi=LKmUdW7VPwjig@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 8 Jan 2023 15:56:46 +0100
+Message-ID: <CANiq72nnyxq_JhCETL+v1zQuU=HHjsS66Lt=0bzQ6Xy6CPKN2Q@mail.gmail.com>
+Subject: Re: [PATCH v2] auxdisplay: ht16k33: Use backlight helper
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Kitt <steve@sk2.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2023 11:22, Pin-yen Lin wrote:
-> Analogix 7625 can be used in systems to switch the DP traffic between
-> two downstreams, which can be USB Type-C DisplayPort alternate mode
-> lane or regular DisplayPort output ports.
-> 
-> Update the binding to accommodate this usage by introducing a
-> data-lanes and a mode-switch property on endpoints.
-> 
-> Also include the link to the product brief in the bindings.
-> 
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> 
-> ---
+On Sun, Jan 8, 2023 at 11:03 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
+This will likely go through drm-misc as part of a bigger series:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    https://lore.kernel.org/lkml/20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org/
 
-Best regards,
-Krzysztof
+So you may want to copy-paste your tag there.
 
+Cheers,
+Miguel
