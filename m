@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF36661521
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 13:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B1E661503
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 13:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjAHMiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 07:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S232950AbjAHMY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 07:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjAHMiR (ORCPT
+        with ESMTP id S229716AbjAHMY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 07:38:17 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE418A19C
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 04:38:15 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id cf18so7425190ejb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 04:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Avq55gRD0o24gHHFPcHLu6HTKb28LUs31qoNXBnZq7o=;
-        b=SaRq11IRo9W5C99Bvfz6SYfn4HdsdfBFfQWi6NBPtPLz1Gb/qDzWd8WnqYPNs6llUr
-         35itgXqlGWAcRp7VZScT0IT73imvtXOVbNb/IRNKoo/VjnUrs/cv7IDScj6HiHeHhhoo
-         svaX1tcRvBkyH5cGqT4STpAfINPyw9bCgHs7VuFbDNY5S2mq3mgmPKoAO7ZWL/E7HEAo
-         4BsM77RYm+0VkdKxeEu1SgwEhY0u1E7phyLx7BN7xcM6ucODYmql+tlOyhYMHNsEHWwD
-         JteerpUUcLCY+W9M8LMp3GEj5el1F7EpTPYpmiA2Hw2VaonVv7IE7yKISSEyTY0TUsoS
-         Dnkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Avq55gRD0o24gHHFPcHLu6HTKb28LUs31qoNXBnZq7o=;
-        b=UlSAsJZnUKS2HhzMJahFIj1tKDjvwHfxfu4V7y4TtH0T8pSz4fiimdM20eMjEOt1Bn
-         V2bothWwdAzzifgIWNBbITjhgrCJOLTyg4Nk/0ydgv7fAxZpdumlmNb5Toe3vi2abmGf
-         32UQOGCXpUED/m9kbs2OJbxxhKgllN7NouavIUfQ7gkBMEd5euaxJqutXheuB9RA3nuV
-         +gcL8Jf5EC8JXrxJeSILkfJXh7SrlSLXLfgjwIlE1GJK18ITJWlVX198DA0GnpK3bBy9
-         7jg+39BUmqJ+27dCx05dqvXfQe6WiyUV+2Qb+smXqSIzVldeDqfudzjxFho0uxjUzkKd
-         jdSQ==
-X-Gm-Message-State: AFqh2kq6WNYJaXiZxVoEtu0Pz787TeUM5KQ9WfKEEjnqo7pjo++NKvPY
-        vsUoYie0ocwSVQw/3HpgJK8=
-X-Google-Smtp-Source: AMrXdXsGwNrCX7itkrEzflpaam01vpOlqAU8MXw5HzlKCcaeLy7rER92TGCNEedyar9AJR2l1umm9Q==
-X-Received: by 2002:a17:906:71c3:b0:7c0:dd80:e95e with SMTP id i3-20020a17090671c300b007c0dd80e95emr59081397ejk.51.1673181494346;
-        Sun, 08 Jan 2023 04:38:14 -0800 (PST)
-Received: from localhost.localdomain (ip5f5abbc8.dynamic.kabel-deutschland.de. [95.90.187.200])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170906c00f00b0084ca4bd71b8sm2448014ejz.208.2023.01.08.04.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 04:38:14 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH] staging: r8188eu: convert rtw_writeN() to common error logic
-Date:   Sun,  8 Jan 2023 13:38:04 +0100
-Message-Id: <20230108123804.3754-1-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Sun, 8 Jan 2023 07:24:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932B6260C;
+        Sun,  8 Jan 2023 04:24:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43BB7B801C1;
+        Sun,  8 Jan 2023 12:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B993C433D2;
+        Sun,  8 Jan 2023 12:24:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673180693;
+        bh=AvraLn3xLafT3m5CE80rVhLQyL81EEEpzfFaGD5yBRQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZMuNsyRtv7Gqxt0eye/RxHGYBSeo3EPmfRCx6OlfS4Lgfe43gMvAQFXJsOvNZ735i
+         VlH8GuMQz/CdWJgtPwkTWPT5H6BBcMq5yOz0xDb8hn9iX0txZoVQ9zLiW0sCeMntqb
+         XuWifnTZiKSCkZjeg975F8Ll6WFGzPZn9G3QZWsiVueDy94SNmsIQglYcXTTGmnHls
+         yWeV9rNWsWbdjEGeJtCeOSGmf+os3d/Km7ynSZ0/SkJxPxxmj9Fty4Lw8R9IsSCflq
+         uo/FDstStlpaXRF5RZT7E3UZva3UDbHzaT78gejLCt1/rWl7qM2TyLJJe69pxZSpPf
+         KKvDK4DYY58BA==
+Date:   Sun, 8 Jan 2023 12:38:20 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new
+ sensor BMP580
+Message-ID: <20230108123820.7d917571@jic23-huawei>
+In-Reply-To: <1efee3367f555ffe21895f68f2bdea64a38ba22a.camel@gmail.com>
+References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
+        <c053976f56c3810915ca2ead6c358b5997b782e5.1672062380.git.ang.iglesiasg@gmail.com>
+        <20221230184535.6f684337@jic23-huawei>
+        <1efee3367f555ffe21895f68f2bdea64a38ba22a.camel@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the function rtw_writeN() away from returning _FAIL or
-_SUCCESS which uses inverted error logic. Use the common error logic
-instead. Return 0 for success and negative values for failure.
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
-Tested on x86_64 with Inter-Tech DMG-02.
+> > > +static const int bmp580_oversampling_avail[] = { 1, 2, 4, 8, 16, 32, 64,
+> > > 128 };
+> > > +static const int bmp580_iir_filter_coeffs_avail[] = { 1, 2, 4, 8, 16, 32,
+> > > 64, 128 };  
+> > 
+> > Up to you, but you could take advantage of the fact this array matches the
+> > bmp380 one.
+> > It is arguable that the code is clearer with it not being reused though so
+> > your choice.  
+> 
+> Hum yes, I could reuse the array for the BMP380, maybe a should use a more
+> generic name for that array to avoid confusion? Something like
+> bmp280_iir_filter_coeffs_avail, refering to the driver name instead of the
+> concrete sensor?
 
- drivers/staging/r8188eu/core/rtw_fw.c       | 10 ++++------
- drivers/staging/r8188eu/hal/usb_ops_linux.c |  7 ++-----
- 2 files changed, 6 insertions(+), 11 deletions(-)
+Don't worry about the naming. Anything clever just tends to cause
+problems as more parts are added.  Just stick to the name of the first part
+that used it.  We've made the mistake of trying for generic names in the
+past and it bites back!
 
-diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index 682c65b1e04c..1e4baf74ecd5 100644
---- a/drivers/staging/r8188eu/core/rtw_fw.c
-+++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -89,9 +89,8 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
- 		addr = FW_8188E_START_ADDRESS + i * block_size;
- 		data = buffer + i * block_size;
- 
--		ret = rtw_writeN(padapter, addr, block_size, data);
--		if (ret == _FAIL)
--			goto exit;
-+		if (rtw_writeN(padapter, addr, block_size, data))
-+			return _FAIL;
- 	}
- 
- 	if (remain) {
-@@ -105,9 +104,8 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
- 			addr = FW_8188E_START_ADDRESS + offset + i * block_size;
- 			data = buffer + offset + i * block_size;
- 
--			ret = rtw_writeN(padapter, addr, block_size, data);
--			if (ret == _FAIL)
--				goto exit;
-+			if (rtw_writeN(padapter, addr, block_size, data))
-+				return _FAIL;
- 		}
- 	}
- 
-diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-index 7c72f5e04d9b..f02f8568cdcf 100644
---- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-@@ -179,14 +179,11 @@ int rtw_writeN(struct adapter *adapter, u32 addr, u32 length, u8 *data)
- 	struct io_priv *io_priv = &adapter->iopriv;
- 	struct intf_hdl *intf = &io_priv->intf;
- 	u16 value = addr & 0xffff;
--	int ret;
- 
- 	if (length > VENDOR_CMD_MAX_DATA_LEN)
--		return _FAIL;
-+		return -EINVAL;
- 
--	ret = usb_write(intf, value, data, length);
--
--	return RTW_STATUS_CODE(ret);
-+	return usb_write(intf, value, data, length);
- }
- 
- static void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
--- 
-2.39.0
+
+Jonathan
 
