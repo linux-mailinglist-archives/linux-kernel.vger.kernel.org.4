@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340696615B6
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79A16615B7
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 15:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjAHOFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 09:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S235082AbjAHOFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 09:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbjAHOFm (ORCPT
+        with ESMTP id S232624AbjAHOFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:05:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A02E0C7
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 06:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673186695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=SvP8ekAIqcOgi1IwFNYhYd6TdupD/4X2ptAF0OQVZ2E1UrXxA+XANQCvSu/zbwLcEWMngx
-        h7JvKJsXNi4fTve6/UOMRZGNlRdimz/pSHsMuIFK4doJj8s1QbA6/SrqG3unA3EzKmZUsy
-        xCE1ncG8mp0EwsJj5gxq0pcMxRiam7k=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-361-_PDY06I5MF6-jK_RvJZZkQ-1; Sun, 08 Jan 2023 09:04:54 -0500
-X-MC-Unique: _PDY06I5MF6-jK_RvJZZkQ-1
-Received: by mail-qv1-f70.google.com with SMTP id kl19-20020a056214519300b004e174020eebso3862508qvb.23
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 06:04:54 -0800 (PST)
+        Sun, 8 Jan 2023 09:05:41 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C87CEE;
+        Sun,  8 Jan 2023 06:05:40 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id l139so6332064ybl.12;
+        Sun, 08 Jan 2023 06:05:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLyGyJv5EKdrM6YbNUV9Yd2+NBwyRo3dIWNfBJujseM=;
+        b=ozIbY+Hmfd/o7aVcWJ7aawXa8GZUuvRThitQx4sDYlRDKAKcS7BEJuYTRaym6rW2Fh
+         q/P9r+ioLW2KdE9zV+aDQF/UIDnQ8Ywy9uv2Ecqa7U1I6+LRKW5bxBeS+J4sQYs/vX5r
+         CVnx1WHvGfMu9imK6mkrINqKPPyZOAK5b5knFWRoFtYRSPnTK4WT4bzgZspcNOSuK4pJ
+         4HpBpQT5bmcOpBtxLuoZqehMGcDF91EDvggFxSNHTWQsrePlbrFVcWr82A6dAR6dX33Z
+         PhXrjz4/Zt97zWNr8CbWc/NXlEt/zFiIzqrLPF86hPcri2EWfbgwyCuGiV51M7QOfsR8
+         vIsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=tvWwckA005Uoo/bUZHeQ05RXwTJDSGr4apKAQhv5jhT0Yxz14PMElXDvtoZRm0+WH0
-         YhsQmnE+3OP9tfO4Z+AGYN3OMxEOoQ12wZdQ3fO/+x8J20bnlvvTnEoVOukBek1P9J/4
-         v1tqCQ1S+5G8ZwpJMgvyCYnmDrOjqAXkCHMpSjvcXJp4bbLWjcPLy1LuITpkDingQHYr
-         tkO9sHjZg+BSgNOL7A6kLK7Nlh/QZdmk5UP7PSw7bBBzbQ1JaksO6h5NWr7x0gXVm58+
-         zlBYhAdi7GM359KycJN1nNtRP3jX5ePOlaFP76lZrxSLnEMVKhrMRwE/GXHEz+3WuU8J
-         wZzQ==
-X-Gm-Message-State: AFqh2koILQayW7TJOft9gGv3HbDSd3neWdyKc0YKGrztPEAxLL2Z5MVL
-        Iz0vxiVa8tcdP6LTXXpsGGZc9wq4PmtdXkUSx1Sk4wncW5jIoHsbaZLjJFE2QCQXw2ys92aOGwD
-        4Yk8P5UX70qmM7i13G6N6Myo6
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767667qto.23.1673186693557;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtID8TsAZQOvN8rRZIxWPf6fGBYCJ6FbN75okARmRvpDMZM4heK3p03Na4clHPhQKpXQ2oNJw==
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767646qto.23.1673186693303;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-Received: from debian (2a01cb058918ce0098fed9113971adae.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:98fe:d911:3971:adae])
-        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm232494qtb.59.2023.01.08.06.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 06:04:52 -0800 (PST)
-Date:   Sun, 8 Jan 2023 15:04:48 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias May <matthias.may@westermo.com>
-Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
- when selftest restarted
-Message-ID: <Y7rNgPj9WIroPcQ/@debian>
-References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
- <Y7i5cT1AlyC53hzN@debian>
- <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
- <Y7lpO9IHtSIyHVej@debian>
- <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mLyGyJv5EKdrM6YbNUV9Yd2+NBwyRo3dIWNfBJujseM=;
+        b=1MvTBoh4HfxIK9GkX3cUTLPgGLllqXZ1Rq3yeVRwV23dbZVi54qaiGn3t7D0JwiRcQ
+         n44o4lakg7nZjcFXbPgMeroWtCSgTWzLoST2jZj2GpI/TcgFuPf2S9MmKQ9LXtJo4zJZ
+         CRIBbj4b+MvLC51+WJSx3d8xzTMbNQloADyEdXvD327dd0DuTu/FxQ7DpXL6ygxhwN4d
+         XJHGgwP6ouatUfFGjt06MYnp3kDiRBGIORaKQ9VR7GNuCN666BF2+vFSuGGn1EYXvzLx
+         +aMT9jR0EGu9iOxZ8xLS29ZbOsozr6yOjVuQX3D1vbV43kqw6tEfvaD/mio2ivEgGN6d
+         AAjg==
+X-Gm-Message-State: AFqh2koXoUKlL+yAjo0jqbRtqU/pKNX3UyxzdfxX1bAgmgoRnuMasEsO
+        2SLJ9xV6/KW4p57jdD3WVvINHouE6LQ1l4yaYm4=
+X-Google-Smtp-Source: AMrXdXt74t7Fv3+NoS1rvMFq+6Mt8PVP5s4X2WJZuU/cPs55Yoqqw+hZRtBar4VLBZGeM7SsZHufE0ai9VyXtJ1GOBc=
+X-Received: by 2002:a25:bc43:0:b0:7b2:343d:6b11 with SMTP id
+ d3-20020a25bc43000000b007b2343d6b11mr1999696ybk.75.1673186740151; Sun, 08 Jan
+ 2023 06:05:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230107091820.3382134-1-masahiroy@kernel.org>
+ <CANiq72nY9X1cyu=3MwfRKTcxMUNHRTUGPFC7VR=OtL8V-NPQog@mail.gmail.com> <CAK7LNAR_VTo1A7rfQq8zMzLYfRRCUzruPQL=akALTg-GYKaQzw@mail.gmail.com>
+In-Reply-To: <CAK7LNAR_VTo1A7rfQq8zMzLYfRRCUzruPQL=akALTg-GYKaQzw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 8 Jan 2023 15:05:29 +0100
+Message-ID: <CANiq72mTUd5ogH_GNXLdNXYwQQpx=-qk3cPpTMDw_-mmbBLJrw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] kbuild: refactor host*_flags
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,91 +76,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 10:11:25AM +0100, Mirsad Goran Todorovac wrote:
-> [root@pc-mtodorov marvin]# tcpdump --immediate-mode -p -v -i veth0 -n
-> dropped privs to tcpdump
-> tcpdump: listening on veth0, link-type EN10MB (Ethernet), capture size 262144 bytes
-> 08:30:22.835825 IP (tos 0x0, ttl 64, id 2490, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.1.35195 > 198.18.0.2.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 198.19.0.2 tell 198.19.0.1, length 28
-> 08:30:22.835926 IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
-> 08:30:22.835976 IP (tos 0xc0, ttl 64, id 29533, offset 0, flags [none], proto ICMP (1), length 106)
->     198.18.0.1 > 198.18.0.2: ICMP host 198.18.0.1 unreachable - admin prohibited filter, length 86
->         IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
+On Sun, Jan 8, 2023 at 2:06 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> No, there is no reason. Just my whimsy.
+>
+> I will do something like the following just in case.
+>
+> hostc_flags  =  -Wp,-MMD,$(depfile)  \
+>                 $(KBUILD_HOSTCFLAGS) $(HOST_EXTRACFLAGS) \
+>                 $(HOSTCFLAGS_$(target-stem).o)
 
-For some reasons, your host doesn't accept the VXLAN packets received
-over veth0. I guess there are some firewalling rules incompatible with
-this tests script.
+Yeah, it sounds simpler to keep it the same, we could always do the
+order change in an independent patch if needed.
 
-> > -------- >8 --------
-> > 
-> > Isolate testing environment and ensure everything is cleaned up on
-> > exit.
-> > 
-> > diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
-
-> Wow, Guillaueme, this patch actually made things unstuck :)
-
-Great! The patch isolates the testing environment, making it less
-dependent from the host that runs it. So the routing and firewalling
-configurations don't interfere anymore.
-
-> The entire tools/tests/selftests/net section now had a PASS w "OK", save for a couple of tests here:
-> 
-> not ok 1 selftests: nci: nci_dev # exit=1
-> not ok 12 selftests: net: nat6to4.o
-> not ok 13 selftests: net: run_netsocktests # exit=1
-> not ok 29 selftests: net: udpgro_bench.sh # exit=255
-> not ok 30 selftests: net: udpgro.sh # exit=255
-> not ok 37 selftests: net: fcnal-test.sh # TIMEOUT 1500 seconds
-> not ok 38 selftests: net: l2tp.sh # exit=2
-> not ok 46 selftests: net: icmp_redirect.sh # exit=1
-> not ok 55 selftests: net: vrf_route_leaking.sh # exit=1
-> not ok 59 selftests: net: udpgro_fwd.sh # exit=1
-> not ok 60 selftests: net: udpgro_frglist.sh # exit=255
-> not ok 61 selftests: net: veth.sh # exit=1
-> not ok 68 selftests: net: srv6_end_dt46_l3vpn_test.sh # exit=1
-> not ok 69 selftests: net: srv6_end_dt4_l3vpn_test.sh # exit=1
-> not ok 75 selftests: net: arp_ndisc_evict_nocarrier.sh # exit=255
-> not ok 83 selftests: net: test_ingress_egress_chaining.sh # exit=1
-> not ok 1 selftests: net/hsr: hsr_ping.sh # TIMEOUT 45 seconds
-> not ok 3 selftests: net/mptcp: mptcp_join.sh # exit=1
-> 
-> If you are interested in additional diagnostics, this is a very interesting part of the
-> Linux kernel testing ...
-> 
-> There was apparent hang in selftest/net/fcnal-test.sh as well.
-> I can help you with the diagnostics if you wish? Thanks.
-> 
-> If I could make them all work both on Ubuntu 22.10 kinetic kudu and AlmaLinux 8.7
-> stone smilodon (CentOS fork), this would be a milestone for me :)
-
-I'm surprised you have so many failures. Feel free to report them
-individually. Don't forget to Cc the authors of the scripts. Just
-pay attention not to overwhelm people.
-
-I can probably help with the l2tp.sh failure and maybe with the
-fcnal-test.sh hang. Please report them in their own mail thread.
-
-> Have a nice day!
-> 
-> Regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
->  
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
-> 
-> 
-
+Cheers,
+Miguel
