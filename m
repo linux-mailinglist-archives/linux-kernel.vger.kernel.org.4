@@ -2,199 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3753661616
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F016866161D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 Jan 2023 16:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjAHPQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 10:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S232950AbjAHPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 10:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbjAHPQ3 (ORCPT
+        with ESMTP id S231272AbjAHPTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 10:16:29 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652CD2BE3
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:16:28 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id z5so4745458wrt.6
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:16:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BXw9KAygztT5jDGimnXGtcc/RXt5y1LZ6kVLW6bynMM=;
-        b=tpTCz4ws4jY+X1l3CQZUYaPGZa/EpzKs+yq2hYz6I47CqYW66cl+bAfI4BbsrWfmGs
-         wtQgtBjyGmpB2lgMW0B1jgg3XLN9/ToR1pRqizZcEcj14V864ktX4fOpZODMiqs4QVlE
-         89UDXaMWkCdVIeWxrbTMXsbvD5Hi55UcJXWyAUya0Ad5cGzzO9UkgL3JPCRYHinRUwoJ
-         MuLaN18LU1Pm+aAZQDXbiTxX4s7eb9ALHtsSAS30swbfEvafY2NlTrmy/rpV5N+6dMDq
-         pRGu/DUepZ8mhJShTxyIljbBeZfAscuPDkR3GYSyzWUEZdDqbobrRMhAg6jYvjyFBa/M
-         98kQ==
+        Sun, 8 Jan 2023 10:19:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBFAB1CF
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 07:18:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673191099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EPjethgfbpXdoRd0XcBNPqRZDZHvORJ5WlXtoiZqGUc=;
+        b=TIqzD15Sz/YmSo6ZiKCBD7lhIXiz/VX4KHAfQVuj26zt1/6ET2VRRNklxxQH0oHQQFCz7L
+        IhM4h35BdvsYk3MPMDrhIWj1E4MkV/76nrDTpkVcN3PR3xLiIuoKneA8TR16PzKlunl264
+        KIEVnPzLL96WoVIH9VjrnU8BmN1nrak=
+Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
+ [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-589-Tzi3t9spPV2cvrLd0nrjEA-1; Sun, 08 Jan 2023 10:18:18 -0500
+X-MC-Unique: Tzi3t9spPV2cvrLd0nrjEA-1
+Received: by mail-ua1-f71.google.com with SMTP id z12-20020ab0564c000000b00516777f7197so3066036uaa.11
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 07:18:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BXw9KAygztT5jDGimnXGtcc/RXt5y1LZ6kVLW6bynMM=;
-        b=4PP5dBZBWSBTXoAZWp/oedVu/TzXDn4IsldPiczAkyScTJye/aaSFkxoxUWZMVa7ri
-         Ra3D5QiTj2AY736hPfhVQaE02WNysBCJHONyJko25+8Pxa2pPs4wccbO/i6KEQ37gse/
-         wBQpiATmwtQXQ0F/XYLYTRhNaEAXQ3SfQO+P94nzJROCCt1WgCHWc3lISBbKKbKwd4TJ
-         Wej/AGJgsbPFu4JGh1k6lu2EoZikZfiF9Njdi9/ua4fLeiupi3rzqn2YaW3WEhCQbA2/
-         S4nfHksyR3SUjqoadB34YF1OjGy0DCPPgSA6FgZv8ObjTS7K9wgEj4Uoa/tZXG6qOF0/
-         YAPw==
-X-Gm-Message-State: AFqh2krnryq9oLPQ5I8hXnShloTMw7BjcMpzeSTWoXc0F/kLVzsh6V+o
-        pFHAHtgghBGGXBy5Pct16pPskw==
-X-Google-Smtp-Source: AMrXdXviZdBmClnb6Toply9D3tNh+sz2JLSNoU9T04Iga71AMgdwS3TaY1guKipjbFqDnRnrIwrRUA==
-X-Received: by 2002:a5d:5e81:0:b0:244:e704:df2c with SMTP id ck1-20020a5d5e81000000b00244e704df2cmr44150318wrb.57.1673190986931;
-        Sun, 08 Jan 2023 07:16:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w4-20020a5d4b44000000b002366dd0e030sm6261986wrs.68.2023.01.08.07.16.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 07:16:26 -0800 (PST)
-Message-ID: <c393e532-d466-366b-a390-65de47c58b6a@linaro.org>
-Date:   Sun, 8 Jan 2023 16:16:24 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EPjethgfbpXdoRd0XcBNPqRZDZHvORJ5WlXtoiZqGUc=;
+        b=FgxrUlUbo0TiczX8BvN9AvGtdtvzJCTgWC5n6nU2Z1TDo8xV4xO/6UTKJ35/gzTABE
+         PVlfq1QFlCBLEl+mY9AgEa3hkwiilUuKLULY2jl0ZVZyS+8xguiFH+3dghWoIM+1AhCV
+         aJbAiYK7k7ILrOZpoTQW7nuBSV+zw4acgJnw1r4XYTryxhSp8W1Yt7h9hwvOr4Zc6zjQ
+         MwTss2QW8TDK3GxSfZuR+1jGY4fr6eC0dlxwnwZ9wplkQZjnNhSCxQ87PX7Qk7d7xjGK
+         VIku3SCuAp0U5qv+zx2BrAAUuNH0dQNLoI2bQpyxVSBKM0mzaa/9rA2g+33K7rsxxxNz
+         FfLw==
+X-Gm-Message-State: AFqh2koLjzA+BqcHQRWNw924HA+bEc3XQ90PouCv6Xf5dHo9pn/4ob4v
+        3QLR6fTpy027TyWM8NIaMf38Ea9d2GlD+e/ij/sLb57mIh262HpV2Db1vGU1rg7/Uw5Fwys6TdK
+        BhcdEU/keurrVNcIK7UEtJ3MziRqNrlmCVBQvzMkf
+X-Received: by 2002:a05:6102:cd4:b0:3c8:92b3:7a28 with SMTP id g20-20020a0561020cd400b003c892b37a28mr8001454vst.13.1673191097006;
+        Sun, 08 Jan 2023 07:18:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv5uPF/b7nQYydA6iJsSIN/vLj3t+rmsB67d7rcUj743rnIxdOe6LNBEQfGJwF2XY2FZzdDep8AFEmkHmX2BdE=
+X-Received: by 2002:a05:6102:cd4:b0:3c8:92b3:7a28 with SMTP id
+ g20-20020a0561020cd400b003c892b37a28mr8001446vst.13.1673191096800; Sun, 08
+ Jan 2023 07:18:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 08/10] dt-bindings: sound: Add support for QMC audio
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230106163746.439717-1-herve.codina@bootlin.com>
- <20230106163746.439717-9-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106163746.439717-9-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108021450.120791-1-yakoyoku@gmail.com>
+In-Reply-To: <20230108021450.120791-1-yakoyoku@gmail.com>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Sun, 8 Jan 2023 15:18:01 +0000
+Message-ID: <CAOgh=Fzc3_bCLCKE+6KVzyMbBUOcQ_s9ef6Rw33amD5+yu-_WA@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts: Exclude Rust CUs with pahole
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Neal Gompa <neal@gompa.dev>, bpf@vger.kernel.org,
+        rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 17:37, Herve Codina wrote:
-> The QMC (QUICC mutichannel controller) is a controller
-> present in some PowerQUICC SoC such as MPC885.
-> The QMC audio is an ASoC component that uses the QMC
-> controller to transfer the audio data.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+On Sun, 8 Jan 2023 at 02:15, Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> Version 1.24 of pahole has the capability to exclude compilation units
+> (CUs) of specific languages. Rust, as of writing, is not currently
+> supported by pahole and if it's used with a build that has BTF debugging
+> enabled it results in malformed kernel and module binaries (see
+> Rust-for-Linux/linux#735). So it's better for pahole to exclude Rust
+> CUs until support for it arrives.
+>
+> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+> Tested-by: Eric Curtin <ecurtin@redhat.com>
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Tested-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 > ---
->  .../bindings/sound/fsl,qmc-audio.yaml         | 110 ++++++++++++++++++
->  1 file changed, 110 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-> new file mode 100644
-> index 000000000000..b3774be36c19
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-> @@ -0,0 +1,110 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/fsl,qmc-audio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> V1 -> V2: Removed dependency on auto.conf
+>
+>  init/Kconfig              | 2 +-
+>  lib/Kconfig.debug         | 9 +++++++++
+>  scripts/Makefile.modfinal | 4 ++++
+>  scripts/link-vmlinux.sh   | 4 ++++
+>  4 files changed, 18 insertions(+), 1 deletion(-)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 694f7c160c9c..360aef8d7292 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1913,7 +1913,7 @@ config RUST
+>         depends on !MODVERSIONS
+>         depends on !GCC_PLUGINS
+>         depends on !RANDSTRUCT
+> -       depends on !DEBUG_INFO_BTF
+> +       depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+>         select CONSTRUCTORS
+>         help
+>           Enables Rust support in the kernel.
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index ea4c903c9868..d473d491e709 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -364,6 +364,15 @@ config PAHOLE_HAS_BTF_TAG
+>           btf_decl_tag) or not. Currently only clang compiler implements
+>           these attributes, so make the config depend on CC_IS_CLANG.
+>
+> +config PAHOLE_HAS_LANG_EXCLUDE
+> +       def_bool PAHOLE_VERSION >= 124
+> +       help
+> +         Support for the --lang_exclude flag which makes pahole exclude
+> +         compilation units from the supplied language. Used in Kbuild to
+> +         omit Rust CUs which are not supported in version 1.24 of pahole,
+> +         otherwise it would emit malformed kernel and module binaries when
+> +         using DEBUG_INFO_BTF_MODULES.
 > +
-> +title: QMC audio
+>  config DEBUG_INFO_BTF_MODULES
+>         def_bool y
+>         depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 25bedd83644b..a880f2d6918f 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -30,6 +30,10 @@ quiet_cmd_cc_o_c = CC [M]  $@
+>
+>  ARCH_POSTLINK := $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postlink)
+>
+> +ifdef CONFIG_RUST
+> +PAHOLE_FLAGS += --lang_exclude=rust
+> +endif
 > +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +description: |
-> +  The QMC audio is an ASoC component which uses QMC (QUICC Multichannel
-> +  Controller) channels to transfer the audio data.
-> +  It provides as many DAI as the number of QMC channel used.
-> +
-> +properties:
-> +  compatible:
-> +    items:
+>  quiet_cmd_ld_ko_o = LD [M]  $@
+>        cmd_ld_ko_o +=                                                   \
+>         $(LD) -r $(KBUILD_LDFLAGS)                                      \
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index 918470d768e9..69eb0bea89bf 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -122,6 +122,10 @@ gen_btf()
+>                 return 1
+>         fi
+>
+> +       if is_enabled CONFIG_RUST; then
+> +               PAHOLE_FLAGS="${PAHOLE_FLAGS} --lang_exclude=rust"
+> +       fi
 
-Drop items.
+If it was me, I would do things more like v1 of the patch (instead
+just checking pahole version), because this is the only flag set in
+scripts/Makefile.modfinal, which is a little confusing and
+inconsistent. It's ok to set --lang_exclude=rust in all cases, as long
+as pahole_ver is recent enough.
 
-> +      - const: fsl,qmc-audio
-> +
-> +  '#address-cells':
-> +    const: 1
-> +  '#size-cells':
-> +    const: 0
-> +  '#sound-dai-cells':
-> +    const: 1
-> +
-> +patternProperties:
-> +  "^dai@([0-9]|[1-5][0-9]|6[0-3])$":
-> +    description:
-> +      A DAI managed by this controller
-> +    type: object
-> +
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 63
-> +        description:
-> +          The DAI number
-> +
-> +      qmc-chan:
++if [ "${pahole_ver}" -ge "124" ]; then
++       # see PAHOLE_HAS_LANG_EXCLUDE
++       extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
++fi
 
-Missing vendor prefix.
+But I'm not too opinionated either on this so...
 
-> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-Why this is not a phandle?
+can be reapplied. I'm gonna test this again to see if it works in a
+Fedora Asahi rpm build.
 
-> +        description: phandle to the QMC channel> +        maxItems: 1
+
 > +
-> +    required:
-> +      - reg
-> +      - qmc-chan
-> +
-> +required:
-> +  - compatible
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - '#sound-dai-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    qmc_audio: qmc_audio {
-
-Same problem as in previous patch.
-
-> +        compatible = "fsl,qmc-audio";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        #sound-dai-cells = <1>;
-> +        dai@16 {
-> +            reg = <16>;
-> +            qmc-chan = <&scc_qmc 16>;
-> +        };
-> +        dai@17 {
-> +            reg = <17>;
-> +            qmc-chan = <&scc_qmc 17>;
-> +        };
-> +    };
-
-Best regards,
-Krzysztof
+>         vmlinux_link ${1}
+>
+>         info "BTF" ${2}
+> --
+> 2.39.0
+>
 
