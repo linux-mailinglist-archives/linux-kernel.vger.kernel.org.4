@@ -2,204 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562F3662CCC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1477662CD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbjAIRcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S234778AbjAIRdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237447AbjAIRbe (ORCPT
+        with ESMTP id S234370AbjAIRc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:31:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AF41A80D;
-        Mon,  9 Jan 2023 09:31:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96C4261228;
-        Mon,  9 Jan 2023 17:31:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACA8C433F2;
-        Mon,  9 Jan 2023 17:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673285490;
-        bh=nsHl4N/Tw8OGEOOp9S/huxCZu0i8VX5YCE34Txmblgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TltHk8HDmPxjXMhyVXI+PTvBjoM4DMk59awdZoaqyfHr+e4cLMAJLYkkUlGA9CIxe
-         /Yv7jFnFsJ9EK4umUOOMQBbwKsgs4LS1DqttJCO4ICOcRkX7HDuIYmZKzfUedGKXml
-         XNJS7e8+RGhXMXa0IVQemver9DHBWItZo0Ja2cHKNp6O+M+jIVLwjKCZnl+hXB61S2
-         2AY68oaRFyl2qCAbT0x8JW4LuLWFcHOnkyZbuGE7TCVmPghmPX6R/TnUD+MNrtgtz3
-         TcJ0zU8ZrRKhqeXanzSriX6c8JhE8poZAG8mTqaz4my3Yv1ESvmUlw2tTv5sEL4thg
-         yonHsCgTpwldA==
-Date:   Mon, 9 Jan 2023 10:31:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v3] kbuild: export top-level LDFLAGS_vmlinux only to
- scripts/Makefile.vmlinux
-Message-ID: <Y7xPcBTZin7H+KFe@dev-arch.thelio-3990X>
-References: <20230108192317.2988108-1-masahiroy@kernel.org>
+        Mon, 9 Jan 2023 12:32:59 -0500
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5554A47E;
+        Mon,  9 Jan 2023 09:32:57 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id p17-20020a9d6951000000b00678306ceb94so5559832oto.5;
+        Mon, 09 Jan 2023 09:32:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vt7DGUy1KFLtewCdpYO+kWiUzbW5gAuQvl+L5yBlJLE=;
+        b=zRW6h1FrGcT/RtZxhetriTbBWWfyM1qn+8fc3e/53flwkssqgXZrhemknrrdBuClj7
+         xJjFliZ6/68TYRQd0jdN2VeIlWKzHxb8/+9DP+LjhQH3sQn44a+XKfaLkJtAw2/gZqTO
+         rzfZXsKUrG5FHbSsv9E5IM5nDAXw78jZlHJ2YNHoRtvst5gxZIh2ph5AJq3INxYK0I7a
+         jmxBa1hDfBe8/EE/Pu0mK+mvuoKfNgnQHNCw3u1Quq9EdFTRZ7aW71HrmTzQWTGOeYxF
+         a7/IgOEQGWkHO7MBG3toDsqETPmvFUifJk0pUfDI/XVdpP0TJ+OEujFEo3DkmOFet5b8
+         Scag==
+X-Gm-Message-State: AFqh2kpc66u6C6lUbQczoG7UcvwIHl9MhY+/6ZlmzObcSasuOx4d/KLz
+        l2wTeJh3hVevJ7YbgBl+sA==
+X-Google-Smtp-Source: AMrXdXsB5bdrYW28/WMqpdBRZNzuh/dd8EtxEGTo5RAGR3aEt6h3yJn+AQWoPreURt1SOKrddRdd/A==
+X-Received: by 2002:a05:6830:612:b0:670:97e8:bb88 with SMTP id w18-20020a056830061200b0067097e8bb88mr39230591oti.28.1673285577072;
+        Mon, 09 Jan 2023 09:32:57 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k8-20020a9d7608000000b006708a6274afsm4847417otl.25.2023.01.09.09.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 09:32:56 -0800 (PST)
+Received: (nullmailer pid 1013201 invoked by uid 1000);
+        Mon, 09 Jan 2023 17:32:55 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108192317.2988108-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org, andersson@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+In-Reply-To: <20230109135647.339224-2-konrad.dybcio@linaro.org>
+References: <20230109135647.339224-1-konrad.dybcio@linaro.org>
+ <20230109135647.339224-2-konrad.dybcio@linaro.org>
+Message-Id: <167328555792.1012753.8015526796598804432.robh@kernel.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: remoteproc: qcom,sm6375-pas: Document
+ remoteprocs
+Date:   Mon, 09 Jan 2023 11:32:55 -0600
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 04:23:17AM +0900, Masahiro Yamada wrote:
-> Nathan Chancellor reports that $(NM) emits an error message when
-> GNU Make 4.4 is used to build the ARM zImage.
-> 
->   $ make-4.4 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- O=build defconfig zImage
->     [snip]
->     LD      vmlinux
->     NM      System.map
->     SORTTAB vmlinux
->     OBJCOPY arch/arm/boot/Image
->     Kernel: arch/arm/boot/Image is ready
->   arm-linux-gnueabi-nm: 'arch/arm/boot/compressed/../../../../vmlinux': No such file
->   /bin/sh: 1: arithmetic expression: expecting primary: " "
->     LDS     arch/arm/boot/compressed/vmlinux.lds
->     AS      arch/arm/boot/compressed/head.o
->     GZIP    arch/arm/boot/compressed/piggy_data
->     AS      arch/arm/boot/compressed/piggy.o
->     CC      arch/arm/boot/compressed/misc.o
-> 
-> This occurs since GNU Make commit 98da874c4303 ("[SV 10593] Export
-> variables to $(shell ...) commands"), and the O= option is needed to
-> reproduce it. The generated zImage is correct despite the error message.
-> 
-> As the commit description of 98da874c4303 [1] says, exported variables
-> are passed down to $(shell ) functions, which means exported recursive
-> variables might be expanded earlier than before, in the parse stage.
-> 
-> The following test code demonstrates the change for GNU Make 4.4.
-> 
-> [Test Makefile]
-> 
->   $(shell echo hello > foo)
->   export foo = $(shell cat bar/../foo)
->   $(shell mkdir bar)
-> 
->   all:
->           @echo $(foo)
-> 
-> [GNU Make 4.3]
-> 
->   $ rm -rf bar; make-4.3
->   hello
-> 
-> [GNU Make 4.4]
-> 
->   $ rm -rf bar; make-4.4
->   cat: bar/../foo: No such file or directory
->   hello
-> 
-> The 'foo' is a resursively expanded (i.e. lazily expanded) variable.
-> 
-> GNU Make 4.3 expands 'foo' just before running the recipe '@echo $(foo)',
-> at this point, the directory 'bar' exists.
-> 
-> GNU Make 4.4 expands 'foo' to evaluate $(shell mkdir bar) because it is
-> exported. At this point, the directory 'bar' does not exit yet. The cat
-> command cannot resolve the bar/../foo path, hence the error message.
-> 
-> Let's get back to the kernel Makefile.
-> 
-> In arch/arm/boot/compressed/Makefile, KBSS_SZ is referenced by
-> LDFLAGS_vmlinux, which is recursive and also exported by the top
-> Makefile.
-> 
-> GNU Make 4.3 expands KBSS_SZ just before running the recipes, so no
-> error message.
-> 
-> GNU Make 4.4 expands KBSS_SZ in the parse stage, where the directory
-> arm/arm/boot/compressed does not exit yet. When compiled with O=,
-> the output directory is created by $(shell mkdir -p $(obj-dirs))
-> in scripts/Makefile.build.
-> 
-> There are two ways to fix this particular issue:
-> 
->  - change "$(obj)/../../../../vmlinux" in KBSS_SZ to "vmlinux"
->  - unexport LDFLAGS_vmlinux
-> 
-> This commit takes the latter course because it is what I originally
-> intended.
-> 
-> Commit 3ec8a5b33dea ("kbuild: do not export LDFLAGS_vmlinux")
-> unexported LDFLAGS_vmlinux.
-> 
-> Commit 5d4aeffbf709 ("kbuild: rebuild .vmlinux.export.o when its
-> prerequisite is updated") accidentally exported it again.
-> 
-> We can clean up arch/arm/boot/compressed/Makefile later.
-> 
-> [1]: https://git.savannah.gnu.org/cgit/make.git/commit/?id=98da874c43035a490cdca81331724f233a3d0c9a
-> 
-> Link: https://lore.kernel.org/all/Y7i8+EjwdnhHtlrr@dev-arch.thelio-3990X/
-> Fixes: 5d4aeffbf709 ("kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Thank you again for digging into this!
-
+On Mon, 09 Jan 2023 14:56:44 +0100, Konrad Dybcio wrote:
+> SM6375 hosts an ADSP, CDSP and modem as remote processors. Create
+> related bindings.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
+> v2 -> v3:
+> - Separate out 6375 bindings
 > 
-> Changes in v3:
->   - Minimize the scope of exporting.
->     LDFLAGS_vmlinux is only exported to scripts/Makefile.vmlinux
+>  .../bindings/remoteproc/qcom,sm6375-pas.yaml  | 137 ++++++++++++++++++
+>  1 file changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
 > 
-> Changes in v2:
->   - Postpone the change for arch/arm/boot/compressed/Makefile
->   - Update the commit description
-> 
->  Makefile | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index dfba294ae790..9eed3e9b3657 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -549,7 +549,7 @@ LDFLAGS_MODULE  =
->  CFLAGS_KERNEL	=
->  RUSTFLAGS_KERNEL =
->  AFLAGS_KERNEL	=
-> -export LDFLAGS_vmlinux =
-> +LDFLAGS_vmlinux =
->  
->  # Use USERINCLUDE when you must reference the UAPI directories only.
->  USERINCLUDE    := \
-> @@ -1248,6 +1248,18 @@ vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
->  	@:
->  
->  PHONY += vmlinux
-> +# LDFLAGS_vmlinux in the top Makefile defines linker flags for the top vmlinux,
-> +# not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
-> +# unrelated; the decompressors just happen to have the same base name,
-> +# arch/*/boot/compressed/vmlinux.
-> +# Export LDFLAGS_vmlinux only to scripts/Makefile.vmlinux.
-> +#
-> +# _LDFLAGS_vmlinux is an indirection to work around the bug:
-> +#   https://savannah.gnu.org/bugs/?61463
-> +# For Make > 4.4, the following simple code will work:
-> +#  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> +vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> +vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
->  vmlinux: vmlinux.o $(KBUILD_LDS) modpost
->  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
->  
-> -- 
-> 2.34.1
-> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/qcom,pas-common.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.example.dtb: remoteproc@a400000: False schema does not allow {'compatible': ['qcom,sm6375-adsp-pas'], 'reg': [[171966464, 256]], 'interrupts-extended': [[4294967295, 0, 282, 4], [4294967295, 0, 1], [4294967295, 1, 1], [4294967295, 2, 1], [4294967295, 3, 1]], 'interrupt-names': ['wdog', 'fatal', 'ready', 'handover', 'stop-ack'], 'clocks': [[4294967295, 0]], 'clock-names': ['xo'], 'power-domains': [[4294967295, 8], [4294967295, 9]], 'power-domain-names': ['lcx', 'lmx'], 'memory-region': [[4294967295]], 'qcom,smem-states': [[4294967295, 0]], 'qcom,smem-state-names': ['stop'], 'glink-edge': {'interrupts-extended': [[4294967295, 3, 0, 1]], 'mboxes': [[4294967295, 3, 0]], 'label': ['lpass'], 'qcom,remote-pid': [[2]]}, '$nodename': ['remoteproc@a400000']}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.example.dtb: remoteproc@a400000: Unevaluated properties are not allowed ('glink-edge', 'memory-region', 'qcom,smem-state-names', 'qcom,smem-states' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230109135647.339224-2-konrad.dybcio@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
