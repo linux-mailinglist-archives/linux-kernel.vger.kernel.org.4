@@ -2,137 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B4C663113
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFDA66310B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbjAIUL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
+        id S237638AbjAIUKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237565AbjAIULA (ORCPT
+        with ESMTP id S237554AbjAIUKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:11:00 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71C7767F;
-        Mon,  9 Jan 2023 12:10:53 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309JuEd7007452;
-        Mon, 9 Jan 2023 20:10:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=WbMDgdUJZVKJs0Nl9/VYi0q97VLNPhEA1RGhIIXexw4=;
- b=tICUTTr25xyQuaVIfVsGyhVM3CaIMsA4ASISY+XYNFT6hzBme/UIOlxZ367da1OIEEqr
- sOQ/n0nGWPCf9F0JptTssk+P0mma08DiuHwqn8IylSE6eKiV3feBtwcHCAiJY8BUNEoV
- jrI/ZfzfT1a8LEL3dtUdA2BWE9dxbQ39gf/fI+G6RInnWnY8MEhahe+O/UZXN3Ayzh62
- 8XmRJmBf8gIsbpnR4XX2bf6hkQO0c7X3PcwS3oZ1t39DBJlUVeihOfVgEQ6vmhtQY7Bt
- /ac8A9WUbhz3JvqDabAObQqr4Le03mkIuaqmv1zckMeszyksbl/YvE8se4SD8/ZywQDb zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjw3qdqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 20:10:48 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309Jt5o8015678;
-        Mon, 9 Jan 2023 20:10:48 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjw3qdq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 20:10:48 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 309IIJIf007444;
-        Mon, 9 Jan 2023 20:10:47 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3my0c75qk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 20:10:47 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309KAkr826804658
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 20:10:46 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF68958054;
-        Mon,  9 Jan 2023 20:10:45 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 815195803F;
-        Mon,  9 Jan 2023 20:10:43 +0000 (GMT)
-Received: from li-2311da4c-2e09-11b2-a85c-c003041e9174.ibm.com.com (unknown [9.65.251.44])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 20:10:43 +0000 (GMT)
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     alex.williamson@redhat.com, pbonzini@redhat.com
-Cc:     jgg@nvidia.com, cohuck@redhat.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com,
-        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] KVM: s390: pci: use asyncronous kvm put
-Date:   Mon,  9 Jan 2023 15:10:37 -0500
-Message-Id: <20230109201037.33051-3-mjrosato@linux.ibm.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109201037.33051-1-mjrosato@linux.ibm.com>
-References: <20230109201037.33051-1-mjrosato@linux.ibm.com>
+        Mon, 9 Jan 2023 15:10:49 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB63A1BEA6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:10:46 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id d30so9884309lfv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:10:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RYv8YtklJYFSBnqUzDCKD0SPZFw1ONkumQGMVniPZaI=;
+        b=GDxTuQIRJgtel7vfxfPwHsWCDWNukZE5tnLZKPy88rB461vEjbSal8xpgOdpnmO8mR
+         8MXuox/tp4GMowtxnXwz5/9sR24YuckCV8aVg/7CXnBelhfZArB6J/3PXs6HaxP5utyz
+         ishkVfpqOLz+qWIHZDUQWnnhmzPN1pxcDLZACLj3xU4mC+QONy2/KX+Ih7BVP4VGtcrC
+         0A+9Qk4CQxKHmwzHKEaGxQa0tcideu/IhvLfA2P45c8+UP7qveelrvsoEGNunkJvenog
+         sxO1WnOY+FQgee1ZogSpSmbVWfOt7RfizZO61l63u38iIwheNeHQclE/ElOcrwE20xrf
+         YpQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RYv8YtklJYFSBnqUzDCKD0SPZFw1ONkumQGMVniPZaI=;
+        b=NVToJSCiAV2mTSIIx5scllAr7KbUWzLkfyIiGt5ZsyMt5d52GxAjAglotFBHKMqrra
+         obREEEcSYH4unHlbHnhXDuRaZg970DTizyr5gy5UtB+5zA5vpzVuLt9Qxp3yfUiV8jI5
+         lk0cUmA7cmgAmwfShYTHPYL8sjVJtCmmgK6AzN58IBmlfgjGE33GxLoAthXHomw9uuQ7
+         qq29s5veWatLRj2IXjUGraR8Zwz4CdQS/MnHVwR2/0XVfDMalq+zG1FuSyas9XI+FZg8
+         TxN1Hb7JJbGrBKpFjT3N2BGGgeGToY4VYsgn59ykogVhvAezixyf0p6jyAXqYq18QJmw
+         tWJQ==
+X-Gm-Message-State: AFqh2ko9mlS6rF0xSJv6rQoQ/WHjmkSA8O8Yk5FAcm4LK8IdfG8PzsFE
+        qFChSb3CqgdXN50VjfSUH9gbZg==
+X-Google-Smtp-Source: AMrXdXtPrpj6UYPWG3GXi/KKEUU8tcapTSxME54rfgaBkTDH5LSK/GVpX5mevXKdB2D1xY0QRN5y6A==
+X-Received: by 2002:a05:6512:3b0e:b0:4cb:4362:381d with SMTP id f14-20020a0565123b0e00b004cb4362381dmr8105304lfv.62.1673295045061;
+        Mon, 09 Jan 2023 12:10:45 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x4-20020a056512078400b004cc548b35fbsm1769736lfr.71.2023.01.09.12.10.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 12:10:44 -0800 (PST)
+Message-ID: <01baab80-4332-542e-e080-affb441f9c97@linaro.org>
+Date:   Mon, 9 Jan 2023 22:10:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Oy22cas3PYwW1KMUoEHNyWu-S5fSk_fC
-X-Proofpoint-GUID: uWY384HuphX1JMDaGrC_ZMgCEmJTwW4n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_14,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- spamscore=0 clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301090141
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 14/18] soc: qcom: rmphpd: add power domains for sa8775p
+Content-Language: en-GB
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230109174511.1740856-1-brgl@bgdev.pl>
+ <20230109174511.1740856-15-brgl@bgdev.pl>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230109174511.1740856-15-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible that the kvm refcount will reach 0 at this point while the
-associated device is still in kvm device list - this would result in a
-deadlock on the vfio group lock.  Avoid this possibility by using
-kvm_put_kvm_async to do the kvm_destroy_vm asynchronously.
+On 09/01/2023 19:45, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add power domain description for sa8775p and a new compatible to match it.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>   drivers/soc/qcom/rpmhpd.c | 34 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
 
-Fixes: 09340b2fca00 ("KVM: s390: pci: add routines to start/stop interpretive execution")
-Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
----
- arch/s390/kvm/pci.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+[skipped]
 
-diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-index ec51e810e381..d1d528438138 100644
---- a/arch/s390/kvm/pci.c
-+++ b/arch/s390/kvm/pci.c
-@@ -509,7 +509,7 @@ static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
- 		kvm_s390_pci_dev_release(zdev);
- 	mutex_unlock(&kvm->lock);
- 	mutex_unlock(&zdev->kzdev_lock);
--	kvm_put_kvm(kvm);
-+	kvm_put_kvm_async(kvm);
- 	return rc;
- }
- 
-@@ -567,7 +567,11 @@ static void kvm_s390_pci_unregister_kvm(void *opaque)
- 	mutex_unlock(&kvm->lock);
- 	mutex_unlock(&zdev->kzdev_lock);
- 
--	kvm_put_kvm(kvm);
-+	/*
-+	 * Avoid possible deadlock on any currently-held vfio lock by
-+	 * ensuring the potential kvm_destroy_vm call is done asynchronously
-+	 */
-+	kvm_put_kvm_async(kvm);
- }
- 
- void kvm_s390_pci_init_list(struct kvm *kvm)
+> +/* SA8775P RPMH power domains */
+> +static struct rpmhpd *sa8775p_rpmhpds[] = {
+> +	[SA8775P_CX] = &cx,
+> +	[SA8775P_CX_AO] = &cx_ao,
+> +	[SA8775P_EBI] = &ebi,
+> +	[SA8775P_GFX] = &gfx,
+> +	[SA8775P_LCX] = &lcx,
+> +	[SA8775P_LMX] = &lmx,
+> +	[SA8775P_MMCX] = &mmcx,
+> +	[SA8775P_MMCX_AO] = &mmcx_ao,
+> +	[SA8775P_MXC] = &mxc,
+> +	[SA8775P_MXC_AO] = &mxc_ao,
+
+Is there any parent/child relationship between mmcx/mxc and other domains?
+
+> +	[SA8775P_MX] = &mx,
+> +	[SA8775P_MX_AO] = &mx_ao,
+> +	[SA8775P_NSP0] = &nsp0,
+> +	[SA8775P_NSP1] = &nsp1,
+> +};
+> +
+> +static const struct rpmhpd_desc sa8775p_desc = {
+> +	.rpmhpds = sa8775p_rpmhpds,
+> +	.num_pds = ARRAY_SIZE(sa8775p_rpmhpds),
+> +};
+> +
+>   /* SDM670 RPMH powerdomains */
+>   static struct rpmhpd *sdm670_rpmhpds[] = {
+>   	[SDM670_CX] = &cx_w_mx_parent,
+> @@ -487,6 +520,7 @@ static const struct rpmhpd_desc sc8280xp_desc = {
+>   static const struct of_device_id rpmhpd_match_table[] = {
+>   	{ .compatible = "qcom,qdu1000-rpmhpd", .data = &qdu1000_desc },
+>   	{ .compatible = "qcom,sa8540p-rpmhpd", .data = &sa8540p_desc },
+> +	{ .compatible = "qcom,sa8775p-rpmhpd", .data = &sa8775p_desc },
+>   	{ .compatible = "qcom,sc7180-rpmhpd", .data = &sc7180_desc },
+>   	{ .compatible = "qcom,sc7280-rpmhpd", .data = &sc7280_desc },
+>   	{ .compatible = "qcom,sc8180x-rpmhpd", .data = &sc8180x_desc },
+
 -- 
-2.39.0
+With best wishes
+Dmitry
 
