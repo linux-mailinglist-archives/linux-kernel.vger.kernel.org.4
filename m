@@ -2,29 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B7E661F7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5886D661F7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbjAIHze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S229785AbjAIHz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbjAIHzZ (ORCPT
+        with ESMTP id S235659AbjAIHz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:55:25 -0500
+        Mon, 9 Jan 2023 02:55:29 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D128913DE9
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:55:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A844FDF3B
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:55:20 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3097sos7026016;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3097sot6026017;
         Mon, 9 Jan 2023 08:54:50 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Warner Losh <imp@bsdimp.com>,
-        Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 2/6] tools/nolibc: Fix S_ISxxx macros
-Date:   Mon,  9 Jan 2023 08:54:38 +0100
-Message-Id: <20230109075442.25963-3-w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 3/6] tools/nolibc: restore mips branch ordering in the _start block
+Date:   Mon,  9 Jan 2023 08:54:39 +0100
+Message-Id: <20230109075442.25963-4-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230109075442.25963-1-w@1wt.eu>
 References: <20230109075442.25963-1-w@1wt.eu>
@@ -36,46 +35,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Warner Losh <imp@bsdimp.com>
+Depending on the compiler used and the optimization options, the sbrk()
+test was crashing, both on real hardware (mips-24kc) and in qemu. One
+such example is kernel.org toolchain in version 11.3 optimizing at -Os.
 
-The mode field has the type encoded as an value in a field, not as a bit
-mask. Mask the mode with S_IFMT instead of each type to test. Otherwise,
-false positives are possible: eg S_ISDIR will return true for block
-devices because S_IFDIR = 0040000 and S_IFBLK = 0060000 since mode is
-masked with S_IFDIR instead of S_IFMT. These macros now match the
-similar definitions in tools/include/uapi/linux/stat.h.
+Inspecting the sys_brk() call shows the following code:
 
-Signed-off-by: Warner Losh <imp@bsdimp.com>
+  0040047c <sys_brk>:
+    40047c:       24020fcd        li      v0,4045
+    400480:       27bdffe0        addiu   sp,sp,-32
+    400484:       0000000c        syscall
+    400488:       27bd0020        addiu   sp,sp,32
+    40048c:       10e00001        beqz    a3,400494 <sys_brk+0x18>
+    400490:       00021023        negu    v0,v0
+    400494:       03e00008        jr      ra
+
+It is obviously wrong, the "negu" instruction is placed in beqz's
+delayed slot, and worse, there's no nop nor instruction after the
+return, so the next function's first instruction (addiu sip,sip,-32)
+will also be executed as part of the delayed slot that follows the
+return.
+
+This is caused by the ".set noreorder" directive in the _start block,
+that applies to the whole program. The compiler emits code without the
+delayed slots and relies on the compiler to swap instructions when this
+option is not set. Removing the option would require to change the
+startup code in a way that wouldn't make it look like the resulting
+code, which would not be easy to debug. Instead let's just save the
+default ordering before changing it, and restore it at the end of the
+_start block. Now the code is correct:
+
+  0040047c <sys_brk>:
+    40047c:       24020fcd        li      v0,4045
+    400480:       27bdffe0        addiu   sp,sp,-32
+    400484:       0000000c        syscall
+    400488:       10e00002        beqz    a3,400494 <sys_brk+0x18>
+    40048c:       27bd0020        addiu   sp,sp,32
+    400490:       00021023        negu    v0,v0
+    400494:       03e00008        jr      ra
+    400498:       00000000        nop
+
+Fixes: 66b6f755ad45 ("rcutorture: Import a copy of nolibc") #5.0
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/types.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/include/nolibc/arch-mips.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 300e0ff1cd58..f1d64fca7cf0 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -26,13 +26,13 @@
- #define S_IFSOCK       0140000
- #define S_IFMT         0170000
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 5fc5b8029bff..7380093ba9e7 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -192,6 +192,7 @@ struct sys_stat_struct {
+ __asm__ (".section .text\n"
+     ".weak __start\n"
+     ".set nomips16\n"
++    ".set push\n"
+     ".set    noreorder\n"
+     ".option pic0\n"
+     ".ent __start\n"
+@@ -210,6 +211,7 @@ __asm__ (".section .text\n"
+     "li $v0, 4001\n"              // NR_exit == 4001
+     "syscall\n"
+     ".end __start\n"
++    ".set pop\n"
+     "");
  
--#define S_ISDIR(mode)  (((mode) & S_IFDIR)  == S_IFDIR)
--#define S_ISCHR(mode)  (((mode) & S_IFCHR)  == S_IFCHR)
--#define S_ISBLK(mode)  (((mode) & S_IFBLK)  == S_IFBLK)
--#define S_ISREG(mode)  (((mode) & S_IFREG)  == S_IFREG)
--#define S_ISFIFO(mode) (((mode) & S_IFIFO)  == S_IFIFO)
--#define S_ISLNK(mode)  (((mode) & S_IFLNK)  == S_IFLNK)
--#define S_ISSOCK(mode) (((mode) & S_IFSOCK) == S_IFSOCK)
-+#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-+#define S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-+#define S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
-+#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
-+#define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
- 
- /* dirent types */
- #define DT_UNKNOWN     0x0
+ #endif // _NOLIBC_ARCH_MIPS_H
 -- 
 2.35.3
 
