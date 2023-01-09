@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43E4662220
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B7166221A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbjAIJwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S237005AbjAIJw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbjAIJvv (ORCPT
+        with ESMTP id S237018AbjAIJvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:51:51 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD6512A9F;
-        Mon,  9 Jan 2023 01:51:16 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v23so4014684plo.1;
-        Mon, 09 Jan 2023 01:51:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qzAkXDnr+TdemKBTBoMvg+ajy3gTNmDpDPz0yRbk3cE=;
-        b=YvvsnJv5X4MUa+p4z03Whw3JreTN28OlOQDeRk00dRsPzl2hjoiwhHe8MmilQjHg1R
-         mTZnctOdGE58MmP9jlWlrcyPgDM6vYriXgTNgksaXWM9bFyu+FB3URLwp1OdJQsms+YB
-         qoTb9Bxh5fJR0n09ABaLMyo8QdpPViaymXfyH4C6o/dBndgHcOIPBnfsop8LCZ2kmjqb
-         eXSfm/gcTve4Ho2IvPfp2FgIBadrWQMZBFkfAcUWZVgGX1kT6nke6c9yZH07jcHkI711
-         dJJmnSRAi5RhwalRTat/fHJsLOtJAjOBt1jstkFa/yxiZNnrzZEmfGjG+TpsYiJ9t++1
-         z7jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qzAkXDnr+TdemKBTBoMvg+ajy3gTNmDpDPz0yRbk3cE=;
-        b=wSSWlLfr19BlN3azQwfoq3njBlalOB/V8BYDO4qIiR96L88AZbcYCRH8uGI3GPZ1RR
-         8X15YnbXjhWEmZdweJ5S7uteIXZMppYPbOZdPxtxZxrNE831Z2syfirvswwarmO7lcPZ
-         DPrpGW/txHzyEArgGqYReGaWVAZZjIMEspbXT2Fdwemw4S//+JB0C8CzUq62gXgX663d
-         tiGE7LhgXtNfJI+/oh5cVxWZHlLoQk9JhNUMyy8Wf1MLuqIK5xiUcjYqfvBGT7+N5MeU
-         qVu9HV3IgM92DL2CW8F30CBhErSvWRtrO1JQP7dEOelJflycqwyYysijyuT6BgCjs0Sj
-         Xcfw==
-X-Gm-Message-State: AFqh2kpWY+q6R/w27oEAXxcwahD/WJA57iEODPHHxm1WY8U5CV9e9fmf
-        YcaINUrBOg6QwmLiBQmD6J4EtUIGX3s=
-X-Google-Smtp-Source: AMrXdXsRVOml529LPLQlVFkBn0nmrdj7dfS8KuXQ8GTtvZEnNn01ICbGEiyj+JlcieFnWtB9IfmxJg==
-X-Received: by 2002:a05:6a20:3953:b0:ab:fb31:a000 with SMTP id r19-20020a056a20395300b000abfb31a000mr96323913pzg.51.1673257876104;
-        Mon, 09 Jan 2023 01:51:16 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-26.three.co.id. [180.214.233.26])
-        by smtp.gmail.com with ESMTPSA id c15-20020aa7952f000000b005747b59fc54sm4333309pfp.172.2023.01.09.01.51.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 01:51:15 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 3FBD9103E6A; Mon,  9 Jan 2023 16:51:10 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Yann Sionneau <ysionneau@kalray.eu>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 5/8] Documentation: kvx: kvx-iommu: monospacize kvx iommu device tree path
-Date:   Mon,  9 Jan 2023 16:51:05 +0700
-Message-Id: <20230109095108.21229-6-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109095108.21229-1-bagasdotme@gmail.com>
-References: <874jt7fqxt.fsf@meer.lwn.net>
- <20230109095108.21229-1-bagasdotme@gmail.com>
+        Mon, 9 Jan 2023 04:51:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090FD12D2E;
+        Mon,  9 Jan 2023 01:51:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A2C377503;
+        Mon,  9 Jan 2023 09:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673257865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3dpWY39isfQP0sdAp5OZ+ksSedF6ts93bX5mDxLgRNU=;
+        b=xo2Dc7X0igItsb8uMulagOWyFVE9QbzvnOlAga3jVFhn4gTJRTGkp7RA0LpmV/E4Ej2DhT
+        6Mx9FqrQRJ/05VoavCW6+GY0SKHg2f4Dqt/ZsAwJXOifG39JhQKTZzt8HO+KKVCIYwh1pQ
+        5RuK/ZaInk/jzhEDqmnq5Eij+Zw+yAE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673257865;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3dpWY39isfQP0sdAp5OZ+ksSedF6ts93bX5mDxLgRNU=;
+        b=hK9+rN5/OIQTVQ+e/nlFnbbfuUpeP7w58Z+jDhh18VIuMj1eNbB0DnL8ec4+VN8KYbxpor
+        0hqKKA/G0WdAauBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E1B613583;
+        Mon,  9 Jan 2023 09:51:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XLemIonju2NYBAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 09:51:05 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 19AD3A074D; Mon,  9 Jan 2023 10:51:05 +0100 (CET)
+Date:   Mon, 9 Jan 2023 10:51:05 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the ext3 tree
+Message-ID: <20230109095105.afvw25ntcvopgvub@quack3>
+References: <20230108125156.30578c00@canb.auug.org.au>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=931; i=bagasdotme@gmail.com; h=from:subject; bh=iPlc/Kn3v/D/f2FzuuvXP8mVDXIepRcvmfLOHBwcrPw=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMm7H3cXtN8SPWfRHq81STPLaI2mc+yj9nndTnkCDZ477sbM cl3cUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIkkHWNkWOKiK7M15vLTuw+NIqs+Md 1KPK/OfsZ9zzvpnQHCFzk31DH8U9P8kjHl7DbX1+9zDh04q7Hqm5ZlyIn9U56cXlYas3SBDyMA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108125156.30578c00@canb.auug.org.au>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device tree path shares the same "kvm-iommu" as the actual
-documentation path (kvm-iommu.rst), which make it links to the doc
-instead. Monospacize the path by enclosing it in inline code.
+Hello!
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/kvx/kvx-iommu.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun 08-01-23 12:51:56, Stephen Rothwell wrote:
+> The following commits are also in Linus Torvalds' tree as different commits
+> (but the same patches):
+> 
+>   ae9e9c7ff062 ("udf: Fix extension of the last extent in the file")
+>   6d5ab7c2f7cf ("udf: initialize newblock to 0")
 
-diff --git a/Documentation/kvx/kvx-iommu.rst b/Documentation/kvx/kvx-iommu.rst
-index 5ed34463b8bb1f..c97035ba624c22 100644
---- a/Documentation/kvx/kvx-iommu.rst
-+++ b/Documentation/kvx/kvx-iommu.rst
-@@ -178,7 +178,7 @@ Device tree
- -----------
- 
- Relationships between devices, DMAs and IOMMUs are described in the
--device tree (see Documentation/devicetree/bindings/iommu/kalray,kvx-iommu.txt
-+device tree (see ``Documentation/devicetree/bindings/iommu/kalray,kvx-iommu.txt``
- for more details).
- 
- Limitations
+Yes, I'm sorry for the trouble. Linus considered the whole original pull
+request too intrusive for rc3 so I've just cherrypicked the easy standalone
+fixes and sent a pull request for those. I've now rebased my for_next
+branch on top of Linus' tree to get rid of the duplicates (nobody depends
+on my tree and there's enough time before the merge window opens so it
+should be fine). If there's a better process how to handle such situations,
+please tell me.
+
+								Honza
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
