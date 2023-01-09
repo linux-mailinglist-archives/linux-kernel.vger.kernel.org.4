@@ -2,179 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1955A663330
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F56366332E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbjAIViN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        id S238085AbjAIViQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238075AbjAIVha (ORCPT
+        with ESMTP id S238132AbjAIVhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:37:30 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139453B92B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:36:21 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id d30so10242759lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:36:21 -0800 (PST)
+        Mon, 9 Jan 2023 16:37:40 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395DF3F13C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:36:31 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id bj3so6967344pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:36:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOGbn4FkDUhoI+21N8v8V6Uvoy2GG2mcs3+XQNUSBLs=;
-        b=BJWuZJmaqjPGlmKuQdrNQZ2AVFgeaMD8DE5LX775Qla43f+Y6x6P86+ssOBkID7Lt3
-         wYZOWquPpNPdolYFi3Kl09o+dvXxD223HJcU/2VZ/EcRNUwUe+utu1/X/F0q3o45C8C3
-         cBReZyMG3pfsLNolUBusBArtUbSmMyuiNEiB5bu3h3X2qiNWrfZUaC1TqBtFI1C5Opr7
-         Zh7S27UivL8akABB4/iD3yzXXY2IS1+72IirNuU8J55KojQZuxWhhYlOSHgMGumcTTVD
-         QJqJ9MZAsufObtnhXBb7Ny9WUoI9wcOxqpvZOq52k1ibtHxAO3lpw3MW2MQT1B3M7lG4
-         /axw==
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQWJ6Cr4IImJL6zlxqosQINLILCXhpE6Qg/8UMNu6m4=;
+        b=M9R9bE9rVQWpi71VTT8izHtCpN0eyRyeYdZK/eCdyXJtkqhTwVbhK/iVBschylObSm
+         PnmzFdmE41k3PMDKxveFDOcC7/QB4cGyGIXLeR8hpJVFzIgzTzmn0DlF6kG2BccsV/kv
+         UWtxlY0xHabBPyiUfwByOsz2dVez1SdUmS7tM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOGbn4FkDUhoI+21N8v8V6Uvoy2GG2mcs3+XQNUSBLs=;
-        b=zHHwiXwJEtVC3LGBw/VV0D8qHldrRB6RnEWwKMVW9j5uSGihknYu4fiyBUSQm5TBzw
-         II/ctZ7PfZgjYwHdtKOjuEOboPaVtLFBNSvRRVQN7l8B+1WgN2h9Sex3mmyVLpXhsGsy
-         Zs9exQFmdLXrz5/8ZCGE5p2toMQOfUPB2qopKfwszukrrgMyatCOjxl0kx4qrBzdrkKa
-         tuFfjhZ99OuL75Jzvsmedq4c/oKD6BeXEJi9sEyKXkYfDr+lv4Ean+QmWH39gJFdUz5k
-         O9i/JghCLEjBr8PzhXIUg0/6BMzK2AYheSo6/aIiwMd0pbdb2zal/Mrz/taZoqux8PW9
-         92+A==
-X-Gm-Message-State: AFqh2kq1sO8iFYO2OJr2B0/9cwBU+TGDl637ZjhEAuYOx8x/jItCk9og
-        yZFQWE+Fcpf+FrFnidvNIb2/Og==
-X-Google-Smtp-Source: AMrXdXupFL2wOn7BpBtq86rXcX7M+0Ks0LIsOZsL5rEMJD3K8DDMrKgcabttHM4tJddgrdDyKPLVJg==
-X-Received: by 2002:a05:6512:2356:b0:4b5:6417:43bb with SMTP id p22-20020a056512235600b004b5641743bbmr23871813lfu.51.1673300180085;
-        Mon, 09 Jan 2023 13:36:20 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac24e87000000b004cb23904bd9sm1795775lfr.144.2023.01.09.13.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:36:19 -0800 (PST)
-Message-ID: <9f6bd192-2a42-0a23-0032-df8b01921bdc@linaro.org>
-Date:   Mon, 9 Jan 2023 23:36:18 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XQWJ6Cr4IImJL6zlxqosQINLILCXhpE6Qg/8UMNu6m4=;
+        b=oji5MwLRebrY3wmOS8ls2E5zaMFAfwC0JJfdo5jxwopyxdKXjUt0uSJfewN24kJ7//
+         rmSUSx+IZRQzbUetdIXliAvMXuTpXgfKBMQuZHa/GYoiqYm/b3a4hh/ay/6cNIrrz7yS
+         ovUjHVwB8zoH0NNNHo+RdPVovUH+KRmSiysIAxPVu56CvGM9KqPh9ZzWcKpgwbqdHl3O
+         ArIyK892YYOalEoQ0rEB9At/lYJaRYqccVYrZPw1RLpAhfpDfXTPc/ie8pQJW9HlLNi2
+         HgrWWXahgx7Ngn6IFFXSKplm63wee1ulZnOODnxnKGS6uXkRBN7xVuvLI7ZJnjl8DsUV
+         qEow==
+X-Gm-Message-State: AFqh2krNc75DCcrHvRRygWPyWEfHMvRxDuYac0TEKf6ccJdDulvhk3i1
+        5R992WS9V9eRPNL9KiMmvTt0+juO3IUZnB7zt9m3
+X-Google-Smtp-Source: AMrXdXvWWUsWUWXZOJID137JCYPjYorrUW7Yb0R8SUea6RrsFVbpKQXNtb2bAvCBWVga2pBRkAsIUfAXCp8kbbOkedw=
+X-Received: by 2002:a17:902:d645:b0:193:150e:a8ef with SMTP id
+ y5-20020a170902d64500b00193150ea8efmr1222338plh.71.1673300190704; Mon, 09 Jan
+ 2023 13:36:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD
- Pro boards
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>, andersson@kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>, agross@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
- <Y5x+WEwTtpoV0gaR@google.com>
- <fd23e295-fea0-1b0a-752c-3cce26b57346@quicinc.com>
- <Y6HHCrl0q5BhrHOY@google.com>
- <e269300d-539e-9eb8-8b3c-d309f3abca1b@quicinc.com>
- <bbc3c257-0a49-4c80-4586-c179c8997b50@linaro.org>
- <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <mhng-72f383f6-a85f-4587-9fa6-f85fb9f27ec8@palmer-ri-x1c9a>
+ <87359wpy9y.fsf@meer.lwn.net> <87y1rooje8.fsf@meer.lwn.net> <Y4srdBCmYJFx+ypW@spud>
+In-Reply-To: <Y4srdBCmYJFx+ypW@spud>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 9 Jan 2023 13:36:19 -0800
+Message-ID: <CAOnJCU+DhxcPjgftMspWAzhsms_8sXnGS++vbp1iJDB0XcOxLQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: riscv: note that counter access is part of
+ the uABI
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 23:00, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Dec 20, 2022 at 9:12 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On 20/12/2022 18:20, Rajendra Nayak wrote:
->>>
->>>
->>> On 12/20/2022 8:00 PM, Matthias Kaehlcke wrote:
->>>> On Tue, Dec 20, 2022 at 10:30:32AM +0530, Rajendra Nayak wrote:
->>>>>
->>>>> On 12/16/2022 7:49 PM, Matthias Kaehlcke wrote:
->>>>>> On Fri, Dec 16, 2022 at 04:59:17PM +0530, Rajendra Nayak wrote:
->>>>>>> Add compatibles for the Pro SKU of the sc7280 CRD boards
->>>>>>> which come with a Pro variant of the qcard.
->>>>>>> The Pro qcard variant has smps9 from pm8350c ganged up with
->>>>>>> smps7 and smps8.
->>>>>>>
->>>>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
->>>>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->>>>>>> ---
->>>>>>> v4 changes:
->>>>>>> Added the zoglin-sku1536 compatible along with hoglin-sku1536.
->>>>>>> Zoglin is same as the Hoglin variant, with the SPI Flash reduced
->>>>>>> from 64MB to 8MB
->>>>>>>
->>>>>>>     Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
->>>>>>>     1 file changed, 6 insertions(+)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>>>> b/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>>>> index 1b5ac6b02bc5..07771d4c91bd 100644
->>>>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>>>> @@ -558,6 +558,12 @@ properties:
->>>>>>>               - const: google,hoglin
->>>>>>>               - const: qcom,sc7280
->>>>>>> +      - description: Qualcomm Technologies, Inc. sc7280 CRD Pro
->>>>>>> platform (newest rev)
->>>>>>> +        items:
->>>>>>> +          - const: google,zoglin-sku1536
->>>>>>> +          - const: google,hoglin-sku1536
->>>>>>
->>>>>> Is there actually such a thing as a 'hoglin-sku1536', i.e. the Pro
->>>>>> qcard
->>>>>> with 64MB of SPI flash, or do they all have 8MB of flash?
->>>>>
->>>>> The SPI flash is on the CRD mother-board and not on the qcards, so if
->>>>> you replace
->>>>> the qcards on the CRDs with 64MB flash you would need the
->>>>> hoglin-sku1536 to
->>>>> boot on those.
->>>>
->>>> With such a configuration how does the bootloader know it should pass
->>>> the kernel
->>>> the device tree for 'hoglin-sku1536' (pro) and not the non-pro
->>>> variant? IIUC the
->>>> device tree is selected based on pin strappings on the mother-board,
->>>> not the
->>>> qcard.
->>>
->>> The device tree is selected based on the pin strappings _and_ additional
->>> logic
->>> to dynamically identify modem/non-modem(wifi) as well as pro/non-pro
->>> SKUs which
->>> was added in the bootloaders.
->>
->> Just to clarify things, when you mention pro SKU, is it a separate SoC
->> revision (like sc7280-pro vs bare sc7280), or is it a CRD revision (CRD
->> Pro vs bare CRD)?
-> 
-> I guess Rajendra never responded, but since I know the answer: it's a
-> different SoC revision. ...but the SoC in this case is on a daughter
-> card, so you could remove the daughter card containing the SoC and put
-> a new daughtercard on. That would have the effect of making an old CRD
-> revision have the new Pro SKU SoC.
+On Sat, Dec 3, 2022 at 2:57 AM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Sat, Dec 03, 2022 at 03:45:35AM -0700, Jonathan Corbet wrote:
+> > Jonathan Corbet <corbet@lwn.net> writes:
+> >
+> > > Palmer Dabbelt <palmer@dabbelt.com> writes:
+> > >> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > >>
+> > >> I think I merged the last one of these, but if the doc folks pick it up
+> > >> that's fine with me.  Otherwise I'll take it when it comes back around,
+> > >> so folks have time to take a look.
+> > >
+> > > "Doc folks" applied it, thanks. :)
+> >
+> > Actually, I take that back.  I'd missed this part from the patch:
+> >
+> > > Based on an, as yet, unsent v2 of my other uABI changes. I don't expect
+> > > it to be applicable, just getting a patch into patchwork while I don't
+> > > forget about this.
+> >
+> > ...but b4 happily picked up a couple of *other* patches from this thread
+> > and applied them instead; I've now undone that.  Sorry for the noise.
+>
+> Huh, I accidentally put an "in-reply-to" header on this patch. I have
+> been updating some of my submission helper scripts & I must have left
+> the field populated from sending another set by accident:
+> https://lore.kernel.org/linux-riscv/20221129144742.2935581-1-conor.dooley@microchip.com/
+>
 
-So, this is a new SoC. Is it 100% compatible with the sc7280? In other 
-words: does it require any additional customizations (in OPP tables, in 
-frequences, speed bins, etc)?
+I don't see the patch upstream. Is this patch merged already ?
+If not, please hold on merging this for now. We had some discussions
+around this in the perf community.
+Here is the thread
+https://lore.kernel.org/lkml/Y7gN32eHJNyWBvVD@FVFF77S0Q05N/T/
 
-> 
-> Bjorn: I'd also note that I think this series (this patch and the next
-> one) are ready to land.
-> 
-> -Doug
+TLDR; Even though x86 allows unrestricted access through rdpmc (not
+default), it still reads zero unless a privileged root user modifies
+the MSR interface exposed by the kernel.
 
--- 
-With best wishes
-Dmitry
+Quoting PeterZ
 
+"RDPMC is only useful if you read counters you own on yourself -- IOW
+selfmonitoring, using the interface outlined in uapi/linux/perf_events.h
+near struct perf_event_mmap_page.
+
+Any other usage -- you get to keep the pieces."
+
+"Anyway, given RISC-V being a very young platform, I would try really
+*really* *REALLY* hard to stomp on these applications and get them to
+change in order to reclaim the PMU usage."
+
+We need to decide what's the best approach for RISC-V. The current
+text in uABI will let users assume that
+cycle/instret can be read without any issues which is wrong.
+
+There are few options what we can do for RISC-V:
+
+1. We can trap n emulate and report 0 always as suggested by Mark in
+that thread.
+2. Continue to allow the user to read the counters directly but
+expects the garbage value depending on the other activities
+on the system. Hopefully, folks will fix their application by that time.
+
+Once we have the procfs interface, we enforce the behavior by breaking
+the application.
+
+In either case, the uABI needs to be updated accordingly.
+
+> Apologies!
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
+
+--
+Regards,
+Atish
