@@ -2,165 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FB766324D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BD166324C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237827AbjAIVJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S237597AbjAIVJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbjAIVI5 (ORCPT
+        with ESMTP id S238113AbjAIVIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:08:57 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E6A9B2BB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:00:39 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id fc4so23329914ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZYMaHaqbGfit3zZPJvO9SjzoXsApTdGwsgUHl4lAQA=;
-        b=XjKVpVF2jUh+nbcr8BfkjUGgrOZhkdDNVv6pcebFKkz6aHrE8UALZhgTfETJjk2w4U
-         0xPk/UrgR4c79afxV4hEdVqMvBzZq8jDcPx+PvY2l6jiOQsTLmYqz9oG3wzAuhs1nLUk
-         gH8Vw7+PtaZ36q0GRpsUjbFb21QMbLyWB/BM8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ZYMaHaqbGfit3zZPJvO9SjzoXsApTdGwsgUHl4lAQA=;
-        b=PGyvavajVdBj7ZEhNbbt6pR3OXwKeG2zxpD30eaSVPLgI+XrWyVi+JnnOjNS3/Bx7z
-         NYefyLfEtmaeeYtRZhCRZ/MO/iUzs493M4lgEm0kJjeMvPlDgLASxD2bscSyLrh6XGHs
-         qFnQndIKXWOr3n70k4Jj7IIKT0eHFbMv1QO3DssMGsOUJBxubjEmoFvKT778rPTa0RPA
-         l6cB4kOQ20wYjn2ODjZ+52Q+o1CSMLOH4NepV6gBt/ZH7u/MSTXAAtzEdDnScZHjI1iL
-         ytKgCc3v0Px8orlOHpROaUW/xCfvBpqDZ7RYk0oIAuJTZjP2EPLO8FsZ5UuG4PO2IQfq
-         XOWA==
-X-Gm-Message-State: AFqh2krgfUYoFnEVd46J4t/xWQbAByUEMmPcpPDx8WYB20ovLWCfT3m1
-        D+RZVoupWto1eaQsmi/suvLVg12PxAH7I/Be
-X-Google-Smtp-Source: AMrXdXs8UtxsgZNw6k7mV04ysnimKpg3RSU23sO2zec7J98L7h+KRrhjEIwKZ49TVycu81rcKaMxDg==
-X-Received: by 2002:a17:907:c24e:b0:7c0:1db5:ea10 with SMTP id tj14-20020a170907c24e00b007c01db5ea10mr73222532ejc.53.1673298038008;
-        Mon, 09 Jan 2023 13:00:38 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id r1-20020a17090609c100b0084ce5d3afe7sm4104999eje.184.2023.01.09.13.00.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:00:36 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id o15so7232633wmr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:00:36 -0800 (PST)
-X-Received: by 2002:a05:600c:4aa8:b0:3d0:69f4:d3d0 with SMTP id
- b40-20020a05600c4aa800b003d069f4d3d0mr2698813wmp.93.1673298035812; Mon, 09
- Jan 2023 13:00:35 -0800 (PST)
+        Mon, 9 Jan 2023 16:08:55 -0500
+Received: from out-97.mta0.migadu.com (out-97.mta0.migadu.com [91.218.175.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883A2A6FC0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:00:37 -0800 (PST)
+Message-ID: <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1673298035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mpz5QV62fd9Z/8dQCjZswuJCHVa8jPKuhq5d3gUONBY=;
+        b=kjgDRTMPn7t5yVbfabYw3U4Bt86OfUO9sPG5HT3E7m0rSa22kXiU1LjNxmbaXzxeG5wCwC
+        CwIoYRtI441fXya0QIcD1Dy5FSM5f3KcRh6qO/eaggEgJc1TrRwP4osowhvZwtMfH3jIO/
+        1ui4TstB3NRV8yKFr3NDiPhKTs4WT58=
+Date:   Mon, 9 Jan 2023 14:00:33 -0700
 MIME-Version: 1.0
-References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
- <Y5x+WEwTtpoV0gaR@google.com> <fd23e295-fea0-1b0a-752c-3cce26b57346@quicinc.com>
- <Y6HHCrl0q5BhrHOY@google.com> <e269300d-539e-9eb8-8b3c-d309f3abca1b@quicinc.com>
- <bbc3c257-0a49-4c80-4586-c179c8997b50@linaro.org>
-In-Reply-To: <bbc3c257-0a49-4c80-4586-c179c8997b50@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 9 Jan 2023 13:00:23 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
-Message-ID: <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD
- Pro boards
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        andersson@kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>, agross@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
+ controller
+Content-Language: en-US
+To:     Xinghui Li <korantwork@gmail.com>
+Cc:     Keith Busch <kbusch@kernel.org>, nirmal.patel@linux.intel.com,
+        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
+References: <20221222072603.1175248-1-korantwork@gmail.com>
+ <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev>
+ <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+ <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
+ <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev>
+ <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+As the bypass mode seems to affect performance greatly depending on the specific configuration,
+it may make sense to use a moduleparam to control it
 
-On Tue, Dec 20, 2022 at 9:12 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 20/12/2022 18:20, Rajendra Nayak wrote:
-> >
-> >
-> > On 12/20/2022 8:00 PM, Matthias Kaehlcke wrote:
-> >> On Tue, Dec 20, 2022 at 10:30:32AM +0530, Rajendra Nayak wrote:
-> >>>
-> >>> On 12/16/2022 7:49 PM, Matthias Kaehlcke wrote:
-> >>>> On Fri, Dec 16, 2022 at 04:59:17PM +0530, Rajendra Nayak wrote:
-> >>>>> Add compatibles for the Pro SKU of the sc7280 CRD boards
-> >>>>> which come with a Pro variant of the qcard.
-> >>>>> The Pro qcard variant has smps9 from pm8350c ganged up with
-> >>>>> smps7 and smps8.
-> >>>>>
-> >>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> >>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> >>>>> ---
-> >>>>> v4 changes:
-> >>>>> Added the zoglin-sku1536 compatible along with hoglin-sku1536.
-> >>>>> Zoglin is same as the Hoglin variant, with the SPI Flash reduced
-> >>>>> from 64MB to 8MB
-> >>>>>
-> >>>>>    Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
-> >>>>>    1 file changed, 6 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml
-> >>>>> b/Documentation/devicetree/bindings/arm/qcom.yaml
-> >>>>> index 1b5ac6b02bc5..07771d4c91bd 100644
-> >>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> >>>>> @@ -558,6 +558,12 @@ properties:
-> >>>>>              - const: google,hoglin
-> >>>>>              - const: qcom,sc7280
-> >>>>> +      - description: Qualcomm Technologies, Inc. sc7280 CRD Pro
-> >>>>> platform (newest rev)
-> >>>>> +        items:
-> >>>>> +          - const: google,zoglin-sku1536
-> >>>>> +          - const: google,hoglin-sku1536
-> >>>>
-> >>>> Is there actually such a thing as a 'hoglin-sku1536', i.e. the Pro
-> >>>> qcard
-> >>>> with 64MB of SPI flash, or do they all have 8MB of flash?
-> >>>
-> >>> The SPI flash is on the CRD mother-board and not on the qcards, so if
-> >>> you replace
-> >>> the qcards on the CRDs with 64MB flash you would need the
-> >>> hoglin-sku1536 to
-> >>> boot on those.
-> >>
-> >> With such a configuration how does the bootloader know it should pass
-> >> the kernel
-> >> the device tree for 'hoglin-sku1536' (pro) and not the non-pro
-> >> variant? IIUC the
-> >> device tree is selected based on pin strappings on the mother-board,
-> >> not the
-> >> qcard.
-> >
-> > The device tree is selected based on the pin strappings _and_ additional
-> > logic
-> > to dynamically identify modem/non-modem(wifi) as well as pro/non-pro
-> > SKUs which
-> > was added in the bootloaders.
->
-> Just to clarify things, when you mention pro SKU, is it a separate SoC
-> revision (like sc7280-pro vs bare sc7280), or is it a CRD revision (CRD
-> Pro vs bare CRD)?
+I'd vote for it being in VMD mode (non-bypass) by default.
 
-I guess Rajendra never responded, but since I know the answer: it's a
-different SoC revision. ...but the SoC in this case is on a daughter
-card, so you could remove the daughter card containing the SoC and put
-a new daughtercard on. That would have the effect of making an old CRD
-revision have the new Pro SKU SoC.
-
-Bjorn: I'd also note that I think this series (this patch and the next
-one) are ready to land.
-
--Doug
+On 12/27/2022 7:19 PM, Xinghui Li wrote:
+> Jonathan Derrick <jonathan.derrick@linux.dev> 于2022年12月28日周三 06:32写道：
+>>
+>> The bypass mode should help in the cases where drives irqs (eg nproc) exceed
+>> VMD I/O irqs. VMD I/O irqs for 28c0 should be min(63, nproc). You have
+>> very few cpus for a Skylake system with that many drives, unless you mean you
+>> are explicitly restricting the 12 drives to only 6 cpus. Either way, bypass mode
+>> is effectively VMD-disabled, which points to other issues. Though I have also seen
+>> much smaller interrupt aggregation benefits.
+> 
+> Firstly，I am sorry for my words misleading you. We totally tested 12 drives.
+> And each drive run in 6 CPU cores with 8 jobs.
+> 
+> Secondly, I try to test the drives with VMD disabled,I found the results to
+> be largely consistent with bypass mode. I suppose the bypass mode just
+> "bypass" the VMD controller.
+> 
+> The last one，we found in bypass mode the CPU idle is 91%. But in remapping mode
+> the CPU idle is 78%. And the bypass's context-switchs is much fewer
+> than the remapping
+> mode's. It seems the system is watiing for something in bypass mode.
