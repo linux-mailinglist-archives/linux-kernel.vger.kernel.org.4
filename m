@@ -2,83 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BED662353
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F40662349
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbjAIKla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S233106AbjAIKjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236962AbjAIKkv (ORCPT
+        with ESMTP id S233339AbjAIKji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:40:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C2418B16
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:35:17 -0800 (PST)
+        Mon, 9 Jan 2023 05:39:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C0517891;
+        Mon,  9 Jan 2023 02:39:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5BD660FD9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:35:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1FFC433D2;
-        Mon,  9 Jan 2023 10:35:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37CC7B80D79;
+        Mon,  9 Jan 2023 10:39:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF686C433D2;
+        Mon,  9 Jan 2023 10:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673260516;
-        bh=YmOTwEg410xLry6JPtWUVue+KxFnjS0fs4qiJfMqPn0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=t4U47ptgIoaLdfE+zHI0kATbQY0S6DflXlbgdgW/lTXMo1nFa4mJ1oXvx1jpZ2K1Z
-         TxATEvh2KtoECvYtsn1WfOhPkYqo5FxMxlOHPpUL+s3ZDmYaGceBENP+BNtP1Jdx6X
-         i5EPcLOZOF3WNHgkJnVunnwkL3TDLK1N7W4TJw9e5vOC697Mi1Js+EQUYKJqZDdt3K
-         m9zodUU9vaB4Q0EaPo4QpbVXTyGA5HJMe/jNfH2k7okhju6/X75p3OiL2zNx/r1375
-         rrXqR/wFqWlL2hfwOwiWZy+1qcsK2iAF5dd38dHw9/7j3zLPtKE08urje/hdxh6t1s
-         faa5jrMbpguiQ==
-Message-ID: <ee7bb35d-aa28-48b0-9877-c6d0881dbe64@kernel.org>
-Date:   Mon, 9 Jan 2023 18:35:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] erofs/zmap.c: Fix incorrect offset calculation
-Content-Language: en-US
-To:     Siddh Raman Pant <code@siddh.me>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     linux-erofs <linux-erofs@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
-References: <20221209102151.311049-1-code@siddh.me>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221209102151.311049-1-code@siddh.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1673260774;
+        bh=p3m9nFnxIEV1XvVP6V4T6cIP+Jeo7SIAprckOCbbr3c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hjzFunT7A5CN0XQsMWeezjm5NYJ392xMJxI4hx6s0A0kqkG8IT9O7hnZIYPgfMuXB
+         Aky20Kud7Oo5SfSo4SuiRrM8/1IWT5Cqk6JpBBEmVHUnZqlYzvM/e/WrlcBfwzP4ow
+         pszHD17A4P+Y8V3Zpih1CVQSO3v5oGxWFYeD0Z4m106KMuhStSS5KxxAmyh5eUN2V4
+         2tMxjnUuPTynAwi7MEyHcHDJaGWYWEOl+ecDfLEOgKuUULB6XlxIwG0AlQxo8Eaezi
+         bH9nWZa13w7XBcNRi7d5U4bTxq/3UPp4mfZIaZrESKbswSxGuWC8ySoKbKMzI17k9d
+         Twkbh+mrf4wSA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pEpYy-000F8K-Kw;
+        Mon, 09 Jan 2023 10:39:32 +0000
+Date:   Mon, 09 Jan 2023 10:39:32 +0000
+Message-ID: <86ilhgng9n.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yogesh Lal <quic_ylal@quicinc.com>
+Cc:     <mark.rutland@arm.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
+In-Reply-To: <9aafa9d9-70f8-67de-df43-e2fb282a4a67@quicinc.com>
+References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+        <86sfgpnjsg.wl-maz@kernel.org>
+        <9aafa9d9-70f8-67de-df43-e2fb282a4a67@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_ylal@quicinc.com, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/9 18:21, Siddh Raman Pant wrote:
-> Effective offset to add to length was being incorrectly calculated,
-> which resulted in iomap->length being set to 0, triggering a WARN_ON
-> in iomap_iter_done().
+On Mon, 09 Jan 2023 06:52:20 +0000,
+Yogesh Lal <quic_ylal@quicinc.com> wrote:
 > 
-> Fix that, and describe it in comments.
-> 
-> This was reported as a crash by syzbot under an issue about a warning
-> encountered in iomap_iter_done(), but unrelated to erofs.
-> 
-> C reproducer: https://syzkaller.appspot.com/text?tag=ReproC&x=1037a6b2880000
-> Kernel config: https://syzkaller.appspot.com/text?tag=KernelConfig&x=e2021a61197ebe02
-> Dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
-> 
-> Reported-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
-> Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+> tested it on affected h/w but looks like sched_clock is still pointing
+> to !arch_timer_counter_has_wa() function calls,
+> may be due to sched_clock_register will register once during non
+> errata impacted core booting.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Ah, of course. We register the function itself instead of an
+indirection. Please try this on top of the previous patch.
 
 Thanks,
+
+	M.
+
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index a7cf0a2c86d3..8232c86b9e7c 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -217,7 +217,12 @@ static notrace u64 arch_counter_get_cntvct(void)
+  * to exist on arm64. arm doesn't use this before DT is probed so even
+  * if we don't have the cp15 accessors we won't have a problem.
+  */
+-u64 (*arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
++static u64 (*__arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
++
++u64 arch_timer_read_counter(void)
++{
++	return __arch_timer_read_counter();
++}
+ EXPORT_SYMBOL_GPL(arch_timer_read_counter);
+ 
+ static u64 arch_counter_read(struct clocksource *cs)
+@@ -595,7 +600,7 @@ void arch_timer_enable_workaround(const struct arch_timer_erratum_workaround *wa
+ 
+ 	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
+ 		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+-		arch_timer_read_counter = arch_counter_get_read_fn();
++		__arch_timer_read_counter = arch_counter_get_read_fn();
+ 	}
+ 
+ 	/*
+@@ -1103,10 +1108,10 @@ static void __init arch_counter_register(unsigned type)
+ 
+ 	/* Register the CP15 based counter if we have one */
+ 	if (type & ARCH_TIMER_TYPE_CP15) {
+-		arch_timer_read_counter = arch_counter_get_read_fn();
++		__arch_timer_read_counter = arch_counter_get_read_fn();
+ 		clocksource_counter.vdso_clock_mode = vdso_default;
+ 	} else {
+-		arch_timer_read_counter = arch_counter_get_cntvct_mem;
++		__arch_timer_read_counter = arch_counter_get_cntvct_mem;
+ 	}
+ 
+ 	width = arch_counter_get_width();
+diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
+index e3c3816d19ba..3ac297a756e8 100644
+--- a/include/clocksource/arm_arch_timer.h
++++ b/include/clocksource/arm_arch_timer.h
+@@ -89,7 +89,7 @@ struct arch_timer_mem {
+ #ifdef CONFIG_ARM_ARCH_TIMER
+ 
+ extern u32 arch_timer_get_rate(void);
+-extern u64 (*arch_timer_read_counter)(void);
++extern u64 arch_timer_read_counter(void);
+ extern struct arch_timer_kvm_info *arch_timer_get_kvm_info(void);
+ extern bool arch_timer_evtstrm_available(void);
+ 
+
+-- 
+Without deviation from the norm, progress is not possible.
