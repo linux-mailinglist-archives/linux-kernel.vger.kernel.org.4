@@ -2,258 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CCA663090
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843A663091
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbjAITib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S236688AbjAITiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237557AbjAITi3 (ORCPT
+        with ESMTP id S237625AbjAITig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:38:29 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F055F777C6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:38:27 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i65so3517901pfc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:38:27 -0800 (PST)
+        Mon, 9 Jan 2023 14:38:36 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20387682B
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:38:35 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so10844305pjj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:38:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZJW757By3pyCr9WhEaqzFQ75DPB5RWkfBLPhZzSAskQ=;
-        b=Uzz5Ku/PJw99Ny3hIDeY6FZm1/UfFL1eLjF+feC+LJbGzXwu7Ic3hBpQLmwcKmNHNc
-         PV06/xC6Kba44i8gHfqWiQL8EwH5BcT64CTXA1inY9LeqGWx6PhjHZbCVPa/RAndDvNJ
-         LNlegHSRZCYgM+v8GJdJfS4jWPYwj2fkm9KAU=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zqcorDaesNPZpzpHYqsyJjDWld3f4vWy8ymddi6+5Ck=;
+        b=jmV1jNzCKoWqckeDEQ1H+b8qDQvzqbwC24lwo82MQMDsobTqG1j24JP0Z1Osj7dVCF
+         AmVdIR7ci4zB/s9W8PPONSD68WZn8LEQQ2cTC11XGYb2LO5ySDoqCVFXIpmfZF54DqSD
+         gOLfU/HEke3StZagS0RrTrJWu9G1KYbItHPXoj+Mo+XsfC9W8X+rstvoIYvP/CdV/ifq
+         vMTJFm7AT/BmAjR8wYwAcefOTugp6QXiLOGV0MDS2vCLj+403EyCDUk/3CXaGYY+xv29
+         gJslPtm5Fi7psZLkWDceAGCtRVEUvcJiVxiQ4OaFkiBqU86u7AqJcpAOQ1nTgFG/JGJf
+         zroQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZJW757By3pyCr9WhEaqzFQ75DPB5RWkfBLPhZzSAskQ=;
-        b=yS1uZWLviykH1hqOojq9ZTxjlOMyW6RklfwXkLJSaKHBTGgyCYbkpZad7KGk0b/SS/
-         Djrv+wQ1Ke/PtN7x0UO5f5NGVc80wlZn/YWhSJ/7HGyY8zh08NX7ziN5/7xvplM17QtX
-         AIWe25ixu0SyyMGErSnZVqq/HsjLaZPCghGZrls8O/YuBBOVDjbxdVW/MgBN4KFWnmWZ
-         FuuJB8O5Qvv+SNE9PEk+DH5RwRReAaEVRtZvRPYOYn10/s1lL5qTtPx/K7Ca02bbtysi
-         5zZvY16rpTVewJsk+QxH2VCxoAFCv/IQ3vyPnpzeWZLMQOEss2mmXDqcv7RqmIg33+xC
-         kJYg==
-X-Gm-Message-State: AFqh2kpNJG8ZYPu1RItbrhr3rbK6uEAy5+i5OPWva3G9d1vfpxCBhdT4
-        8K0CsXwQC6cGAwhQ2aZTrVksvQ0TWqzOTEbzL/3hLHm7Bfcocdg=
-X-Google-Smtp-Source: AMrXdXv5xoh/ZOsyIbIHCfchh5eJtpYVuSbM+a3emfWlGWlYHnt3rM/q0BSzF6iR3XHFH6sBCN5tyo0i+Aur26bHC04=
-X-Received: by 2002:aa7:9d1b:0:b0:580:a13b:366a with SMTP id
- k27-20020aa79d1b000000b00580a13b366amr3484931pfp.37.1673293107413; Mon, 09
- Jan 2023 11:38:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zqcorDaesNPZpzpHYqsyJjDWld3f4vWy8ymddi6+5Ck=;
+        b=yo4P8h0IV90Hi1fL3cZJcPgdQyWkR0j0Q4Knu0LrUgopRST5S4Hm2IEczEYPArAIjn
+         I5uFxWvEr2zKH+Sb/oMKOGcoxBMCSZp4bu6KW4W+0UrYZshVaSiIYN0QeZvv2Z1L5yKt
+         yuZeLTG0MJggnP7OqVOVZYBIMyS8P0/aipsqoSwV2/aWsVXSY5wOhmXwHKBPsMxO8aue
+         7H75kWdP7wOArxFbWECQ7tXNDa6Dc8x/3gv9Emw6/xOA6g7dHxJs2JnVIm3P+FtO8ZKz
+         RKrhORyVH9jRm6pyAMuDpbh+Ud+tJrs7S0KLLdi2Mlh1iugV0dLGpHk14cr4/FTypVJn
+         zS6w==
+X-Gm-Message-State: AFqh2krUQ9Ve+HI9zQtO5JydsQTpdI1LSu56T81EvKDYLOGk1pPrjaDA
+        5bj6zks2cnCXiqpMczafXYET/Q==
+X-Google-Smtp-Source: AMrXdXsYAfvSdlSjVukM++u1bX3tI9f+GUP90GjibWKTDrjNpbsJjyadzAwfK9KIVL76i3Vr1SeFHA==
+X-Received: by 2002:a17:902:b946:b0:192:6bff:734 with SMTP id h6-20020a170902b94600b001926bff0734mr670859pls.2.1673293114869;
+        Mon, 09 Jan 2023 11:38:34 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:3529:30e5:d581:6e80])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b00168dadc7354sm6530260plg.78.2023.01.09.11.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 11:38:33 -0800 (PST)
+Date:   Mon, 9 Jan 2023 11:38:27 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        heikki.krogerus@linux.intel.com,
+        Benson Leung <bleung@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: Re: [PATCH 01/10] Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS
+ EC MCU"
+Message-ID: <Y7xtM8SKaz/di1mX@google.com>
+References: <20221228004648.793339-1-pmalani@chromium.org>
+ <20221228004648.793339-2-pmalani@chromium.org>
 MIME-Version: 1.0
-References: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
- <Y7gN32eHJNyWBvVD@FVFF77S0Q05N> <CAOnJCULGM=JvOtoRQM8gY3w3oSDhto=VwfgqcL+cb=er6d=dgQ@mail.gmail.com>
- <Y7wyI5fBN6yOIzop@FVFF77S0Q05N>
-In-Reply-To: <Y7wyI5fBN6yOIzop@FVFF77S0Q05N>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 9 Jan 2023 11:38:15 -0800
-Message-ID: <CAOnJCUKHe2yTUET4D6k9pFH-g6mYwjdbKUAo9Kxm3_UoT-LwRQ@mail.gmail.com>
-Subject: Re: Expected rdpmc behavior during context swtich and a RISC-V conundrum
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Beeman Strong <beeman@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pdpsTrxAiTvMU7u3"
+Content-Disposition: inline
+In-Reply-To: <20221228004648.793339-2-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 7:26 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Mon, Jan 09, 2023 at 01:06:45AM -0800, Atish Patra wrote:
-> > On Fri, Jan 6, 2023 at 4:02 AM Mark Rutland <mark.rutland@arm.com> wrot=
-e:
-> > >
-> > > On Thu, Jan 05, 2023 at 11:59:24AM -0800, Atish Patra wrote:
-> > > > Hi All,
-> > > > There was a recent uabi update[1] for RISC-V that allows the users =
-to
-> > > > read cycle and instruction count without any checks.
-> > > > We tried to restrict that behavior to address security concerns
-> > > > earlier but it resulted in breakage for some user space
-> > > > applications[2].
-> > > > Thus, previous behavior was restored where a user on RISC-V platfor=
-ms
-> > > > can directly read cycle or instruction count[3].
-> > > >
-> > > > Comparison with other ISAs w.r.t user space access of counters:
-> > > > ARM64
-> > > >   -- Enabled/Disabled via (/proc/sys/kernel/perf_user_access)
-> > > >   -- Only for task bound events configured via perf.
-> > > >
-> > > > X86
-> > > >  --- rdpmc instruction
-> > > >  --- Enable/Disable via =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
-> > > > -- Before v4.0
-> > > >  -- any process (even without active perf event) rdpmc
-> > > > After v4.0
-> > > > -- Default behavior changed to support only active events in a
-> > > > process=E2=80=99s context.
-> > > > -- Configured through perf similar to ARM64
-> > > > -- Continue to maintain backward compatibility for unrestricted acc=
-ess
-> > > > by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
-> > > >
-> > > > IMO, RISC-V should only enable user space access through perf simil=
-ar
-> > > > to ARM64 and x86 (post v4.0).
-> > > > However, we do have to support the legacy behavior to avoid
-> > > > application breakage.
-> > > > As per my understanding a direct user space access can lead to the
-> > > > following problems:
-> > > >
-> > > > 1) There is no context switch support, so counts from other context=
-s are exposed
-> > > > 2) If a perf user is allocated one of these counters, the counter
-> > > > value will be written
-> > > >
-> > > > Looking at the x86 code as it continues to allow the above behavior=
-,
-> > > > rdpmc_always_available_key is enabled in the above case. However,
-> > > > during the context switch (cr4_update_pce_mm)
-> > > > only dirty counters are cleared. It only prevents leakage from perf
-> > > > task to rdpmc task.
-> > > >
-> > > > How does the context switch of counters work for users who enable
-> > > > unrestricted access by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=
-=E2=80=9D ?
-> > > > Otherwise, rdpmc users likely get noise from other applications. Is
-> > > > that expected ?
-> > >
-> > > Regardless of leakage, they're also going to get random jumps in the =
-visible
-> > > values of the cycle count and instruction count as the task is contex=
-t-switched
-> > > (and/or if those values get reset across idle, as can happen on arm64=
-), so
-> > > those aren't going to be useful unless a number of other constraints =
-apply.
-> > >
-> >
-> > Agreed.
-> >
-> > > AFAICT the affected package was actually a library of intrinsics; doe=
-s this
-> > > affect a real application, or was this just in tests? If it's the lat=
-ter there
-> > > might still be scope to properly lock this down...
-> > >
-> >
-> > Unfortunately, there are real applications In RISC-V started using
-> > cycle counters due to legacy reasons.
-> >
-> > Here is the short list from debian repo pointed out in [1]
-> > https://codesearch.debian.net/search?q=3D%22rdcycle+%250%22
->
-> The first of those is GRUB, when running bare metal.
->
-> The second is this library again, which is not a whole application.
->
-> I see that it's used in some benchmarks in real applications, e.g. firefo=
-x,
-> chrome. However, as above we know that's *broken* today.
->
-> Is that code actually run?
->
-> > Looking at aarch64 code in one of the application, it seems they rely
-> > on reading "pmccntr_el0" to read time
-> > https://sources.debian.org/src/chromium/108.0.5359.124-1/third_party/ff=
-mpeg/libavutil/aarch64/timer.h/
->
-> That part is under ifdefs for mac os:
->
-> | #if defined(__APPLE__)
->
 
-Yes. Sorry I missed that earlier. I checked few other application code
-which correctly
-use cntvct_el0 as you pointed out.
+--pdpsTrxAiTvMU7u3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ... and it's nonsensical anyway, pmccntr_el0 is *not* a timer, and I don'=
-t know
-> if Mac OS would bother to context-switch the value, so it's very likely b=
-roken
-> anyhow.
->
-> > AFAIK, any counter access from EL0 is disabled by default in
-> > reset_pmuserenr_el0 and should be enabled via the
-> > proc/sys/perf_user_access
-> > in armv8pmu_enable_user_access. Is that correct ?
->
-> Yes, we *only* enable access for tasks doing self-monitoring via perf.
->
-> No other useage makes sense, since the value is arbitrarily reset, and it=
-'s not
-> consistent across CPUs. It *cannot* be used as a timer.
->
+On Wed, Dec 28, 2022 at 12:45:04AM +0000, Prashant Malani wrote:
+> This reverts commit 66ee379d743c69c726b61d078119a34d5be96a35.
+>=20
+> The feature flag introduced by Commit 66ee379d743c ("mfd: cros_ec: Add
+> SCP Core-1 as a new CrOS EC MCU") was not first added in the source EC
+> code base[1]. This can lead to the possible misinterpration of an EC's
+> supported feature set, as well as causes issues with all future feature
+> flag updates.
+>=20
+> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:in=
+clude/ec_commands.h
+>=20
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Yes. That's what we were trying to convince the user space application
-maintainers too.
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-> > I couldn't find any application actually enabling the access using
-> > perf_user_access. Maybe I am missing something?
-> > Otherwise, the above application would trap on access to pmccntr_el0.
->
-> As above, that's on Mac OS, not Linux.
->
-
-Yeah. My bad. Sorry for the noise :)
-
-> Thanks,
-> Mark.
->
-> >
-> > [1] https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/REWcwYnzsKE=
-?pli=3D1
-> > > Thanks,
-> > > Mark.
-> > >
-> > > > This can be a security concern also where a rogue rdpmc user
-> > > > application can monitor other critical applications to initiate sid=
-e
-> > > > channel attack.
-> > > >
-> > > > Am I missing something? Please correct my understanding of the x86
-> > > > implementation if it is wrong.
-> > > >
-> > > > [1] https://lore.kernel.org/lkml/20221201135110.3855965-1-conor.doo=
-ley@microchip.com/
-> > > > [2] https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/REWcwYn=
-zsKE?pli=3D1
-> > > > [3] https://lore.kernel.org/all/YxIzgYP3MujXdqwj@aurel32.net/T/
-> > > >
-> > > > --
-> > > > Regards,
-> > > > Atish
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
-
-
+> ---
+>=20
+> While this patch modifies drivers/mfd, it would be preferable to submit
+> it through the chrome-platform tree, since that eliminates cross-tree
+> dependencies for the series of which this patch is a part.
+>=20
+>=20
+>  drivers/mfd/cros_ec_dev.c                      | 5 -----
+>  include/linux/platform_data/cros_ec_commands.h | 2 --
+>  include/linux/platform_data/cros_ec_proto.h    | 1 -
+>  3 files changed, 8 deletions(-)
+>=20
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index 344ad03bdc42..02d4271dfe06 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -64,11 +64,6 @@ static const struct cros_feature_to_name cros_mcu_devi=
+ces[] =3D {
+>  		.name	=3D CROS_EC_DEV_SCP_NAME,
+>  		.desc	=3D "System Control Processor",
+>  	},
+> -	{
+> -		.id	=3D EC_FEATURE_SCP_C1,
+> -		.name	=3D CROS_EC_DEV_SCP_C1_NAME,
+> -		.desc	=3D "System Control Processor 2nd Core",
+> -	},
+>  	{
+>  		.id	=3D EC_FEATURE_TOUCHPAD,
+>  		.name	=3D CROS_EC_DEV_TP_NAME,
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/lin=
+ux/platform_data/cros_ec_commands.h
+> index 5744a2d746aa..7c94bf5c8f05 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -1300,8 +1300,6 @@ enum ec_feature_code {
+>  	 * mux.
+>  	 */
+>  	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK =3D 43,
+> -	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
+> -	EC_FEATURE_SCP_C1 =3D 45,
+>  };
+> =20
+>  #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
+> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/=
+platform_data/cros_ec_proto.h
+> index e43107e0bee1..a1f5b6d6db3a 100644
+> --- a/include/linux/platform_data/cros_ec_proto.h
+> +++ b/include/linux/platform_data/cros_ec_proto.h
+> @@ -19,7 +19,6 @@
+>  #define CROS_EC_DEV_ISH_NAME	"cros_ish"
+>  #define CROS_EC_DEV_PD_NAME	"cros_pd"
+>  #define CROS_EC_DEV_SCP_NAME	"cros_scp"
+> -#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
+>  #define CROS_EC_DEV_TP_NAME	"cros_tp"
+> =20
+>  #define CROS_EC_DEV_EC_INDEX 0
+> --=20
+> 2.39.0.314.g84b9a713c41-goog
+>=20
+>=20
 
 --=20
-Regards,
-Atish
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--pdpsTrxAiTvMU7u3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY7xtMwAKCRBzbaomhzOw
+wkixAQDtaWf7A/7oLyeHoq9KF2j9ocTf7B4YH0t8MKaWMjovwgEA3AJKyA/l9T1V
+3kaZihZ0OTn1RFyXnvaW+MN5n4M/3g8=
+=A+fw
+-----END PGP SIGNATURE-----
+
+--pdpsTrxAiTvMU7u3--
