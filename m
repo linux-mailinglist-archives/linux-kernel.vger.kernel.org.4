@@ -2,152 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196A1662A7F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A92F662A89
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbjAIPs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S234855AbjAIPut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbjAIPrq (ORCPT
+        with ESMTP id S235575AbjAIPuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:47:46 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3861A079
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:47:38 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id z8-20020a056e02088800b0030c247efc7dso6308572ils.15
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 07:47:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DUwZds0wjLkQnBIYbIWoN/PPnQGOvTGLK3WZZ9CM4pQ=;
-        b=WMkYUXpO601w1C3S6jPW6sDVf6ligWpMbAD6IFjqkVXq8gWbi8WcuA6yUwRcHdfzbU
-         C5vCNDRy3wEV+qtwC8xCbXBbPseDX4uWdWEEXLUNf8MRYcAiFuRsOC+gE/0K6xavo2h3
-         5hFTmRmjg4OyO1ohcTscEBj5gtpw9AePPl80XTyyUdM1nnzKqCSZy6n3n4ITtQqcRcI2
-         Xet9turyv/9SmWVDkn/VRXE2VIiHQja2aV6daS2E2I5W8J2LHhM4rZn24iivWMPqXL8B
-         WmbMFQV6oft6pXLXw880Wlq9GudX37YM+Z4zEmGRnPX3qEOWiT0A1LVzxCmKapdmjIGS
-         ikUg==
-X-Gm-Message-State: AFqh2kr89ePSnUMIYZyq3cyZlyH3rLFiW7cWnCeOM0DkS1pE8jEiNP3I
-        b+22hpifkhLEEDdSY8bdURH1bD/SKFVaSyKN4K+lSzfL6fAJ
-X-Google-Smtp-Source: AMrXdXuBHqH78nVaV84wwbLsXQ7Y5s6G9Lb6PRlp7Xhzk5VFoOYq6TNp9zYUmoJldNh/EjXY5JXxqwyMujbzdzPa2h5p6rUHCc8+
+        Mon, 9 Jan 2023 10:50:19 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB561A079;
+        Mon,  9 Jan 2023 07:50:02 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 309FnKbk021502;
+        Mon, 9 Jan 2023 09:49:20 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673279360;
+        bh=tHZZefyYne34nwtHlmcO9279ZiTFZKklHDR4wSaraLs=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=MPUiZGBLs/Ku6SlSm3Fh+yFJcoGIXbBdA2icjuIIZ3bG28Lf4hxlbusjtBtW3r+j1
+         d+ESwERr6zuKSVhU4PuUTfDVFIQp3yL6qzK+Rp5rdyZvl3hNXAGClH9q8f6DuClU8d
+         KyAqikzfsRBeqcXaHluWkpbzVG7Qm/XmCoIq+OSg=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 309FnKl1105964
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 9 Jan 2023 09:49:20 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 9
+ Jan 2023 09:49:19 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 9 Jan 2023 09:49:19 -0600
+Received: from [10.250.234.21] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 309Fn9qV038794;
+        Mon, 9 Jan 2023 09:49:10 -0600
+Message-ID: <784cc3a5-8b10-aed3-b151-77cedb531f25@ti.com>
+Date:   Mon, 9 Jan 2023 21:19:08 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a02:7352:0:b0:375:bc14:b202 with SMTP id
- a18-20020a027352000000b00375bc14b202mr4230956jae.244.1673279257349; Mon, 09
- Jan 2023 07:47:37 -0800 (PST)
-Date:   Mon, 09 Jan 2023 07:47:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be991505f1d6afb3@google.com>
-Subject: [syzbot] [reiserfs?] BUG: unable to handle kernel paging request in reiserfs_lookup
-From:   syzbot <syzbot+a99186f624245fd88b94@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
+ panel
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230103064615.5311-1-a-bhatia1@ti.com>
+ <20230103064615.5311-4-a-bhatia1@ti.com>
+ <85837957-f6d2-4722-7693-98c6cf932096@linaro.org>
+ <32d66fb7-6c63-0985-222f-0bd3c36c165d@ti.com>
+ <30423568-df03-1d72-81fe-3a4b33214e5c@linaro.org>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <30423568-df03-1d72-81fe-3a4b33214e5c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Krzysztof,
 
-syzbot found the following issue on:
+On 03-Jan-23 16:58, Krzysztof Kozlowski wrote:
+> On 03/01/2023 12:02, Aradhya Bhatia wrote:
+>> But this is throwing an error. I am confused what else could be done.
+>> Can you please suggest what might be a more accurate check here?
+>>
+>>>
+>>>> +              required:
+>>>> +                - dual-lvds-odd-pixels
+>>>> +        then:
+>>>> +          properties:
+>>>> +            port@1:
+>>>> +              properties:
+>>>> +                dual-lvds-even-pixels: true
+>>>> +                dual-lvds-odd-pixels: false
+>>>
+>>> Why do you need this? Your oneOf before already solves it.
+>>
+>> I agree with your comment here. It makes sense to only have
+>>
+>> 	dual-lvds-even-pixels: true
+>>
+>> and have the oneOf condition take care of the other. But, I just tested
+>> this and it was unable to pick-up this intentionally-added error.
+>>
+>> I added 'dual-lvds-odd-pixels' property to both the nodes, and
+>> dt_binding_check passes successfully (which it should have not.)
+>>
+>> Instead, if I only keep this,
+>>
+>> 	dual-lvds-odd-pixels: false
+>>
+>> then the dt_binding_check detects the error as it should.
+>>
+>> Regardless, I am curious why the first method doesn't work. Will try to
+>> explore more on that.
+> 
+> The check for presence of properties is only against required:, but you
+> added there properties. Like this:
+> 
+> https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml#L155
+> 
+> 
+> Other way is to drop your both oneOf and entire allOf from ports and use:
+> 
+> oneOf:
+>    - properties:
+>        ports:
+>          $ref: /schemas/graph.yaml#/properties/ports
+>          properties:
+>            port@0:
+>              required:
+>                - dual-lvds-odd-pixels
+>            port@1:
+>              required:
+>                - dual-lvds-even-pixels
+>    - properties:
+>        ports:
+>          $ref: /schemas/graph.yaml#/properties/ports
+>          properties:
+>            port@1:
+>              required:
+>                - dual-lvds-odd-pixels
+>            port@0:
+>              required:
+>                - dual-lvds-even-pixels
+> 
 
-HEAD commit:    247f34f7b803 Linux 6.1-rc2
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1619246e480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=a99186f624245fd88b94
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Thank you for the suggestions.
+I tested the both of them, and they seem to be working as expected.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a99186f624245fd88b94@syzkaller.appspotmail.com
-
-Unable to handle kernel paging request at virtual address ffff80000d2e2c80
-Mem abort info:
-  ESR = 0x0000000096000047
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x07: level 3 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000047
-  CM = 0, WnR = 1
-swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c54db000
-[ffff80000d2e2c80] pgd=100000023ffff003, p4d=100000023ffff003, pud=100000023fffe003, pmd=100000023fffa003, pte=0000000000000000
-Internal error: Oops: 0000000096000047 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 21788 Comm: syz-executor.3 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : queued_spin_lock_slowpath+0x198/0x394 kernel/locking/qspinlock.c:474
-lr : queued_spin_lock_slowpath+0x114/0x394 kernel/locking/qspinlock.c:405
-sp : ffff80001400b850
-x29: ffff80001400b850 x28: ffff80000eec9000 x27: ffff80000cbb6d47
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0001fefefc80
-x23: 0000000000000000 x22: ffff80000d37d050 x21: ffff80000d2e2c80
-x20: 0000000000000001 x19: ffff00011e189430 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000001fb8 x12: 0000000000000000
-x11: ffff80000d2e2c80 x10: 0000000000080000 x9 : ffff0001fefefc88
-x8 : ffff0001fefefc80 x7 : 0000000000000000 x6 : ffff80000c08f3c8
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : ffff80000ce889e3 x0 : 0000000000000001
-Call trace:
- decode_tail kernel/locking/qspinlock.c:131 [inline]
- queued_spin_lock_slowpath+0x198/0x394 kernel/locking/qspinlock.c:471
- queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
- do_raw_spin_lock+0x10c/0x110 kernel/locking/spinlock_debug.c:115
- __raw_spin_lock include/linux/spinlock_api_smp.h:134 [inline]
- _raw_spin_lock+0x5c/0x6c kernel/locking/spinlock.c:154
- __mutex_lock_common+0x2a4/0xca8 kernel/locking/mutex.c:617
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_lookup+0xa4/0x1c4 fs/reiserfs/namei.c:364
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x738/0x11c4 fs/namei.c:3710
- do_filp_open+0xdc/0x1b8 fs/namei.c:3740
- do_sys_openat2+0xb8/0x22c fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: 8b2c4ecc f85f818c 1200056b 8b2b52ab (f82b6988) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	8b2c4ecc 	add	x12, x22, w12, uxtw #3
-   4:	f85f818c 	ldur	x12, [x12, #-8]
-   8:	1200056b 	and	w11, w11, #0x3
-   c:	8b2b52ab 	add	x11, x21, w11, uxtw #4
-* 10:	f82b6988 	str	x8, [x12, x11] <-- trapping instruction
+V2 will reflect all the required fixes.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Regards
+Aradhya
