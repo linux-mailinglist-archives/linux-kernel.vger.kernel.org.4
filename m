@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F426630D4
+	by mail.lfdr.de (Postfix) with ESMTP id 04EF06630D3
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237639AbjAITyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:54:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S236528AbjAITyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237392AbjAITyB (ORCPT
+        with ESMTP id S235476AbjAITyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:54:01 -0500
-Received: from 20.mo582.mail-out.ovh.net (20.mo582.mail-out.ovh.net [178.32.124.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0912389D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:53:57 -0800 (PST)
-Received: from director1.ghost.mail-out.ovh.net (unknown [10.109.146.86])
-        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 63D672471F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:53:55 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-zhwml (unknown [10.110.208.112])
-        by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7EEE11FEED;
-        Mon,  9 Jan 2023 19:53:51 +0000 (UTC)
-Received: from sk2.org ([37.59.142.98])
-        by ghost-submission-6684bf9d7b-zhwml with ESMTPSA
-        id SIYmDM9wvGPphQEAR6C6Tg
-        (envelope-from <steve@sk2.org>); Mon, 09 Jan 2023 19:53:51 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-98R002dcb81ab0-aa44-4050-9c7a-c7c6d9d4b65a,
-                    796317D5D98EA53ED2B7ABF3FE0FDD27B7A2AA3D) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-Date:   Mon, 9 Jan 2023 20:53:44 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-staging@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sam Ravnborg via B4 Submission Endpoint 
-        <devnull+sam.ravnborg.org@kernel.org>,
-        Antonino Daplas <adaplas@gmail.com>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight
- handling
-Message-ID: <20230109205026.4c672dc8@heffalump.sk2.org>
-In-Reply-To: <Y7smdFs2xgJwwVQO@ravnborg.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
-        <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
-        <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
-        <Y7nb2q6SDota/rTU@ravnborg.org>
-        <366FC0B8-21E2-4642-A5A5-CF4B6AB046B0@sk2.org>
-        <Y7smdFs2xgJwwVQO@ravnborg.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 9 Jan 2023 14:54:33 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF231026;
+        Mon,  9 Jan 2023 11:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673294072; x=1704830072;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EYmGw8cKylJ3oVUnXbyNAs21ToQ2EjfNHKl2V8Wq3dg=;
+  b=jSaEx1vRnhKKV0TNzowvfZCN0aZl9/xRHta0gZwnoFQBD6/6w2IZEMA7
+   Sy+gtpZegW8D+E2evDM+zDiHDI4jX4uPM520P8dW/aSjeREQoc4alpyAs
+   Ir05pkJg6XLKVzve0PF1YApOg+ckw/x07Axfyfo+EWjvvYfdNTLn0wMxg
+   zzVqXsbTQ5t55PMBE+/iDzyvRyRAmVpXMuH8rjF9LZIgRV2eA5jqZKeO9
+   MfdwIsiVRHSjSXh5R+k1cZ7u89GkiT79YE11Uv7QQ+GamrSixyH8yypXl
+   ySCz8s/IhqQyN0q2VAplGifUP4qgGowR6eaajKxarXaxTVNxalkREhWSJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="387414657"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="387414657"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:54:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="725289770"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="725289770"
+Received: from swapnadi-mobl2.amr.corp.intel.com (HELO [10.209.29.117]) ([10.209.29.117])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:54:31 -0800
+Message-ID: <8d1b8738-03d2-b5a6-fd63-a6513db4c86b@intel.com>
+Date:   Mon, 9 Jan 2023 11:54:30 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WkKI4pNhPlPhuyNdSzKYHjs";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Ovh-Tracer-Id: 8129841754002130566
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeigdduvdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfofggtgesghdtreerredtvdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepjeevgfeigfeukeeujeeghfefjeffjeffjeetffeludelgeevfeejtdekvdevvdevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddrleeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 05/16] x86/virt/tdx: Implement functions to make
+ SEAMCALL
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <d74565e3f71b6e5e5183f3b736222ec42b6e0b81.1670566861.git.kai.huang@intel.com>
+ <61b9cc00-d514-df77-0a31-88ec35d73456@intel.com>
+ <e6296f511bb4fae4696ec19d5777103044f3aad9.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <e6296f511bb4fae4696ec19d5777103044f3aad9.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WkKI4pNhPlPhuyNdSzKYHjs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/9/23 02:30, Huang, Kai wrote:
+>> I don't know that you really _need_ to split this up, but I'm just
+>> pointing out that mashing three different logical things together makes
+>> it hard to write a coherent Subject.  But, I've seen worse.
+> Agreed.
+> 
+> To me seems "Add SEAMCALL infrastructure" is good enough, but I can split up if
+> you want me to.
 
-Hi Sam,
-
-On Sun, 8 Jan 2023 21:24:20 +0100, Sam Ravnborg <sam@ravnborg.org> wrote:
-> > Here are my pending patches from last June on lore:
-> >  =20
->=20
-> All patches are handled I think except this:
-> > * https://lore.kernel.org/lkml/20220608205623.2106113-1-steve@sk2.org/ =
-=20
->=20
-> Can I ask you to drop the assignment that is not needed, and resend with
-> the collected acks/r-b.
->=20
-> With this, then all fbdev patches are handled.
-
-Ah yes, it was revised as
-https://lore.kernel.org/lkml/20220609180440.3138625-1-steve@sk2.org/ which
-only got one ack (from you,
-https://lore.kernel.org/lkml/YqJCKQmQEuVsbspK@ravnborg.org/). Should I
-resend that or is that usable as-is? Or would it be better if I sent all the
-fbdev patches again (collecting all the acks and reviews)?
-
-Regards,
-
-Stephen
-
---Sig_/WkKI4pNhPlPhuyNdSzKYHjs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmO8cMgACgkQgNMC9Yht
-g5z/hg/+M/SIiugiRlPu8/75brBREB81GIjjW2/r/pcvIdkETebFoCKAFma2bIgo
-VljGHiYUQygcfAT+SNwI5wRrMKaNDug+L7iXVOpE9ouBd3SAk65zo8e3xcH6hTJV
-GV7tVbhrQQwIwYGE/xf8ndGBVbHriXm2TZlCV48cNGIK9Gm9mn2yo3791fF/HpLC
-iLJNAG0tEukItdoNh+0HaT3AFj6SQMZCz9mHLCJS6Jpcltr920pa9eeCxpmcMupK
-/hzGcQaMKbpClKn+2h0st9aC3pBcw9kresTlcFlvo7avT7OFqQkV5+YuntPA2SlC
-oY9vS0ztE9capaPic4fsESf4i44NW58vceg96Ill1ZrJyUcXDdq/gntBi3SfM05W
-+DDJaIQQfSsnaqsPGn3AB7CTOeW4cATaih197XFdUcUtoW5nIrSRsCDlpbEmjpwr
-bPsM0KyqJJ5qJXictFaBoD0LDHNHNVVfyn4qA24N/PsgHQxtTaSVZR6ASx9/WI9w
-L83/tK68OFp7m14Z5tvdMHOI7oOUJO6L67wVtP8UrH+YW2NfBwcECQbanhU4cinF
-EWR7e1UlYF2APGsvx/BPrY21rOW4tYnp5WlUqO/SD1sMCWPVjN6LeFIELCW3bIHw
-/jCr9HY2gX6KPDEqkI6grOB+ffgNGgKvPQEOeL+BGNcywWCZTtk=
-=EEPd
------END PGP SIGNATURE-----
-
---Sig_/WkKI4pNhPlPhuyNdSzKYHjs--
+Everything else being equal, I'd rather have them split up.  But, I'm
+frankly not looking forward to the additional work on my part to review
+and rework three more patches and changelogs.
