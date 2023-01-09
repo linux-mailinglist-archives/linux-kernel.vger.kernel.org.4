@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A086627A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0339E6627B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjAINtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S236470AbjAINuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbjAINso (ORCPT
+        with ESMTP id S233669AbjAINte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:48:44 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD9E1EECC;
-        Mon,  9 Jan 2023 05:48:43 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id ay12-20020a05600c1e0c00b003d9ea12bafcso3658721wmb.3;
-        Mon, 09 Jan 2023 05:48:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sjM8hOV94cypu49wh5dstQmAlWS++C//GRjTU4M89js=;
-        b=kuF0jPfU1UAscJ/zjoV4o3aiOyJLdHX8uCTjK8Y3fTHphmKuozDbGagrYmLT3cRScU
-         UHfV4CZnHOHXDIqslfQNrQ24aVJBjA8OGcDD2Ga0FxfOAE1USvznKgqLGFyKgOnaEl1N
-         piLhdt3d46Gnc25HPCt8Nv//q5Pi64evsmTyjTl3hguDqAhrpYg7hLyLvS83tiPm3NgU
-         jiJXcFkxJ5jEZ9fnnRhoum2vQAOFIfKonm70FVb/lEm9GDpl3FPMwb/9E69tDxuR73DC
-         2nrhjNQc22VSchGsdm/gDvllkeUdGF8rY5QLjjCZsidONJ8KzmNIjGVhJpDkV7InQwR5
-         xahQ==
+        Mon, 9 Jan 2023 08:49:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C3B1EED9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673272135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PvQQWSrgFrwfgP/nK/4g0KowjQbRVLSmpT5SVnvrh64=;
+        b=Fb1HPihoPW4YCjGnJNSvHLURmHyE41exzrslpUaPRhweIJtEn7xwb/SIewRPWvaZOmym7l
+        1LrHTpIq0xAzBVQiOJmDkO1uTnBKId1MvPow4zpSH02BOF92+ug0xviKp/qxR4+3xWWsxx
+        Im4AJQ6eIpUxOtSIdNHn3WCCONkTHuM=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-444-ZZg2uGmFMb68hzFEeAnilw-1; Mon, 09 Jan 2023 08:48:52 -0500
+X-MC-Unique: ZZg2uGmFMb68hzFEeAnilw-1
+Received: by mail-qk1-f197.google.com with SMTP id br6-20020a05620a460600b007021e1a5c48so6450340qkb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:48:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sjM8hOV94cypu49wh5dstQmAlWS++C//GRjTU4M89js=;
-        b=iDqGKmRQ8tIqMPb7sRewaxbf3KWuzy+Nl0+ofMy/iHNctPvPz7UAzSKTIXjBlL6KpY
-         S1fFVahqgrn0/gC72XXMA+AIy4sP4xySIgsFEUYweR8H9S49C9tbiTm4cbEmvOaEZ9sD
-         HsmzYtU+3GVXpm6r+Anac2+JcWpwVdN0ZzOj/Rwz45GCWuPFKW8nIkxqORnhf34O6Zk7
-         ltYkzUhiRx2d81+EAGviHeb+NxBIw68oCDHjdiz0mc8I6ZygAAZYnaN7n0POMxWgvhF1
-         llP6j9l34Z4B5xlu2TDFRt1U+Xk3GicJE0XuSvX0RRekL2AigiUgnF4e0nCvMnYJWvTH
-         7S0w==
-X-Gm-Message-State: AFqh2krkjbVrlDhwyOUO5QTc1t3IiVaepAOnLcfSmGYzSiCfOzCCcOnd
-        qpL6VCh3RK1m1d8zzyiLdZs=
-X-Google-Smtp-Source: AMrXdXt0DAoCSuzsNaAgux29pMWEu5IX5Y7NgvCBZaVgMQKZl1rKa1+RRfp3V+X3kTpEb2gF5gwWXg==
-X-Received: by 2002:a1c:4c12:0:b0:3c6:e63e:89a6 with SMTP id z18-20020a1c4c12000000b003c6e63e89a6mr46312893wmf.2.1673272121828;
-        Mon, 09 Jan 2023 05:48:41 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003b4ff30e566sm25387847wms.3.2023.01.09.05.48.39
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PvQQWSrgFrwfgP/nK/4g0KowjQbRVLSmpT5SVnvrh64=;
+        b=Gj8ZSDdbpeWT8EcOgFe1Vi5JX2H6Jj+m7XEYbCPIIkghu1ud6sE2cxTmhtfCK7tZ9C
+         5xA8W1kOOzvjbgO3m2IW63y1eSuTEO1iEyQFlXVaVDH/UwfEPHRCq/39Be911BrN04IZ
+         EYqWIixKz1HwmapEy6nZjyIAed3R0vZKI9zjirjFB+DcA2IebATryzftBYCr42apcpWp
+         gRsiMlZeXf9E0edpkd+xjTcZQ9DtqWuD8m5s4lOGq/5C05YYe+TdrBcM2zuM/+E3WLFw
+         CJ4i+52PWtpc0w/q9dC/KzpKxpwGTLt7DW5V+lEez7H0iY0V+4pEKsrANJo8zHfBg1NP
+         QXdw==
+X-Gm-Message-State: AFqh2koksGYEXV3nSqzXYmiPPQG1v8A9EEVtHoCMKLaFcfvcTovjkMQJ
+        i5cEAMtMFdKf9GX4cCVG7sGW8Eipf3ce6FxBY6zqUkyKDjuRDfzn8QKkDpz1QiZaFA7MZx3g2Bc
+        PbqrHw/L76z6WTRfRdwMBpULG
+X-Received: by 2002:ac8:4509:0:b0:3a8:162d:e977 with SMTP id q9-20020ac84509000000b003a8162de977mr91039461qtn.58.1673272131567;
+        Mon, 09 Jan 2023 05:48:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuBqYf6sR9hrOI8TK8PSKFDec2DU6T9YlCBq3DM5BjirOxhid+aIw2+3HKxNZhD/YmD4XYT3w==
+X-Received: by 2002:ac8:4509:0:b0:3a8:162d:e977 with SMTP id q9-20020ac84509000000b003a8162de977mr91039437qtn.58.1673272131330;
+        Mon, 09 Jan 2023 05:48:51 -0800 (PST)
+Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
+        by smtp.gmail.com with ESMTPSA id z2-20020ac86b82000000b003a5c6ad428asm4551847qts.92.2023.01.09.05.48.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 05:48:40 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 9 Jan 2023 14:48:38 +0100
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
-Message-ID: <Y7wbNinAXM6O62ZF@krava>
-References: <20221230112729.351-1-thunder.leizhen@huawei.com>
- <20221230112729.351-3-thunder.leizhen@huawei.com>
- <Y7WoZARt37xGpjXD@alley>
- <Y7dBoII5kZnHGFdL@krava>
- <Y7ftxIiV35Wd75lZ@krava>
- <652e0eea-1ab2-a4fd-151a-e634bcb4e1da@huawei.com>
+        Mon, 09 Jan 2023 05:48:50 -0800 (PST)
+Message-ID: <36311b962209353333be4c8ceaf0e0823ef9f228.camel@redhat.com>
+Subject: Re: [PATCH 02/11] filemap: Remove filemap_check_and_keep_errors()
+From:   Jeff Layton <jlayton@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Date:   Mon, 09 Jan 2023 08:48:49 -0500
+In-Reply-To: <20230109051823.480289-3-willy@infradead.org>
+References: <20230109051823.480289-1-willy@infradead.org>
+         <20230109051823.480289-3-willy@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <652e0eea-1ab2-a4fd-151a-e634bcb4e1da@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,103 +80,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 04:51:37PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2023/1/6 17:45, Jiri Olsa wrote:
-> > On Thu, Jan 05, 2023 at 10:31:12PM +0100, Jiri Olsa wrote:
-> >> On Wed, Jan 04, 2023 at 05:25:08PM +0100, Petr Mladek wrote:
-> >>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
-> >>>> Function __module_address() can quickly return the pointer of the module
-> >>>> to which an address belongs. We do not need to traverse the symbols of all
-> >>>> modules to check whether each address in addrs[] is the start address of
-> >>>> the corresponding symbol, because register_fprobe_ips() will do this check
-> >>>> later.
-> >>
-> >> hum, for some reason I can see only replies to this patch and
-> >> not the actual patch.. I'll dig it out of the lore I guess
-> >>
-> >>>>
-> >>>> Assuming that there are m modules, each module has n symbols on average,
-> >>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
-> >>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
-> >>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
-> >>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
-> >>>> the ratio is still greater than 1. Therefore, the new method will
-> >>>> generally have better performance.
-> >>
-> >> could you try to benchmark that? I tried something similar but was not
-> >> able to get better performance
-> > 
-> > hm looks like I tried the smilar thing (below) like you did,
-> 
-> Yes. I just found out you're working on this improvement, too.
-> 
-> > but wasn't able to get better performace
-> 
-> Your implementation below is already the limit that can be optimized.
-> If the performance is not improved, it indicates that this place is
-> not the bottleneck.
-> 
-> > 
-> > I guess your goal is to get rid of the module arg in
-> > module_kallsyms_on_each_symbol callback that we use?
-> 
-> It's not a bad thing to keep argument 'mod' for function
-> module_kallsyms_on_each_symbol(), but for kallsyms_on_each_symbol(),
-> it's completely redundant. Now these two functions often use the
-> same hook function. So I carefully analyzed get_modules_for_addrs(),
-> which is the only place that involves the use of parameter 'mod'.
-> Looks like there's a possibility of eliminating parameter 'mod'.
-> 
-> > I'm ok with the change if the performace is not worse
-> 
-> OK, thanks.
-> 
-> > 
-> > jirka
-> > 
-> > 
-> > ---
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 5b9008bc597b..3280c22009f1 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2692,23 +2692,16 @@ struct module_addr_args {
-> >  	int mods_cap;
-> >  };
-> >  
-> > -static int module_callback(void *data, const char *name,
-> > -			   struct module *mod, unsigned long addr)
-> > +static int add_module(struct module_addr_args *args, struct module *mod)
-> >  {
-> > -	struct module_addr_args *args = data;
-> >  	struct module **mods;
-> >  
-> > -	/* We iterate all modules symbols and for each we:
-> > -	 * - search for it in provided addresses array
-> > -	 * - if found we check if we already have the module pointer stored
-> > -	 *   (we iterate modules sequentially, so we can check just the last
-> > -	 *   module pointer)
-> > +	/* We iterate sorted addresses and for each within module we:
-> > +	 * - check if we already have the module pointer stored for it
-> > +	 *   (we iterate sorted addresses sequentially, so we can check
-> > +	 *   just the last module pointer)
-> >  	 * - take module reference and store it
-> >  	 */
-> > -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
-> > -		       bpf_kprobe_multi_addrs_cmp))
-> > -		return 0;
-> > -
-> >  	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
-> >  		return 0;
-> 
-> There'll be problems Petr mentioned.
-> 
-> https://lkml.org/lkml/2023/1/5/191
+On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
+> Convert both callers to use the "new" errseq infrastructure.
+>=20
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/filemap.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index c4d4ace9cc70..48daedc224d9 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -355,16 +355,6 @@ int filemap_check_errors(struct address_space *mappi=
+ng)
+>  }
+>  EXPORT_SYMBOL(filemap_check_errors);
+> =20
+> -static int filemap_check_and_keep_errors(struct address_space *mapping)
+> -{
+> -	/* Check for outstanding write errors */
+> -	if (test_bit(AS_EIO, &mapping->flags))
+> -		return -EIO;
+> -	if (test_bit(AS_ENOSPC, &mapping->flags))
+> -		return -ENOSPC;
+> -	return 0;
+> -}
+> -
+>  /**
+>   * filemap_fdatawrite_wbc - start writeback on mapping dirty pages in ra=
+nge
+>   * @mapping:	address space structure to write
+> @@ -567,8 +557,10 @@ EXPORT_SYMBOL(filemap_fdatawait_range);
+>  int filemap_fdatawait_range_keep_errors(struct address_space *mapping,
+>  		loff_t start_byte, loff_t end_byte)
+>  {
+> +	errseq_t since =3D filemap_sample_wb_err(mapping);
+> +
+>  	__filemap_fdatawait_range(mapping, start_byte, end_byte);
+> -	return filemap_check_and_keep_errors(mapping);
+> +	return filemap_check_wb_err(mapping, since);
+>  }
+>  EXPORT_SYMBOL(filemap_fdatawait_range_keep_errors);
 
-ok, makes sense.. I guess we could just search args->mods in here?
-are you going to send new version, or should I update my patch with that?
+I looked at making this sort of change across the board alongside the
+original wb_err patches, but I backed off at the time.
 
-thanks,
-jirka
+With the above patch, this function will no longer report a writeback
+error that occurs before the sample. Given that writeback can happen at
+any time, that seemed like it might be an undesirable change, and I
+didn't follow through.
+
+It is true that the existing flag-based code may miss errors too, if
+multiple tasks are test_and_clear'ing the bits, but I think the above is
+even more likely to happen, esp. under memory pressure.
+
+To do this right, we probably need to look at these callers and have
+them track a long-term errseq_t "since" value before they ever dirty the
+pages, and then continually check-and-advance vs. that.
+
+For instance, the main caller of the above function is jbd2. Would it be
+reasonable to add in a new errseq_t value to the jnode for tracking
+errors?
+
+> =20
+> @@ -613,8 +605,10 @@ EXPORT_SYMBOL(file_fdatawait_range);
+>   */
+>  int filemap_fdatawait_keep_errors(struct address_space *mapping)
+>  {
+> +	errseq_t since =3D filemap_sample_wb_err(mapping);
+> +
+>  	__filemap_fdatawait_range(mapping, 0, LLONG_MAX);
+> -	return filemap_check_and_keep_errors(mapping);
+> +	return filemap_check_wb_err(mapping, since);
+>  }
+>  EXPORT_SYMBOL(filemap_fdatawait_keep_errors);
+> =20
+
+--=20
+Jeff Layton <jlayton@redhat.com>
+
