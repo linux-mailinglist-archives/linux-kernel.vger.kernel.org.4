@@ -2,136 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7E76624F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2476624FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjAIMD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S237092AbjAIMEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237080AbjAIMDv (ORCPT
+        with ESMTP id S237080AbjAIMET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:03:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEC91A208
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:03:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673265782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q4zLyIG7p1EQVcpYB9xbouaznWvWNmBJl4w7V/27n8I=;
-        b=CLlhK3Fcu0M7LanOcaLb5TqSqNVt5dixjd09XHwRqiAdxgeyTZWvxevVjdTCgrbGm94moO
-        kLK0Hj4kuEe401deMYeAnUOTv+1/j1a8Nn5jo+vCN8UddrdFk7Niy8uVAvVq3KNlHXclgS
-        jqNHNmJq8AaxowCe6ErAqc1SaO/MnkY=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-187-UnhgApa6MCWoeEz_BaQCgg-1; Mon, 09 Jan 2023 07:03:00 -0500
-X-MC-Unique: UnhgApa6MCWoeEz_BaQCgg-1
-Received: by mail-ej1-f71.google.com with SMTP id dr5-20020a170907720500b00808d17c4f27so5227721ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 04:03:00 -0800 (PST)
+        Mon, 9 Jan 2023 07:04:19 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCAE1AA0B;
+        Mon,  9 Jan 2023 04:04:12 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id g8so4014202qkl.2;
+        Mon, 09 Jan 2023 04:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lVNn+YWwJiRPXNtsBieyEVWKNIb/zkrUFPfCeEPxMWw=;
+        b=lVpGq0jRiH44fjieSWWDZP5itmNjimKwXoQjLA1EN74wGirOQjNnMTLfiYkb6HM4nU
+         nzOiEF75i37tGplMLvwTJs6FiJtQ5Z4nActSx6jbLudKWge3rJFSdxC6PJtEWRAo953m
+         GU9mVKdUaN03GRIkjLdeXSbrgtVzPHIhHFQBITbKJtH8EqrVohn1wN1Iqn5TRtw7vFCX
+         Nn5Tp2CDucUfAeu0h25UZuZPUWt7a5qCppBRRILLJoOmPocn1Utvhhcz8Vi4HT3M3aAy
+         6LY8RXVzInyCeWRvc2Rp+v3eFHGDequzembAnK+UmHGh/bpemH33EHzxJoBVaTaZYAsF
+         xzOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q4zLyIG7p1EQVcpYB9xbouaznWvWNmBJl4w7V/27n8I=;
-        b=oBEK+sECzPoBgK4ynbsoxjNUOfuo1tBDcQXOtTcRqo3UaPblx2+Sxa+f03aKw0lC0e
-         9LEG4sXicnQsv0Gyzq27McBASJYK52nkeW6ztISKVzJQ4kpd8okiam6/5XLYhP7FaimA
-         1eioduvvASITeySOwJlKlAoj0GwfhIya0M2B1pYsxz14lIu5KrjHzLPH1CdM6rsnEpPU
-         Hkk/Yx5ojsIBqx2nVVqUDA/AC4Q3Via+WEqXMDX5QxQyTlXPEIWPSSk4x3avf4WtSvhS
-         iWjzN3OE10/SZMhUrfa3hxhIGX9z+XesA5wY4apm2P21AJZGrh6Bg011vtVfPsXlWRNn
-         fmhw==
-X-Gm-Message-State: AFqh2krCprOf/z2xjhnMSuc+vZmPGr1NKPZXcIAo8eVArDN9cF5f3iX7
-        qNQ2wwmgsI9YszsZi9bND2BCj1VqOZTzxwIy53aWS8Lakp3BgTk+hV/h7dmNkI/+PquyyYjTkTz
-        qVQqbwLQtQBDnk0SlFNJTd9dk
-X-Received: by 2002:a17:907:a0cc:b0:78d:f455:b5fa with SMTP id hw12-20020a170907a0cc00b0078df455b5famr54858189ejc.58.1673265779403;
-        Mon, 09 Jan 2023 04:02:59 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXunflF7rFCOUFP3DL+Uc+xS5o03+N3JiS2BecKqY3RR6YoRGrgqnfqDT/Z6AlX9El9oeWoAvA==
-X-Received: by 2002:a17:907:a0cc:b0:78d:f455:b5fa with SMTP id hw12-20020a170907a0cc00b0078df455b5famr54858176ejc.58.1673265779238;
-        Mon, 09 Jan 2023 04:02:59 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id c39-20020a509faa000000b00483cccdfeaesm3712742edf.38.2023.01.09.04.02.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 04:02:58 -0800 (PST)
-Message-ID: <ab037c11-b0d3-96fc-46cc-858cce6eb35c@redhat.com>
-Date:   Mon, 9 Jan 2023 13:02:57 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lVNn+YWwJiRPXNtsBieyEVWKNIb/zkrUFPfCeEPxMWw=;
+        b=7d/+nL5gxgkYEpOvviqUfJWAa7UX/V0wUK9o9nx5o/TrpGli9nWZcOqvn4Sb0Yftou
+         X20ICh36EEM9PVvrNlJmq6bAx2Wzj0IR/52FDq10j67jCI2YlqlyutYx9zhcQsGlV8cV
+         XnkVAHJ2vZ6vnIwqKXPjyaeTwm8aQDwFFXkjjqeW6HJk2ZSw6eezy/OZiBhFalAPv+5X
+         ET3tu99xXOyUS92BnB/AjnFcWjGt1hbLk/5jQE7lj13diu/3EYzXSZKlJEbcUIeaqzhh
+         GcKkN7d6kmLus/TT7WmhIgxfxsJWM4u9j5HE7yGY3WD88PKngH7b2r2pvcKmQl32PwN1
+         W12g==
+X-Gm-Message-State: AFqh2kpRjmnEThDfGXQOVM5ucw3v35ACbfmX6wFtyA6zmp6ZXcOhxp82
+        nHsbg32/T02O0nwLGJEyHZg+B6ftmFKqdcUaIkY=
+X-Google-Smtp-Source: AMrXdXtab23RPB/2ZXMcLY+PmC+jyscFXBJ8G2+xrfC95CqdAo2Wg45jeC1lnEQ0GwjR0BdWjHn+PJpw//FCdU9RsGI=
+X-Received: by 2002:a05:620a:1001:b0:6ff:7b95:633e with SMTP id
+ z1-20020a05620a100100b006ff7b95633emr2573684qkj.689.1673265851185; Mon, 09
+ Jan 2023 04:04:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4] i2c: designware: Fix unbalanced suspended flag
-Content-Language: en-US, nl
-To:     Wolfram Sang <wsa@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20221219130145.883309-1-rf@opensource.cirrus.com>
- <Y7wCLAJxuR38qJNI@ninjato>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y7wCLAJxuR38qJNI@ninjato>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com> <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
+ <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com>
+In-Reply-To: <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 9 Jan 2023 12:03:44 +0000
+Message-ID: <CA+V-a8u6jvR=EDeE3mAbDr6-06NoBJ7mwmi_Y9qVyHT+aC-9rg@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using
+ function pointers for cache management
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Jan 8, 2023 at 12:08 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sat, Jan 7, 2023, at 23:10, Lad, Prabhakar wrote:
+>
+> >> > +
+> >> > +     memset(&thead_cmo_ops, 0x0, sizeof(thead_cmo_ops));
+> >> > +     if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO)) {
+> >> > +             thead_cmo_ops.clean_range = &thead_cmo_clean_range;
+> >> > +             thead_cmo_ops.inv_range = &thead_cmo_inval_range;
+> >> > +             thead_cmo_ops.flush_range = &thead_cmo_flush_range;
+> >> > +             riscv_noncoherent_register_cache_ops(&thead_cmo_ops);
+> >> > +     }
+> >>
+> >> The implementation here looks reasonable, just wonder whether
+> >> the classification as an 'errata' makes sense. I would probably
+> >> consider this a 'driver' at this point, but that's just
+> >> a question of personal preference.
+> >>
+> > zicbom is a CPU feature that doesn't have any DT node and hence no
+> > driver and similarly for T-HEAD SoC.
+>
+> A driver does not have to be a 'struct platform_driver' that
+> matches to a device node, my point was more about what to
+> name it, regardless of how the code is entered.
+>
+> > Also the arch_setup_dma_ops()
+> > happens quite early before driver probing due to which we get WARN()
+> > messages during bootup hence I have implemented it as errata; as
+> > errata patching happens quite early.
+>
+> But there is no more patching here, just setting the
+> function pointers, right?
+>
+Yes that's right.
 
-On 1/9/23 13:01, Wolfram Sang wrote:
-> On Mon, Dec 19, 2022 at 01:01:45PM +0000, Richard Fitzgerald wrote:
->> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
->> i2c_mark_adapter_resumed().
->>
->> dw_i2c_plat_resume() must always be called, so that
->> i2c_mark_adapter_resumed() is called. This is not compatible with
->> DPM_FLAG_MAY_SKIP_RESUME, so remove the flag.
->>
->> Since the controller is always resumed on system resume the
->> dw_i2c_plat_complete() callback is redundant and has been removed.
->>
->> The unbalanced suspended flag was introduced by commit c57813b8b288
->> ("i2c: designware: Lock the adapter while setting the suspended flag")
->>
->> Before that commit, the system and runtime PM used the same functions. The
->> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
->> had been in runtime-suspend. If system resume was skipped, the suspended
->> flag would be cleared by the next runtime resume. The check of the
->> suspended flag was _after_ the call to pm_runtime_get_sync() in
->> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
->> the flag before it was checked.
->>
->> Having introduced the unbalanced suspended flag with that commit, a further
->> commit 80704a84a9f8
->> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
->>
->> changed from using a local suspended flag to using the
->> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
->> checked by I2C core code before issuing the transfer to the bus driver, so
->> there was no opportunity for the bus driver to runtime resume itself before
->> the flag check.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Does this fix a bug when runtime resuming? This is not clear to me. I
-> tend to put it to for-next rather than for-current.
+> >> > +struct riscv_cache_ops {
+> >> > +     void (*clean_range)(unsigned long addr, unsigned long size);
+> >> > +     void (*inv_range)(unsigned long addr, unsigned long size);
+> >> > +     void (*flush_range)(unsigned long addr, unsigned long size);
+> >> > +     void (*riscv_dma_noncoherent_cmo_ops)(void *vaddr, size_t size,
+> >> > +                                           enum dma_data_direction dir,
+> >> > +                                           enum dma_noncoherent_ops ops);
+> >> > +};
+> >>
+> >> I don't quite see how the fourth operation is used here.
+> >> Are there cache controllers that need something beyond
+> >> clean/inv/flush?
+> >>
+> > This is for platforms that dont follow standard cache operations (like
+> > done in patch 5/6) and there drivers decide on the operations
+> > depending on the ops and dir.
+>
+> My feeling is that the set of operations that get called should
+> not depend on the cache controller but at best the CPU. I tried to
+> enumerate how zicbom and ax45 differ here, and how that compares
+> to other architectures:
+>
+>                   zicbom      ax45,mips,arc      arm           arm64
+> fromdevice      clean/flush   inval/inval   inval/inval   clean/inval
+> todevice        clean/-       clean/-       clean/-       clean/-
+> bidi            flush/flush   flush/inval   clean/inval   clean/inval
+>
+> So everyone does the same operation for DMA_TO_DEVICE, but
+> they differ in the DMA_FROM_DEVICE handling, for reasons I
+> don't quite see:
+>
+> Your ax45 code does the same as arc and mips. arm and
+> arm64 skip invalidating the cache before bidi mappings,
+> but arm has a FIXME comment about that. arm64 does a
+> 'clean' instead of 'inval' when mapping a fromdevice
+> page, which seems valid but slower than necessary.
+>
+> Could the zicbom operations be changed to do the same
+> things as the ax45/mips/arc ones, or are there specific
+> details in the zicbom spec that require this?
+>
+I'll let the RISC-V experts respond here.
 
-This fixes a system suspend/resume bug, so this really should go
-to for-current.
-
-Regards,
-
-Hans
-
-
+Cheers,
+Prabhakar
