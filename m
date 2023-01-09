@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B0B6631BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2676D6631BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbjAIUoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S237526AbjAIUoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:44:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbjAIUn4 (ORCPT
+        with ESMTP id S237588AbjAIUod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:43:56 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0974ECB8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:43:55 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id s8so2561825plk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:43:55 -0800 (PST)
+        Mon, 9 Jan 2023 15:44:33 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC9D4ECB8;
+        Mon,  9 Jan 2023 12:44:31 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id r6-20020a056830448600b006848a91d910so2301825otv.12;
+        Mon, 09 Jan 2023 12:44:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgIp64wR5rCqasADNvQH+AVw8h1xGfwjU6s44y76QJM=;
-        b=UhaZZZ3nFggV2QuaA/bx2AQwDz3tF1zsmJt1+d3wqjlcrUTlnAj0glsHDa04RAYVJM
-         raZAwYhThHhCKWW1c5Dx7FJB2D/SwL0rg6AuWeZeb+C51KzWYdJw/R3OxyLf+74Lk5lM
-         /2FJOocqVibc2f7khaeMQqkEF1+MhCr3U4KA4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ePA/IX1EL8d1Iza9X32BzjolB/4rRGKbpwCcOLOiZ4A=;
+        b=hj9I9N6LdA8bmryOkT6IM15+nru45NlRRM/eaZ5QNHKsreypmvOlx5cAZ/kXqaHtJY
+         XApewPY3ibQHQj5Od3n92dJVoK/qMTOpiWVE/O3ZixuMoO/NwCSsSCxdwCUrNj/FvYvE
+         A2/NVfCNSwoi2xejSUOJqz08IsIKKfjxA2g3oSGcuxYlqd7HKEZ6Z9CdmkJ/ude7qqBk
+         wg/zCNuaQCyprjlV5EsYIQZRPwdooHIb9dHC8VfxjNQgFmwq1Fz2sHOO3cY86qdQtdun
+         AIyigHJOHDwsJ4hNB8wlzIXqSUxZbbPKhiyuQYhpGqS6EFuW7Q6YyMedP+8Gmof49L59
+         IYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EgIp64wR5rCqasADNvQH+AVw8h1xGfwjU6s44y76QJM=;
-        b=1GJeOGdsQG1WjRv0lYh3sUmqQxTk4eksQ+86VJR5HQwt7SJ5JxVDxQmTrzfyK2EYm6
-         iyIwq1X97karunzDf1vQE1NhkKB5yMqXuS2wT+GAjDDX2auZPkOA37M15UDqPY6sAjAk
-         la7uQocJ6VT/vf2NlSKJcVjRcMR4Dg6hAhfRqtSXVCtD8yZlytM3jdTeAKZ0JT+QI+Qg
-         pXNlvftNWqvyfY/0qiB0NuRzx7SgOFoEtO0v9yuXUF+JB4VBcltQazI9Hi56EEYq1o6p
-         F8VwnJ5W0xKvH8bh0IeATzb3SK/lKzJNxFga1lEVFu4wYVzia+mt0Cb9gSlaFqzucctK
-         lLNg==
-X-Gm-Message-State: AFqh2koWDN3K2p7DJnzh8ZGZSQktmb+Rub4+ir2/VyLn/OjC2ySSsu+c
-        YaH2Yu/JTjuMgnMWKqzG3n3HtsUCVUAUFl+Chp6QEGsoPLfkaAU2BLTckQqcQAeBsqJbKC1avIB
-        k3buXZ+P6x4/El9h0GQ9H3ddjcCqwaHSG0CJscUiGi6JfdDFUXc+VAXmSKbaNMOptrdR1Lt8IoS
-        Dy2Uee5DnjWXo=
-X-Google-Smtp-Source: AMrXdXvws7J1qmSfAhQIhRJk4KTFCG246r2YS9mc7sz4wfRXUaQS4wjyi4fvwDHKglC9cxwUqXTOpA==
-X-Received: by 2002:a17:902:f70c:b0:188:6b9c:d17d with SMTP id h12-20020a170902f70c00b001886b9cd17dmr86838478plo.16.1673297035026;
-        Mon, 09 Jan 2023 12:43:55 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170902784200b0017d97d13b18sm6566604pln.65.2023.01.09.12.43.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:43:54 -0800 (PST)
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
- <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
- <Y7xrhjhhY3g5DE25@sirena.org.uk>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
-Date:   Mon, 9 Jan 2023 12:43:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ePA/IX1EL8d1Iza9X32BzjolB/4rRGKbpwCcOLOiZ4A=;
+        b=41MIGJy9PsNN7nr39+Rssw170IAzVexhQ+uT9oItaJnA6aUGMDGMHChmJ2Qh6aUDkR
+         HV7FSyZo2kxsp8zZOPv/zNGb7mO263xG0mV/dI7of6BlP/mIsC4wf3TgtV6CpAlyP1j5
+         jQdtJk1Epy5HeTAz1i8ezh0JrTaZ5a03WGmMUB/bpFUKvqxRr2A3Kqsfj5SY/+/RCq+/
+         qnEw1aHKlEWREGhR8S+QBpURsncqnOyKMyoNj6kzJpmm4hcU5fy3HjPY3SsgnNepRH4n
+         farM7AUtZBjD4vPUTGKQCCMwmjbixFzJ3luYui+XguDcCmt2vsz4UaPZHGrmDHk2QBIr
+         EISA==
+X-Gm-Message-State: AFqh2koQ2KpCw5mh26JecLX6rVEAxOU0EWZFQ1Q5FeXXe/yEWfbSKp8Q
+        YJzAWtc7ZO6hirjnV0wM3a/H1Ic4a6s2AqyYsg0N0luudpQRt/ol
+X-Google-Smtp-Source: AMrXdXuWevfq7MaXD6yeFl3FOjTb0cXp+nF6Y92mxk+aAn2xWAjKk7qNSv4APLm4uOkjHzAEB8advUpAbQrrdSiCM1g=
+X-Received: by 2002:a9d:61ca:0:b0:670:6dc1:6c2c with SMTP id
+ h10-20020a9d61ca000000b006706dc16c2cmr4065515otk.375.1673297070961; Mon, 09
+ Jan 2023 12:44:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y7xrhjhhY3g5DE25@sirena.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000067f12205f1dad346"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230109093347.6639-1-apantykhin@gmail.com>
+In-Reply-To: <20230109093347.6639-1-apantykhin@gmail.com>
+From:   Alexander Pantyukhin <apantykhin@gmail.com>
+Date:   Tue, 10 Jan 2023 00:44:20 +0400
+Message-ID: <CAPi66w-mB1LSW=O7mm3jqH0FRCr9h6Y4CiXfTPA6vP=TPNSx2w@mail.gmail.com>
+Subject: Re: [PATCH] tools:perf:scripts:python:mem-phys-addr fix performance
+To:     mark.rutland@arm.com
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,155 +71,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000067f12205f1dad346
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Hi!
+There are some things which I would like to discuss there.
 
+1) I found that if there is for example the following system_ram:
+system_ram =3D [int('00000000', 16) , int('0000ffff', 16)]
 
+and the func
 
-On 01/09/2023 11:31 AM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 07:52:35PM -0800, William Zhang wrote:
->> On 01/06/2023 02:00 PM, Mark Brown wrote:
->>> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
-> 
->>>> Multiple transfers within a SPI message may be combined into one
->>>> transfer to the controller using its prepend feature. A SPI message is
->>>> prependable only if the following are all true:
->>>>     * One or more half duplex write transfer
->>>>     * Optional full duplex read/write at the end
->>>>     * No delay and cs_change between transfers
-> 
->>> There is nothing driver specific here, this should be implemented in the
->>> core - we have existing logic to rewrite messages to match driver
->>> constraints, this could be added there possibly with flags to allow
->>> drivers to disable or enable the merging if they've got special
->>> requirements.
-> 
->> My understanding of combining the spi transfer in the core level does not
->> quite work out to our controller.  For example, for a spi message with three
->> transfers, tx, tx and rx. We can possibly combine them in single duplex
->> tx/rx transfer in the core. But this will be treated as duplex transaction
->> in our controller level which require tx and rx data happens at the same
->> time. Obviously this won't work when rx depends on tx happening first. We
-> 
-> I'm saying that if this logic is useful then implement in the core
-> rather than in the driver.
-> 
->> can not differentiate this combined duplex transfer from the true duplex
->> transfer unless there is some flag to indicate that. Also there is limit of
->> max tx length as the prepend buffer so maybe another parameter.  And another
->> reason to be done in the driver level is this prepend mode has dependency on
->> dummy cs workaround which is driver level parameter currently.  I am not
->> sure how practical and useful this is to factor them out to the core level?
-> 
-> If this relies on software control of the chip select (which is what I
-> *think* your dummy CS workaround thing is about, the other patch about
-> that is really hard to understand) then I'm confused about what the
-> advantage is?
-Dummy CS workaround is implemented by Jonas when he first upstream the 
-driver. It does not work on all the board designs so prepend mode is 
-introduced. I have some detail explanation on this in [PATCH 10/16] spi: 
-bcm63xx-hsspi: Make dummy cs workaround as an option.
+def is_system_ram(phys_addr):
+    #/proc/iomem is sorted
+    position =3D bisect.bisect(system_ram, phys_addr)
+    if position % 2 =3D=3D 0:
+    return False
+    return True
 
-The controller only work in one mode and that's why driver code has some 
-dependency between these two modes. The advantage of the premode is it 
-works on all hw design however it does not support all types mem_ops 
-operation. That is why you see the patch 14 to disable the dual io mem 
-op. But dummy cs workaround can support this and in case there is such 
-pattern from non mem op spi transaction, dummy cs workaround can be used 
-as long as it does not have the board design limitation.   So neither 
-one is perfect but hopefully with both options available, we can cover 
-all the cases.
+The value:
+is_system_ram(int('0000ffff', 16)) is False.
+It seems to be a mistake. This value is the end of the range and it
+should be a True.
+(There is another check on the 88 line: if int(m[0], 16) <=3D phys_addr
+<=3D int(m[1], 16)
+where both ranges are included in the check.)
 
-You mentioned there is some existing logic to rewrite messages to match 
-driver constraints in the core driver.  I didn't see it when I did a 
-quick search on spi.c. I will take a deep look into the file. But if you 
-can point me where this logic is so I can be sure that I am looking at 
-the right place and will double check if this can be done or not in the 
-core level.  Thanks!
+2) The script reads the whole file when parse_iomem()
+and uses this information for pmem and system_ram. What if to store
+whole info about addresses
+for all memory types?
+In This case it's possible to store the data structure like the
+following example:
 
+/proc/iomem
+00000000-0000ffff : reserved
+00010000-0009f3ff : System RAM
 
-> 
+Result: [(00000000, 'reserved'), (0000ffff, 'reserved'), (00010000,
+'System RAM'), (0009f3ff, 'System RAM')....]
 
---00000000000067f12205f1dad346
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+This case the searching would be O(log(n)) for all types not just for
+"System RAM" and "Persistent Memory".
 
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOZeyI1hHATA7iPHqNDCrVE6v1qm
-ddUIE5inDTu2svHeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwOTIwNDM1NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQASf4IteL1rCWanDrKof2wXNLGRjN2mjQd7AlKqQjL6B/f3
-iZoteBHn3oGFuo5rTibZFqoQZ3ja05Jnv7xm1eXiC1RHXgNhzkIfedbuehZrs+QdF264Es5pKKpv
-GRbWTvLrlm74B22Vj6Qf47IVIGDJ/vBIct1WsABVGtk91U+rqGPFFV814v2L2v8ykN9LaNumIDEP
-sw/3ITE7PPb15SkHY7RtGz26EQvtl6e1zsJawlbFDGbjMv9mQhW0Q57pUqlqV6pNFHR4A/bhGOR0
-ZJJr2ukKWpFFS1DPtOGU81b+8HVdzBAHoMgD0Fnv9nnUFBzo7n1G5t7iGRp6e6KdR3Jy
---00000000000067f12205f1dad346--
+But the behavior of the script would be changed: the current version
+re-read the file and scan the fresh data
+when neither "System RAM" nor "Persistent Memory". But the suggested
+fix requires to call parse_iomem() when
+fresh data is required.
+
+If these changes are approved, I would like to fix it.
+
+Best, Alex.
+
+=D0=BF=D0=BD, 9 =D1=8F=D0=BD=D0=B2. 2023 =D0=B3. =D0=B2 13:33, Alexander Pa=
+ntyukhin <apantykhin@gmail.com>:
+>
+> Avoid double strip() calls for getting memory type.
+>
+> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
+> ---
+>  tools/perf/scripts/python/mem-phys-addr.py | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/scripts/python/mem-phys-addr.py b/tools/perf/scri=
+pts/python/mem-phys-addr.py
+> index 1f332e72b9b0..f267d8382eda 100644
+> --- a/tools/perf/scripts/python/mem-phys-addr.py
+> +++ b/tools/perf/scripts/python/mem-phys-addr.py
+> @@ -8,7 +8,6 @@ from __future__ import print_function
+>
+>  import os
+>  import sys
+> -import struct
+>  import re
+>  import bisect
+>  import collections
+> @@ -30,12 +29,14 @@ event_name =3D None
+>  def parse_iomem():
+>         global f
+>         f =3D open('/proc/iomem', 'r')
+> -       for i, j in enumerate(f):
+> +       for _, j in enumerate(f):
+>                 m =3D re.split('-|:',j,2)
+> -               if m[2].strip() =3D=3D 'System RAM':
+> +               memory_type =3D m[2].strip()
+> +
+> +               if memory_type =3D=3D 'System RAM':
+>                         system_ram.append(int(m[0], 16))
+>                         system_ram.append(int(m[1], 16))
+> -               if m[2].strip() =3D=3D 'Persistent Memory':
+> +               elif memory_type =3D=3D 'Persistent Memory':
+>                         pmem.append(int(m[0], 16))
+>                         pmem.append(int(m[1], 16))
+>
+> @@ -75,6 +76,7 @@ def is_persistent_mem(phys_addr):
+>  def find_memory_type(phys_addr):
+>         if phys_addr =3D=3D 0:
+>                 return "N/A"
+> +
+>         if is_system_ram(phys_addr):
+>                 return "System RAM"
+>
+> --
+> 2.25.1
+>
