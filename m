@@ -2,94 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1651662653
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF676662664
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234641AbjAINAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S236966AbjAINCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236471AbjAIM6T (ORCPT
+        with ESMTP id S233331AbjAINCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:58:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A7927194
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:56:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC0BB80DD2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E48C433F1;
-        Mon,  9 Jan 2023 12:56:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673268977;
-        bh=LR9BuGWChT03M61XikBm8S6FvKArWqu7e6r0lnM1Des=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f8YZbq1wXlkRtGJCtd2CEMKqep79EsUjzCV+dKVr5bWdhFfSxJpUeDcAW9aZsmBc/
-         VUXs1If7eJqiFSGXs/mwLeu0+VHL3vzQImE6Al1/ZlGIrwqvjpwF8fTvcdaCxDoMvr
-         P8RhG1xzNQILim9e+lmWZvcD8LRY2AL8dBuTgHDeKU2Rh41KVoKSCeP8Md3MOHjPn4
-         kB5ZLokjDxxXJnENiMoySOe+qMCmypgF2MyK8EY4+zbFXzmmh3NgWqwsSW/J1gi6+t
-         uEuFInJO+OD0eQ4XdF4RfrQzNgnXPG0cIfw4OoYuNjHDAgH+74a8QcrShxqkFRtLD4
-         5ntE1OQKjPEZA==
-Date:   Mon, 9 Jan 2023 12:56:11 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     syed saba kareem <ssabakar@amd.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>, lgirdwood@gmail.com,
-        Syed.SabaKareem@amd.com, ndesaulniers@google.com, trix@redhat.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Subject: Re: [PATCH v2] ASoC: amd: ps: Fix uninitialized ret in
- create_acp64_platform_devs()
-Message-ID: <Y7wO64ZkCeUPWVB6@sirena.org.uk>
-References: <20230105-wsometimes-uninitialized-pci-ps-c-v2-1-c50321676325@kernel.org>
- <6ebdd688-a1e5-f687-2842-b5005fdd89db@amd.com>
+        Mon, 9 Jan 2023 08:02:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A991758A;
+        Mon,  9 Jan 2023 04:59:21 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 601AE6CF;
+        Mon,  9 Jan 2023 13:59:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673269145;
+        bh=b5YGXWGHoxTUNR2lz6oATrp9StnnDmiege+b+Kt/YnM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KrH5T+bybl6PE8El4Qq1rEpTueK/bkk15n6q/dYt+2CCW0oOYqStD7LHyJcRbxi6G
+         37+ZbEVMVSqdYp6qu+ZipXAK+VAB6FQ1ZIg+OKLPORNMFGVf2ZAJA/cD8WQF6/+7NP
+         eAcl919tiZ4bUQDh7hlGbfP4FMT9mgdx8LhGVyPU=
+Message-ID: <5173a16a-83c5-5cfe-f6ce-03e1c90e8790@ideasonboard.com>
+Date:   Mon, 9 Jan 2023 14:59:01 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d7IcEJuYnckhwJud"
-Content-Disposition: inline
-In-Reply-To: <6ebdd688-a1e5-f687-2842-b5005fdd89db@amd.com>
-X-Cookie: Editing is a rewording activity.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+ <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+ <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/01/2023 13:07, Andy Shevchenko wrote:
+> On Sun, Jan 08, 2023 at 06:06:34AM +0200, Laurent Pinchart wrote:
+>> On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>>> +	scnprintf(priv->gpio_chip_name, sizeof(priv->gpio_chip_name), "%s",
+>>> +		  dev_name(dev));
+>>
+>> I think you can use strscpy().
+> 
+> Actually I'm not sure we even need that variable. What is the lifetime of
+> the dev and gc? I believe they are the same or gc's one is shorter, hence
+> dev_name() can be used directly, no?
 
---d7IcEJuYnckhwJud
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think this is a valid point, no need for the extra variable afaics.
 
-On Mon, Jan 09, 2023 at 05:00:11PM +0530, syed saba kareem wrote:
+> ...
+> 
+>>> +	gc->of_node = priv->client->dev.of_node;
+> 
+> We don't have of_node anymore in gc. And if the parent device is set, you can
+> drop this line (it will work with older and newer kernels. Otherwise, use
+> fwnode.
 
-> > Suggested-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Reviewed-by : Syed Saba Kareem<syed.sabakareem@amd.com>
+What do you mean "we don't have of_node anymore"?
 
-Note that if you use a different name (here you've got capital letters
-on the words in your name) or misformat the line (you've got an extra
-space before the colon and are missing one before the email address)
-then the tooling won't pick up your tags.
+> ...
+> 
+>>> +	ret = gpiochip_add_data(gc, priv);
+>>> +	if (ret) {
+>>> +		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
+> 
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	return 0;
+> 
+> return ret;
 
---d7IcEJuYnckhwJud
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not a fan of that style. I like my error handling ifs to return the 
+error inside the if block, and a successful function ends in a "return 0".
 
------BEGIN PGP SIGNATURE-----
+> ...
+> 
+>>> +	ep_node = of_graph_get_endpoint_by_regs(dev->of_node, 0, 0);
+> 
+> Why this can't be fwnode_handle from day 1?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO8DusACgkQJNaLcl1U
-h9BlZQf+KmHcOAEx+KzXe6nxDhZ64/CKq9lEbYNhdPrklgJcid8BwlvHD0Y4z8+x
-eeXadCbsaDoAwplTFYWbFXIcFlDGOBMU0Dp0ogI3rlrNFijEo8ztgYnD5OWXAlqC
-sQL+S5fShD0Ocnzc7fHIsFvtCTBVd2iepbCYHX+tCxCEWS4dV4F2Lk5K4YEVtHfe
-bcNVe7lRocKUH4efMZnw+6GH2lED56cArgOMRMyv3SNIn5bxBlZojBpBnFcLsgYh
-PCHyQyz5IlypaKdC1ifMbPg+zCwcHHxwkWDQvV7O5TzhKwt94UpBNPPnh25aVh7W
-1lshclPhXWdYQ0PgLoD+W2Seqkn9cQ==
-=raZ8
------END PGP SIGNATURE-----
+I guess it can. It's an old driver and there has been no need to convert 
+to fwnode, so we're still using OF.
 
---d7IcEJuYnckhwJud--
+>>> +	if (!ep_node) {
+>>> +		dev_err(dev, "No graph endpoint\n");
+>>> +		return -ENODEV;
+>>> +	}
+> 
+> ...
+> 
+>>> +	ep_np = of_graph_get_endpoint_by_regs(np, 0, 0);
+>>> +	if (!ep_np) {
+>>> +		dev_err(dev, "OF: no endpoint\n");
+>>> +		return -ENOENT;
+>>> +	}
+> 
+> Ditto.
+> 
+>>> +	ret = of_property_read_u32(ep_np, "pclk-sample", &priv->pclk_polarity);
+>>> +
+>>> +	of_node_put(ep_np);
+> 
+> Ditto.
+> 
+> ...
+> 
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	return 0;
+> 
+> return ret;
+> 
+> ...
+> 
+>>> +	priv->plat_data = dev_get_platdata(&client->dev);
+>>> +	if (!priv->plat_data) {
+>>> +		dev_err(dev, "Platform data missing\n");
+>>> +		return -ENODEV;
+> 
+> 	return dev_err_probe(...); ?
+
+Isn't the idea with dev_err_probe to use it where -EPROBE_DEFER might be 
+the error? That's not the case here.
+
+Buuut reading the relevant docs a bit more shows that it's actually 
+recommended to be used in this kind of cases too, so you're right.
+
+>>> +	}
+> 
+> ...
+> 
+>>> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+>>> +	if (IS_ERR(priv->regmap)) {
+>>> +		dev_err(dev, "Failed to init regmap\n");
+>>> +		return PTR_ERR(priv->regmap);
+> 
+> Ditto?
+>
+>>> +	}
+> 
+> ...
+> 
+>>> +#ifdef CONFIG_OF
+>>
+>> The driver depends on CONFIG_OF so I would drop this, as well as the
+>> of_match_ptr().
+> 
+> Even if there is no OF dependency, these ugly ifdeffery with of_match_ptr()
+> are error prone (compilation wise).
+> 
+> ...
+> 
+>>> +static const struct of_device_id ub913_dt_ids[] = {
+>>> +	{ .compatible = "ti,ds90ub913a-q1", },
+> 
+> Inner comma is not needed.
+
+Ok.
+
+> 
+>>> +	{}
+>>> +};
+> 
+> ...
+> 
+>>> +static struct i2c_driver ds90ub913_driver = {
+>>> +	.probe_new	= ub913_probe,
+>>> +	.remove		= ub913_remove,
+>>> +	.id_table	= ub913_id,
+>>> +	.driver = {
+>>> +		.name	= "ds90ub913a",
+> 
+>>> +		.owner = THIS_MODULE,
+> 
+> This is something like for 5+ years is not needed, as the below macro sets it
+> for you.
+
+Ok.
+
+>>> +		.of_match_table = of_match_ptr(ub913_dt_ids),
+>>> +	},
+>>> +};
+> 
+>>> +
+> 
+> Redundant blank line.
+> 
+>>> +module_i2c_driver(ds90ub913_driver);
+> 
+
+  Tomi
+
