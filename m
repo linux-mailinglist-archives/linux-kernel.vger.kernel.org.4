@@ -2,68 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CC1663358
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7502466335D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbjAIVmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S237634AbjAIVnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238262AbjAIVl0 (ORCPT
+        with ESMTP id S238140AbjAIVmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:41:26 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3786101E3;
-        Mon,  9 Jan 2023 13:41:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 3DB74604F3;
-        Mon,  9 Jan 2023 22:41:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673300466; bh=sZ9lvcw9WnbCHVTEn1DuNrgMVYIkO/y7/LxiD8iYtOc=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=l/19ZRS6IYKIzN6yPQWrFm7qmvwq5T4hw2gt0UmS0jmySWJsoOT4T4DRglU/rDqw7
-         jzD+37rDjtGHKYfCCl9657YFPeS5vypmKgPX/Qvvta/Jty9SfpuujiQ8pH//Vzg8sO
-         g0pBhKPLRIKH9Fe/kp0nFLyRcniysk9F0mD/tDOBgefeSsAs/hjdJJAIF8yknxIf6k
-         yt55XS5l12oxs5QqgxmL/C+M5tNSK7UsF43yuwpchBTwbehDGreaKiAK3NuM1D9YQp
-         MptubijLKZwDcc4KhJVRNEJOt6VPxBjl8dWKVTCEXHLcUogUwjgc0vb6j34It4T9tM
-         AGtqUOT1njQlg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HlvCOym_hQs3; Mon,  9 Jan 2023 22:41:03 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.254])
-        by domac.alu.hr (Postfix) with ESMTPSA id 68681604F1;
-        Mon,  9 Jan 2023 22:41:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673300463; bh=sZ9lvcw9WnbCHVTEn1DuNrgMVYIkO/y7/LxiD8iYtOc=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=ypB+EeJwvbUN/qt35A0+SYVmjPeA47V9qFh+GGFcoPc4uWMcW6GBvlw/YFoN+dLDm
-         YRh8uNIBh74BvRZ3f2ekVIDL+n44/Lf390cOXVfce3YF8dn1Nfvrt24FMASocez/57
-         VW0yuOJZpQH/uc4CDXqdiaL/e6VaBEDupSeH17dGck5SWF2mFXUh1tNUit80uyfwIm
-         m6H47vks9E8ACIIzlzC1FLZI9Cse4PwBAcv9J0aCeFVPE+rjwfZCLTtqgB3yZ4VP3T
-         gMSSBoPgflkjIjBdB9kOyRY0845WLvy/4B2Q4Q3OwjHEkVVT7fCckV883okSKicAU/
-         TRmMPj7P4HJJg==
-Message-ID: <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
-Date:   Mon, 9 Jan 2023 22:41:01 +0100
+        Mon, 9 Jan 2023 16:42:55 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A8A25D4;
+        Mon,  9 Jan 2023 13:42:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NrS894JNkz4xP3;
+        Tue, 10 Jan 2023 08:42:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673300521;
+        bh=vFuZMimV3+WILQdsvk/fJXxy0oj3sS4gPr6RYHryZp4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dmdXtKajNo7t2OH0jeqz110qh1r12zwT/gws5uXe7pN4fSrOdOoRMnNP72iyUFOVO
+         vpEVAOT36LKWpPpE5LheSn93CObyp15nOcC+Kicr2/F7iC0f74EQ+558xNbg4m3mJm
+         yS/UE+dAjXrLh9/5+JZtLV+JC0pC7T+CuPV28b6WYz4GduwAkXN+FXw+oekr3a25UM
+         l1pN22mfA6SWPVZqpGEUXIUb6eVCGc7nuoC+Y7s5OoWvtHY2KbvHUfz9B4JK0BwOxT
+         HevzS3/FvgO5s1DxwDlZeaKK2z/0cq1JBpLisqOWaOB29h9BBDRMq+X3gBMTlgVtNI
+         ZvOWYJeCIYUGw==
+Date:   Tue, 10 Jan 2023 08:41:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tags need some work in the stm32 tree
+Message-ID: <20230110084159.7d20dd38@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
- <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Organization: Academy of Fine Arts, University of Zagreb
-Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
- =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
-In-Reply-To: <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/grLQeN+bo9P6DfN18Z=jTv_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +51,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/2023 5:42 PM, David Hildenbrand wrote:
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi, thank you for your reply.
+Hi all,
 
->> I hope this is enough information for you to debug the issue.
->>
->> I am standing by for any additional diagnostics needed.
-> 
-> Won't userfaultfd.c fail in a similar way?
-> 
-> Anyhow, khugepaged.c jas
-> 
-> #ifndef MADV_PAGEOUT
-> #define MADV_PAGEOUT 21
-> #endif
-> 
-> So most probably we should do the same.
+In commits
 
-Actually, David, it turned out that userfaultfd.c compiled 
-out-of-the-box, and side-by-side comparison showed that it also included 
-"/home/marvin/linux/kernel/linux_torvalds/usr/include/asm-generic/mman-common.h"
+  731c05eb8ec3 ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp151a-=
+prtt1l")
+  1bfe5bf6a0ab ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp157c-=
+emstamp-argon")
+  b8deada61dd2 ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-=
+dhcom-som")
+  4beb2a5e840a ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-=
+dhcor-som")
 
-The only remaining difference was including <linux/mman.h>, which fixed 
-the issue w/o #ifdef ... #endif
+Fixes tag
 
-Hope this helps.
+  Fixes: ea99a5a02ebc ("ARM: dts: stm32: Create separate pinmux for qspi cs=
+ pin in stm32mp15-pinctrl.dtsi)
 
-Please find the following diff.
+has these problem(s):
 
-Regards,
-Mirsad
+  - Subject has leading but no trailing quotes
 
-------------------------------------------------------------------------------
-diff --git a/tools/testing/selftests/vm/cow.c 
-b/tools/testing/selftests/vm/cow.c
-index 26f6ea3079e2..dd8cf12c6776 100644
---- a/tools/testing/selftests/vm/cow.c
-+++ b/tools/testing/selftests/vm/cow.c
-@@ -16,6 +16,7 @@
-  #include <fcntl.h>
-  #include <dirent.h>
-  #include <assert.h>
-+#include <linux/mman.h>
-  #include <sys/mman.h>
-  #include <sys/ioctl.h>
-  #include <sys/wait.h>
+Also, please keep all the commit message tags together at the end of
+the commit message.  And I don't see any point in the "To:" tag.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
---
-Mirsad Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-tel. +385 (0)1 3711 451
-mob. +385 91 57 88 355
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO8iicACgkQAVBC80lX
+0GxnAwf6AoQanPneVCJaCu8a2ihYF5ZRv1sV4E5mULmJnvJnoe8zDfTiQBGz0c/C
+D1XQbG9LWg6PSpfa8QojmhdL15O7+bKFnQskjDqsIOX3PkVf8arbBHwrR6vqccWi
+zBtl/WNoFf4ty1xdL5KvbtrwwQrs0335EtFNJe/ced6HBQeG5qKFoVSbeX8vgZhU
+hg2etOo44xw/jJrfeTpS5IQdQ6AD6EO+E+l/Y0n2iw3EMfab5Bni3LPGcHTwGKq0
+zFFVK5at+Prz0YBHY5lhFYLmBnpcpKg7dtR7/9oowm5VWhlbnOIB9VrmCzKAU7Gz
+KvXI+QudoVigpSCBKYPi8iTdrIVsqA==
+=VjKP
+-----END PGP SIGNATURE-----
+
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_--
