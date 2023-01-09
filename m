@@ -2,254 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5456628F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56676628BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjAIOqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S233562AbjAIOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbjAIOqK (ORCPT
+        with ESMTP id S230013AbjAIOn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:46:10 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1DE3C704
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=qSDyQmdE5bEHApGBRVBbuA6qGY5F6QCsHw91603xSjI=; b=KMTWCybUZ+YkUUT62lAo6SbkVV
-        6OHaMQn50EPHQJgSxAqHag3gg0B+/lxw009HeBHyRgzWWXAJhlDtCOsx5EThomWvNX0Wsy5uQDX3h
-        oMdMJMuNCWnU6KfWoDNGnAoU2noWDMybh702kg/8QyLTihZCFgAamCGTd5QybGiamrLGoEaNhWfuX
-        oYk78oRwZj0i9HvLi6at0HFV2NZ0XO1ivQbDYK6K4WmyomusE0J1dPnwfi9Kf19sQQ/MgkqUJrrTQ
-        sLIDtYKMZQTG8wkfVs+S5uAfLR9jRHuDJGL5bD39SbxQLAiUnqsiV5RicGSJ0v7iFSbYxFTzKBp+F
-        NbVewx4A==;
-Received: from [41.74.137.107] (helo=killbill.home)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1pEtO9-003TyM-Nv; Mon, 09 Jan 2023 15:44:37 +0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     Joshua Ashton <joshua@froggi.es>, alex.hung@amd.com,
-        nicholas.kazlauskas@amd.com, sungjoon.kim@amd.com,
-        seanpaul@chromium.org, bhawanpreet.lakha@amd.com,
-        Shashank Sharma <shashank.sharma@amd.com>,
-        ville.syrjala@linux.intel.com, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, kernel-dev@igalia.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        Melissa Wen <mwen@igalia.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 18/18] drm/amd/display: add user shaper LUT support to amdgpu_dm color pipeline
-Date:   Mon,  9 Jan 2023 13:38:46 -0100
-Message-Id: <20230109143846.1966301-19-mwen@igalia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230109143846.1966301-1-mwen@igalia.com>
-References: <20230109143846.1966301-1-mwen@igalia.com>
+        Mon, 9 Jan 2023 09:43:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610E21D0DB
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673275362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GqO8WP47IGCJ8c3pWUysSVCAJdwUf/hbc3Q+tFowqGk=;
+        b=V4kWEXdxDhStOGUnNzZCZSCpzVrKXpSAIZEEu79ApKdJ71CUX8i66FT8szZD4g3fB8IaeT
+        1RUu9x6sWnFWmI1UBh5a+kus9fJnU7BIsLxQ0+grymIcc6tSrY0TZw5jJtRq8WGwiwwSz9
+        C5jPK9E+uvN5QHIrzBS4ZijH1h62haA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-396-XBLlX5IcM0uA1VkPEP6uyg-1; Mon, 09 Jan 2023 09:42:38 -0500
+X-MC-Unique: XBLlX5IcM0uA1VkPEP6uyg-1
+Received: by mail-qk1-f199.google.com with SMTP id br6-20020a05620a460600b007021e1a5c48so6543321qkb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:42:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GqO8WP47IGCJ8c3pWUysSVCAJdwUf/hbc3Q+tFowqGk=;
+        b=d/fWV48ONw3NGR7bb7yWQ37uNM4Pw4osDqNs7Xdt/Prpj9MLZgK/hBDkP7n06uz0Oy
+         0rSwf5KmEFnL++xb2+sRX1OD7ioz2FuxpPKz25MEUBxSORENpUbcXJ/AlF5bUNu7DOMC
+         14wa3nPlw2KYf/WOlT5llC3JqGu2mlAL+qoEMBnBC4BNSShfPLfUqLXGEfVgQPdGI+jG
+         OnYqdrCHGqonamSEbcz80TqCbnGVvhYCCW24WZhtBbkI7S7UHqPrxbK0ae8kdxl398E1
+         laRHXmJetkPnEHfaI26IRMmae4sO3IxCpzhnoC1Yx0valhXpjnSpQ7T19qvrazt4jZFy
+         EgSw==
+X-Gm-Message-State: AFqh2kp9bmfS2xK2N3kTaCR96NiQQ/hlVadiDEES8s9sjS7ybIPRkghS
+        0UhtErq9hILZz9CtTnMeIiFYns+OiHi6kUqjZNxBTnOyPGGCZKdp2doQWjEN4WRHi6XqwYMLdbK
+        d23evx0EGmk7zDLtjmFEikrm6
+X-Received: by 2002:a05:622a:580c:b0:3a8:2b87:9fd8 with SMTP id fg12-20020a05622a580c00b003a82b879fd8mr98712600qtb.48.1673275357938;
+        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvDhPBJIZ+E0FoPfewXrYweMlU/l4+RY/bsNUbu8cqmPky9X6H++s5bY2nvviwUmzzUYAd2Tw==
+X-Received: by 2002:a05:622a:580c:b0:3a8:2b87:9fd8 with SMTP id fg12-20020a05622a580c00b003a82b879fd8mr98712581qtb.48.1673275357707;
+        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
+Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
+        by smtp.gmail.com with ESMTPSA id q8-20020ac87348000000b003a8163c1c96sm4611187qtp.14.2023.01.09.06.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
+Message-ID: <7d1499fadf42052711e39f0d8c7656f4d3a4bc9d.camel@redhat.com>
+Subject: Re: [PATCH 08/11] cifs: Remove call to filemap_check_wb_err()
+From:   Jeff Layton <jlayton@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Date:   Mon, 09 Jan 2023 09:42:36 -0500
+In-Reply-To: <20230109051823.480289-9-willy@infradead.org>
+References: <20230109051823.480289-1-willy@infradead.org>
+         <20230109051823.480289-9-willy@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now, we can use shaper LUT to delinearize and/or normalize the color
-space for a more efficient 3D LUT support (so far, only for DRM atomic
-color mgmt). If a degamma 1D LUT is passed to linearize the color space,
-a custom shaper 1D LUT can be used before applying 3D LUT.
+On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
+> filemap_write_and_wait() now calls filemap_check_wb_err(), so we cannot
+> glean any additional information by calling it ourselves.  It may also
+> be misleading as it will pick up on any errors since the beginning of
+> time which may well be since before this program opened the file.
+>=20
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  fs/cifs/file.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index 22dfc1f8b4f1..7e7ee26cf77d 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -3042,14 +3042,12 @@ int cifs_flush(struct file *file, fl_owner_t id)
+>  	int rc =3D 0;
+> =20
+>  	if (file->f_mode & FMODE_WRITE)
+> -		rc =3D filemap_write_and_wait(inode->i_mapping);
+> +		rc =3D filemap_write_and_wait(file->f_mapping);
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- .../amd/display/amdgpu_dm/amdgpu_dm_color.c   | 95 ++++++++++++++++---
- 1 file changed, 83 insertions(+), 12 deletions(-)
+If we're calling ->flush, then the file is being closed. Should this
+just be?
+		rc =3D file_write_and_wait(file);
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_color.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_color.c
-index 8a930f9bce60..81b20ac9ff19 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_color.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_color.c
-@@ -497,14 +497,62 @@ static void amdgpu_dm_atomic_lut3d(struct dc_stream_state *stream,
- 	stream->lut3d_func = lut;
- }
- 
-+static int __set_func_shaper(struct dc_transfer_func *shaper_func,
-+			     const struct drm_color_lut *lut, uint32_t lut_size)
-+{
-+	struct dc_gamma *gamma = NULL;
-+	struct calculate_buffer cal_buffer = {0};
-+	bool res;
-+
-+	ASSERT(lut && lut_size == MAX_COLOR_LUT_ENTRIES);
-+
-+	cal_buffer.buffer_index = -1;
-+
-+	gamma = dc_create_gamma();
-+	if (!gamma)
-+		return -ENOMEM;
-+
-+	gamma->num_entries = lut_size;
-+	__drm_lut_to_dc_gamma(lut, gamma, false);
-+
-+	/*
-+	 * Color module doesn't like calculating gamma params
-+	 * on top of a linear input. But degamma params can be used
-+	 * instead to simulate this.
-+	 */
-+	gamma->type = GAMMA_CUSTOM;
-+	res = mod_color_calculate_degamma_params(NULL, shaper_func, gamma, true);
-+
-+	dc_gamma_release(&gamma);
-+
-+	return res ? 0 : -ENOMEM;
-+}
-+
- static int amdgpu_dm_atomic_shaper_lut(struct dc_stream_state *stream,
-+				       const struct drm_color_lut *shaper_lut,
-+				       uint32_t shaper_size,
- 				       struct dc_transfer_func *func_shaper_new)
- {
--	/* We don't get DRM shaper LUT yet. We assume the input color space is already
-+	/* If no DRM shaper LUT, we assume the input color space is already
- 	 * delinearized, so we don't need a shaper LUT and we can just BYPASS
- 	 */
--	func_shaper_new->type = TF_TYPE_BYPASS;
--	func_shaper_new->tf = TRANSFER_FUNCTION_LINEAR;
-+	if (!shaper_size) {
-+		func_shaper_new->type = TF_TYPE_BYPASS;
-+		func_shaper_new->tf = TRANSFER_FUNCTION_LINEAR;
-+	} else {
-+		int r;
-+
-+		/* If DRM shaper LUT is set, we assume a linear color space
-+		 * (linearized by DRM degamma 1D LUT or not)
-+		 */
-+		func_shaper_new->type = TF_TYPE_DISTRIBUTED_POINTS;
-+		func_shaper_new->tf = TRANSFER_FUNCTION_LINEAR;
-+
-+		r = __set_func_shaper(func_shaper_new, shaper_lut, shaper_size);
-+		if (r)
-+			return r;
-+	}
-+
- 	stream->func_shaper = func_shaper_new;
- 
- 	return 0;
-@@ -514,6 +562,8 @@ static int amdgpu_dm_atomic_shaper_lut(struct dc_stream_state *stream,
-  * interface
-  * @dc: Display Core control structure
-  * @stream: DC stream state to set shaper LUT and 3D LUT
-+ * @drm_shaper_lut: DRM CRTC (user) shaper LUT
-+ * @drm_shaper_size: size of shaper LUT
-  * @drm_lut3d: DRM CRTC (user) 3D LUT
-  * @drm_lut3d_size: size of 3D LUT
-  *
-@@ -522,6 +572,8 @@ static int amdgpu_dm_atomic_shaper_lut(struct dc_stream_state *stream,
-  */
- static int amdgpu_dm_atomic_shaper_lut3d(struct dc *dc,
- 					 struct dc_stream_state *stream,
-+					 const struct drm_color_lut *drm_shaper_lut,
-+					 uint32_t drm_shaper_size,
- 					 const struct drm_color_lut *drm_lut3d,
- 					 uint32_t drm_lut3d_size,
- 					 const struct drm_mode_lut3d_mode *mode)
-@@ -532,11 +584,11 @@ static int amdgpu_dm_atomic_shaper_lut3d(struct dc *dc,
- 	lut3d_func_new = (struct dc_3dlut *) stream->lut3d_func;
- 	func_shaper_new = (struct dc_transfer_func *) stream->func_shaper;
- 
--
- 	amdgpu_dm_atomic_lut3d(stream, drm_lut3d, drm_lut3d_size,
- 			       mode, lut3d_func_new);
- 
--	return amdgpu_dm_atomic_shaper_lut(stream, func_shaper_new);
-+	return amdgpu_dm_atomic_shaper_lut(stream, drm_shaper_lut,
-+					   drm_shaper_size, func_shaper_new);
- }
- 
- static const struct drm_mode_lut3d_mode *
-@@ -569,13 +621,23 @@ get_lut3d_mode(struct amdgpu_device *adev,
- int amdgpu_dm_verify_lut3d_size(struct amdgpu_device *adev,
- 				const struct drm_crtc_state *crtc_state)
- {
--	const struct drm_color_lut *lut3d = NULL;
-+	const struct drm_color_lut *shaper = NULL, *lut3d = NULL;
- 	const struct drm_mode_lut3d_mode *mode;
- 	uint32_t exp_size, size;
- 
-+	/* shaper LUT is only available if 3D LUT color caps*/
-+	exp_size = has_mpc_lut3d_caps(&adev->dm) ? MAX_COLOR_LUT_ENTRIES : 0;
-+	shaper = __extract_blob_lut(crtc_state->shaper_lut, &size);
-+
-+	if (shaper && size != exp_size) {
-+		DRM_DEBUG_DRIVER(
-+			"Invalid Shaper LUT size. Should be %u but got %u.\n",
-+			exp_size, size);
-+		return -EINVAL;
-+	}
-+
- 	mode = get_lut3d_mode(adev, crtc_state);
- 	exp_size = mode ? mode->lut_size * mode->lut_size * mode->lut_size : 0;
--
- 	lut3d = __extract_blob_lut(crtc_state->lut3d, &size);
- 
- 	if (lut3d && size != exp_size) {
-@@ -617,11 +679,11 @@ int amdgpu_dm_update_crtc_color_mgmt(struct dm_crtc_state *crtc)
- 	bool has_rom = adev->asic_type <= CHIP_RAVEN;
- 	struct drm_color_ctm *ctm = NULL;
- 	const struct drm_color_lut *degamma_lut, *regamma_lut;
--	const struct drm_color_lut *lut3d;
-+	const struct drm_color_lut *shaper_lut, *lut3d;
- 	uint32_t degamma_size, regamma_size;
--	uint32_t lut3d_size;
-+	uint32_t lut3d_size, shaper_size;
- 	bool has_regamma, has_degamma;
--	bool has_lut3d;
-+	bool has_lut3d, has_shaper_lut;
- 	bool is_legacy;
- 	int r;
- 
-@@ -634,12 +696,14 @@ int amdgpu_dm_update_crtc_color_mgmt(struct dm_crtc_state *crtc)
- 		return r;
- 
- 	degamma_lut = __extract_blob_lut(crtc->base.degamma_lut, &degamma_size);
-+	shaper_lut = __extract_blob_lut(crtc->base.shaper_lut, &shaper_size);
- 	lut3d = __extract_blob_lut(crtc->base.lut3d, &lut3d_size);
- 	regamma_lut = __extract_blob_lut(crtc->base.gamma_lut, &regamma_size);
- 
- 	has_degamma =
- 		degamma_lut && !__is_lut_linear(degamma_lut, degamma_size);
- 
-+	has_shaper_lut = shaper_lut != NULL;
- 	has_lut3d = lut3d != NULL;
- 
- 	has_regamma =
-@@ -680,10 +744,17 @@ int amdgpu_dm_update_crtc_color_mgmt(struct dm_crtc_state *crtc)
- 			return r;
- 	} else {
- 		if (has_lut3d) {
--			r = amdgpu_dm_atomic_shaper_lut3d(adev->dm.dc, stream, lut3d, lut3d_size,
-+			/* enable 3D LUT only for DRM atomic color mgmt */
-+			shaper_size = has_shaper_lut ? shaper_size : 0;
-+
-+			r = amdgpu_dm_atomic_shaper_lut3d(adev->dm.dc, stream,
-+							  shaper_lut, shaper_size,
-+							  lut3d, lut3d_size,
- 							  get_lut3d_mode(adev, &crtc->base));
--			if (r)
-+			if (r) {
-+				DRM_DEBUG_DRIVER("Failed to set shaper and 3D LUT\n");
- 				return r;
-+			}
- 		}
- 		/* Note: OGAM is disabled if 3D LUT is successfully programmed.
- 		 * See params and set_output_gamma in
--- 
-2.35.1
+It's not like we need to worry about corrupting ->f_wb_err at that
+point.
+
+> =20
+>  	cifs_dbg(FYI, "Flush inode %p file %p rc %d\n", inode, file rc);
+> -	if (rc) {
+> -		/* get more nuanced writeback errors */
+> -		rc =3D filemap_check_wb_err(file->f_mapping, 0);
+> +	if (rc)
+>  		trace_cifs_flush_err(inode->i_ino, rc);
+> -	}
+> +
+>  	return rc;
+>  }
+> =20
+
+--=20
+Jeff Layton <jlayton@redhat.com>
 
