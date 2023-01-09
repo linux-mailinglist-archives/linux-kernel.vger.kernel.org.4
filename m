@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03721661C58
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C96E3661C5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjAIC1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 21:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S233818AbjAIC3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 21:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjAIC1k (ORCPT
+        with ESMTP id S231926AbjAIC3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 21:27:40 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8939FCE;
-        Sun,  8 Jan 2023 18:27:38 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NqyX50sFvz4f3v57;
-        Mon,  9 Jan 2023 10:27:33 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP2 (Coremail) with SMTP id Syh0CgBnDeuWe7tj6+BkBQ--.41045S2;
-        Mon, 09 Jan 2023 10:27:35 +0800 (CST)
-Subject: Re: [PATCH v2 08/13] blk-mq: simplify flush check in
- blk_mq_dispatch_rq_list
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-        ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, john.garry@huawei.com, jack@suse.cz
-References: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
- <20230104142259.2673013-9-shikemeng@huaweicloud.com>
- <20230108180611.GG23466@lst.de>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <86677943-1c5e-370f-ba69-25e10738b67b@huaweicloud.com>
-Date:   Mon, 9 Jan 2023 10:27:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Sun, 8 Jan 2023 21:29:21 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE899FCE;
+        Sun,  8 Jan 2023 18:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=kaMCTOcUvTU23khT1M5FZYZ1J/m4B8hsn47snTUtPXI=; b=jJcsqHvc+Dd04fVEdjS5iUGmev
+        XQ0FG/720D5yEaCehNpwcWnmQSojsIgjrT/MTahCSntyyMSCLEkSqz0ZIY26yuszAd2hAh7lZnFKM
+        PnUNIagO6DK0ZDMwfEY6KH+1krRv2wY6+Z9fpIaXCDRroTlD2u6WSofpdq0LpHjqd0Y1V+q4HoF8u
+        d2ED5tJ8K8tXDVbtvsiNWHd50PnbfwTjo/3u66l2iqTPJj2JbAWApXou7d7GXVIWAbyYtx5bHqKnq
+        tX71rnTf4Ax0FGiT5iG9zuDq6tjlB4TIVZpSEqOZdS1J08GSsxvAl+pns/Z2OwYR8Q4/4TjIHvl7p
+        OvZgVJNA==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pEhuX-00GnlC-0p; Mon, 09 Jan 2023 02:29:17 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] freevxfs: fix kernel-doc warnings
+Date:   Sun,  8 Jan 2023 18:29:15 -0800
+Message-Id: <20230109022915.17504-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-In-Reply-To: <20230108180611.GG23466@lst.de>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: Syh0CgBnDeuWe7tj6+BkBQ--.41045S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4DKFy3WF48trW8Xr47Jwb_yoWftrbE9F
-        1Fk3Z7Kw4UG3Wqqa1UKFnYqFs8KFyUCF95Aa1ktFZag34kW3Z3JF1DGr15Za13GFZxKr1q
-        gr4rWa4Fyw4qyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix multiple kernel-doc warnings in freevxfs:
 
-Hi, Christoph, thank you so much for review.
-on 1/9/2023 2:06 AM, Christoph Hellwig wrote:
-> I think we need to come up with a clear rule on when commit_rqs
-> needs to be called, and follow that.  In this case I'd be confused
-> if there was any case where we need to call it if list was empty.
-> 
-After we queue request[s] to one driver queue, we need to notify driver
-that there are no more request to the queue or driver will keep waiting
-for the last request to be queued and IO hung could happen.
-Normaly, we will notify this by setting .last in struct blk_mq_queue_data
-along with the normal last request .rq in struct blk_mq_queue_data. The
-extra commit is only needed if normal last information in .last is lost.
-(See comment in struct blk_mq_ops for commit_rqs).
+fs/freevxfs/vxfs_subr.c:45: warning: Function parameter or member 'mapping' not described in 'vxfs_get_page'
+fs/freevxfs/vxfs_subr.c:45: warning: Excess function parameter 'ip' description in 'vxfs_get_page'
+2 warnings
+fs/freevxfs/vxfs_subr.c:101: warning: expecting prototype for vxfs_get_block(). Prototype was for vxfs_getblk() instead
+fs/freevxfs/vxfs_super.c:184: warning: expecting prototype for vxfs_read_super(). Prototype was for vxfs_fill_super() instead
 
-The lost could occur if error happens for sending last request with .last
-set or error happen in middle of list and we even do not send the request
-with .last set.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/freevxfs/vxfs_subr.c  |    6 +++---
+ fs/freevxfs/vxfs_super.c |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Best wishes
-Kemeng Shi
-
+diff -- a/fs/freevxfs/vxfs_subr.c b/fs/freevxfs/vxfs_subr.c
+--- a/fs/freevxfs/vxfs_subr.c
++++ b/fs/freevxfs/vxfs_subr.c
+@@ -31,7 +31,7 @@ vxfs_put_page(struct page *pp)
+ 
+ /**
+  * vxfs_get_page - read a page into memory.
+- * @ip:		inode to read from
++ * @mapping:	mapping to read from
+  * @n:		page number
+  *
+  * Description:
+@@ -81,14 +81,14 @@ vxfs_bread(struct inode *ip, int block)
+ }
+ 
+ /**
+- * vxfs_get_block - locate buffer for given inode,block tuple 
++ * vxfs_getblk - locate buffer for given inode,block tuple
+  * @ip:		inode
+  * @iblock:	logical block
+  * @bp:		buffer skeleton
+  * @create:	%TRUE if blocks may be newly allocated.
+  *
+  * Description:
+- *   The vxfs_get_block function fills @bp with the right physical
++ *   The vxfs_getblk function fills @bp with the right physical
+  *   block and device number to perform a lowlevel read/write on
+  *   it.
+  *
+diff -- a/fs/freevxfs/vxfs_super.c b/fs/freevxfs/vxfs_super.c
+--- a/fs/freevxfs/vxfs_super.c
++++ b/fs/freevxfs/vxfs_super.c
+@@ -165,7 +165,7 @@ static int vxfs_try_sb_magic(struct supe
+ }
+ 
+ /**
+- * vxfs_read_super - read superblock into memory and initialize filesystem
++ * vxfs_fill_super - read superblock into memory and initialize filesystem
+  * @sbp:		VFS superblock (to fill)
+  * @dp:			fs private mount data
+  * @silent:		do not complain loudly when sth is wrong
