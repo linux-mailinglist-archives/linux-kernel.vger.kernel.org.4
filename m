@@ -2,205 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B876630D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF136630D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjAIT5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S237550AbjAIT5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbjAIT5B (ORCPT
+        with ESMTP id S235462AbjAIT5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:57:01 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5945E11C19
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:56:59 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jl4so10718034plb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c0/0D3Mo+wWzikUduU1CAWV0Q8LsaDVd0/kxK56kXw8=;
-        b=OwX1Qbq6gonTa1LwP39ZsEU2QCCmVCurCBjbRc9yTUKyXZH8CHaDklcQWIYMrQFNWJ
-         UrGnDfWU2LfqjqxunfcPKXvQksl7MuXGseixNYA5MxF3pr9ZOCBupn5GbsVDr/YxwU2i
-         0DwMvH2EbjOBNVkS0i5/uPqlAvdbA90lDoBOo=
+        Mon, 9 Jan 2023 14:57:46 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11FA13E24
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:57:44 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id h21so8688463qta.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:57:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c0/0D3Mo+wWzikUduU1CAWV0Q8LsaDVd0/kxK56kXw8=;
-        b=lHB/NSNX/H2uax/rQgXXKPzh2WofrgCxAL39tnawI4PvpjVlyY9ckDJlpreaoHpfCc
-         PLXiGvdEySoQB8vFRjPZdGEEBakKB/agYb/XU6mE2KGXml/KbvD0p/7odwQukkSi/dY1
-         c6nZKBV0CEQNtGiqoTjh+63T7Q3/2dmJpczh0LqBzYET6tuzA1hL6CAPiooSknS9FLzG
-         vZztdixuoHu41SBJBq8t4P4MprSwv1Gvd9VTIqn/5QKoTX7PMN7ZRySAHiRnIlH3zhG9
-         klXi6/yT+/PvWuP/o/znhHQMYXV5yMYakUDKZ7xG2cFVbFS4JnKRWGPBn/YAUJvdZYRC
-         w7Zg==
-X-Gm-Message-State: AFqh2kqjWpAenZPc71V3T8iI60N2EG52Hq+XescHKWWBitZpJBx29j1B
-        x3R+g3P56vkAVxvMHXguqxfURTewPPi6P20Xt6OO
-X-Google-Smtp-Source: AMrXdXsTJ7aO2iHHoPnOlTsETf7fuA9nWCMKbupCxgU+CEyC/kSDdnp1NEvXq0hwRCfiNrNdXwSC1KZF42ZCb3bvN1M=
-X-Received: by 2002:a17:902:6b83:b0:192:d373:2e02 with SMTP id
- p3-20020a1709026b8300b00192d3732e02mr2064310plk.75.1673294218760; Mon, 09 Jan
- 2023 11:56:58 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xT3iy3/Ce9yXgQp7C5BIAX0h7RVPSzdu2IipBE+OZ7I=;
+        b=UttdJQTQ/iIVqu9rlPaviqraSjksKFT3i4tiGODuwqVfc2rLOkuzsFWK0ix28VAPSV
+         HGdwDa22XyOLbxCiYaI1jlJK3M02takuw3P0boufsimOOnF9W+FXPUu2SVMalm4s4nSX
+         cJtG522pP2qTSSjI3KYP7+p9TGcI/GohxTh/M/bULGVwgh0a1g4tl3JS2V7lBRLhJMd0
+         pomSkSOyVKOh6bT3KpKc8rz509umOcFRo64OOeU7FpfEkVFQ92BFxXBUIZC3Yrs5l9KB
+         nb1ZsgnF/5WBVg/XJN9+tmx+QhxVAxKfQAGTz7Y2N43YwX6ag6aws7WyzVGz5+Pe67ca
+         H6PQ==
+X-Gm-Message-State: AFqh2krneDX2K8967xPUNdOvs3t3vmcMeVm5dnGJ0p/4Ofdl5Wih1IAA
+        l3zsmMQSCm+3sdwv04hAegCVUzkqqtqzCA==
+X-Google-Smtp-Source: AMrXdXsAgmk3Bj7HSXpxZXk1YOruNnw9Qx9TwnAd6r0dtKmFGgDuz5N9Rvo9Y2ttZPas5KZZ/gbbBA==
+X-Received: by 2002:a05:622a:5c85:b0:3a7:e271:fc05 with SMTP id ge5-20020a05622a5c8500b003a7e271fc05mr85931349qtb.3.1673294263754;
+        Mon, 09 Jan 2023 11:57:43 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm5010141qtr.55.2023.01.09.11.57.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 11:57:43 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-4bf16baa865so126868337b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:57:43 -0800 (PST)
+X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
+ bg19-20020a05690c031300b0037e6806a5f9mr1807461ywb.47.1673294262797; Mon, 09
+ Jan 2023 11:57:42 -0800 (PST)
 MIME-Version: 1.0
-References: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
- <Y7wLa7I2hlz3rKw/@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y7wLa7I2hlz3rKw/@hirez.programming.kicks-ass.net>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 9 Jan 2023 11:56:47 -0800
-Message-ID: <CAOnJCU+qsJk9oL-2L8fJuGvpaJsyfwQ5+wFXA1L1jM6Fe=FK6A@mail.gmail.com>
-Subject: Re: Expected rdpmc behavior during context swtich and a RISC-V conundrum
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Beeman Strong <beeman@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Anup Patel <apatel@ventanamicro.com>
+References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu>
+ <Y7pzbnlXgv+asekg@amd.ucw.cz> <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
+ <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz> <Y7tjnhs77o4TL5ey@mit.edu> <CAMuHMdXP8ycxE_Sny0q+SAzLTwnaA3hks=ErW-ZfiMBw7ZMSgg@mail.gmail.com>
+ <20230109143059.GB25476@1wt.eu>
+In-Reply-To: <20230109143059.GB25476@1wt.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 Jan 2023 20:57:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX-xpu-+8kAun90ZdYLe6kMzW3CEoD_hQtpwTPSJ8Tp1A@mail.gmail.com>
+Message-ID: <CAMuHMdX-xpu-+8kAun90ZdYLe6kMzW3CEoD_hQtpwTPSJ8Tp1A@mail.gmail.com>
+Subject: Re: Dhrystone -- userland version
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@osdl.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:41 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Jan 05, 2023 at 11:59:24AM -0800, Atish Patra wrote:
-> > Hi All,
-> > There was a recent uabi update[1] for RISC-V that allows the users to
-> > read cycle and instruction count without any checks.
-> > We tried to restrict that behavior to address security concerns
-> > earlier but it resulted in breakage for some user space
-> > applications[2].
-> > Thus, previous behavior was restored where a user on RISC-V platforms
-> > can directly read cycle or instruction count[3].
-> >
-> > Comparison with other ISAs w.r.t user space access of counters:
-> > ARM64
-> >   -- Enabled/Disabled via (/proc/sys/kernel/perf_user_access)
-> >   -- Only for task bound events configured via perf.
-> >
-> > X86
-> >  --- rdpmc instruction
-> >  --- Enable/Disable via =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
-> > -- Before v4.0
-> >  -- any process (even without active perf event) rdpmc
-> > After v4.0
-> > -- Default behavior changed to support only active events in a
-> > process=E2=80=99s context.
-> > -- Configured through perf similar to ARM64
-> > -- Continue to maintain backward compatibility for unrestricted access
-> > by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
-> >
-> > IMO, RISC-V should only enable user space access through perf similar
-> > to ARM64 and x86 (post v4.0).
-> > However, we do have to support the legacy behavior to avoid
-> > application breakage.
-> > As per my understanding a direct user space access can lead to the
-> > following problems:
-> >
-> > 1) There is no context switch support, so counts from other contexts ar=
-e exposed
-> > 2) If a perf user is allocated one of these counters, the counter
-> > value will be written
-> >
-> > Looking at the x86 code as it continues to allow the above behavior,
-> > rdpmc_always_available_key is enabled in the above case. However,
-> > during the context switch (cr4_update_pce_mm)
-> > only dirty counters are cleared. It only prevents leakage from perf
-> > task to rdpmc task.
-> >
-> > How does the context switch of counters work for users who enable
-> > unrestricted access by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=E2=
-=80=9D ?
-> > Otherwise, rdpmc users likely get noise from other applications. Is
-> > that expected ?
-> > This can be a security concern also where a rogue rdpmc user
-> > application can monitor other critical applications to initiate side
-> > channel attack.
-> >
-> > Am I missing something? Please correct my understanding of the x86
-> > implementation if it is wrong.
->
-> So on x86 we have RDTSC and RDPMC instructions. RDTSC reads the
-> Time-Stamp-Counter which is a globally synchronized monotonic increasing
-> counter at some 'random' rate (idealized, don't ask). This thing is used
-> for time-keeping etc..
->
-> And then there's RDPMC which (optionally) allows reading the PMU
-> counters which are normally disabled and all 0.
->
-> Even if RDPMC is unconditionally allowed from userspace (the 2 option
-> you refer to) userspace will only be able to read these 0s unless
-> someone also programs the PMU. Linux only supports a single means of
-> doing so: perf (some people use /dev/msr to poke directly to the MSRs
-> but they get to keep all pieces).
->
+Hi Willy,
 
-It makes sense now. Thanks!!
+On Mon, Jan 9, 2023 at 3:31 PM Willy Tarreau <w@1wt.eu> wrote:
+> Then maybe you'd rather use this:
+>
+>    https://github.com/wtarreau/mhz
 
-AFAIK, the /dev/msr interface is also allowed for root users only. So that
-covers the security concerns I was asking about.
+> It's also what's used by sbc-bench to verify that CPU vendors are not
+> cheating in the embedded world. It's very simple, and not arch-dependent
+> nor compiler-dependent (at least as long as you don't build at -O0 :-)).
 
-> RDPMC is only useful if you read counters you own on yourself -- IOW
-> selfmonitoring, using the interface outlined in uapi/linux/perf_events.h
-> near struct perf_event_mmap_page.
->
-> Any other usage -- you get to keep the pieces.
->
-> Can you observe random other counters, yes, unavoidably so. The sysfs
-> control you mention was instituted to restrict this somewhat.
->
-> If the RISC-V counters are fundamentally the PMU counters that need to
-> be reset to trigger events, then you've managed to paint yourself into a
-> tight spot :/
->
-> Either you must dis-allow userspace access to these things (and break
-> them) or limit the PMU usage -- both options suck.
->
->
-> Now, I'm thinking that esp. something like instruction count is not
-> synchronized between cores (seems fundamentally impossible) and can only
-> be reasonably be consumed (and compared) when strictly affine to a
-> particular CPU, you can argue that applications doing this without also
-> strictly managing their affinity mask are broken anyway and therefore
-> your breakage is not in fact a breaking them -- you can't break
-> something that's already broken.
->
+Gcc 4.1.2 (still the userspace compiler on a few of my old systems)
+doesn't like the aligned() attribute on functions.
+In glibc 2.3, LLONG_MAX is defined conditionally on __USE_ISOC99.
 
-I think most broken applications were using rdcycle to measure time
-which was wrong anyways.
-It probably happened because there was no "time" CSR in the early
-hardwares. Thus, the rdtime would
-trap & emulated by the firmware which was slow. This lead to user
-space application to use rdcycle which
-was not correct either. So the existing applications are broken for
-using rdcycle as well.
+Apart from that, the result is fairly accurate. Nice job!
 
-Since both cycle & instret behave similarly (fixed counters), they get
-enabled/disabled together.
+Gr{oetje,eeting}s,
 
->
-> Anyway, given RISC-V being a very young platform, I would try really
-> *really* *REALLY* hard to stomp on these applications and get them to
-> change in order to reclaim the PMU usage.
+                        Geert
 
-Yes. Thanks for your valuable input.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---=20
-Regards,
-Atish
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
