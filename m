@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9869D66268E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850F166268A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236950AbjAINJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S236849AbjAINJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbjAINJM (ORCPT
+        with ESMTP id S236276AbjAINJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:09:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20DBCD6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:06:37 -0800 (PST)
+        Mon, 9 Jan 2023 08:09:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C2203F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673269574;
+        s=mimecast20190719; t=1673269576;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yuxtE6t14gy3tVXwdyxvVM0sGn8D53ZO/t0J8L72Fkc=;
-        b=Hr12mDgeev+OIXWl/nsNUVd3N9hTNuLZCQyTPaRQZzet/7H1Ov6ty/U0q3HEAz7e1LU/Vu
-        5p6ss/39iwmLJSgb5230BcjZMV2Y7M/VSbWq5aonbgugAxa/dQTmYPCD2CuaAkR8B6lo5+
-        6VtqqFoY5L5spprxVDzNZMTLXv6bWyo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=luPXsS+ks9CN356IQwEOn1IqYG8Q1VUr1O3bLDCB5Co=;
+        b=ail+zzeX55J6EERUpw5Og+yQqitxjo4YYKLUz6fvNFATyrvw1QsMIvDahqflHlrvliMC1v
+        wIVXmKsQtiMvFdJb6AjNHK3NmqeblFeKS6cW3TkGIyFKbcwEIizwvxK6ktaF5vkOF3oErI
+        M39HTwk2dba6s/jx0z0JpnKRAg2Db04=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-6imM__lmOb2ZsDDmOZbzLw-1; Mon, 09 Jan 2023 08:06:09 -0500
-X-MC-Unique: 6imM__lmOb2ZsDDmOZbzLw-1
+ us-mta-435-2oUJb9aVOYKsK2CZI1NtXQ-1; Mon, 09 Jan 2023 08:06:10 -0500
+X-MC-Unique: 2oUJb9aVOYKsK2CZI1NtXQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C5471C02D36;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88BFB80D0EB;
         Mon,  9 Jan 2023 13:06:09 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B9EC175AD;
-        Mon,  9 Jan 2023 13:06:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24BF9175AD;
+        Mon,  9 Jan 2023 13:06:09 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -51,9 +52,11 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Jim Mattson <jmattson@google.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 0/2] xapic: make sure x2APIC -> xapic transition correctly
-Date:   Mon,  9 Jan 2023 08:06:03 -0500
-Message-Id: <20230109130605.2013555-1-eesposit@redhat.com>
+Subject: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling x2APIC in kvm_lapic_set_base
+Date:   Mon,  9 Jan 2023 08:06:04 -0500
+Message-Id: <20230109130605.2013555-2-eesposit@redhat.com>
+In-Reply-To: <20230109130605.2013555-1-eesposit@redhat.com>
+References: <20230109130605.2013555-1-eesposit@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
@@ -67,31 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The root cause is kvm_lapic_set_base() failing to handle x2APIC -> xapic ID
-switch, which is addressed by patch 1.
-Patch 2 provides a selftest to verify this behavior.
+If KVM_SET_MSR firstly enables and then disables x2APIC, make sure
+APIC_ID is actually updated correctly, since bits and offset differ from
+xAPIC and x2APIC.
 
-This serie is an RFC because I think that commit ef40757743b47 already tries to
-fix one such effect of the error made in kvm_lapic_set_base, but I am not sure
-how such error described in the commit message is triggered, nor how to
-reproduce it using a selftest. I don't think one can enable/disable x2APIC using
-KVM_SET_LAPIC, and kvm_lapic_set_base() in kvm_apic_set_state() just takes care
-of updating apic->base_address, since value == old_value.
-The test in patch 2 fails with the fix in ef40757743b47.
+Currently this is not handled correctly, as kvm_set_apic_base() will
+have msr_info->host_initiated, so switching from x2APIC to xAPIC won't
+fail, but kvm_lapic_set_base() does not handle the case.
 
-Thank you,
-Emanuele
+Fixes: 8d860bbeedef ("kvm: vmx: Basic APIC virtualization controls have three settings")
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/kvm/lapic.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Emanuele Giuseppe Esposito (2):
-  KVM: x86: update APIC_ID also when disabling x2APIC in
-    kvm_lapic_set_base
-  KVM: selftests: APIC_ID must be correctly updated when disabling
-    x2apic
-
- arch/x86/kvm/lapic.c                          |  8 ++-
- .../selftests/kvm/x86_64/xapic_state_test.c   | 64 +++++++++++++++++++
- 2 files changed, 70 insertions(+), 2 deletions(-)
-
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 4efdb4a4d72c..df0a50099aa2 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2394,8 +2394,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+ 		}
+ 	}
+ 
+-	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
+-		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
++	if ((old_value ^ value) & X2APIC_ENABLE) {
++		if (value & X2APIC_ENABLE)
++			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
++		else
++			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
++	}
+ 
+ 	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
+ 		kvm_vcpu_update_apicv(vcpu);
 -- 
 2.31.1
 
