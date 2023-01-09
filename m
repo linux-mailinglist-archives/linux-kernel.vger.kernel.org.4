@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096DC66289A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C20662896
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbjAIOcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S233336AbjAIObt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbjAIOb7 (ORCPT
+        with ESMTP id S232864AbjAIObn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:31:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0C61CFFF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:31:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673274665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/5CxOh6JMVjx4DWpk0WTYPdAcLVAF5Kf4Udq+XxJnU=;
-        b=Vfp0c/PFl//VdIq39GQs/A0X4+4JULQzTukk5Q1G5XSqkUBxvPzwqsqlT/oNc3ZLSzjj16
-        pCe2Rk0bzo2PHQwjEE07ssEQPMgcYcDxybJJSaIjIQEshLdFVPp3zHn0DSrg1k6//kvX1I
-        6eGYRL5bDY8WOUs2vPAkIvi2u/Ie3FU=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-610-Rmjh9MUtPvKhCjVCjKVnvw-1; Mon, 09 Jan 2023 09:31:03 -0500
-X-MC-Unique: Rmjh9MUtPvKhCjVCjKVnvw-1
-Received: by mail-qv1-f70.google.com with SMTP id mu2-20020a056214328200b00531cc0222faso5288501qvb.14
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:31:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L/5CxOh6JMVjx4DWpk0WTYPdAcLVAF5Kf4Udq+XxJnU=;
-        b=4Lx+Vl5y02n66WMbr+CT9JZAwLIwV8fvmkowZ1tgg3X78WHhsF5psDMmz5hlGJBos8
-         LQ0c4Oaahh/i4plsfvK02lJ6bJ76lKWm1ODAvNP/5qx0fSJH62TI7Fb+odwxErqlGY4l
-         BUbVn4b2JaCj12pURzcLgtNk8DShnADpuZ9eX5LvEOux1vUvMgUamo6oK6gj/WJ4D5xp
-         spE/ZJLK7WFVqWkx81dAlEE/K4k87aCk07/B891Ggoht85HGj4K35DmSlPi+TQpU7jRJ
-         EuxeKpDZojZSSeA+m29w1qUGqDjQRwE7IfzFs1huw2oOjlYCzxktFGODfoHOAvuUFH/7
-         6iJg==
-X-Gm-Message-State: AFqh2koKQ/ZU0ZEpmAnWKx0fsvmHB9xbIZkQOEnsHCe8W9dczX77tj3Q
-        qv8UakmejGNKppKISlSh2vWYQ8G9+O4vhlewq0DY3FWAgJ1JeHH1HhqNVRHuPMdOVoFv4gmsxyX
-        qLVeDwWXIdztVWkXGQH7dyOCU
-X-Received: by 2002:a05:622a:258c:b0:3ab:9ef8:f7e8 with SMTP id cj12-20020a05622a258c00b003ab9ef8f7e8mr61154356qtb.42.1673274661756;
-        Mon, 09 Jan 2023 06:31:01 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs2PjV6Le5BW95OcfwC5I0zXYI7ZeewrhxYZzbihODOMKdAREvC1S3JTRjDCftXyp1XLCxvtA==
-X-Received: by 2002:a05:622a:258c:b0:3ab:9ef8:f7e8 with SMTP id cj12-20020a05622a258c00b003ab9ef8f7e8mr61154334qtb.42.1673274661522;
-        Mon, 09 Jan 2023 06:31:01 -0800 (PST)
-Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac87ed7000000b0039467aadeb8sm4588461qtj.13.2023.01.09.06.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 06:31:01 -0800 (PST)
-Message-ID: <05df91ed071cfefa272bb8d2fb415222867bae32.camel@redhat.com>
-Subject: Re: [PATCH 02/11] filemap: Remove filemap_check_and_keep_errors()
-From:   Jeff Layton <jlayton@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Date:   Mon, 09 Jan 2023 09:31:00 -0500
-In-Reply-To: <Y7weinAVLt0uPRa8@casper.infradead.org>
-References: <20230109051823.480289-1-willy@infradead.org>
-         <20230109051823.480289-3-willy@infradead.org>
-         <36311b962209353333be4c8ceaf0e0823ef9f228.camel@redhat.com>
-         <Y7weinAVLt0uPRa8@casper.infradead.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 9 Jan 2023 09:31:43 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B8D654E;
+        Mon,  9 Jan 2023 06:31:42 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309DBCHM020698;
+        Mon, 9 Jan 2023 14:31:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=62HdukqYPMV75t04yPVpNh5jiURq5K9MvpCo7sCNlZQ=;
+ b=DPqgfHFGI7fDCt7lYbP6Y4HPfOF8lbJucZPfcY8xmkYAY0vRP0lMn3q60FsheMptK4gG
+ PHFi0ohHK2amoC4mGcO+E2fxFEDO280c1FFOQm5tdcM6untkk+jAqEhh52/X8iSuHDgD
+ mvPTCTy/Mz1XnRLTQawIAAq6V1NIhKa/7acHhiLEn7IMj0x+o97lefcJ6fGrAq8aEXlh
+ Nmf5T2MSLsgI8ypN7YM9OChs1XZNYvb2ykyBizvP6u3BXX2+1izS5cYe0p3V2y8x3h1n
+ 49v7oEhXaXsUUhnYcF217swIOgHx8ZLntACp1BI6O92yQLu1z7A3If+mNDzSdv5stwvv aA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my0yab96j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 14:31:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309EVVj6007219
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 Jan 2023 14:31:31 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 9 Jan 2023 06:31:28 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V0 0/1] bootconfig: Increase size and node limit of bootconfig for DCC support
+Date:   Mon, 9 Jan 2023 20:01:04 +0530
+Message-ID: <cover.1673261071.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: c3wHp8IzG8SPi5K7vnZ1EoFFWxLyIkAo
+X-Proofpoint-ORIG-GUID: c3wHp8IzG8SPi5K7vnZ1EoFFWxLyIkAo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_08,2023-01-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=550 adultscore=0
+ malwarescore=0 clxscore=1011 phishscore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 impostorscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301090104
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-09 at 14:02 +0000, Matthew Wilcox wrote:
-> On Mon, Jan 09, 2023 at 08:48:49AM -0500, Jeff Layton wrote:
-> > On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
-> > > Convert both callers to use the "new" errseq infrastructure.
-> >=20
-> > I looked at making this sort of change across the board alongside the
-> > original wb_err patches, but I backed off at the time.
-> >=20
-> > With the above patch, this function will no longer report a writeback
-> > error that occurs before the sample. Given that writeback can happen at
-> > any time, that seemed like it might be an undesirable change, and I
-> > didn't follow through.
-> >=20
-> > It is true that the existing flag-based code may miss errors too, if
-> > multiple tasks are test_and_clear'ing the bits, but I think the above i=
-s
-> > even more likely to happen, esp. under memory pressure.
-> >=20
-> > To do this right, we probably need to look at these callers and have
-> > them track a long-term errseq_t "since" value before they ever dirty th=
-e
-> > pages, and then continually check-and-advance vs. that.
-> >=20
-> > For instance, the main caller of the above function is jbd2. Would it b=
-e
-> > reasonable to add in a new errseq_t value to the jnode for tracking
-> > errors?
->=20
-> Doesn't b4678df184b3 address this problem?  If nobody has seen the
-> error, we return 0 instead of the current value of wb_err, ensuring
-> that somebody always sees the error.
->=20
+The Data Capture and Compare(DCC) is a debugging tool that uses the bootconfig
+for configuring the register values during boot-time. Increased the max size
+and nodes supported by bootconfig to catre to the needs of the Data Capture and
+Compare Driver. Further details on DCC is available on the below links:-
 
-I was originally thinking no, but now I think you're correct.
+https://lore.kernel.org/linux-arm-kernel/20221228172825.r32vpphbdulaldvv@builder.lan/T/
 
-We do initialize the "since" value to 0 if an error has never been seen,
-so that (sort of) emulates the behavior of the existing AS_EIO/AS_ENOSPC
-flags.
+https://lore.kernel.org/linux-arm-kernel/cover.1673247689.git.quic_schowdhu@quicinc.com/
 
-It's still not quite as reliable as plumbing a "since" value through all
-of the callers (particularly in the case where there are multiple
-waiters), but maybe it's good enough here.
+Souradeep Chowdhury (1):
+  bootconfig: Increase max size of bootconfig from 32 KB to 256 KB for
+    DCC support
 
-I'll look over the rest of the set.
+ include/linux/bootconfig.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
 --
-Jeff Layton <jlayton@redhat.com>
+2.7.4
 
