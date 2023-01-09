@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D856623E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20FD6623E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjAILMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S231777AbjAILNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbjAILMq (ORCPT
+        with ESMTP id S234624AbjAILNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:12:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3DF14086;
-        Mon,  9 Jan 2023 03:12:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE93FB80DAB;
-        Mon,  9 Jan 2023 11:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090FBC433D2;
-        Mon,  9 Jan 2023 11:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673262763;
-        bh=zcY/YpmdAAMLoGt7bn8IulxIoZd2Ehm6U9GhZUL7mCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TIf5R75AM4F9gRfLd291j/ks3M0JEBdIwcmYkmZO+gGU5r91UhX4Qccn33YVhGhtq
-         5BW/U8gXl8grRv+KsZ0Ud7BRoXETBRNFJpr22a6KVWXlRjXB/6A0QX2EMIBWB8szyB
-         T2rCGnAMzqFsFgO2pd/mvd+1Jl+d/QJ/eGqPNypRnRiU1J12X+6ydEYV9jXsGGlUa8
-         a58SBnjB76rg6ceoR+s78YGwLLSJxQZpXc4GSx0Vuut76oG5PhvCRsen9jIJEdZBNS
-         0Fa0oivxdFUYld7t2c0exaWpdx1C8B9kQlwnfX0HZ+GnAvP6Z37wzQq/kqn76S8mYG
-         GjCcAOvf1ybdg==
-Date:   Mon, 9 Jan 2023 19:12:32 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
- endpoint
-Message-ID: <20230109111232.GB94204@nchen-desktop>
-References: <20221222090934.145140-1-pawell@cadence.com>
- <20230102082021.GB40748@nchen-desktop>
- <BYAPR07MB53814954118F9A671DF5AD4DDDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
+        Mon, 9 Jan 2023 06:13:13 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D9C140C4;
+        Mon,  9 Jan 2023 03:13:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673262792; x=1704798792;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hdEsJAUiSPZYf7Xm2lSioHZsJcGS6XDIqya7eqaZHNQ=;
+  b=MxyQVS+fmsh6fE4C1iMnsuBYrTDVWRGT+6Ihbwq5YMNzgFn7r+I3kj/C
+   WJCDh2fDkr+uUtQcQmsXzgKD7gv3/S6+qgHYo9wDyelHAw6gLO3AlsWOX
+   5Irl7qhuR0k6DBNP2e9N3M4Gb1fLaPP3KCluKWdyEyu2FEUBnxNn7bgq5
+   aSRYcL40OWbC2nW7nKQbcjqjmvsb2veFnHJ2dHJ7soPjiDlzfYmcQ0wca
+   FmEJXAMB2mBaszxEP5whf12NxgDfhC8VKEsDcCnLuvY/uEuWHMlZP1+Vp
+   Fe2vWmt1ZeApkKBSD6o+i6ZVOCudwRf5Ke8NyN/tsrJG14bN/KsdroTJM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="321551712"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="321551712"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 03:13:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="649982329"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="649982329"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 09 Jan 2023 03:13:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pEq5N-006MLx-13;
+        Mon, 09 Jan 2023 13:13:01 +0200
+Date:   Mon, 9 Jan 2023 13:13:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     sam@ravnborg.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, Stephen Kitt <steve@sk2.org>
+Subject: Re: [PATCH 09/15] staging: fbtft: fb_ssd1351.c: Introduce
+ backlight_is_blank()
+Message-ID: <Y7v2vJtsWuhhiB2b@smile.fi.intel.com>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-9-1bd9bafb351f@ravnborg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR07MB53814954118F9A671DF5AD4DDDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230107-sam-video-backlight-drop-fb_blank-v1-9-1bd9bafb351f@ravnborg.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-09 05:47:49, Pawel Laszczak wrote:
+On Sat, Jan 07, 2023 at 07:26:23PM +0100, Sam Ravnborg via B4 Submission Endpoint wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
 > 
-> >
-> >On 22-12-22 04:09:34, Pawel Laszczak wrote:
-> >> Patch implements scatter gather support for isochronous endpoint.
-> >> This fix is forced by 'commit e81e7f9a0eb9
-> >> ("usb: gadget: uvc: add scatter gather support")'.
-> >> After this fix CDNSP driver stop working with UVC class.
-> >>
-> >> cc: <stable@vger.kernel.org>
-> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
-> >> USBSSP DRD Driver")
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
-> >>  drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
-> >>  drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
-> >>  3 files changed, 63 insertions(+), 53 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c
-> >> b/drivers/usb/cdns3/cdnsp-gadget.c
-> >> index a8640516c895..e81dca0e62a8 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> >> @@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct
-> >cdnsp_request *preq)
-> >>  		ret = cdnsp_queue_bulk_tx(pdev, preq);
-> >>  		break;
-> >>  	case USB_ENDPOINT_XFER_ISOC:
-> >> -		ret = cdnsp_queue_isoc_tx_prepare(pdev, preq);
-> >> +		ret = cdnsp_queue_isoc_tx(pdev, preq);
-> >>  	}
-> >>
-> >>  	if (ret)
-> >> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h
-> >> b/drivers/usb/cdns3/cdnsp-gadget.h
-> >> index f740fa6089d8..e1b5801fdddf 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> >> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> >> @@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct
-> >cdnsp_device *pdev,
-> >>  			       unsigned int ep_index);
-> >>  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct
-> >> cdnsp_request *preq);  int cdnsp_queue_bulk_tx(struct cdnsp_device
-> >> *pdev, struct cdnsp_request *preq); -int
-> >cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
-> >> -				struct cdnsp_request *preq);
-> >> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
-> >> +			struct cdnsp_request *preq);
-> >
-> >Why you re-name this function?
-> >
-> >Other changes are ok for me.
-> >
+> Avoiding direct access to backlight_properties.props.
 > 
-> The function cdnsp_queue_isoc_tx_prepare has been removed and replaced
-> with cdnsp_queue_isoc_tx.  I just add declaration of this function to header file.
-> Before change cdnsp_queue_isoc_tx was static function.
-> 
+> Access to the deprecated props.fb_blank replaced by backlight_is_blank().
+> Access to props.power is dropped - it was only used for debug.
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Stephen Kitt <steve@sk2.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Cc: linux-fbdev@vger.kernel.org
+
+Not sure why you have this (at least) explicitly mentioned as get_maintainer.pl
+can generate it and git send-email can utilize the script output...
+
+...
+
+> -	write_reg(par, 0xB5, on ? 0x03 : 0x02);
+> +	write_reg(par, 0xB5, !blank ? 0x03 : 0x02);
+
+Why not positive conditional?
+
+	write_reg(par, 0xB5, blank ? 0x02 : 0x03);
 
 -- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Peter Chen
+
