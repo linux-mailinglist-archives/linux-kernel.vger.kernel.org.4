@@ -2,104 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D0E66342F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE90066343F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbjAIWnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S235571AbjAIWqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbjAIWnc (ORCPT
+        with ESMTP id S237536AbjAIWqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:43:32 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B0C633B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:43:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 9 Jan 2023 17:46:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2B1BE91;
+        Mon,  9 Jan 2023 14:46:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 14A455CDE8;
-        Mon,  9 Jan 2023 22:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673304210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZRxQ/OEFLF0ZRAZvAP4JUULIQr4b47/DWJewsV7EvkA=;
-        b=gEyfvrEbxDIojjwsD7bFN8ark6Q0Uc0+cfP1GvQynjWbVexuYzk47hX9t9+ze8mxZgRhbY
-        o3HTbTD1TNKDM1g/QqTp7KlMsL5wDIiQ5qfjBx9tMjitFacr3HTWMRzSpw6K+qtD5Hcfu9
-        TYbo5y4v0p56e/eLbJmE5Rrs9aTgN2I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673304210;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZRxQ/OEFLF0ZRAZvAP4JUULIQr4b47/DWJewsV7EvkA=;
-        b=23eoKFiydH8SfRTgiPg3A5UPTMW+IDbN62QPdF4SBlvW/+RZKIDYrHagHN1XvcszLE/Ks6
-        j/CIxX4qVis7XgCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3B5E13587;
-        Mon,  9 Jan 2023 22:43:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yqh5NpGYvGN5IQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 09 Jan 2023 22:43:29 +0000
-Message-ID: <f39c266c-9802-71a5-8f1c-2d0a1340f59f@suse.cz>
-Date:   Mon, 9 Jan 2023 23:43:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Linux 6.2-rc3
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
- <20230109174742.GA1191249@roeck-us.net>
- <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB91AB81085;
+        Mon,  9 Jan 2023 22:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520AAC433EF;
+        Mon,  9 Jan 2023 22:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1673304368;
+        bh=Smpr3DrhasTIUOdQUCkLW1n6OMxtHjQcAGkhZhSSagU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NrWnulaBpJswTJNHy51afCrsavlOnbtuYkpyeTJoDlBMYqgN/PeSkGKExpci/qM4d
+         WbVIfcvQBMqAan8/zukuIIu+2yZRT6exWCBTwZTobsdkdh/s1Hh1WFo5VfhgHYzcQG
+         3eOWgRys64FEGm9Cl9Ky5N+bwLQTBYBZ7fNjiufo=
+Date:   Mon, 9 Jan 2023 14:46:07 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Dan Carpenter <error27@gmail.com>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] bit_spinlock: Include <asm/processor.h>
+Message-Id: <20230109144607.02edd319f9b5e25ee774f9a5@linux-foundation.org>
+In-Reply-To: <8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr>
+References: <8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 23:18, Linus Torvalds wrote:
-> On Mon, Jan 9, 2023 at 11:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
->> include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
+On Sun,  8 Jan 2023 20:04:44 +0100 Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+
+> In an attempt to simplify some includes in <include/dcache.h>, it
+> appeared, when compiling fs/ecryptfs/dentry.c, that <linux/bit_spinlock.h>
+> was relying on other includes to get the definition of cpu_relax().
+> (see [1])
 > 
-> Ok, I guess we'll have to disable this gcc warning for this version
-> again. I don't think anybody figured out why it happens. We had
-> several people look at it (Kees, Vlastimil, Jaegeuk) and I think
-> everybody ended up going "tis looks like a compiler thing".
+> It broke on arc.
 > 
-> Does anybody remember - what was the compiler version again and what
-> do we need to disable?
+> Include <asm/processor.h> in <linux/bit_spinlock.h> to fix the issue.
+> This will help remove some un-needed includes from <include/dcache.h>.
+> 
+> [1]: https://lore.kernel.org/all/202301082130.LXMj5qkD-lkp@intel.com/
+> 
+> ...
+>
+> --- a/include/linux/bit_spinlock.h
+> +++ b/include/linux/bit_spinlock.h
+> @@ -2,6 +2,7 @@
+>  #ifndef __LINUX_BIT_SPINLOCK_H
+>  #define __LINUX_BIT_SPINLOCK_H
+>  
+> +#include <asm/processor.h>
+>  #include <linux/kernel.h>
+>  #include <linux/preempt.h>
+>  #include <linux/atomic.h>
 
-Guenter reported that "The problem is seen with gcc 11.3.0, but not with gcc
-12.2.0 nor with gcc 10.3.0."
-
-https://lore.kernel.org/all/20221227002941.GA2691687@roeck-us.net/
-
-Kees said it's -Warray-bounds, already disabled on gcc 12 for other reasons:
-
-https://lore.kernel.org/all/D8BDBF66-E44C-45D4-9758-BAAA4F0C1998@kernel.org/
-
+linux/processor.h would be preferable, rather than diving straight into asm/?
