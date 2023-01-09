@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1B1661BE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 02:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200D5661C0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 02:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbjAIBcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 20:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S233656AbjAIBnr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 8 Jan 2023 20:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjAIBcx (ORCPT
+        with ESMTP id S234071AbjAIBno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 20:32:53 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C7AB86E;
-        Sun,  8 Jan 2023 17:32:51 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NqxJs70Wzz4f3nTc;
-        Mon,  9 Jan 2023 09:32:45 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbC+brtjXdp4BQ--.42807S3;
-        Mon, 09 Jan 2023 09:32:48 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221227125502.541931-1-yukuai1@huaweicloud.com>
- <20221227125502.541931-2-yukuai1@huaweicloud.com>
- <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
- <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
- <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
- <7dcdaef3-65c1-8175-fea7-53076f39697f@huaweicloud.com>
- <Y7iCId3pnEnLqY8G@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <875eb43e-202d-5b81-0bff-ef0434358d99@huaweicloud.com>
-Date:   Mon, 9 Jan 2023 09:32:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 8 Jan 2023 20:43:44 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD1CDC3;
+        Sun,  8 Jan 2023 17:43:41 -0800 (PST)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 192.168.8.21
+        by mg.richtek.com with MailGates ESMTP Server V3.0(2730:0:AUTH_RELAY)
+        (envelope-from <prvs=1372DA5DC2=cy_huang@richtek.com>); Mon, 09 Jan 2023 09:43:39 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(16482:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Mon, 09 Jan 2023 09:34:54 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 9 Jan
+ 2023 09:34:53 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Mon, 9 Jan 2023 09:34:53 +0800
+From:   <cy_huang@richtek.com>
+To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <matthias.bgg@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <gene_chen@richtek.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        ChiYuan Huang <cy_huang@richtek.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] usb: typec: tcpm: Fix altmode re-registration causes sysfs create fail
+Date:   Mon, 9 Jan 2023 09:34:52 +0800
+Message-ID: <1673228092-27281-1-git-send-email-cy_huang@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-In-Reply-To: <Y7iCId3pnEnLqY8G@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbC+brtjXdp4BQ--.42807S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFyrCF4xXw1DCFy8tr4fZrb_yoW5Ww1rpF
-        WfK3W5urs2kr97KFnrK3W8WFyFvrZ8JFW5t393Wr9Iyr1Dur1IkrW7trZ8uFyrXFs3CF4S
-        vr4rAry8AF1DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-在 2023/01/07 4:18, Tejun Heo 写道:
-> On Fri, Jan 06, 2023 at 09:08:45AM +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2023/01/06 2:32, Tejun Heo 写道:
->>> On Thu, Jan 05, 2023 at 09:14:07AM +0800, Yu Kuai wrote:
->>>> 1) is related to blkg, while 2) is not, hence refcnting from blkg can't
->>>> fix the problem. refcnting from blkcg_policy_data should be ok, but I
->>>> see that bfq already has the similar refcnting, while other policy
->>>> doesn't require such refcnting.
->>>
->>> Hmm... taking a step back, wouldn't this be solved by moving the first part
->>> of ioc_pd_free() to pd_offline_fn()? The ordering is strictly defined there,
->>> right?
->>>
->>
->> Moving first part to pd_offline_fn() has some requirements, like what I
->> did in the other thread:
->>
->> iocg can be activated again after pd_offline_fn(), which is possible
->> because bio can be dispatched when cgroup is removed. I tried to avoid
->> that by:
->>
->> 1) dispatch all throttled bio io ioc_pd_offline()
->> 2) don't throttle bio after ioc_pd_offline()
->>
->> However, you already disagreed with that. 😔
-> 
-> Okay, I was completely wrong while I was replying to your original patch.
-> Should have looked at the code closer, my apologies.
-> 
-> What I missed is that pd_offline doesn't happen when the cgroup goes
-> offline. Please take a look at the following two commits:
-> 
->   59b57717fff8 ("blkcg: delay blkg destruction until after writeback has finished")
->   d866dbf61787 ("blkcg: rename blkcg->cgwb_refcnt to ->online_pin and always use it")
-> 
+There's the altmode re-registeration issue after data role
+swap (DR_SWAP).
 
-These two commits are applied for three years, I don't check the details
-yet but they seem can't guarantee that no io will be handled by
-rq_qos_throttle() after pd_offline_fn(), because I just reproduced this
-in another problem:
+Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
+can initiate the VDM command to get partner identity information.
 
-f02be9002c48 ("block, bfq: fix null pointer dereference in bfq_bio_bfqg()")
+For a USBPD 3.0 UFP device, it may already get the identity information
+from its port partner before DR_SWAP. If DR_SWAP send or receive at the
+mean time, 'send_discover' flag will be raised again. It causes discover
+identify action restart while entering ready state. And after all
+discover actions are done, the 'tcpm_register_altmodes' will be called.
+If old altmode is not unregistered, this sysfs create fail can be found.
 
-User thread can issue async io, and io can be throttled by
-blk-throttle(not writeback), then user thread can exit and cgroup can be
-removed before such io is dispatched to rq_qos_throttle.
+In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
+For UFP, the original altmodes keep registered.
 
-> After the above two commits, ->pd_offline_fn() is called only after all
-> possible writebacks are complete, so it shouldn't allow mass escapes to
-> root. With writebacks out of the picture, it might be that there can be no
-> further IOs once ->pd_offline_fn() is called too as there can be no tasks
-> left in it and no dirty pages, but best to confirm that.
-> 
-> So, yeah, the original approach you took should work although I'm not sure
-> the patches that you added to make offline blkg to bypass are necessary
-> (that also contributed to my assumption that there will be more IOs on those
-> blkg's). Have you seen more IOs coming down the pipeline after offline? If
-> so, can you dump some backtraces and see where they're coming from?
+This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
+must be called whatever the current data role is.
 
-Currently I'm sure such IOs can come from blk-throttle, and I'm not sure
-yet but I also suspect io_uring can do this.
+Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
+Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Since v2:
+1. Correct the mail sent from Richtek.
+2. Add 'Reviewed-by' tag.
 
-Thanks,
-Kuai
+---
+ drivers/usb/typec/tcpm/tcpm.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 904c7b4..59b366b 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
+                tcpm_set_state(port, ready_state(port), 0);
+                break;
+        case DR_SWAP_CHANGE_DR:
+-               if (port->data_role == TYPEC_HOST) {
+-                       tcpm_unregister_altmodes(port);
++               tcpm_unregister_altmodes(port);
++               if (port->data_role == TYPEC_HOST)
+                        tcpm_set_roles(port, true, port->pwr_role,
+                                       TYPEC_DEVICE);
+-               } else {
++               else
+                        tcpm_set_roles(port, true, port->pwr_role,
+                                       TYPEC_HOST);
+-               }
+                tcpm_ams_finish(port);
+                tcpm_set_state(port, ready_state(port), 0);
+                break;
+--
+2.7.4
+
+************* Email Confidentiality Notice ********************
+
+The information contained in this e-mail message (including any attachments) may be confidential, proprietary, privileged, or otherwise exempt from disclosure under applicable laws. It is intended to be conveyed only to the designated recipient(s). Any use, dissemination, distribution, printing, retaining or copying of this e-mail (including its attachments) by unintended recipient(s) is strictly prohibited and may be unlawful. If you are not an intended recipient of this e-mail, or believe that you have received this e-mail in error, please notify the sender immediately (by replying to this e-mail), delete any and all copies of this e-mail (including any attachments) from your system, and do not disclose the content of this e-mail to any other person. Thank you!
