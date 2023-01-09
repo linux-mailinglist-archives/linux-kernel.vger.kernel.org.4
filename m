@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6672B66238E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0B5662392
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjAIK70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S233946AbjAIK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjAIK7U (ORCPT
+        with ESMTP id S233331AbjAIK7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:59:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1DAF5AD;
-        Mon,  9 Jan 2023 02:59:18 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 656897690D;
-        Mon,  9 Jan 2023 10:59:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673261957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0zum01+6W6CWGMuMAoT/HPm/pZWcmXb0ZmN9Mhpgb7I=;
-        b=ymj96arAyGY+TaDCybETNaeMAySXQp5KaSrVNcO0/OpY+kQw5rdon1sjJB7tKOPbOyxBwd
-        A2CoKC/TqexuuhGvp62eh3K/FkSGbUpPtWfJM7Q8WOHWgpjlmaSUOJRn9OKafa1k8qdnjW
-        t4yKDvi7JUiI9afyU16poZuHMUoIIU4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673261957;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0zum01+6W6CWGMuMAoT/HPm/pZWcmXb0ZmN9Mhpgb7I=;
-        b=i8nH3Nw8dN1tGgWZlu3bylvucdc8gG2H7zcFWPr66gE2yEASNbya0Ohs/HqWFhRbPegPeF
-        LQGbI2DPoix2hhAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 561CC134AD;
-        Mon,  9 Jan 2023 10:59:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 337/FIXzu2ORLwAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 10:59:17 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D8AE9A0749; Mon,  9 Jan 2023 11:59:16 +0100 (CET)
-Date:   Mon, 9 Jan 2023 11:59:16 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
- blk-throtl
-Message-ID: <20230109105916.jvnhjdseqkwejmws@quack3>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <20230106153813.4ttyuikzaagkk2sc@quack3>
- <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
+        Mon, 9 Jan 2023 05:59:46 -0500
+Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCC911A34
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:59:45 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx302.security-mail.net (Postfix) with ESMTP id CC3481C3E747
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:59:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1673261983;
+        bh=lZNxzYbAnagx6z12Q0AJlRyEnCWYJIFN1CJf3QiJ9cw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=KN+m9mG2IN1tfOCcjhQygAKqIp8wrOXKTVntJupgLIrBwXwv+SVq/Jp7haWMK5AYs
+         4F5IFehbC3pV8vC05z+xuudMPWM0itYe1WGQP3sXUBTzw0fTqNzdCkPrbO+1eME8Ox
+         QRpyOKjuYwXRBN9w3Z++ibwvSIZjg004Pb7TxL0c=
+Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
+ (Postfix) with ESMTP id B375C1C3E72D; Mon,  9 Jan 2023 11:59:43 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx302.security-mail.net (Postfix) with ESMTPS id 31A381C3E714; Mon,  9 Jan
+ 2023 11:59:43 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 0BAF527E03B7; Mon,  9 Jan 2023
+ 11:59:43 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id E5B9327E03F5; Mon,  9 Jan 2023 11:59:42 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ 79E2VWtOVg-y; Mon,  9 Jan 2023 11:59:42 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id CC76727E03B7; Mon,  9 Jan 2023
+ 11:59:42 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <618a.63bbf39f.30b29.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E5B9327E03F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1673261982;
+ bh=uuDY2mbHYs3yu9OaIiIFtuSPVXRl0RipgPQRVotTh0o=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=KUyvzl67xsozDcs6ytpSgQ+CiFCu/FWgl9sSdIxk8c2D93xVUCz9ZEgMsoGXz8ic2
+ yU92waLFBunuD57yvLzbWoiSImtrEHmf+E5TcWt23d8uLAltc65MSO4QR3MXql6Sm0
+ s08ioAlp5ggMoaf4AoNGellDykO7lo8qFd63UTjI=
+Date:   Mon, 9 Jan 2023 11:59:41 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Yann Sionneau <ysionneau@kalray.eu>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>
+Subject: Re: [PATCH 0/8] kvx documentation improv (was: Re: [RFC PATCH
+ 01/25] Documentation: kvx: Add basic documentation)
+Message-ID: <20230109105941.GA29108@tellis.lin.mbt.kalray.eu>
+References: <874jt7fqxt.fsf@meer.lwn.net>
+ <20230109095108.21229-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230109095108.21229-1-bagasdotme@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,68 +80,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi Bagas,
 
-On Fri 06-01-23 06:58:05, Tejun Heo wrote:
-> Hello,
+On Mon, Jan 09, 2023 at 04:51:00PM +0700, Bagas Sanjaya wrote:
+> Jonathan Corbet <corbet@lwn.net> writes:
+> >> Add some documentation for kvx arch and its Linux port.
+> >>
+> >> CC: Jonathan Corbet <corbet@lwn.net>
+> >> CC: linux-doc@vger.kernel.org
+> >> CC: linux-kernel@vger.kernel.org
+> >> Co-developed-by: Clement Leger <clement.leger@bootlin.com>
+> >> Signed-off-by: Clement Leger <clement.leger@bootlin.com>
+> >> Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+> >> Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+> >> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> >> ---
+> >>  Documentation/kvx/kvx-exceptions.txt | 246 ++++++++++++++++++++++++
+> >>  Documentation/kvx/kvx-iommu.txt      | 183 ++++++++++++++++++
+> >>  Documentation/kvx/kvx-mmu.txt        | 272 +++++++++++++++++++++++++++
+> >>  Documentation/kvx/kvx-smp.txt        |  36 ++++
+> >>  Documentation/kvx/kvx.txt            | 268 ++++++++++++++++++++++++++
+> >>  5 files changed, 1005 insertions(+)
+> >>  create mode 100644 Documentation/kvx/kvx-exceptions.txt
+> >>  create mode 100644 Documentation/kvx/kvx-iommu.txt
+> >>  create mode 100644 Documentation/kvx/kvx-mmu.txt
+> >>  create mode 100644 Documentation/kvx/kvx-smp.txt
+> >>  create mode 100644 Documentation/kvx/kvx.txt
+> >
+> >Please write this documentation in the RST format (you're 95% of the way
+> >there now) and incorporate into the kernel docs build.
 > 
-> On Fri, Jan 06, 2023 at 04:38:13PM +0100, Jan Kara wrote:
-> > Generally, problems are this are taken care of by IO schedulers. E.g. BFQ
-> > has quite a lot of logic exactly to reduce problems like this. Sync and
-> > async queues are one part of this logic inside BFQ (but there's more).
+> Here is the polished documentation in reST format. Yann, can you please
+> squash this series into your documentation patch?
+Thanks a lot, I've already converted the documentation to reST, but I will
+take a look at this series and see what I can apply.
+
+> Bagas Sanjaya (8):
+>   Documentation: kvx: Convert to reST
+>   Documentation: kvx: Wrap diagrams in literal code block
+>   Documentation: kvx: Fix lists
+>   Documentation: kvx: kvx-iommu: Use reST syntax for subsections
+>   Documentation: kvx: kvx-iommu: monospacize kvx iommu device tree path
+>   Documentation: kvx: Promote title headings
+>   Documentation: kvx: Use literal code block for command-line inputs
+>   Documentation: kvx: reword
 > 
-> With modern ssd's, even deadline's overhead is too high and a lot (but
-> clearly not all) of what the IO schedulers do are no longer necessary. I
-> don't see a good way back to elevators.
-
-Yeah, I agree there's no way back :). But actually I think a lot of the
-functionality of IO schedulers is not needed (by you ;)) only because the
-HW got performant enough and so some issues became less visible. And that
-is all fine but if you end up in a configuration where your cgroup's IO
-limits and IO demands are similar to how the old rotational disks were
-underprovisioned for the amount of IO needed to be done by the system
-(i.e., you can easily generate amount of IO that then takes minutes or tens
-of minutes for your IO subsystem to crunch through), you hit all the same
-problems IO schedulers were trying to solve again. And maybe these days we
-incline more towards the answer "buy more appropriate HW / buy higher
-limits from your infrastructure provider" but it is not like the original
-issues in such configurations disappeared.
-
-> > But given current architecture of the block layer IO schedulers are below
-> > throttling frameworks such as blk-throtl so they have no chance of
-> > influencing problems like this. So we are bound to reinvent the scheduling
-> > logic IO schedulers are already doing. That being said I don't have a good
-> > solution for this or architecture suggestion. Because implementing various
-> > throttling frameworks within IO schedulers is cumbersome (complex
-> > interactions) and generally the perfomance is too slow for some usecases.
-> > We've been there (that's why there's cgroup support in BFQ) and really
-> > the current architecture is much easier to reason about.
+>  Documentation/arch.rst               |   1 +
+>  Documentation/kvx/index.rst          |  12 ++
+>  Documentation/kvx/kvx-exceptions.rst | 258 +++++++++++++++++++++++
+>  Documentation/kvx/kvx-exceptions.txt | 246 ----------------------
+>  Documentation/kvx/kvx-iommu.rst      | 188 +++++++++++++++++
+>  Documentation/kvx/kvx-iommu.txt      | 183 -----------------
+>  Documentation/kvx/kvx-mmu.rst        | 294 +++++++++++++++++++++++++++
+>  Documentation/kvx/kvx-mmu.txt        | 272 -------------------------
+>  Documentation/kvx/kvx-smp.rst        |  36 ++++
+>  Documentation/kvx/kvx-smp.txt        |  36 ----
+>  Documentation/kvx/kvx.rst            | 269 ++++++++++++++++++++++++
+>  Documentation/kvx/kvx.txt            | 268 ------------------------
+>  12 files changed, 1058 insertions(+), 1005 deletions(-)
+>  create mode 100644 Documentation/kvx/index.rst
+>  create mode 100644 Documentation/kvx/kvx-exceptions.rst
+>  delete mode 100644 Documentation/kvx/kvx-exceptions.txt
+>  create mode 100644 Documentation/kvx/kvx-iommu.rst
+>  delete mode 100644 Documentation/kvx/kvx-iommu.txt
+>  create mode 100644 Documentation/kvx/kvx-mmu.rst
+>  delete mode 100644 Documentation/kvx/kvx-mmu.txt
+>  create mode 100644 Documentation/kvx/kvx-smp.rst
+>  delete mode 100644 Documentation/kvx/kvx-smp.txt
+>  create mode 100644 Documentation/kvx/kvx.rst
+>  delete mode 100644 Documentation/kvx/kvx.txt
 > 
-> Another layering problem w/ controlling from elevators is that that's after
-> request allocation and the issuer has already moved on. We used to have
-> per-cgroup rq pools but ripped that out, so it's pretty easy to cause severe
-> priority inversions by depleting the shared request pool, and the fact that
-> throttling takes place after the issuing task returned from issue path makes
-> propagating the throttling operation upwards more challenging too.
-
-Well, we do have .limit_depth IO scheduler callback these days so BFQ uses
-that to solve the problem of exhaustion of shared request pool but I agree
-it's a bit of a hack on the side.
-
-> At least in terms of cgroup control, the new bio based behavior is a lot
-> better. In the fb fleet, iocost is deployed on most (virtually all) of the
-> machines and we don't see issues with severe priority inversions.
-> Cross-cgroup control is pretty well controlled. Inside each cgroup, sync
-> writes aren't prioritized but nobody seems to be troubled by that.
+> -- 
+> An old man doll... just what I always wanted! - Clara
 > 
-> My bet is that inversion issues are a lot more severe with blk-throttle
-> because it's not work-conserving and not doing things like issue-as-root or
-> other measures to alleviate issues which can arise from inversions.
+> 
+> 
+> 
+> 
 
-Yes, I agree these features of blk-throttle make the problems much more
-likely to happen in practice.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+
