@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF260662420
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F88662426
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236558AbjAILWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S236533AbjAILX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjAILWd (ORCPT
+        with ESMTP id S234863AbjAILXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:22:33 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71FB183B9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 03:22:31 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso3433445wmq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 03:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FWFroMaGP/rBBuyi1aeBwg2KMoCRdSf/+bqqQ6WNoCs=;
-        b=wIwMz4aEz7zu6ICEJoSATuPYt+Y6KnYkMNIhgFcwEyDPypmi0i4g510B6VV5bHfRDU
-         +VN/xk6qJ4/z6MX+AfQncA3afAawQokugN/Fjg75abe9oZN4Z21fkTvaUqBKe0krEKUR
-         ai2Hnfmlmul81tvKUn7LiFAn/QBSOjzqabffwKKbaIA5UXrO3IXwJ1q1h57TBLh0c2qv
-         HvDEtCGodd56GOh1bcyJoExusqdIb6GG/jngXUZlEB0IPGAxedyyoNmCI9LZ8CFLTQiH
-         6i4VYCXKUIf4wbeUdc60VMbShyq3+WOO4BViuf+//h8KGKQ0Ayj/ti+EhwaqzTbwnQvd
-         zJMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FWFroMaGP/rBBuyi1aeBwg2KMoCRdSf/+bqqQ6WNoCs=;
-        b=bNlzp1zZOOeU0TzkCZ24S3M0U0/RvaIhGdCq+KI1Ocr40yIdZemRtaJ/Nl1JvFmzO5
-         rXmeFGhr4mRYK4q3eFWBM4afXE5KVfWUNtbt3Vh04E5N0ptlXJHEjY5GF+BBTJKe3ukt
-         OjWQ9mZc7mpcIGPe9CvCWV09KPwQxY2YsqZ8P7J8VA+6LlF6fQl7lmueH30AA7rYVp+O
-         tmNkxdSD63AGwlM/5JmnDgqijLvlSj7OuAKdbrjCotMZt1Jx1SVimyHSDZ/Lb+pmjENn
-         QS+Kf227Uek2x/pVAavC46JnlAdOogl4RlZORJrBUgwq5QM2JgtaUCuXpC5Y56J/hMqr
-         6Qpw==
-X-Gm-Message-State: AFqh2kqcNkIM3xH/KotvPGi1Xk5bZhVqxPG9QFYBvViS4nf3q2hx/o0+
-        jfm4Tgd89KftDNXyJ7MMRhiXPA==
-X-Google-Smtp-Source: AMrXdXuRNDCmsI3QcjFwVPHm42JW+QKz2uF51ApN1JzaQ4roCnwTpfVnYNvc+fryESftFAC4JkKqEA==
-X-Received: by 2002:a05:600c:4f11:b0:3d9:ee01:ae5b with SMTP id l17-20020a05600c4f1100b003d9ee01ae5bmr2930005wmq.12.1673263350532;
-        Mon, 09 Jan 2023 03:22:30 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n14-20020a05600c3b8e00b003b49bd61b19sm17456986wms.15.2023.01.09.03.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 03:22:30 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Mon, 9 Jan 2023 06:23:46 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C50C183B9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 03:23:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673263425; x=1704799425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9gowqygYGDzqp90nSSibk1ac34lVOOMu4128ilX28Mc=;
+  b=RbWuARBbNX2nDWFvRnmEH8xT1Ddwdzro+Ky2udFewXlAkwGz+GkYohOL
+   3kFU/FZXT3+afdz+K/eQyappX78hj/fmHOti1ODjbW4QKgF4xy1Clxppc
+   pkjG5Ecw9eaSziVL/i7DJgZoHOFtAqITqboDX/KHgObhpsBDJm7eeP8Kq
+   ploaPq2Blms/4JWiErjBiFoC7fpom+44b/dZBAl/IzqJBlVVHEJ16d8dG
+   /h89oN8uNmlGIgJjLMDWILQFZ5H13tvOJgcQmmZbMIgVDJfmiP93hCjj+
+   iIA65ipsQUvCc1YOM19+ajU9/YgGLmHBzdV18sbRg8oHFzmQBNK7kaU1V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="350063288"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="350063288"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 03:23:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="658562782"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="658562782"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jan 2023 03:23:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pEqFg-006Mal-2A;
+        Mon, 09 Jan 2023 13:23:40 +0200
+Date:   Mon, 9 Jan 2023 13:23:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sm8250: drop unused properties from tx-macro
-Date:   Mon,  9 Jan 2023 12:22:21 +0100
-Message-Id: <20230109112221.102473-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230109112221.102473-1-krzysztof.kozlowski@linaro.org>
-References: <20230109112221.102473-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] vsprintf: fix possible NULL pointer deref in vsnprintf()
+Message-ID: <Y7v5PEcP3LAcfTdk@smile.fi.intel.com>
+References: <1f4d159e-5382-3c75-bd5e-42337ecd8c28@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f4d159e-5382-3c75-bd5e-42337ecd8c28@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Neither qcom,sm8250-lpass-tx-macro bindings nor the driver use
-"clock-frequency" and address/size cells properties.
+On Fri, Jan 06, 2023 at 12:16:31AM +0300, Sergey Shtylyov wrote:
+> In vsnprintf() etc, C99 allows the 'buf' argument to be NULL when the
+> 'size' argument equals 0.  Let us treat NULL passed as if the 'buf'
+> argument pointed to a 0-sized buffer, so that we can avoid a NULL pointer
+> dereference and still return the # of characters that would be written if
+> 'buf' pointed to a valid buffer...
+> 
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+> analysis tool.
 
-  sm8250-mtp.dtb: txmacro@3220000: Unevaluated properties are not allowed ('clock-frequency', '#address-cells', '#size-cells' were unexpected)
+...
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> +	/*
+> +	 * C99 allows @buf to be NULL when @size is 0. We treat such NULL as if
+> +	 * @buf pointed to 0-sized buffer, so we can both avoid a NULL pointer
+> +	 * dereference and still return # of characters that would be written
+> +	 * if @buf pointed to a valid buffer...
+> +	 */
+> +	if (!buf)
+> +		size = 0;
 
----
+Do we have test cases for that?
 
-Changes since v1:
-1. Add tags.
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 3 ---
- 1 file changed, 3 deletions(-)
+And what's wrong to print "(null)" ? Have you checked if your patch makes any
+regressions to those cases?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index a58f51083715..ddd750591e8c 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2329,10 +2329,7 @@ txmacro: txmacro@3220000 {
- 			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
- 
- 			#clock-cells = <0>;
--			clock-frequency = <9600000>;
- 			clock-output-names = "mclk";
--			#address-cells = <2>;
--			#size-cells = <2>;
- 			#sound-dai-cells = <1>;
- 		};
- 
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
