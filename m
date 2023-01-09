@@ -2,145 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AF2662AAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE91662AAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbjAIP6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S237293AbjAIP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbjAIP6K (ORCPT
+        with ESMTP id S237268AbjAIP7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:58:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE273633B;
-        Mon,  9 Jan 2023 07:58:09 -0800 (PST)
-Received: from jupiter.universe (dyndsl-037-138-188-006.ewe-ip-backbone.de [37.138.188.6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 565E46602D75;
-        Mon,  9 Jan 2023 15:58:08 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673279888;
-        bh=Aod75PABF88FguFuDgtJL/UxZx5iDuWoEMSl5YvgmK8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xqr2GHPBK2xv6ccpILHlhMXqPRvaGMstVc7xFeTiLabw5G0mPYxwIfkH5UjtMxmXN
-         dNcdB4n2/ZV8Sbfi5jmw2Dyr/sulLNZ4lNs/SUvgD2CSGZ3OxUMHCMarEhrJBXYNl/
-         rFuvI9aUKr9rmTqDJRinsJT94ntQasy1r4wo2rN/aI78FQOPuo6opDgJ0DuT5Aj7s0
-         8l1pnl7A5d/4tdnSwEdLWd9ve5ut9vupOa9kxiUdaCuNDLthUgXvBBzOOxUdu5D2b3
-         uDsnLR2l0f9wkjRovbubV3IH0CENO1kj2EQbMku92+4tGfUpVIlKdNzu+wFc3fsBKT
-         aWO3loxF7+P8A==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 8F4E648011F; Mon,  9 Jan 2023 16:58:03 +0100 (CET)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv8 7/7] arm64: dts: rockchip: Add rock-5b board
-Date:   Mon,  9 Jan 2023 16:58:01 +0100
-Message-Id: <20230109155801.51642-8-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109155801.51642-1-sebastian.reichel@collabora.com>
-References: <20230109155801.51642-1-sebastian.reichel@collabora.com>
+        Mon, 9 Jan 2023 10:59:23 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFAB3B902;
+        Mon,  9 Jan 2023 07:59:17 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id jl4so9964840plb.8;
+        Mon, 09 Jan 2023 07:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnaAG4YDJhYITmoc4JFALivyXUFRt7jauTm0mQYzMbQ=;
+        b=CrmUUFgEgmvDxgs5A/ywFQsggyIunQbSDeV8ufkm1vBRaa/INDWTY+EsCaw8oXK2/S
+         FlWVQQPAGncAry0fIZS3oV95zVShMeJ35dEndt4MBH7cH6D/KbzFXwTenGx0e4gN6pz3
+         ze1OWOZGTq5BQhKmGfiHESF7eX96nqM1a1Dymd78oGwSKFKxI6wdkpb4hOVqz6aSA6kF
+         PlnEEqn7IcEaiemhdsL8KC92Ngjv69jnXx2VCoh/tZuQNIWaVTAI2wXqRIdWIkiglgtU
+         fxTq+eUA7d359jNUK4fT4Js77L/+4nz7XNMiNxK21CARbh0+73CPEahjd+lySbtYVRUJ
+         /OVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnaAG4YDJhYITmoc4JFALivyXUFRt7jauTm0mQYzMbQ=;
+        b=REPESrHgwJh3g2adS3S3+5i/e4ETH4ASVGFfTOihynKUjt00rrz+YOI1wcThRkQA0E
+         Mit32a4pILvQnbUHV+gfZz3+ZFyaHQgeIsfzb15vFZ+jXfhfP3wfvitm1kFQtb9n84cV
+         gNzAHvzcpWybtAwrSDyLViJ7CBVnsBsLp30UFH22UqBKH4Gi6/0wcKhyOj2IwrWp9tvL
+         1EoJP3j77JZQuKzvn17qT5Ma8wIU8HD80tgIaKZ53cbiDZxQjL94GMRnfs2p1DZq22dn
+         egJDM0FOgxATGjs9tdzO+QRRW5oCv1UeT8xM+6l9Gpm2kngvwpB1dNNm3rKQV+mPAEdw
+         V/dw==
+X-Gm-Message-State: AFqh2komyn9eJZcNU3NcWhwTaFqLto7waOQlfkUUBSFhkpSK39WWoUSK
+        RUpbM0k7g0ThwRWPVYctM5WZrOaO4O7D+Bc62d4vnbufnZ0=
+X-Google-Smtp-Source: AMrXdXsIHcMFGh8C6JVsndP5O7Yb37EfmTQB1MHMl1BJsI+OTAQfZHN0Hpm0fEvZmMEB9rBptlXxKbpReH1BjBeDTsc=
+X-Received: by 2002:a17:90a:4311:b0:214:291f:87b5 with SMTP id
+ q17-20020a17090a431100b00214291f87b5mr5835174pjg.115.1673279956980; Mon, 09
+ Jan 2023 07:59:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221219052128.18190-1-zhouzhouyi@gmail.com> <Y7wN0TKU1jDyTZs5@lothringen>
+ <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Mon, 9 Jan 2023 23:59:05 +0800
+Message-ID: <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>, fweisbec@gmail.com,
+        tglx@linutronix.de, mingo@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christopher Obbard <chris.obbard@collabora.com>
-
-Add board file for the RK3588 Rock 5B board. This is a basic
-implementation which just brings up the eMMC and UART which is
-enough to successfully boot Linux.
-
-The ethernet controller is connected via PCIe so support will
-come in a follow-up patch.
-
-Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44 +++++++++++++++++++
- 2 files changed, 45 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 87a853435142..c5bdd0176ce0 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-rock-5b.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-new file mode 100644
-index 000000000000..d2f1e963ce06
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+
-+/dts-v1/;
-+
-+#include "rk3588.dtsi"
-+
-+/ {
-+	model = "Radxa ROCK 5 Model B";
-+	compatible = "radxa,rock-5b", "rockchip,rk3588";
-+
-+	aliases {
-+		mmc1 = &sdhci;
-+		serial2 = &uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial2:1500000n8";
-+	};
-+
-+	vcc5v0_sys: vcc5v0-sys-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+};
-+
-+&sdhci {
-+	bus-width = <8>;
-+	no-sdio;
-+	no-sd;
-+	non-removable;
-+	max-frequency = <200000000>;
-+	mmc-hs400-1_8v;
-+	mmc-hs400-enhanced-strobe;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	pinctrl-0 = <&uart2m0_xfer>;
-+	status = "okay";
-+};
--- 
-2.39.0
-
+On Mon, Jan 9, 2023 at 11:25 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Mon, Jan 09, 2023 at 01:51:29PM +0100, Frederic Weisbecker wrote:
+> > On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
+> > > mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
+> > > reported by KCSAN.
+> > >
+> > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > ---
+> > > During the rcutorture test on linux-next,
+> > > ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
+> > > following KCSAN BUG is reported:
+> > > [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
+> > > [   35.400593] ^M
+> > > [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
+> > > [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
+> > > [   35.407162]  do_idle+0xf3/0x2a0^M
+> > > [   35.408016]  cpu_startup_entry+0x15/0x20^M
+> > > [   35.409084]  start_secondary+0x8f/0x90^M
+> > > [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> > > [   35.411607] ^M
+> > > [   35.412042] no locks held by swapper/3/0.^M
+> > > [   35.413172] irq event stamp: 53048^M
+> > > [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
+> > > [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
+> > > [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > > [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > > [   35.423685] ^M
+> > > [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
+> > > [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
+> > > [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
+> > > [   35.428386]  do_idle+0xf3/0x2a0^M
+> > > [   35.429265]  cpu_startup_entry+0x15/0x20^M
+> > > [   35.430429]  rest_init+0x20c/0x210^M
+> > > [   35.431382]  arch_call_rest_init+0xe/0x10^M
+> > > [   35.432508]  start_kernel+0x544/0x600^M
+> > > [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> > >
+> > > fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+> >
+> > This has been discussed before with passion:
+> >
+> > http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
+> >
+> > To me data_race() would be more appropriate but that would need a changelog with
+> > proper analysis of the tick_do_timer_cpu state machine.
+>
+> Please also an analysis of why the compiler cannot do any destructive
+> optimizations in this case.  Maybe also comments.
+I want to try the analysis above, as a newbie I have taught myself
+LLVM for 3 years in my spare time ;-)
+>
+> > One more thing on my TODO list, but feel free to beat me at it :-)
+Please take your time ;-)   Please don't look my next possible email
+as a reminder ;-)
+>
+> I know that feeling!  ;-)
+>
+Thanx, Zhouyi
+>                                                         Thanx, Paul
