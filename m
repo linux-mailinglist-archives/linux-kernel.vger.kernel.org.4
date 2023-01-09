@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37026621FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2EE662203
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbjAIJrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S236452AbjAIJru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236533AbjAIJqP (ORCPT
+        with ESMTP id S234316AbjAIJrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:46:15 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1BD14D23
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:45:14 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so8539401wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:45:14 -0800 (PST)
+        Mon, 9 Jan 2023 04:47:01 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272665FC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:46:12 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id ay12-20020a05600c1e0c00b003d9ea12bafcso3144726wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:46:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lLhH0B+uL7u8FwbJcnA84uIuHyq/9Ih7+fgHG/d+w/g=;
-        b=U/h+91bn+r91+v1YTW1nvU4AvAAw8s6Tk2cgo4doYUseV/Bpu0rMpft+Vd9LPM0gxz
-         5ohKV0lwD8VU3mmrlDRbttFGt47lR55lUefIlsgAxmIy/NigXmj1CIvn9C1LKYlMlW/C
-         TYv3fERgIl3xTwlbQ7vsBaUo0CJGtENI9dO5SDFVQL1+zWVxSpz7ffyOEiC0kmfEgjKL
-         pSr4f23TMg0SyxkZ+ZxkISWFKNv/HC4Hf7dPQi0gi2DM6an9hE9XLyCHsrAnx+EhoAmv
-         25MNiWxPhnLAKDCH+7hgOqOnoToUXta71Ewav8+oV+s8pzy10kQ7KO9Xq9tzlz08xuak
-         0KQQ==
+        bh=4d8EU52tZaN8G55CHlelx4PLWRYfjxDBelNszuGiEiw=;
+        b=KUmkgF4xkeZQoHP9ibXijiP/e/GILo50shdSk89ikoT8/BA8BO2EGXIvIF2WFNTV+1
+         JPFX5FIf486s8sSAAiZSDGqsmCE5fYyglloPO16ZWLgLcz+wygyNVbmsAl5nK/aTi7Q3
+         kM48oiHgk7u8v8Iq6hzvG97Fn9n2uhoUR0tdX8yl543nHBEmgsI/XZhLMyren44H9vVJ
+         cTymjKh5W2UmRTbiGF/TtGYayVDUVOyqHIkMH/agAZ5eQGiWh37YXp7BUQTPjyG6n5nF
+         FexF16UWSg8cyJqZbcwXTj2gjMtZ0nimcXGeqQqIFv6ZMg/oyC6j9ncT8qPzoyysDPdc
+         XuIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLhH0B+uL7u8FwbJcnA84uIuHyq/9Ih7+fgHG/d+w/g=;
-        b=6KMFlolA++rkIeIljK81BWdikQ1ezuwj95NrMf4m/LgayGdQsDLv5VNgTr45bwT86z
-         cPx7AGoJLJta2spzGk+Z32q/P1cMVDQ5H1jUZbr+KqmODj1Ir1t1Xf0fPy1SjntCskXO
-         lYY4+XjsBS38SSLhTS0pocNiufx9IwmGClNNa61p0suiWQHaG1FhaiVfxWN9XpfpPIE5
-         6AzSfcX/Psz8mqHf/3Z+qNWQehn5znRYNI/PM9ioTr3uGt1wDLSTCiUjGQi7N3ticwDR
-         aX1s2TqkOvSF9fo7y6tG04dIRXVC5OhcBBGoLeB6BdryXK9SlYY68UJ/XZ0095B78ypx
-         xKCw==
-X-Gm-Message-State: AFqh2kqEns5A4J4LoUrfMuvvkuyAzaOrZg+fyUtiN+grzY5VYI6hzsLW
-        D5bR1Du4qAQ6yKuq4BaKs24M1w==
-X-Google-Smtp-Source: AMrXdXsNwwIJlURsNnzcw8mgN/L8ukGjkVQPEV1pXW7YTj9pGd9SrJeJnJMo3fMmM8r37up3DG8GMg==
-X-Received: by 2002:a05:600c:687:b0:3cf:e7c8:494 with SMTP id a7-20020a05600c068700b003cfe7c80494mr45806546wmn.29.1673257512932;
-        Mon, 09 Jan 2023 01:45:12 -0800 (PST)
+        bh=4d8EU52tZaN8G55CHlelx4PLWRYfjxDBelNszuGiEiw=;
+        b=rWgifaoGOHb9ygFGFX/XVTwcZg6NMQR4ZEyX6gvMbLRrrens04+cLy8/BOhoBHW/En
+         xad9tHXJCm/M+1h+dXhhmCzK+zWuOCAeuae59O/aC6+6TG1FBrPjGCrSqqNEFZ8lU4wy
+         LdiRxx+H/lW6PtuC4HJLZcPD2DSMI/yjbipDtvC2k6mKbD4fToowGhOmH69/bzo+zpN/
+         iWoatBzjXv6nqHThL494eV9HpYv8EzALzSsxvLeGnfiP8Alvp38b1N94sZPsF4Smy84V
+         cA8vXGSIwRauD4SCU6hkOGSb7Uwsplhvh5UBBcrmIRH7KyHi41YOt3zKy2T75eGhqpVh
+         BYyw==
+X-Gm-Message-State: AFqh2koWl3C7H7JOgzc0+hYLG9l4HhMrkQz2dnsfKyaQoM+ZVinqCKGw
+        jWwvPMCdbJuKTqMFoQaINYH4AA==
+X-Google-Smtp-Source: AMrXdXsst/5w9cMBLN5E3W/1t7/92DmGAnG7/U8umolo0ZIPW0BiFLAxDkZ52kTSEB1g43ZxaWdssA==
+X-Received: by 2002:a05:600c:1d20:b0:3d2:2aaf:316 with SMTP id l32-20020a05600c1d2000b003d22aaf0316mr46167223wms.36.1673257571331;
+        Mon, 09 Jan 2023 01:46:11 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05600c444800b003c21ba7d7d6sm11313513wmn.44.2023.01.09.01.45.11
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d5186000000b002bbddb89c71sm4219198wrv.67.2023.01.09.01.46.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 01:45:12 -0800 (PST)
-Message-ID: <e706b0b9-6b2f-7b0d-fdd1-e66bd3d6c736@linaro.org>
-Date:   Mon, 9 Jan 2023 10:45:10 +0100
+        Mon, 09 Jan 2023 01:46:10 -0800 (PST)
+Message-ID: <fae25e1c-c485-af1c-ae13-1a9e443d932b@linaro.org>
+Date:   Mon, 9 Jan 2023 10:46:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/7] dt-bindings: display/msm: document the SM8550 DSI
- PHY
+Subject: Re: [PATCH v2 2/7] dt-bindings: display/msm: document DPU on SM8550
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Rob Clark <robdclark@gmail.com>,
@@ -71,9 +70,9 @@ Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230103-topic-sm8550-upstream-mdss-dsi-v2-0-87f1c16d7635@linaro.org>
- <20230103-topic-sm8550-upstream-mdss-dsi-v2-1-87f1c16d7635@linaro.org>
+ <20230103-topic-sm8550-upstream-mdss-dsi-v2-2-87f1c16d7635@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v2-1-87f1c16d7635@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v2-2-87f1c16d7635@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,12 +85,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 09/01/2023 10:26, Neil Armstrong wrote:
-> Document the SM8550 DSI PHY which is very close from the 7nm
-> and 5nm DSI PHYs found in earlier platforms.
+> Document the DPU hardware found on the Qualcomm SM8550 platform.
 > 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/display/msm/qcom,sm8550-dpu.yaml      | 134 +++++++++++++++++++++
+>  1 file changed, 134 insertions(+)
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
