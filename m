@@ -2,227 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E5D663297
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8447C66329B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238205AbjAIVSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S238224AbjAIVSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238182AbjAIVRg (ORCPT
+        with ESMTP id S238213AbjAIVRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:17:36 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F8F15804;
-        Mon,  9 Jan 2023 13:15:46 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id i15so14574079edf.2;
-        Mon, 09 Jan 2023 13:15:46 -0800 (PST)
+        Mon, 9 Jan 2023 16:17:41 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8281A13E20
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:16:15 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d17so9623470wrs.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:16:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5boNUO8wPWpy3o+MgKdh6wUcOP724f9MQl+BiJzFcxg=;
-        b=l4LQLVbxa7LMDYQrOp5Vg8ZlaqlAzwr+5f/+pAmTV8N7w90wDY7Yvj5tGhpq6QYmqq
-         wKspBE/OzEsXqJEHX0VLvV51NN9YVPNppmLatyZ9fhpKvhfCAozDknu/PC4yIrT0JZvN
-         oetw+2H9YjlL5irC+cfdR0s2g2U7l//R4B1SxIm2uXsbhVs2ks5VtXZeUuh71bAHiVuM
-         VEVFiWkPUdeqLp3ummcE7PaFjpI0dg5tFLvv7rJDHEHQdtDJBBWQZRZDLStw4FPt+HXR
-         RnpN2Nhne1chUJoXNqS4uBteW5HpeNRY9b54twUneF6U7Rc2lHFYj9eNND4HowdUK6KC
-         3+oA==
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J9KM35Fv2Dw9JmJ+2t7GGA9jMoE7j/7O85W6URim/jg=;
+        b=jUHKr9R1sQwJJ2bJxAnapKyyeWwjbh0ONbLgUVCE3TuUCBEiAKy24tFJxSxhrS04oE
+         1pSA3H6dh/OY00v7xUleL9fx9CNo5u1hHUFeGOdx/9GOaARQDKglqB0LosYGGysuZP2A
+         Ui7TFTmuyIvjIl3kJ0xumIr94MUKJLZb7rFkih9v2xYi0G7aIJpHzeos75blvPUOLW7w
+         da1Hu4JZdKjqM4YcqlHqV0FRsAgOc3PIVh6IGWzHxDNBexNUHnKkYIHMY/Rppd/PI6Uv
+         Uve+ynbBFDpRLFtrcLQr2ZQfruqmfREKhqmKmXL4VwdGZKl0Y/zsS7kxK3LSfTir9e+h
+         Igow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5boNUO8wPWpy3o+MgKdh6wUcOP724f9MQl+BiJzFcxg=;
-        b=l4mBVbv9kT1zD8ISs5XRT+3BxUlYhVuVpOWIpV0auooPzkPJFaDYQgSTIcZAjxMFA4
-         rJvYyqfKR6nm22NZ0bn0g8muSWtvFoV368bUjL/HrTcIgPUKGYr/qpMBuK9Re6OzQ305
-         DFhiDSR99Q90y8l4s1HrfX++kdo/93tNEe6xDtNu0op3tsawX4hrBKjwh+KIuMZGBKof
-         wyXBCQT3r2vDnRpPOZolqr8fszaNedLmBGB6MwddJFtTWieC5T72aaOYBKBxU6jfTBHb
-         t/xsN7hoymFt1NJasGPG65F5MyMKoN+geqgFmlSXCHTzLt1fm0c1OPzvJ/X9NDtsFWZv
-         SNGw==
-X-Gm-Message-State: AFqh2krwKDtB0VyY9IHUAMq2yYUQwm5KwbxW+Nlde5zQp5H4FpwxRto0
-        nNnRZzqS2ZgM9ETAFJHw7is=
-X-Google-Smtp-Source: AMrXdXvxUEZrcagSn8YsZwORT0VcBoetfbuxxX40tCNoQzCh6fpyOtUU8OBJ4xH1dIjlE5lpgOaFEA==
-X-Received: by 2002:a05:6402:530d:b0:47e:f535:e9a0 with SMTP id eo13-20020a056402530d00b0047ef535e9a0mr55249701edb.24.1673298945121;
-        Mon, 09 Jan 2023 13:15:45 -0800 (PST)
-Received: from localhost.localdomain ([46.211.224.63])
-        by smtp.googlemail.com with ESMTPSA id ba6-20020a0564021ac600b0045cf4f72b04sm4143824edb.94.2023.01.09.13.15.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 13:15:44 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name,
-        pauk.denis@gmail.com, pehlm@pekholm.org, renedis@hotmail.com,
-        robert@swiecki.net, sahan.h.fernando@gmail.com,
-        sebastian.arnhold@posteo.de, sefoci9222@rerunway.com,
-        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org
-Subject: [PATCH v2 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards support
-Date:   Mon,  9 Jan 2023 23:15:08 +0200
-Message-Id: <20230109211508.4969-2-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109211508.4969-1-pauk.denis@gmail.com>
-References: <20230109211508.4969-1-pauk.denis@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J9KM35Fv2Dw9JmJ+2t7GGA9jMoE7j/7O85W6URim/jg=;
+        b=XWc2Q1gensWLKUQx7xVEdZsImCZanZwa7MfsKgKOJY0PWxOO8DIXKUpa0DW12rvemD
+         +1DzmF6guTmh1sDZ2dZy3uIAwZQTKYCQP7/NH835LInD8fXJUlY2q67RzQh+9241P05H
+         b+LKs9YWNk/dPwbvvXkx+rHQyH88SOFmQqNNZJA0+TcApA9Ij3qEwKS8pXt5lcZWs3Pc
+         nk4ymVwYEeE8Y4fjI8AZEvm2jjmFu2THy7+bmRI/2aMfIAd/chV6uX3gTu62TlkFHq19
+         uZkWefv5m5Bcu5/+FwF9EeLnw54q2SLX/bmPH4I8locpLJMYVej0Y2SdeDnwCfZL6ZZA
+         ZghA==
+X-Gm-Message-State: AFqh2kouUKlug7+8T+f35nol756Jyj7xTGav4F6bWA5aWs8+qJ1yLtst
+        wnZlkrz7EWEWDl6rbteh8dNn+Q==
+X-Google-Smtp-Source: AMrXdXv/cm6IaIy2SIh+NbQ31mBw1A15x3wThIGG/18avpBuj1g5CAbRI4qwwLVQyj0JSlJYYytNTA==
+X-Received: by 2002:a05:6000:383:b0:242:5a80:79b8 with SMTP id u3-20020a056000038300b002425a8079b8mr43660704wrf.20.1673298974073;
+        Mon, 09 Jan 2023 13:16:14 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id t10-20020a5d534a000000b00272c0767b4asm9430012wrv.109.2023.01.09.13.16.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 13:16:13 -0800 (PST)
+Message-ID: <fd00d15c-e131-c0c5-9836-36887e12b44f@arista.com>
+Date:   Mon, 9 Jan 2023 21:16:12 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/5] crypto/net/tcp: Use crypto_pool for TCP-MD5
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230103184257.118069-1-dima@arista.com>
+ <20230103184257.118069-4-dima@arista.com>
+ <20230106180526.6e65b54d@kernel.org>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20230106180526.6e65b54d@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as:
-  "EX-B660M-V5 PRO D4",
-  "PRIME B650-PLUS",
-  "PRIME B650M-A",
-  "PRIME B650M-A AX",
-  "PRIME B650M-A II",
-  "PRIME B650M-A WIFI",
-  "PRIME B650M-A WIFI II",
-  "PRIME B660M-A D4",
-  "PRIME B660M-A WIFI D4",
-  "PRIME X670-P",
-  "PRIME X670-P WIFI",
-  "PRIME X670E-PRO WIFI",
-  "Pro B660M-C-D4",
-  "ProArt B660-CREATOR D4",
-  "ProArt X670E-CREATOR WIFI",
-  "ROG CROSSHAIR X670E EXTREME",
-  "ROG CROSSHAIR X670E GENE",
-  "ROG CROSSHAIR X670E HERO",
-  "ROG MAXIMUS XIII EXTREME GLACIAL",
-  "ROG MAXIMUS Z690 EXTREME",
-  "ROG MAXIMUS Z690 EXTREME GLACIAL",
-  "ROG STRIX B650-A GAMING WIFI",
-  "ROG STRIX B650E-E GAMING WIFI",
-  "ROG STRIX B650E-F GAMING WIFI",
-  "ROG STRIX B650E-I GAMING WIFI",
-  "ROG STRIX B660-A GAMING WIFI D4",
-  "ROG STRIX B660-F GAMING WIFI",
-  "ROG STRIX B660-G GAMING WIFI",
-  "ROG STRIX B660-I GAMING WIFI",
-  "ROG STRIX X670E-A GAMING WIFI",
-  "ROG STRIX X670E-E GAMING WIFI",
-  "ROG STRIX X670E-F GAMING WIFI",
-  "ROG STRIX X670E-I GAMING WIFI",
-  "ROG STRIX Z590-A GAMING WIFI II",
-  "ROG STRIX Z690-A GAMING WIFI D4",
-  "TUF GAMING B650-PLUS",
-  "TUF GAMING B650-PLUS WIFI",
-  "TUF GAMING B650M-PLUS",
-  "TUF GAMING B650M-PLUS WIFI",
-  "TUF GAMING B660M-PLUS WIFI",
-  "TUF GAMING X670E-PLUS",
-  "TUF GAMING X670E-PLUS WIFI",
-  "TUF GAMING Z590-PLUS WIFI",
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On 1/7/23 02:05, Jakub Kicinski wrote:
+> On Tue,  3 Jan 2023 18:42:55 +0000 Dmitry Safonov wrote:
+>> Use crypto_pool API that was designed with tcp_md5sig_pool in mind.
+>> The conversion to use crypto_pool will allow:
+>> - to reuse ahash_request(s) for different users
+>> - to allocate only one per-CPU scratch buffer rather than a new one for
+>>   each user
+>> - to have a common API for net/ users that need ahash on RX/TX fast path
+> 
+>>  config TCP_MD5SIG
+>>  	bool "TCP: MD5 Signature Option support (RFC2385)"
+>> -	select CRYPTO
+>> +	select CRYPTO_POOL
+> 
+> Are you sure we don't need to select CRYPTO any more?
+> select does not resolve dependencies.
 
-This commit adds such boards to the monitoring list with new ACPI device
-UID.
+Yeah, stumbled into it when I was rebasing TCP-AO patches on the top:
+they select both and I think you're right that it still needs to select
+CRYPTO here as well (noticed only after sending v2).
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Tested-by: Jeroen Beerstra <jeroen@beerstra.org>
-Tested-by: Slawomir Stepien <sst@poczta.fm>
----
-Changes:
-v1: no changes
+> 
+>>  	select CRYPTO_MD5
+>>  	help
+>>  	  RFC2385 specifies a method of giving MD5 protection to TCP sessions.
+> 
+>> @@ -749,29 +746,27 @@ static int tcp_v6_md5_hash_skb(char *md5_hash,
+>>  		daddr = &ip6h->daddr;
+>>  	}
+>>  
+>> -	hp = tcp_get_md5sig_pool();
+>> -	if (!hp)
+>> +	if (crypto_pool_get(tcp_md5_crypto_pool_id, (struct crypto_pool *)&hp))
+> 
+> &hp.base ? To avoid the cast
 
- drivers/hwmon/nct6775-platform.c | 52 ++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+Oh, that's nice, will do!
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 1f7885af524e..784a3be38ee8 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -114,6 +114,7 @@ struct nct6775_sio_data {
- #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
- #define ASUSWMI_DEVICE_HID		"PNP0C14"
- #define ASUSWMI_DEVICE_UID		"ASUSWMI"
-+#define ASUSMSI_DEVICE_UID		"AsusMbSwInterface"
- 
- static struct acpi_device *asus_acpi_dev;
- 
-@@ -1102,6 +1103,52 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING Z490-PLUS (WI-FI)",
- };
- 
-+static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 PRO D4",
-+	"PRIME B650-PLUS",
-+	"PRIME B650M-A",
-+	"PRIME B650M-A AX",
-+	"PRIME B650M-A II",
-+	"PRIME B650M-A WIFI",
-+	"PRIME B650M-A WIFI II",
-+	"PRIME B660M-A D4",
-+	"PRIME B660M-A WIFI D4",
-+	"PRIME X670-P",
-+	"PRIME X670-P WIFI",
-+	"PRIME X670E-PRO WIFI",
-+	"Pro B660M-C-D4",
-+	"ProArt B660-CREATOR D4",
-+	"ProArt X670E-CREATOR WIFI",
-+	"ROG CROSSHAIR X670E EXTREME",
-+	"ROG CROSSHAIR X670E GENE",
-+	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS Z690 EXTREME",
-+	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG STRIX B650-A GAMING WIFI",
-+	"ROG STRIX B650E-E GAMING WIFI",
-+	"ROG STRIX B650E-F GAMING WIFI",
-+	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI D4",
-+	"ROG STRIX B660-F GAMING WIFI",
-+	"ROG STRIX B660-G GAMING WIFI",
-+	"ROG STRIX B660-I GAMING WIFI",
-+	"ROG STRIX X670E-A GAMING WIFI",
-+	"ROG STRIX X670E-E GAMING WIFI",
-+	"ROG STRIX X670E-F GAMING WIFI",
-+	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z690-A GAMING WIFI D4",
-+	"TUF GAMING B650-PLUS",
-+	"TUF GAMING B650-PLUS WIFI",
-+	"TUF GAMING B650M-PLUS",
-+	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660M-PLUS WIFI",
-+	"TUF GAMING X670E-PLUS",
-+	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS WIFI",
-+};
-+
- struct each_device_arg {
- 	struct acpi_device *adev;
- 	const char *match;
-@@ -1170,6 +1217,11 @@ static int __init sensors_nct6775_platform_init(void)
- 				   board_name);
- 		if (err >= 0)
- 			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
-+
-+		err = match_string(asus_msi_boards, ARRAY_SIZE(asus_msi_boards),
-+				   board_name);
-+		if (err >= 0)
-+			access = nct6775_determine_access(ASUSMSI_DEVICE_UID);
- 	}
- 
- 	/*
--- 
-2.39.0
-
+Thanks,
+          Dmitry
