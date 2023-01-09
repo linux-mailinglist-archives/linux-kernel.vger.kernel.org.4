@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6B9662911
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D43666292C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbjAIOwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S234733AbjAIOwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbjAIOwG (ORCPT
+        with ESMTP id S231310AbjAIOw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:52:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25AD373AA;
-        Mon,  9 Jan 2023 06:50:41 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309DLcBA020828;
-        Mon, 9 Jan 2023 14:50:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=FHx/pK7UbHd7cF/C7/sPVqB5iCoXCLVTjdEuHXQA9mg=;
- b=CiLnUYulcd3Y2FXk5Lj5WAh4KgxsfZcYKjxfCQ08zGWcNBqLvTSEqOgEDQKQGyTK9VcX
- BGDmbrW07oViNhu/TsJ6VkK+ta4f5V7BNRo4EWtEm/eFh+LFf/ru6aVuI3mqLsGu3+8L
- 1EcK6JeiyqXdsSeBXwcdasCFXOf6DXR86xRFvd4rkGU0ixTBA1w+QOZ52pMEe9ufLsqd
- tm+Zzg+56oLusXSwc+NJEXmkI1ZR3x+p+xdUEU+wsYY+yvVy1r136SZK8w1uvRkL9KeL
- qd6R2az87Gp5cPIrfzaX2GENftn2xDngAV8MgiFVKu/GpOSgaLc7db9STQK77mx5FT/n +Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjasrgbp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 14:50:40 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309EJob6023203;
-        Mon, 9 Jan 2023 14:50:39 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjasrgbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 14:50:39 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3096uNxd021763;
-        Mon, 9 Jan 2023 14:50:38 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3my0c6a78w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 14:50:38 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309EoYss48300328
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 14:50:34 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40FD120043;
-        Mon,  9 Jan 2023 14:50:34 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6C7020040;
-        Mon,  9 Jan 2023 14:50:33 +0000 (GMT)
-Received: from osiris (unknown [9.179.30.90])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon,  9 Jan 2023 14:50:33 +0000 (GMT)
-Date:   Mon, 9 Jan 2023 15:50:32 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: s390: interrupt: use READ_ONCE() before cmpxchg()
-Message-ID: <Y7wpuAArn1Al6c9v@osiris>
-References: <20230109125135.393784-1-hca@linux.ibm.com>
+        Mon, 9 Jan 2023 09:52:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B630725E1;
+        Mon,  9 Jan 2023 06:51:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 494A1B80DFB;
+        Mon,  9 Jan 2023 14:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77021C433EF;
+        Mon,  9 Jan 2023 14:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673275909;
+        bh=rtqlm7a55WTBEGFP7RFDOv4Gy1EqcDD3WhvBsTOHcTU=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=SNC5IayHplZ7eClBcJG5kR8lFBMJ2iqOylUBkV66SfusUKCYAXfGrvzLHM8dRslgJ
+         tD0aerVmciqu7QCBsQUSDbW5wy803BF3D2ggVKidzBKOfk3qIEQqKJ2GKoLKUrQTOB
+         kCJbK5G4sPiHIu8BuGZCfyrMfUALJwoXdInB6UnAMlXUWW8XDflkA5EUBNLR2gAkjo
+         RNNgwwRn+Axo41AphGA/yZkfkSEzdBPfMkiBfGZEQXHLISCvnC9TpdYPtchRE3rBOz
+         uGYp3/X9PMJCxt/UNj7WI0J58zIB/Y79asi+jFFv2fDnK5VW0iXXMXIh+AXlVbcx7H
+         cyO7X1/OpgEbw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221225115907.55250-1-krzysztof.kozlowski@linaro.org>
+References: <20221225115907.55250-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: qcom,lpass-wsa-macro: correct
+ clocks on SM8250
+Message-Id: <167327590621.170440.11249846867635800211.b4-ty@kernel.org>
+Date:   Mon, 09 Jan 2023 14:51:46 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109125135.393784-1-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: E0byUrtvdsaVDdFIqd8wf89HkzzhtxVg
-X-Proofpoint-ORIG-GUID: A517Jdb_YGqdvI4fVmwSzimZXdRCWZKs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_08,2023-01-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=623 clxscore=1015 spamscore=0 bulkscore=0
- suspectscore=0 priorityscore=1501 adultscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090105
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 01:51:35PM +0100, Heiko Carstens wrote:
-> Use READ_ONCE() before cmpxchg() to prevent that the compiler generates
-> code that fetches the to be compared old value several times from memory.
+On Sun, 25 Dec 2022 12:59:06 +0100, Krzysztof Kozlowski wrote:
+> SM8250 DTS uses additional "va" clock in WSA macro device node:
 > 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/kvm/interrupt.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>   sm8250-sony-xperia-edo-pdx203.dtb: codec@3240000: clock-names: ['mclk', 'npl', 'macro', 'dcodec', 'va', 'fsgen'] is too long
 > 
-> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-> index 1dae78deddf2..a3bf1b6a7962 100644
-> --- a/arch/s390/kvm/interrupt.c
-> +++ b/arch/s390/kvm/interrupt.c
-> @@ -83,8 +83,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
->  		struct esca_block *sca = vcpu->kvm->arch.sca;
->  		union esca_sigp_ctrl *sigp_ctrl =
->  			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
-> -		union esca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
-> +		union esca_sigp_ctrl new_val = {0};
->  
-> +		old_val = READ_ONCE(*sigp_ctrl);
+> 
 
-FWIW, Claudio pointed out that this doesn't even compile.
-Sending a new version - sorry about this!
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/2] ASoC: dt-bindings: qcom,lpass-wsa-macro: correct clocks on SM8250
+      commit: 69568267c5b624eaa86afcafbca1c4765f63e112
+[2/2] ASoC: dt-bindings: qcom,lpass-tx-macro: correct clocks on SC7280
+      commit: c9fb35f685b2f8a2ead98e3f1b249a1d4e9c040e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
