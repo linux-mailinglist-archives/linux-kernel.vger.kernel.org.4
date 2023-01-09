@@ -2,97 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6D6662BDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456EA662BDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjAIQ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S236916AbjAIQ4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237372AbjAIQ4I (ORCPT
+        with ESMTP id S237369AbjAIQ4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:56:08 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13843DBE6;
-        Mon,  9 Jan 2023 08:55:39 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309CcGuC004595;
-        Mon, 9 Jan 2023 17:55:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=YjT/bG+TMpRgFpOkWYXPKTVwULXuvHrBXEMuyi5xiqc=;
- b=69WzxP57UXXJoZhip+4l6/j5qNj6dTrnhgHgl+hnCgaA+2AHA52MuDXJsr83tU5eLXtF
- 7m8P2rjr6xxRzQmrrJ8bH9TPRDAKjm+HGXacET3auJHEeiiHoFzkhRl0iM7nLIGjZ7Ly
- 0GIK3zUCr8yZJSkFWBqjHnxR2b4TbepUeP5a6eJXNgBEcxsZ+HRkL6kwH2kSVkXV2l2H
- QWqocyVy/sKXsRp+qgxkFPfqpVUmzVmadPhMXBSEUqoY/BWPWREZ5EnV/t6gDKNbps2Q
- RI563mCn6M+DZ/VlP6bPtS6edNG1a3fY50JyTYMjB53pS6UszyffIGaOJWAPnfK0gvHC zA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3my0y6uhud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 17:55:27 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6C70A10002A;
-        Mon,  9 Jan 2023 17:55:27 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 64904226FDF;
-        Mon,  9 Jan 2023 17:55:27 +0100 (CET)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 9 Jan
- 2023 17:55:26 +0100
-Message-ID: <1712d4cf-3315-0d38-04ab-6b55d3f1d4b9@foss.st.com>
-Date:   Mon, 9 Jan 2023 17:55:26 +0100
+        Mon, 9 Jan 2023 11:56:07 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D2B3D9D6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:55:39 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id h7-20020a17090aa88700b00225f3e4c992so13456317pjq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 08:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=81sjJWzHO6Ovjo5Gl60AAk0+/2Zuzb6zOrT24WH6r3o=;
+        b=OOJuw8OWU9nGb+CL4TUgcpiaj0SA2J1CLUj7NLENcLFdDRo7NoHkTYncpkkO8iVYRl
+         74LR+OZkKxRfS5/+S70XDs2suGpDD6t9Hkh0kUhKuWlV9iwZpbsPPDe3G2gtcCd3m4nw
+         jkzOl8rELfTy/SlBdk23Ea03QIoTSoMfnf+EXS6eQOBKw7jDv0FTj3yFjQUvJjfapk4T
+         kf0Zy5ZqxRUUFZpsVxuA5H0Hw8apONfzLomEcmRWF/IHy93TJuSvzGiXQ8CJ/tb6x6h9
+         egX2evheI9vwF5TD/jWWy9FQg5kL0XyYYoEFICAoU2fjCkLhF9MUnLleCSPuBSDqBe0M
+         DX8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=81sjJWzHO6Ovjo5Gl60AAk0+/2Zuzb6zOrT24WH6r3o=;
+        b=OPvpzonJbRGcXons1Sa6CiplGGKmp1RvOL32NpDQBxKoasvqeA+AyqolL7/tRzjpjP
+         M080FJoIeSYyeu+cwQMm8ySSe9egyIx95O8Rc9QKMGzbT72L7C1NQcrvPKfaQlHawoAx
+         3rEW5/RbqgFpcwkRbLTrOEPAIbgaAMEMX7Hwkjt+o6Csra/kbvS1DDF27yMmfprXSPI2
+         ojVdFoWp+29iApVtXV/8ifLsCosR9RSVrEEPZccYBGUUGzlr7TMBYhroG+WnHlR67W3O
+         n0g/HgCo98i5HPZeYfyWcm9gWXVDfbh2wkEhHKQJERWhAN5OSAY3UgQoebTw9TS27J8D
+         Fqfw==
+X-Gm-Message-State: AFqh2kqB+eyvl4WEk30WyedNweO+JBhG0ubkyxchEGPIdyWLss1tIGR5
+        gQOrg1535mqXy+dRimYVi+sYhMcPUHVHdUEfkPZiAw==
+X-Google-Smtp-Source: AMrXdXsPdoZHVqBzLP7WRcXcNC4Xd6GTdeUcwaefhv8fy9Lwb6M6BmFfgkXiH/ADLsV/yr8LRaT3J6DHlJCmHzvZGPY=
+X-Received: by 2002:a17:902:82cb:b0:192:a04b:c624 with SMTP id
+ u11-20020a17090282cb00b00192a04bc624mr2581882plz.134.1673283338843; Mon, 09
+ Jan 2023 08:55:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/4] ARM: dts: add audio support on stm32mp131
-Content-Language: en-US
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118142006.479138-1-olivier.moysan@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20221118142006.479138-1-olivier.moysan@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_10,2023-01-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-63-michael.roth@amd.com>
+ <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com>
+In-Reply-To: <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Mon, 9 Jan 2023 08:55:27 -0800
+Message-ID: <CAAH4kHbhFezeY3D_qoMQBLuFzWNDQF2YLQ-FW_dp5itHShKUWw@mail.gmail.com>
+Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier
+> > +
+> > +static int snp_set_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> > +{
+> [...]
+>
+> Here we set the length to the page-aligned value, but we copy only
+> params.cert_len bytes.  If there are two subsequent
+> snp_set_instance_certs() calls where the second one has a shorter
+> length, we might "keep" some leftover bytes from the first call.
+>
+> Consider:
+> 1. snp_set_instance_certs(certs_addr point to "AAA...", certs_len=8192)
+> 2. snp_set_instance_certs(certs_addr point to "BBB...", certs_len=4097)
+>
+> If I understand correctly, on the second call we'll copy 4097 "BBB..."
+> bytes into the to_certs buffer, but length will be (4096 + PAGE_SIZE -
+> 1) & PAGE_MASK which will be 8192.
+>
+> Later when fetching the certs (for the extended report or in
+> snp_get_instance_certs()) the user will get a buffer of 8192 bytes
+> filled with 4097 BBBs and 4095 leftover AAAs.
+>
+> Maybe zero sev->snp_certs_data entirely before writing to it?
+>
 
-On 11/18/22 15:20, Olivier Moysan wrote:
-> Add SAI, I2S, SPDIFRX and DFSDM audio peripherals support for the
-> STM32MP13 SoC family.
-> 
-> Olivier Moysan (4):
->    ARM: dts: stm32: add i2s nodes on stm32mp131
->    ARM: dts: stm32: add sai nodes on stm32mp131
->    ARM: dts: stm32: add spdifrx node on stm32mp131
->    ARM: dts: stm32: add dfsdm node on stm32mp131
-> 
->   arch/arm/boot/dts/stm32mp131.dtsi | 149 ++++++++++++++++++++++++++++++
->   1 file changed, 149 insertions(+)
-> 
+Yes, I agree it should be zeroed, at least if the previous length is
+greater than the new length. Good catch.
 
-Series applied on stm32-next.
 
-Regards
-Alex
+> Related question (not only for this patch) regarding snp_certs_data
+> (host or per-instance): why is its size page-aligned at all? why is it
+> limited by 16KB or 20KB? If I understand correctly, for SNP, this buffer
+> is never sent to the PSP.
+>
+
+The buffer is meant to be copied into the guest driver following the
+GHCB extended guest request protocol. The data to copy back are
+expected to be in 4K page granularity.
+
+> [...]
+> >
+> > -#define SEV_FW_BLOB_MAX_SIZE 0x4000  /* 16KB */
+> > +#define SEV_FW_BLOB_MAX_SIZE 0x5000  /* 20KB */
+> >
+>
+> This has effects in drivers/crypto/ccp/sev-dev.c
+>                                                                (for
+> example in alloc_snp_host_map).  Is that OK?
+>
+
+No, this was a mistake of mine because I was using a bloated data
+encoding that needed 5 pages for the GUID table plus 4 small
+certificates. I've since fixed that in our user space code.
+We shouldn't change this size and instead wait for a better size
+negotiation protocol between the guest and host to avoid this awkward
+hard-coding.
+
+
+-- 
+-Dionna Glaze, PhD (she/her)
