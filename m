@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5AC662E52
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2B0662E4A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbjAISKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S237433AbjAISKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237262AbjAISI4 (ORCPT
+        with ESMTP id S237291AbjAISI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:08:56 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221D95C1C1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:08:15 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g13so14264342lfv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:08:15 -0800 (PST)
+        Mon, 9 Jan 2023 13:08:57 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1BC232;
+        Mon,  9 Jan 2023 10:08:40 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id q9so6444975pgq.5;
+        Mon, 09 Jan 2023 10:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e1JMPoTV80PEJefONcOYlms/hHbc5vj9vRLyRa7UBTM=;
-        b=wL3QGkdKztFOkWWeW09aqswuc2d3KrnalWesJnYDWz07wftez/OhOySylYmGPkbnXh
-         v+gY20wHq44rAdZct4rxh439oyw4yJuAueOvueAk6bY8iun/fOAbt/MARe9G5NPzfGgL
-         4OlPvd42d8ctkrUqp+QKrMsvRjiZ/SXnheyYzuhxaOhR5CBGqr5151o/HleYba9Exf1c
-         gi5uGiRwkOtiXoPM3b0QU4nlerMA8Qt8xcmGMhgwfwdz48FUhujTs86X/ugCe5paRsq0
-         j4yH6A6tf0gMlR7Y36vGYWcG70SOQH17nCHhSuvkuwO+pC+FLHKEzMXyM6Vesg7mLQIv
-         dUHA==
+        bh=v8mDl6z8HZB+9Kmvxhak2TbVtn9xL/oPkERHONVaK/o=;
+        b=IrAiD+WenjCOrXbXt8CHP0KM/kRGlzZglFdJYig8j5c+YduPyy214fU95mZg19YZkQ
+         6If8TiMTCLETa696jiUhr8lxUtbHqo/oWKanSDA1M81PLYUn5V8qOopxrztev4v2o+xS
+         V2WA8iphWw18eOMfI2BgQAfYq1ZX2nlK2k5EoWL9e5OUP6fgSnLqENq/CIg9Sh9q6iu4
+         vV+CoMLnAbgl8Fzj2B+BU+TrePgajPu1J04qyNvFN2hRraF72WvETFCxK7Xy32dwolKT
+         aKdW3jdopXXVKJ7gmLyeqSd2CfFnMBbrBjyC614BjE2lw+mf0XsK77jr5I5etdCJOh6A
+         0MHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1JMPoTV80PEJefONcOYlms/hHbc5vj9vRLyRa7UBTM=;
-        b=OyT40W8rBmb+rUFrptSWGHnIh7CZWktLXzTmyN76BamdGj8PAXc+nzMraDpZ6XkrLS
-         NIEk11ai+oo/17CSU1VuoLNE4LQDWtDAMBbShzvLJuPc8aGZ5Scg4UJ+JKTZOJAf92ur
-         veDdJejUxEMFr00ppesXTK2u+zbflYCdl9NDQB/fYIsxQzzgas3JzzSAQ4cx0fPzTAZa
-         MywUnn6H7jtx5Af+pYgC8lTVmSW81JVJj6padrME7HrMwSe/aoDYtkgcOrn6GFMxSO6k
-         YV+Vm8uIdi0iDAIZyIRE5hlbRB0QQaVKk3IQlvRxlrIkp9THV1z82YRVaEXN1O9HPWL6
-         pKTA==
-X-Gm-Message-State: AFqh2komLF4/amcBFq86RBmiQWp4yUsbYbIIkmpZGh4B+T3+O1GL+tDc
-        RRPN0XJ95Fv7T8aDJB9nqSqyaQ==
-X-Google-Smtp-Source: AMrXdXuHQ4Z4c3jNaPXxZMQVMkuAuL7LiQ/JV1NHaQswZ17QQXQ1WWKUQftP4wAWRoYpEIJgYWZPRA==
-X-Received: by 2002:a05:6512:2591:b0:4b5:7dd6:4df0 with SMTP id bf17-20020a056512259100b004b57dd64df0mr18516952lfb.32.1673287693455;
-        Mon, 09 Jan 2023 10:08:13 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056512118200b004a27d2ea029sm1731866lfr.172.2023.01.09.10.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:08:12 -0800 (PST)
-Message-ID: <7b1d8756-efd2-5dc5-a411-0b13b2de555a@linaro.org>
-Date:   Mon, 9 Jan 2023 19:08:09 +0100
+        bh=v8mDl6z8HZB+9Kmvxhak2TbVtn9xL/oPkERHONVaK/o=;
+        b=39JLb+tqVUa57D27OmnDZbbowm7WmniRk4DFjqrabzcND/jC4WaBCH6aWxDqv4+jbA
+         Vp4R5vMCgleg/XdASu0yCHqf4dQj0nJrUl3gKDcgeBs1CwNTwYZZMWYq90nawMIkC7xP
+         4qI6NmEadrTwLW5HjsH24LW+Jw6J4GVw/0SeDIimzw/puEHnPBCD0sPCIKP/Tv+ai/Lx
+         +WhJLpY8bXC/c/VREMoNjWivmQhAjyJbUyfTj+emHTqgzme/5f45IdUjlNNrYLe9UDvd
+         8qM+tqrJhtiE1RjUMnS0pu+UAqvunkARumdjpqqYXfiCc8IWGz7I/Yx0HAeJ4a78V6bo
+         XJbg==
+X-Gm-Message-State: AFqh2krUpwYnOZY/wPEu78WxcG0THPClhtXuRDE1u5VRzKkIJzKqq5gv
+        pjijonAvFdBWEtxaeSURZjA=
+X-Google-Smtp-Source: AMrXdXvF6SQqW4OIsHaOrTkEXKKQcWrsf8pD0JyZy4xDSSGlS0ZUbM9NQXxmWMDmJpbz+9pRCA2+1w==
+X-Received: by 2002:aa7:96f9:0:b0:582:7007:3fec with SMTP id i25-20020aa796f9000000b0058270073fecmr29248932pfq.11.1673287719766;
+        Mon, 09 Jan 2023 10:08:39 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 186-20020a6216c3000000b0057fec210d33sm5215812pfw.152.2023.01.09.10.08.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 10:08:39 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 9 Jan 2023 08:08:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     hanjinke <hanjinke.666@bytedance.com>
+Cc:     Jan Kara <jack@suse.cz>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
+ queues for blk-throtl
+Message-ID: <Y7xYJfRLSMYk9tj9@slm.duckdns.org>
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <20230105161854.GA1259@blackbody.suse.cz>
+ <20230106153813.4ttyuikzaagkk2sc@quack3>
+ <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
+ <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
+ <Y7hlX4T1UOmQHiGf@slm.duckdns.org>
+ <e499f088-8ed9-2e19-b2e5-efaa4f9738f0@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 11/18] arm64: defconfig: enable the pinctrl driver for
- Qualcomm SA8775P platforms
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-12-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230109174511.1740856-12-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e499f088-8ed9-2e19-b2e5-efaa4f9738f0@bytedance.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+On Sat, Jan 07, 2023 at 12:44:35PM +0800, hanjinke wrote:
+> For cost.model setting, We first use the tools iocost provided to test the
+> benchmark model parameters of different types of disks online, and then save
+> these benchmark parameters to a parametric Model Table. During the
+> deployment process, pull and set the corresponding model parameters
+> according to the type of disk.
+> 
+> The setting of cost.qos should be considered slightly more，we need to make
+> some compromises between overall disk throughput and io latency.
+> The average disk utilization of the entire disk on a specific business and
+> the RLA（if it is io sensitive） of key businesses will be taken as
+> important input considerations. The cost.qos will be dynamically fine-tuned
+> according to the health status monitoring of key businesses.
 
-On 9.01.2023 18:45, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Enable the Qualcomm SA8775P TLMM pinctrl and GPIO driver. It needs to be
-> built-in for UART to provide a console.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Ah, I see. Do you use the latency targets and min/max ranges or just fixate
+the vrate by setting min == max?
 
-Konrad
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index d5c938adbd2d..6c752b9a4565 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -555,6 +555,7 @@ CONFIG_PINCTRL_QCM2290=y
->  CONFIG_PINCTRL_QCS404=y
->  CONFIG_PINCTRL_QDF2XXX=y
->  CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
-> +CONFIG_PINCTRL_SA8775P=y
->  CONFIG_PINCTRL_SC7180=y
->  CONFIG_PINCTRL_SC7280=y
->  CONFIG_PINCTRL_SC8180X=y
+> For cost.weight setting, high-priority services  will gain greater
+> advantages through weight settings to deal with a large number of io
+> requests in a short period of time. It works fine as work-conservation
+> of iocost works well according to our observation.
+
+Glad to hear.
+
+> These practices can be done better and I look forward to your better
+> suggestions.
+
+It's still in progress but resctl-bench's iocost-tune benchmark is what
+we're starting to use:
+
+ https://github.com/facebookexperimental/resctl-demo/blob/main/resctl-bench/doc/iocost-tune.md
+
+The benchmark takes like 6 hours and what it does is probing the whole vrate
+range looking for behavior inflection points given the scenario of
+protecting a latency sensitive workload against memory leak. On completion,
+it provides several solutions based on the behavior observed.
+
+The benchmark is destructive (to the content on the target ssd) and can be
+tricky to set up. There's installable image to help setting up and running
+the benchmark:
+
+ https://github.com/iocost-benchmark/resctl-demo-image-recipe/actions
+
+The eventual goal is collecting these benchmark results in the following git
+repo:
+
+ https://github.com/iocost-benchmark/iocost-benchmarks
+
+which generates hwdb files describing all the found solution and make
+systemd apply the appropriate configuration on boot automatically.
+
+It's still all a work in progress but hopefully we should be able to
+configure iocost reasonably on boot on most SSDs.
+
+Thanks.
+
+-- 
+tejun
