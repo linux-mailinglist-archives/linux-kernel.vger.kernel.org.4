@@ -2,104 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10356629ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CDC6629B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237062AbjAIP3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S237205AbjAIPSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbjAIP3O (ORCPT
+        with ESMTP id S237373AbjAIPRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:29:14 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F77212;
-        Mon,  9 Jan 2023 07:29:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673278153; x=1704814153;
-  h=from:to:cc:subject:date:message-id;
-  bh=wva8vZRxBk1WM1WW4WpFbcoP5MmHOU8eLhwsXmsxR3Q=;
-  b=e73+XiHzh0fgyvqAOyfPe7h9I4NOvg+UXaug//snuBw/Z9zRLF9R5tr+
-   2y2S+mc+qQ5YLTuZ2ZmjTgZNgd/0GDeQvlKLcF9SHawiP44YhNfPpE2U3
-   1LXWnxceI0/EtdMxhPKAD8nvZPRv6vEuYbDU8XpflUKdQFliMcsPafsku
-   8pZOI/4sl6XW+28JDJUAVxuxdwsmZRkKfyFLDtztG2DlGrMXv5OTAyjc5
-   iGF/dg1C1r801RinBllbI088FJ0Oq+Te63d3tzETL4aWiPQ6MPwD4fsIL
-   Bw/ppg6aWVm8c3DJ4yL9+LI7RNaIyWSwH4CnUjAyTkPfmIDvLyKqpQHPN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="385201766"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="385201766"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 07:29:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="719960144"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="719960144"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jan 2023 07:29:12 -0800
-Received: from noorazur1-iLBPG12.png.intel.com (noorazur1-iLBPG12.png.intel.com [10.88.229.87])
-        by linux.intel.com (Postfix) with ESMTP id 50F405809A0;
-        Mon,  9 Jan 2023 07:29:07 -0800 (PST)
-From:   Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Noor Azura Ahmad Tarmizi 
-        <noor.azura.ahmad.tarmizi@linux.intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH net 1/1] net: stmmac: add aux timestamps fifo clearance wait
-Date:   Mon,  9 Jan 2023 23:15:46 +0800
-Message-Id: <20230109151546.26247-1-noor.azura.ahmad.tarmizi@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 9 Jan 2023 10:17:39 -0500
+Received: from outbound-smtp03.blacknight.com (outbound-smtp03.blacknight.com [81.17.249.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8269E1EEEE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:16:45 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp03.blacknight.com (Postfix) with ESMTPS id EA77EC0D20
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:16:43 +0000 (GMT)
+Received: (qmail 15870 invoked from network); 9 Jan 2023 15:16:43 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 9 Jan 2023 15:16:43 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Linux-MM <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 0/6 v2] Discard __GFP_ATOMIC
+Date:   Mon,  9 Jan 2023 15:16:24 +0000
+Message-Id: <20230109151631.24923-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add timeout polling wait for auxiliary timestamps snapshot FIFO clear bit
-(ATSFC) to clear. This is to ensure no residue fifo value is being read
-erroneously.
+Changelog since v1
+o Split one patch						(vbabka)
+o Improve OOM reserve handling					(vbabka)
+o Fix __GFP_RECLAIM vs __GFP_DIRECT_RECLAIM			(vbabka)
 
-Cc: <stable@vger.kernel.org> # 5.10.x
-Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Neil's patch has been residing in mm-unstable as commit 2fafb4fe8f7a
+("mm: discard __GFP_ATOMIC") for a long time and recently brought up
+again. Most recently, I was worried that __GFP_HIGH allocations could
+use high-order atomic reserves which is unintentional but there was no
+response so lets revisit -- this series reworks how min reserves are used,
+protects highorder reserves and then finishes with Neil's patch with very
+minor modifications so it fits on top.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-index fc06ddeac0d5..b4388ca8d211 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-@@ -210,7 +210,10 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
- 		}
- 		writel(acr_value, ptpaddr + PTP_ACR);
- 		mutex_unlock(&priv->aux_ts_lock);
--		ret = 0;
-+		/* wait for auxts fifo clear to finish */
-+		ret = readl_poll_timeout(ptpaddr + PTP_ACR, acr_value,
-+					 !(acr_value & PTP_ACR_ATSFC),
-+					 10, 10000);
- 		break;
- 
- 	default:
+There was a review discussion on renaming __GFP_DIRECT_RECLAIM to
+__GFP_ALLOW_BLOCKING but I didn't think it was that big an issue and is
+ortogonal to the removal of __GFP_ATOMIC.
+
+There were some concerns about how the gfp flags affect the min reserves
+but it never reached a solid conclusion so I made my own attempt.
+
+The series tries to iron out some of the details on how reserves are
+used. ALLOC_HIGH becomes ALLOC_MIN_RESERVE and ALLOC_HARDER becomes
+ALLOC_NON_BLOCK and documents how the reserves are affected. For example,
+ALLOC_NON_BLOCK (no direct reclaim) on its own allows 25% of the min reserve.
+ALLOC_MIN_RESERVE (__GFP_HIGH) allows 50% and both combined allows deeper
+access again. ALLOC_OOM allows access to 75%.
+
+High-order atomic allocations are explicitly handled with the caveat that
+no __GFP_ATOMIC flag means that any high-order allocation that specifies
+GFP_HIGH and cannot enter direct reclaim will be treated as if it was
+GFP_ATOMIC.
+
+ Documentation/mm/balance.rst   |   2 +-
+ drivers/iommu/tegra-smmu.c     |   4 +-
+ include/linux/gfp_types.h      |  12 ++--
+ include/trace/events/mmflags.h |   1 -
+ lib/test_printf.c              |   8 +--
+ mm/internal.h                  |  15 ++++-
+ mm/page_alloc.c                | 103 ++++++++++++++++++++-------------
+ tools/perf/builtin-kmem.c      |   1 -
+ 8 files changed, 86 insertions(+), 60 deletions(-)
+
 -- 
-2.17.1
+2.35.3
 
