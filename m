@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDB6661D64
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F4A661D52
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbjAIEEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 23:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S236710AbjAIEEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 23:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbjAIEED (ORCPT
+        with ESMTP id S236119AbjAIED6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 23:04:03 -0500
+        Sun, 8 Jan 2023 23:03:58 -0500
 Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F1D011821
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23FE9CE3B
         for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 20:03:52 -0800 (PST)
 Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
         by 156.147.23.52 with ESMTP; 9 Jan 2023 12:33:52 +0900
@@ -46,9 +46,9 @@ Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
         melissa.srw@gmail.com, hamohammed.sa@gmail.com,
         42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
         gwan-gyeong.mun@intel.com
-Subject: [PATCH RFC v7 09/23] dept: Apply sdt_might_sleep_weak() to swait
-Date:   Mon,  9 Jan 2023 12:33:37 +0900
-Message-Id: <1673235231-30302-10-git-send-email-byungchul.park@lge.com>
+Subject: [PATCH RFC v7 10/23] dept: Apply sdt_might_sleep_weak() to waitqueue wait
+Date:   Mon,  9 Jan 2023 12:33:38 +0900
+Message-Id: <1673235231-30302-11-git-send-email-byungchul.park@lge.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
 References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
@@ -61,39 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes Dept able to track dependencies by swaits, but weakly.
+Makes Dept able to track dependencies by waitqueue waits, but weakly.
 
 Signed-off-by: Byungchul Park <byungchul.park@lge.com>
 ---
- include/linux/swait.h | 3 +++
+ include/linux/wait.h | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/swait.h b/include/linux/swait.h
-index 6a8c22b..1304209 100644
---- a/include/linux/swait.h
-+++ b/include/linux/swait.h
-@@ -6,6 +6,7 @@
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index a0307b5..ede466c 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -7,6 +7,7 @@
+ #include <linux/list.h>
  #include <linux/stddef.h>
  #include <linux/spinlock.h>
- #include <linux/wait.h>
 +#include <linux/dept_sdt.h>
- #include <asm/current.h>
  
- /*
-@@ -161,6 +162,7 @@ static inline bool swq_has_sleeper(struct swait_queue_head *wq)
- 	struct swait_queue __wait;					\
- 	long __ret = ret;						\
- 									\
-+	sdt_might_sleep_weak(NULL);					\
- 	INIT_LIST_HEAD(&__wait.task_list);				\
- 	for (;;) {							\
- 		long __int = prepare_to_swait_event(&wq, &__wait, state);\
-@@ -176,6 +178,7 @@ static inline bool swq_has_sleeper(struct swait_queue_head *wq)
- 		cmd;							\
- 	}								\
- 	finish_swait(&wq, &__wait);					\
-+	sdt_might_sleep_finish();					\
- __out:	__ret;								\
+ #include <asm/current.h>
+ #include <uapi/linux/wait.h>
+@@ -303,6 +304,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 	struct wait_queue_entry __wq_entry;					\
+ 	long __ret = ret;	/* explicit shadow */				\
+ 										\
++	sdt_might_sleep_weak(NULL);						\
+ 	init_wait_entry(&__wq_entry, exclusive ? WQ_FLAG_EXCLUSIVE : 0);	\
+ 	for (;;) {								\
+ 		long __int = prepare_to_wait_event(&wq_head, &__wq_entry, state);\
+@@ -318,6 +320,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 		cmd;								\
+ 	}									\
+ 	finish_wait(&wq_head, &__wq_entry);					\
++	sdt_might_sleep_finish();						\
+ __out:	__ret;									\
  })
  
 -- 
