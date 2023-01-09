@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E446627E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21A76627EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237074AbjAIN7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S236536AbjAIN65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbjAIN62 (ORCPT
+        with ESMTP id S237225AbjAIN6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:58:28 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D66D138;
-        Mon,  9 Jan 2023 05:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673272707; x=1704808707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EFIeQp6uECf0+1f/Iuo156tsEA9puTtW3jNhyTO8xBc=;
-  b=OTXb1wVJqHKDeFxQ7Dc6ZOjw/nuy76QyWqm22+ijk8P7GUY58llzXbfD
-   WVMux/Wn24LcpLSMVkZA5G6g7o2J/0xXjaQgPzn/fepP3zVC8Z4lgr/No
-   JYKNL/2tM66syx5mzWTNntmo68A+mhZ4US1r5Kd0DIceWsOECb9mSo493
-   2yQduGCEriaB8YWHr9qfAM5GDpbh+/1X0UC45pzGIxAwUrWSz23gluFEo
-   1LqwnZMeZXjiEf49UVVFBXqOD24PYCZB53lrKtKw+D95rMnQ3ekdd1KjQ
-   Ytfe1gHkTNNq9cKq3fzIhOhXWW4z8pu48GUzslIk0IRsjkjbmUU0kM9WA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350089598"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="350089598"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 05:58:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="606614901"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="606614901"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 09 Jan 2023 05:58:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pEsfI-006VTV-1I;
-        Mon, 09 Jan 2023 15:58:16 +0200
-Date:   Mon, 9 Jan 2023 15:58:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
-Message-ID: <Y7wdePnmFx1XDGvB@smile.fi.intel.com>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
- <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
- <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
- <5173a16a-83c5-5cfe-f6ce-03e1c90e8790@ideasonboard.com>
- <Y7wc2lX8eGPITx30@smile.fi.intel.com>
+        Mon, 9 Jan 2023 08:58:38 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D109F25CD;
+        Mon,  9 Jan 2023 05:58:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80ABAAD7;
+        Mon,  9 Jan 2023 05:59:19 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A9AB63F23F;
+        Mon,  9 Jan 2023 05:58:35 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     catalin.marinas@arm.com, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mhiramat@kernel.org, ndesaulniers@google.com,
+        ojeda@kernel.org, peterz@infradead.org, rafael.j.wysocki@intel.com,
+        revest@chromium.org, robert.moore@intel.com, rostedt@goodmis.org,
+        will@kernel.org
+Subject: [PATCH 0/8] arm64/ftrace: Add support for DYNAMIC_FTRACE_WITH_CALL_OPS
+Date:   Mon,  9 Jan 2023 13:58:20 +0000
+Message-Id: <20230109135828.879136-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7wc2lX8eGPITx30@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 03:55:39PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 09, 2023 at 02:59:01PM +0200, Tomi Valkeinen wrote:
-> > On 09/01/2023 13:07, Andy Shevchenko wrote:
-> > > On Sun, Jan 08, 2023 at 06:06:34AM +0200, Laurent Pinchart wrote:
-> > > > On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
+This series adds a new DYNAMIC_FTRACE_WITH_CALL_OPS mechanism, and
+enables support for this on arm64. This significantly reduces the
+overhead of tracing when a callsite/tracee has a single associated
+tracer, avoids a number of issues that make it undesireably and
+infeasible to use dynamically-allocated trampolines (e.g. branch range
+limitations), and makes it possible to implement support for
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS in future.
 
-...
+The main idea is to give each ftrace callsite an associated pointer to
+an ftrace_ops. The architecture's ftrace_caller trampoline can recover
+the ops pointer and invoke ops->func from this without needing to use
+ftrace_ops_list_func, which has to iterate through all registered ops.
 
-> > > > > +	gc->of_node = priv->client->dev.of_node;
-> > > 
-> > > We don't have of_node anymore in gc. And if the parent device is set, you can
-> > > drop this line (it will work with older and newer kernels. Otherwise, use
-> > > fwnode.
-> > 
-> > What do you mean "we don't have of_node anymore"?
+To do this, we use -fpatchable-function-entry=M,N, there N NOPs are
+placed before the function entry point. On arm64 NOPs are always 4
+bytes, so by allocating 2 per-function NOPs, we have enaough space to
+place a 64-bit value. So that we can manipulate the pointer atomically,
+we need to align instrumented functions to at least 8 bytes.
 
-Just to add that you missed "gc" in the quote which is crucial to get
-what I meant.
+The first three patches enable this function alignment, requiring
+changes to the ACPICA Makefile, and working around cases where GCC drops
+alignment.
 
-> There is no of_node member of struct gpio_chip anymore. This will fail
-> to compile.
+The final four patches implement support for arm64. As noted in the
+final patch, this results in a significant reduction in overhead:
+
+  Before this patch:
+
+  Number of tracers     || Total time  | Per-call average time (ns)
+  Relevant | Irrelevant || (ns)        | Total        | Overhead
+  =========+============++=============+==============+============
+         0 |          0 ||      94,583 |         0.95 |           -
+         0 |          1 ||      93,709 |         0.94 |           -
+         0 |          2 ||      93,666 |         0.94 |           -
+         0 |         10 ||      93,709 |         0.94 |           -
+         0 |        100 ||      93,792 |         0.94 |           -
+  ---------+------------++-------------+--------------+------------
+         1 |          1 ||   6,467,833 |        64.68 |       63.73
+         1 |          2 ||   7,509,708 |        75.10 |       74.15
+         1 |         10 ||  23,786,792 |       237.87 |      236.92
+         1 |        100 || 106,432,500 |     1,064.43 |     1063.38
+  ---------+------------++-------------+--------------+------------
+         1 |          0 ||   1,431,875 |        14.32 |       13.37
+         2 |          0 ||   6,456,334 |        64.56 |       63.62
+        10 |          0 ||  22,717,000 |       227.17 |      226.22
+       100 |          0 || 103,293,667 |      1032.94 |     1031.99
+  ---------+------------++-------------+--------------+--------------
+
+  Note: per-call overhead is estiamated relative to the baseline case
+  with 0 relevant tracers and 0 irrelevant tracers.
+
+  After this patch
+
+  Number of tracers     || Total time  | Per-call average time (ns)
+  Relevant | Irrelevant || (ns)        | Total        | Overhead
+  =========+============++=============+==============+============
+         0 |          0 ||      94,541 |         0.95 |           -
+         0 |          1 ||      93,666 |         0.94 |           -
+         0 |          2 ||      93,709 |         0.94 |           -
+         0 |         10 ||      93,667 |         0.94 |           -
+         0 |        100 ||      93,792 |         0.94 |           -
+  ---------+------------++-------------+--------------+------------
+         1 |          1 ||     281,000 |         2.81 |        1.86
+         1 |          2 ||     281,042 |         2.81 |        1.87
+         1 |         10 ||     280,958 |         2.81 |        1.86
+         1 |        100 ||     281,250 |         2.81 |        1.87
+  ---------+------------++-------------+--------------+------------
+         1 |          0 ||     280,959 |         2.81 |        1.86
+         2 |          0 ||   6,502,708 |        65.03 |       64.08
+        10 |          0 ||  18,681,209 |       186.81 |      185.87
+       100 |          0 || 103,550,458 |     1,035.50 |     1034.56
+  ---------+------------++-------------+--------------+------------
+
+  Note: per-call overhead is estiamated relative to the baseline case
+  with 0 relevant tracers and 0 irrelevant tracers.
+
+Thanks,
+Mark.
+
+Mark Rutland (8):
+  Compiler attributes: GCC function alignment workarounds
+  ACPI: Don't build ACPICA with '-Os'
+  arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
+  ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
+  arm64: insn: Add helpers for BTI
+  arm64: patching: Add aarch64_insn_write_literal_u64()
+  arm64: ftrace: Update stale comment
+  arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
+
+ arch/arm64/Kconfig                  |   3 +
+ arch/arm64/Makefile                 |   5 +-
+ arch/arm64/include/asm/ftrace.h     |  15 +--
+ arch/arm64/include/asm/insn.h       |   1 +
+ arch/arm64/include/asm/linkage.h    |  10 +-
+ arch/arm64/include/asm/patching.h   |   2 +
+ arch/arm64/kernel/asm-offsets.c     |   4 +
+ arch/arm64/kernel/entry-ftrace.S    |  32 +++++-
+ arch/arm64/kernel/ftrace.c          | 158 +++++++++++++++++++++++++++-
+ arch/arm64/kernel/patching.c        |  17 +++
+ drivers/acpi/acpica/Makefile        |   2 +-
+ include/linux/compiler_attributes.h |  23 +++-
+ include/linux/ftrace.h              |  15 ++-
+ kernel/trace/Kconfig                |   7 ++
+ kernel/trace/ftrace.c               | 109 ++++++++++++++++++-
+ 15 files changed, 371 insertions(+), 32 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
