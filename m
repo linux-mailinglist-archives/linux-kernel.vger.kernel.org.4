@@ -2,211 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FC76625DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FB76625DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbjAIMvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S233985AbjAIMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjAIMvP (ORCPT
+        with ESMTP id S234182AbjAIMvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:51:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205C7B49
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673268578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LwhDO9hieIsVo3qlSVGIThrVfpxjel+wqnVT2UQVflA=;
-        b=LcCRh6FREiDYfVyvHVG9rL35uAzGu35xxTVvp9FF3AzsuZy7FP9rlgOpuipJItqjb7PpVJ
-        4gC2mFVsHB1/d5KV303uPCjuxKEcQtUAo7QUy1cWAEbynHOlyoViB5uEV8t6qHX4RYHywq
-        6KR//2XqHgeypSWXL8aM7/KguttydLU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-213-8ESDBqPiPE2lYi__J1m1ng-1; Mon, 09 Jan 2023 07:49:33 -0500
-X-MC-Unique: 8ESDBqPiPE2lYi__J1m1ng-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 9 Jan 2023 07:51:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A46369;
+        Mon,  9 Jan 2023 04:51:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8F7E1C07541;
-        Mon,  9 Jan 2023 12:49:32 +0000 (UTC)
-Received: from localhost (ovpn-12-124.pek2.redhat.com [10.72.12.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EA6022166B26;
-        Mon,  9 Jan 2023 12:49:31 +0000 (UTC)
-Date:   Mon, 9 Jan 2023 20:49:28 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
-        stephen.s.brennan@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v2 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y7wNWNr/0oxEhjZw@fedora>
-References: <20221217015435.73889-1-bhe@redhat.com>
- <20221217015435.73889-4-bhe@redhat.com>
- <Y52wsONH+u/h0nuj@lucifer>
- <Y7UyYDRnc663qzTs@MiWiFi-R3L-srv>
- <Y7XfoQgk3HHgK0+f@lucifer>
- <Y7uZeBj56VcnJhzJ@fedora>
- <Y7u+dQfq3ZbDcf/d@lucifer>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9254B80D6D;
+        Mon,  9 Jan 2023 12:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155F3C433D2;
+        Mon,  9 Jan 2023 12:51:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673268692;
+        bh=FLtPDF70FGfxYG+fPIQA1yKaLTx9bihKTRpDvvNDcIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pk11NsK0SySFIjt4dNC3ISnWFkbe6NQUX5iLw+RD8t+djc29Oe+x9Etl0zxqJzm54
+         uj/VrgIAWrIKMibFIjsd8T2MamtQlvZpBO855C1/kU6YhgQ9+axL8eoK6OjTItAuGY
+         tbmopaf0Kr2OLvlL5DvmaL6T4ef5TlwB825l8RpzeRi1AqLkDW20Gt343rk/R+4wpS
+         sXgPAQSREqH20pbWB602cn0W98UsZTtWi/m5zm8F0r7ZxCOhTQslt/WTkyA1cb93Vb
+         ndu3nV0HgIySwv/GrloC/3+LIrc9oB5ScjpJm5zuUhDO1PJAPh8p/RfXEiVIX96Apc
+         EV6fZB1rbZYfA==
+Date:   Mon, 9 Jan 2023 13:51:29 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
+        paulmck@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with
+ READ_ONCE/WRITE_ONCE
+Message-ID: <Y7wN0TKU1jDyTZs5@lothringen>
+References: <20221219052128.18190-1-zhouzhouyi@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7u+dQfq3ZbDcf/d@lucifer>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221219052128.18190-1-zhouzhouyi@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/23 at 07:12am, Lorenzo Stoakes wrote:
-> On Mon, Jan 09, 2023 at 12:35:04PM +0800, Baoquan He wrote:
-> > Sorry for late reply, just come back from vacation.
+On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
+> mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
+> reported by KCSAN.
 > 
-> Hope you had a great time! :)
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> ---
+> During the rcutorture test on linux-next,
+> ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
+> following KCSAN BUG is reported:
+> [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
+> [   35.400593] ^M
+> [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
+> [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
+> [   35.407162]  do_idle+0xf3/0x2a0^M
+> [   35.408016]  cpu_startup_entry+0x15/0x20^M
+> [   35.409084]  start_secondary+0x8f/0x90^M
+> [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> [   35.411607] ^M
+> [   35.412042] no locks held by swapper/3/0.^M
+> [   35.413172] irq event stamp: 53048^M
+> [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
+> [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
+> [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> [   35.423685] ^M
+> [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
+> [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
+> [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
+> [   35.428386]  do_idle+0xf3/0x2a0^M
+> [   35.429265]  cpu_startup_entry+0x15/0x20^M
+> [   35.430429]  rest_init+0x20c/0x210^M
+> [   35.431382]  arch_call_rest_init+0xe/0x10^M
+> [   35.432508]  start_kernel+0x544/0x600^M
+> [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> 
+> fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+
+This has been discussed before with passion:
+
+http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
+
+To me data_race() would be more appropriate but that would need a changelog with
+proper analysis of the tick_do_timer_cpu state machine.
+
+One more thing on my TODO list, but feel free to beat me at it :-)
 
 Thanks.
-
-> 
-> >
-> > Lei + mutt sounds like a good idea. I relied too much on mbsync in the
-> > past.
-> >
-> 
-> Yeah I'm finding it works well,
-> https://josefbacik.github.io/kernel/2021/10/18/lei-and-b4.html is a handy guide!
-
-Very helpful, will try.
-
-> 
-> [snip]
-> > > Maybe let me rephrase:-
-> > >
-> > > - We want to read `count` bytes from `addr` into `buf`
-> > > - We iterate over _used_ blocks, placing the start/end of each block in `rs`, `re`
-> > >   respectively.
-> > > - If we hit a block whose start address is above the one in which we are interested then:-
-> > >   - Place a zero byte in the buffer
-> > >   - Increment `addr` by 1 byte
-> > >   - Decrement the `count` by 1 byte
-> > >   - Carry on
-> > >
-> > > I am seriously confused as to why we do this? Surely we should be checking
-> > > whether the range [addr, addr + count) overlaps this block at all, and only then
-> > > copying the relevant region?
-> >
-> > I guessed this could be your concern, but not very sure. That
-> > code block is copied from vread(), and my considerations are:
-> > 1) We could starting read from any position of kcore file. /proc/kcore
-> > is a elf file logically, it's allowed to read from anywhere, right? We
-> > don't have to read the entire file always. So the vmap_block reading is
-> > not necessarily page aligned. It's very similar with the empty area
-> > filling in vread().
-> > 2) memset() is doing the byte by byte reading. We can
-> > change code as below. While we don't save the effort very much, and we
-> > need introduce an extra local variable to store the value of
-> > (start - end).
-> >
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index b054081aa66b..dce4a843a9e8 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -3576,6 +3576,15 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
-> > +		if (addr < start) {
-> > +			int num = min(count, (start - add));
-> > +			memset(buf, 0, count);
-> > +			count -= num;
-> > +			if (count == 0)
-> > +				break;
-> > +			buf -= num;
-> > +			addr -= num;
-> > +		}
-> >  		/*it could start reading from the middle of used region*/
-> >  		offset = offset_in_page(addr);
-> >  		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
-> >
-> 
-> The difference with vread() is that uses a while loop rather than an if clause
-> so operates over the whole region byte-by-byte, your original would only do this
-> for 1 byte so now things make a lot more sense!
-
-Oops, that 'if clause' is a code bug, I finally got your point until
-now, my dumb head.
-
-> 
-> This approach makes sense though I'd put the count == 0 check first and nit
-> 'add' should be 'addr'.
-> 
-> I am happy with either this or a while loop instead of an if which it seems is
-> what the original issue was!
-
-OK, I will think again which one is more appropriate.
-
-> 
-> > void *memset(void *s, int c, size_t count)
-> > {
-> >         char *xs = s;
-> >
-> >         while (count--)
-> >                 *xs++ = c;
-> >         return s;
-> > }
-> >
-> > >
-> > > It's the fact that blocks are at base page granularity but then this condition
-> > > is at byte granularity that is confusing to me (again it's _very_ possible I am
-> > > just being dumb here and missing something, just really want to understand this
-> > > better :)
-> >
-> > I like this kind of reviewing with careful checking and deep thinking.
-> > For above code block, I think it's a very great point. From my point of
-> > view, I like the memset version better, it's easier to understand. If we
-> > all agree, we can change it to take memset way. When I made patches,
-> > several issues related to patches were hovering in my mind at the same
-> > time, I did not consider this one so deeply.
-> >
-> 
-> Thanks :) I have a particular interest in vmalloc so am happy to dive in with
-> reviews here!
-> 
-> > >
-> > > > > > -		vm = va->vm;
-> > > > > > -		vaddr = (char *) vm->addr;
-> > > > > > -		if (addr >= vaddr + get_vm_area_size(vm))
-> > > > > > +		vaddr = (char *) va->va_start;
-> > > > > > +		size = flags ? va_size(va) : get_vm_area_size(vm);
-> > > > >
-> > > > > For example here, I feel that this ternary should be reversed and based on
-> > > > > whether vm is null, unles we expect vm to ever be non-null _and_ flags to be
-> > > > > set?
-> > > >
-> > > > Now only vm_map_ram area sets flags, all other types has vm not null.
-> > > > Since those temporary state, e.g vm==NULL, flags==0 case has been
-> > > > filtered out. Is below you suggested?
-> > > >
-> > > > 		size = (!vm&&flags)? va_size(va) : get_vm_area_size(vm);
-> > > > 		or
-> > > > 		size = (vm&&!flags)? get_vm_area_size(vm):va_size(va);
-> > > >
-> > >
-> > > Sorry I didn't phrase this very well, my point is that the key thing you're
-> > > relying on here is whether vm exists in order to use it so I simply meant:-
-> > >
-> > > size = vm ? get_vm_area_size(vm) : va_size(va);
-> > >
-> > > This just makes it really explicit that you need vm to be non-NULL, and you've
-> > > already done the flags check before so this should suffice.
-> >
-> > Sounds reasonable, I will copy above line you pasted. Thanks a lot.
-
-Thanks again for careful reviewing and great suggestions and findings.
-
