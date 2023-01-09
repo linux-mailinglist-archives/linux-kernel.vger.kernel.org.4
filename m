@@ -2,186 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3E5662539
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A9E66253C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbjAIMPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S237173AbjAIMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237193AbjAIMOm (ORCPT
+        with ESMTP id S237227AbjAIMPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:14:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC311A81C;
-        Mon,  9 Jan 2023 04:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=v24BERDCC4RQqnJo6tY3NjXwHdQxUjz76w0sCn1hN0s=; b=RVU2AE8iKiuhsgAoyx5dG/mc0d
-        90++PABn9zvVMjRpnqPOqCldq4sKv1pXC+pB5VI/V4ReF/xkTJXDzBaUrzxqb073MdOZbbn+Qbkpz
-        3IbOg16KTqP9Ei8XFlgRABKEtPDb1IJSqPQ+g3jy55ElX0RxxAa1iV1zwot3FrQA98tziyk+sOnOY
-        8uKhv2Ze67AijbLWvNIJCg8f9xU0DxuXg2BqR/RY0q4X7y7D9lKtT/PP37TAkh0LqADsDUtcNWcFk
-        ROD4AmU2GsUViN/mTtndNPqCkdxcgSP8yQ3DQO0nBv9xgXQ3v9tC20ueJVHTs53KoKndaqxKh23dY
-        gmJUSJqg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEr37-002G3g-Cu; Mon, 09 Jan 2023 12:14:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 894AA3005C9;
-        Mon,  9 Jan 2023 13:14:31 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 69868201ABB83; Mon,  9 Jan 2023 13:14:31 +0100 (CET)
-Date:   Mon, 9 Jan 2023 13:14:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in
- perf_prepare_sample()
-Message-ID: <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net>
-References: <20221229204101.1099430-1-namhyung@kernel.org>
- <20221229204101.1099430-2-namhyung@kernel.org>
+        Mon, 9 Jan 2023 07:15:21 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FDB1A825
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:15:20 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso3568212wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 04:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Sf2TZznzR94HwbxPhrrDg7FkzybRt5Em8Lc/blKdqH8=;
+        b=SzEGagKva5XOYlfYjF0turJTD/NqRAWhsxpnDTO8Bw/EzKXMjgL4qlfBv8D1TjmLyt
+         IBozLxYW4mOY10zCNAdNj46Ur/AMrhKmQZ9fZe6dOHH6EJxc1seHhu+qVUFWYk3Q9eOS
+         swgt02fhDMZYimDxUQ/rkescISOKQoKqMIP9HXwZ6jak84gktnrPCPPHaekZGxTdXiE3
+         w9RkSPxRzDdhN7pTTrYe5Uv/etW/xaLclLIybO0+bJHUZqFQFmECqsjUpkC6HgMIW/QM
+         SNF2meC7vaBtxQYWtXEYcRrb34LM18X3YSq9BhAYLFXKzrJA2782nSE+oY6j3MHnFMMZ
+         YyWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sf2TZznzR94HwbxPhrrDg7FkzybRt5Em8Lc/blKdqH8=;
+        b=fbubz8R/bUuDIXHTWW9KR6LW1XbkrMwpCCj3Ne2f9/U3FpwHqLbgLHRdWTDRSrj6vB
+         CLGkMrniNhgWByOFFLd33TW0cX0NIl4jzPTtuj3q9Zm2f2CbymrCjbFAfjUgp/RM5xEN
+         QMmu8rgO55CgZ8iEIZH+aEy4+pvRmV4IYhg28bxbfdU9xV1mBhJJPmtRpiZLOHcvFS5J
+         5KW++M0V/biCD8WH+rHhgn5OpzEk2pJNPlD3QZjQOlUnEgal7qgMfv8LV1ren2vFfqWZ
+         7OVTsq0/bDJ875pYh9o/y8fOznrDyHFwMEgSCgmpRwTfEyjj+cwwjDOpRDj/WJXHMxMz
+         JR/w==
+X-Gm-Message-State: AFqh2kpQZFXs43CAaTCNzGWZ0dH8SqLsG34c29AvY1jzTYUlu6W4tQhT
+        NKxv/U65O+iyknnc70WrTUubCg==
+X-Google-Smtp-Source: AMrXdXtmVMaoiczR9d03qwRGWbgZHDTNvXuMvAvIqtS2eVUgL38gXdUkMeGdBX/TO4oTGIKbhnIUkw==
+X-Received: by 2002:a05:600c:5022:b0:3c6:e61e:ae8c with SMTP id n34-20020a05600c502200b003c6e61eae8cmr56295366wmr.28.1673266518601;
+        Mon, 09 Jan 2023 04:15:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id az28-20020a05600c601c00b003cf57329221sm15656813wmb.14.2023.01.09.04.15.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 04:15:18 -0800 (PST)
+Message-ID: <4b7458ce-18cf-8222-b5c7-349e07dc6b87@linaro.org>
+Date:   Mon, 9 Jan 2023 13:15:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221229204101.1099430-2-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: panel: document the Visionox
+ VTDR6130 AMOLED DSI Panel bindings
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230103-topic-sm8550-upstream-vtdr6130-panel-v2-0-dd6200f47a76@linaro.org>
+ <20230103-topic-sm8550-upstream-vtdr6130-panel-v2-1-dd6200f47a76@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-vtdr6130-panel-v2-1-dd6200f47a76@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 12:41:00PM -0800, Namhyung Kim wrote:
-
-So I like the general idea; I just think it's turned into a bit of a
-mess. That is code is already overly branchy which is known to hurt
-performance, we should really try and not make it worse than absolutely
-needed.
-
->  kernel/events/core.c | 86 ++++++++++++++++++++++++++++++++------------
->  1 file changed, 63 insertions(+), 23 deletions(-)
+On 09/01/2023 09:49, Neil Armstrong wrote:
+> Document the 1080x2400 Visionox VTDR6130 AMOLED DSI Panel bindings.
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index eacc3702654d..70bff8a04583 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -7582,14 +7582,21 @@ void perf_prepare_sample(struct perf_event_header *header,
->  	filtered_sample_type = sample_type & ~data->sample_flags;
->  	__perf_event_header__init_id(header, data, event, filtered_sample_type);
->  
-> -	if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
-> -		data->ip = perf_instruction_pointer(regs);
-> +	if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
-> +		/* attr.sample_type may not have PERF_SAMPLE_IP */
 
-Right, but that shouldn't matter, IIRC its OK to have more bits set in
-data->sample_flags than we have set in attr.sample_type. It just means
-we have data available for sample types we're (possibly) not using.
+If there is going to be resend:
 
-That is, I think you can simply write this like:
+Subject: drop last, redundant "bindings".
 
-> +		if (!(data->sample_flags & PERF_SAMPLE_IP)) {
-> +			data->ip = perf_instruction_pointer(regs);
-> +			data->sample_flags |= PERF_SAMPLE_IP;
-> +		}
-> +	}
+Best regards,
+Krzysztof
 
-	if (filtered_sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
-		data->ip = perf_instruction_pointer(regs);
-		data->sample_flags |= PERF_SAMPLE_IP);
-	}
-
-	...
-
-	if (filtered_sample_type & PERF_SAMPLE_CODE_PAGE_SIZE) {
-		data->code_page_size = perf_get_page_size(data->ip);
-		data->sample_flags |= PERF_SAMPLE_CODE_PAGE_SIZE;
-	}
-
-Then after a single perf_prepare_sample() run we have:
-
-  pre			|	post
-  ----------------------------------------
-  0			|	0
-  IP			|	IP
-  CODE_PAGE_SIZE	|	IP|CODE_PAGE_SIZE
-  IP|CODE_PAGE_SIZE	|	IP|CODE_PAGE_SIZE
-
-So while data->sample_flags will have an extra bit set in the 3rd case,
-that will not affect perf_sample_outout() which only looks at data->type
-(== attr.sample_type).
-
-And since data->sample_flags will have both bits set, a second run will
-filter out both and avoid the extra work (except doing that will mess up
-the branch predictors).
-
-
->  	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
->  		int size = 1;
->  
-> -		if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
-> +		if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN) {
->  			data->callchain = perf_callchain(event, regs);
-> +			data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> +		}
->  
->  		size += data->callchain->nr;
->  
-
-This, why can't this be:
-
-	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN) {
-		data->callchain = perf_callchain(event, regs);
-		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-
-		header->size += (1 + data->callchain->nr) * sizeof(u64);
-	}
-
-I suppose this is because perf_event_header lives on the stack of the
-overflow handler and all that isn't available / relevant for the BPF
-thing.
-
-And we can't pull that out into anther function without adding yet
-another branch fest.
-
-However; inspired by your next patch; we can do something like so:
-
-	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN) {
-		data->callchain = perf_callchain(event, regs);
-		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-
-		data->size += (1 + data->callchain->nr) * sizeof(u64);
-	}
-
-And then have __perf_event_output() (or something thereabout) do:
-
-	perf_prepare_sample(data, event, regs);
-	perf_prepare_header(&header, data, event);
-	err = output_begin(&handle, data, event, header.size);
-	if (err)
-		goto exit;
-	perf_output_sample(&handle, &header, data, event);
-	perf_output_end(&handle);
-
-With perf_prepare_header() being something like:
-
-	header->type = PERF_RECORD_SAMPLE;
-	header->size = sizeof(*header) + event->header_size + data->size;
-	header->misc = perf_misc_flags(regs);
-	...
-
-Hmm ?
-
-(same for all the other sites)
