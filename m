@@ -2,119 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3005662DCE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F98F662D0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbjAIRnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S234827AbjAIRnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235012AbjAIRn2 (ORCPT
+        with ESMTP id S237319AbjAIRnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:43:28 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE91D1ADA8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:43:27 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id y5so6722946pfe.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 09:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSSXv+I+w/8fq5Yx5Ez6ORBTwPIwCfMMjmGhcpp+UqU=;
-        b=g0eGXd1q88kKO1UBdVGzjP/95p/jpiFOz1tlu9gArFeF2qE16G4bVRKZnTw+XZWtP+
-         EXrJCYtuU4eMsLsoIGwLHGE/k07Dndjexhtc4+89wiIh6t0htZq88FgfPeF2HiM+62gW
-         6bVYPLutu6hFNdoSRn3rQ3obSPWJsZ/DaHbp0ph0JiEXjk2KMis4Qd8AW9xA1OlPRfcO
-         IRE2Tydovrr2fE+hnvN0agTBvFC49yxzQWirTToKPy0kam/RY/O5O+6uTm/r2z8YrQ3h
-         YOdKyhwgMJMT55xd9yRJf6srnW5aApxQjTtPOI1niagvZTpis4FDOtgy/qD+Nl8IXzWT
-         vPfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GSSXv+I+w/8fq5Yx5Ez6ORBTwPIwCfMMjmGhcpp+UqU=;
-        b=4RkI0ecefLc3wHn8mNY4nTA9eCtdMpQP9OnIzGFJzlfhrX/vI16ygTUPvVOCguL28D
-         c2kgwJwOvVeQpGr5A/3Cog2cPuyncfNjjfSktVq8sk2tmHcjaW1JrV6mNF+pULCuxoY3
-         aSiedBJ68K3PSWTv39WTrGukkZcesaik2ixOz8gmup/o/KT5TQUM9b0grqLUb+FfRTQB
-         lmWHWnuqCuErm3A9legfSI2m+E9H8gf+QvXZ6c8Ac6pVvToCmSl7W93p0dZIN0yVSv1y
-         265yBty+ZuEq4gFs0FHet072uG07xcRAbEHCYAHmpuIeE5LBenRdNU6H1Kace/c+ad/4
-         kGTA==
-X-Gm-Message-State: AFqh2krKg87P7+IzKzBE4dtk1mi9Fb7lV9ae8DxZFpDVXxsYrd/kBg3A
-        SIf4r8uYrOkFgl49LF4Qs01SxA==
-X-Google-Smtp-Source: AMrXdXuahdX5fT5IrjPkz4RnJUA4Kk4OaigXHUxhSIcCKVvee6MrvxGtSvPNdBbAdchzeYDmGAb45w==
-X-Received: by 2002:aa7:9249:0:b0:576:9252:d06 with SMTP id 9-20020aa79249000000b0057692520d06mr740111pfp.0.1673286207259;
-        Mon, 09 Jan 2023 09:43:27 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id k197-20020a6284ce000000b00574b86040a4sm6350861pfd.3.2023.01.09.09.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 09:43:26 -0800 (PST)
-Date:   Mon, 9 Jan 2023 17:43:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH rcu 01/27] arch/x86: Remove "select SRCU"
-Message-ID: <Y7xSO2dW1sy21RVz@google.com>
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <20230105003813.1770367-1-paulmck@kernel.org>
+        Mon, 9 Jan 2023 12:43:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E663D1ADA8;
+        Mon,  9 Jan 2023 09:43:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A332EB80EBB;
+        Mon,  9 Jan 2023 17:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B43BC433EF;
+        Mon,  9 Jan 2023 17:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673286215;
+        bh=OusFUpHUgWztm0MPCMtNFsLIBDzi7S02luxqwtlv1DM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r1jT4Ppjc4S7ABOJSmqD/07hlwETehUj7z3PHaDFC8nK+au5Nz2vVgIbRQIuTOuCe
+         Mgr6IBPGbGEAENlmZvVzn1IEYwjUcDSySmgaghootojXndzO7meMzf74t9b7FuAm7N
+         BsMwR3PlFR9CGCVEWIAzmQE3UxwsEKW+aTH50uJKjuALl4ObPMpWUWchfU04dt5Bg+
+         1QUgnCwMmVpcfKu2HYB1heFjX1LxValNM6zmbYvgpfIjfhFZXaIH1Ue3apZh8ziIZY
+         sfTULc149f8XwQYxhqgv0qEvRAPiI4K+rdeD+xXIemmiYxqx1Y6JjAm5K6qCwu3z2p
+         GeSm1T76X0QBw==
+Date:   Mon, 9 Jan 2023 17:43:29 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y7xSQde3pzcOIu+X@google.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230105003813.1770367-1-paulmck@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023, Paul E. McKenney wrote:
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> Kconfig statements.
+On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
+
+> BMC type specific info is currently set by a switch/case block. The
+> size of this info is expected to grow as more dev types and features
+> are added which would have made the switch block bloaty.
 > 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: <x86@kernel.org>
-> Cc: <kvm@vger.kernel.org>
+> Store type specific info into struct and place them into .driver_data
+> instead because it makes things a bit cleaner.
+> 
+> The m10bmc_type enum can be dropped as the differentiation is now
+> fully handled by the platform info.
+> 
+> The info member of struct intel_m10bmc that is added here is not used
+> yet in this change but its addition logically still belongs to this
+> change. The CSR map change that comes after this change needs to have
+> the info member.
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
-
-...
-
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index fbeaa9ddef598..9306d99585188 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -46,7 +46,6 @@ config KVM
->  	select KVM_XFER_TO_GUEST_WORK
->  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->  	select KVM_VFIO
-> -	select SRCU
-
-Would it be too much trouble to bundle all of the KVM changes into a single patch?
-The SRCU requirement is a generic KVM requirement that's handled in the arch Kconfigs
-purely because of KVM's somewhat roundabout Kconfig setup.
-
->  	select INTERVAL_TREE
->  	select HAVE_KVM_PM_NOTIFIER if PM
->  	help
-> -- 
-> 2.31.1.189.g2e36527f23
+>  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
+>  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
+>  2 files changed, 36 insertions(+), 29 deletions(-)
 > 
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index 7e3319e5b22f..12c522c16d83 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -13,12 +13,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/spi/spi.h>
+>  
+> -enum m10bmc_type {
+> -	M10_N3000,
+> -	M10_D5005,
+> -	M10_N5010,
+> -};
+> -
+>  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+>  	{ .name = "d5005bmc-hwmon" },
+>  	{ .name = "d5005bmc-sec-update" }
+> @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+>  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  {
+>  	const struct spi_device_id *id = spi_get_device_id(spi);
+> +	const struct intel_m10bmc_platform_info *info;
+>  	struct device *dev = &spi->dev;
+> -	struct mfd_cell *cells;
+>  	struct intel_m10bmc *ddata;
+> -	int ret, n_cell;
+> +	int ret;
+>  
+>  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+>  	if (!ddata)
+>  		return -ENOMEM;
+>  
+> +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> +	ddata->info = info;
+
+Why are you keeping it?
+
+>  	ddata->dev = dev;
+>  
+>  	ddata->regmap =
+> @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  		return ret;
+>  	}
+>  
+> -	switch (id->driver_data) {
+> -	case M10_N3000:
+> -		cells = m10bmc_pacn3000_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> -		break;
+> -	case M10_D5005:
+> -		cells = m10bmc_d5005_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> -		break;
+> -	case M10_N5010:
+> -		cells = m10bmc_n5010_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> -		break;
+> -	default:
+> -		return -ENODEV;
+> -	}
+> -
+> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> +				   info->cells, info->n_cells,
+>  				   NULL, 0, NULL);
+>  	if (ret)
+>  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  	return ret;
+>  }
+>  
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+> +	.cells = m10bmc_pacn3000_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> +};
+
+Not seeing how adding a whole new structure and swapping out 4 lines to
+describe a device for a different 4 lines per device is better?
+
+I'm not necessarily against it.  Just seems like a bit of a pointless
+exercise.
+
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_d5005 = {
+> +	.cells = m10bmc_d5005_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
+> +};
+> +
+> +static const struct intel_m10bmc_platform_info m10bmc_spi_n5010 = {
+> +	.cells = m10bmc_n5010_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
+> +};
+> +
+>  static const struct spi_device_id m10bmc_spi_id[] = {
+> -	{ "m10-n3000", M10_N3000 },
+> -	{ "m10-d5005", M10_D5005 },
+> -	{ "m10-n5010", M10_N5010 },
+> +	{ "m10-n3000", (kernel_ulong_t)&m10bmc_spi_n3000 },
+> +	{ "m10-d5005", (kernel_ulong_t)&m10bmc_spi_d5005 },
+> +	{ "m10-n5010", (kernel_ulong_t)&m10bmc_spi_n5010 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index f0044b14136e..725b51ea4aee 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -118,14 +118,26 @@
+>  /* Address of 4KB inverted bit vector containing staging area FLASH count */
+>  #define STAGING_FLASH_COUNT	0x17ffb000
+>  
+> +/**
+> + * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
+> + * @cells: MFD cells
+> + * @n_cells: MFD cells ARRAY_SIZE()
+> + */
+> +struct intel_m10bmc_platform_info {
+> +	struct mfd_cell *cells;
+> +	int n_cells;
+> +};
+> +
+>  /**
+>   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+>   * @dev: this device
+>   * @regmap: the regmap used to access registers by m10bmc itself
+> + * @info: the platform information for MAX10 BMC
+>   */
+>  struct intel_m10bmc {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> +	const struct intel_m10bmc_platform_info *info;
+>  };
+>  
+>  /*
+> -- 
+> 2.30.2
+> 
+
+-- 
+Lee Jones [李琼斯]
