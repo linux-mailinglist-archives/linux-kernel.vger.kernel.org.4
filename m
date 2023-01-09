@@ -2,217 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66DA662116
+	by mail.lfdr.de (Postfix) with ESMTP id 623FE662115
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbjAIJL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S236879AbjAIJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236618AbjAIJKK (ORCPT
+        with ESMTP id S236907AbjAIJKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:10:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7D216584;
-        Mon,  9 Jan 2023 01:05:23 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:ad7f:4e82:9389:686f] (unknown [IPv6:2a01:e0a:120:3210:ad7f:4e82:9389:686f])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DBE1E6601F10;
-        Mon,  9 Jan 2023 09:05:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673255122;
-        bh=tRpKJLAiABOhpP2YUjpXF1Z+WYFDa3TbM92QViIdx+0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kN0y67jMkHwsCGjUaBqn+id3yzmig1x92FvKi1Nge9aiEAel3a2j0NT4uQWJZb2Et
-         oJVGqlXjB3ejkOkLS3gmIL7J3bNIHy4qT8pM6XfvU2qdsKEBAyHA7mAFeUpgB6HIJh
-         +tOVSUZ7xeAx66b0QYHlooEGbji65ssLSh6vyIYVnxO5rH92dA9Q3kXMZ8LdnXCl9V
-         7WHbi6dPs/4/wIEUJTkUJ9xYKwX3y4poAVbgeYo61rBIXqahrN3LIV1gz7JXnZrgNZ
-         9sbxA/2SWFoEc6P+ob8mNBc8eDuO6pOaMnqgix7EFOEmOGuABZIZVz2Gmlqvck00u8
-         qHQFRoeyJxEqQ==
-Message-ID: <852e5269-cb3d-bd56-c7fd-0a1f461623de@collabora.com>
-Date:   Mon, 9 Jan 2023 10:05:19 +0100
+        Mon, 9 Jan 2023 04:10:15 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9624516495;
+        Mon,  9 Jan 2023 01:06:24 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3097r7Cv001816;
+        Mon, 9 Jan 2023 09:06:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=XxHuIQPh1jtnEpxWMwNDr1Y0CAe06b1+6mK5HGVQu5w=;
+ b=EVgqWEiYLZ3+ztYFCe27IWCHuT6TjM9JoUdIhwAU1VzVPhez43C14F9ngot+0olMkFlp
+ 11/AomqEJjq7b5aD5hOrz0cFkggHfD8AszKSDeitiFf/WjIRK31xKtXVzxInYAly8R12
+ xXYNx9XuAXRGc+Y/AwcwW5rqDaIfVB9AMLi9AVzWOJpEHX0RHxzJ4ynfh5eiX3u/96l6
+ 7TuWrwY0eh3NsUMWQGSJ1pe/D4zjJE9n8oubKB5Wt/aR8G9lYTiQlKVAIG9VdT8ELW8j
+ vV/pktMaZjxTzEg3qZoRzedPpqrX3o5gzNGHA1GSQN8nT2/ba+ouPnrzZrYxKMadFYEP fg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my02t2q55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 09:06:06 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309965Gk021644
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 Jan 2023 09:06:05 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
+ 01:05:57 -0800
+Date:   Mon, 9 Jan 2023 14:35:53 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v8 12/28] gunyah: vm_mgr: Introduce basic VM Manager
+Message-ID: <20230109090553.GA1737564@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-13-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 13/13] media: verisilicon: Conditionnaly ignore native
- formats
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230103170058.810597-1-benjamin.gaignard@collabora.com>
- <20230103170058.810597-14-benjamin.gaignard@collabora.com>
- <CAAEAJfBRtBSZt0B3OyQSCHhsseUn6_H+JSvAR3cOH15WUryuNw@mail.gmail.com>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAAEAJfBRtBSZt0B3OyQSCHhsseUn6_H+JSvAR3cOH15WUryuNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+In-Reply-To: <20221219225850.2397345-13-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: AykUCM4ocXnB41CGW_xT6GSACgEI0PMz
+X-Proofpoint-ORIG-GUID: AykUCM4ocXnB41CGW_xT6GSACgEI0PMz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_03,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 mlxlogscore=794 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090064
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Elliot Berman <quic_eberman@quicinc.com> [2022-12-19 14:58:33]:
 
-Le 08/01/2023 à 22:12, Ezequiel Garcia a écrit :
-> On Tue, Jan 3, 2023 at 2:01 PM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->> AV1 film grain feature requires to use the postprocessor to produce
->> valid frames. In such case the driver shouldn't propose native pixels
->> format but only post-processed pixels format.
->> If a codec set need_postproc field in hantro_ctx structure to true
->> native pixel formats will be ignored.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/media/platform/verisilicon/hantro.h   |  3 ++
->>   .../media/platform/verisilicon/hantro_drv.c   |  5 ++
->>   .../platform/verisilicon/hantro_postproc.c    |  4 ++
->>   .../media/platform/verisilicon/hantro_v4l2.c  | 46 +++++++++++++------
->>   4 files changed, 45 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
->> index a98cb40a8d3b..7a5357e810fb 100644
->> --- a/drivers/media/platform/verisilicon/hantro.h
->> +++ b/drivers/media/platform/verisilicon/hantro.h
->> @@ -231,6 +231,8 @@ struct hantro_dev {
->>    * @ctrl_handler:      Control handler used to register controls.
->>    * @jpeg_quality:      User-specified JPEG compression quality.
->>    * @bit_depth:         Bit depth of current frame
->> + * @need_postproc:     Set to true if the bitstream features require to
->> + *                     use the post-processor.
->>    *
->>    * @codec_ops:         Set of operations related to codec mode.
->>    * @postproc:          Post-processing context.
->> @@ -258,6 +260,7 @@ struct hantro_ctx {
->>          struct v4l2_ctrl_handler ctrl_handler;
->>          int jpeg_quality;
->>          int bit_depth;
->> +       bool need_postproc;
->>
->>          const struct hantro_codec_ops *codec_ops;
->>          struct hantro_postproc_ctx postproc;
->> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
->> index 4fc6dea16ae6..8d7055c0bf3b 100644
->> --- a/drivers/media/platform/verisilicon/hantro_drv.c
->> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
->> @@ -346,6 +346,11 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
->>                                  return -EINVAL;
->>
->>                  ctx->bit_depth = bit_depth;
->> +
->> +               if (ctrl->p_new.p_av1_sequence->flags
->> +                   & V4L2_AV1_SEQUENCE_FLAG_FILM_GRAIN_PARAMS_PRESENT)
->> +                       ctx->need_postproc = true;
->> +
->>                  break;
->>          default:
->>                  return -EINVAL;
->> diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
->> index 7dc39519a2ee..293e5612e2ce 100644
->> --- a/drivers/media/platform/verisilicon/hantro_postproc.c
->> +++ b/drivers/media/platform/verisilicon/hantro_postproc.c
->> @@ -57,6 +57,10 @@ bool hantro_needs_postproc(const struct hantro_ctx *ctx,
->>   {
->>          if (ctx->is_encoder)
->>                  return false;
->> +
->> +       if (ctx->need_postproc)
->> +               return true;
->> +
->>          return fmt->postprocessed;
->>   }
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> index bbe79dbd2cd9..5c381766cca3 100644
->> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
->> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> @@ -38,6 +38,11 @@ hantro_get_formats(const struct hantro_ctx *ctx, unsigned int *num_fmts)
->>   {
->>          const struct hantro_fmt *formats;
->>
->> +       if (ctx->need_postproc) {
->> +               *num_fmts = 0;
->> +               return NULL;
->> +       }
->> +
->>          if (ctx->is_encoder) {
->>                  formats = ctx->dev->variant->enc_fmts;
->>                  *num_fmts = ctx->dev->variant->num_enc_fmts;
->> @@ -132,6 +137,15 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
->>                      hantro_check_depth_match(ctx, &formats[i]))
->>                          return &formats[i];
->>          }
->> +
->> +       formats = hantro_get_postproc_formats(ctx, &num_fmts);
->> +       for (i = 0; i < num_fmts; i++) {
->> +               if (bitstream == (formats[i].codec_mode !=
->> +                                 HANTRO_MODE_NONE) &&
->> +                   hantro_check_depth_match(ctx, &formats[i]))
->> +                       return &formats[i];
->> +       }
->> +
->>          return NULL;
->>   }
->>
->> @@ -261,19 +275,6 @@ static int vidioc_g_fmt_out_mplane(struct file *file, void *priv,
->>          return 0;
->>   }
->>
->> -static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
->> -                                  struct v4l2_format *f)
->> -{
->> -       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
->> -       struct hantro_ctx *ctx = fh_to_ctx(priv);
->> -
->> -       vpu_debug(4, "f->type = %d\n", f->type);
->> -
->> -       *pix_mp = ctx->dst_fmt;
->> -
->> -       return 0;
->> -}
->> -
->>   static int hantro_try_fmt(const struct hantro_ctx *ctx,
->>                            struct v4l2_pix_format_mplane *pix_mp,
->>                            enum v4l2_buf_type type)
->> @@ -353,6 +354,25 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
->>          return 0;
->>   }
->>
->> +static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
->> +                                  struct v4l2_format *f)
->> +{
->> +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
->> +       struct hantro_ctx *ctx = fh_to_ctx(priv);
->> +       int ret;
->> +
->> +       vpu_debug(4, "f->type = %d\n", f->type);
->> +
->> +       ret = hantro_try_fmt(ctx, pix_mp, f->type);
->> +       if (ret)
->> +               return ret;
->> +
->> +       ctx->vpu_dst_fmt = hantro_find_format(ctx, pix_mp->pixelformat);
->> +       ctx->dst_fmt = *pix_mp;
->> +
-> This looks like the g_fmt is setting some state in the context,
-> this looks incorrect.
+> +config GUNYAH_VM_MANAGER
 
-Indeed only a call to hantro_try_fmt() is needed here.
-I will fix that in v3.
+Any reason why this needs to be a separate config? IOW CONFIG_GUNYAH should
+enable VM management functionality also.
 
-Benjamin
+> @@ -550,14 +580,29 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
+>  	rsc_mgr->msgq_client.rx_callback = gh_rm_msgq_rx_data;
+>  	rsc_mgr->msgq_client.tx_done = gh_rm_msgq_tx_done;
+>  
+> -	return gh_msgq_init(&pdev->dev, &rsc_mgr->msgq, &rsc_mgr->msgq_client,
+> +	ret = gh_msgq_init(&pdev->dev, &rsc_mgr->msgq, &rsc_mgr->msgq_client,
+>  				&rsc_mgr->tx_ghrsc, &rsc_mgr->rx_ghrsc);
 
->
-> Thanks,
-> Ezequiel
+Bail on error here.
+
+[snip]
+
+> +static __must_check struct gunyah_vm *gunyah_vm_alloc(struct gh_rm_rpc *rm)
+> +{
+> +	struct gunyah_vm *ghvm;
+> +	int vmid;
+> +
+> +	vmid = gh_rm_alloc_vmid(rm, 0);
+> +	if (vmid < 0)
+> +		return ERR_PTR(vmid);
+> +
+> +	ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
+> +	if (!ghvm)
+
+dealloc_vmid here (as well as few other error paths)?
+
+> +		return ghvm;
+> +
+> +	get_gh_rm(rm);
