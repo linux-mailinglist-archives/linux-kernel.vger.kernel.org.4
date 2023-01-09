@@ -2,150 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C33666232F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568FD662331
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbjAIK1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S233782AbjAIK1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbjAIK0g (ORCPT
+        with ESMTP id S237051AbjAIK1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:26:36 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AA410C6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:26:35 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso12348965pjt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:26:35 -0800 (PST)
+        Mon, 9 Jan 2023 05:27:23 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A1BCE39
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:27:18 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id ay40so5909255wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aa0LOobEUkWWUY8RhKywphIXv2oIbVVC/OzD6QfEsQE=;
-        b=Z7pTduGlCGBHVVcxuh1G+qFZ8V8F8RDij6up/fHEYFYwjw4jsAAU8hPA3DcGW7EMTs
-         PwZr27y+BmAO3nffL3xhtMzHL16VVDZ0hutyCRrHwCNnTCwdBEps5pvb539TpQGwW2sC
-         8pCMuHZffO7HH1BT27aKv3spiDWKqiXyneSiY=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SR4xg/8vRGqoBJiSpvGD2Rl2ghk9VGEtuelbvA5hJfk=;
+        b=aT3ss8O+Gsu9jCN8YuL3TDXjKyNWf4nB21P7RR9Th1b+8mZp8kz3LPZ9G8Ug/9sSbr
+         JmeDD4GvprLSePBUp4a0A5MB7ZzURamGMbAjnAq7iF3USgE9Kv0+e28Kt3qHCsN8NGN9
+         21WASmcnew4Cd/TZS+qup11illvEBYs18hjBTbG+EVySqrihxge0+iZqjKyWIaMKb59I
+         zqRx0kU5xQvogoAUaleQhVB/eG0XEIup+csXL5dIT9wK1/BTQlL7L98iLAVNHJSRJWbt
+         SVLxKaJrSs6/0qwW/Fo7d9ghv0DVJMQsmZOj6b13qqG7Uh25bJyFTyQH2iKv0bt8jP9I
+         uSKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Aa0LOobEUkWWUY8RhKywphIXv2oIbVVC/OzD6QfEsQE=;
-        b=qBE/ied0C9re1c4urzNMOJAbnidRGAAWf6toUpcoWdt6CvCyAM3Yu/TdswO8905w/e
-         ax3uPW+Y4A4rCpKJ9P6FJMgv7K08qGFkSAjY9q6EF3EjQXv8Dq/IYQS5pEmQW/A5l+K/
-         ifmtzIxQq3XetnZtvMwEcJUJ/bqqD7G5BODqGSM2GnjdNguftdIGl86jibJowdN5eFYf
-         BjDIzwexZMdvF6Uig3PS39mHqdF/e4aDCAsCCFKwIjmgkMS4g5u+YG8lRfHQPhs5s1em
-         M4OSahqs+OCZlXUUTUSgmXRyFeIoWm4fWAssPruM56x7sDfMhkGodqNB9KAPOCNZ1YEs
-         HPsQ==
-X-Gm-Message-State: AFqh2kpMq4vBU0OB+Z8B+ZlKrRmbe0Vc6HETXnJYEnneGboIZzepHuqv
-        SQYeBp7FUdYHNKZgmrx7yLLdbgITvQ/ykvANltdVHw==
-X-Google-Smtp-Source: AMrXdXvqVha9HvD+ZV3UPEcDTnV12qpjFigiVnDNRTduYEkbP3gT+f48li1UxGcNeTw/+cJfUhEiW2+eicsfZv55/Lk=
-X-Received: by 2002:a17:902:7884:b0:192:bf3c:b85e with SMTP id
- q4-20020a170902788400b00192bf3cb85emr2011150pll.68.1673259995334; Mon, 09 Jan
- 2023 02:26:35 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SR4xg/8vRGqoBJiSpvGD2Rl2ghk9VGEtuelbvA5hJfk=;
+        b=PleSJ4irCM+MANu8vljT/QPirQtpOtJB5cN81zT+FGv3QFATzFiRsZNtfQ5eepa6n8
+         I3IOputj+bn+8b3oMHu7YUjS9iXYWqnq1f3+NPLx4qo1B7wlNyFovVzNWMZSALaKcqJJ
+         hyPWjuzJolxE7HvN8yRJmX7nnRC9XUDuL5hmskTKRh+vAShKMgEK8XBxWPOfK70vhpgM
+         zsFHc+xoXnMUuwIPmAXncasw8pe+BvMMepSzcVpZ3bMr/Dq8/ZFrza/rx3VKg7jcapA5
+         ldOZxae7AQgCMnMqEFLzYEGyOvtSfXLr41d9sMF87JmUfHSv2jrPClcT1d4mq3laGfim
+         /YtA==
+X-Gm-Message-State: AFqh2ko/hkwfKpDLS40JsfBOkE/5ro81k8ZKRIh+7Z8vgpfAEM4rVQmH
+        HX8EcVvdcfX6Ok87ZlXxTvvAfQ==
+X-Google-Smtp-Source: AMrXdXvlCiyiCuzHJg/WG8LUCp3wL2rzbSPwtjvrHVXTysfocLK7IGL9XmfsmXW4Llcem1k1rdDJBA==
+X-Received: by 2002:a05:600c:4e90:b0:3cf:894f:964b with SMTP id f16-20020a05600c4e9000b003cf894f964bmr47444559wmq.16.1673260036605;
+        Mon, 09 Jan 2023 02:27:16 -0800 (PST)
+Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003d9b87296a9sm16796137wmo.25.2023.01.09.02.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 02:27:15 -0800 (PST)
+Date:   Mon, 9 Jan 2023 10:27:13 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Stephen Kitt <steve@sk2.org>, Lee Jones <lee@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH RESEND 1/4] backlight: aat2870: Use backlight helper
+Message-ID: <Y7vsAdMqGNgYS/m9@aspen.lan>
+References: <20230106164856.1453819-2-steve@sk2.org>
+ <Y7hdyPAKBYv+gAzf@phenom.ffwll.local>
 MIME-Version: 1.0
-References: <Y7aGw/irynC61O85@ls3530> <CAKMK7uEnFBo_YfU8OTvMS8+YkoGS=vmpGQPMa9PKxGOB3pd7nA@mail.gmail.com>
-In-Reply-To: <CAKMK7uEnFBo_YfU8OTvMS8+YkoGS=vmpGQPMa9PKxGOB3pd7nA@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 9 Jan 2023 11:26:23 +0100
-Message-ID: <CAKMK7uFijjF+px9=xDXnyfhMbkxRqinEmV_N5VX6eAuJkc1J+g@mail.gmail.com>
-Subject: Re: [GIT PULL] fbdev fixes for v6.2-rc3
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7hdyPAKBYv+gAzf@phenom.ffwll.local>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 Jan 2023 at 11:22, Daniel Vetter <daniel@ffwll.ch> wrote:
+On Fri, Jan 06, 2023 at 06:43:36PM +0100, Daniel Vetter wrote:
+> On Fri, Jan 06, 2023 at 05:48:52PM +0100, Stephen Kitt wrote:
+> > Instead of retrieving the backlight brightness in struct
+> > backlight_properties manually, and then checking whether the backlight
+> > should be on at all, use backlight_get_brightness() which does all
+> > this and insulates this from future changes.
+> >
+> > Signed-off-by: Stephen Kitt <steve@sk2.org>
 >
-> On Thu, 5 Jan 2023 at 09:14, Helge Deller <deller@gmx.de> wrote:
-> >
-> > Hi Linus,
-> >
-> > please pull the fbdev driver updates for 6.2-rc3, to receive
-> > fixes for matroxfb, offb, omapfb and fbmem.
-> >
-> > Thanks,
-> > Helge
-> >
-> > ----
-> >
-> > The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> >
-> >   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.2-rc3
-> >
-> > for you to fetch changes up to 764043cccd7232a783753a612d628fc0cb7854be:
-> >
-> >   fbdev: omapfb: avoid stack overflow warning (2023-01-04 19:09:40 +0100)
-> >
-> > ----------------------------------------------------------------
-> > fbdev updates for kernel 6.2-rc3:
-> >
-> > - Fix Matrox G200eW initialization failure
-> > - Fix build failure of offb driver when built as module
-> > - Optimize stack usage in omapfb
-> > - Prevent use-after-free in fbmem
-> >
-> > ----------------------------------------------------------------
-> > Arnd Bergmann (1):
-> >       fbdev: omapfb: avoid stack overflow warning
-> >
-> > Hang Zhang (1):
-> >       fbdev: fbmem: prevent potential use-after-free issues with console_lock()
->
-> I looked at this, and even by fbdev locking standards this makes
-> absolutely no sense to me. I think this should be dropped before we've
-> reached some sort of conclusion on what is going on, or whether this
-> is just pure static checker conjecture without fully understanding how
-> this is supposed to work really.
+> Lee/Daniel, will you pick these up, or should I smash them all into
+> drm-misc-next for 6.3?
 
-Just to close this: Turned out to be some kind of static checker dud
-(and unfortunately the commit message didn't even explain that it was
-found through some undisclosed static checker, I asked the submitter
-to rectify this going forward since they'll likely submit more stuff
-like this).
--Daniel
+Outside of holiday, Lee usually hoovers up the backlight patches (and
+negotiates about who merges what).
 
-> > Paul Menzel (1):
-> >       fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+
+Daniel.
+
+
+> > ---
+> >  drivers/video/backlight/aat2870_bl.c | 7 +------
+> >  1 file changed, 1 insertion(+), 6 deletions(-)
 > >
-> > Randy Dunlap (1):
-> >       fbdev: make offb driver tristate
+> > diff --git a/drivers/video/backlight/aat2870_bl.c b/drivers/video/backlight/aat2870_bl.c
+> > index a7af9adafad6..1cbb303e9c88 100644
+> > --- a/drivers/video/backlight/aat2870_bl.c
+> > +++ b/drivers/video/backlight/aat2870_bl.c
+> > @@ -59,7 +59,7 @@ static int aat2870_bl_update_status(struct backlight_device *bd)
+> >  	struct aat2870_bl_driver_data *aat2870_bl = bl_get_data(bd);
+> >  	struct aat2870_data *aat2870 =
+> >  			dev_get_drvdata(aat2870_bl->pdev->dev.parent);
+> > -	int brightness = bd->props.brightness;
+> > +	int brightness = backlight_get_brightness(bd);
+> >  	int ret;
 > >
-> > Xu Panda (2):
-> >       fbdev: omapfb: use strscpy() to instead of strncpy()
-> >       fbdev: atyfb: use strscpy() to instead of strncpy()
+> >  	if ((brightness < 0) || (bd->props.max_brightness < brightness)) {
+> > @@ -70,11 +70,6 @@ static int aat2870_bl_update_status(struct backlight_device *bd)
+> >  	dev_dbg(&bd->dev, "brightness=%d, power=%d, state=%d\n",
+> >  		 bd->props.brightness, bd->props.power, bd->props.state);
 > >
-> >  drivers/video/fbdev/Kconfig                |  4 ++--
-> >  drivers/video/fbdev/aty/atyfb_base.c       |  3 +--
-> >  drivers/video/fbdev/core/fbmem.c           |  2 ++
-> >  drivers/video/fbdev/matrox/matroxfb_base.c |  4 ++--
-> >  drivers/video/fbdev/omap/omapfb_main.c     |  5 ++---
-> >  drivers/video/fbdev/omap2/omapfb/dss/dsi.c | 28 ++++++++++++++++++----------
-> >  6 files changed, 27 insertions(+), 19 deletions(-)
->
->
+> > -	if ((bd->props.power != FB_BLANK_UNBLANK) ||
+> > -			(bd->props.state & BL_CORE_FBBLANK) ||
+> > -			(bd->props.state & BL_CORE_SUSPENDED))
+> > -		brightness = 0;
+> > -
+> >  	ret = aat2870->write(aat2870, AAT2870_BLM,
+> >  			     (u8)aat2870_brightness(aat2870_bl, brightness));
+> >  	if (ret < 0)
+> > --
+> > 2.30.2
+> >
 >
 > --
 > Daniel Vetter
 > Software Engineer, Intel Corporation
 > http://blog.ffwll.ch
-
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
