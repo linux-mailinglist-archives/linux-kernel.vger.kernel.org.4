@@ -2,76 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33DF6620D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED3C6620DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbjAIJBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S236550AbjAIJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbjAIJAv (ORCPT
+        with ESMTP id S237001AbjAIJB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:00:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD201839C;
-        Mon,  9 Jan 2023 00:52:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A88E60F64;
-        Mon,  9 Jan 2023 08:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89118C43392;
-        Mon,  9 Jan 2023 08:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673254342;
-        bh=ON51W0KW3eubukMtXSLrXoIkB71m/gu6sk3xJBg5bP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NiCtskm5xptM8PGSCN/NbW+t9fajk2ysvFtfkmhlYlR/z4iycpoelroCAknkSjKlp
-         Qyq/TIHLTuGRm0xvEdoy4o5N06L7zE1FqgBQ4ktz9RdoTG+bH2YknMAXwh9sigOA0o
-         580Z/yVMlet2pxtU4w7l/4hUK2HxqDj6TjUsi0VZ2D1P9eA4jiRG6WVDRmXpOAZVyr
-         40mW1VCaEpCvyREGnnRDdGqtzcJAQsgvLp9Ke0klZViwTM5RwHf8/yMp8rtSccu41K
-         oEYKwlnqVKqhCXvlchth1CfXBnHGuiWCK5V1PvMtFoQOaIiYdWW3f+4K2TtXQmnvLT
-         GPPTuSfy3sNpw==
-Date:   Mon, 9 Jan 2023 16:52:15 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 0/5] binding: imx8m: add IOMUXC GPR
-Message-ID: <20230109085214.GI18301@T480>
-References: <20230104002545.3473598-1-peng.fan@oss.nxp.com>
+        Mon, 9 Jan 2023 04:01:29 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7592DFB;
+        Mon,  9 Jan 2023 00:54:49 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 91010604F2;
+        Mon,  9 Jan 2023 09:54:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673254486; bh=8DeTwAhLzt4dVHB7OlsNpU1KQ00qgAGdnmKRRJi0MPA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j+0UzbchyMfHFD/15BqQQvsF7QZ7idUrYzM9YZacjPgeREvIFben/NJI9BRDgbvQC
+         JyTvJrZXew6oY/j2/sCAW2GktTyVUnVFtf3IGmnTIFe4D7j4pbDLyCcrXpSxOJiZUG
+         SYQtP2Mu3i9OanX9f/eGKhxknZfDdQX1wC2nXP++uKaYyL4M3EE7JAiXa5aMKLUA9k
+         xK9T6REioF/bMQopX0EGtYyQuIm2dzPPpOiLAQ/oEwGWmvXWb1BJ0mFmNvUuMa3fG2
+         XbFYOqKzkb6x8TfJ6Ch4texoIHM+dRGREfEnGrr+J6kKIO8DnD3KQFFtBQflzd2CPn
+         vpTfvDI6mArJA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pV2t13sZzXmh; Mon,  9 Jan 2023 09:54:44 +0100 (CET)
+Received: from [10.0.1.103] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id E2EBE604F1;
+        Mon,  9 Jan 2023 09:54:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673254484; bh=8DeTwAhLzt4dVHB7OlsNpU1KQ00qgAGdnmKRRJi0MPA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=17Li/CZ2X+HdR6AMbhB35rD7x3S+re57M8l7vS+VkUuBLdbGPBLnw0HME9PbunKdZ
+         aqCLJ2P0Mc5uduByJlpqWdeHFtRgmaHwpOtUBChw8jRc274ZoRnp3sk6xbexsxqrdx
+         DfBT5Ebbj3rQ1Udz8z+VGQIz2XGVLP6ySGh/kaH/rwgA4GLoI2E4mFgIoQIzN2+kv5
+         7m17+8Pt+/uT7f4y/iOqz9+leMyccix/OSo4L480pe/wjtUIV0Aekm8VIwv6AICYf+
+         XzS33ZCBDE8zJ+NFMZ6NLgcPRqlyBDxP9iG0fGB65PdgK1/a4kTE9sXl/osHUGb2vR
+         qFgFh5Ab7Sepw==
+Message-ID: <00edc00c-7e44-3641-ded7-e9f908946514@alu.unizg.hr>
+Date:   Mon, 9 Jan 2023 09:53:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104002545.3473598-1-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net v4] af_unix: selftest: Fix the size of the parameter
+ to connect()
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>, mirsad.todorovac@alu.hr
+Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
+        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
+ <20230109011512.15267-1-kuniyu@amazon.com>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230109011512.15267-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 08:25:40AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 9.1.2023. 2:15, Kuniyuki Iwashima wrote:
+> From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
+> Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
+>> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>
+>> Adjust size parameter in connect() to match the type of the parameter, to
+>> fix "No such file or directory" error in selftests/net/af_unix/
+>> test_oob_unix.c:127.
+>>
+>> The existing code happens to work provided that the autogenerated pathname
+>> is shorter than sizeof (struct sockaddr), which is why it hasn't been
+>> noticed earlier.
+>>
+>> Visible from the trace excerpt:
+>>
+>> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+>> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+>> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+>>
+>> BUG: The filename is trimmed to sizeof (struct sockaddr).
+>>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Paolo Abeni <pabeni@redhat.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+>> Cc: Florian Westphal <fw@strlen.de>
+>> Reviewed-by: Florian Westphal <fw@strlen.de>
+>> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 > 
-> V2:
->  Update nodename to syscon in patch 3
->  Add A-b/R-b tag
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 > 
-> Add binding doc for i.MX8M, update dts to match binding doc.
-> This is effort for ARM System-Ready 2.0 certification
-> 
-> Peng Fan (5):
->   dt-bindings: soc: imx: add IOMUXC GPR support
->   arm64: dts: imx8mq: correct iomuxc-gpr compatible
->   arm64: dts: imx8mm: correct iomuxc-gpr compatible
->   arm64: dts: imx8mn: update iomuxc-gpr node name
->   arm64: dts: imx8mp: use syscon for iomuxc-gpr
+> You can check the current status here.
+> https://patchwork.kernel.org/project/netdevbpf/patch/alpine.DEB.2.21.2301070437400.26826@domac.alu.hr/
 
-Applied all, thanks!
+Thank you very much for your time on this, Koniyuki, Jakub.
+
+> PS: you may want to check config not to send a mail as multipart next time.
+
+Done! Thanks for the hint. This should work:
+
+   [ Sending Preferences ]
+       [X]  Do Not Generate Sender Header
+       [ ]  Use Sender Instead of X-X-Sender
+       [X]  Do Not Send Flowed Text
+       [X]  Downgrade Multipart to Text
+
+Maybe add this to Documentation/process/email-clients.rst, section 
+Alpine? It could save some round-trips ...
+
+Thanks,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+--
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
