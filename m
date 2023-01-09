@@ -2,101 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356116624E1
+	by mail.lfdr.de (Postfix) with ESMTP id 8102C6624E2
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbjAIL5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S236382AbjAIL5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237040AbjAIL41 (ORCPT
+        with ESMTP id S237083AbjAIL5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:56:27 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E064CF3;
-        Mon,  9 Jan 2023 03:56:25 -0800 (PST)
-Received: from pendragon.ideasonboard.com (85-76-142-108-nat.elisa-mobile.fi [85.76.142.108])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F8986CF;
-        Mon,  9 Jan 2023 12:56:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673265382;
-        bh=XPs/a0nVKMqSHxxTHoDGGKRDbVgF5xY49dDsiFhkpD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PLmoZr7RwlGLLWwcEsLG9n8oXjD+y8bQOPc5lhvhoIABb6iuwghfRvuGVMTx61+A6
-         bS9ffZdFQdVnZ1qZILPrK3B1qwNEutYzpt9aEMa2h6rND/bBamie3KuAsF5yp3bf6Q
-         jfY2+5o0P7cuNM+O5SLtws7un/b+8ChPpvaGelxM=
-Date:   Mon, 9 Jan 2023 13:56:19 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Subject: Re: [PATCH v16 02/20] media: add V4L2_SUBDEV_FL_STREAMS
-Message-ID: <Y7wA4z51PTf/KNK6@pendragon.ideasonboard.com>
-References: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
- <20221215121634.287100-3-tomi.valkeinen@ideasonboard.com>
+        Mon, 9 Jan 2023 06:57:01 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9172D12083;
+        Mon,  9 Jan 2023 03:56:57 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z11so12174407ede.1;
+        Mon, 09 Jan 2023 03:56:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R/pT23tJD4oTt91rYqRLukayxZ3L3T77mmbN65HM1ng=;
+        b=Ua7tqnmz76QuyglO1osJpuYr+bgSHGx1SUhy9z7kPTzzillWXVYwuu3x4UQrgzc539
+         lBTDj1CsnpAZccHPWU6T1VGv8Wtm3df9updiX3VWX68jatXyYrcI0oB7C2B+gG8kPjYG
+         QWhGgb8Au8oa0K2db+FwCP78MGf2UiqT3DIrioBJidIYg2SpgzrKAZJn8uX04Us5DgpY
+         9SESgaRE3UwVLiqGaMQ+NcAGCq3jgvrFu5/yL1iCUp7X7cDtHQ1dlcULZQQt8V0Ox+4a
+         XbL+DUp1X8MeSKqjzXIEH8s9MT2Oodqy0uHatvzIa/P+PkXC0K4jjQnJ9lwxgPEoiPJw
+         Vamw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R/pT23tJD4oTt91rYqRLukayxZ3L3T77mmbN65HM1ng=;
+        b=lEBdbQIUAZuxXT3jPRmOFn+I+3h/UuXnyR1Jn7dTSddDeoHKGEESs1X7nynkDlzcLV
+         Qc0Ujn827i9gDwOVxDo1Sgb3l0GJTSnI2e/G7MnNyJocFZw+9XBLz6H1H8yYvRX3E6yS
+         plk7xY/+77RxIVCS3F+vqcmfrjp6GI7y1I5sHqcQjavFbL59jrQW4qg9KLYA5hzOaDnt
+         4cxmEdo8dxhwQ9LOps0Cd0Yzl7Pa8PeA6LDkXlJ3LwIlymZCBbwVkQu+q1aqZk+6lNI+
+         wEh2NDuievJWohEO7sEgIK3iFalPgbyFJFVLab+ywbEA/MUE6Q8Zy7g210Y1hRR6QW8C
+         JbkQ==
+X-Gm-Message-State: AFqh2kq41I39VKkQXgQvU4I5EGzjmrLMceSql4fhotUhttaGUWinX+sE
+        kbir/l1YTk8MF6YdapxOOmY=
+X-Google-Smtp-Source: AMrXdXupavywksOzsGvJd+G6X2+bu6gHlKAHWmcHS/M09LcC+/A+TIPVjFvCTyKAFkaLD9KNgwB6Yw==
+X-Received: by 2002:a05:6402:8cc:b0:499:8849:5fb2 with SMTP id d12-20020a05640208cc00b0049988495fb2mr3991753edz.28.1673265416050;
+        Mon, 09 Jan 2023 03:56:56 -0800 (PST)
+Received: from skbuf ([188.27.185.38])
+        by smtp.gmail.com with ESMTPSA id g11-20020a056402428b00b004722d7e8c7csm3614118edc.14.2023.01.09.03.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 03:56:55 -0800 (PST)
+Date:   Mon, 9 Jan 2023 13:56:53 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org, Nikolay Aleksandrov <razor@blackwall.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v5 net-next 01/15] net: bridge: mst: Multiple Spanning
+ Tree (MST) mode
+Message-ID: <20230109115653.6yjijaj63n2v35lw@skbuf>
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <20220316150857.2442916-2-tobias@waldekranz.com>
+ <Y7vK4T18pOZ9KAKE@shredder>
+ <20230109100236.euq7iaaorqxrun7u@skbuf>
+ <Y7v98s8lC1WUvsSO@shredder>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215121634.287100-3-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y7v98s8lC1WUvsSO@shredder>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
-
-Thank you for the patch.
-
-On Thu, Dec 15, 2022 at 02:16:16PM +0200, Tomi Valkeinen wrote:
-> Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
-> subdev supports the new API with multiplexed streams (routing, stream
-> configs).
+On Mon, Jan 09, 2023 at 01:43:46PM +0200, Ido Schimmel wrote:
+> OK, thanks for confirming. Will send a patch later this week if Tobias
+> won't take care of it by then. First patch will probably be [1] to make
+> sure we dump the correct MST state to user space. It will also make it
+> easier to show the problem and validate the fix.
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->  include/media/v4l2-subdev.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index 2f80c9c818ed..4be0a590c7c7 100644
-> --- a/include/media/v4l2-subdev.h
-> +++ b/include/media/v4l2-subdev.h
-> @@ -879,6 +879,17 @@ struct v4l2_subdev_internal_ops {
->   * should set this flag.
->   */
->  #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
-> +/*
-> + * Set this flag if this subdev supports multiplexed streams. This means
-> + * that the driver supports routing and handles the stream parameter in its
-> + * v4l2_subdev_pad_ops handlers. More specifically, this means:
-> + *
-> + * - Centrally managed subdev active state is enabled
-> + * - Legacy pad config is _not_ supported (state->pads is NULL)
-> + * - Routing ioctls are available
+> [1]
+> diff --git a/net/bridge/br.c b/net/bridge/br.c
+> index 4f5098d33a46..f02a1ad589de 100644
+> --- a/net/bridge/br.c
+> +++ b/net/bridge/br.c
+> @@ -286,7 +286,7 @@ int br_boolopt_get(const struct net_bridge *br, enum br_boolopt_id opt)
+>  	case BR_BOOLOPT_MCAST_VLAN_SNOOPING:
+>  		return br_opt_get(br, BROPT_MCAST_VLAN_SNOOPING_ENABLED);
+>  	case BR_BOOLOPT_MST_ENABLE:
+> -		return br_opt_get(br, BROPT_MST_ENABLED);
+> +		return br_mst_is_enabled(br);
 
-I wonder, as a sanity check, should the subdev core verify that the
-s_routing operation is available when this flag is set ? This could be
-done on top, so
+Well, this did report the correct MST state despite the incorrect static
+branch state, no? The users of br_mst_is_enabled(br) are broken, not
+those of br_opt_get(br, BROPT_MST_ENABLED).
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Anyway, I see there's a br_mst_is_enabled() and also a br_mst_enabled()?!
+One is used in the fast path and the other in the slow path. They should
+probably be merged, I guess. They both exist probably because somebody
+thought that the "if (!netif_is_bridge_master(dev))" test is redundant
+in the fast path.
 
-> + * - Multiple streams per pad are supported
-> + */
-> +#define V4L2_SUBDEV_FL_STREAMS			(1U << 4)
->  
->  struct regulator_bulk_data;
->  
-
--- 
-Regards,
-
-Laurent Pinchart
+>  	default:
+>  		/* shouldn't be called with unsupported options */
+>  		WARN_ON(1);
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index 75aff9bbf17e..7f0475f62d45 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -1827,7 +1827,7 @@ static inline bool br_vlan_state_allowed(u8 state, bool learn_allow)
+>  /* br_mst.c */
+>  #ifdef CONFIG_BRIDGE_VLAN_FILTERING
+>  DECLARE_STATIC_KEY_FALSE(br_mst_used);
+> -static inline bool br_mst_is_enabled(struct net_bridge *br)
+> +static inline bool br_mst_is_enabled(const struct net_bridge *br)
+>  {
+>  	return static_branch_unlikely(&br_mst_used) &&
+>  		br_opt_get(br, BROPT_MST_ENABLED);
+> @@ -1845,7 +1845,7 @@ int br_mst_fill_info(struct sk_buff *skb,
+>  int br_mst_process(struct net_bridge_port *p, const struct nlattr *mst_attr,
+>  		   struct netlink_ext_ack *extack);
+>  #else
+> -static inline bool br_mst_is_enabled(struct net_bridge *br)
+> +static inline bool br_mst_is_enabled(const struct net_bridge *br)
+>  {
+>  	return false;
+>  }
