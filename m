@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D23766208E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F52662096
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbjAIIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S234589AbjAIIva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbjAIIrg (ORCPT
+        with ESMTP id S237026AbjAIIr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:47:36 -0500
+        Mon, 9 Jan 2023 03:47:56 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DA0415FE7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:43:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEB2A164B9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:43:33 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gF3D027436;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gFGJ027437;
         Mon, 9 Jan 2023 09:42:15 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 17/22] tools/nolibc: add auxiliary vector retrieval for riscv
-Date:   Mon,  9 Jan 2023 09:42:03 +0100
-Message-Id: <20230109084208.27355-18-w@1wt.eu>
+Subject: [PATCH 18/22] tools/nolibc: add auxiliary vector retrieval for mips
+Date:   Mon,  9 Jan 2023 09:42:04 +0100
+Message-Id: <20230109084208.27355-19-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230109084208.27355-1-w@1wt.eu>
 References: <20230109084208.27355-1-w@1wt.eu>
@@ -38,41 +38,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 In the _start block we now iterate over envp to find the auxiliary
 vector after the NULL. The pointer is saved into an _auxv variable
 that is marked as weak so that it's accessible from multiple units.
-It was tested on riscv64 only.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/arch-riscv.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/include/nolibc/arch-mips.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 1608e6bd94b9..e197fcb10ac0 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -171,6 +171,7 @@ struct sys_stat_struct {
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 7d22f7bc38b3..bf83432d23ed 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -177,6 +177,7 @@ struct sys_stat_struct {
  })
  
  char **environ __attribute__((weak));
 +const unsigned long *_auxv __attribute__((weak));
  
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-@@ -185,6 +186,15 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- 		"slli  a2, a0, "PTRLOG"\n"   // envp (a2) = SZREG*argc ...
- 		"add   a2, a2, "SZREG"\n"    //             + SZREG (skip null)
- 		"add   a2,a2,a1\n"           //             + argv
+ /* startup code, note that it's called __start on MIPS */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
+@@ -196,6 +197,16 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
+ 		"lui $a3, %hi(environ)\n"     // load environ into a3 (hi)
+ 		"addiu $a3, %lo(environ)\n"   // load environ into a3 (lo)
+ 		"sw $a2,($a3)\n"              // store envp(a2) into environ
 +
-+		"add   a3, a2, zero\n"       // iterate a3 over envp to find auxv (after NULL)
-+		"0:\n"                       // do {
-+		"ld    a4, 0(a3)\n"          //   a4 = *a3;
-+		"add   a3, a3, "SZREG"\n"    //   a3 += sizeof(void*);
-+		"bne   a4, zero, 0b\n"       // } while (a4);
-+		"lui   a4, %hi(_auxv)\n"     // a4 = &_auxv (high bits)
-+		"sd    a3, %lo(_auxv)(a4)\n" // store a3 into _auxv
++		"move $t0, $a2\n"             // iterate t0 over envp, look for NULL
++		"0:"                          // do {
++		"lw $a3, ($t0)\n"             //   a3=*(t0);
++		"bne $a3, $0, 0b\n"           // } while (a3);
++		"addiu $t0, $t0, 4\n"         // delayed slot: t0+=4;
++		"lui $a3, %hi(_auxv)\n"       // load _auxv into a3 (hi)
++		"addiu $a3, %lo(_auxv)\n"     // load _auxv into a3 (lo)
++		"sw $t0, ($a3)\n"             // store t0 into _auxv
 +
- 		"lui a3, %hi(environ)\n"     // a3 = &environ (high bits)
- 		"sd a2,%lo(environ)(a3)\n"   // store envp(a2) into environ
- 		"andi  sp,a1,-16\n"          // sp must be 16-byte aligned
+ 		"li $t0, -8\n"
+ 		"and $sp, $sp, $t0\n"   // sp must be 8-byte aligned
+ 		"addiu $sp,$sp,-16\n"   // the callee expects to save a0..a3 there!
 -- 
 2.17.5
 
