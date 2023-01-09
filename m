@@ -2,276 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4261F66252B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F7D662532
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbjAIMMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S237062AbjAIMO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237140AbjAIMMR (ORCPT
+        with ESMTP id S234926AbjAIMN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:12:17 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F243613D59;
-        Mon,  9 Jan 2023 04:12:15 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id i188so8323988vsi.8;
-        Mon, 09 Jan 2023 04:12:15 -0800 (PST)
+        Mon, 9 Jan 2023 07:13:58 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628BE1A3BF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:13:56 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso6833060wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 04:13:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wy1uKuARPQNLsUvgR4U41MvGrwqwLWtn+Ee7QUsOXw8=;
-        b=S/F1dQPOcAiXwTKlcbuvU6DIADfIqdp0YUb/D2AKASIvdM42V5eaP9XNAF2TsSDak5
-         bg2LXnbB36Qz5RtlqQgz8440vm7Ul86+78Wk/26Km4IyRUBZRty+V7k294k/NCOZkMTt
-         T8SCWb/Idqws2O81JqKyBXQNLBnVdZ12KR4iggB7mXi4wd38XXXqsbDT4DL0IME2QJhJ
-         vALwP73LcNWq8DrnzaUegnOlXs+RCt/FHYx45gZa8p/D8G6CJukvdEsWatV+GSQAGVSw
-         eaUSJWYyr7t1D5Ttq4e2MLPGmPmel3T5BP0abDJVt8pQsvWXsO7oBywjAbKy84sK7xf5
-         8ehQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Apvhoqi+OOOMQ4HR148na/DFjKLgEz3QcDuyY6Juuo=;
+        b=cXWt+TZUXIaL9XldVhJ2vQAL0UbkG3l6tWldpJQy6EwO/KXPFQTOJh1Q627alitksd
+         3I+SxiZkYaZB4GFyIxrqdw4qQA2016UwUmC7gJiDkZVmifRLZfUdqPDdVdgSxdr+B3V8
+         iseK937jZMBLIs4melo7vjit8D+2bnhklYItCPewIdj14ACF14BSCtIwp0z7PCDkpndO
+         yCEnRh/r6maQzdiDGt8I5S8U6zq9lrg+0qJHYzuxV5O/93UABmOYrr8td6EV/XlfYRNS
+         ySV61YC9coDEBUMGOeRW/7Ph47TcK2kauv1iNm9V7srJ+Cewn3eahZc41oK6E4l+pJI4
+         IoHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wy1uKuARPQNLsUvgR4U41MvGrwqwLWtn+Ee7QUsOXw8=;
-        b=CRmsXov3E1BB1VKww2T7ZCZLevbEgvWVB7ELXDvMFCFyaR5sB9BGbmC0ST+F6+oK/7
-         kFpBhzBNRZyxfkrj0DVBz1TGfjRAz19Cj20a+26O5qeEWYT4zTTJsnd/NXFoFFd62zuJ
-         C8U15gmh3km6q5F6JJhymSnLapu6ZFYxSvMxI78sc0apLGdLKhc7NtjC67l352Q3Wf70
-         qD0imdMGy+NCIUkYjB0+4IIg1y5M8R6ClzCBbSVsE1K7PU+7k2RHsb873Fgkngcgx4nI
-         19N7cNegzFtaZuLRqs8BVs/pt+DHe+DrHUl14NgkeVhMD8/tFEbBUQ5MMxhQjyvWJm37
-         TdAg==
-X-Gm-Message-State: AFqh2kqwwXhHMCiP2LS3bz3IC5o60fgAMlo6lCzfvnnYwkP+coeyRfs/
-        yQC2k+PLW1igIkG8xuyaaoaB9CksP+jL/NJZvvJYNXFsngQ=
-X-Google-Smtp-Source: AMrXdXs4B3IZuW4/ioHp1Tv0Za1G2dq9C62aG5qmySYkzH06QhQ5trpibgGw/8CSMQb8j/7Jjto5ZzjNYp30D77NGjY=
-X-Received: by 2002:a05:6102:c4a:b0:3ce:f2da:96a with SMTP id
- y10-20020a0561020c4a00b003cef2da096amr1550916vss.64.1673266334966; Mon, 09
- Jan 2023 04:12:14 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Apvhoqi+OOOMQ4HR148na/DFjKLgEz3QcDuyY6Juuo=;
+        b=lXnd1Hfsba3s7hnaWZT+7V5zrAuePmaeBP3jzi5k1l5LxH6KBgjxvuCd7IN8u1Sg1c
+         YDuQ156a9/iAnLBx9FyjcUbjJ99I+4OlWU/98pGGF26WFbsQa4ANh56PLWoz0mdBp8w4
+         pSV64Y0+7AZWM0iExbW1/+aJiOaWjEhL2ElTo8+Gln5ZUXgCDrAd7ASvlaAQrNt5TtSz
+         h/m6J1K7/zDVW1vsZS4ACd73CoBLFohN9OHX33D0sx6tjOZb9t+PoB9nNV1XkKr9uyqd
+         9eMZY0W2HNZ6JX9EZXE/SLVF1dfw0bhEpKnbet2sqOIPbSXec3PySLVXoFcyh9q93xpC
+         CYng==
+X-Gm-Message-State: AFqh2kp+T4KJthCLcZYJ/wBwe0+Kn47uusGdcVSAh0kIMIdatIdsZDCK
+        c8DxrRwdjmuSbF7u3ksRxhF5jg==
+X-Google-Smtp-Source: AMrXdXsILHpk+nalIB34Dpa0HY57tdFpemqwhDbetBXThq02zr0jZIk4EOyQv8rCh0UzImryFrdc8Q==
+X-Received: by 2002:a05:600c:3550:b0:3d9:ed30:6a73 with SMTP id i16-20020a05600c355000b003d9ed306a73mr3300171wmq.9.1673266434967;
+        Mon, 09 Jan 2023 04:13:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t12-20020a05600c198c00b003d9de0c39fasm13687845wmq.36.2023.01.09.04.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 04:13:54 -0800 (PST)
+Message-ID: <118e34d1-617e-3d95-c31b-73b99109fc40@linaro.org>
+Date:   Mon, 9 Jan 2023 13:13:53 +0100
 MIME-Version: 1.0
-References: <20221220112927.440506-1-alistair@alistair23.me>
- <20221220112927.440506-4-alistair@alistair23.me> <20221220131715.femjybikqcnm4lyg@pengutronix.de>
-In-Reply-To: <20221220131715.femjybikqcnm4lyg@pengutronix.de>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Mon, 9 Jan 2023 22:11:48 +1000
-Message-ID: <CAKmqyKO-Qw3AihUnF7np7_6kr6-ODnXU3aBwph-_9=xSbXRx-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        s.hauer@pengutronix.de, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        arnd@arndb.de, linux@armlinux.org.uk, jernej.skrabec@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/3] dt-bindings: reserved-memory: rmtfs: Make
+ qcom,vmid an array
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230109093947.83394-1-konrad.dybcio@linaro.org>
+ <2bc5d781-499b-fe39-2dc5-92bc9ba8396d@linaro.org>
+ <97dafa30-8b76-8bf9-4411-be6d10e4c71a@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <97dafa30-8b76-8bf9-4411-be6d10e4c71a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 11:17 PM Marco Felsch <m.felsch@pengutronix.de> wrote:
->
-> Hi Alistair,
->
-> thanks for your patch, please see below.
->
-> On 22-12-20, Alistair Francis wrote:
-> > Add support for the rohm,bd71815 power controller controller for the
-> > reMarkable 2.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > ---
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 159 ++++++++++++++++++++++++
-> >  1 file changed, 159 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > index a138b292ec6a..4387d30d6180 100644
-> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > @@ -92,6 +92,10 @@ wifi_pwrseq: wifi_pwrseq {
-> >       };
-> >  };
-> >
-> > +&cpu0 {
-> > +     cpu-supply = <&buck1_reg>;
-> > +};
-> > +
-> >  &clks {
-> >       assigned-clocks = <&clks IMX7D_CLKO2_ROOT_SRC>,
-> >                         <&clks IMX7D_CLKO2_ROOT_DIV>;
-> > @@ -119,6 +123,148 @@ wacom_digitizer: digitizer@9 {
-> >       };
-> >  };
-> >
-> > +&i2c2 {
-> > +     clock-frequency = <100000>;
->
-> We can set this now to 400kHz since the driver can handle quirks now
-> internal.
+On 09/01/2023 12:41, Konrad Dybcio wrote:
+> 
+> 
+> On 9.01.2023 10:51, Krzysztof Kozlowski wrote:
+>> On 09/01/2023 10:39, Konrad Dybcio wrote:
+>>> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
+>>> others really don't want that. Since it has to be conditional, turn
+>>> qcom,vmid into an u32 array so that we can handle the NAV case, as
+>>> well as other similar ones if they pop up in the future.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>> v2 -> v3:
+>>> Rewrite to accomodate for changes, don't pick up tags
+>>>
+>>>  .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml   | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>>> index 2998f1c8f0db..cfc2fda30eba 100644
+>>> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>>> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+>>> @@ -27,9 +27,9 @@ properties:
+>>>        identifier of the client to use this region for buffers
+>>>  
+>>>    qcom,vmid:
+>>> -    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>      description: >
+>>> -      vmid of the remote processor, to set up memory protection
+>>> +      Array of vmids of the remote processors, to set up memory protection
+>>
+>> You need now min and maxItems.
+> Hm, I tested it with and without:
+> 
+> minItems: 1
+> maxItems: 2
+> 
+> on DTs with either one or two VMIDs defined and neither complains..
 
-After a discussion on the first patch I'm going to leave this as is.
-Let me know if you do want me to change it.
+You can also make a property like:
 
->
-> > +     pinctrl-names = "default", "sleep";
-> > +     pinctrl-0 = <&pinctrl_i2c2>;
-> > +     pinctrl-1 = <&pinctrl_i2c2>;
->
-> Do we need a "sleep" config here since this will be the same
-> configuration as the "default" one.
+	qcom,vmid: true
 
-Nope, dropped.
+which will accept anything but it won't be correct approach. Properties
+should have some reasonable constraints. Otherwise binding is not really
+specific and is describing the interface in a very relaxed way.
 
->
-> > +     status = "okay";
-> > +
-> > +     bd71815: pmic@4b {
-> > +             compatible = "rohm,bd71815";
-> > +             reg = <0x4b>;
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&pinctrl_bd71815>;
-> > +             interrupt-parent = <&gpio6>; /* PMIC_INT_B GPIO6_IO16 */
-> > +             interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
-> > +             gpio-controller;
-> > +             clocks = <&clks IMX7D_CLKO2_ROOT_SRC>;
-> > +             clock-output-names = "bd71815-32k-out";
-> > +             #clock-cells = <0>;
-> > +             #gpio-cells = <1>;
-> > +
-> > +             regulators {
-> > +                     #address-cells = <1>;
-> > +                     #size-cells = <0>;
-> > +
-> > +                     buck1_reg: regulator@0 {
-> > +                             reg = <0>;
-> > +                             regulator-compatible = "buck1";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <2000000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                             regulator-ramp-delay = <1250>;
-> > +                     };
-> > +
-> > +                     buck2_reg: regulator@1 {
-> > +                             reg = <1>;
-> > +                             regulator-compatible = "buck2";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <2000000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                             regulator-ramp-delay = <1250>;
-> > +                     };
-> > +
-> > +                     buck3_reg: regulator@2 {
-> > +                             reg = <2>;
-> > +                             regulator-compatible = "buck3";
-> > +                             regulator-min-microvolt = <1200000>;
-> > +                             regulator-max-microvolt = <2700000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     buck4_reg: regulator@3 {
-> > +                             reg = <3>;
-> > +                             regulator-compatible = "buck4";
-> > +                             regulator-min-microvolt = <1100000>;
-> > +                             regulator-max-microvolt = <1850000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     buck5_reg: regulator@4 {
-> > +                             reg = <4>;
-> > +                             regulator-compatible = "buck5";
-> > +                             regulator-min-microvolt = <1800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     ldo1_reg: regulator@5 {
-> > +                             reg = <5>;
-> > +                             regulator-compatible = "ldo1";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     ldo2_reg: regulator@6 {
-> > +                             reg = <6>;
-> > +                             regulator-compatible = "ldo2";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     ldo3_reg: regulator@7 {
-> > +                             reg = <7>;
-> > +                             regulator-compatible = "ldo3";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     ldo4_reg: regulator@8 {
-> > +                             reg = <8>;
-> > +                             regulator-compatible = "ldo4";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     ldo5_reg: regulator@9 {
-> > +                             reg = <9>;
-> > +                             regulator-compatible = "ldo5";
-> > +                             regulator-min-microvolt = <800000>;
-> > +                             regulator-max-microvolt = <3300000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     dvref_reg: regulator@a {
-> > +                             reg = <0xa>;
-> > +                             regulator-compatible = "dvref";
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     lpsr_reg: regulator@b {
-> > +                             reg = <0xb>;
-> > +                             regulator-compatible = "lpsr";
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
-> > +
-> > +                     wled_reg: regulator@c {
-> > +                             reg = <0xc>;
-> > +                             regulator-compatible = "wled";
-> > +                             regulator-min-microamp = <10>;
-> > +                             regulator-max-microamp = <25000>;
-> > +                             regulator-boot-on;
-> > +                             regulator-always-on;
-> > +                     };
->
-> Note: You have marked all regulators as always on, this is rather
-> suboptimal due to power consumption.
+Best regards,
+Krzysztof
 
-Good point. The power consumption is already pretty bad, as mainline
-doesn't support the i.MX deep sleep. As I know this works I'd like to
-keep it as is. I'll test to see if removing them doesn't break
-anything and then send a follow up patch.
-
-Alistair
-
->
-> Regards,
->   Marco
->
