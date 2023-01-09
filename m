@@ -2,153 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007DD661EAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169BB661EB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjAIGbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 01:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
+        id S229473AbjAIGcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 01:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjAIGbp (ORCPT
+        with ESMTP id S230355AbjAIGcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 01:31:45 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38FF1180E
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:31:43 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so5412361ill.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 22:31:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UlJwxp6GYj5ZaTzFBjTys5qzcJdyUszP5walHHnblyk=;
-        b=mg+HN9DsR2SQOyI5T77byh9R8+Z1n9MR5mR36+wnqaXHbKmru7g24daWb2M5etqufO
-         WdWLHdvNnjwU8OvGD8/tF5KTsrSM+Lur6NJkDRteO3/sT1mKdBTK98l5sAuwwy8F4oyd
-         NM13gO06y72esKC6RjVCEbV2yDa11ETCD/8/u0cK1KQBSsuxGBuOp+6BMlmfkz2vSSgu
-         WLd2VF/mKPo4fpURxBCtIswKNNvdJqSO+RGjNXDWFoTdUldZnKbttReq16AheitSQ6j8
-         Szwq7Q1YgbTfQXCIglP7OdC6cx4jfKS01AWsiTXjVwWwkAUpbvdG+tjJKJxy/WK7qLB3
-         IXBA==
-X-Gm-Message-State: AFqh2kqqKVxODDcS20eDb7ycKUtIlZhfEw4982sL4IeCmuX7VaGOyvtv
-        XijAz16BSIkKs8H4plLl79y3LqWYdkHJSN+zSnllheOJJw22
-X-Google-Smtp-Source: AMrXdXvWhPisbEV3WlNIkC+gey5f9z0tGSL7PzIGqQn3Rino6VfEns2ytkpwQLrsJ61AOtuzq/r+ND22DXjB5mqB61mkCJndsa2g
+        Mon, 9 Jan 2023 01:32:48 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60EE1180F;
+        Sun,  8 Jan 2023 22:32:45 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6406324E004;
+        Mon,  9 Jan 2023 14:32:44 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 9 Jan
+ 2023 14:32:44 +0800
+Received: from [192.168.125.95] (113.72.147.215) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 9 Jan
+ 2023 14:32:43 +0800
+Message-ID: <24316eeb-36e7-eb91-2085-f1e64b59f813@starfivetech.com>
+Date:   Mon, 9 Jan 2023 14:32:44 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3986:b0:6e4:1c03:2520 with SMTP id
- bw6-20020a056602398600b006e41c032520mr5128978iob.59.1673245903344; Sun, 08
- Jan 2023 22:31:43 -0800 (PST)
-Date:   Sun, 08 Jan 2023 22:31:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b0ddad05f1ceeb5f@google.com>
-Subject: [syzbot] [udf?] general protection fault in udf_fiiter_write_fi
-From:   syzbot <syzbot+aebf90eea2671c43112a@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RESEND PATCH v2 2/3] soc: starfive: Add StarFive JH71XX pmu
+ driver
+To:     Conor Dooley <conor@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221208084523.9733-1-walker.chen@starfivetech.com>
+ <20221208084523.9733-3-walker.chen@starfivetech.com> <Y6DMQpGuXfBWHr8L@spud>
+ <83899ba9-dff0-a678-e319-565101f71157@starfivetech.com>
+ <Y6yd6p16JxDz1j20@spud>
+Content-Language: en-US
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <Y6yd6p16JxDz1j20@spud>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.215]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022/12/29 3:50, Conor Dooley wrote:
+> Hey Walker,
+> Took another bit of a look.
 
-syzbot found the following issue on:
+Hey Conor, sorry for delay respond as I was busy with other things.
 
-HEAD commit:    c76083fac3ba Add linux-next specific files for 20221226
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ce8194480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c217c755f1884ab6
-dashboard link: https://syzkaller.appspot.com/bug?extid=aebf90eea2671c43112a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> On Wed, Dec 28, 2022 at 10:08:55AM +0800, Walker Chen wrote:
+>> On 2022/12/20 4:40, Conor Dooley wrote:
+>> > Hey Walker,
+>> > 
+>> > Hopefully just some minor bits here. Hopefully either Emil who has a
+>> > board, or someone that knows power management stuff better can give this
+>> > a proper review.
+>> > 
+>> > On Thu, Dec 08, 2022 at 04:45:22PM +0800, Walker Chen wrote:
+>> >> Add pmu driver for the StarFive JH71XX SoC.
+>> >> 
+>> >> As the power domains provider, the Power Management Unit (PMU) is
+>> >> designed for including multiple PM domains that can be used for power
+>> >> gating of selected IP blocks for power saving by reduced leakage
+>> >> current. It accepts software encourage command to switch the power mode
+>> >> of SoC.
+>> >> 
+>> >> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> >> ---
+>> >>  MAINTAINERS                       |  14 ++
+>> >>  drivers/soc/Kconfig               |   1 +
+>> >>  drivers/soc/Makefile              |   1 +
+>> >>  drivers/soc/starfive/Kconfig      |  11 +
+>> >>  drivers/soc/starfive/Makefile     |   3 +
+>> >>  drivers/soc/starfive/jh71xx_pmu.c | 396 ++++++++++++++++++++++++++++++
+>> >>  6 files changed, 426 insertions(+)
+>> >>  create mode 100644 drivers/soc/starfive/Kconfig
+>> >>  create mode 100644 drivers/soc/starfive/Makefile
+>> >>  create mode 100644 drivers/soc/starfive/jh71xx_pmu.c
+>> >> 
+>> > 
+>> >> +config JH71XX_PMU
+>> >> +	bool "Support PMU for StarFive JH71XX Soc"
+>> >> +	depends on PM && (SOC_STARFIVE || COMPILE_TEST)
+>> > 
+>> > Why not just do:
+>> > 	depends on PM
+>> > 	depends on SOC_STARFIVE || COMPILE_TEST
+>> > I think that way reads a little better.
+>> 
+>> No problem, will be changed like this way.
+>> 
+>> > 
+>> >> +	default SOC_STARFIVE
+>> >> +	select PM_GENERIC_DOMAINS
+>> >> +	help
+>> >> +	  Say 'y' here to enable support power domain support.
+>> >> +	  In order to meet low power requirements, a Power Management Unit (PMU)
+>> >> +	  is designed for controlling power resources in StarFive JH71XX SoCs.
+>> >> diff --git a/drivers/soc/starfive/Makefile b/drivers/soc/starfive/Makefile
+>> >> new file mode 100644
+>> >> index 000000000000..13b589d6b5f3
+>> >> --- /dev/null
+>> >> +++ b/drivers/soc/starfive/Makefile
+>> >> @@ -0,0 +1,3 @@
+>> >> +# SPDX-License-Identifier: GPL-2.0
+>> >> +
+>> >> +obj-$(CONFIG_JH71XX_PMU)	+= jh71xx_pmu.o
+>> >> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
+>> >> new file mode 100644
+>> >> index 000000000000..7a0145779e07
+>> >> --- /dev/null
+>> >> +++ b/drivers/soc/starfive/jh71xx_pmu.c
+>> >> @@ -0,0 +1,396 @@
+>> >> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> >> +/*
+>> >> + * StarFive JH71XX PMU (Power Management Unit) Controller Driver
+>> >> + *
+>> >> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> >> + */
+>> >> +
+>> >> +#include <linux/interrupt.h>
+>> >> +#include <linux/io.h>
+>> >> +#include <linux/iopoll.h>
+>> >> +#include <linux/module.h>
+>> >> +#include <linux/of.h>
+>> >> +#include <linux/of_device.h>
+>> >> +#include <linux/platform_device.h>
+>> >> +#include <linux/pm_domain.h>
+>> >> +#include <dt-bindings/power/starfive,jh7110-pmu.h>
+>> >> +
+>> >> +/* register offset */
+>> >> +#define JH71XX_PMU_HW_EVENT_ON		0x04
+>> >> +#define JH71XX_PMU_HW_EVENT_OFF		0x08
+> 
+> Neither of these are used here at the moment - would they be used in the
+> future? Also the docs fail to describe this PMU_HW_EVENT_OFF register,
+> although the HW_ON, and SW_FOO ones are described.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+They are not used in the current version, may be used in the future with the improvement of driver.
+If so, how about your suggestion ?  drop them ?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e388f26357fd/disk-c76083fa.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e24f0bae36d5/vmlinux-c76083fa.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5a69a059716/bzImage-c76083fa.xz
+> 
+>> >> +#define JH71XX_PMU_SW_TURN_ON_POWER	0x0C
+>> >> +#define JH71XX_PMU_SW_TURN_OFF_POWER	0x10
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE		0x44
+>> >> +#define JH71XX_PMU_INT_MASK		0x48
+> 
+> This one is called the "Timer Interrupt Mask", so we may as well match
+> that naming here, no?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+aebf90eea2671c43112a@syzkaller.appspotmail.com
+OK, will be changed.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-CPU: 1 PID: 13485 Comm: syz-executor.3 Not tainted 6.2.0-rc1-next-20221226-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:udf_fiiter_write_fi+0x14e/0x9d0 fs/udf/directory.c:402
-Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1b 08 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 63 10 49 8d 7c 24 28 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 ed 07 00 00 49 8b 44 24 28 48 8d 7b 18 48 89 fa
-RSP: 0018:ffffc9000b327818 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffffc9000b327ad0 RCX: ffffc9000cd16000
-RDX: 0000000000000005 RSI: ffffffff82df7ad5 RDI: 0000000000000028
-RBP: 0000000000000200 R08: 0000000000000001 R09: 0000000000000003
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff888082c31af8 R14: ffffc9000b327ad0 R15: ffff888082c30158
-FS:  00007ff99c5ae700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020045000 CR3: 0000000078396000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- udf_rename+0x69d/0xb80 fs/udf/namei.c:870
- vfs_rename+0x1162/0x1a90 fs/namei.c:4779
- do_renameat2+0xb22/0xc30 fs/namei.c:4930
- __do_sys_rename fs/namei.c:4976 [inline]
- __se_sys_rename fs/namei.c:4974 [inline]
- __x64_sys_rename+0x81/0xa0 fs/namei.c:4974
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff99b88c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff99c5ae168 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 00007ff99b9ac050 RCX: 00007ff99b88c0c9
-RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000020000040
-RBP: 00007ff99b8e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdfd6d93ef R14: 00007ff99c5ae300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:udf_fiiter_write_fi+0x14e/0x9d0 fs/udf/directory.c:402
-Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1b 08 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 63 10 49 8d 7c 24 28 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 ed 07 00 00 49 8b 44 24 28 48 8d 7b 18 48 89 fa
-RSP: 0018:ffffc9000b327818 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffffc9000b327ad0 RCX: ffffc9000cd16000
-RDX: 0000000000000005 RSI: ffffffff82df7ad5 RDI: 0000000000000028
-RBP: 0000000000000200 R08: 0000000000000001 R09: 0000000000000003
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff888082c31af8 R14: ffffc9000b327ad0 R15: ffff888082c30158
-FS:  00007ff99c5ae700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b3303f000 CR3: 0000000078396000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	89 fa                	mov    %edi,%edx
-   2:	48 c1 ea 03          	shr    $0x3,%rdx
-   6:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   a:	0f 85 1b 08 00 00    	jne    0x82b
-  10:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  17:	fc ff df
-  1a:	4c 8b 63 10          	mov    0x10(%rbx),%r12
-  1e:	49 8d 7c 24 28       	lea    0x28(%r12),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 ed 07 00 00    	jne    0x821
-  34:	49 8b 44 24 28       	mov    0x28(%r12),%rax
-  39:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
-  3d:	48 89 fa             	mov    %rdi,%rdx
+> 
+>> >> +#define JH71XX_PMU_PCH_BYPASS		0x4C
+>> >> +#define JH71XX_PMU_PCH_PSTATE		0x50
+>> >> +#define JH71XX_PMU_PCH_TIMEOUT		0x54
+>> >> +#define JH71XX_PMU_LP_TIMEOUT		0x58
+>> >> +#define JH71XX_PMU_HW_TURN_ON		0x5C
+> 
+> Same here, this HW related bit is also not used AFAICT.
+> Do you intend adding a user of the HW encourage at some point in the
+> future?
 
+I haven't thought about this yet. At least SW encourage can work now.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+>> >> +#define JH71XX_PMU_CURR_POWER_MODE	0x80
+>> >> +#define JH71XX_PMU_EVENT_STATUS		0x88
+>> >> +#define JH71XX_PMU_INT_STATUS		0x8C
+>> >> +
+>> >> +/* sw encourage cfg */
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE_EN_LO	0x05
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE_EN_HI	0x50
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE_DIS_LO	0x0A
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE_DIS_HI	0xA0
+>> >> +#define JH71XX_PMU_SW_ENCOURAGE_ON	0xFF
+> 
+> This all seems to correspond w/ docs...
+> 
+>> >> +
+>> >> +/* pmu int status */
+>> >> +#define JH71XX_PMU_INT_SEQ_DONE		BIT(0)
+>> >> +#define JH71XX_PMU_INT_HW_REQ		BIT(1)
+>> >> +#define JH71XX_PMU_INT_SW_FAIL		GENMASK(3, 2)
+>> >> +#define JH71XX_PMU_INT_HW_FAIL		GENMASK(5, 4)
+>> >> +#define JH71XX_PMU_INT_PCH_FAIL		GENMASK(8, 6)
+>> >> +#define JH71XX_PMU_INT_FAIL_MASK	(JH71XX_PMU_INT_SW_FAIL | \
+>> >> +					JH71XX_PMU_INT_HW_FAIL | \
+>> >> +					JH71XX_PMU_INT_PCH_FAIL)
+>> >> +#define JH71XX_PMU_INT_ALL_MASK		(JH71XX_PMU_INT_SEQ_DONE | \
+>> >> +					JH71XX_PMU_INT_HW_REQ | \
+>> >> +					JH71XX_PMU_INT_FAIL_MASK)
+> 
+> ...as does all of this - although, could the FAIL_MASK be dropped as it
+> appears to only be used here & the ALL_MASK definition be replaced with
+> GENMASK(8, 0)?
+> I don't really mind what you do here, think it just may be slightly
+> easier to read, so if you disagree leave it as is.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Maybe your way is more readable.
+
+> 
+>> >> +
+>> >> +/*
+>> >> + * The time required for switching power status is based on the time
+>> >> + * to turn on the largest domain's power, which is at microsecond level
+> 
+> Would you mind mentioning which domain that is?
+> USB seems to be listed in Table 3-9 as 200 us.
+
+Hardware colleague told me this time is based on the time to turn on the largest 
+domain's power, but he didn't tell me which one it was. This time refers to the
+ time required for switching the status of power domains, is not the time of power-up for analog PHY.
+USB is not one of power domains in JH7110 SoC.
+
+> 
+>> >> + */
+>> >> +#define JH71XX_PMU_TIMEOUT_US		100
+> 
+> I'm happy enough with things, apart from my lack of familiarity with the
+> power management APIs. Perhaps when you send the next version, someone
+> else can comment there.
+
+Anyway, I appreciate your detailed reading and comments.
+
+> 
+>> >> +struct jh71xx_domain_info {
+>> > 
+>> > 	const char * const name;
+>> > 	unsigned int flags;
+>> > 	u8 bit;
+>> > 
+>> >> +};
+>> >> +
+>> >> +struct jh71xx_pmu_match_data {
+>> > 
+>> > 	const struct jh71xx_domain_info *domain_info;
+>> > 	int num_domains;
+>> > 
+>> > Can you switch these two around like so?
+>> 
+>> Should be no problem.
+>> 
+>> >> +};
+>> >> +
+>> >> +struct jh71xx_pmu {
+>> >> +	struct device *dev;
+>> >> +	const struct jh71xx_pmu_match_data *match_data;
+>> >> +	void __iomem *base;
+>> >> +	spinlock_t lock;	/* protects pmu reg */
+>> >> +	int irq;
+>> >> +	struct genpd_onecell_data genpd_data;
+>> >> +	struct generic_pm_domain **genpd;
+>> >> +};
+>> >> +
+>> >> +struct jh71xx_pmu_dev {
+>> >> +	struct generic_pm_domain genpd;
+>> >> +	const struct jh71xx_domain_info *domain_info;
+>> >> +	struct jh71xx_pmu *pmu;
+>> > 
+>> > And these two too please in the same way.
+>> 
+>> Nice :)
+>> 
+>> > 
+>> >> +};
+>> >> +
+>> >> +static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_on)
+>> >> +{
+>> >> +	struct jh71xx_pmu *pmu = pmd->pmu;
+>> >> +
+>> >> +	if (!mask) {
+>> >> +		*is_on = false;
+>> >> +		return -EINVAL;
+>> >> +	}
+>> >> +
+>> >> +	*is_on = readl(pmu->base + JH71XX_PMU_CURR_POWER_MODE) & mask;
+>> >> +
+>> >> +	return 0;
+>> >> +}
+>> >> +
+>> >> +static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+>> >> +{
+>> >> +	struct jh71xx_pmu *pmu = pmd->pmu;
+>> >> +	unsigned long flags;
+>> >> +	u32 val;
+>> >> +	u32 mode;
+>> >> +	u32 encourage_lo;
+>> >> +	u32 encourage_hi;
+>> >> +	bool is_on;
+>> >> +	int ret;
+>> >> +
+>> >> +	ret = jh71xx_pmu_get_state(pmd, mask, &is_on);
+>> >> +	if (ret) {
+>> >> +		dev_dbg(pmu->dev, "unable to get current state for %s\n",
+>> >> +			pmd->genpd.name);
+>> >> +		return ret;
+>> >> +	}
+>> >> +
+>> >> +	if (is_on == on) {
+>> >> +		dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
+>> >> +			pmd->genpd.name, on ? "en" : "dis");
+>> >> +		return 0;
+>> >> +	}
+>> >> +
+>> >> +	spin_lock_irqsave(&pmu->lock, flags);
+>> >> +
+>> >> +	/*
+>> >> +	 * The PMU accepts software encourage to switch power mode in the following 2 steps:
+>> >> +	 *
+>> >> +	 * 1. Configure the register SW_TURN_ON_POWER (offset 0x0c), write 1 to
+>> >> +	 *    the bit which power domain will be turn-on, write 0 to the others.
+>> > 
+>> > Some grammatical nit picking..
+>> > 
+>> > "Configure the register blah (offset 0x0c) by writing 1 to the bit
+>> > corresponding to the power domain that will be turned on and writing
+>> > zero to the others."
+>> > 
+>> > Is that a correct correct summation of the operation?
+>> 
+>> Yes, maybe your description is better easy-to-understand.
+>> 
+>> > 
+>> >> +	 *    Likewise, configure the register SW_TURN_OFF_POWER (offset 0x10),
+>> >> +	 *    write 1 to the bit which power domain will be turn-off, write 0 to the others.
+>> > 
+>> > 
+>> >> +	 */
+>> >> +	if (on) {
+>> >> +		mode = JH71XX_PMU_SW_TURN_ON_POWER;
+>> >> +		encourage_lo = JH71XX_PMU_SW_ENCOURAGE_EN_LO;
+>> >> +		encourage_hi = JH71XX_PMU_SW_ENCOURAGE_EN_HI;
+>> >> +	} else {
+>> >> +		mode = JH71XX_PMU_SW_TURN_OFF_POWER;
+>> >> +		encourage_lo = JH71XX_PMU_SW_ENCOURAGE_DIS_LO;
+>> >> +		encourage_hi = JH71XX_PMU_SW_ENCOURAGE_DIS_HI;
+>> >> +	}
+>> >> +
+>> >> +	writel(mask, pmu->base + mode);
+>> >> +
+>> >> +	/*
+>> >> +	 * 2. Write SW encourage command sequence to the Software Encourage Reg (offset 0x44)
+>> >> +	 * SW turn-on command sequence: 0xff -> 0x05 -> 0x50
+>> >> +	 * SW turn-off command sequence: 0xff -> 0x0a -> 0xa0
+>> > 
+>> > I think you could replace the hard "coded" numbers here with a better
+>> > description idk without looking at the #defines above what these
+>> > correspond to. AFAICT, it'd be something like:
+>> > First write the ...ENCOURAGE_ON to reset the state machine which parses
+>> > the command sequence. It must be written every time.
+>> > Then write the lower bits of the command sequence, followed by the upper
+>> > bits. The sequence differs between powering on & off a domain.
+>> 
+>> Thank you for correction for these description. Because English is not my native language,
+>> so not very good in some sentences. I'll take your advice.
+> 
+> It may be mine but that does not mean I don't make mistakes either :)
+> In this case, I'd like to re-word my suggestion. How about:
+> First write ...ENCOURAGE_ON to ...SW_ENCOURAGE. This will reset the state
+> machine which parses the command sequence. This register must be written
+> every time software wants to power on/off a domain.
+> Then write the lower bits of the command sequence, followed by the upper
+> bits. The sequence differs between powering on & off a domain.
+> 
+> When I read my previous suggestion back, I had to read it more than once
+> to get what I had meant...
+
+In brief, the key is to clearly describe the software steps and it's easy to understand.
+
+> 
+>> >> +	 * Note: writing SW_MODE_ENCOURAGE_ON (0xFF) to the SW_ENCOURAGE register,
+>> >> +	 * the purpose is to reset the state machine which is going to parse instruction
+>> >> +	 *  sequence. It has to be written every time.
+>> >> +	 */
+>> >> +	writel(JH71XX_PMU_SW_ENCOURAGE_ON, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
+>> >> +	writel(encourage_lo, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
+>> >> +	writel(encourage_hi, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
+>> >> +
+>> >> +	spin_unlock_irqrestore(&pmu->lock, flags);
+>> >> +
+>> >> +	/* Wait for the power domain bit to be enabled / disabled */
+>> >> +	if (on) {
+>> >> +		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
+>> >> +						val, val & mask,
+>> >> +						1, JH71XX_PMU_TIMEOUT_US);
+>> >> +	} else {
+>> >> +		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
+>> >> +						val, !(val & mask),
+>> >> +						1, JH71XX_PMU_TIMEOUT_US);
+>> >> +	}
+>> >> +
+>> >> +	if (ret) {
+>> >> +		dev_err(pmu->dev, "%s: failed to power %s\n",
+>> >> +			pmd->genpd.name, on ? "on" : "off");
+>> >> +		return -ETIMEDOUT;
+>> >> +	}
+>> >> +
+>> >> +	return 0;
+>> >> +}
+>> > 
+>> >> +static int jh71xx_pmu_probe(struct platform_device *pdev)
+>> >> +{
+>> >> +	struct device *dev = &pdev->dev;
+>> >> +	struct device_node *np = dev->of_node;
+>> >> +	const struct jh71xx_pmu_match_data *match_data;
+>> >> +	struct jh71xx_pmu *pmu;
+>> >> +	unsigned int i;
+>> >> +	int ret;
+>> >> +
+>> >> +	pmu = devm_kzalloc(dev, sizeof(*pmu), GFP_KERNEL);
+>> >> +	if (!pmu)
+>> >> +		return -ENOMEM;
+>> >> +
+>> >> +	pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>> >> +	if (IS_ERR(pmu->base))
+>> >> +		return PTR_ERR(pmu->base);
+>> >> +
+>> >> +	/* initialize pmu interrupt  */
+>> > 
+>> > nit: this comment is ~pointless.
+>> 
+>> Will be dropped.
+>> 
+>> > 
+>> >> +	pmu->irq = platform_get_irq(pdev, 0);
+>> >> +	if (pmu->irq < 0)
+>> >> +		return pmu->irq;
+>> >> +
+>> >> +	ret = devm_request_irq(dev, pmu->irq, jh71xx_pmu_interrupt,
+>> >> +			       0, pdev->name, pmu);
+>> >> +	if (ret)
+>> >> +		dev_err(dev, "request irq failed.\n");
+>> > 
+>> > nit: s/request/requesting
+>> 
+>> Will be fixed.
+>> 
+>> > 
+>> > Unfortunately I cannot really review the rest of this, but hopefully
+>> > I'll get a board soon and can try it out - or else send me a link to
+>> > your TRM or w/e.
+>> 
+>> Anyway, I would like to thank you very much for your time.
+> 
+> Oh, while I think of it - I was talking to some people from Imagination
+> at the RISC-V Summit who said they're working on open sourcing their
+> GPU drivers, so hopefully we do end up with an open source driver for
+> the one on JH7110 soon :)
+
+Of course, hopefully the GPU can also be open source eventually.
+
+Best regards,
+Walker Chen
+
