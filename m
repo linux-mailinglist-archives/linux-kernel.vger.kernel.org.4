@@ -2,107 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C756625E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D7C6625FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbjAIMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S236215AbjAIMyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbjAIMw0 (ORCPT
+        with ESMTP id S234257AbjAIMxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:52:26 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44CB41;
-        Mon,  9 Jan 2023 04:52:26 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id i20so7619361qtw.9;
-        Mon, 09 Jan 2023 04:52:26 -0800 (PST)
+        Mon, 9 Jan 2023 07:53:34 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705F815FE1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:53:33 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso2264751wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 04:53:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2oUr8w/fBVkJnE59k2x6LjFTgvfWlu1602Zu3esq0gQ=;
+        b=yw7651Zfiaa/ETLY1KrF3sA59Qt0nq2p9DYlfctPDk3lmFGFgxggxE1j9xeV4bWlz6
+         EJHzBbK5iAv2IEEosCynJKk6OzKB0omA/4odpZkIoCPLMKsu09p2zyYkXourRrSw2VL5
+         1GQsPjAHf3eyuc7yKnvLrLCl+mX7SXR7+KO1yANTVXg5DR0PloCvslrjAt/jq3umiql4
+         OeWyumIvb5oNn+k2blGF+uHuGRPrNWvdjSXXeWQlwFHNpan8JJYwMYBBmMpfGcDb2vOX
+         2L27BJCG4Obp0QFgf9f16SycA4f63/y5LQ0Yvay6aZRKLGheyCsfyBM7hX9y+IOzEB4z
+         BHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k3NkQ2MoGKot6GyanlF01tIJyl/D3I3FmiwM87+ZRR0=;
-        b=qt0kXDAY6EZfmz2ZMrHCYCfwwy5OLWBLtKVQ4zCBW2WTE4SXsup8uswTK04SiCzj6e
-         qNmT70nhsJCeZSsbw+3c1QWbTiBF7R1t4amlhaq5L5ZxpBI1mNMuGZlJMohz0eqk9JJI
-         7OnouTce9H7hfVZPql91zAjNkP2Qzs2fdGsyXNT39MDS3Jwx/juDqYPRnyY3F++58J1G
-         Eqf+nVxX+Y++yXn5Mas7IB2z8I0FSUWrp8GCZgEPPFd0KPOy+jiJSv7kqh0H/fqBTvTG
-         wCB7tVw54iSmKcRmx/jmRNtn0UTKRMZBl9a4DJcK2nGlFm3Kv/VqdFP+a7rnIjC/uKpH
-         g7iA==
-X-Gm-Message-State: AFqh2krvH3xXUmiK/pUTd48WjBaCumHyMwS2T53OpWJmNEbOX3QN2R6h
-        aTIwnqoGzrJz1C4PqqhNEnfv+2DtFRMFuA==
-X-Google-Smtp-Source: AMrXdXuyCnvavHh1UZDI6wcy5FdKryQlGuC+Cjj6bJoqbHcaTN5kadVo4uNlRKdNurXUYeCwTpKeVw==
-X-Received: by 2002:ac8:41d5:0:b0:3ac:b93d:84b6 with SMTP id o21-20020ac841d5000000b003acb93d84b6mr6528446qtm.4.1673268745025;
-        Mon, 09 Jan 2023 04:52:25 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id y4-20020ac87c84000000b0039a55f78792sm4509544qtv.89.2023.01.09.04.52.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 04:52:24 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-4c7d35b37e2so54760177b3.2;
-        Mon, 09 Jan 2023 04:52:23 -0800 (PST)
-X-Received: by 2002:a81:17d5:0:b0:480:fa10:459e with SMTP id
- 204-20020a8117d5000000b00480fa10459emr3677548ywx.283.1673268743712; Mon, 09
- Jan 2023 04:52:23 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2oUr8w/fBVkJnE59k2x6LjFTgvfWlu1602Zu3esq0gQ=;
+        b=XrDMN+KKbhrHjZUS5qp91YlVfd7uG63FIwcvo3UGyfifvyipXM1/uMFoO95/WtFfYQ
+         ly/ByfmaPIX18OjFilUuGWO1hJ6A7h/GVXJp87+1SJtBHnDseRbm4NYhQOSz0Fp+jSU8
+         uCfMhvCJ1TGjqBKw4qTejxDL7BgpKLuQ3M+ZFbjF+ZAe6CYgg58ojpEKYPHviLheQ6m3
+         wO4R+yNJ++j/NxOa4NN0rBPxO0hKdcG0UGjf2j+sXbYdZSgNPTsb+PeiaynQGTfM22bd
+         FGNG3rTNh8xOUlR3if+x8qP7LFqyVdSXSpSbZ88nArl2muPaxkUtWQTnPhNwRZMQqxS7
+         7aoQ==
+X-Gm-Message-State: AFqh2kpny7XhrTFiLiX0nFb+g5nbvm74AG1N8brC9kfCQ4LY1UBpJKW3
+        5uNyFqqHkSe5OTvsYoKkDwwdXQ==
+X-Google-Smtp-Source: AMrXdXvGChqLrkdOYMIrvP3oiZBLJmzLXN7wzV4hvUgkqWIZvi4SN9pHUanVnXVyf/b8Nfwm+x5bRQ==
+X-Received: by 2002:a05:600c:8507:b0:3d9:6c7d:c9ee with SMTP id gw7-20020a05600c850700b003d96c7dc9eemr41487743wmb.25.1673268811818;
+        Mon, 09 Jan 2023 04:53:31 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id y7-20020a7bcd87000000b003d997e5e679sm12805667wmj.14.2023.01.09.04.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 04:53:31 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Mon, 09 Jan 2023 13:53:25 +0100
+Subject: [PATCH v2 01/11] dt-bindings: firmware: convert meson_sm.txt to dt-schema
 MIME-Version: 1.0
-References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com> <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Jan 2023 13:52:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
-Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
- PM clocks
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221117-b4-amlogic-bindings-convert-v2-1-36ad050bb625@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:49 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
-> reset the system.
->
-> The procedure described in the HW manual (Procedure for Activating Modules)
-> for activating the target module states we need to start supply of the
-> clock module before applying the reset signal. This patch makes sure we
-> follow the same procedure to clear the registers of the WDT module, fixing
-> the issues seen on RZ/Five SoC.
->
-> While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as it has
-> the same function calls.
->
-> Fixes: 4055ee81009e ("watchdog: rzg2l_wdt: Add set_timeout callback")
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Convert the Amlogic Secure Monitor bindings to dt-schema.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Take in account usage the used variant with amlogic,meson-gx-sm.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ .../bindings/firmware/amlogic,meson-gxbb-sm.yaml   | 39 ++++++++++++++++++++++
+ .../bindings/firmware/meson/meson_sm.txt           | 15 ---------
+ 2 files changed, 39 insertions(+), 15 deletions(-)
 
-                        Geert
+diff --git a/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml b/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml
+new file mode 100644
+index 000000000000..8f50e698760e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/firmware/amlogic,meson-gxbb-sm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Secure Monitor (SM)
++
++description:
++  In the Amlogic SoCs the Secure Monitor code is used to provide access to the
++  NVMEM, enable JTAG, set USB boot, etc...
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++properties:
++  compatible:
++    oneOf:
++      - const: amlogic,meson-gxbb-sm
++      - items:
++          - const: amlogic,meson-gx-sm
++          - const: amlogic,meson-gxbb-sm
++
++  power-controller:
++    type: object
++    $ref: /schemas/power/amlogic,meson-sec-pwrc.yaml#
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    firmware {
++        secure-monitor {
++            compatible = "amlogic,meson-gxbb-sm";
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt b/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt
+deleted file mode 100644
+index c248cd44f727..000000000000
+--- a/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-* Amlogic Secure Monitor
+-
+-In the Amlogic SoCs the Secure Monitor code is used to provide access to the
+-NVMEM, enable JTAG, set USB boot, etc...
+-
+-Required properties for the secure monitor node:
+-- compatible: Should be "amlogic,meson-gxbb-sm"
+-
+-Example:
+-
+-	firmware {
+-		sm: secure-monitor {
+-			compatible = "amlogic,meson-gxbb-sm";
+-		};
+-	};
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.34.1
