@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9478662B37
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC85662B46
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234953AbjAIQaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S233666AbjAIQbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235096AbjAIQ3s (ORCPT
+        with ESMTP id S235117AbjAIQbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:29:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB905FFA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:29:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF6DBB80E74
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC07C433D2;
-        Mon,  9 Jan 2023 16:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673281784;
-        bh=+keg4TVU7FGnl6EyOzGiiSmz2L+QPNnuTFBQiu5jWlU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oTXZhHTOj4JH6e6DjknfyvjK8d6v1e9p88ovTPjFe5ohgYRWDuL6EUnQk0R0B54Fz
-         vxvTiK0a0yvQ96hy7NlglLNFUvGuofF0SHnoZ5KBnuDxQF9eNpp4ovujEzF/8uOWW8
-         bon7++4vYzxsfVFatqoDP3ewyOJOWAbCMc2sWLHDTyu2euMGwbptvLUYHTTAr1g/uJ
-         m272hyZFl6XWzmxJO40xqyVrSQ3siQDPdxeAIvzTxn4U4wtJqN1rQ8LQoi4u4+ql8/
-         OgImY7hQ14KFLtZvvGsnAMBKbnCEoaY5zTCd47PFyZ1LVQ6np3WPhCf7bV2M55KIQx
-         fzn4zA/726m7g==
-Date:   Mon, 9 Jan 2023 16:29:40 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH trivial v2] mfd: core: Spelling s/compement/complement/
-Message-ID: <Y7xA9N2IfSYYPLzi@google.com>
-References: <aa7abd7103a0e4be954ea63de78f12e8251b2964.1673271092.git.geert+renesas@glider.be>
+        Mon, 9 Jan 2023 11:31:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4172537503;
+        Mon,  9 Jan 2023 08:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=o2/WdWh0APeupuPh7RKLqwpzddI4XMgnRH0Srb3bBA8=; b=JVVg5ZiQ5EwX/bJmzcBrm5hQRZ
+        /FzNMH+VKS9Uj+oKG55AthoXByc4rsJne2KzG8AGcjMmoP5h0WqErzYgDSN+WUQKzncqgpwuFs1+7
+        1M6D1dFOaXVUOKeggVpP3UtCWrl5p5Ztj2Lj80rGwv2HxiXqq7hDuP/8BUHSrJZWBfuL6Q1X4nx1p
+        RS1CDqZNoCvrBjNAChCc1uvqKPHUBlUFMKbqG3LtFI8xHtSyffujWEPx/nzLx/hEe5qaX301iKJnv
+        lPtarK9OheMMBqEx+eJIz+xyn512CYwoPVvUtrlL1KlwNB/M9NxcRuX/KVZUMniyhSoP3acYxTdvd
+        rpTqYc0Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pEv2H-002QqF-Eb; Mon, 09 Jan 2023 16:30:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 13FAA3001E5;
+        Mon,  9 Jan 2023 17:29:56 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 02FBF20086EAB; Mon,  9 Jan 2023 17:29:56 +0100 (CET)
+Date:   Mon, 9 Jan 2023 17:29:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 07/12] percpu: Wire up cmpxchg128
+Message-ID: <Y7xBA35m6DboB2C7@hirez.programming.kicks-ass.net>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.286760562@infradead.org>
+ <Y7VsbM4ada2KkAdx@osiris>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aa7abd7103a0e4be954ea63de78f12e8251b2964.1673271092.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7VsbM4ada2KkAdx@osiris>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023, Geert Uytterhoeven wrote:
-
-> Fix a misspelling of "complement".
+On Wed, Jan 04, 2023 at 01:09:16PM +0100, Heiko Carstens wrote:
+> On Mon, Dec 19, 2022 at 04:35:32PM +0100, Peter Zijlstra wrote:
+> > In order to replace cmpxchg_double() with the newly minted
+> > cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ...
+> > --- a/arch/s390/include/asm/percpu.h
+> > +++ b/arch/s390/include/asm/percpu.h
+> > +#define this_cpu_cmpxchg_16(pcp, oval, nval)				\
+> > +({									\
+> > +	u128 old__ = __pcpu_cast_128((nval), (nval));			\
+> > +	u128 new__ = __pcpu_cast_128((oval), (oval));			\
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v2:
->   - Do not reflow the comment, as requested by Lee.
-> ---
->  include/linux/mfd/core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> spot the bug... please merge the below into this patch.
 
-Applied, thanks
-
--- 
-Lee Jones [李琼斯]
+D'oh, luckily I got a fresh pile of brown paper bags for xmas.
