@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA47A6635BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEC76635C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238114AbjAIXos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S237988AbjAIXo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237882AbjAIXoO (ORCPT
+        with ESMTP id S235432AbjAIXoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 Jan 2023 18:44:14 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916C03BE9C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:44:09 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id q2so10676437ljp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:44:09 -0800 (PST)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B33752E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:44:10 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id f34so15577613lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kpASIlrn94h2kw47h1c03X9cqh5FWCX9FeHma7sBwdI=;
-        b=v1wrZ2vN/XnH/5e/agAJ16tPNvEY3v5UQpgH5Myp1qx1T/tvSz7m8P7mZNZ7lXLfD0
-         EpkGbcICZQkZsQ6g2RTtvYTPrKYaaMjD0x5LUliXvpSwXhtSdyg7YRUoet1/smn7hSa6
-         yIkwgYhdC7QLiBvK3GMYHo6ArZe+pS697mGl7ohBaNWtoV8YakjJ93ISDemTmu29Q6rM
-         tvMdADfb4ZOj3ollbJaPYObgJJxTeRuBWzqkCzZoAM8w+ZYM63Q4Dqa0nMNclVJ3OErA
-         lpNOCuMww4d2efN+xd+3Dx3ZyAcMF41gNNIUkM4m0/dF/L3yjRiNwgQhCtFmvbfSCTqK
-         DS5A==
+        bh=oUSIRNZZE79nkyMU9G9AqBIuhvo2pozCegvf/Srh544=;
+        b=uJ5zkAXcPizQidJBAs/mQpb6fWttL+vM7ap+xLWfv4mHkzsnUY2SIk3ZL+Ks2/9mZS
+         CPiNW2BlpphCd3ikKwzLVN93Tq2CQ5G3BdKWbDeerxtNAY0tJpbXdVfKhYPnl/u4kfqk
+         DMhhtpZpwT7ExztXEodx/Hc/WdSZrpkqgq+qoUTsZoyzc4SJai1vZhMw7r2Vrpzm2CpL
+         f6aSCnMdeQf81xHBjNUC5fMcRvJWkXTg1x10jUye/qG/z7i3iZ0HnNLQzAdft/2IV9vH
+         63k12N6Q4HecofVPXg2mj8CCEIE8TyAAkTAo3JPi85MSU3EdDS/kJIbUc+Pb80YW1fpm
+         u0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kpASIlrn94h2kw47h1c03X9cqh5FWCX9FeHma7sBwdI=;
-        b=QGaujsmbarl3tZfF7FZ0XIzNI+iY0VSe9nX9r2A/dTyx8KD86b0O3+2tTFSEw2//XV
-         1n8QXUFVALf3fowHc/VyI7qbctOXh7NhwPUjAlC9dMvuBpYrffFcT6Cxp26j9MFCkyAq
-         h6vsJFzr2x/th+E12nsEFKHyuPuVkneOTOECBvq7dXqrG+alIuuCxf1wsbU1KzRPi1/g
-         SIQQiNJX6juGexizbhgvWKeQe/hjGw9e3Fsqjlt8moJkJqbNzMRR5dTskpK1i22zHGAZ
-         DKWMEEE1FOa1V+XT0+QFB2PNCMRDlDg7G8fonaUJSToxRJ+oHGXii/Vxu6NvBF0aTZwf
-         w5Gg==
-X-Gm-Message-State: AFqh2kov+43iXur33TD+H9QphZ625C4tPdACGC6F7rrzH2oIOtyOyMkn
-        BQclp9k7h9GZtxhlIGNmE4zYVg==
-X-Google-Smtp-Source: AMrXdXuTSirBkKKX9cOHfeyvPTZYP1igXatg4QzFNBd3JOOm6VJi6sJ8f6PwONdphEmyG1wXADgO1g==
-X-Received: by 2002:a2e:2c0d:0:b0:281:bb75:1863 with SMTP id s13-20020a2e2c0d000000b00281bb751863mr3348094ljs.0.1673307847937;
-        Mon, 09 Jan 2023 15:44:07 -0800 (PST)
+        bh=oUSIRNZZE79nkyMU9G9AqBIuhvo2pozCegvf/Srh544=;
+        b=0WFjYO3HhghomeOrWszIY5n3R93CI4tkOTtoLRWtgel+Kl+dfgNeK8yGwNJ9WGowMo
+         mlrMjLTH8wOnvzvZ8j4L/Qn9UUEm3h69Bi2GhYaYrGM6vSUqfrpeQUIabhJP2IE2Wiz4
+         Bj1ecs1kanz0+r6USFdHH/H5gdfNAboK2BRQAJpAwLUETWNEpuPl6SoKZeKbfMcV6UUQ
+         VjaHOgQRBmXwAewme13Fx1G7yvrKHCaFAJ1BPzRQjh6LTxFIcuwjCT7eUaibsW/9NZwc
+         TsGNg8Oiw6LP09uHX/vkNjvUP0Ozo7ww7S9XcGxAsFoAXiIYMucZRl0fQP3PMLBYimca
+         41aw==
+X-Gm-Message-State: AFqh2kqfTy9ArND8oFKkn9cD4tS6m4tzayY5DsofEfzFqzqsCncR1LfQ
+        Hdhc2gWqALyb/C5T72rsg6CbJQ==
+X-Google-Smtp-Source: AMrXdXt5Lb1JdORz9wFKniYzT1NTeV6oyiJCRsJrJzp3Srm/OE2t1T4PW6ihA06QLlT0hzAYtUMKzA==
+X-Received: by 2002:a05:6512:368a:b0:4b5:b90a:829d with SMTP id d10-20020a056512368a00b004b5b90a829dmr16791324lfs.66.1673307848857;
+        Mon, 09 Jan 2023 15:44:08 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056512214900b004b5a4cf69dfsm1835255lfr.261.2023.01.09.15.44.07
+        by smtp.gmail.com with ESMTPSA id s9-20020a056512214900b004b5a4cf69dfsm1835255lfr.261.2023.01.09.15.44.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 15:44:07 -0800 (PST)
+        Mon, 09 Jan 2023 15:44:08 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     phone-devel@vger.kernel.org,
+To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Marijn Suijten <marijn.suijten@somainline.org>
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
@@ -59,28 +61,38 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Martin Botka <martin.botka@somainline.org>,
         Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
         Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/dpu: Print interrupt index in addition to the mask
-Date:   Tue, 10 Jan 2023 01:43:52 +0200
-Message-Id: <167330408782.609993.3753799611578677856.b4-ty@linaro.org>
+Subject: Re: [PATCH v2 0/8] drm/msm: DSC Electric Boogaloo for sm8[12]50
+Date:   Tue, 10 Jan 2023 01:43:53 +0200
+Message-Id: <167330408773.609993.1753222329751720759.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221121222456.437815-1-marijn.suijten@somainline.org>
-References: <20221121222456.437815-1-marijn.suijten@somainline.org>
+In-Reply-To: <20221221231943.1961117-1-marijn.suijten@somainline.org>
+References: <20221221231943.1961117-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,21 +100,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 21 Nov 2022 23:24:55 +0100, Marijn Suijten wrote:
-> The mask only describes the `irq_idx % 32` part, making it generally
-> impossible to deduce what interrupt is being enabled/disabled.  Since
-> `debug/core_irq` in debugfs (and other prints) also include the full
-> `DPU_IRQ_IDX()` value, print the same full value here for easier
-> correlation instead of only adding the `irq_idx / 32` part.
-> 
-> Furthermore, make the dbgstr messages more consistent.
+On Thu, 22 Dec 2022 00:19:35 +0100, Marijn Suijten wrote:
+> This preliminary Display Stream Compression support package for
+> (initially tested on) sm8[12]50 is based on comparing DSC behaviour
+> between downstream and mainline.  Some new callbacks are added (for
+> binding blocks on active CTLs), logic bugs are corrected, zeroed struct
+> members are now assigned proper values, and RM allocation and hw block
+> retrieval now hand out (or not) DSC blocks without causing null-pointer
+> dereferences.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] drm/msm/dpu: Print interrupt index in addition to the mask
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/d45e5744ab39
+[1/8] drm/msm/dpu: Wire up DSC mask for active CTL configuration
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/c2d2c62da1fc
+[2/8] drm/msm/dsi: Use DSC slice(s) packet size to compute word count
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/bbd1bccdcf4e
+[3/8] drm/msm/dsi: Flip greater-than check for slice_count and slice_per_intf
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/85b5a40991dd
+[5/8] drm/msm/dpu: Reject topologies for which no DSC blocks are available
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/f52b965c9434
+[6/8] drm/msm/dpu: Remove num_enc from topology struct in favour of num_dsc
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/9ce765395f41
+[7/8] drm/msm/dpu: Implement DSC binding to PP block for CTL V1
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/086116ae1410
+[8/8] drm/msm/dpu: Add DSC configuration for SM8150 and SM8250
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/8cc4c9de15f4
 
 Best regards,
 -- 
