@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779D066351A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6655D663517
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbjAIXRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S237854AbjAIXR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbjAIXQd (ORCPT
+        with ESMTP id S237833AbjAIXQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:16:33 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2F1DDD0;
-        Mon,  9 Jan 2023 15:16:31 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bt23so15494875lfb.5;
-        Mon, 09 Jan 2023 15:16:31 -0800 (PST)
+        Mon, 9 Jan 2023 18:16:30 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC461CB13;
+        Mon,  9 Jan 2023 15:16:29 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b3so15550208lfv.2;
+        Mon, 09 Jan 2023 15:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fcv1oFN64qJbUFhacrhJqgn8l/kgjLzAdWsUtFoBwMI=;
-        b=nBdqaJGPr/nRqiCZKqfaB1HQdy85AAh1ZQqHWisT9yDwtkhoPZXkKF7qRcING1Gzup
-         Uwwla3Pj8/L696BkpNLVsLz7x6fei2MZy2fzk1P0wvqBSVqvT5sYt4feMLxjjjmLVEpJ
-         e13sfdL4Yg7pkuIDOQsGNRn4d0RLWivD8Y2vHOSAb02bJyq12Naag37tHw56u7SlphtW
-         vG8BhN0CmrFdC7wiB6Jijei+yfRFNGaMVHH/Hy5Bso8hQjsoT1Ezxgc4VA1wJh/avvIO
-         R8Qp6sw54FQBsCc9HJmLB8BNumhP/pcVSKefZUQ+AEWAMFhwKcGIV2kUxyNZ6WyT5k/r
-         1eug==
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ORCokxU5jx6cKMaaTper0S84yDtXOhtofp7KVmnXiA=;
+        b=QdlzW40tyv/wOyAd0t/0Pkv5enmi1SZeXXuLb3sKU0MVWmGJHk9UuQG1SLoL7xhkdB
+         AqABtKiqP1rzK18A6dnd0Pr1S8ChdG55n6ixEjrataQ3NhjrihGrh2S+hW4sPeWF5fPC
+         lj0huOAVW51wYVP+tsGCov9pOr9HPNSfy5Tp5AMqejjkLs7w1M8/thZ0WdpFGHUfJtN1
+         MvdhWu2jfRV/n0iEyLy/4spC1FRkhODF3U0FQD179eZVquhwRqDGbkefeStLYyEF3XNW
+         d6DrohC+tHzhtOL0WV/JcPj1/H+7FMVUIoJRu7L0UU1T169OFV+uFO2wt0cNTjnrIBsF
+         20KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fcv1oFN64qJbUFhacrhJqgn8l/kgjLzAdWsUtFoBwMI=;
-        b=jTUmwdwJPRv8WFkqr0/umi+t/rn2ODlfOmDphKB9dvCkudOC1rWInZNd6l3svlDG3R
-         LKty6nBWQ1rqZX9g5w/AyhA04+9KSv8ErzfwFc1J+8O1RATtPesec4HHtHWi83O9ZKd/
-         6JMbyeptG2ApQwY5XQ22+CCD2Z+NRE1svno2Mah4wAtVgeWoJixplr5a/eDtZWIrhPeN
-         ZSJtuOS3bStQXpvVI4cxK2KpbEHJIX6Nkuo9p3N6vSPwdgfoLxi5CjT2jhKDRJw311+i
-         Sb6FAgopWwI9r4WETo9aGazltxRnxecYzRSvePTKef9rov/okWHhIxMExJwRRILQyNcZ
-         i4Fw==
-X-Gm-Message-State: AFqh2kqsWwGI0AxpVtuhFgVdE28cWbql75WqB3MUI1nce2bHJma8++bc
-        ojHbHrWUT+RN8E8jVh9LPkU=
-X-Google-Smtp-Source: AMrXdXtXMWbO88qPnq745Od9/2z5JfHQSbibEexSfpksdpgkjdwJBwliMQal1f7GVguXLEPln76qHQ==
-X-Received: by 2002:ac2:52ba:0:b0:4cb:445c:dc7d with SMTP id r26-20020ac252ba000000b004cb445cdc7dmr5998193lfm.26.1673306191279;
-        Mon, 09 Jan 2023 15:16:31 -0800 (PST)
+        bh=9ORCokxU5jx6cKMaaTper0S84yDtXOhtofp7KVmnXiA=;
+        b=FSWphUA/WMMWqb9Hf6yh1cKlRzAPp/jwh+EJjz8aBcQydz8SwuatKs3B4W94Zo0Bxx
+         KNgoSbwfhznA74E87yUPiAW174wDMXygmCVQOwq3HWZakVGJg0osxVpWjENBR0e1pMPT
+         kuBLQAoZknEVkbs2FuevUedtYJX2j5xJBTiDU7GMsRJh43ON8WAXpMm5j0Svu6Qkzr7a
+         xQ/vToxDRXmShm2Jsp+QkqEZ2KWRwxCzpzkBG2mI8vQ0KVl+vrz4m5cJXK8+us1soGRw
+         dqskt4VyWZQziYimqruNtW5ryOQAjtwDPbL+0xNdJHHoOt0qdeiwh13PG9yXheqZwpkI
+         837Q==
+X-Gm-Message-State: AFqh2kr8hBrFB8cFiMt9xuz8IOTNYHISUcdercLFEQsB+R5EyC2FCT1l
+        bhJe0bnmx+PfvXCWLWVoP5c=
+X-Google-Smtp-Source: AMrXdXsCbcTdDaTRpnUjGR5hQtLiFtCrpoRSWtrpxkgLsUUlzEWRhBdXsDzyLfrRwhHb4avnFJjojQ==
+X-Received: by 2002:a05:6512:260a:b0:4cb:427:745c with SMTP id bt10-20020a056512260a00b004cb0427745cmr21625530lfb.33.1673306188877;
+        Mon, 09 Jan 2023 15:16:28 -0800 (PST)
 Received: from localhost (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id br11-20020a056512400b00b0048a934168c0sm1831364lfb.35.2023.01.09.15.16.29
+        by smtp.gmail.com with ESMTPSA id s6-20020ac25fe6000000b004b6efcb7bb5sm1840277lfg.169.2023.01.09.15.16.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 15:16:30 -0800 (PST)
+        Mon, 09 Jan 2023 15:16:28 -0800 (PST)
 From:   Dmitry Baryshkov <dbaryshkov@gmail.com>
 X-Google-Original-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
-        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+To:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@somainline.org,
-        quic_jesszhan@quicinc.com,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        vkoul@kernel.org, a39.skl@gmail.com, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, swboyd@chromium.org,
-        dianders@chromium.org, liushixin2@huawei.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, Robert Foss <robert.foss@linaro.org>
-In-Reply-To: <20221230153554.105856-1-robert.foss@linaro.org>
-References: <20221230153554.105856-1-robert.foss@linaro.org>
-Subject: Re: [PATCH v4 00/11] Enable Display for SM8350
-Message-Id: <167330408775.609993.7646803775858639381.b4-ty@linaro.org>
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, airlied@gmail.com,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1672163103-31254-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1672163103-31254-1-git-send-email-quic_khsieh@quicinc.com>
+Subject: Re: [PATCH v16 0/5] Add data-lanes and link-frequencies to dp_out endpoint
+Message-Id: <167330408780.609993.2871958303249366717.b4-ty@linaro.org>
 Date:   Tue, 10 Jan 2023 00:41:27 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -84,29 +81,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 30 Dec 2022 16:35:43 +0100, Robert Foss wrote:
-> Dependencies:
-> https://lore.kernel.org/all/20221102231309.583587-1-dmitry.baryshkov@linaro.org/
-> https://lore.kernel.org/all/20221024164225.3236654-1-dmitry.baryshkov@linaro.org/
-> https://lore.kernel.org/all/20221104130324.1024242-5-dmitry.baryshkov@linaro.org/
+On Tue, 27 Dec 2022 09:44:58 -0800, Kuogee Hsieh wrote:
+> Add DP both data-lanes and link-frequencies property to dp_out endpoint and support
+> functions to DP driver.
 > 
-> Branch:
-> https://git.linaro.org/people/robert.foss/linux.git/log/?h=sm8350_dsi_v4
+> Kuogee Hsieh (5):
+>   arm64: dts: qcom: add data-lanes and link-freuencies into dp_out
+>     endpoint
+>   dt-bindings: msm/dp: add data-lanes and link-frequencies property
+>   drm/msm/dp: parse data-lanes as property of dp_out endpoint
+>   Add capability to parser and retrieve max DP link supported rate from
+>        link-frequencies property of dp_out endpoint.
+>   drm/msm/dp: add support of max dp link rate
 > 
 > [...]
 
 Applied, thanks!
 
-[01/11] dt-bindings: display: msm: Add qcom,sm8350-dpu binding
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/7a0c3d0025de
-[02/11] dt-bindings: display: msm: Add qcom,sm8350-mdss binding
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/ddcf30003b92
-[03/11] drm/msm/dpu: Add SM8350 to hw catalog
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/0a72f23f6ef8
-[04/11] drm/msm/dpu: Add support for SM8350
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/a596a6078586
-[05/11] drm/msm: Add support for SM8350
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/3d6287e64cbd
+[2/5] dt-bindings: msm/dp: add data-lanes and link-frequencies property
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/123f12555074
+[3/5] drm/msm/dp: parse data-lanes as property of dp_out endpoint
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/d25cfeeec064
+[4/5] Add capability to parser and retrieve max DP link supported rate from link-frequencies property of dp_out endpoint.
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/381518a1677c
+[5/5] drm/msm/dp: add support of max dp link rate
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/0e7f270591a4
 
 Best regards,
 -- 
