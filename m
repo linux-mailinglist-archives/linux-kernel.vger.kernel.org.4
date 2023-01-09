@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676826633B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31776633BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbjAIWLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S237601AbjAIWM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbjAIWLV (ORCPT
+        with ESMTP id S229616AbjAIWMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:11:21 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6703DFD32;
-        Mon,  9 Jan 2023 14:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673302280; x=1704838280;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ln9UmdvPEfCHFUK0OjSflAkT5ICnYz1pheD9irb6dlY=;
-  b=R/pENgKetfJv/OnxB3SlOyKXWD5JfpCb4DPOdTOgwiuCv8P2d5uNUp0x
-   mSRUamdT5HkqQ+TWNdxo6WuQA81ZTFfv+a05OsupGdQammfB8E2db0qwi
-   ZGHLTroCKF9SXMNbglN/HTYbxfzYFC2Bc/DI9UXRIc1Z2VSFds13rN5C5
-   7wMM+FxBy1zgSFuSpvaHhtAVq/lvNgTj0tB9asxs+EVuqbCJCq8sDhmvH
-   HuNiox94Bvk5KlXSqyztDwew10YjF0hMB7mes6CQUS9aa7h79+y3/7FZx
-   1m3gvRaVNEY9QpiybwS11eaMXbhZvcYn+ZqHYowcTZESuzQZ0OENLgQN+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="409242544"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="409242544"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 14:11:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="745528697"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="745528697"
-Received: from swapnadi-mobl2.amr.corp.intel.com (HELO [10.209.29.117]) ([10.209.29.117])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 14:11:18 -0800
-Message-ID: <7086ac3c-5eee-18c4-8c19-ae75eaa2e01a@intel.com>
-Date:   Mon, 9 Jan 2023 14:11:17 -0800
+        Mon, 9 Jan 2023 17:12:25 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16B41EEDE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:12:23 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id u24-20020a6be918000000b006ed1e9ad302so5862647iof.22
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:12:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DTUK3cZDq7+5e5U091ru+GvF8C+iMdCzHADni7W4eDI=;
+        b=oa2TSf+AKR7UciUPc573CcmOpJTtR8CVvaSSmy5QTrYYEVNjOLSh19Vkum29/7rgKC
+         MMQBXYIoGIwLiVlCIhhR70SlpGzN4KicnMBv6jTm+lLz8mkMHMyNpkpjudfc1KwSVEUZ
+         88WyQdUkFTsALyL42h5rifcdyzT2GBJff4mBoWVQa6sDOLTZ/ahMLsNz0R06/tk/Lyc4
+         9gIs8lBN0Ox/I3WIOYt3G5ddGiKYm7O3slYKk8IfV6XotkmA3ZHex78Mg5BbLG/NfLhm
+         2wUKRn4EWMMUI613Ltpv0Fha1yLMrIhGCiJIZ7SIfTrqfTvCdNw/nyHRj7Crps/+RJ2Y
+         GfCg==
+X-Gm-Message-State: AFqh2krW61AG7ZZQ3WQ/Y4V3OLtsyYlVmFVY7drmvxwhGrjHYvoV6G57
+        wyZ4e059CVoRg2Hw9XlZXXvXN2ARa9GMobw1yArb8WzOuQvQ
+X-Google-Smtp-Source: AMrXdXt22QvHMfgLmlMKJ4fSPICEnPJL8xHSmNJ/v5/CvyV6F7eDLPbLBcUQgUfuus7Oa0Foa7X9MTvgJeY8H6S/U9vanvNTKuMu
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 06/16] x86/virt/tdx: Get information about TDX module
- and TDX-capable memory
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1670566861.git.kai.huang@intel.com>
- <7c21a3de810397901bade0b1021912bbbf2d18bd.1670566861.git.kai.huang@intel.com>
- <d1093b3e-cdab-b138-d488-19b9456be978@intel.com>
- <e605ce95f1b92fae630bf6abb801774bc28d8072.camel@intel.com>
- <bea7dbd0-f6ec-5103-9d00-9617154d6be9@intel.com>
- <95de773544dfe4e13c3599a5f83f6fcad3c00e11.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <95de773544dfe4e13c3599a5f83f6fcad3c00e11.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:927:b0:30d:96b6:5cd2 with SMTP id
+ o7-20020a056e02092700b0030d96b65cd2mr1750200ilt.31.1673302343067; Mon, 09 Jan
+ 2023 14:12:23 -0800 (PST)
+Date:   Mon, 09 Jan 2023 14:12:23 -0800
+In-Reply-To: <e3029146-e399-aaaf-6192-2af8f1c1e131@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c2b1b505f1dc0f10@google.com>
+Subject: Re: [syzbot] memory leak in io_submit_sqes (4)
+From:   syzbot <syzbot+6c95df01470a47fc3af4@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 14:07, Huang, Kai wrote:
->>
->>       The 'tdsysinfo_struct' is fairly large (1k) and contains a lot
->>       of info about the TD.  Fully define the entire structure, but
->                           ^
->                 should be: "about the TDX module"?
-> 
+Hello,
 
-Yes, of course.  Thinko on my part.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-and-tested-by: syzbot+6c95df01470a47fc3af4@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         0af4af97 io_uring/poll: add hash if ready poll request..
+git tree:       git://git.kernel.dk/linux.git syztest
+console output: https://syzkaller.appspot.com/x/log.txt?x=1105391c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=72a4287b7f412c8a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6c95df01470a47fc3af4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
