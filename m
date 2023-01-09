@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FCA663225
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAC2663328
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237970AbjAIVCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S237969AbjAIVhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237819AbjAIVBO (ORCPT
+        with ESMTP id S238072AbjAIVft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:01:14 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B5813DCB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:56:09 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso11090455pjo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k77roXZTKEa1bW9MMBlu0nb8dRHFWkQI4epay3x27MU=;
-        b=CGg0P2AbUZkyGt7JVy15IUwgYNiwHKNpuHK4sbKDRxzpEnSHIUIVUG1crw2skaHRzO
-         8fKoa2lJUBsqWgBn3n1wQbkoT6CjRtdskVjHzY9lgpzwxtTNWRMQjDs5Ivw8aY3yTWAW
-         tVjsB5cF9ZpGG/15u1rgsnch2EJhSHA4QG3HqIK5jKkHg1WPnwP6Xx/q9oEqkgke/2cJ
-         cmyTO1GhMTg859Nd4qBZYUTx5Tvd88rZhjGuaZR3o//tANk8tuSDY9ven5Vp48m9ns59
-         Uq0Tk6wvGMFlZqzfwpqQObJkN5Aq++f3NTAXiukQ4HjTHYQbZJWNY31z8JN46GAJyo40
-         E3sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k77roXZTKEa1bW9MMBlu0nb8dRHFWkQI4epay3x27MU=;
-        b=NGJBbzhW0Ht3P4YeNd7afaTtEREFYNMCdgWyn+unhhez8PCmDOzBa2zeTtgjN9p6/L
-         VP82eD66dUX+Hx56ZO96ak8+8N3MBXuRBKG6vnRfeIH858k/g1xDVNMhOv9yRj+RFWSn
-         o59LoIzKSygXVw/s9Ix2hxyy+UbJ8yMZZvWJ3KSLUsCWWnwlqiTqdScAS7AZf5yNxKEO
-         a7vSsFIqH7MePWiQ12swsb9qQzhZP9wwTaBkPB1XFOTWJTc6L1ypl9B308Jug8KI+1+O
-         VXd9IAema7aflOUUuttKyCIXU6b4QbRmWa8/ZPLEp2rQKFSxR9wFpmd9R8sJ2bzJNij6
-         3WHw==
-X-Gm-Message-State: AFqh2krDT7smg99Hjt/oRxZj52K9VD7Xu4j8L5TryRJQIlBWEd9sBEyj
-        yrcyytfLfh5qY+kdAOvJg31NKS1xEwXF4VJacsYaUw==
-X-Google-Smtp-Source: AMrXdXvDm6dBr45GZwR8ZZacfwEY/hvFmIphJjWyEmyM7/WIajTWRzT+myD3k0Dip/lFV7Z3NNuiG+lA09+rqzxqYSY=
-X-Received: by 2002:a17:902:a407:b0:189:f899:bc23 with SMTP id
- p7-20020a170902a40700b00189f899bc23mr3757452plq.33.1673297768779; Mon, 09 Jan
- 2023 12:56:08 -0800 (PST)
+        Mon, 9 Jan 2023 16:35:49 -0500
+Received: from 14.mo550.mail-out.ovh.net (14.mo550.mail-out.ovh.net [178.32.97.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359A3D1C6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:34:43 -0800 (PST)
+Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.138.143])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 37B332476E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 20:19:08 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-frlns (unknown [10.109.138.190])
+        by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7D9691FEFE;
+        Mon,  9 Jan 2023 20:19:04 +0000 (UTC)
+Received: from sk2.org ([37.59.142.110])
+        by ghost-submission-6684bf9d7b-frlns with ESMTPSA
+        id 3/0OF7h2vGMDvxAAlD46gA
+        (envelope-from <steve@sk2.org>); Mon, 09 Jan 2023 20:19:04 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-110S004842627ec-d049-43fb-8f4c-5212fa5a1396,
+                    796317D5D98EA53ED2B7ABF3FE0FDD27B7A2AA3D) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Mon, 9 Jan 2023 21:18:57 +0100
+From:   Stephen Kitt <steve@sk2.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Sam Ravnborg via B4 Submission Endpoint 
+        <devnull+sam.ravnborg.org@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: Re: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight
+ handling
+Message-ID: <20230109211857.79856bcf@heffalump.sk2.org>
+In-Reply-To: <811a392a-d634-5557-dd58-57f1580e28f2@gmx.de>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+        <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
+        <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
+        <Y7nb2q6SDota/rTU@ravnborg.org>
+        <811a392a-d634-5557-dd58-57f1580e28f2@gmx.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230109201837.23873-1-eliasfleckenstein@web.de>
-In-Reply-To: <20230109201837.23873-1-eliasfleckenstein@web.de>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 9 Jan 2023 12:55:57 -0800
-Message-ID: <CAKwvOdnYkmadAhiwFAFuZwhABT4vE_urtDafA2pqP7=yt8795Q@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: fix typo (usafe -> unsafe)
-To:     Lizzy Fleckenstein <eliasfleckenstein@web.de>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, masahiroy@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/JDvLw33J.MlCnUHZ=3B.xEG";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 8555713393067591302
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeigddufeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfofggtgesghdtreerredtjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepfeeljeehvdeuheejudetvdfggfdutdekledvuddthedtkeehhfejffefudegveelnecuffhomhgrihhnpehlkhhmlhdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrdduuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehhedtpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 12:19 PM Lizzy Fleckenstein
-<eliasfleckenstein@web.de> wrote:
->
-> Fix the help text for the PRINTK_SAFE_LOG_BUF_SHIFT setting.
->
-> Signed-off-by: Lizzy Fleckenstein <eliasfleckenstein@web.de>
+--Sig_/JDvLw33J.MlCnUHZ=3B.xEG
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Sun, 8 Jan 2023 18:26:12 +0100, Helge Deller <deller@gmx.de> wrote:
 
-> ---
->  init/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 7e5c3ddc341d..57c8d224ea4c 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -776,7 +776,7 @@ config PRINTK_SAFE_LOG_BUF_SHIFT
->         depends on PRINTK
->         help
->           Select the size of an alternate printk per-CPU buffer where messages
-> -         printed from usafe contexts are temporary stored. One example would
-> +         printed from unsafe contexts are temporary stored. One example would
->           be NMI messages, another one - printk recursion. The messages are
->           copied to the main log buffer in a safe context to avoid a deadlock.
->           The value defines the size as a power of 2.
-> --
-> 2.39.0
->
+> On 1/7/23 21:53, Sam Ravnborg wrote:
+> > Hi Stephen.
+> >
+> > On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote: =20
+> >> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoint
+> >> <devnull+sam.ravnborg.org@kernel.org> wrote: =20
+> >>> From: Sam Ravnborg <sam@ravnborg.org>
+> >>>
+> >>> The atmel_lcdfb had code to save/restore power state.
+> >>> This is not needed so drop it.
+> >>>
+> >>> Introduce backlight_is_brightness() to make logic simpler.
+> >>>
+> >>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> >>> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> >>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> >>> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> >>> Cc: linux-fbdev@vger.kernel.org
+> >>> Cc: linux-arm-kernel@lists.infradead.org
+> >>> ---
+> >>> drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
+> >>> 1 file changed, 3 insertions(+), 21 deletions(-) =20
+> > ... =20
+> >>
+> >> Hi Sam,
+> >>
+> >> I=E2=80=99d submitted quite a few more of these previously (and you=E2=
+=80=99d reviewed
+> >> them), see e.g. the thread starting at
+> >> https://lkml.org/lkml/2022/6/7/4365, and yesterday,
+> >> https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/656,
+> >> https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/643,
+> >> and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can fi=
+nd
+> >> them if it=E2=80=99s any use. =20
+> >
+> > The patches from yesterday was what triggered me to resurrect an old
+> > branch of mine where I had done something similar. I had lost all
+> > memory of reviewing similar patches from you.
+> >
+> >
+> > Helge - could you pick the reviewed patches from:
+> > https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
+> > [This is the same mail as Stephen refer to above - looked up via lore].=
+ =20
+>=20
+> I just pulled those 7 patches into fbdev/for-next.
+> If you need more, please let me know,
 
+Please pull
+https://lore.kernel.org/lkml/20230109200239.1850611-1-steve@sk2.org/ too, it
+completes the fbdev set. (It=E2=80=99s a re-send of
+https://lore.kernel.org/lkml/20220609180440.3138625-1-steve@sk2.org/).
 
--- 
 Thanks,
-~Nick Desaulniers
+
+Stephen
+
+--Sig_/JDvLw33J.MlCnUHZ=3B.xEG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmO8drEACgkQgNMC9Yht
+g5xaOhAAjf3wpZqPQkXA+OJq7x3rFQCxDxu+EC9QfKpc+GTyKDeYUp1CiCaMACTm
+CmEva3GpgKshfkWam50r0elXs+IKPn9/Bwu7aoFot55EumgQp5Tbep2Bmzq92XPu
+oFvKrneavKK3Zc0y8tMyqnY44egaf1p5ngnCL9KWvgtSxSdqUUc7h1rp8Uevxc16
+Svpv5x8AaWNjvHqexEWU7DPoGzWwhCJosdFfzE0E/b5oamL3bCpniVgqvrhZ3XNh
+xDDLZsUQPWx6h51ndY44PfUUaF93mHtXo678mlOXIBK4Eb+GCQUTu6FUgWsbIYL9
+3zS7n+hYOgrAcvjXD+Kj2EwGAkfAkySAOs98SZYc/P9qzdEPZ7SIA2FbLbXyqf6x
+oO7qJlb7PLYCro4L6uSzBYJHK9or4nFh/K0sjWlJMCu3BSHtuDBxpU1+ajilEZYw
+GCN2Or9X+vFwQm0GtdpnbwRXutktuUmyEiaTZ0SRswPuK/8o/gc4BjaNdVm7xGld
+Yite9fSnhZsSwrT+TsCmoZw4m3W43c5zNs35lcw2LlhZEFnMNhYPAOd6I5zJPKno
+SgxxN7R6BxWIiXk7uEt+3CR745R6yGebDDD2G5cR1LtilzKWaj49g4ChgwAjsN5t
+uicuFMKEruILdqw6DfjJ5cDi+/1Db3pnP0mdjoiHWmrgigU6wD0=
+=3DFt
+-----END PGP SIGNATURE-----
+
+--Sig_/JDvLw33J.MlCnUHZ=3B.xEG--
