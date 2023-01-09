@@ -2,71 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F146662920
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D79662925
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbjAIOyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S235465AbjAIOzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjAIOyw (ORCPT
+        with ESMTP id S235133AbjAIOzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:54:52 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BCDD53
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:54:51 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id p188so8747199yba.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:54:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YIgOk2vZYUEppuqaUX7d/zLpPOAJZJ2Q2hrbqGB8Xww=;
-        b=iAttVXlqOJBUULuAIBDupT8wsqo+pj8RZgiE+4viHriW0AennRfmWsZ43ZooCRNpou
-         31Sy35//2Zb7i7wliONLBc53yLMAJId9WUGpfFQD/2wEv47+FNyJhfABkEG2TQ4vKMc+
-         ISoQNxvxAtCFNy0W+OrJ+0deXe48HbNKVpnYCdJ7ExtyPTbur0G1Jbzp5C92kh8OqYtm
-         ksKqa8uhCiXljYR//eDX0Y5UeM8Iu3wUiVK4Jz/+tZfk++nv4cK4gFuQE0dX7Fh+g3mD
-         uZvmJ4rHHHZogCyUiraugNLsPyvY16xJYz6NCBMiEdo4vZ+tZfKUTQ8ViP+mBeg668wB
-         fg6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YIgOk2vZYUEppuqaUX7d/zLpPOAJZJ2Q2hrbqGB8Xww=;
-        b=kJnaVvExkrCknYKgjZ4PZCKlQKYI5I/xPaiFo6LAMTuw+5ZKbtPufUu9+TZQ/FjpP0
-         11YVOWUFXUOYT6+ZO1c+wgezNaZtF4mOIu22+rlDGq3PjZEoYUvwbTJ/THUVxqek56Gl
-         sMKyE40aSTy9OaZtXVel8m85n+Q7l0ALby1XOoDGgxG/jlP+NpKorskY7RfcKpu/a9Ql
-         TERTuS7APpg2gBra23XVSbevkcOyOE8afl7b9k3XPSG4CIN5AK2rYx1bIMQ2ePw9Q5Zm
-         ZNeZGITnXOy4ysrMtcWqAZiMJOATF/1XXT5QJaJS+YhPHM9c1MW4tS16OaB9oDUd2ekp
-         MRWA==
-X-Gm-Message-State: AFqh2kq89tPsr3EThwicrhUFkR7G0K4tajGb36S9JJTrG4Bh3qd2Vd3G
-        U/0ljfwivuI5DjHi6qjBok3TsnbjCV3QWgyw4s/391d3enejRBwG
-X-Google-Smtp-Source: AMrXdXs1tg6BtCNjD4l/XSKxtuExUHllGzNESTqihwz7aJH4NbrzysLwBZYZ4UQ392n611o1b+kvnMIRIDw+GqPcMus=
-X-Received: by 2002:a25:8f89:0:b0:7b3:bb8:9daf with SMTP id
- u9-20020a258f89000000b007b30bb89dafmr1083040ybl.427.1673276089915; Mon, 09
- Jan 2023 06:54:49 -0800 (PST)
+        Mon, 9 Jan 2023 09:55:04 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0ECE50;
+        Mon,  9 Jan 2023 06:55:03 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309DtYHv025507;
+        Mon, 9 Jan 2023 14:55:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dz3MBxgQWcjymajRU5SZ8XCXO5den3d97KfPX9mneKc=;
+ b=Pd+k30NgEpANXlDSQJi26MRjzX8UX/wtx9a/ZY8jVMPwfWK/rebx8QGhRIkzDK77KGiW
+ N7FIeQzGXbQVisAYyPAL2sqh4VONOQAWXc2BX+cYZdIPIgPdl8ksURYdP0ntd8CtNffZ
+ 9acjI/BYRL1hPy+ly20PH6uukJh5ZpcVCT6v/EExsIp3V1rD8QXVjz/kMlY/QimofepK
+ xNJkJWClvGEAngyUYKJuXKL68oU7aN57qC/n25frlTd4qBqc0arrKpihRs49p/DGXbig
+ fzCFc9zGe82VGYLmmjrfAtvJtCfaa2BZefGX4ixPAO4VDb/OTWFRGHzF4178+wlxyi1O 1w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjhtggvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 14:55:03 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309DTKi9005770;
+        Mon, 9 Jan 2023 14:55:03 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjhtgguh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 14:55:02 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3098dsvM012475;
+        Mon, 9 Jan 2023 14:55:00 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3my00fk47m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 14:55:00 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309EsuRX23724752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Jan 2023 14:54:57 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF9342004B;
+        Mon,  9 Jan 2023 14:54:56 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E3D020043;
+        Mon,  9 Jan 2023 14:54:56 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  9 Jan 2023 14:54:56 +0000 (GMT)
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: s390: interrupt: use READ_ONCE() before cmpxchg()
+Date:   Mon,  9 Jan 2023 15:54:56 +0100
+Message-Id: <20230109145456.2895385-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230108025545.338-1-cuiyunhui@bytedance.com> <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
- <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
-In-Reply-To: <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 9 Jan 2023 15:54:38 +0100
-Message-ID: <CANn89iKY5gOC97NobXkhYv6d9ik=ks5ZEwVe=6H-VTwux=BwGQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv length
-To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, kuniyu@amazon.com,
-        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0dbQWy9H7XsqBjKZb6ZTZYdt6mU72qVt
+X-Proofpoint-GUID: PIGQ1sQM3rg2WuyihH4gTqfp3N0E5Xt3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_08,2023-01-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 clxscore=1015 phishscore=0 mlxlogscore=730
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 2:13 PM =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@byted=
-ance.com> wrote:
->
-> On Mon, Jan 9, 2023 at 5:56 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> >
-> > Note: At least for CONFIG_RETPOLINE=3Dy and gcc 12.2, compiler adds man=
-y
-> > additional instructions (and additional memory reads),
-> > even when the trace point is not enabled.
-> >
-> > Contrary to some belief, adding a tracepoint is not always 'free'.
-> > tail calls for example are replaced with normal calls.
-> >
->
->
-> >         .popsection
-> >
-> > # 0 "" 2
-> > #NO_APP
-> > .L106:
-> > # net/socket.c:1008: }
-> >         movl    %ebx, %eax      # <retval>,
-> >         popq    %rbx    #
-> >         popq    %rbp    #
-> >         popq    %r12    #
-> >         ret
-> > .L111:
-> > # ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
-> > sock_recv_length,
-> >
->
-> Hi Eric,  Thanks for your reply,  In fact, it is because the
-> definition of the tracepoint function is inline,
-> Not just these two tracepoints=EF=BC=8Cright?
->
-> #define __DECLARE_TRACE(name, proto, args, cond, data_proto)            \
->       ...
->       static inline void trace_##name(proto)
->
-> Regarding the above issue, I plan to optimize it like this:
->
-> static noinline void call_trace_sock_send_length(struct sock *sk, __u16 f=
-amily,
->                                             __u16 protocol, int ret, int =
-flags)
-> {
->         trace_sock_send_length(sk, family, protocol, ret, 0);
-> }
->
-> static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *=
-msg)
-> {
->         int ret =3D INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
->                                      inet_sendmsg, sock, msg,
->                                      msg_data_left(msg));
->         BUG_ON(ret =3D=3D -EIOCBQUEUED);
->
->         if (trace_sock_send_length_enabled()) {
+Use READ_ONCE() before cmpxchg() to prevent that the compiler generates
+code that fetches the to be compared old value several times from memory.
 
-A barrier() is needed here, with the current state of affairs.
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
 
-IMO, ftrace/x86 experts should take care of this generic issue ?
+v2: make it compile
 
+arch/s390/kvm/interrupt.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
+diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+index 1dae78deddf2..ab26aa53ee37 100644
+--- a/arch/s390/kvm/interrupt.c
++++ b/arch/s390/kvm/interrupt.c
+@@ -83,8 +83,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+ 		struct esca_block *sca = vcpu->kvm->arch.sca;
+ 		union esca_sigp_ctrl *sigp_ctrl =
+ 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+-		union esca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
++		union esca_sigp_ctrl new_val = {0}, old_val;
+ 
++		old_val = READ_ONCE(*sigp_ctrl);
+ 		new_val.scn = src_id;
+ 		new_val.c = 1;
+ 		old_val.c = 0;
+@@ -95,8 +96,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+ 		struct bsca_block *sca = vcpu->kvm->arch.sca;
+ 		union bsca_sigp_ctrl *sigp_ctrl =
+ 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+-		union bsca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
++		union bsca_sigp_ctrl new_val = {0}, old_val;
+ 
++		old_val = READ_ONCE(*sigp_ctrl);
+ 		new_val.scn = src_id;
+ 		new_val.c = 1;
+ 		old_val.c = 0;
+@@ -126,16 +128,18 @@ static void sca_clear_ext_call(struct kvm_vcpu *vcpu)
+ 		struct esca_block *sca = vcpu->kvm->arch.sca;
+ 		union esca_sigp_ctrl *sigp_ctrl =
+ 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+-		union esca_sigp_ctrl old = *sigp_ctrl;
++		union esca_sigp_ctrl old;
+ 
++		old = READ_ONCE(*sigp_ctrl);
+ 		expect = old.value;
+ 		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+ 	} else {
+ 		struct bsca_block *sca = vcpu->kvm->arch.sca;
+ 		union bsca_sigp_ctrl *sigp_ctrl =
+ 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+-		union bsca_sigp_ctrl old = *sigp_ctrl;
++		union bsca_sigp_ctrl old;
+ 
++		old = READ_ONCE(*sigp_ctrl);
+ 		expect = old.value;
+ 		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+ 	}
+-- 
+2.34.1
 
->                 call_trace_sock_send_length(sock->sk, sock->sk->sk_family=
-,
->                                             sock->sk->sk_protocol, ret, 0=
-);
->         }
->         return ret;
-> }
->
-> What do you think?
->
-> Thanks,
-> Yunhui
