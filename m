@@ -2,166 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9788D6629CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86FC6629CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbjAIPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S229604AbjAIPXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbjAIPW1 (ORCPT
+        with ESMTP id S237144AbjAIPWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:22:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E75937527;
-        Mon,  9 Jan 2023 07:22:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F1061196;
-        Mon,  9 Jan 2023 15:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40427C433EF;
-        Mon,  9 Jan 2023 15:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673277727;
-        bh=HH3u76bj1eMiMDOuqUoDInmJot4wY57kASPDBAy7ekQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=I7yoMCVmpEUf5HcEGNkT9P+aQ1vr0b6SYK5CpGbniaqfkEFXiaRzNdmsfkHWPbgsG
-         dUw7AlUvklvRyN7TYHClnTrRX36Cg69COPnZl6JNLZvUFmAHfgVHAux080xdaX4FcJ
-         X3pUEkY7dycmzZuepi73EmDFw+w3kBbxATO6kKEtYTRPsx3VyGLDN0Tgw6zlVYLbKv
-         GFqpbpvivASMn8AgZvB/Rl8jTsANiw6XYbd+woZMJwKkiDE/sg40QkL1lS+OU+opTb
-         Tf4IbVcpCIJDxPBMRDbLDKJOSW9iTSOdazHmkBrFWE9kDS/EfwWAOfJyz3CCArrlyX
-         SuGB+WPGORYaA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CB5435C090A; Mon,  9 Jan 2023 07:22:06 -0800 (PST)
-Date:   Mon, 9 Jan 2023 07:22:06 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
+        Mon, 9 Jan 2023 10:22:39 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8BD32185
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:22:18 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so9325502wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 07:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2vOTKWnDZmwehJAU6Nl1hb49nz4Cs660rzRHE7sjmWA=;
+        b=AGc30VpVOrKwF+dKIvUbevde6oEnt0lII78VVfHLfyT53Wz0n1Yh/KCOEybIswI2zD
+         2xxjsJidh6GvzQ2K1+Oxy5V4RKPOVuLgTexEgK1e/MEJIMRqfTjWKjQvFVE7e1XEnxSA
+         Ns3U7whvAy8xH9apVcq6bypl6/NrOj1V1hz7bu0TVBxinqNgwQT7SUgoxl2RuYroxL0/
+         3QPhi9+xNcKCelo5p1EJ++1aQvXHGU80JKC7ZazNkAG+d/rlhmUzpqRtOinhTctxZEUm
+         l7BiIN0qNf9jrqlFznod+Yo1bi4BVSZav2FDu4G1YF6N1r3rHbJGTsrgki87TCzb8MXm
+         tUlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2vOTKWnDZmwehJAU6Nl1hb49nz4Cs660rzRHE7sjmWA=;
+        b=0+clGPPVC21F37Pd2HFtUQUng6NwBCxXCooi3d46ayEKc2ykSTaJkKus0hpDPTw3Ny
+         MN3fvHEDRRMSRfxto6vC1THXPTrVX1w4pnxeM/2SxFViY/vM06ndxpnVZza/K34jBKSY
+         ifr5ixtX11fBW3W/8nB4//2ww7IjEztGMXsN5iFLpSqpGUfBadf/HPsSwDsxIKDlymYQ
+         apv6wcDxvzEfMLha/KPicls11Jkq+DV6LQnMF66VqEpbZp8Po7ogZsxun9tpzqi8jyxa
+         klx4nVSgN4xlaIzDTB8q9eVUDvXkVXcR/BadeW7ZyH9zk6QW6eyrnFUG2lI5x5FVS3rD
+         cpNQ==
+X-Gm-Message-State: AFqh2koirnlBAPEW5T2GgNF+QD3FZ1qMqsoYnnT+8YmE5kvOlK5H1pYa
+        nZfQw4SmD9SZQbiOE5a1duIXOw==
+X-Google-Smtp-Source: AMrXdXtRAL3NMvlUqZrrkSZbPdNqDQn6dQLhR41NfSr1it0b0iJqWDDrRJBt7KxQZX/oUuox/jGqyA==
+X-Received: by 2002:a05:600c:1d20:b0:3d2:2aaf:316 with SMTP id l32-20020a05600c1d2000b003d22aaf0316mr47036944wms.36.1673277737004;
+        Mon, 09 Jan 2023 07:22:17 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b003d35acb0fd7sm17314027wmo.34.2023.01.09.07.22.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 07:22:16 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Safe access to rcu_node structure's->exp_tasks
-Message-ID: <20230109152206.GP4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221224052553.263199-1-qiang1.zhang@intel.com>
- <20230106034146.GM4028633@paulmck-ThinkPad-P17-Gen-1>
- <Y7wUvZ/kVmpxvm14@lothringen>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] serial: msm: add lock annotation to msm_set_baud_rate()
+Date:   Mon,  9 Jan 2023 16:22:12 +0100
+Message-Id: <20230109152212.343476-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7wUvZ/kVmpxvm14@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:21:01PM +0100, Frederic Weisbecker wrote:
-> On Thu, Jan 05, 2023 at 07:41:46PM -0800, Paul E. McKenney wrote:
-> > On Sat, Dec 24, 2022 at 01:25:53PM +0800, Zqiang wrote:
-> > > For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario
-> > > can result system oops.
-> > > 
-> > >            CPU1                                           CPU2
-> > > rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
-> > >   if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
-> > >     raw_spin_lock_rcu_node
-> > >     np = rcu_next_node_entry(t, rnp)
-> > >     if (&t->rcu_node_entry == rnp->exp_tasks)
-> > >       WRITE_ONCE(rnp->exp_tasks, np)
-> > >       ....
-> > >       raw_spin_unlock_irqrestore_rcu_node
-> > >                                                     raw_spin_lock_irqsave_rcu_node
-> > >                                                     t = list_entry(rnp->exp_tasks->prev,
-> > >                                                         struct task_struct, rcu_node_entry)
-> > >                                                     (if rnp->exp_tasks is NULL
-> > >                                                        will trigger oops)
-> > > 
-> > > This problem is that CPU2 accesses rcu_node structure's->exp_tasks
-> > > without holding the rcu_node structure's ->lock and CPU2 did not
-> > > observe CPU1's change to rcu_node structure's->exp_tasks in time,
-> > > if rcu_node structure's->exp_tasks is set null pointer by CPU1, after
-> > > that CPU2 accesses members of rcu_node structure's->exp_tasks will
-> > > trigger oops.
-> > > 
-> > > This commit therefore allows rcu_node structure's->exp_tasks to be
-> > > accessed while holding rcu_node structure's ->lock.
-> > > 
-> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > 
-> > Apologies for the delay and thank you for the reminder!
-> > 
-> > Please check the wordsmithed version below, which I have queued.
-> > 
-> > 						Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 389b0eafd72829fd63548f7ff4e8d6ac90fa1f98
-> > Author: Zqiang <qiang1.zhang@intel.com>
-> > Date:   Sat Dec 24 13:25:53 2022 +0800
-> > 
-> >     rcu: Protect rcu_print_task_exp_stall() ->exp_tasks access
-> >     
-> >     For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario can
-> >     result in a NULL-pointer dereference:
-> >     
-> >                CPU1                                           CPU2
-> >     rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
-> >       if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
-> >         raw_spin_lock_rcu_node
-> >         np = rcu_next_node_entry(t, rnp)
-> >         if (&t->rcu_node_entry == rnp->exp_tasks)
-> >           WRITE_ONCE(rnp->exp_tasks, np)
-> >           ....
-> >           raw_spin_unlock_irqrestore_rcu_node
-> >                                                         raw_spin_lock_irqsave_rcu_node
-> >                                                         t = list_entry(rnp->exp_tasks->prev,
-> >                                                             struct task_struct, rcu_node_entry)
-> >                                                         (if rnp->exp_tasks is NULL, this
-> >                                                            will dereference a NULL pointer)
-> >     
-> >     The problem is that CPU2 accesses the rcu_node structure's->exp_tasks
-> >     field without holding the rcu_node structure's ->lock and CPU2 did
-> >     not observe CPU1's change to rcu_node structure's ->exp_tasks in time.
-> >     Therefore, if CPU1 sets rcu_node structure's->exp_tasks pointer to NULL,
-> >     then CPU2 might dereference that NULL pointer.
-> >     
-> >     This commit therefore holds the rcu_node structure's ->lock while
-> >     accessing that structure's->exp_tasks field.
-> >     
-> >     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> > index 7cc4856da0817..902e7c8709c7e 100644
-> > --- a/kernel/rcu/tree_exp.h
-> > +++ b/kernel/rcu/tree_exp.h
-> > @@ -803,9 +803,11 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
-> >  	int ndetected = 0;
-> >  	struct task_struct *t;
-> >  
-> > -	if (!READ_ONCE(rnp->exp_tasks))
-> > -		return 0;
-> >  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-> > +	if (!READ_ONCE(rnp->exp_tasks)) {
-> 
-> Does it have to be READ_ONCE then?
+msm_set_baud_rate() releases and re-acquires the port->lock, thus add
+lock annotation for Sparse static code checks.
 
-Good point, that should not be necessary.  I will drop the READ_ONCE on
-my next rebase.  (Unless someone tells me there is something subtle that
-I am missing.)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/tty/serial/msm_serial.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-							Thanx, Paul
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 7dd19a281579..44e1e83127ac 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -1125,6 +1125,7 @@ msm_find_best_baud(struct uart_port *port, unsigned int baud,
+ 
+ static int msm_set_baud_rate(struct uart_port *port, unsigned int baud,
+ 			     unsigned long *saved_flags)
++	__must_hold(&port->lock)
+ {
+ 	unsigned int rxstale, watermark, mask;
+ 	struct msm_port *msm_port = to_msm_port(port);
+-- 
+2.34.1
 
-> Thanks.
-> 
-> > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> > +		return 0;
-> > +	}
-> >  	t = list_entry(rnp->exp_tasks->prev,
-> >  		       struct task_struct, rcu_node_entry);
-> >  	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
