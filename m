@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1F5663283
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7A6663281
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237998AbjAIVOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S238027AbjAIVOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235188AbjAIVMm (ORCPT
+        with ESMTP id S238163AbjAIVNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:12:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD798293;
-        Mon,  9 Jan 2023 13:08:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=FJgMelawb+AVR/FU9zZ+45ERmeanV6JC6hl8xIQSQmY=; b=UYXeVuG1f9QXJVG/8cLqgT7sPr
-        GX7cVQ9ITa6CNmrV3hmu9/VST4acURhn2EuMCfuZfevkrdzObYXDUcBTK4/EdzKAjHdgTK8d1WDj9
-        xVW2lfnRyP+cNyaqgj2o6zLy8CrXzXGOk6lcfLZ5ih6K6PVJjGfEOhTKeqDXKz/cBX+JwgPSN5Tt/
-        tXij4tu2BO4hoiQOB7cq8icBN0hzhG9aQrOPhETusJM4Ib776rT7go5a3EgN1idhCUSU6tkdIEN/8
-        MkkuJBHF8zr7737ANe9E3ykZZsM+Shu8RN95n4piuV64jG5fDwu5Jz6w1OQKYpkvxQQrFq70JDzx3
-        6e/IRcvw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEzNm-0046VS-P6; Mon, 09 Jan 2023 21:08:38 +0000
-Message-ID: <714cf8b2-b02d-15d4-22a7-5e0dbec3c078@infradead.org>
-Date:   Mon, 9 Jan 2023 13:08:37 -0800
+        Mon, 9 Jan 2023 16:13:38 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6271DF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:11:09 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id l26so7267307wme.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DlA17XMkRQ3G/hL7VKUijED0fsrDm5Yt+UT5dD35GJo=;
+        b=LTHiQK5XMYshftFvzm9RMsuxogW9AYfXM1Q+tKsM5lPIm6QG5JdjGUEAEZtbv6ieX/
+         ah9SwX7cuLzGSW5jATu6QmFkTuj5WzQH4GLCnQAkACy/D+1gKaxN3zr2+Jl7eonuuEfp
+         hCKswKld/iGw4A2KXY3UyDv5lqUVZ8mhg47o1mcY00TQjZYvOEyI+HAAwqGqQA/GW6x5
+         Rcx0SlCegOZ87Q6kOVpVdku+4m5n9uDw1UoSV+pF6Gn1vAjSsFhrK0GZyfb/wtVtXdFh
+         ORmppBOSWyDXpJKfWK142PYbPlextM1YxXyXztdm7ZU4cRYn/Q1glrAzBgJha2LOw+OQ
+         axUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DlA17XMkRQ3G/hL7VKUijED0fsrDm5Yt+UT5dD35GJo=;
+        b=NdvPQC75SX72UUo/cevc/cJpRR8dQfZTy/81v5+bANnEoV5uAGDS6pCF6nVK7XMGAY
+         oGAM7eNzoIyjdx7W4k4rQGIHtHsow9CrJuy8+uAUxtFkGqaRNptapYWDMaeuAxD99dmc
+         YBT204IYp/Gmr1kOonN5/vBwZbTLCuuHXBmaEKvOh3CeV0mo1PHMGF+G66QlNv/d9ZHw
+         30esXLakJOmsi8qBgiR9814D09NA5fdcSMWgaue7JJZcQti7b+svGE6gpkt83ZIpHNxN
+         BzToz911vRGjX+l+U1jzr92IUwMLxsUsNCdDviADuFqfiZZ+z+gdhJrlcInXr5sZ3+QP
+         kcJQ==
+X-Gm-Message-State: AFqh2krxSsJvc09Olp2exwHd7k+2dLyudm2UjpGQ7yo9EvhmFyYjczPN
+        jIvZ0oYJw+BFS5YZr8WFfWzvqw==
+X-Google-Smtp-Source: AMrXdXvXvVWh7v2Y+09IuHVn5r2jjGjJooZDIKTsfTB+CEZp1MoiD3i778lPZ9vlkKefpikM6Esi9Q==
+X-Received: by 2002:a05:600c:5116:b0:3d9:f296:1adc with SMTP id o22-20020a05600c511600b003d9f2961adcmr2663076wms.33.1673298668398;
+        Mon, 09 Jan 2023 13:11:08 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id t19-20020a0560001a5300b002362f6fcaf5sm9403005wry.48.2023.01.09.13.11.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 13:11:07 -0800 (PST)
+Message-ID: <a947f2fa-3de8-0e38-87fc-e5d80451ef90@arista.com>
+Date:   Mon, 9 Jan 2023 21:11:01 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2] x86/retbleed: add "stuff" mode admin documentation
+Subject: Re: [PATCH v2 1/5] crypto: Introduce crypto_pool
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>
-References: <20230109160808.30740-1-rdunlap@infradead.org>
- <ceec97e2-2acd-6f15-5675-6b2b143b972f@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ceec97e2-2acd-6f15-5675-6b2b143b972f@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230103184257.118069-1-dima@arista.com>
+ <20230103184257.118069-2-dima@arista.com>
+ <20230106175326.2d6a4dcd@kernel.org>
+ <00e43ac2-6238-79a2-d9cb-8c42208594d8@arista.com>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <00e43ac2-6238-79a2-d9cb-8c42208594d8@arista.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/9/23 09:19, Dave Hansen wrote:
-> On 1/9/23 08:08, Randy Dunlap wrote:
->> +			stuff        - Enables "stuffing" mode mitigation,
->> +				       which uses return thunking and call depth
->> +				       tracking.  Only in effect if
->> +				       CONFIG_CALL_DEPTH_TRACKING is set and
->> +				       Spectre V2 mitigation mode is
->> +				       "retpoline".
->> +				       IBRS is fully secure mitigation but is
->> +				       more costly (slower) than stuffing.
+On 1/9/23 20:59, Dmitry Safonov wrote:
+> Hi Jakub,
 > 
-> The "fully secure" thing makes me cringe a bit.
+> Thanks for taking a look and your review,
 > 
-> I'd suggest saying:
+> On 1/7/23 01:53, Jakub Kicinski wrote:
+[..]
+>>> +static int crypto_pool_scratch_alloc(void)
+>>
+>> This isn't called by anything in this patch..
+>> crypto_pool_alloc_ahash() should call it I'm guessing?
 > 
-> 	IBRS is a stronger mitigation
-> 	but is more costly than stuffing
-> 	(slower).
+> Ah, this is little historical left-over: in the beginning, I used
+> constant-sized area as "scratch" buffer, the way TCP-MD5 does it.
+> Later, while converting users to crypto_pool, I found that it would be
+> helpful to support simple resizing as users have different size
+> requirement to the temporary buffer, i.e. looking at xfrm_ipcomp, if
+> later it would be converted to use the same API, rather than its own:
+> IPCOMP_SCRATCH_SIZE is huge (which may help to save quite some memory if
+> shared with other crypto_pool users: as the buffer is as well protected
+> by bh-disabled section, the usage pattern is quite the same).
+> 
+> In patch 2 I rewrote it for crypto_pool_reserve_scratch(). The purpose
+> of patch 2 was to only add dynamic up-sizing of this buffer to make it
+> easier to review the change. So, here are 2 options:
+> - I can move scratch area allocation/resizing/freeing to patch2 for v3
+> - Or I can keep patch 2 for only adding the resizing functionality, but
+> in patch 1 make crypto_pool_scratch_alloc() non-static and to the header
+> API.
+> 
+> What would you prefer?
 
-OK, will do (v3).  :)
+Taking the question off: in v3 I'll provide "size" as another argument
+in patch 2 (the way you suggested it in review for patch 2). That way
+dynamic allocation would be still separated in patch 2.
 
-Thanks.
-
--- 
-~Randy
+Thanks,
+          Dmitry
