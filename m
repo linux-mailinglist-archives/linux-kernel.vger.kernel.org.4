@@ -2,187 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DC76629EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B526629EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbjAIPaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S237154AbjAIPaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbjAIP3q (ORCPT
+        with ESMTP id S234329AbjAIPaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:29:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08BEB86B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673278186; x=1704814186;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4ozBL1OO74Su0bM36gbCDVzVroq7+sT4OBWNnObJYlY=;
-  b=SnmgClGvOr4oYPlsVlv/zGAr49b4J5CZuk7ASXI5Lpo+H/in7E7sAxeq
-   cD9lsHhTBkSMsREz/1CsQCEFPtUGbpzFkpJSZSdRJyA2JCw3ZU5ntYMdh
-   0w/Az7eFmVS465cvqyxd9Og9Rz33Ap4Q5aVuKTlnjWSvW7+uiHzufVXYB
-   yO+WBtmtNx14KhiRSLtJUjMuPj/l5PFOQZ0w8GdetYbrmhwWRHayFz288
-   6e2UTTrnHLsoMq+v+u9DN/MAcWEYilCgQ5F/Xu1WYksOA6ZfXqt3XPeBN
-   05p4r8qwVqnxeV59KMB09a05XzoWqlqHVkRxsTqBHcQrxoLUzU2SMNNW8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="310690459"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="310690459"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 07:29:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="606637659"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="606637659"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 07:29:45 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fan Du <fan.du@intel.com>
-Subject: [PATCH v2] x86/mce: Mask out non-address bits from machine check bank
-Date:   Mon,  9 Jan 2023 07:29:36 -0800
-Message-Id: <20230109152936.397862-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230103223416.310026-1-tony.luck@intel.com>
-References: <20230103223416.310026-1-tony.luck@intel.com>
+        Mon, 9 Jan 2023 10:30:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DB91274E;
+        Mon,  9 Jan 2023 07:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bc3idNtsAWoy+2ncthmgzQVDyaeHH0rtTXHo3T/zuhY=; b=s5EGoru1cjrQGCeJd8V5jrtw8M
+        4F35tTEElZxf/CtwBjrbyUMGZaLo1nfwDDFZhuUBJcOzsS3fn/fcNpCl1YLHI7d0KkjxpgxkmrHt5
+        DbsKYCc6pQkXM/XeUS0SLTyWuI8dz9qEyeA41HHlmPDsIdlJL9wJ0By55ryA6muYyBoUFdFqNa0zR
+        dtLKHexYBfgPycRA7VqD2C8ovNa6hN2Mu0A2iWpf/pdRqDEU0VvGCj7TBmIu28ZY2mDggDREJ0uSI
+        Y1YL48eJzcmwLXjeSMjaXkVOTvwqNrnHLdsqhGTIFnMUXjg5ufmnsCsJTok1VDdgcQav145biosm3
+        2mCAIKig==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pEu6E-002Odi-Ac; Mon, 09 Jan 2023 15:30:10 +0000
+Date:   Mon, 9 Jan 2023 15:30:10 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jeff Layton <jlayton@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 08/11] cifs: Remove call to filemap_check_wb_err()
+Message-ID: <Y7wzAml5tAZXNMGV@casper.infradead.org>
+References: <20230109051823.480289-1-willy@infradead.org>
+ <20230109051823.480289-9-willy@infradead.org>
+ <7d1499fadf42052711e39f0d8c7656f4d3a4bc9d.camel@redhat.com>
+ <74c40f813d4dc2bf90fbf80a80a5f0ba15365a90.camel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74c40f813d4dc2bf90fbf80a80a5f0ba15365a90.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Systems that support various memory encryption schemes (MKTME, TDX, SEV)
-use high order physical address bits to indicate which key should be
-used for a specific memory location.
+On Mon, Jan 09, 2023 at 10:14:12AM -0500, Jeff Layton wrote:
+> On Mon, 2023-01-09 at 09:42 -0500, Jeff Layton wrote:
+> > On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
+> > > filemap_write_and_wait() now calls filemap_check_wb_err(), so we cannot
+> > > glean any additional information by calling it ourselves.  It may also
+> > > be misleading as it will pick up on any errors since the beginning of
+> > > time which may well be since before this program opened the file.
+> > > 
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > ---
+> > >  fs/cifs/file.c | 8 +++-----
+> > >  1 file changed, 3 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> > > index 22dfc1f8b4f1..7e7ee26cf77d 100644
+> > > --- a/fs/cifs/file.c
+> > > +++ b/fs/cifs/file.c
+> > > @@ -3042,14 +3042,12 @@ int cifs_flush(struct file *file, fl_owner_t id)
+> > >  	int rc = 0;
+> > >  
+> > >  	if (file->f_mode & FMODE_WRITE)
+> > > -		rc = filemap_write_and_wait(inode->i_mapping);
+> > > +		rc = filemap_write_and_wait(file->f_mapping);
+> > 
+> > If we're calling ->flush, then the file is being closed. Should this
+> > just be?
+> > 		rc = file_write_and_wait(file);
+> > 
+> > It's not like we need to worry about corrupting ->f_wb_err at that
+> > point.
+> > 
+> 
+> OTOH, I suppose it is possible for there to be racing fsync syscall with
+> a filp_close, and in that case advancing the f_wb_err might be a bad
+> idea, particularly since a lot of places ignore the return from
+> filp_close. It's probably best to _not_ advance the f_wb_err on ->flush
+> calls.
 
-When a memory error is reported, some systems may report those key
-bits in the IA32_MCi_ADDR machine check MSR.
+There's only so much we can do to protect an application from itself.
+If it's racing an fsync() against close(), it might get an EBADF from
+fsync(), or end up fsyncing entirely the wrong file due to a close();
+open(); associating the fd with a different file.
 
-The Intel SDM has a footnote for the contents of the address register
-that says: "Useful bits in this field depend on the address methodology
-in use when the register state is saved."
+> That said...wonder if we ought to consider making filp_close and ->flush
+> void return functions. There's no POSIX requirement to flush all of the
+> data on close(), so an application really shouldn't rely on seeing
+> writeback errors returned there since it's not reliable.
+> 
+> If you care about writeback errors, you have to call fsync -- full stop.
 
-AMD Processor Programming Reference has a more explicit description
-of the MCA_ADDR register:
+Yes, most filesystems do not writeback dirty data on close().
+Applications can't depend on that behaviour.  Interestingly, if you read
+https://pubs.opengroup.org/onlinepubs/9699919799/functions/close.html
+really carefully, it says:
 
- "For physical addresses, the most significant bit is given by
-  Core::X86::Cpuid::LongModeInfo[PhysAddrSize]."
+   If an I/O error occurred while reading from or writing to the file
+   system during close(), it may return -1 with errno set to [EIO];
+   if this error is returned, the state of fildes is unspecified.
 
-Add a new #define MCI_ADDR_PHYSADDR for the mask of valid physical
-address bits within the machine check bank address register. Use this
-mask for recoverable machine check handling and in the EDAC driver to
-ignore any key bits that may be present.
-
-[Credit: Based on independent fixes proposed by Fan Du and Isaku Yamahata]
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reported-by: Isaku Yamahata <isaku.yamahata@intel.com>
-Reported-by: Fan Du <fan.du@intel.com>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-
-Changes in V2:
-Yazen: Use GENMASK_ULL() rather that GENMASK() to set up mask of
-       valid address bits so this will work on 32-bit kernels.
-
-I also updated the commit message from the quote from the AMD
-documentation that Yazen provided.
-
- arch/x86/include/asm/mce.h     |  3 +++
- arch/x86/kernel/cpu/mce/core.c | 14 +++++++++-----
- drivers/edac/skx_common.c      |  2 +-
- 3 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 6e986088817d..9646ed6e8c0b 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -88,6 +88,9 @@
- #define  MCI_MISC_ADDR_MEM	3	/* memory address */
- #define  MCI_MISC_ADDR_GENERIC	7	/* generic */
- 
-+/* MCi_ADDR register defines */
-+#define MCI_ADDR_PHYSADDR	GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
-+
- /* CTL2 register defines */
- #define MCI_CTL2_CMCI_EN		BIT_ULL(30)
- #define MCI_CTL2_CMCI_THRESHOLD_MASK	0x7fffULL
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2c8ec5c71712..949705bdb2f3 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 	    mce->severity != MCE_DEFERRED_SEVERITY)
- 		return NOTIFY_DONE;
- 
--	pfn = mce->addr >> PAGE_SHIFT;
-+	pfn = (mce->addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
- 	if (!memory_failure(pfn, 0)) {
- 		set_mce_nospec(pfn);
- 		mce->kflags |= MCE_HANDLED_UC;
-@@ -1308,6 +1308,7 @@ static void kill_me_maybe(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
- 	int flags = MF_ACTION_REQUIRED;
-+	unsigned long pfn;
- 	int ret;
- 
- 	p->mce_count = 0;
-@@ -1316,9 +1317,10 @@ static void kill_me_maybe(struct callback_head *cb)
- 	if (!p->mce_ripv)
- 		flags |= MF_MUST_KILL;
- 
--	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
-+	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	ret = memory_failure(pfn, flags);
- 	if (!ret) {
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
-+		set_mce_nospec(pfn);
- 		sync_core();
- 		return;
- 	}
-@@ -1340,11 +1342,13 @@ static void kill_me_maybe(struct callback_head *cb)
- static void kill_me_never(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
-+	unsigned long pfn;
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
-+	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	if (!memory_failure(pfn, 0))
-+		set_mce_nospec(pfn);
- }
- 
- static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index f0f8e98f6efb..806986f03177 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -657,7 +657,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 
- 	memset(&res, 0, sizeof(res));
- 	res.mce  = mce;
--	res.addr = mce->addr;
-+	res.addr = mce->addr & MCI_ADDR_PHYSADDR;
- 
- 	/* Try driver decoder first */
- 	if (!(driver_decode && driver_decode(&res))) {
--- 
-2.38.1
-
+So if we return an error, userspace doesn't know if this fd is still
+open or not!  This feels like poor underspecification on POSIX's part
+(and probably stems from a historical unwillingness to declare any
+vendor's implementation as "not Unix").
