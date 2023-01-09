@@ -2,173 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83C26623F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15766623F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbjAILPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S236458AbjAILQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjAILPJ (ORCPT
+        with ESMTP id S234689AbjAILPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:15:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E78140B4;
-        Mon,  9 Jan 2023 03:15:07 -0800 (PST)
-Date:   Mon, 09 Jan 2023 11:15:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673262906;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fwBBNxv7C7lDprLRZa06JGOtQtbPsAWbCJVlihexc7Y=;
-        b=SzEjD7CGHGwviEQ+tCm47RP4nW39pKZ5twCFoJHLeQ8L6OtX7imSO24iFKARmDJUAzc4Zb
-        Kn30L+5hO+LO7S5HXGcaoMlP/uYBQS+IdYO+EBcBBCmqOfOdMNW5aJQt6L62M0Ugs5Zcjz
-        ui5fkgU/m6GZcH4SXEGCzXk/9SLrMbpBcnigxA7h2UZ58VLKML43VGVx5Hg9Y//ClGHGIL
-        FZImiONxQVTbh6tQ2afQTnsHBIBOhR4OC5wP662BpZ9Voj7OENrOl0x4gafPvycBy8J5Ry
-        +EadhQCwt+VX/YivDwDlHBBDyppAtoxvTdxKKIh3rXfUiUoTfjgxKxQFvrFj1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673262906;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fwBBNxv7C7lDprLRZa06JGOtQtbPsAWbCJVlihexc7Y=;
-        b=AJpkU9WXTnhVydkstoEiAcEJ4o78etonN8OpzAQJLbP2WBla75socWUDobF8c+4VyLFoHL
-        5z1ud2FoO6CG52Aw==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/cstate: Add Meteor Lake support
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230104201349.1451191-6-kan.liang@linux.intel.com>
-References: <20230104201349.1451191-6-kan.liang@linux.intel.com>
+        Mon, 9 Jan 2023 06:15:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D887140C2;
+        Mon,  9 Jan 2023 03:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673262919; x=1704798919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bZbtSxVq7tKRN0w032vmRM6pRPfyv3+6ov17Khe0FpU=;
+  b=cab7MJ0+YavhmXxy2tk1jZmDeXzl9pf7UC6gnGOSFvuHpRmtnXk55bwk
+   XKgMRWIPNx6nZc6+x8mrIEHimyifYeFfdhSDYJLAy+2ZGGc/KUMth2Vz1
+   vGQSuf+iyr5gutxs2XruYYj86sygxXNROa2Q5pzPHC63fxXSBaqswRrQI
+   oYE6J0WVgSPA1xoC6Mmx98L8cc16BSVAHRVbe4DYy/9h5rVeEqzlLLDI4
+   eI7gLsH+DtnywMI3ajr7cknStbsEH4bRXY8vIdqcbNx5QYc/j4qfbIXu6
+   z7b9S7oy6OfS3gcz562XkRv2LmP6S4xBeDivGGGrguHABE4mVYFPY9UAb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="324095817"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="324095817"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 03:15:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="830562411"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="830562411"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 09 Jan 2023 03:15:11 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pEq7Q-006MOk-0s;
+        Mon, 09 Jan 2023 13:15:08 +0200
+Date:   Mon, 9 Jan 2023 13:15:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     sam@ravnborg.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, Stephen Kitt <steve@sk2.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Peter Suti <peter.suti@streamunlimited.com>
+Subject: Re: [PATCH 10/15] staging: fbtft: core: Introduce
+ backlight_is_blank()
+Message-ID: <Y7v3O+6wacN8qL7K@smile.fi.intel.com>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-10-1bd9bafb351f@ravnborg.org>
 MIME-Version: 1.0
-Message-ID: <167326290572.4906.628148987099820944.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230107-sam-video-backlight-drop-fb_blank-v1-10-1bd9bafb351f@ravnborg.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+On Sat, Jan 07, 2023 at 07:26:24PM +0100, Sam Ravnborg via B4 Submission Endpoint wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Avoiding direct access to backlight_properties.props.
+> 
+> Access to the deprecated props.fb_blank replaced by backlight_is_blank().
+> Access to props.power is dropped - it was only used for debug.
 
-Commit-ID:     01f2ea5bcf89dbd7a6530dbce7f2fb4e327e7006
-Gitweb:        https://git.kernel.org/tip/01f2ea5bcf89dbd7a6530dbce7f2fb4e327e7006
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Wed, 04 Jan 2023 12:13:46 -08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 09 Jan 2023 12:00:51 +01:00
+...
 
-perf/x86/cstate: Add Meteor Lake support
+> +	if (blank)
+>  		gpiod_set_value(par->gpio.led[0], !polarity);
+> +	else
+> +		gpiod_set_value(par->gpio.led[0], polarity);
 
-Meteor Lake is Intel's successor to Raptor lake. From the perspective of
-Intel cstate residency counters, there is nothing changed compared with
-Raptor lake.
+	if (blank)
+		polarity = !polarity;
 
-Share adl_cstates with Raptor lake.
-Update the comments for Meteor Lake.
+	gpiod_set_value(par->gpio.led[0], polarity);
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Link: https://lore.kernel.org/r/20230104201349.1451191-6-kan.liang@linux.intel.com
----
- arch/x86/events/intel/cstate.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+?
 
-diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
-index a2834bc..3019fb1 100644
---- a/arch/x86/events/intel/cstate.c
-+++ b/arch/x86/events/intel/cstate.c
-@@ -41,6 +41,7 @@
-  *	MSR_CORE_C1_RES: CORE C1 Residency Counter
-  *			 perf code: 0x00
-  *			 Available model: SLM,AMT,GLM,CNL,ICX,TNT,ADL,RPL
-+ *					  MTL
-  *			 Scope: Core (each processor core has a MSR)
-  *	MSR_CORE_C3_RESIDENCY: CORE C3 Residency Counter
-  *			       perf code: 0x01
-@@ -51,50 +52,50 @@
-  *			       perf code: 0x02
-  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
-  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
-- *						TGL,TNT,RKL,ADL,RPL,SPR
-+ *						TGL,TNT,RKL,ADL,RPL,SPR,MTL
-  *			       Scope: Core
-  *	MSR_CORE_C7_RESIDENCY: CORE C7 Residency Counter
-  *			       perf code: 0x03
-  *			       Available model: SNB,IVB,HSW,BDW,SKL,CNL,KBL,CML,
-- *						ICL,TGL,RKL,ADL,RPL
-+ *						ICL,TGL,RKL,ADL,RPL,MTL
-  *			       Scope: Core
-  *	MSR_PKG_C2_RESIDENCY:  Package C2 Residency Counter.
-  *			       perf code: 0x00
-  *			       Available model: SNB,IVB,HSW,BDW,SKL,KNL,GLM,CNL,
-  *						KBL,CML,ICL,ICX,TGL,TNT,RKL,ADL,
-- *						RPL,SPR
-+ *						RPL,SPR,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C3_RESIDENCY:  Package C3 Residency Counter.
-  *			       perf code: 0x01
-  *			       Available model: NHM,WSM,SNB,IVB,HSW,BDW,SKL,KNL,
-  *						GLM,CNL,KBL,CML,ICL,TGL,TNT,RKL,
-- *						ADL,RPL
-+ *						ADL,RPL,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C6_RESIDENCY:  Package C6 Residency Counter.
-  *			       perf code: 0x02
-  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
-  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
-- *						TGL,TNT,RKL,ADL,RPL,SPR
-+ *						TGL,TNT,RKL,ADL,RPL,SPR,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C7_RESIDENCY:  Package C7 Residency Counter.
-  *			       perf code: 0x03
-  *			       Available model: NHM,WSM,SNB,IVB,HSW,BDW,SKL,CNL,
-- *						KBL,CML,ICL,TGL,RKL,ADL,RPL
-+ *						KBL,CML,ICL,TGL,RKL,ADL,RPL,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C8_RESIDENCY:  Package C8 Residency Counter.
-  *			       perf code: 0x04
-  *			       Available model: HSW ULT,KBL,CNL,CML,ICL,TGL,RKL,
-- *						ADL,RPL
-+ *						ADL,RPL,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C9_RESIDENCY:  Package C9 Residency Counter.
-  *			       perf code: 0x05
-  *			       Available model: HSW ULT,KBL,CNL,CML,ICL,TGL,RKL,
-- *						ADL,RPL
-+ *						ADL,RPL,MTL
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C10_RESIDENCY: Package C10 Residency Counter.
-  *			       perf code: 0x06
-  *			       Available model: HSW ULT,KBL,GLM,CNL,CML,ICL,TGL,
-- *						TNT,RKL,ADL,RPL
-+ *						TNT,RKL,ADL,RPL,MTL
-  *			       Scope: Package (physical package)
-  *
-  */
-@@ -686,6 +687,8 @@ static const struct x86_cpu_id intel_cstates_match[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_cstates),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_cstates),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_cstates),
-+	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,		&adl_cstates),
-+	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	&adl_cstates),
- 	{ },
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_cstates_match);
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
