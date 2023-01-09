@@ -2,83 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BD166324C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591AD663260
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237597AbjAIVJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S237973AbjAIVLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238113AbjAIVIz (ORCPT
+        with ESMTP id S237967AbjAIVK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:08:55 -0500
-Received: from out-97.mta0.migadu.com (out-97.mta0.migadu.com [91.218.175.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883A2A6FC0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:00:37 -0800 (PST)
-Message-ID: <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1673298035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mpz5QV62fd9Z/8dQCjZswuJCHVa8jPKuhq5d3gUONBY=;
-        b=kjgDRTMPn7t5yVbfabYw3U4Bt86OfUO9sPG5HT3E7m0rSa22kXiU1LjNxmbaXzxeG5wCwC
-        CwIoYRtI441fXya0QIcD1Dy5FSM5f3KcRh6qO/eaggEgJc1TrRwP4osowhvZwtMfH3jIO/
-        1ui4TstB3NRV8yKFr3NDiPhKTs4WT58=
-Date:   Mon, 9 Jan 2023 14:00:33 -0700
+        Mon, 9 Jan 2023 16:10:58 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BED3BEB1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:03:30 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id bu8so15016596lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xvbOJwJCDvAVe4Ypk6TWCIgsg3158YUlrEMw2YNb0Mo=;
+        b=J/52Y5D40ZyVHCKzboYRyiaw0gGNjlAz3UGYLftraJb/Js04jRHSkbpc11vqBhJkLY
+         b4C0zTCHweLcchOlRsBh01CsYClhxIQQzkMmjDMw1QHCZfbvnFZxkESOW8oiOCsnxXKq
+         rWyTPeRhQQX+x+oVnsUSxI/KruU4N+uvaJf5THOLNLhRhuvnjCg79IKXFF66GrW/0Wc+
+         mmsUswGH67RNx2OuO0F2OcmuUJXHOBSE0VO6gW3PGZloL7zlZOwmZCKZHr0na50oGjIN
+         IsCJX2Zb0bSyKP31k9pPVMwhC0uIEfTDb3T6litAsRybOc4ILP9d+PWWJi4g/A6+tGUH
+         HgXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvbOJwJCDvAVe4Ypk6TWCIgsg3158YUlrEMw2YNb0Mo=;
+        b=RKWh+BZjf7UK94Hol7tS7rSOuK21eLULNpOnJHAmiTz0H8zYr0xNWxk0yUkuAfC/+z
+         Kv+N4ji9+BKweR3Ir+Zpp9m9tgNrYhss0DfOxy9OPZmiRdWTtmaTeymmEFsZTk3vz+qp
+         gee1lTXlBdz1FAdiBAeAdIZgj6443E9srZMsMUI97+4CXbFw7mJqzVG1fbqHCYTmLSu5
+         FdDS3DU4Lz3pje0wimIfloA+d7N+KUmkU6+bpxXtmgOfVBL4IXohPGZNr1hsq5W435CN
+         PH91q/z6milYqhgC8FUYjTeF2jPpvOkOz8ulLTopB4tJa/fsXjKIEyNRTeQF65qeaah0
+         B+pQ==
+X-Gm-Message-State: AFqh2krzPZPjBRo92qkcG2hOYllqdKjc66uDxoGgCW618qHuOuF1eYqr
+        6YisPi+MqvazcI/3QTILPw1MuA==
+X-Google-Smtp-Source: AMrXdXsbI5uSFJDymeTgphPOV5Fli5DX46O6F/LKDz4NKUeOQVAI8vZ1Os79nbfg1VaDx1h2TGA5vQ==
+X-Received: by 2002:a05:6512:6d4:b0:4cb:1e1:f380 with SMTP id u20-20020a05651206d400b004cb01e1f380mr17575366lff.40.1673298209192;
+        Mon, 09 Jan 2023 13:03:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05651220c600b004cc865fdfdfsm383653lfr.89.2023.01.09.13.03.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 13:03:28 -0800 (PST)
+Message-ID: <a185b4e3-011c-c7f2-d18b-5c7486b121eb@linaro.org>
+Date:   Mon, 9 Jan 2023 23:03:28 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
- controller
-Content-Language: en-US
-To:     Xinghui Li <korantwork@gmail.com>
-Cc:     Keith Busch <kbusch@kernel.org>, nirmal.patel@linux.intel.com,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev>
- <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev>
- <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 00/18] arm64: qcom: add support for sa8775p-ride
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230109174511.1740856-1-brgl@bgdev.pl>
+ <bca87233-ae9d-00f8-07d3-07afef2cb92c@linaro.org>
+ <59835841-654a-0ef2-6c79-1ba62ff00928@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <59835841-654a-0ef2-6c79-1ba62ff00928@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the bypass mode seems to affect performance greatly depending on the specific configuration,
-it may make sense to use a moduleparam to control it
-
-I'd vote for it being in VMD mode (non-bypass) by default.
-
-On 12/27/2022 7:19 PM, Xinghui Li wrote:
-> Jonathan Derrick <jonathan.derrick@linux.dev> 于2022年12月28日周三 06:32写道：
+On 09/01/2023 22:59, Konrad Dybcio wrote:
+> 
+> 
+> On 9.01.2023 21:13, Dmitry Baryshkov wrote:
+>> On 09/01/2023 19:44, Bartosz Golaszewski wrote:
+>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>
+>>> This adds basic support for the Qualcomm sa8775p platform and its reference
+>>> board: sa8775p-ride. The dtsi contains basic SoC description required for
+>>> a simple boot-to-shell. The dts enables boot-to-shell with UART on the
+>>> sa8775p-ride board. There are three new drivers required to boot the board:
+>>> pinctrl, interconnect and GCC clock. Other patches contain various tweaks
+>>> to existing code. More support is coming up.
+>>>
+>>> Bartosz Golaszewski (15):
+>>>     dt-bindings: clock: sa8775p: add bindings for Qualcomm gcc-sa8775p
+>>>     arm64: defconfig: enable the clock driver for Qualcomm SA8775P
+>>>       platforms
+>>>     dt-bindings: clock: qcom-rpmhcc: document the clock for sa8775p
+>>>     clk: qcom: rpmh: add clocks for sa8775p
+>>>     dt-bindings: interconnect: qcom: document the interconnects for
+>>>       sa8775p
+>>>     arm64: defconfig: enable the interconnect driver for Qualcomm SA8775P
+>>>     dt-bindings: pinctrl: sa8775p: add bindings for qcom,sa8775p-tlmm
+>>>     arm64: defconfig: enable the pinctrl driver for Qualcomm SA8775P
+>>>       platforms
+>>>     dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
+>>>     dt-bindings: power: qcom,rpmpd: document sa8775p
+>>>     soc: qcom: rmphpd: add power domains for sa8775p
+>>>     dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+>>>     iommu: arm-smmu: qcom: add support for sa8775p
+>>>     dt-bindings: arm: qcom: document the sa8775p reference board
+>>>     arm64: dts: qcom: add initial support for qcom sa8775p-ride
+>>>
+>>> Shazad Hussain (2):
+>>>     clk: qcom: add the GCC driver for sa8775p
 >>
->> The bypass mode should help in the cases where drives irqs (eg nproc) exceed
->> VMD I/O irqs. VMD I/O irqs for 28c0 should be min(63, nproc). You have
->> very few cpus for a Skylake system with that many drives, unless you mean you
->> are explicitly restricting the 12 drives to only 6 cpus. Either way, bypass mode
->> is effectively VMD-disabled, which points to other issues. Though I have also seen
->> much smaller interrupt aggregation benefits.
-> 
-> Firstly，I am sorry for my words misleading you. We totally tested 12 drives.
-> And each drive run in 6 CPU cores with 8 jobs.
-> 
-> Secondly, I try to test the drives with VMD disabled,I found the results to
-> be largely consistent with bypass mode. I suppose the bypass mode just
-> "bypass" the VMD controller.
-> 
-> The last one，we found in bypass mode the CPU idle is 91%. But in remapping mode
-> the CPU idle is 78%. And the bypass's context-switchs is much fewer
-> than the remapping
-> mode's. It seems the system is watiing for something in bypass mode.
+>> This patch didn't make it to the list. Please check if you can fix or split it somehow?
+> It's a known issue with lists clipping messages that are too long.
+> I'll forward it to you.
+
+Thank you!
+
+-- 
+With best wishes
+Dmitry
+
