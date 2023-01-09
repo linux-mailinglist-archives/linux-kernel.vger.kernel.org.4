@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86FC6629CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421116629CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjAIPXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S230032AbjAIPXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237144AbjAIPWj (ORCPT
+        with ESMTP id S229510AbjAIPWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:22:39 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8BD32185
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:22:18 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so9325502wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 07:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vOTKWnDZmwehJAU6Nl1hb49nz4Cs660rzRHE7sjmWA=;
-        b=AGc30VpVOrKwF+dKIvUbevde6oEnt0lII78VVfHLfyT53Wz0n1Yh/KCOEybIswI2zD
-         2xxjsJidh6GvzQ2K1+Oxy5V4RKPOVuLgTexEgK1e/MEJIMRqfTjWKjQvFVE7e1XEnxSA
-         Ns3U7whvAy8xH9apVcq6bypl6/NrOj1V1hz7bu0TVBxinqNgwQT7SUgoxl2RuYroxL0/
-         3QPhi9+xNcKCelo5p1EJ++1aQvXHGU80JKC7ZazNkAG+d/rlhmUzpqRtOinhTctxZEUm
-         l7BiIN0qNf9jrqlFznod+Yo1bi4BVSZav2FDu4G1YF6N1r3rHbJGTsrgki87TCzb8MXm
-         tUlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2vOTKWnDZmwehJAU6Nl1hb49nz4Cs660rzRHE7sjmWA=;
-        b=0+clGPPVC21F37Pd2HFtUQUng6NwBCxXCooi3d46ayEKc2ykSTaJkKus0hpDPTw3Ny
-         MN3fvHEDRRMSRfxto6vC1THXPTrVX1w4pnxeM/2SxFViY/vM06ndxpnVZza/K34jBKSY
-         ifr5ixtX11fBW3W/8nB4//2ww7IjEztGMXsN5iFLpSqpGUfBadf/HPsSwDsxIKDlymYQ
-         apv6wcDxvzEfMLha/KPicls11Jkq+DV6LQnMF66VqEpbZp8Po7ogZsxun9tpzqi8jyxa
-         klx4nVSgN4xlaIzDTB8q9eVUDvXkVXcR/BadeW7ZyH9zk6QW6eyrnFUG2lI5x5FVS3rD
-         cpNQ==
-X-Gm-Message-State: AFqh2koirnlBAPEW5T2GgNF+QD3FZ1qMqsoYnnT+8YmE5kvOlK5H1pYa
-        nZfQw4SmD9SZQbiOE5a1duIXOw==
-X-Google-Smtp-Source: AMrXdXtRAL3NMvlUqZrrkSZbPdNqDQn6dQLhR41NfSr1it0b0iJqWDDrRJBt7KxQZX/oUuox/jGqyA==
-X-Received: by 2002:a05:600c:1d20:b0:3d2:2aaf:316 with SMTP id l32-20020a05600c1d2000b003d22aaf0316mr47036944wms.36.1673277737004;
-        Mon, 09 Jan 2023 07:22:17 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b003d35acb0fd7sm17314027wmo.34.2023.01.09.07.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 07:22:16 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] serial: msm: add lock annotation to msm_set_baud_rate()
-Date:   Mon,  9 Jan 2023 16:22:12 +0100
-Message-Id: <20230109152212.343476-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 9 Jan 2023 10:22:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F31A315F08;
+        Mon,  9 Jan 2023 07:22:15 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B25D91042;
+        Mon,  9 Jan 2023 07:22:57 -0800 (PST)
+Received: from [10.57.37.91] (unknown [10.57.37.91])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E24A03F587;
+        Mon,  9 Jan 2023 07:22:13 -0800 (PST)
+Message-ID: <563924f6-190a-6a2a-b6ee-e77759e74c4d@arm.com>
+Date:   Mon, 9 Jan 2023 15:22:12 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] perf kmem: Support field "node" in
+ evsel__process_alloc_event()
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+References: <20230108062400.250690-1-leo.yan@linaro.org>
+ <20230108062400.250690-2-leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230108062400.250690-2-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-msm_set_baud_rate() releases and re-acquires the port->lock, thus add
-lock annotation for Sparse static code checks.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/tty/serial/msm_serial.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 7dd19a281579..44e1e83127ac 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -1125,6 +1125,7 @@ msm_find_best_baud(struct uart_port *port, unsigned int baud,
- 
- static int msm_set_baud_rate(struct uart_port *port, unsigned int baud,
- 			     unsigned long *saved_flags)
-+	__must_hold(&port->lock)
- {
- 	unsigned int rxstale, watermark, mask;
- 	struct msm_port *msm_port = to_msm_port(port);
--- 
-2.34.1
+On 08/01/2023 06:24, Leo Yan wrote:
+> Commit 11e9734bcb6a ("mm/slab_common: unify NUMA and UMA version of
+> tracepoints") adds the field "node" into the tracepoints 'kmalloc' and
+> 'kmem_cache_alloc', so this patch modifies the event process function to
+> support the field "node".
+> 
+> If field "node" is existed by checking function evsel__field(), it stats
+> the cross allocation.
+> 
+> When the "node" value is NUMA_NO_NODE (-1), it means the memory can be
+> allocated from any memory node, in this case, we don't account it as a
+> cross allocation.
+> 
+> After support the field "node" in evsel__process_alloc_event(),
+> evsel__process_alloc_node_event() is duplicate with the previous one,
+> so removes evsel__process_alloc_node_event().
+> 
+> Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> Fixes: 11e9734bcb6a ("mm/slab_common: unify NUMA and UMA version of tracepoints")
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/builtin-kmem.c | 36 ++++++++++++++++++++++++------------
+>  1 file changed, 24 insertions(+), 12 deletions(-)
+> 
 
+Reviewed-by: James Clark <james.clark@arm.com>
