@@ -2,134 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D79662CB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D89F662CAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237393AbjAIR2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S237289AbjAIR17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbjAIR1V (ORCPT
+        with ESMTP id S237286AbjAIR1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:27:21 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AAE617E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:27:19 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id p9so4801403iod.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 09:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IHXvGgEJl9eaO3mOBW9vWXVnI2VO8B60EvEFrwQyz+U=;
-        b=h+5fGZi+zwDm6SA7gsaba83k41nvrMQMK43WrYRqCSAVD0bvKjtTe273hryhdUJbRn
-         JyKEvJvNpzpiFlw9AdgnzHqrF6vEAlzIkvtfsHt2ZKDqwqpYUSt5bxGiqLfBXywSNpwd
-         glwES9vsycgT3H/PiYHbi9TNBa0KKXDZ6yaKVpec85sjjQkAO95dKOqmqxIN/cHBB/U2
-         INHIqOqqatVex6aUIbSDIRuzYH6GjIK3Gsm032tI7WTxPt/OIG4C3EqDmloJLhKcpfgX
-         c1PKyIrzRKSkczEjCBBj7DpWJrZK3ZswBXdy0fIAJNRX1wA2yX2aPBZKeaff6bUeAmc1
-         Fk0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IHXvGgEJl9eaO3mOBW9vWXVnI2VO8B60EvEFrwQyz+U=;
-        b=KwjDyMsEAaBCGbSr8S6N2OcOsAtQSPFq3DOHtupue1sWTXid1q6Yq88h6apLdpr3v4
-         10r+nfbuCzw+ZrZgXhYMyByWwzMPf6XL4eoQlQonWIGe4g0ZdKWdZOBPMO2Y9ynBGGNe
-         +1gi4tQZOztppzO6a42pjY6QEsbnNczwISKCyNr87o/qezo1dyXsGgjz7rTGhOgfA52q
-         akkFwT8LHNnwoFE+LzbSByycIM+vh5Ufya9C4MILCFlhbEp4xssSmkDkVWzhte96ljbL
-         2rpvtMlsy9uPKCZoO+nfOqY4qAFI4gx+GBNncbJISG5wolQKlv2B8B4vOIbn6M8AhxPQ
-         baCQ==
-X-Gm-Message-State: AFqh2kqUCsZUJr3Bhy9KiVuyHp+QCvazh2Bu9sKjXt9msQCT2VY3Y5UD
-        wLcdJXxKc6ShTGlKne+7yKBzAQ==
-X-Google-Smtp-Source: AMrXdXvtKHRAqb15E0W05m01Njdmp3xZx3201ok7Hi+t/QQ5HEbqAq9UO3tKTw4l8ZVdLS34DZEtAA==
-X-Received: by 2002:a6b:7808:0:b0:6db:3123:261 with SMTP id j8-20020a6b7808000000b006db31230261mr8485411iom.2.1673285238507;
-        Mon, 09 Jan 2023 09:27:18 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id m12-20020a026d0c000000b003758bcba4b5sm2854856jac.153.2023.01.09.09.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 09:27:17 -0800 (PST)
-Message-ID: <0113e8b2-0ce4-e0f1-7924-bb5389d168de@kernel.dk>
-Date:   Mon, 9 Jan 2023 10:27:14 -0700
+        Mon, 9 Jan 2023 12:27:31 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0CBD100;
+        Mon,  9 Jan 2023 09:27:28 -0800 (PST)
+Received: from jupiter.universe (dyndsl-037-138-188-006.ewe-ip-backbone.de [37.138.188.6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B17E66602D69;
+        Mon,  9 Jan 2023 17:27:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673285246;
+        bh=JW5wBxdojw4K7oF/wR5FR58bBfyVL9FjXxsrFAVyCDc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i453iAm831YEWVClNHjp+3L33KRixRoLV6ehu9JXxMZCPB90dVIFPN5kXnJRy7A1L
+         MGQEXxbzMoRayeFvJoo9n9KqlXnL2H6lCzVXCO4Ssrn3sGIYUE00ksGmIq9t91PRWw
+         e49MqmilNBGNOTB3gXTVQCrZpyz3PE3Rpfvau8/s72aLR9LOCEndQKafc6hBET80ae
+         8Wj4JVkfwb/bHm2OSRRWuJEPxXxQP8kGUO4uR2PPxeKoxJoPDUeZRIM2rFZAE3+Gpi
+         VH8iHfDaOBDtyLJmZ+XOtqSvZQdyLzwGi7oSSLrpgoLZcVLUv6+c1qsemEAuJsl9On
+         8+UIK3zUA3eaQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 5869E48011A; Mon,  9 Jan 2023 18:27:24 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv5 02/10] mfd: rk808: convert to device managed resources
+Date:   Mon,  9 Jan 2023 18:27:15 +0100
+Message-Id: <20230109172723.60304-3-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230109172723.60304-1-sebastian.reichel@collabora.com>
+References: <20230109172723.60304-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather
- than ref'ing if appropriate
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <d86e6340-534c-c34c-ab1d-6ebacb213bb9@kernel.dk>
- <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
- <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
- <1880793.1673257404@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <1880793.1673257404@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 2:43?AM, David Howells wrote:
-> Jens Axboe <axboe@kernel.dk> wrote:
-> 
->>> A field, bi_cleanup_mode, is added to the bio struct that gets set by
->>> iov_iter_extract_pages() with FOLL_* flags indicating what cleanup is
->>> necessary.  FOLL_GET -> put_page(), FOLL_PIN -> unpin_user_page().  Other
->>> flags could also be used in future.
->>>
->>> Newly allocated bio structs have bi_cleanup_mode set to FOLL_GET to
->>> indicate that attached pages are ref'd by default.  Cloning sets it to 0.
->>> __bio_iov_iter_get_pages() overrides it to what iov_iter_extract_pages()
->>> indicates.
->>
->> What's the motivation for this change?
-> 
-> DIO reads in most filesystems and, I think, the block layer are
-> currently broken with respect to concurrent fork in the same process
-> because they take refs (FOLL_GET) on the pages involved which causes
-> the CoW mechanism to malfunction, leading (I think) the parent process
-> to not see the result of the DIO.  IIRC, the pages undergoing DIO get
-> forcibly copied by fork - and the copies given to the parent.
-> Instead, DIO reads should be pinning the pages (FOLL_PIN).  Maybe
-> Willy can weigh in on this?
-> 
-> Further, getting refs on pages in, say, a KVEC iterator is the wrong
-> thing to do as the kvec may point to things that shouldn't be ref'd
-> (vmap'd or vmalloc'd regions, for example).  Instead, the in-kernel
-> caller should do what it needs to do to keep hold of the memory and
-> the DIO should not take a ref at all.
+Fully convert the driver to device managed resources.
 
-Makes sense!
+Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/mfd/rk808.c | 64 ++++++++++++++++-----------------------------
+ 1 file changed, 22 insertions(+), 42 deletions(-)
 
->> It's growing struct bio, which we can have a lot of in the system. I read
->> the cover letter too and I can tell what the change does, but there's no
->> justification really for the change.
-> 
-> The FOLL_* flags I'm getting back from iov_iter_extract_pages() can be mapped
-> to BIO_* flags in the bio.  For the moment, AFAIK, I think only FOLL_GET and
-> FOLL_PIN are necessary.  There are three cleanup types: put, unpin and do
-> nothing.
-
-That would work, or if they fit into a ushort, there is room that could
-be utilized for that. My main knee jerk reaction is just plopping a full
-into in there for 2 bits of state, really. I try pretty hard to not
-succumb to struct bloat, particularly on the hot path and when we can
-have lots of them. So that part needs to be done more carefully in v5.
-
+diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
+index f44fc3f080a8..4f5dca76bb54 100644
+--- a/drivers/mfd/rk808.c
++++ b/drivers/mfd/rk808.c
+@@ -547,13 +547,11 @@ static const struct regmap_irq_chip rk818_irq_chip = {
+ 	.init_ack_masked = true,
+ };
+ 
+-static struct i2c_client *rk808_i2c_client;
+-
+-static void rk808_pm_power_off(void)
++static int rk808_power_off(struct sys_off_data *data)
+ {
++	struct rk808 *rk808 = data->cb_data;
+ 	int ret;
+ 	unsigned int reg, bit;
+-	struct rk808 *rk808 = i2c_get_clientdata(rk808_i2c_client);
+ 
+ 	switch (rk808->variant) {
+ 	case RK805_ID:
+@@ -574,16 +572,18 @@ static void rk808_pm_power_off(void)
+ 		bit = DEV_OFF;
+ 		break;
+ 	default:
+-		return;
++		return NOTIFY_DONE;
+ 	}
+ 	ret = regmap_update_bits(rk808->regmap, reg, bit, bit);
+ 	if (ret)
+-		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
++		dev_err(&rk808->i2c->dev, "Failed to shutdown device!\n");
++
++	return NOTIFY_DONE;
+ }
+ 
+-static int rk808_restart_notify(struct notifier_block *this, unsigned long mode, void *cmd)
++static int rk808_restart(struct sys_off_data *data)
+ {
+-	struct rk808 *rk808 = i2c_get_clientdata(rk808_i2c_client);
++	struct rk808 *rk808 = data->cb_data;
+ 	unsigned int reg, bit;
+ 	int ret;
+ 
+@@ -599,16 +599,11 @@ static int rk808_restart_notify(struct notifier_block *this, unsigned long mode,
+ 	}
+ 	ret = regmap_update_bits(rk808->regmap, reg, bit, bit);
+ 	if (ret)
+-		dev_err(&rk808_i2c_client->dev, "Failed to restart device!\n");
++		dev_err(&rk808->i2c->dev, "Failed to restart device!\n");
+ 
+ 	return NOTIFY_DONE;
+ }
+ 
+-static struct notifier_block rk808_restart_handler = {
+-	.notifier_call = rk808_restart_notify,
+-	.priority = 192,
+-};
+-
+ static void rk8xx_shutdown(struct i2c_client *client)
+ {
+ 	struct rk808 *rk808 = i2c_get_clientdata(client);
+@@ -744,9 +739,9 @@ static int rk808_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = regmap_add_irq_chip(rk808->regmap, client->irq,
+-				  IRQF_ONESHOT, -1,
+-				  rk808->regmap_irq_chip, &rk808->irq_data);
++	ret = devm_regmap_add_irq_chip(&client->dev, rk808->regmap, client->irq,
++				       IRQF_ONESHOT, -1,
++				       rk808->regmap_irq_chip, &rk808->irq_data);
+ 	if (ret) {
+ 		dev_err(&client->dev, "Failed to add irq_chip %d\n", ret);
+ 		return ret;
+@@ -770,17 +765,23 @@ static int rk808_probe(struct i2c_client *client)
+ 			      regmap_irq_get_domain(rk808->irq_data));
+ 	if (ret) {
+ 		dev_err(&client->dev, "failed to add MFD devices %d\n", ret);
+-		goto err_irq;
++		return ret;
+ 	}
+ 
+ 	if (of_property_read_bool(np, "rockchip,system-power-controller")) {
+-		rk808_i2c_client = client;
+-		pm_power_off = rk808_pm_power_off;
++		ret = devm_register_sys_off_handler(&client->dev,
++				    SYS_OFF_MODE_POWER_OFF_PREPARE, SYS_OFF_PRIO_HIGH,
++				    &rk808_power_off, rk808);
++		if (ret)
++			return dev_err_probe(&client->dev, ret,
++					     "failed to register poweroff handler\n");
+ 
+ 		switch (rk808->variant) {
+ 		case RK809_ID:
+ 		case RK817_ID:
+-			ret = register_restart_handler(&rk808_restart_handler);
++			ret = devm_register_sys_off_handler(&client->dev,
++							    SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
++							    &rk808_restart, rk808);
+ 			if (ret)
+ 				dev_warn(&client->dev, "failed to register rst handler, %d\n", ret);
+ 			break;
+@@ -791,26 +792,6 @@ static int rk808_probe(struct i2c_client *client)
+ 	}
+ 
+ 	return 0;
+-
+-err_irq:
+-	regmap_del_irq_chip(client->irq, rk808->irq_data);
+-	return ret;
+-}
+-
+-static void rk808_remove(struct i2c_client *client)
+-{
+-	struct rk808 *rk808 = i2c_get_clientdata(client);
+-
+-	regmap_del_irq_chip(client->irq, rk808->irq_data);
+-
+-	/**
+-	 * pm_power_off may points to a function from another module.
+-	 * Check if the pointer is set by us and only then overwrite it.
+-	 */
+-	if (pm_power_off == rk808_pm_power_off)
+-		pm_power_off = NULL;
+-
+-	unregister_restart_handler(&rk808_restart_handler);
+ }
+ 
+ static int __maybe_unused rk8xx_suspend(struct device *dev)
+@@ -867,7 +848,6 @@ static struct i2c_driver rk808_i2c_driver = {
+ 		.pm = &rk8xx_pm_ops,
+ 	},
+ 	.probe_new = rk808_probe,
+-	.remove   = rk808_remove,
+ 	.shutdown = rk8xx_shutdown,
+ };
+ 
 -- 
-Jens Axboe
+2.39.0
 
