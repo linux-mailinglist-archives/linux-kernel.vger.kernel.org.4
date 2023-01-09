@@ -2,179 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0156635EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526536635EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbjAIX4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S235085AbjAIX7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjAIX4p (ORCPT
+        with ESMTP id S231358AbjAIX7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:56:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788F63BF;
-        Mon,  9 Jan 2023 15:56:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE6DBB810B6;
-        Mon,  9 Jan 2023 23:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31414C433F0;
-        Mon,  9 Jan 2023 23:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673308601;
-        bh=kGARkBvg/xZwK6CWO/t5enuGZ6gCSiDIREKt17POl5E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Gxa59t26s3y4iWedgV4KymKF8cdE5/UHHJSgpvmQJs7o7RIpfxahlrtLPXveCOj0x
-         /FKdziCBpOgKUNYi4/4Sy+9wDYnzO5ORH9zzgXz70Yg/WfqsPzBebtB5/GIaUx5wlH
-         rfkQ2WXIZLYv1jlmYvtAbSorXGjgXxEeGFG1KDbq6mHfHCZThXzNgiuJzpOEG4Y4II
-         GNFdLOTdFsLCCKx8FhEwhdcArFpjKQCOJlpxAXEOJe5M2FauXL25ZILcDtaF4aX1EI
-         c27LmrUzd3cBtpLzj4MoWRHGwSc9nahdrDvBhNV+OM47I1POqDGgzxtjc1G5l8Jong
-         Zp9GLxcQ8pe9Q==
-Date:   Tue, 10 Jan 2023 08:56:36 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-Id: <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
-In-Reply-To: <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
-        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
-        <20230108150425.426f2861e9db1152fa84508f@kernel.org>
-        <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 9 Jan 2023 18:59:04 -0500
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E1E1B1D0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+        t=1673308738; bh=FMcjA51wpzoraSDLjxsaLpmF0naPwUP70E0dsefK2kE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=NbrIC3v4a9JK1+VGa/iF+OJMNNgwwbr5/9+6WqgaTSYBnndWJ1QraPOFr/KNPucw8
+         WSqa6XlXlQfJ/Ozs2j0YXBWn43rpSeUVtotji1s3bVcvvvg91wvH1PdHoZEoDO3YoQ
+         UBJ/QiBjEefElAcJuLUYfWHRVEXZOWrrdxNOEtQ+NLcjze47U69VnleNzn9qcy496c
+         kTQmSQ1y48qinlUfm98mQGGh2Kzd1D9oO1Xy1Mr4cHg0vF1qFDRGl3Q5rh0J7HUI8b
+         lTkHDMuvUg4vLcHPxtSxBhFILeNHBjtRY1EARUnXjNayua7CwALxfpPB4DzquYMxwn
+         9WJ3hWfwHmLVg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from luka-spectre.fritz.box ([77.180.184.175]) by smtp.web.de
+ (mrweb006 [213.165.67.108]) with ESMTPSA (Nemesis) id
+ 1MxYXF-1or3992FVh-00xcIG; Tue, 10 Jan 2023 00:58:58 +0100
+From:   Luka Guzenko <l.guzenko@web.de>
+To:     tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Luka Guzenko <l.guzenko@web.de>
+Subject: [PATCH] ALSA: hda/realtek: Enable mute/micmute LEDs on HP Spectre x360 13-aw0xxx
+Date:   Tue, 10 Jan 2023 00:58:40 +0100
+Message-Id: <20230109235840.26452-1-l.guzenko@web.de>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XouvoeaEbNqWsNABGNhUZH/5qo2PXjBy/mxzbDIEJNW6259sGQg
+ KSGr0Ds2MNYakBIeGzHn7hOdD79CoKopik/RnSF374hafAZGwP5U05njMd3x5PGbzf0kKSx
+ au3xD3a2JTTmdoKWzZ4ilqh7cvoflxoHm4RwNhZYfRcgoCZLKGrfLjkzmY8OdDIKwpaGd/M
+ L0+saHHyjiudMaIzMFvMQ==
+UI-OutboundReport: notjunk:1;M01:P0:1jhPLbLZR4k=;CsQR9QSobUElphVxrW7w7TsPNx5
+ LMo1MAkiKVCtl6fG1on8BaoMHDCuES4ge+kHT9KPiDBwX6CZQkiKWbaJLvmb7Eswc8M/bCOFj
+ ma3Ru8mInsVOW16B6pbLpfvEo5T8LQOFnyxkSyhiLRGJbsSxUY47MEeGFlATlp/k4fSEGOjm+
+ U46FYZuzCJ295yRHQ4ud48aee4asuxNnk5sw/tRNwFvvWGuduLeWyNO96yf24A9n074ZBxlM8
+ mKbe+2iuJbaujMjuPx+U/GvAeqa2fJfPyTPfZQlWW5zguNAS5gNxXyLD1WoGsy6/5qVrCfZxp
+ zqpYpBmvHmkNgFDQWdjqNC4r/MqHnqrzckQ7g0dKwPzlf4h/b0SGQpmHo/Q5UIPVwFWLTVqf8
+ 9swkv8M+fG4irmdiQFoqh5sMHtYCV8qxkrVkejg1kcGscqHsMr86CSKKyb7h37z75oy54o1ED
+ 3xb+tT+gIn9/QDOve6NvRH/cOAmxNDNRUg1iRJPjy5kWA8vKbLNvdSjbeJj/4zQcL7ssLMQbP
+ 1WqzO047Z7uZMG9Srw1UQtuwqGtb9HaS1wbtu1Dt2gnHh0bjOitajE2SGFf0Xaji4xSUXNXTX
+ HpzgAoTrxObn9+8LJzLoKecQL1cM+wqtrwIeOQ/Cvy2WvvxL1MwUw1tfuv0Gu5HA//9aZ7PTF
+ hgOkECqbQkt4VQ4WNpLyocedNfOfrQRyFaG5KmuOJ2KC+CL6ye/cHD5qyq5T9zYHd1GdEx9Kg
+ LJHfmC3+xSx5x3B1L9wBYxfmFvu8LW1l6Y2SED9dGb2d8FzrTkrolmj4M/t1dsHKmlWcKW78R
+ Cj5qx2u8SUKE6adH1Wa6ioHGto8ub1f/BajikPw3doz7gY0UFPB8zxPhojIvFMCbuLM/txjyH
+ 2IEmsAKp802hXHbdjOkpr2P799t4jSXWf0ygJgdAaahktYlDIW0NHKpMnZvHwze2BNo5/xoR6
+ /dpydtvozCZ2VYXchV9ykvLq9ZQ=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 Jan 2023 20:25:01 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+The HP Spectre x360 13-aw0xxx devices use the ALC285 codec with GPIO 0x04
+controlling the micmute LED and COEF 0x0b index 8 controlling the mute LED=
+.
+A quirk was added to make these work as well as a fixup entry.
 
-> On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> > On Sat, 7 Jan 2023 08:22:02 -0800
-> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > 
-> > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > 
-> > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > > in cases where some of the boot parameters depend on the kernel version
-> > > > > rather than on the server hardware, firmware, or workload.
-> > > > > 
-> > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > > into that file.
-> > > > > 
-> > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > > boot parameters to be embedded into the kernel image without the need to
-> > > > > (for example) update large numbers of boot loaders.
-> > > > 
-> > > > I like this because this is a simple solution. We have another option
-> > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > > bootloader. Thus, it is better to have this option so that user can
-> > > > always enable bootconfig.
-> > > 
-> > > Glad you like it!
-> > > 
-> > > In addition, if the help text is accurate, another shortcoming of
-> > > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > > parameters, and others differ in the order in which the parameters
-> > > are processed.
-> > 
-> > Yes, that differences confuse us...
-> 
-> I am glad that it is not just me.  ;-)
-> 
-> I will add words to that effect to the commit log.
-> 
-> > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > 
-> > > Thank you!
-> > > 
-> > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > (or at least recommend to enable this)
-> > > 
-> > > Like this?
-> > 
-> > Yes! Thanks.
-> > 
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > ------------------------------------------------------------------------
-> > > 
-> > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > 
-> > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > >     
-> > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > >     will normally be to unconditionally provide the specified kernel-boot
-> > >     arguments to the kernel, as opposed to requiring a separately provided
-> > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > >     
-> > >     The old semantics may be obtained by manually overriding this default.
-> > >     
-> > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Applied, thank you!
-> 
-> 							Thanx, Paul
+Signed-off-by: Luka Guzenko <l.guzenko@web.de>
+=2D--
+ sound/pci/hda/patch_realtek.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-Paul, just for confirmation, have you picked these patches on your tree?
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3794b522c222..6a76a2eddd3c 100644
+=2D-- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -4644,6 +4644,16 @@ static void alc285_fixup_hp_coef_micmute_led(struct=
+ hda_codec *codec,
+ 	}
+ }
 
-Thank you,
++static void alc285_fixup_hp_gpio_micmute_led(struct hda_codec *codec,
++				const struct hda_fixup *fix, int action)
++{
++	struct alc_spec *spec =3D codec->spec;
++
++	if (action !=3D HDA_FIXUP_ACT_PRE_PROBE)
++		spec->micmute_led_polarity =3D 1;
++	alc_fixup_hp_gpio_led(codec, action, 0, 0x04);
++}
++
+ static void alc236_fixup_hp_coef_micmute_led(struct hda_codec *codec,
+ 				const struct hda_fixup *fix, int action)
+ {
+@@ -4665,6 +4675,13 @@ static void alc285_fixup_hp_mute_led(struct hda_cod=
+ec *codec,
+ 	alc285_fixup_hp_coef_micmute_led(codec, fix, action);
+ }
 
-> 
-> > Thank you!
-> > 
-> > > 
-> > > diff --git a/init/Kconfig b/init/Kconfig
-> > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > --- a/init/Kconfig
-> > > +++ b/init/Kconfig
-> > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > >  config BOOT_CONFIG_FORCE
-> > >  	bool "Force unconditional bootconfig processing"
-> > >  	depends on BOOT_CONFIG
-> > > +	default y if BOOT_CONFIG_EMBED
-> > >  	help
-> > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
++static void alc285_fixup_hp_spectre_x360_mute_led(struct hda_codec *codec=
+,
++				const struct hda_fixup *fix, int action)
++{
++	alc285_fixup_hp_mute_led_coefbit(codec, fix, action);
++	alc285_fixup_hp_gpio_micmute_led(codec, fix, action);
++}
++
+ static void alc236_fixup_hp_mute_led(struct hda_codec *codec,
+ 				const struct hda_fixup *fix, int action)
+ {
+@@ -7106,6 +7123,7 @@ enum {
+ 	ALC285_FIXUP_ASUS_G533Z_PINS,
+ 	ALC285_FIXUP_HP_GPIO_LED,
+ 	ALC285_FIXUP_HP_MUTE_LED,
++	ALC285_FIXUP_HP_SPECTRE_X360_MUTE_LED,
+ 	ALC236_FIXUP_HP_GPIO_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
+@@ -8486,6 +8504,10 @@ static const struct hda_fixup alc269_fixups[] =3D {
+ 		.type =3D HDA_FIXUP_FUNC,
+ 		.v.func =3D alc285_fixup_hp_mute_led,
+ 	},
++	[ALC285_FIXUP_HP_SPECTRE_X360_MUTE_LED] =3D {
++		.type =3D HDA_FIXUP_FUNC,
++		.v.func =3D alc285_fixup_hp_spectre_x360_mute_led,
++	},
+ 	[ALC236_FIXUP_HP_GPIO_LED] =3D {
+ 		.type =3D HDA_FIXUP_FUNC,
+ 		.v.func =3D alc236_fixup_hp_gpio_led,
+@@ -9327,6 +9349,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[]=
+ =3D {
+ 	SND_PCI_QUIRK(0x103c, 0x86c7, "HP Envy AiO 32", ALC274_FIXUP_HP_ENVY_GPI=
+O),
+ 	SND_PCI_QUIRK(0x103c, 0x86e7, "HP Spectre x360 15-eb0xxx", ALC285_FIXUP_=
+HP_SPECTRE_X360_EB1),
+ 	SND_PCI_QUIRK(0x103c, 0x86e8, "HP Spectre x360 15-eb0xxx", ALC285_FIXUP_=
+HP_SPECTRE_X360_EB1),
++	SND_PCI_QUIRK(0x103c, 0x86f9, "HP Spectre x360 13-aw0xxx", ALC285_FIXUP_=
+HP_SPECTRE_X360_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8716, "HP Elite Dragonfly G2 Notebook PC", ALC28=
+5_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x8720, "HP EliteBook x360 1040 G8 Notebook PC", A=
+LC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x8724, "HP EliteBook 850 G7", ALC285_FIXUP_HP_GPI=
+O_LED),
+=2D-
+2.39.0
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
