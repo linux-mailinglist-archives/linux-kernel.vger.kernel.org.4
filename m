@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14DA6629B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E9F6629B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbjAIPSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S237142AbjAIPS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbjAIPRv (ORCPT
+        with ESMTP id S237180AbjAIPRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:17:51 -0500
-Received: from outbound-smtp46.blacknight.com (outbound-smtp46.blacknight.com [46.22.136.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E68C36312
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:17:06 -0800 (PST)
+        Mon, 9 Jan 2023 10:17:55 -0500
+Received: from outbound-smtp17.blacknight.com (outbound-smtp17.blacknight.com [46.22.139.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA63E1A1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:17:16 -0800 (PST)
 Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp46.blacknight.com (Postfix) with ESMTPS id 1858EFABB0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:17:05 +0000 (GMT)
-Received: (qmail 17223 invoked from network); 9 Jan 2023 15:17:04 -0000
+        by outbound-smtp17.blacknight.com (Postfix) with ESMTPS id 37BFB1C40FC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:17:15 +0000 (GMT)
+Received: (qmail 17642 invoked from network); 9 Jan 2023 15:17:15 -0000
 Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 9 Jan 2023 15:17:04 -0000
+  by 81.17.254.9 with ESMTPA; 9 Jan 2023 15:17:15 -0000
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     Linux-MM <linux-mm@kvack.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -30,9 +30,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         LKML <linux-kernel@vger.kernel.org>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 2/7] mm/page_alloc: Treat RT tasks similar to __GFP_HIGH
-Date:   Mon,  9 Jan 2023 15:16:26 +0000
-Message-Id: <20230109151631.24923-3-mgorman@techsingularity.net>
+Subject: [PATCH 3/7] mm/page_alloc: Explicitly record high-order atomic allocations in alloc_flags
+Date:   Mon,  9 Jan 2023 15:16:27 +0000
+Message-Id: <20230109151631.24923-4-mgorman@techsingularity.net>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230109151631.24923-1-mgorman@techsingularity.net>
 References: <20230109151631.24923-1-mgorman@techsingularity.net>
@@ -46,33 +46,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RT tasks are allowed to dip below the min reserve but ALLOC_HARDER is
-typically combined with ALLOC_MIN_RESERVE so RT tasks are a little
-unusual. While there is some justification for allowing RT tasks
-access to memory reserves, there is a strong chance that a RT task
-that is also under memory pressure is at risk of missing deadlines
-anyway. Relax how much reserves an RT task can access by treating
-it the same as __GFP_HIGH allocations.
+A high-order ALLOC_HARDER allocation is assumed to be atomic. While that
+is accurate, it changes later in the series. In preparation, explicitly
+record high-order atomic allocations in gfp_to_alloc_flags(). There is
+a slight functional change in that OOM handling avoids using high-order
+reserve until it has to.
 
 Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/internal.h   |  1 +
+ mm/page_alloc.c | 29 +++++++++++++++++++++++------
+ 2 files changed, 24 insertions(+), 6 deletions(-)
 
+diff --git a/mm/internal.h b/mm/internal.h
+index 403e4386626d..178484d9fd94 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -746,6 +746,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+ #else
+ #define ALLOC_NOFRAGMENT	  0x0
+ #endif
++#define ALLOC_HIGHATOMIC	0x200 /* Allows access to MIGRATE_HIGHATOMIC */
+ #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
+ 
+ enum ttu_flags;
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 244c1e675dc8..0040b4e00913 100644
+index 0040b4e00913..0ef4f3236a5a 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -4847,7 +4847,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
+@@ -3706,10 +3706,20 @@ struct page *rmqueue_buddy(struct zone *preferred_zone, struct zone *zone,
+ 		 * reserved for high-order atomic allocation, so order-0
+ 		 * request should skip it.
  		 */
- 		alloc_flags &= ~ALLOC_CPUSET;
- 	} else if (unlikely(rt_task(current)) && in_task())
--		alloc_flags |= ALLOC_HARDER;
-+		alloc_flags |= ALLOC_MIN_RESERVE;
+-		if (order > 0 && alloc_flags & ALLOC_HARDER)
++		if (alloc_flags & ALLOC_HIGHATOMIC)
+ 			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+ 		if (!page) {
+ 			page = __rmqueue(zone, order, migratetype, alloc_flags);
++
++			/*
++			 * If the allocation fails, allow OOM handling access
++			 * to HIGHATOMIC reserves as failing now is worse than
++			 * failing a high-order atomic allocation in the
++			 * future.
++			 */
++			if (!page && (alloc_flags & ALLOC_OOM))
++				page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
++
+ 			if (!page) {
+ 				spin_unlock_irqrestore(&zone->lock, flags);
+ 				return NULL;
+@@ -4023,8 +4033,10 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+ 			return true;
+ 		}
+ #endif
+-		if (alloc_harder && !free_area_empty(area, MIGRATE_HIGHATOMIC))
++		if ((alloc_flags & (ALLOC_HIGHATOMIC|ALLOC_OOM)) &&
++		    !free_area_empty(area, MIGRATE_HIGHATOMIC)) {
+ 			return true;
++		}
+ 	}
+ 	return false;
+ }
+@@ -4286,7 +4298,7 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+ 			 * If this is a high-order atomic allocation then check
+ 			 * if the pageblock should be reserved for the future
+ 			 */
+-			if (unlikely(order && (alloc_flags & ALLOC_HARDER)))
++			if (unlikely(alloc_flags & ALLOC_HIGHATOMIC))
+ 				reserve_highatomic_pageblock(page, zone, order);
  
- 	alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, alloc_flags);
+ 			return page;
+@@ -4813,7 +4825,7 @@ static void wake_all_kswapds(unsigned int order, gfp_t gfp_mask,
+ }
  
+ static inline unsigned int
+-gfp_to_alloc_flags(gfp_t gfp_mask)
++gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
+ {
+ 	unsigned int alloc_flags = ALLOC_WMARK_MIN | ALLOC_CPUSET;
+ 
+@@ -4839,8 +4851,13 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
+ 		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+ 		 * if it can't schedule.
+ 		 */
+-		if (!(gfp_mask & __GFP_NOMEMALLOC))
++		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
+ 			alloc_flags |= ALLOC_HARDER;
++
++			if (order > 0)
++				alloc_flags |= ALLOC_HIGHATOMIC;
++		}
++
+ 		/*
+ 		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
+ 		 * comment for __cpuset_node_allowed().
+@@ -5048,7 +5065,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+ 	 * kswapd needs to be woken up, and to avoid the cost of setting up
+ 	 * alloc_flags precisely. So we do that now.
+ 	 */
+-	alloc_flags = gfp_to_alloc_flags(gfp_mask);
++	alloc_flags = gfp_to_alloc_flags(gfp_mask, order);
+ 
+ 	/*
+ 	 * We need to recalculate the starting point for the zonelist iterator
 -- 
 2.35.3
 
