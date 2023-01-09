@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9F366206D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2569662074
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbjAIInG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S236886AbjAIIn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236836AbjAIImX (ORCPT
+        with ESMTP id S236847AbjAIImY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:42:23 -0500
+        Mon, 9 Jan 2023 03:42:24 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 803A112D2B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:42:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30ADBDFBE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:42:23 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gGfR027440;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gG7L027441;
         Mon, 9 Jan 2023 09:42:16 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH 21/22] nolibc/sys: Implement `getpagesize(2)` function
-Date:   Mon,  9 Jan 2023 09:42:07 +0100
-Message-Id: <20230109084208.27355-22-w@1wt.eu>
+Subject: [PATCH 22/22] selftests/nolibc: Add `getpagesize(2)` selftest
+Date:   Mon,  9 Jan 2023 09:42:08 +0100
+Message-Id: <20230109084208.27355-23-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230109084208.27355-1-w@1wt.eu>
 References: <20230109084208.27355-1-w@1wt.eu>
@@ -37,58 +37,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-This function returns the page size used by the running kernel. The
-page size value is taken from the auxiliary vector at 'AT_PAGESZ' key.
-
-'getpagesize(2)' is assumed as a syscall becuase the manpage placement
-of this function is in entry 2 ('man 2 getpagesize') despite there is
-no real 'getpagesize(2)' syscall in the Linux syscall table. Define
-this function in 'sys.h'.
+Test the getpagesize() function. Make sure it returns the correct
+value.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/include/nolibc/sys.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 30 ++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 47bf67668860..b5f8cd35c03b 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -19,6 +19,7 @@
- #include <linux/fs.h>
- #include <linux/loop.h>
- #include <linux/time.h>
-+#include <linux/auxvec.h>
- 
- #include "arch.h"
- #include "errno.h"
-@@ -499,6 +500,26 @@ pid_t gettid(void)
- 	return sys_gettid();
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index f14f5076fb6d..c4a0c915139c 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -442,6 +442,35 @@ int test_getdents64(const char *dir)
+ 	return ret;
  }
  
-+static unsigned long getauxval(unsigned long key);
-+
-+/*
-+ * long getpagesize(void);
-+ */
-+
-+static __attribute__((unused))
-+long getpagesize(void)
++static int test_getpagesize(void)
 +{
-+	long ret;
++	long x = getpagesize();
++	int c;
 +
-+	ret = getauxval(AT_PAGESZ);
-+	if (!ret) {
-+		SET_ERRNO(ENOENT);
-+		return -1;
-+	}
++	if (x < 0)
++		return x;
 +
-+	return ret;
++#if defined(__x86_64__) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
++	/*
++	 * x86 family is always 4K page.
++	 */
++	c = (x == 4096);
++#elif defined(__aarch64__)
++	/*
++	 * Linux aarch64 supports three values of page size: 4K, 16K, and 64K
++	 * which are selected at kernel compilation time.
++	 */
++	c = (x == 4096 || x == (16 * 1024) || x == (64 * 1024));
++#else
++	/*
++	 * Assuming other architectures must have at least 4K page.
++	 */
++	c = (x >= 4096);
++#endif
++
++	return !c;
 +}
 +
- 
- /*
-  * int gettimeofday(struct timeval *tv, struct timezone *tz);
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -502,6 +531,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+ 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+ #endif
++		CASE_TEST(getpagesize);       EXPECT_SYSZR(1, test_getpagesize()); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+ 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
 -- 
 2.17.5
 
