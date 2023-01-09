@@ -2,105 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A5A66314C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C23663155
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbjAIUTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S237559AbjAIUTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237817AbjAIUS5 (ORCPT
+        with ESMTP id S237486AbjAIUTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:18:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF35F34D67;
-        Mon,  9 Jan 2023 12:18:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29799B80FA3;
-        Mon,  9 Jan 2023 20:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A24C433F0;
-        Mon,  9 Jan 2023 20:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673295533;
-        bh=fKmzDa8xWu0AAMUhY9kDg0odlBMun7WpnzbGtGHCOBE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oDX2C9i+FDRvpquD0Tm76+Ztd1AH/yS/g3Qg7WHgxgYL29Ye/phnNYpv6xEpWwKQd
-         JFkLncU8U/jqrN9TiunGb0Sx7rtJBsQjfJUv6/3OJh1oOagbURdbzilqMRkXx05cGT
-         24r5PMAvpKBzBIKcNP6ycQLhO+AC7wPoOldLkZH/s2TmcZuCUy+nl6bew7FhvtUsP7
-         wMo43JkxcraKxsM/4ISzDPaCz++NYL2cfLYyD2xiLF8bmRIjpXGDfMcvlSDIrCmHAp
-         vIGicqV03wqm+0XB+dtNuM4qoJ+/jdj78Mp4Zn8Cn7qKSmPtFVNk0TptynUg3Awio7
-         /ZLLBqlUUNrHg==
-Received: by mail-ua1-f54.google.com with SMTP id l13so2312166uai.8;
-        Mon, 09 Jan 2023 12:18:53 -0800 (PST)
-X-Gm-Message-State: AFqh2kqyPZU5RJ8uAhWKXUAQRLKBUX0Z0lp7Ux2ppz0OtEo+T27iXfdn
-        Aq9x80pbhY3GKADzSWnY6h36QMlAc8ct6n9+Ng==
-X-Google-Smtp-Source: AMrXdXs6BTZ+8D74o0hJQvodxrknKckEnyT3FIAUEDSl4Nm2U6u2mch8LVVAz/MbaiofQWil2sRw59UL0KIBA4Gu1cs=
-X-Received: by 2002:a05:6130:2ac:b0:573:d2a:e6cf with SMTP id
- q44-20020a05613002ac00b005730d2ae6cfmr3918699uac.36.1673295532626; Mon, 09
- Jan 2023 12:18:52 -0800 (PST)
+        Mon, 9 Jan 2023 15:19:17 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C1934D5B;
+        Mon,  9 Jan 2023 12:19:15 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MfYHW-1oZJ8B2UkC-00fwYV; Mon, 09 Jan 2023 21:19:03 +0100
+Message-ID: <09d76f45-9dfe-19a0-33ec-badaac280772@i2se.com>
+Date:   Mon, 9 Jan 2023 21:19:02 +0100
 MIME-Version: 1.0
-References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
- <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org> <Y7xsDXFlNjiQ1AIe@sirena.org.uk>
-In-Reply-To: <Y7xsDXFlNjiQ1AIe@sirena.org.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 9 Jan 2023 14:18:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLFSMzmTSAjtWWotzFy=JLr+rjim4F_X5thWK9ji6z22g@mail.gmail.com>
-Message-ID: <CAL_JsqLFSMzmTSAjtWWotzFy=JLr+rjim4F_X5thWK9ji6z22g@mail.gmail.com>
-Subject: Re: [PATCH v4 3/8] arm64/sysreg: Convert SPE registers to automatic generation
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: Move 'attach' work to the
+ driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20230105230119.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+ <20230105230119.2.I16b51f32db0c32f8a8532900bfe1c70c8572881a@changeid>
+ <d606398d-8569-5695-5fd7-038977c83eb4@i2se.com>
+ <a5a32db9-21a1-1734-1c4f-88b9431d7aa8@i2se.com> <Y7xRjDAgI3UO8Xuv@google.com>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Y7xRjDAgI3UO8Xuv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:8fVqNUrQuoY97iqfAMNpGZm04anZZNms9TcTmwFD1iOPW1aikC9
+ B5+n4AhII3gxiZQynPBodjLnIRNy92oH2B5c0sd+r5SyAzZSMswLThCluIkA8oryntJdARl
+ xuL1TUxDjupEZJ3Z0h5Tq2giK985lxjl9DctW/Ikpsm7t2E7gb6DjhU6PbBiJWrau8q9GNQ
+ puMOWlN5lBUuZjNLpAD5A==
+UI-OutboundReport: notjunk:1;M01:P0:TntHzEeApJ8=;Fmr8AJgxW8SpO09Rq8RNDNnlsDb
+ Jmi4LyzEQN3RW4K66wYz9O9cpzyIBOWoOnS6xwYeiReo1B0c+bfU1Ql/K4dlPXO/Dev+CdkEO
+ z9uKqE4I/xzn93OtjkCa1ibq8nbKw/J/g6zoaxPKKJ66lY8o8Kzn8JNZJG78OW8G5ARnwqhyq
+ fqDsrsOM+AH5l7NevMVt4PxOp2Q7krZ+Ig83UPbvpUOlO4lNKYiy1HNV/pjmHlQSTaqTvju7n
+ Y3IiBpENjFM32dba/dEsjbG9QFQpdiCnprpfikhINMUX+6wL2SiVowWsQu57yh61F5Uh3TNOl
+ dq2l7tQv3b3QSRaboYtkt1SSKE/UesNHsXY8zH/TUPg951Sm6T+qSQUnRKK+up3GZp32WPXMr
+ GTWXN5QXuS/W7pFeZE3g3DioQi6No4fox+dG0sDxPJDK8Ot75n3olauAWJ3DluA3p+4mlY5Eg
+ mw2zXd5O7p8OH6dcnjnyIjLCGa/vCThNnjxaH/8HVKPFxrbQMHLkaqwbiHyz8eFFYikOP3G2m
+ uLHGcHOwyuclJHbwr7onjuEYDRgUO33vqDoDd/iI4hp3uL43h7LF3tqhrembQSqJwicUMiQJC
+ gIHltgV7UXf04STjRMfjVukXjfBVUxIxGyO2rjm83Ilc6EwFtHUj4ip+aFI8tvYCNjA55HERQ
+ /wWH8vO/62mspsyvrkXZRwy2tYkCUxBhmMGu+Oxlcw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 1:33 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Jan 09, 2023 at 01:26:19PM -0600, Rob Herring wrote:
-> > Convert all the SPE register defines to automatic generation. No
-> > functional changes.
-> >
-> > New registers and fields for SPEv1.2 are added with the conversion.
-> >
-> > Some of the PMBSR MSS field defines are kept as the automatic generation
-> > has no way to create multiple names for the same register bits. The
-> > meaning of the MSS field depends on other bits.
-> >
-> > Tested-by: James Clark <james.clark@arm.com>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > v4:
-> >  - Rebase on v6.2-rc1
-> > v3:
-> >  - Make some fields enums and add some missing fields
->
-> What changed to invalidate my Reviewed-by?
->
->    https://lore.kernel.org/all/Y2kgC9QlBwvXTLe6@sirena.org.uk/
+Hi Matthias,
 
-Ugg, sorry. Nothing changed, I just forgot to add it.
-
-Rob
+Am 09.01.23 um 18:40 schrieb Matthias Kaehlcke:
+> On Sun, Jan 08, 2023 at 11:47:13AM +0100, Stefan Wahren wrote:
+>> Am 07.01.23 um 18:23 schrieb Stefan Wahren:
+>>> Hi Matthias,
+>>>
+>>> Am 06.01.23 um 00:03 schrieb Matthias Kaehlcke:
+>>>> Currently each onboard_hub platform device owns an 'attach' work,
+>>>> which is scheduled when the device probes. With this deadlocks
+>>>> have been reported on a Raspberry Pi 3 B+ [1], which has nested
+>>>> onboard hubs.
+>>>>
+>>>> The flow of the deadlock is something like this (with the onboard_hub
+>>>> driver built as a module) [2]:
+>>>>
+>>>> - USB root hub is instantiated
+>>>> - core hub driver calls onboard_hub_create_pdevs(), which creates the
+>>>>     'raw' platform device for the 1st level hub
+>>>> - 1st level hub is probed by the core hub driver
+>>>> - core hub driver calls onboard_hub_create_pdevs(), which creates
+>>>>     the 'raw' platform device for the 2nd level hub
+>>>>
+>>>> - onboard_hub platform driver is registered
+>>>> - platform device for 1st level hub is probed
+>>>>     - schedules 'attach' work
+>>>> - platform device for 2nd level hub is probed
+>>>>     - schedules 'attach' work
+>>>>
+>>>> - onboard_hub USB driver is registered
+>>>> - device (and parent) lock of hub is held while the device is
+>>>>     re-probed with the onboard_hub driver
+>>>>
+>>>> - 'attach' work (running in another thread) calls driver_attach(), which
+>>>>      blocks on one of the hub device locks
+>>>>
+>>>> - onboard_hub_destroy_pdevs() is called by the core hub driver when one
+>>>>     of the hubs is detached
+>>>> - destroying the pdevs invokes onboard_hub_remove(), which waits for the
+>>>>     'attach' work to complete
+>>>>     - waits forever, since the 'attach' work can't acquire the device
+>>>> lock
+>>>>
+>>>> Use a single work struct for the driver instead of having a work struct
+>>>> per onboard hub platform driver instance. With that it isn't necessary
+>>>> to cancel the work in onboard_hub_remove(), which fixes the deadlock.
+>>>> The work is only cancelled when the driver is unloaded.
+>>> i applied both patches for this series on top of v6.1
+>>> (multi_v7_defconfig), but usb is still broken on Raspberry Pi 3 B+
+> Thanks for testing.
+>
+>> here is the hung task output:
+>>
+>> [  243.682193] INFO: task kworker/1:0:18 blocked for more than 122 seconds.
+>> [  243.682222]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.682233] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.682242] task:kworker/1:0     state:D stack:0     pid:18 ppid:2
+>> flags:0x00000000
+>> [  243.682267] Workqueue: events onboard_hub_attach_usb_driver
+>> [onboard_usb_hub]
+>> [  243.682317]  __schedule from schedule+0x4c/0xe0
+>> [  243.682345]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.682367]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.682394]  __mutex_lock.constprop.0 from __driver_attach+0x7c/0x188
+>> [  243.682421]  __driver_attach from bus_for_each_dev+0x70/0xb0
+>> [  243.682449]  bus_for_each_dev from onboard_hub_attach_usb_driver+0xc/0x28
+>> [onboard_usb_hub]
+>> [  243.682494]  onboard_hub_attach_usb_driver [onboard_usb_hub] from
+>> process_one_work+0x1ec/0x4d0
+>> [  243.682534]  process_one_work from worker_thread+0x50/0x540
+>> [  243.682559]  worker_thread from kthread+0xd0/0xec
+>> [  243.682582]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.682600] Exception stack(0xf086dfb0 to 0xf086dff8)
+>> [  243.682615] dfa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.682631] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.682646] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+>> [  243.682692] INFO: task kworker/1:2:82 blocked for more than 122 seconds.
+>> [  243.682703]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.682713] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.682721] task:kworker/1:2     state:D stack:0     pid:82 ppid:2
+>> flags:0x00000000
+>> [  243.682741] Workqueue: events_power_efficient hub_init_func2
+>> [  243.682764]  __schedule from schedule+0x4c/0xe0
+>> [  243.682785]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.682808]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.682833]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+>> [  243.682859]  hub_activate from process_one_work+0x1ec/0x4d0
+>> [  243.682883]  process_one_work from worker_thread+0x50/0x540
+>> [  243.682907]  worker_thread from kthread+0xd0/0xec
+>> [  243.682927]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.682944] Exception stack(0xf1509fb0 to 0xf1509ff8)
+>> [  243.682958] 9fa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.682974] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.682988] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+>> [  243.683023] INFO: task kworker/1:4:257 blocked for more than 122 seconds.
+>> [  243.683034]       Not tainted 6.1.0-00002-gaa61d98d165b #2
+>> [  243.683043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>> this message.
+>> [  243.683051] task:kworker/1:4     state:D stack:0     pid:257 ppid:2
+>> flags:0x00000000
+>> [  243.683071] Workqueue: events_power_efficient hub_init_func2
+>> [  243.683092]  __schedule from schedule+0x4c/0xe0
+>> [  243.683113]  schedule from schedule_preempt_disabled+0xc/0x10
+>> [  243.683135]  schedule_preempt_disabled from
+>> __mutex_lock.constprop.0+0x244/0x804
+>> [  243.683160]  __mutex_lock.constprop.0 from hub_activate+0x584/0x8b0
+>> [  243.683184]  hub_activate from process_one_work+0x1ec/0x4d0
+>> [  243.683209]  process_one_work from worker_thread+0x50/0x540
+>> [  243.683233]  worker_thread from kthread+0xd0/0xec
+>> [  243.683253]  kthread from ret_from_fork+0x14/0x2c
+>> [  243.683270] Exception stack(0xf09d9fb0 to 0xf09d9ff8)
+>> [  243.683283] 9fa0:                                     00000000 00000000
+>> 00000000 00000000
+>> [  243.683299] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000
+>> [  243.683313] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> Does commenting the following help:
+>
+>    while (work_busy(&attach_usb_driver_work) & WORK_BUSY_RUNNING)
+>        msleep(10);
+>
+> ?
+Yes, it does. I restarted the board multiple times and it never hang :-)
