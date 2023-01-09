@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DC6661EA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110B0661E9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbjAIGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 01:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S233652AbjAIGNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 01:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjAIGXg (ORCPT
+        with ESMTP id S230458AbjAIGNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 01:23:36 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F366ABE13;
-        Sun,  8 Jan 2023 22:23:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673245415; x=1704781415;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=99wwgki3vDnEuMvkqt8gVpIBfAzSTXbaAFnjD0Am8uM=;
-  b=TXG/k2G1zpRCIiXnwkuyIceCGcUQ+ZtORd2/8z91bG5M28QxdhUgtPrO
-   NYKDCfzdU7GegSGOte3dKTFspB5MJr9Qod/VFMwb0SYfm8M/GGTOOwa42
-   6gtACUS52Wz0Dk23hsfZKU99uocLhQUeEBqw6xshDPdf/X+aJbAh4IiDI
-   YpUvvJbvM6A+mbXkrxwEBSwk5vSqB7nBhdS818P5Jn1LFmCkYr8HTD2Ux
-   qUQFSgH0cqSBzHRo2RPnTWQQlrsZfih9DGja8VYlDGa9A7EpLESxWK4XV
-   H2UgTouRSXpTdmSp3VhSES2qP2PVr82xS2+uq/w6lekm6FmKGGCMx708Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="302501575"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="302501575"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2023 22:23:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="649919372"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="649919372"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2023 22:23:32 -0800
-Date:   Mon, 9 Jan 2023 14:13:16 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-fpga@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v5 0/3] Reliability improvements for Microchip MPF FPGA
- manager
-Message-ID: <Y7uwfCPAl15Db8G6@yilunxu-OptiPlex-7050>
-References: <20221230092922.18822-1-i.bornyakov@metrotek.ru>
- <20230109054742.ola6gafnn2ikyuqa@x260>
+        Mon, 9 Jan 2023 01:13:45 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217AEA197;
+        Sun,  8 Jan 2023 22:13:44 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 308McDcN018600;
+        Sun, 8 Jan 2023 22:13:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=0oXfUSucqDnprNu/xjDfCXx1MiNwuNLq5i0naIl8Ado=;
+ b=eKIFupSz/vaiFF0HGQIZpg3G3SVaivFMcIqb6Z+zyWVYh76DmJ7aN6Gd3RM4h8Bz7z8S
+ +lg6gI7CTteNj9ZRohtn4f27yjuWcN+84I5wVokqmf77OEXXmg9J6q7u5tlXnJSSgUIK
+ uS3WpWHsYhyHTFE3swfWuOvJLm79R2AdOmWRzrAYiMUxS/iLftNFwT7MdnDqaeZji5zV
+ 8szZ9ER6PDK6KUkEkRs+tEq1I4H0rVNlIRDUPNLf1U4IwivWBqYbi49AluA3TnBOGiGE
+ b4FmuHkgUTQqsAazjmmuDQvWroq2iF776uRdUu84hOlFKcd3qnpGS6gbPPAiZUZ6r2bu Xw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3my94tmbgf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 08 Jan 2023 22:13:31 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 8 Jan
+ 2023 22:13:29 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Sun, 8 Jan 2023 22:13:29 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 6D7E93F7090;
+        Sun,  8 Jan 2023 22:13:26 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <sgoutham@marvell.com>,
+        <gakula@marvell.com>, <sbhatta@marvell.com>
+Subject: [net PATCH] octeontx2-pf: Fix resource leakage in VF driver unbind
+Date:   Mon, 9 Jan 2023 11:43:25 +0530
+Message-ID: <20230109061325.21395-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109054742.ola6gafnn2ikyuqa@x260>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: D2BdtYno9FprCMkB1oCNyC5ZRHhCIqe_
+X-Proofpoint-GUID: D2BdtYno9FprCMkB1oCNyC5ZRHhCIqe_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_02,2023-01-06_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-09 at 08:47:42 +0300, Ivan Bornyakov wrote:
-> On Fri, Dec 30, 2022 at 12:29:19PM +0300, Ivan Bornyakov wrote:
-> > A couple of reliability improvements for Microchip Polarfire FPGA
-> > manager:
-> >  * move SPI I/O buffers out of stack
-> >  * rewrite status polling routine in a time measurable way
-> > 
-> > Also improve mpf_ops_write() code readability by separating single data
-> > frame writing routine.
-> > 
-> > ChangeLog:
-> >   v1:
-> > [https://lore.kernel.org/linux-fpga/20221223123854.8023-1-i.bornyakov@metrotek.ru/]
-> >   v2:
-> >     * split into 3 distinct patches
-> > [https://lore.kernel.org/linux-fpga/20221226142326.8111-1-i.bornyakov@metrotek.ru/]
-> >   v3:
-> >     * fix polling stop condition in mpf_poll_status() as Ilpo suggested.
-> > [https://lore.kernel.org/linux-fpga/20221227100450.2257-1-i.bornyakov@metrotek.ru/]
-> >   v4:
-> >     * more verbose comment for mpf_poll_status()
-> > [https://lore.kernel.org/linux-fpga/20221229104604.2496-1-i.bornyakov@metrotek.ru/]
-> >   v5:
-> >     * revord "fpga: microchip-spi: move SPI I/O buffers out of stack"
-> >       commit message "Use allocated buffers" -> "Use cacheline aligned
-> >       buffers"
-> >     * drop __aligned(ARCH_KMALLOC_MINALIGN) attribute of struct mpf_priv
-> >       member "rx". tx and rx are used synchronously by dma, they could
-> >       share a cacheline.
-> > 
-> > Ivan Bornyakov (3):
-> >   fpga: microchip-spi: move SPI I/O buffers out of stack
-> >   fpga: microchip-spi: rewrite status polling in a time measurable way
-> >   fpga: microchip-spi: separate data frame write routine
-> > 
-> >  drivers/fpga/microchip-spi.c | 145 +++++++++++++++++++----------------
-> >  1 file changed, 79 insertions(+), 66 deletions(-)
-> > 
-> > -- 
-> > 2.38.2
-> > 
-> 
-> Friendly ping.
-> 
+resources allocated like mcam entries to support the Ntuple feature
+and hash tables for the tc feature are not getting freed in driver
+unbind. This patch fixes the issue.
 
-Patch #1 is good to me now. And applied this series to for-next
+Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-Yilun
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+index 86653bb8e403..7f8ffbf79cf7 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+@@ -758,6 +758,8 @@ static void otx2vf_remove(struct pci_dev *pdev)
+ 	if (vf->otx2_wq)
+ 		destroy_workqueue(vf->otx2_wq);
+ 	otx2_ptp_destroy(vf);
++	otx2_mcam_flow_del(vf);
++	otx2_shutdown_tc(vf);
+ 	otx2vf_disable_mbox_intr(vf);
+ 	otx2_detach_resources(&vf->mbox);
+ 	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+-- 
+2.17.1
+
