@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D5966344E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D0E66342F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbjAIWub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S237285AbjAIWnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjAIWnM (ORCPT
+        with ESMTP id S237928AbjAIWnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:43:12 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DFB1DDCC;
-        Mon,  9 Jan 2023 14:42:52 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Mon, 9 Jan 2023 17:43:32 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B0C633B
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:43:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NrTVH4jN9z4xND;
-        Tue, 10 Jan 2023 09:42:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673304171;
-        bh=7DWiRV4Q8QRPF+LkxUekuAC1Y3rOnAapGW2ZUhPDazc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jPZAuhG6Q8tIhNIKwTjfEZzNYrg62mhClnT5xWVHU4s1dpekt/G49cn9WPuTzUOUg
-         m0mCMScACPVRU49PlzXhRrKKIZgk/akXvI13+HVnnGkhRMXVM94NgNAP+TxTrjM69C
-         VMNwrx5RuneoiGlQ/sKKa7TzbkO1C608GVa1ie3+VKokGi+xeFC44X7PS6Z4NnZcau
-         lLT6L44PLmR385Zt32eI9BiN7FPktG03fTgetyjPs0m+K/1aarFixU1IMnnK8ZfGkq
-         RbHcIthg7lYOjlTPHV0RBChzmIfCFAws9cIR+Cu6GWsMR6LleWknMvGP+8bw/xMgd3
-         y/KbQlT7mcrpw==
-Date:   Tue, 10 Jan 2023 09:42:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the davinci tree with the arm-soc tree
-Message-ID: <20230110094246.1497d12e@canb.auug.org.au>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 14A455CDE8;
+        Mon,  9 Jan 2023 22:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673304210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZRxQ/OEFLF0ZRAZvAP4JUULIQr4b47/DWJewsV7EvkA=;
+        b=gEyfvrEbxDIojjwsD7bFN8ark6Q0Uc0+cfP1GvQynjWbVexuYzk47hX9t9+ze8mxZgRhbY
+        o3HTbTD1TNKDM1g/QqTp7KlMsL5wDIiQ5qfjBx9tMjitFacr3HTWMRzSpw6K+qtD5Hcfu9
+        TYbo5y4v0p56e/eLbJmE5Rrs9aTgN2I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673304210;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZRxQ/OEFLF0ZRAZvAP4JUULIQr4b47/DWJewsV7EvkA=;
+        b=23eoKFiydH8SfRTgiPg3A5UPTMW+IDbN62QPdF4SBlvW/+RZKIDYrHagHN1XvcszLE/Ks6
+        j/CIxX4qVis7XgCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3B5E13587;
+        Mon,  9 Jan 2023 22:43:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yqh5NpGYvGN5IQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 09 Jan 2023 22:43:29 +0000
+Message-ID: <f39c266c-9802-71a5-8f1c-2d0a1340f59f@suse.cz>
+Date:   Mon, 9 Jan 2023 23:43:29 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UX9MyVrSXCmEHSFeNun/8Nf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Linux 6.2-rc3
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
+ <20230109174742.GA1191249@roeck-us.net>
+ <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/UX9MyVrSXCmEHSFeNun/8Nf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/9/23 23:18, Linus Torvalds wrote:
+> On Mon, Jan 9, 2023 at 11:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
+>> include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
+> 
+> Ok, I guess we'll have to disable this gcc warning for this version
+> again. I don't think anybody figured out why it happens. We had
+> several people look at it (Kees, Vlastimil, Jaegeuk) and I think
+> everybody ended up going "tis looks like a compiler thing".
+> 
+> Does anybody remember - what was the compiler version again and what
+> do we need to disable?
 
-Hi all,
+Guenter reported that "The problem is seen with gcc 11.3.0, but not with gcc
+12.2.0 nor with gcc 10.3.0."
 
-Today's linux-next merge of the davinci tree got a conflict in:
+https://lore.kernel.org/all/20221227002941.GA2691687@roeck-us.net/
 
-  arch/arm/mach-davinci/board-dm365-evm.c
+Kees said it's -Warray-bounds, already disabled on gcc 12 for other reasons:
 
-between commit:
+https://lore.kernel.org/all/D8BDBF66-E44C-45D4-9758-BAAA4F0C1998@kernel.org/
 
-  fef6ca600ba7 ("ARM: davinci: remove unused board support")
-
-from the arm-soc tree and commit:
-
-  84bde55c050b ("ARM: davinci: fix repeated words in comments")
-
-from the davinci tree.
-
-I fixed it up (I removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UX9MyVrSXCmEHSFeNun/8Nf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO8mGYACgkQAVBC80lX
-0GyBzwf+MrEGJvgsywvPzzoCE37N7+H9UpELbyC59ORp+P+lx+bgM2XX/f8RMlDl
-S12t59Sl2OaA4zpvj7EmiMy/o9M7bcV8DxdgOwWJmqis0nbxNlkqICgs6xays8Go
-/0GZW68ZcG4J7GZo5GSdVdakiF8lTgbzi0va6gVn/dv7cU1TOu+NZO/SS7xJleaG
-IyFxC0h0ubN2xutH0JkOvxiEjUAVMFlBxm3NTEilphlG6MxsuJsIKjNfVEiPusyA
-AlmX48QgOVQq7XyPmN4aUXS0WqV+Or5LLHb90fUJe6NHmrQhqqrxI4MeEKytAmuW
-BuKToJEQHzMwZbmgDI2d81paR4zFZw==
-=sCXs
------END PGP SIGNATURE-----
-
---Sig_/UX9MyVrSXCmEHSFeNun/8Nf--
