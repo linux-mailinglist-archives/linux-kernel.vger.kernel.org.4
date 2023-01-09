@@ -2,130 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE91662AAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE73662ABA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbjAIP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S235612AbjAIQCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237268AbjAIP7X (ORCPT
+        with ESMTP id S234955AbjAIQC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:59:23 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFAB3B902;
-        Mon,  9 Jan 2023 07:59:17 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id jl4so9964840plb.8;
-        Mon, 09 Jan 2023 07:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gnaAG4YDJhYITmoc4JFALivyXUFRt7jauTm0mQYzMbQ=;
-        b=CrmUUFgEgmvDxgs5A/ywFQsggyIunQbSDeV8ufkm1vBRaa/INDWTY+EsCaw8oXK2/S
-         FlWVQQPAGncAry0fIZS3oV95zVShMeJ35dEndt4MBH7cH6D/KbzFXwTenGx0e4gN6pz3
-         ze1OWOZGTq5BQhKmGfiHESF7eX96nqM1a1Dymd78oGwSKFKxI6wdkpb4hOVqz6aSA6kF
-         PlnEEqn7IcEaiemhdsL8KC92Ngjv69jnXx2VCoh/tZuQNIWaVTAI2wXqRIdWIkiglgtU
-         fxTq+eUA7d359jNUK4fT4Js77L/+4nz7XNMiNxK21CARbh0+73CPEahjd+lySbtYVRUJ
-         /OVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gnaAG4YDJhYITmoc4JFALivyXUFRt7jauTm0mQYzMbQ=;
-        b=REPESrHgwJh3g2adS3S3+5i/e4ETH4ASVGFfTOihynKUjt00rrz+YOI1wcThRkQA0E
-         Mit32a4pILvQnbUHV+gfZz3+ZFyaHQgeIsfzb15vFZ+jXfhfP3wfvitm1kFQtb9n84cV
-         gNzAHvzcpWybtAwrSDyLViJ7CBVnsBsLp30UFH22UqBKH4Gi6/0wcKhyOj2IwrWp9tvL
-         1EoJP3j77JZQuKzvn17qT5Ma8wIU8HD80tgIaKZ53cbiDZxQjL94GMRnfs2p1DZq22dn
-         egJDM0FOgxATGjs9tdzO+QRRW5oCv1UeT8xM+6l9Gpm2kngvwpB1dNNm3rKQV+mPAEdw
-         V/dw==
-X-Gm-Message-State: AFqh2komyn9eJZcNU3NcWhwTaFqLto7waOQlfkUUBSFhkpSK39WWoUSK
-        RUpbM0k7g0ThwRWPVYctM5WZrOaO4O7D+Bc62d4vnbufnZ0=
-X-Google-Smtp-Source: AMrXdXsIHcMFGh8C6JVsndP5O7Yb37EfmTQB1MHMl1BJsI+OTAQfZHN0Hpm0fEvZmMEB9rBptlXxKbpReH1BjBeDTsc=
-X-Received: by 2002:a17:90a:4311:b0:214:291f:87b5 with SMTP id
- q17-20020a17090a431100b00214291f87b5mr5835174pjg.115.1673279956980; Mon, 09
- Jan 2023 07:59:16 -0800 (PST)
+        Mon, 9 Jan 2023 11:02:29 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C8C1C133;
+        Mon,  9 Jan 2023 08:02:28 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309BUSOH003298;
+        Mon, 9 Jan 2023 17:02:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Jt+8u7dc7kaoHRVclJ4gTOkOj2blFmusjgWq7LjVRrc=;
+ b=6eZORvo4lw///FcMSYj4Ln6zwTf4V0NdkPNkTC2Mxs2sfnMU50VmLapBkp2bv+V8Qjr3
+ N3TpQVRCcgx5z0ntc0G4MZcBVqEkOhUkf6W1XUx75gs0y0oFkJOqF1eBXbRA9/Mp6eR1
+ d2m7VgFpN5UgLR6XwdfTItj6hvNG7P3UaFfjwcxMSHQlDPseCZILJxFKwfOVA3ei7ThL
+ r5R8zn/DTP6uU3XSFcbWRm55RmCvmieUrGls33uC1GL1qL5cElfjsUzOOZ3wdbzbbM/W
+ IcKfgG8UUjDOHiC+uhOXz4dL4USqmIxdykSdgzMu5qYrtJge5c1V9+ls512OAiHeniTW zA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3my0gnvbhq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 17:02:16 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE11610002A;
+        Mon,  9 Jan 2023 17:02:14 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E7A812243E9;
+        Mon,  9 Jan 2023 17:02:14 +0100 (CET)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 9 Jan
+ 2023 17:02:14 +0100
+Message-ID: <dd823016-f419-f801-6da5-3fdfc9bd758b@foss.st.com>
+Date:   Mon, 9 Jan 2023 17:02:13 +0100
 MIME-Version: 1.0
-References: <20221219052128.18190-1-zhouzhouyi@gmail.com> <Y7wN0TKU1jDyTZs5@lothringen>
- <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Mon, 9 Jan 2023 23:59:05 +0800
-Message-ID: <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
-Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, fweisbec@gmail.com,
-        tglx@linutronix.de, mingo@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/2] ASoC: stm32: update sound card on stm32mp15xx-dkx
+Content-Language: en-US
+To:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Alexandre Torgue <alexandre.torgue@st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221205121602.17187-1-olivier.moysan@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20221205121602.17187-1-olivier.moysan@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_09,2023-01-09_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:25 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Mon, Jan 09, 2023 at 01:51:29PM +0100, Frederic Weisbecker wrote:
-> > On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
-> > > mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
-> > > reported by KCSAN.
-> > >
-> > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > ---
-> > > During the rcutorture test on linux-next,
-> > > ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
-> > > following KCSAN BUG is reported:
-> > > [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
-> > > [   35.400593] ^M
-> > > [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
-> > > [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
-> > > [   35.407162]  do_idle+0xf3/0x2a0^M
-> > > [   35.408016]  cpu_startup_entry+0x15/0x20^M
-> > > [   35.409084]  start_secondary+0x8f/0x90^M
-> > > [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
-> > > [   35.411607] ^M
-> > > [   35.412042] no locks held by swapper/3/0.^M
-> > > [   35.413172] irq event stamp: 53048^M
-> > > [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
-> > > [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
-> > > [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
-> > > [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
-> > > [   35.423685] ^M
-> > > [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
-> > > [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
-> > > [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
-> > > [   35.428386]  do_idle+0xf3/0x2a0^M
-> > > [   35.429265]  cpu_startup_entry+0x15/0x20^M
-> > > [   35.430429]  rest_init+0x20c/0x210^M
-> > > [   35.431382]  arch_call_rest_init+0xe/0x10^M
-> > > [   35.432508]  start_kernel+0x544/0x600^M
-> > > [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
-> > >
-> > > fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
-> >
-> > This has been discussed before with passion:
-> >
-> > http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
-> >
-> > To me data_race() would be more appropriate but that would need a changelog with
-> > proper analysis of the tick_do_timer_cpu state machine.
->
-> Please also an analysis of why the compiler cannot do any destructive
-> optimizations in this case.  Maybe also comments.
-I want to try the analysis above, as a newbie I have taught myself
-LLVM for 3 years in my spare time ;-)
->
-> > One more thing on my TODO list, but feel free to beat me at it :-)
-Please take your time ;-)   Please don't look my next possible email
-as a reminder ;-)
->
-> I know that feeling!  ;-)
->
-Thanx, Zhouyi
->                                                         Thanx, Paul
+Hi Olivier
+
+On 12/5/22 13:16, Olivier Moysan wrote:
+> This patchset introduces the following changes on STMP32MP15 DK boards
+> sound card:
+> - Rename the sound card to ease SOC diversity management
+> - Cleanup of useless clock property in SAI2A node
+> 
+> Olivier Moysan (2):
+>    ARM: dts: stm32: remove sai kernel clock on stm32mp15xx-dkx
+>    ARM: dts: rename sound card on stm32mp15xx-dkx
+> 
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+
+Applied on stm32-fixes.
+
+Regards
+Alex
