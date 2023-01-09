@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47CB6632F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F2F663300
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbjAIVd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S237760AbjAIVeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjAIVdv (ORCPT
+        with ESMTP id S235529AbjAIVdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:33:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257E1DD0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:33:48 -0800 (PST)
+        Mon, 9 Jan 2023 16:33:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215F410CE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:33:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB40D6140C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 21:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EB2C43392;
-        Mon,  9 Jan 2023 21:33:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6ECBB80FE3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 21:33:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B924C433F0;
+        Mon,  9 Jan 2023 21:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673300026;
-        bh=S9qpLQ77vZLkX0Fi/FnXthnFg4be2LJbk3/kO/j1qTI=;
+        s=k20201202; t=1673300027;
+        bh=2JLtN8tos+I5Ax4pubeTviifV4tMrNZA936nz1vxxcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jRDHdTCz4fpg4pSg+atnuiWHPSzA34OuiyN0y4hpkdydvPbEXc5zQNd2rmXYtLG3R
-         3qnhCqhu0s5e6yY71KGAHWgxIuU/eKP9xpeghcLzTaHoAiaNpS1AV6Ixh21DKD0orM
-         uSzwGl7Itp0qOi0SAjUWVJgo6gllE3SdJ2Tfo53cV7OsSDL+n310BVjzmPDIcm0XMO
-         p8wPGPwVOXBEM6ivtFSJskAo1VQNvggSIM9GNleCP4uRobOuMxdi9GBMueeRyyR1Rr
-         BEaar4UIe6j/wPq/l0eaX6+bLZBckUQuURSfg9NUCEN8MXUiJ4raIz5tcuKTpBcfsR
-         BUGNJ394IFnhg==
+        b=fd3GB+4WIT0xNztbpTNCwyNhCDV1rv7z8xAvq8Nxtl4ZCZTIvE8E4qoOJzAuF0qd/
+         nIxdhKCEKTchIOd2lY5DKaGN1EQ2wSTEJ06oObeHGBiYuXf6fLkGhJMvJSkZFf1kW7
+         bZikE7oMHL1fDZ3JidDlVkhMdB74EQ6VYGwvUxzaf6y0k1s+VxA4Nh40zWa/Oyx1ge
+         hu7GJpQg5axP/a+/wogIcX0QmJqqRY06JBBZGPDszg/dSU8/V2wLG1VaU9PaWOwra7
+         NCsnLXECcDn2l7pAQ8RjpT/y0DEKzI5Sy9zMRvtfOpqm+BHHDySbyTDUHvsaNj77LC
+         6vtqs4qizzHYQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] mm/damon/vaddr: support folio of neither HPAGE_PMD_SIZE nor PAGE_SIZE
-Date:   Mon,  9 Jan 2023 21:33:31 +0000
-Message-Id: <20230109213335.62525-3-sj@kernel.org>
+Subject: [PATCH 3/6] mm/damon/vaddr: record appropriate folio size when the access is not found
+Date:   Mon,  9 Jan 2023 21:33:32 +0000
+Message-Id: <20230109213335.62525-4-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230109213335.62525-1-sj@kernel.org>
 References: <20230109213335.62525-1-sj@kernel.org>
@@ -53,28 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON virtual address space monitoring operations set treats folios
-having non-HPAGE_PMD_SIZE size as having PAGE_SIZE size.  Use the exact
-size of the folio.
+DAMON virtual address spaces monitoring operations set doesn't set folio
+size of the access checked address if access is not found.  It could
+result in unnecessary and inefficient repeated check.  Appropriately set
+the size regardless of access check result.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/vaddr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/damon/vaddr.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
 diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index d6cb1fca1769..c7b192006fe6 100644
+index c7b192006fe6..1fec16d7263e 100644
 --- a/mm/damon/vaddr.c
 +++ b/mm/damon/vaddr.c
-@@ -475,7 +475,7 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+@@ -452,10 +452,9 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 			goto huge_out;
+ 		if (pmd_young(*pmd) || !folio_test_idle(folio) ||
+ 					mmu_notifier_test_young(walk->mm,
+-						addr)) {
+-			*priv->folio_sz = HPAGE_PMD_SIZE;
++						addr))
+ 			priv->young = true;
+-		}
++		*priv->folio_sz = HPAGE_PMD_SIZE;
+ 		folio_put(folio);
+ huge_out:
+ 		spin_unlock(ptl);
+@@ -474,10 +473,9 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	if (!folio)
  		goto out;
  	if (pte_young(*pte) || !folio_test_idle(folio) ||
- 			mmu_notifier_test_young(walk->mm, addr)) {
--		*priv->folio_sz = PAGE_SIZE;
-+		*priv->folio_sz = folio_size(folio);
+-			mmu_notifier_test_young(walk->mm, addr)) {
+-		*priv->folio_sz = folio_size(folio);
++			mmu_notifier_test_young(walk->mm, addr))
  		priv->young = true;
- 	}
+-	}
++	*priv->folio_sz = folio_size(folio);
  	folio_put(folio);
+ out:
+ 	pte_unmap_unlock(pte, ptl);
+@@ -504,10 +502,9 @@ static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
+ 	folio_get(folio);
+ 
+ 	if (pte_young(entry) || !folio_test_idle(folio) ||
+-	    mmu_notifier_test_young(walk->mm, addr)) {
+-		*priv->folio_sz = huge_page_size(h);
++	    mmu_notifier_test_young(walk->mm, addr))
+ 		priv->young = true;
+-	}
++	*priv->folio_sz = huge_page_size(h);
+ 
+ 	folio_put(folio);
+ 
 -- 
 2.25.1
 
