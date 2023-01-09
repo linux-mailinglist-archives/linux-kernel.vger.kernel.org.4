@@ -2,126 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56676628BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710846628B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbjAIOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S230032AbjAIOnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjAIOn3 (ORCPT
+        with ESMTP id S229485AbjAIOm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:43:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610E21D0DB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673275362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GqO8WP47IGCJ8c3pWUysSVCAJdwUf/hbc3Q+tFowqGk=;
-        b=V4kWEXdxDhStOGUnNzZCZSCpzVrKXpSAIZEEu79ApKdJ71CUX8i66FT8szZD4g3fB8IaeT
-        1RUu9x6sWnFWmI1UBh5a+kus9fJnU7BIsLxQ0+grymIcc6tSrY0TZw5jJtRq8WGwiwwSz9
-        C5jPK9E+uvN5QHIrzBS4ZijH1h62haA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-396-XBLlX5IcM0uA1VkPEP6uyg-1; Mon, 09 Jan 2023 09:42:38 -0500
-X-MC-Unique: XBLlX5IcM0uA1VkPEP6uyg-1
-Received: by mail-qk1-f199.google.com with SMTP id br6-20020a05620a460600b007021e1a5c48so6543321qkb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:42:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GqO8WP47IGCJ8c3pWUysSVCAJdwUf/hbc3Q+tFowqGk=;
-        b=d/fWV48ONw3NGR7bb7yWQ37uNM4Pw4osDqNs7Xdt/Prpj9MLZgK/hBDkP7n06uz0Oy
-         0rSwf5KmEFnL++xb2+sRX1OD7ioz2FuxpPKz25MEUBxSORENpUbcXJ/AlF5bUNu7DOMC
-         14wa3nPlw2KYf/WOlT5llC3JqGu2mlAL+qoEMBnBC4BNSShfPLfUqLXGEfVgQPdGI+jG
-         OnYqdrCHGqonamSEbcz80TqCbnGVvhYCCW24WZhtBbkI7S7UHqPrxbK0ae8kdxl398E1
-         laRHXmJetkPnEHfaI26IRMmae4sO3IxCpzhnoC1Yx0valhXpjnSpQ7T19qvrazt4jZFy
-         EgSw==
-X-Gm-Message-State: AFqh2kp9bmfS2xK2N3kTaCR96NiQQ/hlVadiDEES8s9sjS7ybIPRkghS
-        0UhtErq9hILZz9CtTnMeIiFYns+OiHi6kUqjZNxBTnOyPGGCZKdp2doQWjEN4WRHi6XqwYMLdbK
-        d23evx0EGmk7zDLtjmFEikrm6
-X-Received: by 2002:a05:622a:580c:b0:3a8:2b87:9fd8 with SMTP id fg12-20020a05622a580c00b003a82b879fd8mr98712600qtb.48.1673275357938;
-        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvDhPBJIZ+E0FoPfewXrYweMlU/l4+RY/bsNUbu8cqmPky9X6H++s5bY2nvviwUmzzUYAd2Tw==
-X-Received: by 2002:a05:622a:580c:b0:3a8:2b87:9fd8 with SMTP id fg12-20020a05622a580c00b003a82b879fd8mr98712581qtb.48.1673275357707;
-        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
-Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
-        by smtp.gmail.com with ESMTPSA id q8-20020ac87348000000b003a8163c1c96sm4611187qtp.14.2023.01.09.06.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 06:42:37 -0800 (PST)
-Message-ID: <7d1499fadf42052711e39f0d8c7656f4d3a4bc9d.camel@redhat.com>
-Subject: Re: [PATCH 08/11] cifs: Remove call to filemap_check_wb_err()
-From:   Jeff Layton <jlayton@redhat.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Date:   Mon, 09 Jan 2023 09:42:36 -0500
-In-Reply-To: <20230109051823.480289-9-willy@infradead.org>
-References: <20230109051823.480289-1-willy@infradead.org>
-         <20230109051823.480289-9-willy@infradead.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 9 Jan 2023 09:42:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6061AA07;
+        Mon,  9 Jan 2023 06:42:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A67A61168;
+        Mon,  9 Jan 2023 14:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D93C433D2;
+        Mon,  9 Jan 2023 14:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673275376;
+        bh=vyhQ5Kv0jvomCtF2wA1v2cv86vfLJ4UcKD5du8lOS44=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=cUs47DELJbya0V+D1JRWcGin6AUwqy93PoasktkKfpnLZbriVm4P/ZxqgcZw9a4Mi
+         HT1mdDbx+UhZP9RsyrmaCCjAYFXtYyGLUl/KTRmzZuUVw3Q3JqHUHicn/tqmQdZlw+
+         5RJTMcyxKssxJCBgbGPmaC2yWTTVhmvy0NfrsosTmMrkKke7vbDIYz7AbNYwOKrkh+
+         wbHGKvoKG8iEEgHTDehxMpumffCkgcpTelnBQkE0LEKYxCg3L0nJU7IsD422rWhXN1
+         hFJxVwScDbRyEN4NBipWYnSMDEWjEqrO0l8ktNb0za5Cl7PDj1DTmJwQRXfmJHTkJ0
+         faHJ7vg7FxbJg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     gregory.greenman@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        luciano.coelho@intel.com, johannes.berg@intel.com,
+        shaul.triebitz@intel.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iwlwifi: Add missing check for alloc_ordered_workqueue
+References: <20230104100059.24987-1-jiasheng@iscas.ac.cn>
+Date:   Mon, 09 Jan 2023 16:42:48 +0200
+In-Reply-To: <20230104100059.24987-1-jiasheng@iscas.ac.cn> (Jiasheng Jiang's
+        message of "Wed, 4 Jan 2023 18:00:59 +0800")
+Message-ID: <87358jixav.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
-> filemap_write_and_wait() now calls filemap_check_wb_err(), so we cannot
-> glean any additional information by calling it ourselves.  It may also
-> be misleading as it will pick up on any errors since the beginning of
-> time which may well be since before this program opened the file.
->=20
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  fs/cifs/file.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->=20
-> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-> index 22dfc1f8b4f1..7e7ee26cf77d 100644
-> --- a/fs/cifs/file.c
-> +++ b/fs/cifs/file.c
-> @@ -3042,14 +3042,12 @@ int cifs_flush(struct file *file, fl_owner_t id)
->  	int rc =3D 0;
-> =20
->  	if (file->f_mode & FMODE_WRITE)
-> -		rc =3D filemap_write_and_wait(inode->i_mapping);
-> +		rc =3D filemap_write_and_wait(file->f_mapping);
+Jiasheng Jiang <jiasheng@iscas.ac.cn> writes:
 
-If we're calling ->flush, then the file is being closed. Should this
-just be?
-		rc =3D file_write_and_wait(file);
+> Add check for the return value of alloc_ordered_workqueue since it may
+> return NULL pointer.
+>
+> Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-It's not like we need to worry about corrupting ->f_wb_err at that
-point.
+Your address for linux-wireless was wrong, I manually fixed it (".or" ->
+".org"). But patchwork didn't see this patch now so please resubmit as
+v2 with the correct list address.
 
-> =20
->  	cifs_dbg(FYI, "Flush inode %p file %p rc %d\n", inode, file rc);
-> -	if (rc) {
-> -		/* get more nuanced writeback errors */
-> -		rc =3D filemap_check_wb_err(file->f_mapping, 0);
-> +	if (rc)
->  		trace_cifs_flush_err(inode->i_ino, rc);
-> -	}
-> +
->  	return rc;
->  }
-> =20
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
---=20
-Jeff Layton <jlayton@redhat.com>
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
