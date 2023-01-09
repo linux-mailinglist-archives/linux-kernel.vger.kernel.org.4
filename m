@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6107661F0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C5B661F0D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbjAIHPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S230491AbjAIHO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbjAIHPH (ORCPT
+        with ESMTP id S233576AbjAIHOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:15:07 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DB71006B
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:15:05 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bs20so7190587wrb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 23:15:05 -0800 (PST)
+        Mon, 9 Jan 2023 02:14:22 -0500
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CE61209F
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:14:19 -0800 (PST)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-4b6255ce5baso101683367b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 23:14:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=djYroUcP7LJj8Vfu0pfc16kXU2pouT3NI2vQqAjt8UI=;
-        b=DpQGjS7qf86KkinejfalItV4JhAijE15LdUeORGx3G0QoIyi6QF2V9zEpbYoKBZlER
-         oEDcENQGrZV1AQ/8EyWz3oL9oWfZu/ytzJ9oRb2zNnJI52QTqu7Q1Q22x+wSBfvTdTEl
-         pW906imxH22HP8HVImsKWQhuq9XXl3u3+RHZJl3fzEX13/nr/Scw2OAdyJQg0FLLoLFN
-         mEeTSGer75fQ58gc5EOFkjL/2Q1vd/B2F3fsjtKXSN6UCbZgznSJlbgUe79HwL+GncP0
-         3IXOYvYaZS2GYPA4ohNQYFTT1iDOUAefOhbFP7eGuQ6qTWC4yqnlVNnSXN9irzS2kol8
-         YOKA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3P4KpMYHjMcRtTeC0AGN2bMbTWe/Y4tWuNNHyqRwN1E=;
+        b=V3hc4ur2h4YdudQTRZKZttR04YLioc5r5aUVh6R+g28fMuw/uplM7DDGwhHVPCeBxL
+         YbdfYJSnaFkRqUOKJBl8L0ygw5QTfvHxTRAjWkMn9CdLAf4fN1/l9yyHaF+cfeQYCMTh
+         ikLS+0HGPp3eLPFHtrc0lQGdDm62uGICct44I3vVxbegEPvCZT/ruBvHcSWmDOT5X+4l
+         QK/RCxuNKTNR9Iq1sH1iENfmz5uJpcZkuZSbUFTLyXa4EUXzyTRZ+dN/KJUzmpXtwF6M
+         g7/9uNiXfTEEVqyuUr6bB9zdHCHUs+bUcQ0d5KQQ/Mvoyft/fYItsDI85VBfKafjM49c
+         UDRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djYroUcP7LJj8Vfu0pfc16kXU2pouT3NI2vQqAjt8UI=;
-        b=dcJr5jx19MAjm65idL0hzMrDam6LMBwu5xrXyo8Huucw3KdksaqxJVoWxQTuzv9wFr
-         iwn+BzkzRaPL0xdN+rv7n58Rs9IjBempbvVK49crpOt63j62Zckiy2oXJBKR3JV5KfbO
-         Tv1YLHugE/yQWGJVSQSfIcWtggRrjlBAxTZunJwVNW2bkUjUGCoD14AzBVSmtcZKQ6Zf
-         vpCaT84AuaqQIiNubq0T7AAH57A5WtSrsJka+9uID9xqb/3QPpA7H25c4q97F/t9NsNi
-         rBM8KyO7tCSLOeuVOWvbR6/lB3drNAVVQHCJ3+1INJIued5C8zbnQnhaUbGuVwWD3vgN
-         703Q==
-X-Gm-Message-State: AFqh2kre3WQVDHhMr5lWqrfWEerrEHOJ6RjIZ2MPKgIgvSdtuI6Ca2Be
-        EtMm4MeaMTnZ6oIKvI1UE5Rysnein4Q=
-X-Google-Smtp-Source: AMrXdXtILkYsNlifUW/4HmfuMMvgCLwzy9sTLAQ7wc1VavGSmqqHInOsBs+CSk6DW2ePzJl/p8ff1w==
-X-Received: by 2002:a05:6000:1042:b0:2bc:804e:4c78 with SMTP id c2-20020a056000104200b002bc804e4c78mr143774wrx.59.1673248504120;
-        Sun, 08 Jan 2023 23:15:04 -0800 (PST)
-Received: from localhost (host81-157-153-247.range81-157.btcentralplus.com. [81.157.153.247])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056000104a00b002238ea5750csm8986002wrx.72.2023.01.08.23.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 23:15:03 -0800 (PST)
-Date:   Mon, 9 Jan 2023 07:12:53 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, urezki@gmail.com,
-        stephen.s.brennan@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v2 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y7u+dQfq3ZbDcf/d@lucifer>
-References: <20221217015435.73889-1-bhe@redhat.com>
- <20221217015435.73889-4-bhe@redhat.com>
- <Y52wsONH+u/h0nuj@lucifer>
- <Y7UyYDRnc663qzTs@MiWiFi-R3L-srv>
- <Y7XfoQgk3HHgK0+f@lucifer>
- <Y7uZeBj56VcnJhzJ@fedora>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3P4KpMYHjMcRtTeC0AGN2bMbTWe/Y4tWuNNHyqRwN1E=;
+        b=2AhhNk4GeK3zCVa7xKgrHVHwac/DKHBLlXXFgIPolT9ZfKysIKvD8Jt5N5Xb7gT0Iw
+         B5bxwL8Suq9rTaEz4KJruSbgnUnPLrMYEaaWEYn4i+4UEa/8AvLDsMwU54GdEU5NrtkD
+         D4hgn7s7rjGfLft+WVRybr2Nv3FzSlQI/GVJOg87yOplD/CqLBHp3+KfVSbo8+POqtvc
+         K5YJ9T00v3fy01ns8XCKBB3Dk1AfickcBlguFOvVAEnIoyzevtaqbjCzKnRVSeCLW3ch
+         TF83sWP0drpD8bigfX1K/hrxCVTI3zwi1Dgs+Stz2THYGHkPCOphMpl+tcONriaXJb0M
+         y7/w==
+X-Gm-Message-State: AFqh2kol3Qd5jkJgStm3FwmaG8lnK2SuY2nRubRJiO431JtbJtpg/8it
+        7ZBtJgWZkQApz5voPsXRgVumPXDwqfWLgKUEpqA=
+X-Google-Smtp-Source: AMrXdXv9N2vVXMRaifK/p1uDqFHsnj5NTh/v836yUSUymb573TTsgjXtKjNPZ9wKAx5F3enzeE9vWoLbZcKzC+RB5i0=
+X-Received: by 2002:a81:c30e:0:b0:4b2:72:d8ee with SMTP id r14-20020a81c30e000000b004b20072d8eemr2946003ywk.272.1673248459052;
+ Sun, 08 Jan 2023 23:14:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7uZeBj56VcnJhzJ@fedora>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221110082443.4069161-1-zhanggenjian@kylinos.cn> <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
+From:   genjian zhang <zhanggenjian123@gmail.com>
+Date:   Mon, 9 Jan 2023 15:13:06 +0800
+Message-ID: <CAOd03ySSrC996R_=xxC4M7s=X-V-jC1D-5rTsixWorg_qQmTLA@mail.gmail.com>
+Subject: Re: [PATCH] context_tracking: Use arch_atomic_*() in __ct_user_enter
+ and __ct_user_exit
+To:     paulmck@kernel.org
+Cc:     frederic@kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,131 +68,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 12:35:04PM +0800, Baoquan He wrote:
-> Sorry for late reply, just come back from vacation.
-
-Hope you had a great time! :)
-
+On Fri, Jan 6, 2023 at 10:53 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Lei + mutt sounds like a good idea. I relied too much on mbsync in the
-> past.
->
-
-Yeah I'm finding it works well,
-https://josefbacik.github.io/kernel/2021/10/18/lei-and-b4.html is a handy guide!
-
-[snip]
-> > Maybe let me rephrase:-
+> On Thu, Nov 10, 2022 at 04:24:43PM +0800, Genjian wrote:
+> > From: Genjian Zhang <zhanggenjian@kylinos.cn>
 > >
-> > - We want to read `count` bytes from `addr` into `buf`
-> > - We iterate over _used_ blocks, placing the start/end of each block in `rs`, `re`
-> >   respectively.
-> > - If we hit a block whose start address is above the one in which we are interested then:-
-> >   - Place a zero byte in the buffer
-> >   - Increment `addr` by 1 byte
-> >   - Decrement the `count` by 1 byte
-> >   - Carry on
+> > vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
+> > __kasan_check_write() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
+> > __kasan_check_write() leaves .noinstr.text section
 > >
-> > I am seriously confused as to why we do this? Surely we should be checking
-> > whether the range [addr, addr + count) overlaps this block at all, and only then
-> > copying the relevant region?
->
-> I guessed this could be your concern, but not very sure. That
-> code block is copied from vread(), and my considerations are:
-> 1) We could starting read from any position of kcore file. /proc/kcore
-> is a elf file logically, it's allowed to read from anywhere, right? We
-> don't have to read the entire file always. So the vmap_block reading is
-> not necessarily page aligned. It's very similar with the empty area
-> filling in vread().
-> 2) memset() is doing the byte by byte reading. We can
-> change code as below. While we don't save the effort very much, and we
-> need introduce an extra local variable to store the value of
-> (start - end).
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index b054081aa66b..dce4a843a9e8 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3576,6 +3576,15 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
-> +		if (addr < start) {
-> +			int num = min(count, (start - add));
-> +			memset(buf, 0, count);
-> +			count -= num;
-> +			if (count == 0)
-> +				break;
-> +			buf -= num;
-> +			addr -= num;
-> +		}
->  		/*it could start reading from the middle of used region*/
->  		offset = offset_in_page(addr);
->  		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
->
-
-The difference with vread() is that uses a while loop rather than an if clause
-so operates over the whole region byte-by-byte, your original would only do this
-for 1 byte so now things make a lot more sense!
-
-This approach makes sense though I'd put the count == 0 check first and nit
-'add' should be 'addr'.
-
-I am happy with either this or a while loop instead of an if which it seems is
-what the original issue was!
-
-> void *memset(void *s, int c, size_t count)
-> {
->         char *xs = s;
->
->         while (count--)
->                 *xs++ = c;
->         return s;
-> }
->
+> > noinstr cannot have atomic_*() functions.because they have explicit
+> > instrumentation.Switch to arch_ prefixed atomic operation functions to
+> > avoid the explicit instrumentation.
 > >
-> > It's the fact that blocks are at base page granularity but then this condition
-> > is at byte granularity that is confusing to me (again it's _very_ possible I am
-> > just being dumb here and missing something, just really want to understand this
-> > better :)
+> > Reported-by: k2ci <kernel-bot@kylinos.cn>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
 >
-> I like this kind of reviewing with careful checking and deep thinking.
-> For above code block, I think it's a very great point. From my point of
-> view, I like the memset version better, it's easier to understand. If we
-> all agree, we can change it to take memset way. When I made patches,
-> several issues related to patches were hovering in my mind at the same
-> time, I did not consider this one so deeply.
+> Apologies for the delay, but finally queued, thank you!  Frederic gave
+> his ack off-list, which I have included in the wordsmithed version below.
+> Could you please check to make sure that I did not mess anything up?
 >
+>                                                         Thanx, Paul
+>
+> ------------------------------------------------------------------------
+>
+> commit 936acd859f4a7b2b0f9900e26bc972385286df6e
+> Author: Genjian Zhang <zhanggenjian@kylinos.cn>
+> Date:   Thu Nov 10 16:24:43 2022 +0800
+>
+>     context_tracking: Use arch_atomic_*() in __ct_user_enter and __ct_user_exit
+>
+>     The following diagnostics are issued by objtool:
+>
+>     vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
+>     __kasan_check_write() leaves .noinstr.text section
+>     vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
+>     __kasan_check_write() leaves .noinstr.text section
+>
+>     The reason for these diagnostics is that code marked noinstr if prohibited
+>     from using atomic_*() functions, which have explicit instrumentation.
+>     Therefore, switch to arch_ prefixed atomic operation functions to avoid
+>     the explicit instrumentation.
+>
+>     Reported-by: k2ci <kernel-bot@kylinos.cn>
+>     Reported-by: kernel test robot <lkp@intel.com>
+>     Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+>     Acked-by: Frederic Weisbecker <frederic@kernel.org>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>
+> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+> index 77978e3723771..a09f1c19336ae 100644
+> --- a/kernel/context_tracking.c
+> +++ b/kernel/context_tracking.c
+> @@ -510,7 +510,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+>                          * In this we case we don't care about any concurrency/ordering.
+>                          */
+>                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+> -                               atomic_set(&ct->state, state);
+> +                               arch_atomic_set(&ct->state, state);
+>                 } else {
+>                         /*
+>                          * Even if context tracking is disabled on this CPU, because it's outside
+> @@ -527,7 +527,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+>                          */
+>                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+>                                 /* Tracking for vtime only, no concurrent RCU EQS accounting */
+> -                               atomic_set(&ct->state, state);
+> +                               arch_atomic_set(&ct->state, state);
+>                         } else {
+>                                 /*
+>                                  * Tracking for vtime and RCU EQS. Make sure we don't race
+> @@ -535,7 +535,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+>                                  * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+>                                  * ordered.
+>                                  */
+> -                               atomic_add(state, &ct->state);
+> +                               arch_atomic_add(state, &ct->state);
+>                         }
+>                 }
+>         }
+> @@ -630,12 +630,12 @@ void noinstr __ct_user_exit(enum ctx_state state)
+>                          * In this we case we don't care about any concurrency/ordering.
+>                          */
+>                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+> -                               atomic_set(&ct->state, CONTEXT_KERNEL);
+> +                               arch_atomic_set(&ct->state, CONTEXT_KERNEL);
+>
+>                 } else {
+>                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+>                                 /* Tracking for vtime only, no concurrent RCU EQS accounting */
+> -                               atomic_set(&ct->state, CONTEXT_KERNEL);
+> +                               arch_atomic_set(&ct->state, CONTEXT_KERNEL);
+>                         } else {
+>                                 /*
+>                                  * Tracking for vtime and RCU EQS. Make sure we don't race
+> @@ -643,7 +643,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
+>                                  * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+>                                  * ordered.
+>                                  */
+> -                               atomic_sub(state, &ct->state);
+> +                               arch_atomic_sub(state, &ct->state);
+>                         }
+>                 }
+>         }
 
-Thanks :) I have a particular interest in vmalloc so am happy to dive in with
-reviews here!
+Seems good to me.
 
-> >
-> > > > > -		vm = va->vm;
-> > > > > -		vaddr = (char *) vm->addr;
-> > > > > -		if (addr >= vaddr + get_vm_area_size(vm))
-> > > > > +		vaddr = (char *) va->va_start;
-> > > > > +		size = flags ? va_size(va) : get_vm_area_size(vm);
-> > > >
-> > > > For example here, I feel that this ternary should be reversed and based on
-> > > > whether vm is null, unles we expect vm to ever be non-null _and_ flags to be
-> > > > set?
-> > >
-> > > Now only vm_map_ram area sets flags, all other types has vm not null.
-> > > Since those temporary state, e.g vm==NULL, flags==0 case has been
-> > > filtered out. Is below you suggested?
-> > >
-> > > 		size = (!vm&&flags)? va_size(va) : get_vm_area_size(vm);
-> > > 		or
-> > > 		size = (vm&&!flags)? get_vm_area_size(vm):va_size(va);
-> > >
-> >
-> > Sorry I didn't phrase this very well, my point is that the key thing you're
-> > relying on here is whether vm exists in order to use it so I simply meant:-
-> >
-> > size = vm ? get_vm_area_size(vm) : va_size(va);
-> >
-> > This just makes it really explicit that you need vm to be non-NULL, and you've
-> > already done the flags check before so this should suffice.
->
-> Sounds reasonable, I will copy above line you pasted. Thanks a lot.
->
+Thanks,
 
-Cheers!
+Genjian.
