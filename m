@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C60663348
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECDD663344
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbjAIVkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S238062AbjAIVkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbjAIVjp (ORCPT
+        with ESMTP id S238143AbjAIVjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:39:45 -0500
-Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FF63BEA0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:38:32 -0800 (PST)
-Received: by mail-oi1-x249.google.com with SMTP id q8-20020a056808200800b00363bb37d22cso3115607oiw.19
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:38:32 -0800 (PST)
+        Mon, 9 Jan 2023 16:39:46 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9DB2725
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:38:37 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4b34cf67fb6so105183227b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWOMIyzYML+GnCVLadZ/bfKF2vZbEfEtiwoUNHe8I8g=;
-        b=B/4nGCkbSar9JPAjXdE2nMB2agrlgj7EbvSmEmaJ+FSJY/iiSdTcvg5MdvBrbYHsHT
-         aJRIFm3Wr5pW8VLrvwXyFhP3E3TT9U5sZcpJvG8FV1JDpbHJwB7rtgFFGgNK9LDaVjog
-         Pxt5yN9L6hOC7uq/3GfuD7+lUUQyPP+3VSsa17lsU0G2BkfMYQpcL3C/SsXM7xi372Zn
-         fNO5FJJkb2PUBmghvakzxN8uNK9UFoT5CrG30MTZzLQBuir0MX/aQWG2h1G8i+8H8PX5
-         4fz1y8odBf62yg98vv3M9x+vuJXu9iZH5joEdWq+vYgTfLpmFQLvIEwSeteAmim8RvJX
-         MOWw==
+        bh=SQeNgY+J6MKzCRrIntmsIbLAzrhXUK7Ksf6ShqqTDqg=;
+        b=JBDEWasB+3OrvV/Y27HbN2Neb2kEXiiVXQ+wxK++73bxItz+h84CoAdQzRT6NPJANE
+         CLVxy9fExG/dYCBL9Kj+T7e6Fb6ul1yD6ZQb8A+AL4pzEaI7DoHPA9JZGXcUqFYa49aP
+         iAkXaV01QrmTY+TL3EB8WOUxQiuibhGQDvpIh6fIzVNuB+Qk+ocz4E7Y33kxzw4PYa6g
+         NN/E4LuCqSW7+xRTARJMsEa7Pt/FZojDU3MFoN6807jAGeTOdKlMYAXKehPKnbE4ZgBV
+         im2AF/krq07AeNXvCPN706WdUF61A4jBsp9p0BqVwBod4BUCHSRlawT3zlavAiChILB8
+         KYsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWOMIyzYML+GnCVLadZ/bfKF2vZbEfEtiwoUNHe8I8g=;
-        b=zfej8iom4Jwl7KB3cMLWWSLFxQnhId53GGFXjfXWDdKFA1iKmNsFjhL2f4GNywh0OM
-         uFAxuMJdPpQnuWHlJLBwb54ZIdXzArwphHslIcuN4QAWMQNnvXoaiBOqEggHz8M3f49X
-         aZX5lcUIpkSJng6EWi0aZS5Vx8YxI0XdcvuYBPxC1Au8itWWtAW+jYRLLaU2QNM1dkhm
-         1hcwgQgGcWdGZkwZWT1vd55oknaJnGKcVznSpatCoc+ICQe1kSSomKHP9P5JmZOYjc85
-         zeEVByTkmanix9sSueCoXdm0AkK+R7jlfte404jQKPTB81JUY+iYnUglbebD365A94Fv
-         YX2A==
-X-Gm-Message-State: AFqh2kprtxNX7FdWFJLSJFEQ7A6irUMrrRoKY9ufyl2O/KiidfQOnJL9
-        ZTx5FEae34F+RxR+xc3EHge1qMK2w0O/YxU=
-X-Google-Smtp-Source: AMrXdXt2b4GmnQbBAnictl+P9Qid5OxsP4Aa+Rreix4gjPXQPZYSTzo2urBLSPG5NnFGp9zwycV58Z5FT1JxcHQ=
+        bh=SQeNgY+J6MKzCRrIntmsIbLAzrhXUK7Ksf6ShqqTDqg=;
+        b=JjD2PvgbN2WnELd7pCXPtkpynphaW0sNaGyM9Ni/uiC0Y7XYnll1XfRK6seHB9tWzu
+         Z5GBF9MNrWWxdDSjlUH6qD36/eFaUL30etsJ0iTumrQrJp6xYLG94sqqIFAmtt1tnax7
+         mBKBeMrtKFVUpFtEhWx7Mv/oHxe79DkBOy11Ky5Ds+8vrNMj4oCywCYO0pYYbFLFLi0R
+         +A2OV3o4ko1ARIbPApJG6xtI/p4/jcHZfkfr5BLvf0E929JFeAiL/etbW2UR/Qeih5dP
+         w2W5uwvGA/4YkhEg1SR80g99dqYetFFHmQS1W8tkOmu0mPpwyIci5kYfAqy7Rb+v6AXz
+         YZsA==
+X-Gm-Message-State: AFqh2koAotobfNB9Thgx/jVrAhckrc0ltKryXmyyHIDamhurtIcR0xij
+        u9TL5VJp14cxc+fZDMWe253T2LcgX1rcCSY=
+X-Google-Smtp-Source: AMrXdXsly8ftnTGxkXWURs6cgQlim0110CyvAjtUB2YdXI6XZT+4/hpYTJ6JlWae8xNU5rTd/sJIbiwGsASFKCY=
 X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
- (user=tjmercier job=sendgmr) by 2002:a05:6870:6327:b0:15b:d2e:d059 with SMTP
- id s39-20020a056870632700b0015b0d2ed059mr587093oao.179.1673300311796; Mon, 09
- Jan 2023 13:38:31 -0800 (PST)
-Date:   Mon,  9 Jan 2023 21:38:06 +0000
+ (user=tjmercier job=sendgmr) by 2002:a0d:eb07:0:b0:475:794e:90e3 with SMTP id
+ u7-20020a0deb07000000b00475794e90e3mr515886ywe.483.1673300316284; Mon, 09 Jan
+ 2023 13:38:36 -0800 (PST)
+Date:   Mon,  9 Jan 2023 21:38:07 +0000
 In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20230109213809.418135-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109213809.418135-4-tjmercier@google.com>
-Subject: [PATCH 3/4] binder: Add flags to relinquish ownership of fds
+Message-ID: <20230109213809.418135-5-tjmercier@google.com>
+Subject: [PATCH 4/4] security: binder: Add transfer_charge SElinux hook
 From:   "T.J. Mercier" <tjmercier@google.com>
-To:     tjmercier@google.com, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+To:     tjmercier@google.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
         Todd Kjos <tkjos@android.com>,
@@ -66,13 +63,14 @@ To:     tjmercier@google.com, Tejun Heo <tj@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
         Carlos Llamas <cmllamas@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>
-Cc:     daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        Hridya Valsaraju <hridya@google.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
+Cc:     hannes@cmpxchg.org, daniel.vetter@ffwll.ch, android-mm@google.com,
+        jstultz@google.com, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -84,237 +82,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+Any process can cause a memory charge transfer to occur to any other
+process when transmitting a file descriptor through binder. This should
+only be possible for central allocator processes, so a new SELinux
+permission is added to restrict which processes are allowed to initiate
+these charge transfers.
 
-This patch introduces flags BINDER_FD_FLAG_XFER_CHARGE, and
-BINDER_FD_FLAG_XFER_CHARGE that a process sending an individual fd or
-fd array to another process over binder IPC can set to relinquish
-ownership of the fd(s) being sent for memory accounting purposes. If the
-flag is found to be set during the fd or fd array translation and the
-fd is for a DMA-BUF, the buffer is uncharged from the sender's cgroup
-and charged to the receiving process's cgroup instead.
-
-It is up to the sending process to ensure that it closes the fds
-regardless of whether the transfer failed or succeeded.
-
-Most graphics shared memory allocations in Android are done by the
-graphics allocator HAL process. On requests from clients, the HAL
-process allocates memory and sends the fds to the clients over binder
-IPC. The graphics allocator HAL will not retain any references to the
-buffers. When the HAL sets *_FLAG_XFER_CHARGE for fd arrays holding
-DMA-BUF fds, or individual fd objects, binder will transfer the charge
-for the buffer from the allocator process cgroup to the client process
-cgroup.
-
-The pad [1] and pad_flags [2] fields of binder_fd_object and
-binder_fda_array_object come from alignment with flat_binder_object and
-have never been exposed for use from userspace. This new flags use
-follows the pattern set by binder_buffer_object.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/android/binder.h?id=feba3900cabb8e7c87368faa28e7a6936809ba22
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/android/binder.h?id=5cdcf4c6a638591ec0e98c57404a19e7f9997567
-
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst |  3 ++-
- drivers/android/binder.c                | 31 +++++++++++++++++++++----
- drivers/dma-buf/dma-buf.c               |  4 +---
- include/linux/dma-buf.h                 |  1 +
- include/uapi/linux/android/binder.h     | 23 ++++++++++++++----
- 5 files changed, 50 insertions(+), 12 deletions(-)
+ drivers/android/binder.c            | 5 +++++
+ include/linux/lsm_hook_defs.h       | 2 ++
+ include/linux/lsm_hooks.h           | 6 ++++++
+ include/linux/security.h            | 2 ++
+ security/security.c                 | 6 ++++++
+ security/selinux/hooks.c            | 9 +++++++++
+ security/selinux/include/classmap.h | 2 +-
+ 7 files changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 538ae22bc514..d225295932c0 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1457,7 +1457,8 @@ PAGE_SIZE multiple when read back.
- 
- 	  dmabuf (npn)
- 		Amount of memory used for exported DMA buffers allocated by the cgroup.
--		Stays with the allocating cgroup regardless of how the buffer is shared.
-+		Stays with the allocating cgroup regardless of how the buffer is shared
-+		unless explicitly transferred.
- 
- 	  workingset_refault_anon
- 		Number of refaults of previously evicted anonymous pages.
 diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 880224ec6abb..9830848c8d25 100644
+index 9830848c8d25..9063db04826d 100644
 --- a/drivers/android/binder.c
 +++ b/drivers/android/binder.c
-@@ -42,6 +42,7 @@
+@@ -2279,6 +2279,11 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset, __u32 flags,
+ 	if (IS_ENABLED(CONFIG_MEMCG) && (flags & BINDER_FD_FLAG_XFER_CHARGE)) {
+ 		struct dma_buf *dmabuf;
  
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/dma-buf.h>
- #include <linux/fdtable.h>
- #include <linux/file.h>
- #include <linux/freezer.h>
-@@ -2237,7 +2238,7 @@ static int binder_translate_handle(struct flat_binder_object *fp,
- 	return ret;
++		if (security_binder_transfer_charge(proc->cred, target_proc->cred)) {
++			ret = -EPERM;
++			goto err_security;
++		}
++
+ 		if (unlikely(!is_dma_buf_file(file))) {
+ 			binder_user_error(
+ 				"%d:%d got transaction with XFER_CHARGE for non-dmabuf fd, %d\n",
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index ed6cb2ac55fa..8db2a958557e 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -33,6 +33,8 @@ LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
+ 	 const struct cred *to)
+ LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
+ 	 const struct cred *to, struct file *file)
++LSM_HOOK(int, 0, binder_transfer_charge, const struct cred *from,
++	 const struct cred *to)
+ LSM_HOOK(int, 0, ptrace_access_check, struct task_struct *child,
+ 	 unsigned int mode)
+ LSM_HOOK(int, 0, ptrace_traceme, struct task_struct *parent)
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 0a5ba81f7367..39c40c7bf519 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -1385,6 +1385,12 @@
+  *	@file contains the struct file being transferred.
+  *	@to contains the struct cred for the receiving process.
+  *	Return 0 if permission is granted.
++ * @binder_transfer_charge:
++ *	Check whether @from is allowed to transfer the memory charge for a
++ *	buffer out of its cgroup to @to.
++ *	@from contains the struct cred for the sending process.
++ *	@to contains the struct cred for the receiving process.
++ *	Return 0 if permission is granted.
+  *
+  * @ptrace_access_check:
+  *	Check permission before allowing the current process to trace the
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 5b67f208f7de..3b7472308430 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -270,6 +270,8 @@ int security_binder_transfer_binder(const struct cred *from,
+ 				    const struct cred *to);
+ int security_binder_transfer_file(const struct cred *from,
+ 				  const struct cred *to, struct file *file);
++int security_binder_transfer_charge(const struct cred *from,
++				    const struct cred *to);
+ int security_ptrace_access_check(struct task_struct *child, unsigned int mode);
+ int security_ptrace_traceme(struct task_struct *parent);
+ int security_capget(struct task_struct *target,
+diff --git a/security/security.c b/security/security.c
+index d1571900a8c7..97e1e74d1ff2 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -801,6 +801,12 @@ int security_binder_transfer_file(const struct cred *from,
+ 	return call_int_hook(binder_transfer_file, 0, from, to, file);
  }
  
--static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
-+static int binder_translate_fd(u32 fd, binder_size_t fd_offset, __u32 flags,
- 			       struct binder_transaction *t,
- 			       struct binder_thread *thread,
- 			       struct binder_transaction *in_reply_to)
-@@ -2275,6 +2276,26 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
- 		goto err_security;
- 	}
- 
-+	if (IS_ENABLED(CONFIG_MEMCG) && (flags & BINDER_FD_FLAG_XFER_CHARGE)) {
-+		struct dma_buf *dmabuf;
++int security_binder_transfer_charge(const struct cred *from,
++				    const struct cred *to)
++{
++	return call_int_hook(binder_transfer_charge, 0, from, to);
++}
 +
-+		if (unlikely(!is_dma_buf_file(file))) {
-+			binder_user_error(
-+				"%d:%d got transaction with XFER_CHARGE for non-dmabuf fd, %d\n",
-+				proc->pid, thread->pid, fd);
-+			ret = -EINVAL;
-+			goto err_dmabuf;
-+		}
-+
-+		dmabuf = file->private_data;
-+		ret = dma_buf_transfer_charge(dmabuf, target_proc->tsk);
-+		if (ret) {
-+			pr_warn("%d:%d Unable to transfer DMA-BUF fd charge to %d\n",
-+				proc->pid, thread->pid, target_proc->pid);
-+			goto err_xfer;
-+		}
-+	}
-+
- 	/*
- 	 * Add fixup record for this transaction. The allocation
- 	 * of the fd in the target needs to be done from a
-@@ -2294,6 +2315,8 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
- 	return ret;
- 
- err_alloc:
-+err_xfer:
-+err_dmabuf:
- err_security:
- 	fput(file);
- err_fget:
-@@ -2604,7 +2627,7 @@ static int binder_translate_fd_array(struct list_head *pf_head,
- 
- 		ret = copy_from_user(&fd, sender_ufda_base + sender_uoffset, sizeof(fd));
- 		if (!ret)
--			ret = binder_translate_fd(fd, offset, t, thread,
-+			ret = binder_translate_fd(fd, offset, fda->flags, t, thread,
- 						  in_reply_to);
- 		if (ret)
- 			return ret > 0 ? -EINVAL : ret;
-@@ -3383,8 +3406,8 @@ static void binder_transaction(struct binder_proc *proc,
- 			struct binder_fd_object *fp = to_binder_fd_object(hdr);
- 			binder_size_t fd_offset = object_offset +
- 				(uintptr_t)&fp->fd - (uintptr_t)fp;
--			int ret = binder_translate_fd(fp->fd, fd_offset, t,
--						      thread, in_reply_to);
-+			int ret = binder_translate_fd(fp->fd, fd_offset, fp->flags,
-+						      t, thread, in_reply_to);
- 
- 			fp->pad_binder = 0;
- 			if (ret < 0 ||
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index fd6c5002032b..a65b42433099 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -34,8 +34,6 @@
- 
- #include "dma-buf-sysfs-stats.h"
- 
--static inline int is_dma_buf_file(struct file *);
--
- struct dma_buf_list {
- 	struct list_head head;
- 	struct mutex lock;
-@@ -527,7 +525,7 @@ static const struct file_operations dma_buf_fops = {
- /*
-  * is_dma_buf_file - Check if struct file* is associated with dma_buf
-  */
--static inline int is_dma_buf_file(struct file *file)
-+int is_dma_buf_file(struct file *file)
+ int security_ptrace_access_check(struct task_struct *child, unsigned int mode)
  {
- 	return file->f_op == &dma_buf_fops;
+ 	return call_int_hook(ptrace_access_check, 0, child, mode);
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 3c5be76a9199..823ef14924bd 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2066,6 +2066,14 @@ static int selinux_binder_transfer_file(const struct cred *from,
+ 			    &ad);
  }
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 6aa128d76aa7..092d572ce528 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -595,6 +595,7 @@ dma_buf_attachment_is_dynamic(struct dma_buf_attachment *attach)
- 	return !!attach->importer_ops;
- }
  
-+int is_dma_buf_file(struct file *file);
- struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
- 					  struct device *dev);
- struct dma_buf_attachment *
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-index e72e4de8f452..696c2bdb8a7e 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -91,14 +91,14 @@ struct flat_binder_object {
- /**
-  * struct binder_fd_object - describes a filedescriptor to be fixed up.
-  * @hdr:	common header structure
-- * @pad_flags:	padding to remain compatible with old userspace code
-+ * @flags:	One or more BINDER_FD_FLAG_* flags
-  * @pad_binder:	padding to remain compatible with old userspace code
-  * @fd:		file descriptor
-  * @cookie:	opaque data, used by user-space
-  */
- struct binder_fd_object {
- 	struct binder_object_header	hdr;
--	__u32				pad_flags;
-+	__u32				flags;
- 	union {
- 		binder_uintptr_t	pad_binder;
- 		__u32			fd;
-@@ -107,6 +107,17 @@ struct binder_fd_object {
- 	binder_uintptr_t		cookie;
- };
- 
-+enum {
-+	/**
-+	 * @BINDER_FD_FLAG_XFER_CHARGE
-+	 *
-+	 * When set, the sender of a binder_fd_object wishes to relinquish ownership of the fd for
-+	 * memory accounting purposes. If the fd is for a DMA-BUF, the buffer is uncharged from the
-+	 * sender's cgroup and charged to the receiving process's cgroup instead.
-+	 */
-+	BINDER_FD_FLAG_XFER_CHARGE = 0x01,
-+};
++static int selinux_binder_transfer_charge(const struct cred *from, const struct cred *to)
++{
++	return avc_has_perm(&selinux_state,
++			    cred_sid(from), cred_sid(to),
++			    SECCLASS_BINDER, BINDER__TRANSFER_CHARGE,
++			    NULL);
++}
 +
- /* struct binder_buffer_object - object describing a userspace buffer
-  * @hdr:		common header structure
-  * @flags:		one or more BINDER_BUFFER_* flags
-@@ -141,7 +152,7 @@ enum {
+ static int selinux_ptrace_access_check(struct task_struct *child,
+ 				       unsigned int mode)
+ {
+@@ -7052,6 +7060,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(binder_transaction, selinux_binder_transaction),
+ 	LSM_HOOK_INIT(binder_transfer_binder, selinux_binder_transfer_binder),
+ 	LSM_HOOK_INIT(binder_transfer_file, selinux_binder_transfer_file),
++	LSM_HOOK_INIT(binder_transfer_charge, selinux_binder_transfer_charge),
  
- /* struct binder_fd_array_object - object describing an array of fds in a buffer
-  * @hdr:		common header structure
-- * @pad:		padding to ensure correct alignment
-+ * @flags:		One or more BINDER_FDA_FLAG_* flags
-  * @num_fds:		number of file descriptors in the buffer
-  * @parent:		index in offset array to buffer holding the fd array
-  * @parent_offset:	start offset of fd array in the buffer
-@@ -162,12 +173,16 @@ enum {
-  */
- struct binder_fd_array_object {
- 	struct binder_object_header	hdr;
--	__u32				pad;
-+	__u32				flags;
- 	binder_size_t			num_fds;
- 	binder_size_t			parent;
- 	binder_size_t			parent_offset;
- };
- 
-+enum {
-+	BINDER_FDA_FLAG_XFER_CHARGE = BINDER_FD_FLAG_XFER_CHARGE,
-+};
-+
- /*
-  * On 64-bit platforms where user code may run in 32-bits the driver must
-  * translate the buffer (and local binder) addresses appropriately.
+ 	LSM_HOOK_INIT(ptrace_access_check, selinux_ptrace_access_check),
+ 	LSM_HOOK_INIT(ptrace_traceme, selinux_ptrace_traceme),
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+index a3c380775d41..2eef180d10d7 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -172,7 +172,7 @@ const struct security_class_mapping secclass_map[] = {
+ 	{ "tun_socket",
+ 	  { COMMON_SOCK_PERMS, "attach_queue", NULL } },
+ 	{ "binder", { "impersonate", "call", "set_context_mgr", "transfer",
+-		      NULL } },
++		      "transfer_charge", NULL } },
+ 	{ "cap_userns",
+ 	  { COMMON_CAP_PERMS, NULL } },
+ 	{ "cap2_userns",
 -- 
 2.39.0.314.g84b9a713c41-goog
 
