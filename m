@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12136628A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8257A66288C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjAIOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S233084AbjAIOax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAIOel (ORCPT
+        with ESMTP id S231811AbjAIOar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:34:41 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D62F46
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:34:40 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4bf16baa865so114484417b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Yy00juT6YLJ5oWGMT9Wza1I0KabYl3KuXLE2Ym30r8=;
-        b=hqu1WUIKQ7nelxjitmtslt7P2HWICJ6UQhItkE1DxGc9pYkqGv2Z3jzXfiUQ7oN+jD
-         woMH988I6TyAfP/DcKz8zY/EqQvJsbpUwPmosnHsPhhtYjp/+7T4/iB5/v0fZx5jhews
-         EgJ65v8od4MS0eHGmvOkk88QhVj1ogj0TwlYA=
+        Mon, 9 Jan 2023 09:30:47 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC5B1659C;
+        Mon,  9 Jan 2023 06:30:45 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso5251357otn.2;
+        Mon, 09 Jan 2023 06:30:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Yy00juT6YLJ5oWGMT9Wza1I0KabYl3KuXLE2Ym30r8=;
-        b=lbC5EShBEzc9JU0YoPk2UPdaAu4pQvbwHoCFySROIjja7gtOsgMA/947fGp1xkfBvp
-         XrMNn6lofY8UsZOUN8oGDaRmwsX2WRNSTFJep6ks7/jyzIVjj2ZW7F9TGqGIkelPapUf
-         +cwkG3jwqncjH0BYxeshsljecXLT4PX0EQIyAxhZjw6DRKreANZnAWZWm67kl2bI0C6z
-         bP4H288a54wxBBWr7s/iQcAWeAwDLjHtwcMK7Q1oxAAh9AHVWymdm7C5hdMUX0+FLvZX
-         qCSYk+bGW6iFfdfTrQI7Q+uL1w7rUvmcDW8S4xRpTte7PLCne4XqqzVKTP4vd4H9N5m/
-         40fA==
-X-Gm-Message-State: AFqh2kqI8lCxLDJmCJJ63bLaehPPYvfb55wOTULC1aDV1+Csz4y9tlgC
-        jLa75SaOaSKRGNDeHayLRBvRBll3UFydcaFTZ0I=
-X-Google-Smtp-Source: AMrXdXvjlJ/D7I76WHSWvqjEYTzCcqVHU/kjVTe55RKa0YxDRisiZPf8RKIaFRjqaoaOw2bBVhY/7g==
-X-Received: by 2002:a05:7500:4056:b0:f0:3a45:f99 with SMTP id r22-20020a057500405600b000f03a450f99mr591272gar.13.1673274879581;
-        Mon, 09 Jan 2023 06:34:39 -0800 (PST)
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com. [209.85.160.173])
-        by smtp.gmail.com with ESMTPSA id f1-20020a05620a280100b006eef13ef4c8sm5474350qkp.94.2023.01.09.06.34.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 06:34:39 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id jr10so677254qtb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:34:39 -0800 (PST)
-X-Received: by 2002:ae9:ef49:0:b0:6fe:d4a6:dcef with SMTP id
- d70-20020ae9ef49000000b006fed4a6dcefmr3220519qkg.594.1673274554214; Mon, 09
- Jan 2023 06:29:14 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lnvWjGkJXKCbxJNpIXGvIrUGwer2KE72GLT13UzJPJM=;
+        b=WvqozAVSGlJzNrkagP47k+xDE+z4V62+pVg6NTzz/QLTdXKdaFdJoFBZPBmIEHrh3Q
+         I8hmmQc727vXeEIKTm/PgC/i0VzooGUYy+bt7G88Z+LL7vHzal80PseCEJRM055gaPqw
+         DRonqvu1ak+fKrsL0pbDCgzfK4c78GQttYBpSVLUgsT8KIOpQEW5ylVvSqNuECQz/ovW
+         SO12y8beqdtMPQqsUMcDpJWoIDjwlEQ/4Ux+berB0m3TXPuglnKiukiKQMHIZ9z9cmNP
+         5P8kLy7e3H2Azb4K1s4lO99cQehVPTHhWSzKqlEkguvizkf6euZM3Kx3Zm/oazYShNYQ
+         x7mA==
+X-Gm-Message-State: AFqh2kq39tVRH/gZmG5gBNiSNe889I+dIC0lIbD0fXm3y5ev2ubK6am6
+        2qlPKZk7npsmA0FKhUA4Lg==
+X-Google-Smtp-Source: AMrXdXsbnWLocs9cJBrnQ0sJkMZX7KSKHILdb1IwjdJTuilsjNdiW3psm5xNI4+SRYShJnGsLC5OAg==
+X-Received: by 2002:a9d:69c4:0:b0:66e:a5db:c553 with SMTP id v4-20020a9d69c4000000b0066ea5dbc553mr35961709oto.19.1673274644592;
+        Mon, 09 Jan 2023 06:30:44 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b19-20020a9d6b93000000b0066ca61230casm4615429otq.8.2023.01.09.06.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 06:30:43 -0800 (PST)
+Received: (nullmailer pid 237517 invoked by uid 1000);
+        Mon, 09 Jan 2023 14:30:36 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230101162910.710293-1-Jason@zx2c4.com> <20230101162910.710293-3-Jason@zx2c4.com>
- <Y7QIg/hAIk7eZE42@gmail.com> <CALCETrWdw5kxrtr4M7AkKYDOJEE1cU1wENWgmgOxn0rEJz4y3w@mail.gmail.com>
- <CAHk-=wg_6Uhkjy12Vq_hN6rQqGRP2nE15rkgiAo6Qay5aOeigg@mail.gmail.com>
- <Y7SDgtXayQCy6xT6@zx2c4.com> <CAHk-=whQdWFw+0eGttxsWBHZg1+uh=0MhxXYtvJGX4t9P1MgNw@mail.gmail.com>
- <874jt0kndq.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <874jt0kndq.fsf@oldenburg.str.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 9 Jan 2023 08:28:58 -0600
-X-Gmail-Original-Message-ID: <CAHk-=wg7vMC2VmSBdVw7EKV+7UDiftQEg3L+3Rc0rcjjfsvs5A@mail.gmail.com>
-Message-ID: <CAHk-=wg7vMC2VmSBdVw7EKV+7UDiftQEg3L+3Rc0rcjjfsvs5A@mail.gmail.com>
-Subject: Re: [PATCH v14 2/7] mm: add VM_DROPPABLE for designating always
- lazily freeable mappings
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, tglx@linutronix.de,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
-        mlichvar@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Paul <sean@poorly.run>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230103-topic-sm8550-upstream-mdss-dsi-v3-3-660c3bcb127f@linaro.org>
+References: <20230103-topic-sm8550-upstream-mdss-dsi-v3-0-660c3bcb127f@linaro.org>
+ <20230103-topic-sm8550-upstream-mdss-dsi-v3-3-660c3bcb127f@linaro.org>
+Message-Id: <167327376817.61320.5444570222214850129.robh@kernel.org>
+Subject: Re: [PATCH v3 3/7] dt-bindings: display/msm: document MDSS on SM8550
+Date:   Mon, 09 Jan 2023 08:30:36 -0600
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,20 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:34 AM Florian Weimer <fweimer@redhat.com> wrote:
->
-> We did these changes on the glibc side because Jason sounded very
-> confident that he's able to deliver vDSO acceleration for getrandom.  If
-> that fails to materialize, we'll just have to add back userspace
-> buffering in glibc.
 
-My whole argument has been that user-space buffering is the sane thing
-to do. Most definitely for something like glibc.
+On Mon, 09 Jan 2023 11:15:19 +0100, Neil Armstrong wrote:
+> Document the MDSS hardware found on the Qualcomm SM8550 platform.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/display/msm/qcom,sm8550-mdss.yaml     | 331 +++++++++++++++++++++
+>  1 file changed, 331 insertions(+)
+> 
 
-The number of people who go "oh, no, my buffer or randomness could be
-exposed by insert-odd-situation-here" is approximately zero, and then
-the onus should be on *them* to do something special.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Because *they* are special. Precious little snowflake special.
+yamllint warnings/errors:
 
-             Linus
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/display/msm/qcom,sm8550-mdss.example.dts:21:18: fatal error: dt-bindings/clock/qcom,sm8550-dispcc.h: No such file or directory
+   21 |         #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/display/msm/qcom,sm8550-mdss.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1508: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230103-topic-sm8550-upstream-mdss-dsi-v3-3-660c3bcb127f@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
