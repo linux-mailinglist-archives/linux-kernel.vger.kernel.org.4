@@ -2,165 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A61662EBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDC3662EC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbjAISVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
+        id S237451AbjAISXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbjAISVS (ORCPT
+        with ESMTP id S229824AbjAISWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:21:18 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDC99FEA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:19:57 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d17so9111997wrs.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:19:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeo5OtVq8imDZHD82tnbeCo8M/ylS8y24Un+2HomtKs=;
-        b=Sl7Cj1xuTp7WQTESfCdvuPCm6DywpiiwjCQZJYA+LwFzIGbpb333b9Um+7zU1k9ecT
-         2dMrjoE1W70ruVRvUm2evh/DWnuNEhWjQtOLm0wGdm36umYS0BUprjkmc6i58Cm1Pn1N
-         bx2AGC6wH1vxYUu0yIHy1SMsDXAJz4wDO1YOqN29gCQC0pNGH/DPPCMDUW3do2AhBCE0
-         E7CiCp0Fb8sMmO8DjHaKDtxW7Y5XvBjt9fTMHVCCyeusiMLrl7/rvLR5tCh1Q357f0/2
-         gtnnNYQQOFqli8o9Y2iO4yPBnNuFFHW1AgNneNezr7xhQNoEbJOH/J+WiN1gg8HgOoRx
-         0oIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeo5OtVq8imDZHD82tnbeCo8M/ylS8y24Un+2HomtKs=;
-        b=Hzsv/fI+2Yuf6sWP0E7u7RogFRXQRjyt5YTN5/FXUfUwQNnmTTvuBrovlE9IU4SkdD
-         oXNoddAa649l51SR0yBUPdPbxULueotzetUYKWwiOhmFeJM8QENMgub+I5egSwKBIlFE
-         eg0qfzgcxIW+cttoX2E8tzeUvThx3zSgMKMNzbCb4c2BZPKLw/eZa6U190wtHZd8++tv
-         4v0PwXwSDr5W4S1mN/h2p8Wf6DGDS6YHzGItX9j9yfqwoQlr0maxlEvXJgWw4z/sq++e
-         qy8QzEjISKPveIHL2pJQD0O7gwSYpMDI1B1yvfUV6sDbbbvO0ES70zyogTJkcxvComGM
-         zoNQ==
-X-Gm-Message-State: AFqh2kq+K2Z57VJRuXpLF7dBB0AeiqKCztI1l5+IhBFeysxz3IJFmyIH
-        iNezGu25UWnGyT9djkuewv4Dzg==
-X-Google-Smtp-Source: AMrXdXsHmRrRWiLJ0gOPMtFN8/kxB3iO5ZcLc0KpMt7uRGmwjxmNtC8/G2RPCwQiylGezoGMKXZXJQ==
-X-Received: by 2002:a05:6000:382:b0:2b0:eee2:a43e with SMTP id u2-20020a056000038200b002b0eee2a43emr12090389wrf.38.1673288396176;
-        Mon, 09 Jan 2023 10:19:56 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y15-20020adffa4f000000b002bbec19c8acsm3862109wrr.64.2023.01.09.10.19.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:19:55 -0800 (PST)
-Message-ID: <8b634315-ae4e-1710-bebd-17f30620e52b@linaro.org>
-Date:   Mon, 9 Jan 2023 19:19:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 06/18] dt-bindings: interconnect: qcom: document the
- interconnects for sa8775p
+        Mon, 9 Jan 2023 13:22:35 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9ED659E;
+        Mon,  9 Jan 2023 10:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673288458; x=1704824458;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=botZPKv4sevpiUxsulK9qJ2nx1RN/gh5HzewG1ox+Sk=;
+  b=lkAllMneuJwrS4P/lIwRODpx5I4uEcgvTyWD0LtbIutGo+nR4TDZbQI+
+   tdf8s/s4Vb4EBpGNOJ+mYB7osMlwIZoOF5nu+nQOE/1n1VEk1E+Lx8qJe
+   RO1jJeDHidLX701PpAIXb0uBP6i1QEENdEuIvKNw8SpKkAAxdRN4/cE9M
+   LjCJE2Ye3b6Jnz0yz8J/dnF0EBwyoAxIxhb1g6bX/6HxpJ9DWziDXDC1H
+   ZCBHQqgdTfUXpsqOG7yeqDTf5zgarrPBwOsmupQUVLuERJqKVNQrW96nP
+   7HsGuZG9RUlTL7230xUeYRX1ILv3T+FkCwmmnwmMX7TLdiy/HVllPyXSs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306462677"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="306462677"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:20:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="720024224"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="720024224"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Jan 2023 10:20:57 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 9 Jan 2023 10:20:57 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 9 Jan 2023 10:20:56 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 10:20:56 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 9 Jan 2023 10:20:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gpi1it5PFpveOiYIr58vJKpPgpzso/Dn/+OHvcr4oh+m7S6To5A4D3L4KDjDPOjYogPoBdeOezMZXumk3P4jC4nFJekZUeu7uaPi1QPfFcNx7gnEj7ycOCPOc5rxyN3WOKZqCpEu1aAiGpI7GcgmfApggytS4mk5zYB7G7cELgbS6opdKln0uLwxieOnKT/OBUjtoYPhdSb8YywkPkY1qPcsTbH/Ji7tclI8njlqSBojEM6r1mCsql9kMmCAnAPlmyK5V6WVfaG6FpgOGVvSkD1+rSe7VM0gG0kbkGWCIfCalxDAcQs6OG/8vmRmwoN34OHCrI9E3ChoSAvYBfaqJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FnqQe8cCdSSTWEq9o5Nwby9LhoOIhbA52YlMMv3h0lA=;
+ b=Q0UhsgjFbnQ1/gSCZVvn8B3LNf7IsFU/Pt5PAa/QLK9ceeJ0sgwrhITQ8hhitLGdn9YDke7JeXfcgs9OBNsz7un4tHfdiI2LwiU0sqaCFiJcbkMspgHx3QLm28WRGhuCkCpV257J7KQPEGIhzeoTTHFI6mtHecadRdd5lEmpO2X0JumQmXDUxVNyZXOZRvtoLBRVlBYldLTr476pbxz57xvPxsChyGNPGIYpOJQqlBo4L6WKDVAUrGldyKXg3OLQr4vp+4+QnrVPUjjrMaWmHEKWqrD1GD6zrvMHszbDBrIqWsowCBFAK4ItT0pWTm/XoEccyORhUVlv0+1yyl+BHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by MN2PR11MB4600.namprd11.prod.outlook.com (2603:10b6:208:26e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 18:20:51 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::52ef:33cf:9be9:fcb0]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::52ef:33cf:9be9:fcb0%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 18:20:51 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: RE: [RFC PATCH 05/32] x86/traps: add exc_raise_irq() for VMX IRQ
+ reinjection
+Thread-Topic: [RFC PATCH 05/32] x86/traps: add exc_raise_irq() for VMX IRQ
+ reinjection
+Thread-Index: AQHZFEEHMoyRIdAKpEePAcSCwnR1Sq6WhPYQ
+Date:   Mon, 9 Jan 2023 18:20:51 +0000
+Message-ID: <SA1PR11MB6734110197BD5B5887917338A8FE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20221220063658.19271-1-xin3.li@intel.com>
+ <20221220063658.19271-6-xin3.li@intel.com>
+In-Reply-To: <20221220063658.19271-6-xin3.li@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-7-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109174511.1740856-7-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|MN2PR11MB4600:EE_
+x-ms-office365-filtering-correlation-id: b8aafab4-e392-4cfc-e0e9-08daf26e3d52
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /XJvnb3Au/0oN3ezaLPqqXCug+2ZBp1QODuIMUQdtBgPZd1EQaTyiXgJ4mhhJK0gXfVV+3OvVIyRDqM4PUfE88TmlL21Y23FF0Idvq4621CuOv95vuSsZEsBMjngqOAguR7NkVq4vaKAJH0y6kba9jTD91CCgd5M/ekVnMFTGxNUFpq5Z9USCgFRATIln1d18aJ09h40RJSnmFzgO2n5sEygUBDQLbdStMCw/Vf86U0DGq46abiSzPFxftGEL9F/6v+agtbNb8NW6bY7lW5c4952/zbx7QRF3x2TjO/XQD53bHgTDKIGQOcXVWNPcOcVTVYgABQpDicvToJc3wT+U27fuRP7GTleOwUZRbLBBQkSRo2PogjgiC3/+IN/1PRV+9/mr6mB1ZJD+7w8GNhnVtxQ91yRgABXqYkv4C0QjeWhXQPo48YFdw8FXxat6XjT6qzKR/fHzdwaTjjKQgdzy+T2xK1Fky/5fj69059GqcwPNogZGhofV+m8cyriws2bJH3p1fSU3L4wFA8G/h7ma7nXIDZVf6ElmKvh19n8ub/zP6NREsWtJh9AdfOJ+zO87HODYF7iCBM79ksa/VbM1nO2qHjOzY9F41D3d+EHeoVEJKEz0XVJehRMJCfo+k9aJr2/cMZ2b0tc306ZUZqaDkNYm8qFpwjaqsEeBtvsRAEG520TyUYHppEIULtQGy+LDklAAQNonSPw6C+adr2AYw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199015)(41300700001)(6506007)(86362001)(122000001)(52536014)(478600001)(38070700005)(5660300002)(82960400001)(9686003)(38100700002)(7696005)(186003)(26005)(8936002)(8676002)(76116006)(71200400001)(66946007)(7416002)(66446008)(4326008)(33656002)(2906002)(64756008)(316002)(66476007)(66556008)(54906003)(55016003)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+rM3K0N5cqmOB4Kre5H3lJgxjdu5NvUUbmKpep8cqnZFE7wdzGDdne006qBi?=
+ =?us-ascii?Q?gnQlFUM8ATsKOucn7WhOye0MfETiA1XgGb54kYYdN3B76Bo4Eg80Pj41au3h?=
+ =?us-ascii?Q?+4FfUf61gifK+AwYuLVesLvYNZae//3+47tULMPhIt+zjU49OXFozEyRf9Ak?=
+ =?us-ascii?Q?8ib0vC0LUBUynsjL9QY3aIznh4HUuZ35F7Vec/8VsAoClUPym5JPoHl0eIyq?=
+ =?us-ascii?Q?rYV8tbYvRQBvydqvYmVQUwLB8sTphdoktyL1T9Avwq/YNL8B+vXC7oDqWNzz?=
+ =?us-ascii?Q?0Dd0y8W1dJiUcmCHY2ayrPdZt8Q+/LjSq1OraXainsyxqkz3BGCNca0mAWte?=
+ =?us-ascii?Q?o7rsBdhXl5nIAPpaUNoBGMu4F1KOfRaGcsJB4iZ5m8Y8kHRx7cW8MW63ayL5?=
+ =?us-ascii?Q?XnsEE2kQ0QA4pJkaqBp+txiRBPlZxedEfYvWPYRRH8qWvRtuKnSz3MGep7xY?=
+ =?us-ascii?Q?fSgG8GiidFPxCTB+LGh1m4Uk1RjhP2lyN4T5W9ICeiElvfPHlhryBNLOfwbn?=
+ =?us-ascii?Q?3bofc3LfzOwJpMhDnCi5DixvB+8dbkQZXiIN2WxpC8idQSrib1XMhSZNdgVL?=
+ =?us-ascii?Q?Bygh8uwsnWCCoqzm6dnzt315sN59MmiAhkn2Kdhcg8g0conS1v4UicGxBNRX?=
+ =?us-ascii?Q?keDwXAPCWsPWlgkzieCkXq8QxRfzHXIpLarSTyRyWUObxY5juC265RH0eQCV?=
+ =?us-ascii?Q?KUQIiZKH0Gp/z0m+SCJ3tomUQ+TOxzx0U5W6VYqlRvdWuqSN9hjzJmLyEuX1?=
+ =?us-ascii?Q?qmwc12xPoMfFlxbGwkTl10MmN8qtWVfQ0jUcJtNsysEuqIZjU7Psj6MHb1K9?=
+ =?us-ascii?Q?/pXxddJkuKAU/JpJLxpPS87kpIWb8RD8rkIET5hlhxvWMvqqiOeI9uSGcsp1?=
+ =?us-ascii?Q?8+grwdCMZtZ+ZVrJkP8RcLt9lX+cy/5pWcrNgIg66miGUV5TLv129HiFRf0E?=
+ =?us-ascii?Q?+1DiXU1SJKxCQk9as0N+IBl9ZCh/I8LoSUN0fw9ii8ODkdGlemnM5YkeK874?=
+ =?us-ascii?Q?yfXJ6jFJcQYdxAVamyr29mB/ckx5kKkE3WjQB/Yb/d/6ZhhHps9/CXihROtk?=
+ =?us-ascii?Q?/BVtqwQ/7PPvGyvC0KeQ19pas/Uz1GnzF67ADg8nurdVP3vNMQ0BXR068IuS?=
+ =?us-ascii?Q?A7dLByCJRSOx4Vbbc5cUOj0Auuta4uhFQiuHR4q2zT4z+CZ8t7jLBnnPSUk1?=
+ =?us-ascii?Q?1qpmHpeaIGRbDOUrFMh3D29RK4WD7GXaVckfPUCz339zWOdko23FiSSCB/ek?=
+ =?us-ascii?Q?yU1tzk98cEm2FMP+9A6279g/L5vj6P+eMY+YOcfhUZIfJiEJLuyD3MkfBc7X?=
+ =?us-ascii?Q?bWItUOJQZZZR/+Dsjp2OsiGaHlOFwvjER17JxmvHOVDbnnug0udoyfObfjMq?=
+ =?us-ascii?Q?JucV3MYXhYHVwuN+B0qbre6e+rxI1O/9i1+DCCZ8UljyUUJ2enJIJCY3ZXb1?=
+ =?us-ascii?Q?STxmfQs/yH3SyO7FgyqwLBgQ3qgObcclEPpCp3/tlwQ+enFsyGpSw16BAXfr?=
+ =?us-ascii?Q?R8W8DQYYuDGhb3gAoK9c83ISE3nZrQr5Au2jzPKk8dMtJOh2u7wwqL6kBF9+?=
+ =?us-ascii?Q?/GAJREq9MdK89heHK8B8Ugl7GjjkP4mA0rGZedw0?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8aafab4-e392-4cfc-e0e9-08daf26e3d52
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 18:20:51.5356
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: URxP8HZyIkRLZaXqhnkq1hn7+y+9rtXDKFg65FzDxUE7LOKA+REIm6pVF02c+qMT1O2g44b+FwypRKO5TTYWqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4600
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 18:44, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add a set of new compatibles and DT include defines for the sa8775p
-> platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,rpmh.yaml      |  14 ++
->  .../dt-bindings/interconnect/qcom,sa8775p.h   | 231 ++++++++++++++++++
->  2 files changed, 245 insertions(+)
->  create mode 100644 include/dt-bindings/interconnect/qcom,sa8775p.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index a429a1ed1006..ad3e0c7e9430 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -27,6 +27,20 @@ properties:
->  
->    compatible:
->      enum:
-> +      - qcom,sa8775p-aggre1-noc
-> +      - qcom,sa8775p-aggre2-noc
-> +      - qcom,sa8775p-clk-virt
+> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
+> index 46f5e4e2a346..366b1675c033 100644
+> --- a/arch/x86/include/asm/traps.h
+> +++ b/arch/x86/include/asm/traps.h
+> @@ -56,4 +56,6 @@ void __noreturn handle_stack_overflow(struct pt_regs
+> *regs,
+>  	void f (struct pt_regs *regs)
+>  typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
+>=20
+> +int exc_raise_irq(struct pt_regs *regs, u32 vector);
+> +
+>  #endif /* _ASM_X86_TRAPS_H */
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index c35dd2b4d146..99386836b02e 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -1536,6 +1536,24 @@ int external_interrupt(struct pt_regs *regs, unsig=
+ned
+> int vector)
+>  	return 0;
+>  }
+>=20
+> +#if IS_ENABLED(CONFIG_KVM_INTEL)
+> +/*
+> + * KVM VMX reinjects IRQ on its current stack, it's a sync call
+> + * thus the values in the pt_regs structure are not used in
+> + * executing IRQ handlers, except cs.RPL and flags.IF, which
+> + * are both always 0 in the VMX IRQ reinjection context.
+> + *
+> + * However, the pt_regs structure is sometimes used in stack
+> + * dump, e.g., show_regs(). So let the caller, i.e., KVM VMX
+> + * decide how to initialize the input pt_regs structure.
+> + */
+> +int exc_raise_irq(struct pt_regs *regs, u32 vector)
+> +{
+> +	return external_interrupt(regs, vector);
+> +}
+> +EXPORT_SYMBOL_GPL(exc_raise_irq);
+> +#endif
 
-Are you sure they come with IO address space? IOW, was the binding and
-DTS tested against each other?
+Maybe it's better to simply export external_interrupt()
 
-All recent bindings are split into their own file:
+ +EXPORT_SYMBOL_GPL(external_interrupt);
 
-https://lore.kernel.org/all/20221223132040.80858-3-krzysztof.kozlowski@linaro.org/
+Then I don't need to add exc_raise_irq().
 
-https://lore.kernel.org/all/20221202232054.2666830-2-abel.vesa@linaro.org/
-
-
-> +      - qcom,sa8775p-config-noc
-> +      - qcom,sa8775p-dc-noc
-> +      - qcom,sa8775p-gem-noc
-> +      - qcom,sa8775p-gpdsp-anoc
-> +      - qcom,sa8775p-lpass-ag-noc
-> +      - qcom,sa8775p-mc-virt
-> +      - qcom,sa8775p-mmss-noc
-> +      - qcom,sa8775p-nspa-noc
-> +      - qcom,sa8775p-nspb-noc
-> +      - qcom,sa8775p-pcie-anoc
-> +      - qcom,sa8775p-system-noc
->        - qcom,sc7180-aggre1-noc
->        - qcom,sc7180-aggre2-noc
->        - qcom,sc7180-camnoc-virt
-> diff --git a/include/dt-bindings/interconnect/qcom,sa8775p.h b/include/dt-bindings/interconnect/qcom,sa8775p.h
-> new file mode 100644
-> index 000000000000..8d5968854187
-> --- /dev/null
-> +++ b/include/dt-bindings/interconnect/qcom,sa8775p.h
-
-Filename matching family/compatible style, so just like sm8550.
-
-> @@ -0,0 +1,231 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-
-Dual license.
-
-Best regards,
-Krzysztof
+> +
+>  void __init trap_init(void)
+>  {
+>  	/* Init cpu_entry_area before IST entries are set up */
+> --
+> 2.34.1
 
