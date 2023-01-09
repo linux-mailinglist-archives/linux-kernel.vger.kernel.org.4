@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CB76629B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0945C6629BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbjAIPSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S237340AbjAIPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237211AbjAIPR5 (ORCPT
+        with ESMTP id S234922AbjAIPR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:17:57 -0500
-Received: from outbound-smtp47.blacknight.com (outbound-smtp47.blacknight.com [46.22.136.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A04955A1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:17:47 -0800 (PST)
+        Mon, 9 Jan 2023 10:17:59 -0500
+Received: from outbound-smtp41.blacknight.com (outbound-smtp41.blacknight.com [46.22.139.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DBFE4C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:17:57 -0800 (PST)
 Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id D1B80FA8A7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:17:45 +0000 (GMT)
-Received: (qmail 19193 invoked from network); 9 Jan 2023 15:17:45 -0000
+        by outbound-smtp41.blacknight.com (Postfix) with ESMTPS id 0894C1FB2
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:17:56 +0000 (GMT)
+Received: (qmail 19711 invoked from network); 9 Jan 2023 15:17:55 -0000
 Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 9 Jan 2023 15:17:45 -0000
+  by 81.17.254.9 with ESMTPA; 9 Jan 2023 15:17:55 -0000
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     Linux-MM <linux-mm@kvack.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -30,9 +30,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         LKML <linux-kernel@vger.kernel.org>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking allocations access to reserves
-Date:   Mon,  9 Jan 2023 15:16:30 +0000
-Message-Id: <20230109151631.24923-7-mgorman@techsingularity.net>
+Subject: [PATCH 7/7] mm: discard __GFP_ATOMIC
+Date:   Mon,  9 Jan 2023 15:16:31 +0000
+Message-Id: <20230109151631.24923-8-mgorman@techsingularity.net>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230109151631.24923-1-mgorman@techsingularity.net>
 References: <20230109151631.24923-1-mgorman@techsingularity.net>
@@ -46,109 +46,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
-vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
-other non-blocking allocation requests equal access to reserve.  Rename
-ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
-means.
+From: NeilBrown <neilb@suse.de>
 
+__GFP_ATOMIC serves little purpose.  Its main effect is to set
+ALLOC_HARDER which adds a few little boosts to increase the chance of an
+allocation succeeding, one of which is to lower the water-mark at which it
+will succeed.
+
+It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
+adjusts this watermark.  It is probable that other users of __GFP_HIGH
+should benefit from the other little bonuses that __GFP_ATOMIC gets.
+
+__GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
+There is little point to this.  We already get a might_sleep() warning if
+__GFP_DIRECT_RECLAIM is set.
+
+__GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
+probable that testing ALLOC_HARDER is a better fit here.
+
+__GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
+sleep.  This should test __GFP_DIRECT_RECLAIM instead.
+
+This patch:
+ - removes __GFP_ATOMIC
+ - allows __GFP_HIGH allocations to ignore watermark boosting as well
+   as GFP_ATOMIC requests.
+ - makes other adjustments as suggested by the above.
+
+The net result is not change to GFP_ATOMIC allocations.  Other
+allocations that use __GFP_HIGH will benefit from a few different extra
+privileges.  This affects:
+  xen, dm, md, ntfs3
+  the vermillion frame buffer
+  hibernation
+  ksm
+  swap
+all of which likely produce more benefit than cost if these selected
+allocation are more likely to succeed quickly.
+
+[mgorman: Minor adjustments to rework on top of a series]
+Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
+Signed-off-by: NeilBrown <neilb@suse.de>
 Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/internal.h   |  7 +++++--
- mm/page_alloc.c | 23 +++++++++++++----------
- 2 files changed, 18 insertions(+), 12 deletions(-)
+ Documentation/mm/balance.rst   |  2 +-
+ drivers/iommu/tegra-smmu.c     |  4 ++--
+ include/linux/gfp_types.h      | 12 ++++--------
+ include/trace/events/mmflags.h |  1 -
+ lib/test_printf.c              |  8 ++++----
+ mm/internal.h                  |  2 +-
+ mm/page_alloc.c                | 13 +++----------
+ tools/perf/builtin-kmem.c      |  1 -
+ 8 files changed, 15 insertions(+), 28 deletions(-)
 
+diff --git a/Documentation/mm/balance.rst b/Documentation/mm/balance.rst
+index 6a1fadf3e173..e38e9d83c1c7 100644
+--- a/Documentation/mm/balance.rst
++++ b/Documentation/mm/balance.rst
+@@ -6,7 +6,7 @@ Memory Balancing
+ 
+ Started Jan 2000 by Kanoj Sarcar <kanoj@sgi.com>
+ 
+-Memory balancing is needed for !__GFP_ATOMIC and !__GFP_KSWAPD_RECLAIM as
++Memory balancing is needed for !__GFP_HIGH and !__GFP_KSWAPD_RECLAIM as
+ well as for non __GFP_IO allocations.
+ 
+ The first reason why a caller may avoid reclaim is that the caller can not
+diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
+index 5b1af40221ec..af8d0e685260 100644
+--- a/drivers/iommu/tegra-smmu.c
++++ b/drivers/iommu/tegra-smmu.c
+@@ -671,12 +671,12 @@ static struct page *as_get_pde_page(struct tegra_smmu_as *as,
+ 	 * allocate page in a sleeping context if GFP flags permit. Hence
+ 	 * spinlock needs to be unlocked and re-locked after allocation.
+ 	 */
+-	if (!(gfp & __GFP_ATOMIC))
++	if (gfpflags_allow_blocking(gfp))
+ 		spin_unlock_irqrestore(&as->lock, *flags);
+ 
+ 	page = alloc_page(gfp | __GFP_DMA | __GFP_ZERO);
+ 
+-	if (!(gfp & __GFP_ATOMIC))
++	if (gfpflags_allow_blocking(gfp))
+ 		spin_lock_irqsave(&as->lock, *flags);
+ 
+ 	/*
+diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+index d88c46ca82e1..5088637fe5c2 100644
+--- a/include/linux/gfp_types.h
++++ b/include/linux/gfp_types.h
+@@ -31,7 +31,7 @@ typedef unsigned int __bitwise gfp_t;
+ #define ___GFP_IO		0x40u
+ #define ___GFP_FS		0x80u
+ #define ___GFP_ZERO		0x100u
+-#define ___GFP_ATOMIC		0x200u
++/* 0x200u unused */
+ #define ___GFP_DIRECT_RECLAIM	0x400u
+ #define ___GFP_KSWAPD_RECLAIM	0x800u
+ #define ___GFP_WRITE		0x1000u
+@@ -116,11 +116,8 @@ typedef unsigned int __bitwise gfp_t;
+  *
+  * %__GFP_HIGH indicates that the caller is high-priority and that granting
+  * the request is necessary before the system can make forward progress.
+- * For example, creating an IO context to clean pages.
+- *
+- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
+- * high priority. Users are typically interrupt handlers. This may be
+- * used in conjunction with %__GFP_HIGH
++ * For example creating an IO context to clean pages and requests
++ * from atomic context.
+  *
+  * %__GFP_MEMALLOC allows access to all memory. This should only be used when
+  * the caller guarantees the allocation will allow more memory to be freed
+@@ -135,7 +132,6 @@ typedef unsigned int __bitwise gfp_t;
+  * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency reserves.
+  * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
+  */
+-#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
+ #define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
+ #define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
+ #define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
+@@ -329,7 +325,7 @@ typedef unsigned int __bitwise gfp_t;
+  * version does not attempt reclaim/compaction at all and is by default used
+  * in page fault path, while the non-light is used by khugepaged.
+  */
+-#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
++#define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
+ #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+ #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+ #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+index 412b5a46374c..9db52bc4ce19 100644
+--- a/include/trace/events/mmflags.h
++++ b/include/trace/events/mmflags.h
+@@ -31,7 +31,6 @@
+ 	gfpflag_string(__GFP_HIGHMEM),		\
+ 	gfpflag_string(GFP_DMA32),		\
+ 	gfpflag_string(__GFP_HIGH),		\
+-	gfpflag_string(__GFP_ATOMIC),		\
+ 	gfpflag_string(__GFP_IO),		\
+ 	gfpflag_string(__GFP_FS),		\
+ 	gfpflag_string(__GFP_NOWARN),		\
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index d34dc636b81c..46b4e6c414a3 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -674,17 +674,17 @@ flags(void)
+ 	gfp = GFP_ATOMIC|__GFP_DMA;
+ 	test("GFP_ATOMIC|GFP_DMA", "%pGg", &gfp);
+ 
+-	gfp = __GFP_ATOMIC;
+-	test("__GFP_ATOMIC", "%pGg", &gfp);
++	gfp = __GFP_HIGH;
++	test("__GFP_HIGH", "%pGg", &gfp);
+ 
+ 	/* Any flags not translated by the table should remain numeric */
+ 	gfp = ~__GFP_BITS_MASK;
+ 	snprintf(cmp_buffer, BUF_SIZE, "%#lx", (unsigned long) gfp);
+ 	test(cmp_buffer, "%pGg", &gfp);
+ 
+-	snprintf(cmp_buffer, BUF_SIZE, "__GFP_ATOMIC|%#lx",
++	snprintf(cmp_buffer, BUF_SIZE, "__GFP_HIGH|%#lx",
+ 							(unsigned long) gfp);
+-	gfp |= __GFP_ATOMIC;
++	gfp |= __GFP_HIGH;
+ 	test(cmp_buffer, "%pGg", &gfp);
+ 
+ 	kfree(cmp_buffer);
 diff --git a/mm/internal.h b/mm/internal.h
-index 8706d46863df..23a37588073a 100644
+index 23a37588073a..71b1111427f3 100644
 --- a/mm/internal.h
 +++ b/mm/internal.h
-@@ -735,7 +735,10 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
- #define ALLOC_OOM		ALLOC_NO_WATERMARKS
- #endif
+@@ -24,7 +24,7 @@ struct folio_batch;
+ #define GFP_RECLAIM_MASK (__GFP_RECLAIM|__GFP_HIGH|__GFP_IO|__GFP_FS|\
+ 			__GFP_NOWARN|__GFP_RETRY_MAYFAIL|__GFP_NOFAIL|\
+ 			__GFP_NORETRY|__GFP_MEMALLOC|__GFP_NOMEMALLOC|\
+-			__GFP_ATOMIC|__GFP_NOLOCKDEP)
++			__GFP_NOLOCKDEP)
  
--#define ALLOC_HARDER		 0x10 /* try to alloc harder */
-+#define ALLOC_NON_BLOCK		 0x10 /* Caller cannot block. Allow access
-+				       * to 25% of the min watermark or
-+				       * 62.5% if __GFP_HIGH is set.
-+				       */
- #define ALLOC_MIN_RESERVE	 0x20 /* __GFP_HIGH set. Allow access to 50%
- 				       * of the min watermark.
- 				       */
-@@ -750,7 +753,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
- #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
- 
- /* Flags that allow allocations below the min watermark. */
--#define ALLOC_RESERVES (ALLOC_HARDER|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
-+#define ALLOC_RESERVES (ALLOC_NON_BLOCK|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
- 
- enum ttu_flags;
- struct tlbflush_unmap_batch;
+ /* The GFP flags allowed during early boot */
+ #define GFP_BOOT_MASK (__GFP_BITS_MASK & ~(__GFP_RECLAIM|__GFP_IO|__GFP_FS))
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index d2df78f5baa2..2217bab2dbb2 100644
+index 2217bab2dbb2..7244ab522028 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -3999,7 +3999,7 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
- 		 * if it cannot get memory quickly, particularly if it's
- 		 * also __GFP_HIGH.
- 		 */
--		if (alloc_flags & ALLOC_HARDER)
-+		if (alloc_flags & ALLOC_NON_BLOCK)
- 			min -= min / 4;
- 
- 		/*
-@@ -4851,28 +4851,30 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
- 	 * The caller may dip into page reserves a bit more if the caller
- 	 * cannot run direct reclaim, or if the caller has realtime scheduling
- 	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
--	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_MIN_RESERVE(__GFP_HIGH).
-+	 * set both ALLOC_NON_BLOCK and ALLOC_MIN_RESERVE(__GFP_HIGH).
+@@ -4086,13 +4086,14 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
+ 	if (__zone_watermark_ok(z, order, mark, highest_zoneidx, alloc_flags,
+ 					free_pages))
+ 		return true;
++
+ 	/*
+-	 * Ignore watermark boosting for GFP_ATOMIC order-0 allocations
++	 * Ignore watermark boosting for __GFP_HIGH order-0 allocations
+ 	 * when checking the min watermark. The min watermark is the
+ 	 * point where boosting is ignored so that kswapd is woken up
+ 	 * when below the low watermark.
  	 */
- 	alloc_flags |= (__force int)
- 		(gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
+-	if (unlikely(!order && (gfp_mask & __GFP_ATOMIC) && z->watermark_boost
++	if (unlikely(!order && (alloc_flags & ALLOC_MIN_RESERVE) && z->watermark_boost
+ 		&& ((alloc_flags & ALLOC_WMARK_MASK) == WMARK_MIN))) {
+ 		mark = z->_watermark[WMARK_MIN];
+ 		return __zone_watermark_ok(z, order, mark, highest_zoneidx,
+@@ -5057,14 +5058,6 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+ 	unsigned int zonelist_iter_cookie;
+ 	int reserve_flags;
  
--	if (gfp_mask & __GFP_ATOMIC) {
-+	if (!(gfp_mask & __GFP_DIRECT_RECLAIM)) {
- 		/*
- 		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
- 		 * if it can't schedule.
- 		 */
- 		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
--			alloc_flags |= ALLOC_HARDER;
-+			alloc_flags |= ALLOC_NON_BLOCK;
- 
- 			if (order > 0)
- 				alloc_flags |= ALLOC_HIGHATOMIC;
- 		}
- 
- 		/*
--		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
--		 * comment for __cpuset_node_allowed().
-+		 * Ignore cpuset mems for non-blocking __GFP_HIGH (probably
-+		 * GFP_ATOMIC) rather than fail, see the comment for
-+		 * __cpuset_node_allowed().
- 		 */
--		alloc_flags &= ~ALLOC_CPUSET;
-+		if (alloc_flags & ALLOC_MIN_RESERVE)
-+			alloc_flags &= ~ALLOC_CPUSET;
- 	} else if (unlikely(rt_task(current)) && in_task())
- 		alloc_flags |= ALLOC_MIN_RESERVE;
- 
-@@ -5304,11 +5306,12 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
- 
- 		/*
- 		 * Help non-failing allocations by giving them access to memory
--		 * reserves but do not use ALLOC_NO_WATERMARKS because this
-+		 * reserves normally used for high priority non-blocking
-+		 * allocations but do not use ALLOC_NO_WATERMARKS because this
- 		 * could deplete whole memory reserves which would just make
--		 * the situation worse
-+		 * the situation worse.
- 		 */
--		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE|ALLOC_HARDER, ac);
-+		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE|ALLOC_NON_BLOCK, ac);
- 		if (page)
- 			goto got_pg;
- 
+-	/*
+-	 * We also sanity check to catch abuse of atomic reserves being used by
+-	 * callers that are not in atomic context.
+-	 */
+-	if (WARN_ON_ONCE((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
+-				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)))
+-		gfp_mask &= ~__GFP_ATOMIC;
+-
+ restart:
+ 	compaction_retries = 0;
+ 	no_progress_loops = 0;
+diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
+index e20656c431a4..173d407dce92 100644
+--- a/tools/perf/builtin-kmem.c
++++ b/tools/perf/builtin-kmem.c
+@@ -641,7 +641,6 @@ static const struct {
+ 	{ "__GFP_HIGHMEM",		"HM" },
+ 	{ "GFP_DMA32",			"D32" },
+ 	{ "__GFP_HIGH",			"H" },
+-	{ "__GFP_ATOMIC",		"_A" },
+ 	{ "__GFP_IO",			"I" },
+ 	{ "__GFP_FS",			"F" },
+ 	{ "__GFP_NOWARN",		"NWR" },
 -- 
 2.35.3
 
