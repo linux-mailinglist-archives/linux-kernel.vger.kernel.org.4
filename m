@@ -2,558 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D053662A56
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A6D662A58
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjAIPnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S231365AbjAIPnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbjAIPmv (ORCPT
+        with ESMTP id S236276AbjAIPnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:42:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1067D1133;
-        Mon,  9 Jan 2023 07:40:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 888CEB80973;
-        Mon,  9 Jan 2023 15:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6995CC433D2;
-        Mon,  9 Jan 2023 15:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673278828;
-        bh=UyVRc9O5snMPuEkCgMMTiFPdwN/OH5l6ezUaVMBo+4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBzbdM6oPnSqfP7fzmv+kiSlG3wtXDv0rgcd5DT8BvUUzUHQJpkreX3zqLTZIZ/S5
-         yycUdcQciGbmIx8YV9G8oKB4b9EUdqHAEujNu5E1gzl8dgdw33weNOm3JXeTiVx4XS
-         hOaSo6YMl4lmuglD90MfZv3vDrbbw4KC93GJdNGbXw71ecOJ82VKjtSvXciZNGZ9Yc
-         fpJ+iaDw42GH+OwJkLBwvw8Yv8wSqHxcuSKoVg5NelQU4iFEzzxZ16vSeLAPIB8jEv
-         6Kmet+fUxHCbrY2wKL+NAB6+wFWgZ87M1mK9iqyk9jeDD36lI4qU8PXkMVQr6VsiBY
-         DG6Cbh81YJqiQ==
-Date:   Mon, 9 Jan 2023 09:40:25 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alex Elder <elder@ieee.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
-Subject: Re: [PATCH V1 1/1] soc: qcom: dcc: Add QAD, Ctitrigger and
- Bootconfig support for DCC
-Message-ID: <20230109154025.sy5nxgrrzjoon5nc@builder.lan>
-References: <cover.1673270769.git.quic_schowdhu@quicinc.com>
- <90a5a60b6f4cc84321370acaa0f2876dcaae7580.1673270769.git.quic_schowdhu@quicinc.com>
+        Mon, 9 Jan 2023 10:43:24 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2076.outbound.protection.outlook.com [40.107.20.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F331A9598;
+        Mon,  9 Jan 2023 07:41:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EKYw+KNYBUQ1fI/djoqDjl5NyeIvFCFRgVVm9YEo/5fNZo8Ba2ZXRc+WnrzvKU25EEj6zJx6HFcLdOUrdyDyNFNsD/FcOSEXXs6zDA72FjaKvFBrAwl7ldcuO18mHEDWvzlUHIZP1vylT03Q/a92SFL29Ug7RmcfcoDUzyhhQ1I0R2kCxXXSNWukmin7TGz/VSAZkCklsMDOJtAdI9Ty4ACZdR/bpVlL5vXRWwEh7/+ptUiRzodAWMk6XZwDsoId5mK2X2s5LsPE/9bkQJBTEQsOWa6M6a9whrI2rK5+HjM82gmnWLIoK/FFkeYPvW0F9IobGNhmTjPIajBOHxxzqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HRdsqoWdhdBLmgauRXpopVCnpjIw65gEYUiWeBTwtVk=;
+ b=aX1mpaFuHQ7/Ye17ftb7ioiIUt0d03NHXjUZIu9stcMZhkDpMlie/2koleqixWzA3lIAl5ZW72R+HS0x0dRRRmOURJChHj2+L8ZAvsO026/L1uAjt2yoDalu+ARzLZ+7znWFzqA/GjomIK9SeLkcV+78wwTRaj4jkD5SG1B6hxYlOUQiiNTNjzivADWvtGC5xArD4oPf+HpSivcbyxn8wPY7a6mBV8+IJx0HF1G4wt6EnfMZfaQERnNLsUnTda0G4clNopOi+CAgVOWH3bZct8Dl7OaFK/w0znZNeTONWxUGfFK+UfyhjNxsu+WUvkXig1SH9iBaMGT7l2KOvIJk0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HRdsqoWdhdBLmgauRXpopVCnpjIw65gEYUiWeBTwtVk=;
+ b=f9iYRWTs6NLDEGfaAuu+OloOcMHVNx7yodhOCRJ4ajFcglVMq/i32Dv+jABla8/CiQ4jr+QhHfaVfgSGrR4OCa0gucdL+n6Abcgdewvxq53ePHjWVO/iguZoZUlCHDxWOl2bcpOb3Vgc2b+1BqTjVKe480YX6YPLmJQehUScaOM=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by DB8PR04MB6907.eurprd04.prod.outlook.com (2603:10a6:10:119::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 15:41:31 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 15:41:31 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: RE: [PATCH 1/1] PCI: layerscape: Add EP mode support for ls1028a
+Thread-Topic: [PATCH 1/1] PCI: layerscape: Add EP mode support for ls1028a
+Thread-Index: AQHZEWmyQszXKE+SiEOtDSsQo9pf5a6WXqnQ
+Date:   Mon, 9 Jan 2023 15:41:31 +0000
+Message-ID: <HE1PR0401MB2331BA1F1CDF8F8B8A4D26E488FE9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20221216161537.1003595-1-Frank.Li@nxp.com>
+In-Reply-To: <20221216161537.1003595-1-Frank.Li@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|DB8PR04MB6907:EE_
+x-ms-office365-filtering-correlation-id: 7307195c-7296-4050-c4b8-08daf257faf4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zti6F5hTPXmqeWa2rvOjoO7KYxsvesXz0Xl9ISBBaDrlBhK2qqx0t6wLAPdr38zs1p+bTZ2HvOhQqFTA40uODbsp99vKFsq3KzIPVJfMPGR+OhWLSlEOKfZTFB+G04sSq0e/4ZYLQgTE85IAJDpGENQy4eVqnr1F5jHPEhAnO3ZDSEdAkQVN3FCjVm3M/4iHVH2cqQiLZttQ8V5oXCf3ZNPgF2hsIc9s28YJj0g6qjoztlUPCmQDMS+fsANVx7AA4UokX+3SHAbpwbii96pOvhYhTWxz2qSsXVpl2s8FXqeMiRUcA1E5PQCKXmME/3O+BDA79pnJk4ylCeYVR0Xtpn8n/+AfoEHpfPJ3oRLJJd1rl3VdhONZ24mlMCLEjaNlMnizi9DsCP0XjJKE8U1Cp3QCq2brssekQ6iUbNwqZFEXC9bxzP4LfbCZbD9e4S5IQ8tHSq2Af66MpGw/BiBI2xeWCYF/Rg//zhdM5aos/uC1epmt7J8pPaZgX2qkwPkYOxafC9XMbIe3Y0wIbp8LwBL/ugz73c5deEdG5boLpBsGhl7D9YC2SGg2/gRY6TfaE5QL/csRQNr3WeEYHvTd6nOBR2HFrGOcLtglMGMUPm9UIccCU7HV1UV/L8yY5Io86oJIuL3fo7S3zlb2CVu5wYH/XjYhrmI1Bo7eV3EoF8ekXsSStRCkT9GDlUr/qH3WdYjccm/MUtD6LmtOc5ZPvWWbhwHdgYthFMaZgG1eq46Ll5qTHBp9TgtPGqZ9EqWn
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199015)(8676002)(9686003)(33656002)(4744005)(316002)(5660300002)(71200400001)(26005)(44832011)(7696005)(966005)(478600001)(186003)(41300700001)(110136005)(66946007)(4326008)(64756008)(66556008)(76116006)(66476007)(66446008)(52536014)(8936002)(38070700005)(86362001)(55016003)(55236004)(6506007)(122000001)(38100700002)(921005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?8xvpevg3IdbvnSA5pd9linDnhXBnJvzR94tMYBhIZxYyCEn0Qk86zjN/tj?=
+ =?iso-8859-2?Q?MZEX+Lj3iX8CU01FG6QCJ48dLUGkgBipUwwRYpGSgBGY6dVDpApMr7ukSO?=
+ =?iso-8859-2?Q?dZUwrXS3PgYByG18fETwSXJ8Zvd+XtpifeOYPYyVgzA8vwOwbaEtVXnlcy?=
+ =?iso-8859-2?Q?2JKpg6eIKQryp1RF+u/0apOLCCPYmKKsk8IROuvHHouwC0QU61SFZR3QK1?=
+ =?iso-8859-2?Q?CcbO3xazDUkyn/EL27g0zpP/08oaaA0n/B7o/xehPaBOhMX7yr83SPiAFt?=
+ =?iso-8859-2?Q?PI+TUm90ecKG+HLXNASOYN3SiUEojVLPO1BDRqo112rP0ZaDECdeSw6gxj?=
+ =?iso-8859-2?Q?UiFgrsOMD+Yl+cSf+fl+AHTp4obmsFK/JFwzN66/FKwXeML65SIJsMlRoF?=
+ =?iso-8859-2?Q?CIcKTotH67xLoSKt1zKabiyd/gv+5W1LJCITpKY3Rzzs9YUlWtKiCF5ZdV?=
+ =?iso-8859-2?Q?O4FwrqQVoX28ValJXYdwhK1M7s1T9KscpQdU8G1rrlwuqUDsC/4OFoBK9o?=
+ =?iso-8859-2?Q?VxwIT5OerLaKGabd2yguBR9rpH+gAYUc6infNZGy1xTlAf+cZCOfbIOBcM?=
+ =?iso-8859-2?Q?E8dCR3BGmAVqrME1bR+xkSjICtKMUVa0leVyocb023reiij6Jmqq05T7g4?=
+ =?iso-8859-2?Q?wQKfuqAbAJZeZWG/jCYl4udgyaBEZHtWG672ljizW+PN8jLPUjVZRRSlIH?=
+ =?iso-8859-2?Q?sFQwXR34Zf6LiBD0jp23nRExgVi6lr4A6FRAjdJvwgtZQGZfomJA43Ua1f?=
+ =?iso-8859-2?Q?xhHmyVQ7uh+DDSjHP6XR08u/gydGh+k1W/taKYK2o0eUHOcsJH4yo5BDST?=
+ =?iso-8859-2?Q?BI6xVF92UwdcmDWRXiqmWkao1xClNmvNby8gECs6VrrECwOpercpOYXC8y?=
+ =?iso-8859-2?Q?8DzEoB7KCSmniF24oFnbrxA5Z829cb3OFvm7+D3gk2SH5GqBdgRqTcTlt1?=
+ =?iso-8859-2?Q?M6VRbcI4VRWIb3KWdBM+6Q1kNt8z+8u6Yb0EAGlxyd51D4G44/NPbGb8nZ?=
+ =?iso-8859-2?Q?rG0IAhxNpIoqcVVqYQj3969nE9F9FrsehRQvue/YOYB9Pj3+ccdKG4aqj4?=
+ =?iso-8859-2?Q?e+Zs/nJLqCm1ctUov3FLgV1WwNACKq3aZspngcIgL+JovX8CPJ4CydBAC6?=
+ =?iso-8859-2?Q?xVPRnEwsij0tK9vErGXMwnRIGc6WiIlZlecvylNVo0z/tJ902eIHmKbaG6?=
+ =?iso-8859-2?Q?lC7BpkHhXPbm66Fxg85HHd+lZHViH9UBXqm5K7Ql3otPl7NT/+EvYsxZHe?=
+ =?iso-8859-2?Q?hzD7Rmup8fppo+xaC+hSMTypZOatNLdQoJtK+Ec1szBZKFg+QtxiIGRPDp?=
+ =?iso-8859-2?Q?dnj2u3BJjX+vKF6dzwreRyAhBmeZya/37Imp0Fmpjkc08Wsmh6AwqLgmky?=
+ =?iso-8859-2?Q?cn8OOEEc9U9Yh6LlRiS8/rAE8+h3sCFvDmLQJUqvpcVlImfxdPkUXTXb7J?=
+ =?iso-8859-2?Q?9q/jTh4TqN5nahMBmoz+QOLlgutV8quIw90dHI7Tzy0Xac01qUZD2w70HM?=
+ =?iso-8859-2?Q?RM3H3y6wma5K1obeiavOZEcgWI23au5pPopnahvifj80XkBaWoP+tLYKgs?=
+ =?iso-8859-2?Q?+c5Hr0P5DScjf+aGMxUFzGu5ap8dw0C6WiAVUM+BMoCFblJlfXp1j4Zab5?=
+ =?iso-8859-2?Q?8+4yDSWZwCrF8=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90a5a60b6f4cc84321370acaa0f2876dcaae7580.1673270769.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7307195c-7296-4050-c4b8-08daf257faf4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 15:41:31.2388
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B9/E4hOU/1teRUPIoMUPUB0VqN8Y3CF2YXbJ09QbLlW8NI1CDisVer5jDoIL2+5n6+1sCbnBpJRRLpnD1xKjFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6907
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 07:32:26PM +0530, Souradeep Chowdhury wrote:
-> Add the QAD, ctitrigger and bootconfig support for dcc driver.
-> The QAD is used for access control of the DCC configurations
-> and can be set or unset by writing to DCC_QAD_OUTPUT register.
-> The Cti-trigger is used for the cross trigger interface, on
-> enabling it the software trigger can be initiated for dcc by
-> setting the cti-trigout.
-> Bootconfig support for DCC is for configuring register values
-> to dcc at boot time, this is needed for debugging crashes that
-> happen at boot time.
-> Add the debugfs files QAD and CTI-trigger for each list folder.
-> Also add hwtrigger debugfs file which needs to be disabled on
-> enabling the cti-trigger.
-> 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>=20
+> From: Xiaowei Bao <xiaowei.bao@nxp.com>
+>=20
+> Add PCIe EP mode support for ls1028a.
+>=20
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 > ---
->  Documentation/ABI/testing/debugfs-driver-dcc |  24 +++
->  drivers/soc/qcom/dcc.c                       | 284 ++++++++++++++++++++++++++-
->  2 files changed, 304 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/debugfs-driver-dcc b/Documentation/ABI/testing/debugfs-driver-dcc
-> index 27ed591..f817a9f 100644
-> --- a/Documentation/ABI/testing/debugfs-driver-dcc
-> +++ b/Documentation/ABI/testing/debugfs-driver-dcc
-> @@ -125,3 +125,27 @@ Description:
->  		on manual or crash induced triggers. Lists must
->  		be configured and enabled sequentially, e.g. list
->  		2 can only be enabled when list 1 have so.
-> +
-> +What:		/sys/kernel/debug/dcc/.../[list-number]/ctitrigger
-> +Date:		January 2023
-> +Contact:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> +Description:
-> +		This debugfs interface is used for enabling the
-> +		ctitrigger. Ctitrigger can be enabled by writing
-> +		a '1' to the file.
-> +
-> +What:		/sys/kernel/debug/dcc/.../[list-number]/QAD
-> +Date:           January 2023
-> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> +Description:
-> +		This debugfs interface is used for enabling the
-> +		ctitrigger. Ctitrigger can be enabled by writing
-> +		a '1' to the file.
-> +
-> +What:           /sys/kernel/debug/dcc/.../[list-number]/hwtrigger
-> +Date:	        January 2023
-> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> +Description:
-> +	        This debugfs interface is used for enabling the
-> +	        hwtrigger support. Hwtrigger can be enabled by
-> +	        writing a '1' to the file.
-> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
-> index 5b50d63..ea44dbf 100644
-> --- a/drivers/soc/qcom/dcc.c
-> +++ b/drivers/soc/qcom/dcc.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bitops.h>
-> +#include <linux/bootconfig.h>
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/fs.h>
-> @@ -36,6 +37,8 @@
->  #define DCC_LL_INT_STATUS		0x1c
->  #define DCC_LL_SW_TRIGGER		0x2c
->  #define DCC_LL_BUS_ACCESS_STATUS	0x30
-> +#define DCC_CTI_TRIG                    0x34
-> +#define DCC_QAD_OUTPUT                  0x38
->  
->  /* Default value used if a bit 6 in the HW_INFO register is set. */
->  #define DCC_FIX_LOOP_OFFSET		16
-> @@ -114,6 +117,9 @@ struct dcc_config_entry {
->   * @nr_link_list:	Total number of linkedlists supported by the DCC configuration
->   * @loop_shift:	Loop offset bits range for the addresses
->   * @enable_bitmap:	Bitmap to capture the enabled status of each linked list of addresses
-> + * @cti_bitmap:		Bitmap to capture the cti-trigger status of each linked list of addresses
-> + * @qad_bitmap:		Bitmap to capture the qad status of each linked list of addresses
-> + * @hwtrig_bitmap:	Bitmap to capture the hwtrig status of each linked list of addresses
->   */
->  struct dcc_drvdata {
->  	void __iomem		*base;
-> @@ -131,6 +137,9 @@ struct dcc_drvdata {
->  	size_t			nr_link_list;
->  	u8			loop_shift;
->  	unsigned long		*enable_bitmap;
-> +	unsigned long		*cti_bitmap;
-> +	unsigned long           *qad_bitmap;
-> +	unsigned long           *hwtrig_bitmap;
->  };
->  
->  struct dcc_cfg_attr {
-> @@ -148,6 +157,18 @@ struct dcc_cfg_loop_attr {
->  	bool	loop_start;
->  };
->  
-> +static char *replace_char(char *str, char find, char replace)
-> +{
-> +	char *current_pos = strchr(str, find);
-> +
-> +	while (current_pos) {
-> +		*current_pos = replace;
-> +		current_pos = strchr(current_pos, find);
-> +	}
-> +
-> +	return str;
-> +}
-> +
->  static inline u32 dcc_list_offset(int version)
->  {
->  	return version == 1 ? 0x1c : version == 2 ? 0x2c : 0x34;
-> @@ -201,6 +222,10 @@ static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
->  			continue;
->  		ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
->  		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-> +		if (drvdata->mem_map_ver != 3)
-> +			tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-> +		else
-> +			tmp_ll_cfg = ll_cfg & ~BIT(8);
->  		dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
->  		dcc_list_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
->  		dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
-> @@ -577,6 +602,25 @@ static int dcc_enable(struct dcc_drvdata *drvdata, unsigned int curr_list)
->  	/* 5. Configure trigger */
->  	dcc_list_writel(drvdata, DCC_TRIGGER_MASK,
->  			curr_list, DCC_LL_CFG);
-> +	if (drvdata->mem_map_ver == 3) {
-> +		dcc_list_writel(drvdata, test_bit(curr_list, drvdata->qad_bitmap), curr_list,
-> +				DCC_QAD_OUTPUT);
-> +		dcc_list_writel(drvdata, test_bit(curr_list, drvdata->cti_bitmap), curr_list,
-> +				DCC_CTI_TRIG);
-> +		if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-> +			dcc_list_writel(drvdata, BIT(8), curr_list, DCC_LL_CFG);
-> +		else
-> +			dcc_list_writel(drvdata, (unsigned int)~BIT(8), curr_list, DCC_LL_CFG);
-> +	} else {
-> +		if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-> +			dcc_list_writel(drvdata, DCC_TRIGGER_MASK |
-> +					test_bit(curr_list, drvdata->cti_bitmap) << 8,
-> +					curr_list, DCC_LL_CFG);
-> +		else
-> +			dcc_list_writel(drvdata, ~DCC_TRIGGER_MASK &
-> +					test_bit(curr_list, drvdata->cti_bitmap) << 8,
-> +					curr_list, DCC_LL_CFG);
-> +	}
->  
->  out_unlock:
->  	mutex_unlock(&drvdata->mutex);
-> @@ -1103,6 +1147,168 @@ static const struct file_operations config_fops = {
->  	.release = single_release,
->  };
->  
-> +static ssize_t ctitrigger_read(struct file *filp, char __user *userbuf,
-> +			       size_t count, loff_t *ppos)
-> +{
-> +	char *buf;
-> +	int curr_list;
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (test_bit(curr_list, drvdata->cti_bitmap))
-> +		buf = "Y\n";
-> +	else
-> +		buf = "N\n";
-> +
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-> +}
-> +
-> +static ssize_t ctitrigger_write(struct file *filp, const char __user *userbuf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	int ret = 0, curr_list;
-> +	bool val;
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	if (test_bit(curr_list, drvdata->enable_bitmap))
-> +		return -EBUSY;
-> +
-> +	ret = kstrtobool_from_user(userbuf, count, &val);
-> +	if (ret < 0)
-> +		return 0;
-> +
-> +	if (val)
-> +		set_bit(curr_list, drvdata->cti_bitmap);
-> +	else
-> +		clear_bit(curr_list, drvdata->cti_bitmap);
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations ctitrigger_fops = {
-> +	.read = ctitrigger_read,
-> +	.write = ctitrigger_write,
-> +	.open = simple_open,
-> +	.llseek = generic_file_llseek,
-> +};
-> +
-> +static ssize_t qad_read(struct file *filp, char __user *userbuf,
-> +			size_t count, loff_t *ppos)
-> +{
-> +	char *buf;
-> +	int curr_list;
-> +
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (test_bit(curr_list, drvdata->qad_bitmap))
-> +		buf = "Y\n";
-> +	else
-> +		buf = "N\n";
-> +
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-> +}
-> +
-> +static ssize_t qad_write(struct file *filp, const char __user *userbuf,
-> +			 size_t count, loff_t *ppos)
-> +{
-> +	int ret = 0, curr_list;
+>=20
+> All other patches were already accepte by maintainer in
+> https://lore.kernel.org/lkml/20211112223457.10599-1-leoyang.li@nxp.com/
+>=20
+> But missed this one.
+>=20
+> Re-post.
+>=20
 
-First use of ret is an assignment, no need to assign it here.
+Ping.
 
-> +	bool val;
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	if (drvdata->mem_map_ver != 3) {
-> +		dev_err(drvdata->dev, "QAD is not supported\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (test_bit(curr_list, drvdata->enable_bitmap))
-> +		return -EBUSY;
-> +
-> +	ret = kstrtobool_from_user(userbuf, count, &val);
-> +	if (ret < 0)
-> +		return 0;
-
-0 isn't a good return value here.
-
-> +
-> +	if (val)
-> +		set_bit(curr_list, drvdata->qad_bitmap);
-> +	else
-> +		clear_bit(curr_list, drvdata->qad_bitmap);
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations qad_fops = {
-> +	.read = qad_read,
-> +	.write = qad_write,
-> +	.open = simple_open,
-> +	.llseek = generic_file_llseek,
-> +};
-> +
-> +static ssize_t hwtrigger_read(struct file *filp, char __user *userbuf,
-> +			      size_t count, loff_t *ppos)
-> +{
-> +	char *buf;
-> +	int curr_list;
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-> +		buf = "Y\n";
-> +	else
-> +		buf = "N\n";
-> +
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-> +}
-> +
-> +static ssize_t hwtrigger_write(struct file *filp, const char __user *userbuf,
-> +			       size_t count, loff_t *ppos)
-> +{
-> +	int ret = 0, curr_list;
-> +	bool val;
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +
-> +	if (test_bit(curr_list, drvdata->enable_bitmap))
-> +		return -EBUSY;
-> +
-> +	ret = kstrtobool_from_user(userbuf, count, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (val)
-> +		set_bit(curr_list, drvdata->hwtrig_bitmap);
-> +	else
-> +		clear_bit(curr_list, drvdata->hwtrig_bitmap);
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations hwtrigger_fops = {
-> +	.read = hwtrigger_read,
-> +	.write = hwtrigger_write,
-> +	.open = simple_open,
-> +	.llseek = generic_file_llseek,
-> +};
-> +
->  static void dcc_delete_debug_dir(struct dcc_drvdata *drvdata)
->  {
->  	 debugfs_remove_recursive(drvdata->dbg_dir);
-> @@ -1126,6 +1332,9 @@ static void dcc_create_debug_dir(struct dcc_drvdata *drvdata)
->  		list = debugfs_create_dir(list_num, drvdata->dbg_dir);
->  		debugfs_create_file("enable", 0600, list, drvdata, &enable_fops);
->  		debugfs_create_file("config", 0600, list, drvdata, &config_fops);
-> +		debugfs_create_file("ctitrigger", 0600, list, drvdata, &ctitrigger_fops);
-> +		debugfs_create_file("QAD", 0600, list, drvdata, &qad_fops);
-> +		debugfs_create_file("hwtrigger", 0600, list, drvdata, &hwtrigger_fops);
->  	}
->  
->  	debugfs_create_file("trigger", 0200, drvdata->dbg_dir, drvdata, &trigger_fops);
-> @@ -1185,13 +1394,60 @@ static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
->  	misc_deregister(&drvdata->sram_dev);
->  }
->  
-> -static int dcc_probe(struct platform_device *pdev)
-> +static int __init dcc_bootconfig_parse(struct dcc_drvdata *drvdata, struct  xbc_node  *dcc_node)
-> +{
-> +	struct xbc_node *linked_list, *node;
-> +	int curr_list, ret;
-> +	const char *p;
-> +	char *input, *token;
-> +	char val[30];
-> +
-> +	xbc_node_for_each_subkey(dcc_node, linked_list) {
-> +		p = xbc_node_find_value(linked_list, "qcom-curr-link-list", &node);
-> +		if (p) {
-
-So if I specify 
-
-dcc-config {
-	list1 {
-		qcom-curr-link-list = 1
-	}
-	list2 {
-
-	}
-}
-
-Then list2 should have &curr_list of 1 as well?
-
-Or did you miss the error handling here?
-
-
-PS. I think you can skip the "qcom-" prefix. Frankly, you know that
-you're in a subnode of dcc_config; use "id" and "items" ("list"?).
-
-> +			ret = kstrtoint(p, 0, &curr_list);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +
-> +		p = xbc_node_find_value(linked_list, "qcom-link-list", &node);
-> +		if (!p)
-> +			continue;
-> +
-> +		xbc_array_for_each_value(node, p) {
-> +			snprintf(val, sizeof(val), "%s", p);
-
-strscpy() would be less costly.
-
-> +			input = replace_char(val, '_', ' ');
-> +			token = strsep(&input, " ");
-> +
-> +			if (!strcmp("R", token)) {
-> +				ret = dcc_config_add_read(drvdata, input, curr_list);
-> +			} else if (!strcmp("W", token)) {
-> +				ret = dcc_config_add_write(drvdata, input, curr_list);
-> +			} else if (!strcmp("RW", token)) {
-> +				ret = dcc_config_add_read_write(drvdata, input, curr_list);
-> +			} else if (!strcmp("L", token)) {
-> +				ret = dcc_config_add_loop(drvdata, input, curr_list);
-> +			} else {
-> +				dev_err(drvdata->dev, "%s is not a correct input\n", token);
-> +				return -EINVAL;
-> +			}
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		dcc_enable(drvdata, curr_list);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init dcc_probe(struct platform_device *pdev)
->  {
->  	u32 val;
->  	int ret = 0, i;
->  	struct device *dev = &pdev->dev;
->  	struct dcc_drvdata *drvdata;
->  	struct resource *res;
-> +	struct xbc_node *dcc_node;
->  
->  	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
->  	if (!drvdata)
-> @@ -1247,13 +1503,30 @@ static int dcc_probe(struct platform_device *pdev)
->  	if (!drvdata->enable_bitmap)
->  		return -ENOMEM;
->  
-> +	drvdata->cti_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-> +					   sizeof(*drvdata->cti_bitmap), GFP_KERNEL);
-
-How about devm_bitmap_alloc()?
-
-> +	if (!drvdata->cti_bitmap)
-> +		return -ENOMEM;
-> +
-> +	drvdata->qad_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-> +					   sizeof(*drvdata->qad_bitmap), GFP_KERNEL);
-> +	if (!drvdata->qad_bitmap)
-> +		return -ENOMEM;
-> +
-> +	drvdata->hwtrig_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-> +					      sizeof(*drvdata->hwtrig_bitmap), GFP_KERNEL);
-> +	if (!drvdata->hwtrig_bitmap)
-> +		return -ENOMEM;
-> +
->  	drvdata->cfg_head = devm_kcalloc(dev, drvdata->nr_link_list,
->  					 sizeof(*drvdata->cfg_head), GFP_KERNEL);
->  	if (!drvdata->cfg_head)
->  		return -ENOMEM;
->  
-> -	for (i = 0; i < drvdata->nr_link_list; i++)
-> +	for (i = 0; i < drvdata->nr_link_list; i++) {
->  		INIT_LIST_HEAD(&drvdata->cfg_head[i]);
-> +		set_bit(i, drvdata->hwtrig_bitmap);
-> +	}
->  
->  	ret = dcc_sram_dev_init(drvdata);
->  	if (ret) {
-> @@ -1263,6 +1536,10 @@ static int dcc_probe(struct platform_device *pdev)
->  
->  	dcc_create_debug_dir(drvdata);
->  
-> +	dcc_node = xbc_find_node("dcc_config");
-> +	if (dcc_node)
-> +		return dcc_bootconfig_parse(drvdata, dcc_node);
-
-Wouldn't it make sense to still probe dcc, even if the configuration is
-rejected?
-
-> +
->  	return 0;
->  }
->  
-> @@ -1287,14 +1564,13 @@ static const struct of_device_id dcc_match_table[] = {
->  MODULE_DEVICE_TABLE(of, dcc_match_table);
->  
->  static struct platform_driver dcc_driver = {
-> -	.probe = dcc_probe,
->  	.remove	= dcc_remove,
->  	.driver	= {
->  		.name = "qcom-dcc",
->  		.of_match_table	= dcc_match_table,
->  	},
->  };
-> -module_platform_driver(dcc_driver);
-> +module_platform_driver_probe(dcc_driver, dcc_probe);
-
-This change is unrelated to the others, and I don't see it mentioned
-in your commit message.
-
-Regards,
-Bjorn
-
->  
->  MODULE_LICENSE("GPL");
->  MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
-> -- 
-> 2.7.4
-> 
