@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CD1662158
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7C066215E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234050AbjAIJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S236511AbjAIJYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236719AbjAIJV0 (ORCPT
+        with ESMTP id S236729AbjAIJYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:21:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410E9B;
-        Mon,  9 Jan 2023 01:19:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7CF04CE0B56;
-        Mon,  9 Jan 2023 09:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE62C433D2;
-        Mon,  9 Jan 2023 09:19:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673255969;
-        bh=uKoGDZevx+gVbLfmMYY5TwRvq3hzb+5W3E7t3luGh1A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cu0bjgAitfPvflSUJnHrp6QmYi0GE/Ivp/cLcHFBiYYCZKJzzmqa30YoiR8gOknta
-         jrmVw1Ts/hSx96TAliBUqVSE1XnU5rYiYhfXDeUlK56Qt/0utykZPeB/gXztTW1fPt
-         6Z/NzC6gGjKYvl0WnZ3M8sK/PcENnLcYRmHhz2nI4+Ta/xxybuob9quCnkbi+05I45
-         br3CJQkTOPj7oVTTD2c3vdS8EaLKA04i3X+SQdJyNd9HizbYP+lFR5j6S/GFxNgkzv
-         RRY2rJXNc3TgNWGPjrjbEelogtX5u/XFGOBvIFLrWibkYgZe46j23F6kP51feUQfg6
-         w22Gm8VsjsuKQ==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH] tomoyo: remove a temporary output file
-Date:   Mon,  9 Jan 2023 18:19:18 +0900
-Message-Id: <20230109091919.3160916-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 9 Jan 2023 04:24:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FD8E75
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673256163; x=1704792163;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ztTKJLAYLdsnjwu13/hosydJOMVcTGPsqlQq4Xtfc3o=;
+  b=EBGE/eh8G2yLwaaYEHPuqosGRb1aF8SfTT+JfbetSoIWFhSrCDAam8YK
+   /NigVNSNWT+YiZcy5I8TUoMZTgv+L/cZiPT7+9IcYNeGzHuUmZRxUeYgL
+   tCan48vn2W7knoIop2y5W1+N4WATPgJsHRWsI4H6k6Y3gqhFx7EsbbmBS
+   2QtBtv2khGZTuil39mlKKnw4/uDk4qRE+WwcyKMEh4F6GVb6EoKQ+TeIs
+   eWI9qQYQpdN+adPwGv+JHVQeFkNnSQnDIywTHMRJwJvBc+lEG7aQoDn16
+   3o+Wl1GUtJ11Hmm6hXmsS0yuFUOVhnlLADskupITnoUzVMQ2tB9lq+XQn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="322906463"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="322906463"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 01:22:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10584"; a="985337425"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="985337425"
+Received: from gtmcgeac-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.11.217])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 01:22:39 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Melissa Wen <mwen@igalia.com>,
+        =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>
+Subject: Re: [PATCH 1/2] drm/debugfs: use octal permissions instead of
+ symbolic permissions
+In-Reply-To: <20230105193039.287677-1-mcanal@igalia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230105193039.287677-1-mcanal@igalia.com>
+Date:   Mon, 09 Jan 2023 11:22:37 +0200
+Message-ID: <877cxw2hb6.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8ab5bc40aad4 ("tomoyo: Omit use of bin2c") was locally modified
-on top of the patch I submitted.
+On Thu, 05 Jan 2023, Ma=C3=ADra Canal <mcanal@igalia.com> wrote:
+> Currently, debugfs functions are using symbolic macros as permission
+> bits, but checkpatch reinforces permission bits in the octal form, as
+> they are more readable and easier to understand [1].
+>
+> Therefore, use octal permission bits in all debugfs functions.
+>
+> [1] https://docs.kernel.org/dev-tools/checkpatch.html#permissions
+>
+> Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+> Signed-off-by: Ma=C3=ADra Canal <mcanal@igalia.com>
 
-I recommend writing to the target directly.
+The commit message should also mention S_IFREG is redundant. Can be
+fixed while applying.
 
-If the recipe command fails, Kbuild will automatically delete the target
-because scripts/Kbuild.include defines .DELETE_ON_ERROR.
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
-If the recipe command is interrupted, GNU Make will automatically
-delete the target if it has been partially updated. There was a corner
-case where the target was not cleaned up, but it was fixed by Commit
-a7f3257da8a8 ("kbuild: remove the target in signal traps when
-interrupted").
+> ---
+>  drivers/gpu/drm/drm_debugfs.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_debugfs.c b/drivers/gpu/drm/drm_debugfs.c
+> index 5ea237839439..4f643a490dc3 100644
+> --- a/drivers/gpu/drm/drm_debugfs.c
+> +++ b/drivers/gpu/drm/drm_debugfs.c
+> @@ -207,7 +207,7 @@ void drm_debugfs_create_files(const struct drm_info_l=
+ist *files, int count,
+>=20=20
+>  		tmp->minor =3D minor;
+>  		tmp->dent =3D debugfs_create_file(files[i].name,
+> -						S_IFREG | S_IRUGO, root, tmp,
+> +						0444, root, tmp,
+>  						&drm_debugfs_fops);
+>  		tmp->info_ent =3D &files[i];
+>=20=20
+> @@ -246,7 +246,7 @@ int drm_debugfs_init(struct drm_minor *minor, int min=
+or_id,
+>  		dev->driver->debugfs_init(minor);
+>=20=20
+>  	list_for_each_entry_safe(entry, tmp, &dev->debugfs_list, list) {
+> -		debugfs_create_file(entry->file.name, S_IFREG | S_IRUGO,
+> +		debugfs_create_file(entry->file.name, 0444,
+>  				    minor->debugfs_root, entry, &drm_debugfs_entry_fops);
+>  		list_del(&entry->list);
+>  	}
+> @@ -263,7 +263,7 @@ void drm_debugfs_late_register(struct drm_device *dev)
+>  		return;
+>=20=20
+>  	list_for_each_entry_safe(entry, tmp, &dev->debugfs_list, list) {
+> -		debugfs_create_file(entry->file.name, S_IFREG | S_IRUGO,
+> +		debugfs_create_file(entry->file.name, 0444,
+>  				    minor->debugfs_root, entry, &drm_debugfs_entry_fops);
+>  		list_del(&entry->list);
+>  	}
+> @@ -508,15 +508,15 @@ void drm_debugfs_connector_add(struct drm_connector=
+ *connector)
+>  	connector->debugfs_entry =3D root;
+>=20=20
+>  	/* force */
+> -	debugfs_create_file("force", S_IRUGO | S_IWUSR, root, connector,
+> +	debugfs_create_file("force", 0644, root, connector,
+>  			    &drm_connector_fops);
+>=20=20
+>  	/* edid */
+> -	debugfs_create_file("edid_override", S_IRUGO | S_IWUSR, root, connector,
+> +	debugfs_create_file("edid_override", 0644, root, connector,
+>  			    &drm_edid_fops);
+>=20=20
+>  	/* vrr range */
+> -	debugfs_create_file("vrr_range", S_IRUGO, root, connector,
+> +	debugfs_create_file("vrr_range", 0444, root, connector,
+>  			    &vrr_range_fops);
+>=20=20
+>  	/* max bpc */
 
-Since this is a general problem, you can leave it to Kbuild instead
-of introducing unneeded complexity.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-If it is not too late, please squash this.
-
- security/tomoyo/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/security/tomoyo/Makefile b/security/tomoyo/Makefile
-index 458cf5e2fa25..884ff155edc3 100644
---- a/security/tomoyo/Makefile
-+++ b/security/tomoyo/Makefile
-@@ -9,7 +9,7 @@ quiet_cmd_policy = POLICY  $@
- 	printf 'static char tomoyo_builtin_$x[] __initdata =\n'; \
- 	sed -e 's/\\/\\\\/g' -e 's/\"/\\"/g' -e 's/\(.*\)/\t"\1\\n"/' -- $(firstword $(filter %/$x.conf %/$x.conf.default, $^) /dev/null);  \
- 	printf '\t"";\n';) \
--	} > $@.tmp && mv $@.tmp $@
-+	} > $@
- 
- $(obj)/builtin-policy.h: $(wildcard $(obj)/policy/*.conf $(srctree)/$(src)/policy/*.conf.default) FORCE
- 	$(call if_changed,policy)
--- 
-2.34.1
-
+--=20
+Jani Nikula, Intel Open Source Graphics Center
