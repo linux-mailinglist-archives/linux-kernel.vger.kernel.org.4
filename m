@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DBC6625AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FBE6625AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbjAIMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S233562AbjAIMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237277AbjAIMcd (ORCPT
+        with ESMTP id S237286AbjAIMcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:32:33 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757E61CB30;
-        Mon,  9 Jan 2023 04:32:12 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NrCwF6rcqzJrM7;
-        Mon,  9 Jan 2023 20:30:53 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 9 Jan 2023 20:32:09 +0800
-Subject: Re: [BUG Report] undefined reference to `convert_to_fxsr'
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        linux-toolchains ML <linux-toolchains@vger.kernel.org>,
-        Michael Matz <matz@suse.de>
-References: <Y6w49Y1d3lpv3KFn@zn.tnic>
- <23e2907c-5188-5ac6-3db8-1c5a12120bf2@huawei.com> <Y62vbjBzHF4rmh1V@zn.tnic>
- <e041533c-4005-b9bc-3985-02224985aa28@huawei.com> <Y67IlthBqaX69RwN@zn.tnic>
- <64fe1be4-954f-fe6f-44f0-59b572548663@huawei.com> <Y7dZwWsiUfHKxN3S@zn.tnic>
- <d312c572-f232-a4e9-2ecc-023050528a29@huawei.com> <Y7lSZerjPghqllWp@zn.tnic>
- <08115444-73a3-b9b0-dbeb-2a0cf374290e@huawei.com> <Y7v/ZVTeQCw7Hv8g@zn.tnic>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <88dbc59d-1a33-26be-7fd3-0fcdfef33b3a@huawei.com>
-Date:   Mon, 9 Jan 2023 20:32:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 9 Jan 2023 07:32:35 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C5F1789F;
+        Mon,  9 Jan 2023 04:32:25 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id bj3so5356551pjb.0;
+        Mon, 09 Jan 2023 04:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8kJNw0tI78VKEk8giaqn7hQZMx/hePZ8gBUzDu+yW+0=;
+        b=gqahu2rsRXtJQvHmv5itTvGs02lPf2ptjB3OzBJPgELA5plaTOYe9KWSVgZdSua0AS
+         XGw4pLklWleE0p27WzfgT3lUOgeufyyudSWcJT+L0IjQKyFgPGzdMDTcXOL4yGDgmtGx
+         /AQkK6C/Ej2hyN0DlNu/0zno80Ka5alkCRPuqcURvsPQ0KcaLR8UBs7xdOMiv8EzzykH
+         m+0flcQ1r/Qg60MAFS2sMuAScxyYRmuJUyCq4jtzJvwz7vcD3bA8oEToWrDaNth+p2E3
+         TAH49xrqFdcAVMDqmAgGI+D9XBQRyS0uOyCoyOJF/4oPQHIOHIbjQZ6qsxx7KCJ+/RBB
+         gKdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8kJNw0tI78VKEk8giaqn7hQZMx/hePZ8gBUzDu+yW+0=;
+        b=LCizTIpLrFKMOcfGdCGrDYAK03qGxhvXqP9ZsT1PmViK9433RYP2e5aqRRM5UY2UFb
+         DEqeVfBHtW53GTsXCYAr66Za4t32YKfjXAZNWYFa16GrCz6i6apNXAP3EyN7SvEm6sQz
+         XKZmDH3kWzHcbVy+U88rkh5HRx0I8zCBhIyOzyZSlsHO4H66hpETiU6UggI6+9Vd5HBS
+         NvNYKGJclaxWMLIzZEMSp6DyODcWQlJXU/LVsaZQH3ZsOKW9SFiEizv3HgFIQ4SKZveu
+         h4KjuWls5FLYPVuxh3JJ6NpjpVpBKVZADkFEOeecwcUlp8iO3Jq9eWk5M0ezOj7hVLil
+         YyKA==
+X-Gm-Message-State: AFqh2krx3xzRZInq7E8rlJq2tBMOTIVtPhssS2+7vUHDpCHsZPcAxg6w
+        LMdSS0EV15kFm3jvyuYdRqI=
+X-Google-Smtp-Source: AMrXdXsafOOb6uEDFeKl5sAy36Uu+Bx7S6fwTB4V2LmFOxMLO6f1fLjebOC9ZYWuprEQhKctEtglNQ==
+X-Received: by 2002:a05:6a20:3945:b0:b3:5196:9505 with SMTP id r5-20020a056a20394500b000b351969505mr67929557pzg.30.1673267545270;
+        Mon, 09 Jan 2023 04:32:25 -0800 (PST)
+Received: from mi-OptiPlex-7080.mioffice.cn ([2408:8607:1b00:8:b27b:25ff:fe2c:5c4])
+        by smtp.gmail.com with ESMTPSA id h9-20020a63f909000000b00439c6a4e1ccsm4992733pgi.62.2023.01.09.04.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 04:32:24 -0800 (PST)
+From:   Qi Feng <fengqi706@gmail.com>
+To:     jikos@kernel.org
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fengqi <fengqi@xiaomi.com>
+Subject: [PATCH] HID: add KEY_CAMERA_FOCUS event in HID
+Date:   Mon,  9 Jan 2023 20:32:16 +0800
+Message-Id: <20230109123216.4974-1-fengqi706@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-In-Reply-To: <Y7v/ZVTeQCw7Hv8g@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,19 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/9 19:49, Borislav Petkov wrote:
-> On Mon, Jan 09, 2023 at 09:48:50AM +0800, Miaohe Lin wrote:
->> Oh, sorry, I miss-read that. My compiler is gcc-7.3.0 which contains many
->> in-house codes from our company in it. That might matters. Thanks a lot for
->> your guidance. :)
-> 
-> Yah, next time, before you report something like that, try to reproduce it with
-> an official compiler (gcc from the upstream repo, SUSE, Debian, RH-built etc).
-> 
-> If it doesn't reproduce, go complain to the folks who hack your in-house
-> compiler.
+From: fengqi <fengqi@xiaomi.com>
 
-Sorry, my bad! I thought my compiler is just as same as upstream one... Many thanks for your time.
+Our HID device need KEY_CAMERA_FOCUS event to control camera, but this
+event is non-existent in current HID driver.
+So we add this event in hid-input.c
 
-Thanks,
-Miaohe Lin
+Signed-off-by: fengqi <fengqi@xiaomi.com>
+---
+ drivers/hid/hid-input.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 9b59e436df0a..22cca3406b5c 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1105,6 +1105,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 		case 0x0e5: map_key_clear(KEY_BASSBOOST);	break;
+ 		case 0x0e9: map_key_clear(KEY_VOLUMEUP);	break;
+ 		case 0x0ea: map_key_clear(KEY_VOLUMEDOWN);	break;
++		case 0x0ee: map_key_clear(KEY_CAMERA_FOCUS);	break;
+ 		case 0x0f5: map_key_clear(KEY_SLOW);		break;
+ 
+ 		case 0x181: map_key_clear(KEY_BUTTONCONFIG);	break;
+-- 
+2.39.0
+
