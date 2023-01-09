@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBBC662AFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10E9662B08
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbjAIQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S229496AbjAIQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbjAIQQv (ORCPT
+        with ESMTP id S229643AbjAIQUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:16:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847A062F8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:16:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21449611BE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12184C433F1;
-        Mon,  9 Jan 2023 16:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673281009;
-        bh=gfjzt/DnF9JCvu8ufzPU2ZxmvixSmjjSU/gNSsjFWEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V88ClifFKaGQJE/tkgPL9sOuWJq7wM0ylZS3l3ybzyNdtm4NfkW8jwDdGDwxzWGcK
-         hMLo6bdOt5emTRJxjvQ4nZD2ICBEys2A+0/T6+0vAL7E5rZXNzUxVLahb8NEAZhzHn
-         XG89infn9dhpMxnJxMCibE3bFRchbex5U2Sln5zQNYHKpmcCk8RT2ZZwF0NwCCfbGX
-         0mK7RdnmvDh0jQgJZk2M6Cz+TIts3+2cY6OYuK1sws9H9tfBqItsOeVhcvTsfnt20f
-         DmSZbUjbJLq69nYj2iTUqkUe5BSnlLRub8vY+o0zDi3Fo3PeeefkGWKSWRpAcGfMCl
-         CLyAzkdXNwoQg==
-Date:   Mon, 9 Jan 2023 21:46:45 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v4 0/4] Minor SoundWire clean ups
-Message-ID: <Y7w97fs92SL8Sg5U@matsya>
-References: <20221125142028.1118618-1-ckeepax@opensource.cirrus.com>
+        Mon, 9 Jan 2023 11:20:13 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F61192B9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:20:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j+Gen2eU0jf9G0iqx+BIbLnHGKCdcFm/8cL1m3LwQjY=; b=j59SI0kNy2I8DmsJs6em3tvKcX
+        IpwD5QTuYugoFRnG4sd6ob+yPyBeJ07//2wTRA8PTlktw8DTcoPAn2MZZtTB2qBaaRDZkrCy1eZ/4
+        WrhqyrSecJdAZLLysNtj+834ibt9mX0hJFZB23+hh/KRsZ6Ad8U8vaI0DiySGrSRgsgWPdiI6Oucw
+        EoJz+qLRl37m5UVXZqMEiUQruF2HDZeHojZaOcGRvuRQgJFPK+KxgFNyHq2QhYDqjPuaEC/Y186M5
+        nNxOkp/yp70xZ7lTWP7dMm0y0Tc+OiE9hnpY4ZNKaNRS+/0ZmNJ2PnwSBHJaiIfl8i79beyfHr5vD
+        EGGY44Zw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pEusL-002mH6-34;
+        Mon, 09 Jan 2023 16:19:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5DE00300293;
+        Mon,  9 Jan 2023 17:19:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 31BE620086EAB; Mon,  9 Jan 2023 17:19:59 +0100 (CET)
+Date:   Mon, 9 Jan 2023 17:19:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: Re: [PATCH x86/nmi 1/2] x86/nmi: Accumulate NMI-progress evidence in
+ exc_nmi()
+Message-ID: <Y7w+r3Nbubin8sNN@hirez.programming.kicks-ass.net>
+References: <20230105011537.1774941-1-paulmck@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221125142028.1118618-1-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105011537.1774941-1-paulmck@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-11-22, 14:20, Charles Keepax wrote:
-> Just some minor tidy ups and preparation for starting to upstream some
-> Cirrus SoundWire devices. The first three patches are pretty trivial,
-> the last patch which moves the remaining core over to using the no_pm
-> functions could probably use some careful review.
+On Wed, Jan 04, 2023 at 05:15:36PM -0800, Paul E. McKenney wrote:
 
-Applied, thanks
+> diff --git a/arch/x86/kernel/nmi.c b/arch/x86/kernel/nmi.c
+> index cec0bfa3bc04f..4f1651dc65b3a 100644
+> --- a/arch/x86/kernel/nmi.c
+> +++ b/arch/x86/kernel/nmi.c
+> @@ -69,6 +69,15 @@ struct nmi_stats {
+>  	unsigned int unknown;
+>  	unsigned int external;
+>  	unsigned int swallow;
+> +	unsigned long recv_jiffies;
+> +	unsigned long idt_seq;
+> +	unsigned long idt_nmi_seq;
+> +	unsigned long idt_ignored;
+> +	atomic_long_t idt_calls;
+> +	unsigned long idt_seq_snap;
+> +	unsigned long idt_nmi_seq_snap;
+> +	unsigned long idt_ignored_snap;
+> +	long idt_calls_snap;
+>  };
 
-> 
-> Changes since v3:
->  - Return an error and add a WARN_ONCE if the build stubs are used.
-> 
-> Changes since v2:
->  - Fix up a memory leak of a buffer on the error path
->  - Added some reviewed by's
-> 
-> Thanks,
-> Charles
-> 
-> *** BLURB HERE ***
+Urgh, this is more than a whole cacheline of extra data :/ Can't we make
+this #ifdef CONFIG_NMI_CHECK_CPU ?
 
-oops :)
+> @@ -509,8 +526,15 @@ DEFINE_IDTENTRY_RAW(exc_nmi)
+>  
+>  	inc_irq_stat(__nmi_count);
+>  
+> -	if (!ignore_nmis)
+> +	if (IS_ENABLED(CONFIG_NMI_CHECK_CPU) && ignore_nmis) {
+> +		WRITE_ONCE(nsp->idt_ignored, nsp->idt_ignored + 1);
+> +	} else if (!ignore_nmis) {
+> +		WRITE_ONCE(nsp->idt_nmi_seq, nsp->idt_nmi_seq + 1);
+> +		WARN_ON_ONCE(!(nsp->idt_nmi_seq & 0x1));
+>  		default_do_nmi(regs);
+> +		WRITE_ONCE(nsp->idt_nmi_seq, nsp->idt_nmi_seq + 1);
+> +		WARN_ON_ONCE(nsp->idt_nmi_seq & 0x1);
+> +	}
+>  
+>  	irqentry_nmi_exit(regs, irq_state);
 
- 
-> 
-> Charles Keepax (3):
->   soundwire: Provide build stubs for common functions
->   soundwire: debugfs: Switch to sdw_read_no_pm
->   soundwire: stream: Move remaining register accesses over to no_pm
-> 
-> Simon Trimmer (1):
->   soundwire: bus: export sdw_nwrite_no_pm and sdw_nread_no_pm functions
-> 
->  drivers/soundwire/bus.c       |  10 ++--
->  drivers/soundwire/debugfs.c   |  13 ++++-
->  drivers/soundwire/stream.c    |  30 +++++-----
->  include/linux/soundwire/sdw.h | 107 ++++++++++++++++++++++++++++++----
->  4 files changed, 129 insertions(+), 31 deletions(-)
-> 
-> -- 
-> 2.30.2
-
--- 
-~Vinod
+That is not a NO-OP when !CONFIG_NMI_CHECK_CPU :/
