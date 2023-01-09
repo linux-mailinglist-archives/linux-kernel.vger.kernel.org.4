@@ -2,151 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FC86635E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0156635EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237024AbjAIX4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S235639AbjAIX4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237717AbjAIXz7 (ORCPT
+        with ESMTP id S231358AbjAIX4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:55:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E912FF69;
-        Mon,  9 Jan 2023 15:55:56 -0800 (PST)
+        Mon, 9 Jan 2023 18:56:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788F63BF;
+        Mon,  9 Jan 2023 15:56:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACB9DB80AD5;
-        Mon,  9 Jan 2023 23:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131C5C433EF;
-        Mon,  9 Jan 2023 23:55:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE6DBB810B6;
+        Mon,  9 Jan 2023 23:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31414C433F0;
+        Mon,  9 Jan 2023 23:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673308554;
-        bh=d2PcXOaVy6FyBVtZaPfSiTqbNPTuX2NFJs+b75ZfvvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M8v+snmwHqkXwWhs4EjMyIdbPC2VwXf1vMsdqyLNFlJY+RW3mnrsdWGh1P49N2vLb
-         3Tb7HV0BYe+ZG2a1OAWIFTgaulHhMRObmDzlPgqXSLSSP5bZ5LJNYOG2HDV792VfTi
-         f9k6JxF9/NOZvg5S7mgBlsXdmjXHBPs4qQuNbjdYn3AiXUZtlVNCxZRygcFz4EOUFx
-         +S8HGXW4EDGE78oaSjKujQ1hESOgQfUb/4TA3YKsN2AClbom7XLz07zBLOI+0igbG4
-         /mq9AFnGAWwLs2ZhLiK5q6JS+USjmWo3g13W6g2tnvZBzAFUZVtdIeizelVHK6R9NU
-         eg5jYk2eqkjDA==
-Date:   Tue, 10 Jan 2023 00:55:51 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Zqiang <qiang1.zhang@intel.com>, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
-Message-ID: <Y7yph3aMNbxGa7o5@lothringen>
-References: <0BF2065B-1E02-498C-B999-EB52F005B62E@joelfernandes.org>
- <D445A93C-8315-4407-A8E4-C377BF63058A@joelfernandes.org>
- <Y7tNPF4x+HYJUwjK@lothringen>
- <20230109193226.GX4028633@paulmck-ThinkPad-P17-Gen-1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230109193226.GX4028633@paulmck-ThinkPad-P17-Gen-1>
+        s=k20201202; t=1673308601;
+        bh=kGARkBvg/xZwK6CWO/t5enuGZ6gCSiDIREKt17POl5E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gxa59t26s3y4iWedgV4KymKF8cdE5/UHHJSgpvmQJs7o7RIpfxahlrtLPXveCOj0x
+         /FKdziCBpOgKUNYi4/4Sy+9wDYnzO5ORH9zzgXz70Yg/WfqsPzBebtB5/GIaUx5wlH
+         rfkQ2WXIZLYv1jlmYvtAbSorXGjgXxEeGFG1KDbq6mHfHCZThXzNgiuJzpOEG4Y4II
+         GNFdLOTdFsLCCKx8FhEwhdcArFpjKQCOJlpxAXEOJe5M2FauXL25ZILcDtaF4aX1EI
+         c27LmrUzd3cBtpLzj4MoWRHGwSc9nahdrDvBhNV+OM47I1POqDGgzxtjc1G5l8Jong
+         Zp9GLxcQ8pe9Q==
+Date:   Tue, 10 Jan 2023 08:56:36 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-Id: <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
+In-Reply-To: <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+        <20230108150425.426f2861e9db1152fa84508f@kernel.org>
+        <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 11:32:26AM -0800, Paul E. McKenney wrote:
-> On Mon, Jan 09, 2023 at 12:09:48AM +0100, Frederic Weisbecker wrote:
-> > On Sat, Jan 07, 2023 at 09:55:22PM -0500, Joel Fernandes wrote:
+On Sun, 8 Jan 2023 20:25:01 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+> On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
+> > On Sat, 7 Jan 2023 08:22:02 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > On Wed, 4 Jan 2023 16:58:38 -0800
+> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > 
+> > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
+> > > > > containing kernel boot parameters to be embedded into an initrd or into
+> > > > > the kernel itself.  This can be extremely useful when deploying kernels
+> > > > > in cases where some of the boot parameters depend on the kernel version
+> > > > > rather than on the server hardware, firmware, or workload.
+> > > > > 
+> > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
+> > > > > order to cause the kernel to look for the embedded bootconfig file,
+> > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
+> > > > > into that file.
+> > > > > 
+> > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
+> > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
+> > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
+> > > > > for the embedded bootconfig file even when the "bootconfig" kernel
+> > > > > parameter is omitted.  This permits kernel-version-dependent kernel
+> > > > > boot parameters to be embedded into the kernel image without the need to
+> > > > > (for example) update large numbers of boot loaders.
+> > > > 
+> > > > I like this because this is a simple solution. We have another option
+> > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
+> > > > bootloader. Thus, it is better to have this option so that user can
+> > > > always enable bootconfig.
 > > > 
+> > > Glad you like it!
 > > > 
-> > > > On Jan 7, 2023, at 9:48 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > > 
-> > > > ﻿
-> > > >>> On Jan 7, 2023, at 5:11 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
-> > > >>> 
-> > > >>> ﻿On Fri, Jan 06, 2023 at 07:01:28PM -0500, Joel Fernandes wrote:
-> > > >>> (lost html content)
-> > > > 
-> > > > My problem is the iPhone wises up when I put a web link in an email. I want to look into smtp relays but then if I spent time on fixing that, I might not get time to learn from emails like these... 
-> > > > 
-> > > >> I can't find a place where the exp grace period sends an IPI to
-> > > >> CPUs slow to report a QS. But anyway you really need the tick to poll
-> > > >> periodically on the CPU to chase a quiescent state.
-> > > > 
-> > > > Ok.
-> > > > 
-> > > >> Now arguably it's probably only useful when CONFIG_PREEMPT_COUNT=y
-> > > >> and rcu_exp_handler() has interrupted a preempt-disabled or bh-disabled
-> > > >> section. Although rcu_exp_handler() sets TIF_RESCHED, which is handled
-> > > >> by preempt_enable() and local_bh_enable() when CONFIG_PREEMPT=y.
-> > > >> So probably it's only useful when CONFIG_PREEMPT_COUNT=y and CONFIG_PREEMPT=n
-> > > >> (and there is also PREEMPT_DYNAMIC to consider).
-> > > > 
-> > > > Makes sense. I think I was missing this use case and was going by the general design of exp grace periods.  I was incorrectly assuming the IPIs were being sent repeatedly for hold out CPUs, which is not the case I think. But that would another way to fix it?
-> > > > 
-> > > > But yeah I get your point, the first set of IPIs missed it, so we need the rescue-tick for long non-rcu_read_lock() implicit critical sections.. 
-> > > > 
-> > > >> If CONFIG_PREEMPT_COUNT=n, the tick can only report idle and user
-> > > >> as QS, but those are already reported explicitly on ct_kernel_exit() ->
-> > > >> rcu_preempt_deferred_qs().
-> > > > 
-> > > > Oh hmm, because that function is a NOOP for PREEMPT_COUNT=y and PREEMPT=n and will not report the deferred QS?  Maybe it should then. However I think the tick is still useful if after the preempt disabled section, will still did not exit the kernel.
-> > > 
-> > > I think meant I here, an atomic section (like bh or Irq disabled). There is no such thing as disabling preemption for CONFIG_PREEMPT=n. Or maybe I am confused again.  This RCU thing…
+> > > In addition, if the help text is accurate, another shortcoming of
+> > > CONFIG_CMDLINE is that its semantics vary from one architecture to
+> > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
+> > > parameters, and others differ in the order in which the parameters
+> > > are processed.
 > > 
-> > Right, so when CONFIG_PREEMPT_COUNT=n, there is no way for a tick to tell if the
-> > the interrupted code is safely considered as a QS. That's because
-> > preempt_disable() <-> preempt_enable() are no-ops so the whole kernel is
-> > assumed non-preemptible, and therefore the whole kernel is a READ side critical
-> > section, except for the explicit points reporting a QS.
-> > 
-> > The only exception is when the tick interrupts idle (or user with
-> > nohz_full). But we already have an exp QS reported on idle (and user with
-> > nohz_full) entry through ct_kernel_exit(), and that happens on all RCU_TREE
-> > configs (PREEMPT or not). Therefore the tick doesn't appear to be helpful at
-> > all on a nohz_full CPU with CONFIG_PREEMPT_COUNT=n.
-> > 
-> > I suggest we don't bother optimizing that case though...
-> > 
-> > To summarize:
-> > 
-> > 1) nohz_full && !CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
-> >   Tick isn't helpful. It can only report idle/user QS, but that is
-> >   already reported explicitly.
-> > 
-> > 2) nohz_full && CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
-> >   Tick is very helpful because it can tell if the kernel is in
-> >   a QS state.
-> > 
-> > 3) nohz_full && CONFIG_PREEMPT_RCU:
-> >    Tick doesn't appear to be helpful because:
-> >        - If the rcu_exp_handler() fires in an rcu_read_lock'ed section, then the
-> >          exp QS is reported on rcu_read_unlock()
-> >        - If the rcu_exp_handler() fires in a preempt/bh disabled section,
-> >          TIF_RESCHED is forced which is handled on preempt/bh re-enablement,
-> > 	 reporting a QS.
-> >    
-> >   
-> > The case 2) is a niche, only useful for debugging. But anyway I'm not sure it's
-> > worth changing/optimizing the current state. Might be worth add a comment
-> > though.
+> > Yes, that differences confuse us...
 > 
-> Thank you both for the analysis!  I would welcome a comment.
+> I am glad that it is not just me.  ;-)
+> 
+> I will add words to that effect to the commit log.
+> 
+> > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > Thank you!
+> > > 
+> > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > (or at least recommend to enable this)
+> > > 
+> > > Like this?
+> > 
+> > Yes! Thanks.
+> > 
+> > > 
+> > > 							Thanx, Paul
+> > > 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > 
+> > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > >     
+> > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > >     will normally be to unconditionally provide the specified kernel-boot
+> > >     arguments to the kernel, as opposed to requiring a separately provided
+> > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > >     
+> > >     The old semantics may be obtained by manually overriding this default.
+> > >     
+> > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Applied, thank you!
+> 
+> 							Thanx, Paul
 
-I'm preparing that.
+Paul, just for confirmation, have you picked these patches on your tree?
 
-> One could argue that we should increase the delay before turning the
-> tick on, but my experience is that expedited grace periods almost always
-> complete in less than a jiffy, so there would almost never be any benefit
-> in doing so.  But if some large NO_HZ_FULL system with long RCU readers
-> starts having trouble with too-frequent tick enablement, that is one
-> possible fix.
+Thank you,
 
-And last but not least: wait for anybody to complain before changing anything
-;-))
+> 
+> > Thank you!
+> > 
+> > > 
+> > > diff --git a/init/Kconfig b/init/Kconfig
+> > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > --- a/init/Kconfig
+> > > +++ b/init/Kconfig
+> > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > >  config BOOT_CONFIG_FORCE
+> > >  	bool "Force unconditional bootconfig processing"
+> > >  	depends on BOOT_CONFIG
+> > > +	default y if BOOT_CONFIG_EMBED
+> > >  	help
+> > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
+> > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
+> > 
+> > 
+> > -- 
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Thanks.
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
