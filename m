@@ -2,438 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D25A661E83
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A823661E90
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbjAIFsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 00:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S233682AbjAIGDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 01:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbjAIFsA (ORCPT
+        with ESMTP id S229473AbjAIGDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 00:48:00 -0500
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CBD1164;
-        Sun,  8 Jan 2023 21:47:58 -0800 (PST)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 308DmfRC017668;
-        Sun, 8 Jan 2023 21:47:54 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=4RaNBArRjpBwkKN0jECxBTrijzXhXfCcA3RjfHmLX60=;
- b=G2LDu/et8hrUAdfkGB9sigZTkQwmfIq8hfFjj+X9tOjxE+boD0PD8dl9wLVvXtY+b2jA
- PNAIJAlxx+lSxELFY/kEB17sFXJZMSK+DEnHNCDEzk8/PCIg0bDqpj3fHO/l4lLn/QiY
- qL53LDOZTUl9D2oJQGUw1aRmqyv63uOGVkyxSdMl9kSA2t7AeEZKytm4E6Q8BNXVNhbX
- s8pDh/TH8STjdd0C3HRpmFi3yHs+pia23OW9ivl+hktG4ZhXG135DYinsLuHikt4Z36/
- UKizWSQWIw4Vn0sEnTqPadY+nW7YRohbG2KwXlI0yXmIPmctfVAZ9dg+EUlCED1En0JP iw== 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3my576nvw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 08 Jan 2023 21:47:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bico1rAAVDph5+A3XBrP9bJStVjfYHm4+E1a0ZkEof3GjWGjAe7KTQjevANMmzu0RNSBGp4j2rLxcHOjhhwYBs8jxRDh6j2O8CaZY1/Q4hQDQrloiK0cBZtBBJuzWD8yUXDuV9tuICjZysW1Bu7AIJcEabtT/57cUvCQOAkE1wccyDCcnvDKCkfXprLTBBcApDGM004I6j1/FkUjPce5T51vcWmzcqIbP/3J85aBVUSSzhbOhEoWPYekQ6yTQEVKjy1YL3sz4XLjnjV/u265Sa/XTcQtoKtgnpYiyV9hrmrPuXQ+jeh/jAA1gc8iefOMFCASSqS+YBvQbyY70cespw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4RaNBArRjpBwkKN0jECxBTrijzXhXfCcA3RjfHmLX60=;
- b=EVbN1nndVzRryoH0TiGO9GO6FK28Js1h5ZLGVXqXzY1zUHO8uRM7KTR8N+PSr70soqpUirlEysdfLNgX3h6UYoa7xLnjRFSY5ATf3vdRryGTi+HyhO9oGU7mx3OVFngCY/fCvp3roQiNkeixeZj5ft5jZxJe+qzCEy0NXocGr3yMQ3cu3gW2WF67B4zwcLfqDRPqmEIWIzQ7fDyLK0THdx/3e62GMoKj28rHjMijKew0fhzc+iZ+jCUztXbF01tzYpRcLKFBufLKta1Rrr1NKW7fC41+2kugNlo3W43acGHwuEvf8nmutw58yu1RwBKDvl0S8xEC80mJgKwQuBmqIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4RaNBArRjpBwkKN0jECxBTrijzXhXfCcA3RjfHmLX60=;
- b=1raMsdN4LcgM6ASfmW3y6J/Hq3EkLdd23KO9T3Oe2y0ffvrTBTZdDVd7qpTfXH62RpaI1JoaJGj8YXp8XfXXUWKNAaMrowXQfwIZdlBFVKcfnVmL6jul/6mM9yv7mxKwo1NX/gfsce1cT81CdcExE44Hcbyftsd5BPEG5acIwLs=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by BLAPR07MB8260.namprd07.prod.outlook.com (2603:10b6:208:326::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 05:47:49 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::f36d:8292:963:59c6]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::f36d:8292:963:59c6%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 05:47:49 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
- endpoint
-Thread-Topic: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
- endpoint
-Thread-Index: AQHZFeUoK5K4NcemKESrscg3rCfnOa6K2lGAgArTY5A=
-Date:   Mon, 9 Jan 2023 05:47:49 +0000
-Message-ID: <BYAPR07MB53814954118F9A671DF5AD4DDDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <20221222090934.145140-1-pawell@cadence.com>
- <20230102082021.GB40748@nchen-desktop>
-In-Reply-To: <20230102082021.GB40748@nchen-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMjUxMDlmODQtOGZlMS0xMWVkLWE4NTctMDBiZTQzMTQxNTFlXGFtZS10ZXN0XDI1MTA5Zjg2LThmZTEtMTFlZC1hODU3LTAwYmU0MzE0MTUxZWJvZHkudHh0IiBzej0iOTQ1MCIgdD0iMTMzMTc3MTY4NjgwNjEzMzgwIiBoPSI3c1NONk9XY0pqVUwxRjNGdUlVdjFQQUhtVjQ9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|BLAPR07MB8260:EE_
-x-ms-office365-filtering-correlation-id: 379664db-08b7-4561-d4fe-08daf2050ac7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 51FxjgWNjWkLHpADQMiXxsw+J/9UsJb8fjSrkmpumbvvnsGumCmZ36TFdPw0L5qhbFi1/4H7Wo9vCMpprD2dT+27TkktNZaAY1uO5oVR3aMJoBkRHjhunUF4Fde2ooDOZaBV2AEa7x/paJHK2e6aGqv0b7k3YtcJoobqa3yHXLb2r3IC4uZGyCMPGZ70IAE7ZsS5tkDwQ86NmbS2mUMMH8y+Fhdz7HJ+DcASnsGQlldjDHJZA0wFUW2ZoaM1uIUyd9RB5xk8PRoCdccySeCqAFclgXqbIMV+z+kp+tlRU1N2CO3DvZPJ4lifjMV5iwPSNBz3Ja0CCRhK3LJiQIuqeX/rwtV1oCRfUFO70qvbQtY8Fxrdl/nbrzKcbhqKITrPII4dyMAYQv76u36eK7v2DpkWtQJ/D0bsq4nzjPY8ffXbcQZixIBDXbxazzNaqScFvQQzBtEBSABBYYkMHO/gxP07UppMoy1s1hojPoSHEo98pUb42aFlQgMdKU0AaUm3Cpo1k/AuFwUZG3URIk6JI/EcFsw5XWhMJ9U6Rst2oXxEC64DbFE3yGJU+OAWPjNmnLwzfMsHrqigbwlbxEumm3QVRCYfPhNLU/BHmln7rGes0GljZrHw5RNClqW15hl5tpUjFTroeRMpV/HErjK2zwKbi7K5tmlTHMkJL4Z8/+wRt0nO+pj19EdjGf8aXF7lDB4HXhuAa0RElgbYZPUwlg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(36092001)(451199015)(8676002)(4326008)(66946007)(76116006)(6916009)(66476007)(66556008)(64756008)(316002)(66446008)(7696005)(54906003)(38070700005)(5660300002)(2906002)(71200400001)(8936002)(41300700001)(52536014)(86362001)(83380400001)(6506007)(478600001)(33656002)(122000001)(55016003)(9686003)(186003)(26005)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?P4VgpdjDOKcv9da3/O/C5+b4LQ6eRwTuBr1/5go1hNA8u/yYAGq9zc6WicLG?=
- =?us-ascii?Q?29zW6vGWdWx7/IZ4Praemslm2XPR4ELN+HGdMqyhfDacVi4pw/wmsVfSMiRT?=
- =?us-ascii?Q?c2EQUmLM0TB10aPbw9w7WwVRSZqirjqnTskd2pVYQUDQi3Bxvfx6lGYwlVEe?=
- =?us-ascii?Q?IHmBEpAmC/+Bvcfix0d0e7GrBulTH2YpEX7qhBVXpHxbT/tbgzH/e+eGUvtN?=
- =?us-ascii?Q?FwFgAyQ6AofRcC7RoDdjt9iygfa0JgXr7ZGuqzR8LOpHVna74BNarkUsmgl0?=
- =?us-ascii?Q?82whzc+EdWWi+P3DISU20frZAK87p1KJ3hNdNiHYWvMu89G+2Bn5wfzycgq1?=
- =?us-ascii?Q?+kSJRdV6zRC9Ml1cfaLULlg9/LQRcaLJXv9g3vWzQAoyoLrdcvZbMIR+5EbR?=
- =?us-ascii?Q?rvEWgivc/vSQNnZcH5HB/TrY5TlmMATVTj9e2tz1Cgo4DpXIcYXxmAaTmKT8?=
- =?us-ascii?Q?2PIXvSQbnsVgziYLLzaprbyd6HoZB2dn7eEohGuYDMTOt1yQlQdSZe7hM3gK?=
- =?us-ascii?Q?NEt5ZBN3lXiNCq+kG1mSmgvaFjWiuU6X+trGG6+6UpeYDdzehY5Fmz8DcGKD?=
- =?us-ascii?Q?4QTZuGgXGtTb3Pq/qugYRgs68KaHaJySioZTQts3nrPPe3NfqkJJD2uY8IL/?=
- =?us-ascii?Q?E5praMzjoWxQv6to6hHFEhPsVdYJw4iUHAAPePaukNuyNu1NlFI4wlFP3yKF?=
- =?us-ascii?Q?AnQqcm1BzjiAFBjU5FZd279DfqhdyT2kKedVxczf+lpMK/GMA6QDaUWoFnIu?=
- =?us-ascii?Q?3A+ZrfgLtmPvURyiW6JwIqOg2JNiqLMFHB642cCKqIbAOEpttLpKmcO4CpC3?=
- =?us-ascii?Q?kaV+IctXQJMCIQAOwIzOCPDM2iWVnlvsYhh6i3i9ws9Y/h8LYe2CcqAXbDPE?=
- =?us-ascii?Q?3CQURTDbjfHPBVT5SZSDWUJzU3HApWpdcqh3FMIlJ2MnrBtheJZ7yixy1KVl?=
- =?us-ascii?Q?m4yIEin/5qDQbIjuXMrjkYct+A8hyOAe4XeaGhc1WhO+6Ob57ojytSGNFvE1?=
- =?us-ascii?Q?2kWpCSByRs01rlcrL1FiNcLmXTTuZhPJmeS964doxajCmlnU2M2Kci+wwllm?=
- =?us-ascii?Q?FO2/WADZ8E0drKCfMq2Zk0paGaCbT/jD0MjbdzN6xOK9B4q73u8ij+t0rAgD?=
- =?us-ascii?Q?mqGkPPfPl3/trQsGzzTsaNyoGS4+77C+kAzx7GY0RTCIIucIYSGGJTpbQKvk?=
- =?us-ascii?Q?KDuT3SoQu23OgP6bBRmBqNAr5QzT7A9bp9uw+L8Oqi1xEC9sn/jH3r+PqQGn?=
- =?us-ascii?Q?Lt8pQxRZXtRmyXb2CIEZwNwNCcpzzMu16bVkLeY1ct0DvMvPJZgOVO6LFZWd?=
- =?us-ascii?Q?umjxBaVS0Xc2XBoIgpoztVzFIo+Dlbh5vb5s5KXK4EUafprGwOAQs6zLpdnx?=
- =?us-ascii?Q?mgt/zc26cr09XLWFBNY/PC1X+VC1dfy1b/bxK6HP5od97bmrUnEjgng2LqAI?=
- =?us-ascii?Q?vfyd1VBpLutYW56/CVGodYWf90js62nmC1Ww3okK/XWxvdte6uwLQ2BYsGXV?=
- =?us-ascii?Q?v9J9sjEVEPKj1ugi5Hz9J6XiRKdheJ2o31rIxbQROpo1Erg0rHtl705ao+Eo?=
- =?us-ascii?Q?RSWCpqdAalXZ1lSDbtfRSa3isaEX1YpHJyaOR4tJHLYCBML8l7A4bb+vi71q?=
- =?us-ascii?Q?+Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 9 Jan 2023 01:03:46 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74610B6F
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:03:44 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id x8-20020a056e021ca800b0030c075dc55dso5397680ill.7
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 22:03:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wzHJLWm9LNa/lQNpAVyuVPX1ZS0ziAse1UdwET5NjtE=;
+        b=ES1iG2mxFOUxsZZmcP/rboJYnqnlTbDxrWKW2YXnJRpImvhZiz3sQm+F5YG5VOR2jW
+         orRf2bd/Gjzr1uu05RIqJEuMNAEElix1DM+b8LoCspdku3hT+5DE0NaqpKZRwHhz4SFq
+         /0dFXUdTY6RtjANONG8DwYSrgAwlScPKoyqWPI/4BZRvt2Ouu8x4fVj4qwuS3/IL9Gd1
+         rIR+EkEEpb7uNZQF5bixJnPdWTn94WYRBk415naQESh/O2umopSBd71vSkRCW2Tj3dtv
+         tAFVcaKfJXLVRe4MUWeOJfPddzl5YvLNxaTrKfcb0xZXt3Wcs5C1l63Hr+P9P5BtS8NH
+         FIDg==
+X-Gm-Message-State: AFqh2kocgObW2eVcfDUAVcCD63LibXDXlA8FcJ6BvY7ihaAA3Q66QOnF
+        XubjPFVsCActARks7gfy+asSduq8PUIOQ16hMEwxdTtiO4kX
+X-Google-Smtp-Source: AMrXdXvcB32WP6tUEvImMLOznkmRAFIOBQDboVApqZqwvXjgdJs9FSFMpLibyjBzIZIzahULXaQXnri/BuaVF/NG5FRVhY9tmQMF
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 379664db-08b7-4561-d4fe-08daf2050ac7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 05:47:49.5504
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xHKnIOCYJkouoq/Y60lTGTRNoOZE3iY+QEDrGa7e7E7oWY6iaqGs/S1QxQBBCgOjN29XJF3sWl0svp/a6FabUVga24s8mqHE1ZtTaGwehCk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR07MB8260
-X-Proofpoint-GUID: NwH0nMAneqKDhH2ymMwY-0N5nIo4CR5v
-X-Proofpoint-ORIG-GUID: NwH0nMAneqKDhH2ymMwY-0N5nIo4CR5v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_02,2023-01-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxlogscore=999
- lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0 mlxscore=0
- spamscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301090040
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:37a9:b0:38a:b267:8900 with SMTP id
+ w41-20020a05663837a900b0038ab2678900mr5456530jal.151.1673244223992; Sun, 08
+ Jan 2023 22:03:43 -0800 (PST)
+Date:   Sun, 08 Jan 2023 22:03:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000097fc2305f1ce87d9@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in io_worker_get
+From:   syzbot <syzbot+55cc59267340fad29512@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
->
->On 22-12-22 04:09:34, Pawel Laszczak wrote:
->> Patch implements scatter gather support for isochronous endpoint.
->> This fix is forced by 'commit e81e7f9a0eb9
->> ("usb: gadget: uvc: add scatter gather support")'.
->> After this fix CDNSP driver stop working with UVC class.
->>
->> cc: <stable@vger.kernel.org>
->> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
->> USBSSP DRD Driver")
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
->>  drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
->>  drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
->>  3 files changed, 63 insertions(+), 53 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c
->> b/drivers/usb/cdns3/cdnsp-gadget.c
->> index a8640516c895..e81dca0e62a8 100644
->> --- a/drivers/usb/cdns3/cdnsp-gadget.c
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
->> @@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct
->cdnsp_request *preq)
->>  		ret =3D cdnsp_queue_bulk_tx(pdev, preq);
->>  		break;
->>  	case USB_ENDPOINT_XFER_ISOC:
->> -		ret =3D cdnsp_queue_isoc_tx_prepare(pdev, preq);
->> +		ret =3D cdnsp_queue_isoc_tx(pdev, preq);
->>  	}
->>
->>  	if (ret)
->> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h
->> b/drivers/usb/cdns3/cdnsp-gadget.h
->> index f740fa6089d8..e1b5801fdddf 100644
->> --- a/drivers/usb/cdns3/cdnsp-gadget.h
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
->> @@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct
->cdnsp_device *pdev,
->>  			       unsigned int ep_index);
->>  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct
->> cdnsp_request *preq);  int cdnsp_queue_bulk_tx(struct cdnsp_device
->> *pdev, struct cdnsp_request *preq); -int
->cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
->> -				struct cdnsp_request *preq);
->> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->> +			struct cdnsp_request *preq);
->
->Why you re-name this function?
->
->Other changes are ok for me.
->
+syzbot found the following issue on:
 
-The function cdnsp_queue_isoc_tx_prepare has been removed and replaced
-with cdnsp_queue_isoc_tx.  I just add declaration of this function to heade=
-r file.
-Before change cdnsp_queue_isoc_tx was static function.
+HEAD commit:    a689b938df39 Merge tag 'block-2023-01-06' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1495a5e6480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=33ad6720950f996d
+dashboard link: https://syzkaller.appspot.com/bug?extid=55cc59267340fad29512
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1532ef72480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b43f3a480000
 
-Regards,
-Pawel
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5fcfa927aa80/disk-a689b938.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e92e2a5e7778/vmlinux-a689b938.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5e792fc2d1a8/bzImage-a689b938.xz
 
->>  void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
->>  				    dma_addr_t in_ctx_ptr);
->>  void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int
->> ep_index); diff --git a/drivers/usb/cdns3/cdnsp-ring.c
->> b/drivers/usb/cdns3/cdnsp-ring.c index b23e543b3a3d..07f6068342d4
->> 100644
->> --- a/drivers/usb/cdns3/cdnsp-ring.c
->> +++ b/drivers/usb/cdns3/cdnsp-ring.c
->> @@ -1333,6 +1333,20 @@ static int cdnsp_handle_tx_event(struct
->cdnsp_device *pdev,
->>  					 ep_ring->dequeue, td->last_trb,
->>  					 ep_trb_dma);
->>
->> +		desc =3D td->preq->pep->endpoint.desc;
->> +
->> +		if (ep_seg) {
->> +			ep_trb =3D &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
->> +					       / sizeof(*ep_trb)];
->> +
->> +			trace_cdnsp_handle_transfer(ep_ring,
->> +					(struct cdnsp_generic_trb *)ep_trb);
->> +
->> +			if (pep->skip && usb_endpoint_xfer_isoc(desc) &&
->> +			    td->last_trb !=3D ep_trb)
->> +				return -EAGAIN;
->> +		}
->> +
->>  		/*
->>  		 * Skip the Force Stopped Event. The event_trb(ep_trb_dma)
->>  		 * of FSE is not in the current TD pointed by ep_ring->dequeue
->@@
->> -1347,7 +1361,6 @@ static int cdnsp_handle_tx_event(struct cdnsp_device
->*pdev,
->>  			goto cleanup;
->>  		}
->>
->> -		desc =3D td->preq->pep->endpoint.desc;
->>  		if (!ep_seg) {
->>  			if (!pep->skip || !usb_endpoint_xfer_isoc(desc)) {
->>  				/* Something is busted, give up! */ @@ -
->1374,12 +1387,6 @@ static
->> int cdnsp_handle_tx_event(struct cdnsp_device *pdev,
->>  			goto cleanup;
->>  		}
->>
->> -		ep_trb =3D &ep_seg->trbs[(ep_trb_dma - ep_seg->dma)
->> -				       / sizeof(*ep_trb)];
->> -
->> -		trace_cdnsp_handle_transfer(ep_ring,
->> -					    (struct cdnsp_generic_trb *)ep_trb);
->> -
->>  		if (cdnsp_trb_is_noop(ep_trb))
->>  			goto cleanup;
->>
->> @@ -1726,11 +1733,6 @@ static unsigned int count_sg_trbs_needed(struct
->cdnsp_request *preq)
->>  	return num_trbs;
->>  }
->>
->> -static unsigned int count_isoc_trbs_needed(struct cdnsp_request
->> *preq) -{
->> -	return cdnsp_count_trbs(preq->request.dma, preq->request.length);
->> -}
->> -
->>  static void cdnsp_check_trb_math(struct cdnsp_request *preq, int
->> running_total)  {
->>  	if (running_total !=3D preq->request.length) @@ -2192,28 +2194,48 @@
->> static unsigned int  }
->>
->>  /* Queue function isoc transfer */
->> -static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->> -			       struct cdnsp_request *preq)
->> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->> +			struct cdnsp_request *preq)
->>  {
->> -	int trb_buff_len, td_len, td_remain_len, ret;
->> +	unsigned int trb_buff_len, td_len, td_remain_len, block_len;
->>  	unsigned int burst_count, last_burst_pkt;
->>  	unsigned int total_pkt_count, max_pkt;
->>  	struct cdnsp_generic_trb *start_trb;
->> +	struct scatterlist *sg =3D NULL;
->>  	bool more_trbs_coming =3D true;
->>  	struct cdnsp_ring *ep_ring;
->> +	unsigned int num_sgs =3D 0;
->>  	int running_total =3D 0;
->>  	u32 field, length_field;
->> +	u64 addr, send_addr;
->>  	int start_cycle;
->>  	int trbs_per_td;
->> -	u64 addr;
->> -	int i;
->> +	int i, sent_len, ret;
->>
->>  	ep_ring =3D preq->pep->ring;
->> +
->> +	td_len =3D preq->request.length;
->> +
->> +	if (preq->request.num_sgs) {
->> +		num_sgs =3D preq->request.num_sgs;
->> +		sg =3D preq->request.sg;
->> +		addr =3D (u64)sg_dma_address(sg);
->> +		block_len =3D sg_dma_len(sg);
->> +		trbs_per_td =3D count_sg_trbs_needed(preq);
->> +	} else {
->> +		addr =3D (u64)preq->request.dma;
->> +		block_len =3D td_len;
->> +		trbs_per_td =3D count_trbs_needed(preq);
->> +	}
->> +
->> +	ret =3D cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
->> +	if (ret)
->> +		return ret;
->> +
->>  	start_trb =3D &ep_ring->enqueue->generic;
->>  	start_cycle =3D ep_ring->cycle_state;
->> -	td_len =3D preq->request.length;
->> -	addr =3D (u64)preq->request.dma;
->>  	td_remain_len =3D td_len;
->> +	send_addr =3D addr;
->>
->>  	max_pkt =3D usb_endpoint_maxp(preq->pep->endpoint.desc);
->>  	total_pkt_count =3D DIV_ROUND_UP(td_len, max_pkt); @@ -2225,11
->+2247,6
->> @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
->>  	burst_count =3D cdnsp_get_burst_count(pdev, preq, total_pkt_count);
->>  	last_burst_pkt =3D cdnsp_get_last_burst_packet_count(pdev, preq,
->>  							   total_pkt_count);
->> -	trbs_per_td =3D count_isoc_trbs_needed(preq);
->> -
->> -	ret =3D cdnsp_prepare_transfer(pdev, preq, trbs_per_td);
->> -	if (ret)
->> -		goto cleanup;
->>
->>  	/*
->>  	 * Set isoc specific data for the first TRB in a TD.
->> @@ -2248,6 +2265,7 @@ static int cdnsp_queue_isoc_tx(struct
->> cdnsp_device *pdev,
->>
->>  		/* Calculate TRB length. */
->>  		trb_buff_len =3D TRB_BUFF_LEN_UP_TO_BOUNDARY(addr);
->> +		trb_buff_len =3D min(trb_buff_len, block_len);
->>  		if (trb_buff_len > td_remain_len)
->>  			trb_buff_len =3D td_remain_len;
->>
->> @@ -2256,7 +2274,8 @@ static int cdnsp_queue_isoc_tx(struct cdnsp_device
->*pdev,
->>  					       trb_buff_len, td_len, preq,
->>  					       more_trbs_coming, 0);
->>
->> -		length_field =3D TRB_LEN(trb_buff_len) | TRB_INTR_TARGET(0);
->> +		length_field =3D TRB_LEN(trb_buff_len) |
->TRB_TD_SIZE(remainder) |
->> +			TRB_INTR_TARGET(0);
->>
->>  		/* Only first TRB is isoc, overwrite otherwise. */
->>  		if (i) {
->> @@ -2281,12 +2300,27 @@ static int cdnsp_queue_isoc_tx(struct
->cdnsp_device *pdev,
->>  		}
->>
->>  		cdnsp_queue_trb(pdev, ep_ring, more_trbs_coming,
->> -				lower_32_bits(addr), upper_32_bits(addr),
->> +				lower_32_bits(send_addr),
->upper_32_bits(send_addr),
->>  				length_field, field);
->>
->>  		running_total +=3D trb_buff_len;
->>  		addr +=3D trb_buff_len;
->>  		td_remain_len -=3D trb_buff_len;
->> +
->> +		sent_len =3D trb_buff_len;
->> +		while (sg && sent_len >=3D block_len) {
->> +			/* New sg entry */
->> +			--num_sgs;
->> +			sent_len -=3D block_len;
->> +			if (num_sgs !=3D 0) {
->> +				sg =3D sg_next(sg);
->> +				block_len =3D sg_dma_len(sg);
->> +				addr =3D (u64)sg_dma_address(sg);
->> +				addr +=3D sent_len;
->> +			}
->> +		}
->> +		block_len -=3D sent_len;
->> +		send_addr =3D addr;
->>  	}
->>
->>  	/* Check TD length */
->> @@ -2324,30 +2358,6 @@ static int cdnsp_queue_isoc_tx(struct
->cdnsp_device *pdev,
->>  	return ret;
->>  }
->>
->> -int cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
->> -				struct cdnsp_request *preq)
->> -{
->> -	struct cdnsp_ring *ep_ring;
->> -	u32 ep_state;
->> -	int num_trbs;
->> -	int ret;
->> -
->> -	ep_ring =3D preq->pep->ring;
->> -	ep_state =3D GET_EP_CTX_STATE(preq->pep->out_ctx);
->> -	num_trbs =3D count_isoc_trbs_needed(preq);
->> -
->> -	/*
->> -	 * Check the ring to guarantee there is enough room for the whole
->> -	 * request. Do not insert any td of the USB Request to the ring if the
->> -	 * check failed.
->> -	 */
->> -	ret =3D cdnsp_prepare_ring(pdev, ep_ring, ep_state, num_trbs,
->GFP_ATOMIC);
->> -	if (ret)
->> -		return ret;
->> -
->> -	return cdnsp_queue_isoc_tx(pdev, preq);
->> -}
->> -
->>  /****		Command Ring Operations		****/
->>  /*
->>   * Generic function for queuing a command TRB on the command ring.
->> --
->> 2.25.1
->>
->
->--
->
->Thanks,
->Peter Chen
+The issue was bisected to:
+
+commit af82425c6a2d2f347c79b63ce74fca6dc6be157f
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Mon Jan 2 23:49:46 2023 +0000
+
+    io_uring/io-wq: free worker if task_work creation is canceled
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a90a6e480000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a90a6e480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a90a6e480000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+55cc59267340fad29512@syzkaller.appspotmail.com
+Fixes: af82425c6a2d ("io_uring/io-wq: free worker if task_work creation is canceled")
+
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:147 [inline]
+BUG: KASAN: use-after-free in __refcount_add_not_zero include/linux/refcount.h:152 [inline]
+BUG: KASAN: use-after-free in __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+BUG: KASAN: use-after-free in refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+BUG: KASAN: use-after-free in io_worker_get+0x77/0x2a0 io_uring/io-wq.c:153
+Read of size 4 at addr ffff888028085c00 by task syz-executor161/5058
+
+CPU: 0 PID: 5058 Comm: syz-executor161 Not tainted 6.2.0-rc2-syzkaller-00256-ga689b938df39 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2d0 lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:306
+ print_report+0x107/0x220 mm/kasan/report.c:417
+ kasan_report+0x139/0x170 mm/kasan/report.c:517
+ kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ refcount_read include/linux/refcount.h:147 [inline]
+ __refcount_add_not_zero include/linux/refcount.h:152 [inline]
+ __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+ refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+ io_worker_get+0x77/0x2a0 io_uring/io-wq.c:153
+ io_wq_for_each_worker io_uring/io-wq.c:846 [inline]
+ io_wq_exit_workers io_uring/io-wq.c:1250 [inline]
+ io_wq_put_and_exit+0x2f8/0xcb0 io_uring/io-wq.c:1289
+ io_uring_clean_tctx+0x164/0x1d0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x60e/0x670 io_uring/io_uring.c:3145
+ io_uring_files_cancel include/linux/io_uring.h:55 [inline]
+ do_exit+0x2ad/0x2150 kernel/exit.c:822
+ do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __se_sys_exit_group kernel/exit.c:1021 [inline]
+ __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f43fd8b3ce9
+Code: 00 49 c7 c0 c0 ff ff ff be e7 00 00 00 ba 3c 00 00 00 eb 12 0f 1f 44 00 00 89 d0 0f 05 48 3d 00 f0 ff ff 77 1c f4 89 f0 0f 05 <48> 3d 00 f0 ff ff 76 e7 f7 d8 64 41 89 00 eb df 0f 1f 80 00 00 00
+RSP: 002b:00007fffe594c5b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f43fd929350 RCX: 00007f43fd8b3ce9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f43fd929350
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+Allocated by task 5058:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+ kmalloc_node include/linux/slab.h:606 [inline]
+ kzalloc_node include/linux/slab.h:731 [inline]
+ create_io_worker+0xef/0x630 io_uring/io-wq.c:801
+ create_worker_cb+0x16b/0x330 io_uring/io-wq.c:339
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ get_signal+0x1654/0x1820 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x8d/0x5f0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x74/0x160 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:203
+ irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:309
+ exc_page_fault+0xa2/0x120 arch/x86/mm/fault.c:1578
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+
+Freed by task 5058:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0x71/0x110 mm/slub.c:3800
+ io_wq_cancel_tw_create io_uring/io-wq.c:1233 [inline]
+ io_wq_exit_workers io_uring/io-wq.c:1244 [inline]
+ io_wq_put_and_exit+0x137/0xcb0 io_uring/io-wq.c:1289
+ io_uring_clean_tctx+0x164/0x1d0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x60e/0x670 io_uring/io_uring.c:3145
+ io_uring_files_cancel include/linux/io_uring.h:55 [inline]
+ do_exit+0x2ad/0x2150 kernel/exit.c:822
+ do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __se_sys_exit_group kernel/exit.c:1021 [inline]
+ __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Last potentially related work creation:
+ kasan_save_stack+0x3b/0x60 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:488
+ task_work_add+0x87/0x340 kernel/task_work.c:48
+ io_queue_worker_create+0x1e2/0x430 io_uring/io-wq.c:373
+ sched_submit_work kernel/sched/core.c:6597 [inline]
+ schedule+0x63/0x190 kernel/sched/core.c:6628
+ schedule_timeout+0xac/0x300 kernel/time/timer.c:2143
+ wait_woken+0xca/0x1b0 kernel/sched/wait.c:463
+ af_alg_wait_for_data+0x458/0x700 crypto/af_alg.c:904
+ _skcipher_recvmsg crypto/algif_skcipher.c:65 [inline]
+ skcipher_recvmsg+0x2d9/0xea0 crypto/algif_skcipher.c:157
+ sock_recvmsg_nosec net/socket.c:995 [inline]
+ sock_recvmsg net/socket.c:1013 [inline]
+ sock_read_iter+0x3fa/0x530 net/socket.c:1086
+ call_read_iter include/linux/fs.h:2183 [inline]
+ io_iter_do_read io_uring/rw.c:643 [inline]
+ io_read+0x4a8/0x1310 io_uring/rw.c:766
+ io_issue_sqe+0x44e/0xcd0 io_uring/io_uring.c:1856
+ io_wq_submit_work+0x44a/0x9c0 io_uring/io_uring.c:1932
+ io_worker_handle_work+0x8e1/0xee0 io_uring/io-wq.c:587
+ io_wqe_worker+0x36c/0xde0 io_uring/io-wq.c:632
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff888028085c00
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 0 bytes inside of
+ 512-byte region [ffff888028085c00, ffff888028085e00)
+
+The buggy address belongs to the physical page:
+page:ffffea0000a02100 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x28084
+head:ffffea0000a02100 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012841c80 0000000000000000 dead000000000001
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 9757639976, free_ts 0
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
+ alloc_page_interleave+0x22/0x1c0 mm/mempolicy.c:2119
+ alloc_slab_page+0xbd/0x190 mm/slub.c:1851
+ allocate_slab+0x5e/0x3c0 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0x7f4/0xeb0 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x25b/0x340 mm/slub.c:3491
+ kmalloc_trace+0x26/0x60 mm/slab_common.c:1062
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ device_private_init drivers/base/core.c:3323 [inline]
+ device_add+0xb6/0xf90 drivers/base/core.c:3373
+ netdev_register_kobject+0x178/0x310 net/core/net-sysfs.c:2015
+ register_netdevice+0x136c/0x1a30 net/core/dev.c:10045
+ register_netdev+0x37/0x50 net/core/dev.c:10173
+ rose_proto_init+0x197/0x7c0 net/rose/af_rose.c:1545
+ do_one_initcall+0xbd/0x2c0 init/main.c:1306
+ do_initcall_level+0x168/0x220 init/main.c:1379
+ do_initcalls+0x43/0x90 init/main.c:1395
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888028085b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888028085b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888028085c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff888028085c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888028085d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
