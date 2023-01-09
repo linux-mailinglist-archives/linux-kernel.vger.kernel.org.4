@@ -2,80 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E29A6634DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290CB6634DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbjAIXKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S237557AbjAIXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbjAIXJ5 (ORCPT
+        with ESMTP id S237536AbjAIXKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:09:57 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7237E3B90E;
-        Mon,  9 Jan 2023 15:09:56 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id e205so8565988oif.11;
-        Mon, 09 Jan 2023 15:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NeB2WP3G3p2A8QP68r0F1gYeM3d0wPSRqqdorg4gDko=;
-        b=UJ50J9UWJVNGirM1cO/n4wtv1M4LaPceOI+f2v+rWSasLuUej6MWBQMA7Ssjg3Okhs
-         0iSyCBZeuGBZYfakVf5lS2xwqVZobI2J6TvsEisykvjJKvEoATJHo8317XXuPnj9/ZYF
-         ru7LnRPGHCjiRCBIn6ELCZMKrU+bV9hG3BwXGKfvUXMpMyRIlH/1Dx157yHzDcw5lDEw
-         kNXTdOOF6FUhyG24bBLRLfjETDSD2DSn0j/Zjkn+9eZzH7Yp5rakscFNOEjdxcax5yx/
-         2agJltd92ztxq3K9D8kw4oiGkjgq924fv0FeFkIJE3ECgMleJHVxNJ1fXrze1a4VtipP
-         3vwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NeB2WP3G3p2A8QP68r0F1gYeM3d0wPSRqqdorg4gDko=;
-        b=Pjng5HW0D0yEjz3mhMJMx5nKUKyuRz4fTOF73MrKpQ43KXmG/7KfUM5EUOHYxLWVOn
-         A4a7KE8wnhLtJcJmbFjoyFAmtfbt+N6oKw9qHx0LTmBeO844iM7lO+N6ujcshBvdVBNj
-         aM6qj/blRGeg9fiRQvsp/npYCipOOGdqIgc0PLhEcIQaCgi5QUvjd6NhmBFv7v6DQhiT
-         sEdXIAhnZeVdg3JdrpkVMZt308J3sTe6t50Pg6VoU3fBkgebZ0r3ho6fQv9r/vOJ9Qwr
-         /vNSCSOjasxAvaaY2VLHvIUNn0D9QzuvmAZjzrktFH+JX2SvrTYTqu2ULmInpSimA2m6
-         bCsw==
-X-Gm-Message-State: AFqh2kr+0aiIqmXIro8fe7rNgbqmn9p4wIBMXA1mx6P7lFfLeyuJmJYD
-        /eiTZng2FU0RAV8StR1PuFs=
-X-Google-Smtp-Source: AMrXdXuHtViA3tqLKWXJA0PXwyBGtGE+ohpPxoSq4diLbmvjNkVfE1VS+GSIOAuwatY/du0cHsOGZQ==
-X-Received: by 2002:a05:6808:1993:b0:35e:9090:2969 with SMTP id bj19-20020a056808199300b0035e90902969mr35913445oib.13.1673305795705;
-        Mon, 09 Jan 2023 15:09:55 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ca18-20020a056830611200b0066e873e4c2csm5454875otb.45.2023.01.09.15.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 15:09:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 Jan 2023 15:09:53 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
-        renedis@hotmail.com, robert@swiecki.net,
-        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
-        sefoci9222@rerunway.com, sst@poczta.fm, to.eivind@gmail.com,
-        torvic9@mailbox.org
-Subject: Re: [PATCH v2 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI
- method
-Message-ID: <20230109230953.GA1788936@roeck-us.net>
+        Mon, 9 Jan 2023 18:10:45 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231833BE80;
+        Mon,  9 Jan 2023 15:10:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KidjC1BP2w/9BucawsVofB36TVWpziklgznuUVeQ1rQuTQSfyUYZlKMzsIn8y9LBGWPztvwuiKHaQs3rExKHsSIgZ092ctp1s3zOICW3u0B8oE2v0giEdDfYrfv5M1LxecHycfGUrFl1Zd++hl+iau2QapD9vZdEkB2BmcXzcQ3UraNZKQIpfMhV1Y9hj20NRe7oJA/QlJ9UlrhFZkDz9G0RKRzlgMIkqOcudTEjB2mzrPXBhadrpAiBW53+dFTA/d9oKhZ+CzOu2t9FKOrJtl9L68NHrBzxWA1SzQadyTBqhQOjYSKI+X5IiAduP/hORxHOg6uhSRmJylqF4ZdoQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q4Qx6JEA9D52jk/yCp4ftOjVDzmJMLFupbI5xjm0zps=;
+ b=nygnYxvblypkXCODiKSw7sGGSXoklzayG/XY2xXMrDV/6GOQJq3RTXf4yBudeer+43JuHI6dqPa3Ah9EiHrFOdkZtfRv8CnlNQ4tZuKA3J4n8gBq/zzr+SYugAq62RF1RKp+yppBr/9S5BjbNaWMgzFa/w0W7JLVLlYYsJaV+A1r90DG9xGGLLdqS4qIs73lkxlNgPSZvsBjMn6A3kRmQbYChFxjB4Av3Tbk327E0YBqcijXaVU+UrRNEKrCv+KI4Emaft2/NCsKmmAz00cMMeoMJeZEH8pWCAqqIrJkDthLPYf69TbDXwhBkD8Rz6iQHIrAyKj9IMBmYgoByUNwZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q4Qx6JEA9D52jk/yCp4ftOjVDzmJMLFupbI5xjm0zps=;
+ b=YhySCTAimrMFEEP1zxbfFkEJ8WYuISBVjs2ntHvmig935O+hruzbzEuIaSRrcw2O4bq3omNVsw+mFcLn3WcGyRvy/SxYiMvar6uQ5zFCwSBX4OGo82cpZ2EZlLICpphFiMJP48GdHh9hfGcrkSP2Wn6g3Cpg4poAJnTcZegfNWs=
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by CY8PR12MB8215.namprd12.prod.outlook.com (2603:10b6:930:77::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 23:10:40 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098%7]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 23:10:40 +0000
+From:   "Moger, Babu" <Babu.Moger@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "Hunter, Adrian" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: RE: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring Event
+ Configuration feature flag
+Thread-Topic: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring
+ Event Configuration feature flag
+Thread-Index: AQHZJEmjhfzr9QeU50WxzksWMekCmK6WcBKAgAAOO4CAABXYAIAABRYA//+gtwCAAGaXgIAAEhqg
+Date:   Mon, 9 Jan 2023 23:10:40 +0000
+Message-ID: <MW3PR12MB455384130AF0BDE3AF88BCF095FE9@MW3PR12MB4553.namprd12.prod.outlook.com>
+References: <20230109164405.569714-1-babu.moger@amd.com>
+ <20230109164405.569714-5-babu.moger@amd.com> <Y7xjxUj+KnOEJssZ@zn.tnic>
+ <5afd0a7c-3fbe-dfea-f1b4-2fc35fbb4f13@amd.com> <Y7yCCNANVBnOOmxM@zn.tnic>
+ <SJ1PR11MB608321F26D729A082BFC6FAEFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <ecf0abf0-59fe-3898-762c-d9d883925550@amd.com> <Y7yMbQ8hI9MGl1w3@zn.tnic>
+In-Reply-To: <Y7yMbQ8hI9MGl1w3@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-09T22:56:28Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8a4692b2-8c32-427e-8dc6-8d017cae3c90;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-01-09T23:10:39Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: be66147f-91dc-4244-9887-6d107ad8d6a3
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW3PR12MB4553:EE_|CY8PR12MB8215:EE_
+x-ms-office365-filtering-correlation-id: 3049368b-0c27-4dbf-0829-08daf296ba1d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VmFYuwrHum0sEsAwSZZjOBLmyktOp7qMRzk0lE03lpaKssfEhRzlz+pFDndNSFp//GwkbW5IRDdez1iU9OkAHp3aq4JAjQO3VMG1xCw2M7YMPwPOlTXgIaE6pegxnYNqw6jhzv1Tn6dMobte8G6tWDp3O1nuz5gy16ygpF0kAe3N7mXrTBUg1UOB+flM5NPkCWSLTa8zeJmNzGdXSljfvZxToGvhZv/iKU8EICS8XEh5efxlvpG5CILT3EK9vBP7pT0/XCZF4EIo8v19Jw6vlJNEkdAP/CehoVOBMHMXEzrM6NZTebNtzqORkaACZY8sgzCHxKBhGUNyS8BNnMB9/0gA5SNfV7W0A51xE5NZ8Oms2J7DFADZVdPIa0BBL38Zyg/eNOvddA/K3UNnRa6pcy8oomz9lC/SF0Q3gnkhnNze8nmwbrlQ0PQPN/8XuRFo7DAtiDmn++1CSn/vKAYj8beJ+UvPwKok7t+s6TewsIfb2jjf0mWuM3VVI0gxEUHNpqgMvjmQ8emNGFbkV8zJO0NcX116rop6XROQdu1F6piT5EWbjzanZSlZ9CB9zPsTrBUcXvJ78D0imU1Jb9Efn1FQNNmi5mURGUTW91QsGnHzqSMeD8hQO6K1TF3GhMREt06Bwuu207ujs9H9X50d9RrfRgBWi72F5o2JO/OlGzGlCscnuX9TmlfTN5Ze0pu8
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(39860400002)(396003)(376002)(136003)(451199015)(8936002)(2906002)(7406005)(5660300002)(52536014)(41300700001)(7416002)(71200400001)(38070700005)(66446008)(4326008)(7696005)(76116006)(6916009)(8676002)(64756008)(66476007)(66556008)(316002)(66946007)(54906003)(26005)(9686003)(122000001)(38100700002)(55016003)(86362001)(186003)(83380400001)(33656002)(478600001)(6506007)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9wI0L6eMziL+ND3H4uJOEwrS+nyqQyhgzWctAHqk+t3uccPsDEDVLSwaDCVb?=
+ =?us-ascii?Q?CrAL1waZanqeuwf4kHOzw6VkdKTYCCQ+iPVqct2QQplnXgASbGv0BK/aYvC1?=
+ =?us-ascii?Q?1W/CdCaf91ALQFsXLDqm9Ve4WZrLHm6hZKFEoMJdWYVz2x/vHVEx3Nnx+LA1?=
+ =?us-ascii?Q?zAmorkQJEP+tE4A6PcafFIXKGChj97lzaMjf6HGwmXVlLtI7Jod0d+q2cQyv?=
+ =?us-ascii?Q?Vr3m4ge3XQc5Nm0oMt3iDz8O54foHODQfuLMg6OPqp/R/2AL2ZcfSy1lltsB?=
+ =?us-ascii?Q?qXzQ5kMT0Lni+MxYFlERxMlrJ+70VLqDiQ5DQg6VVSUredh6wNnyl6yKgjA7?=
+ =?us-ascii?Q?yN0f+sP4p6vJoVwEgN9xiJy5vhX1MK842JGxHOMnZTiXDoBKqqTT60QJH2zQ?=
+ =?us-ascii?Q?+kl65JWdVL8wNIhmEO3CmWk5lUhOJmchJx4S8HxW4qPeGRRmLlO353v+vZnv?=
+ =?us-ascii?Q?oLuuCvafpSuJEJs5cmevkwKXvrDvfJ5jSZw9QXySRl5QVrkBkBSVsSt9Tl5j?=
+ =?us-ascii?Q?dBFDF+FxASxoQS0yGa58eK5MRzVH2//j2URVdP92jVmJgE3wxNN0mWAq24kP?=
+ =?us-ascii?Q?lS/5a/AMP+93Vabm4Pv7jxLjcNwC4Bv1CoUy/1BdpA58QeFsibsVuqcr/XSp?=
+ =?us-ascii?Q?nBRHFTxPLC/VzCCmjn9lmmwSeZb1hy5q7q3sjauIj9IWQPk6k1iCSzT66MPb?=
+ =?us-ascii?Q?XKyLJVozZZ0mjmzKL8DxqONlF7ThGmOLRB1HxQye/VHwq1FXzAsOKz+JACNR?=
+ =?us-ascii?Q?kronw3APy36WtmbUROmEs7fkwhhxt/JL0miU9oS1AMH+6/Qis6ZJDxCf4Ze8?=
+ =?us-ascii?Q?Rcs65SN9r9VJVCy0guZ8SMqO96/vibvFTUCSJtLuruP3dtrHy3b+uiksBel7?=
+ =?us-ascii?Q?UjStM5Su03L+HU4ajfypxE9hOEgHabRqSa1IkZs94B5F4v/EiayS6kDHRtaZ?=
+ =?us-ascii?Q?qcmYR5yAk+SUn4mpIZaC5HbPxk01e3TpDijfwbw/2p++AuSEvwglkUWfnzYd?=
+ =?us-ascii?Q?c/zzKqiqyEIzKe4sqLo/zYR7JS42MYNAGQtA8c7PZX0Edcoto+ii3o/HU5Bu?=
+ =?us-ascii?Q?EZQGMQb/ygnz7EW1QfTHI/ODy+bJwWRZWhJl+yJ42MxsjR57sfHXqnwSwHKO?=
+ =?us-ascii?Q?7pt8eTqNxjRvZqZKQVKL14tdeRXlWBbKG0hRMMc8hddsmIp5Sth+eEojBKVz?=
+ =?us-ascii?Q?a8yr05JuhQmnf57J2mWtYgAZo2+u2It2vYUum6dPT9p80BU4UpYOKjCvGs/a?=
+ =?us-ascii?Q?o2H13jKj1GCgSN3S41aHkOU8VhNHn6RAKldca+t5tgjksTQYs/FN9tTvjpZB?=
+ =?us-ascii?Q?oCXUTaM0gtMzjhqakp5pQ8rNmrDqccvFM/M/dG58P4uX42tIcxauv6ZmXgNE?=
+ =?us-ascii?Q?po9wjvG6O6qvr6lWOXPIzlaBzwsiVKDnrZ5dd9J2+37eQVdep6k51J4aHESr?=
+ =?us-ascii?Q?Wp/j8vajzPo0j+4KSh++oQURTj4Mr5TVl7Ne4Rt//HKMkqWcRhFnAGRPzcyI?=
+ =?us-ascii?Q?Ied+kszy5JZeo9jX0UE/rEUnSf7KmOWrv5VZ/PymPR9jDvunWCPAr+cniiHF?=
+ =?us-ascii?Q?Ulc9r09RebP15bxWync=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3049368b-0c27-4dbf-0829-08daf296ba1d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 23:10:40.7671
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bw0ElntDwGgr4zzQspwuZxD669XyVDC0JWFUW4NtpaSPXJMolPZtMWMkm9Z57sZf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8215
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,217 +166,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 11:15:07PM +0200, Denis Pauk wrote:
-> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
-> GUID  and entrypoint method WMBD could be implemented for different device
-> UID.
-> 
-> Implement the direct call to entrypoint method for monitoring the device
-> UID of B550/X570 boards.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-> ---
-> Changes:
-> v1:
->   rename each_port_arg to each_device_arg
->   rename nct6775_find_asus_acpi to nct6775_asuswmi_device_match
->   remove unrequired return -EEXIST, and iterate whole list of devices
+[AMD Official Use Only - General]
 
-Why ? More on that below.
 
->   make asus_acpi_dev static
-> 
->  drivers/hwmon/Kconfig            |  2 +-
->  drivers/hwmon/nct6775-platform.c | 97 ++++++++++++++++++++++----------
->  2 files changed, 69 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 3176c33af6c6..300ce8115ce4 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
->  config SENSORS_NCT6775
->  	tristate "Platform driver for Nuvoton NCT6775F and compatibles"
->  	depends on !PPC
-> -	depends on ACPI_WMI || ACPI_WMI=n
-> +	depends on ACPI || ACPI=n
->  	select HWMON_VID
->  	select SENSORS_NCT6775_CORE
->  	help
-> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> index bf43f73dc835..1f7885af524e 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -17,7 +17,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> -#include <linux/wmi.h>
->  
->  #include "nct6775.h"
->  
-> @@ -107,40 +106,44 @@ struct nct6775_sio_data {
->  	void (*sio_exit)(struct nct6775_sio_data *sio_data);
->  };
->  
-> -#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-> +#define ASUSWMI_METHOD			"WMBD"
->  #define ASUSWMI_METHODID_RSIO		0x5253494F
->  #define ASUSWMI_METHODID_WSIO		0x5753494F
->  #define ASUSWMI_METHODID_RHWM		0x5248574D
->  #define ASUSWMI_METHODID_WHWM		0x5748574D
->  #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
-> +#define ASUSWMI_DEVICE_HID		"PNP0C14"
-> +#define ASUSWMI_DEVICE_UID		"ASUSWMI"
-> +
-> +static struct acpi_device *asus_acpi_dev;
->  
->  static int nct6775_asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg, u8 val, u32 *retval)
->  {
-> -#if IS_ENABLED(CONFIG_ACPI_WMI)
-> +#if IS_ENABLED(CONFIG_ACPI)
-> +	acpi_handle handle = acpi_device_handle(asus_acpi_dev);
->  	u32 args = bank | (reg << 8) | (val << 16);
-> -	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
-> -	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	struct acpi_object_list input;
-> +	union acpi_object params[3];
-> +	unsigned long long result;
->  	acpi_status status;
-> -	union acpi_object *obj;
-> -	u32 tmp = ASUSWMI_UNSUPPORTED_METHOD;
-> -
-> -	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0,
-> -				     method_id, &input, &output);
->  
-> +	params[0].type = ACPI_TYPE_INTEGER;
-> +	params[0].integer.value = 0;
-> +	params[1].type = ACPI_TYPE_INTEGER;
-> +	params[1].integer.value = method_id;
-> +	params[2].type = ACPI_TYPE_BUFFER;
-> +	params[2].buffer.length = sizeof(args);
-> +	params[2].buffer.pointer = (void *)&args;
-> +	input.count = 3;
-> +	input.pointer = params;
-> +
-> +	status = acpi_evaluate_integer(handle, ASUSWMI_METHOD, &input, &result);
->  	if (ACPI_FAILURE(status))
->  		return -EIO;
->  
-> -	obj = output.pointer;
-> -	if (obj && obj->type == ACPI_TYPE_INTEGER)
-> -		tmp = obj->integer.value;
-> -
->  	if (retval)
-> -		*retval = tmp;
-> -
-> -	kfree(obj);
-> +		*retval = (u32)result & 0xFFFFFFFF;
->  
-> -	if (tmp == ASUSWMI_UNSUPPORTED_METHOD)
-> -		return -ENODEV;
->  	return 0;
->  #else
->  	return -EOPNOTSUPP;
-> @@ -1099,6 +1102,50 @@ static const char * const asus_wmi_boards[] = {
->  	"TUF GAMING Z490-PLUS (WI-FI)",
->  };
->  
-> +struct each_device_arg {
-> +	struct acpi_device *adev;
-> +	const char *match;
-> +};
-> +
-> +/*
-> + * Callback for acpi_bus_for_each_dev() to find the right device
-> + * by _UID and _HID and store to each_device_arg.
-> + */
-> +static int nct6775_asuswmi_device_match(struct device *dev, void *data)
-> +{
-> +	struct acpi_device *adev = to_acpi_device(dev);
-> +	const char *uid = acpi_device_uid(adev);
-> +	const char *hid = acpi_device_hid(adev);
-> +	struct each_device_arg *arg = data;
-> +
-> +	if (hid && !strcmp(hid, ASUSWMI_DEVICE_HID) &&
-> +		uid && !strcmp(uid, arg->match)) {
-> +		arg->adev = adev;
 
-Why not return 1 for match here ? If there is a reason to look for
-the last match instead of the first match, it needs to be explained.
+> -----Original Message-----
+> From: Borislav Petkov <bp@alien8.de>
+> Sent: Monday, January 9, 2023 3:52 PM
+> To: Moger, Babu <Babu.Moger@amd.com>
+> Cc: Luck, Tony <tony.luck@intel.com>; corbet@lwn.net; Chatre, Reinette
+> <reinette.chatre@intel.com>; tglx@linutronix.de; mingo@redhat.com; Yu,
+> Fenghua <fenghua.yu@intel.com>; dave.hansen@linux.intel.com;
+> x86@kernel.org; hpa@zytor.com; paulmck@kernel.org; akpm@linux-
+> foundation.org; quic_neeraju@quicinc.com; rdunlap@infradead.org;
+> damien.lemoal@opensource.wdc.com; songmuchun@bytedance.com;
+> peterz@infradead.org; jpoimboe@kernel.org; pbonzini@redhat.com; Bae,
+> Chang Seok <chang.seok.bae@intel.com>;
+> pawan.kumar.gupta@linux.intel.com; jmattson@google.com;
+> daniel.sneddon@linux.intel.com; Das1, Sandipan <Sandipan.Das@amd.com>;
+> james.morse@arm.com; linux-doc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; bagasdotme@gmail.com; Eranian, Stephane
+> <eranian@google.com>; christophe.leroy@csgroup.eu; jarkko@kernel.org;
+> Hunter, Adrian <adrian.hunter@intel.com>; quic_jiles@quicinc.com;
+> peternewman@google.com
+> Subject: Re: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring
+> Event Configuration feature flag
+>=20
+> On Mon, Jan 09, 2023 at 03:44:30PM -0600, Moger, Babu wrote:
+> > So, if we remove them, we need to update here also.
+>=20
+> We can "reroute" that documentation to /sys/fs/resctrl's info...
 
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static enum sensor_access nct6775_determine_access(const char *device_uid)
-> +{
-> +	struct each_device_arg arg;
-> +	u8 tmp;
-> +
-> +	arg.match = device_uid;
-> +	acpi_bus_for_each_dev(nct6775_asuswmi_device_match, &arg);
-> +	if (!arg.adev)
-> +		return access_direct;
-> +
-> +	asus_acpi_dev = arg.adev;
-
-The use of the static variable made me look into this further. Why
-all that complexity with struct each_device_arg and passing the structure
-and adev to/from the match function instead of just passing the 
-match string as parameter and storing the matching adev directly in
-asus_acpi_dev instead of passing it back and storing it here ?
-
-Also, the use of a static variable makes me wonder: would asus_acpi_dev
-be the same for both chips if there are two Super-IO chips in the system ?
-
-Thanks,
-Guenter
-
-> +	/* if reading chip id via ACPI succeeds, use WMI "WMBD" method for access */
-> +	if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
-> +		pr_debug("Using Asus WMBD method of %s to access %#x chip.\n", device_uid, tmp);
-> +		return access_asuswmi;
-> +	}
-> +
-> +	return access_direct;
-> +}
-> +
->  static int __init sensors_nct6775_platform_init(void)
->  {
->  	int i, err;
-> @@ -1109,7 +1156,6 @@ static int __init sensors_nct6775_platform_init(void)
->  	int sioaddr[2] = { 0x2e, 0x4e };
->  	enum sensor_access access = access_direct;
->  	const char *board_vendor, *board_name;
-> -	u8 tmp;
->  
->  	err = platform_driver_register(&nct6775_driver);
->  	if (err)
-> @@ -1122,15 +1168,8 @@ static int __init sensors_nct6775_platform_init(void)
->  	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
->  		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
->  				   board_name);
-> -		if (err >= 0) {
-> -			/* if reading chip id via WMI succeeds, use WMI */
-> -			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
-> -				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-> -				access = access_asuswmi;
-> -			} else {
-> -				pr_err("Can't read ChipID by Asus WMI.\n");
-> -			}
-> -		}
-> +		if (err >= 0)
-> +			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
->  	}
->  
->  	/*
-> 
-> base-commit: b0587c87abc891e313d63946ff8c9f4939d1ea1a
-> -- 
-> 2.39.0
-> 
+Yes. We could. But at this point we don't have all the features listed in /=
+sys/fs/resctrl/info directory. We need to add all the resctrl feature bits =
+in info directory.
+How about we take this as separate task and I can send separate series to a=
+ddress it?
+Thanks
+Babu
