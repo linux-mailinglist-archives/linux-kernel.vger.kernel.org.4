@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F9D661EA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7341661EA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjAIGTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 01:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S233735AbjAIGYu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 9 Jan 2023 01:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjAIGTw (ORCPT
+        with ESMTP id S229650AbjAIGYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 01:19:52 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C7ADF52
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:19:50 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id o63so7562612vsc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 22:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=106uD06AzbNxk62noX8/CiR5uQr2OwaIURM2AqUxNqU=;
-        b=KKlqbXe8YdVAhhRpmR/QNe1LyJ5nWrsuNWXUFZKYjFQTa4mo5bec9f9XNYpsdBbIxd
-         DfvEgehaKBiAQLHI67cHXned06E5DhxtUp6gCzm+oDZJTTW7v2He2TVYoK52ZooVQxEn
-         GCQAxF967limKBoz7kOCWWg8PgcU/gK4hLL9g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=106uD06AzbNxk62noX8/CiR5uQr2OwaIURM2AqUxNqU=;
-        b=YWt244fKirL87lU8ubBvsv3UcwaKLnrqHhF7SXDsEwuIGrrt9vOLuUboviKf6c/h9D
-         4zKCMHpBIQJBenAy8FllGH5YnlOAFWuz/8439eVk7siQh7oU3aQVGBjb+GQYweJuRA2s
-         Cq8JNAfsocxdwGdlPaPoAnmd48RUpjiSvhoVkMm7EQoDPH/48z9vfneKt10+jnO7Gabe
-         s8UKEQK2s/TO3cgd86WT+drABTDkwgejl2V62i+68JZNyML0K6DwLacJvLhow2Jn2RmF
-         u+12/V2r5cv89/S1ChbmTHCNOxMLx5ous4NydnuArV0nPUp8v/njrqjN1Sz1fb5/zBwV
-         2rtQ==
-X-Gm-Message-State: AFqh2koKHPwx9VqTi4ItdkB7PomytpEV3QiR5DSqB0EHx4VC62I0/BIb
-        f8P03El8quWmHGx7WoVPMFFIkV3omO3ckGyHB0IVgA==
-X-Google-Smtp-Source: AMrXdXuVhwhLKcDsnsdWzIyAuuiqkdrTwY2VDzmktFx5YnMTYMwDmmQu5EKubdQQCDilvp6+oq7A+BC4ewXjF6zIBNo=
-X-Received: by 2002:a67:447:0:b0:3ce:d0ae:f6f6 with SMTP id
- 68-20020a670447000000b003ced0aef6f6mr2866248vse.26.1673245189605; Sun, 08 Jan
- 2023 22:19:49 -0800 (PST)
+        Mon, 9 Jan 2023 01:24:22 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A047BE14
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:24:17 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DF58924E035;
+        Mon,  9 Jan 2023 14:24:15 +0800 (CST)
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 9 Jan
+ 2023 14:24:15 +0800
+Received: from jsia-virtual-machine.localdomain (60.49.128.133) by
+ EXMBX066.cuchost.com (172.16.6.66) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Mon, 9 Jan 2023 14:24:12 +0800
+From:   Sia Jee Heng <jeeheng.sia@starfivetech.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <jeeheng.sia@starfivetech.com>, <leyfoon.tan@starfivetech.com>,
+        <mason.huo@starfivetech.com>
+Subject: [PATCH v2 0/3] RISC-V Hibernation Support
+Date:   Mon, 9 Jan 2023 14:24:04 +0800
+Message-ID: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230106045537.1243887-1-wenst@chromium.org> <Y7flCydDtLVwsXIJ@google.com>
- <CAGXv+5Gnc6tCjO95VjBJ4F5p5bnS+M96at3ErpSX==3qPwNUsg@mail.gmail.com> <Y7uqJ+DPyqFxaQUV@google.com>
-In-Reply-To: <Y7uqJ+DPyqFxaQUV@google.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 9 Jan 2023 14:19:38 +0800
-Message-ID: <CAGXv+5GNUyVpe5P7QazHB6K37C_0dNLwoP9gWKhgAbfXWRxJwA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chromeos: cros_ec: Use per-device lockdep key
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [60.49.128.133]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX066.cuchost.com
+ (172.16.6.66)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 1:46 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> On Sat, Jan 07, 2023 at 01:43:57PM +0800, Chen-Yu Tsai wrote:
-> > On Fri, Jan 6, 2023 at 5:08 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > >
-> > > On Fri, Jan 06, 2023 at 12:55:37PM +0800, Chen-Yu Tsai wrote:
-> > > > Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
-> > > > the following lock sequences:
-> > > >
-> > > > 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
-> > > > 2. lock(&ec_dev->lock); lock(prepare_lock);
-> > > >
-> > > > The actual dependency chains are much longer. The shortened version
-> > > > looks somewhat like:
-> > > >
-> > > > 1. cros-ec-rpmsg on mtk-scp
-> > > >    ec_dev->lock -> prepare_lock
-> > > > 2. In rt5682_i2c_probe() on native I2C bus:
-> > > >    prepare_lock -> regmap->lock -> (possibly) i2c_adapter->bus_lock
-> > > > 3. In rt5682_i2c_probe() on native I2C bus:
-> > > >    regmap->lock -> i2c_adapter->bus_lock
-> > > > 4. In sbs_probe() on cros-ec-i2c (passthrough) I2C bus on cros-ec
-> > > >    i2c_adapter->bus_lock -> ec_dev->lock
-> > > >
-> > > > While lockdep is correct that the shared lockdep classes have a circular
-> > > > dependency, it is bogus because
-> > > >
-> > > >   a) 2+3 happen on a native I2C bus
-> > > >   b) 4 happens on the actual EC on ChromeOS devices
-> > > >   c) 1 happens on the SCP coprocessor on MediaTek Chromebooks that just
-> > > >      happen to expose a cros-ec interface, but do not have a passthrough
-> > > >      I2C bus
-> > > >
-> > > > In short, the "dependencies" are actually on different devices.
-> > >
-> > > Path of 4 looks weird to me.
-> > >
-> > > Could you point out where sbs_probe() gets to acquire ec_dev->lock?
-> >
-> > sbs_probe() calls sbs_get_battery_presence_and_health(), which
-> >
-> >   -> does an I2C transfer. This SBS instance is connected on the I2C bus
-> >      on the EC, so the I2C transfer
-> >
-> >      -> acquires i2c_adapter->bus_lock, and
->
-> I see.
->
-> Another question: the i2c_adapter here should be different from the native
-> I2C bus in 2 and 3.  Did they really form the circular dependencies?
+This series adds RISC-V Hibernation/suspend to disk support.
+Low level Arch functions were created to support hibernation.
+swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
+cpu state onto the stack, then calling swsusp_save() to save the memory
+image.
 
-That's why it's a false positive. lockdep normally doesn't track individual
-instances, only classes of locks. The class is declared as part of the
-mutex_init() macro.
+arch_hibernation_header_restore() and arch_hibernation_header_save()
+functions are implemented to prevent kernel crash when resume,
+the kernel built version is saved into the hibernation image header
+to making sure only the same kernel is restore when resume.
 
-ChenYu
+swsusp_arch_resume() creates a temporary page table that covering only
+the linear map, copies the restore code to a 'safe' page, then start to
+restore the memory image. Once completed, it restores the original
+kernel's page table. It then calls into __hibernate_cpu_resume()
+to restore the CPU context. Finally, it follows the normal hibernation
+path back to the hibernation core.
+
+To enable hibernation/suspend to disk into RISCV, the below config
+need to be enabled:
+- CONFIG_ARCH_HIBERNATION_HEADER
+- CONFIG_ARCH_HIBERNATION_POSSIBLE
+- CONFIG_ARCH_RV64I
+- CONFIG_64BIT
+
+At high-level, this series includes the following changes:
+1) Change suspend_save_csrs() and suspend_restore_csrs()
+   to public function as these functions are common to
+   suspend/hibernation. (patch 1)
+2) Enhance kernel_page_present() function to support huge page. (patch 2)
+3) Add arch/riscv low level functions to support
+   hibernation/suspend to disk. (patch 3)
+
+The above patches are based on kernel v6.2-rc3 and are tested on
+StarFive VF2 SBC board. Hibernation for RV32 and ACPI platform mode are not
+supported in this series at the moment.
+
+Changes since v1:
+- Rebased to kernel v6.2-rc3
+- Fixed bot's compilation error
+
+Sia Jee Heng (3):
+  RISC-V: Change suspend_save_csrs and suspend_restore_csrs to public
+    function
+  RISC-V: mm: Enable huge page support to kernel_page_present() function
+  RISC-V: Add arch functions to support hibernation/suspend-to-disk
+
+ arch/riscv/Kconfig                |   8 +
+ arch/riscv/include/asm/suspend.h  |  23 ++
+ arch/riscv/kernel/Makefile        |   2 +-
+ arch/riscv/kernel/asm-offsets.c   |   5 +
+ arch/riscv/kernel/hibernate-asm.S | 123 +++++++++++
+ arch/riscv/kernel/hibernate.c     | 353 ++++++++++++++++++++++++++++++
+ arch/riscv/kernel/suspend.c       |   4 +-
+ arch/riscv/mm/pageattr.c          |   6 +
+ 8 files changed, 521 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/kernel/hibernate-asm.S
+ create mode 100644 arch/riscv/kernel/hibernate.c
+
+
+base-commit: 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
+-- 
+2.34.1
+
