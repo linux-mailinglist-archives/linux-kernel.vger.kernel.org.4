@@ -2,106 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D395A662991
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53680662993
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237126AbjAIPOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S236774AbjAIPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbjAIPNI (ORCPT
+        with ESMTP id S237122AbjAIPNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:13:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E114024;
-        Mon,  9 Jan 2023 07:12:19 -0800 (PST)
+        Mon, 9 Jan 2023 10:13:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC463753F;
+        Mon,  9 Jan 2023 07:12:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 252366117E;
-        Mon,  9 Jan 2023 15:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B76C4339E;
-        Mon,  9 Jan 2023 15:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673277138;
-        bh=daZxDGs86Bk5MzJICViW/vk55hlhK8dtOjzS01jPUdk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AeciNFTE67BGP9fkkAqtyDeygJS/MFRECSzsSBN2B93Jv4QgR2sVekPUYyjp6/6ty
-         Y32B5J+XlZb1gH7tErm7KYMrq5jZbXodSvGNrN9wGfRMOUKBRQwRbUTKF6kLORTpRR
-         Lbse5yYItfyjcYh/kvP4BwzNd+SesrxNdGfnGDTOKm2HFOeLJYhXAX2uY9nc/vQum6
-         kwrRJkxY9YfahipQzRaPqCaSoarFt30Q5nQIPwLQexSo5egaMP91iDSs6ZnR6FG1KH
-         JBjUeGCrRO2303DBWwJN+1Jj4Xy7hrFDbf5xFqA4EsXpIt1K5goZ3wsgC9bEhzcHeJ
-         FW/BPCXK5iKCQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C726C40468; Mon,  9 Jan 2023 12:12:15 -0300 (-03)
-Date:   Mon, 9 Jan 2023 12:12:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org
-Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
-Message-ID: <Y7wuz6EOggZ8Wysb@kernel.org>
-References: <20230106151320.619514-1-irogers@google.com>
- <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
- <Y7hZccgOiueB31a+@kernel.org>
- <Y7hgKMDGzQlankL1@kernel.org>
- <Y7hgoVKBoulCbA4l@kernel.org>
- <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 593A56118B;
+        Mon,  9 Jan 2023 15:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0A2C433D2;
+        Mon,  9 Jan 2023 15:12:28 +0000 (UTC)
+Date:   Mon, 9 Jan 2023 10:12:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Quanfa Fu <quanfafu@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tracing/eprobe: no need to check for negative ret
+ value for snprintf
+Message-ID: <20230109101226.7f75fc0e@gandalf.local.home>
+In-Reply-To: <20230109235913.8ac99d54cff8b7c3fc5dcfa4@kernel.org>
+References: <20230109040625.3259642-1-quanfafu@gmail.com>
+        <20230109235913.8ac99d54cff8b7c3fc5dcfa4@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jan 06, 2023 at 11:06:46AM -0800, Ian Rogers escreveu:
-> So trying to get build-test working on my Debian derived distro is a
-> PITA with broken feature detection for options I don't normally use.
+On Mon, 9 Jan 2023 23:59:13 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-Its really difficult to have perf building with so many dependent
-libraries, mowing out some should be in order.
+> On Mon,  9 Jan 2023 12:06:25 +0800
+> Quanfa Fu <quanfafu@gmail.com> wrote:
+> 
+> > No need to check for negative return value from snprintf() as the
+> > code does not return negative values.
+> >   
+> 
+> Thanks for simplifying, this looks good to me.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> I'll try to fix this.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Thanks.
- 
-> In any case I think I've spotted what is really happening here and it
-> isn't a failure but a feature :-D The build is specifying
+Masami, do you want to take it into the probes branch, or do you want me to
+take it into the tracing branch?
 
-I get it.
+-- Steve
 
-> LIBBPF_DYNAMIC=1 which means you get the libbpf headers from
-> /usr/include. I think the build is trying to do this on a system with
-> an old libbpf and hence getting the failures above. Previously, even
-> though we wanted the dynamic headers we still had a -I, this time for
-> the install_headers version. Now you really are using the system
-> version and it is broken. This means a few things:
-> - the libbpf feature test should fail if code like above is going to fail,
 
-Agreed.
-
-> - we may want to contemplate supporting older libbpfs (I'd rather not),
-
-I'd rather require everybody to be up to the latest trends, but I really
-don't think that is a reasonable expectation.
-
-> - does build-test have a way to skip known issues like this?
-
-Unsure, Jiri?
-
-But yeah, previous experiences with Andrii were that we can do not too
-costly feature checks, not using .c programs that would fail if some
-required feature wasn't present but instead would just do some grep on a
-header and if some "smell" wasn't scent, just fail the cap query.
-
-- Arnaldo
+> 
+> > Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
+> > 
