@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C23663215
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76E166321E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbjAIU7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S237725AbjAIU72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:59:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbjAIU6W (ORCPT
+        with ESMTP id S234818AbjAIU62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:58:22 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE288E9BB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:55:23 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4597b0ff5e9so105296977b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:55:23 -0800 (PST)
+        Mon, 9 Jan 2023 15:58:28 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671498F2A6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:55:24 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c1456d608cso104298577b3.15
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:55:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KsiQb/dE9yymRpEr0UBz2Qq4KLrRHehGb+mEU6hVzX0=;
-        b=sWtobSCBvoHV5TPkE/zYtWszgUW3jVRDiVjTt3sAcjFBaXlqjfdYiQ6AHG86rnNt0b
-         mg+e+VoU+a89JO+rslq34FfyzRkAoGg7DuVDlMH1H1ePQ32MuB2+77t0gAtkJ+y+wX6p
-         B/589/jsqLZApvm6BoQPTAcfoFYkEfWsjxaKMUYIa10AIrZvQul2s59ukdBVjUu/Ibrp
-         egNG28U4wT5FZXec8pRJXGar6bKM6QyHpkRg0GkDbw6/Hl7olgQ7YiTkujC6hmd+0b7u
-         2fP91n1+O4wNRIiFMGmQ1g/TPPehatod7VMoh0dY0z9ogD+TX+MKDQ5sfW6QhS4fa9cZ
-         O/Tw==
+        bh=6eLzL6RHeFdZbRB5oFC0iJ795TBzqFT5ovI/MwJrKVk=;
+        b=J47RXHly65L6DdSqhS16NmYDveuNz+mvTNG4sGvbQhUoWkeX6DBvsEbauZWeZvA/FL
+         6iJWwlnZTOJwBfCXcZD78WFVJCG7QdSQyabstEWgAbqGHA3DDp9ZOq1VOAfH1PKWr803
+         hD+hbwJSt9HgzHQXXidFA8sLeLstkKuaZuBnozg86r7c8tgk1iKjkQ1PqFU36BM8+uUF
+         XrYI9BSRx6s/UM8T/tSpiSH9gONtyaFYLkfVKHbhv2aDCwIEnthDk+4faf5N9RzawpoY
+         Qe27f6FOB5GsQ/NQQedhE4ZJmkp3i9Bbttmr9VE8Pj62jtmxe5G6ZqBn6CUeB13gsJFT
+         GliQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KsiQb/dE9yymRpEr0UBz2Qq4KLrRHehGb+mEU6hVzX0=;
-        b=mE5jrXaVUYv/0RnvlEGxu2MomIHk2di19OwyAYbkCv2q0MczPgfCPNP6Ihj6SLWyCO
-         7NrDWmRSxUrqqFOhThCqapEUhbhAYMUVdSmKX3K+yWouothbdHCPOq7ZLtMPEE7Sblfh
-         h988FW5a9SYKbG7EeY1tGqjuDY53YxR8ogVmnX0lxgSP+4Dtgv1nCx/oHheXt9o05QP7
-         5SR/Kv3DihFexE4Wz/Lp/ZXir2NBvGmUb9351Eicpiv+CWvn52tCBNzKxNIkdno81gk0
-         hIpfupqpSpeMWfrIScxCBWf+e5cqJJqcjH11V00/Y7s74y2bDH3vKGao4sejejhgMsAF
-         WIiA==
-X-Gm-Message-State: AFqh2krNHOcLxaqn+b6kUfa33I1p/EKysLMj8Eg6e7cZ3mlJnTaqriY0
-        hsA4cpEiIqfA/FdkwbFi9sZAHFn9UPY=
-X-Google-Smtp-Source: AMrXdXvB4GUb8flK/fogRdz9aeHP/yrxt0+V7dhaMMs1drQdYkqQuuAWfxuEu+0du5vQqeydWK6w8e3+WKU=
+        bh=6eLzL6RHeFdZbRB5oFC0iJ795TBzqFT5ovI/MwJrKVk=;
+        b=eiA5DvksMQP1HiV5Tuk9RAoRbP7/IeNAr8iJFy5I+ZwnrrhVBDhX9Bnhbs3J1G/M50
+         E536UZEynQ8b7wfV4XnaYiA7sqJTwSQSKGVBZLG65PD0/VQJLYsrrFb0wQWoGI0q4WXU
+         Wz25AEH+NWPcSktmsEMiboDYCpTheR8OUUm2oIiX8Q6u2j6aioxxg7fu3OP08a9k0flU
+         f34x3wLS6pxMi8We05Fm4Tk682UcbXG3qQuGEvZOZeVZsbv47cwx8MNPc/n2Hj+bXMgc
+         LdQxPUz2aRrLWBg9c38bW6Kx+w6tA8S5CP49AYnTX12bh2Kk2pQobWjYbv/8vdjRxlH9
+         PP3g==
+X-Gm-Message-State: AFqh2kruaOSFBoz855EZnR0WlKo5WVOWQxnSV0W2SR92a9ypHjJghEEy
+        DZuiK2SwbgjdgUVw2uub90UQzMDuX4w=
+X-Google-Smtp-Source: AMrXdXvrHv3ZAwS3fQ/OCRP/gup9EskfAqpVKQwrbofhFp/7IXGRuSpH+yzdGI9HlCLagGnSix+y0aiJr6A=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:9393:6f7a:d410:55ca])
- (user=surenb job=sendgmr) by 2002:a25:abc6:0:b0:755:29c5:63e with SMTP id
- v64-20020a25abc6000000b0075529c5063emr6840356ybi.142.1673297721512; Mon, 09
- Jan 2023 12:55:21 -0800 (PST)
-Date:   Mon,  9 Jan 2023 12:53:35 -0800
+ (user=surenb job=sendgmr) by 2002:a5b:305:0:b0:707:473f:b763 with SMTP id
+ j5-20020a5b0305000000b00707473fb763mr7071095ybp.158.1673297724036; Mon, 09
+ Jan 2023 12:55:24 -0800 (PST)
+Date:   Mon,  9 Jan 2023 12:53:36 -0800
 In-Reply-To: <20230109205336.3665937-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230109205336.3665937-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109205336.3665937-41-surenb@google.com>
-Subject: [PATCH 40/41] mm: separate vma->lock from vm_area_struct
+Message-ID: <20230109205336.3665937-42-surenb@google.com>
+Subject: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -84,273 +84,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vma->lock being part of the vm_area_struct causes performance regression
-during page faults because during contention its count and owner fields
-are constantly updated and having other parts of vm_area_struct used
-during page fault handling next to them causes constant cache line
-bouncing. Fix that by moving the lock outside of the vm_area_struct.
-All attempts to keep vma->lock inside vm_area_struct in a separate
-cache line still produce performance regression especially on NUMA
-machines. Smallest regression was achieved when lock is placed in the
-fourth cache line but that bloats vm_area_struct to 256 bytes.
-Considering performance and memory impact, separate lock looks like
-the best option. It increases memory footprint of each VMA but that
-will be addressed in the next patch.
-Note that after this change vma_init() does not allocate or
-initialize vma->lock anymore. A number of drivers allocate a pseudo
-VMA on the stack but they never use the VMA's lock, therefore it does
-not need to be allocated. The future drivers which might need the VMA
-lock should use vm_area_alloc()/vm_area_free() to allocate it.
+rw_semaphore is a sizable structure of 40 bytes and consumes
+considerable space for each vm_area_struct. However vma_lock has
+two important specifics which can be used to replace rw_semaphore
+with a simpler structure:
+1. Readers never wait. They try to take the vma_lock and fall back to
+mmap_lock if that fails.
+2. Only one writer at a time will ever try to write-lock a vma_lock
+because writers first take mmap_lock in write mode.
+Because of these requirements, full rw_semaphore functionality is not
+needed and we can replace rw_semaphore with an atomic variable.
+When a reader takes read lock, it increments the atomic unless the
+value is negative. If that fails read-locking is aborted and mmap_lock
+is used instead.
+When writer takes write lock, it resets atomic value to -1 if the
+current value is 0 (no readers). Since all writers take mmap_lock in
+write mode first, there can be only one writer at a time. If there
+are readers, writer will place itself into a wait queue using new
+mm_struct.vma_writer_wait waitqueue head. The last reader to release
+the vma_lock will signal the writer to wake up.
+vm_lock_seq is also moved into vma_lock and along with atomic_t they
+are nicely packed and consume 8 bytes, bringing the overhead from
+vma_lock from 44 to 16 bytes:
+
+    slabinfo before the changes:
+     <name>            ... <objsize> <objperslab> <pagesperslab> : ...
+    vm_area_struct    ...    152   53    2 : ...
+
+    slabinfo with vma_lock:
+     <name>            ... <objsize> <objperslab> <pagesperslab> : ...
+    rw_semaphore      ...      8  512    1 : ...
+    vm_area_struct    ...    160   51    2 : ...
+
+Assuming 40000 vm_area_structs, memory consumption would be:
+baseline: 6040kB
+vma_lock (vm_area_structs+vma_lock): 6280kB+316kB=6596kB
+Total increase: 556kB
+
+atomic_t might overflow if there are many competing readers, therefore
+vma_read_trylock() implements an overflow check and if that occurs it
+restors the previous value and exits with a failure to lock.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h       | 25 ++++++------
- include/linux/mm_types.h |  6 ++-
- kernel/fork.c            | 82 ++++++++++++++++++++++++++++------------
- 3 files changed, 74 insertions(+), 39 deletions(-)
+ include/linux/mm.h       | 37 +++++++++++++++++++++++++------------
+ include/linux/mm_types.h | 10 ++++++++--
+ kernel/fork.c            |  6 +++---
+ mm/init-mm.c             |  2 ++
+ 4 files changed, 38 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 50c7a6dd9c7a..d40bf8a5e19e 100644
+index d40bf8a5e19e..294dd44b2198 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -615,11 +615,6 @@ struct vm_operations_struct {
- };
- 
- #ifdef CONFIG_PER_VMA_LOCK
--static inline void vma_init_lock(struct vm_area_struct *vma)
--{
--	init_rwsem(&vma->lock);
--	vma->vm_lock_seq = -1;
--}
- 
- static inline void vma_write_lock(struct vm_area_struct *vma)
- {
-@@ -635,9 +630,9 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
- 	if (vma->vm_lock_seq == mm_lock_seq)
+@@ -627,12 +627,16 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+ 	 * mm->mm_lock_seq can't be concurrently modified.
+ 	 */
+ 	mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
+-	if (vma->vm_lock_seq == mm_lock_seq)
++	if (vma->vm_lock->lock_seq == mm_lock_seq)
  		return;
  
--	down_write(&vma->lock);
-+	down_write(&vma->vm_lock->lock);
- 	vma->vm_lock_seq = mm_lock_seq;
--	up_write(&vma->lock);
-+	up_write(&vma->vm_lock->lock);
+-	down_write(&vma->vm_lock->lock);
+-	vma->vm_lock_seq = mm_lock_seq;
+-	up_write(&vma->vm_lock->lock);
++	if (atomic_cmpxchg(&vma->vm_lock->count, 0, -1))
++		wait_event(vma->vm_mm->vma_writer_wait,
++			   atomic_cmpxchg(&vma->vm_lock->count, 0, -1) == 0);
++	vma->vm_lock->lock_seq = mm_lock_seq;
++	/* Write barrier to ensure lock_seq change is visible before count */
++	smp_wmb();
++	atomic_set(&vma->vm_lock->count, 0);
  }
  
  /*
-@@ -651,17 +646,17 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
- 	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+@@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+ static inline bool vma_read_trylock(struct vm_area_struct *vma)
+ {
+ 	/* Check before locking. A race might cause false locked result. */
+-	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
++	if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
  		return false;
  
--	if (unlikely(down_read_trylock(&vma->lock) == 0))
-+	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+-	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
++	if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
  		return false;
  
++	/* If atomic_t overflows, restore and fail to lock. */
++	if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
++		if (atomic_dec_and_test(&vma->vm_lock->count))
++			wake_up(&vma->vm_mm->vma_writer_wait);
++		return false;
++	}
++
  	/*
  	 * Overflow might produce false locked result.
  	 * False unlocked result is impossible because we modify and check
--	 * vma->vm_lock_seq under vma->lock protection and mm->mm_lock_seq
-+	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+ 	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
  	 * modification invalidates all existing locks.
  	 */
- 	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
--		up_read(&vma->lock);
-+		up_read(&vma->vm_lock->lock);
+-	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+-		up_read(&vma->vm_lock->lock);
++	if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
++		if (atomic_dec_and_test(&vma->vm_lock->count))
++			wake_up(&vma->vm_mm->vma_writer_wait);
  		return false;
  	}
  	return true;
-@@ -669,7 +664,7 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
+@@ -664,7 +676,8 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
  
  static inline void vma_read_unlock(struct vm_area_struct *vma)
  {
--	up_read(&vma->lock);
-+	up_read(&vma->vm_lock->lock);
+-	up_read(&vma->vm_lock->lock);
++	if (atomic_dec_and_test(&vma->vm_lock->count))
++		wake_up(&vma->vm_mm->vma_writer_wait);
  }
  
  static inline void vma_assert_write_locked(struct vm_area_struct *vma)
-@@ -684,7 +679,7 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
+@@ -674,13 +687,13 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
+ 	 * current task is holding mmap_write_lock, both vma->vm_lock_seq and
+ 	 * mm->mm_lock_seq can't be concurrently modified.
+ 	 */
+-	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
++	VM_BUG_ON_VMA(vma->vm_lock->lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
+ }
  
  static inline void vma_assert_no_reader(struct vm_area_struct *vma)
  {
--	VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock) &&
-+	VM_BUG_ON_VMA(rwsem_is_locked(&vma->vm_lock->lock) &&
- 		      vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
+-	VM_BUG_ON_VMA(rwsem_is_locked(&vma->vm_lock->lock) &&
+-		      vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
++	VM_BUG_ON_VMA(atomic_read(&vma->vm_lock->count) > 0 &&
++		      vma->vm_lock->lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
  		      vma);
  }
-@@ -694,7 +689,6 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
  
- #else /* CONFIG_PER_VMA_LOCK */
- 
--static inline void vma_init_lock(struct vm_area_struct *vma) {}
- static inline void vma_write_lock(struct vm_area_struct *vma) {}
- static inline bool vma_read_trylock(struct vm_area_struct *vma)
- 		{ return false; }
-@@ -704,6 +698,10 @@ static inline void vma_assert_no_reader(struct vm_area_struct *vma) {}
- 
- #endif /* CONFIG_PER_VMA_LOCK */
- 
-+/*
-+ * WARNING: vma_init does not initialize vma->vm_lock.
-+ * Use vm_area_alloc()/vm_area_free() if vma needs locking.
-+ */
- static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- {
- 	static const struct vm_operations_struct dummy_vm_ops = {};
-@@ -712,7 +710,6 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- 	vma->vm_mm = mm;
- 	vma->vm_ops = &dummy_vm_ops;
- 	INIT_LIST_HEAD(&vma->anon_vma_chain);
--	vma_init_lock(vma);
- }
- 
- /* Use when VMA is not part of the VMA tree and needs no locking */
 diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index c0e6c8e4700b..faa61b400f9b 100644
+index faa61b400f9b..a6050c38ca2e 100644
 --- a/include/linux/mm_types.h
 +++ b/include/linux/mm_types.h
-@@ -526,6 +526,10 @@ struct anon_vma_name {
- 	char name[];
+@@ -527,7 +527,13 @@ struct anon_vma_name {
  };
  
-+struct vma_lock {
-+	struct rw_semaphore lock;
-+};
-+
+ struct vma_lock {
+-	struct rw_semaphore lock;
++	/*
++	 * count > 0 ==> read-locked with 'count' number of readers
++	 * count < 0 ==> write-locked
++	 * count = 0 ==> unlocked
++	 */
++	atomic_t count;
++	int lock_seq;
+ };
+ 
  /*
-  * This struct describes a virtual memory area. There is one of these
-  * per VM-area/task. A VM area is any part of the process virtual memory
-@@ -563,7 +567,7 @@ struct vm_area_struct {
+@@ -566,7 +572,6 @@ struct vm_area_struct {
+ 	unsigned long vm_flags;
  
  #ifdef CONFIG_PER_VMA_LOCK
- 	int vm_lock_seq;
--	struct rw_semaphore lock;
-+	struct vma_lock *vm_lock;
+-	int vm_lock_seq;
+ 	struct vma_lock *vm_lock;
  #endif
  
- 	/*
+@@ -706,6 +711,7 @@ struct mm_struct {
+ 					  * by mmlist_lock
+ 					  */
+ #ifdef CONFIG_PER_VMA_LOCK
++		struct wait_queue_head vma_writer_wait;
+ 		int mm_lock_seq;
+ 		struct {
+ 			struct list_head head;
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 97f2b751f88d..95db6a521cf1 100644
+index 95db6a521cf1..b221ad182d98 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -451,40 +451,28 @@ static struct kmem_cache *vm_area_cachep;
- /* SLAB cache for mm_struct structures (tsk->mm) */
- static struct kmem_cache *mm_cachep;
+@@ -461,9 +461,8 @@ static bool vma_init_lock(struct vm_area_struct *vma)
+ 	vma->vm_lock = kmem_cache_alloc(vma_lock_cachep, GFP_KERNEL);
+ 	if (!vma->vm_lock)
+ 		return false;
+-
+-	init_rwsem(&vma->vm_lock->lock);
+-	vma->vm_lock_seq = -1;
++	atomic_set(&vma->vm_lock->count, 0);
++	vma->vm_lock->lock_seq = -1;
  
--struct vm_area_struct *vm_area_alloc(struct mm_struct *mm)
--{
--	struct vm_area_struct *vma;
-+#ifdef CONFIG_PER_VMA_LOCK
- 
--	vma = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
--	if (vma)
--		vma_init(vma, mm);
--	return vma;
--}
-+/* SLAB cache for vm_area_struct.lock */
-+static struct kmem_cache *vma_lock_cachep;
- 
--struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
-+static bool vma_init_lock(struct vm_area_struct *vma)
- {
--	struct vm_area_struct *new = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
-+	vma->vm_lock = kmem_cache_alloc(vma_lock_cachep, GFP_KERNEL);
-+	if (!vma->vm_lock)
-+		return false;
- 
--	if (new) {
--		ASSERT_EXCLUSIVE_WRITER(orig->vm_flags);
--		ASSERT_EXCLUSIVE_WRITER(orig->vm_file);
--		/*
--		 * orig->shared.rb may be modified concurrently, but the clone
--		 * will be reinitialized.
--		 */
--		*new = data_race(*orig);
--		INIT_LIST_HEAD(&new->anon_vma_chain);
--		vma_init_lock(new);
--		dup_anon_vma_name(orig, new);
--	}
--	return new;
-+	init_rwsem(&vma->vm_lock->lock);
-+	vma->vm_lock_seq = -1;
-+
-+	return true;
+ 	return true;
  }
- 
--#ifdef CONFIG_PER_VMA_LOCK
- static inline void __vm_area_free(struct vm_area_struct *vma)
- {
- 	/* The vma should either have no lock holders or be write-locked. */
- 	vma_assert_no_reader(vma);
-+	kmem_cache_free(vma_lock_cachep, vma->vm_lock);
- 	kmem_cache_free(vm_area_cachep, vma);
- }
- 
-@@ -540,6 +528,7 @@ void vm_area_free(struct vm_area_struct *vma)
- 
- #else /* CONFIG_PER_VMA_LOCK */
- 
-+static bool vma_init_lock(struct vm_area_struct *vma) { return true; }
- void drain_free_vmas(struct mm_struct *mm) {}
- 
- void vm_area_free(struct vm_area_struct *vma)
-@@ -550,6 +539,48 @@ void vm_area_free(struct vm_area_struct *vma)
- 
- #endif /* CONFIG_PER_VMA_LOCK */
- 
-+struct vm_area_struct *vm_area_alloc(struct mm_struct *mm)
-+{
-+	struct vm_area_struct *vma;
-+
-+	vma = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
-+	if (!vma)
-+		return NULL;
-+
-+	vma_init(vma, mm);
-+	if (!vma_init_lock(vma)) {
-+		kmem_cache_free(vm_area_cachep, vma);
-+		return NULL;
-+	}
-+
-+	return vma;
-+}
-+
-+struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
-+{
-+	struct vm_area_struct *new;
-+
-+	new = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
-+	if (!new)
-+		return NULL;
-+
-+	ASSERT_EXCLUSIVE_WRITER(orig->vm_flags);
-+	ASSERT_EXCLUSIVE_WRITER(orig->vm_file);
-+	/*
-+	 * orig->shared.rb may be modified concurrently, but the clone
-+	 * will be reinitialized.
-+	 */
-+	*new = data_race(*orig);
-+	if (!vma_init_lock(new)) {
-+		kmem_cache_free(vm_area_cachep, new);
-+		return NULL;
-+	}
-+	INIT_LIST_HEAD(&new->anon_vma_chain);
-+	dup_anon_vma_name(orig, new);
-+
-+	return new;
-+}
-+
- static void account_kernel_stack(struct task_struct *tsk, int account)
- {
- 	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-@@ -3138,6 +3169,9 @@ void __init proc_caches_init(void)
- 			NULL);
- 
- 	vm_area_cachep = KMEM_CACHE(vm_area_struct, SLAB_PANIC|SLAB_ACCOUNT);
-+#ifdef CONFIG_PER_VMA_LOCK
-+	vma_lock_cachep = KMEM_CACHE(vma_lock, SLAB_PANIC|SLAB_ACCOUNT);
-+#endif
- 	mmap_init();
- 	nsproxy_cache_init();
- }
+@@ -1229,6 +1228,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	mmap_init_lock(mm);
+ 	INIT_LIST_HEAD(&mm->mmlist);
+ #ifdef CONFIG_PER_VMA_LOCK
++	init_waitqueue_head(&mm->vma_writer_wait);
+ 	WRITE_ONCE(mm->mm_lock_seq, 0);
+ 	INIT_LIST_HEAD(&mm->vma_free_list.head);
+ 	spin_lock_init(&mm->vma_free_list.lock);
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index b53d23c2d7a3..0088e31e5f7e 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -38,6 +38,8 @@ struct mm_struct init_mm = {
+ 	.arg_lock	=  __SPIN_LOCK_UNLOCKED(init_mm.arg_lock),
+ 	.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
+ #ifdef CONFIG_PER_VMA_LOCK
++	.vma_writer_wait =
++		__WAIT_QUEUE_HEAD_INITIALIZER(init_mm.vma_writer_wait),
+ 	.mm_lock_seq	= 0,
+ 	.vma_free_list.head = LIST_HEAD_INIT(init_mm.vma_free_list.head),
+ 	.vma_free_list.lock =  __SPIN_LOCK_UNLOCKED(init_mm.vma_free_list.lock),
 -- 
 2.39.0
 
