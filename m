@@ -2,118 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F33B66223A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54D1662245
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbjAIJ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S234194AbjAIJ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjAIJ40 (ORCPT
+        with ESMTP id S233985AbjAIJ6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:56:26 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D9418E1F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:54:28 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g10so5842354wmo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:54:28 -0800 (PST)
+        Mon, 9 Jan 2023 04:58:34 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3515719
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:56:16 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id p188so8007893yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:56:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c8qXFIeMr9pMSyYWEYQkZme6Z9JhhjJGkjPasbJMQrE=;
-        b=SbkkmdM/kETAbEVUqrPXzULs7E59O0Yooxbvd173lH4Erp8AVkEKsQB+WB943x1WFE
-         kJq13h3GhogAXeODJ0FDDpswT3fa2mdqJOVV5g9NQsa8uCuPvHSk/sczoRXsHnv4i2sH
-         RtAPLpzbYSidlUwz78nGmrquPC3GebmH3XFNZCLXqe/phEKLy5Cbgl17mUhectGyaeLu
-         VhBZPYHHkfGCTshD3Kv1b1sruI5GxXAjVB2qAwnPv1N+wZRU+5luFkYLy7j2l5oCLiCg
-         jw3z4X15SJl9hjnYdFPGhzxliSLySnvhqZBomq+6YqTWThLfBdJAyBzOj28UEOGZ2Ytj
-         tjYw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SfDaq2ASpiM1zBb2WHSIhwQSieUxoxDNWuYmU52fBIY=;
+        b=blauc+qxWSvrWJvnw8ziranzXegXkmdq5J/cb3W9GtJvc/dXWfk6uMqzpTrVAp7sPu
+         e8alsyX/smcZ+MwKh+qUCW3SzuHbm1CzZxqQ0aonQXNSsN1JEmU5jMsOg9QaZF+ke9gB
+         A06wBYBMfhnhMlD2utylI4UP1KWDH6TiCGyaVYgUJyW2n+wbYdoAvEntaj7AkuAAnrQS
+         Go1sto9NClzKe1oAKmxAasjn21RR/Wjbml2qG3P4+2n/Uts9TvZ2OvmFrKqeZaT3ChiN
+         1QQ8C8ql32/V8INuDNgoRlWlN9ecMGoP84PgzRplF5qgNERvXjpQxZPn9H3VRWeP4LIe
+         eaXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8qXFIeMr9pMSyYWEYQkZme6Z9JhhjJGkjPasbJMQrE=;
-        b=sHQssN6PybUD+fR7Y3gE9QWMOlLFFUX2wmnD+MtGLV2pkJMWBEJbyFcqxqt9c1CFdW
-         PZ8KYxkIskMejNyTckMnp8kUivztjMzpAxcAAoJqOZhTzDngitxjQhXrKwWPxb3CZ2+Z
-         u9Z2rRyyKL+Xu07IVxXlF72VrwmvlpfiF5bjB4uo0WW25pXduFQP/2kynT1ZJ6wgcUis
-         dN3uRhhCDHDr1Fh/2aINnxYpZVaDGfZHydkI6l+vHBniNf0pj8/4bkg9cWI/TYkuTdlm
-         XubopbrpO+5P/e1J/bZIUMxvCqQviTmFjlm8up/t3g2EnxhydAUwqfsR3p3Eaqr7KK1q
-         Rhsg==
-X-Gm-Message-State: AFqh2kqMpAtrmXSU9n731NGvCae+yg/K0GTMnvsA0ktwobaYNYHgMaWd
-        k/f38uOxqF+jnRrme1jsaOOGlA==
-X-Google-Smtp-Source: AMrXdXtEL2qwGBtgcLfYF/pZACbKO4SmrSrPkCIo15Ern0RItHA2yVmSLZw0mXlWlmehrVYuYdbfXw==
-X-Received: by 2002:a05:600c:8507:b0:3d9:6c7d:c9ee with SMTP id gw7-20020a05600c850700b003d96c7dc9eemr41026101wmb.25.1673258067131;
-        Mon, 09 Jan 2023 01:54:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y15-20020adffa4f000000b002bbec19c8acsm2825931wrr.64.2023.01.09.01.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 01:54:26 -0800 (PST)
-Message-ID: <e64d22eb-4c42-b279-b493-972e4a1af1cd@linaro.org>
-Date:   Mon, 9 Jan 2023 10:54:25 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SfDaq2ASpiM1zBb2WHSIhwQSieUxoxDNWuYmU52fBIY=;
+        b=OdfUxlNPsCP//B14xzVEAUDPqHCv+0r8Pcvv5IxO/Uk5+qW+m/i+L0el91nM0x7B3Q
+         revuF5s1QsVotcLBvKgKk9c4N/tiEhmCG1wGGV5ra8obijdpjNZrZNW3E3EXDhu1kvnr
+         UXxjy/Zcd/CLL5zpdo45ar0g27qB2Am/W2XafM/FcXdSRiz+9zYE63oEG7gYBm05WyDd
+         v1tyvlC0M7FiYoB98GaMYDZwj7P8IBLVn9Zfvhr0cTvTb4eKZqgi7Y1/j8pevStpxwZb
+         WYrAVMvRuNOdbfAVOIzFxZlDejBkf82AFlPcsB9wO54nPpT70z42q37Qa0M41HE71Y90
+         DBUQ==
+X-Gm-Message-State: AFqh2kp9omvlGs/iKJ2Se8xkvLXWb5OlbOSdZAFBr2383vhQbh57iU69
+        yLSVm36s2KGE/JAPUSNtEsd2q1potTARM808834yJw==
+X-Google-Smtp-Source: AMrXdXsHHnAEm3fH4gz1NO9LoZFtdEIsaXJ4YeYcnXGDlU9/SzIYVGbyu7x7LN0IqTlQ0oQNGt4wIYD/KERNa/pZsSk=
+X-Received: by 2002:a25:8f89:0:b0:7b3:bb8:9daf with SMTP id
+ u9-20020a258f89000000b007b30bb89dafmr1033768ybl.427.1673258175757; Mon, 09
+ Jan 2023 01:56:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/3] dt-bindings: firmware: qcom: scm: Separate VMIDs
- from header to bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Loic Poulain <loic.poulain@linaro.org>
-References: <20230109093947.83394-1-konrad.dybcio@linaro.org>
- <20230109093947.83394-3-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109093947.83394-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230108025545.338-1-cuiyunhui@bytedance.com>
+In-Reply-To: <20230108025545.338-1-cuiyunhui@bytedance.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 9 Jan 2023 10:56:04 +0100
+Message-ID: <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
+Subject: Re: [PATCH v4] sock: add tracepoint for send recv length
+To:     Yunhui Cui <cuiyunhui@bytedance.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, kuniyu@amazon.com,
+        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 10:39, Konrad Dybcio wrote:
-> With changes to the rmtfs binding, secure VMIDs will become useful to
-> have in device trees. Separate them out and add to include/dt-bindings.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Sun, Jan 8, 2023 at 3:56 AM Yunhui Cui <cuiyunhui@bytedance.com> wrote:
+>
+> Add 2 tracepoints to monitor the tcp/udp traffic
+> of per process and per cgroup.
+>
+> Regarding monitoring the tcp/udp traffic of each process, there are two
+> existing solutions, the first one is https://www.atoptool.nl/netatop.php.
+> The second is via kprobe/kretprobe.
+>
+> Netatop solution is implemented by registering the hook function at the
+> hook point provided by the netfilter framework.
+>
+> These hook functions may be in the soft interrupt context and cannot
+> directly obtain the pid. Some data structures are added to bind packets
+> and processes. For example, struct taskinfobucket, struct taskinfo ...
+>
+> Every time the process sends and receives packets it needs multiple
+> hashmaps,resulting in low performance and it has the problem fo inaccurate
+> tcp/udp traffic statistics(for example: multiple threads share sockets).
+>
+> We can obtain the information with kretprobe, but as we know, kprobe gets
+> the result by trappig in an exception, which loses performance compared
+> to tracepoint.
+>
+> We compared the performance of tracepoints with the above two methods, and
+> the results are as follows:
+>
+> ab -n 1000000 -c 1000 -r http://127.0.0.1/index.html
+> without trace:
+> Time per request: 39.660 [ms] (mean)
+> Time per request: 0.040 [ms] (mean, across all concurrent requests)
+>
+> netatop:
+> Time per request: 50.717 [ms] (mean)
+> Time per request: 0.051 [ms] (mean, across all concurrent requests)
+>
+> kr:
+> Time per request: 43.168 [ms] (mean)
+> Time per request: 0.043 [ms] (mean, across all concurrent requests)
+>
+> tracepoint:
+> Time per request: 41.004 [ms] (mean)
+> Time per request: 0.041 [ms] (mean, across all concurrent requests
+>
+> It can be seen that tracepoint has better performance.
+>
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
 > ---
-> v2 -> v3:
-> New patch
-> 
->  include/dt-bindings/firmware/qcom/scm.h | 16 ++++++++++++++++
->  include/linux/qcom_scm.h                |  7 ++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
->  create mode 100644 include/dt-bindings/firmware/qcom/scm.h
-> 
-> diff --git a/include/dt-bindings/firmware/qcom/scm.h b/include/dt-bindings/firmware/qcom/scm.h
-> new file mode 100644
-> index 000000000000..d66818cd57a8
-> --- /dev/null
-> +++ b/include/dt-bindings/firmware/qcom/scm.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+>  include/trace/events/sock.h | 48 +++++++++++++++++++++++++++++++++++++
+>  net/socket.c                | 23 ++++++++++++++----
+>  2 files changed, 67 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
+> index 777ee6cbe933..d00a5b272404 100644
+> --- a/include/trace/events/sock.h
+> +++ b/include/trace/events/sock.h
+> @@ -263,6 +263,54 @@ TRACE_EVENT(inet_sk_error_report,
+>                   __entry->error)
+>  );
+>
+> +/*
+> + * sock send/recv msg length
+> + */
+> +DECLARE_EVENT_CLASS(sock_msg_length,
+> +
+> +       TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
+> +                int flags),
+> +
+> +       TP_ARGS(sk, family, protocol, ret, flags),
+> +
+> +       TP_STRUCT__entry(
+> +               __field(void *, sk)
+> +               __field(__u16, family)
+> +               __field(__u16, protocol)
+> +               __field(int, length)
+> +               __field(int, error)
+> +               __field(int, flags)
+> +       ),
+> +
+> +       TP_fast_assign(
+> +               __entry->sk = sk;
+> +               __entry->family = sk->sk_family;
+> +               __entry->protocol = sk->sk_protocol;
+> +               __entry->length = ret > 0 ? ret : 0;
+> +               __entry->error = ret < 0 ? ret : 0;
+> +               __entry->flags = flags;
+> +       ),
+> +
+> +       TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
+> +                 __entry->sk, show_family_name(__entry->family),
+> +                 show_inet_protocol_name(__entry->protocol),
+> +                 __entry->length,
+> +                 __entry->error, __entry->flags)
+> +);
+> +
+> +DEFINE_EVENT(sock_msg_length, sock_send_length,
+> +       TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
+> +                int flags),
+> +
+> +       TP_ARGS(sk, family, protocol, ret, flags)
+> +);
+> +
+> +DEFINE_EVENT(sock_msg_length, sock_recv_length,
+> +       TP_PROTO(struct sock *sk, __u16 family, __u16 protocol, int ret,
+> +                int flags),
+> +
+> +       TP_ARGS(sk, family, protocol, ret, flags)
+> +);
+>  #endif /* _TRACE_SOCK_H */
+>
+>  /* This part must be outside protection */
+> diff --git a/net/socket.c b/net/socket.c
+> index 888cd618a968..60a1ff95b4b1 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -106,6 +106,7 @@
+>  #include <net/busy_poll.h>
+>  #include <linux/errqueue.h>
+>  #include <linux/ptp_clock_kernel.h>
+> +#include <trace/events/sock.h>
+>
+>  #ifdef CONFIG_NET_RX_BUSY_POLL
+>  unsigned int sysctl_net_busy_read __read_mostly;
+> @@ -715,6 +716,9 @@ static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
+>                                      inet_sendmsg, sock, msg,
+>                                      msg_data_left(msg));
+>         BUG_ON(ret == -EIOCBQUEUED);
+> +
+> +       trace_sock_send_length(sock->sk, sock->sk->sk_family,
+> +                              sock->sk->sk_protocol, ret, 0);
 
-Only Codeaurora folks contributed these numbers, thus we can relicense
-it to dual-license, I believe.
+Note: At least for CONFIG_RETPOLINE=y and gcc 12.2, compiler adds many
+additional instructions (and additional memory reads),
+even when the trace point is not enabled.
 
-The other topic is what do these numbers represent: hardware interface?
-registers? offsets? firmware? IOW, why bindings is the place for them?
-(usefulness for DTS is not the reason)
+Contrary to some belief, adding a tracepoint is not always 'free'.
+tail calls for example are replaced with normal calls.
+
+sock_recvmsg_nosec:
+        pushq   %r12    #
+        movl    %edx, %r12d     # tmp123, flags
+        pushq   %rbp    #
+# net/socket.c:999:     int ret =
+INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+        movl    %r12d, %ecx     # flags,
+# net/socket.c:998: {
+        movq    %rdi, %rbp      # tmp121, sock
+        pushq   %rbx    #
+# net/socket.c:999:     int ret =
+INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+        movq    32(%rdi), %rax  # sock_19(D)->ops, sock_19(D)->ops
+# ./include/linux/uio.h:270:    return i->count;
+        movq    32(%rsi), %rdx  # MEM[(const struct iov_iter
+*)msg_20(D) + 16B].count, pretmp_48
+# net/socket.c:999:     int ret =
+INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+        movq    144(%rax), %rax # _1->recvmsg, _2
+        cmpq    $inet6_recvmsg, %rax    #, _2
+        jne     .L107   #,
+        call    inet6_recvmsg   #
+        movl    %eax, %ebx      # tmp124, <retval>
+.L108:
+# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+        xorl    %r8d, %r8d      # tmp127
+        testl   %ebx, %ebx      # <retval>
+# net/socket.c:1004:                           sock->sk->sk_protocol,
+        movq    24(%rbp), %rsi  # sock_19(D)->sk, _10
+# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+        cmovle  %ebx, %r8d      # <retval>,, tmp119
+        testb   $2, %r12b       #, flags
+# net/socket.c:1004:                           sock->sk->sk_protocol,
+        movzwl  516(%rsi), %ecx # _10->sk_protocol,
+# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+        movzwl  16(%rsi), %edx  # _10->__sk_common.skc_family,
+# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+        cmove   %ebx, %r8d      # tmp119,, <retval>, iftmp.54_16
+# ./arch/x86/include/asm/jump_label.h:27:       asm_volatile_goto("1:"
+#APP
+# 27 "./arch/x86/include/asm/jump_label.h" 1
+        1:jmp .L111 # objtool NOPs this         #
+        .pushsection __jump_table,  "aw"
+         .balign 8
+        .long 1b - .
+        .long .L111 - .         #
+         .quad __tracepoint_sock_recv_length+8 + 2 - .  #,
+        .popsection
+
+# 0 "" 2
+#NO_APP
+.L106:
+# net/socket.c:1008: }
+        movl    %ebx, %eax      # <retval>,
+        popq    %rbx    #
+        popq    %rbp    #
+        popq    %r12    #
+        ret
+.L111:
+# ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
+sock_recv_length,
 
 
-Best regards,
-Krzysztof
-
+>         return ret;
+>  }
+>
+> @@ -992,9 +996,15 @@ INDIRECT_CALLABLE_DECLARE(int inet6_recvmsg(struct socket *, struct msghdr *,
+>  static inline int sock_recvmsg_nosec(struct socket *sock, struct msghdr *msg,
+>                                      int flags)
+>  {
+> -       return INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+> -                                 inet_recvmsg, sock, msg, msg_data_left(msg),
+> -                                 flags);
+> +       int ret = INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+> +                                    inet_recvmsg, sock, msg,
+> +                                    msg_data_left(msg), flags);
+> +
+> +       trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+> +                              sock->sk->sk_protocol,
+> +                              !(flags & MSG_PEEK) ? ret :
+> +                              (ret < 0 ? ret : 0), flags);
+> +       return ret;
+>  }
+>
+>  /**
+> @@ -1044,6 +1054,7 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
+>  {
+>         struct socket *sock;
+>         int flags;
+> +       int ret;
+>
+>         sock = file->private_data;
+>
+> @@ -1051,7 +1062,11 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
+>         /* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
+>         flags |= more;
+>
+> -       return kernel_sendpage(sock, page, offset, size, flags);
+> +       ret = kernel_sendpage(sock, page, offset, size, flags);
+> +
+> +       trace_sock_send_length(sock->sk, sock->sk->sk_family,
+> +                              sock->sk->sk_protocol, ret, 0);
+> +       return ret;
+>  }
+>
+>  static ssize_t sock_splice_read(struct file *file, loff_t *ppos,
+> --
+> 2.20.1
+>
