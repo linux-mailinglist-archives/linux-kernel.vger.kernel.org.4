@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9096766326E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EAD663274
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbjAIVLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S237909AbjAIVMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237819AbjAIVLg (ORCPT
+        with ESMTP id S237855AbjAIVLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:11:36 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD741A76;
-        Mon,  9 Jan 2023 13:05:47 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id l139so9767852ybl.12;
-        Mon, 09 Jan 2023 13:05:47 -0800 (PST)
+        Mon, 9 Jan 2023 16:11:41 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC4212099;
+        Mon,  9 Jan 2023 13:06:17 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id c124so9773132ybb.13;
+        Mon, 09 Jan 2023 13:06:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=myEKGg+oMEzcSTRA/yCcbDAjuI7KfOMxWzLnkBmkC7Y=;
-        b=KKh3FuuvOpr51yI0LDH/oIme2+Hs5Gwn0hqqM1Ytor7PzuInJ0En8ggSSspfJ30SaI
-         kWVKD0FVS+Grls7waVZhg5695Mvi96LjJjrbcZai4x49BmdWU4H9kUraiAuvBCe/B6lC
-         fQhAL2CxHFyXCrbxQVdG8bfiJR//TYsTQTIth+GWMygLeUigzr1CoUa+n1pN0r/j9rEi
-         0W8czT3zajB6mmnbkM065wnrFZRbKZ1niJVlj9l3omMbz+FMbPftQR5xOcTssawRuVrn
-         n7E+2d0zrcx3Gh4MS5tv62NBiv9hHdxxys1C+qekXlRWgOgdaC7n9CdU6eqLFigLJX8q
-         VRRQ==
+        bh=ruqurkiOPq/60Ofar99Z98QHHgy9IA7M4V3XUwPdHC8=;
+        b=LxtJ+X5iYJcNmJcWpm8rjH0waBDqiQdG88taP2+j4q047HhQOLkKQ8jx0LC/bkrgRI
+         kseC7SSxeKQzZ8aUlq45UXd9n6m/9OcB0UsICzX25e59lc7kS7NgzzfgPjM8Ouk973jT
+         VBWfXgQ792/ytHcAoc1v2U9mvvmYKV64/XGlBY429/siIJfamy0eVNHCEduLusREe5KI
+         Eo83FW6MBM/4Lhx0e3fQqnG3LljPWHuE6468vOsHUEbk9bNwWvVTlQl6zHMonFlu9Jks
+         zmDi2+hDjohK5zWF8gGiP5tZZdhqe7ByGL955eFJBeRIXXo7wrOn8MBD/I4SkcS4NrHs
+         xqyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=myEKGg+oMEzcSTRA/yCcbDAjuI7KfOMxWzLnkBmkC7Y=;
-        b=l8cDMzaLyN32ruhHOysoulpFW60FeXqJ2M5s6rqoKYT6ogOazOGFILT+YBbXpSlfy+
-         qUw7SuSRGNcmefXtEJ03/H0yy5x21rX++AKgeE0slS2uWHJ/tXApgPFSYdzHGKbsawzJ
-         gPfkdmyisNrR6xsBjptmPsZRQ6MSrNrJL4Ot+ozRT4d9tygPM8ythmsD9fSlkzQGi4Dp
-         Gznca2FiHaPGEGcFTYDz3V+cQcehaSHEwKd/Dt9JbNY6Jd7p5yFCurkfvQyHxB0uNZxr
-         dpoUT35HeePQUyAfaF+uUhmEAMfD0SxJ8InUSmFhWazskjnIgaTZa/I7xwXs6wBkxF7m
-         dLrw==
-X-Gm-Message-State: AFqh2kpDh3LNU6jxPwn8eyoUMJsNOWvsPNLPsr06QKozqB43BfzQm3rw
-        HYzil+GmMS7gOeLHNhmA9/EuFxtl6UZOUgj5TvU=
-X-Google-Smtp-Source: AMrXdXtxeAq1fcrp0b42A4VMYRMUWp0hLyrkry0m7xghpdIY2iK2OeCAvX/A8wipnJx6npW9eQA3IsQmGU8rhapiN+I=
-X-Received: by 2002:a25:1004:0:b0:712:faac:e6b2 with SMTP id
- 4-20020a251004000000b00712faace6b2mr6955908ybq.632.1673298346610; Mon, 09 Jan
- 2023 13:05:46 -0800 (PST)
+        bh=ruqurkiOPq/60Ofar99Z98QHHgy9IA7M4V3XUwPdHC8=;
+        b=hAV6w3a0J0ikByWDDCOEXZP1lX6wHXw17lPYN+5yqBSrWOu0yM04SoynbVU6s0X0+b
+         Iu1/HKRYvHLEROV9tEk98RRvRjP/DRlxZSLfrFABs77afVB2sGo63ovKwlge4Q3iS7ny
+         2eTWL4IRjG6GIdlmqSZzJQWYvJbDXvoAIbRcjVgoB9lnLlgvMtdL1WNIOA574j7t5Kqe
+         AyW9OqMUOzWVIj22JotGRPzSFdDnpXv9ovOwYwjweXcyN2XmjjkGSK141lGKC2qK5Qo1
+         rHk7fA30uvWYUZYpjxizB0U0swQADphH5v+OcMaBxqpI6bdbqzFFdhGXhDIiYD9Z5POn
+         vyXA==
+X-Gm-Message-State: AFqh2kpAnGXYuWasNGnz+935XNQO1Snq/IG4Ma1yB5il8BJpitqI8Nkq
+        raD0zFTtwhaijrwT4RC9RdmJtqyGLLPVM7wLO90=
+X-Google-Smtp-Source: AMrXdXtV6jEFbH9LeE1FPymK59PmRaEJbE++VCpZc1kGfJiDhWH47gzHv0RWTADEClSW7TO4g6lpJWsTcg61ZqgjnAQ=
+X-Received: by 2002:a25:ac08:0:b0:73b:23cf:ad63 with SMTP id
+ w8-20020a25ac08000000b0073b23cfad63mr8094083ybi.323.1673298376640; Mon, 09
+ Jan 2023 13:06:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <CAKwvOdkr6mAdNOkZqGdkosAN6JABHRU3bHg=K8ujjbw2GxEsKQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkr6mAdNOkZqGdkosAN6JABHRU3bHg=K8ujjbw2GxEsKQ@mail.gmail.com>
+References: <20230109204520.539080-1-ojeda@kernel.org>
+In-Reply-To: <20230109204520.539080-1-ojeda@kernel.org>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 9 Jan 2023 22:05:35 +0100
-Message-ID: <CANiq72=RJ9NffqJOJLuN6B-DCQgjx1Yp7-sP58q2HchBNpYE=w@mail.gmail.com>
+Date:   Mon, 9 Jan 2023 22:06:05 +0100
+Message-ID: <CANiq72m_+xJYUxrwFc7vNLkuOb6zC-W-wDzXjbPb8Ursqzwiaw@mail.gmail.com>
 Subject: Re: [PATCH 1/6] docs: rust: add paragraph about finding a suitable `libclang`
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kbuild@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
@@ -76,17 +76,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 9:54 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Mon, Jan 9, 2023 at 9:45 PM Miguel Ojeda <ojeda@kernel.org> wrote:
 >
-> This is super helpful for me, since I build clang from source and
-> would like to use my libclang.so! Thanks for this documentation
-> Miguel!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> +* Or ``LIBCLANG_PATH`` can be pointed to a ``libclang`` shared library
+> +  or to the directoy containing it.
 
-Thanks for the quick review Nick!
+I just noticed the typo here, sorry: directoy -> directory
 
-By the way, I didn't add your Reported-by here because apparently it
-is only intended for bug fixes and not features.
+Masahiro: if you take them, please feel free to correct it.
 
 Cheers,
 Miguel
