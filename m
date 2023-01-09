@@ -2,526 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC53E6622F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6614A6622C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjAIKRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S236793AbjAIKPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbjAIKQJ (ORCPT
+        with ESMTP id S237045AbjAIKO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:16:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CDF109B;
-        Mon,  9 Jan 2023 02:15:34 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3097gBjm023783;
-        Mon, 9 Jan 2023 10:15:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=kRaoQJK8KYop87jY7BEaLbrpAp5gCNOfrxBZWKBW1wQ=;
- b=YRsE0JsvDTObxQbpu4/l8+3JM+lMKsdiZenrIrp2MpkCjsyuiSGjfcxGBSgWB0NiCJfJ
- d92bvwvaDFSFtcgx9opyuejmkegFl0BKtM1beGX47Tmb7yjnMtaEWhbf3XAfAhTkzfIq
- XUbNIeCmAcHR+I6ZTA8jx8YohtZS95BfRR0WN28RNchezBVp5BEmge7wirOZ6K9CIX1O
- gEpbVT1/vomEq1HVRm6iv5xzlI6vqOe1FjOp1snWtCzt9KlV7lIamvJn4nz8ybTsAEPf
- DjXFo7Mi8eBIBByeFykMQvSjcDWt9aD39F5HyEVvDnfoaqHrbwP3LJBvBZQXpnI5FSR/ AQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mxx3w30jp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 10:15:20 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309AFJ6M030984
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 9 Jan 2023 10:15:19 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 9 Jan 2023 02:15:15 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V0 1/1] soc: qcom: dcc: Add QAD, Cti-trigger and Bootconfig support for DCC
-Date:   Mon, 9 Jan 2023 15:43:44 +0530
-Message-ID: <8337e5672559b197a13699d2c0ee69f18f6167a6.1673247689.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1673247689.git.quic_schowdhu@quicinc.com>
-References: <cover.1673247689.git.quic_schowdhu@quicinc.com>
+        Mon, 9 Jan 2023 05:14:58 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C4219294
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:14:06 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id z5so6552300wrt.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
+        b=ckhYgBdaOObPp08TPqTFL7LDtCo3mvVO9nMROdG6iaHdh7Vmnz+KDmLvzMC3j+kXqr
+         bGl+hEV9Vx4GS9/U9JSTG38wjjZS3JttcgkWmogv3YYYCCKi3whX1IYfr7TPfQ3i9z4U
+         spe6stZTjC0IBRevcS/vLdR7NaZieS06dmJGsGI5YkG6Y+c84xvSw+T4dGP4pPavoLsx
+         vGRs7/m3UY8IhY/GTbaxsj2wDAPgGwFYxQrniEZsOZfksv0JiPdgBBOJYGI82gm8E+lb
+         HrQYOGsO7jVo9Oo9WMIT1YWSzGaQ7tSBLuEPOSLtk6jA6oS1LRDQ9jW3wxsSSouptbLx
+         4j2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tKCQUhm58zZMU1+N1NXsPah3RLRpFdffVr/EsdddpFY=;
+        b=K4JdXEgBUafplWq5FzIXBHcbTwfTPxX9PGePPwGIZrCT511hl8bR2qFMVsPbDgY1OS
+         VLzhOiTDUl3KI2TKmQUrzpyTWE8b+TSSq+xYUPN4hnU6fwtU+SWrK4d9ZsKKSrHRkCFk
+         dpKoefdKbg5REccP4eIqaqmubmDEKUr2KLib4mdryRDccnwxDWA6DRfrDTJz0dcDJYxC
+         4WsN/l6Uqie5KEL2xf34fTnpGOA+9MsJWhqn82pRJm611VGIDq2B7BOWQ8fgCR4fAVk1
+         YjcLUtkVkmTxH56K8jmUzeiGoNXOtNnYs9Bp/kA1dZTs2VLVMhZ6xfq3r+LNHcUM/8G1
+         UbSw==
+X-Gm-Message-State: AFqh2krr19RY4FZ6AR6pc210YGATbcaZpcn29nv0dF3fqsIXkkw8JwQP
+        omjmqqGoEYVs5ynfRqfpk/dRDA==
+X-Google-Smtp-Source: AMrXdXuppLG6yXIDwCzTHlmZxEUSt0/iBt0iREIXO/zIq2DPIPPsNImJeAsr6RgHanJAh5qw2Be6nA==
+X-Received: by 2002:a5d:6b4e:0:b0:2ba:e1d9:37e7 with SMTP id x14-20020a5d6b4e000000b002bae1d937e7mr6995164wrw.18.1673259245274;
+        Mon, 09 Jan 2023 02:14:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b002a6f329203esm8232130wrw.61.2023.01.09.02.14.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 02:14:04 -0800 (PST)
+Message-ID: <3aa83ec3-228d-1add-5e4b-c100340b127e@linaro.org>
+Date:   Mon, 9 Jan 2023 11:14:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tttclr8vNc1xdB0ech5nCzP1h5QIcwTb
-X-Proofpoint-GUID: tttclr8vNc1xdB0ech5nCzP1h5QIcwTb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_03,2023-01-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 malwarescore=0
- clxscore=1015 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
- impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301090071
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] dt-bindings usb: typec: rt1718s: Add binding for
+ Richtek RT1718S
+Content-Language: en-US
+To:     gene_chen@richtek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1673256674-25165-1-git-send-email-gene_chen@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the QAD, ctitrigger and bootconfig support for dcc driver.
-The QAD is used for access control of the DCC configurations
-and can be set or unset by writing to DCC_QAD_OUTPUT register.
-The Cti-trigger is used for the cross trigger interface, on
-enabling it the software trigger can be initiated for dcc by
-setting the cti-trigout.
-Bootconfig support for DCC is for configuring register values
-to dcc at boot time, this is needed for debugging crashes that
-happen at boot time.
-Add the debugfs files QAD and CTI-trigger for each list folder.
-Also add hwtrigger debugfs file which needs to be disabled on
-enabling the cti-trigger.
+On 09/01/2023 10:31, gene_chen@richtek.com wrote:
+> From: Gene Chen <gene_chen@richtek.com>
+> 
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- Documentation/ABI/testing/debugfs-driver-dcc |  24 +++
- drivers/soc/qcom/dcc.c                       | 281 ++++++++++++++++++++++++++-
- 2 files changed, 301 insertions(+), 4 deletions(-)
+Subject: drop second, redundant "binding for".
 
-diff --git a/Documentation/ABI/testing/debugfs-driver-dcc b/Documentation/ABI/testing/debugfs-driver-dcc
-index 27ed591..f817a9f 100644
---- a/Documentation/ABI/testing/debugfs-driver-dcc
-+++ b/Documentation/ABI/testing/debugfs-driver-dcc
-@@ -125,3 +125,27 @@ Description:
- 		on manual or crash induced triggers. Lists must
- 		be configured and enabled sequentially, e.g. list
- 		2 can only be enabled when list 1 have so.
-+
-+What:		/sys/kernel/debug/dcc/.../[list-number]/ctitrigger
-+Date:		January 2023
-+Contact:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+Description:
-+		This debugfs interface is used for enabling the
-+		ctitrigger. Ctitrigger can be enabled by writing
-+		a '1' to the file.
-+
-+What:		/sys/kernel/debug/dcc/.../[list-number]/QAD
-+Date:          January 2023
-+Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+Description:
-+		This debugfs interface is used for enabling the
-+		ctitrigger. Ctitrigger can be enabled by writing
-+		a '1' to the file.
-+
-+What:          /sys/kernel/debug/dcc/.../[list-number]/hwtrigger
-+Date:	        January 2023
-+Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+Description:
-+	        This debugfs interface is used for enabling the
-+	        hwtrigger support. Hwtrigger can be enabled by
-+	        writing a '1' to the file.
-diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
-index 5b50d63..e3d2710 100644
---- a/drivers/soc/qcom/dcc.c
-+++ b/drivers/soc/qcom/dcc.c
-@@ -6,6 +6,7 @@
+> Add binding for Richtek RT1718s
+> 
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> ---
+>  .../devicetree/bindings/usb/richtek,rt1718s.yaml   | 98 ++++++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> new file mode 100644
+> index 00000000..7797fc6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/richtek,rt1718s.yaml
+> @@ -0,0 +1,98 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/richtek,rt1718s.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
- #include <linux/bitfield.h>
- #include <linux/bitops.h>
-+#include <linux/bootconfig.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/fs.h>
-@@ -36,6 +37,8 @@
- #define DCC_LL_INT_STATUS		0x1c
- #define DCC_LL_SW_TRIGGER		0x2c
- #define DCC_LL_BUS_ACCESS_STATUS	0x30
-+#define DCC_CTI_TRIG                    0x34
-+#define DCC_QAD_OUTPUT                  0x38
+Drop quotes from both.
 
- /* Default value used if a bit 6 in the HW_INFO register is set. */
- #define DCC_FIX_LOOP_OFFSET		16
-@@ -131,6 +134,9 @@ struct dcc_drvdata {
- 	size_t			nr_link_list;
- 	u8			loop_shift;
- 	unsigned long		*enable_bitmap;
-+	unsigned long		*cti_bitmap;
-+	unsigned long           *qad_bitmap;
-+	unsigned long           *hwtrig_bitmap;
- };
+> +
+> +title: Richtek RT1718S Type-C Port Switch and Power Delivery controller
+> +
+> +maintainers:
+> +  - Gene Chen <gene_chen@richtek.com>
+> +
+> +description: |
+> +  The RT1718S is a USB Type-C controller that complies with the latest
+> +  USB Type-C and PD standards. It does the USB Type-C detection including attach
+> +  and orientation. It integrates the physical layer of the USB BMC power
+> +  delivery protocol to allow up to 100W of power. The BMC PD block enables full
+> +  support for alternative interfaces of the Type-C specification.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - richtek,rt1718s
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  wakeup-source:
+> +    description: enable IRQ remote wakeup, see power/wakeup-source.txt
 
- struct dcc_cfg_attr {
-@@ -148,6 +154,18 @@ struct dcc_cfg_loop_attr {
- 	bool	loop_start;
- };
+Drop description, you are copying generic description.
 
-+char *replace_char(char *str, char find, char replace)
-+{
-+	char *current_pos = strchr(str, find);
-+
-+	while (current_pos) {
-+		*current_pos = replace;
-+		current_pos = strchr(current_pos, find);
-+	}
-+
-+	return str;
-+}
-+
- static inline u32 dcc_list_offset(int version)
- {
- 	return version == 1 ? 0x1c : version == 2 ? 0x2c : 0x34;
-@@ -201,6 +219,10 @@ static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
- 			continue;
- 		ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
- 		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-+		if (drvdata->mem_map_ver != 3)
-+			tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-+		else
-+			tmp_ll_cfg = ll_cfg & ~BIT(8);
- 		dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
- 		dcc_list_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
- 		dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
-@@ -577,6 +599,25 @@ static int dcc_enable(struct dcc_drvdata *drvdata, unsigned int curr_list)
- 	/* 5. Configure trigger */
- 	dcc_list_writel(drvdata, DCC_TRIGGER_MASK,
- 			curr_list, DCC_LL_CFG);
-+	if (drvdata->mem_map_ver == 3) {
-+		dcc_list_writel(drvdata, test_bit(curr_list, drvdata->qad_bitmap), curr_list,
-+				DCC_QAD_OUTPUT);
-+		dcc_list_writel(drvdata, test_bit(curr_list, drvdata->cti_bitmap), curr_list,
-+				DCC_CTI_TRIG);
-+		if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-+			dcc_list_writel(drvdata, BIT(8), curr_list, DCC_LL_CFG);
-+		else
-+			dcc_list_writel(drvdata, (unsigned int)~BIT(8), curr_list, DCC_LL_CFG);
-+	} else {
-+		if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-+			dcc_list_writel(drvdata, DCC_TRIGGER_MASK |
-+					test_bit(curr_list, drvdata->cti_bitmap) << 8,
-+					curr_list, DCC_LL_CFG);
-+		else
-+			dcc_list_writel(drvdata, ~DCC_TRIGGER_MASK &
-+					test_bit(curr_list, drvdata->cti_bitmap) << 8,
-+					curr_list, DCC_LL_CFG);
-+	}
+> +    type: boolean
 
- out_unlock:
- 	mutex_unlock(&drvdata->mutex);
-@@ -1103,6 +1144,168 @@ static const struct file_operations config_fops = {
- 	.release = single_release,
- };
+Drop. Just wakeup-soource: true
 
-+static ssize_t ctitrigger_read(struct file *filp, char __user *userbuf,
-+			       size_t count, loff_t *ppos)
-+{
-+	char *buf;
-+	int curr_list;
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	mutex_lock(&drvdata->mutex);
-+
-+	if (test_bit(curr_list, drvdata->cti_bitmap))
-+		buf = "Y\n";
-+	else
-+		buf = "N\n";
-+
-+	mutex_unlock(&drvdata->mutex);
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-+}
-+
-+static ssize_t ctitrigger_write(struct file *filp, const char __user *userbuf,
-+				size_t count, loff_t *ppos)
-+{
-+	int ret = 0, curr_list;
-+	bool val;
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	if (test_bit(curr_list, drvdata->enable_bitmap))
-+		return -EBUSY;
-+
-+	ret = kstrtobool_from_user(userbuf, count, &val);
-+	if (ret < 0)
-+		return 0;
-+
-+	if (val)
-+		set_bit(curr_list, drvdata->cti_bitmap);
-+	else
-+		clear_bit(curr_list, drvdata->cti_bitmap);
-+
-+	return count;
-+}
-+
-+static const struct file_operations ctitrigger_fops = {
-+	.read = ctitrigger_read,
-+	.write = ctitrigger_write,
-+	.open = simple_open,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static ssize_t qad_read(struct file *filp, char __user *userbuf,
-+			size_t count, loff_t *ppos)
-+{
-+	char *buf;
-+	int curr_list;
-+
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	mutex_lock(&drvdata->mutex);
-+
-+	if (test_bit(curr_list, drvdata->qad_bitmap))
-+		buf = "Y\n";
-+	else
-+		buf = "N\n";
-+
-+	mutex_unlock(&drvdata->mutex);
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-+}
-+
-+static ssize_t qad_write(struct file *filp, const char __user *userbuf,
-+			 size_t count, loff_t *ppos)
-+{
-+	int ret = 0, curr_list;
-+	bool val;
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	if (drvdata->mem_map_ver != 3) {
-+		dev_err(drvdata->dev, "QAD is not supported\n");
-+		return -EINVAL;
-+	}
-+
-+	if (test_bit(curr_list, drvdata->enable_bitmap))
-+		return -EBUSY;
-+
-+	ret = kstrtobool_from_user(userbuf, count, &val);
-+	if (ret < 0)
-+		return 0;
-+
-+	if (val)
-+		set_bit(curr_list, drvdata->qad_bitmap);
-+	else
-+		clear_bit(curr_list, drvdata->qad_bitmap);
-+
-+	return count;
-+}
-+
-+static const struct file_operations qad_fops = {
-+	.read = qad_read,
-+	.write = qad_write,
-+	.open = simple_open,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static ssize_t hwtrigger_read(struct file *filp, char __user *userbuf,
-+			      size_t count, loff_t *ppos)
-+{
-+	char *buf;
-+	int curr_list;
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	mutex_lock(&drvdata->mutex);
-+
-+	if (test_bit(curr_list, drvdata->hwtrig_bitmap))
-+		buf = "Y\n";
-+	else
-+		buf = "N\n";
-+
-+	mutex_unlock(&drvdata->mutex);
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-+}
-+
-+static ssize_t hwtrigger_write(struct file *filp, const char __user *userbuf,
-+			       size_t count, loff_t *ppos)
-+{
-+	int ret = 0, curr_list;
-+	bool val;
-+	struct dcc_drvdata *drvdata = filp->private_data;
-+
-+	curr_list = dcc_filp_curr_list(filp);
-+
-+	if (test_bit(curr_list, drvdata->enable_bitmap))
-+		return -EBUSY;
-+
-+	ret = kstrtobool_from_user(userbuf, count, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (val)
-+		set_bit(curr_list, drvdata->hwtrig_bitmap);
-+	else
-+		clear_bit(curr_list, drvdata->hwtrig_bitmap);
-+
-+	return count;
-+}
-+
-+static const struct file_operations hwtrigger_fops = {
-+	.read = hwtrigger_read,
-+	.write = hwtrigger_write,
-+	.open = simple_open,
-+	.llseek = generic_file_llseek,
-+};
-+
- static void dcc_delete_debug_dir(struct dcc_drvdata *drvdata)
- {
- 	 debugfs_remove_recursive(drvdata->dbg_dir);
-@@ -1126,6 +1329,9 @@ static void dcc_create_debug_dir(struct dcc_drvdata *drvdata)
- 		list = debugfs_create_dir(list_num, drvdata->dbg_dir);
- 		debugfs_create_file("enable", 0600, list, drvdata, &enable_fops);
- 		debugfs_create_file("config", 0600, list, drvdata, &config_fops);
-+		debugfs_create_file("ctitrigger", 0600, list, drvdata, &ctitrigger_fops);
-+		debugfs_create_file("QAD", 0600, list, drvdata, &qad_fops);
-+		debugfs_create_file("hwtrigger", 0600, list, drvdata, &hwtrigger_fops);
- 	}
+> +
+> +  connector:
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml#
 
- 	debugfs_create_file("trigger", 0200, drvdata->dbg_dir, drvdata, &trigger_fops);
-@@ -1185,13 +1391,60 @@ static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
- 	misc_deregister(&drvdata->sram_dev);
- }
+Full path, so /schemas/usb/connector ....
 
--static int dcc_probe(struct platform_device *pdev)
-+static int __init dcc_bootconfig_parse(struct dcc_drvdata *drvdata, struct  xbc_node  *dcc_node)
-+{
-+	struct xbc_node *linked_list, *node;
-+	int curr_list, ret;
-+	const char *p;
-+	char *input, *token;
-+	char val[30];
-+
-+	xbc_node_for_each_subkey(dcc_node, linked_list) {
-+		p = xbc_node_find_value(linked_list, "qcom-curr-link-list", &node);
-+		if (p) {
-+			ret = kstrtoint(p, 0, &curr_list);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		p = xbc_node_find_value(linked_list, "qcom-link-list", &node);
-+		if (!p)
-+			continue;
-+
-+		xbc_array_for_each_value(node, p) {
-+			snprintf(val, sizeof(val), "%s", p);
-+			input = replace_char(val, '_', ' ');
-+			token = strsep(&input, " ");
-+
-+			if (!strcmp("R", token)) {
-+				ret = dcc_config_add_read(drvdata, input, curr_list);
-+			} else if (!strcmp("W", token)) {
-+				ret = dcc_config_add_write(drvdata, input, curr_list);
-+			} else if (!strcmp("RW", token)) {
-+				ret = dcc_config_add_read_write(drvdata, input, curr_list);
-+			} else if (!strcmp("L", token)) {
-+				ret = dcc_config_add_loop(drvdata, input, curr_list);
-+			} else {
-+				dev_err(drvdata->dev, "%s is not a correct input\n", token);
-+				return -EINVAL;
-+			}
-+			if (ret)
-+				return ret;
-+		}
-+		dcc_enable(drvdata, curr_list);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init dcc_probe(struct platform_device *pdev)
- {
- 	u32 val;
- 	int ret = 0, i;
- 	struct device *dev = &pdev->dev;
- 	struct dcc_drvdata *drvdata;
- 	struct resource *res;
-+	struct xbc_node *dcc_node;
+> +    description:
+> +      Properties for usb c connector.
 
- 	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
- 	if (!drvdata)
-@@ -1247,13 +1500,30 @@ static int dcc_probe(struct platform_device *pdev)
- 	if (!drvdata->enable_bitmap)
- 		return -ENOMEM;
+That's not accurate description. Everything in properties is a property,
+so no need to say that properties are properties.
 
-+	drvdata->cti_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-+					   sizeof(*drvdata->cti_bitmap), GFP_KERNEL);
-+	if (!drvdata->cti_bitmap)
-+		return -ENOMEM;
-+
-+	drvdata->qad_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-+					   sizeof(*drvdata->qad_bitmap), GFP_KERNEL);
-+	if (!drvdata->qad_bitmap)
-+		return -ENOMEM;
-+
-+	drvdata->hwtrig_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
-+					      sizeof(*drvdata->hwtrig_bitmap), GFP_KERNEL);
-+	if (!drvdata->hwtrig_bitmap)
-+		return -ENOMEM;
-+
- 	drvdata->cfg_head = devm_kcalloc(dev, drvdata->nr_link_list,
- 					 sizeof(*drvdata->cfg_head), GFP_KERNEL);
- 	if (!drvdata->cfg_head)
- 		return -ENOMEM;
+Actually this looks the same as existing rt1711, so please do not
+duplicate stuff. Especially, do not duplicate mistakes...
 
--	for (i = 0; i < drvdata->nr_link_list; i++)
-+	for (i = 0; i < drvdata->nr_link_list; i++) {
- 		INIT_LIST_HEAD(&drvdata->cfg_head[i]);
-+		set_bit(i, drvdata->hwtrig_bitmap);
-+	}
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - connector
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/usb/pd.h>
+> +    i2c0 {
 
- 	ret = dcc_sram_dev_init(drvdata);
- 	if (ret) {
-@@ -1263,6 +1533,10 @@ static int dcc_probe(struct platform_device *pdev)
+i2c
 
- 	dcc_create_debug_dir(drvdata);
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      rt1718s@43 {
 
-+	dcc_node = xbc_find_node("dcc_config");
-+	if (dcc_node)
-+		return dcc_bootconfig_parse(drvdata, dcc_node);
-+
- 	return 0;
- }
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-@@ -1287,14 +1561,13 @@ static const struct of_device_id dcc_match_table[] = {
- MODULE_DEVICE_TABLE(of, dcc_match_table);
 
- static struct platform_driver dcc_driver = {
--	.probe = dcc_probe,
- 	.remove	= dcc_remove,
- 	.driver	= {
- 		.name = "qcom-dcc",
- 		.of_match_table	= dcc_match_table,
- 	},
- };
--module_platform_driver(dcc_driver);
-+module_platform_driver_probe(dcc_driver, dcc_probe);
-
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
---
-2.7.4
+Best regards,
+Krzysztof
 
