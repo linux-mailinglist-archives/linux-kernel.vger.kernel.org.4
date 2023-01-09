@@ -2,161 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC0066338A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F820663395
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237863AbjAIVyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S235130AbjAIV5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237800AbjAIVyW (ORCPT
+        with ESMTP id S235477AbjAIV5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:54:22 -0500
-Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8474F3C0ED
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:54:13 -0800 (PST)
-Received: by mail-io1-xd4a.google.com with SMTP id t15-20020a5d81cf000000b006f95aa9ba6eso5760882iol.16
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnWQSYtdYbIpMuZp6LkKgpjLfcHlUZmLQRKHyPWiT+U=;
-        b=SoQHKoORituEmv9rUcL664DtdyreklZiFGEKpPbMIqEEDHQRWBI7SRr3f7cEoqCsvZ
-         1e7IZZ836ejawXXum/N1EwK5B4IqD2gR6GsFJWCf92qXR9lLgyBN3G4c5l9JL/DOIgzd
-         5SoZlkxgAJogZrpvMLXlxuFB6zLuebhc5CnJ3Lvd6tWm5FooSJa7Awa5clf+HtqEP2aG
-         eQESQnMpMQOrH2ch9tyF4Sn5bZVnHYL9cgG5M0HGBrBLO1SgEiQFRQ0FQspsxC0pC7hs
-         ur+0YtUUCtgQF8i/Lg4Oe9SZDzJBgNK97UxeExA2fo2dWsRWc7G5+liOox0x9OsztI9W
-         /J9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnWQSYtdYbIpMuZp6LkKgpjLfcHlUZmLQRKHyPWiT+U=;
-        b=m9PPpFUSIooWEe4h4UWN7elZewNBXaR7eYYzrt6yM80mGXMCbu04BjySnDDyxxDX9/
-         lQb8woB2RfSICqSk909Nt0myID5EZriI5d6iJinRjGNwmQqflLCLmfP1xpAlihle+9s2
-         AiQ6tVlywFy8b/WDEwioaLVGeABTDm6h7oGJMZdC8ilFBOksZ3nXOJaLKXVOUdLOYySL
-         41JWfkMHMgQG6w6EE8YENefjoLMtVkhf9f68ArLhWvAyDuS0QPg+WfJMXwPhozRKAtsP
-         NMsbPKeoF60qJWrcIuXFaXxEGURivwQnlwQIj2wb7CBivz2k3Yugnv7FB7KvqDOatws1
-         6ucA==
-X-Gm-Message-State: AFqh2konwmjbDZeV1Hn95mvvb1MqzCzgTFE3/N4SWR2ZT+bpcSYy6S3G
-        Co8l+QCOVtxLf4x8nm9bG0VpCDyd4Npm
-X-Google-Smtp-Source: AMrXdXuEKpemaG/E8lRrZNDz8BRpwdnTj1XFG2QPwNU3UfWi6vqI2Uo/p3n228o5g0euwm8Gw3DaqOUCn3p1
-X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
- (user=rananta job=sendgmr) by 2002:a92:4a11:0:b0:300:e879:8094 with SMTP id
- m17-20020a924a11000000b00300e8798094mr6116771ilf.153.1673301252929; Mon, 09
- Jan 2023 13:54:12 -0800 (PST)
-Date:   Mon,  9 Jan 2023 21:53:47 +0000
-In-Reply-To: <20230109215347.3119271-1-rananta@google.com>
-Mime-Version: 1.0
-References: <20230109215347.3119271-1-rananta@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109215347.3119271-7-rananta@google.com>
-Subject: [RFC PATCH 6/6] KVM: arm64: Create a fast stage-2 unmap path
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 9 Jan 2023 16:57:18 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EB9100F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:57:16 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673301433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=crQggRCCTS9KBx/w5xi4+o+X/zIwoXHiy4Qxywl0rDY=;
+        b=jlhroFq0hxX606/TPil8wehF7+JDsZOfxdrARjn596nzoPnZKntRgSd5B0I6u3D7LnEeWE
+        GsagpDDtjim395PeSYkqvD58jgt5eBJYzDid2C0ySb7pMsrRFepGaMMJBAPQyHn8EVKseV
+        yaJYjMvwfbwZrWewMiuj1sxZLTVKVyZZVXWNNck12KUaRQRozg76SeGCavZ6bwx3eLVe/1
+        iqhIPM5BPejrIZFeQ9tqe2/sSHs1wAGJdbCqiT4kRgiuXV06sC/kqNBimwwXHua2WrijbV
+        fx0g6XHKV5zv5s+VP1Ci/+tpROThGXTxQuqDBw7EI+SBjJ+VUX3xXaghq9H/fg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673301433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=crQggRCCTS9KBx/w5xi4+o+X/zIwoXHiy4Qxywl0rDY=;
+        b=cjhakuEtujcCDmFY4QZr2I17y5uHf1FyH/jMBZ+npa0D1+5SUnwh4QUVQlJp9sYLneLi8l
+        J/FInu9LD+UqeiAw==
+To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, kexec@lists.infradead.org
+Subject: Re: kdump kernel randomly hang with tick_periodic call trace on
+ bare metal system
+In-Reply-To: <Y6FK++b4buO5EgjD@MiWiFi-R3L-srv>
+References: <Y6FJgh3fOYoF0wSV@MiWiFi-R3L-srv> <Y6FK++b4buO5EgjD@MiWiFi-R3L-srv>
+Date:   Mon, 09 Jan 2023 22:57:13 +0100
+Message-ID: <87mt6rjrra.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation of the stage-2 unmap walker
-traverses the entire page-table to clear and flush the TLBs
-for each entry. This could be very expensive if the VM
-is not backed by hugepages. The unmap operation could be
-made efficient by disconnecting the table at the very
-top (level at which the largest block mapping can be hosted)
-and do the rest of the unmapping using free_removed_table().
-If the system supports FEAT_TLBIRANGE, flush the entire range
-that has been disconnected from the rest of the page-table.
+On Tue, Dec 20 2022 at 13:41, Baoquan He wrote:
+> On one intel bare metal system, I can randomly reproduce the kdump hang
+> as below with tick_periodic call trace. Attach the kernel config for
+> reference.
 
-Suggested-by: Ricardo Koller <ricarkol@google.com>
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+This has absolutely nothing to do with x2apic IPI shorthands
+
+> [    0.045980] Spurious LAPIC timer interrupt on cpu 0
+
+So here the CPU receives a spurious Local APIC timer interrupt, but
+that's a red herring.
+
+> [    1.152690] BUG: kernel NULL pointer dereference, address: 0000000000000088
+> [    1.159634] #PF: supervisor read access in kernel mode
+> [    1.164757] #PF: error_code(0x0000) - not-present page
+> [    1.169882] PGD 0 P4D 0 
+> [    1.172407] Oops: 0000 [#1] PREEMPT SMP PTI
+> [    1.176578] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.11-300.fc37.x86_64 #1
+> [    1.183870] Hardware name: Dell Inc. PowerEdge R410/0N051F, BIOS 1.11.0 07/20/2012
+> [    1.191420] RIP: 0010:tick_periodic+0x23/0x80
+
+I'm willing to bet that this is caused by the following line in tick_periodic():
+
+    update_process_times(user_mode(get_irq_regs()));
+
+       user_mode() is invoked with a NULL pointer. user_mode() accesses
+       regs->cs. CS is at offset 0x88....
+
+The reason for this is here:
+
+> [    1.280648]  tick_handle_periodic+0x1f/0x70
+> [    1.284821]  timer_interrupt+0x14/0x20
+> [    1.288561]  __handle_irq_event_percpu+0x46/0x190
+> [    1.293253]  handle_irq_event+0x34/0x70
+> [    1.297080]  handle_level_irq+0xa8/0x180
+> [    1.300993]  resend_irqs+0x5d/0x70
+> [    1.304386]  tasklet_action_common.constprop.0+0xab/0xe0
+> [    1.309686]  __do_softirq+0xfb/0x319
+> [    1.313254]  __irq_exit_rcu+0xd7/0x140
+> [    1.316993]  common_interrupt+0xb9/0xd0
+
+For some reason the timer interrupt is resent in software. I assume it is
+the HPET interrupt because that's what just got initialized.
+
+> [    1.143537] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 133484882848 ns
+
+and the callchain below just confirms that:
+
+> [    1.393315]  _raw_spin_unlock_irqrestore+0x19/0x40
+> [    1.398093]  __setup_irq+0x443/0x6d0
+> [    1.401659]  request_threaded_irq+0x109/0x170
+> [    1.406005]  hpet_time_init+0x2d/0x4b
+> [    1.409661]  x86_late_time_init+0x17/0x34
+> [    1.413658]  start_kernel+0x8cf/0x97f
+
+The software resend code does not go through the regular interrupt entry
+path which explains why get_irq_regs() returns NULL.
+
+That software resend is bogus especially since the timer interrupt is
+a level interrupt. As dmesg does not say anything about the APIC
+delivery mode I assume this goes through i8259, which fails to set the
+IRQ_LEVEL flag on all interrupt lines.
+
+The below should fix this.
+
+Thanks,
+
+        tglx
 ---
- arch/arm64/kvm/hyp/pgtable.c | 44 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 099032bb01bce..7bcd898de2805 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -1021,6 +1021,49 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 	return 0;
+--- a/arch/x86/kernel/i8259.c
++++ b/arch/x86/kernel/i8259.c
+@@ -114,6 +114,7 @@ static void make_8259A_irq(unsigned int
+ 	disable_irq_nosync(irq);
+ 	io_apic_irqs &= ~(1<<irq);
+ 	irq_set_chip_and_handler(irq, &i8259A_chip, handle_level_irq);
++	irq_set_status_flags(irq, IRQ_LEVEL);
+ 	enable_irq(irq);
+ 	lapic_assign_legacy_vector(irq, true);
+ }
+--- a/arch/x86/kernel/irqinit.c
++++ b/arch/x86/kernel/irqinit.c
+@@ -65,8 +65,10 @@ void __init init_ISA_irqs(void)
+ 
+ 	legacy_pic->init(0);
+ 
+-	for (i = 0; i < nr_legacy_irqs(); i++)
++	for (i = 0; i < nr_legacy_irqs(); i++) {
+ 		irq_set_chip_and_handler(i, chip, handle_level_irq);
++		irq_set_status_flags(i, IRQ_LEVEL);
++	}
  }
  
-+/*
-+ * The fast walker executes only if the unmap size is exactly equal to the
-+ * largest block mapping supported (i.e. at KVM_PGTABLE_MIN_BLOCK_LEVEL),
-+ * such that the underneath hierarchy at KVM_PGTABLE_MIN_BLOCK_LEVEL can
-+ * be disconnected from the rest of the page-table without the need to
-+ * traverse all the PTEs, at all the levels, and unmap each and every one
-+ * of them. The disconnected table can be freed using free_removed_table().
-+ */
-+static int fast_stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
-+			       enum kvm_pgtable_walk_flags visit)
-+{
-+	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
-+	kvm_pte_t *childp = kvm_pte_follow(ctx->old, mm_ops);
-+	struct kvm_s2_mmu *mmu = ctx->arg;
-+
-+	if (!kvm_pte_valid(ctx->old) || ctx->level != KVM_PGTABLE_MIN_BLOCK_LEVEL)
-+		return 0;
-+
-+	if (!stage2_try_break_pte(ctx, mmu, 0))
-+		return -EAGAIN;
-+
-+	/*
-+	 * Gain back a reference for stage2_unmap_walker() to free
-+	 * this table entry from KVM_PGTABLE_MIN_BLOCK_LEVEL - 1.
-+	 */
-+	mm_ops->get_page(ctx->ptep);
-+
-+	mm_ops->free_removed_table(childp, ctx->level);
-+	return 0;
-+}
-+
-+static void kvm_pgtable_try_fast_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
-+{
-+	struct kvm_pgtable_walker walker = {
-+		.cb	= fast_stage2_unmap_walker,
-+		.arg	= pgt->mmu,
-+		.flags	= KVM_PGTABLE_WALK_TABLE_PRE,
-+	};
-+
-+	if (size == kvm_granule_size(KVM_PGTABLE_MIN_BLOCK_LEVEL))
-+		kvm_pgtable_walk(pgt, addr, size, &walker);
-+}
-+
- int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
- 	struct kvm_pgtable_walker walker = {
-@@ -1029,6 +1072,7 @@ int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- 		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
- 	};
- 
-+	kvm_pgtable_try_fast_stage2_unmap(pgt, addr, size);
- 	return kvm_pgtable_walk(pgt, addr, size, &walker);
- }
- 
--- 
-2.39.0.314.g84b9a713c41-goog
-
+ void __init init_IRQ(void)
