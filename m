@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA15662747
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BDD66274D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236610AbjAINhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S234702AbjAINix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbjAINg4 (ORCPT
+        with ESMTP id S237262AbjAINiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:36:56 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A33E850
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:34:58 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso9010362wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:34:58 -0800 (PST)
+        Mon, 9 Jan 2023 08:38:08 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7075A62F6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:35:54 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 203so8486093yby.10
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0Kukoai+7dPesMj73NOB/0XiMbmQYiypYpyBD0Rmy94=;
-        b=zOHtFB/xF7vcwYY/emTb5TpaZ/e879x3tN6lXF064jEw6Nce1R7CNOPUIdfoMLUDux
-         /HkdOiAkBqdHcbB2z9kDCSLylnQoJ4q3mnQE2StRS3+qzF25tlO3v7hi1mTGtV0TJtK/
-         Xy6LMY5+l/heC3fTHKGjAAVvO9ZL2MuCMw5tsq0dRDq1VFaODIZ8nGf42T9X1kgDKjea
-         qWDNwCjQJ0k5LQB5cEeRHfndy8jQnjeoqTRx6f1xQCBOglu+sB25ZM8EW8VUdYYHwwZW
-         6dz2KgDFnhJuP8Ln2bDfzTtie8kbO3h3hVCwGkCiZJ+bdXZY7v7M5pA8/cue+0nT2ZxP
-         kRvw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qnppp6O9rdKqbwFnY5I7NEyC+PLI49fpb8XjPx9K9kY=;
+        b=X5KBMlY+l3uEKb3KlAV/VkLeIZQlibfQI7xC0OEIMJWiX1pzgdPRkFkUDfldoqejWP
+         qx3CpUdKYQJE9qqkyYEgYRUJMr/qXageQlaPEuyS9VYuQgL5KWNdWEa7NpUsSY38jb35
+         kpsJLNys+M8NNRoeLVFcOhtSKnkC7yA3/qIkNNyINYnszPTRYMZmtjeu4fHqk98mBdlp
+         j2kbOVve4XGndCbLypd4+p3QK1xG0dxBrG3FmZkq/hPKjzULYboVBM6l9imslaIyZmNW
+         J5w/fiIT35b/v3j64NyNZeo4qNF2MkgGdZNyFoOF/2rfcv3v0ScaukX2Uz4/pBnxuzVQ
+         d8/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Kukoai+7dPesMj73NOB/0XiMbmQYiypYpyBD0Rmy94=;
-        b=BrDbbU2dOnxyO3lCB+soRAZKNFE/4VuI7k7n1/qFwk5j4mp6o7KOvgOomWNGRaoUuh
-         S681TeKYwResSCmDTfDAfigAN6i9Xrl5vErHmD67etIa1/RbEB5Ma5+6t1G+mU21I161
-         ZRPrRsfVrwN2SLezkmqKp0BbAjP4FD7UU+W9ZOZVS325KhPLGDxHUBfaXzxy+TwmS5zQ
-         +IQ/nw9StIl57cFggUO4XSbcHjPyT6CmInYpcs279DztFZjavyBiIPY4b3cQEDCIp9xj
-         /P7JyS/NltrNFtzYVWVWSUrVyQ3w4E7WAzanO1YN5GSq3469W2weuTMN32oSWYZWYUCW
-         OTUw==
-X-Gm-Message-State: AFqh2krfhzsE8MahgkmP62Fi0Yyf9JujAbYOrHvtfivcch/P/WSRaANw
-        CEcHGKGgpoUJu0tUS0gZbaxAww==
-X-Google-Smtp-Source: AMrXdXuuIbQxmJyr8sv7eqCDQEhNZuR1xlJjy+MALuch+4sirs3IilzzHrs+adelj6IveSWQjBSMsg==
-X-Received: by 2002:a05:600c:3d12:b0:3d2:392b:3165 with SMTP id bh18-20020a05600c3d1200b003d2392b3165mr46061791wmb.12.1673271266988;
-        Mon, 09 Jan 2023 05:34:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003b4ff30e566sm25333512wms.3.2023.01.09.05.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 05:34:26 -0800 (PST)
-Message-ID: <b0f1f804-d0fc-8c1e-fc3d-fa9013bdf493@linaro.org>
-Date:   Mon, 9 Jan 2023 14:34:25 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qnppp6O9rdKqbwFnY5I7NEyC+PLI49fpb8XjPx9K9kY=;
+        b=RQzmTVIXtpniZVyMN88+BYKkDXJ5OOlSBBpvT4enNkSAcS2Ka9b9MDOOZ7hzmCDfY8
+         HhbeE5JxDcbCsRkR2J7x+kqfAm0dn5EvanUzMDX3JCA0hfBI8exQDL2+QOX8r0x+lSCx
+         WvJ0kiaj3qLlze0j7e82s2cCCvvXa43rORuHORvdjhScEdaX24nKb5OzG/cOyhlq4bdZ
+         G/iGBUoQ6ZDWWz319eJy52HbReQRA3u88QCsEcXI/MyBU3sBMaR20vIsSOwnukmZF+dy
+         otJHGBNFISvlEdQ5GtktSaJwtlv3CrjPW59m4LKUSwqJQTsyCFZ6tfJ6mp206klG9Lh+
+         EGlw==
+X-Gm-Message-State: AFqh2kpA6pnDzzUdHHyFVzon0rYk9OUDCGaBYStGxZkZVzCgmlwGjz28
+        O7f7yDcwSVM4eHsXQo6YoaTFU3OXK4u8JtT7NVMfEw==
+X-Google-Smtp-Source: AMrXdXt+flubROOHapYHT2FaRO7FxPa9Na5CMrvvqi4lErIiX3EJ1CN07iHonh9qeMFuiACLFZuGrIn3WqgqO1jsWJs=
+X-Received: by 2002:a25:911:0:b0:7bf:fd02:6dbb with SMTP id
+ 17-20020a250911000000b007bffd026dbbmr55958ybj.341.1673271342147; Mon, 09 Jan
+ 2023 05:35:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: add
- input-enable and bias-bus-hold
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
- <CACRpkdbMS7MNPhzi2Ty69TZddEsai-2tASVGJLCiiVktL34V5Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdbMS7MNPhzi2Ty69TZddEsai-2tASVGJLCiiVktL34V5Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230101220149.3035048-1-bero@baylibre.com> <20230101220149.3035048-5-bero@baylibre.com>
+In-Reply-To: <20230101220149.3035048-5-bero@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 9 Jan 2023 14:35:30 +0100
+Message-ID: <CACRpkdY-VqM_mzgJ=n9fEtFJD64EBie1EQF+8Bk5iLE68mCnSA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/7] dt-bindings: pinctrl: add bindings for Mediatek
+ MT8365 SoC
+To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        matthias.bgg@gmail.com, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org,
+        angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 14:31, Linus Walleij wrote:
-> On Thu, Dec 22, 2022 at 5:14 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> Allow bias-bus-hold and input-enable properties (already used in SM8450):
->>
->>   sm8450-qrd.dtb: pinctrl@3440000: dmic02-default-state: 'oneOf' conditional failed, one must be fixed:
->>     'pins' is a required property
->>     'function' is a required property
->>     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
->>     'input-enable' does not match any of the regexes: 'pinctrl-[0-9]+'
->>
->> Compact the properties which are just set to true for readability.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Looks good, is this something I should be applying directly or are
-> you collecting some big qualcomm pull requests like last time?
+On Sun, Jan 1, 2023 at 11:01 PM Bernhard Rosenkr=C3=A4nzer <bero@baylibre.c=
+om> wrote:
 
-I have just nine patches so far and it looks it is the end of
-cleanups/work on Qualcomm pinctrl. Of course maybe something will pop-up
-later.
+> Add devicetree bindings for Mediatek MT8365 pinctrl driver.
+>
+> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
 
-It's up to you how would you prefer to take them. There are few patches
-from other people (also adding new devices/bindings), but I did not
-notice any conflicts with my sets.
+Looks good to me, do you want me to just apply this one patch to the
+pin control tree?
 
-Best regards,
-Krzysztof
-
+Yours,
+Linus Walleij
