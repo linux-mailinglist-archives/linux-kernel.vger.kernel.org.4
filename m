@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940E76631E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DEC6631EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbjAIUya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        id S235107AbjAIUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbjAIUx5 (ORCPT
+        with ESMTP id S237209AbjAIUyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:53:57 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EA774598
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:53:56 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id r8-20020a252b08000000b007b989d5e105so6925570ybr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:53:56 -0800 (PST)
+        Mon, 9 Jan 2023 15:54:00 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B8675D0D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:53:59 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-487b0bf1117so104130847b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:53:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpY24U65dxDevik5396IsQMXmVZXiLzmW2j6b7ptC2o=;
-        b=FGVUXzbMKsAgHtVe2H+ZGPByy9vTxmIYvrPV7ZuF76ZDV4PCOupJdRY2uHLiI7i+8R
-         4Fjm3rnOC/ry4DX8g5MN/0YQ4aHPdCQZYFwG7UcSZ/43mvYNjuR6DmjlzCEnl8acF7KD
-         ERVaFO4iv0zgtEZ4MmYzhpcYCiFLTkatnznfDTOltPoYyw5CvEIb1yptgTPwDbjWQDix
-         pGxXZ1tFpWIKQUAKj6j+gMffNX2JeuA3u7s8cWrwnHHzy9T6apLvHv6bApzCw3vZvb6B
-         a2xiK595oO97JhT8ZQYkTmP/j11qoIyiGxI24X5jHCYtpJjinnDlcXs5UPFQKhdZ/Kdz
-         DK0A==
+        bh=TT+2XsH00KwTX585kTrU5AriHJozMAXcs0iFxeAd0aM=;
+        b=Czdnd0b+5bkyGxVk+9aViJOW1TJ5m6k5XpyXdj4R+Q3dGGEBK2eP5deQvySgSh0iz/
+         GZ1iYooFrZ5CipGLrqMEQsrY/Zn4kUyQA8m4xIFN7mfEerPKCDkU1AubZLdIfDfth4hu
+         d8dG+6QDcTUs7A9Y052NxeL9TA5a3QdfxlEt4CBoSlbUsLAUBEORkFyS1sdo7qsKHieD
+         EXHjCZRBRMhYEWoMQiXcySJyrWxVf33iALFZt6xsCbFcNo15dZaOnJt+J48Z17ETAj7O
+         45DKwd6DY6kCK0yPohqOb3E3TN0P5VYKNR4qSRkuKInUqGltfhkGbi1MmOGm2N8pUB+H
+         +TEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpY24U65dxDevik5396IsQMXmVZXiLzmW2j6b7ptC2o=;
-        b=TO7rP8Kc59XyDQqzqM0my/30gHtjua5O65Yh0CaeCm/ezC+m+04aIdUT964TXyVT+F
-         rn558gf0OP6JryPHKswGQVkvqOuHCOcz7MPBV7JMEYifdGr1awHq6vopOZI8Nqny7QOC
-         0+ApA8hblSS3tf2D3KuuTiPUa2sUqvFsXCNIR5n7NMOTH1ubjGFsND/zRyrTQX0hdPkv
-         nSKhHiNzuahUS/vpQz2ra0SArYWeYdagE9xSwbX2uczRDZ8a8JYneIcGRvrtjHdpx7P2
-         f8bkuD4NO+DqhaaINQOMdniMOJLGWyl9oE4NAMfSJv+NL9O2vc0pNin8dLKVNeHrpwyd
-         bukw==
-X-Gm-Message-State: AFqh2kqqiJtOKmjA/pP0v2vGk+cWnMcjMaumLdcLbau8/ApWG/J6kRkg
-        zyY57lyIouv5ZHKXxqY4nv7JgIiMv6Y=
-X-Google-Smtp-Source: AMrXdXs5jnkdpf0WLGjSqHJja91Z23ecX2Os+zrAvpCFIdrfHWytTqhc2UPXUEbTUa59RZZK2SYuIAkg8gM=
+        bh=TT+2XsH00KwTX585kTrU5AriHJozMAXcs0iFxeAd0aM=;
+        b=bC7B/rJ3bVdZfmD7YYZZtl92FWvCZHlyc5d7T6uwJwdSoDaAH/3/GspsE7gH/oJE3Y
+         YNMRv8y17rWecdG/EefZGbFAhpm1grM2Sr1FZ9GZ3a9BAsy40pDUq1b8eVXFQ3ozmq0C
+         +VviG7ozHW8h4GXs9OX8aVUt7RhtG5St1bP2Lis68XORHnS/WERPnOVi1B/O1diGDSOL
+         rkQzJsIVu+p6qNdCtLlaTBEX6lIiO2yk1mJn+u3r5Rqkm47lnNu/IRtB+0HClHkj07ZO
+         k9peQbqzHUzVjWxV5e0cNQm4dodhfYqhBHuGt3SwvA6c+XKBKkRdVfxYaAEKyfFkqH7t
+         cbWQ==
+X-Gm-Message-State: AFqh2krcWkwsbUS2J382Dit4Tmi49DbKYlV/OA33TsMieHdYRVWHBYhw
+        0urCr++7aSWDYrkU74IXXrdTb7k+6QM=
+X-Google-Smtp-Source: AMrXdXtUN3SiDpbjRFPvhoNJBXB5uM1KkpI6Zcz0Naqt9m0yZDl1B9u4vz5wIeviZulbrZU/bcJYjep5MGE=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:9393:6f7a:d410:55ca])
- (user=surenb job=sendgmr) by 2002:a25:2491:0:b0:7ba:cd98:5bed with SMTP id
- k139-20020a252491000000b007bacd985bedmr646916ybk.69.1673297636065; Mon, 09
- Jan 2023 12:53:56 -0800 (PST)
-Date:   Mon,  9 Jan 2023 12:53:01 -0800
+ (user=surenb job=sendgmr) by 2002:a25:abea:0:b0:762:b86:e82e with SMTP id
+ v97-20020a25abea000000b007620b86e82emr7288109ybi.407.1673297638462; Mon, 09
+ Jan 2023 12:53:58 -0800 (PST)
+Date:   Mon,  9 Jan 2023 12:53:02 -0800
 In-Reply-To: <20230109205336.3665937-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230109205336.3665937-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109205336.3665937-7-surenb@google.com>
-Subject: [PATCH 06/41] maple_tree: Add smp_rmb() to dead node detection
+Message-ID: <20230109205336.3665937-8-surenb@google.com>
+Subject: [PATCH 07/41] mm: Enable maple tree RCU mode by default.
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -86,46 +86,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
 
-Add an smp_rmb() before reading the parent pointer to ensure that
-anything read from the node prior to the parent pointer hasn't been
-reordered ahead of this check.
+Use the maple tree in RCU mode for VMA tracking.  This is necessary for
+the use of per-VMA locking.  RCU mode is enabled by default but disabled
+when exiting an mm and for the new tree during a fork.
 
-The is necessary for RCU mode.
+Also enable RCU for the tree used in munmap operations to ensure the
+nodes remain valid for readers.
 
-Fixes: 54a611b60590 ("Maple Tree: add new data structure")
 Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- lib/maple_tree.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ include/linux/mm_types.h | 3 ++-
+ kernel/fork.c            | 3 +++
+ mm/mmap.c                | 4 +++-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 8066fb1e8ec9..80ca28b656d3 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -535,9 +535,11 @@ static inline struct maple_node *mte_parent(const struct maple_enode *enode)
-  */
- static inline bool ma_dead_node(const struct maple_node *node)
- {
--	struct maple_node *parent = (void *)((unsigned long)
--					     node->parent & ~MAPLE_NODE_MASK);
-+	struct maple_node *parent;
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 3b8475007734..4b6bce73fbb4 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -810,7 +810,8 @@ struct mm_struct {
+ 	unsigned long cpu_bitmap[];
+ };
  
-+	/* Do not reorder reads from the node prior to the parent check */
-+	smp_rmb();
-+	parent = (void *)((unsigned long) node->parent & ~MAPLE_NODE_MASK);
- 	return (parent == node);
- }
+-#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN)
++#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN | \
++			 MT_FLAGS_USE_RCU)
+ extern struct mm_struct init_mm;
  
-@@ -552,6 +554,8 @@ static inline bool mte_dead_node(const struct maple_enode *enode)
- 	struct maple_node *parent, *node;
+ /* Pointer magic because the dynamic array size confuses some compilers. */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9f7fe3541897..58aab6c889a4 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -617,6 +617,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+ 	if (retval)
+ 		goto out;
  
- 	node = mte_to_node(enode);
-+	/* Do not reorder reads from the node prior to the parent check */
-+	smp_rmb();
- 	parent = mte_parent(enode);
- 	return (parent == node);
- }
++	mt_clear_in_rcu(mas.tree);
+ 	mas_for_each(&old_mas, mpnt, ULONG_MAX) {
+ 		struct file *file;
+ 
+@@ -703,6 +704,8 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+ 	retval = arch_dup_mmap(oldmm, mm);
+ loop_out:
+ 	mas_destroy(&mas);
++	if (!retval)
++		mt_set_in_rcu(mas.tree);
+ out:
+ 	mmap_write_unlock(mm);
+ 	flush_tlb_mm(oldmm);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 87d929316d57..9db37adfc00a 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2304,7 +2304,8 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+ 	int count = 0;
+ 	int error = -ENOMEM;
+ 	MA_STATE(mas_detach, &mt_detach, 0, 0);
+-	mt_init_flags(&mt_detach, MT_FLAGS_LOCK_EXTERN);
++	mt_init_flags(&mt_detach, mas->tree->ma_flags &
++		      (MT_FLAGS_LOCK_MASK | MT_FLAGS_USE_RCU));
+ 	mt_set_external_lock(&mt_detach, &mm->mmap_lock);
+ 
+ 	if (mas_preallocate(mas, vma, GFP_KERNEL))
+@@ -3091,6 +3092,7 @@ void exit_mmap(struct mm_struct *mm)
+ 	 */
+ 	set_bit(MMF_OOM_SKIP, &mm->flags);
+ 	mmap_write_lock(mm);
++	mt_clear_in_rcu(&mm->mm_mt);
+ 	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
+ 		      USER_PGTABLES_CEILING);
+ 	tlb_finish_mmu(&tlb);
 -- 
 2.39.0
 
