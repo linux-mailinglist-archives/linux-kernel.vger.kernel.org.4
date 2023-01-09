@@ -2,99 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF78663463
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3963A66347D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237271AbjAIWxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S237556AbjAIW5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237536AbjAIWxP (ORCPT
+        with ESMTP id S235136AbjAIW5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:53:15 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBAD9140F5
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:53:14 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 330CD92009D; Mon,  9 Jan 2023 23:53:12 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2FB4B92009C;
-        Mon,  9 Jan 2023 22:53:12 +0000 (GMT)
-Date:   Mon, 9 Jan 2023 22:53:12 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ingo Molnar <mingo@kernel.org>
-cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86: Disable kernel stack offset randomization for
- !TSC
-In-Reply-To: <Y7vvKHYXpe7KmwCI@gmail.com>
-Message-ID: <alpine.DEB.2.21.2301091946360.65308@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2301082113350.65308@angie.orcam.me.uk> <Y7vvKHYXpe7KmwCI@gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Mon, 9 Jan 2023 17:57:13 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C899D11148
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:57:10 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cp9-20020a17090afb8900b00226a934e0e5so121675pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mdo2/wDqCM6o38jdj1jQCw6QRnTv8QbOLw7MxYlHlrk=;
+        b=16g0R6uNNKJzKpGNX1lPaagFx4n+ocJT15a6CdoHNRa3kXLdm6l+X8tfKfzip4O9jL
+         Yx+m9c63FhJXRDdVtlpHrKcAbabIPQouM2gr+v0XMy5vTKHj4VsH3CPzwF1bUWbwotNw
+         KN5ErzbzOn9FYZdNIAv81d6HVQGw3Eajg7Ab4eJ1Q9kXLwN5JNxyjSeGtLh5npdkpksS
+         SwjDmHsj0OK8Rjo+CUmHIxDJKovAiZ66EMy2Bi6LW2PDGeoYVleAk0fUx4zyoA9jkJI6
+         WIxcVTURovOsbweHx5PapLCSaZWH9/pzAywtrDuhZle66SzY1c7kNobHrQjZulVuFbQ9
+         GeEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdo2/wDqCM6o38jdj1jQCw6QRnTv8QbOLw7MxYlHlrk=;
+        b=pxa9Tic8toAPJz9p/HMm7A474QOQOhUETU8bcAhTbyJ+SG31sI6jQSDcfQ/WLVdVxl
+         BtOAYjpl5hkc7muSBpwMdTc0s2E218R4zikT7+MFVO3wAUBT6cqRud6Blr3md2y8Jamr
+         6JpbU+sBoMwl6KdAfGQBjUIit2f/3oHR/KuLT6KHFSRZ1WvN20AjrL0w0rBCAVV5Uffj
+         y+YaPFDTZjfG6c4AoiVPOadVkYnIIPy4NlbeqvL7gZtmXOfEtMEWNrjY/ugAXOuQ0UIx
+         hxKiWlB9RlpChgzl226/Hl7by+NeTSy3XBUXB+oAKue+1veFIEZD6H248nxEj81ydiVS
+         G2Dw==
+X-Gm-Message-State: AFqh2kp8vbaIAx4sO39TuvEq1UE8ieE6oesZRFbFoGlWkmhns0AY4Fko
+        ctBVKvePI7Fn7xYFfnG5TmWOnQ==
+X-Google-Smtp-Source: AMrXdXs87F2FmsDn6dLx5iqTdvODtWQXUv1Vh3rhPVK2TwOslYFMDwqA/V5nf4J9/gYFu2qn91zWXA==
+X-Received: by 2002:a17:902:b611:b0:189:f277:3834 with SMTP id b17-20020a170902b61100b00189f2773834mr14677883pls.6.1673305030113;
+        Mon, 09 Jan 2023 14:57:10 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902c1c600b00177f4ef7970sm6681389plc.11.2023.01.09.14.57.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 14:57:09 -0800 (PST)
+Message-ID: <bbd9cde3-7cbb-f3e4-a2a4-7b1b5ae392e0@kernel.dk>
+Date:   Mon, 9 Jan 2023 15:57:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather
+ than ref'ing if appropriate
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <d0bb04e7-7e58-d494-0e39-6e98f3368a7b@kernel.dk>
+ <20230109173513.htfqbkrtqm52pnye@quack3>
+ <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
+ <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
+ <2008444.1673300255@warthog.procyon.org.uk>
+ <2084839.1673303046@warthog.procyon.org.uk>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <2084839.1673303046@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
+On 1/9/23 3:24?PM, David Howells wrote:
+> Would you be okay with me flipping the logic of BIO_NO_PAGE_REF, so I end up
+> with:
+> 
+> 	static void bio_release_page(struct bio *bio, struct page *page)
+> 	{
+> 		if (bio_flagged(bio, BIO_PAGE_PINNED))
+> 			unpin_user_page(page);
+> 		if (bio_flagged(bio, BIO_PAGE_REFFED))
+> 			put_page(page);
+> 	}
+> 
+> See attached patch.
 
- Would you mind commenting on the below?
+I think it makes more sense to have NO_REF check, to be honest, as that
+means the general path doesn't have to set that flag. But I don't feel
+too strongly about that part.
 
-On Mon, 9 Jan 2023, Ingo Molnar wrote:
+> diff --git a/block/bio.c b/block/bio.c
+> index 5f96fcae3f75..5b9f9fc62345 100644
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -243,6 +243,11 @@ static void bio_free(struct bio *bio)
+>   * Users of this function have their own bio allocation. Subsequently,
+>   * they must remember to pair any call to bio_init() with bio_uninit()
+>   * when IO has completed, or when the bio is released.
+> + *
+> + * We set the initial assumption that pages attached to the bio will be
+> + * released with put_page() by setting BIO_PAGE_REFFED, but this should be set
+> + * to BIO_PAGE_PINNED if the page should be unpinned instead; if the pages
+> + * should not be put or unpinned, these flags should be cleared.
+>   */
+>  void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+>  	      unsigned short max_vecs, blk_opf_t opf)
+> @@ -274,6 +279,7 @@ void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+>  #ifdef CONFIG_BLK_DEV_INTEGRITY
+>  	bio->bi_integrity = NULL;
+>  #endif
+> +	bio_set_flag(bio, BIO_PAGE_REFFED);
 
-> > For x86 kernel stack offset randomization uses the RDTSC instruction, 
-> > which causes an invalid opcode exception with hardware that does not 
-> > implement this instruction:
-> 
-> > @@ -85,7 +86,8 @@ static inline void arch_exit_to_user_mod
-> >  	 * Therefore, final stack offset entropy will be 5 (x86_64) or
-> >  	 * 6 (ia32) bits.
-> >  	 */
-> > -	choose_random_kstack_offset(rdtsc() & 0xFF);
-> > +	if (cpu_feature_enabled(X86_FEATURE_TSC))
-> > +		choose_random_kstack_offset(rdtsc() & 0xFF);
-> >  }
-> 
-> While this is an obscure corner case, falling back to 0 offset silently 
-> feels a bit wrong - could we at least attempt to generate some 
-> unpredictability in this case?
-> 
-> It's not genuine entropy, but we could pass in a value that varies from 
-> task to task and which is not an 'obviously known' constant value like the 
-> 0 fallback?
-> 
-> For example the lowest 8 bits of the virtual page number of the current 
-> task plus the lowest 8 bits of jiffies should vary from task to task, has 
-> some time dependence and is cheap to compute:
-> 
-> 	(((unsigned long)current >> 12) + jiffies) & 0xFF
-> 
-> This combined with the per-CPU forward storage of previous offsets:
-> 
-> #define choose_random_kstack_offset(rand) do {                          \
->         if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT, \
->                                 &randomize_kstack_offset)) {            \
->                 u32 offset = raw_cpu_read(kstack_offset);               \
->                 offset ^= (rand);                                       \
->                 raw_cpu_write(kstack_offset, offset);                   \
->         }                                                               \
-> 
-> Should make this reasonably hard to guess for long-running tasks even if 
-> there's no TSC - and make it hard to guess even for tasks whose creation an 
-> attacker controls, unless there's an info-leak to rely on.
+This is first set to zero, then you set the flag. Why not just
+initialize it like that to begin with?
 
- Sure, I'm fine implementing it, even in such a way so as not to cause a 
-code size/performance regression for X86_TSC configurations.  But is the 
-calculation really unpredictable enough?  I don't feel competent enough to 
-decide.  Jason, what do you think?
+> @@ -302,6 +308,8 @@ void bio_reset(struct bio *bio, struct block_device *bdev, blk_opf_t opf)
+>  {
+>  	bio_uninit(bio);
+>  	memset(bio, 0, BIO_RESET_BYTES);
+> +	bio_set_flag(bio, BIO_PAGE_REFFED);
+> +	bio_clear_flag(bio, BIO_PAGE_PINNED);
+>  	atomic_set(&bio->__bi_remaining, 1);
+>  	bio->bi_bdev = bdev;
+>  	if (bio->bi_bdev)
 
-  Maciej
+You just memset bi_flags here, surely we don't need to clear
+BIO_PAGE_PINNED after that?
+
+> @@ -814,6 +822,8 @@ static int __bio_clone(struct bio *bio, struct bio *bio_src, gfp_t gfp)
+>  	bio_set_flag(bio, BIO_CLONED);
+>  	bio->bi_ioprio = bio_src->bi_ioprio;
+>  	bio->bi_iter = bio_src->bi_iter;
+> +	bio_clear_flag(bio, BIO_PAGE_REFFED);
+> +	bio_clear_flag(bio, BIO_PAGE_PINNED);
+
+Maybe it would make sense to have a set/clear mask operation? Not
+strictly required for this patch, but probably worth checking after the
+fact.
+
+> @@ -1273,12 +1295,20 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>  	 * result to ensure the bio's total size is correct. The remainder of
+>  	 * the iov data will be picked up in the next bio iteration.
+>  	 */
+> -	size = iov_iter_get_pages(iter, pages,
+> -				  UINT_MAX - bio->bi_iter.bi_size,
+> -				  nr_pages, &offset, gup_flags);
+> +	size = iov_iter_extract_pages(iter, &pages,
+> +				      UINT_MAX - bio->bi_iter.bi_size,
+> +				      nr_pages, gup_flags,
+> +				      &offset, &cleanup_mode);
+>  	if (unlikely(size <= 0))
+>  		return size ? size : -EFAULT;
+>  
+> +	bio_clear_flag(bio, BIO_PAGE_REFFED);
+> +	bio_clear_flag(bio, BIO_PAGE_PINNED);
+> +	if (cleanup_mode & FOLL_GET)
+> +		bio_set_flag(bio, BIO_PAGE_REFFED);
+> +	if (cleanup_mode & FOLL_PIN)
+> +		bio_set_flag(bio, BIO_PAGE_PINNED);
+> +
+>  	nr_pages = DIV_ROUND_UP(offset + size, PAGE_SIZE);
+
+The cleanup_mode pass-back isn't the prettiest thing in the world, and
+that's a lot of arguments. Maybe it'd be slightly better if we just have
+gup_flags be an output parameter too?
+
+Also not great to first clear both flags, then set them with the two
+added branches...
+
+> diff --git a/include/linux/bio.h b/include/linux/bio.h
+> index 22078a28d7cb..1c6f051f6ff2 100644
+> --- a/include/linux/bio.h
+> +++ b/include/linux/bio.h
+> @@ -482,7 +482,8 @@ void zero_fill_bio(struct bio *bio);
+>  
+>  static inline void bio_release_pages(struct bio *bio, bool mark_dirty)
+>  {
+> -	if (!bio_flagged(bio, BIO_NO_PAGE_REF))
+> +	if (bio_flagged(bio, BIO_PAGE_REFFED) ||
+> +	    bio_flagged(bio, BIO_PAGE_PINNED))
+>  		__bio_release_pages(bio, mark_dirty);
+>  }
+
+Same here on a mask check, but perhaps it ends up generating the same
+code?
+
+-- 
+Jens Axboe
+
