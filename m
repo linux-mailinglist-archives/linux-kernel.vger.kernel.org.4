@@ -2,130 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A0C662A4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496DD662A4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbjAIPmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
+        id S237270AbjAIPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237268AbjAIPkr (ORCPT
+        with ESMTP id S237323AbjAIPkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:40:47 -0500
+        Mon, 9 Jan 2023 10:40:49 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC41EC69;
-        Mon,  9 Jan 2023 07:39:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C161EC7B;
+        Mon,  9 Jan 2023 07:39:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C65E0B80D66;
-        Mon,  9 Jan 2023 15:39:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337BBC433D2;
-        Mon,  9 Jan 2023 15:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673278762;
-        bh=rnfIk1jOfskD63wG/yF93j4JUbwfc5OF2eyMAQ8DGy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KwOaYdQo8+qWEjnqNi5bAx3ZIkY6guZ9lgPlmHpsyw6yBMjlY6TOpBl5O3sPgi9vx
-         nq/FOOSowwODoSjSp+u1St/JX3OJ7U2c/AGH5GAkpNj6V0rBW86L6YpoUEW6UEXVor
-         h/p9qtxgDdx4utH+tvqBFzOmiy7n7DQMxxsYaM2VvWRI5vM+HhthfELR6ysyKrT2ej
-         7DCJSU6yQbAc/y5vtDdKbm1iV9dOxf1WjcANHejLik+PDoc1dMz/h460iM30CKMbRI
-         iV27ofdLiiGzJIYw0zpuhS9F5upOlrMfZ09DSEnlWEKj0Z8xhTrBBgOX1Y7SBO2iON
-         nl3speuTMF1oA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D28B940468; Mon,  9 Jan 2023 12:39:19 -0300 (-03)
-Date:   Mon, 9 Jan 2023 12:39:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        rust-for-linux@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Neal Gompa <neal@gompa.dev>
-Subject: Re: Fwd: [PATCH bpf] scripts: Exclude Rust CUs with pahole
-Message-ID: <Y7w1J489NWFtCD+7@kernel.org>
-References: <828d438e-afe3-1fc0-bc12-ac98632c0908@gmail.com>
- <0ca4ad02-af27-0d1f-8750-1ff6b34e8d2a@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADE5EB80D66;
+        Mon,  9 Jan 2023 15:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11442C433D2;
+        Mon,  9 Jan 2023 15:39:24 +0000 (UTC)
+Date:   Mon, 9 Jan 2023 10:39:22 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
+        mhiramat@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, kuniyu@amazon.com, xiyou.wangcong@gmail.com,
+        duanxiongchun@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv
+ length
+Message-ID: <20230109103922.656eb286@gandalf.local.home>
+In-Reply-To: <CANn89iJwBkCsuNH9vih30xy_Ur6+0dtbfs8wmsA4s7r8=J3cBw@mail.gmail.com>
+References: <20230108025545.338-1-cuiyunhui@bytedance.com>
+        <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
+        <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
+        <CANn89iKY5gOC97NobXkhYv6d9ik=ks5ZEwVe=6H-VTwux=BwGQ@mail.gmail.com>
+        <20230109100833.03f4d4b1@gandalf.local.home>
+        <CANn89iJwBkCsuNH9vih30xy_Ur6+0dtbfs8wmsA4s7r8=J3cBw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ca4ad02-af27-0d1f-8750-1ff6b34e8d2a@gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Jan 07, 2023 at 11:23:11PM -0300, Martin Rodriguez Reboredo escreveu:
-> On 1/5/23 13:40, Eric Curtin wrote:
-> > Hiya Martin,
-> > 
-> > Just in case you hadn't noticed, the test bot complained about this...
-> > 
-> >>> grep: include/config/auto.conf: No such file or directory
-> > --
-> >>> grep: include/config/auto.conf: No such file or directory
-> >>> grep: include/config/auto.conf: No such file or directory
-> >>> grep: include/config/auto.conf: No such file or directory
-> > 
-> > Is mise le meas/Regards,
-> > 
-> > Eric Curtin
-> > 
-> > On Sun, 1 Jan 2023 at 08:57, kernel test robot <lkp@intel.com> wrote:
-> >>
-> >> Hi Martin,
-> >>
-> >> Thank you for the patch! Yet something to improve:
-> >>
-> >> [auto build test ERROR on bpf/master]
-> >>
-> >> url:    https://github.com/intel-lab-lkp/linux/commits/Martin-Rodriguez-Reboredo/scripts-Exclude-Rust-CUs-with-pahole/20221221-112806
-> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-> >> patch link:    https://lore.kernel.org/r/20221220203901.1333304-1-yakoyoku%40gmail.com
-> >> patch subject: [PATCH bpf] scripts: Exclude Rust CUs with pahole
-> >> config: sh-se7724_defconfig
-> >> compiler: sh4-linux-gcc (GCC) 12.1.0
-> >> reproduce (this is a W=1 build):
-> >>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>         chmod +x ~/bin/make.cross
-> >>         # https://github.com/intel-lab-lkp/linux/commit/24aac5fd4ea59e02e9c203d3a59be6f13c5e702f
-> >>         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >>         git fetch --no-tags linux-review Martin-Rodriguez-Reboredo/scripts-Exclude-Rust-CUs-with-pahole/20221221-112806
-> >>         git checkout 24aac5fd4ea59e02e9c203d3a59be6f13c5e702f
-> >>         # save the config file
-> >>         mkdir build_dir && cp config build_dir/.config
-> >>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-> >>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh distclean
-> >>
-> >> If you fix the issue, kindly add following tag where applicable
-> >> | Reported-by: kernel test robot <lkp@intel.com>
-> >>
-> >> All errors (new ones prefixed by >>):
-> >>
-> >>>> grep: include/config/auto.conf: No such file or directory
-> >> --
-> >>>> grep: include/config/auto.conf: No such file or directory
-> >>>> grep: include/config/auto.conf: No such file or directory
-> >>>> grep: include/config/auto.conf: No such file or directory
-> >>
-> >> --
-> >> 0-DAY CI Kernel Test Service
-> >> https://01.org/lkp
-> > 
+On Mon, 9 Jan 2023 16:20:58 +0100
+Eric Dumazet <edumazet@google.com> wrote:
+
+> On Mon, Jan 9, 2023 at 4:08 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Mon, 9 Jan 2023 15:54:38 +0100
+> > Eric Dumazet <edumazet@google.com> wrote:
+> >  
+> > > > static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
+> > > > {
+> > > >         int ret = INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
+> > > >                                      inet_sendmsg, sock, msg,
+> > > >                                      msg_data_left(msg));
+> > > >         BUG_ON(ret == -EIOCBQUEUED);
+> > > >
+> > > >         if (trace_sock_send_length_enabled()) {  
+> > >
+> > > A barrier() is needed here, with the current state of affairs.
+> > >
+> > > IMO, ftrace/x86 experts should take care of this generic issue ?  
+> >
+> > trace_*_enabled() is a static_branch() (aka. jump label).
+> >
+> > It's a nop, where the if block is in the out-of-line code and skipped. When
+> > the tracepoint is enabled, it gets turned into a jump to the if block
+> > (which returns back to this location).
+> >  
 > 
-> I see, I was making a dependency on `auto.conf` in `pahole-flags.sh` but
-> the former gets generated after the latter is called, so that's the
-> reason behind the `grep` errors. Sent a new version of the patch.
+> This is not a nop, as shown in the generated assembly, I copied in
+> this thread earlier.
 
-I'll wait a bit then try to finally get into the rust bandwagon by
-actually testing all this to ack this.
+But I thought that was for the patch before the added noinline helper
+function to force the tracepoint into its own function, and this now just
+has the static branch.
 
-- Arnaldo
+> 
+> Compiler does all sorts of things before the point the static branch
+> is looked at.
+> 
+> Let's add the extract again with <<*>> tags on added instructions/dereferences.
+> 
+> 
+
+Ug, bad line wrapping
+
+> sock_recvmsg_nosec:
+>         pushq   %r12    #
+>         movl    %edx, %r12d     # tmp123, flags
+>         pushq   %rbp    #
+> # net/socket.c:999:     int ret =
+> INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+>         movl    %r12d, %ecx     # flags,
+> # net/socket.c:998: {
+>         movq    %rdi, %rbp      # tmp121, sock
+>         pushq   %rbx    #
+> # net/socket.c:999:     int ret =
+> INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+>         movq    32(%rdi), %rax  # sock_19(D)->ops, sock_19(D)->ops
+> # ./include/linux/uio.h:270:    return i->count;
+>         movq    32(%rsi), %rdx  # MEM[(const struct iov_iter
+> *)msg_20(D) + 16B].count, pretmp_48
+> # net/socket.c:999:     int ret =
+> INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
+>         movq    144(%rax), %rax # _1->recvmsg, _2
+>         cmpq    $inet6_recvmsg, %rax    #, _2
+>         jne     .L107   #,
+>         call    inet6_recvmsg   #
+>  <<*>>       movl    %eax, %ebx      # tmp124, <retval>
+> .L108:
+> # net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+>   <<*>>      xorl    %r8d, %r8d      # tmp127
+>    <<*>>     testl   %ebx, %ebx      # <retval>
+> # net/socket.c:1004:                           sock->sk->sk_protocol,
+>  <<*>>       movq    24(%rbp), %rsi  # sock_19(D)->sk, _10
+> # net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+>  <<*>>       cmovle  %ebx, %r8d      # <retval>,, tmp119
+>   <<*>>      testb   $2, %r12b       #, flags
+> # net/socket.c:1004:                           sock->sk->sk_protocol,
+>   <<*>>      movzwl  516(%rsi), %ecx # _10->sk_protocol,
+> # net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+>   <<*>>      movzwl  16(%rsi), %edx  # _10->__sk_common.skc_family,
+> # net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
+>   <<*>>      cmove   %ebx, %r8d      # tmp119,, <retval>, iftmp.54_16
+> # ./arch/x86/include/asm/jump_label.h:27:       asm_volatile_goto("1:"
+> #APP
+> # 27 "./arch/x86/include/asm/jump_label.h" 1
+>         1:jmp .L111 # objtool NOPs this         #
+>         .pushsection __jump_table,  "aw"
+>          .balign 8
+>         .long 1b - .
+>         .long .L111 - .         #
+>          .quad __tracepoint_sock_recv_length+8 + 2 - .  #,
+>         .popsection
+> 
+> # 0 "" 2
+> #NO_APP
+> .L106:
+> # net/socket.c:1008: }
+>  <<*>>       movl    %ebx, %eax      # <retval>,
+>         popq    %rbx    #
+>         popq    %rbp    #
+>         popq    %r12    #
+>         ret
+> .L111:
+> # ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
+> sock_recv_length,
+> 
+> > That is, when the tracepoint in the block gets enabled so does the above
+> > branch. Sure, there could be a race between the two being enabled, but I
+> > don't see any issue if there is. But the process to modify the jump labels,
+> > does a bunch of synchronization between the CPUs.
+> >
+> > What barrier are you expecting?  
+> 
+> Something preventing the compiler being 'smart', forcing expression evaluations
+> before TP_fast_assign() is eventually called.
+
+There's no good way to generically keep the compiler from being 'smart',
+that I know of. That's because the tracepoint injection is defined by:
+
+#define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
+	extern int __traceiter_##name(data_proto);			\
+	DECLARE_STATIC_CALL(tp_func_##name, __traceiter_##name);	\
+	extern struct tracepoint __tracepoint_##name;			\
+	static inline void __trace_##name(proto)			\
+	{								
+
+That (proto) is the prototype being passed in. And because macros can't
+create other macros, I don't know how to have a way to inject a barrier()
+before and after that call, or better yet, to have the prototype hidden
+behind the static_branch.
+
+
+But looking at this tracepoint again, I see a issue that can help with the
+dereferencing.
+
+Why is family and protocol passed in?
+
++	trace_sock_send_length(sock->sk, sock->sk->sk_family,
++			       sock->sk->sk_protocol, ret, 0);
+
+
+Where the TP_fast_assign() is:
+
++	TP_fast_assign(
++		__entry->sk = sk;
++		__entry->family = sk->sk_family;
++		__entry->protocol = sk->sk_protocol;
++		__entry->length = ret > 0 ? ret : 0;
++		__entry->error = ret < 0 ? ret : 0;
++		__entry->flags = flags;
++	),
+
+The family and protocol is taken from the sk, and not the parameters. I bet
+dropping those would help.
+
+-- Steve
+
