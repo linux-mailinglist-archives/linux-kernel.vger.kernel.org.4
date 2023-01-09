@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AFF6627D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E446627E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbjAIN5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
+        id S237074AbjAIN7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237128AbjAIN45 (ORCPT
+        with ESMTP id S237130AbjAIN62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:56:57 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319795F9F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:56:56 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id m6so13048920lfj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:56:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5/etb6Li+SD1qbbc9rQxZclFqISGWC/9BhlatPB62o4=;
-        b=vCtezC3cFYTmqwEK9IuuO5ETNM7p4cil2D5Jjn/TK/UBDfPHkHG50nj6u7OZlW4WM5
-         O0V+M3m2vQg1QMNYcm4Pz/tYh6SktKQDys2lMEa/gLu+si5SU5OFkT+baA68uA9HwvHr
-         2CKndpT/k+gZGtMgRSIPJniu6L6skl8cOC16jSA70mOlLYIOX8+Oz7cDLOugfzeXgXOH
-         aYk9kwll1E6Qhzdftqcw2wVyOirQ2qeZcoQ1A4QSet5bTta/bPUj1z22TPbDVID1h9o/
-         MTwYJ6FUKytHuXZQh0Wz50wi9HKupKDZhGZlNUzEe33LdFQ+PSzg/gzjvFQ87bkxyd3i
-         jKmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5/etb6Li+SD1qbbc9rQxZclFqISGWC/9BhlatPB62o4=;
-        b=jalFnJMhxCbM3tz+I13aH5ZT8DKJAFNsAGw6BiCRudGMaEiyJj1EonZn+JwD+vdUDS
-         qjdrASOCtOngZ6ZyxKboABrgF3QKZIIyNrPlLq2MH4KvTUX7uTU6qTkGEhcJJJAnRuGS
-         KNElNrgWbHwaLtIsWTEXVMs0wy5tDgTd2lNbF8tYX+3Pve7jEdNltObZ/7+nK497wcBD
-         guiDHvxEWfshGmy0J+ii6PJ4BmUrtoVikKtORq7ksNURrgycLkZerpjdm9fqTpBq/Bbv
-         sB1B4r/ktOTWUqyca29GKyaZBLVaAQ7Ku4o9FkVMvjAb7GwpjdsE7rM0+YY/w4touQXB
-         H8kA==
-X-Gm-Message-State: AFqh2koMl3dMs5qSmMMiMRLaOZ7a1vgaJNvgQtkjlGIIAqVgyVA7gPf5
-        9UVGEgxANeNWySRUHhb7p24GJA==
-X-Google-Smtp-Source: AMrXdXsxRujt/w9vMYb/h5KmybJyJUpBxB/ztrdQ4vSNn3xnQU7xA3eWTJ0KMpbpfj95ij4iJMgGCA==
-X-Received: by 2002:a05:6512:22d3:b0:4b4:fbdc:a359 with SMTP id g19-20020a05651222d300b004b4fbdca359mr19491673lfu.54.1673272615522;
-        Mon, 09 Jan 2023 05:56:55 -0800 (PST)
-Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id x16-20020a056512079000b004c89b9fb1fdsm1638226lfr.68.2023.01.09.05.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 05:56:55 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mon, 9 Jan 2023 08:58:28 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D66D138;
+        Mon,  9 Jan 2023 05:58:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673272707; x=1704808707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EFIeQp6uECf0+1f/Iuo156tsEA9puTtW3jNhyTO8xBc=;
+  b=OTXb1wVJqHKDeFxQ7Dc6ZOjw/nuy76QyWqm22+ijk8P7GUY58llzXbfD
+   WVMux/Wn24LcpLSMVkZA5G6g7o2J/0xXjaQgPzn/fepP3zVC8Z4lgr/No
+   JYKNL/2tM66syx5mzWTNntmo68A+mhZ4US1r5Kd0DIceWsOECb9mSo493
+   2yQduGCEriaB8YWHr9qfAM5GDpbh+/1X0UC45pzGIxAwUrWSz23gluFEo
+   1LqwnZMeZXjiEf49UVVFBXqOD24PYCZB53lrKtKw+D95rMnQ3ekdd1KjQ
+   Ytfe1gHkTNNq9cKq3fzIhOhXWW4z8pu48GUzslIk0IRsjkjbmUU0kM9WA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350089598"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="350089598"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 05:58:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="606614901"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="606614901"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 09 Jan 2023 05:58:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pEsfI-006VTV-1I;
+        Mon, 09 Jan 2023 15:58:16 +0200
+Date:   Mon, 9 Jan 2023 15:58:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] arm64: dts: qcom: sm6375: Add missing power-domain-named to CDSP
-Date:   Mon,  9 Jan 2023 14:56:47 +0100
-Message-Id: <20230109135647.339224-5-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109135647.339224-1-konrad.dybcio@linaro.org>
-References: <20230109135647.339224-1-konrad.dybcio@linaro.org>
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Message-ID: <Y7wdePnmFx1XDGvB@smile.fi.intel.com>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+ <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+ <Y7v1Wrma/Ev8KEzy@smile.fi.intel.com>
+ <5173a16a-83c5-5cfe-f6ce-03e1c90e8790@ideasonboard.com>
+ <Y7wc2lX8eGPITx30@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7wc2lX8eGPITx30@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was omitted when first introducing the node. Fix it.
+On Mon, Jan 09, 2023 at 03:55:39PM +0200, Andy Shevchenko wrote:
+> On Mon, Jan 09, 2023 at 02:59:01PM +0200, Tomi Valkeinen wrote:
+> > On 09/01/2023 13:07, Andy Shevchenko wrote:
+> > > On Sun, Jan 08, 2023 at 06:06:34AM +0200, Laurent Pinchart wrote:
+> > > > On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
 
-Fixes: fe6fd26aeddf ("arm64: dts: qcom: sm6375: Add ADSP&CDSP")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-v2 -> v3:
-New patch
+...
 
- arch/arm64/boot/dts/qcom/sm6375.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+> > > > > +	gc->of_node = priv->client->dev.of_node;
+> > > 
+> > > We don't have of_node anymore in gc. And if the parent device is set, you can
+> > > drop this line (it will work with older and newer kernels. Otherwise, use
+> > > fwnode.
+> > 
+> > What do you mean "we don't have of_node anymore"?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-index 4f00307b30e8..bf5114468ba5 100644
---- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-@@ -1873,6 +1873,7 @@ remoteproc_cdsp: remoteproc@b000000 {
- 			clock-names = "xo";
- 
- 			power-domains = <&rpmpd SM6375_VDDCX>;
-+			power-domain-names = "cx";
- 
- 			memory-region = <&pil_cdsp_mem>;
- 
+Just to add that you missed "gc" in the quote which is crucial to get
+what I meant.
+
+> There is no of_node member of struct gpio_chip anymore. This will fail
+> to compile.
+
 -- 
-2.39.0
+With Best Regards,
+Andy Shevchenko
+
 
