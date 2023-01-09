@@ -2,155 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1952C662B67
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBFB662B6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjAIQji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S233451AbjAIQkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbjAIQja (ORCPT
+        with ESMTP id S233666AbjAIQk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:39:30 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8691F34D67
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:39:28 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id h26so5084443ila.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 08:39:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xrg136BCp0PmT+E9WTU4STUIwjfV5DcN5FDK70FqYcI=;
-        b=aIFfWS0cT4UCU3f6+rKm+5rHYgjr2Tnu5w/qCdXoxWFfN6ueukXs1tp/iAqvpFruK7
-         6tN75Q/bqrlviXjadh9+tAa31LXc9OPq9r3CqA566MBQTvoURfX3gKuDU8AqrQDRBhyZ
-         c06SMvz82ThLUp5ehRVxJiZtnjJqPdFRKpKEA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xrg136BCp0PmT+E9WTU4STUIwjfV5DcN5FDK70FqYcI=;
-        b=JAK58c7xrXxFX6nB52hKckYRnk8p29E3t+P28iDKRifAMw57O/eMbKHFIRadfkdyYu
-         JUgE1NbVOjWjJpkyi9mT6AuxLrqwAmkwxNrAPHxvlT1mqtgDJkGsLhfxDFH3mVKS+Yxb
-         V9ZQyuWYTuj6aAkDupdg315K6Yk2S2smI0WMRmssNVew0uMF9FsRO/3TEg2cIaaH9EJp
-         RXSNYy4DFqY5VqcZBpbnLRyA0BhF0w7Lyb6CL/zlFx8iw2XMx/9tteiAqfwDcGk8I7uQ
-         25TkaXE1f5e5urwHYP4Btg1ZtnQtiH3gIE4iUKuq4airkQrTgxhFVuD0uP8xX/PXF/98
-         VpLw==
-X-Gm-Message-State: AFqh2kpals7aZwH2kB6SE2DP8Xvz7Z4uNQ4Fnb1theflOZeFHI5bJhKV
-        IvOEM9qpJwWQSsVyy8Py6R00mg==
-X-Google-Smtp-Source: AMrXdXsKno4G65HN0v8xsEuZOmhCnZC8InIBvJDkqhetZl7+YX9yYEGFPoFLGieuDFZqVW7UzXp4lQ==
-X-Received: by 2002:a05:6e02:2205:b0:30d:92c4:8d6 with SMTP id j5-20020a056e02220500b0030d92c408d6mr9444298ilf.10.1673282367876;
-        Mon, 09 Jan 2023 08:39:27 -0800 (PST)
-Received: from localhost.localdomain ([70.57.89.124])
-        by smtp.gmail.com with ESMTPSA id w17-20020a92ad11000000b0030c44ed932asm2790684ilh.29.2023.01.09.08.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 08:39:27 -0800 (PST)
-From:   Frederick Lawler <fred@cloudflare.com>
-To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        kuba@kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        zymon.heidrich@gmail.com, phil@nwl.cc, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>,
-        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
-Subject: [PATCH net] net: sched: disallow noqueue for qdisc classes
-Date:   Mon,  9 Jan 2023 10:39:06 -0600
-Message-Id: <20230109163906.706000-1-fred@cloudflare.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 9 Jan 2023 11:40:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553BF1C928;
+        Mon,  9 Jan 2023 08:40:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673282425; x=1704818425;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=bKBjn2mW2FE+vH8pSgLn7FxbJRs046nNQ3GlEkmoTvE=;
+  b=NjTZcnCVzywAD7VE6jgSJncva1LZNWL6KpWx27CapbApVnI/LtJ8rG7j
+   KuQoHC1NGvrFOKWPgvtkuwsUrXuJo3/amlHCcSQSoLSIgn6pQSCPf3AxU
+   zUi+KbkPEkKSwOzf00lQqCrWsZ6V2mqehQIa1nain/f/pJyLknLNXaJSj
+   VNG9AX6PMDN6jSjBQawStMxwVwEp60SoXuIpMTyQxVufOQo6LME6fC434
+   B/RRIRh7WZOpJlBuqLUb446N4fuyPVhgz4ogf/EFWnXesBcGx9UvoQT9S
+   9oioCY+XcB+GGF4CgA49AGnrYkX9yDqJMWmCEIuWydudDKMBwlRPUCjNI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306434898"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="306434898"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 08:40:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="634271084"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="634271084"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 08:40:05 -0800
+Date:   Mon, 9 Jan 2023 08:40:37 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Tom Rix <trix@redhat.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
+        corbet@lwn.net, gregkh@linuxfoundation.org,
+        linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v9 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <4e7f84ff-8bab-019d-3858-4c545834a354@redhat.com>
+Message-ID: <alpine.DEB.2.22.394.2301090840020.211949@rhweight-WRK1>
+References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com> <20230104232253.24743-2-matthew.gerlach@linux.intel.com> <4e7f84ff-8bab-019d-3858-4c545834a354@redhat.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-119339409-1673282443=:211949"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While experimenting with applying noqueue to a classful queue discipline,
-we discovered a NULL pointer dereference in the __dev_queue_xmit()
-path that generates a kernel OOPS:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-    # dev=enp0s5
-    # tc qdisc replace dev $dev root handle 1: htb default 1
-    # tc class add dev $dev parent 1: classid 1:1 htb rate 10mbit
-    # tc qdisc add dev $dev parent 1:1 handle 10: noqueue
-    # ping -I $dev -w 1 -c 1 1.1.1.1
+--8323328-119339409-1673282443=:211949
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-[    2.172856] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[    2.173217] #PF: supervisor instruction fetch in kernel mode
-...
-[    2.178451] Call Trace:
-[    2.178577]  <TASK>
-[    2.178686]  htb_enqueue+0x1c8/0x370
-[    2.178880]  dev_qdisc_enqueue+0x15/0x90
-[    2.179093]  __dev_queue_xmit+0x798/0xd00
-[    2.179305]  ? _raw_write_lock_bh+0xe/0x30
-[    2.179522]  ? __local_bh_enable_ip+0x32/0x70
-[    2.179759]  ? ___neigh_create+0x610/0x840
-[    2.179968]  ? eth_header+0x21/0xc0
-[    2.180144]  ip_finish_output2+0x15e/0x4f0
-[    2.180348]  ? dst_output+0x30/0x30
-[    2.180525]  ip_push_pending_frames+0x9d/0xb0
-[    2.180739]  raw_sendmsg+0x601/0xcb0
-[    2.180916]  ? _raw_spin_trylock+0xe/0x50
-[    2.181112]  ? _raw_spin_unlock_irqrestore+0x16/0x30
-[    2.181354]  ? get_page_from_freelist+0xcd6/0xdf0
-[    2.181594]  ? sock_sendmsg+0x56/0x60
-[    2.181781]  sock_sendmsg+0x56/0x60
-[    2.181958]  __sys_sendto+0xf7/0x160
-[    2.182139]  ? handle_mm_fault+0x6e/0x1d0
-[    2.182366]  ? do_user_addr_fault+0x1e1/0x660
-[    2.182627]  __x64_sys_sendto+0x1b/0x30
-[    2.182881]  do_syscall_64+0x38/0x90
-[    2.183085]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-...
-[    2.187402]  </TASK>
 
-Previously in commit d66d6c3152e8 ("net: sched: register noqueue
-qdisc"), NULL was set for the noqueue discipline on noqueue init
-so that __dev_queue_xmit() falls through for the noqueue case. This
-also sets a bypass of the enqueue NULL check in the
-register_qdisc() function for the struct noqueue_disc_ops.
 
-Classful queue disciplines make it past the NULL check in
-__dev_queue_xmit() because the discipline is set to htb (in this case),
-and then in the call to __dev_xmit_skb(), it calls into htb_enqueue()
-which grabs a leaf node for a class and then calls qdisc_enqueue() by
-passing in a queue discipline which assumes ->enqueue() is not set to NULL.
+On Mon, 9 Jan 2023, Tom Rix wrote:
 
-Fix this by not allowing classes to be assigned to the noqueue
-discipline. Linux TC Notes states that classes cannot be set to
-the noqueue discipline. [1] Let's enforce that here.
+>
+> On 1/4/23 3:22 PM, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> 
+>> Add documentation describing the extensions provided by Version
+>> 1 of the Device Feature Header (DFHv1).
+>> 
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>
+> Thanks for the changes.
+>
+> Reviewed-by: Tom Rix <trix@redhat.com>
 
-Links:
-1. https://linux-tc-notes.sourceforge.net/tc/doc/sch_noqueue.txt
+Thanks for the review,
+Matthew Gerlach
 
-Fixes: d66d6c3152e8 ("net: sched: register noqueue qdisc")
-Cc: stable@vger.kernel.org
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- net/sched/sch_api.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 2317db02c764..72d2c204d5f3 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1133,6 +1133,11 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 			return -ENOENT;
- 		}
- 
-+		if (new && new->ops == &noqueue_qdisc_ops) {
-+			NL_SET_ERR_MSG(extack, "Cannot assign noqueue to a class");
-+			return -EINVAL;
-+		}
-+
- 		err = cops->graft(parent, cl, new, &old, extack);
- 		if (err)
- 			return err;
--- 
-2.34.1
-
+>
+>> ---
+>> v9: move DFH definitions to after the Overview
+>>      fix name of feature revision field
+>>      clarify next field in DFH
+>> 
+>> v8: fix section titles
+>> 
+>> v7: shorten long lines and wording suggestions by bagasdotme@gmail.com
+>> 
+>> v6: no change
+>> 
+>> v5: use nested list for field descriptions
+>>      clean up prose
+>>      add reviewed-by and comments from Ilpo Järvinen
+>> 
+>> v4: Remove marketing speak and separate v0 and v1 descriptions.
+>>      Fix errors reported by "make htmldocs".
+>> 
+>> v3: no change
+>> 
+>> v2: s/GUILD/GUID/
+>>      add picture
+>> ---
+>>   Documentation/fpga/dfl.rst | 117 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 117 insertions(+)
+>> 
+>> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+>> index 15b670926084..7e015249785b 100644
+>> --- a/Documentation/fpga/dfl.rst
+>> +++ b/Documentation/fpga/dfl.rst
+>> @@ -75,6 +75,123 @@ convenient for software to locate each feature by 
+>> walking through this list,
+>>   and can be implemented in register regions of any FPGA device.
+>>     +Device Feature Header - Version 0
+>> +=================================
+>> +Version 0 (DFHv0) is the original version of the Device Feature Header.
+>> +The format of DFHv0 is shown below::
+>> +
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 REV 12|11 ID 
+>> 0| 0x00
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_L 
+>> 0| 0x08
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_H 
+>> 0| 0x10
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +
+>> +- Offset 0x00
+>> +
+>> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
+>> +  * DFH VER - The version of the DFH.
+>> +  * Rsvd - Currently unused.
+>> +  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
+>> +  * Next - The offset in bytes of the next DFH in the DFL from the DFH 
+>> start,
+>> +    and the start of a DFH must be aligned to an 8 byte boundary.
+>> +    If EOL is set, Next is the size of MMIO of the last feature in the 
+>> list.
+>> +  * REV - The revision of the feature associated with this header.
+>> +  * ID - The feature ID if Type is private feature.
+>> +
+>> +- Offset 0x08
+>> +
+>> +  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique 
+>> Identifier
+>> +    (present only if Type is FME or AFU).
+>> +
+>> +- Offset 0x10
+>> +
+>> +  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique 
+>> Identifier
+>> +    (present only if Type is FME or AFU).
+>> +
+>> +
+>> +Device Feature Header - Version 1
+>> +=================================
+>> +Version 1 (DFHv1) of the Device Feature Header adds the following 
+>> functionality:
+>> +
+>> +* Provides a standardized mechanism for features to describe
+>> +  parameters/capabilities to software.
+>> +* Standardize the use of a GUID for all DFHv1 types.
+>> +* Decouples the DFH location from the register space of the feature 
+>> itself.
+>> +
+>> +The format of Version 1 of the Device Feature Header (DFH) is shown 
+>> below::
+>> +
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 REV 12|11 ID 
+>> 0| 0x00
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_L 
+>> 0| 0x08
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_H 
+>> 0| 0x10
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                   Reg Address/Offset                      1|  Rel 
+>> 0| 0x18
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance 
+>> 0| 0x20
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID 
+>> 0| 0x28
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                 Parameter Data 
+>> 0| 0x30
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +
+>> +                                  ...
+>> +
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID 
+>> 0|
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +    |63                 Parameter Data 
+>> 0|
+>> + 
+>> +-----------------------------------------------------------------------+
+>> +
+>> +- Offset 0x00
+>> +
+>> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
+>> +  * DFH VER - The version of the DFH.
+>> +  * Rsvd - Currently unused.
+>> +  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
+>> +  * Next - The offset in bytes of the next DFH in the DFL from the DFH 
+>> start,
+>> +    and the start of a DFH must be aligned to an 8 byte boundary.
+>> +    If EOL is set, Next is the size of MMIO of the last feature in the 
+>> list.
+>> +  * REV - The revision of the feature associated with this header.
+>> +  * ID - The feature ID if Type is private feature.
+>> +
+>> +- Offset 0x08
+>> +
+>> +  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique 
+>> Identifier.
+>> +
+>> +- Offset 0x10
+>> +
+>> +  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique 
+>> Identifier.
+>> +
+>> +- Offset 0x18
+>> +
+>> +  * Reg Address/Offset - If Rel bit is set, then the value is the high 63 
+>> bits
+>> +    of a 16-bit aligned absolute address of the feature's registers. 
+>> Otherwise
+>> +    the value is the offset from the start of the DFH of the feature's 
+>> registers.
+>> +
+>> +- Offset 0x20
+>> +
+>> +  * Reg Size - Size of feature's register set in bytes.
+>> +  * Params - Set if DFH has a list of parameter blocks.
+>> +  * Group - Id of group if feature is part of a group.
+>> +  * Instance - Id of feature instance within a group.
+>> +
+>> +- Offset 0x28 if feature has parameters
+>> +
+>> +  * Next - Offset to the next parameter block in 8 byte words. If EOP set,
+>> +    size in 8 byte words of last parameter.
+>> +  * Param Version - Version of Param ID.
+>> +  * Param ID - ID of parameter.
+>> +
+>> +- Offset 0x30
+>> +
+>> +  * Parameter Data - Parameter data whose size and format is defined by
+>> +    version and ID of the parameter.
+>> +
+>> +
+>>   FIU - FME (FPGA Management Engine)
+>>   ==================================
+>>   The FPGA Management Engine performs reconfiguration and other 
+>> infrastructure
+>
+>
+--8323328-119339409-1673282443=:211949--
