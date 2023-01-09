@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D2C6631F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D1D6631F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237358AbjAIU4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S237709AbjAIU4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237546AbjAIUzY (ORCPT
+        with ESMTP id S237601AbjAIUz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:55:24 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5E81D7F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:54:25 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id k18-20020a170902c41200b001896d523dc8so6993492plk.19
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:54:25 -0800 (PST)
+        Mon, 9 Jan 2023 15:55:26 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7DC85C89
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:54:28 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id n203-20020a2572d4000000b0078f09db9888so10253981ybc.18
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:54:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDqG76VNjmKFCkYaVQCHk1jK9PV7CZBX+MdyRpSUw7Y=;
-        b=oTTbEHXXf074UTT/LXfKIzTlYAOVSZBWjz/z2pi8uw2sgTsKOn0pf4M+FUmb3fhKEp
-         t8utYb+BYUrtOmcMbBRfjQmj3HjZCnvt7nX8XXsh4x467hUw4mc17N9vBA4v3IH0gXYu
-         Tf0NgJ8TRnq+dnC575YF2XUlugz8igLSTMm592zbLFSlzWIJOjCEMLUlmrt7z2QrvV2T
-         gekww8A2UJVHgfp1zwqjj/KBiOxEMFrYzziSkpJrGHAD1djB4N2zU8kmwkE7PnEOrNUu
-         hxvDlopUQbh5t04B3B6cW3kLOVcLSOY+TAkcMQBqHoc5+w1BV2sS39QIbB6FPKvgrwld
-         s2sA==
+        bh=mttq8CcSxh6pk/PDvvqo/9XfYX/awSV+YKJHUec4DWQ=;
+        b=EbLgVpiNWauCxYsPhZzluNh8i7Jc9od95XU7q4baD/bZuTFbACugKjaBqwn3ZlwjPK
+         DyA2dJROokooe1X9hWF9cqxx7R8dzaLC4TQ2VgG1K6ZzCrV6Cn+bNgWtTm8qKV2EPlQI
+         C3EgQy0lx8995KoeqPGehRxKjsY9DJj6pO/ydpCP34y4VCDsA5lFDA9xaQObsm54nagL
+         gf/rqX49ePSI64VKn0w7yUB28hwRSupVRZyvn8G3inMqKMvhkMvaFS5iHqspfhqeeQGW
+         sJQNxcx4h1OW/3tP5B8wZxgrbXFTXvC0zscvDZLigjE3sBlwiKuCEIrG4zHiBAmIFXhN
+         sp1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDqG76VNjmKFCkYaVQCHk1jK9PV7CZBX+MdyRpSUw7Y=;
-        b=CaFAor7JdrXfi8+vNs4KOkeelfkQptUs/UWVR9Fxwg0aucomzDTtjMNI3Y3DvdgWNP
-         wzvuEukT8nnTy8wxW/1SyUpLihHe5bGhAcj2aK+0nPOzhzVdjtubNfuRBXKHRDvrNsCw
-         n+sL8/gh6kaw6SZusaXG5Oku0/C3H5c+y3hR2O8UmmwkUgnrk7HDvLCZCQAz8UpQAgaz
-         fd8U2KdCJ7JH8U5IDQpH+a6coo2gMTBoRQqVSHf3iRQQ1lo632dKWRlK7caQyjbRajMO
-         14KN3mv278DxYYus2mId4lAItBmXuOjqyNNM6hX7ywzP2jiZqoKOvFDk0nf/Q5Ct9g4C
-         pVWw==
-X-Gm-Message-State: AFqh2kp8e+dQFCnFn+dErp4nus9y36gqot+LlmJaNI2ltTrcoZE+v1dZ
-        kMhsV//g+Iu3++8W2NWbiIro7Hd+yrw=
-X-Google-Smtp-Source: AMrXdXvx+5mjUKCd2siyFSRbOdBiHgQPNh6ZnBtsj8lXWONeXJTph7ewao1odYnxoExvO1xzjoIbjT4zuzo=
+        bh=mttq8CcSxh6pk/PDvvqo/9XfYX/awSV+YKJHUec4DWQ=;
+        b=5WJWiABhMZgyLmuOtlK7476/RvLzIHRadz5DxklX2oNNchRgDf7QOrcl0lXIaZM+rR
+         7O24E38Nz2hBt7D+DiRjiCO+1yiKZDKuzWP9ukYeejYHZajSfiHQdDsKU8TQBEZ7HgBW
+         apwQwp1VnW7eRKAGg1XNscCrG+AOmXQ42AcJdYvIY9V3HaTX4krx165n1zmvN8git6eq
+         vwP0VngLOFBFdeyl/QJoXnzPX8m2iTucptrA4TyGz1N1XqzBYAQa+P6m8WYVw1UiGhzC
+         Ux0N6YN/hxCCgIYmHF8jyTxndRI/dpTieLuhPMg1EOjQsk/qNRfHvp4BeeJkx2l1Im3e
+         pfsQ==
+X-Gm-Message-State: AFqh2kr+c5dm96RGEXRTWU5v36UFKfwg817i4Mzjp6MmS1mYFm3LGt0a
+        vXuLccAOiUf8JRBm3tkW8mzcDf/sL3Q=
+X-Google-Smtp-Source: AMrXdXsB8fbMiTP1DYP5J5XEU88bTBTK0YYISNp2DJzOoqciXF/+cmYxWMxqmdOzbjRBqH/+xJjk8vQehVo=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:9393:6f7a:d410:55ca])
- (user=surenb job=sendgmr) by 2002:a17:90a:638b:b0:221:52e3:1f56 with SMTP id
- f11-20020a17090a638b00b0022152e31f56mr5166916pjj.225.1673297664681; Mon, 09
- Jan 2023 12:54:24 -0800 (PST)
-Date:   Mon,  9 Jan 2023 12:53:12 -0800
+ (user=surenb job=sendgmr) by 2002:a25:850e:0:b0:6f8:42d8:2507 with SMTP id
+ w14-20020a25850e000000b006f842d82507mr8097864ybk.110.1673297667509; Mon, 09
+ Jan 2023 12:54:27 -0800 (PST)
+Date:   Mon,  9 Jan 2023 12:53:13 -0800
 In-Reply-To: <20230109205336.3665937-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230109205336.3665937-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109205336.3665937-18-surenb@google.com>
-Subject: [PATCH 17/41] mm/mmap: move VMA locking before anon_vma_lock_write call
+Message-ID: <20230109205336.3665937-19-surenb@google.com>
+Subject: [PATCH 18/41] mm/khugepaged: write-lock VMA while collapsing a huge page
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -84,33 +84,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move VMA flag modification (which now implies VMA locking) before
-anon_vma_lock_write to match the locking order of page fault handler.
+Protect VMA from concurrent page fault handler while collapsing a huge
+page. Page fault handler needs a stable PMD to use PTL and relies on
+per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
+set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
+not be detected by a page fault handler without proper locking.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/mmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/khugepaged.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index fa994ae903d9..53d885e70a54 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2953,13 +2953,13 @@ static int do_brk_flags(struct ma_state *mas, struct vm_area_struct *vma,
- 		if (mas_preallocate(mas, vma, GFP_KERNEL))
- 			goto unacct_fail;
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 5376246a3052..d8d0647f0c2c 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1032,6 +1032,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	if (result != SCAN_SUCCEED)
+ 		goto out_up_write;
  
-+		set_vm_flags(vma, VM_SOFTDIRTY);
- 		vma_adjust_trans_huge(vma, vma->vm_start, addr + len, 0);
- 		if (vma->anon_vma) {
- 			anon_vma_lock_write(vma->anon_vma);
- 			anon_vma_interval_tree_pre_update_vma(vma);
- 		}
- 		vma->vm_end = addr + len;
--		set_vm_flags(vma, VM_SOFTDIRTY);
- 		mas_store_prealloc(mas, vma);
++	vma_write_lock(vma);
+ 	anon_vma_lock_write(vma->anon_vma);
  
- 		if (vma->anon_vma) {
+ 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, NULL, mm,
+@@ -1503,6 +1504,9 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		goto drop_hpage;
+ 	}
+ 
++	/* Lock the vma before taking i_mmap and page table locks */
++	vma_write_lock(vma);
++
+ 	/*
+ 	 * We need to lock the mapping so that from here on, only GUP-fast and
+ 	 * hardware page walks can access the parts of the page tables that
+@@ -1690,6 +1694,7 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+ 				result = SCAN_PTE_UFFD_WP;
+ 				goto unlock_next;
+ 			}
++			vma_write_lock(vma);
+ 			collapse_and_free_pmd(mm, vma, addr, pmd);
+ 			if (!cc->is_khugepaged && is_target)
+ 				result = set_huge_pmd(vma, addr, pmd, hpage);
 -- 
 2.39.0
 
