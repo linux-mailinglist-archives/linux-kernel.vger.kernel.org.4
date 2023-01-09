@@ -2,118 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA4E662C13
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF28A662C1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234370AbjAIRDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S235348AbjAIRFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237230AbjAIRCP (ORCPT
+        with ESMTP id S233994AbjAIREf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:02:15 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E2F4102D;
-        Mon,  9 Jan 2023 09:02:12 -0800 (PST)
-Date:   Mon, 09 Jan 2023 17:02:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673283729;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EZm38wdW5+QOVUucpdsdwwl/TOi/yt5E1upu2Li1qCY=;
-        b=cCBUL4x8HGnC62fOlgO8uitWTXVGHQWj/puqUAxMxTsQXYmLfMfE8iFyBS/45oFCJBGPYz
-        XdaR43tfZ7Ew3w/kWtP0RGav70RY7Fq4ZRyIKlTRpfJbF3EwoZesH55um+9MwJ2jNISZ/t
-        Ofqm1aR25afDcAmYm1NdRLramtcTlNdCPzqibjTIIqoVeeYBSS46Ve3IAgbL6DOBvDTy0Z
-        fFmwjX9ywPn0ENlKZlAqIPa9cpBmT3589I4HELpI0Ur1gcfD9A4LngpWVWgmnOfguR+S9q
-        jY4uCQDg3zSlLfTuZ/yKHpdYSpoMcKfpCECSdn6Qt3/enOF0BQnv6odzfZQmzA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673283729;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EZm38wdW5+QOVUucpdsdwwl/TOi/yt5E1upu2Li1qCY=;
-        b=Rr4qhwltgqwkvwPOscWkOznZ3pv9gLBkWOA6fZcDQGmI8uRgkdHRBsbqq2J8iqK6mRmJAr
-        0aChjyrPlkdWsTAw==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf: Add PMU_FORMAT_ATTR_SHOW
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230104201349.1451191-1-kan.liang@linux.intel.com>
-References: <20230104201349.1451191-1-kan.liang@linux.intel.com>
+        Mon, 9 Jan 2023 12:04:35 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84EE2B4AF;
+        Mon,  9 Jan 2023 09:03:32 -0800 (PST)
+Received: from [192.168.0.5] (75-172-37-193.tukw.qwest.net [75.172.37.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0416820B92A8;
+        Mon,  9 Jan 2023 09:03:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0416820B92A8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1673283812;
+        bh=reGvUKkOQRe1DdF3MA29LaS413i2/fZZ7X1lw4HXNiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MCv/z84SFZGRfOstaa0KBSI7/DxyBUSmCSE0qa3rqEmrXm55EiIAWP7ObJAcGqSgQ
+         duJOBPur8xzaRVfgjceSBacMEiaPlQfJ90iHI8gmdaNX+vS710Fyrw4UgyCYI/8XNY
+         8qdndGjQ8y/zVBDtSeHCfRJhf7ZEjSt1uqFlN9x0=
+Message-ID: <5bb525c3-cc6d-f526-aeb8-4b7ef1a3eb55@linux.microsoft.com>
+Date:   Mon, 9 Jan 2023 09:03:36 -0800
 MIME-Version: 1.0
-Message-ID: <167328372960.4906.10711570935052964699.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, seanjc@google.com,
+        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
+ <cb951fb1ad6814996fc54f4a255c5841a20a151f.1672639707.git.jinankjain@linux.microsoft.com>
+Content-Language: en-US
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <cb951fb1ad6814996fc54f4a255c5841a20a151f.1672639707.git.jinankjain@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+On 1/1/2023 11:12 PM, Jinank Jain wrote:
+> Child partitions are free to allocate SynIC message and event page but in
+> case of root partition it must use the pages allocated by Microsoft
+> Hypervisor (MSHV). Base address for these pages can be found using
+> synthetic MSRs exposed by MSHV. There is a slight difference in those MSRs
+> for nested vs non-nested root partition.
+> 
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 +++++
+>  arch/x86/include/asm/mshyperv.h    | 30 +++-----------
+>  arch/x86/kernel/cpu/mshyperv.c     | 65 ++++++++++++++++++++++++++++++
+>  drivers/hv/hv.c                    | 18 +++++----
+>  4 files changed, 93 insertions(+), 31 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 58c03d18c235..b5019becb618 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -225,6 +225,17 @@ enum hv_isolation_type {
+>  #define HV_REGISTER_SINT14			0x4000009E
+>  #define HV_REGISTER_SINT15			0x4000009F
+>  
+> +/*
+> + * Define synthetic interrupt controller model specific registers for
+> + * nested hypervisor.
+> + */
+> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
+> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
+> +#define HV_REGISTER_NESTED_SIMP                0x40001083
+> +#define HV_REGISTER_NESTED_EOM                 0x40001084
+> +#define HV_REGISTER_NESTED_SINT0               0x40001090
+> +
+>  /*
+>   * Synthetic Timer MSRs. Four timers per vcpu.
+>   */
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 61f0c206bff0..c38e4c66a3ac 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -198,30 +198,10 @@ static inline bool hv_is_synic_reg(unsigned int reg)
+>  	return false;
+>  }
+>  
+> -static inline u64 hv_get_register(unsigned int reg)
+> -{
+> -	u64 value;
+> -
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> -		hv_ghcb_msr_read(reg, &value);
+> -	else
+> -		rdmsrl(reg, value);
+> -	return value;
+> -}
+> -
+> -static inline void hv_set_register(unsigned int reg, u64 value)
+> -{
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> -		hv_ghcb_msr_write(reg, value);
+> -
+> -		/* Write proxy bit via wrmsl instruction */
+> -		if (reg >= HV_REGISTER_SINT0 &&
+> -		    reg <= HV_REGISTER_SINT15)
+> -			wrmsrl(reg, value | 1 << 20);
+> -	} else {
+> -		wrmsrl(reg, value);
+> -	}
+> -}
+> +u64 hv_get_register(unsigned int reg);
+> +void hv_set_register(unsigned int reg, u64 value);
+> +u64 hv_get_non_nested_register(unsigned int reg);
+> +void hv_set_non_nested_register(unsigned int reg, u64 value);
+>  
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
+> @@ -241,6 +221,8 @@ static inline int hyperv_flush_guest_mapping_range(u64 as,
+>  }
+>  static inline void hv_set_register(unsigned int reg, u64 value) { }
+>  static inline u64 hv_get_register(unsigned int reg) { return 0; }
+> +static inline void hv_set_non_nested_register(unsigned int reg, u64 value) { }
+> +static inline u64 hv_get_non_nested_register(unsigned int reg) { return 0; }
+>  static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
+>  					     bool visible)
+>  {
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index f9b78d4829e3..938fc82edf05 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -41,7 +41,72 @@ bool hv_root_partition;
+>  bool hv_nested;
+>  struct ms_hyperv_info ms_hyperv;
+>  
+> +static inline unsigned int hv_get_nested_reg(unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case HV_REGISTER_SIMP:
+> +		return HV_REGISTER_NESTED_SIMP;
+> +	case HV_REGISTER_SIEFP:
+> +		return HV_REGISTER_NESTED_SIEFP;
+> +	case HV_REGISTER_SVERSION:
+> +		return HV_REGISTER_NESTED_SVERSION;
+> +	case HV_REGISTER_SCONTROL:
+> +		return HV_REGISTER_NESTED_SCONTROL;
+> +	case HV_REGISTER_SINT0:
+> +		return HV_REGISTER_NESTED_SINT0;
+> +	case HV_REGISTER_EOM:
+> +		return HV_REGISTER_NESTED_EOM;
+> +	default:
+> +		return reg;
+> +	}
+> +}
+> +
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> +u64 hv_get_non_nested_register(unsigned int reg)
+> +{
+> +	u64 value;
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> +		hv_ghcb_msr_read(reg, &value);
+> +	else
+> +		rdmsrl(reg, value);
+> +	return value;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_get_non_nested_register);
+> +
+> +void hv_set_non_nested_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> +		hv_ghcb_msr_write(reg, value);
+> +
+> +		/* Write proxy bit via wrmsl instruction */
+> +		if (reg >= HV_REGISTER_SINT0 &&
+> +		    reg <= HV_REGISTER_SINT15)
+> +			wrmsrl(reg, value | 1 << 20);
+> +	} else {
+> +		wrmsrl(reg, value);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(hv_set_non_nested_register);
+> +
+> +u64 hv_get_register(unsigned int reg)
+> +{
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	return hv_get_non_nested_register(reg);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_get_register);
+> +
+> +void hv_set_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	hv_set_non_nested_register(reg, value);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_set_register);
+> +
+>  static void (*vmbus_handler)(void);
+>  static void (*hv_stimer0_handler)(void);
+>  static void (*hv_kexec_handler)(void);
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 4d6480d57546..8b0dd8e5244d 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -147,7 +147,7 @@ int hv_synic_alloc(void)
+>  		 * Synic message and event pages are allocated by paravisor.
+>  		 * Skip these pages allocation here.
+>  		 */
+> -		if (!hv_isolation_type_snp()) {
+> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
+>  			hv_cpu->synic_message_page =
+>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>  			if (hv_cpu->synic_message_page == NULL) {
+> @@ -216,7 +216,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
+>  	simp.simp_enabled = 1;
+>  
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_message_page
+>  			= memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
+>  				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -233,7 +233,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled = 1;
+>  
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_event_page =
+>  			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
+>  				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -315,20 +315,24 @@ void hv_synic_disable_regs(unsigned int cpu)
+>  	 * addresses.
+>  	 */
+>  	simp.simp_enabled = 0;
+> -	if (hv_isolation_type_snp())
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		memunmap(hv_cpu->synic_message_page);
+> -	else
+> +		hv_cpu->synic_message_page = NULL;
+> +	} else {
+>  		simp.base_simp_gpa = 0;
+> +	}
+>  
+>  	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
+>  
+>  	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled = 0;
+>  
+> -	if (hv_isolation_type_snp())
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		memunmap(hv_cpu->synic_event_page);
+> -	else
+> +		hv_cpu->synic_event_page = NULL;
+> +	} else {
+>  		siefp.base_siefp_gpa = 0;
+> +	}
+>  
+>  	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
+>  
 
-Commit-ID:     b6c00fb9949fbd073e651a77aa75faca978cf2a6
-Gitweb:        https://git.kernel.org/tip/b6c00fb9949fbd073e651a77aa75faca978cf2a6
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Wed, 04 Jan 2023 12:13:41 -08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 09 Jan 2023 12:22:07 +01:00
-
-perf: Add PMU_FORMAT_ATTR_SHOW
-
-The macro PMU_FORMAT_ATTR facilitates the definition of both the "show"
-function and "format_attr". But it only works for a non-hybrid platform.
-For a hybrid platform, the name "format_attr_hybrid_" is used.
-
-The definition of the "show" function can be shared between a non-hybrid
-platform and a hybrid platform. Add a new macro PMU_FORMAT_ATTR_SHOW.
-
-No functional change. The PMU_FORMAT_ATTR_SHOW will be used in the
-following patch.
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230104201349.1451191-1-kan.liang@linux.intel.com
----
- include/linux/perf_event.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index c6a3bac..ad92ad3 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1724,7 +1724,7 @@ static struct perf_pmu_events_attr _var = {				    \
- 		  .id = _id, }						\
- 	})[0].attr.attr)
- 
--#define PMU_FORMAT_ATTR(_name, _format)					\
-+#define PMU_FORMAT_ATTR_SHOW(_name, _format)				\
- static ssize_t								\
- _name##_show(struct device *dev,					\
- 			       struct device_attribute *attr,		\
-@@ -1733,6 +1733,9 @@ _name##_show(struct device *dev,					\
- 	BUILD_BUG_ON(sizeof(_format) >= PAGE_SIZE);			\
- 	return sprintf(page, _format "\n");				\
- }									\
-+
-+#define PMU_FORMAT_ATTR(_name, _format)					\
-+	PMU_FORMAT_ATTR_SHOW(_name, _format)				\
- 									\
- static struct device_attribute format_attr_##_name = __ATTR_RO(_name)
- 
+Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
