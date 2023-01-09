@@ -2,47 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E4F661F1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C90661F29
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbjAIHV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
+        id S236333AbjAIHX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjAIHVz (ORCPT
+        with ESMTP id S233304AbjAIHWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:21:55 -0500
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB128FF1;
-        Sun,  8 Jan 2023 23:21:50 -0800 (PST)
-Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by SHSQR01.spreadtrum.com with ESMTP id 3097LI0e092948;
-        Mon, 9 Jan 2023 15:21:18 +0800 (+08)
-        (envelope-from Chunyan.Zhang@unisoc.com)
-Received: from ubt.spreadtrum.com (10.0.74.87) by BJMBX02.spreadtrum.com
- (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Mon, 9 Jan 2023
- 15:21:15 +0800
-From:   Chunyan Zhang <chunyan.zhang@unisoc.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH V3 3/3] dt-bindings: gpio: Add compatible string for Unisoc UMS512
-Date:   Mon, 9 Jan 2023 15:21:06 +0800
-Message-ID: <20230109072106.2176048-4-chunyan.zhang@unisoc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230109072106.2176048-1-chunyan.zhang@unisoc.com>
-References: <20230109072106.2176048-1-chunyan.zhang@unisoc.com>
+        Mon, 9 Jan 2023 02:22:55 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C6339596;
+        Sun,  8 Jan 2023 23:22:50 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTP Server V5.0(16481:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Mon, 09 Jan 2023 15:22:27 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 9 Jan
+ 2023 15:22:26 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Mon, 9 Jan 2023 15:22:26 +0800
+Date:   Mon, 9 Jan 2023 15:22:26 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     ChiYuan Huang <u0084500@gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>, <linux@roeck-us.net>,
+        <heikki.krogerus@linux.intel.com>, <matthias.bgg@gmail.com>,
+        <tommyyl.chen@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes
+ sysfs create fail
+Message-ID: <20230109072226.GA15975@linuxcarl2.richtek.com>
+References: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
+ <Y5rsdo/SGHJM4UKG@kroah.com>
+ <CADiBU3-iVLQf6Q5SzOB_pMCs2PGcFuWryjpDn5Qvz41WQ6C2RA@mail.gmail.com>
+ <Y5sIZ3zC6o4ARDEn@kroah.com>
+ <20230109014123.GA27423@linuxcarl2.richtek.com>
+ <Y7u2Yi+UeqMcVhad@kroah.com>
+ <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.74.87]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL: SHSQR01.spreadtrum.com 3097LI0e092948
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,78 +61,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UMS512 use the same GPIO and EIC controller with SC9860.
+On Mon, Jan 09, 2023 at 02:46:34PM +0800, ChiYuan Huang wrote:
+> Greg KH <gregkh@linuxfoundation.org> 於 2023年1月9日 週一 下午2:38寫道：
+> >
+> > On Mon, Jan 09, 2023 at 09:41:23AM +0800, ChiYuan Huang wrote:
+> > > ************* Email Confidentiality Notice ********************
+> > >
+> > > The information contained in this e-mail message (including any attachments) may be confidential, proprietary, privileged, or otherwise exempt from disclosure under applicable laws. It is intended to be conveyed only to the designated recipient(s). Any use, dissemination, distribution, printing, retaining or copying of this e-mail (including its attachments) by unintended recipient(s) is strictly prohibited and may be unlawful. If you are not an intended recipient of this e-mail, or believe that you have received this e-mail in error, please notify the sender immediately (by replying to this e-mail), delete any and all copies of this e-mail (including any attachments) from your system, and do not disclose the content of this e-mail to any other person. Thank you!
+> >
+> > Now deleted.
+> >
+> > For obvious reasons, this wording is not compatible with kernel
+> > development :(
+> 
+> I'm sorry about that. Let me check with MIS..............
+This one seems work.
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- .../bindings/gpio/sprd,gpio-eic.yaml          | 33 +++++++++++++++----
- .../devicetree/bindings/gpio/sprd,gpio.yaml   |  7 +++-
- 2 files changed, 33 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-index a21350bd0f2c..99fcf970773a 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-@@ -42,12 +42,33 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - sprd,sc9860-eic-debounce
--      - sprd,sc9860-eic-latch
--      - sprd,sc9860-eic-async
--      - sprd,sc9860-eic-sync
--      - sprd,sc2731-eic
-+    oneOf:
-+      - enum:
-+          - sprd,sc9860-eic-debounce
-+          - sprd,sc9860-eic-latch
-+          - sprd,sc9860-eic-async
-+          - sprd,sc9860-eic-sync
-+          - sprd,sc2731-eic
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-debounce
-+          - const: sprd,sc9860-eic-debounce
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-latch
-+          - const: sprd,sc9860-eic-latch
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-async
-+          - const: sprd,sc9860-eic-async
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-sync
-+          - const: sprd,sc9860-eic-sync
-+      - items:
-+          - enum:
-+              - sprd,sc2730-eic
-+          - const: sprd,sc2731-eic
- 
-   reg:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-index 40924123d184..483168838128 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-@@ -19,7 +19,12 @@ description: |
- 
- properties:
-   compatible:
--    const: sprd,sc9860-gpio
-+    oneOf:
-+      - const: sprd,sc9860-gpio
-+      - items:
-+          - enum:
-+              - sprd,ums512-gpio
-+          - const: sprd,sc9860-gpio
- 
-   reg:
-     maxItems: 1
--- 
-2.25.1
-
+https://www.lkml.org/lkml/2023/1/9/73
