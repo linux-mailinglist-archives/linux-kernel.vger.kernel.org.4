@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6025662EDF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582B2662EED
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjAISYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S231310AbjAIS0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjAISXj (ORCPT
+        with ESMTP id S237504AbjAISZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:23:39 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70B768CA3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:22:46 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ja17so6923846wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:22:46 -0800 (PST)
+        Mon, 9 Jan 2023 13:25:40 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A56D539
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:23:13 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t5so4700484wrq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4I9a2u/ZrGLHIwScZmGllc87eUh/OufbbnBg0RjayAc=;
-        b=imulFjmKfL16MFAUV/KLR82FSiH6U2btmRS0B4dqItTP+kGzdlQa19UyW9DQ/O7H+7
-         bTYgi3Biswev63WU+wSWP/jPv20/RZft55i6fdJ2QR3u9CQlPWZMFV70FzX6Y84wL+oa
-         4pa2OAQ8DNzMnEngg25Y8Ynn4T3Y1q5Gms+1p5wPrh7mGliSwI24rNyePuKIlsAdhemA
-         F7Oz5Q5LlbBY3DScIe/p2dLqbT/T/6y7v5xVG2nu/CbfGN1FeUsZLBOmQZE+cWhc22Qa
-         dOVy9RdsDRYTZAPi1AB7BSmo3HQlYkf+X1nXE3Jorm1AI+uxxKB65DB3jvQrJTk3dLif
-         axaw==
+        bh=A00xyofDnmYBC+YdwEJ6rLbaZfkGLo4zgr19f7CaBy0=;
+        b=Nn560XwbDWnu6G77ftDb5073LFO23GkitBB9lcflnyEaIUw6AmwQ40dLP+Fesu/+gU
+         So2x/k+DlrgBQp4MOuwLTGgW/jrh+w9xRoQjI4FzwiyOi9zwkhZ3v4UPjxF1El9qTIFN
+         A4/3U0/cgq7jTetYBLGPkwd5YVIvwNW3J8eGHihIRBcyc8KuUgjd00lPBHuqlWNtlFOi
+         SsH78muTDUrTIQDzAbjGLJFRENx+pdugFomt97C4CVvjR3HQzpC1B+6fgaN0d6FlNg+D
+         C3cmDbAE79TDfnAUsRisA+a5RXmGm1foH294ilbiRRQ3NiWM+NrufrI0U4L5pWL3RSAF
+         4PJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4I9a2u/ZrGLHIwScZmGllc87eUh/OufbbnBg0RjayAc=;
-        b=QveQgae5LatTAGkpz9PmfufNeMvgum3duJm42iL1dqiP8zLZnvs1HM3pR3e1kLNm92
-         cHW4+IaKqlOWDicwWqkuz6c091Ue0iqaCcuij/RaVXS6V7Xj/ka64sLGrLJ2Lw9E22Wj
-         KDQ2d6JRuh5kkQk9dvCHXiz+0tOUw9e+oAHWrwDUnKzM6hbR0FJ1mNC1f0pjrfvcumah
-         M4yJwRB57IgCxd88NT9m9mjEsIQQ2r5j5OnNY0vc83PPRHAC4+dXjhephSQx+JwOHpKe
-         cn1A9ikDv5RhJ9MBJjhoPlL3DlcZGh6NFyOVxoYRf/xyF8ErK0+23MLLe1tJFN9NT/sJ
-         qa7A==
-X-Gm-Message-State: AFqh2koH42SUA16iWOpUU5drovi0Lhk6tjEK9/6deSijIHVpgvsJ992R
-        j5qdAnlEJ5UFRJqchp5N3d3D7g==
-X-Google-Smtp-Source: AMrXdXvzOQzmnUHWBiYlOCVrua6gXZN+THvm33Jb9HAxI6MjBJD6kMOIRY3fa1ON2R158EliBRBjGw==
-X-Received: by 2002:a05:600c:c07:b0:3d9:73fe:96f8 with SMTP id fm7-20020a05600c0c0700b003d973fe96f8mr40571156wmb.32.1673288565332;
-        Mon, 09 Jan 2023 10:22:45 -0800 (PST)
+        bh=A00xyofDnmYBC+YdwEJ6rLbaZfkGLo4zgr19f7CaBy0=;
+        b=veFp46ovto69lYLE98Vc/jVm1sup5Ee2hirhtUVlXXuLu0OILmik1tCdLa23mareBh
+         hNrgDPzhwEvd5zJd3aLXoPOPJpwDhT4uyyQsJCCHktaVBMRzByc3w2xQDgVvSyUvaSjX
+         QgGXl3ryeibpA/7+bk3x1F30Uxr+t8b4Yq4T6rrw1Jgetxc9yRDgUbfqLdHT1BBt95E/
+         RdQ8fi2y8ooeywFJB1Skc0rTLJI2SsjkHh/6PO7NkTCwBl+lzr3tQwVlja0+XJHOlf+1
+         GM6SbxspxsMhmDgZpxME4VrxODvw7lCHH5DnzUoXZEjs1rZPR/AFGob8hHpznAKSGjqh
+         aj/g==
+X-Gm-Message-State: AFqh2kqU9cXzHR349aabvOUjhIb+fr1aZbZ2H88lAPpQPN32VG+q0tNK
+        emyKPdOUephTKgxeh2pDAW48Mg==
+X-Google-Smtp-Source: AMrXdXuMGYUrHoq4kIUWUWO5tf56nNLAhc62b2axVIsjwOUdF/rm8nQM5YAguQaJeokfqPilyj+DXQ==
+X-Received: by 2002:adf:e383:0:b0:242:3cb6:36b8 with SMTP id e3-20020adfe383000000b002423cb636b8mr42328232wrm.44.1673288592385;
+        Mon, 09 Jan 2023 10:23:12 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b003d96b8e9bcasm18555195wmq.32.2023.01.09.10.22.42
+        by smtp.gmail.com with ESMTPSA id u5-20020adfdb85000000b002ba2646fd30sm10713382wri.36.2023.01.09.10.23.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:22:44 -0800 (PST)
-Message-ID: <61b2de99-060c-d37e-60ce-4524ced84033@linaro.org>
-Date:   Mon, 9 Jan 2023 19:22:41 +0100
+        Mon, 09 Jan 2023 10:23:11 -0800 (PST)
+Message-ID: <aa146dc5-b4de-0e77-345a-8592b097f444@linaro.org>
+Date:   Mon, 9 Jan 2023 19:23:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 12/18] dt-bindings: mailbox: qcom-ipcc: document the
- sa8775p platform
+Subject: Re: [PATCH 13/18] dt-bindings: power: qcom,rpmpd: document sa8775p
 Content-Language: en-US
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
@@ -84,9 +83,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         netdev@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-13-brgl@bgdev.pl>
+ <20230109174511.1740856-14-brgl@bgdev.pl>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109174511.1740856-13-brgl@bgdev.pl>
+In-Reply-To: <20230109174511.1740856-14-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -102,9 +101,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 09/01/2023 18:45, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Add a compatible for the ipcc on sa8775p platforms.
+> Add a compatible for sa8775p platforms and relevant defines to the include
+> file.
 > 
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
