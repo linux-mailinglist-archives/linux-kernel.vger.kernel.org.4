@@ -2,176 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98870662CE8
+	by mail.lfdr.de (Postfix) with ESMTP id 25893662CE6
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjAIRfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S237230AbjAIRf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbjAIRfZ (ORCPT
+        with ESMTP id S235361AbjAIRfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 Jan 2023 12:35:25 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05160B7E3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:35:14 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309FlSos016268;
-        Mon, 9 Jan 2023 17:34:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=yyS9R9F/aJXxFCcyr2ffyOpM0MkurazgQVmRGeFVaBU=;
- b=sWTf7Mcq9JLpzixFAwfk2ugC6V/8LKofbBAG1eT/ac32j5Xq48RxmoM/yHF2WN0p4jex
- oIbdAqIRJWkOg8RnuX9WYMA+sdsZH8ar1QfW+VdrhY6Yk3zpa4CfjI+ev0dN/D/NOfRa
- 6j95XRw15ne+4pXqGpkJfKSqCnqIZIsyLcob+CbJU/GGnKVHsjQ/nJ3l+CsKpluG5Uj7
- DxLOWFgwuI2Hs1m7ggAlDWingEfUPjt3MPSdDSQPRHdd72TJDoTGfzzB5XqpE+buXZPL
- V/ATdGtyVZGLt7Qj/lWMklM8LHWEVHKRFWcXFpqjMg6AZVbp8jUyD2H0Fre5w40V+olr zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jn0ac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 17:34:37 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309HGmLE016228;
-        Mon, 9 Jan 2023 17:34:36 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jn09q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 17:34:36 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3097F8UJ027702;
-        Mon, 9 Jan 2023 17:34:33 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3my0c6jbcm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 17:34:33 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309HYV8U38797688
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 17:34:31 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4259F20049;
-        Mon,  9 Jan 2023 17:34:31 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC0C720063;
-        Mon,  9 Jan 2023 17:34:27 +0000 (GMT)
-Received: from [9.43.119.183] (unknown [9.43.119.183])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 17:34:27 +0000 (GMT)
-Message-ID: <45ea36ba-050c-f8e3-f85a-cf1d5c6a4e0f@linux.ibm.com>
-Date:   Mon, 9 Jan 2023 23:04:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] objtool: continue if find_insn() fails in
- decode_instructions()
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        jpoimboe@redhat.com, peterz@infradead.org, aik@ozlabs.ru,
-        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
-        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
-        sfr@canb.auug.org.au, naveen.n.rao@linux.vnet.ibm.com,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20221208072813.25799-1-sv@linux.ibm.com>
- <Y7lHsw4diDgVc9ip@gmail.com>
- <623307fe-a29a-c691-b07b-4d2168d4bdcc@linux.ibm.com>
- <Y7xGas4FAHFUtEJE@gmail.com>
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-In-Reply-To: <Y7xGas4FAHFUtEJE@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uH7pre-31K4LffNU0n3AHu0GNics0n17
-X-Proofpoint-GUID: kMsD7Iw4SAZh1zGw7e7g_ngRzn3PoF-p
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D27B7E4;
+        Mon,  9 Jan 2023 09:35:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A8F283F28C;
+        Mon,  9 Jan 2023 17:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673285713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGKS2ahh/tqXoJw+j3CtKE67Wdk/iYOHKkyaoeiIFJs=;
+        b=CRvyd96i3cTmKlpU8KP558SZUkubG3kJoWV3B1QvbAz3zehVWxCy4Y2wRwosr5bIRcEEYs
+        CHZzJac2s/IGi5q2YMvW8ZVDjEDHQJ3OCgUXBhKWygZvU0GdCwUQpdutATIsNOVPzHckTL
+        xs2d87271Ym+7EA2OAl5gzuhf3P8m2s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673285713;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGKS2ahh/tqXoJw+j3CtKE67Wdk/iYOHKkyaoeiIFJs=;
+        b=ml9fvO7IQyXA0fzJv/pUcgxSaFqoSqpAgF+R24IxFlnj3kMsZZ3BKVwuLO6GSJkiZhVUeF
+        djHxOwSGHSSW6gBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91333134AD;
+        Mon,  9 Jan 2023 17:35:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xS5pI1FQvGOMGQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 17:35:13 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 1DD3BA0749; Mon,  9 Jan 2023 18:35:13 +0100 (CET)
+Date:   Mon, 9 Jan 2023 18:35:13 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages
+ rather than ref'ing if appropriate
+Message-ID: <20230109173513.htfqbkrtqm52pnye@quack3>
+References: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
+ <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_10,2023-01-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=866 phishscore=0 adultscore=0 mlxscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090125
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat 07-01-23 00:34:21, David Howells wrote:
+> Convert the block layer's bio code to use iov_iter_extract_pages() instead
+> of iov_iter_get_pages().  This will pin pages or leave them unaltered
+> rather than getting a ref on them as appropriate to the source iterator.
+> 
+> A field, bi_cleanup_mode, is added to the bio struct that gets set by
+> iov_iter_extract_pages() with FOLL_* flags indicating what cleanup is
+> necessary.  FOLL_GET -> put_page(), FOLL_PIN -> unpin_user_page().  Other
+> flags could also be used in future.
+> 
+> Newly allocated bio structs have bi_cleanup_mode set to FOLL_GET to
+> indicate that attached pages are ref'd by default.  Cloning sets it to 0.
+> __bio_iov_iter_get_pages() overrides it to what iov_iter_extract_pages()
+> indicates.
+> 
+> [!] Note that this is tested a bit with ext4, but nothing else.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Logan Gunthorpe <logang@deltatee.com>
 
-On 09/01/23 22:23, Ingo Molnar wrote:
-> * Sathvika Vasireddy <sv@linux.ibm.com> wrote:
->
->> Hi Ingo, Happy New Year!
-> Happy New Year to you too! :-)
->
->> On 07/01/23 15:51, Ingo Molnar wrote:
->>> * Sathvika Vasireddy <sv@linux.ibm.com> wrote:
->>>
->>>> Currently, decode_instructions() is failing if it is not able to find
->>>> instruction, and this is happening since commit dbcdbdfdf137b4
->>>> ("objtool: Rework instruction -> symbol mapping") because it is
->>>> expecting instruction for STT_NOTYPE symbols.
->>>>
->>>> Due to this, the following objtool warnings are seen:
->>>>    [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
->>>>    [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
->>>>    [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
->>>>
->>>> The warnings are thrown because find_insn() is failing for symbols that
->>>> are at the end of the file, or at the end of the section. Given how
->>>> STT_NOTYPE symbols are currently handled in decode_instructions(),
->>>> continue if the instruction is not found, instead of throwing warning
->>>> and returning.
->>>>
->>>> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->>>> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->>> The SOB chain doesn't look valid: is Naveen N. Rao, the first SOB line, the
->>> author of the patch? If yes then a matching From: line is needed.
->>>
->>> Or if two people developed the patch, then Co-developed-by should be used:
->>>
->>>           Co-developed-by: First Co-Author <first@coauthor.example.org>
->>>           Signed-off-by: First Co-Author <first@coauthor.example.org>
->>>           Co-developed-by: Second Co-Author <second@coauthor.example.org>
->>>           Signed-off-by: Second Co-Author <second@coauthor.example.org>
->>>
->>> [ In this SOB sequence "Second Co-Author" is the one who submits the patch. ]
->>>
->>> [ Please only use Co-developed-by if actual lines of code were written by
->>>     the co-author that created copyrightable material - it's not a courtesy
->>>     tag. Reviewed-by/Acked-by/Tested-by can be used to credit non-code
->>>     contributions. ]
->> Thank you for the clarification, and for bringing these points to my
->> attention. I'll keep these things in mind. In this case, since both Naveen
->> N. Rao and I developed the patch, the below tags
->> are applicable.
->>
->>          Co-developed-by: First Co-Author <first@coauthor.example.org>
->>          Signed-off-by: First Co-Author <first@coauthor.example.org>
->>          Co-developed-by: Second Co-Author <second@coauthor.example.org>
->>          Signed-off-by: Second Co-Author <second@coauthor.example.org>
-> ... while filling in your real names & email addresses I suppose. ;-)
-Indeed :-)
->
->> However, I would be dropping this particular patch, since I think Nick's
->> patch [1] is better to fix the objtool issue.
->>
->> [1] - https://lore.kernel.org/linuxppc-dev/20221220101323.3119939-1-npiggin@gmail.com/
-> Ok, I'll pick up Nick's fix, with these tags added for the PowerPC
-> regression aspect and your review:
->
->    Reported-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->    Reported-by: Sathvika Vasireddy <sv@linux.ibm.com>
->    Acked-by: Sathvika Vasireddy <sv@linux.ibm.com>
->
-> To document & credit the efforts of your patch.
+So currently we already have BIO_NO_PAGE_REF flag and what you do in this
+patch partially duplicates that. So either I'd drop that flag or instead of
+bi_cleanup_mode variable (which honestly looks a bit wasteful given how we
+microoptimize struct bio) just add another BIO_ flag...
 
-Sure, thank you!
+								Honza
 
-- Sathvika
-
+> ---
+> 
+>  block/bio.c               |   47 +++++++++++++++++++++++++++++++++------------
+>  include/linux/blk_types.h |    1 +
+>  2 files changed, 35 insertions(+), 13 deletions(-)
+> 
+> diff --git a/block/bio.c b/block/bio.c
+> index 5f96fcae3f75..eafcbeba0bab 100644
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -243,6 +243,11 @@ static void bio_free(struct bio *bio)
+>   * Users of this function have their own bio allocation. Subsequently,
+>   * they must remember to pair any call to bio_init() with bio_uninit()
+>   * when IO has completed, or when the bio is released.
+> + *
+> + * We set the initial assumption that pages attached to the bio will be
+> + * released with put_page() by setting bi_cleanup_mode to FOLL_GET, but this
+> + * should be set to FOLL_PIN if the page should be unpinned instead; if the
+> + * pages should not be put or unpinned, this should be set to 0
+>   */
+>  void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+>  	      unsigned short max_vecs, blk_opf_t opf)
+> @@ -274,6 +279,7 @@ void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+>  #ifdef CONFIG_BLK_DEV_INTEGRITY
+>  	bio->bi_integrity = NULL;
+>  #endif
+> +	bio->bi_cleanup_mode = FOLL_GET;
+>  	bio->bi_vcnt = 0;
+>  
+>  	atomic_set(&bio->__bi_remaining, 1);
+> @@ -302,6 +308,7 @@ void bio_reset(struct bio *bio, struct block_device *bdev, blk_opf_t opf)
+>  {
+>  	bio_uninit(bio);
+>  	memset(bio, 0, BIO_RESET_BYTES);
+> +	bio->bi_cleanup_mode = FOLL_GET;
+>  	atomic_set(&bio->__bi_remaining, 1);
+>  	bio->bi_bdev = bdev;
+>  	if (bio->bi_bdev)
+> @@ -814,6 +821,7 @@ static int __bio_clone(struct bio *bio, struct bio *bio_src, gfp_t gfp)
+>  	bio_set_flag(bio, BIO_CLONED);
+>  	bio->bi_ioprio = bio_src->bi_ioprio;
+>  	bio->bi_iter = bio_src->bi_iter;
+> +	bio->bi_cleanup_mode = 0;
+>  
+>  	if (bio->bi_bdev) {
+>  		if (bio->bi_bdev == bio_src->bi_bdev &&
+> @@ -1168,6 +1176,18 @@ bool bio_add_folio(struct bio *bio, struct folio *folio, size_t len,
+>  	return bio_add_page(bio, &folio->page, len, off) > 0;
+>  }
+>  
+> +/*
+> + * Clean up a page according to the mode indicated by iov_iter_extract_pages(),
+> + * where the page is may be pinned or may have a ref taken on it.
+> + */
+> +static void bio_release_page(struct bio *bio, struct page *page)
+> +{
+> +	if (bio->bi_cleanup_mode & FOLL_PIN)
+> +		unpin_user_page(page);
+> +	if (bio->bi_cleanup_mode & FOLL_GET)
+> +		put_page(page);
+> +}
+> +
+>  void __bio_release_pages(struct bio *bio, bool mark_dirty)
+>  {
+>  	struct bvec_iter_all iter_all;
+> @@ -1176,7 +1196,7 @@ void __bio_release_pages(struct bio *bio, bool mark_dirty)
+>  	bio_for_each_segment_all(bvec, bio, iter_all) {
+>  		if (mark_dirty && !PageCompound(bvec->bv_page))
+>  			set_page_dirty_lock(bvec->bv_page);
+> -		put_page(bvec->bv_page);
+> +		bio_release_page(bio, bvec->bv_page);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(__bio_release_pages);
+> @@ -1213,7 +1233,7 @@ static int bio_iov_add_page(struct bio *bio, struct page *page,
+>  	}
+>  
+>  	if (same_page)
+> -		put_page(page);
+> +		bio_release_page(bio, page);
+>  	return 0;
+>  }
+>  
+> @@ -1227,7 +1247,7 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
+>  			queue_max_zone_append_sectors(q), &same_page) != len)
+>  		return -EINVAL;
+>  	if (same_page)
+> -		put_page(page);
+> +		bio_release_page(bio, page);
+>  	return 0;
+>  }
+>  
+> @@ -1238,10 +1258,10 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
+>   * @bio: bio to add pages to
+>   * @iter: iov iterator describing the region to be mapped
+>   *
+> - * Pins pages from *iter and appends them to @bio's bvec array. The
+> - * pages will have to be released using put_page() when done.
+> - * For multi-segment *iter, this function only adds pages from the
+> - * next non-empty segment of the iov iterator.
+> + * Pins pages from *iter and appends them to @bio's bvec array.  The pages will
+> + * have to be released using put_page() or unpin_user_page() when done as
+> + * according to bi_cleanup_mode.  For multi-segment *iter, this function only
+> + * adds pages from the next non-empty segment of the iov iterator.
+>   */
+>  static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>  {
+> @@ -1273,9 +1293,10 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>  	 * result to ensure the bio's total size is correct. The remainder of
+>  	 * the iov data will be picked up in the next bio iteration.
+>  	 */
+> -	size = iov_iter_get_pages(iter, pages,
+> -				  UINT_MAX - bio->bi_iter.bi_size,
+> -				  nr_pages, &offset, gup_flags);
+> +	size = iov_iter_extract_pages(iter, &pages,
+> +				      UINT_MAX - bio->bi_iter.bi_size,
+> +				      nr_pages, gup_flags,
+> +				      &offset, &bio->bi_cleanup_mode);
+>  	if (unlikely(size <= 0))
+>  		return size ? size : -EFAULT;
+>  
+> @@ -1308,7 +1329,7 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>  	iov_iter_revert(iter, left);
+>  out:
+>  	while (i < nr_pages)
+> -		put_page(pages[i++]);
+> +		bio_release_page(bio, pages[i++]);
+>  
+>  	return ret;
+>  }
+> @@ -1489,8 +1510,8 @@ void bio_set_pages_dirty(struct bio *bio)
+>   * the BIO and re-dirty the pages in process context.
+>   *
+>   * It is expected that bio_check_pages_dirty() will wholly own the BIO from
+> - * here on.  It will run one put_page() against each page and will run one
+> - * bio_put() against the BIO.
+> + * here on.  It will run one put_page() or unpin_user_page() against each page
+> + * and will run one bio_put() against the BIO.
+>   */
+>  
+>  static void bio_dirty_fn(struct work_struct *work);
+> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+> index 99be590f952f..883f873a01ef 100644
+> --- a/include/linux/blk_types.h
+> +++ b/include/linux/blk_types.h
+> @@ -289,6 +289,7 @@ struct bio {
+>  #endif
+>  	};
+>  
+> +	unsigned int		bi_cleanup_mode; /* How to clean up pages */
+>  	unsigned short		bi_vcnt;	/* how many bio_vec's */
+>  
+>  	/*
+> 
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
