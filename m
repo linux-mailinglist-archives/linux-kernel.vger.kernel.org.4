@@ -2,183 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D64662CDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98870662CE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbjAIRf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S231133AbjAIRfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbjAIRfI (ORCPT
+        with ESMTP id S235136AbjAIRfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:35:08 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4CA1BC81;
-        Mon,  9 Jan 2023 09:34:25 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bf43so14136665lfb.6;
-        Mon, 09 Jan 2023 09:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/a6jdGAfZ7pIbpWGVVuD5gf5IZMu1/POVTFRtaxPG4=;
-        b=Oy6QPTM/AN37YaK3JtPCP+jDRO6F3KE1MNe0/loFI9GTyhHyTOURvDzFK84eQO9FfO
-         mrPkSb2aulFnStIU6P0kwOlHSrbOEPsoOsGnJxxTopwjJ4SYIBLTGz2dQ2A74HGC7T4K
-         0oUphA7mZLoEk/apZofHVmQJfj+RQFgAXbYL/TphA2D90x8FjuB8WQVQ4ORsb8PhDrkc
-         +dZ03A79ZQZjXbaSLpv7BF1+lFt2M/nPzjNncG2rAMfsvxNDmrBQLjx8ZInqQJ8sccFI
-         kvMZsa5Mb/lYyfo3jv0wbegpqbbdwD5pS5yLTz5psIkWbW0AxUqrlleblFY+UD4fGE24
-         eA6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/a6jdGAfZ7pIbpWGVVuD5gf5IZMu1/POVTFRtaxPG4=;
-        b=S/gTjjmo00EQahd1FWTKuQjQuxznl8TIhg3txhpODIN79OqjVjZ7I24ttUEorekNzz
-         l/3rR9ma0Hs+iAcJD0a+35tG2NNB4Lg5mWnQL8zCaR9vwiLOyiYTz/n5kF4Ry6iODsIX
-         lsfXC+crO+NkmuLvrYGdLc3z7PkR6++rz0HBWvTbuKKlYhPd4sw/1auAf+RrkOkljwi5
-         FeBVeN89QJXC0h2m1sFkUxj1qdIjkmpkpdjrXig5GwFVy0Vy5UyNIYkgJr/A0493wYFo
-         iirNGMw2hWW4SJejKgB2Y4iekg4c9cfqNJ2CAtm6T7ug9eRCX+kYZQ3VKpZ8pqYcMHPE
-         cmow==
-X-Gm-Message-State: AFqh2korgEz/ZAfQqtKucLNSqVMO2z+2P4x+aOkPxvZaXYx+84x5yFGa
-        2eabj3jWLniHtO9Yu5XHcaE=
-X-Google-Smtp-Source: AMrXdXtzdUVLC+bmCVsj5cHC/kijG5r3W/HBMl7bo413BmHfubxeOR9AHmOCBKV91spZxJG6XrCHlw==
-X-Received: by 2002:a05:6512:2526:b0:4a4:68b9:66e1 with SMTP id be38-20020a056512252600b004a468b966e1mr16101198lfb.44.1673285659808;
-        Mon, 09 Jan 2023 09:34:19 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s11-20020a056512314b00b004b592043413sm1719984lfi.12.2023.01.09.09.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 09:34:18 -0800 (PST)
-Date:   Mon, 9 Jan 2023 20:34:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
-        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/15] spi: dw: add check for support of enhanced spi
-Message-ID: <20230109173416.zzphzen7vnzsttsu@mobilestation>
-References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221212180732.79167-5-sudip.mukherjee@sifive.com>
+        Mon, 9 Jan 2023 12:35:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05160B7E3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:35:14 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309FlSos016268;
+        Mon, 9 Jan 2023 17:34:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=yyS9R9F/aJXxFCcyr2ffyOpM0MkurazgQVmRGeFVaBU=;
+ b=sWTf7Mcq9JLpzixFAwfk2ugC6V/8LKofbBAG1eT/ac32j5Xq48RxmoM/yHF2WN0p4jex
+ oIbdAqIRJWkOg8RnuX9WYMA+sdsZH8ar1QfW+VdrhY6Yk3zpa4CfjI+ev0dN/D/NOfRa
+ 6j95XRw15ne+4pXqGpkJfKSqCnqIZIsyLcob+CbJU/GGnKVHsjQ/nJ3l+CsKpluG5Uj7
+ DxLOWFgwuI2Hs1m7ggAlDWingEfUPjt3MPSdDSQPRHdd72TJDoTGfzzB5XqpE+buXZPL
+ V/ATdGtyVZGLt7Qj/lWMklM8LHWEVHKRFWcXFpqjMg6AZVbp8jUyD2H0Fre5w40V+olr zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jn0ac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 17:34:37 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309HGmLE016228;
+        Mon, 9 Jan 2023 17:34:36 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jn09q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 17:34:36 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3097F8UJ027702;
+        Mon, 9 Jan 2023 17:34:33 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3my0c6jbcm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 17:34:33 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309HYV8U38797688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Jan 2023 17:34:31 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4259F20049;
+        Mon,  9 Jan 2023 17:34:31 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC0C720063;
+        Mon,  9 Jan 2023 17:34:27 +0000 (GMT)
+Received: from [9.43.119.183] (unknown [9.43.119.183])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  9 Jan 2023 17:34:27 +0000 (GMT)
+Message-ID: <45ea36ba-050c-f8e3-f85a-cf1d5c6a4e0f@linux.ibm.com>
+Date:   Mon, 9 Jan 2023 23:04:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] objtool: continue if find_insn() fails in
+ decode_instructions()
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        jpoimboe@redhat.com, peterz@infradead.org, aik@ozlabs.ru,
+        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        sfr@canb.auug.org.au, naveen.n.rao@linux.vnet.ibm.com,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20221208072813.25799-1-sv@linux.ibm.com>
+ <Y7lHsw4diDgVc9ip@gmail.com>
+ <623307fe-a29a-c691-b07b-4d2168d4bdcc@linux.ibm.com>
+ <Y7xGas4FAHFUtEJE@gmail.com>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <Y7xGas4FAHFUtEJE@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uH7pre-31K4LffNU0n3AHu0GNics0n17
+X-Proofpoint-GUID: kMsD7Iw4SAZh1zGw7e7g_ngRzn3PoF-p
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212180732.79167-5-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_10,2023-01-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=866 phishscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:07:21PM +0000, Sudip Mukherjee wrote:
-> Before doing the mem op, spi controller will be queried about the
-> buswidths it supports. Add the dual/quad/octal if the controller
-> has the DW_SPI_CAP_EMODE capability.
-> The DW_SPI_CAP_EMODE capability will be enabled in a later patch.
-> 
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  drivers/spi/spi-dw-core.c | 25 ++++++++++++++++++++++++-
->  drivers/spi/spi-dw.h      |  1 +
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index d59401f16c47a..49fad58ceb94a 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -510,6 +510,26 @@ static int dw_spi_adjust_mem_op_size(struct spi_mem *mem, struct spi_mem_op *op)
->  	return 0;
->  }
->  
-> +static bool dw_spi_supports_enh_mem_op(struct spi_mem *mem,
-> +				       const struct spi_mem_op *op)
-> +{
-> +	if (op->addr.nbytes != 0 && op->addr.buswidth != 1 &&
-> +	    op->addr.buswidth != op->data.buswidth)
-> +		return false;
-> +
-> +	if (op->cmd.buswidth != 1 && op->cmd.buswidth != op->addr.buswidth &&
-> +	    op->cmd.buswidth != op->data.buswidth)
-> +		return false;
-> +
-> +	if (op->dummy.nbytes != 0 && op->data.dir == SPI_MEM_DATA_OUT)
-> +		return false;
-> +
-> +	if (op->dummy.nbytes != 0 && op->dummy.nbytes / op->dummy.buswidth > 4)
-> +		return false;
-> +
-> +	return spi_mem_default_supports_op(mem, op);
-> +}
-> +
->  static bool dw_spi_supports_mem_op(struct spi_mem *mem,
->  				   const struct spi_mem_op *op)
->  {
-> @@ -792,7 +812,10 @@ static void dw_spi_init_mem_ops(struct dw_spi *dws)
 
->  	if (!dws->mem_ops.exec_op && !(dws->caps & DW_SPI_CAP_CS_OVERRIDE) &&
->  	    !dws->set_cs) {
->  		dws->mem_ops.adjust_op_size = dw_spi_adjust_mem_op_size;
-> -		dws->mem_ops.supports_op = dw_spi_supports_mem_op;
+On 09/01/23 22:23, Ingo Molnar wrote:
+> * Sathvika Vasireddy <sv@linux.ibm.com> wrote:
+>
+>> Hi Ingo, Happy New Year!
+> Happy New Year to you too! :-)
+>
+>> On 07/01/23 15:51, Ingo Molnar wrote:
+>>> * Sathvika Vasireddy <sv@linux.ibm.com> wrote:
+>>>
+>>>> Currently, decode_instructions() is failing if it is not able to find
+>>>> instruction, and this is happening since commit dbcdbdfdf137b4
+>>>> ("objtool: Rework instruction -> symbol mapping") because it is
+>>>> expecting instruction for STT_NOTYPE symbols.
+>>>>
+>>>> Due to this, the following objtool warnings are seen:
+>>>>    [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+>>>>    [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+>>>>    [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
+>>>>
+>>>> The warnings are thrown because find_insn() is failing for symbols that
+>>>> are at the end of the file, or at the end of the section. Given how
+>>>> STT_NOTYPE symbols are currently handled in decode_instructions(),
+>>>> continue if the instruction is not found, instead of throwing warning
+>>>> and returning.
+>>>>
+>>>> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>>>> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>>> The SOB chain doesn't look valid: is Naveen N. Rao, the first SOB line, the
+>>> author of the patch? If yes then a matching From: line is needed.
+>>>
+>>> Or if two people developed the patch, then Co-developed-by should be used:
+>>>
+>>>           Co-developed-by: First Co-Author <first@coauthor.example.org>
+>>>           Signed-off-by: First Co-Author <first@coauthor.example.org>
+>>>           Co-developed-by: Second Co-Author <second@coauthor.example.org>
+>>>           Signed-off-by: Second Co-Author <second@coauthor.example.org>
+>>>
+>>> [ In this SOB sequence "Second Co-Author" is the one who submits the patch. ]
+>>>
+>>> [ Please only use Co-developed-by if actual lines of code were written by
+>>>     the co-author that created copyrightable material - it's not a courtesy
+>>>     tag. Reviewed-by/Acked-by/Tested-by can be used to credit non-code
+>>>     contributions. ]
+>> Thank you for the clarification, and for bringing these points to my
+>> attention. I'll keep these things in mind. In this case, since both Naveen
+>> N. Rao and I developed the patch, the below tags
+>> are applicable.
+>>
+>>          Co-developed-by: First Co-Author <first@coauthor.example.org>
+>>          Signed-off-by: First Co-Author <first@coauthor.example.org>
+>>          Co-developed-by: Second Co-Author <second@coauthor.example.org>
+>>          Signed-off-by: Second Co-Author <second@coauthor.example.org>
+> ... while filling in your real names & email addresses I suppose. ;-)
+Indeed :-)
+>
+>> However, I would be dropping this particular patch, since I think Nick's
+>> patch [1] is better to fix the objtool issue.
+>>
+>> [1] - https://lore.kernel.org/linuxppc-dev/20221220101323.3119939-1-npiggin@gmail.com/
+> Ok, I'll pick up Nick's fix, with these tags added for the PowerPC
+> regression aspect and your review:
+>
+>    Reported-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>    Reported-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>    Acked-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>
+> To document & credit the efforts of your patch.
 
-Please see my comment to the cover letter. In order to have a more
-readable method I'd suggest to convert it to something like this:
+Sure, thank you!
 
-< dw_spi_init_mem_ops() {
-< 	if (dws->mem_ops.exec_op || dws->caps & DW_SPI_CAP_CS_OVERRIDE ||
-< 	    dws->set_cs)
-<		return;
-<
-< 	if (dws->caps & DW_SPI_CAP_ENH_CLK_STR) {
-< 		dws->mem_ops.adjust_op_size = dw_spi_enh_adjust_mem_op;
-< 		dws->mem_ops.supports_op = dw_spi_enh_supports_mem_op;
-< 		dws->mem_ops.exec_op = dw_spi_enh_exec_mem_op;
-< 
-<		return;
-< 	}
-<
-<  	dws->mem_ops.adjust_op_size = dw_spi_adjust_mem_op_size;
-< 	dws->mem_ops.supports_op = dw_spi_supports_mem_op;
-< 	dws->mem_ops.exec_op = dw_spi_exec_mem_op;
-<
-<	return;
-< }
+- Sathvika
 
-> +		if (dws->caps & DW_SPI_CAP_EMODE)
-
-Your implementation is working only if the clock-stretching feature is
-available.
-
-> +			dws->mem_ops.supports_op = dw_spi_supports_enh_mem_op;
-> +		else
-> +			dws->mem_ops.supports_op = dw_spi_supports_mem_op;
->  		dws->mem_ops.exec_op = dw_spi_exec_mem_op;
->  		if (!dws->max_mem_freq)
->  			dws->max_mem_freq = dws->max_freq;
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index f29d89d05f34b..327d037bdb10e 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -34,6 +34,7 @@
->  /* DW SPI controller capabilities */
->  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
->  #define DW_SPI_CAP_DFS32		BIT(1)
-
-> +#define DW_SPI_CAP_EMODE		BIT(2)
-
-As I suggested in the cover letter let's make it DW_SPI_CAP_ENH (any
-better suggestion?). Then the clock-stretching capability flag will be
-DW_SPI_CAP_ENH_CLK_STR.
-
--Serge(y)
-
->  
->  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
->  #define DW_SPI_CTRLR0			0x00
-> -- 
-> 2.30.2
-> 
