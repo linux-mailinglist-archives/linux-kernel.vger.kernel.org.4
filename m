@@ -2,98 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE73662ABA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5C7662ABD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235612AbjAIQCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S235264AbjAIQDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234955AbjAIQC3 (ORCPT
+        with ESMTP id S231341AbjAIQDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:02:29 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C8C1C133;
-        Mon,  9 Jan 2023 08:02:28 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309BUSOH003298;
-        Mon, 9 Jan 2023 17:02:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Jt+8u7dc7kaoHRVclJ4gTOkOj2blFmusjgWq7LjVRrc=;
- b=6eZORvo4lw///FcMSYj4Ln6zwTf4V0NdkPNkTC2Mxs2sfnMU50VmLapBkp2bv+V8Qjr3
- N3TpQVRCcgx5z0ntc0G4MZcBVqEkOhUkf6W1XUx75gs0y0oFkJOqF1eBXbRA9/Mp6eR1
- d2m7VgFpN5UgLR6XwdfTItj6hvNG7P3UaFfjwcxMSHQlDPseCZILJxFKwfOVA3ei7ThL
- r5R8zn/DTP6uU3XSFcbWRm55RmCvmieUrGls33uC1GL1qL5cElfjsUzOOZ3wdbzbbM/W
- IcKfgG8UUjDOHiC+uhOXz4dL4USqmIxdykSdgzMu5qYrtJge5c1V9+ls512OAiHeniTW zA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3my0gnvbhq-1
+        Mon, 9 Jan 2023 11:03:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AD31D0D4;
+        Mon,  9 Jan 2023 08:03:50 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309FL7Xc015963;
+        Mon, 9 Jan 2023 16:03:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=foMnHzTcJhE1OB25m5g2nN/Qijb9TqQf2o1tQuw9Dac=;
+ b=sTR4ZxQlqjqlT88dFiweZBW+z7dOsNcyH0Mj+jCVquhb8IFZOiOcvRy97zN0McZiYwTP
+ 47uyAOp6yjN6GTLX8XeZ79hiLYhzxdRQLKrk8XEJRAfOGYj8FRpZZk/Cz6uoVpPUBkUR
+ TQnoJaSVtNkS+qC36m/5bBlv3g//klBTzUQH4lQHrTiZUHedB8x1laiY171lmezqHtsu
+ tL/clSnxtGqsOqdZKT25V4rqvJdejCn1OJgAjJTTFSjwi8sBjGn1bJMyL2rZU73STmmQ
+ dMOKHGV+MV++BsSxKmmLKWtSP1jMv81M2HVnu2Xiq03+TFGb/fPUfOsCmKIEDFRBTVFp UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jjpqv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 17:02:16 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE11610002A;
-        Mon,  9 Jan 2023 17:02:14 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E7A812243E9;
-        Mon,  9 Jan 2023 17:02:14 +0100 (CET)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 9 Jan
- 2023 17:02:14 +0100
-Message-ID: <dd823016-f419-f801-6da5-3fdfc9bd758b@foss.st.com>
-Date:   Mon, 9 Jan 2023 17:02:13 +0100
+        Mon, 09 Jan 2023 16:03:50 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309FtOkI024134;
+        Mon, 9 Jan 2023 16:03:49 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jjpp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 16:03:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3098ti3b024704;
+        Mon, 9 Jan 2023 16:03:47 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6k665-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 16:03:47 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309G3hmO49152340
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Jan 2023 16:03:43 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6AFE20049;
+        Mon,  9 Jan 2023 16:03:43 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1BA3C20043;
+        Mon,  9 Jan 2023 16:03:43 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.179.4.251])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Mon,  9 Jan 2023 16:03:43 +0000 (GMT)
+Date:   Mon, 9 Jan 2023 17:03:41 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: s390: interrupt: use READ_ONCE() before
+ cmpxchg()
+Message-ID: <20230109170341.6d3edc7b@p-imbrenda>
+In-Reply-To: <20230109145456.2895385-1-hca@linux.ibm.com>
+References: <20230109145456.2895385-1-hca@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/2] ASoC: stm32: update sound card on stm32mp15xx-dkx
-Content-Language: en-US
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Alexandre Torgue <alexandre.torgue@st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221205121602.17187-1-olivier.moysan@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20221205121602.17187-1-olivier.moysan@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5T46g9dGXCgn6OyAowMtmuMtyNQ7Z96M
+X-Proofpoint-GUID: SqoaB9pIu61Qn1_q_Bvu7ue_YjBHWEbu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-09_09,2023-01-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=844 phishscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090116
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier
+On Mon,  9 Jan 2023 15:54:56 +0100
+Heiko Carstens <hca@linux.ibm.com> wrote:
 
-On 12/5/22 13:16, Olivier Moysan wrote:
-> This patchset introduces the following changes on STMP32MP15 DK boards
-> sound card:
-> - Rename the sound card to ease SOC diversity management
-> - Cleanup of useless clock property in SAI2A node
+> Use READ_ONCE() before cmpxchg() to prevent that the compiler generates
+> code that fetches the to be compared old value several times from memory.
 > 
-> Olivier Moysan (2):
->    ARM: dts: stm32: remove sai kernel clock on stm32mp15xx-dkx
->    ARM: dts: rename sound card on stm32mp15xx-dkx
-> 
->   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 
-Applied on stm32-fixes.
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Regards
-Alex
+> ---
+> 
+> v2: make it compile
+> 
+> arch/s390/kvm/interrupt.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index 1dae78deddf2..ab26aa53ee37 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -83,8 +83,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+>  		struct esca_block *sca = vcpu->kvm->arch.sca;
+>  		union esca_sigp_ctrl *sigp_ctrl =
+>  			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union esca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
+> +		union esca_sigp_ctrl new_val = {0}, old_val;
+>  
+> +		old_val = READ_ONCE(*sigp_ctrl);
+>  		new_val.scn = src_id;
+>  		new_val.c = 1;
+>  		old_val.c = 0;
+> @@ -95,8 +96,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+>  		struct bsca_block *sca = vcpu->kvm->arch.sca;
+>  		union bsca_sigp_ctrl *sigp_ctrl =
+>  			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union bsca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
+> +		union bsca_sigp_ctrl new_val = {0}, old_val;
+>  
+> +		old_val = READ_ONCE(*sigp_ctrl);
+>  		new_val.scn = src_id;
+>  		new_val.c = 1;
+>  		old_val.c = 0;
+> @@ -126,16 +128,18 @@ static void sca_clear_ext_call(struct kvm_vcpu *vcpu)
+>  		struct esca_block *sca = vcpu->kvm->arch.sca;
+>  		union esca_sigp_ctrl *sigp_ctrl =
+>  			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union esca_sigp_ctrl old = *sigp_ctrl;
+> +		union esca_sigp_ctrl old;
+>  
+> +		old = READ_ONCE(*sigp_ctrl);
+>  		expect = old.value;
+>  		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+>  	} else {
+>  		struct bsca_block *sca = vcpu->kvm->arch.sca;
+>  		union bsca_sigp_ctrl *sigp_ctrl =
+>  			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union bsca_sigp_ctrl old = *sigp_ctrl;
+> +		union bsca_sigp_ctrl old;
+>  
+> +		old = READ_ONCE(*sigp_ctrl);
+>  		expect = old.value;
+>  		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+>  	}
+
