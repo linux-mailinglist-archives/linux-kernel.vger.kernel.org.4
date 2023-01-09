@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE73D66334F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0F6663349
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbjAIVkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S238009AbjAIVkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238119AbjAIVjl (ORCPT
+        with ESMTP id S238132AbjAIVjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:39:41 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C7D19C35
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:38:25 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l194-20020a2525cb000000b007b411fbdc13so10521428ybl.23
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:38:25 -0800 (PST)
+        Mon, 9 Jan 2023 16:39:45 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B6E3BE87
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:38:27 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4755eb8a57bso106023707b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:38:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzZnon9AuhDOmqXXwy+4pPV98gk0DXyzNf2lwwH3FVc=;
-        b=MIKhBBBnQ+bqQnJww8/fPsZhi0whxCGIUG6kEGUGMp4FOf1NaJ2uHO5gbQnelxNiQA
-         /zZow36TcojzDwPLoUOvG98yay8W+H/pD2HMrI1l93vbQq7yL0EPGLWZQ0R6+VY7DRtV
-         JNWPRrorFPERhG5pCoV73P8K4BeUX6WEsXjfyFLgqrSJKvyOp3o0siNMo696W/r6yKXU
-         y8RJ2vfZCTDjh6Oi2w1rHjBj4wQlmL0t+ZRPOFSxOTrZS7vGovErpCiunYz6Rey8BJDi
-         cncB+zuYtfJ9rQv3FhWwefPz3sWwVINattaPynPAVTeC+nbR6FJw+i6h1qaddB0J7iUL
-         VYgw==
+        bh=jsT6wq4yb7S+NdjklyWb1ngjMGzkBXwNX+64A3lfzpA=;
+        b=fvDtcLaeN/uzP3qHT8MCEklfe9OhLf6lmImIfuCacJYjG57XiBued7S3DOodRE/TYJ
+         zCKNDg3ctqd3Dd67SPwPhW8ysEt0WGDBME6NGDgBcM5YrM326jXvkSXkPWXqmZwxbxsz
+         JlJKx2q3UL/4NVtdfwNCMCP7QlTJxXBQXsxWNIIGkTyzBjhTdHqnlRz7A6SrrXEGohYg
+         Y1TskQ4j5YZqdyazr4xhq4xZW9Gypy/dhRHNo7P2nwjIq6XxOhFfSm8keT19RigyoUi+
+         Lj952kU65FcH0FMfMGjpPdMsLkeIqjmWXAgeBMVlEt6SVmi5tV7uui22G7kOc9eQRFhz
+         T4Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzZnon9AuhDOmqXXwy+4pPV98gk0DXyzNf2lwwH3FVc=;
-        b=xYacJHP40bNwZZ9twnGYb5PCc8dpJkchSlDL1xF2i5PTJ7ZHxpwYyqDWxJRQq6uWg2
-         Yy6TKQ44ZPUlsJXDr0kkEUQd9jqEbXIXx+NoUzjetoz8srSk6LYmLzEYDBGcBjJVls3u
-         JRrs7qAkURMiStp29GN6Z5Izkg/zAwKJ0Sx8Qv3+4N3OjDEYYtnAOt041OfNibz3IT1a
-         vmPgeKDtvJ1B9rN79BM7ubUSrPFASFxKeB1zCw/2blzF09500N76+PqpPUkBAnE0fNTu
-         7Mhb4dLkeFMcgizGYXP0C0V6KGuaJ/5OYXZnL+guHdKfudoyk4U3zmQ/pr8hoDqdqTF/
-         QSow==
-X-Gm-Message-State: AFqh2kpb1hLG0CF0ZIBaiK0HRHfIDnH+sbYs3nntm7gSBlERwEoVTEj/
-        OcEgeZEmKZA22A3zFYVQ1gUcx9nNUN1VVJ0=
-X-Google-Smtp-Source: AMrXdXtOrlHW8ygC4EeYcDKs1WQIoeE3W+TEcqNZ/tFdoHO00Cnd/PEn3XI5TMhGx2JhnY0yguaIzWNDLrFIktg=
+        bh=jsT6wq4yb7S+NdjklyWb1ngjMGzkBXwNX+64A3lfzpA=;
+        b=E6doaDt6zk8VjxgdXnWzmHLvKYLrXsRADPuk4EoDBxymm1eZZKHy7whqb93K8ujM9g
+         70qzAfreCmqsMol0vnjTtMpZSu//1BihK35koGLEoFVqspumEH/lGhbOw19G8wc9TAyn
+         eBq4T//uMGBao8GbXsTaBEJiA/ZY6nc/ODBz7CY7KJj+yzjqEJdkHj957z8HoFHclYXu
+         sGokTb88UX4jlcMW5Yh+mVwpNKzAoInyPixWBSZstp7fOAj5JNBWW+Hky9IQu2EYfVnj
+         wJg8BwLylKpvwOOpGuIHHVI9uhogt9lwT4uxIOvwUTtxSAP4HVj/SRBtU/xh5orvE0Xa
+         bd6w==
+X-Gm-Message-State: AFqh2kr81W2h0ef1BpbMPVTgSCGJHkq74vQvkEgzBdm++388hCxxaLYS
+        noskJaPWBddmPrzgXW9/fETArHS9lP24SN0=
+X-Google-Smtp-Source: AMrXdXtIpfaXFqcDGkNsmQctSMqXPQ/tLvykMkynrX+C5cGc1INOkvBaGX4j41udFUeKmd51zadys8k1Cp1SKbA=
 X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
- (user=tjmercier job=sendgmr) by 2002:a81:6784:0:b0:460:c029:6c76 with SMTP id
- b126-20020a816784000000b00460c0296c76mr2274300ywc.515.1673300304313; Mon, 09
- Jan 2023 13:38:24 -0800 (PST)
-Date:   Mon,  9 Jan 2023 21:38:04 +0000
+ (user=tjmercier job=sendgmr) by 2002:a0d:e241:0:b0:48f:a921:40f2 with SMTP id
+ l62-20020a0de241000000b0048fa92140f2mr5685523ywe.275.1673300307137; Mon, 09
+ Jan 2023 13:38:27 -0800 (PST)
+Date:   Mon,  9 Jan 2023 21:38:05 +0000
 In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20230109213809.418135-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109213809.418135-2-tjmercier@google.com>
-Subject: [PATCH 1/4] memcg: Track exported dma-buffers
+Message-ID: <20230109213809.418135-3-tjmercier@google.com>
+Subject: [PATCH 2/4] dmabuf: Add cgroup charge transfer function
 From:   "T.J. Mercier" <tjmercier@google.com>
-To:     tjmercier@google.com, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+To:     tjmercier@google.com, Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>
+Cc:     hannes@cmpxchg.org, daniel.vetter@ffwll.ch, android-mm@google.com,
+        jstultz@google.com, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -81,130 +71,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a buffer is exported to userspace, use memcg to attribute the
-buffer to the allocating cgroup until all buffer references are
-released.
-
-Unlike the dmabuf sysfs stats implementation, this memcg accounting
-avoids contention over the kernfs_rwsem incurred when creating or
-removing nodes.
+The dma_buf_transfer_charge function provides a way for processes to
+transfer charge of a buffer to a different cgroup. This is essential
+for the cases where a central allocator process does allocations for
+various subsystems, hands over the fd to the client who requested the
+memory, and drops all references to the allocated memory.
 
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 4 ++++
- drivers/dma-buf/dma-buf.c               | 5 +++++
- include/linux/dma-buf.h                 | 3 +++
- include/linux/memcontrol.h              | 1 +
- mm/memcontrol.c                         | 4 ++++
- 5 files changed, 17 insertions(+)
+ drivers/dma-buf/dma-buf.c  | 45 ++++++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h    |  1 +
+ include/linux/memcontrol.h |  6 +++++
+ 3 files changed, 52 insertions(+)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index c8ae7c897f14..538ae22bc514 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1455,6 +1455,10 @@ PAGE_SIZE multiple when read back.
- 		Amount of memory used for storing in-kernel data
- 		structures.
- 
-+	  dmabuf (npn)
-+		Amount of memory used for exported DMA buffers allocated by the cgroup.
-+		Stays with the allocating cgroup regardless of how the buffer is shared.
-+
- 	  workingset_refault_anon
- 		Number of refaults of previously evicted anonymous pages.
- 
 diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index e6528767efc7..ac45dd101c4d 100644
+index ac45dd101c4d..fd6c5002032b 100644
 --- a/drivers/dma-buf/dma-buf.c
 +++ b/drivers/dma-buf/dma-buf.c
-@@ -75,6 +75,8 @@ static void dma_buf_release(struct dentry *dentry)
- 	 */
- 	BUG_ON(dmabuf->cb_in.active || dmabuf->cb_out.active);
+@@ -11,6 +11,7 @@
+  * refining of this idea.
+  */
  
-+	mod_memcg_state(dmabuf->memcg, MEMCG_DMABUF, -dmabuf->size);
-+	mem_cgroup_put(dmabuf->memcg);
- 	dma_buf_stats_teardown(dmabuf);
- 	dmabuf->ops->release(dmabuf);
++#include <linux/atomic.h>
+ #include <linux/fs.h>
+ #include <linux/slab.h>
+ #include <linux/dma-buf.h>
+@@ -1618,6 +1619,50 @@ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
+ }
+ EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap_unlocked, DMA_BUF);
  
-@@ -673,6 +675,9 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 	if (ret)
- 		goto err_dmabuf;
- 
-+	dmabuf->memcg = get_mem_cgroup_from_mm(current->mm);
-+	mod_memcg_state(dmabuf->memcg, MEMCG_DMABUF, dmabuf->size);
++/**
++ * dma_buf_transfer_charge - Change the cgroup to which the provided dma_buf is charged.
++ * @dmabuf:	[in]	buffer whose charge will be migrated to a different cgroup
++ * @target:	[in]	the task_struct of the destination process for the cgroup charge
++ *
++ * Only tasks that belong to the same cgroup the buffer is currently charged to
++ * may call this function, otherwise it will return -EPERM.
++ *
++ * Returns 0 on success, or a negative errno code otherwise.
++ */
++int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct task_struct *target)
++{
++	struct mem_cgroup *current_cg, *target_cg;
++	int ret = 0;
 +
- 	file->private_data = dmabuf;
- 	file->f_path.dentry->d_fsdata = dmabuf;
- 	dmabuf->file = file;
++	if (!IS_ENABLED(CONFIG_MEMCG))
++		return 0;
++
++	if (WARN_ON(!dmabuf) || WARN_ON(!target))
++		return -EINVAL;
++
++	current_cg = mem_cgroup_from_task(current);
++	target_cg = get_mem_cgroup_from_mm(target->mm);
++
++	if (current_cg == target_cg)
++		goto skip_transfer;
++
++	if (cmpxchg(&dmabuf->memcg, current_cg, target_cg) != current_cg) {
++		/* Only the current owner can transfer the charge */
++		ret = -EPERM;
++		goto skip_transfer;
++	}
++
++	mod_memcg_state(current_cg, MEMCG_DMABUF, -dmabuf->size);
++	mod_memcg_state(target_cg, MEMCG_DMABUF, dmabuf->size);
++
++	mem_cgroup_put(current_cg); /* unref from buffer - buffer keeps new ref to target_cg */
++	return 0;
++
++skip_transfer:
++	mem_cgroup_put(target_cg);
++	return ret;
++}
++
+ #ifdef CONFIG_DEBUG_FS
+ static int dma_buf_debug_show(struct seq_file *s, void *unused)
+ {
 diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 6fa8d4e29719..1f0ffb8e4bf5 100644
+index 1f0ffb8e4bf5..6aa128d76aa7 100644
 --- a/include/linux/dma-buf.h
 +++ b/include/linux/dma-buf.h
-@@ -22,6 +22,7 @@
- #include <linux/fs.h>
- #include <linux/dma-fence.h>
- #include <linux/wait.h>
-+#include <linux/memcontrol.h>
- 
- struct device;
- struct dma_buf;
-@@ -446,6 +447,8 @@ struct dma_buf {
- 		struct dma_buf *dmabuf;
- 	} *sysfs_entry;
- #endif
-+	/* The cgroup to which this buffer is currently attributed */
-+	struct mem_cgroup *memcg;
- };
- 
- /**
+@@ -634,4 +634,5 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ int dma_buf_vmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
++int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct task_struct *target);
+ #endif /* __DMA_BUF_H__ */
 diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index d3c8203cab6c..1c1da2da20a6 100644
+index 1c1da2da20a6..e5aec27044c7 100644
 --- a/include/linux/memcontrol.h
 +++ b/include/linux/memcontrol.h
-@@ -37,6 +37,7 @@ enum memcg_stat_item {
- 	MEMCG_KMEM,
- 	MEMCG_ZSWAP_B,
- 	MEMCG_ZSWAPPED,
-+	MEMCG_DMABUF,
- 	MEMCG_NR_STAT,
- };
+@@ -1298,6 +1298,12 @@ struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css)
+ 	return NULL;
+ }
  
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index ab457f0394ab..680189bec7e0 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1502,6 +1502,7 @@ static const struct memory_stat memory_stats[] = {
- 	{ "unevictable",		NR_UNEVICTABLE			},
- 	{ "slab_reclaimable",		NR_SLAB_RECLAIMABLE_B		},
- 	{ "slab_unreclaimable",		NR_SLAB_UNRECLAIMABLE_B		},
-+	{ "dmabuf",			MEMCG_DMABUF			},
- 
- 	/* The memory events */
- 	{ "workingset_refault_anon",	WORKINGSET_REFAULT_ANON		},
-@@ -1519,6 +1520,7 @@ static int memcg_page_state_unit(int item)
- 	switch (item) {
- 	case MEMCG_PERCPU_B:
- 	case MEMCG_ZSWAP_B:
-+	case MEMCG_DMABUF:
- 	case NR_SLAB_RECLAIMABLE_B:
- 	case NR_SLAB_UNRECLAIMABLE_B:
- 	case WORKINGSET_REFAULT_ANON:
-@@ -4042,6 +4044,7 @@ static const unsigned int memcg1_stats[] = {
- 	WORKINGSET_REFAULT_ANON,
- 	WORKINGSET_REFAULT_FILE,
- 	MEMCG_SWAP,
-+	MEMCG_DMABUF,
- };
- 
- static const char *const memcg1_stat_names[] = {
-@@ -4057,6 +4060,7 @@ static const char *const memcg1_stat_names[] = {
- 	"workingset_refault_anon",
- 	"workingset_refault_file",
- 	"swap",
-+	"dmabuf",
- };
- 
- /* Universal VM events cgroup1 shows, original sort order */
++static inline
++struct mem_cgroup *mem_cgroup_from_task(struct task_struct *p)
++{
++	return NULL;
++}
++
+ static inline void obj_cgroup_put(struct obj_cgroup *objcg)
+ {
+ }
 -- 
 2.39.0.314.g84b9a713c41-goog
 
