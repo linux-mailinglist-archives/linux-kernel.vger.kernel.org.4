@@ -2,193 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88B66629D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F896629DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjAIP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S234894AbjAIP2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjAIP0l (ORCPT
+        with ESMTP id S234546AbjAIP2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:26:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6821F24F;
-        Mon,  9 Jan 2023 07:26:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 240251042;
-        Mon,  9 Jan 2023 07:27:22 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.103])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC3B03F587;
-        Mon,  9 Jan 2023 07:26:37 -0800 (PST)
-Date:   Mon, 9 Jan 2023 15:26:27 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Beeman Strong <beeman@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: Re: Expected rdpmc behavior during context swtich and a RISC-V
- conundrum
-Message-ID: <Y7wyI5fBN6yOIzop@FVFF77S0Q05N>
-References: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
- <Y7gN32eHJNyWBvVD@FVFF77S0Q05N>
- <CAOnJCULGM=JvOtoRQM8gY3w3oSDhto=VwfgqcL+cb=er6d=dgQ@mail.gmail.com>
+        Mon, 9 Jan 2023 10:28:01 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8003AA;
+        Mon,  9 Jan 2023 07:27:54 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.97.169]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N17cq-1on28P2f5W-012aag; Mon, 09 Jan 2023 16:27:31 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 931743C1B9; Mon,  9 Jan 2023 16:27:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1673278049; bh=s4fwN7O0YOUIvKRdDW8HwVKR/TWCB1S1O0HUPcdIC34=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aqwh38l5TMV5qhD3wstQlMwgbTvb1EqYTI2tlIYS9jiuxGaCqmTJb5in3/PbfC6kS
+         6c//83OPdRQoAKQiGjswT+ayElNQLbjZHq0xHxyjC9WhOwC8TGxm8rvL/q09TSYk44
+         38yt++IerEC95GHCFQB9x4lk629tGwlXI7/oSkOQ=
+Date:   Mon, 9 Jan 2023 16:27:29 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: replace $(dot-target).tmp in filechk with
+ $(tmp-target)
+Message-ID: <Y7wyYe52A6U5qOAQ@fjasle.eu>
+References: <20230109134040.3191458-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="J+023HwIdzFgwpYN"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOnJCULGM=JvOtoRQM8gY3w3oSDhto=VwfgqcL+cb=er6d=dgQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109134040.3191458-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:kH6MaxCkdNqlhcIhC8UCAOpCLC/H3AViG+TujyrhZzqgrKI5139
+ D+8tcLB6b7Wy2/opT1AE49P0aTT+5JpYMMKvcUJYBeyloEdLWj01hpq3JHy1CQvnT4LR2QM
+ +8APzS9CWqOha+IR0Hv5ciPw8c1Ziruri4s4iNTHfpwdaf2RvrgWlaox9wk8GyjhcT1wwpt
+ xwePL7I9mpg7BfTW5u2sw==
+UI-OutboundReport: notjunk:1;M01:P0:m4ixR/S2FJI=;I4/1E/Xn+21fFwl8nB2VR8FH4Oi
+ mINfUYo55WpkxngFjNsHPjvitiS6BaARGToBpMEDMPCSijk61mnbkkxkq7utPDjtw6/kOWZ3d
+ jFJ/sJd4/CW7GdUyvqpcLIGoR9zJ5G7v69saG2FUpaedjN5y5KULOQOvTvVX0mWTWDz823JnR
+ cFkamR0QPbrHk53yIAAi0FTINleVll7WzaCLM567OED+OpgKTDiZR3hu4mAtBcBsGJytcic2T
+ mhoq05a51Hb6S+vX6bLOhcebabR7KaYtMeEGCx4B2Sb8dt5n464JlIunYfMB5wn2cBdyi9bQO
+ rSHiBmCYt/WYD7GaBXGxqZhSk5yYwxegvyUI7U+MT5SNjPQ6y8gsNw6QVWKTKGYHR1qidnUpR
+ A49C7vxiAJGE1TaIlNcwyglEBaq2JCsYA5K2V7fAatFTk6FDxYSoF5QyZxK9YhvpRw3KsgKez
+ vAxZzXtSuswn9w3LzZVkR4EAmJBI5YHq4EnjsUJ2dX3NBzM1OkTOrUhJUJvvcTdB00dJLKQb+
+ YzjyW4ZFr7M0BrnuFn9txXmcVHKZsEW6O9JGvDHd+DNMAK9VFqVbqnqhPL2Tbtl2DH9XFgImH
+ O63v8wgBgtXV9mg//3PYv1xQ6Wu1gy27kcLjjDOzEYWYX0SNKA5rrf2IWCtMfvMKa8mxXDTxi
+ k6RRKU1HDdwc6k4Lgjeri77Uc7y4T+jJIpQVFgAwbg==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 01:06:45AM -0800, Atish Patra wrote:
-> On Fri, Jan 6, 2023 at 4:02 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Thu, Jan 05, 2023 at 11:59:24AM -0800, Atish Patra wrote:
-> > > Hi All,
-> > > There was a recent uabi update[1] for RISC-V that allows the users to
-> > > read cycle and instruction count without any checks.
-> > > We tried to restrict that behavior to address security concerns
-> > > earlier but it resulted in breakage for some user space
-> > > applications[2].
-> > > Thus, previous behavior was restored where a user on RISC-V platforms
-> > > can directly read cycle or instruction count[3].
-> > >
-> > > Comparison with other ISAs w.r.t user space access of counters:
-> > > ARM64
-> > >   -- Enabled/Disabled via (/proc/sys/kernel/perf_user_access)
-> > >   -- Only for task bound events configured via perf.
-> > >
-> > > X86
-> > >  --- rdpmc instruction
-> > >  --- Enable/Disable via “/sys/devices/cpu/rdpmc”
-> > > -- Before v4.0
-> > >  -- any process (even without active perf event) rdpmc
-> > > After v4.0
-> > > -- Default behavior changed to support only active events in a
-> > > process’s context.
-> > > -- Configured through perf similar to ARM64
-> > > -- Continue to maintain backward compatibility for unrestricted access
-> > > by writing 2 to “/sys/devices/cpu/rdpmc”
-> > >
-> > > IMO, RISC-V should only enable user space access through perf similar
-> > > to ARM64 and x86 (post v4.0).
-> > > However, we do have to support the legacy behavior to avoid
-> > > application breakage.
-> > > As per my understanding a direct user space access can lead to the
-> > > following problems:
-> > >
-> > > 1) There is no context switch support, so counts from other contexts are exposed
-> > > 2) If a perf user is allocated one of these counters, the counter
-> > > value will be written
-> > >
-> > > Looking at the x86 code as it continues to allow the above behavior,
-> > > rdpmc_always_available_key is enabled in the above case. However,
-> > > during the context switch (cr4_update_pce_mm)
-> > > only dirty counters are cleared. It only prevents leakage from perf
-> > > task to rdpmc task.
-> > >
-> > > How does the context switch of counters work for users who enable
-> > > unrestricted access by writing 2 to “/sys/devices/cpu/rdpmc” ?
-> > > Otherwise, rdpmc users likely get noise from other applications. Is
-> > > that expected ?
-> >
-> > Regardless of leakage, they're also going to get random jumps in the visible
-> > values of the cycle count and instruction count as the task is context-switched
-> > (and/or if those values get reset across idle, as can happen on arm64), so
-> > those aren't going to be useful unless a number of other constraints apply.
-> >
-> 
-> Agreed.
-> 
-> > AFAICT the affected package was actually a library of intrinsics; does this
-> > affect a real application, or was this just in tests? If it's the latter there
-> > might still be scope to properly lock this down...
-> >
-> 
-> Unfortunately, there are real applications In RISC-V started using
-> cycle counters due to legacy reasons.
-> 
-> Here is the short list from debian repo pointed out in [1]
-> https://codesearch.debian.net/search?q=%22rdcycle+%250%22
 
-The first of those is GRUB, when running bare metal.
+--J+023HwIdzFgwpYN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The second is this library again, which is not a whole application.
+On Mon, Jan 09, 2023 at 10:40:40PM +0900 Masahiro Yamada wrote:
+> $(tmp-target) is a better fit for local use like this.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>=20
+>  scripts/Kbuild.include | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> index 4648ab8f11d4..7778cc97a4e0 100644
+> --- a/scripts/Kbuild.include
+> +++ b/scripts/Kbuild.include
+> @@ -99,11 +99,11 @@ define filechk
+>  	$(check-FORCE)
+>  	$(Q)set -e;						\
+>  	mkdir -p $(dir $@);					\
+> -	trap "rm -f $(dot-target).tmp" EXIT;			\
+> -	{ $(filechk_$(1)); } > $(dot-target).tmp;		\
+> -	if [ ! -r $@ ] || ! cmp -s $@ $(dot-target).tmp; then	\
+> +	trap "rm -f $(tmp-target)" EXIT;			\
+> +	{ $(filechk_$(1)); } > $(tmp-target);			\
+> +	if [ ! -r $@ ] || ! cmp -s $@ $(tmp-target); then	\
+>  		$(kecho) '  UPD     $@';			\
+> -		mv -f $(dot-target).tmp $@;			\
+> +		mv -f $(tmp-target) $@;				\
+>  	fi
+>  endef
+> =20
+> --=20
+> 2.34.1
 
-I see that it's used in some benchmarks in real applications, e.g. firefox,
-chrome. However, as above we know that's *broken* today.
+I do fully agree.
 
-Is that code actually run?
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-> Looking at aarch64 code in one of the application, it seems they rely
-> on reading "pmccntr_el0" to read time
-> https://sources.debian.org/src/chromium/108.0.5359.124-1/third_party/ffmpeg/libavutil/aarch64/timer.h/
+--J+023HwIdzFgwpYN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That part is under ifdefs for mac os:
+-----BEGIN PGP SIGNATURE-----
 
-| #if defined(__APPLE__)
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmO8MmAACgkQB1IKcBYm
+Emnt9xAA4DA0k9/FPc8eRMgBFJYzTSo5f8eUs/0kifdQzUADg1wKTWqP1XItSnyP
+SGPsMM6JhODbVPJYdqQfnqSDVH/YtSImMtpld+pQmh/j6IR7SkgSx0g8GX8ixl8V
+DCUjDpeq82nyGELNNOppesmYpIq/UyEXdhur0KZjoMIHfTHroQ5an4EDUOCAz2aB
+PK1ayUPHQRgdSFI2jT83JsaEn/m+NAAEX5zydhmQB3Ad/S0ip1beB/ueszR5pVoL
+AWfk8aoeU1ADD6jN1uB9nVT5t3w8DNZFilkOA2JKkJds2L+bd0eyD0JvOgVuNLgn
+j1sS6kNao82Ci5HrDG0nSMRSlwaT6b/+Vr3pwAc+xqMmY5H9nUP4E60PEYTlMmap
+NeSYfUjzUJj16oktrDqyfbmHe8Pu6Lg7UBsFWbi8+J4FBlH710TXa86x2M//7GRD
+xj0iO37oagNo4abuCsJXIChlJDB2CtK9ctcjk6yca4ppzv+6i/ZAiB9N4d17D7lX
+mFgAyfNx5QX9+2zNLS4C4mllCwelWTDVwojmI47s9+t3xRprdx5yE/3IirT7fqoZ
+1zxtm0meunGZO2x3vrPCmfigmvRtYu6LEQOXriJDWhybuFixuH8pG0kIyeb46qr/
+UPLAKaFXG3Szswd+w/NfPWTanGP4Z3KNHIDjAIYRjWavs0UZnVs=
+=HSC8
+-----END PGP SIGNATURE-----
 
-... and it's nonsensical anyway, pmccntr_el0 is *not* a timer, and I don't know
-if Mac OS would bother to context-switch the value, so it's very likely broken
-anyhow.
-
-> AFAIK, any counter access from EL0 is disabled by default in
-> reset_pmuserenr_el0 and should be enabled via the
-> proc/sys/perf_user_access
-> in armv8pmu_enable_user_access. Is that correct ?
-
-Yes, we *only* enable access for tasks doing self-monitoring via perf.
-
-No other useage makes sense, since the value is arbitrarily reset, and it's not
-consistent across CPUs. It *cannot* be used as a timer.
-
-> I couldn't find any application actually enabling the access using
-> perf_user_access. Maybe I am missing something?
-> Otherwise, the above application would trap on access to pmccntr_el0.
-
-As above, that's on Mac OS, not Linux.
-
-Thanks,
-Mark.
-
-> 
-> [1] https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/REWcwYnzsKE?pli=1
-> > Thanks,
-> > Mark.
-> >
-> > > This can be a security concern also where a rogue rdpmc user
-> > > application can monitor other critical applications to initiate side
-> > > channel attack.
-> > >
-> > > Am I missing something? Please correct my understanding of the x86
-> > > implementation if it is wrong.
-> > >
-> > > [1] https://lore.kernel.org/lkml/20221201135110.3855965-1-conor.dooley@microchip.com/
-> > > [2] https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/REWcwYnzsKE?pli=1
-> > > [3] https://lore.kernel.org/all/YxIzgYP3MujXdqwj@aurel32.net/T/
-> > >
-> > > --
-> > > Regards,
-> > > Atish
-> 
-> 
-> 
-> -- 
-> Regards,
-> Atish
+--J+023HwIdzFgwpYN--
