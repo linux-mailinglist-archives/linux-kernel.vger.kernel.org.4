@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B34662FF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9593662FEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbjAITJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S237608AbjAITJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbjAITIr (ORCPT
+        with ESMTP id S237597AbjAITIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:08:47 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E7395FF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:08:45 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id fc4so22583415ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:08:45 -0800 (PST)
+        Mon, 9 Jan 2023 14:08:55 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941CD3C391
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:08:54 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id cf18so16301891ejb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:08:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dN85jDDbS9++X72ZVzQ9zBzrc025p4BbE5KdWzs6teU=;
-        b=dYLebetn+ue1TzjRxs86nXaH4dOwnQ3mPO1MjAjPdrANYUoFmIf2tju0M6myLkPK5a
-         zOpuMhHvKiEkATgJeLESWvHLQ0XKK9KZ9E3NhE6neN6zs1/wqU5WMwtgzcFYLLYEpjwf
-         Vx/YbLHP4xYHrLIym+Im1oSz4ZkUXlLFBuF0OonxlvVnbFd6npZR1AM1NisSydVJalSZ
-         bk+ibOF5tW2hkUwXiIj6ufYeIg2w5laGCEN/BdUu63ncUPB+pD4nYScXeS5xmxEC7hkr
-         LjnI0mMUbpQtxlDiR9T6PHdpw7M0TsUV4Hr/thr81BmaPBX7vdqv+TJAli3d5m3PwlRX
-         hjDg==
+        bh=4ZMU1x+tLk0OFGwO9qk4HxCl3v2Y+JR1fHam1odju/4=;
+        b=OB/LTABusMIttSRpolHRGe2RIiuDWHWG13bN3ppO4WyfcRn+a/WDmaR1YjSQAcrmcA
+         k2ez60PSPSRmPBqqGOuElxT+rBcglhwwfky4BmwEnG+Z/+Jh/p1rzD7sXxnXbjUJxpZB
+         uACAgleEtJ4v+FWb4b0S96F5XaZl8DeG+L60CF7ZM02KUrT2zjbIiq8TSivFsqgIml+E
+         Bajz2jXwHY22zTkgxXINxTnD3FEeDuGGhg7SR0PG05efzSLfQStfTCCrvb9a+lfq0xqn
+         cLZcpyquyPf40ugaOiDBXxiBAYEShj+oRapZQ9Eyc4B9say5O4ozSEpqNplDsCCYTozc
+         zXbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dN85jDDbS9++X72ZVzQ9zBzrc025p4BbE5KdWzs6teU=;
-        b=Qmanb+QjLsPTrmN/08xRj+t8n/c2PStQv4+PS4DQEejLpAn0rzlZ+Zp+1c9f11ihQa
-         WL/fWlMzbxBe7s6nOHDSxAFFuVLn3syMge3qf8mNu0d9qfCHFLNsMw7fOAimCqMYNHou
-         4wUUjVQFQd9fgz7JCmg+jeK2e7d+R6OGt5xj4FAPMPEqoT6qZRDrLsChIt8PdD2IlF3H
-         Kfu1RKbi+YXYGuTarkc30UFkXA2MFmXPZ6Hp9BI2FtCTVsQTsopJvRxFoCeK2a8dOf0D
-         JKZTzIGrbATfVCotuAC+By+rB7Iyd2CnooHK06jQ5wSSefmvT1sjZRG1Ww3XxGqIc35R
-         C7pg==
-X-Gm-Message-State: AFqh2kpGbuOF6Gc9L3oOrtsHVYgvMP0aKFzcSjKYunUGbbUm6lqDfL+V
-        dAvaXuwRgHyk1+qrBPJSkOuj54eqBo4=
-X-Google-Smtp-Source: AMrXdXs4DHQlacg6eIYe0Vg6eSoumPw5RMsJl5MHx50rRk9HXh2TK6Dwb6VfNdLWVHW4zqHhPJ24wQ==
-X-Received: by 2002:a17:906:308c:b0:7b2:91e8:155c with SMTP id 12-20020a170906308c00b007b291e8155cmr13682743ejv.5.1673291324420;
-        Mon, 09 Jan 2023 11:08:44 -0800 (PST)
+        bh=4ZMU1x+tLk0OFGwO9qk4HxCl3v2Y+JR1fHam1odju/4=;
+        b=xI5qQVrrk9SBEFxwXGPRf1/rX9v+BwMxeVskyDQ/6IHGT+eBjaSzVaTOhMWQXT4++I
+         NGaE2eR5vRmsj6Db49tAt6UgPw0JZUYsKkbKmiNfTTcg8x+t+Zq3Iq38vBlw7d+3XqpH
+         wrrSqU42Mc+BNKskB0OiWnqjMDZSBzwbxVV6gNKIs9PUvZgNYNNd/9NFVdkg8uTWHUiA
+         og+YXHhj5MNRCjyubHbp9CBfwxcXgt5iuL7CSEK7r0NewkDuZiDcCXc/VLNsoXMgEtil
+         45J1gZoOAQyb/d9pF2lrDn3r8b5NGWyGu9siBamXakFk170yvJOk11In12+N/nWQVKru
+         623w==
+X-Gm-Message-State: AFqh2krZmIz5i5zxicFmdj4WACtTqfEqISfAdOg9V98v6dkLkLEhNGj4
+        cWptNuk33NE8gAYKuJCdHonHElI2SxQ=
+X-Google-Smtp-Source: AMrXdXu7ZDtWWQPtPguBBWqpEMGojFE8xUIljZYuY0yg54sMXqwaB0eOISFjJKxDpzY58FR4Lv4TuA==
+X-Received: by 2002:a17:906:9c85:b0:7c0:d7af:fce3 with SMTP id fj5-20020a1709069c8500b007c0d7affce3mr12499739ejc.1.1673291333241;
+        Mon, 09 Jan 2023 11:08:53 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id fu17-20020a170907b01100b0084c723b4c40sm4115507ejc.103.2023.01.09.11.08.43
+        by smtp.gmail.com with ESMTPSA id gn19-20020a1709070d1300b00815835b4b5fsm4038886ejc.134.2023.01.09.11.08.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 11:08:43 -0800 (PST)
-Date:   Mon, 9 Jan 2023 20:08:41 +0100
+        Mon, 09 Jan 2023 11:08:52 -0800 (PST)
+Date:   Mon, 9 Jan 2023 20:08:51 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/7] staging: rtl8192e: Rename CCKPresentAtt...
-Message-ID: <1254f23aefd25075ef3e16719eed79b461f41e4c.1673290428.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 4/7] staging: rtl8192e: Rename TxPowerLevelCCK...
+Message-ID: <c18af327debcf85f3498be9c7a1492d501748669.1673290428.git.philipp.g.hortmann@gmail.com>
 References: <cover.1673290428.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,129 +70,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable CCKPresentAttentuation_20Mdefault to
-cck_present_attn_20m_def, CCKPresentAttentuation_40Mdefault to
-cck_present_attn_40m_def and CCKPresentAttentuation_difference to
-cck_present_attn_diff to avoid CamelCase which is not accepted by
-checkpatch.
+Rename variable TxPowerLevelCCK to tx_pwr_level_cck, TxPowerLevelCCK_A to
+tx_pwr_level_cck_a and TxPowerLevelCCK_C to tx_pwr_level_cck_c to avoid
+CamelCase which is not accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  8 ++++----
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 14 +++++++-------
  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  8 ++++----
  drivers/staging/rtl8192e/rtl8192e/rtl_core.h   |  6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 16 ++++++++--------
- 4 files changed, 19 insertions(+), 19 deletions(-)
+ 3 files changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 8b61c7581fe0..5c5326491e90 100644
+index 5c5326491e90..ec817de1ca59 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -787,14 +787,14 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 
- 			for (i = 0; i < CCKTxBBGainTableLength; i++) {
- 				if (TempCCk == dm_cck_tx_bb_gain[i][0]) {
--					priv->CCKPresentAttentuation_20Mdefault = i;
-+					priv->cck_present_attn_20m_def = i;
- 					break;
- 				}
- 			}
--			priv->CCKPresentAttentuation_40Mdefault = 0;
--			priv->CCKPresentAttentuation_difference = 0;
-+			priv->cck_present_attn_40m_def = 0;
-+			priv->cck_present_attn_diff = 0;
- 			priv->cck_present_attn =
--				  priv->CCKPresentAttentuation_20Mdefault;
-+				  priv->cck_present_attn_20m_def;
- 			priv->btxpower_tracking = false;
+@@ -408,7 +408,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
  		}
- 	}
+ 		if (priv->epromtype == EEPROM_93C46) {
+ 			for (i = 0; i < 14; i++) {
+-				priv->TxPowerLevelCCK[i] =
++				priv->tx_pwr_level_cck[i] =
+ 					 priv->EEPROMTxPowerLevelCCK[i];
+ 				priv->TxPowerLevelOFDM24G[i] =
+ 					 priv->EEPROMTxPowerLevelOFDM24G[i];
+@@ -427,31 +427,31 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 		} else if (priv->epromtype == EEPROM_93C56) {
+ 
+ 			for (i = 0; i < 3; i++) {
+-				priv->TxPowerLevelCCK_A[i] =
++				priv->tx_pwr_level_cck_a[i] =
+ 					 priv->EEPROMRfACCKChnl1TxPwLevel[0];
+ 				priv->TxPowerLevelOFDM24G_A[i] =
+ 					 priv->EEPROMRfAOfdmChnlTxPwLevel[0];
+-				priv->TxPowerLevelCCK_C[i] =
++				priv->tx_pwr_level_cck_c[i] =
+ 					 priv->EEPROMRfCCCKChnl1TxPwLevel[0];
+ 				priv->TxPowerLevelOFDM24G_C[i] =
+ 					 priv->EEPROMRfCOfdmChnlTxPwLevel[0];
+ 			}
+ 			for (i = 3; i < 9; i++) {
+-				priv->TxPowerLevelCCK_A[i]  =
++				priv->tx_pwr_level_cck_a[i]  =
+ 					 priv->EEPROMRfACCKChnl1TxPwLevel[1];
+ 				priv->TxPowerLevelOFDM24G_A[i] =
+ 					 priv->EEPROMRfAOfdmChnlTxPwLevel[1];
+-				priv->TxPowerLevelCCK_C[i] =
++				priv->tx_pwr_level_cck_c[i] =
+ 					 priv->EEPROMRfCCCKChnl1TxPwLevel[1];
+ 				priv->TxPowerLevelOFDM24G_C[i] =
+ 					 priv->EEPROMRfCOfdmChnlTxPwLevel[1];
+ 			}
+ 			for (i = 9; i < 14; i++) {
+-				priv->TxPowerLevelCCK_A[i]  =
++				priv->tx_pwr_level_cck_a[i]  =
+ 					 priv->EEPROMRfACCKChnl1TxPwLevel[2];
+ 				priv->TxPowerLevelOFDM24G_A[i] =
+ 					 priv->EEPROMRfAOfdmChnlTxPwLevel[2];
+-				priv->TxPowerLevelCCK_C[i] =
++				priv->tx_pwr_level_cck_c[i] =
+ 					 priv->EEPROMRfCCCKChnl1TxPwLevel[2];
+ 				priv->TxPowerLevelOFDM24G_C[i] =
+ 					 priv->EEPROMRfCOfdmChnlTxPwLevel[2];
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index ccbce3e177b6..33b39b1dc655 100644
+index 33b39b1dc655..ee6138699e10 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1009,8 +1009,8 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
- 	switch (priv->CurrentChannelBW) {
- 	case HT_CHANNEL_WIDTH_20:
- 		priv->cck_present_attn =
--			priv->CCKPresentAttentuation_20Mdefault +
--			    priv->CCKPresentAttentuation_difference;
-+			priv->cck_present_attn_20m_def +
-+			    priv->cck_present_attn_diff;
+@@ -592,14 +592,14 @@ void rtl92e_set_tx_power(struct net_device *dev, u8 channel)
+ 	u32	u4RegValue;
  
- 		if (priv->cck_present_attn >
- 		    (CCKTxBBGainTableLength-1))
-@@ -1034,8 +1034,8 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
+ 	if (priv->epromtype == EEPROM_93C46) {
+-		powerlevel = priv->TxPowerLevelCCK[channel-1];
++		powerlevel = priv->tx_pwr_level_cck[channel - 1];
+ 		powerlevelOFDM24G = priv->TxPowerLevelOFDM24G[channel-1];
+ 	} else if (priv->epromtype == EEPROM_93C56) {
+ 		if (priv->rf_type == RF_1T2R) {
+-			powerlevel = priv->TxPowerLevelCCK_C[channel-1];
++			powerlevel = priv->tx_pwr_level_cck_c[channel - 1];
+ 			powerlevelOFDM24G = priv->TxPowerLevelOFDM24G_C[channel-1];
+ 		} else if (priv->rf_type == RF_2T4R) {
+-			powerlevel = priv->TxPowerLevelCCK_A[channel-1];
++			powerlevel = priv->tx_pwr_level_cck_a[channel - 1];
+ 			powerlevelOFDM24G = priv->TxPowerLevelOFDM24G_A[channel-1];
  
- 	case HT_CHANNEL_WIDTH_20_40:
- 		priv->cck_present_attn =
--			priv->CCKPresentAttentuation_40Mdefault +
--			priv->CCKPresentAttentuation_difference;
-+			priv->cck_present_attn_40m_def +
-+			priv->cck_present_attn_diff;
+ 			ant_pwr_diff = priv->TxPowerLevelOFDM24G_C[channel-1]
+@@ -726,7 +726,7 @@ u8 rtl92e_config_rf_path(struct net_device *dev, enum rf90_radio_path eRFPath)
+ static void _rtl92e_set_tx_power_level(struct net_device *dev, u8 channel)
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+-	u8	powerlevel = priv->TxPowerLevelCCK[channel-1];
++	u8	powerlevel = priv->tx_pwr_level_cck[channel - 1];
+ 	u8	powerlevelOFDM24G = priv->TxPowerLevelOFDM24G[channel-1];
  
- 		if (priv->cck_present_attn >
- 		    (CCKTxBBGainTableLength - 1))
+ 	switch (priv->rf_chip) {
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 825cb8ce06c0..344b2c92843a 100644
+index 344b2c92843a..1efaea925b3a 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -463,9 +463,9 @@ struct r8192_priv {
- 	u8 cck_pwr_enl;
- 	u16 tssi_13dBm;
- 	u32 pwr_track;
--	u8 CCKPresentAttentuation_20Mdefault;
--	u8 CCKPresentAttentuation_40Mdefault;
--	s8 CCKPresentAttentuation_difference;
-+	u8 cck_present_attn_20m_def;
-+	u8 cck_present_attn_40m_def;
-+	s8 cck_present_attn_diff;
- 	s8 cck_present_attn;
+@@ -470,9 +470,9 @@ struct r8192_priv {
  	long undecorated_smoothed_pwdb;
  
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 6cd49b3f6408..6d3c9491d070 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -708,21 +708,21 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 				_rtl92e_dm_tx_update_tssi_strong_signal(dev, RF_Type);
- 
- 			if (RF_Type == RF_2T4R) {
--				priv->CCKPresentAttentuation_difference
-+				priv->cck_present_attn_diff
- 					= priv->rfa_txpowertrackingindex - priv->rfa_txpowertracking_default;
- 			} else {
--				priv->CCKPresentAttentuation_difference
-+				priv->cck_present_attn_diff
- 					= priv->rfa_txpowertrackingindex_real - priv->rfa_txpowertracking_default;
- 			}
- 
- 			if (priv->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
- 				priv->cck_present_attn =
--					 priv->CCKPresentAttentuation_20Mdefault +
--					 priv->CCKPresentAttentuation_difference;
-+					 priv->cck_present_attn_20m_def +
-+					 priv->cck_present_attn_diff;
- 			else
- 				priv->cck_present_attn =
--					 priv->CCKPresentAttentuation_40Mdefault +
--					 priv->CCKPresentAttentuation_difference;
-+					 priv->cck_present_attn_40m_def +
-+					 priv->cck_present_attn_diff;
- 
- 			if (priv->cck_present_attn > (CCKTxBBGainTableLength-1))
- 				priv->cck_present_attn = CCKTxBBGainTableLength-1;
-@@ -742,8 +742,8 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 					rtl92e_dm_cck_txpower_adjust(dev, priv->bcck_in_ch14);
- 			}
- 
--			if (priv->CCKPresentAttentuation_difference <= -12 ||
--			    priv->CCKPresentAttentuation_difference >= 24) {
-+			if (priv->cck_present_attn_diff <= -12 ||
-+			    priv->cck_present_attn_diff >= 24) {
- 				priv->rtllib->bdynamic_txpower_enable = true;
- 				rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 				rtl92e_writeb(dev, FW_Busy_Flag, 0);
+ 	u32 MCSTxPowerLevelOriginalOffset[6];
+-	u8 TxPowerLevelCCK[14];
+-	u8 TxPowerLevelCCK_A[14];
+-	u8 TxPowerLevelCCK_C[14];
++	u8 tx_pwr_level_cck[14];
++	u8 tx_pwr_level_cck_a[14];
++	u8 tx_pwr_level_cck_c[14];
+ 	u8		TxPowerLevelOFDM24G[14];
+ 	u8		TxPowerLevelOFDM24G_A[14];
+ 	u8		TxPowerLevelOFDM24G_C[14];
 -- 
 2.39.0
 
