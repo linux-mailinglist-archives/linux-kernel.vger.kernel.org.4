@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA50663074
+	by mail.lfdr.de (Postfix) with ESMTP id 889D4663073
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237394AbjAITdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S237683AbjAITeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237726AbjAITdn (ORCPT
+        with ESMTP id S237586AbjAITeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:33:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB8100F;
-        Mon,  9 Jan 2023 11:33:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F72261358;
-        Mon,  9 Jan 2023 19:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7220DC433EF;
-        Mon,  9 Jan 2023 19:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673292820;
-        bh=bTSoMPcMcmLPaD3oxUR9mFEaflJdAiTqYCb5O5A+MJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lv3cEa/aSGwho+07n//aR6cSlJsY/GTswOJlakzLyZPXAPlWbnXN8oSQaDd6nsm7x
-         vBJczEXe3POhwslvIc0HxQOFU42+bL/DhgnpBwPNOpUbx5/rNkDZMT7icCEsb3KasW
-         gyIG7LdHNzG3zJyCFnxCKnC0972eylTGpPlavnLdwrZawxKKOfVmSxgY8y+PMmAc3Y
-         9gy/nHWJ1Mvk0CuErrlMgunN8O67pJbLydqMZIlL9p38G466X0Jskf+xFwhqsdVwAE
-         keYy2jTyJKLgeplPwQ2tieYgL+fyzoAa+NmTOJQ8AbsPAkH1bZnxW9/9Dxg4C3VMiU
-         6o9a9CC3yrJOQ==
-Date:   Mon, 9 Jan 2023 19:33:33 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>
-Subject: Re: [PATCH v4 3/8] arm64/sysreg: Convert SPE registers to automatic
- generation
-Message-ID: <Y7xsDXFlNjiQ1AIe@sirena.org.uk>
-References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
- <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org>
+        Mon, 9 Jan 2023 14:34:00 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C2748CC8
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:33:59 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id z5so8248612wrt.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:33:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9EGAARif97svm43WKQHpTah2AyhIqRbyKB8mnpK2KoM=;
+        b=FN24xWhjGLoTMj4wniz93gpIal1LKDyeNvlCERxakutz4BhNniu2K5kQxqw6wquK0t
+         G1cmo26HRw1BKyjaa/qfRWa06G1/1ZipE0RJTPXj+roz3L3mbTJKe3By8mD2VplCESEd
+         NTssJ+cfKGxpNWZ8X3a1fbc4Heqo/V+L9w1fcNgKIgvmVkqNEsoEbS0cIkRjnXrhlX+B
+         O+6n4QdtTkVuyaiTY2s3Ro3Po8Zadfgq3NXUv8CUFfxg9v0gPymTJteY+jKY9rRwtDky
+         aJlzLzWH5o2xh1VIporHV7OSSwnPs3QYyi9K6E5MufrHSQ/SLgyzcqw9VWeTnzA0eARV
+         c/wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9EGAARif97svm43WKQHpTah2AyhIqRbyKB8mnpK2KoM=;
+        b=FOhlDKT8qt7xONC3rB7J4GeKnFrE0su2q250D0kq5x/2babgrdJXDwjMbrjE6f2GCd
+         Mzrh0KcpaVyKOWiiF1XQGer9uhpG5s45vbTrN4FIdU6o/cqtcvZm5Tfh+2pHj0/MzPMo
+         72zQkkg6TCZQvAqiwQsi3qeskBgriePCuvuKA+45WRKRxJ9zZMpuF7UyWyAnA55+qetO
+         F9oY1IWkun6L9Yj9UmqQncDDNW8fCL1Utz7nGa9/ktsu9L93qAUaFEVeZregxc5Roi2g
+         OKShnWAwIZ221G1B4prjD9wHvCF62rt+ozYdCH/IxXLXrp8EadpHRLzDg6GmSJYAvyDz
+         RinQ==
+X-Gm-Message-State: AFqh2kpN9haoNxBPTrBK+Wiyz+gB4M/j0VsIaIX3R0PdIuH/zO8haCvs
+        ePpDp+F27TWzuGHjdtQ5inx89Q==
+X-Google-Smtp-Source: AMrXdXujuX4oRsEDqNPcClUhfWZ/stgeEBpG7Wkczu21BWmF8b0e0MO30sCiL8RFsHOkyhvZzZdqcw==
+X-Received: by 2002:a5d:69d0:0:b0:2ba:5ed7:543d with SMTP id s16-20020a5d69d0000000b002ba5ed7543dmr10402348wrw.52.1673292838124;
+        Mon, 09 Jan 2023 11:33:58 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm9274282wrp.55.2023.01.09.11.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 11:33:57 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-vtdr6130-panel-v2-0-dd6200f47a76@linaro.org>
+References: <20230103-topic-sm8550-upstream-vtdr6130-panel-v2-0-dd6200f47a76@linaro.org>
+Subject: Re: [PATCH v2 0/2] drm/panel: add support for the Visionox VTDR6130
+ AMOLED DSI panel
+Message-Id: <167329283727.1538353.13855678312817983424.b4-ty@linaro.org>
+Date:   Mon, 09 Jan 2023 20:33:57 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+R5R38EZaqmBSfGK"
-Content-Disposition: inline
-In-Reply-To: <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org>
-X-Cookie: Editing is a rewording activity.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---+R5R38EZaqmBSfGK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 09 Jan 2023 09:49:29 +0100, Neil Armstrong wrote:
+> Add support for the 1080x2400 Visionox VTDR6130 AMOLED DSI panel
+> found on the Qualcomm SM8550 MTP board.
+> 
+> By default the the panel is configured to work with DSI compressed
+> streams, but can work in uncompressed video mode since 1080x2400 in
+> RGB888 fits in the 4 DSI lanes bandwidth.
+> 
+> [...]
 
-On Mon, Jan 09, 2023 at 01:26:19PM -0600, Rob Herring wrote:
-> Convert all the SPE register defines to automatic generation. No
-> functional changes.
->=20
-> New registers and fields for SPEv1.2 are added with the conversion.
->=20
-> Some of the PMBSR MSS field defines are kept as the automatic generation
-> has no way to create multiple names for the same register bits. The
-> meaning of the MSS field depends on other bits.
->=20
-> Tested-by: James Clark <james.clark@arm.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v4:
->  - Rebase on v6.2-rc1
-> v3:
->  - Make some fields enums and add some missing fields
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-What changed to invalidate my Reviewed-by?
+[1/2] dt-bindings: display: panel: document the Visionox VTDR6130 AMOLED DSI Panel bindings
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ef85db911134d103a7f713eae6689dbb15c3f96a
+[2/2] drm/panel: add visionox vtdr6130 DSI panel driver
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=2349183d32d83a7635baa804934813bcad13fd62
 
-   https://lore.kernel.org/all/Y2kgC9QlBwvXTLe6@sirena.org.uk/
-
---+R5R38EZaqmBSfGK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO8bAwACgkQJNaLcl1U
-h9DxNAf/WsewNj2Jsxe561AMAVfSZGGTeD3cxMiIkJu7/i6seiPbUAVmRQAU/3AO
-hWLnAE0qdAZHyp47NwC6fd04WBq7W2910I+Sx7ESUbrXKciJqp1lpG2DBauU4HpZ
-Hu8Ak7/eEe2gHvooa2ku3X1jFK59X9jKjXtTJLkky0jxXqZV0DhAWEhRukPLEen/
-GAx9GzqacaRbZ0d6e95U9F/WyvmMLzv5J8NkuT97Ue+AD37691GJ1ECeb/WsrdOV
-wPAqZ0l0BVqnMxBPzVa0SpMXL0uooYlvfyLzvFotPrilxwgMoQ3WI6ULCM7fj5O4
-nxuNXWR2kEZuo4b0jsXjvfYIQJfNTg==
-=hyzN
------END PGP SIGNATURE-----
-
---+R5R38EZaqmBSfGK--
+-- 
+Neil
