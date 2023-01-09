@@ -2,200 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7D46630B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885286630A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237784AbjAITng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S237634AbjAITnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237632AbjAITmq (ORCPT
+        with ESMTP id S237678AbjAITm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:42:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA703C3BD;
-        Mon,  9 Jan 2023 11:42:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673293364; x=1704829364;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=QvhtlK4SYmJQvhKAlXbD4WLjYDIsGYSH3KPw5DihPkE=;
-  b=f+kM8sY70mJ65HHL5FyB1swNBuudRZ3HWXMBMAH+Hn8Drmgz2IHyRn+T
-   9MX6uI31DsLlP5ggA54O/FEIuqNGQXv7NFLU5ntBS+t/lKMl6/YJEzWdW
-   eMRRtcI1vSO0s6oQ5/8nJ/H5ZRRVrPnSNxkQz2H4X3er6KydYnH61lMv1
-   MdChwmz3asouyq6HD8YLUEkp9M5Rjazhym8a4v4gJDKbMpMd3oRW1JpW8
-   hyLZtW3nlQqA9tjv2fpR1CrgOG+lzns5MAKRzGQtQ1LrDd7q8MDNu5m2O
-   6i+xAhh9eHWQrVJTPtORi46SzN74mlmxVbKHbWyWu7oNdd4wzRJiFfd4h
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="385269923"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="385269923"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:42:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="656783522"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="656783522"
-Received: from cwchen-mobl.amr.corp.intel.com (HELO localhost) ([10.212.45.225])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:42:42 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Mon, 09 Jan 2023 11:42:27 -0800
-Subject: [PATCH v6 8/8] cxl/test: Simulate event log overflow
+        Mon, 9 Jan 2023 14:42:57 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4503590C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:42:56 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id bs20so9336420wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sm+C6Y4VHJEDtGwIvvGgY7BGxijkOAR29lDr/Tbsy3A=;
+        b=tDlDq1FkSgoi9HsSAmHq/G1pvTD21qW7XYfQnck5oYb2AhOo9kFjJMrLzYSkivk1T4
+         4BPoJn1oyAJsLYH87L+dNhESNeJXB4dkJ5TQ0Gq5UwBIuCdQEfYvPfJmGp6kowUbBj0g
+         ZOjVOa+89Z3KIgebtQN+Ug9K2zNt6viJ17kxjohRc91l1gyfcHSBGya+kQEw97VYLr77
+         DteJKaG7Pb6gW0/OgmH6lq03RZTQIqOZpYpmB7ZbU9VW1Bnp9mVIofo7kGSSBwBWglSi
+         rdV/IAq18wsDLyUVEoVIsE0ga0iIruBN10dy2evrp1LsBCBP8CleQefNS5rvS7xnkUo+
+         Ft1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sm+C6Y4VHJEDtGwIvvGgY7BGxijkOAR29lDr/Tbsy3A=;
+        b=sv4NE+Nr608Dwwnt1cqdb86h6kdLypHagpMAx8uoXSD0csrl6hAyHwkD8QLUcVqjUd
+         GuHzMz8RpsStMI5HaZUxUfGZQJSZAoUS9SCOllCb5vRxq5VQfA8ZBgP+8HalV5gXyVOQ
+         nb36AYAZZPc4MFi6tbkGdSC8fwl0K0UKgn+TQ7DuxIBrI9BaMn9SZ3bobdKUSZCGbPbH
+         2SUhOOt4STaDFuluFlSC6aIMmd93XzWf4hU0tOpgs8q9CzvsfLeCbLHmxKvomPQlJGUk
+         3jVHAyE4J815MTtbR2eIy1D9A+xWXXfwVIkheFasTO1MUli1mcrkSaWttzTVYYK3+o7y
+         h0ig==
+X-Gm-Message-State: AFqh2kreNKwQo++4p5tU76fjSIvtoE7YqQQWtRYeldwYzkEBhCGfZET+
+        VPQcYJmdzgNFd233DrdUSOvhWCYY+5caHTvD7uEHlA==
+X-Google-Smtp-Source: AMrXdXvmpe85LGRAEvZEbNLRLiITVTgyGbd3Lmkkw5o1zaaUX68O/76T6yls5toHkzKVDFagcX3kdIZLT8OIDP0ag8Q=
+X-Received: by 2002:a05:6000:12cb:b0:28c:459a:d5d with SMTP id
+ l11-20020a05600012cb00b0028c459a0d5dmr1401361wrx.654.1673293374842; Mon, 09
+ Jan 2023 11:42:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221216-cxl-ev-log-v6-8-346583105b30@intel.com>
-References: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
-In-Reply-To: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
-X-Mailer: b4 0.12-dev-cc11a
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673293350; l=4119;
- i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=QvhtlK4SYmJQvhKAlXbD4WLjYDIsGYSH3KPw5DihPkE=;
- b=tSsasDMPRKg+cKKuCNbUwOZUnO0oSWvD7bR6bMtF8KG4Knt0G8aQ4PU+s65rJQshScWIlFU3p6L+
- r3sR4fg0DKv3Xn0osU7LuXzQd8D/Thb9MZItcZbWjBOl/L5BVW8D
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105030434.255603-1-irogers@google.com> <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+ <CAA6y9eV50Xw6tsq7dDJ61_uNM-yKdN8O+VU=6wcUFr7MGUbOaA@mail.gmail.com>
+In-Reply-To: <CAA6y9eV50Xw6tsq7dDJ61_uNM-yKdN8O+VU=6wcUFr7MGUbOaA@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 9 Jan 2023 11:42:42 -0800
+Message-ID: <CAP-5=fXRr_cTYWhO4=HicrddbwVt=DpmEnvAQMY0sTsgcSx4jQ@mail.gmail.com>
+Subject: Re: [PATCH v1] perf script flamegraph: Avoid d3-flame-graph package dependency
+To:     Martin Spier <spiermar@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        996839@bugs.debian.org, Andreas Gerstmayr <agerstmayr@redhat.com>,
+        Brendan Gregg <brendan@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Log overflow is marked by a separate trace message.
+On Fri, Jan 6, 2023 at 7:32 AM Martin Spier <spiermar@gmail.com> wrote:
+>
+> On Thu, Jan 5, 2023 at 1:25 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Wed, Jan 4, 2023 at 7:04 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > Currently flame graph generation requires a d3-flame-graph template to
+> > > be installed. Unfortunately this is hard to come by for things like
+> > > Debian [1]. If the template isn't installed warn and download it from
+> > > jsdelivr CDN. If downloading fails generate a minimal flame graph
+> > > again with the javascript coming from jsdelivr CDN.
+> > >
+> > > [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/scripts/python/flamegraph.py | 63 ++++++++++++++++++-------
+> > >  1 file changed, 45 insertions(+), 18 deletions(-)
+> > >
+> > > diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
+> > > index b6af1dd5f816..808b0e1c9be5 100755
+> > > --- a/tools/perf/scripts/python/flamegraph.py
+> > > +++ b/tools/perf/scripts/python/flamegraph.py
+> > > @@ -25,6 +25,27 @@ import io
+> > >  import argparse
+> > >  import json
+> > >  import subprocess
+> > > +import urllib.request
+> > > +
+> > > +minimal_html = """<head>
+> > > +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
+> >
+> > (hopefully fixed Martin Spier's e-mail address)
+> >
+> > The @4.1.3 comes from the README.md:
+> > https://github.com/spiermar/d3-flame-graph/blob/master/README.md
+> > Does it make sense just to drop it or use @latest ? It'd be nice not
+> > to patch this file for every d3-flame-graph update.
+> >
+> > Thanks,
+> > Ian
+>
+> Yes, that's the right email.
+>
+> Using @latest is an option, but it might be better to just use @4 to
+> avoid breaking changes. Not expecting any major releases in the near
+> future.
+>
+> Thanks,
+> Martin
 
-Simulate a log with lots of messages and flag overflow until space is
-cleared.
+Thanks Martin! I'll leave it using @4 then. Could I trouble you for an
+Acked-by or Reviewed-by for the change? It would be nice to resolve
+the Debian bug.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Thanks,
+Ian
 
----
-Changes from V4:
-	Pick up tag
----
- tools/testing/cxl/test/mem.c | 50 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 49 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 73db722a8879..b2327a8de4a6 100644
---- a/tools/testing/cxl/test/mem.c
-+++ b/tools/testing/cxl/test/mem.c
-@@ -78,6 +78,8 @@ struct mock_event_log {
- 	u16 clear_idx;
- 	u16 cur_idx;
- 	u16 nr_events;
-+	u16 nr_overflow;
-+	u16 overflow_reset;
- 	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
- };
- 
-@@ -116,6 +118,7 @@ static void event_reset_log(struct mock_event_log *log)
- {
- 	log->cur_idx = 0;
- 	log->clear_idx = 0;
-+	log->nr_overflow = log->overflow_reset;
- }
- 
- /* Handle can never be 0 use 1 based indexing for handle */
-@@ -147,8 +150,12 @@ static void mes_add_event(struct mock_event_store *mes,
- 		return;
- 
- 	log = &mes->mock_logs[log_type];
--	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
-+
-+	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
-+		log->nr_overflow++;
-+		log->overflow_reset = log->nr_overflow;
- 		return;
-+	}
- 
- 	log->events[log->nr_events] = event;
- 	log->nr_events++;
-@@ -159,6 +166,7 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
- {
- 	struct cxl_get_event_payload *pl;
- 	struct mock_event_log *log;
-+	u16 nr_overflow;
- 	u8 log_type;
- 	int i;
- 
-@@ -191,6 +199,19 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
- 	if (!event_log_empty(log))
- 		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
- 
-+	if (log->nr_overflow) {
-+		u64 ns;
-+
-+		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
-+		pl->overflow_err_count = cpu_to_le16(nr_overflow);
-+		ns = ktime_get_real_ns();
-+		ns -= 5000000000; /* 5s ago */
-+		pl->first_overflow_timestamp = cpu_to_le64(ns);
-+		ns = ktime_get_real_ns();
-+		ns -= 1000000000; /* 1s ago */
-+		pl->last_overflow_timestamp = cpu_to_le64(ns);
-+	}
-+
- 	return 0;
- }
- 
-@@ -231,6 +252,9 @@ static int mock_clear_event(struct cxl_dev_state *cxlds,
- 		}
- 	}
- 
-+	if (log->nr_overflow)
-+		log->nr_overflow = 0;
-+
- 	/* Clear events */
- 	log->clear_idx += pl->nr_recs;
- 	return 0;
-@@ -353,6 +377,30 @@ static void cxl_mock_add_event_logs(struct mock_event_store *mes)
- 		      (struct cxl_event_record_raw *)&mem_module);
- 	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
- 
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&dram);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&gen_media);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&mem_module);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&dram);
-+	/* Overflow this log */
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
-+
- 	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
- 	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
- 		      (struct cxl_event_record_raw *)&dram);
-
--- 
-2.39.0
+> >
+> > > +</head>
+> > > +<body>
+> > > +  <div id="chart"></div>
+> > > +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
+> > > +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+> > > +  <script type="text/javascript">
+> > > +  const stacks = [/** @flamegraph_json **/];
+> > > +  // Note, options is unused.
+> > > +  const options = [/** @options_json **/];
+> > > +
+> > > +  var chart = flamegraph();
+> > > +  d3.select("#chart")
+> > > +        .datum(stacks[0])
+> > > +        .call(chart);
+> > > +  </script>
+> > > +</body>
+> > > +"""
+> > >
+> > >  # pylint: disable=too-few-public-methods
+> > >  class Node:
+> > > @@ -50,15 +71,18 @@ class FlameGraphCLI:
+> > >          self.args = args
+> > >          self.stack = Node("all", "root")
+> > >
+> > > -        if self.args.format == "html" and \
+> > > -                not os.path.isfile(self.args.template):
+> > > -            print("Flame Graph template {} does not exist. Please install "
+> > > -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
+> > > -                  "package, specify an existing flame graph template "
+> > > -                  "(--template PATH) or another output format "
+> > > -                  "(--format FORMAT).".format(self.args.template),
+> > > -                  file=sys.stderr)
+> > > -            sys.exit(1)
+> > > +        if self.args.format == "html":
+> > > +            if os.path.isfile(self.args.template):
+> > > +                self.template = f"file://{self.args.template}"
+> > > +            else:
+> > > +                print(f"""
+> > > +Warning: Flame Graph template '{self.args.template}'
+> > > +does not exist, a template will be downloaded via http. To avoid this
+> > > +please install a package such as the js-d3-flame-graph or
+> > > +libjs-d3-flame-graph, specify an existing flame graph template
+> > > +(--template PATH) or another output format (--format FORMAT).
+> > > +""", file=sys.stderr)
+> > > +            self.template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
+> > >
+> > >      @staticmethod
+> > >      def get_libtype_from_dso(dso):
+> > > @@ -129,15 +153,18 @@ class FlameGraphCLI:
+> > >              options_json = json.dumps(options)
+> > >
+> > >              try:
+> > > -                with io.open(self.args.template, encoding="utf-8") as template:
+> > > -                    output_str = (
+> > > -                        template.read()
+> > > -                        .replace("/** @options_json **/", options_json)
+> > > -                        .replace("/** @flamegraph_json **/", stacks_json)
+> > > -                    )
+> > > -            except IOError as err:
+> > > -                print("Error reading template file: {}".format(err), file=sys.stderr)
+> > > -                sys.exit(1)
+> > > +                with urllib.request.urlopen(self.template) as template:
+> > > +                    output_str = '\n'.join([
+> > > +                        l.decode('utf-8') for l in template.readlines()
+> > > +                    ])
+> > > +            except Exception as err:
+> > > +                print(f"Error reading template {self.template}: {err}\n"
+> > > +                      "a minimal flame graph will be generated", file=sys.stderr)
+> > > +                output_str = minimal_html
+> > > +
+> > > +            output_str = output_str.replace("/** @options_json **/", options_json)
+> > > +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
+> > > +
+> > >              output_fn = self.args.output or "flamegraph.html"
+> > >          else:
+> > >              output_str = stacks_json
+> > > --
+> > > 2.39.0.314.g84b9a713c41-goog
+> > >
