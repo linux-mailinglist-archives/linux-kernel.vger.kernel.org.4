@@ -2,134 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2E4661F48
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1102661F53
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjAIHf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S236199AbjAIHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjAIHfX (ORCPT
+        with ESMTP id S236470AbjAIHhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:35:23 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A531BA
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:35:20 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id l3so430646vkk.11
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 23:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0suxQdAcQu0p2UKz47c1j8q2hACyOlrOS3RM69ysgcU=;
-        b=Sr6WYLcxn0+IUm77HQaJ5O6/6vU8v2M3Kb0i3kRohqyTL55ykUNdkLJf1RtLIwGRIR
-         wRGGlIYb9QTocNQdDknipspG7Zvv9Rr4QCZDhTdams+Sh2OXM+zEMCQk7G1lsRBMWvYW
-         DlUKs1dhkelMXvZ8AbmvFsOTYgMDdgkXghqTM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0suxQdAcQu0p2UKz47c1j8q2hACyOlrOS3RM69ysgcU=;
-        b=YLCAATlxPzvbOf6GhTyuQ0f+8V3DPb90ZDsF6sOP/MNKenvq5tbFTjVpeeuudLH6fm
-         H+4zCBQqrHYlWeArhM+hAzAKh67yCwllpetCQRDnUhMxUTPaPuKfgGaySgKha3q3z+Eu
-         +uOLF00voXI7YNxue319ctHtwtMlFB5cbdk8p2Q2Ifq1jugy2wW8PgB1L9w3Y6RMBcV+
-         ob77Yqdr0lvZXwCOyAETfMpj7zsJD6wdiLKVXRiXQs87r9Ba78TJBvxkYCsAXgTMYiKx
-         jVC8FUydJkS2cReSkge8RJKSoglZZsgP/ftvG5atG8+ytAheJK1mv38f7DKFJb0XB5h/
-         q9HA==
-X-Gm-Message-State: AFqh2kpUEcLC8KDsQEu+0Ecy3K3NDSA0bs6LgCjsMWStLYJw6FsjtT/B
-        GlyQ/PwbH23D/QP3rJzqe1NR+QoigWya3coqO2U4NQ==
-X-Google-Smtp-Source: AMrXdXup+yxUrF9QQjUzNYfkBT9Vi3LgwtinciNz13DOlCZHzAo9Y/3pKDZ7DrtYumSWVbHr+kwY8Ca83HtT58fSH+0=
-X-Received: by 2002:a1f:940a:0:b0:3bd:e439:84e4 with SMTP id
- w10-20020a1f940a000000b003bde43984e4mr7518397vkd.11.1673249719507; Sun, 08
- Jan 2023 23:35:19 -0800 (PST)
+        Mon, 9 Jan 2023 02:37:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC41ACE00
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673249778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3pRRcbAJr9FBmhMCHXLl4cGEBukXZQYCmqCCYZCpshc=;
+        b=a4szKYkHnnRyFvQWiHdIksWAaEci92n4iRZEZNXi3CwHPLnzTC7lVw+nW2z3Jjnx3hJc07
+        fFCo+3tW2q7o3gjPTXZCnqZ3uCVCaldena0MN7vhjSfZ2u7vA0r+fB/RgULgE7XyNzmRFN
+        ezZeqJyf2Vl8ozvthaqzsdIqXb3AZw0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-6SgBgRqnOwOUnSLWDuvUaQ-1; Mon, 09 Jan 2023 02:36:15 -0500
+X-MC-Unique: 6SgBgRqnOwOUnSLWDuvUaQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1DF7101A521;
+        Mon,  9 Jan 2023 07:36:14 +0000 (UTC)
+Received: from localhost (ovpn-12-124.pek2.redhat.com [10.72.12.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96EB3492B00;
+        Mon,  9 Jan 2023 07:36:12 +0000 (UTC)
+Date:   Mon, 9 Jan 2023 15:36:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v16 7/7] x86/crash: add x86 crash hotplug support
+Message-ID: <Y7vD6bm9xy9uyvRD@fedora>
+References: <20230105151709.1845-1-eric.devolder@oracle.com>
+ <20230105151709.1845-8-eric.devolder@oracle.com>
 MIME-Version: 1.0
-References: <20230106045537.1243887-1-wenst@chromium.org> <Y7flCydDtLVwsXIJ@google.com>
- <CAGXv+5Gnc6tCjO95VjBJ4F5p5bnS+M96at3ErpSX==3qPwNUsg@mail.gmail.com>
- <Y7uqJ+DPyqFxaQUV@google.com> <CAGXv+5GNUyVpe5P7QazHB6K37C_0dNLwoP9gWKhgAbfXWRxJwA@mail.gmail.com>
- <Y7vCeNzJMn0nOrla@google.com>
-In-Reply-To: <Y7vCeNzJMn0nOrla@google.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 9 Jan 2023 15:35:08 +0800
-Message-ID: <CAGXv+5FELCKmmU2tiETGagOk+83x8OkYAxFTTxt+9tRdsujtmA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chromeos: cros_ec: Use per-device lockdep key
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105151709.1845-8-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 3:30 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> On Mon, Jan 09, 2023 at 02:19:38PM +0800, Chen-Yu Tsai wrote:
-> > On Mon, Jan 9, 2023 at 1:46 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > >
-> > > On Sat, Jan 07, 2023 at 01:43:57PM +0800, Chen-Yu Tsai wrote:
-> > > > On Fri, Jan 6, 2023 at 5:08 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > > > >
-> > > > > On Fri, Jan 06, 2023 at 12:55:37PM +0800, Chen-Yu Tsai wrote:
-> > > > > > Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
-> > > > > > the following lock sequences:
-> > > > > >
-> > > > > > 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
-> > > > > > 2. lock(&ec_dev->lock); lock(prepare_lock);
-> > > > > >
-> > > > > > The actual dependency chains are much longer. The shortened version
-> > > > > > looks somewhat like:
-> > > > > >
-> > > > > > 1. cros-ec-rpmsg on mtk-scp
-> > > > > >    ec_dev->lock -> prepare_lock
-> > > > > > 2. In rt5682_i2c_probe() on native I2C bus:
-> > > > > >    prepare_lock -> regmap->lock -> (possibly) i2c_adapter->bus_lock
-> > > > > > 3. In rt5682_i2c_probe() on native I2C bus:
-> > > > > >    regmap->lock -> i2c_adapter->bus_lock
-> > > > > > 4. In sbs_probe() on cros-ec-i2c (passthrough) I2C bus on cros-ec
-> > > > > >    i2c_adapter->bus_lock -> ec_dev->lock
-> > > > > >
-> > > > > > While lockdep is correct that the shared lockdep classes have a circular
-> > > > > > dependency, it is bogus because
-> > > > > >
-> > > > > >   a) 2+3 happen on a native I2C bus
-> > > > > >   b) 4 happens on the actual EC on ChromeOS devices
-> > > > > >   c) 1 happens on the SCP coprocessor on MediaTek Chromebooks that just
-> > > > > >      happen to expose a cros-ec interface, but do not have a passthrough
-> > > > > >      I2C bus
-> > > > > >
-> > > > > > In short, the "dependencies" are actually on different devices.
-> > > > >
-> > > > > Path of 4 looks weird to me.
-> > > > >
-> > > > > Could you point out where sbs_probe() gets to acquire ec_dev->lock?
-> > > >
-> > > > sbs_probe() calls sbs_get_battery_presence_and_health(), which
-> > > >
-> > > >   -> does an I2C transfer. This SBS instance is connected on the I2C bus
-> > > >      on the EC, so the I2C transfer
-> > > >
-> > > >      -> acquires i2c_adapter->bus_lock, and
-> > >
-> > > I see.
-> > >
-> > > Another question: the i2c_adapter here should be different from the native
-> > > I2C bus in 2 and 3.  Did they really form the circular dependencies?
-> >
-> > That's why it's a false positive. lockdep normally doesn't track individual
-> > instances, only classes of locks. The class is declared as part of the
-> > mutex_init() macro.
->
-> Is the following understanding correct:
-> It has 2 ways to break the "fake" circular dependencies: separate lockdep key
-> for i2c_adapter vs. ec_dev.  The patch adopts the latter one because it has
-> limited impact for other I2C-related drivers.
+On 01/05/23 at 10:17am, Eric DeVolder wrote:
+......
+> @@ -394,10 +409,37 @@ int crash_load_segments(struct kimage *image)
+>  	if (ret)
+>  		return ret;
+>  
+> -	image->elf_headers = kbuf.buffer;
+> -	image->elf_headers_sz = kbuf.bufsz;
+> +	image->elf_headers	= kbuf.buffer;
+> +	image->elf_headers_sz	= kbuf.bufsz;
+> +	kbuf.memsz		= kbuf.bufsz;
+> +
+> +	if (IS_ENABLED(CONFIG_CRASH_HOTPLUG)) {
+> +		/*
+> +		 * Ensure the elfcorehdr segment large enough for hotplug changes.
+> +		 * Start with VMCOREINFO and kernel_map.
+> +		 */
+> +		unsigned long pnum = 2;
+> +
+> +		if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
+> +			pnum += CONFIG_NR_CPUS_DEFAULT;
+> +
+> +		if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
+> +			pnum += CRASH_MAX_MEMORY_RANGES;
 
-That's correct.
+Logic of pnum calculating is a little confusing to me. If I only enable
+one of CONFIG_HOTPLUG_CPU and CONFIG_MEMORY_HOTPLUG, is it OK? Say I
+only enable CONFIG_HOTPLUG_CPU and CONFIG_SMP, on x86_64,
+CONFIG_NR_CPUS_DEFAULT will be 64. pnum will be 64, is it OK. Am I miss
+anything?
+
+> +
+> +		if (pnum < (unsigned long)PN_XNUM) {
+> +			kbuf.memsz = pnum * sizeof(Elf64_Phdr);
+> +			kbuf.memsz += sizeof(Elf64_Ehdr);
+> +
+> +			image->elfcorehdr_index = image->nr_segments;
+> +			image->elfcorehdr_index_valid = true;
+> +
+> +			/* Mark as usable to crash kernel, else crash kernel fails on boot */
+> +			image->elf_headers_sz = kbuf.memsz;
+> +		} else {
+> +			pr_err("number of Phdrs %lu exceeds max\n", pnum);
+> +		}
+> +	}
+>  
+> -	kbuf.memsz = kbuf.bufsz;
+>  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+>  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+>  	ret = kexec_add_buffer(&kbuf);
+> @@ -412,3 +454,67 @@ int crash_load_segments(struct kimage *image)
+>  	return ret;
+>  }
+>  #endif /* CONFIG_KEXEC_FILE */
+
