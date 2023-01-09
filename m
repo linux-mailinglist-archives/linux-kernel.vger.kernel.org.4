@@ -2,158 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DEE66306A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A7366306D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237505AbjAITcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S237417AbjAITc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbjAITcN (ORCPT
+        with ESMTP id S237651AbjAITce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:32:13 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED01164B3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:32:10 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k19so6946170pfg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:32:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MS9c8pSDmVucTZdPdHhH3mdXKbPND6bL5OXnhsaz428=;
-        b=sOIFmmww5t87chNqg4RrjKvRSK55mbJUfkLlDwVdXFzdUVNQpuL8j+67d+DkgdzGV/
-         cY+1zKjyGAv7inACtQNgX5uUKu4ApW+iH+DVN7GkXfrRLLF2Mvo9WifnFmurzCTgdAvo
-         yO0VsoKDonS/b5FpljJp4kIUzSG1uLseP8M04BYadiPR3LnDKhEB8JDIFZ6XY2cYQ9Ip
-         q/lAxkFfWGCi4n140C5isaU+LhXs1upwAI92uUGwcJ28pRBl0VFZtoKmw+InBC55cTsl
-         h4qHQp+F6duxw8RJ/SXhE+ei/WHcJpuK0DK+gQrpAmJlxVZpoBxyR4o9mafVKF6RyDWB
-         AG3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MS9c8pSDmVucTZdPdHhH3mdXKbPND6bL5OXnhsaz428=;
-        b=g9Y50uwC0HKrwtL69dnyU27VjEsnTl6mj+Ck1N+3g+ZL2V7Z04T66hPgJtBMg1Q1Fz
-         NISNrj0ALzxqQ9y+Qm0ZdYPemjqgSGey2K9fje5ZoImYWDGlDYLNHQ0yJk1cEcvMhC7x
-         L0+gAVHkRfgRihLGHJZYNdfyAaa419VWS3Lk5HbKVdbxz7gByfqPDDJlqCvO/u/mqgCB
-         iMdRoVzFV2Yn3i1CSr1T3u/Nfg2FwT43kV7TpAFf3CVVfZo5c+qrvhVmzIk0pR5tUJAP
-         KYj/77ZjHRgm89l/yxSPfaLSm2t3bUJgEBCr/qAD60dLffMes9ml3Obunseos0Fmg8Gx
-         PHbQ==
-X-Gm-Message-State: AFqh2kovYY+ExgVko4/WfkVYcIL4T/DLPO9pMgoxqpLxGcL+z8o/wcxM
-        NxmGmOTjhdi2bZ8qpOjbiUDR7A==
-X-Google-Smtp-Source: AMrXdXsOvwNIYYmxRZ1A4P2qL2M11DO9ETy3xVnstT6ROBE9IIpgFgsb6iMlmsjwANei+MKsQQb7Fw==
-X-Received: by 2002:aa7:973c:0:b0:574:8995:c0d0 with SMTP id k28-20020aa7973c000000b005748995c0d0mr742042pfg.1.1673292729425;
-        Mon, 09 Jan 2023 11:32:09 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 194-20020a6214cb000000b005809d382016sm6429041pfu.74.2023.01.09.11.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 11:32:09 -0800 (PST)
-Date:   Mon, 9 Jan 2023 19:32:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y7xrtf9FCuYRYm1q@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y7azFdnnGAdGPqmv@kernel.org>
- <20230106094000.GA2297836@chaop.bj.intel.com>
+        Mon, 9 Jan 2023 14:32:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D977AC2;
+        Mon,  9 Jan 2023 11:32:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ED1CDCE117E;
+        Mon,  9 Jan 2023 19:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363C7C433D2;
+        Mon,  9 Jan 2023 19:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673292747;
+        bh=fkuIqfQJLQz83NXft5ONGeG/0chs3pGmSc+OK0oPY7Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=jEi1huJZ7Prrm+e+05I+B7rlJeur0oRrjC/OkOSF/1i3J66DNuTN49XCf64a52+EX
+         Y3mHiHscgfiktQXDUGmO7hjwJSSLFCD1T0BXfXUGZUQCl51jijFJ5tAOGsp7J3xhqk
+         yHJ74SLVawOvVfYTq+jh0sJO5VW47ksL5GKj/QE4h0CfbrtRy7IbYAnffYu0Zmufj0
+         cK5m1goFTKiJK9b5qOUk2Rz6zk9oXNMIr5tHrFhgNK46agwoDTSBahoRhNLVqptJZB
+         bzy4ezVURnn/DubZZLqi6YkfpwMdDMKNBW6KXNT0A7OhJHCnv38bYfPUNEpO3NTirB
+         eFasYeeleKB7A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CDB875C05C8; Mon,  9 Jan 2023 11:32:26 -0800 (PST)
+Date:   Mon, 9 Jan 2023 11:32:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Zqiang <qiang1.zhang@intel.com>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
+Message-ID: <20230109193226.GX4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <0BF2065B-1E02-498C-B999-EB52F005B62E@joelfernandes.org>
+ <D445A93C-8315-4407-A8E4-C377BF63058A@joelfernandes.org>
+ <Y7tNPF4x+HYJUwjK@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230106094000.GA2297836@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y7tNPF4x+HYJUwjK@lothringen>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023, Chao Peng wrote:
-> On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
-> > On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> > > To make future maintenance easy, internally use a binary compatible
-> > > alias struct kvm_user_mem_region to handle both the normal and the
-> > > '_ext' variants.
+On Mon, Jan 09, 2023 at 12:09:48AM +0100, Frederic Weisbecker wrote:
+> On Sat, Jan 07, 2023 at 09:55:22PM -0500, Joel Fernandes wrote:
 > > 
-> > Feels bit hacky IMHO, and more like a completely new feature than
-> > an extension.
 > > 
-> > Why not just add a new ioctl? The commit message does not address
-> > the most essential design here.
+> > > On Jan 7, 2023, at 9:48 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > 
+> > > ﻿
+> > >>> On Jan 7, 2023, at 5:11 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
+> > >>> 
+> > >>> ﻿On Fri, Jan 06, 2023 at 07:01:28PM -0500, Joel Fernandes wrote:
+> > >>> (lost html content)
+> > > 
+> > > My problem is the iPhone wises up when I put a web link in an email. I want to look into smtp relays but then if I spent time on fixing that, I might not get time to learn from emails like these... 
+> > > 
+> > >> I can't find a place where the exp grace period sends an IPI to
+> > >> CPUs slow to report a QS. But anyway you really need the tick to poll
+> > >> periodically on the CPU to chase a quiescent state.
+> > > 
+> > > Ok.
+> > > 
+> > >> Now arguably it's probably only useful when CONFIG_PREEMPT_COUNT=y
+> > >> and rcu_exp_handler() has interrupted a preempt-disabled or bh-disabled
+> > >> section. Although rcu_exp_handler() sets TIF_RESCHED, which is handled
+> > >> by preempt_enable() and local_bh_enable() when CONFIG_PREEMPT=y.
+> > >> So probably it's only useful when CONFIG_PREEMPT_COUNT=y and CONFIG_PREEMPT=n
+> > >> (and there is also PREEMPT_DYNAMIC to consider).
+> > > 
+> > > Makes sense. I think I was missing this use case and was going by the general design of exp grace periods.  I was incorrectly assuming the IPIs were being sent repeatedly for hold out CPUs, which is not the case I think. But that would another way to fix it?
+> > > 
+> > > But yeah I get your point, the first set of IPIs missed it, so we need the rescue-tick for long non-rcu_read_lock() implicit critical sections.. 
+> > > 
+> > >> If CONFIG_PREEMPT_COUNT=n, the tick can only report idle and user
+> > >> as QS, but those are already reported explicitly on ct_kernel_exit() ->
+> > >> rcu_preempt_deferred_qs().
+> > > 
+> > > Oh hmm, because that function is a NOOP for PREEMPT_COUNT=y and PREEMPT=n and will not report the deferred QS?  Maybe it should then. However I think the tick is still useful if after the preempt disabled section, will still did not exit the kernel.
+> > 
+> > I think meant I here, an atomic section (like bh or Irq disabled). There is no such thing as disabling preemption for CONFIG_PREEMPT=n. Or maybe I am confused again.  This RCU thing…
 > 
-> Yes, people can always choose to add a new ioctl for this kind of change
-> and the balance point here is we want to also avoid 'too many ioctls' if
-> the functionalities are similar.  The '_ext' variant reuses all the
-> existing fields in the 'normal' variant and most importantly KVM
-> internally can reuse most of the code. I certainly can add some words in
-> the commit message to explain this design choice.
+> Right, so when CONFIG_PREEMPT_COUNT=n, there is no way for a tick to tell if the
+> the interrupted code is safely considered as a QS. That's because
+> preempt_disable() <-> preempt_enable() are no-ops so the whole kernel is
+> assumed non-preemptible, and therefore the whole kernel is a READ side critical
+> section, except for the explicit points reporting a QS.
+> 
+> The only exception is when the tick interrupts idle (or user with
+> nohz_full). But we already have an exp QS reported on idle (and user with
+> nohz_full) entry through ct_kernel_exit(), and that happens on all RCU_TREE
+> configs (PREEMPT or not). Therefore the tick doesn't appear to be helpful at
+> all on a nohz_full CPU with CONFIG_PREEMPT_COUNT=n.
+> 
+> I suggest we don't bother optimizing that case though...
+> 
+> To summarize:
+> 
+> 1) nohz_full && !CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
+>   Tick isn't helpful. It can only report idle/user QS, but that is
+>   already reported explicitly.
+> 
+> 2) nohz_full && CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
+>   Tick is very helpful because it can tell if the kernel is in
+>   a QS state.
+> 
+> 3) nohz_full && CONFIG_PREEMPT_RCU:
+>    Tick doesn't appear to be helpful because:
+>        - If the rcu_exp_handler() fires in an rcu_read_lock'ed section, then the
+>          exp QS is reported on rcu_read_unlock()
+>        - If the rcu_exp_handler() fires in a preempt/bh disabled section,
+>          TIF_RESCHED is forced which is handled on preempt/bh re-enablement,
+> 	 reporting a QS.
+>    
+>   
+> The case 2) is a niche, only useful for debugging. But anyway I'm not sure it's
+> worth changing/optimizing the current state. Might be worth add a comment
+> though.
 
-After seeing the userspace side of this, I agree with Jarkko; overloading
-KVM_SET_USER_MEMORY_REGION is a hack.  E.g. the size validation ends up being
-bogus, and userspace ends up abusing unions or implementing kvm_user_mem_region
-itself.
+Thank you both for the analysis!  I would welcome a comment.
 
-It feels absolutely ridiculous, but I think the best option is to do:
+One could argue that we should increase the delay before turning the
+tick on, but my experience is that expedited grace periods almost always
+complete in less than a jiffy, so there would almost never be any benefit
+in doing so.  But if some large NO_HZ_FULL system with long RCU readers
+starts having trouble with too-frequent tick enablement, that is one
+possible fix.
 
-#define KVM_SET_USER_MEMORY_REGION2 _IOW(KVMIO, 0x49, \
-					 struct kvm_userspace_memory_region2)
-
-/* for KVM_SET_USER_MEMORY_REGION2 */
-struct kvm_user_mem_region2 {
-	__u32 slot;
-	__u32 flags;
-	__u64 guest_phys_addr;
-	__u64 memory_size;
-	__u64 userspace_addr;
-	__u64 restricted_offset;
-	__u32 restricted_fd;
-	__u32 pad1;
-	__u64 pad2[14];
-}
-
-And it's consistent with other KVM ioctls(), e.g. KVM_SET_CPUID2.
-
-Regarding the userspace side of things, please include Vishal's selftests in v11,
-it's impossible to properly review the uAPI changes without seeing the userspace
-side of things.  I'm in the process of reviewing Vishal's v2[*], I'll try to
-massage it into a set of patches that you can incorporate into your series.
-
-[*] https://lore.kernel.org/all/20221205232341.4131240-1-vannapurve@google.com
+							Thanx, Paul
