@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAAD662CB6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E83D662CB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbjAIR2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S237559AbjAIR2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbjAIR1a (ORCPT
+        with ESMTP id S237277AbjAIR13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:27:30 -0500
+        Mon, 9 Jan 2023 12:27:29 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A169DFDC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A31A13DD0;
         Mon,  9 Jan 2023 09:27:28 -0800 (PST)
 Received: from jupiter.universe (dyndsl-037-138-188-006.ewe-ip-backbone.de [37.138.188.6])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC5266602D6A;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C29DB6602D6B;
         Mon,  9 Jan 2023 17:27:26 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673285246;
-        bh=a+siEWTrJAt1hnOUNn1EZg3w7XVtF2oWl2llWNtJ73w=;
+        s=mail; t=1673285247;
+        bh=5Zn8aDYnrSMF2mwEGl5Y8i472oI3FD8C2W/ATAfeeeA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DKnglrDL9x3wweBjre4NlPr4SU5lVhU8eJuW7R5H7RQv8IY7tCvQMol5/8g+gJNgF
-         7CGGOnx23SplLF10lue3RJ4Q+apGhPCy6SbSCpzzSLX6v9/vOb9Qzp2Dv+140PKxKi
-         pj0X8lHEsMm1C1S+q7m0PyQsO/bTVRU1l4i3A0WuGj7OqWVC6Lvyt63RYla9j106de
-         FYulLYdS5NmvNLlWzK1WLqzr+x41UpLI0EiM5k7ExTA7kxHKDL4+9PuRBkJ6R15nOE
-         hP50fmCH3d6kjk5M4XzfZ8eFzvTwG66qtF2AfT6rL9WPd5tdWVbZM6N2JJqKckg99z
-         EKDdx9PBED3jQ==
+        b=GpS9tEAuamtrw/R6rprOUl3aM8PEHpgrLagzhzaAHLF2Bo2NvIDO3MGwUiGYFa5L4
+         3XwjRlQ034V2E9YPr48PQHlIsOTp68pUJU/he+ZrE8x7fpYX4cRMD5JKhqh1OgAZ45
+         1h48gL19d9mXz7/0ofcZ4aloqGrVxokt6CudkNDBMxBnzmgcXsnovM9/YHN0JnZiVZ
+         4XOjoWFEpPFwXZtACxEPCXvQheuw3OmZkkPa9g11TuaZBdsVg8svWfKGksNpCFQhek
+         V5bxAa3DmKtLS3FQZzU3HggNv1O6W42jlc4MCW1FzlKFuO3ol4Lvp9ZP4wO2WP6uLe
+         2HTBsyR14lbUQ==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 5A70348011B; Mon,  9 Jan 2023 18:27:24 +0100 (CET)
+        id 5C8F348011C; Mon,  9 Jan 2023 18:27:24 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -49,9 +49,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv5 03/10] mfd: rk808: use dev_err_probe
-Date:   Mon,  9 Jan 2023 18:27:16 +0100
-Message-Id: <20230109172723.60304-4-sebastian.reichel@collabora.com>
+Subject: [PATCHv5 04/10] mfd: rk808: replace 'struct i2c_client' with 'struct device'
+Date:   Mon,  9 Jan 2023 18:27:17 +0100
+Message-Id: <20230109172723.60304-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230109172723.60304-1-sebastian.reichel@collabora.com>
 References: <20230109172723.60304-1-sebastian.reichel@collabora.com>
@@ -66,103 +66,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dev_err_probe instead of dev_err in probe function,
-which simplifies code a little bit and prints the error
-code.
-
-Also drop possibly incorrect printing of chip id registers
-while touching the error message.
+Put 'struct device' pointer into the MFD platform_data instead
+of the 'struct i2c_client' pointer. This simplifies the code
+and prepares the MFD for SPI support.
 
 Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/mfd/rk808.c | 48 +++++++++++++++------------------------------
- 1 file changed, 16 insertions(+), 32 deletions(-)
+ drivers/mfd/rk808.c       | 6 +++---
+ include/linux/mfd/rk808.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
-index 4f5dca76bb54..01d8303fccbe 100644
+index 01d8303fccbe..695a3fe6b9e0 100644
 --- a/drivers/mfd/rk808.c
 +++ b/drivers/mfd/rk808.c
-@@ -669,18 +669,12 @@ static int rk808_probe(struct i2c_client *client)
+@@ -576,7 +576,7 @@ static int rk808_power_off(struct sys_off_data *data)
+ 	}
+ 	ret = regmap_update_bits(rk808->regmap, reg, bit, bit);
+ 	if (ret)
+-		dev_err(&rk808->i2c->dev, "Failed to shutdown device!\n");
++		dev_err(rk808->dev, "Failed to shutdown device!\n");
  
- 	/* Read chip variant */
- 	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
--	if (msb < 0) {
--		dev_err(&client->dev, "failed to read the chip id at 0x%x\n",
--			RK808_ID_MSB);
--		return msb;
--	}
-+	if (msb < 0)
-+		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
+ 	return NOTIFY_DONE;
+ }
+@@ -599,7 +599,7 @@ static int rk808_restart(struct sys_off_data *data)
+ 	}
+ 	ret = regmap_update_bits(rk808->regmap, reg, bit, bit);
+ 	if (ret)
+-		dev_err(&rk808->i2c->dev, "Failed to restart device!\n");
++		dev_err(rk808->dev, "Failed to restart device!\n");
  
- 	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
--	if (lsb < 0) {
--		dev_err(&client->dev, "failed to read the chip id at 0x%x\n",
--			RK808_ID_LSB);
--		return lsb;
--	}
-+	if (lsb < 0)
-+		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
+ 	return NOTIFY_DONE;
+ }
+@@ -719,7 +719,7 @@ static int rk808_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
  
- 	rk808->variant = ((msb << 8) | lsb) & RK8XX_ID_MSK;
- 	dev_info(&client->dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
-@@ -729,44 +723,34 @@ static int rk808_probe(struct i2c_client *client)
+-	rk808->i2c = client;
++	rk808->dev = &client->dev;
  	i2c_set_clientdata(client, rk808);
  
  	rk808->regmap = devm_regmap_init_i2c(client, rk808->regmap_cfg);
--	if (IS_ERR(rk808->regmap)) {
--		dev_err(&client->dev, "regmap initialization failed\n");
--		return PTR_ERR(rk808->regmap);
--	}
-+	if (IS_ERR(rk808->regmap))
-+		return dev_err_probe(&client->dev, PTR_ERR(rk808->regmap),
-+				     "regmap initialization failed\n");
+diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
+index 9af1f3105f80..a89ddd9ba68e 100644
+--- a/include/linux/mfd/rk808.h
++++ b/include/linux/mfd/rk808.h
+@@ -787,7 +787,7 @@ enum {
+ };
  
--	if (!client->irq) {
--		dev_err(&client->dev, "No interrupt support, no core IRQ\n");
--		return -EINVAL;
--	}
-+	if (!client->irq)
-+		return dev_err_probe(&client->dev, -EINVAL, "No interrupt support, no core IRQ\n");
- 
- 	ret = devm_regmap_add_irq_chip(&client->dev, rk808->regmap, client->irq,
- 				       IRQF_ONESHOT, -1,
- 				       rk808->regmap_irq_chip, &rk808->irq_data);
--	if (ret) {
--		dev_err(&client->dev, "Failed to add irq_chip %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "Failed to add irq_chip\n");
- 
- 	for (i = 0; i < nr_pre_init_regs; i++) {
- 		ret = regmap_update_bits(rk808->regmap,
- 					pre_init_reg[i].addr,
- 					pre_init_reg[i].mask,
- 					pre_init_reg[i].value);
--		if (ret) {
--			dev_err(&client->dev,
--				"0x%x write err\n",
--				pre_init_reg[i].addr);
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret, "0x%x write err\n",
-+					     pre_init_reg[i].addr);
- 	}
- 
- 	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
- 			      cells, nr_cells, NULL, 0,
- 			      regmap_irq_get_domain(rk808->irq_data));
--	if (ret) {
--		dev_err(&client->dev, "failed to add MFD devices %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "failed to add MFD devices\n");
- 
- 	if (of_property_read_bool(np, "rockchip,system-power-controller")) {
- 		ret = devm_register_sys_off_handler(&client->dev,
+ struct rk808 {
+-	struct i2c_client		*i2c;
++	struct device			*dev;
+ 	struct regmap_irq_chip_data	*irq_data;
+ 	struct regmap			*regmap;
+ 	long				variant;
 -- 
 2.39.0
 
