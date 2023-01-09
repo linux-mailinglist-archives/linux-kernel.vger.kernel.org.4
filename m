@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5431E662717
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8AB66271D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbjAINbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S234776AbjAINcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbjAINbg (ORCPT
+        with ESMTP id S236892AbjAINcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:31:36 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D680111A30
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:31:35 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 87D8F33CF4;
-        Mon,  9 Jan 2023 13:31:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673271094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q11OBrOHITPIlsyO/Dq+3gpMzEg2KWi7ZEM9FefLb9Q=;
-        b=i037iJL/djQ5mmpq0Q9xQf6PRPaCBIYb7zVuc2oztZXnOV2RmbV7DOkwId9U2R7I3PGuGC
-        OvfaLRiAtDJp3WpTgLbu+Q8wguH0DNKN0p/Xv5r/EB1ZDlQOqaMjOEwd4Fqxtte0LtlcyS
-        p7S5xx3FBlx6+HMHSvLz/VFY5ZnVT+o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673271094;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q11OBrOHITPIlsyO/Dq+3gpMzEg2KWi7ZEM9FefLb9Q=;
-        b=5yuFLTXK7G4DDQECNyPI7XU+ziLqdoDRSOKOLUh9nA1YsZFWaQhC2wg9ZT8RFCt+yzkuWs
-        IfFe8IgfH47XxaCw==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 13E082C141;
-        Mon,  9 Jan 2023 13:31:34 +0000 (UTC)
-Date:   Mon, 9 Jan 2023 13:31:31 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: invert logic for early page
- initialisation checks
-Message-ID: <20230109133131.ayebr4g2jaw3vpfy@suse.de>
-References: <20230104191805.2535864-1-rppt@kernel.org>
+        Mon, 9 Jan 2023 08:32:10 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0D71EC67;
+        Mon,  9 Jan 2023 05:31:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=vePePHbs+qQUDjlfX65V+DdCZ2Hrj2lqp1xp3j40q2c=; b=p/J6DgzeDlZ+UvxoBM+Xyje0QR
+        ruNd2wDzrr6wjnKI7PzOFyeOc/gUyXVrZkKI6zz9/Gd44skS13s3+CGGBqejKSAz7nMEyU4mD64ER
+        cB2TewXF+H9Y89e+XqLFwWq1vHbbeDBqKg4zquGuwd2UEEbx6wu1wc5QQM+dJ9yhmBAQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pEsFX-001ZK6-JZ; Mon, 09 Jan 2023 14:31:39 +0100
+Date:   Mon, 9 Jan 2023 14:31:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org
+Subject: Re: [PATCH v2 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y7wXO7x7Wh7+Hw/Z@lunn.ch>
+References: <cover.1673030528.git.piergiorgio.beruto@gmail.com>
+ <b15b3867233c7adf33870460ea442ff9a4f6ad41.1673030528.git.piergiorgio.beruto@gmail.com>
+ <Y7m4v8nLEc4bVBDf@lunn.ch>
+ <Y7tYT8lkgCugZ7kP@gvm01>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104191805.2535864-1-rppt@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7tYT8lkgCugZ7kP@gvm01>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:18:05PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Mon, Jan 09, 2023 at 12:57:03AM +0100, Piergiorgio Beruto wrote:
+> On Sat, Jan 07, 2023 at 07:23:59PM +0100, Andrew Lunn wrote:
+> > > +++ b/drivers/net/phy/Kconfig
+> > > @@ -264,6 +264,13 @@ config NATIONAL_PHY
+> > >  	help
+> > >  	  Currently supports the DP83865 PHY.
+> > >  
+> > > +config NCN26000_PHY
+> > > +	tristate "onsemi 10BASE-T1S Ethernet PHY"
+> > > +	help
+> > > +	  Adds support for the onsemi 10BASE-T1S Ethernet PHY.
+> > > +	  Currently supports the NCN26000 10BASE-T1S Industrial PHY
+> > > +	  with MII interface.
+> > > +
+> > >  config NXP_C45_TJA11XX_PHY
+> > >  	tristate "NXP C45 TJA11XX PHYs"
+> > 
+> > These are actually sorted by the tristate string, which is what you
+> > see when you use
+> > 
+> > make menuconfig
+> > 
+> > So 'onsemi' should be after 'NXP TJA11xx PHYs support'. Also, all the
+> > other entries capitalise the first word.
+> As for the order I fixed it. Thanks for noticing.
 > 
-> Rename early_page_uninitialised() to early_page_initialised() and invert
-> its logic to make the code more readable.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Regarding the capitalization, I have a little problem here. 'onsemi' is a
+> brand and according to company rules it MUST be written all in
+> lowercase. I know we're not obliged to follow any company directive here, but 
+> as wierd as it might sound, I'd rather keep it lowercase just not to get 
+> comments later on trying to fix this, if you agree...
 
-Acked-by: Mel Gorman <mgorman@suse.de>
+Linux tends to ignore Marketing, because Marketing tends to change its
+mind every 6 months. Also, Linux ignores companies being bought and
+sold, changing their name. So this PHY will forever be called whatever
+name you give it here. The vitesse PHY driver is an example of
+this. They got bought by Microsemi, and then Microchip bought
+Microsemi. The PHY driver is still called vitesse.c.
 
--- 
-Mel Gorman
-SUSE Labs
+How about using the legal name, 'ON Semiconductor
+Corporation'
+
+	Andrew
