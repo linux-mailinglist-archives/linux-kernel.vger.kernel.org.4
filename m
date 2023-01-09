@@ -2,172 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30BA662018
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2996620B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjAIIeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S233331AbjAIIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjAIIee (ORCPT
+        with ESMTP id S237020AbjAIIyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:34:34 -0500
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC9DF5;
-        Mon,  9 Jan 2023 00:34:32 -0800 (PST)
-Received: by mail-wm1-f41.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso5977697wms.5;
-        Mon, 09 Jan 2023 00:34:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ai89XU1vTr8jmWYzTC3dz44+t98FTx9wn3aEaRiaIuk=;
-        b=Hq3eULkwKSpgiEsZEcTMwXIhs74jCq2uXa/DPWeW8EbJdZpIV9PyYAYxkCPOa/dYuG
-         t9bPptkdVaLfEPsQH453Kpi4kSy6CbhGg1Bm4l+2ScSnTQGAjWwmaoEBXOTOO8Tqy7Oc
-         4WKriAby1jqh/E+Qxe47w7i9quBfVg2dJRsVsVWrYxQJMsszYbjWwHAPMzGf58MxLnGQ
-         OhqwOww7doQH3ar1OzitZD9WoAZihQiNUBgR0xUJxWgmGcpnZRYpUKTsY6uLYe4iK+7h
-         tAj72nI+oPv4R05ONlHFHYNXNLZ0OZUDVKEdVGK97dPsuGKrURfifEjS6ibgPiTj8bo9
-         ww2Q==
-X-Gm-Message-State: AFqh2koychD3BjTnfm0fM9rstqns47vwO/zTsqoI4LaEJhFL8nV2t6ZV
-        a7EVU/sjNdsRnFGaZu42EZo=
-X-Google-Smtp-Source: AMrXdXtjlHdY/ENv0HKrQhiUW86lNsmrAe9U9q9o1ZJzBphFcyOOuX1i4xq4T+O9/Z+J1SnbwUA6Kw==
-X-Received: by 2002:a05:600c:1da3:b0:3d0:965f:63ed with SMTP id p35-20020a05600c1da300b003d0965f63edmr46049641wms.23.1673253271256;
-        Mon, 09 Jan 2023 00:34:31 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003a84375d0d1sm16068925wmc.44.2023.01.09.00.34.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 00:34:30 -0800 (PST)
-Message-ID: <ad6efc07-1706-a8e2-1478-45124838a043@kernel.org>
-Date:   Mon, 9 Jan 2023 09:34:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net-next] Remove DECnet support from kernel
-Content-Language: en-US
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kees Cook <keescook@chromium.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Mon, 9 Jan 2023 03:54:01 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD12DF0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:45:57 -0800 (PST)
+X-UUID: 10559a3b014e4c4dafccc2fcf81277e1-20230109
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=BAp+xDBGU54PPm/5VMviuQnl/KdEsY0dtwop6ZaDpbE=;
+        b=Lh6Kv2eOAHNBuX+fabw0f7BoGh6FE2jcq2Vq+/TjNFfhU3uaXKcfsW08fR7rQxpsYJvEGFPniqHjHnqsyRCgnDJnQfPf6fKc1iiSSBDy1FxG6iYedTeNbjfXuhHGScAiZASD9auB7+9Hk0L1UdvpUPHtyB65eNizFYTuQtMCuO8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:79fc4fbf-def8-4ea4-a046-e4f36bb84947,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:543e81c,CLOUDID:16751754-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: 10559a3b014e4c4dafccc2fcf81277e1-20230109
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1951956810; Mon, 09 Jan 2023 16:45:52 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 9 Jan 2023 16:45:51 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 9 Jan 2023 16:45:50 +0800
+From:   <yf.wang@mediatek.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
         open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-References: <20220818004357.375695-1-stephen@networkplumber.org>
- <07786498-2209-3af0-8d68-c34427049947@kernel.org>
- <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
+        jianjiao zeng <jianjiao.zeng@mediatek.com>,
+        Yunfei Wang <yf.wang@mediatek.com>
+Subject: [PATCH] iommu/iova: Fix alloc iova overflows issue
+Date:   Mon, 9 Jan 2023 16:34:28 +0800
+Message-ID: <20230109083429.25622-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09. 01. 23, 9:14, Jan Engelhardt wrote:
-> 
-> On Monday 2023-01-09 08:04, Jiri Slaby wrote:
->> On 18. 08. 22, 2:43, Stephen Hemminger wrote:
->>> DECnet is an obsolete network protocol
->>
->> this breaks userspace. Some projects include linux/dn.h:
->>
->>   https://codesearch.debian.net/search?q=include.*linux%2Fdn.h&literal=0
->>
->> I found Trinity fails to build:
->> net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
->>      5 | #include <linux/dn.h>
->>
->> Should we provide the above as empty files?
-> 
-> Not a good idea. There may be configure tests / code that merely checks for
-> dn.h existence without checking for specific contents/defines. If you provide
-> empty files, this would fail to build:
-> 
-> #include "config.h"
-> #ifdef HAVE_LINUX_DN_H
-> #	include <linux/dn.h>
-> #endif
-> int main() {
-> #ifdef HAVE_LINUX_DN_H
-> 	socket(AF_DECNET, 0, DNPROTO_NSP); // or whatever
-> #else
-> 	...
-> #endif
-> }
-> 
-> So, with my distro hat on, outright removing header files feels like the
-> slightly lesser of two evils. Given the task to port $arbitrary software
-> between operating systems, absent header files is something more or less
-> "regularly" encountered, so one could argue we are "trained" to deal with it.
-> But missing individual defines is a much deeper dive into the APIs and
-> software to patch it out.
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-Right, we used to keep providing also defines and structs in uapi 
-headers of removed functionality. So that the above socket would 
-compile, but fail during runtime.
+In __alloc_and_insert_iova_range, there is an issue that retry_pfn
+overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
+iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
+overflow. As a result, if the retry logic is executed, low_pfn is
+updated to 0, and then new_pfn < low_pfn returns false to make the
+allocation successful.
 
-I am not biased to any solution. In fact, I found out trinity was fixed 
-already. So either path networking takes, it's fine by me. I'm not sure 
-about the chromium users, though (and I don't care).
+This issue occurs in the following two situations:
+1. The first iova size exceeds the domain size. When initializing
+iova domain, iovad->cached_node is assigned as iovad->anchor. For
+example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
+and the iova size allocated for the first time is 11M. The
+following is the log information, new->pfn_lo is smaller than
+iovad->cached_node.
 
-thanks,
+Example log:
+[  223.798112][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
+start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
+[  223.799590][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
+success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new->pfn_hi:0x1f08ff
+
+2. The node with the largest iova->pfn_lo value in the iova domain
+is deleted, iovad->cached_node will be updated to iovad->anchor,
+and then the alloc iova size exceeds the maximum iova size that can
+be allocated in the domain.
+
+Adding judgment that retry_pfn must be greater than iovad->start_pfn
+can fix this issue.
+
+Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+---
+ drivers/iommu/iova.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+index a44ad92fc5eb..0073206c2a95 100644
+--- a/drivers/iommu/iova.c
++++ b/drivers/iommu/iova.c
+@@ -209,7 +209,8 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
+ 	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >= low_pfn);
+ 
+ 	if (high_pfn < size || new_pfn < low_pfn) {
+-		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
++		if (low_pfn == iovad->start_pfn &&
++		    retry_pfn >= iovad->start_pfn && retry_pfn < limit_pfn) {
+ 			high_pfn = limit_pfn;
+ 			low_pfn = retry_pfn;
+ 			curr = iova_find_limit(iovad, limit_pfn);
 -- 
-js
-suse labs
+2.18.0
 
