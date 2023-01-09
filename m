@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C87662233
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A633D662227
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbjAIJxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S237051AbjAIJxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbjAIJv5 (ORCPT
+        with ESMTP id S234428AbjAIJvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:51:57 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF22413D2A;
-        Mon,  9 Jan 2023 01:51:20 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id b17so1423081pld.7;
-        Mon, 09 Jan 2023 01:51:20 -0800 (PST)
+        Mon, 9 Jan 2023 04:51:55 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC85A12AB8;
+        Mon,  9 Jan 2023 01:51:17 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id q64so8177087pjq.4;
+        Mon, 09 Jan 2023 01:51:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rxew3ajMkQ4bWs7+VLjcEpNUZ+iv1uP6LViYhl+6XNo=;
-        b=ch9O8aLAyIywf0SGwOnngbKDBlFDadiZ826y64a3tRfyZGtRT3tTaW9bXsSE6hyKL6
-         Hohrec581Dgv4feylcCX20L3Ra2vJ+SjtuOIJmfXGRzwNxQ6kOe4I8ll6Uq3GzlqVlMd
-         ZpedJQdyM19MFLpuxG4lrJU4KKX5Izm+ygZ3iaYxiY3OeDjiHWouY5oTobnLtzAMZ5+C
-         YlH7LNO25vDHwKty94vWy2r8XOmq8p7vPd7Sr78r8CaN+QJqqmhx9cXMSM+s6yCv+4lO
-         C2EV2HMKcilV6mNkrcVByZenJ/pcn6yHv3gAnUvdwV64kXxRwYF2xHyhjBj4eWgLTSnC
-         eN6Q==
+        bh=/pY4ZKXVLOrE6gD68z6GRMauw7Dx/dgMLhheE8eJci0=;
+        b=BDPwNvqefBDNX9Ref2snXWVTU0ETDThH4C4K8JZ55jYDlgRZuRMhIcPIqY/ZQRun44
+         y1NID1LZ+gMjRrM36zVNlGQlEdZ/+o8pk2fgk0vjwgYDr5VaeNKj4FVSAIdUwIA6kcTC
+         kO31rUMHso2pgbbBjurwJikiX3Aljipw0P79uFfMKLsH1LetkW4iHifhQVaXWRpFlaTw
+         DDfjhCh9hKiPVrQBMoed11CJ0CcqFEgCyJ75p1/PGJBQB8DFp6q165kT+T4tcQpYpNp1
+         gc21q0Ur4V6d5P7OPvgldAXEWDVtEkNKGJg35TRk+2568qO8kSg0mz4iUb+dn1KVczR2
+         FNpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rxew3ajMkQ4bWs7+VLjcEpNUZ+iv1uP6LViYhl+6XNo=;
-        b=pZ/aYmqhhg7jPCrVc02gPZhRrAFbN5NTquLb9ff7JFNKv1+EcqYkwpuXlEHtxOY2BW
-         JZPVKBKHwGQTcmoMzjUEKQkyXTr7uZawOCqxB5qZUkqxmn1UJix2OTpxgb031M/Srr9/
-         CC3r9tm9du6xns62TVXJXbBDH6XecW743We+wUfzALF3da2D2iw81PfAsStzG7/aVQMi
-         WMz5c28oT0My5tDNKL9yWwX1Ic/0uK9c6zZzsJvg1Fsoi+cwRpH3Mxy4OE3bQCSngwlC
-         vJ7zVYRUfbeJ98qN8lgFZoQlnN4P7NMhBAz0ZxQuqxHOkOPf8iFPKoeI+d+QFLNbRbEs
-         /OKA==
-X-Gm-Message-State: AFqh2kqLb6YWaBlExGFNsP9me84jv8csIsvxCB8wJxTOVW63x/qltaZC
-        tVHlO0jsNiQb0F9mYtLUdV0=
-X-Google-Smtp-Source: AMrXdXuCovS+m6D/GwjSQ52aBkZhAvLOHDVXNu0oWROEUDgQeInMFn0/M8eThf5UqGc53oYSD6zgjQ==
-X-Received: by 2002:a17:90a:fcf:b0:226:ed62:576e with SMTP id 73-20020a17090a0fcf00b00226ed62576emr9082736pjz.34.1673257880448;
-        Mon, 09 Jan 2023 01:51:20 -0800 (PST)
+        bh=/pY4ZKXVLOrE6gD68z6GRMauw7Dx/dgMLhheE8eJci0=;
+        b=jfbnbf9dNn7+eqDH32t6iiFqDl67OLT+r/3VzFWYpXU7XsRx0q8n5aCqs6h/SsjS6g
+         6Wyh9NlJLWROStFL3VHBZrBouQ8qtF0hiaCxlMKA9JoJw0w8lXtZX6q2e2Q5y86FJGLp
+         99fZfvGvm6362QIH/KXtzXPz94rFSlDXGxhRrHwL87wpVcbItHoCcIVDzPWvfV1qnQjl
+         roQead5UfPg6fyZcwXyKl6DIJfWzxUdKk/37VzWTBMXdwpD4gsVqQZbXS1s94H6jMiJU
+         8fG05zglDgc0xRWmWiDl/jv+lvIQhcpPbTOr9JoaeDB6LGqSvpXg2JYSD/FVmxZSa9Cx
+         DiYQ==
+X-Gm-Message-State: AFqh2kqiMFnT2vQk0S2PwWJ9CVjsldud6fGEVB3qYamaR2WWwFs0Dt+m
+        NUMvvux8cgc1Csnw3TkMPWw=
+X-Google-Smtp-Source: AMrXdXtgweC1kVhPoQNQh3kHXUCXyIpa6J9Yux3VpMe0mfYIEnspuyIr3MNUNrJaLyJ4KFQFE1Ttpg==
+X-Received: by 2002:a17:90b:70e:b0:227:1f03:f22d with SMTP id s14-20020a17090b070e00b002271f03f22dmr1483298pjz.15.1673257877212;
+        Mon, 09 Jan 2023 01:51:17 -0800 (PST)
 Received: from debian.me (subs03-180-214-233-26.three.co.id. [180.214.233.26])
-        by smtp.gmail.com with ESMTPSA id s6-20020a17090a2f0600b00226156cf039sm6827424pjd.44.2023.01.09.01.51.18
+        by smtp.gmail.com with ESMTPSA id ha18-20020a17090af3d200b00219eefe47c7sm4975315pjb.47.2023.01.09.01.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 01:51:18 -0800 (PST)
+        Mon, 09 Jan 2023 01:51:15 -0800 (PST)
 Received: by debian.me (Postfix, from userid 1000)
-        id 2843F105013; Mon,  9 Jan 2023 16:51:10 +0700 (WIB)
+        id 97994105014; Mon,  9 Jan 2023 16:51:10 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Yann Sionneau <ysionneau@kalray.eu>
@@ -59,15 +59,15 @@ Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Clement Leger <clement.leger@bootlin.com>,
         Guillaume Thouvenin <gthouvenin@kalray.eu>,
         Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 2/8] Documentation: kvx: Wrap diagrams in literal code block
-Date:   Mon,  9 Jan 2023 16:51:02 +0700
-Message-Id: <20230109095108.21229-3-bagasdotme@gmail.com>
+Subject: [PATCH 3/8] Documentation: kvx: Fix lists
+Date:   Mon,  9 Jan 2023 16:51:03 +0700
+Message-Id: <20230109095108.21229-4-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230109095108.21229-1-bagasdotme@gmail.com>
 References: <874jt7fqxt.fsf@meer.lwn.net>
  <20230109095108.21229-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=24167; i=bagasdotme@gmail.com; h=from:subject; bh=RmQw3dvwG456+kl9oktVQc8IZ2fTICciIBt3vtjbgfU=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMm7H3e9PHFBYE6QQ9zdtybHipI07m3sN5W8tdfu/eWaHl2d C6caO0pZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjCRMBeG/0WajB7LXu7uutDIVPyxdO 1L/jVnH04+GvbMaemJhf8z13Aw/M/ZpJ1T4adk4pop5Pn1jOr1rA8irfO+K4h6V3plOdrLMwIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13049; i=bagasdotme@gmail.com; h=from:subject; bh=yapx+R4CPIYDKlrP7H+zacYOrKBXnpEEf/JMW3WEweI=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMm7H3exN9+sLdqsvP7nn8kpLPH9htbHzFSKLwZ+TzUoXckk JZTXUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIlkXWb4p7Oh9ENytHB3/fqczbqs1x k70pJvX/q879ASRWkHu6UanYwM1x82VX1wUS62mCm9J7vDRV7zC+vy/lq1nMh/Kov8O0q4AQ==
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,553 +80,300 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrap code path diagrams in literal code block, just like other diagrams
-in the kernel documentation. This avoids confusion with other constructs
-(tables, block quotes, and inline substitutions).
+Many "unexpected indentation" and block quote warnings are generated due
+to errors in lists. Fix them up by:
+
+  * Align lists texts just after the lists marker
+  * Add required blank line between nested lists and between paragraphs
+    and the lists
+  * Use appropriate syntax for numbered lists
+
+While at it, also lightly reword.
 
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/kvx/kvx-exceptions.rst | 241 ++++++++++++++-------------
- Documentation/kvx/kvx-iommu.rst      |  64 +++----
- Documentation/kvx/kvx-mmu.rst        |  41 +++--
- Documentation/kvx/kvx.rst            |  96 +++++------
- 4 files changed, 225 insertions(+), 217 deletions(-)
+ Documentation/kvx/kvx-exceptions.rst | 53 ++++++++++++++-----------
+ Documentation/kvx/kvx-iommu.rst      |  3 +-
+ Documentation/kvx/kvx-mmu.rst        | 37 +++++++++--------
+ Documentation/kvx/kvx.rst            | 59 +++++++++++++++-------------
+ 4 files changed, 85 insertions(+), 67 deletions(-)
 
 diff --git a/Documentation/kvx/kvx-exceptions.rst b/Documentation/kvx/kvx-exceptions.rst
-index d3e52f30285223..bb9010efb14196 100644
+index bb9010efb14196..bd485efd2362c1 100644
 --- a/Documentation/kvx/kvx-exceptions.rst
 +++ b/Documentation/kvx/kvx-exceptions.rst
-@@ -10,21 +10,21 @@ The offset depends on which exception vector the cpu wants to jump to:
+@@ -5,6 +5,7 @@ specifies a base address.
+ An offset is added to $ev upon exception and the result is used as
+ "Next $pc".
+ The offset depends on which exception vector the cpu wants to jump to:
++
+ * $ev + 0x00 for debug
+ * $ev + 0x40 for trap
  * $ev + 0x80 for interrupt
- * $ev + 0xc0 for syscall
- 
--Then, handlers are laid in the following order:
-+Then, handlers are laid in the following order::
- 
--        +-------------+
--        |             |
--        |   Syscall   |
--        +-------------+
--        |             |
--        |  Interrupts |
--        +-------------+
--        |             |
--        |    Traps    |
--        +-------------+
--        |             | ^
--        |    Debug    | | Stride
--BASE -> +-------------+ v
-+          +-------------+
-+          |             |
-+          |   Syscall   |
-+          +-------------+
-+          |             |
-+          |  Interrupts |
-+          +-------------+
-+          |             |
-+          |    Traps    |
-+          +-------------+
-+          |             | ^
-+          |    Debug    | | Stride
-+  BASE -> +-------------+ v
+@@ -28,6 +29,7 @@ Then, handlers are laid in the following order::
  
  
  Interrupts, and traps are serviced similarly, ie:
-@@ -99,65 +99,66 @@ When handling a signal, the path is the following:
- 7 - User application is restored at the exact point it was interrupted
-     before.
++
+ - Jump to handler
+ - Save all registers
+ - Prepare the call (do_IRQ or trap_handler)
+@@ -58,12 +60,15 @@ The following steps are then taken:
  
-+    ::
+ - Switch to kernel stack
+ - Extract syscall number
+-- Check that the syscall number is not bogus
+- - If so, set syscall func to a not implemented one
+-- Check if tracing is enabled
+- - If so, jump to trace_syscall_enter
++- Check that the syscall number is not bogus.
++  If so, set syscall func to a not implemented one
++
++- Check if tracing is enabled.
++  If so, jump to trace_syscall_enter, then:
++
+  - Save syscall arguments (r0 -> r7) on stack in pt_regs
+  - Call do_trace_syscall_enter function
++
+ - Restore syscall arguments since they have been modified by C call
+ - Call the syscall function
+ - Save $r0 in pt_regs since it can be cloberred afterward
+@@ -80,24 +85,28 @@ Signals
+ Signals are handled when exiting kernel before returning to user.
+ When handling a signal, the path is the following:
  
--        +----------+
--        |    1     |
--        | User app | @func
--        |  (user)  |
--        +---+------+
--            |
--            | it/trap/scall
--            |
--        +---v-------+
--        |    2      |
--        | exception |
--        | handling  |
--        | (kernel)  |
--        +---+-------+
--            |
--            | Check if signal are pending, if so, handle signals
--            |
--        +---v--------+
--        |    3       |
--        | do_signal  |
--        |  handling  |
--        |  (kernel)  |
--        +----+-------+
--             |
--             | Return to user signal handler
--             |
--        +----v------+
--        |    4      |
--        |  signal   |
--        |  handler  |
--        |  (user)   |
--        +----+------+
--             |
--             | Return to sigreturn trampoline
--             |
--        +----v-------+
--        |    5       |
--        |  syscall   |
--        |rt_sigreturn|
--        |  (user)    |
--        +----+-------+
--             |
--             | Syscall to rt_sigreturn
--             |
--        +----v-------+
--        |    6       |
--        |  sigreturn |
--        |  handler   |
--        |  (kernel)  |
--        +----+-------+
--             |
--             | Modify context to return to original func
--             |
--        +----v-----+
--        |    7     |
--        | User app | @func
--        |  (user)  |
--        +----------+
-+            +----------+
-+            |    1     |
-+            | User app | @func
-+            |  (user)  |
-+            +---+------+
-+                |
-+                | it/trap/scall
-+                |
-+            +---v-------+
-+            |    2      |
-+            | exception |
-+            | handling  |
-+            | (kernel)  |
-+            +---+-------+
-+                |
-+                | Check if signal are pending, if so, handle signals
-+                |
-+            +---v--------+
-+            |    3       |
-+            | do_signal  |
-+            |  handling  |
-+            |  (kernel)  |
-+            +----+-------+
-+                 |
-+                 | Return to user signal handler
-+                 |
-+            +----v------+
-+            |    4      |
-+            |  signal   |
-+            |  handler  |
-+            |  (user)   |
-+            +----+------+
-+                 |
-+                 | Return to sigreturn trampoline
-+                 |
-+            +----v-------+
-+            |    5       |
-+            |  syscall   |
-+            |rt_sigreturn|
-+            |  (user)    |
-+            +----+-------+
-+                 |
-+                 | Syscall to rt_sigreturn
-+                 |
-+            +----v-------+
-+            |    6       |
-+            |  sigreturn |
-+            |  handler   |
-+            |  (kernel)  |
-+            +----+-------+
-+                 |
-+                 | Modify context to return to original func
-+                 |
-+            +----v-----+
-+            |    7     |
-+            | User app | @func
-+            |  (user)  |
-+            +----------+
+-1 - User application is executing normally
+-    Then any exception happens (syscall, interrupt, trap)
+-2 - The exception handling path is taken
+-    and before returning to user, pending signals are checked
+-3 - Signal are handled by do_signal
+-    Registers are saved and a special part of the stack is modified
+-    to create a trampoline to call rt_sigreturn
+-    $spc is modified to jump to user signal handler
+-    $ra is modified to jump to sigreturn trampoline directly after
+-    returning from user signal handler.
+-4 - User signal handler is called after rfe from exception
+-    when returning, $ra is retored to $pc, resulting in a call
+-    to the syscall trampoline.
+-5 - syscall trampoline is executed, leading to rt_sigreturn syscall
+-6 - rt_sigreturn syscall is executed
+-    Previous registers are restored to allow returning to user correctly
+-7 - User application is restored at the exact point it was interrupted
+-    before.
++1. User application is executing normally, then exception occurs (syscall,
++   interrupt, trap)
++2. The exception handling path is taken
++   and before returning to user, pending signals are checked.
++
++3. The signal handling path is as follows:
++
++   * Signals are handled by do_signal.
++   * Registers are saved and a special part of the stack is modified
++     to create a trampoline to call rt_sigreturn.
++   * $spc is modified to jump to user signal handler.
++   * $ra is modified to jump to sigreturn trampoline directly after
++     returning from user signal handler.
++
++4. User signal handler is called after rfe from exception.
++   When returning, $ra is retored to $pc, resulting in a call
++   to the syscall trampoline.
++5. syscall trampoline is executed, leading to rt_sigreturn syscall
++6. rt_sigreturn syscall is executed.
++   Previous registers are restored to allow returning to user correctly
++7. User application is restored at the exact point it was interrupted
++   before.
  
- Registers handling
- ==================
-@@ -174,62 +175,62 @@ Interrupts and traps
+     ::
  
- When interrupt and traps are triggered, we only save the caller-saved registers.
- Indeed, we rely on the fact that C code will save and restore callee-saved and
--hence, there is no need to save them. This path is the following:
-+hence, there is no need to save them. This path is the following::
- 
--     +------------+          +-----------+        +---------------+
--IT   | Save caller| C Call   | Execute C |  Ret   | Restore caller| Ret from IT
--+--->+   saved    +--------->+  handler  +------->+     saved     +----->
--     | registers  |          +-----------+        |   registers   |
--     +------------+                               +---------------+
-+       +------------+          +-----------+        +---------------+
-+  IT   | Save caller| C Call   | Execute C |  Ret   | Restore caller| Ret from IT
-+  +--->+   saved    +--------->+  handler  +------->+     saved     +----->
-+       | registers  |          +-----------+        |   registers   |
-+       +------------+                               +---------------+
- 
- However, when returning to user, we check if there is work_pending. If a signal
- is pending and there is a signal handler to be called, then we need all
- registers to be saved on the stack in the pt_regs before executing the signal
- handler and restored after that. Since we only saved caller-saved registers, we
- need to also save callee-saved registers to restore them correctly when
--returning to user. This path is the following (a bit more complicated !):
-+returning to user. This path is the following (a bit more complicated !)::
- 
--      +------------+
--      | Save caller|          +-----------+  Ret   +------------+
-- IT   |   saved    | C Call   | Execute C | to asm | Check work |
-- +--->+ registers  +--------->+  handler  +------->+   pending  |
--      | to pt_regs |          +-----------+        +--+---+-----+
--      +------------+                                  |   |
--                        Work pending                  |   | No work pending
--         +--------------------------------------------+   |
--         |                                                |
--         |                                   +------------+
--         v                                   |
--  +------+------+                            v
--  | Save callee |                    +-------+-------+
--  |   saved     |                    | Restore caller|  RFE from IT
--  | registers   |                    |     saved     +------->
--  | to pt_regs  |                    |   registers   |
--  +--+-------+--+                    | from pt_regs  |
--     |       |                       +-------+-------+
--     |       |         +---------+           ^
--     |       |         | Execute |           |
--     |       +-------->+ needed  +-----------+
--     |                 |  work   |
--     |                 +---------+
--     |Signal handler ?
--     v
--+----+----------+ RFE to user +-------------+       +--------------+
--|   Copy all    | handler     |  Execute    |  ret  | rt_sigreturn |
--|   registers   +------------>+ user signal +------>+ trampoline   |
--| from pt_regs  |             |  handler    |       |  to kernel   |
--| to user stack |             +-------------+       +------+-------+
--+---------------+                                          |
--                         syscall rt_sigreturn              |
--         +-------------------------------------------------+
--         |
--         v
--+--------+-------+                      +-------------+
--|   Recopy all   |                      | Restore all |  RFE
--| registers from +--------------------->+    saved    +------->
--|   user stack   |       Return         |  registers  |
--|   to pt_regs   |    from sigreturn    |from pt_regs |
--+----------------+  (via ret_from_fork) +-------------+
-+        +------------+
-+        | Save caller|          +-----------+  Ret   +------------+
-+   IT   |   saved    | C Call   | Execute C | to asm | Check work |
-+   +--->+ registers  +--------->+  handler  +------->+   pending  |
-+        | to pt_regs |          +-----------+        +--+---+-----+
-+        +------------+                                  |   |
-+                          Work pending                  |   | No work pending
-+           +--------------------------------------------+   |
-+           |                                                |
-+           |                                   +------------+
-+           v                                   |
-+    +------+------+                            v
-+    | Save callee |                    +-------+-------+
-+    |   saved     |                    | Restore caller|  RFE from IT
-+    | registers   |                    |     saved     +------->
-+    | to pt_regs  |                    |   registers   |
-+    +--+-------+--+                    | from pt_regs  |
-+       |       |                       +-------+-------+
-+       |       |         +---------+           ^
-+       |       |         | Execute |           |
-+       |       +-------->+ needed  +-----------+
-+       |                 |  work   |
-+       |                 +---------+
-+       |Signal handler ?
-+       v
-+  +----+----------+ RFE to user +-------------+       +--------------+
-+  |   Copy all    | handler     |  Execute    |  ret  | rt_sigreturn |
-+  |   registers   +------------>+ user signal +------>+ trampoline   |
-+  | from pt_regs  |             |  handler    |       |  to kernel   |
-+  | to user stack |             +-------------+       +------+-------+
-+  +---------------+                                          |
-+                           syscall rt_sigreturn              |
-+           +-------------------------------------------------+
-+           |
-+           v
-+  +--------+-------+                      +-------------+
-+  |   Recopy all   |                      | Restore all |  RFE
-+  | registers from +--------------------->+    saved    +------->
-+  |   user stack   |       Return         |  registers  |
-+  |   to pt_regs   |    from sigreturn    |from pt_regs |
-+  +----------------+  (via ret_from_fork) +-------------+
- 
- 
- Syscalls
 diff --git a/Documentation/kvx/kvx-iommu.rst b/Documentation/kvx/kvx-iommu.rst
-index 96b74ce71acb3e..69eca8d1bc37a1 100644
+index 69eca8d1bc37a1..f7f61777eee21e 100644
 --- a/Documentation/kvx/kvx-iommu.rst
 +++ b/Documentation/kvx/kvx-iommu.rst
-@@ -63,39 +63,39 @@ IOMMU implementation
- --------------------
+@@ -32,7 +32,8 @@ Cluster IOMMUs
+ --------------
  
- The kvx is providing several IOMMUs. Here is a simplified view of all IOMMUs
--and translations that occurs between memory and devices:
-+and translations that occurs between memory and devices::
- 
-- +---------------------------------------------------------------------+
-- | +------------+     +---------+                          | CLUSTER X |
-- | | Cores 0-15 +---->+ Crypto  |                          +-----------|
-- | +-----+------+     +----+----+                                      |
-- |       |                 |                                           |
-- |       v                 v                                           |
-- |   +-------+        +------------------------------+                 |
-- |   |  MMU  |   +----+ IOMMU x4 (secure + insecure) |                 |
-- |   +---+---+   |    +------------------------------+                 |
-- |       |       |                                                     |
-- +--------------------+                                                |
--        |        |    |                                                |
--        v        v    |                                                |
--    +---+--------+-+  |                                                |
--    |    MEMORY    |  |     +----------+     +--------+     +-------+  |
--    |              +<-|-----+ IOMMU Rx |<----+ DMA Rx |<----+       |  |
--    |              |  |     +----------+     +--------+     |       |  |
--    |              |  |                                     |  NoC  |  |
--    |              |  |     +----------+     +--------+     |       |  |
--    |              +--|---->| IOMMU Tx +---->| DMA Tx +---->+       |  |
--    |              |  |     +----------+     +--------+     +-------+  |
--    |              |  +------------------------------------------------+
--    |              |
--    |              |     +--------------+     +------+
--    |              |<--->+ IOMMU Rx/Tx  +<--->+ PCIe +
--    |              |     +--------------+     +------+
--    |              |
--    |              |     +--------------+     +------------------------+
--    |              |<--->+ IOMMU Rx/Tx  +<--->+ master Soc Peripherals |
--    |              |     +--------------+     +------------------------+
--    +--------------+
-+  +---------------------------------------------------------------------+
-+  | +------------+     +---------+                          | CLUSTER X |
-+  | | Cores 0-15 +---->+ Crypto  |                          +-----------|
-+  | +-----+------+     +----+----+                                      |
-+  |       |                 |                                           |
-+  |       v                 v                                           |
-+  |   +-------+        +------------------------------+                 |
-+  |   |  MMU  |   +----+ IOMMU x4 (secure + insecure) |                 |
-+  |   +---+---+   |    +------------------------------+                 |
-+  |       |       |                                                     |
-+  +--------------------+                                                |
-+         |        |    |                                                |
-+         v        v    |                                                |
-+     +---+--------+-+  |                                                |
-+     |    MEMORY    |  |     +----------+     +--------+     +-------+  |
-+     |              +<-|-----+ IOMMU Rx |<----+ DMA Rx |<----+       |  |
-+     |              |  |     +----------+     +--------+     |       |  |
-+     |              |  |                                     |  NoC  |  |
-+     |              |  |     +----------+     +--------+     |       |  |
-+     |              +--|---->| IOMMU Tx +---->| DMA Tx +---->+       |  |
-+     |              |  |     +----------+     +--------+     +-------+  |
-+     |              |  +------------------------------------------------+
-+     |              |
-+     |              |     +--------------+     +------+
-+     |              |<--->+ IOMMU Rx/Tx  +<--->+ PCIe +
-+     |              |     +--------------+     +------+
-+     |              |
-+     |              |     +--------------+     +------------------------+
-+     |              |<--->+ IOMMU Rx/Tx  +<--->+ master Soc Peripherals |
-+     |              |     +--------------+     +------------------------+
-+     +--------------+
- 
- 
- There is also an IOMMU dedicated to the crypto module but this module will not
+ IOMMUs on cluster are used for DMA and cryptographic accelerators.
+-There are six IOMMUs connected to the:
++There are six IOMMUs connected:
++
+ 	- cluster DMA tx
+ 	- cluster DMA rx
+ 	- first non secure cryptographic accelerator
 diff --git a/Documentation/kvx/kvx-mmu.rst b/Documentation/kvx/kvx-mmu.rst
-index 59bda2afc9abde..832fb7c41a49d8 100644
+index 832fb7c41a49d8..faa6bda2c39959 100644
 --- a/Documentation/kvx/kvx-mmu.rst
 +++ b/Documentation/kvx/kvx-mmu.rst
-@@ -157,14 +157,17 @@ We only support three levels for the page table and 4KB for page size.
- 3 levels page table
- -------------------
+@@ -77,6 +77,7 @@ routine which would (obviously) not work... Once this is done, we can flush the
+ entries and that new entries inserted in JTLB will apply.
  
--...-----+--------+--------+--------+--------+--------+
--      40|39    32|31    24|23    16|15     8|7      0|
--...-----++-------+--+-----+---+----+----+---+--------+
--         |          |         |         |
--         |          |         |         +--->  [11:0] Offset (12 bits)
--         |          |         +------------->  [20:12] PTE offset (9 bits)
--         |          +----------------------->  [29:21] PMD offset (9 bits)
--         +---------------------------------->  [39:30] PGD offset (10 bits)
-+::
+ By default, the following policy is applied on vmlinux sections:
 +
-+  ...-----+--------+--------+--------+--------+--------+
-+        40|39    32|31    24|23    16|15     8|7      0|
-+  ...-----++-------+--+-----+---+----+----+---+--------+
-+           |          |         |         |
-+           |          |         |         +--->  [11:0] Offset (12 bits)
-+           |          |         +------------->  [20:12] PTE offset (9 bits)
-+           |          +----------------------->  [29:21] PMD offset (9 bits)
-+           +---------------------------------->  [39:30] PGD offset (10 bits)
+ - init_data: RW
+ - init_text: RX (or RWX if parameter rodata=off)
+ - text: RX (or RWX if parameter rodata=off)
+@@ -92,8 +93,9 @@ spaces to be in the same space as the user. The kernel will have the
+ $ps.mmup set in kernel (PL1) and unset for user (PL2).
+ As said in kvx documentation, we have two cases when the kernel is
+ booted:
+-- Either we have been booted by someone (bootloader, hypervisor, etc)
+-- Or we are alone (boot from flash)
 +
- Bits 40 to 64 are signed extended according to bit 39. If bit 39 is equal to 1
- we are in kernel space.
++- Boot via intermediaries (bootloader, hypervisor, etc)
++- Direct boot from flash
  
-@@ -175,12 +178,14 @@ PTE format
+ In both cases, we will use the virtual space 0. Indeed, if we are alone
+ on the core, then it means nobody is using the MMU and we can take the
+@@ -115,6 +117,7 @@ setup_bootmem: Memory  : 0x100000000 - 0x120000000
+ setup_bootmem: Reserved: 0x10001f000 - 0x1002d1bc0
  
- About the format of the PTE entry, as we are not forced by hardware for choices,
- we choose to follow the format described in the RiscV implementation as a
--starting point.
-+starting point::
+ During the paging init we need to set:
 +
-+  +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
-+  | 63..23  | 22..13 | 12 | 11..10 | 9 | 8 | 7 | 6 | 5 | 4 | 3..2 | 1 | 0 |
-+  +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
-+      PFN     Unused   S    PageSZ   H   G   X   W   R   D    CP    A   P
+   - min_low_pfn that is the lowest PFN available in the system
+   - max_low_pfn that indicates the end if NORMAL zone
+   - max_pfn that is the number of pages in the system
+@@ -213,16 +216,16 @@ kvx core does not feature a hardware page walker. This work must be done
+ by the core in software. In order to optimize TLB refill, a special fast
+ path is taken when entering in kernel space.
+ In order to speed up the process, the following actions are taken:
+-# Save some registers in a per process scratchpad
+-# If the trap is a nomapping then try the fastpath
+-# Save some more registers for this fastpath
+-# Check if faulting address is a memory direct mapping one.
+- # If entry is a direct mapping one and RWX is not enabled, add an entry into LTLB
+- # If not, continue
+-# Try to walk the page table
+- # If entry is not present, take the slowpath (do_page_fault)
+-# Refill the tlb properly
+-# Exit by restoring only a few registers
 +
++1. Save some registers in a per process scratchpad
++2. If the trap is a nomapping then try the fastpath
++3. Save some more registers for this fastpath
++4. Check if faulting address is a memory direct mapping one. If entry is a
++   direct mapping one and RWX is not enabled, add an entry into LTLB.
++   Otherwise, continue
++5. Try to walk the page table. If entry is not present, take the slowpath (do_page_fault)
++6. Refill the tlb properly
++7. Exit by restoring only a few registers
  
-- +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
-- | 63..23  | 22..13 | 12 | 11..10 | 9 | 8 | 7 | 6 | 5 | 4 | 3..2 | 1 | 0 |
-- +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
--     PFN     Unused   S    PageSZ   H   G   X   W   R   D    CP    A   P
-        where:
-         P: Present
-         A: Accessed
-@@ -231,10 +236,12 @@ kvx implementation to use them is based on other architectures (such as arc
- or xtensa) and uses a wrapping ASN counter containing both cycle/generation and
- asn.
+ ASN Handling
+ ============
+@@ -273,13 +276,15 @@ Debug
  
--+---------+--------+
--|63     10|9      0|
--+---------+--------+
--  Cycle      ASN
-+::
+ In order to debug the page table and tlb entries, gdb scripts contains commands
+ which allows to dump the page table:
 +
-+  +---------+--------+
-+  |63     10|9      0|
-+  +---------+--------+
-+    Cycle      ASN
+ - lx-kvx-page-table-walk
+- - Display the current process page table by default
++    Display the current process page table by default
+ - lx-kvx-tlb-decode
+- - Display the content of $tel and $teh into something readable
++    Display the content of $tel and $teh into something readable
  
- This ASN counter is incremented monotonously to allocate new ASNs. When the
- counter reaches 511 (9 bit), TLB is completely flushed and a new cycle is
+ Other commands available in kvx-gdb are the following:
++
+ - mppa-dump-tlb
+- - Display the content of TLBs (JTLB and LTLB)
++    Display the content of TLBs (JTLB and LTLB)
+ - mppa-lookup-addr
+- - Find physical address matching a virtual one
++    Find physical address matching a virtual one
 diff --git a/Documentation/kvx/kvx.rst b/Documentation/kvx/kvx.rst
-index 8ce0703de6813b..20c3666f445e26 100644
+index 20c3666f445e26..8982d10f2678df 100644
 --- a/Documentation/kvx/kvx.rst
 +++ b/Documentation/kvx/kvx.rst
-@@ -15,17 +15,17 @@ On kvx, we have 4 levels of privilege level starting from 0 (most
- privileged one) to 3 (less privilege one). A system of owners allows
- to delegate ownership of resources by using specials system registers.
+@@ -74,6 +74,7 @@ When entering the C (kvx_lowlevel_start) the kernel will look for a special
+ magic in $r0 (0x494C314B). This magic tells the kernel if there is arguments
+ passed by a bootloader.
+ Currently, the following values are passed through registers:
++
+  - r1: pointer to command line setup by bootloader
+  - r2: device tree
  
--The 2 main software stacks for Linux Kernel are the following:
-+The 2 main software stacks for Linux Kernel are the following::
+@@ -105,11 +106,13 @@ of the LTLB.
  
--+-------------+       +-------------+
--| PL0: Debug  |       | PL0: Debug  |
--+-------------+       +-------------+
--| PL1: Linux  |       | PL1: HyperV |
--+-------------+       +-------------+
--| PL2: User   |       | PL2: Linux  |
--+-------------+       +-------------+
--|             |       | PL3: User   |
--+-------------+       +-------------+
-+  +-------------+       +-------------+
-+  | PL0: Debug  |       | PL0: Debug  |
-+  +-------------+       +-------------+
-+  | PL1: Linux  |       | PL1: HyperV |
-+  +-------------+       +-------------+
-+  | PL2: User   |       | PL2: Linux  |
-+  +-------------+       +-------------+
-+  |             |       | PL3: User   |
-+  +-------------+       +-------------+
+ The first entry will map the first 1G of virtual address space to the first
+ 1G of DDR:
++
+   - TLB[0]: 0xffffff0000000000 -> 0x100000000 (size 512Mo)
  
- In both cases, the kvx support for privileges has been designed using
- only relative PL and thus should work on both configurations without
-@@ -201,45 +201,45 @@ to it, the kernel sends an interrupt using a mailbox.
- If the L2$ node is not present in the device tree, then, the RM will directly go
- into sleeping.
+ The second entry will be a flat mapping of the first 512 Ko of the SMEM. It
+ is required to have this flat mapping because there is still code located at
+ this address that needs to be executed:
++
+   - TLB[1]: 0x0 -> 0x0 (size 512Ko)
  
--Boot diagram:
-+Boot diagram::
+ Once virtual space reached the second entry is removed.
+@@ -151,19 +154,19 @@ r20 and r21 to special values containing the function to call.
  
--           RM                       PE 0
--                          +
--       +---------+        |
--       |  Boot   |        |
--       +----+----+        |
--            |             |
--            v             |
--      +-----+-----+       |
--      |  Prepare  |       |
--      | L2 shared |       |
--      |  memory   |       |
--      |(registers)|       |
--      +-----+-----+       |
--            |             |      +-----------+
--            +------------------->+   Boot    |
--            |             |      +-----+-----+
--            v             |            |
--   +--------+---------+   |            |
--   | L2 firmware      |   |            |
--   | parameters:      |   |            |
--   | r0 = registers   |   |            |
--   | r1 = DTB         |   |            |
--   +--------+---------+   |            |
--            |             |            |
--            v             |            |
--    +-------+--------+    |     +------+------+
--    |  L2 firmware   |    |     | Wait for L2 |
--    |   execution    |    |     | to be ready |
--    +-------+--------+    |     +------+------+
--            |             |            |
--     +------v-------+     |            v
--     | L2 requests  |     |     +------+------+
--+--->+   handling   |     |     |   Enable    |
--|    +-------+------+     |     | L2 caching  |
--|            |            |     +------+------+
--|            |            |            |
--+------------+            +            v
-+             RM                       PE 0
-+                            +
-+         +---------+        |
-+         |  Boot   |        |
-+         +----+----+        |
-+              |             |
-+              v             |
-+        +-----+-----+       |
-+        |  Prepare  |       |
-+        | L2 shared |       |
-+        |  memory   |       |
-+        |(registers)|       |
-+        +-----+-----+       |
-+              |             |      +-----------+
-+              +------------------->+   Boot    |
-+              |             |      +-----+-----+
-+              v             |            |
-+     +--------+---------+   |            |
-+     | L2 firmware      |   |            |
-+     | parameters:      |   |            |
-+     | r0 = registers   |   |            |
-+     | r1 = DTB         |   |            |
-+     +--------+---------+   |            |
-+              |             |            |
-+              v             |            |
-+      +-------+--------+    |     +------+------+
-+      |  L2 firmware   |    |     | Wait for L2 |
-+      |   execution    |    |     | to be ready |
-+      +-------+--------+    |     +------+------+
-+              |             |            |
-+       +------v-------+     |            v
-+       | L2 requests  |     |     +------+------+
-+  +--->+   handling   |     |     |   Enable    |
-+  |    +-------+------+     |     | L2 caching  |
-+  |            |            |     +------+------+
-+  |            |            |            |
-+  +------------+            +            v
+ The normal path for a kernel thread will be the following:
  
+- 1 - Enter copy_thread_tls and setup callee saved registers which will
+-     be restored in __switch_to.
+- 2 - set r20 and r21 (in thread_struct) to function and argument and
+-     ra to ret_from_kernel_thread.
+-     These callee saved will be restored in switch_to.
+- 3 - Call _switch_to at some point.
+- 4 - Save all callee saved register since switch_to is seen as a
+-     standard function call by the caller.
+- 5 - Change stack pointer to the new stack
+- 6 - At the end of switch to, set sr0 to the new task and use ret to
+-     jump to ret_from_kernel_thread (address restored from ra).
+- 7 - In ret_from_kernel_thread, execute the function with arguments by
+-     using r20, r21 and we are done
++ 1. Enter copy_thread_tls and setup callee saved registers which will
++    be restored in __switch_to.
++ 2. set r20 and r21 (in thread_struct) to function and argument and
++    ra to ret_from_kernel_thread.
++    These callee saved will be restored in switch_to.
++ 3. Call _switch_to at some point.
++ 4. Save all callee saved register since switch_to is seen as a
++    standard function call by the caller.
++ 5. Change stack pointer to the new stack
++ 6. At the end of switch to, set sr0 to the new task and use ret to
++    jump to ret_from_kernel_thread (address restored from ra).
++ 7. In ret_from_kernel_thread, execute the function with arguments by
++    using r20, r21 and we are done
  
- Since this driver is started early (before SMP boot), A lot of drivers are not
+ For more explanation, you can refer to https://lwn.net/Articles/520227/
+ 
+@@ -173,21 +176,21 @@ User thread creation
+ We are using almost the same path as copy_thread to create it.
+ The detailed path is the following:
+ 
+- 1 - Call start_thread which will setup user pc and stack pointer in
+-     task regs. We also set sps and clear privilege mode bit.
+-     When returning from exception, it will "flip" to user mode.
+- 2 - Enter copy_thread_tls and setup callee saved registers which will
+-     be restored in __switch_to. Also, set the "return" function to be
+-     ret_from_fork which will be called at end of switch_to
+- 3 - set r20 (in thread_struct) with tracing information.
+-     (simply by lazyness to avoid computing it in assembly...)
+- 4 - Call _switch_to at some point.
+- 5 - The current pc will then be restored to be ret_from fork.
+- 6 - Ret from fork calls schedule_tail and then check if tracing is
+-     enabled. If so call syscall_trace_exit
+- 7 - finally, instead of returning to kernel, we restore all registers
+-     that have been setup by start_thread by restoring regs stored on
+-     stack
++ 1. Call start_thread which will setup user pc and stack pointer in
++    task regs. We also set sps and clear privilege mode bit.
++    When returning from exception, it will "flip" to user mode.
++ 2. Enter copy_thread_tls and setup callee saved registers which will
++    be restored in __switch_to. Also, set the "return" function to be
++    ret_from_fork which will be called at end of switch_to
++ 3. set r20 (in thread_struct) with tracing information.
++    (simply by lazyness to avoid computing it in assembly...)
++ 4. Call _switch_to at some point.
++ 5. The current pc will then be restored to be ret_from fork.
++ 6. Ret from fork calls schedule_tail and then check if tracing is
++    enabled. If so call syscall_trace_exit
++ 7. Finally, instead of returning to kernel, we restore all registers
++    that have been setup by start_thread by restoring regs stored on
++    stack
+ 
+ L2$ handling
+ ============
 -- 
 An old man doll... just what I always wanted! - Clara
 
