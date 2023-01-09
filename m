@@ -2,78 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF6566319A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F1966319D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237311AbjAIUfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S237554AbjAIUfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbjAIUfF (ORCPT
+        with ESMTP id S237389AbjAIUfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:35:05 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E0C6086A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:35:04 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id c2-20020a17090a8d0200b002269fb8d787so7864354pjo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:35:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8To9c/RhjeU3UhCcJpilZYbO96GcFeqlarqkyf14xk=;
-        b=pBt0bIydFOwdKSVmC67SAEC38M3pJdN4Rbbk1sSIr2dLWuKG+E4cAAfIKa+hVPgR6l
-         PSMauWXMYX2UXWlVwJj1DCeuZNq1JrwyrNZVSR0hHDv1QPkudW0vfVXPam8RusLj2wzi
-         twBqKGWkBWo30T5upazEELk5+hstDV4f920U2q7L11Rbpgi+FsLPFzRRLRDXBX4MtcQ3
-         Z8q3/1FewblD5NeUTT4cKaKavnfexeYXt4hAE5zVgo2DbZNcvLYZbYPtRbL1qHABKurK
-         aPy9TiloeqQbRXNC5zkauL0/6zt5hGuvCIQ628aVBWXXlUe+UOT4ywnNnnuhT12g2vtX
-         hv8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8To9c/RhjeU3UhCcJpilZYbO96GcFeqlarqkyf14xk=;
-        b=UmW5zzDeaRQ3UR6MfeoQ+/gv5PrervTrl/mnHqWyWlSfnt/llEwtuQckXapJaX9vVY
-         rCoRvI1Bne5HZZymR25ZIae1Z4oLtWZjoDrCDfwCd/IEuSp6eOxB0vVo5cnSDLns6hW3
-         zUevLqYLfkUSlYWfDlFbEigkGXVTzHfz0l2sGUqRTXhToH9xBXdG5Jlm7303NeSr5yLk
-         YTjRZiTi5MvR25jaX27DROWawa9lABti/eaHwxqbZrC7VQ+MkDCpHogSWb4MRu0vLHwg
-         YaCDpadSCMRzTHh6QU0vLk5Q7Lel68/RBaggQ/GEqGwQ9aufmFjSlCRjDZmTFw1O5t32
-         Aopg==
-X-Gm-Message-State: AFqh2krsNan0Lq7LooJ71qU1cMIHQtQ18ZWAF8E+2rRdEAC4iXdvylA3
-        Xxug/K1hgPX3amUE4yaYU88qnlMjZy/o
-X-Google-Smtp-Source: AMrXdXtUZRgLPxys+vegp/cuo3pBqGhpG0+QdQhR8QR3TvP33C+w+N/SXk8YCm7Y+zwyCUW76b0oO7vVLFkn
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:59e7:81ad:bc43:d9dc])
- (user=irogers job=sendgmr) by 2002:a17:90a:b288:b0:227:f19:eb19 with SMTP id
- c8-20020a17090ab28800b002270f19eb19mr507224pjr.44.1673296504559; Mon, 09 Jan
- 2023 12:35:04 -0800 (PST)
-Date:   Mon,  9 Jan 2023 12:34:24 -0800
-In-Reply-To: <20230109203424.1157561-1-irogers@google.com>
-Message-Id: <20230109203424.1157561-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20230109203424.1157561-1-irogers@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 3/3] perf bpf: Remove pre libbpf 1.0 conditional logic
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Mon, 9 Jan 2023 15:35:25 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFBE6C284;
+        Mon,  9 Jan 2023 12:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1673296481; bh=tDDMxQUH9PrDLgE/dT+MuHlPyJiO7mFGW8/sbQmK4fA=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gxMrS/Twsss7fCu2lS0Wb7K3e/li2f3rr8EK0drV5Gymn8ukNv3Bwd3LMbH/SmLJz
+         o2pWkySPI2F6couqVMUSRCavEGZqW+jT+LxjfSX8MZJes+uauHTLdbV5/NxJk291CX
+         ttUvgacY+St5fs4ANcNfRSuJ0LQubjNe4T7ejyE7EPNyMI/EAgYH8sAY0VeTaiwytz
+         8FAsrR1AbNmEEbpSuFs3/+7VsGugLmhoT+YZmgEAg8A5M+IslycNul2RkgORKhtpdV
+         /weQ+nsr0P6qYV6MOEXto40tT5he1eKLUNC73UieAtSZYLBAigqW9XXZ9z4aW1VLn9
+         II8e94VHAgC2g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.168.5]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWAOW-1pHbCN0Lk2-00XalY; Mon, 09
+ Jan 2023 21:34:41 +0100
+Message-ID: <f5b87764-57b8-8d13-79bd-592363ca7c32@gmx.de>
+Date:   Mon, 9 Jan 2023 21:34:36 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 01/15] video: fbdev: atmel_lcdfb: Rework backlight
+ handling
+Content-Language: en-US
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Sam Ravnborg via B4 Submission Endpoint 
+        <devnull+sam.ravnborg.org@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-1-1bd9bafb351f@ravnborg.org>
+ <553AE999-CAF1-4E59-9F3F-68591ED192DE@sk2.org>
+ <Y7nb2q6SDota/rTU@ravnborg.org> <811a392a-d634-5557-dd58-57f1580e28f2@gmx.de>
+ <20230109211857.79856bcf@heffalump.sk2.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230109211857.79856bcf@heffalump.sk2.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Sxat2VV9tsmpDqx48BXRIJsjtp4Uk+LtMp6TeothrAxEKeOVUMN
+ Dm0J5cCxulRKy7oAmoyPnyYtBINa8biDQuhLNx3id5aME9DtEU5Bjf/sV3mvs40zfguZnbh
+ KtsbJUiQXuF3dSrIqUeLm0CfC2SEBu2glCy9/ejtL6222AIa6jJQxToCY/b0mN6irXRDkxr
+ YErYktx+mjchd/jxSTLBA==
+UI-OutboundReport: notjunk:1;M01:P0:Ru6D61qjM+I=;/Tif9Q07xNGL/8IpH47T4Zb2J/p
+ 87op62XiN1+XP1UVPc++jmLZc3PbX8X9DyVhRrkA+1F+2SvKWtOdBxx0+7KIDfVWx9w0/9mym
+ cGrz4Hz99ahqT75tlCPuD9C340MVcJwPEkubfK4IAoZn5iz7mvijEeHZl0HE3t4OI5BJ6Yyyg
+ e+muYXDfYFB4b2wOzOyP5lmp8SIkqdnUQiNK6B7QgUJAgubpgxBe62neT1cxRXfo5kPDiTg97
+ iUMWRThu99tk9hZ/rOPyyRVGNp46tU5eW0uFDJSXSN1KDo00pyAJHeToaAc424ld8T+Gh6+JM
+ 7Alx9KJZs1jVQveQrERjLkcczY3TGv4ktXLXIXIdZ3Mvgee2ed71+lUUBpN5S3cBAaMLXawPx
+ HCGmxyBNZ2DOaW2tf08AfG/zAleN9QNs7nEHhy1ETyTdwgjW8qT9fd4hyTf73icRT0MQt7amF
+ 2nzXeM/b6tH3qHifK1iaxWAlFLlj38yKg/rUv31pYRG0V0m1PG5vdDFs1fBtFNGIhMhzw6ezi
+ zfi3h0KmiGw5NQUkUkvIkCaHSKsrD2zXEkh0qAtXf299o/ZweoN6YFZnc9NPNl3Ge/RzVazUJ
+ qB6UWJ790F+sf2/MqvlneZqxmgceqEEsHOtqsOdAHPb7viXlebkLnhq5Hqnrfv8ESCO5mwTcQ
+ 5D9swqk/sxRHfuDLKXDf5I+KZWSxtoboJH4V+TuOPIoPg1G3Bdhl2FJEDqi4a2rLaYttNv60f
+ T6OfkZJ12Bxtc4tmYiZRJgGbiGgwdfp5b1AFR9JnK2zGr4qX8xa/5oC7e7rQMdXU50SU9ZBkk
+ mNCd+bQk1QovwKxnpregRNLjnVjbhpsEIcY4FznWPiFR0/n1YiVEK+4wpjUsxMT8+lORVepC0
+ tTn339nCiIBz0Lfmm4vvvFKeTbUg6LD/gOmkmJFJq2UWfWinI8CNbixz6uQqNIxbEOqAF+xmz
+ aRkqQA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,171 +94,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests are no longer applicable as libbpf 1.0 can be assumed.
+On 1/9/23 21:18, Stephen Kitt wrote:
+> On Sun, 8 Jan 2023 18:26:12 +0100, Helge Deller <deller@gmx.de> wrote:
+>
+>> On 1/7/23 21:53, Sam Ravnborg wrote:
+>>> Hi Stephen.
+>>>
+>>> On Sat, Jan 07, 2023 at 09:36:47PM +0100, Stephen Kitt wrote:
+>>>> On 7 January 2023 19:26:15 CET, Sam Ravnborg via B4 Submission Endpoi=
+nt
+>>>> <devnull+sam.ravnborg.org@kernel.org> wrote:
+>>>>> From: Sam Ravnborg <sam@ravnborg.org>
+>>>>>
+>>>>> The atmel_lcdfb had code to save/restore power state.
+>>>>> This is not needed so drop it.
+>>>>>
+>>>>> Introduce backlight_is_brightness() to make logic simpler.
+>>>>>
+>>>>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>>>>> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+>>>>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>>>> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+>>>>> Cc: linux-fbdev@vger.kernel.org
+>>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>>> ---
+>>>>> drivers/video/fbdev/atmel_lcdfb.c | 24 +++---------------------
+>>>>> 1 file changed, 3 insertions(+), 21 deletions(-)
+>>> ...
+>>>>
+>>>> Hi Sam,
+>>>>
+>>>> I=E2=80=99d submitted quite a few more of these previously (and you=
+=E2=80=99d reviewed
+>>>> them), see e.g. the thread starting at
+>>>> https://lkml.org/lkml/2022/6/7/4365, and yesterday,
+>>>> https://lkml.org/lkml/2023/1/6/520, https://lkml.org/lkml/2023/1/6/65=
+6,
+>>>> https://lkml.org/lkml/2023/1/6/970, https://lkml.org/lkml/2023/1/6/64=
+3,
+>>>> and https://lkml.org/lkml/2023/1/6/680. There are a few more, I can f=
+ind
+>>>> them if it=E2=80=99s any use.
+>>>
+>>> The patches from yesterday was what triggered me to resurrect an old
+>>> branch of mine where I had done something similar. I had lost all
+>>> memory of reviewing similar patches from you.
+>>>
+>>>
+>>> Helge - could you pick the reviewed patches from:
+>>> https://lore.kernel.org/all/20220607192335.1137249-1-steve@sk2.org/
+>>> [This is the same mail as Stephen refer to above - looked up via lore]=
+.
+>>
+>> I just pulled those 7 patches into fbdev/for-next.
+>> If you need more, please let me know,
+>
+> Please pull
+> https://lore.kernel.org/lkml/20230109200239.1850611-1-steve@sk2.org/ too=
+, it
+> completes the fbdev set. (It=E2=80=99s a re-send of
+> https://lore.kernel.org/lkml/20220609180440.3138625-1-steve@sk2.org/).
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config    |  9 -----
- tools/perf/util/bpf-event.c   | 66 -----------------------------------
- tools/perf/util/bpf-loader.c  | 18 ----------
- tools/perf/util/bpf_counter.c | 18 ----------
- 4 files changed, 111 deletions(-)
+Done.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 399e03338613..2197970bd503 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -566,15 +566,6 @@ ifndef NO_LIBELF
-       # detecting libbpf without LIBBPF_DYNAMIC, so make VF=1 shows libbpf detection status
-       $(call feature_check,libbpf)
- 
--      # Feature test requires libbpf 1.0 so we can assume the following:
--      CFLAGS += -DHAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
--      CFLAGS += -DHAVE_LIBBPF_BPF_PROG_LOAD
--      CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
--      CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_MAP
--      CFLAGS += -DHAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
--      CFLAGS += -DHAVE_LIBBPF_BTF__RAW_DATA
--      CFLAGS += -DHAVE_LIBBPF_BPF_MAP_CREATE
--
-       ifdef LIBBPF_DYNAMIC
-         ifeq ($(feature-libbpf), 1)
-           EXTLIBS += -lbpf
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index cc7c1f90cf62..025f331b3867 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -22,72 +22,6 @@
- #include "record.h"
- #include "util/synthetic-events.h"
- 
--#ifndef HAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
--struct btf *btf__load_from_kernel_by_id(__u32 id)
--{
--       struct btf *btf;
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--       int err = btf__get_from_id(id, &btf);
--#pragma GCC diagnostic pop
--
--       return err ? ERR_PTR(err) : btf;
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_PROG_LOAD
--LIBBPF_API int bpf_load_program(enum bpf_prog_type type,
--				const struct bpf_insn *insns, size_t insns_cnt,
--				const char *license, __u32 kern_version,
--				char *log_buf, size_t log_buf_sz);
--
--int bpf_prog_load(enum bpf_prog_type prog_type,
--		  const char *prog_name __maybe_unused,
--		  const char *license,
--		  const struct bpf_insn *insns, size_t insn_cnt,
--		  const struct bpf_prog_load_opts *opts)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_load_program(prog_type, insns, insn_cnt, license,
--				opts->kern_version, opts->log_buf, opts->log_size);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
--struct bpf_program *
--bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_program__next(prev, obj);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_OBJECT__NEXT_MAP
--struct bpf_map *
--bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_map__next(prev, obj);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BTF__RAW_DATA
--const void *
--btf__raw_data(const struct btf *btf_ro, __u32 *size)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return btf__get_raw_data(btf_ro, size);
--#pragma GCC diagnostic pop
--}
--#endif
--
- static int snprintf_hex(char *buf, size_t size, unsigned char *data, size_t len)
- {
- 	int ret = 0;
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 6e9b06cf06ee..44cde27d6389 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -32,24 +32,6 @@
- 
- #include <internal/xyarray.h>
- 
--#ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
--int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
--			   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_unused)
--{
--	pr_err("%s: not support, update libbpf\n", __func__);
--	return -ENOTSUP;
--}
--
--int libbpf_register_prog_handler(const char *sec __maybe_unused,
--                                 enum bpf_prog_type prog_type __maybe_unused,
--                                 enum bpf_attach_type exp_attach_type __maybe_unused,
--                                 const struct libbpf_prog_handler_opts *opts __maybe_unused)
--{
--	pr_err("%s: not support, update libbpf\n", __func__);
--	return -ENOTSUP;
--}
--#endif
--
- /* temporarily disable libbpf deprecation warnings */
- #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
- 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index eeee899fcf34..aa78a15a6f0a 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -312,24 +312,6 @@ static bool bperf_attr_map_compatible(int attr_map_fd)
- 		(map_info.value_size == sizeof(struct perf_event_attr_map_entry));
- }
- 
--#ifndef HAVE_LIBBPF_BPF_MAP_CREATE
--LIBBPF_API int bpf_create_map(enum bpf_map_type map_type, int key_size,
--                              int value_size, int max_entries, __u32 map_flags);
--int
--bpf_map_create(enum bpf_map_type map_type,
--	       const char *map_name __maybe_unused,
--	       __u32 key_size,
--	       __u32 value_size,
--	       __u32 max_entries,
--	       const struct bpf_map_create_opts *opts __maybe_unused)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_create_map(map_type, key_size, value_size, max_entries, 0);
--#pragma GCC diagnostic pop
--}
--#endif
--
- static int bperf_lock_attr_map(struct target *target)
- {
- 	char path[PATH_MAX];
--- 
-2.39.0.314.g84b9a713c41-goog
+Thanks!
+Helge
 
