@@ -2,137 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E76663123
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D51663131
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237735AbjAIUNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S237338AbjAIUQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237729AbjAIUNr (ORCPT
+        with ESMTP id S235552AbjAIUP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:13:47 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB1918E20
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:13:46 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id g13so14808745lfv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZwlI2rC+HzJTLFLMhKZ8XXSbqvnPdbvWS7MaUPnObQo=;
-        b=kz3Ist5SxOCjqV2Ocp2A6n17EHolOzFGiqs6Wco9XF+43bgkwP9nBpHWfzG4X/BXQx
-         CyGQO1Ofksog/BjasUXnL0yAnmDUZ44XYgH8AYgP6Dnp3dav6Bea9C/x41l56t1mL2Sw
-         chgSQ8gIVZWZ0S0UaW5amMhXBDegOHhh9IFm40U2qPAsFRM09/BF0IvMBNsMmmwR6KtA
-         8cmvA2FyEnoOMh2ULjMshs5E4J7fz2izE+xtI+I4y42dmYwQMyTcgrXVpI7HVQs4caH4
-         KEQ3vy9J0wHOewqQ99+KxtH1TIZOMtJuV/ljHg4FElybP2XRtibuBisf4wIQhKhHdkvW
-         xT7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZwlI2rC+HzJTLFLMhKZ8XXSbqvnPdbvWS7MaUPnObQo=;
-        b=LcZdcHeY4rSwbtf8YjKzimi8qJ3yTNb5jzbiWjOUz2Nl88uYsvCF0iMXTSs3WARPQi
-         Ls5i+XRA8WfCDHbCuIi0XRhBIzRX22CL0WRW7QzCHcyLZama27NBvUit3Q3ErxYQ36qu
-         dOreJSTGS5XEKPIRkt66WTWvaLbH2J9R6YJ7WbKJnUacYnUGWJ5M6LrmRE27VRxzMr7k
-         x1rJ6GJQikdL5MUDA9z/2rj/EJUECLhWFEfRKMB1PXl4rF2Scf8T1qCyA1nNLWONWFjE
-         kDeAPFMqh7DQKUYpmsL0DQxjL9Pyf8vPHr3dapE0Xvfi4O4jcyjGfKeHD6URnWd/3Win
-         mTKg==
-X-Gm-Message-State: AFqh2kqqGIGqulYN6xnmvnRkhA1GKGgKUTNBesMTIYEqaV+ARhmco+/z
-        dGOfHQhMXUog0VvwtWeRqrL9VQ==
-X-Google-Smtp-Source: AMrXdXtvNWi+5bMNS3mo/Qw4dk7CPRaMpdh2nLCV4A0yC2G+8sSbxJc6WOy18Yj7EqgI+pgZXWBpcA==
-X-Received: by 2002:a05:6512:3601:b0:4b7:13b:259d with SMTP id f1-20020a056512360100b004b7013b259dmr16616174lfs.48.1673295225068;
-        Mon, 09 Jan 2023 12:13:45 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x2-20020a056512130200b004a8f824466bsm1766455lfu.188.2023.01.09.12.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:13:44 -0800 (PST)
-Message-ID: <bca87233-ae9d-00f8-07d3-07afef2cb92c@linaro.org>
-Date:   Mon, 9 Jan 2023 22:13:43 +0200
+        Mon, 9 Jan 2023 15:15:57 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 86E66FF1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:15:52 -0800 (PST)
+Received: (qmail 648577 invoked by uid 1000); 9 Jan 2023 15:15:51 -0500
+Date:   Mon, 9 Jan 2023 15:15:51 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
+        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
+        kishon@ti.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
+Message-ID: <Y7x19w/sEvQyfi9C@rowland.harvard.edu>
+References: <0000000000002fc8dc05ef267a9f@google.com>
+ <Y49h3MX8iXEO/na+@rowland.harvard.edu>
+ <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
+ <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
+ <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 00/18] arm64: qcom: add support for sa8775p-ride
-Content-Language: en-GB
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230109174511.1740856-1-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 19:44, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> This adds basic support for the Qualcomm sa8775p platform and its reference
-> board: sa8775p-ride. The dtsi contains basic SoC description required for
-> a simple boot-to-shell. The dts enables boot-to-shell with UART on the
-> sa8775p-ride board. There are three new drivers required to boot the board:
-> pinctrl, interconnect and GCC clock. Other patches contain various tweaks
-> to existing code. More support is coming up.
-> 
-> Bartosz Golaszewski (15):
->    dt-bindings: clock: sa8775p: add bindings for Qualcomm gcc-sa8775p
->    arm64: defconfig: enable the clock driver for Qualcomm SA8775P
->      platforms
->    dt-bindings: clock: qcom-rpmhcc: document the clock for sa8775p
->    clk: qcom: rpmh: add clocks for sa8775p
->    dt-bindings: interconnect: qcom: document the interconnects for
->      sa8775p
->    arm64: defconfig: enable the interconnect driver for Qualcomm SA8775P
->    dt-bindings: pinctrl: sa8775p: add bindings for qcom,sa8775p-tlmm
->    arm64: defconfig: enable the pinctrl driver for Qualcomm SA8775P
->      platforms
->    dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
->    dt-bindings: power: qcom,rpmpd: document sa8775p
->    soc: qcom: rmphpd: add power domains for sa8775p
->    dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
->    iommu: arm-smmu: qcom: add support for sa8775p
->    dt-bindings: arm: qcom: document the sa8775p reference board
->    arm64: dts: qcom: add initial support for qcom sa8775p-ride
-> 
-> Shazad Hussain (2):
->    clk: qcom: add the GCC driver for sa8775p
+Returning to an old discussion...
 
-This patch didn't make it to the list. Please check if you can fix or 
-split it somehow?
+On Mon, Dec 12, 2022 at 01:29:24PM +0100, Oliver Neukum wrote:
+> 
+> 
+> On 08.12.22 18:40, Alan Stern wrote:
+> > On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
+> > > On 06.12.22 16:38, Alan Stern wrote:
+> 
+> > It's hard to tell what's really going on.  Looking at
+> > xpad_stop_output(), you see that it doesn't do anything if xpad->type is
+> > XTYPE_UNKNOWN.  Is that what happened here?
+> 
+> The output anchor in xpad was used. So I have to answer that in the negative.
+> > I can't figure out where the underlying race is.  Maybe it's not
+> > directly connected with anchors after all.
+> > 
+> > > As far as I can tell the order we decrease use_count is correct. But:
+> > > 
+> > > 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
+> > > 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
+> > > 
+> > > Do we need to guarantee memory ordering here?
+> > 
+> > I don't think we need to do anything more.  usb_kill_urb() is careful to
+> > wait for completion handlers to finish, and we already have
+> 
+> By checking use_count
+> 
+> > smp_mb__after_atomic() barriers in the appropriate places to ensure
+> > proper memory ordering.
+> 
+> Do we? Looking at __usb_hcd_giveback_urb():
+> 
+>         usb_unanchor_urb(urb);
+> 
+> This is an implicit memory barrier
+> 
+>         if (likely(status == 0))
+>                 usb_led_activity(USB_LED_EVENT_HOST);
+> 
+>         /* pass ownership to the completion handler */
+>         urb->status = status;
+>         /*
+>          * This function can be called in task context inside another remote
+>          * coverage collection section, but kcov doesn't support that kind of
+>          * recursion yet. Only collect coverage in softirq context for now.
+>          */
+>         kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+>         urb->complete(urb);
+>         kcov_remote_stop_softirq();
+> 
+>         usb_anchor_resume_wakeups(anchor);
+>         atomic_dec(&urb->use_count);
+>         /*
+>          * Order the write of urb->use_count above before the read
+>          * of urb->reject below.  Pairs with the memory barriers in
+>          * usb_kill_urb() and usb_poison_urb().
+>          */
+>         smp_mb__after_atomic();
+> 
+> That is the latest time use_count can go to zero.
+> But what is the earliest time the CPU could reorder setting use_count to zero?
+> Try as I might the last certain memory barrier I can find in this function
+> is usb_unanchor_urb().
+> That means another CPU can complete usb_kill_urb() before usb_anchor_resume_wakeups()
+> runs.
+> 
+>         usb_anchor_resume_wakeups(anchor);
+> 
+> I think we need a memory barrier here, too.
+> 
+>         atomic_dec(&urb->use_count);
 
--- 
-With best wishes
-Dmitry
+Please comment on the proposed patch below.
 
+Alan Stern
+
+
+Index: usb-devel/drivers/usb/core/hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd.c
++++ usb-devel/drivers/usb/core/hcd.c
+@@ -1563,13 +1563,19 @@ int usb_hcd_submit_urb (struct urb *urb,
+ 		usbmon_urb_submit_error(&hcd->self, urb, status);
+ 		urb->hcpriv = NULL;
+ 		INIT_LIST_HEAD(&urb->urb_list);
+-		atomic_dec(&urb->use_count);
+ 		/*
+-		 * Order the write of urb->use_count above before the read
+-		 * of urb->reject below.  Pairs with the memory barriers in
+-		 * usb_kill_urb() and usb_poison_urb().
++		 * urb->use_count acts like a refcount, so decrementing it to
++		 * 0 must be ordered after earlier accesses (pairs with the
++		 * implicit control dependencies in the wait conditions of
++		 * usb_kill_urb() and usb_poison_urb()).  Also, the decrement
++		 * must be ordered before the read of urb->reject below
++		 * (pairs with the memory barriers in those same routines).
++		 *
++		 * Get the effect of full memory barriers before and after
++		 * the decrement by using atomic_dec_return() instead of a
++		 * simple atomic_dec().
+ 		 */
+-		smp_mb__after_atomic();
++		atomic_dec_return(&urb->use_count);
+ 
+ 		atomic_dec(&urb->dev->urbnum);
+ 		if (atomic_read(&urb->reject))
+@@ -1672,13 +1678,19 @@ static void __usb_hcd_giveback_urb(struc
+ 	kcov_remote_stop_softirq();
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+-	atomic_dec(&urb->use_count);
+ 	/*
+-	 * Order the write of urb->use_count above before the read
+-	 * of urb->reject below.  Pairs with the memory barriers in
+-	 * usb_kill_urb() and usb_poison_urb().
++	 * urb->use_count acts like a refcount, so decrementing it to
++	 * 0 must be ordered after earlier accesses (pairs with the
++	 * implicit control dependencies in the wait conditions of
++	 * usb_kill_urb() and usb_poison_urb()).  Also, the decrement
++	 * must be ordered before the read of urb->reject below
++	 * (pairs with the memory barriers in those same routines).
++	 *
++	 * Get the effect of full memory barriers before and after
++	 * the decrement by using atomic_dec_return() instead of a
++	 * simple atomic_dec().
+ 	 */
+-	smp_mb__after_atomic();
++	atomic_dec_return(&urb->use_count);
+ 
+ 	if (unlikely(atomic_read(&urb->reject)))
+ 		wake_up(&usb_kill_urb_queue);
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -726,6 +726,10 @@ void usb_kill_urb(struct urb *urb)
+ 
+ 	usb_hcd_unlink_urb(urb, -ENOENT);
+ 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
++	/*
++	 * The test of urb->use_count creates a control dependency
++	 * ordering the wait_event() call against any later writes.
++	 */
+ 
+ 	atomic_dec(&urb->reject);
+ }
+@@ -776,6 +780,10 @@ void usb_poison_urb(struct urb *urb)
+ 
+ 	usb_hcd_unlink_urb(urb, -ENOENT);
+ 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
++	/*
++	 * The test of urb->use_count creates a control dependency
++	 * ordering the wait_event() call against any later writes.
++	 */
+ }
+ EXPORT_SYMBOL_GPL(usb_poison_urb);
+ 
