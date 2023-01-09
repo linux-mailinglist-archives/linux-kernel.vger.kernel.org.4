@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03BA661CA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95CE661CB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjAIDVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 22:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S234006AbjAIDaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 22:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAIDVa (ORCPT
+        with ESMTP id S230504AbjAIDaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:21:30 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8B110FFC
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 19:21:27 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so11407614pjk.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 19:21:27 -0800 (PST)
+        Sun, 8 Jan 2023 22:30:08 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DAD5FC9
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 19:30:04 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso8022424pjo.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 19:30:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1jM4mtOjxzdkvFj3jCakSNJPcFUF5OXMS78TpTOkDW4=;
-        b=cRp2Z8RUR4sfc1KLeo3L5gGC6ptTp4LAVkfMYeHbSm58AYuAy4sxKOFLXN/CLRCE5E
-         LshWW/NefQvWJ8mNHInIl7KQ0ifdJygzsYI7rjHldbqnpK6bvJ+LWVg02P8qyfwLLSmP
-         LlYLVUupKcv6tz8Sju4/sfM+AfrCR2mJO8mz3kOP3E96z8bUS6tm/pM7EYEDKOVaUAP1
-         58EG0tVx3EEKqJBORmYqmh9q6RaQcxPymx3AWVLC7tl5XEeOzqFvjnzGQjsD7EuSUTkE
-         C5o/pVkUvtCN8jkVmsElc198JdwVjphcErKfPKiZzupEfZVOvwCOreItJFOvhpPZZdtj
-         syUA==
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l1Q0s3QZP3zgMoieH09ETwIZdLie5eQr6iy50h+rqPs=;
+        b=53o2f2czGsiadqF8jeoKIJ9bjpIMB+3jP+24mrPAyfFwUmUX6qSkx0LpX8JBjk/y2D
+         /zVzBFSraoYAG/2RZZNqZm6+7XyQ8qGpOB0d97N2ATqfS0AFBsBGjmD7dbUtaoD1Efti
+         EPDzn3gUBg+rAFjHwy8VAxPg8a/RIxruvrKbFg2/DyWNnrXa/XM6FpphPhyG/0fd4JyK
+         8mccONWce58PXfyURCPRZbDGQpwgBzQyLLzLV9d6oY5Ztgu7hQl0cdT+X4jPwYPnwMfB
+         tQ56VmDyFhqMj94Z3D6Y+XPiJLF4L61cTueI67N2tar93NMNbYTBMFECfnTAAvZ6D3E/
+         B7OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1jM4mtOjxzdkvFj3jCakSNJPcFUF5OXMS78TpTOkDW4=;
-        b=uUVomy2bIN1Mwry/zXBL7sVW3HMmrzmQPJqh92FsiXg27oCvPO1FqLRuN80ipyjyCA
-         iH0hTCxlt7kht3viOSRKR70mfs1EpeXyeGc3ZuXXreZvnz9jtCAupVE2CPJGK4T9SL3A
-         lqiGz0fUj1o+GjxB6G2Y8S+1kLwHmLJaR3L98qEeXQxd8QXzm1vLop85ExhcsongSCaB
-         L7vd7T84kZTln93pftAzxE68XgptuZFKmBV4tVbmoi9UObDazMdtUrfFfpMgtfaa26/x
-         y+vSLugaSKGpEhJENT4ZSPakjorW5l1FYT0PiCdBx6HpyBTDbp7AWQ17jRJTURclqgxG
-         +88w==
-X-Gm-Message-State: AFqh2krOz6dxLq4cYxaKOcROGKDQSvy37bEcNiK4jet+uqZVHu84tTE3
-        sv3hUw8dLvtjrlcKcpEiGn6qAtXnc5iSjaH7
-X-Google-Smtp-Source: AMrXdXtVFt1i2MZWHS/tT/iGO3Y7mw0s3YQU8XLOXkuSEK8oesC6OzPZBoaF74YwPKmynJ8e1b9AgA==
-X-Received: by 2002:a05:6a21:8cc4:b0:af:cc4e:f2d with SMTP id ta4-20020a056a218cc400b000afcc4e0f2dmr17033783pzb.0.1673234486613;
-        Sun, 08 Jan 2023 19:21:26 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id b5-20020a630c05000000b00477def759cbsm4200903pgl.58.2023.01.08.19.21.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 19:21:26 -0800 (PST)
-Message-ID: <df7cb4c5-eae8-1aa4-2c1d-4cbf3c651c1a@kernel.dk>
-Date:   Sun, 8 Jan 2023 20:21:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] KASAN: wild-memory-access Read in io_wq_worker_running
-To:     syzbot <syzbot+d56ec896af3637bdb7e4@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000e7f96f05f1cb9a84@google.com>
-Content-Language: en-US
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l1Q0s3QZP3zgMoieH09ETwIZdLie5eQr6iy50h+rqPs=;
+        b=OYrC0AgqCqrBpGLC18RJJgZYPnFCzJQpUZwzTZk7Gr+1iVLRGwHhunzpVcQteoDqso
+         cd5Ix2XEzEofKsbvwdMvXLrqOE8IbzMF1eUTovC+x8u9cZcSa8a52pxb7yp+Fe3fSuz0
+         TKcoCiki8UI6wSrvWobF+16akW2MgSpb16yg+MT6UxxJzmZxNQAZFBc8d+gJINa/g3Gv
+         F+oamV+1Hf15NX+rFMFuHbv9N9ruvis9py2H1HrEReTty+I0FO81WVPt0GCXqMCBNQV+
+         1JQmRV5ACa40N1ZFBomFAE+/Nzuk3ayheKrMk9ygLEJ8JSkpgai8kORZNJYsOB7V3EUJ
+         gwag==
+X-Gm-Message-State: AFqh2kom2SXNJJ7leidj/agKVHDNa6cxv2hS3Da0TmJqY9YS1Wpxybvv
+        a/G2EABLf/GlLbfBMkgb3W220YjkvmtLQZTN
+X-Google-Smtp-Source: AMrXdXsxPtBfJ2yhCEFV7jgfVbDZJ4zEnmdJgwY/fXZ8EruCYvaNWOFlrqmk9onvRakIQ2QISugdbQ==
+X-Received: by 2002:a05:6a20:a6a7:b0:b5:c751:78ac with SMTP id ba39-20020a056a20a6a700b000b5c75178acmr780704pzb.2.1673235003564;
+        Sun, 08 Jan 2023 19:30:03 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ik9-20020a170902ab0900b00183c67844aesm4858264plb.22.2023.01.08.19.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 19:30:03 -0800 (PST)
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000e7f96f05f1cb9a84@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
+References: <Y7g3L6fntnTtOm63@kili> <Y7hbYPSdLqW++y/p@slm.duckdns.org>
+ <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
+ <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
+Subject: Re: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep()
+ from blk_put_queue()
+Message-Id: <167323500264.3803.6715346209932603598.b4-ty@kernel.dk>
+Date:   Sun, 08 Jan 2023 20:30:02 -0700
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-cc11a
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/8/23 7:34 PM, syzbot wrote:
-> Hello,
+
+On Fri, 06 Jan 2023 10:34:10 -1000, Tejun Heo wrote:
+> Dan reports the following smatch detected the following:
 > 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> INFO: rcu detected stall in corrupted
+>   block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
 > 
-> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5774 } 2664 jiffies s: 2777 root: 0x0/T
-> rcu: blocking rcu_node structures (internal RCU debug):
+> caused by blkcg_schedule_throttle() calling blk_put_queue() in an
+> non-sleepable context.
+> 
+> [...]
 
-Don't think that's related, probably because of the earlier base of
-that branch. Let's try something that's merged to current master:
+Applied, thanks!
 
-#syz test: git://git.kernel.dk/linux.git syztest
+[1/1] block: Drop spurious might_sleep() from blk_put_queue()
+      commit: 49e4d04f0486117ac57a97890eb1db6d52bf82b3
 
+Best regards,
 -- 
 Jens Axboe
 
