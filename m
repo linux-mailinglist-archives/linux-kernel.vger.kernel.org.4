@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596A16633C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF446633D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbjAIWQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S237718AbjAIWSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjAIWQh (ORCPT
+        with ESMTP id S237753AbjAIWSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:16:37 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F60711C31
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:16:37 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c57d19de6fso78939577b3.20
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:16:37 -0800 (PST)
+        Mon, 9 Jan 2023 17:18:22 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787171208E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:18:20 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id q141so2115228vkb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:18:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y9TFZ1eWP+JIndu1JdgCdrPRh+jAT3LtUVgzdE/rI84=;
-        b=C0Hc9uF3im6Ys2/s/4e6nNvgxvlythCwW8m17GdXHrOqWQ9yn0iW0LTZyj+MdItAEY
-         iybja8FN1XyhoSwQX36EF+9wSfenpbb6LvJn2ASIr9ARjPf3bBYDEf0TmC1ADROKbIzA
-         uqBW5UJwXEglstUm+YQchdmDfMIzIajQqCXdq5tXej2n/om0MByQQj7QiCcAlkoHzW+f
-         0EvQf8SiwDxeGivZRKBfCGtD95VHgBTkc0pBRfvgB/JhWJIan9MB+IxMjhlK+NPhAWfg
-         dNKLyThxKdiUaJhH8Ndfdtdxjx9wWLvlbjqkUFmWXQ0tbaB5ICv8vHAarsuXw/gDkqnj
-         gHfA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2KmFF4MIYR1i1tDn7HkCXsIkV2zq/DOASpD61PD2PiQ=;
+        b=o9O4iMagnefvuL39/DCHp9NN7X7dAfd5489k94RQaSeNu3Qe9PpX1LHn7PZ/LN+PbQ
+         RVsgiQvejr/XomlyXBf1cUFSzBxzGYdacyaOzd7SMmecWNm9U614/aPFL5AcKuzHIbmu
+         dvR8umH3QOBwYCCAxQURO8baXqc1BXRLsrD+jb+n9r/LK6hnJvxs0UvVGgWiNjiCZPWM
+         AI5eDEMtsueo+BwAXqiMBJ/S0LncsC+rkUqYn7kr+LbcTe0u9O2o+jIxC8s7Y8CjqKgS
+         5pwXk2CUXPWNQ4b6/KCTNTHCdqfaawCe3iZSXqvfUyCGnYfkUId34ZLl/akgrplN2Jho
+         x1Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y9TFZ1eWP+JIndu1JdgCdrPRh+jAT3LtUVgzdE/rI84=;
-        b=ZartU+aikrBtyaxMtbqUgV7urohYbrKCpguh4lNlmyimSK615nX0LhpIjElJ1PkScK
-         LABOv/GqQvZjHtnC8Sj/znfXJHXF8Ha8dR79FgsbVktzZM2JJnibjvpAoj4daAc418Zl
-         ZT+Kf9eeHLFBPid5ACrj5xeIpXPVERkoTLJpqzNgYE707qXnMppq1DKE0gxtiU/9+jYp
-         RhQzrx0Zk8CNNopTXYzYO+YypO7tQgHHZb3J5+WhogJcgY4jyVtGAMcM7bcLE+Xx0q48
-         V3CfvT8kY93jpWnpR3TWNcqhLGvzYEVjfD8dcVgRksfGiqKl3VYPoZCSIKfsA31GWRuf
-         vFkw==
-X-Gm-Message-State: AFqh2kpMjdiOctfCMqMkQahzyl6xBA+cLL7NIPloxFs3PfyTingsY1xp
-        wdgvvt4g8lPJ4WgWMFgsupbbtDPpxZ4o5E7IRrKEew==
-X-Google-Smtp-Source: AMrXdXvHobRDwuXj4MA5OcW3NVM1spLgSqNMAAiW4GhwomXZXFwO2kaU1GbMWchPaX3UjiQoZHyyjBmkbD8YjhmyaldVbQ==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:3990:5e50:b0f8:bcdd])
- (user=isaacmanjarres job=sendgmr) by 2002:a05:690c:b08:b0:469:28df:b2c2 with
- SMTP id cj8-20020a05690c0b0800b0046928dfb2c2mr1656471ywb.122.1673302596557;
- Mon, 09 Jan 2023 14:16:36 -0800 (PST)
-Date:   Mon,  9 Jan 2023 14:16:23 -0800
-In-Reply-To: <20230109221624.592315-1-isaacmanjarres@google.com>
-Mime-Version: 1.0
-References: <20230109221624.592315-1-isaacmanjarres@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109221624.592315-3-isaacmanjarres@google.com>
-Subject: [PATCH v1 2/2] mm/cma.c: Delete kmemleak objects when freeing CMA
- areas to buddy at boot
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2KmFF4MIYR1i1tDn7HkCXsIkV2zq/DOASpD61PD2PiQ=;
+        b=U8lKOBT8r+2sKCk0vOXSTr0hZ8ae+h9DR3vkX1vEnwtSU7p1teXJeKcgmo6nZAQZy+
+         vTvwede2419OPbNcGxTKUFfWqgFj/CMADgST5p1Pajs1RBZQze+ep1ZRHQ2oI45Bdn5Z
+         Rnr3wSOQomiQRXfTkz9Ns/EOy3it9nQzq7xNpj7gQCYh9KR07cRRdCojCmkSkw00EdFn
+         aZM0Aj03TlxeqXfSFidCuEnaICW/JFBvo95LtZCV78H7kanrcKU8uzjhGPiW/00Avlr/
+         LzBelbkgRSIYFGL2QWYcwrhUaPV7enw4x2uhsJD6DCw89z3AkcTpM/lrpJLoAnUoZE9P
+         N5dw==
+X-Gm-Message-State: AFqh2kpaZr31WQk5pENkJTpfXr+R7w6NYh1JiPQYdglHuy8xbEeh1dno
+        4aaqZxfDmAYkd8D9rCF1hHjV2FGB2NoAIqH5nk8=
+X-Google-Smtp-Source: AMrXdXvv7mF9XZiIt7npgmZEq2JiEakZJUiZv6jkCpyOs0AGEHA8TcqpOYnAIxhbZwkFgHo27x1dr29c97ldfYsMuy8=
+X-Received: by 2002:a1f:5f90:0:b0:3d5:e6da:6d53 with SMTP id
+ t138-20020a1f5f90000000b003d5e6da6d53mr3409574vkb.36.1673302699525; Mon, 09
+ Jan 2023 14:18:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20221205161005.222274-1-jim.cromie@gmail.com> <20221205161005.222274-3-jim.cromie@gmail.com>
+ <Y7bGiLRanR3Y7tXM@phenom.ffwll.local>
+In-Reply-To: <Y7bGiLRanR3Y7tXM@phenom.ffwll.local>
+From:   jim.cromie@gmail.com
+Date:   Mon, 9 Jan 2023 15:17:52 -0700
+Message-ID: <CAJfuBxz=JQkXOYRRdbrcsZ+EjzjcSAMrd4P_NrbUAxCqYy2TMw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm_print: fix stale macro-name in comment
+To:     Jim Cromie <jim.cromie@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
+        ville.syrjala@linux.intel.com, seanpaul@chromium.org,
+        robdclark@gmail.com
+Cc:     daniel.vetter@ffwll.ch
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,56 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since every CMA region is now tracked by kmemleak at the time
-cma_activate_area() is invoked, and cma_activate_area() is called
-for each CMA region, invoke kmemleak_free_part_phys() during
-cma_activate_area() to inform kmemleak that the CMA region will
-be freed. Doing so also removes the need to invoke
-kmemleak_ignore_phys() when the global CMA region is being created,
-as the kmemleak object for it will be deleted.
+On Thu, Jan 5, 2023 at 5:46 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, Dec 05, 2022 at 09:10:05AM -0700, Jim Cromie wrote:
+> > Cited commit uses stale macro name, fix this, and explain better.
+> >
+> > When DRM_USE_DYNAMIC_DEBUG=y, DYNDBG_CLASSMAP_DEFINE() maps DRM_UT_*
+> > onto BITs in drm.debug.  This still uses enum drm_debug_category, but
+> > it is somewhat indirect, with the ordered set of DRM_UT_* enum-vals.
+> > This requires that the macro args: DRM_UT_* list must be kept in sync
+> > and in order.
+> >
+> > Fixes: f158936b60a7 ("drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.")
+> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+>
+> What's the status of this series?
+>
 
-This helps resolve a crash when kmemleak and CONFIG_DEBUG_PAGEALLOC
-are both enabled, since CONFIG_DEBUG_PAGEALLOC causes the CMA region
-to be unmapped from the kernel's address space when the pages are freed
-to buddy. Without this patch, kmemleak will attempt to scan the CMA
-regions, even though they are unmapped, which leads to a page-fault.
+dead - superseded by
+https://patchwork.freedesktop.org/series/111652/
+which is still WIP, but improved since that post.
+I'll resubmit soon, with same title so patchwork calls it rev 2
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- mm/cma.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/mm/cma.c b/mm/cma.c
-index 674b7fdd563e..dd25b095d9ca 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -102,6 +102,13 @@ static void __init cma_activate_area(struct cma *cma)
- 	if (!cma->bitmap)
- 		goto out_error;
- 
-+	/*
-+	 * The CMA region was marked as allocated by kmemleak when it was either
-+	 * dynamically allocated or statically reserved. In any case,
-+	 * inform kmemleak that the region is about to be freed to the page allocator.
-+	 */
-+	kmemleak_free_part_phys(cma_get_base(cma), cma_get_size(cma));
-+
- 	/*
- 	 * alloc_contig_range() requires the pfn range specified to be in the
- 	 * same zone. Simplify by forcing the entire CMA resv range to be in the
-@@ -361,11 +368,6 @@ int __init cma_declare_contiguous_nid(phys_addr_t base,
- 			}
- 		}
- 
--		/*
--		 * kmemleak scans/reads tracked objects for pointers to other
--		 * objects but this address isn't mapped and accessible
--		 */
--		kmemleak_ignore_phys(addr);
- 		base = addr;
- 	}
- 
--- 
-2.39.0.314.g84b9a713c41-goog
-
+> Greg, you landed the original entire pile that wasn't quite ready yet? Or
+> should I apply these two?
+> -Daniel
+>
+> > ---
+> > . emphasize ABI non-change despite enum val change - Jani Nikula
+> > . reorder to back of patchset to follow API name changes.
+> > ---
+> >  include/drm/drm_print.h | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+> > index a44fb7ef257f..e4c0c7e6d49d 100644
+> > --- a/include/drm/drm_print.h
+> > +++ b/include/drm/drm_print.h
+> > @@ -276,7 +276,10 @@ static inline struct drm_printer drm_err_printer(const char *prefix)
+> >   *
+> >   */
+> >  enum drm_debug_category {
+> > -     /* These names must match those in DYNAMIC_DEBUG_CLASSBITS */
+> > +     /*
+> > +      * Keep DYNDBG_CLASSMAP_DEFINE args in sync with changes here,
+> > +      * the enum-values define BIT()s in drm.debug, so are ABI.
+> > +      */
+> >       /**
+> >        * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
+> >        * drm_memory.c, ...
+> > --
+> > 2.38.1
+> >
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
