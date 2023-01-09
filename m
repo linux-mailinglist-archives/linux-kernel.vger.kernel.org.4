@@ -2,231 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A4C663244
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FB766324D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237453AbjAIVIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S237827AbjAIVJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237756AbjAIVHo (ORCPT
+        with ESMTP id S238130AbjAIVI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:07:44 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A3799275
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:00:03 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso8119104wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:00:03 -0800 (PST)
+        Mon, 9 Jan 2023 16:08:57 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E6A9B2BB
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:00:39 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id fc4so23329914ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:00:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UzZy04Ic2aUdzTgSub/+D+guuDt6qN2zJBC1MOCj0FE=;
-        b=PqmeRotaVpMJ4ujbDvAsrYaWBCkhC6Jo70nSAeNd9xslWsIzbDzbW0yNfoaF5r0yy9
-         F+MucbQxhBNAcGKweocHMmo5+KVIWsTmMv1VyPryn3dmpjL0F2VYdwCfyesz+ZpCFaGi
-         KEk4mw/VMVZZPxy4aVfVw8r3evMBAusP+9egBmEdInB+Gv95brlZUof60RG9aUl7JPRk
-         x72PxbuvIEETojjxnoPpsGNznAT3PvrJz8w4RfYe6jAOQlqiWrlxJHkkEA5/WRSZaG7E
-         VvP3ive0Pw6jKLya2jeoZuM6mKqhC41IZVpmOJxbxkvp2b9YWDbrTzZWNPuvbrrzITwM
-         BRpQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ZYMaHaqbGfit3zZPJvO9SjzoXsApTdGwsgUHl4lAQA=;
+        b=XjKVpVF2jUh+nbcr8BfkjUGgrOZhkdDNVv6pcebFKkz6aHrE8UALZhgTfETJjk2w4U
+         0xPk/UrgR4c79afxV4hEdVqMvBzZq8jDcPx+PvY2l6jiOQsTLmYqz9oG3wzAuhs1nLUk
+         gH8Vw7+PtaZ36q0GRpsUjbFb21QMbLyWB/BM8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UzZy04Ic2aUdzTgSub/+D+guuDt6qN2zJBC1MOCj0FE=;
-        b=8D81Uaka+o3gQpv+pg4Q5HSewa7dvkeZbPK7/779zU4F1KtgJLkINqjjgGqNWtL8i0
-         KxoUO+nZomJ2bGcVlWZLqMuSnu+8yT2W6CHY2xc9yGzcfyXXQTX8S6h2B9/Y50uM9I5J
-         PliBajkPmCFaWwJXNWkpMpnlc34embhAakInIhKHioKo6sijfRK4WGnSjPLqM4ctxfH6
-         tqLqfITpYRzP+3CJp0Ds5d0TqQ4DyquDu96itktaj1QjW01qhaDjJhZu+WifrWm3Hctz
-         +zwGt/Oiq4Hvf2o2p/ktMGzoUCt7vAVmuCitdLheHPBg/7eGxqnVG8Kt2e+gWEGZOmaT
-         lICA==
-X-Gm-Message-State: AFqh2koBPN2XXdX+VN/P0gTuTklVdeAqTbvPOB12upeM4mjwG/+5arPo
-        dWaop6U7WtiU3hoMhRDN8yt6HA==
-X-Google-Smtp-Source: AMrXdXu07Z6MDFh4ZEgcrX9Q3LqIJ4zJVrDOP82VKKfk8W315cyXZsXXbi88iyE0M9V8CvQMVxKb/Q==
-X-Received: by 2002:a05:600c:1d28:b0:3d2:1d51:246e with SMTP id l40-20020a05600c1d2800b003d21d51246emr50762581wms.9.1673298002065;
-        Mon, 09 Jan 2023 13:00:02 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id p21-20020a7bcc95000000b003c65c9a36dfsm12229340wma.48.2023.01.09.13.00.00
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ZYMaHaqbGfit3zZPJvO9SjzoXsApTdGwsgUHl4lAQA=;
+        b=PGyvavajVdBj7ZEhNbbt6pR3OXwKeG2zxpD30eaSVPLgI+XrWyVi+JnnOjNS3/Bx7z
+         NYefyLfEtmaeeYtRZhCRZ/MO/iUzs493M4lgEm0kJjeMvPlDgLASxD2bscSyLrh6XGHs
+         qFnQndIKXWOr3n70k4Jj7IIKT0eHFbMv1QO3DssMGsOUJBxubjEmoFvKT778rPTa0RPA
+         l6cB4kOQ20wYjn2ODjZ+52Q+o1CSMLOH4NepV6gBt/ZH7u/MSTXAAtzEdDnScZHjI1iL
+         ytKgCc3v0Px8orlOHpROaUW/xCfvBpqDZ7RYk0oIAuJTZjP2EPLO8FsZ5UuG4PO2IQfq
+         XOWA==
+X-Gm-Message-State: AFqh2krgfUYoFnEVd46J4t/xWQbAByUEMmPcpPDx8WYB20ovLWCfT3m1
+        D+RZVoupWto1eaQsmi/suvLVg12PxAH7I/Be
+X-Google-Smtp-Source: AMrXdXs8UtxsgZNw6k7mV04ysnimKpg3RSU23sO2zec7J98L7h+KRrhjEIwKZ49TVycu81rcKaMxDg==
+X-Received: by 2002:a17:907:c24e:b0:7c0:1db5:ea10 with SMTP id tj14-20020a170907c24e00b007c01db5ea10mr73222532ejc.53.1673298038008;
+        Mon, 09 Jan 2023 13:00:38 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090609c100b0084ce5d3afe7sm4104999eje.184.2023.01.09.13.00.36
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:00:01 -0800 (PST)
-Message-ID: <00e43ac2-6238-79a2-d9cb-8c42208594d8@arista.com>
-Date:   Mon, 9 Jan 2023 20:59:54 +0000
+        Mon, 09 Jan 2023 13:00:36 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id o15so7232633wmr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:00:36 -0800 (PST)
+X-Received: by 2002:a05:600c:4aa8:b0:3d0:69f4:d3d0 with SMTP id
+ b40-20020a05600c4aa800b003d069f4d3d0mr2698813wmp.93.1673298035812; Mon, 09
+ Jan 2023 13:00:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/5] crypto: Introduce crypto_pool
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-References: <20230103184257.118069-1-dima@arista.com>
- <20230103184257.118069-2-dima@arista.com>
- <20230106175326.2d6a4dcd@kernel.org>
-Content-Language: en-US
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20230106175326.2d6a4dcd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
+ <Y5x+WEwTtpoV0gaR@google.com> <fd23e295-fea0-1b0a-752c-3cce26b57346@quicinc.com>
+ <Y6HHCrl0q5BhrHOY@google.com> <e269300d-539e-9eb8-8b3c-d309f3abca1b@quicinc.com>
+ <bbc3c257-0a49-4c80-4586-c179c8997b50@linaro.org>
+In-Reply-To: <bbc3c257-0a49-4c80-4586-c179c8997b50@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 9 Jan 2023 13:00:23 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
+Message-ID: <CAD=FV=X3DyMrEWESV2cWvqg_TQYnj+VGFBQodAp+gfbhBz6X3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD
+ Pro boards
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        andersson@kernel.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>, agross@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+Hi,
 
-Thanks for taking a look and your review,
+On Tue, Dec 20, 2022 at 9:12 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 20/12/2022 18:20, Rajendra Nayak wrote:
+> >
+> >
+> > On 12/20/2022 8:00 PM, Matthias Kaehlcke wrote:
+> >> On Tue, Dec 20, 2022 at 10:30:32AM +0530, Rajendra Nayak wrote:
+> >>>
+> >>> On 12/16/2022 7:49 PM, Matthias Kaehlcke wrote:
+> >>>> On Fri, Dec 16, 2022 at 04:59:17PM +0530, Rajendra Nayak wrote:
+> >>>>> Add compatibles for the Pro SKU of the sc7280 CRD boards
+> >>>>> which come with a Pro variant of the qcard.
+> >>>>> The Pro qcard variant has smps9 from pm8350c ganged up with
+> >>>>> smps7 and smps8.
+> >>>>>
+> >>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> >>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> >>>>> ---
+> >>>>> v4 changes:
+> >>>>> Added the zoglin-sku1536 compatible along with hoglin-sku1536.
+> >>>>> Zoglin is same as the Hoglin variant, with the SPI Flash reduced
+> >>>>> from 64MB to 8MB
+> >>>>>
+> >>>>>    Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+> >>>>>    1 file changed, 6 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml
+> >>>>> b/Documentation/devicetree/bindings/arm/qcom.yaml
+> >>>>> index 1b5ac6b02bc5..07771d4c91bd 100644
+> >>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> >>>>> @@ -558,6 +558,12 @@ properties:
+> >>>>>              - const: google,hoglin
+> >>>>>              - const: qcom,sc7280
+> >>>>> +      - description: Qualcomm Technologies, Inc. sc7280 CRD Pro
+> >>>>> platform (newest rev)
+> >>>>> +        items:
+> >>>>> +          - const: google,zoglin-sku1536
+> >>>>> +          - const: google,hoglin-sku1536
+> >>>>
+> >>>> Is there actually such a thing as a 'hoglin-sku1536', i.e. the Pro
+> >>>> qcard
+> >>>> with 64MB of SPI flash, or do they all have 8MB of flash?
+> >>>
+> >>> The SPI flash is on the CRD mother-board and not on the qcards, so if
+> >>> you replace
+> >>> the qcards on the CRDs with 64MB flash you would need the
+> >>> hoglin-sku1536 to
+> >>> boot on those.
+> >>
+> >> With such a configuration how does the bootloader know it should pass
+> >> the kernel
+> >> the device tree for 'hoglin-sku1536' (pro) and not the non-pro
+> >> variant? IIUC the
+> >> device tree is selected based on pin strappings on the mother-board,
+> >> not the
+> >> qcard.
+> >
+> > The device tree is selected based on the pin strappings _and_ additional
+> > logic
+> > to dynamically identify modem/non-modem(wifi) as well as pro/non-pro
+> > SKUs which
+> > was added in the bootloaders.
+>
+> Just to clarify things, when you mention pro SKU, is it a separate SoC
+> revision (like sc7280-pro vs bare sc7280), or is it a CRD revision (CRD
+> Pro vs bare CRD)?
 
-On 1/7/23 01:53, Jakub Kicinski wrote:
-[..]
->> +config CRYPTO_POOL
->> +	tristate "Per-CPU crypto pool"
->> +	default n
->> +	help
->> +	  Per-CPU pool of crypto requests ready for usage in atomic contexts.
-> 
-> Let's make it a hidden symbol? It seems like a low-level library
-> which gets select'ed, so no point bothering users with questions.
-> 
-> config CRYPTO_POOL
-> 	tristate
-> 
-> that's it.
+I guess Rajendra never responded, but since I know the answer: it's a
+different SoC revision. ...but the SoC in this case is on a daughter
+card, so you could remove the daughter card containing the SoC and put
+a new daughtercard on. That would have the effect of making an old CRD
+revision have the new Pro SKU SoC.
 
-Sounds good
+Bjorn: I'd also note that I think this series (this patch and the next
+one) are ready to land.
 
->> +static int crypto_pool_scratch_alloc(void)
-> 
-> This isn't called by anything in this patch..
-> crypto_pool_alloc_ahash() should call it I'm guessing?
-
-Ah, this is little historical left-over: in the beginning, I used
-constant-sized area as "scratch" buffer, the way TCP-MD5 does it.
-Later, while converting users to crypto_pool, I found that it would be
-helpful to support simple resizing as users have different size
-requirement to the temporary buffer, i.e. looking at xfrm_ipcomp, if
-later it would be converted to use the same API, rather than its own:
-IPCOMP_SCRATCH_SIZE is huge (which may help to save quite some memory if
-shared with other crypto_pool users: as the buffer is as well protected
-by bh-disabled section, the usage pattern is quite the same).
-
-In patch 2 I rewrote it for crypto_pool_reserve_scratch(). The purpose
-of patch 2 was to only add dynamic up-sizing of this buffer to make it
-easier to review the change. So, here are 2 options:
-- I can move scratch area allocation/resizing/freeing to patch2 for v3
-- Or I can keep patch 2 for only adding the resizing functionality, but
-in patch 1 make crypto_pool_scratch_alloc() non-static and to the header
-API.
-
-What would you prefer?
-
-[..]
->> +out_free:
->> +	if (!IS_ERR_OR_NULL(hash) && e->needs_key)
->> +		crypto_free_ahash(hash);
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		if (*per_cpu_ptr(e->req, cpu) == NULL)
->> +			break;
->> +		hash = crypto_ahash_reqtfm(*per_cpu_ptr(e->req, cpu));
-> 
-> Could you use a local variable here instead of @hash?
-> That way you won't need the two separate free_ahash()
-> one before and one after the loop..
-
-Good idea, will do
-
-> 
->> +		ahash_request_free(*per_cpu_ptr(e->req, cpu));
-> 
-> I think using @req here would be beneficial as well :S
-> 
->> +		if (e->needs_key) {
->> +			crypto_free_ahash(hash);
->> +			hash = NULL;
->> +		}
->> +	}
->> +
->> +	if (hash)
->> +		crypto_free_ahash(hash);
-> 
-> This error handling is tricky as hell, please just add a separate
-> variable to hold the 
-
-Agree, will do for v3
-
->> +out_free_req:
->> +	free_percpu(e->req);
->> +out_free_alg:
->> +	kfree(e->alg);
->> +	e->alg = NULL;
->> +	return ret;
->> +}
->> +
->> +/**
->> + * crypto_pool_alloc_ahash - allocates pool for ahash requests
->> + * @alg: name of async hash algorithm
->> + */
->> +int crypto_pool_alloc_ahash(const char *alg)
->> +{
->> +	int i, ret;
->> +
->> +	/* slow-path */
->> +	mutex_lock(&cpool_mutex);
->> +
->> +	for (i = 0; i < cpool_populated; i++) {
->> +		if (cpool[i].alg && !strcmp(cpool[i].alg, alg)) {
->> +			if (kref_read(&cpool[i].kref) > 0) {
-> 
-> In the current design we can as well resurrect a pool waiting to 
-> be destroyed, right? Just reinit the ref and we're good.
-> 
-> Otherwise the read() + get() looks quite suspicious to a reader.
-
-Yes, unsure why I haven't done it from the beginning
-
-[..]
->> +/**
->> + * crypto_pool_add - increases number of users (refcounter) for a pool
->> + * @id: crypto_pool that was previously allocated by crypto_pool_alloc_ahash()
->> + */
->> +void crypto_pool_add(unsigned int id)
->> +{
->> +	if (WARN_ON_ONCE(id > cpool_populated || !cpool[id].alg))
->> +		return;
->> +	kref_get(&cpool[id].kref);
->> +}
->> +EXPORT_SYMBOL_GPL(crypto_pool_add);
->> +
->> +/**
->> + * crypto_pool_get - disable bh and start using crypto_pool
->> + * @id: crypto_pool that was previously allocated by crypto_pool_alloc_ahash()
->> + * @c: returned crypto_pool for usage (uninitialized on failure)
->> + */
->> +int crypto_pool_get(unsigned int id, struct crypto_pool *c)
-> 
-> Is there a precedent somewhere for the _add() and _get() semantics
-> you're using here? I don't think I've seen _add() for taking a
-> reference, maybe _get() -> start(), _add() -> _get()?
-
-Yeah, I presume I took not the best-fitting naming from
-tcp_get_md5sig_pool()/tcp_put_md5sig_pool().
-Will do the renaming.
-
-Thanks,
-          Dmitry
-
+-Doug
