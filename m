@@ -2,108 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96E3661C5A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1EE661C61
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbjAIC3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 21:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S233886AbjAICe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 21:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjAIC3V (ORCPT
+        with ESMTP id S233682AbjAICeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 21:29:21 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE899FCE;
-        Sun,  8 Jan 2023 18:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=kaMCTOcUvTU23khT1M5FZYZ1J/m4B8hsn47snTUtPXI=; b=jJcsqHvc+Dd04fVEdjS5iUGmev
-        XQ0FG/720D5yEaCehNpwcWnmQSojsIgjrT/MTahCSntyyMSCLEkSqz0ZIY26yuszAd2hAh7lZnFKM
-        PnUNIagO6DK0ZDMwfEY6KH+1krRv2wY6+Z9fpIaXCDRroTlD2u6WSofpdq0LpHjqd0Y1V+q4HoF8u
-        d2ED5tJ8K8tXDVbtvsiNWHd50PnbfwTjo/3u66l2iqTPJj2JbAWApXou7d7GXVIWAbyYtx5bHqKnq
-        tX71rnTf4Ax0FGiT5iG9zuDq6tjlB4TIVZpSEqOZdS1J08GSsxvAl+pns/Z2OwYR8Q4/4TjIHvl7p
-        OvZgVJNA==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEhuX-00GnlC-0p; Mon, 09 Jan 2023 02:29:17 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] freevxfs: fix kernel-doc warnings
-Date:   Sun,  8 Jan 2023 18:29:15 -0800
-Message-Id: <20230109022915.17504-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Sun, 8 Jan 2023 21:34:24 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC218A45D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 18:34:23 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id s22-20020a6bdc16000000b006e2d7c78010so4083062ioc.21
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 18:34:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rcvn48tUUP2FTlVeQr9AifQJvd5jYKtHm0iLNtdMWo=;
+        b=eK0C8fBRF3Xf3yknk/U4jwM8g6wcL6gETybhSgXqDfQ0lzKBIuPIlLfRxYVH3tb6yr
+         bbzCbc7PU3pam6Dp8n5rfaNxlmd/xllSerLWov2grKZ2lEmjP+VcRLU65JJeNaWdIOvy
+         IdISK+qySUz7O52L9g0QoiDyPzSA9BIbV2SpS6Vdask9i8zeVtgZ7hjGvzu75+67PTlT
+         2LCFex2g3PrES40KVZJKlwRrxdFerpPA1tCx/Xmy7r8ceERo+fNEpCFM6JWBxeSA5SEh
+         52++T2al84Xs8Pn0YNCs/ojud6iq3AX2KXS89hsieI1P0I1K6hyCTCx32FLE9BXL/GLT
+         Wz8w==
+X-Gm-Message-State: AFqh2kq0vI+nd6lm24DhEe0zdhVkB8W7XKZsbP1tx9c1GeC0p3CKQc4q
+        mf+bQmnKiBuj2KbG7kYs+9la5TU3o32dxHWT0E2TltyyZER4
+X-Google-Smtp-Source: AMrXdXtyWF6n+SkKThTewWuMsVgJytLmOd3j80ZHF91ZEghmQIZLMZWR3G3eciaEYPpa4ngxefOi+N9m74PC8PJNSe2a8p9saJ3Y
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9655:0:b0:6df:f621:ee37 with SMTP id
+ d21-20020a5d9655000000b006dff621ee37mr5198929ios.174.1673231663100; Sun, 08
+ Jan 2023 18:34:23 -0800 (PST)
+Date:   Sun, 08 Jan 2023 18:34:23 -0800
+In-Reply-To: <4be0a7d0-a1ac-1cd4-ccba-77653342efdc@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e7f96f05f1cb9a84@google.com>
+Subject: Re: [syzbot] KASAN: wild-memory-access Read in io_wq_worker_running
+From:   syzbot <syzbot+d56ec896af3637bdb7e4@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix multiple kernel-doc warnings in freevxfs:
+Hello,
 
-fs/freevxfs/vxfs_subr.c:45: warning: Function parameter or member 'mapping' not described in 'vxfs_get_page'
-fs/freevxfs/vxfs_subr.c:45: warning: Excess function parameter 'ip' description in 'vxfs_get_page'
-2 warnings
-fs/freevxfs/vxfs_subr.c:101: warning: expecting prototype for vxfs_get_block(). Prototype was for vxfs_getblk() instead
-fs/freevxfs/vxfs_super.c:184: warning: expecting prototype for vxfs_read_super(). Prototype was for vxfs_fill_super() instead
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- fs/freevxfs/vxfs_subr.c  |    6 +++---
- fs/freevxfs/vxfs_super.c |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5774 } 2664 jiffies s: 2777 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-diff -- a/fs/freevxfs/vxfs_subr.c b/fs/freevxfs/vxfs_subr.c
---- a/fs/freevxfs/vxfs_subr.c
-+++ b/fs/freevxfs/vxfs_subr.c
-@@ -31,7 +31,7 @@ vxfs_put_page(struct page *pp)
- 
- /**
-  * vxfs_get_page - read a page into memory.
-- * @ip:		inode to read from
-+ * @mapping:	mapping to read from
-  * @n:		page number
-  *
-  * Description:
-@@ -81,14 +81,14 @@ vxfs_bread(struct inode *ip, int block)
- }
- 
- /**
-- * vxfs_get_block - locate buffer for given inode,block tuple 
-+ * vxfs_getblk - locate buffer for given inode,block tuple
-  * @ip:		inode
-  * @iblock:	logical block
-  * @bp:		buffer skeleton
-  * @create:	%TRUE if blocks may be newly allocated.
-  *
-  * Description:
-- *   The vxfs_get_block function fills @bp with the right physical
-+ *   The vxfs_getblk function fills @bp with the right physical
-  *   block and device number to perform a lowlevel read/write on
-  *   it.
-  *
-diff -- a/fs/freevxfs/vxfs_super.c b/fs/freevxfs/vxfs_super.c
---- a/fs/freevxfs/vxfs_super.c
-+++ b/fs/freevxfs/vxfs_super.c
-@@ -165,7 +165,7 @@ static int vxfs_try_sb_magic(struct supe
- }
- 
- /**
-- * vxfs_read_super - read superblock into memory and initialize filesystem
-+ * vxfs_fill_super - read superblock into memory and initialize filesystem
-  * @sbp:		VFS superblock (to fill)
-  * @dp:			fs private mount data
-  * @silent:		do not complain loudly when sth is wrong
+
+Tested on:
+
+commit:         e6db6f93 io_uring/io-wq: only free worker if it was al..
+git tree:       git://git.kernel.dk/linux.git io_uring-6.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=116df816480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2edd87fe5cbdf43f
+dashboard link: https://syzkaller.appspot.com/bug?extid=d56ec896af3637bdb7e4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
