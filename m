@@ -2,175 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B2566294D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E1D66295D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbjAIPFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S235476AbjAIPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjAIPFQ (ORCPT
+        with ESMTP id S235112AbjAIPHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:05:16 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F101C92F;
-        Mon,  9 Jan 2023 07:05:14 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 9 Jan 2023 10:07:31 -0500
+X-Greylist: delayed 249 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Jan 2023 07:07:29 PST
+Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [IPv6:2001:638:a000:4134::ffff:40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869DEB8D;
+        Mon,  9 Jan 2023 07:07:29 -0800 (PST)
+Received: from luis-i4.informatik.uni-erlangen.de (i4laptop35.informatik.uni-erlangen.de [10.188.34.202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D18E14680;
-        Mon,  9 Jan 2023 15:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673276712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r5AchZgkjBMvT1rTdbO0/ZY4pyGy39ipbS0uUdkYcRY=;
-        b=ALlw8jrDaBsAMeOsxe37gz788mxvsiIal84uC3vh8oCPb/RUOGaMrHPWS4u/XZ7YaTrojO
-        /0vL7JTxDXcpiY4JVHHOHWSEoBC2rfvC7jt/VeA1fco6NMz+r9weMsFMOgQlN3Lxf7gIPR
-        Wxpn6kaoTqLV/lIjIHJInWbL6UGGQMA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA32C134AD;
-        Mon,  9 Jan 2023 15:05:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fK85KCgtvGMGQwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 09 Jan 2023 15:05:12 +0000
-Message-ID: <055adce8-ceba-983a-19cc-b09ec30bb3c3@suse.com>
-Date:   Mon, 9 Jan 2023 16:05:12 +0100
+        (Authenticated sender: gerhorst)
+        by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 4NrHNs2GvsznkXl;
+        Mon,  9 Jan 2023 16:07:25 +0100 (CET)
+From:   Luis Gerhorst <gerhorst@cs.fau.de>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Piotr Krysiuk <piotras@gmail.com>,
+        Benedict Schlueter <benedict.schlueter@rub.de>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Luis Gerhorst <gerhorst@cs.fau.de>,
+        stefan.saecherl@use.startmail.com,
+        Henriette Hofmeier <henriette.hofmeier@rub.de>
+Subject: [PATCH] bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation
+Date:   Mon,  9 Jan 2023 16:05:46 +0100
+Message-Id: <20230109150544.41465-1-gerhorst@cs.fau.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <edc95bad-aada-9cfc-ffe2-fa9bb206583c@cs.fau.de>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 0/4] xen/blkback: some cleanups
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
-        Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org
-References: <20221216145816.27374-1-jgross@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221216145816.27374-1-jgross@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Bn9el70qiXK9dBtQDHvkBxHs"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Bn9el70qiXK9dBtQDHvkBxHs
-Content-Type: multipart/mixed; boundary="------------5FtRzSy4gpSehjOHS0zh00HX";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc: =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
- Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org
-Message-ID: <055adce8-ceba-983a-19cc-b09ec30bb3c3@suse.com>
-Subject: Re: [PATCH 0/4] xen/blkback: some cleanups
-References: <20221216145816.27374-1-jgross@suse.com>
-In-Reply-To: <20221216145816.27374-1-jgross@suse.com>
+To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
+insufficient speculative store bypass mitigation") inserts lfence
+instructions after 1) initializing a stack slot and 2) spilling a
+pointer to the stack.
 
---------------5FtRzSy4gpSehjOHS0zh00HX
-Content-Type: multipart/mixed; boundary="------------KfBHdy9WwI9ryEeh1hcoeXvF"
+However, this does not cover cases where a stack slot is first
+initialized with a pointer (subject to sanitization) but then
+overwritten with a scalar (not subject to sanitization because the slot
+was already initialized). In this case, the second write may be subject
+to speculative store bypass (SSB) creating a speculative
+pointer-as-scalar type confusion. This allows the program to
+subsequently leak the numerical pointer value using, for example, a
+branch-based cache side channel.
 
---------------KfBHdy9WwI9ryEeh1hcoeXvF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+To fix this, also sanitize scalars if they write a stack slot that
+previously contained a pointer. Assuming that pointer-spills are only
+generated by LLVM on register-pressure, the performance impact on most
+real-world BPF programs should be small.
 
-T24gMTYuMTIuMjIgMTU6NTgsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IFNvbWUgc21hbGwg
-Y2xlYW51cCBwYXRjaGVzIEkgaGFkIGx5aW5nIGFyb3VuZCBmb3Igc29tZSB0aW1lIG5vdy4N
-Cj4gDQo+IEp1ZXJnZW4gR3Jvc3MgKDQpOg0KPiAgICB4ZW4vYmxrYmFjazogZml4IHdoaXRl
-IHNwYWNlIGNvZGUgc3R5bGUgaXNzdWVzDQo+ICAgIHhlbi9ibGtiYWNrOiByZW1vdmUgc3Rh
-bGUgcHJvdG90eXBlDQo+ICAgIHhlbi9ibGtiYWNrOiBzaW1wbGlmeSBmcmVlX3BlcnNpc3Rl
-bnRfZ250cygpIGludGVyZmFjZQ0KPiAgICB4ZW4vYmxrYmFjazogbW92ZSBibGtpZl9nZXRf
-eDg2XypfcmVxKCkgaW50byBibGtiYWNrLmMNCj4gDQo+ICAgZHJpdmVycy9ibG9jay94ZW4t
-YmxrYmFjay9ibGtiYWNrLmMgfCAxMjYgKysrKysrKysrKysrKysrKysrKysrKysrKy0tLQ0K
-PiAgIGRyaXZlcnMvYmxvY2sveGVuLWJsa2JhY2svY29tbW9uLmggIHwgMTAzICstLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAxMTggaW5zZXJ0aW9ucygr
-KSwgMTExIGRlbGV0aW9ucygtKQ0KPiANCg0KUGluZz8NCg0KDQpKdWVyZ2VuDQo=
---------------KfBHdy9WwI9ryEeh1hcoeXvF
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+The following unprivileged BPF bytecode drafts a minimal exploit and the
+mitigation:
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+  [...]
+  // r6 = 0 or 1 (skalar, unknown user input)
+  // r7 = accessible ptr for side channel
+  // r10 = frame pointer (fp), to be leaked
+  //
+  r9 = r10 # fp alias to encourage ssb
+  *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
+  // lfence added here because of pointer spill to stack.
+  //
+  // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
+  // for no r9-r10 dependency.
+  //
+  *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
+  // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
+  // store may be subject to SSB
+  //
+  // fix: also add an lfence when the slot contained a ptr
+  //
+  r8 = *(u64 *)(r9 - 8)
+  // r8 = architecturally a scalar, speculatively a ptr
+  //
+  // leak ptr using branch-based cache side channel:
+  r8 &= 1 // choose bit to leak
+  if r8 == 0 goto SLOW // no mispredict
+  // architecturally dead code if input r6 is 0,
+  // only executes speculatively iff ptr bit is 1
+  r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
+SLOW:
+  [...]
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+After running this, the program can time the access to *(r7 + 0) to
+determine whether the chosen pointer bit was 0 or 1. Repeat this 64
+times to recover the whole address on amd64.
 
---------------KfBHdy9WwI9ryEeh1hcoeXvF--
+In summary, sanitization can only be skipped if one scalar is
+overwritten with another scalar. Scalar-confusion due to speculative
+store bypass can not lead to invalid accesses because the pointer bounds
+deducted during verification are enforced using branchless logic. See
+979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
+arithmetic") for details.
 
---------------5FtRzSy4gpSehjOHS0zh00HX--
+Do not make the mitigation depend on
+!env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
+likely unexpected if these were enabled. For example, leaking the
+address to a protected log file may be acceptable while disabling the
+mitigation might unintentionally leak the address into the cached-state
+of a map that is accessible to unprivileged processes.
 
---------------Bn9el70qiXK9dBtQDHvkBxHs
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
+Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
+Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a5255a0dcbb6..5e3aa4a75bd6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3287,7 +3287,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		bool sanitize = reg && is_spillable_regtype(reg->type);
+ 
+ 		for (i = 0; i < size; i++) {
+-			if (state->stack[spi].slot_type[i] == STACK_INVALID) {
++			u8 type = state->stack[spi].slot_type[i];
++			if (type != STACK_MISC && type != STACK_ZERO) {
+ 				sanitize = true;
+ 				break;
+ 			}
+-- 
+2.34.1
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmO8LSgFAwAAAAAACgkQsN6d1ii/Ey8T
-rgf/YPspae1H6xxWZbx8KKP2yS3WylDZF0YoQUBMlTxslcwhIiRltIckPFalUVdJclpwj8v2DyXK
-gIqKYpP1LJvXxIwty70hNd7lsWtSUeG633XCeEmkm/UlxGtk901ELOiPC6Pz4kHOS2Q+24CumPyV
-Cto1pzmm4K0PiXaAZyLLJ1B9GBpKnoOBJoL4H9Gxoq3lNr+FATjxbIQaPNS45hKx9qFhlVqAsDUX
-s+KMdJQsyhXcIakEzwBiqpZ0A4DAP7I8zHuoMeELoPR7DpZB+rPh8MlobYvQfv/eR1hIRjlq8zeB
-5UV+XYYQGFDp1Z2p4QHR4IerT9sRCNCqyiQ8/AlYjw==
-=sGDi
------END PGP SIGNATURE-----
-
---------------Bn9el70qiXK9dBtQDHvkBxHs--
