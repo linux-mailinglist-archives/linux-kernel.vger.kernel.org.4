@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80CA66208C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06435662095
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236851AbjAIItr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S234186AbjAIIvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbjAIIsV (ORCPT
+        with ESMTP id S237101AbjAIIsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:48:21 -0500
+        Mon, 9 Jan 2023 03:48:38 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C43B5167DF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:43:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDB3E17419
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:43:57 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gDS7027428;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3098gDk8027429;
         Mon, 9 Jan 2023 09:42:13 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 09/22] tools/nolibc: export environ as a weak symbol on arm
-Date:   Mon,  9 Jan 2023 09:41:55 +0100
-Message-Id: <20230109084208.27355-10-w@1wt.eu>
+Subject: [PATCH 10/22] tools/nolibc: export environ as a weak symbol on mips
+Date:   Mon,  9 Jan 2023 09:41:56 +0100
+Message-Id: <20230109084208.27355-11-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230109084208.27355-1-w@1wt.eu>
 References: <20230109084208.27355-1-w@1wt.eu>
@@ -39,48 +39,37 @@ The environ is retrieved from the _start code and is easy to store at
 this moment. Let's declare the variable weak and store the value into
 it. By not being static it will be visible to all units. By being weak,
 if some programs already declared it, they will continue to be able to
-use it. This was tested in arm and thumb1 and thumb2 modes, and for each
-mode, both with environ inherited from _start and extracted from envp.
+use it. This was tested with mips24kc (BE) both with environ inherited
+from _start and extracted from envp.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/arch-arm.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/include/nolibc/arch-mips.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 48bd95492c87..79666b590e87 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -196,6 +196,8 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index a3764f6d267e..7d22f7bc38b3 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -176,6 +176,8 @@ struct sys_stat_struct {
+ 	_arg4 ? -_num : _num;                                                 \
  })
  
 +char **environ __attribute__((weak));
 +
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ /* startup code, note that it's called __start on MIPS */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
  {
-@@ -206,6 +208,8 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- 		"add %r2, %r0, $1\n"          // envp = (argc + 1) ...
- 		"lsl %r2, %r2, $2\n"          //        * 4        ...
- 		"add %r2, %r2, %r1\n"         //        + argv
-+		"ldr %r3, 1f\n"               // r3 = &environ (see below)
-+		"str %r2, [r3]\n"             // store envp into environ
- 
- 		"mov %r3, $8\n"               // AAPCS : sp must be 8-byte aligned in the
- 		"neg %r3, %r3\n"              //         callee, and bl doesn't push (lr=pc)
-@@ -215,7 +219,10 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- 		"bl main\n"                   // main() returns the status code, we'll exit with it.
- 		"movs r7, $1\n"               // NR_exit == 1
- 		"svc $0x00\n"
--	  );
-+		".align 2\n"                  // below are the pointers to a few variables
-+		"1:\n"
-+		".word environ\n"
-+	);
- 	__builtin_unreachable();
- }
- 
+@@ -191,6 +193,9 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
+ 		"sll $a2, $a0, 2\n"     // a2 = argc * 4
+ 		"add   $a2, $a2, $a1\n" // envp = argv + 4*argc ...
+ 		"addiu $a2, $a2, 4\n"   //        ... + 4
++		"lui $a3, %hi(environ)\n"     // load environ into a3 (hi)
++		"addiu $a3, %lo(environ)\n"   // load environ into a3 (lo)
++		"sw $a2,($a3)\n"              // store envp(a2) into environ
+ 		"li $t0, -8\n"
+ 		"and $sp, $sp, $t0\n"   // sp must be 8-byte aligned
+ 		"addiu $sp,$sp,-16\n"   // the callee expects to save a0..a3 there!
 -- 
 2.17.5
 
