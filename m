@@ -2,100 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657A466222F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430F8662370
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbjAIJxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S234546AbjAIKr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbjAIJwx (ORCPT
+        with ESMTP id S233682AbjAIKrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:52:53 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD2CDDA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:52:08 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4bf16baa865so105509017b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:52:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
-        b=DVfCyJ6P3zydmckWF8seSRRw/mz6qUyyH0LrKVrsvYJAZ/YNG6Mq5wFaD140cl5+Ib
-         KiwpsqJymIId+h5o6qdfMB7wX7OXUI2ziy601EpVhnGbLTKmKyVlreUcACXdSKp2UX1X
-         OEsiE8fMyPqTic7T67qLgNRVijQzlvX36bNwYY6KadKvfTzd04RqtNTnUybSKV0q0opJ
-         AyOtbJ0FhWJZOqZK9RWfIz6xTGeFVie2Br5pGFEwBS2NK3FWOS897lhpxVuX91WtQmTt
-         uABX3Qfc1ng4EIsFPSNo2PrSp4Lu0ObHJmsT0hTGTqxBNz1sN2YYnL5uU+/N+w1QdPZW
-         tL9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
-        b=5Naki/36ev2bmRKIUiaVJB3hvMbPuGmKCq+53UFGyYzSj1p106kXaMp6u/kJ+umum6
-         hPAdYMRMJ8CW+IqyUFWwaj+DoOz6RjlzF5hHbhJY1I+BcsLLhZ5KsvYZO+fkCSrE4BeR
-         By5UzOK44xZEYGvdZ4wMHOHIr6I+ec+th2I/sawGQ75Z8lY0Pf+UTkSnFqPX5+I6TU3l
-         1kfUyTlVea5jnMRKYJggdbFsiZxffsDGbEipLRIJjnw/eGgHvOMk3U3VsyRKcNFUWcai
-         abDxb4BQa6dolpAQU0NcB9atEaK20LcaJRHfX3fxW+RnzA9k1zHIPjiLvnW8Nyqng6nq
-         pZUw==
-X-Gm-Message-State: AFqh2kp1cdJ8THLelQE2NszEgE99pJXaxZPs4taOdBLT77fOmp3VFJtq
-        5DQ2BQ+X5WxrLtBocuRqnjPAZx2/OZpSDnfcMjuOQw==
-X-Google-Smtp-Source: AMrXdXuGvJK/Z2GNIYTIcilU/lRPpom25Exjk2m/eTsYGxQGzPycGsZ6tbA4IcBTD/gP8jy9E/3DFgSf/xXGY41i0OE=
-X-Received: by 2002:a0d:f084:0:b0:4c2:51b:796c with SMTP id
- z126-20020a0df084000000b004c2051b796cmr993316ywe.144.1673257927353; Mon, 09
- Jan 2023 01:52:07 -0800 (PST)
+        Mon, 9 Jan 2023 05:47:45 -0500
+X-Greylist: delayed 3005 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Jan 2023 02:47:43 PST
+Received: from 8.mo576.mail-out.ovh.net (8.mo576.mail-out.ovh.net [46.105.56.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C01A22A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:47:43 -0800 (PST)
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.1.93])
+        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 5749720837
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:52:34 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-78j8k (unknown [10.110.208.94])
+        by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 201CB1FF6C;
+        Mon,  9 Jan 2023 09:52:34 +0000 (UTC)
+Received: from RCM-web6.webmail.mail.ovh.net ([151.80.29.20])
+        by ghost-submission-6684bf9d7b-78j8k with ESMTPSA
+        id pKYPBuLju2OyXwAA1nTmNw
+        (envelope-from <rafal@milecki.pl>); Mon, 09 Jan 2023 09:52:34 +0000
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com> <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 9 Jan 2023 10:51:30 +0100
-Message-ID: <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Date:   Mon, 09 Jan 2023 10:52:33 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     INAGAKI Hiroshi <musashino.open@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
+In-Reply-To: <d0df69da-e881-46aa-da51-eb3b610dee57@linaro.org>
+References: <20221012155133.287-1-musashino.open@gmail.com>
+ <57f10c5d-2a71-7f8d-e2ab-6e868d8ba79b@linaro.org>
+ <e8932e3eaf1bd9a690e2f41aad8faf3a@milecki.pl>
+ <d0df69da-e881-46aa-da51-eb3b610dee57@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0857740baa7bd7fd2c3f5ff5a5cb911b@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 16420687192283196379
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeigddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnheptdeihffftdefveffvdduvddttddvieekteefgeettedugedvgeelgfefleetgfegnecuffhomhgrihhnpehgihhtrdhnohifnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudehuddrkedtrddvledrvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejiedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,84 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wro=
-te:
->
-> Alexander Potapenko wrote:
-> > (+ Dan Williams)
-> > (resending with patch context included)
-> >
-> > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > >
-> > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> =
-wrote:
-> > > >
-> > > > KMSAN adds extra metadata fields to struct page, so it does not fit=
- into
-> > > > 64 bytes anymore.
-> > >
-> > > Does this somehow cause extra space being used in all kernel configs?
-> > > If not, it would be good to note this in the commit message.
-> > >
-> > I actually couldn't verify this on QEMU, because the driver never got l=
-oaded.
-> > Looks like this increases the amount of memory used by the nvdimm
-> > driver in all kernel configs that enable it (including those that
-> > don't use KMSAN), but I am not sure how much is that.
-> >
-> > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
->
-> Apologies I missed this several months ago. The answer is that this
-> causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> capacity of their namespace even when not using KMSAN which is too
-> wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> something like:
->
-> diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> index 79d93126453d..5693869b720b 100644
-> --- a/drivers/nvdimm/Kconfig
-> +++ b/drivers/nvdimm/Kconfig
-> @@ -63,6 +63,7 @@ config NVDIMM_PFN
->         bool "PFN: Map persistent (device) memory"
->         default LIBNVDIMM
->         depends on ZONE_DEVICE
-> +       depends on !KMSAN
->         select ND_CLAIM
->         help
->           Map persistent memory, i.e. advertise it to the memory
->
->
-> ...otherwise, what was the rationale for increasing this value? Were you
-> actually trying to use KMSAN for DAX pages?
+On 2023-01-09 10:48, Srinivas Kandagatla wrote:
+> On 06/01/2023 19:15, Rafał Miłecki wrote:
+>> On 2022-11-11 18:41, Srinivas Kandagatla wrote:
+>>> On 12/10/2022 16:51, INAGAKI Hiroshi wrote:
+>>>> This patch fixes crc32 error on Big-Endianness system by conversion 
+>>>> of
+>>>> calculated crc32 value.
+>>>> 
+>>>> Little-Endianness system:
+>>>> 
+>>>>    obtained crc32: Little
+>>>> calculated crc32: Little
+>>>> 
+>>>> Big-Endianness system:
+>>>> 
+>>>>    obtained crc32: Little
+>>>> calculated crc32: Big
+>>>> 
+>>>> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
+>>>> 
+>>>> [    8.570000] u_boot_env 
+>>>> 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated 
+>>>> CRC32: 0x88cd6f09 (expected: 0x096fcd88)
+>>>> [    8.580000] u_boot_env: probe of 
+>>>> 18001200.spi:flash@0:partitions:partition@c0000 failed with error 
+>>>> -22
+>>>> 
+>>>> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment 
+>>>> variables")
+>>>> 
+>>>> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+>>>> ---
+>>> 
+>>> Applied thanks,
+>> 
+>> has this patch been lost somewhere in the process?
+>> 
+>> I'm quite sure I saw it in linux-next.git and probably in nvmem.git. 
+>> Now
+>> it seems to be gone.
+> Yes, I had to revert this one as next reported sparse warnings [1]
+> with this patch which were not addressed.
 
-I was just building the kernel with nvdimm driver and KMSAN enabled.
-Because KMSAN adds extra data to every struct page, it immediately hit
-the following assert:
+I missed that, thank you.
 
-drivers/nvdimm/pfn_devs.c:796:3: error: call to
-__compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
-fE
-                BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
-
-The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
-page size independent of kernel config", but maybe we can afford
-making it dependent on CONFIG_KMSAN (and possibly other config options
-that increase struct page size)?
-
-I don't mind disabling the driver under KMSAN, but having an extra
-ifdef to keep KMSAN support sounds reasonable, WDYT?
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+INAGAKI: could you take a look at this, please?
