@@ -2,125 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2288D66246B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7F9662477
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjAILmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S234224AbjAILmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbjAILl2 (ORCPT
+        with ESMTP id S237193AbjAILmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:41:28 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACAA2DFC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 03:41:04 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id o7so8213863ljj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 03:41:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K/tHPRvN2kH9+ou065o/tSnqEbVr+L3o1B3YpzQ3ZLo=;
-        b=tsSuSZPtRvU6Dbtnj4ydxBHB7XlbmNkhIT5K3ASmIJcFoputsZPLcaM8KYKP9xvg22
-         +n7kFCUjlunsd644vfJvsCka4sUGGPJo4hrcHU0EuSoQelup6N0rrMO8zv1OVeROksv4
-         05t/N52WtOE7fZZXR4Jc8f+UgZ7lknwN4YTW56gJPR5PV/LIXico+qwTQndTMW9KoE93
-         VXy1LE+nQp/EfsduLZ3ADCT1hg3I+404Oi+osWA3jZDRkxFTMX7EBTlZRk5UWjZbkjkL
-         w5Jibbddi1m0SFVbc0IaqaedPtO4CA50MYy/4ZgaZKzwU79AnaI+tPUqftqOd9ych/Lp
-         rknA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/tHPRvN2kH9+ou065o/tSnqEbVr+L3o1B3YpzQ3ZLo=;
-        b=2VPirTCZTpcI3ANNSMmHiJCoN+T3kdRUQwK+s4RYZtI83GVJ5wHtDx00cFQhLzPbi/
-         6Zd4KZW26n2V6o7tGzlnBfZFrPD22xp4rDYfZvEfg0PH4/N/sCgL4p+BRicrX8MEQVh0
-         P0j2V4AkpsiblbCw0VV/BWfcjUylTF3aL7c+0ZETGNjT73GrMo1lp+7rk63k4m2FfSnl
-         Edme3UfR80E0wiJ7KyozM9SNdPmFWZT/o4jNgPmKDvpW1pAmTHjjfcMiydZPxykvA1of
-         VKIelg+Ww72TmjJ72M1qaYhBcZrVr2+TzEKms5BBjyxFMRKbr2P7QXbV7jFDlPAhTdhn
-         lNjQ==
-X-Gm-Message-State: AFqh2koRoyZ9u8afEAjPYWjXg59HoQUi7DdyObJKQ3k585xjdOr2Mr1P
-        /XsrjegPhLLBSaDAoB+ndwoqqg==
-X-Google-Smtp-Source: AMrXdXu8jhoAYmgM2b/4FQeYsYSxLSgFAnhLA/LN+U6TyUSc2NBgcq1EPEmtZ/l2NtSUM/RkgTdwkQ==
-X-Received: by 2002:a05:651c:333:b0:27f:ed97:7c7e with SMTP id b19-20020a05651c033300b0027fed977c7emr6451350ljp.24.1673264462376;
-        Mon, 09 Jan 2023 03:41:02 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b004cb3aced3f9sm1584030lfq.226.2023.01.09.03.41.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 03:41:01 -0800 (PST)
-Message-ID: <97dafa30-8b76-8bf9-4411-be6d10e4c71a@linaro.org>
-Date:   Mon, 9 Jan 2023 12:41:00 +0100
+        Mon, 9 Jan 2023 06:42:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100B22DC7;
+        Mon,  9 Jan 2023 03:41:57 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD49E6602D06;
+        Mon,  9 Jan 2023 11:41:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673264515;
+        bh=yrs+2HfuiXoGEzozSFsUfZATCSNY0mbpEQlx5omqmIA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NRVLDCFUTwoMzukUNCZ+6dGcaAldNGWH2+IdE5YD1rIJMaW41j4ZclxfjqdePGQmg
+         1uvLnBSJfMe9XRXh/q8qftgKsQPxe8bLloE0iWegGR1WuvsDbHJlY7nv1dYhOAc1PB
+         8NVt2s+ZD4xFcJN/u9z5AYkypYMZnluyoLTnXw9CyHdso5z6I4olWCkSZmOujm/tAD
+         SqbS92z0u5b1kgWHAXu2YHbT6pzRcnWi5yxDXWBiwVIdtVps1TFrbnCG6EteM9kdj0
+         yVWsBe7GKGccev55dYAqUATAPsrbZ9B+nSw2CCee14P/TTdWCX6C4hxuIFjMkLW8AV
+         CZ9LU92gH/Cww==
+Message-ID: <2ce47b8f-b08e-222e-1c4c-e2b17c1cb5a6@collabora.com>
+Date:   Mon, 9 Jan 2023 12:41:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/3] dt-bindings: reserved-memory: rmtfs: Make
- qcom,vmid an array
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v9 8/9] drm/bridge: it6505: Fix Kconfig indentation
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230109093947.83394-1-konrad.dybcio@linaro.org>
- <2bc5d781-499b-fe39-2dc5-92bc9ba8396d@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <2bc5d781-499b-fe39-2dc5-92bc9ba8396d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>, linux-acpi@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org
+References: <20230109084101.265664-1-treapking@chromium.org>
+ <20230109084101.265664-9-treapking@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230109084101.265664-9-treapking@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.01.2023 10:51, Krzysztof Kozlowski wrote:
-> On 09/01/2023 10:39, Konrad Dybcio wrote:
->> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
->> others really don't want that. Since it has to be conditional, turn
->> qcom,vmid into an u32 array so that we can handle the NAV case, as
->> well as other similar ones if they pop up in the future.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->> v2 -> v3:
->> Rewrite to accomodate for changes, don't pick up tags
->>
->>  .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml   | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
->> index 2998f1c8f0db..cfc2fda30eba 100644
->> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
->> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
->> @@ -27,9 +27,9 @@ properties:
->>        identifier of the client to use this region for buffers
->>  
->>    qcom,vmid:
->> -    $ref: /schemas/types.yaml#/definitions/uint32
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>      description: >
->> -      vmid of the remote processor, to set up memory protection
->> +      Array of vmids of the remote processors, to set up memory protection
+Il 09/01/23 09:41, Pin-yen Lin ha scritto:
+> Replace the spaces with tab characters in the Kconfig file.
 > 
-> You need now min and maxItems.
-Hm, I tested it with and without:
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
-minItems: 1
-maxItems: 2
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-on DTs with either one or two VMIDs defined and neither complains..
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
-> 
