@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803FA663009
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DCA663013
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbjAITMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S237448AbjAITNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237619AbjAITMK (ORCPT
+        with ESMTP id S235289AbjAITNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:12:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC1813DF7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:11:43 -0800 (PST)
+        Mon, 9 Jan 2023 14:13:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4991838B8;
+        Mon,  9 Jan 2023 11:12:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDF361349
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2BAEC433F0;
-        Mon,  9 Jan 2023 19:11:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6E98B80E00;
+        Mon,  9 Jan 2023 19:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416A1C433EF;
+        Mon,  9 Jan 2023 19:12:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673291501;
-        bh=TeyhFwGi/frdTtjyAeMDCtCBhJgN1d2nRyVR89UsjgM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EogoYlqt+AN30++TKdt2qvkfZu0WlXbPTUKZsEBtbeAOkvTEKrbjYoRjwZBlhv73v
-         af4rwwQQUofvjDHFtYRQkrVAVfRLr+LPUhppgx+iV5AgP7eshq2FHDQ8xzo0C1MquV
-         WPRx5z+z3hdCaWpIQjLCYmqlf8tX8SL2nPoSW56NG+UNVTvBRAMOEkYqSW+4cZYZnf
-         MJpqLKy1uZua2j+EbIjIZUHEoa2LCOlznhdQabZQkUbPQ/t8l8JjLqEGhmmLomj3Vn
-         GM0JlDegPyPHTR0mC/ZPi3fMHkhJvct+phC4B3xzr8/DXdp8cUE6kxJE6yL7IlHPv5
-         oBo9wwVlfF6ZA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 826225C05C8; Mon,  9 Jan 2023 11:11:41 -0800 (PST)
-Date:   Mon, 9 Jan 2023 11:11:41 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org, Warner Losh <imp@bsdimp.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH 0/6] pending bug fixes for nolibc
-Message-ID: <20230109191141.GT4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230109075442.25963-1-w@1wt.eu>
+        s=k20201202; t=1673291562;
+        bh=wTIj3y5/T8S2ncQd4XUCVx1Z1E5mTxiUfX6LIHH3wGc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W1yu7yBWp9tihRsSUgU5MySlpp9oOCoYEbYN6WheuNO8mi0y/CCC5HHACp3L4c7FF
+         8odzoADtE2xhhfCbqif5Pc/6TD7Kd9z71ZqM/CDkOQoN15dQ14I+AaR5WG+aX8OS7R
+         rg7ILZkDEZzjsb8OyORz0+exxtn5oHd9Bn2o4d7P0q1d6lKYUDZ8+q9HYS3zRVAGJm
+         rd4hGEFAllrvZHc8tXS4/3a8PmsKGokEDIeH7g/wQYMnwadRYZcFr+5G8VLjpA13CA
+         nUVzgQTyA1vXzhcPBZ+CVBQFOp8l2Gau6vocdHojrnPhRe6+AlJ6qiiQQIfz+jL66j
+         Rrl06mQgc3K1A==
+Date:   Mon, 9 Jan 2023 11:12:41 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     tglx@linutronix.de, jstultz@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] softirq: don't yield if only expedited handlers are
+ pending
+Message-ID: <20230109111241.6ed3a64a@kernel.org>
+In-Reply-To: <CANn89iK2NTz_M-OtcN5iATUacMaseNLi42QipuxDF3MMQCEVHg@mail.gmail.com>
+References: <20221222221244.1290833-1-kuba@kernel.org>
+        <20221222221244.1290833-4-kuba@kernel.org>
+        <Y7viEa4BC3yJRXIS@hirez.programming.kicks-ass.net>
+        <CANn89iK2NTz_M-OtcN5iATUacMaseNLi42QipuxDF3MMQCEVHg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109075442.25963-1-w@1wt.eu>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,86 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 08:54:36AM +0100, Willy Tarreau wrote:
-> Hello Paul,
+On Mon, 9 Jan 2023 11:16:45 +0100 Eric Dumazet wrote:
+> > On Thu, Dec 22, 2022 at 02:12:44PM -0800, Jakub Kicinski wrote:  
+> > > In networking we try to keep Tx packet queues small, so we limit
+> > > how many bytes a socket may packetize and queue up. Tx completions
+> > > (from NAPI) notify the sockets when packets have left the system
+> > > (NIC Tx completion) and the socket schedules a tasklet to queue
+> > > the next batch of frames.
+> > >
+> > > This leads to a situation where we go thru the softirq loop twice.
+> > > First round we have pending = NET (from the NIC IRQ/NAPI), and
+> > > the second iteration has pending = TASKLET (the socket tasklet).  
+> >
+> > So to me that sounds like you want to fix the network code to not do
+> > this then. Why can't the NAPI thing directly queue the next batch; why
+> > do you have to do a softirq roundtrip like this?  
 > 
-> please consider the current patch series for merging into your fixes queue.
-> The intent is to get them before 6.2, then backported where relevant.
-> 
-> It addresses the following bugs:
->   - fd_set was incorrectly defined as arrays of u32 instead of long,
->     which breaks BE64. Fix courtesy of Sven Schnelle.
-> 
->   - S_ISxxx macros were incorrectly testing the bits after applying them
->     instead of applying S_ISFMT to the value. Fix from Warner Losh.
-> 
->   - the mips code was randomly broken due to an unprotected "noreorder"
->     directive in the _start code that would prevent the assembler from
->     filling delayed slots, and randomly leaving other instructions there
-> 
->   - since the split of the single include file into multiple files, we're
->     implicitly refraining from including some which are not explicitly
->     added in the code. It causes build failures when such files contain
->     definitions for functions that may be used e.g. by libgcc, such as
->     raise() or memset(), which are often called only by a few archs at
->     certain optimization levels only.
-> 
->   - gcc 11.3 in ARM thumb2 mode at -O2 was able to recognize a memset()
->     construction inside the memset() definition, and it replaced it with
->     a call to... memset(). We cannot impose to userland to build with
->     -ffreestanding so the introduction of an empty asm() statement in
->     the loop was enough to stop this.
-> 
->   - most of the O_* macros were wrong on RISCV because their octal value
->     was used as a hexadecimal one when the platform was introduced. This
->     was revealed by the selftest breaking in getdents64().
-> 
-> The series was tested on x86_64, i386, armv5, armv7, thumb1, thumb2,
-> mips and riscv, all at -O0, -Os and -O3. This is based on the "nolibc"
-> branch of your linux-rcu tree. Do not hesitate to let me know if you
-> prefer that I rebase it on a different one.
+> I think Jakub refers to tcp_wfree() code, which can be called from
+> arbitrary contexts,
+> including non NAPI ones, and with the socket locked (by this thread or
+> another) or not locked at all
+> (say if skb is freed from a TX completion handler or a qdisc drop)
 
-"81 test(s) passed", so queued at urgent-nolibc.2023.01.09a, thank you!
+Yes, fwiw.
 
-Also, thank you for the detailed cover letter, which I co-opted into the
-signed tag.  But please check to make sure that my wordsmithing didn't
-break anything.
+> > > On two web workloads I looked at this condition accounts for 10%
+> > > and 23% of all ksoftirqd wake ups respectively. We run NAPI
+> > > which wakes some process up, we hit need_resched() and wake up
+> > > ksoftirqd just to run the TSQ (TCP small queues) tasklet.
+> > >
+> > > Tweak the need_resched() condition to be ignored if all pending
+> > > softIRQs are "non-deferred". The tasklet would run relatively
+> > > soon, anyway, but once ksoftirqd is woken we're risking stalls.
+> > >
+> > > I did not see any negative impact on the latency in an RR test
+> > > on a loaded machine with this change applied.  
+> >
+> > Ignoring need_resched() will get you in trouble with RT people real
+> > fast.  
 
-If all goes well, I will send the pull request to Linus before the end
-of this week.
+Ah, you're right :/ Is it good enough if we throw || force_irqthreads()
+into the condition?
 
-							Thanx, Paul
-
-> Thank you!
-> Willy
-> 
-> ---
-> Sven Schnelle (1):
->   nolibc: fix fd_set type
-> 
-> Warner Losh (1):
->   tools/nolibc: Fix S_ISxxx macros
-> 
-> Willy Tarreau (4):
->   tools/nolibc: restore mips branch ordering in the _start block
->   tools/nolibc: fix missing includes causing build issues at -O0
->   tools/nolibc: prevent gcc from making memset() loop over itself
->   tools/nolibc: fix the O_* fcntl/open macro definitions for riscv
-> 
->  tools/include/nolibc/arch-mips.h  |  2 +
->  tools/include/nolibc/arch-riscv.h | 14 +++----
->  tools/include/nolibc/ctype.h      |  3 ++
->  tools/include/nolibc/errno.h      |  3 ++
->  tools/include/nolibc/signal.h     |  3 ++
->  tools/include/nolibc/stdio.h      |  3 ++
->  tools/include/nolibc/stdlib.h     |  3 ++
->  tools/include/nolibc/string.h     |  8 +++-
->  tools/include/nolibc/sys.h        |  2 +
->  tools/include/nolibc/time.h       |  3 ++
->  tools/include/nolibc/types.h      | 70 ++++++++++++++++++-------------
->  tools/include/nolibc/unistd.h     |  3 ++
->  12 files changed, 79 insertions(+), 38 deletions(-)
-> 
-> -- 
-> 2.35.3
-> 
+Otherwise we can just postpone this optimization, the overload 
+time horizon / limit patch is much more important.
