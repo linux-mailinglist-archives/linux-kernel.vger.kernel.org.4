@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C769A662FE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6305E662FED
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237499AbjAITGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S237305AbjAITIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbjAITGu (ORCPT
+        with ESMTP id S230185AbjAITIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:06:50 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C651DF33
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:06:49 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k6so804413vsk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:06:49 -0800 (PST)
+        Mon, 9 Jan 2023 14:08:20 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B707918B3E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:08:19 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id i15so14056904edf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t8exJoBvTt1P5Ibi4ffT0OZZL8/6VG/7d+FIG5bJyws=;
-        b=hCg80Z6dcWf/j5KoT6Kc5O4vq3+Fd5vxmJkTuUVCBWaTzWgewPzOptLZEwuws6vZDt
-         zdshtoO1TqppUITvdDyMmT1plqoW8W/YuEw7NmfDoHQG3zFwBRRfFs7YK9eFH/c0IclD
-         v9MrS6NIm/enDInGpNANWJB69fPeNcK7AzL6c=
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jT0Oz+3cAXi9MsBWfMsEAGfcOwY189DZFhtGxbqiu6k=;
+        b=i74hD6c0B4mxb2STWM/PpEPCub6GaziRLOYPHLIoa2zbv2PpwPLtN01V7ElTf171HW
+         T8IIR+xM7X2+gmmrVHG2zU8YpngBo+ob1KufO7mJP/Z42YILUyGQcKHS9uTwxPRGCIT/
+         QGDCVLGKyWN3fDLo1QMrPl2zatm5EzXK4+7Zr9eHmHVXVzBm6gBpJ1vHa5TjTs2pECBn
+         QrRTtO9t0SpobLVZCzF7JKjku15b+nyNersKNW32qtGUr/ha9sEYKgoXoph+pRhDQ5cj
+         80BY+LOhy5TUjVjbkjb5AJUY50o0dmcOFKMz04QYQIfnaVHewDwM3mGEaijBazjvMvvM
+         qOWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t8exJoBvTt1P5Ibi4ffT0OZZL8/6VG/7d+FIG5bJyws=;
-        b=p4Hse180EdsmgT4gS1S5Xw/P6XA2NFfd4ZC3Vp5Yv7q8MXPV55r6vS7IT5ugvX9VNX
-         GRYBd2LwvyHu0uXF+qnpWfpykfjqpVoFHuPYqdF2RDfw+41TtIHtnWnEB6/t9LLB3G0e
-         +kNSL7C7rvtdy7C+B+APBg+cP8SDk0MePsgTcMDWVTk+Y8dpwUqPB/j7k0rbznJu/Wd7
-         BXKdzv02/XzcZd/Pokx1l0D+9XZoBHV0tPniCj8ASIJDBoN8gT7H/QPfgj9ZlX3H5oDz
-         E6lafStNupPXA9TU7QcdlVcCo9SzwpZwl79TWdtOKX9ZRpw28U2TwfYbzG3wFgQT+gDq
-         GgYQ==
-X-Gm-Message-State: AFqh2kou/DSYC/W3ZtiRPCxTMgG0PdoB7geQ3EbVx4rQHhLZwZSsaHr+
-        RA3I4errMJQ6M4KxKAtlL8QgJQk4KpvoIPNUI8xtOg==
-X-Google-Smtp-Source: AMrXdXt+GyECPwXEpKoOsk3GjRvID0FnUWGBJaqFdPPdhTixqf7vsBWhIGl/8QLFBEXaU3i68it2oTjiaB/J2mZ8x+Q=
-X-Received: by 2002:a05:6102:1179:b0:3bb:425f:75ea with SMTP id
- k25-20020a056102117900b003bb425f75eamr10333107vsg.80.1673291208860; Mon, 09
- Jan 2023 11:06:48 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jT0Oz+3cAXi9MsBWfMsEAGfcOwY189DZFhtGxbqiu6k=;
+        b=Uae4PjSGJpBHmocrjA2dBJnm6YHBcuewLqZPX+sPEbOCI4uU6E7hWG/oZiAktC6Fb3
+         PjTimAMZnqvLsks4ymLDyF0/L+ZuRDqWUdSI6JcTq2eKMhhciLE9zlnWUIxoRdOMv76y
+         2ZCCXNEPIevzUSpTuygwF27auAtNcd5Av2gW4eiLdqhc+TkoKHmkUDWnJlfOkGcv7Nix
+         84LVKcfNdQkYLDZZyLd0w23nYgILSNGI9vyD80XTqwLDU3l/yf8F1BdjN0UWjdBlN6v2
+         TuSQlUlkEyK0DuF399IUPdu7O6YvUpwSrj4ntOmi2cc1KHeA7r6VQFCuHZHVH7++uw2L
+         2tUQ==
+X-Gm-Message-State: AFqh2kpOS95uj9WT2Vde+uRQ5W6nmU+gI7pnfeck//VSb1MOkTbSbMkO
+        t9WOAwf5SHd8bM9A/aQ2cwP53MuTohE=
+X-Google-Smtp-Source: AMrXdXswuPq44IMreZvlfHay82vYyAUa7RxeKhJFOvI28aJakPgWh6URDQQ3l21lPgjn98EmEXX0hg==
+X-Received: by 2002:a05:6402:3603:b0:460:21e2:749a with SMTP id el3-20020a056402360300b0046021e2749amr13780038edb.3.1673291298223;
+        Mon, 09 Jan 2023 11:08:18 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
+        by smtp.gmail.com with ESMTPSA id bt16-20020a0564020a5000b00482e0c55e2bsm4048389edb.93.2023.01.09.11.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 11:08:17 -0800 (PST)
+Date:   Mon, 9 Jan 2023 20:08:15 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] staging: rtl8192e: Rename variables from r8192_priv
+ start with ChannelPlan
+Message-ID: <cover.1673290428.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-References: <20221207104005.v10.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
- <20221207104005.v10.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
- <Y7WkeCi7/x/t37JM@google.com> <Y7YjmtwByTR+8tbZ@google.com>
- <Y7bdmiZ9lqKZXCfq@google.com> <Y7buUdgLfnQqnG+x@google.com>
- <Y7b6dC6dDNO2bVjr@google.com> <Y7cSKFIakdGKKokE@google.com>
-In-Reply-To: <Y7cSKFIakdGKKokE@google.com>
-From:   Mark Hasemeyer <markhas@chromium.org>
-Date:   Mon, 9 Jan 2023 12:06:38 -0700
-Message-ID: <CANg-bXDrSJCGk27YKheupm9YND1fSaBaYfQ1Bd-4C-PnH67ioQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/3] dt-bindings: mfd: Add compatible string for UART support
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Raul Rangel <rrangel@chromium.org>,
-        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 9:08 AM Lee Jones <lee@kernel.org> wrote:
-> I changed the subject line and applied the patch, thanks.
+Rename variables to avoid CamelCase which is not accepted by checkpatch.
 
-Hey Lee, a couple comments/questions:
-1. The subject line of this patch was updated in v11 of the series.
-2. What tree was the patch applied to? I don't see the changes in linux-next.
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
+---
+V1 -> V2: In patch "Rename TSSI_13dBm, Pwr_Track and NumTotalRFPath"
+          Changed TSSI_13dBm to tssi_13dBm instead of tssi_13dbm
 
-On Thu, Jan 5, 2023 at 11:08 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> On Thu, Jan 05, 2023 at 04:27:32PM +0000, Lee Jones wrote:
-> > > > You should gain permission from the maintainer before you apply patches.
-> > > >
-> > > >   % scripts/get_maintainer.pl -f Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > > >      Lee Jones <lee@kernel.org> (supporter:MULTIFUNCTION DEVICES (MFD))
-> > > >      Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> > > >      Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> > > >      Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
-> > >
-> > > I see.  I guess for the case, I should get both MFD and DT bindings
-> > > maintainers' Acks before applying the patch.
-> >
-> > Yes.  The situation isn't overly clear and differs from subsystem to
-> > subsystem and maintainer to maintainer.  In the MFD case, Rob and
-> > Krzysztof conduct the first reviews.  99 times out of 100, if they're
-> > happy, I'm happy and I merge the changes via the MFD tree.  Same goes
-> > for Backlight and more recently, LEDs.
->
-> I see.  Apologize for that and I will pay more attention next time when
-> handling cross-subsystem patches.
+Philipp Hortmann (7):
+  staging: rtl8192e: Rename ChannelPlan, eeprom_ChannelPlan and CckPwEnl
+  staging: rtl8192e: Rename TSSI_13dBm, Pwr_Track and NumTotalRFPath
+  staging: rtl8192e: Rename CCKPresentAtt...
+  staging: rtl8192e: Rename TxPowerLevelCCK...
+  staging: rtl8192e: Rename TxPowerLevelOFDM24G...
+  staging: rtl8192e: Rename MCSTxPowerL.., LegacyHTTxPowe.. and
+    AntennaTx..
+  staging: rtl8192e: Rename SetRFPowerSta.., RfReg0Value and
+    bTXPowerDa..
+
+ .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |  14 +--
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  78 +++++++-------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 100 +++++++++---------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  10 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  42 ++++----
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    |  30 +++---
+ 6 files changed, 137 insertions(+), 137 deletions(-)
+
+-- 
+2.39.0
+
