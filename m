@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A63662AC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706FA662ACA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237062AbjAIQEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S230013AbjAIQFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjAIQEP (ORCPT
+        with ESMTP id S233804AbjAIQFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:04:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941911C41F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:04:14 -0800 (PST)
+        Mon, 9 Jan 2023 11:05:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F71DDF7;
+        Mon,  9 Jan 2023 08:05:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CF34B80E2A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC61C433F0;
-        Mon,  9 Jan 2023 16:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673280251;
-        bh=nC+zu23SLcFaISxH4vAQngXlax29OJipYbg1EhlYNpk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SkpyqOUAa09AuTie9kZS7sHMraNnh15/nx0txMROb4VZqnejwDxSApQAp/vSFBnxw
-         N2iz1UkjvSUf80eEEZucj5JynkFOCjRtiOPQFDRbrTjlXyBzb/8o7FXZzkiia8ETj2
-         hsFT+gCUDcwPRJw9PKzUKG5zYvowvI8H+T0dJDkAIdBW6Eed5ICC3PxwTJ4vYTxbKB
-         4q3jT2aKtbQCWcI/WdjIUuJVD5dE8+9Yg4VJnSWjaLIrb81Zd5Z2qcDP/f6Cnleh0V
-         kyE33RbS0/6WY+GRw9kOJ7yp1iysgziaWcVMkXGDiPcBh1bX7KisvPDjmduUQIvIkl
-         aovvReV2aH+5w==
-Date:   Mon, 9 Jan 2023 21:34:08 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: Re: [PATCH] soundwire: intel: remove DAI startup/shutdown
-Message-ID: <Y7w6+HMSn8M1OwHt@matsya>
-References: <20221215085436.2001568-1-yung-chuan.liao@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABAF9611BE;
+        Mon,  9 Jan 2023 16:05:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F105BC433F0;
+        Mon,  9 Jan 2023 16:05:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XOaraKj2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1673280333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z+niQef/oIp19ZPZkiD3NOHrMKlrLAG21vq0oN2bzI8=;
+        b=XOaraKj2DB2VFDzDX60zwUrFOyOgbAtEalCGXgZoKcew8HXZkEKWbtoYI7BI5SJwRGAKwh
+        Lo+oIg9AP89/Fp6cWVKILhFRly1Dpn3yCm1LoJH7SK+5GL2tqzWQL7dqz0rQXHXgNVRiqp
+        YxjflGD7X2Q8pUHpjdn6R6yC1jpCAAA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b1117af8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 9 Jan 2023 16:05:33 +0000 (UTC)
+Date:   Mon, 9 Jan 2023 17:05:28 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luigi Semenzato <semenzato@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        tbroch@chromium.org, dbasehore@chromium.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
+ suspend fails
+Message-ID: <Y7w7SMitXFkcR6Gb@zx2c4.com>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+ <20230106030156.3258307-1-Jason@zx2c4.com>
+ <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com>
+ <CAA25o9Sbkg=qD+DH-aqXY9H5R_oBtePcnqagwAGCgoUk8D-Vyg@mail.gmail.com>
+ <CAHk-=wi60PhJRzaBJ9uvVCpOpqSsKy=oXkGDq7t844BJ6dRcmA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221215085436.2001568-1-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wi60PhJRzaBJ9uvVCpOpqSsKy=oXkGDq7t844BJ6dRcmA@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-12-22, 16:54, Bard Liao wrote:
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On Fri, Jan 06, 2023 at 02:28:00PM -0800, Linus Torvalds wrote:
+> On Fri, Jan 6, 2023 at 12:04 PM Luigi Semenzato <semenzato@chromium.org> wrote:
+> >
+> > I think it's fine to go ahead with your change, for multiple reasons.
 > 
-> The only thing these DAI startup/shutdown callbacks do is play with
-> pm_runtime reference counts.
-> 
-> This is not wrong, but it's not necessary at all. At the ASoC core level,
-> only the component matters for pm_runtime. The ASoC core already calls
-> pm_runtime_get_sync() in snd_soc_pcm_component_pm_runtime_get(),
-> before the DAI startup callback is invoked.
-> 
-> None of the SoundWire codec drivers rely on pm_runtime helpers in
-> their DAI startup/shutdown either. This adds to the evidence that only
-> the component, or more precisely the device specified when registering
-> a component, should deal with pm_runtime transitions.
-> 
-> Beyond the code cleanup, this move prepares for the addition of link
-> power management in the auxiliary device startup/resume/suspend
-> callbacks. The DAI callbacks can by-design assume that the device is
-> already pm_runtime active.
+> Ok, I've applied the patch (although I did end up editing it to use
+> dev_err() before doing that just to make myself happier about the
+> printout).
 
-Applied, thanks
+Thanks for fixing it up to use dev_err(). Final commit looks good to me.
 
--- 
-~Vinod
+Jason
