@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D146631FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7BB663204
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbjAIU4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S237807AbjAIU47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbjAIUzg (ORCPT
+        with ESMTP id S237607AbjAIU4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:55:36 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A8487F17
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:54:35 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c1456d608cso104273017b3.15
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:54:35 -0800 (PST)
+        Mon, 9 Jan 2023 15:56:02 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8808B535
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:54:37 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id z17-20020a25e311000000b00719e04e59e1so10332272ybd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:54:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1sz3d8Q6zHAextbGhc5zNdx6/hdXqibZ5+zjxQEPtcY=;
-        b=dyW75mchIm8T3L3V0Aa5O5essWjp4aFupYS1LFKIISIPYObh/dim0X80nsutKOS2m/
-         7vd6AcHVv3F7nL+fFOG4vgOpiulnyZtSLux8AIxMn/Q09ghgqU9hpb0yvL9ry+wKM1Wm
-         UvSXVlZK7VJVWgc1kVtRM87LVA0ol6j3197yqrcZsN3y1TKaMHMTXNPpOvk38N+aLEKf
-         U9xTtNcWgL4MRS7DZ4GXXUuetaMZa2ezppHTDMHc58pzPdKSGBN9qWFGFMwk1DYAuR6m
-         mxxVO9djRkO0qH7ZMi64I+oMQN0AQu1sYjF82YaLSmfJI9fTdyDigl7Wn8SgruW4bLXZ
-         WU7A==
+        bh=1FpUUiRmr7dBuhWWRB46HjSP7TgY2quKdzRuNf/hqHM=;
+        b=AsrsBvZP9aQHF3L5Nl/u1fB+D2bm7e0YjzSCvgbBaPzVvDqUAEV/bKN3f/FWWFnJld
+         y54pIfCVv+Sf28j1GT6GnDmjTV3QxG0dtIi870ieojG97R1YrLaN1+Hnnh1RqNC6IKhV
+         FDsy8k4m0XBTPaqC3JVLB2amGI721PZ/e3uTJFIVXTdjA/KJiKwGIaizGxyvcp5J8QaW
+         5xEAO0mZOLLdDxM+ya/sdbkzi1vVwSyWReOOtmKkNqv4WGZ0uHxmN44Y8NrueULgHAw2
+         BBJ3cZtaXuduG2TgX3HtPnChX2RwWmECLeYtrImIURhb/vK80eEmATn6FHpKHV2WHJD9
+         N1QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1sz3d8Q6zHAextbGhc5zNdx6/hdXqibZ5+zjxQEPtcY=;
-        b=2ek9xVPg5kTOse9s7DJeUBms3KlFaULCDJFWo3rGk1EOtLUtJ13x5aoAp6Py8+7tLk
-         XEiGY4i3N46zeLJe0M35P5Ny+7xSGXQ4KBAn5OfDinW4elurR8QpTJPtPdiRCYFysLSE
-         EGVz+A+/lcUVTtThybM/uQmTytdmEcuu6GWBy/dbmvV1S60GKfN3bYGxDaU9O400Yr2l
-         e72l8WFD37cOoEb0rxkJT0gf9IyyWIrtgsaxDAA0rA2KRpCr5YNUgpKGWhZin0V+Lf4B
-         x8GFt8NjBuiEjnM+WoeHVL2SYEj0DaHZYniFrJB4IIp7GRBEh36XO1b9D08Be0D9Ihtm
-         1PSw==
-X-Gm-Message-State: AFqh2koEsPZXj1SVJJ+ptcFwACtnk8wQrjxZaU3mkJk95vm44CIr+BMl
-        7l7PMjKMTMptk5S1A2Jh8v9Nkf0Y+fg=
-X-Google-Smtp-Source: AMrXdXvYJ0MKAPgXdwWnp9E6tLdKAmG2zH31TOsESiFv0D3eqJovHEz4lb9T2t60zhYoFlt31PHaEzcWVdQ=
+        bh=1FpUUiRmr7dBuhWWRB46HjSP7TgY2quKdzRuNf/hqHM=;
+        b=7mh5zTs6gpnI607jpHI6uZiwptDQdvYWBqlhWBXMRyjtvvdf2pSxsNBdRuOVN5iJao
+         wBU1NlY53WWFpm3cFGCEcF/soXHTbUcX3CacPXCc2Y1j3woLPQvTXLRwR6mN6GnRSWLv
+         8P1GXmiRm7XNTOCE0km5CZeyT7UoOecIUj9qXpVWWdWrwGJ6i2BFcI36IvGvJ/IEw2mn
+         bVtLWwTv+Bg7SM5Hq6Z2Rr7NrtbXkNxWoGOPZPgvNWTQwuOp5X4JKnzugW8R+yyLAXsv
+         c92LzA0jfb6b7vPzSgrxL20dZOWGuDyawkF+2eqjiSLHJ0CKQ25MN75lTo2ZYkxU7ALA
+         sN5A==
+X-Gm-Message-State: AFqh2kr/s7x7pc30V35IN1Wibl8TKOnuSAhSXXSIwXcNixKsPOwFfOr5
+        Jhj5rmM77W2R9Rqx+e11XS7hCvToHN8=
+X-Google-Smtp-Source: AMrXdXtAgZu+pAoAaYuQQAsM5E55paYeoDQZrstt2b6LAIgKd1Hk/SubADrA5GRLvEWllXjlmSi56GzDLGU=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:9393:6f7a:d410:55ca])
- (user=surenb job=sendgmr) by 2002:a25:830b:0:b0:731:a583:5571 with SMTP id
- s11-20020a25830b000000b00731a5835571mr8144189ybk.320.1673297674437; Mon, 09
- Jan 2023 12:54:34 -0800 (PST)
-Date:   Mon,  9 Jan 2023 12:53:16 -0800
+ (user=surenb job=sendgmr) by 2002:a25:4646:0:b0:799:3955:201f with SMTP id
+ t67-20020a254646000000b007993955201fmr3367922yba.94.1673297676537; Mon, 09
+ Jan 2023 12:54:36 -0800 (PST)
+Date:   Mon,  9 Jan 2023 12:53:17 -0800
 In-Reply-To: <20230109205336.3665937-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230109205336.3665937-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230109205336.3665937-22-surenb@google.com>
-Subject: [PATCH 21/41] mm/mmap: write-lock VMAs affected by VMA expansion
+Message-ID: <20230109205336.3665937-23-surenb@google.com>
+Subject: [PATCH 22/41] mm/mremap: write-lock VMA while remapping it to a new
+ address range
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -84,34 +85,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vma_expand changes VMA boundaries and might result in freeing an adjacent
-VMA. Write-lock affected VMAs to prevent concurrent page faults.
+Write-lock VMA as locked before copying it and when copy_vma produces
+a new VMA.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>
 ---
- mm/mmap.c | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/mmap.c   | 1 +
+ mm/mremap.c | 1 +
+ 2 files changed, 2 insertions(+)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 1e2154137631..ff02cb51e7e7 100644
+index ff02cb51e7e7..da1908730828 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -544,6 +544,7 @@ inline int vma_expand(struct ma_state *mas, struct vm_area_struct *vma,
- 	if (mas_preallocate(mas, vma, GFP_KERNEL))
- 		goto nomem;
- 
-+	vma_write_lock(vma);
- 	vma_adjust_trans_huge(vma, start, end, 0);
- 
- 	if (file) {
-@@ -590,6 +591,7 @@ inline int vma_expand(struct ma_state *mas, struct vm_area_struct *vma,
+@@ -3261,6 +3261,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 			get_file(new_vma->vm_file);
+ 		if (new_vma->vm_ops && new_vma->vm_ops->open)
+ 			new_vma->vm_ops->open(new_vma);
++		vma_write_lock(new_vma);
+ 		if (vma_link(mm, new_vma))
+ 			goto out_vma_link;
+ 		*need_rmap_locks = false;
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 2ccdd1561f5b..d24a79bcb1a1 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -622,6 +622,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 			return -ENOMEM;
  	}
  
- 	if (remove_next) {
-+		vma_write_lock(next);
- 		if (file) {
- 			uprobe_munmap(next, next->vm_start, next->vm_end);
- 			fput(file);
++	vma_write_lock(vma);
+ 	new_pgoff = vma->vm_pgoff + ((old_addr - vma->vm_start) >> PAGE_SHIFT);
+ 	new_vma = copy_vma(&vma, new_addr, new_len, new_pgoff,
+ 			   &need_rmap_locks);
 -- 
 2.39.0
 
