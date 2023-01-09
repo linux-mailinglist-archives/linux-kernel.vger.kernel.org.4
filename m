@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8032A6625B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D956B6625BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbjAIMfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S234590AbjAIMkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbjAIMfc (ORCPT
+        with ESMTP id S231591AbjAIMkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:35:32 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456F064FA;
-        Mon,  9 Jan 2023 04:35:31 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Mon, 9 Jan 2023 07:40:06 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E15EEE29
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 04:40:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 8B6369FB;
-        Mon,  9 Jan 2023 13:35:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1673267729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7BC933EEC4;
+        Mon,  9 Jan 2023 12:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673268003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JQKaBY79GF+RPE6e93Lg/pYFuxmQLdWNgR8P0RjYoXg=;
-        b=YNe7fL7/NvBT9L6Xe/XKhfiU4deYF+rMcnn0PVQjmP8JXnWJnnkS3k45Axw3ZrVlF835dG
-        mLQILtHhuY/HO+jJTzAgjUYhpeNtQpcwWN3MfskBvly/QmSEDqqw4/g7+wlSqEgBvOWchV
-        r5PnpMP2Ns6mUH0K7HHTxw2Iq3PkYc2/rWu0/FbdurUrmvBL+HOvPeVKDO6aEXB9Rr9GpL
-        AqwASKCUxfm5ylURZ2inKalD18ZZ3BBDbJ2Z/NXdJFJhxakGyaQc0F0cDijDQON8ESHwMG
-        bE99WMg1fhqML2j2+JM6JoPXwjLGUIbtjFqNGWVIEh3KD4iV/aJ4aYBSEOdx9A==
-MIME-Version: 1.0
-Date:   Mon, 09 Jan 2023 13:35:29 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wei Fang <wei.fang@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH RFC net-next v2 03/12] net: mdio: mdiobus_register: update
- validation test
-In-Reply-To: <Y7SqCRkYkhQCLs8z@shell.armlinux.org.uk>
-References: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
- <20221227-v6-2-rc1-c45-seperation-v2-3-ddb37710e5a7@walle.cc>
- <Y7P/45Owf2IezIpO@shell.armlinux.org.uk>
- <37247c17e5e555dddbc37c3c63a2cadb@walle.cc>
- <Y7SqCRkYkhQCLs8z@shell.armlinux.org.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0584195b863b361a4f5c1e27e6c270b3@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=sxdz8WLO9DUBROFb+jBWHE2Tj51r6kudSkohQSadqZs=;
+        b=fGejd6PQVFdhK0EKMTdcf/XrJRdgIHXx5WerdJY7xq/6Flxe9nPcwL7bSf4bCSXkCyK+ok
+        8fbkvb5bV67dUuJSiqKKsGTTINJ0kJkS72qo4WrAVM1DhCp7AF1ZSaGz0p0wwJvqQDHJhb
+        Wux3CVZ0NEGBYdFqf8KCPXgbcwzRiS8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673268003;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sxdz8WLO9DUBROFb+jBWHE2Tj51r6kudSkohQSadqZs=;
+        b=3bPOQPsBJjln7pGcBCINy//eU5+06X7eZpfoE9TO/IpAfWiUC7lhd9a9cfIXLU6tN6kcmt
+        IdViUO9CGYrcvSDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4800F13583;
+        Mon,  9 Jan 2023 12:40:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id voZnECMLvGNZbgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 09 Jan 2023 12:40:03 +0000
+Date:   Mon, 09 Jan 2023 13:40:02 +0100
+Message-ID: <87zgarg9ul.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     <yang.yang29@zte.com.cn>
+Cc:     <perex@perex.cz>, <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>
+Subject: Re: [PATCH linux-next] ALSA: control-led: use strscpy() to instead of strncpy()
+In-Reply-To: <202301091945513559977@zte.com.cn>
+References: <202301091945513559977@zte.com.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell,
-
-Am 2023-01-03 23:19, schrieb Russell King (Oracle):
-> On Tue, Jan 03, 2023 at 11:21:08AM +0100, Michael Walle wrote:
->> Am 2023-01-03 11:13, schrieb Russell King (Oracle):
->> > On Wed, Dec 28, 2022 at 12:07:19AM +0100, Michael Walle wrote:
->> > > +	if (!bus || !bus->name)
->> > > +		return -EINVAL;
->> > > +
->> > > +	/* An access method always needs both read and write operations */
->> > > +	if ((bus->read && !bus->write) ||
->> > > +	    (!bus->read && bus->write) ||
->> > > +	    (bus->read_c45 && !bus->write_c45) ||
->> > > +	    (!bus->read_c45 && bus->write_c45))
->> >
->> > I wonder whether the following would be even more readable:
->> >
->> > 	if (!bus->read != !bus->write || !bus->read_c45 != !bus->write_c45)
->> 
->> That's what Andrew had originally. But there was a comment from Sergey 
->> [1]
->> which I agree with. I had a hard time wrapping my head around that, so 
->> I
->> just listed all the possible bad cases.
+On Mon, 09 Jan 2023 12:45:51 +0100,
+<yang.yang29@zte.com.cn> wrote:
 > 
-> The only reason I suggested it was because when looked at your code,
-> it also took several reads to work out what it was trying to do!
+> From: Xu Panda <xu.panda@zte.com.cn>
 > 
-> Would using !!bus->read != !!bus->write would help or make it worse,
-> !!ptr being the more normal way to convert something to a boolean?
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+> 
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> ---
+>  sound/core/control_led.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/sound/core/control_led.c b/sound/core/control_led.c
+> index f975cc85772b..c88653c205eb 100644
+> --- a/sound/core/control_led.c
+> +++ b/sound/core/control_led.c
+> @@ -534,8 +534,7 @@ static ssize_t set_led_id(struct snd_ctl_led_card *led_card, const char *buf, si
+>  	struct snd_ctl_elem_id id;
+>  	int err;
+> 
+> -	strncpy(buf2, buf, len);
+> -	buf2[len] = '\0';
+> +	strncpy(buf2, buf, len + 1);
 
-IMHO that makes it even harder. But I doubt we will find an expression
-that will work for everyone. I'll go with your suggestion/Andrew's first
-version in the next iteration.
+Still using strncpy()...?
 
--michael
+
+thanks,
+
+Takashi
