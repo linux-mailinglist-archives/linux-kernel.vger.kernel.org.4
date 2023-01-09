@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C05C6623DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D856623E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjAILM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S233330AbjAILMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjAILMZ (ORCPT
+        with ESMTP id S234085AbjAILMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:12:25 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACED1402E;
-        Mon,  9 Jan 2023 03:12:24 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Mon, 9 Jan 2023 06:12:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3DF14086;
+        Mon,  9 Jan 2023 03:12:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E0F91EC0589;
-        Mon,  9 Jan 2023 12:12:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673262742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WvxdxW8ZHXLmCsU9EpE35YDlNZMGPm5wJIQfY7TWylQ=;
-        b=lQCc6DDuUeoK44s+MIuuSls73wzOiBPbV9sWfB1M/tDY3xo+TA9dziLTnfy82wY5fyA4+u
-        tH2rwrDYfEwvz/5JjDb/jJNaDWVKvlS4YaVPWYMvhXZF16Yh0NiU0Y81ONdQyaMLjTWc+3
-        fAhEYwnIPe+w3kJkRwvDgo0A580VguQ=
-Date:   Mon, 9 Jan 2023 12:12:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Borislav Petkov <bp@suse.de>, Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, upstream@semihalf.com,
-        Muralidhara M K <muralimk@amd.com>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
- to SMN access
-Message-ID: <Y7v2j92Ol6dL3FLE@zn.tnic>
-References: <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
- <Yyt5LSxSz+6QeWF1@zn.tnic>
- <YywvmueFj/ibyZdf@smile.fi.intel.com>
- <YywwEvkZK1R9mJfE@smile.fi.intel.com>
- <c0c8bdce-26a0-ad3f-749b-7585d947608b@redhat.com>
- <YyxrdpUyc+kp48kX@zn.tnic>
- <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com>
- <CAOtMz3M=BTZUTRMHWGULwMDWmGdOzHKo=UcZeg3sP8_ndVYk2g@mail.gmail.com>
- <YzG657ZFeEvLd6hm@zn.tnic>
- <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE93FB80DAB;
+        Mon,  9 Jan 2023 11:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090FBC433D2;
+        Mon,  9 Jan 2023 11:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673262763;
+        bh=zcY/YpmdAAMLoGt7bn8IulxIoZd2Ehm6U9GhZUL7mCA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TIf5R75AM4F9gRfLd291j/ks3M0JEBdIwcmYkmZO+gGU5r91UhX4Qccn33YVhGhtq
+         5BW/U8gXl8grRv+KsZ0Ud7BRoXETBRNFJpr22a6KVWXlRjXB/6A0QX2EMIBWB8szyB
+         T2rCGnAMzqFsFgO2pd/mvd+1Jl+d/QJ/eGqPNypRnRiU1J12X+6ydEYV9jXsGGlUa8
+         a58SBnjB76rg6ceoR+s78YGwLLSJxQZpXc4GSx0Vuut76oG5PhvCRsen9jIJEdZBNS
+         0Fa0oivxdFUYld7t2c0exaWpdx1C8B9kQlwnfX0HZ+GnAvP6Z37wzQq/kqn76S8mYG
+         GjCcAOvf1ybdg==
+Date:   Mon, 9 Jan 2023 19:12:32 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdnsp: : add scatter gather support for ISOC
+ endpoint
+Message-ID: <20230109111232.GB94204@nchen-desktop>
+References: <20221222090934.145140-1-pawell@cadence.com>
+ <20230102082021.GB40748@nchen-desktop>
+ <BYAPR07MB53814954118F9A671DF5AD4DDDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR07MB53814954118F9A671DF5AD4DDDFE9@BYAPR07MB5381.namprd07.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another forgotten thread... ;-\
-
-+ Yazen.
-
-On Fri, Oct 28, 2022 at 10:32:20AM +0200, Jan Dąbroś wrote:
-> So to summarize everything, I would like below order:
+On 23-01-09 05:47:49, Pawel Laszczak wrote:
 > 
-> acpi_init() -> init_amd_nbs() -> dw_i2c_init_driver()
-> ^--subsys_initcall   ^--fs_initicall            ^--subsys_initcall
+> >
+> >On 22-12-22 04:09:34, Pawel Laszczak wrote:
+> >> Patch implements scatter gather support for isochronous endpoint.
+> >> This fix is forced by 'commit e81e7f9a0eb9
+> >> ("usb: gadget: uvc: add scatter gather support")'.
+> >> After this fix CDNSP driver stop working with UVC class.
+> >>
+> >> cc: <stable@vger.kernel.org>
+> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
+> >> USBSSP DRD Driver")
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >> ---
+> >>  drivers/usb/cdns3/cdnsp-gadget.c |   2 +-
+> >>  drivers/usb/cdns3/cdnsp-gadget.h |   4 +-
+> >>  drivers/usb/cdns3/cdnsp-ring.c   | 110 +++++++++++++++++--------------
+> >>  3 files changed, 63 insertions(+), 53 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c
+> >> b/drivers/usb/cdns3/cdnsp-gadget.c
+> >> index a8640516c895..e81dca0e62a8 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> >> @@ -382,7 +382,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct
+> >cdnsp_request *preq)
+> >>  		ret = cdnsp_queue_bulk_tx(pdev, preq);
+> >>  		break;
+> >>  	case USB_ENDPOINT_XFER_ISOC:
+> >> -		ret = cdnsp_queue_isoc_tx_prepare(pdev, preq);
+> >> +		ret = cdnsp_queue_isoc_tx(pdev, preq);
+> >>  	}
+> >>
+> >>  	if (ret)
+> >> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h
+> >> b/drivers/usb/cdns3/cdnsp-gadget.h
+> >> index f740fa6089d8..e1b5801fdddf 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-gadget.h
+> >> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
+> >> @@ -1532,8 +1532,8 @@ void cdnsp_queue_stop_endpoint(struct
+> >cdnsp_device *pdev,
+> >>  			       unsigned int ep_index);
+> >>  int cdnsp_queue_ctrl_tx(struct cdnsp_device *pdev, struct
+> >> cdnsp_request *preq);  int cdnsp_queue_bulk_tx(struct cdnsp_device
+> >> *pdev, struct cdnsp_request *preq); -int
+> >cdnsp_queue_isoc_tx_prepare(struct cdnsp_device *pdev,
+> >> -				struct cdnsp_request *preq);
+> >> +int cdnsp_queue_isoc_tx(struct cdnsp_device *pdev,
+> >> +			struct cdnsp_request *preq);
+> >
+> >Why you re-name this function?
+> >
+> >Other changes are ok for me.
+> >
 > 
-> but I don't have a clear idea how to achieve this in a clean way.
+> The function cdnsp_queue_isoc_tx_prepare has been removed and replaced
+> with cdnsp_queue_isoc_tx.  I just add declaration of this function to header file.
+> Before change cdnsp_queue_isoc_tx was static function.
 > 
-> The only option seems to be to register init_amd_nbs() as
-> subsys_initcall and force it to execute after acpi_init() and before
-> dw_i2c_init_drvier(). However the only option (if I'm not mistaken)
-> for forcing order on initcalls placed on the same level is to modify
-> their order within Makefile, so that linker puts them in the "init"
-> section with addresses in desired order. This doesn't seem to be an
-> option for upstream.
-> 
-> Do you have any clue how to solve this problem?
 
-Make init_amd_nbs() arch_initcall_sync() so that it executes after PCI init.
-
-By the time subsys_initcalls come, they'll have all the facilities they need,
-prepared for them...
-
-Along with big fat comment why.
-
-Btw, note to myself as I keep wondering about it each time: the sync calls come
-after the regular ones, in link order if you look at preprocessed linker script
-arch/x86/kernel/vmlinux.lds:
-
-__initcall_start = .;
- KEEP(*(.initcallearly.init)) __initcall0_start = .;
- KEEP(*(.initcall0.init)) KEEP(*(.initcall0s.init)) __initcall1_start = .;
- KEEP(*(.initcall1.init)) KEEP(*(.initcall1s.init)) __initcall2_start = .;
- KEEP(*(.initcall2.init)) KEEP(*(.initcall2s.init)) __initcall3_start = .;
- KEEP(*(.initcall3.init)) KEEP(*(.initcall3s.init)) __initcall4_start = .;
- KEEP(*(.initcall4.init)) KEEP(*(.initcall4s.init)) __initcall5_start = .;
- KEEP(*(.initcall5.init)) KEEP(*(.initcall5s.init)) __initcallrootfs_start = .;
- KEEP(*(.initcallrootfs.init)) KEEP(*(.initcallrootfss.init)) __initcall6_start = .;
- KEEP(*(.initcall6.init)) KEEP(*(.initcall6s.init)) __initcall7_start = .;
- KEEP(*(.initcall7.init)) KEEP(*(.initcall7s.init)) __initcall_end = .;
-
-Mario, is that something that would work for what you wanna do too?
-
-Thx.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
 -- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Peter Chen
