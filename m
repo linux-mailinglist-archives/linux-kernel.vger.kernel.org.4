@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A7D663402
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B94663401
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237843AbjAIWfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S237825AbjAIWeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237856AbjAIWee (ORCPT
+        with ESMTP id S237705AbjAIWeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:34:34 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD51183AB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:34:33 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id qb7so7341273qvb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:34:33 -0800 (PST)
+        Mon, 9 Jan 2023 17:34:22 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF031A3B1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:34:21 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id vm8so23971250ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:34:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EMSZpqLoelwVL3RJvee/aXBXiDqbnSM5XzpQm7l2pMw=;
-        b=X6h3npwjtEyOy3oAqdRDLqD+PojsSLHre8gy1KpEzrrCpBRS1SMbr1l7FaD5ob73vo
-         vizEFUB2X7TRuxcta0zMVC52gMyawbptyC4C77BrgI9R0YVJqfodI/CR0TuKRiWdAM6B
-         /C2uiJlQJwohEU1G9y717N7h/2G/UIXs4Enyo=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qrfnj92qZV9YKD/X88FUYEhh1ZiUzM2jrGqzUrMkfuk=;
+        b=ZEz0LqnW0DVKY426fn/ys0ikA02+XSjrZKzdMdAtQJfKWrkT0Wza+pSTE4ESvfPpHm
+         UutkCwvBqV2/6Cf5dpx3HWzChM6Pvn6fPeonWBWZjsHxhsHwX6DTjSM9ugIqoMO/eXOd
+         OMRFe7e5QAZ4Zfo9V4wOB+MHm2C4Q+V6FsNPVIh7QIiuNQGdAUIAhp2oqfTRdaNYqdmY
+         Mi2E9hh5G3nBkziNjEFNRrkHOvCV6ItaEcVwKcqQEuEJIONWw1/QclfPb1JAQXYwVzNu
+         ustDqipzElqrSYOfsG0JJ63qQgY4DX8Pnkssac0MfkddoVFKi4Moo2UJi46Rn6e5Iw/p
+         /GSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EMSZpqLoelwVL3RJvee/aXBXiDqbnSM5XzpQm7l2pMw=;
-        b=UMmLBd9iMODEa/mbtDE9QaoobeiLvFYPziWvehzuRE4Vvbpdpy2/xIDwJ/safiQG76
-         IekMfd6ACnPybPx3pcns0xCWk65Y+xrJfgX5wCEf1h0NpM+Lcj0Og0HBkXlKx2xXpCtf
-         s3fxgR8wAo2JRGCPf4aqPP+4M2eqL68bJHGIwFA8Xj1iideUrWBVTSQWzkLl50HrDoRo
-         x2HAnLcGYU0bR3zSxL2GtwM/2QIQPKzb52cDRS2bxGsw8iBvanTz8EvnSW1tKoNXYYBb
-         kMZtSw8y+7uEQ/JZcT8NN7L+bXP9SQ68OI8gjMyT91TLclIpzEMtPsslVJAs5B3hd11A
-         /Uxw==
-X-Gm-Message-State: AFqh2kpj+XsQE34ayHEhN/UBAJtbWEFzqg0Ll/LbeH/2CO6jjpXitdM2
-        70HgNEPTYO7PqNvRwcSzZVjxSz3qVq6VN/pTp7Y=
-X-Google-Smtp-Source: AMrXdXvuyfqKqS/4MJ8blCv5qLJMCrzIG7hN5OwCQuupzktm1EqXpqcK7eBG+KjCHFxWFTaCi+Xo6g==
-X-Received: by 2002:a0c:9166:0:b0:4df:59a8:b700 with SMTP id q93-20020a0c9166000000b004df59a8b700mr83804621qvq.42.1673303672322;
-        Mon, 09 Jan 2023 14:34:32 -0800 (PST)
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com. [209.85.160.176])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006fc5a1d9cd4sm6201937qko.34.2023.01.09.14.34.31
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qrfnj92qZV9YKD/X88FUYEhh1ZiUzM2jrGqzUrMkfuk=;
+        b=ofrpqhZP+XWaIdCVvZRhnyUEukLMGsJRVPRyToKflCovlfDB5TrKRjjA0HK/oLb2sN
+         pZfYwbz75z3ACwI+TT7qyORCRnU3tAwTATO9DsE6bscEoaOh1M1UMj4galJINYJgkhII
+         N9QOF7cKJXD/FMW08Q0cKUSGg7Eu10C5XoEGcdTCTo6No+P3P1H9awj0zIrRlkpn7BzT
+         ITEHXg7KSP4ExeJxji7kYwOJauc60G4fyAu3Yd37tzlsFFHPdxrFVUD7rsiOxuKqtS+x
+         TuM4Fs/qjEnziZvmMJNfz1XgCFFH/hNxgej5nSmmjGCFn4y/igXR+mnUO33JpU7Ibgx4
+         lhNw==
+X-Gm-Message-State: AFqh2kqa6baY+Y52uqd/G1J3j4Gdy/31xaBybQuOSsDm376oWAZunnY4
+        TgljQRoPi0IXd9FUcWhaLN0Iduk5eLA=
+X-Google-Smtp-Source: AMrXdXsM+c1VHFzHaCsf3M6QGLEtt0pIt1VJcbyCJieByfpI6Uo/kcPt7H1vXOo2Cqe/b6zAgywJBA==
+X-Received: by 2002:a17:906:280d:b0:837:c290:eb83 with SMTP id r13-20020a170906280d00b00837c290eb83mr14496758ejc.2.1673303659631;
+        Mon, 09 Jan 2023 14:34:19 -0800 (PST)
+Received: from [192.168.1.102] (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170906305400b007c0d64c1886sm4203377ejd.33.2023.01.09.14.34.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 14:34:32 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id s5so4981691qtx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:34:31 -0800 (PST)
-X-Received: by 2002:a05:622a:2598:b0:3ae:db1:185f with SMTP id
- cj24-20020a05622a259800b003ae0db1185fmr145364qtb.436.1673303671540; Mon, 09
- Jan 2023 14:34:31 -0800 (PST)
+        Mon, 09 Jan 2023 14:34:18 -0800 (PST)
+Message-ID: <fcbe9f78-bd22-4ec0-9768-9320a1c946fd@gmail.com>
+Date:   Mon, 9 Jan 2023 23:34:16 +0100
 MIME-Version: 1.0
-References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
- <20230109174742.GA1191249@roeck-us.net> <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
- <CANpmjNOmDp_sZgRuks3OZfT015vLwSKcfdFFC=yLGPUNOxnecg@mail.gmail.com>
-In-Reply-To: <CANpmjNOmDp_sZgRuks3OZfT015vLwSKcfdFFC=yLGPUNOxnecg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 9 Jan 2023 16:34:15 -0600
-X-Gmail-Original-Message-ID: <CAHk-=whGP8c9J96mvMqUu96DmFzgs8Gcg072_njEEwuym=Woyg@mail.gmail.com>
-Message-ID: <CAHk-=whGP8c9J96mvMqUu96DmFzgs8Gcg072_njEEwuym=Woyg@mail.gmail.com>
-Subject: Re: Linux 6.2-rc3
-To:     Marco Elver <elver@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 00/12] staging: r8188eu: some more xmit cleanups
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230108185738.597105-1-martin@kaiser.cx>
+ <20230109212852.75612-1-martin@kaiser.cx>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230109212852.75612-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,15 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:30 PM Marco Elver <elver@google.com> wrote:
->
-> The 1.5kB array is being fixed by
-> https://lore.kernel.org/lkml/20221231004514.317809-1-jcmvbkbc@gmail.com/
-> -- I suppose it's fair if you'd like to pull that patch right away, or
-> wait for the next PR from the xtensa tree (Cc Max).
+On 1/9/23 22:28, Martin Kaiser wrote:
+> Here's another set of xmit cleanups, based on my previous patches.
+> 
+> changes in v2:
+> - drop "make rtl8188eu_inirp_init a void function" patch
+>    (we should relay the return value instead of discarding it)
+> 
+> Martin Kaiser (12):
+>    staging: r8188eu: beq_cnt is write-only
+>    staging: r8188eu: bkq_cnt is write-only
+>    staging: r8188eu: viq_cnt is write-only
+>    staging: r8188eu: voq_cnt is write-only
+>    staging: r8188eu: replace switch with if
+>    staging: r8188eu: dir_dev is unused
+>    staging: r8188eu: remove unused hal_xmit_handler define
+>    staging: r8188eu: txirp_cnt is write-only
+>    staging: r8188eu: remove unused QSLT defines
+>    staging: r8188eu: xmit_priv's vcs_type is not used
+>    staging: r8188eu: xmit_priv's vcs is not used
+>    staging: r8188eu: xmit_priv's vcs_setting is not used
+> 
+>   drivers/staging/r8188eu/core/rtw_mlme.c       |  5 ---
+>   drivers/staging/r8188eu/core/rtw_xmit.c       | 42 -------------------
+>   drivers/staging/r8188eu/include/drv_types.h   |  1 -
+>   .../staging/r8188eu/include/rtl8188e_xmit.h   | 11 -----
+>   drivers/staging/r8188eu/include/rtw_xmit.h    | 10 -----
+>   drivers/staging/r8188eu/os_dep/os_intfs.c     |  3 --
+>   .../staging/r8188eu/os_dep/usb_ops_linux.c    | 23 +---------
+>   7 files changed, 1 insertion(+), 94 deletions(-)
+> 
 
-I'll wait for the pull request, and hope that this gets in by rc4 and
-we don't have another -rc with this issue.
+When applying first the 4 patch series and then the 20 patch series this 
+series is working.
 
-Hint hint,
-                Linus
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
