@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AA5661C55
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03721661C58
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjAICU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 21:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S230334AbjAIC1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 21:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjAICU5 (ORCPT
+        with ESMTP id S230504AbjAIC1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 21:20:57 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CB3F1FD;
-        Sun,  8 Jan 2023 18:20:51 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowABnic75ebtjTbDFCw--.5271S2;
-        Mon, 09 Jan 2023 10:20:44 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dmitry.baryshkov@linaro.org, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, freedreno@lists.freedesktop.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drm/msm: Add missing check and destroy for alloc_ordered_workqueue
-Date:   Mon,  9 Jan 2023 10:20:38 +0800
-Message-Id: <20230109022038.2163-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 8 Jan 2023 21:27:40 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8939FCE;
+        Sun,  8 Jan 2023 18:27:38 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NqyX50sFvz4f3v57;
+        Mon,  9 Jan 2023 10:27:33 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP2 (Coremail) with SMTP id Syh0CgBnDeuWe7tj6+BkBQ--.41045S2;
+        Mon, 09 Jan 2023 10:27:35 +0800 (CST)
+Subject: Re: [PATCH v2 08/13] blk-mq: simplify flush check in
+ blk_mq_dispatch_rq_list
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, john.garry@huawei.com, jack@suse.cz
+References: <20230104142259.2673013-1-shikemeng@huaweicloud.com>
+ <20230104142259.2673013-9-shikemeng@huaweicloud.com>
+ <20230108180611.GG23466@lst.de>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <86677943-1c5e-370f-ba69-25e10738b67b@huaweicloud.com>
+Date:   Mon, 9 Jan 2023 10:27:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowABnic75ebtjTbDFCw--.5271S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urWkCF4xJF15Ww1fKFy5twb_yoW8Jw1rpa
-        13Aa95try0ya1ag3ZFyr1kCa45Ca18t3WrCrW29wn3uw1Yyr1DZa4DtFyjkry7JFZ7JF12
-        yFZ7JF95ZF1jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUF3kuDUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230108180611.GG23466@lst.de>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: Syh0CgBnDeuWe7tj6+BkBQ--.41045S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4DKFy3WF48trW8Xr47Jwb_yoWftrbE9F
+        1Fk3Z7Kw4UG3Wqqa1UKFnYqFs8KFyUCF95Aa1ktFZag34kW3Z3JF1DGr15Za13GFZxKr1q
+        gr4rWa4Fyw4qyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for the return value of alloc_ordered_workqueue as it may return
-NULL pointer.
-Moreover, use the destroy_workqueue in the later fails in order to avoid
-memory leak.
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Hi, Christoph, thank you so much for review.
+on 1/9/2023 2:06 AM, Christoph Hellwig wrote:
+> I think we need to come up with a clear rule on when commit_rqs
+> needs to be called, and follow that.  In this case I'd be confused
+> if there was any case where we need to call it if list was empty.
+> 
+After we queue request[s] to one driver queue, we need to notify driver
+that there are no more request to the queue or driver will keep waiting
+for the last request to be queued and IO hung could happen.
+Normaly, we will notify this by setting .last in struct blk_mq_queue_data
+along with the normal last request .rq in struct blk_mq_queue_data. The
+extra commit is only needed if normal last information in .last is lost.
+(See comment in struct blk_mq_ops for commit_rqs).
 
-v1 -> v2:
+The lost could occur if error happens for sending last request with .last
+set or error happen in middle of list and we even do not send the request
+with .last set.
 
-1. Convert "goto err_destroy_workqueue" into "goto err_msm_unit" and
-remove "err_destroy_workqueue" label.
----
- drivers/gpu/drm/msm/msm_drv.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 8b0b0ac74a6f..54be323ed33d 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -418,6 +418,8 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 	priv->dev = ddev;
- 
- 	priv->wq = alloc_ordered_workqueue("msm", 0);
-+	if (!priv->wq)
-+		return -ENOMEM;
- 
- 	INIT_LIST_HEAD(&priv->objects);
- 	mutex_init(&priv->obj_lock);
-@@ -440,12 +442,12 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 
- 	ret = msm_init_vram(ddev);
- 	if (ret)
--		return ret;
-+		goto err_msm_uninit;
- 
- 	/* Bind all our sub-components: */
- 	ret = component_bind_all(dev, ddev);
- 	if (ret)
--		return ret;
-+		goto err_msm_uninit;
- 
- 	dma_set_max_seg_size(dev, UINT_MAX);
- 
 -- 
-2.25.1
+Best wishes
+Kemeng Shi
 
