@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACB66635E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FC86635E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjAIXzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
+        id S237024AbjAIX4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjAIXzg (ORCPT
+        with ESMTP id S237717AbjAIXz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:55:36 -0500
+        Mon, 9 Jan 2023 18:55:59 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1420DFCC;
-        Mon,  9 Jan 2023 15:55:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E912FF69;
+        Mon,  9 Jan 2023 15:55:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF78B810B3;
-        Mon,  9 Jan 2023 23:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A568C433D2;
-        Mon,  9 Jan 2023 23:55:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACB9DB80AD5;
+        Mon,  9 Jan 2023 23:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131C5C433EF;
+        Mon,  9 Jan 2023 23:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673308532;
-        bh=36W9a7c+G0nl1lcdbIJ/BM2s765cqvTrYCaVHIqcPAw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=AGJHpzHIodkO9gpRBSXl7RpPj7usJlj3xJUsQrbHFxdtqdjGkP/TW0gVpduI7/7Cf
-         Y/c9f8MZcYjp5J0i/DctlG4fADgwgACCXuGMElDYHz3kX7MC9zC6vtUrUS8JwIG0Bb
-         6qAgFj5mzu+MBqTq4bueZoQ/3pWYA4laHY7Grf5ujxm+6WvOv/gadUUHIxA3glzFHf
-         z2qNMWTxrV9rnLImWeIw2MM7VvIx9sdjAR8c6RL5Yy5yLFLmcNshJ3MNsS4lvrVcZw
-         gkSoj6LCV3nTbgI9j/NV4fEU5HZDf2bM9Ue3FoTbduKPhzfUgDnhXT5QdkmZkhalPi
-         StwTZEHy7YlHA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B3C985C0623; Mon,  9 Jan 2023 15:55:31 -0800 (PST)
-Date:   Mon, 9 Jan 2023 15:55:31 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        foo@bar.com
-Subject: Re: [PATCH -rcu] rcu: Disable lazy if call_rcu() called when GPs
- expedited
-Message-ID: <20230109235531.GB4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230109231416.GA4028633@paulmck-ThinkPad-P17-Gen-1>
- <C461EF52-B060-4871-8C20-30824983E787@joelfernandes.org>
+        s=k20201202; t=1673308554;
+        bh=d2PcXOaVy6FyBVtZaPfSiTqbNPTuX2NFJs+b75ZfvvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8v+snmwHqkXwWhs4EjMyIdbPC2VwXf1vMsdqyLNFlJY+RW3mnrsdWGh1P49N2vLb
+         3Tb7HV0BYe+ZG2a1OAWIFTgaulHhMRObmDzlPgqXSLSSP5bZ5LJNYOG2HDV792VfTi
+         f9k6JxF9/NOZvg5S7mgBlsXdmjXHBPs4qQuNbjdYn3AiXUZtlVNCxZRygcFz4EOUFx
+         +S8HGXW4EDGE78oaSjKujQ1hESOgQfUb/4TA3YKsN2AClbom7XLz07zBLOI+0igbG4
+         /mq9AFnGAWwLs2ZhLiK5q6JS+USjmWo3g13W6g2tnvZBzAFUZVtdIeizelVHK6R9NU
+         eg5jYk2eqkjDA==
+Date:   Tue, 10 Jan 2023 00:55:51 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Zqiang <qiang1.zhang@intel.com>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
+Message-ID: <Y7yph3aMNbxGa7o5@lothringen>
+References: <0BF2065B-1E02-498C-B999-EB52F005B62E@joelfernandes.org>
+ <D445A93C-8315-4407-A8E4-C377BF63058A@joelfernandes.org>
+ <Y7tNPF4x+HYJUwjK@lothringen>
+ <20230109193226.GX4028633@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <C461EF52-B060-4871-8C20-30824983E787@joelfernandes.org>
+In-Reply-To: <20230109193226.GX4028633@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,81 +58,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 06:20:55PM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Jan 9, 2023, at 6:14 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+On Mon, Jan 09, 2023 at 11:32:26AM -0800, Paul E. McKenney wrote:
+> On Mon, Jan 09, 2023 at 12:09:48AM +0100, Frederic Weisbecker wrote:
+> > On Sat, Jan 07, 2023 at 09:55:22PM -0500, Joel Fernandes wrote:
+> > > 
+> > > 
+> > > > On Jan 7, 2023, at 9:48 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > > 
+> > > > ﻿
+> > > >>> On Jan 7, 2023, at 5:11 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
+> > > >>> 
+> > > >>> ﻿On Fri, Jan 06, 2023 at 07:01:28PM -0500, Joel Fernandes wrote:
+> > > >>> (lost html content)
+> > > > 
+> > > > My problem is the iPhone wises up when I put a web link in an email. I want to look into smtp relays but then if I spent time on fixing that, I might not get time to learn from emails like these... 
+> > > > 
+> > > >> I can't find a place where the exp grace period sends an IPI to
+> > > >> CPUs slow to report a QS. But anyway you really need the tick to poll
+> > > >> periodically on the CPU to chase a quiescent state.
+> > > > 
+> > > > Ok.
+> > > > 
+> > > >> Now arguably it's probably only useful when CONFIG_PREEMPT_COUNT=y
+> > > >> and rcu_exp_handler() has interrupted a preempt-disabled or bh-disabled
+> > > >> section. Although rcu_exp_handler() sets TIF_RESCHED, which is handled
+> > > >> by preempt_enable() and local_bh_enable() when CONFIG_PREEMPT=y.
+> > > >> So probably it's only useful when CONFIG_PREEMPT_COUNT=y and CONFIG_PREEMPT=n
+> > > >> (and there is also PREEMPT_DYNAMIC to consider).
+> > > > 
+> > > > Makes sense. I think I was missing this use case and was going by the general design of exp grace periods.  I was incorrectly assuming the IPIs were being sent repeatedly for hold out CPUs, which is not the case I think. But that would another way to fix it?
+> > > > 
+> > > > But yeah I get your point, the first set of IPIs missed it, so we need the rescue-tick for long non-rcu_read_lock() implicit critical sections.. 
+> > > > 
+> > > >> If CONFIG_PREEMPT_COUNT=n, the tick can only report idle and user
+> > > >> as QS, but those are already reported explicitly on ct_kernel_exit() ->
+> > > >> rcu_preempt_deferred_qs().
+> > > > 
+> > > > Oh hmm, because that function is a NOOP for PREEMPT_COUNT=y and PREEMPT=n and will not report the deferred QS?  Maybe it should then. However I think the tick is still useful if after the preempt disabled section, will still did not exit the kernel.
+> > > 
+> > > I think meant I here, an atomic section (like bh or Irq disabled). There is no such thing as disabling preemption for CONFIG_PREEMPT=n. Or maybe I am confused again.  This RCU thing…
 > > 
-> > ﻿On Mon, Jan 09, 2023 at 10:17:56PM +0000, Joel Fernandes (Google) wrote:
-> >> During suspend, we see failures to suspend 1 in 300-500 suspends.
-> >> Looking closer, it appears that we are queuing lazy callbacks even
-> >> though rcu_gp_is_expedited(). These delays appear to not be very welcome
-> >> by the suspend/resume code as evidenced by these occasional suspend
-> >> failures.
-> >> 
-> >> This commit therefore checks if rcu_gp_is_expedited() and ignores the
-> >> lazy hint if so.
-> >> 
-> >> Ignoring the lazy hint if rcu_gp_is_expedited() makes the 3000
-> >> suspend/resume cycles pass reliably on a 12th gen 12-core Intel CPU.
+> > Right, so when CONFIG_PREEMPT_COUNT=n, there is no way for a tick to tell if the
+> > the interrupted code is safely considered as a QS. That's because
+> > preempt_disable() <-> preempt_enable() are no-ops so the whole kernel is
+> > assumed non-preemptible, and therefore the whole kernel is a READ side critical
+> > section, except for the explicit points reporting a QS.
 > > 
-> > Yow!!!  ;-)
-> 
-> :-D
-> 
-> >> Fixes: 3cb278e73be5 ("rcu: Make call_rcu() lazy to save power")
-> >> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> >> ---
-> >> Paul, could we take this for 6.2 -rc cycle? Thanks.
-> >> 
-> >> kernel/rcu/tree.c | 5 +++--
-> >> 1 file changed, 3 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> >> index 63545d79da51..93eb03f8ed99 100644
-> >> --- a/kernel/rcu/tree.c
-> >> +++ b/kernel/rcu/tree.c
-> >> @@ -2594,12 +2594,12 @@ static void check_cb_ovld(struct rcu_data *rdp)
-> >> }
-> >> 
-> >> static void
-> >> -__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
-> >> +__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
-> >> {
-> >>    static atomic_t doublefrees;
-> >>    unsigned long flags;
-> >>    struct rcu_data *rdp;
-> >> -    bool was_alldone;
-> >> +    bool was_alldone, lazy;
+> > The only exception is when the tick interrupts idle (or user with
+> > nohz_full). But we already have an exp QS reported on idle (and user with
+> > nohz_full) entry through ct_kernel_exit(), and that happens on all RCU_TREE
+> > configs (PREEMPT or not). Therefore the tick doesn't appear to be helpful at
+> > all on a nohz_full CPU with CONFIG_PREEMPT_COUNT=n.
 > > 
-> > Please put "lazy" in alpha order.  Except that...
-> 
-> Ah sure.
-> 
+> > I suggest we don't bother optimizing that case though...
 > > 
-> >>    /* Misaligned rcu_head! */
-> >>    WARN_ON_ONCE((unsigned long)head & (sizeof(void *) - 1));
-> >> @@ -2622,6 +2622,7 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
-> >>    kasan_record_aux_stack_noalloc(head);
-> >>    local_irq_save(flags);
-> >>    rdp = this_cpu_ptr(&rcu_data);
-> >> +    lazy = lazy_in && !rcu_gp_is_expedited();
+> > To summarize:
 > > 
-> > Doesn't this completely disable laziness on Android?
+> > 1) nohz_full && !CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
+> >   Tick isn't helpful. It can only report idle/user QS, but that is
+> >   already reported explicitly.
+> > 
+> > 2) nohz_full && CONFIG_PREEMPT_COUNT && !CONFIG_PREEMPT_RCU:
+> >   Tick is very helpful because it can tell if the kernel is in
+> >   a QS state.
+> > 
+> > 3) nohz_full && CONFIG_PREEMPT_RCU:
+> >    Tick doesn't appear to be helpful because:
+> >        - If the rcu_exp_handler() fires in an rcu_read_lock'ed section, then the
+> >          exp QS is reported on rcu_read_unlock()
+> >        - If the rcu_exp_handler() fires in a preempt/bh disabled section,
+> >          TIF_RESCHED is forced which is handled on preempt/bh re-enablement,
+> > 	 reporting a QS.
+> >    
+> >   
+> > The case 2) is a niche, only useful for debugging. But anyway I'm not sure it's
+> > worth changing/optimizing the current state. Might be worth add a comment
+> > though.
 > 
-> Good point, I am not sure but it could be. Maybe it is safer that I add
-> a new suspend-indicator then, with corresponding
-> suspend entry/exit calls like we do for expedited.
-> 
-> That way anyone doing it this way will not disable
-> lazy fully.
-> 
-> Thoughts?
+> Thank you both for the analysis!  I would welcome a comment.
 
-Makes sense to me!
+I'm preparing that.
 
-Just so you know, there is an overlapping patch series in flight here:
+> One could argue that we should increase the delay before turning the
+> tick on, but my experience is that expedited grace periods almost always
+> complete in less than a jiffy, so there would almost never be any benefit
+> in doing so.  But if some large NO_HZ_FULL system with long RCU readers
+> starts having trouble with too-frequent tick enablement, that is one
+> possible fix.
 
-https://lore.kernel.org/all/20221219202910.3063036-1-elliott@hpe.com/
+And last but not least: wait for anybody to complain before changing anything
+;-))
 
-							Thanx, Paul
+Thanks.
