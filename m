@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C0A66270B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC51662708
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbjAINaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S236801AbjAIN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjAIN34 (ORCPT
+        with ESMTP id S231267AbjAIN3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:29:56 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642DA1A397
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:29:54 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4b718cab0e4so112420267b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:29:54 -0800 (PST)
+        Mon, 9 Jan 2023 08:29:50 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D83BC0F;
+        Mon,  9 Jan 2023 05:29:48 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id u19so20008961ejm.8;
+        Mon, 09 Jan 2023 05:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOu+YPGL4HyTcJPErwyvfcCw8AgjES/LkJyDaqUA8xo=;
-        b=MmIVeiwGGg+w70IfORtKA6uSn4jgusMZs9qTk/5aGLvuqebaBKnrGkH6v+NUOPGYiS
-         pUYVE1LkpaG8IeDssdw2Kfc9H49sXT70cp3n3BiXevLPVrBq7cgURKvFKVns547Nes3i
-         Ffs6cWYDiTYFeFWs78lXv0zXPqy1UBATpUC3gNQoXF8tdDK+YQirEmupV8NWBBLDXvDU
-         86FFej0tZSemF/dgnmgaSd0iU72hGQ6GiUfaFynsSaoILuKh9jsUTGmB5iTbtPElwCiu
-         gcQV3iLt4GSV5Zy17yf9NP9SURfc80q1QdEgQaGRrbNXGOK6uNppyuBTOrCwE9XP1GgH
-         kIdQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OnLgVlQcPUmhGddpJYGzFYAsfQhj3TvV2AMn1iaicV4=;
+        b=U0mU7RMxkmdrEdFGy9CJinO/If0ziVK7HzWZwo7R85GUyz6cSI7XQD1JoGsqiEp8tA
+         +QcYaPpK3zPBijaX+YJd/w6l9Y1ItyCd06CMjFrOG3WZJHK15sDrIMKJgGDnWpAbA/1n
+         X9a13cQt3BTasjrHlr+X3cWfIMcdKAKeeRp/S2sVSELPIftbUS+whnD2WERmwB6QqHe2
+         5o/V1B9CA4Ura/1X6EXDtpUbZiC2DYYTTxiIEE5cgG2PBCDJgsxrXPvN+CThUAbvucsc
+         At+7UXZq/WrTJIwbwRFHnmlfji81yAHU2tpuVQFPVo7BJKxR0pzsOzGWPXQFKSVQHdBz
+         1YMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZOu+YPGL4HyTcJPErwyvfcCw8AgjES/LkJyDaqUA8xo=;
-        b=XRABjaEPrmP8h8dynO8bSUtVMrpSKsCKD85qcx/hfTZFbhnuTEwbA5ijAX0fpL9B2L
-         3ZdwjzilcwX6kSiiAvBb/Ijyucc9cfJ0Uo69yVgkUcg2ahRYOTg7xaaHHXx9mVAAnDrD
-         4jnpTlOEPHy7RvNrE2v0pTp2z+84vKb/VNXuSRkx94nomtCBX35AngorcJdtH8/aC5fC
-         d/0+zBgPnK4vJ2tYQDt4hRIzg5OA/0UKVk3BJXbvu+7Oio0uFggb3nlixEG//lQ7k7Yh
-         vfVncu/gg4irfhwlr2k/HV0E0429XMP5/8KYnlVJpc6gnkFd9YXsjcYzR7R1FI//8aif
-         T/Lg==
-X-Gm-Message-State: AFqh2koPnUm/Y4RWGJEDeCFBP/An7scxDFBwUl60DoeHrK7HazsVt8el
-        PYHpBm9H34gjnrnzBQoaRHx+zPWIrZmxe4KXOSoCHg==
-X-Google-Smtp-Source: AMrXdXvAcvxObj5g9/LlFQeX9n4DRfwF9usxC+I5SxlLdi4AuXTDLQvYlKlVCo1NrmFyB7wxdhf3+Xniq1G6cR/iSew=
-X-Received: by 2002:a81:441c:0:b0:463:e60:e538 with SMTP id
- r28-20020a81441c000000b004630e60e538mr1091802ywa.130.1673270993625; Mon, 09
- Jan 2023 05:29:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OnLgVlQcPUmhGddpJYGzFYAsfQhj3TvV2AMn1iaicV4=;
+        b=B6FiHHTZ8kCeizRSNORRAoeU4yPWdcQTKVfJOZMYu9yRfioSmdDv3OczcQlO2w0e98
+         RDS33V9dEcAzAKdx96BIpVPeyWP/a81pLOkgPZD/cH0b21/misSkbrTLPPhoewkBeMRN
+         WVq20zDRP2LO6cFkkmYvmryCMkkAIYcz4eo1Cb29LEwto0YD6eLMpW1bJzM+b/ihOzew
+         bN8Vx/w9Y2SeA6BE+SrHFLVYkqRrfBe8CW8XgXGfAzAwpcZW4oy4M9SoJQSZh1pI1gTX
+         e8DGvfyyBKTB50lHxauvR8WEwwQjWnxDffmilTpkfMdC0pJ267Efp++J6qhkCejDIeAI
+         kD5Q==
+X-Gm-Message-State: AFqh2koh8exg6Tn0aAobQ/7x/1yqQOvXTFYrymDCJYYJTVF/RoGFE6Sy
+        F6EWDIFPPcAYkc/Z3FoJZAw=
+X-Google-Smtp-Source: AMrXdXuk/fs7Fa0jTnCxkLCt/vvpaLyKgXMW78MxFDCX5QqZMNBLOgiPVgoxVohrUH1FftyprV4BLQ==
+X-Received: by 2002:a17:906:280d:b0:7c1:2a0f:55b1 with SMTP id r13-20020a170906280d00b007c12a0f55b1mr60218751ejc.14.1673270986856;
+        Mon, 09 Jan 2023 05:29:46 -0800 (PST)
+Received: from skbuf ([188.27.185.38])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm3761223ejg.174.2023.01.09.05.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 05:29:46 -0800 (PST)
+Date:   Mon, 9 Jan 2023 15:29:44 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 net-next 2/3] net: dsa: mv88e6xxx: shorten the locked
+ section in mv88e6xxx_g1_atu_prob_irq_thread_fn()
+Message-ID: <20230109132944.ipczdt3oj2kpfppn@skbuf>
+References: <20230108094849.1789162-1-netdev@kapio-technology.com>
+ <20230108094849.1789162-3-netdev@kapio-technology.com>
 MIME-Version: 1.0
-References: <20221221073232.21888-1-clin@suse.com> <20221221073232.21888-3-clin@suse.com>
-In-Reply-To: <20221221073232.21888-3-clin@suse.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 9 Jan 2023 14:29:42 +0100
-Message-ID: <CACRpkdbwgngAmqB4uU9TxeqcURtvH9S8Y5U38nmX4e7fWM07Fg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] pinctrl: add NXP S32 SoC family support
-To:     Chester Lin <clin@suse.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108094849.1789162-3-netdev@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chester,
+On Sun, Jan 08, 2023 at 10:48:48AM +0100, Hans J. Schultz wrote:
+> As only the hardware access functions up til and including
+> mv88e6xxx_g1_atu_mac_read() called under the interrupt handler
+> need to take the chip lock, we release the chip lock after this call.
+> The follow up code that handles the violations can run without the
+> chip lock held.
+> In further patches, the violation handler function will even be
+> incompatible with having the chip lock held. This due to an AB/BA
+> ordering inversion with rtnl_lock().
+> 
+> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+> ---
 
-thanks for your patch!
-
-On Wed, Dec 21, 2022 at 8:33 AM Chester Lin <clin@suse.com> wrote:
-
-> Add the pinctrl driver for NXP S32 SoC family. This driver is mainly based
-> on NXP's downstream implementation on CodeAurora[1].
->
-> [1] https://source.codeaurora.org/external/autobsps32/linux/tree/drivers/pinctrl/freescale?h=bsp34.0-5.10.120-rt
->
-> Signed-off-by: Matthew Nunez <matthew.nunez@nxp.com>
-> Signed-off-by: Phu Luu An <phu.luuan@nxp.com>
-> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>
-> Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
-> Signed-off-by: Radu Pirea <radu-nicolae.pirea@nxp.com>
-> Signed-off-by: Chester Lin <clin@suse.com>
-
-(...)
->  drivers/pinctrl/freescale/Kconfig         |  14 +
->  drivers/pinctrl/freescale/Makefile        |   2 +
->  drivers/pinctrl/freescale/pinctrl-s32.h   |  76 ++
->  drivers/pinctrl/freescale/pinctrl-s32cc.c | 983 ++++++++++++++++++++++
->  drivers/pinctrl/freescale/pinctrl-s32g2.c | 773 +++++++++++++++++
-
-Should this driver really be grouped together with the legacy branded
-"freescale" stuff? Does it share any hardware or structure or code
-with the Freescale drivers?
-
-Maybe you should bite the bullet and created drivers/pinctrl/nxp?
-
-Also create a new MAINTAINERS entry so we do not get the
-Freescale legacy maintainer list.
-
-Overall the driver looks good, I am a bit sceptic about the things
-that Kryzstof is talking about as well so that needs to be resolved.
-
-Yours,
-Linus Walleij
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
