@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BC466228C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED48366228B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbjAIKJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:09:31 -0500
+        id S236303AbjAIKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:09:22 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236871AbjAIKIu (ORCPT
+        with ESMTP id S236885AbjAIKIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:08:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09CA10F6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:08:48 -0800 (PST)
+        Mon, 9 Jan 2023 05:08:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5B3B1C1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:08:49 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1673258926;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KwtlRFi0ucYwgo8zAGimTYO9K8YK26MeFnNklCQOGzw=;
-        b=3RoQA2aDLx7AlS6Co8IADuTW2f6qTEEXfGZJMrn/9nhav5yaGegA44eq414C5fFHD/ZM5J
-        UrASxwb8wRezckEGyL5BqJ9U2C0Aiv2FCZE8lWEiRNkvD/kIUrf7anBZw/KT0owt0G0qKE
-        h3jF2XIJtY5C5yPlgp9sFw5WMhKZCzcgE2ztl6Dxm2x3fEn83QDN5qYXxKd2ortCyo0krr
-        mhj90TQJUeN7L2hxAtKssv7qIcH7uoBM2NSfiUBDAvYJM9Phdc+noOQUKgMton+VbqmD8b
-        1/v6qd1y3rCVYJt/zxdIetZeT4abFjBboaTWZblVX8OuyJuF0IYlBPi3aftK1Q==
+        bh=PJqnYxHgAm5zPWQPXQ8w2S1sD7jcnMKX3VIFczAZH38=;
+        b=1EByRzQzhb8tbRlrbFCbzD5+nrEU7ae34iNdqti1AKJsCvff+F8EJIdQKnShLXRjNtCyMk
+        pzFgLfbQe4s268Hu/bbClmRcSoW2mxIet/PgIqMGHRJUDKPe7xwiMgRgtDCXo93ugKUoCA
+        x4U2kVPQ/Yhzu6YHEmMl+cr7mv+TGcQmzIynuOic3tuyJtS7hX+mrEmZUAIvW2kCPTi6x8
+        cYSC2gWk61+8r8gddLm9JBPOQtbuqkdoEzNt2WE5uWfXqnl5h+ibCj00NQLwk94J8Ueb+I
+        gvB37aNHy802lVSChD96146Ln3NCZcd+MdfejcBvRTU9HfaIZd0yOa6KGW3vBA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1673258926;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KwtlRFi0ucYwgo8zAGimTYO9K8YK26MeFnNklCQOGzw=;
-        b=IXpLv0+901H2N2U63t49w1Ie91aCWYX8F3HksNv9buCqUJQaEx1/MtDDNqdWEQKrLDpZHK
-        Vwc5VVXkijc0hZCQ==
+        bh=PJqnYxHgAm5zPWQPXQ8w2S1sD7jcnMKX3VIFczAZH38=;
+        b=IAQ1RJhglgrijsFvOo0DaKvloLt3um1/8neEecwhxvE1oNmhiHOEx7HpZl4r7r/RwkrLS3
+        jZivOpfaIOa5lyCg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH printk v5 6/8] printk: introduce console_prepend_dropped() for dropped messages
-Date:   Mon,  9 Jan 2023 11:13:58 +0106
-Message-Id: <20230109100800.1085541-7-john.ogness@linutronix.de>
+Subject: [PATCH printk v5 7/8] printk: use printk_buffers for devkmsg
+Date:   Mon,  9 Jan 2023 11:13:59 +0106
+Message-Id: <20230109100800.1085541-8-john.ogness@linutronix.de>
 In-Reply-To: <20230109100800.1085541-1-john.ogness@linutronix.de>
 References: <20230109100800.1085541-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,190 +59,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently "dropped messages" are separately printed immediately
-before printing the printk message. Since normal consoles are
-now using an output buffer that is much larger than previously,
-the "dropped message" could be prepended to the printk message
-and then output everything in a single write() call.
+Replace the buffers in struct devkmsg_user with a struct
+printk_buffers. This reduces the number of buffers to keep track of.
 
-Introduce a helper function console_prepend_dropped() to prepend
-an existing message with a "dropped message". This simplifies
-the code by allowing all message formatting to be handled
-together and then only requires a single write() call to output
-the full message. And since this helper does not require any
-locking, it can be used in the future for other console printing
-contexts as well.
+As a side-effect, @text_buf was 8kB large, even though it only
+needed to be the max size of a ringbuffer record. By switching to
+struct printk_buffers, ~7kB less memory is allocated when opening
+/dev/kmsg.
 
-Note that console_prepend_dropped() is defined as a NOP for
-!CONFIG_PRINTK. Although the function will never be called for
-!CONFIG_PRINTK, compiling the function can lead to warnings of
-"always true" conditionals due to the size macro values used
-in !CONFIG_PRINTK.
+And since struct printk_buffers will be used now, reduce duplicate
+code by calling printk_get_next_message() to handle the record
+reading and formatting.
+
+Note that since /dev/kmsg never suppresses records based on
+loglevel, printk_get_next_message() is extended with an extra
+bool argument to specify if suppression is allowed.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/printk/internal.h |  4 --
- kernel/printk/printk.c   | 90 +++++++++++++++++++++++++++-------------
- 2 files changed, 61 insertions(+), 33 deletions(-)
+ kernel/printk/printk.c | 49 +++++++++++++++++++-----------------------
+ 1 file changed, 22 insertions(+), 27 deletions(-)
 
-diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
-index c9bb0cd86372..72df730597f1 100644
---- a/kernel/printk/internal.h
-+++ b/kernel/printk/internal.h
-@@ -26,9 +26,6 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
- /* the maximum size of a formatted extended record */
- #define CONSOLE_EXT_LOG_MAX	8192
- 
--/* the maximum size for a dropped text message */
--#define DROPPED_TEXT_MAX	64
--
- /* the maximum size allowed to be reserved for a record */
- #define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
- 
-@@ -69,7 +66,6 @@ u16 printk_parse_prefix(const char *text, int *level,
- #define PREFIX_MAX		0
- #define CONSOLE_LOG_MAX		0
- #define CONSOLE_EXT_LOG_MAX	0
--#define DROPPED_TEXT_MAX	0
- #define LOG_LINE_MAX		0
- 
- /*
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 6e2a6d5548e9..80a49ec6f42b 100644
+index 80a49ec6f42b..a72904890a5f 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -1995,27 +1995,6 @@ static int console_trylock_spinning(void)
- 	return 1;
+@@ -695,16 +695,15 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
+ 	return len;
  }
  
--/*
-- * Call the specified console driver, asking it to write out the specified
-- * text and length. If @dropped_text is non-NULL and any records have been
-- * dropped, a dropped message will be written out first.
-- */
--static void call_console_driver(struct console *con, const char *text, size_t len,
--				char *dropped_text)
--{
--	size_t dropped_len;
++static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
++				    bool is_extended, bool may_supress);
++
+ /* /dev/kmsg - userspace message inject/listen interface */
+ struct devkmsg_user {
+ 	atomic64_t seq;
+ 	struct ratelimit_state rs;
+ 	struct mutex lock;
+-	char buf[CONSOLE_EXT_LOG_MAX];
 -
--	if (con->dropped && dropped_text) {
--		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
--				       "** %lu printk messages dropped **\n",
--				       con->dropped);
--		con->dropped = 0;
--		con->write(con, dropped_text, dropped_len);
--	}
--
--	con->write(con, text, len);
--}
--
- /*
-  * Recursion is tracked separately on each CPU. If NMIs are supported, an
-  * additional NMI context per CPU is also separately tracked. Until per-CPU
-@@ -2395,10 +2374,6 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
- 				  struct dev_printk_info *dev_info) { return 0; }
- static void console_lock_spinning_enable(void) { }
- static int console_lock_spinning_disable_and_check(int cookie) { return 0; }
--static void call_console_driver(struct console *con, const char *text, size_t len,
--				char *dropped_text)
--{
--}
- static bool suppress_message_printing(int level) { return false; }
- static bool pr_flush(int timeout_ms, bool reset_on_progress) { return true; }
- static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
-@@ -2724,6 +2699,56 @@ static void __console_unlock(void)
- 	up_console_sem();
- }
+-	struct printk_info info;
+-	char text_buf[CONSOLE_EXT_LOG_MAX];
+-	struct printk_record record;
++	struct printk_buffers pbufs;
+ };
  
-+/*
-+ * Prepend the message in @pmsg->pbufs->outbuf with a "dropped message". This
-+ * is achieved by shifting the existing message over and inserting the dropped
-+ * message.
-+ *
-+ * @pmsg is the printk message to prepend.
-+ *
-+ * @dropped is the dropped count to report in the dropped message.
-+ *
-+ * If the message text in @pmsg->pbufs->outbuf does not have enough space for
-+ * the dropped message, the message text will be sufficiently truncated.
-+ *
-+ * If @pmsg->pbufs->outbuf is modified, @pmsg->outbuf_len is updated.
-+ */
-+#ifdef CONFIG_PRINTK
-+static void console_prepend_dropped(struct printk_message *pmsg, unsigned long dropped)
-+{
-+	struct printk_buffers *pbufs = pmsg->pbufs;
-+	const size_t scratchbuf_sz = sizeof(pbufs->scratchbuf);
-+	const size_t outbuf_sz = sizeof(pbufs->outbuf);
-+	char *scratchbuf = &pbufs->scratchbuf[0];
-+	char *outbuf = &pbufs->outbuf[0];
-+	size_t len;
-+
-+	len = snprintf(scratchbuf, scratchbuf_sz,
-+		       "** %lu printk messages dropped **\n", dropped);
-+
-+	/*
-+	 * Make sure outbuf is sufficiently large before prepending.
-+	 * Keep at least the prefix when the message must be truncated.
-+	 * It is a rather theoretical problem when someone tries to
-+	 * use a minimalist buffer.
-+	 */
-+	if (WARN_ON_ONCE(len + PREFIX_MAX >= outbuf_sz))
-+		return;
-+
-+	if (pmsg->outbuf_len + len >= outbuf_sz) {
-+		/* Truncate the message, but keep it terminated. */
-+		pmsg->outbuf_len = outbuf_sz - (len + 1);
-+		outbuf[pmsg->outbuf_len] = 0;
-+	}
-+
-+	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
-+	memcpy(outbuf, scratchbuf, len);
-+	pmsg->outbuf_len += len;
-+}
-+#else
-+#define console_prepend_dropped(pmsg, dropped)
-+#endif /* CONFIG_PRINTK */
-+
- /*
-  * Read and format the specified record (or a later record if the specified
-  * record is not available).
-@@ -2817,7 +2842,6 @@ static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
-  */
- static bool console_emit_next_record(struct console *con, bool *handover, int cookie)
+ static __printf(3, 4) __cold
+@@ -786,8 +785,10 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 			    size_t count, loff_t *ppos)
  {
--	static char dropped_text[DROPPED_TEXT_MAX];
- 	static struct printk_buffers pbufs;
+ 	struct devkmsg_user *user = file->private_data;
+-	struct printk_record *r = &user->record;
+-	size_t len;
++	char *outbuf = &user->pbufs.outbuf[0];
++	struct printk_message pmsg = {
++		.pbufs = &user->pbufs,
++	};
+ 	ssize_t ret;
  
- 	bool is_extended = console_srcu_read_flags(con) & CON_EXTENDED;
-@@ -2840,6 +2864,11 @@ static bool console_emit_next_record(struct console *con, bool *handover, int co
- 		goto skip;
+ 	if (!user)
+@@ -797,7 +798,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!prb_read_valid(prb, atomic64_read(&user->seq), r)) {
++	if (!printk_get_next_message(&pmsg, atomic64_read(&user->seq), true, false)) {
+ 		if (file->f_flags & O_NONBLOCK) {
+ 			ret = -EAGAIN;
+ 			goto out;
+@@ -814,36 +815,31 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		ret = wait_event_interruptible(log_wait,
+-				prb_read_valid(prb,
+-					atomic64_read(&user->seq), r)); /* LMM(devkmsg_read:A) */
++				printk_get_next_message(&pmsg, atomic64_read(&user->seq), true,
++							false)); /* LMM(devkmsg_read:A) */
+ 		if (ret)
+ 			goto out;
  	}
  
-+	if (con->dropped && !is_extended) {
-+		console_prepend_dropped(&pmsg, con->dropped);
-+		con->dropped = 0;
-+	}
-+
- 	/*
- 	 * While actively printing out messages, if another printk()
- 	 * were to occur on another CPU, it may wait for this one to
-@@ -2853,9 +2882,12 @@ static bool console_emit_next_record(struct console *con, bool *handover, int co
- 	printk_safe_enter_irqsave(flags);
- 	console_lock_spinning_enable();
+-	if (r->info->seq != atomic64_read(&user->seq)) {
++	if (pmsg.dropped) {
+ 		/* our last seen message is gone, return error and reset */
+-		atomic64_set(&user->seq, r->info->seq);
++		atomic64_set(&user->seq, pmsg.seq);
+ 		ret = -EPIPE;
+ 		goto out;
+ 	}
  
--	stop_critical_timings();	/* don't trace print latency */
--	call_console_driver(con, outbuf, pmsg.outbuf_len,
--			    is_extended ? NULL : dropped_text);
-+	/* Do not trace print latency. */
-+	stop_critical_timings();
-+
-+	/* Write everything out to the hardware. */
-+	con->write(con, outbuf, pmsg.outbuf_len);
-+
- 	start_critical_timings();
+-	len = info_print_ext_header(user->buf, sizeof(user->buf), r->info);
+-	len += msg_print_ext_body(user->buf + len, sizeof(user->buf) - len,
+-				  &r->text_buf[0], r->info->text_len,
+-				  &r->info->dev_info);
+-
+-	atomic64_set(&user->seq, r->info->seq + 1);
++	atomic64_set(&user->seq, pmsg.seq + 1);
  
- 	con->seq = pmsg.seq + 1;
+-	if (len > count) {
++	if (pmsg.outbuf_len > count) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	if (copy_to_user(buf, user->buf, len)) {
++	if (copy_to_user(buf, outbuf, pmsg.outbuf_len)) {
+ 		ret = -EFAULT;
+ 		goto out;
+ 	}
+-	ret = len;
++	ret = pmsg.outbuf_len;
+ out:
+ 	mutex_unlock(&user->lock);
+ 	return ret;
+@@ -937,9 +933,6 @@ static int devkmsg_open(struct inode *inode, struct file *file)
+ 
+ 	mutex_init(&user->lock);
+ 
+-	prb_rec_init_rd(&user->record, &user->info,
+-			&user->text_buf[0], sizeof(user->text_buf));
+-
+ 	atomic64_set(&user->seq, prb_first_valid_seq(prb));
+ 
+ 	file->private_data = user;
+@@ -2762,12 +2755,14 @@ static void console_prepend_dropped(struct printk_message *pmsg, unsigned long d
+  * @is_extended specifies if the message should be formatted for extended
+  * console output.
+  *
++ * @may_supress specifies if records may be skipped based on loglevel.
++ *
+  * Returns false if no record is available. Otherwise true and all fields
+  * of @pmsg are valid. (See the documentation of struct printk_message
+  * for information about the @pmsg fields.)
+  */
+ static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
+-				    bool is_extended)
++				    bool is_extended, bool may_suppress)
+ {
+ 	static int panic_console_dropped;
+ 
+@@ -2810,7 +2805,7 @@ static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
+ 	}
+ 
+ 	/* Skip record that has level above the console loglevel. */
+-	if (suppress_message_printing(r.info->level))
++	if (may_suppress && suppress_message_printing(r.info->level))
+ 		goto out;
+ 
+ 	if (is_extended) {
+@@ -2853,7 +2848,7 @@ static bool console_emit_next_record(struct console *con, bool *handover, int co
+ 
+ 	*handover = false;
+ 
+-	if (!printk_get_next_message(&pmsg, con->seq, is_extended))
++	if (!printk_get_next_message(&pmsg, con->seq, is_extended, true))
+ 		return false;
+ 
+ 	con->dropped += pmsg.dropped;
 -- 
 2.30.2
 
