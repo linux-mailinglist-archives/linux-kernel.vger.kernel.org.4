@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68B36622FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D141662300
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236838AbjAIKSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S236694AbjAIKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237080AbjAIKQv (ORCPT
+        with ESMTP id S234328AbjAIKQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:16:51 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C917656
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:16:42 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id g13so12183664lfv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:16:42 -0800 (PST)
+        Mon, 9 Jan 2023 05:16:57 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9A91868F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:16:57 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4c7d35b37e2so50296927b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z4C+uBeuYJaLIQOjHxSFx74inl8MleJj+0t84zKqd+U=;
-        b=gsKFgkaKO0UiC45NxDJvDWSRgSeF7zZQ/ZtxBmTJYSFZfUMKlWgJzDo/cSm5DTmvbq
-         SG8E/bTSrZlhJyw/Hzz8MMc8b5nyJaQY12hHE2ZPZxMx/ewOhjvUXBNQNN2XMk3S4viG
-         BQAdfq7jhud0o6Gz+xZBx1fnqDKM4FTJLylmaxVW2ZwegnGIQAeEJRXeyYDFrYORZyVN
-         HjPikM5ec2P1pSAQTVCTtNxJ+Jb4Rz8QKH81XrT7odQN7yXtTPpb2HnPrY9syMSFTUH7
-         8aFcccrjafWvAhCZLVgWo687NPoB/x3M/dfhJaPlnpGSZdhLkYhvQqWDLyUFYX9liYkx
-         QKnw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U60Van+eqKcdvfqQ+03BU+/nu30LeFsU7MWr64SwCAg=;
+        b=G5R7bz2gNJ0Bp3J3+78krejGBZTNnpzIfGLrxDNwZBh4g0IhnjjDmyLrl+M3bixcQl
+         vA3sPXPkMjqhujT+hxcLKwNIvaJl44RLcuQf5WFO+t7nwK4Y8NKNznYjjTAwUPO4PuJw
+         fb5JGquilbP795H1fFOk66ZWj+OsIfkQsHjzUTxbIru5nC+RKyeT9wUSDOJxPrv157Ih
+         vvGax35iGEtSb91SWvpJt2NWTUFSNmi3GBdY+SgyxwF8gtQMJGfIyBxbpRhEVbnV7jYj
+         FE+Lfvxn/MDNemmgkGp2mR+xlKjq1TXxsiaFMfPI6yc54+PSShq51/YDBpmP4HiWA0kd
+         0eeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4C+uBeuYJaLIQOjHxSFx74inl8MleJj+0t84zKqd+U=;
-        b=7s+2ekk39cE1KoxhRW7dqp9PGSLWnKtu4eHUn/HPIt/V3ZdZDNgbpi3R7SsiEiEN3u
-         434IJFwSfFqiEYQJypKssHCOZmjUkgFmUD6hPnybom6vphSYbuLZiJKV4miMidOeouOG
-         kyHWApOJQXRRyzrsHL4Yti84+jmKSPbEruEW9hLgPZWccMF4yGZiwxVqhq0F97f/dfXc
-         qVnfB/EcXmpGzoATMNk1+dx4YdtK6Un6W49FO3EFNvTczytrs+K49RRgzXDfiRvEnWXi
-         Qj8NmKqnQjc3nLdoQQXfPTv/8CJ6kFQiKnmK3Fj2LFKMspu7mQ0IHfDhAdljVzlKiq7t
-         uQ+A==
-X-Gm-Message-State: AFqh2kqcHKDvVnau3Ds4MTv28Re2OzdFEN55py9Fpgz5/fF0xZTiQDWu
-        JierYgTiWNoS8VDHQ9wmqGad+A==
-X-Google-Smtp-Source: AMrXdXvjSeDYGDcKZPl8murhw+Uf5jtlCt6Syj74+J9xEW4u+aYleQcMPLSgokkqZLriQ30WgtgZ/Q==
-X-Received: by 2002:a05:6512:340d:b0:4b5:69f1:61b1 with SMTP id i13-20020a056512340d00b004b569f161b1mr18204040lfr.42.1673259401186;
-        Mon, 09 Jan 2023 02:16:41 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id b15-20020a05651c032f00b0027fd02c99d4sm848109ljp.75.2023.01.09.02.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 02:16:40 -0800 (PST)
-Message-ID: <1ec4b446-b195-0277-90ba-4a8398fcd729@linaro.org>
-Date:   Mon, 9 Jan 2023 11:16:39 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U60Van+eqKcdvfqQ+03BU+/nu30LeFsU7MWr64SwCAg=;
+        b=rOrcgCHLQjPNsC9j089ANj79udwKHI+fOe20UuyLuCQrpczqlxYGV4wRGFX6jcVhTk
+         09PMI5ECf965zXUMac/fUobD9Lh8Hos3quR2tluWhKqZ/1Pgl5KbzvHtK5l9kcCncK05
+         VirkUUD61mEsHvpFDhAzQmxVt2RjKy8xBQgDMBrVm8aNR2Mcb7iaBaAgF9mFZGv7eg2n
+         oRsSqS6j/kR89IrivcwhHk+6yqcqiV7QPmXkLGNiA9hVsJSZD/yKTuQUoP7WwZ+kh3C8
+         pTKONCdsZaRIKd9+6IV7NBK/pewZkc3FYfwC4/17LukIwXBme90Fxwir8Xtc10ryBveC
+         Osaw==
+X-Gm-Message-State: AFqh2kpRsdF6lLYqVJZ2iXWw2pXmomsK2pHjDksMuCJnLawzOdo5t3L4
+        O3ia1gotMT0rwYzcRK9wPUPlLb15XdCx8GvMrHvMXNKaTwhgOQ==
+X-Google-Smtp-Source: AMrXdXskMkgDhLRxG6gWGGj+BS9pw7QSzhoomB4HeeSYuyksnUxqH4ZvCcmi11YEIVMRvqS159bDMsx1obzTzlEXziM=
+X-Received: by 2002:a81:1441:0:b0:4bc:6c9c:bf9a with SMTP id
+ 62-20020a811441000000b004bc6c9cbf9amr2498262ywu.255.1673259416328; Mon, 09
+ Jan 2023 02:16:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/3] dt-bindings: firmware: qcom: scm: Separate VMIDs
- from header to bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Loic Poulain <loic.poulain@linaro.org>
-References: <20230109093947.83394-1-konrad.dybcio@linaro.org>
- <20230109093947.83394-3-konrad.dybcio@linaro.org>
- <e64d22eb-4c42-b279-b493-972e4a1af1cd@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <e64d22eb-4c42-b279-b493-972e4a1af1cd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222221244.1290833-1-kuba@kernel.org> <20221222221244.1290833-4-kuba@kernel.org>
+ <Y7viEa4BC3yJRXIS@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y7viEa4BC3yJRXIS@hirez.programming.kicks-ass.net>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 9 Jan 2023 11:16:45 +0100
+Message-ID: <CANn89iK2NTz_M-OtcN5iATUacMaseNLi42QipuxDF3MMQCEVHg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] softirq: don't yield if only expedited handlers are pending
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, tglx@linutronix.de,
+        jstultz@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 10:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Dec 22, 2022 at 02:12:44PM -0800, Jakub Kicinski wrote:
+> > In networking we try to keep Tx packet queues small, so we limit
+> > how many bytes a socket may packetize and queue up. Tx completions
+> > (from NAPI) notify the sockets when packets have left the system
+> > (NIC Tx completion) and the socket schedules a tasklet to queue
+> > the next batch of frames.
+> >
+> > This leads to a situation where we go thru the softirq loop twice.
+> > First round we have pending = NET (from the NIC IRQ/NAPI), and
+> > the second iteration has pending = TASKLET (the socket tasklet).
+>
+> So to me that sounds like you want to fix the network code to not do
+> this then. Why can't the NAPI thing directly queue the next batch; why
+> do you have to do a softirq roundtrip like this?
 
+I think Jakub refers to tcp_wfree() code, which can be called from
+arbitrary contexts,
+including non NAPI ones, and with the socket locked (by this thread or
+another) or not locked at all
+(say if skb is freed from a TX completion handler or a qdisc drop)
 
-On 9.01.2023 10:54, Krzysztof Kozlowski wrote:
-> On 09/01/2023 10:39, Konrad Dybcio wrote:
->> With changes to the rmtfs binding, secure VMIDs will become useful to
->> have in device trees. Separate them out and add to include/dt-bindings.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->> v2 -> v3:
->> New patch
->>
->>  include/dt-bindings/firmware/qcom/scm.h | 16 ++++++++++++++++
->>  include/linux/qcom_scm.h                |  7 ++-----
->>  2 files changed, 18 insertions(+), 5 deletions(-)
->>  create mode 100644 include/dt-bindings/firmware/qcom/scm.h
->>
->> diff --git a/include/dt-bindings/firmware/qcom/scm.h b/include/dt-bindings/firmware/qcom/scm.h
->> new file mode 100644
->> index 000000000000..d66818cd57a8
->> --- /dev/null
->> +++ b/include/dt-bindings/firmware/qcom/scm.h
->> @@ -0,0 +1,16 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
-> 
-> Only Codeaurora folks contributed these numbers, thus we can relicense
-> it to dual-license, I believe.
-> 
-> The other topic is what do these numbers represent: hardware interface?
-> registers? offsets? firmware?
-Arguments for a SCM call, so firmware interface.
-
-IOW, why bindings is the place for them?
-> (usefulness for DTS is not the reason)
-These defines correspond to mappings in a hardcoded, irreplaceable
-and un-omittable firmware which is (unless you steal engineering
-samples from the factory) always shipped with these SoCs and they
-help clarify some otherwise totally magic numbers.
-
-Konrad
-
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+>
+> > On two web workloads I looked at this condition accounts for 10%
+> > and 23% of all ksoftirqd wake ups respectively. We run NAPI
+> > which wakes some process up, we hit need_resched() and wake up
+> > ksoftirqd just to run the TSQ (TCP small queues) tasklet.
+> >
+> > Tweak the need_resched() condition to be ignored if all pending
+> > softIRQs are "non-deferred". The tasklet would run relatively
+> > soon, anyway, but once ksoftirqd is woken we're risking stalls.
+> >
+> > I did not see any negative impact on the latency in an RR test
+> > on a loaded machine with this change applied.
+>
+> Ignoring need_resched() will get you in trouble with RT people real
+> fast.
