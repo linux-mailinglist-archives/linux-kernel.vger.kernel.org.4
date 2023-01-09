@@ -2,168 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A4E661FBE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF07D661FC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbjAIIOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S234355AbjAIIOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjAIIOW (ORCPT
+        with ESMTP id S233106AbjAIIOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:14:22 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81927EA7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:14:19 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s9so7291811wru.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jr2FwX3P1iZIyqTb6rsoFPPaAUL6NdJrS167QJ230/w=;
-        b=q5yusg2aaBnoLvE8zqqsgCYfgiuoc56g8R/6j5yEJkQi341zVqAzU0hkRjqHqP+iFC
-         Fw40130ftwNQEYVmGKzjNBsZYgnhpEAcaQmfNHeIBYwopToKdSdeulO9rWKW00Ybicwk
-         sVoDRO8j1AZc4Z5i31nSgtvBAG1AjNwkmvGK8wrk5SdbrVNHdEPDeuRtMjaiMwtTse1q
-         bSmKVxGKaKYujgJOsGk33szMTMWhNZgcBF7XiKlI4f64b+rXj9aw/MeAgoN4xijvHAAN
-         jSun29i7Degpwzq0+DGNKpQK4xGBhgWQKjLkakEN/5ODBtO4YbkQzlRHofHyLcogPDMd
-         c3rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jr2FwX3P1iZIyqTb6rsoFPPaAUL6NdJrS167QJ230/w=;
-        b=FAASb6/VfqySo8jbXxKJz8G9VAms+zFrUxAI/0nOolVlTLmDalSGSmQXm+CtOXB1W5
-         ZKxahfMiUGzFG0ZVRKjsJ34VgH2cGCWHPPP5maejLxToLJa6FmS0O+dkkEa63W38XQNE
-         ZngfPY7aAgE7NqaXnMOQ4Wkyyt1/96A0M7lNgzJHERSd4h9S9FOTZOiG0Hyis3DzCQih
-         ZG7TFQmHvUnFCtnlItttz8Nn7NpxccM6vQ6rWJjwML7FswSCm0Fe0580g8Svt6g1KZbb
-         zAcDjioTEPYQP8DsFT2SAvJ0DdzyYeCyOu7aulGtwFTtqPpN8xPrfjPEZ5s/LByDK7it
-         o4FQ==
-X-Gm-Message-State: AFqh2koY1QQS0RVPG0RDIs46SrlX0sUEH5Ip/+cUChO3KHUqqigPvQnk
-        BHjAhEEZ6nBLjHxzRHnj/yXgTQ==
-X-Google-Smtp-Source: AMrXdXuBT//WvM7GCSkw/bEgSnHDiNUBAR2qEQhZ1dxgYHAS3iU3EvBb01ARoB8OicYbWn71UCJl7g==
-X-Received: by 2002:a05:6000:60d:b0:2a5:6244:329e with SMTP id bn13-20020a056000060d00b002a56244329emr13639467wrb.40.1673252058065;
-        Mon, 09 Jan 2023 00:14:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v13-20020a5d678d000000b002bbe8686d6fsm3923501wru.117.2023.01.09.00.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 00:14:17 -0800 (PST)
-Message-ID: <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
-Date:   Mon, 9 Jan 2023 09:14:16 +0100
+        Mon, 9 Jan 2023 03:14:41 -0500
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB676457;
+        Mon,  9 Jan 2023 00:14:37 -0800 (PST)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 1BED758957AAE; Mon,  9 Jan 2023 09:14:34 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id 5306160BC6B00;
+        Mon,  9 Jan 2023 09:14:34 +0100 (CET)
+Date:   Mon, 9 Jan 2023 09:14:34 +0100 (CET)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Akhmat Karakotov <hmukos@yandex-team.ru>,
+        Antoine Tenart <atenart@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kees Cook <keescook@chromium.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+        "open list:NETFILTER" <coreteam@netfilter.org>
+Subject: Re: [PATCH net-next] Remove DECnet support from kernel
+In-Reply-To: <07786498-2209-3af0-8d68-c34427049947@kernel.org>
+Message-ID: <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
+References: <20220818004357.375695-1-stephen@networkplumber.org> <07786498-2209-3af0-8d68-c34427049947@kernel.org>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
- <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/01/2023 18:09, Trond Myklebust wrote:
-> Hi Krzysztof,
-> 
->> On Jan 8, 2023, at 08:25, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>
->> [You don't often get email from krzysztof.kozlowski@linaro.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification]
->>
->> On 07/01/2023 16:44, Krzysztof Kozlowski wrote:
->>> Hi,
->>>
->>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
->>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
->>> when mounting NFS root on NFSv4 client:
->>>
->>> [   25.739003] systemd[1]: Set hostname to <odroidhc1>.
->>> [   25.771714] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
->>> argument
->>> [   26.199478] 8<--- cut here ---
->>> [   26.201366] Unable to handle kernel NULL pointer dereference at
->>> virtual address 00000004
->>> ...
->>> [   26.555522]  mmiocpy from xdr_inline_decode+0xec/0x16c
->>> [   26.560628]  xdr_inline_decode from nfs4_xdr_dec_read_plus+0x178/0x358
->>> [   26.567130]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
->>>
->>> Full OOPS attached. Full log available here:
->>> https://krzk.eu/#/builders/21/builds/3901/steps/15/logs/serial0
->>>
->>> Disabling NFS_V4_2_READ_PLUS fixes the issue, so obviously the commit is
->>> not the cause, but rather making it default caused the regression.
->>>
->>> I did not make the bisect yet which commit introduced it, if every
->>> config includes NFS_V4_2_READ_PLUS.
->>
->> When every kernel is built with NFS_V4_2_READ_PLUS, bisect pointed to:
->> d3b00a802c84 ("NFS: Replace the READ_PLUS decoding code")
->>
->> commit d3b00a802c845a6021148ce2e669b5a0b5729959
->> Author: Anna Schumaker <Anna.Schumaker@Netapp.com>
->> Date:   Thu Jul 21 14:21:34 2022 -0400
->>
->>    NFS: Replace the READ_PLUS decoding code
->>
->>    We now take a 2-step process that allows us to place data and hole
->>    segments directly at their final position in the xdr_stream without
->>    needing to do a bunch of redundant copies to expand holes. Due to the
->>    variable lengths of each segment, the xdr metadata might cross page
->>    boundaries which I account for by setting a small scratch buffer so
->>    xdr_inline_decode() won't fail.
->>
->>    Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
->>    Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
->>
->> With a trace:
->> [   25.898462] systemd[1]: Set hostname to <odroidhc1>.
->> [   25.933746] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
->> argument
->> [   25.986237] random: crng init done
->> [   26.264564] 8<--- cut here ---
->> [   26.266823] Unable to handle kernel NULL pointer dereference at
->> virtual address 00000fe8
->> ...
->> [   26.597263]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
->> [   26.603222]  call_decode from __rpc_execute+0xd0/0x890
->> [   26.608328]  __rpc_execute from rpc_async_schedule+0x1c/0x34
->> [   26.613960]  rpc_async_schedule from process_one_work+0x294/0x790
->> [   26.620030]  process_one_work from worker_thread+0x54/0x518
->> [   26.625570]  worker_thread from kthread+0xf4/0x128
->> [   26.630336]  kthread from ret_from_fork+0x14/0x2c
->>
-> 
-> Is this test being run against a 6.2-rc2 server, or is it an older server platform? We know there were bugs in older server implementations, so the question is whether this might be a problem with handling a bad/corrupt RPC reply from the server, or whether it is happening against code that is supposed to have been fixed?
 
-I would say that buggy server should not cause NULL pointer dereferences
-on the client. Otherwise this is a perfect recipe for a rogue server in
-the network to start crashing clients and running exploits... Imagine a
-compromised machine (through some other means) in a local company
-network running now a server with NFS share "HR salary data" or "HR
-planned layoffs", where unsuspected people in that network access it
-leading to exploit of NFS code on their side...
+On Monday 2023-01-09 08:04, Jiri Slaby wrote:
+> On 18. 08. 22, 2:43, Stephen Hemminger wrote:
+>> DECnet is an obsolete network protocol
+>
+> this breaks userspace. Some projects include linux/dn.h:
+>
+>  https://codesearch.debian.net/search?q=include.*linux%2Fdn.h&literal=0
+>
+> I found Trinity fails to build:
+> net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
+>     5 | #include <linux/dn.h>
+>
+> Should we provide the above as empty files?
 
-Server is Raspberry Pi 3 kernel: 5.10.92-2-rpi-legacy-ARCH
+Not a good idea. There may be configure tests / code that merely checks for
+dn.h existence without checking for specific contents/defines. If you provide
+empty files, this would fail to build:
 
-Which points that it is not latest stable, so anyway I need to update.
+#include "config.h"
+#ifdef HAVE_LINUX_DN_H
+#	include <linux/dn.h>
+#endif
+int main() {
+#ifdef HAVE_LINUX_DN_H
+	socket(AF_DECNET, 0, DNPROTO_NSP); // or whatever
+#else
+	...
+#endif
+}
 
-Best regards,
-Krzysztof
-
+So, with my distro hat on, outright removing header files feels like the
+slightly lesser of two evils. Given the task to port $arbitrary software
+between operating systems, absent header files is something more or less
+"regularly" encountered, so one could argue we are "trained" to deal with it.
+But missing individual defines is a much deeper dive into the APIs and
+software to patch it out.
