@@ -2,87 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AF5662155
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CD1662158
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbjAIJVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S234050AbjAIJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbjAIJVM (ORCPT
+        with ESMTP id S236719AbjAIJV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:21:12 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE97140A0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:19:07 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so6088219wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C06q0gIAm/NQX+5eHkx45JzvQYMJI7cdvsvTSfGywes=;
-        b=LcKxqpEhz8U5r0a54uwBc/FASNUSWirDYAW9+QV/BCUti75CTu84kFl+IRyB85lwh6
-         38wOQ+SYs48AXi7MAj9iVHYp0O9TdA7fPrxi4v8/DjPQfzO+7mXJQ7E+OAcKEv7zpXW3
-         pyPOd5oaene1WmOXaf9d5qoIiCYPbnLowAi6VypeaMEdzgUCJeqWiV309En6D9qIegHx
-         Mcws4B5e3LHx7QUsAyS3YRGtzm6GCsWMFWnGL5hHlNdMeleBgDYlphnFkwF/iVL8hKMt
-         9f4Kcf7KYAV/S/q9WwabKiRZwocxhZDgMqUBatYfxoHq9o5JPyjOI57x515HhcJKFEd5
-         Yjtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C06q0gIAm/NQX+5eHkx45JzvQYMJI7cdvsvTSfGywes=;
-        b=4ejUKgkVdO+E1r9uX5MAoSzAbpjt2RjxxXf7bxEu+goQRDGfuI0nfELrKICQRDAqc0
-         E1ZEGtVQ4PACNvxr115nhwQnJaA6XcbgdZE1ll/hTb1fGAv4LNxA0DcqNJ8rJ6FXRvJX
-         /Oj/sEJwMELICtPFB6wUDMx1OsOUIAdss+x9Ec6Hsi9DXhqSQThZYtHuExeWHJfDdRT3
-         3gad5bMuqdoWWZVyH9A7GclBky5zJH9OfX24KRZYvWOmytduJDSAUyVCjAKJ2DohvA4S
-         zItvrXVCRnFKX+a7lTRPPXBnEori4uo4WBR0Yz1a8FO97pIGvd8wg2CKw5ZwqdUs9Mi1
-         p9HQ==
-X-Gm-Message-State: AFqh2kpP9XSjy72bUUJs6gnecGopsl+tseur0yM1IxwFKaLbBmVdLxxG
-        SZRjSUBKpRO+xZYzcVqvWYklOg==
-X-Google-Smtp-Source: AMrXdXsTzngZimD6cB8N3WV1JcLup6CYEj3DCy8hNnl16qSsT/9bpMn4TZtHWbWDJ3G59qQqHQJkfw==
-X-Received: by 2002:a05:600c:4a9b:b0:3d1:dc6f:b1a4 with SMTP id b27-20020a05600c4a9b00b003d1dc6fb1a4mr55574979wmp.5.1673255946474;
-        Mon, 09 Jan 2023 01:19:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003b492753826sm10175053wme.43.2023.01.09.01.19.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 01:19:06 -0800 (PST)
-Message-ID: <08fae328-2343-6b59-237b-95fea0f3ddcc@linaro.org>
-Date:   Mon, 9 Jan 2023 10:19:03 +0100
+        Mon, 9 Jan 2023 04:21:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410E9B;
+        Mon,  9 Jan 2023 01:19:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7CF04CE0B56;
+        Mon,  9 Jan 2023 09:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE62C433D2;
+        Mon,  9 Jan 2023 09:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673255969;
+        bh=uKoGDZevx+gVbLfmMYY5TwRvq3hzb+5W3E7t3luGh1A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cu0bjgAitfPvflSUJnHrp6QmYi0GE/Ivp/cLcHFBiYYCZKJzzmqa30YoiR8gOknta
+         jrmVw1Ts/hSx96TAliBUqVSE1XnU5rYiYhfXDeUlK56Qt/0utykZPeB/gXztTW1fPt
+         6Z/NzC6gGjKYvl0WnZ3M8sK/PcENnLcYRmHhz2nI4+Ta/xxybuob9quCnkbi+05I45
+         br3CJQkTOPj7oVTTD2c3vdS8EaLKA04i3X+SQdJyNd9HizbYP+lFR5j6S/GFxNgkzv
+         RRY2rJXNc3TgNWGPjrjbEelogtX5u/XFGOBvIFLrWibkYgZe46j23F6kP51feUQfg6
+         w22Gm8VsjsuKQ==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH] tomoyo: remove a temporary output file
+Date:   Mon,  9 Jan 2023 18:19:18 +0900
+Message-Id: <20230109091919.3160916-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/9] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: add
- input-enable and bias-bus-hold
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <me@iskren.info>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221230135645.56401-1-krzysztof.kozlowski@linaro.org>
- <20221230135645.56401-2-krzysztof.kozlowski@linaro.org>
- <20230108200845.GA212886-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230108200845.GA212886-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,26 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/01/2023 21:08, Rob Herring wrote:
-> On Fri, Dec 30, 2022 at 02:56:38PM +0100, Krzysztof Kozlowski wrote:
->> Allow bias-bus-hold and input-enable properties (already used in
->> SC8280XP LPASS LPI nodes):
->>
->>   sa8540p-ride.dtb: pinctrl@33c0000: tx-swr-default-state: 'oneOf' conditional failed, one must be fixed:
->>     'pins' is a required property
->>     'function' is a required property
->>     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
->>     'bias-bus-hold' does not match any of the regexes: 'pinctrl-[0-9]+'
->>     'gpio2' does not match '^gpio([0-1]|1[0-8])$'
-> 
-> Wrong warning?
+Commit 8ab5bc40aad4 ("tomoyo: Omit use of bin2c") was locally modified
+on top of the patch I submitted.
 
-No, it is still correct, just one warning for two issues:
-1. patch 1 for wrong GPIO
-2. patch 2 for bias-bus-hold
+I recommend writing to the target directly.
 
-I can drop last line here (gpio2 does not match).
+If the recipe command fails, Kbuild will automatically delete the target
+because scripts/Kbuild.include defines .DELETE_ON_ERROR.
 
-Best regards,
-Krzysztof
+If the recipe command is interrupted, GNU Make will automatically
+delete the target if it has been partially updated. There was a corner
+case where the target was not cleaned up, but it was fixed by Commit
+a7f3257da8a8 ("kbuild: remove the target in signal traps when
+interrupted").
+
+Since this is a general problem, you can leave it to Kbuild instead
+of introducing unneeded complexity.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+If it is not too late, please squash this.
+
+ security/tomoyo/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/tomoyo/Makefile b/security/tomoyo/Makefile
+index 458cf5e2fa25..884ff155edc3 100644
+--- a/security/tomoyo/Makefile
++++ b/security/tomoyo/Makefile
+@@ -9,7 +9,7 @@ quiet_cmd_policy = POLICY  $@
+ 	printf 'static char tomoyo_builtin_$x[] __initdata =\n'; \
+ 	sed -e 's/\\/\\\\/g' -e 's/\"/\\"/g' -e 's/\(.*\)/\t"\1\\n"/' -- $(firstword $(filter %/$x.conf %/$x.conf.default, $^) /dev/null);  \
+ 	printf '\t"";\n';) \
+-	} > $@.tmp && mv $@.tmp $@
++	} > $@
+ 
+ $(obj)/builtin-policy.h: $(wildcard $(obj)/policy/*.conf $(srctree)/$(src)/policy/*.conf.default) FORCE
+ 	$(call if_changed,policy)
+-- 
+2.34.1
 
