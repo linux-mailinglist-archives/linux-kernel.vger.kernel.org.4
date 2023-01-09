@@ -2,107 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2376631A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E266631AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjAIUkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S236966AbjAIUkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjAIUkV (ORCPT
+        with ESMTP id S231220AbjAIUkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:40:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC2DECE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9818BB80FE9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 20:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F26DC433F1;
-        Mon,  9 Jan 2023 20:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673296817;
-        bh=7w/Hmq23umA2zKjTNavIPH6QN2Gmhs+FRIEzskyqC5s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=o0R8zM6CbO87oRLJFUWOa6QtC4G2LwMYtvEr0z2sv5UEm/D+cMvS708G6+zXFnICz
-         LSEQl31HaYismRGvi1uUBCp29pA8FKTx2SUmH68EglNTshwBpjPNe40PaDzoE1V7sm
-         taeHOrSrm0s1sEwk5Wx3ByAaiccxoW4QlA5Ql6uA+RiNjoc7ifxTgwyuaRd0W9wOTy
-         uuJgBB4eUsIkX6tvI9xEgKCne6IinwtTUbFjB469JnFRGiZpt1t3drMHHs7CTrduuZ
-         Rbfu0cmj+iy8LHaQcf+w/fmjei1t85QsfAJd+vp3zFV8ZQVfIOwfePQyDifZyAkMz/
-         gSLWKrb4AaFUQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05C38C395DF;
-        Mon,  9 Jan 2023 20:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 9 Jan 2023 15:40:47 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8231634770
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 12:40:45 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso5074141wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 12:40:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MCRW0UkTNlTzkZ4jOzer8zj7ypiKG1rbT29sYMJr0H0=;
+        b=SKO4ZX8fQPOxTTcMnTbp5MFbMfTEzMDNX7cwrMxkDT51AdOR0mgCK+A8X5hxt6SrEq
+         w4CKxeCPJiZxa/vofF5uHOsRmB6riV3BPAPZuZkIg3PekMR4z9IGHtAl1DQDHEw0eF4i
+         JIGunRDVUq7U+Bhpui8Rcvid0HOehY53Ify5/l6SCIlPmFXUGYBTzuqkUs7jJ45yGsnW
+         rQA3u1EPJy1VdUSMCvy8ZSG9UF63qoNWihdHPMIoKJFGKVrni57DUHimOtV975ev9H+Q
+         m011MLFr6BN52WpZwJRFNyGaYJfSbc5WUIY2pFbD5JrRQaZhHefi1LXaloaC20F484Bn
+         08hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MCRW0UkTNlTzkZ4jOzer8zj7ypiKG1rbT29sYMJr0H0=;
+        b=DAGNISCGykO1euWjEjq9J3lpms+Ud1BGfDxqpHM3M2j5hoBj1s/gsuJKvr2y4PorH9
+         TbzdSLvtSDTrV/RNFJbzl6G/YzvXXJTC2gordXpEZ/zWCkUMd5OGVa0qfPSx75ZIH/Mf
+         zv7Vkt2d+jsaglGgtK4wtmgLgL9VmeWmOHEkD8z85ZtTPugdAo8wFHoStZf/X6XutbXy
+         4eNDNEmIRwUrtuCv5Tt5GWVTfb7n5ZV3hlsJN2jAenPgpn8x+YsmUgCaMN1iBgFeT/mS
+         uVq2U0TCmjkmb33Ot4gGFkJ2JsCExo6Y+pkU6kS3kX94ExfBge/vmkofcfu1sZmSklqH
+         Zi9Q==
+X-Gm-Message-State: AFqh2kpC/U64XWhhXSOMkqYhzgsQ6ovMysGBUPwrngzwfTZmDSIm6mGK
+        R4Tc4j5P7J9QwGZaYlU17wDMFckAyYWBy52PuW6gew==
+X-Google-Smtp-Source: AMrXdXsHG/iZRmaXeZTbdJc8dLvE4HxpOxTVoriaJACvg5w0n2cAyT8cqtwrH/tyBJFGsjhsaYh4xJxSXcFfCetfRPY=
+X-Received: by 2002:a1c:4c04:0:b0:3d9:edae:ed7 with SMTP id
+ z4-20020a1c4c04000000b003d9edae0ed7mr230023wmf.182.1673296843828; Mon, 09 Jan
+ 2023 12:40:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/10] platform/chrome: cros_ec_typec: VDM support
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <167329681701.25676.11612337815617439336.git-patchwork-notify@kernel.org>
-Date:   Mon, 09 Jan 2023 20:40:17 +0000
-References: <20221228004648.793339-1-pmalani@chromium.org>
-In-Reply-To: <20221228004648.793339-1-pmalani@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        heikki.krogerus@linux.intel.com, bleung@chromium.org,
-        dnojiri@chromium.org, dustin@howett.net, evgreen@chromium.org,
-        gregkh@linuxfoundation.org, groeck@chromium.org,
-        gustavoars@kernel.org, keescook@chromium.org, lee.jones@linaro.org,
-        lee@kernel.org, sebastian.reichel@collabora.com,
-        swboyd@chromium.org, tinghan.shen@mediatek.com, tzungbi@kernel.org,
-        wangxiang@cdjrlc.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106151320.619514-1-irogers@google.com> <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
+ <Y7hZccgOiueB31a+@kernel.org> <Y7hgKMDGzQlankL1@kernel.org>
+ <Y7hgoVKBoulCbA4l@kernel.org> <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
+ <Y7wuz6EOggZ8Wysb@kernel.org> <Y7xYimp0h4YT72/N@krava> <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
+ <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com> <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 9 Jan 2023 12:40:31 -0800
+Message-ID: <CAP-5=fX_MQBaER86c1UEuSMYGoQ0uv4siv==_ewr6H5xhb0XpA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Jan 9, 2023 at 11:34 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 11:29 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Mon, Jan 9, 2023 at 10:37 AM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Mon, Jan 9, 2023 at 10:10 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > >
+> > > > On Mon, Jan 09, 2023 at 12:12:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > > Em Fri, Jan 06, 2023 at 11:06:46AM -0800, Ian Rogers escreveu:
+> > > > > > So trying to get build-test working on my Debian derived distro is a
+> > > > > > PITA with broken feature detection for options I don't normally use.
+> > > > >
+> > > > > Its really difficult to have perf building with so many dependent
+> > > > > libraries, mowing out some should be in order.
+> > > > >
+> > > > > > I'll try to fix this.
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > > > In any case I think I've spotted what is really happening here and it
+> > > > > > isn't a failure but a feature :-D The build is specifying
+> > > > >
+> > > > > I get it.
+> > > > >
+> > > > > > LIBBPF_DYNAMIC=1 which means you get the libbpf headers from
+> > > > > > /usr/include. I think the build is trying to do this on a system with
+> > > > > > an old libbpf and hence getting the failures above. Previously, even
+> > > > > > though we wanted the dynamic headers we still had a -I, this time for
+> > > > > > the install_headers version. Now you really are using the system
+> > > > > > version and it is broken. This means a few things:
+> > > > > > - the libbpf feature test should fail if code like above is going to fail,
+> > > > >
+> > > > > Agreed.
+> > > > >
+> > > > > > - we may want to contemplate supporting older libbpfs (I'd rather not),
+> > > > >
+> > > > > I'd rather require everybody to be up to the latest trends, but I really
+> > > > > don't think that is a reasonable expectation.
+> > > > >
+> > > > > > - does build-test have a way to skip known issues like this?
+> > > > >
+> > > > > Unsure, Jiri?
+> > > >
+> > > > I don't think so it just triggers the build, it's up to the features check
+> > > > to disable the feature if the library is not compatible with perf code
+> > > >
+> > > > could we add that specific libbpf call to the libbpf feature check?
+> > >
+> > > Looking at the failure closer, the failing code is code inside a
+> > > feature check trying to workaround the feature not being present. We
+> > > need to do something like:
+> > >
+> > > ```
+> > > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+> > > index 6e9b06cf06ee..a1c3cc230273 100644
+> > > --- a/tools/perf/util/bpf-loader.c
+> > > +++ b/tools/perf/util/bpf-loader.c
+> > > @@ -33,17 +33,18 @@
+> > > #include <internal/xyarray.h>
+> > >
+> > > #ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
+> > > -int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> > > -                          struct bpf_insn *new_insns __maybe_unused,
+> > > size_t new_insn_cnt __maybe_un
+> > > used)
+> > > +static int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> > > +                                 struct bpf_insn *new_insns __maybe_unused,
+> > > +                                 size_t new_insn_cnt __maybe_unused)
+> > > {
+> > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > >        return -ENOTSUP;
+> > > }
+> > >
+> > > -int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> > > -                                 enum bpf_prog_type prog_type __maybe_unused,
+> > > -                                 enum bpf_attach_type exp_attach_type
+> > > __maybe_unused,
+> > > -                                 const struct
+> > > libbpf_prog_handler_opts *opts __maybe_unused)
+> > > +static int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> > > +                                       enum bpf_prog_type prog_type
+> > > __maybe_unused,
+> > > +                                       enum bpf_attach_type
+> > > exp_attach_type __maybe_unused,
+> > > +                                       const void *opts __maybe_unused)
+> > > {
+> > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > >        return -ENOTSUP;
+> > > ```
+> > >
+> > > There are some other fixes necessary too. I'll try to write the fuller
+> > > patch but I have no means for testing except for undefining
+> > > HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS.
+> > >
+> > > Thanks,
+> > > Ian
+> >
+> > So libbpf_prog_handler_opts is missing in the failing build, this
+> > points to a libbpf before 0.8. I'm somewhat concerned that to work
+> > around these linkage problems we're adding runtime errors - we may
+> > build but the functionality is totally crippled. Is it worth
+> > maintaining these broken builds or to just upfront fail the feature
+> > test?
+> >
+> > We can also switch the feature tests for LIBBPF_MAJOR_VERSION and
+> > LIBBPF_MINOR_VERSION checks. This would have the property of letting
+> > us tie the error messages to what version of libbpf is assumed.
+> >
+> > In this case we could have a feature test for the libbpf version and
+> > if the version is before libbpf 0.8 fail the feature check. A quick
+> > way to do this is:
+> > ```
+> > diff --git a/tools/build/feature/test-libbpf.c
+> > b/tools/build/feature/test-libbpf.c
+> > index a508756cf4cc..dadd8186b71d 100644
+> > --- a/tools/build/feature/test-libbpf.c
+> > +++ b/tools/build/feature/test-libbpf.c
+> > @@ -1,6 +1,10 @@
+> > // SPDX-License-Identifier: GPL-2.0
+> > #include <bpf/libbpf.h>
+> >
+> > +#if (LIBBPF_MAJOR_VERSION == 0) && (LIBBPF_MINOR_VERSION < 8)
+> > +#error At least libbpf 0.8 is assumed for Linux tools.
+> > +#endif
+> > +
+> > int main(void)
+> > {
+> >        return bpf_object__open("test") ? 0 : -1;
+> > ```
+> >
+> > Thanks,
+> > Ian
+>
+> Oh, just to note. While failing the feature test is disappointing for
+> a libbpf that isn't very old, we have the newer libbpf to statically
+> build in. Developers won't be impacted due to the static route. If you
+> are a distro maintainer, you should just update your libbpf. So we
+> could just bump the API assumption to 1.0 as I believe that'd have the
+> advantage of removing feature tests, workarounds, untested code (like
+> what broke here), etc.
+>
+> What do you think?
+>
+> Thanks,
+> Ian
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
-by Prashant Malani <pmalani@chromium.org>:
+The removal of pre-libbpf 1.0 support is in:
+https://lore.kernel.org/lkml/20230109203424.1157561-1-irogers@google.com/
+So my proposal is that for 6.2 these two patches are sufficient. In
+perf/core (to be in 6.3) it makes sense to add both sets of patches to
+fix the build issue reported here. The problem with that is that some
+build tests will fail for 6.2 if they are testing libbpf dynamic with
+a libbpf earlier than 1.0. If that is an issue then cherry-picking the
+first or all of the pre-libbpf 1.0 removal patches should address it.
 
-On Wed, 28 Dec 2022 00:45:03 +0000 you wrote:
-> This series adds support for sending and receiving USB PD Vendor
-> Defined Messages (VDMs) between the Application Processor's Type-C
-> ports and connected peripherals.
-> 
-> Thir enables the Application processor to enter alternate modes and
-> process VDMs directly, instead of relying on state machines that exist
-> inside of co-processors like the ChromeOS Embedded Controller (EC).
-> 
-> [...]
+Thanks,
+Ian
 
-Here is the summary with links:
-  - [01/10] Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS EC MCU"
-    https://git.kernel.org/chrome-platform/c/0ac7200e3317
-  - [02/10] platform_chrome: cros_ec: Add Type-C VDM defines
-    https://git.kernel.org/chrome-platform/c/0e0dba884c43
-  - [03/10] platform/chrome: cros_ec_typec: Stash port driver info
-    https://git.kernel.org/chrome-platform/c/4dc9355cef4f
-  - [04/10] platform/chrome: cros_ec_typec: Set port alt mode drvdata
-    https://git.kernel.org/chrome-platform/c/c856e3ff98bb
-  - [05/10] platform/chrome: cros_ec_typec: Update port DP VDO
-    https://git.kernel.org/chrome-platform/c/8d2b28df6c3d
-  - [06/10] platform/chrome: cros_ec_typec: Move structs to header
-    https://git.kernel.org/chrome-platform/c/690580965153
-  - [07/10] platform/chrome: cros_ec_typec: Alter module name with hyphens
-    https://git.kernel.org/chrome-platform/c/e5eea6a3319f
-  - [08/10] platform/chrome: cros_ec_typec: Add initial VDM support
-    https://git.kernel.org/chrome-platform/c/493e699b9934
-  - [09/10] platform/chrome: cros_typec_vdm: Add VDM reply support
-    https://git.kernel.org/chrome-platform/c/50ed638bbc47
-  - [10/10] platform/chrome: cros_typec_vdm: Add VDM send support
-    https://git.kernel.org/chrome-platform/c/40a9b13a09ef
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> > > > jirka
+> > > >
+> > > > >
+> > > > > But yeah, previous experiences with Andrii were that we can do not too
+> > > > > costly feature checks, not using .c programs that would fail if some
+> > > > > required feature wasn't present but instead would just do some grep on a
+> > > > > header and if some "smell" wasn't scent, just fail the cap query.
+> > > > >
+> > > > > - Arnaldo
