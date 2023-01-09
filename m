@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791126635C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABF46635D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbjAIXpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S238001AbjAIXri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238001AbjAIXoR (ORCPT
+        with ESMTP id S238272AbjAIXrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:44:17 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879D63C9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:44:15 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m6so15589110lfj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:44:15 -0800 (PST)
+        Mon, 9 Jan 2023 18:47:21 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0F72BEB
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:45:57 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-4d19b2686a9so6934217b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XHjEtNVaTqOtCpnB9ZP021rbETT/k+vzPdGSi2OKKbk=;
-        b=KdluC5isYfGPedU/R2fjuuNpCoSuFF1Gex4PxTwA/N8jNDHS/AVQE5mKglBc1iQzkS
-         PsYw3u+iVbQxMe+TjLhY/zIwy1l/27O2gFVrl2UK7tdwpA/NEej1wX+R514XKyLF+uSv
-         xHsN/YuPfGmmfmBKCwj9zCYW+8Oc3ryiysNMANUaS+wodqw0J5mEFq3QoHYnY4t3Lzjg
-         FeXOAW48fZW+o7VQhUl8UGSy3Ji3tHu//ALLLsKYTDdmCo9/IQWdubtGXEHiGiIXDctP
-         vHyW137kiAwiwBvnxNWqh9LLcNkjZbml1VAWAHKK2831myR9iU3oxsy/g9IJ30OGHok9
-         yLmg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2+KX7du7whicN+PS9fU23ysrGOmXoF+0M7DLlUtPuI=;
+        b=ZgXn18vNNIICztMBawwC/7R15H4RvIurJtsuiESatewLzdxVJ22qGKGLsYNSGMZ/1J
+         kqJLhrCdHZfEqLtaEJm+rwlCpUoN72QGA5WVuZ8lata0hrkjF1Aaiw83E2DGTR1TLzPf
+         nNoYt+MXL0z4WrfBV20/KqlOYo8TDx8tKu1JfbOPASVmZzAhUuBLvK+64mgWSBD+BbW3
+         ROGwxnI+BsBHpTm0li51OCl/YPPJ7hHh9rpDw68lVJt5LxQOI3tQoU8Js5bzfBdgqGPB
+         L2rct/g75bwCkbvS3IGeYwyWqqDw2S7JPd7q5lIniApGK+jI1ovfHWIhIO5+udTgqATx
+         hrpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XHjEtNVaTqOtCpnB9ZP021rbETT/k+vzPdGSi2OKKbk=;
-        b=NWhad9ITYcql47XJ55sR9ZAY8chI6ppZEIMpTCPRzNDnmj88ovTF8IIeBSLX7IoWJa
-         pzPhsy+5aSRWSGpio/dGgj2T1urt72mZFuuojZyXCeuDhvmF3B2gmFS/bahUxq8DHI6M
-         f/nPAsi5KaVgtLNZcRk9utkWtS8ugYsb8w9V74cpNLINtDLrviaH0VhEZcaA+QwQAMej
-         GTGaUy4V2oxHR7vVxUIUwivyV7vGb+xGCkwdRTFSbRr5RMtrkMZSQjA8TCSacAXHns6e
-         UESh61IFFiSVDZKdZwefRf2J3w2S5phE6v0yH2KkdgUf7vxMLH877tHgYAvB2fj3V0ow
-         +P9Q==
-X-Gm-Message-State: AFqh2kp7+JFzAPA6piUgJvYft1OJeXp3PbkS2L5LNKgDCjdSke0AGTFb
-        IR9YE4+zfI9ZpKc4hZvlKuW5DQ==
-X-Google-Smtp-Source: AMrXdXs4hWSrnGESPaDMiC7Skctx3mIanGzpIn+a29djjV3HrxocDoxhqI+rKdtTzMIxIdZgqlnGAg==
-X-Received: by 2002:a05:6512:3b91:b0:4a4:68b8:f4e5 with SMTP id g17-20020a0565123b9100b004a468b8f4e5mr23148885lfv.43.1673307853915;
-        Mon, 09 Jan 2023 15:44:13 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056512214900b004b5a4cf69dfsm1835255lfr.261.2023.01.09.15.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 15:44:13 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     robdclark@gmail.com, quic_abhinavk@quicinc.com, airlied@gmail.com,
-        daniel@ffwll.ch, Hui Tang <tanghui20@huawei.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        yusongping@huawei.com
-Subject: Re: [PATCH] drm/msm/dpu: check for null return of devm_kzalloc() in dpu_writeback_init()
-Date:   Tue, 10 Jan 2023 01:43:59 +0200
-Message-Id: <167330408783.609993.13860899129914018447.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221119055518.179937-1-tanghui20@huawei.com>
-References: <20221119055518.179937-1-tanghui20@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v2+KX7du7whicN+PS9fU23ysrGOmXoF+0M7DLlUtPuI=;
+        b=AywDeCRWq4Q7Ba9KGtDkEThpsMopQfdhZQSc8kuwsjVXbhds0wDirrDzV37I9Ha3CL
+         U68q/gu8ZwnDrCCGuvPzI2EdLyt0jMZpjcUNPwt+uttDHfwPy1OuAcSYvJlzXo6W0Wnc
+         5va3eeUJE9GbtdPBWG82HHkEHKX5ROEdJzjdxQquvLL4tntmaUZ+HReY3EMq+uhF8Bd6
+         RUTJociexnrkQZsCRhxbEVIouEghU1lSdj1gJuIiV/MKXLDQ+aPYG/qYLQOk9kdXu8mz
+         +i7JJwrCXEe2A321GPf4r3+ZJY1wJGiaduTji/AVqjuXyWhdj7ucpJxVx0A4WqwZ0ky9
+         ejEQ==
+X-Gm-Message-State: AFqh2kruNdh+NQ8bvKClOCFjNYKXeYLa/CjzIUbaFTwgRj0sGLku08Sf
+        S7bBV4260dPwcGauUuOV3LxA79wk8OqGxK2Gu2pPaQ==
+X-Google-Smtp-Source: AMrXdXtiOGtj7wxlgeBUlNrKN/Gt85LVD0b/yBSFIPRATuoaFVxXPi/DrmaKnwECCcPeNhPtU69RvhrNET3mcgBYxKQ=
+X-Received: by 2002:a0d:fc84:0:b0:3df:6a50:40ec with SMTP id
+ m126-20020a0dfc84000000b003df6a5040ecmr2231052ywf.340.1673307956007; Mon, 09
+ Jan 2023 15:45:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230109215347.3119271-1-rananta@google.com> <20230109215347.3119271-4-rananta@google.com>
+ <Y7ymEiU1ZC/gzs9s@google.com>
+In-Reply-To: <Y7ymEiU1ZC/gzs9s@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 9 Jan 2023 15:45:30 -0800
+Message-ID: <CALzav=cqPv5coe3iei9wMHR_W-PbQWDpaFKzGeUL36Fz0NcB_Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] KVM: Define kvm_flush_remote_tlbs_range
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 3:41 PM David Matlack <dmatlack@google.com> wrote:
+>
+> On Mon, Jan 09, 2023 at 09:53:44PM +0000, Raghavendra Rao Ananta wrote:
+> > +{
+> > +     kvm_flush_remote_tlbs(kvm);
+> > +}
+>
+> FYI I also proposed a common kvm_flush_remote_tlbs() in my Common MMU
+> series [1].
+>
+> Could I interest you in grabbing patches 29-33 from that series, which
+> has the same end result (common kvm_flush_remote_tlbs_range()) but also
+> hooks up the KVM/x86 range-based flushing, and folding them into this
+> series?
+>
+> [1] https://lore.kernel.org/kvm/20221208193857.4090582-33-dmatlack@google.com/
 
-On Sat, 19 Nov 2022 13:55:18 +0800, Hui Tang wrote:
-> Because of the possilble failure of devm_kzalloc(), dpu_wb_conn might
-> be NULL and will cause null pointer derefrence later.
-> 
-> Therefore, it might be better to check it and directly return -ENOMEM.
-> 
-> 
+(Also they make kvm_arch_flush_remote_tlbs_memslot() common so you
+don't need the ARM-specific implementation in patch 4.)
 
-Applied, thanks!
-
-[1/1] drm/msm/dpu: check for null return of devm_kzalloc() in dpu_writeback_init()
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/21e9a838f505
-
-Best regards,
--- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>
+> >  #endif
+> >
+> >  static void kvm_flush_shadow_all(struct kvm *kvm)
+> > @@ -637,7 +642,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+> >       }
+> >
+> >       if (range->flush_on_ret && ret)
+> > -             kvm_flush_remote_tlbs(kvm);
+> > +             kvm_flush_remote_tlbs_range(kvm, range->start, range->end - 1);
+> >
+> >       if (locked) {
+> >               KVM_MMU_UNLOCK(kvm);
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
