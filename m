@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309546634E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D920E6634DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjAIXO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:14:26 -0500
+        id S237536AbjAIXOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:14:22 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235571AbjAIXOU (ORCPT
+        with ESMTP id S234627AbjAIXOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:14:20 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B53BE81
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:14:19 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r130so8600827oih.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OnhTMq60ZlyrTxCbX5UG9A3CalsAR+Z2mhuSowyGVrA=;
-        b=F4qYwAwEjJiKT0OgPQ7GjcVMsy86D4X2IR+ZQ9RudT8dgmunwrxt4mocX1fBYQBH8y
-         GyRdPc29B8gSXqOjYXvsqnYufKLv/k3klNGBDr1HlXdeQg407nQAxDM3UtuFkYgosy2C
-         +8Kal/c7ehflkCgmn5tQvys0CYu8zFPybxuaVcd0nWHnY0zRwkpGsoTQQs+AmOKLToeT
-         NOh5Cm1o4aghPKZAWhhkghINz8EMONBboewkqsjn1doL9FOYr598W5VB7bjg3zQUufa9
-         xqqaSgfU/fqLx2vIFbxmB++PVpm3W2GC6hHw2JAweVB/KCdfnqRmut3bgerY0eYAxbRm
-         ZRaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OnhTMq60ZlyrTxCbX5UG9A3CalsAR+Z2mhuSowyGVrA=;
-        b=DaIn5J+HhsYm3kMIgsfnRoIYvrHcYBglnrbR9Kk0W4zyD0YxIOWTYJI3i3TRMb3S7r
-         6hctrKllmoHJL1CVE0BThR99tRxBmNP82aTR02yV3lYIL9no83746iD4tqy39LXZ1a6Q
-         OyyF+pQTOLNiDrNKIay75V9nwqlPWobEfJROGvjklVPLd9GDI8qRCFeTBmxiVZDqILRz
-         WuYeKb+wMzwFqnt5fD1iVQn1Pu88RuwbeyGMSH7jolh5eBrXmPU/zgLUG8QOkGa/c3OI
-         TiU9GJhZ29ZtHGL7LlH0B1KpidaG3m6rqAMmtZUMorW4a3dfDzHY2l2Os9ZhaXJKEXM2
-         8UpQ==
-X-Gm-Message-State: AFqh2kqIVyC1ycLCzas6Q9442bMIOGtG7tuQ5UdRuVNGTQ4sN6rLXCrH
-        lXga171syxWVG43/LTdccu6TfOhThfU=
-X-Google-Smtp-Source: AMrXdXutmGsgmSr6/qb/dOTYWdXv/XXym7ZoJZBFf4p1X0ltkQvWCd+WYoM4WCKkTNQA2eNv8UjmpA==
-X-Received: by 2002:a05:6808:178a:b0:363:b41b:eedd with SMTP id bg10-20020a056808178a00b00363b41beeddmr19520924oib.20.1673306058926;
-        Mon, 09 Jan 2023 15:14:18 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t13-20020a9d774d000000b00670523bf1cfsm5272071otl.47.2023.01.09.15.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 15:14:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2128d543-33aa-b32d-68f6-5d3edad6cb47@roeck-us.net>
+        Mon, 9 Jan 2023 18:14:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67BE3BE81;
+        Mon,  9 Jan 2023 15:14:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF8961471;
+        Mon,  9 Jan 2023 23:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9458CC433D2;
+        Mon,  9 Jan 2023 23:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673306056;
+        bh=CjrypHLmoNnt1ElYwzhHOe0piX1D547BMjLmD95cSX0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WgQ7RYmeKWFxNsOy8Uvv8vLjVhZ1nDJnZqvEs2klECRfoSCi+zGrq5nWbXQiVJFZB
+         f1G4SW3KWArmhIjJEcmnmXkMdAGkiXI8vW2vhVASW/84RCk0LaMtg7qelqJgWfTe3C
+         IqOPuN0Eo28Gv8DcndcCQ38n7qTrxfspyay3Je3MS9CcYmmDf5gw9gRo3HLxULqaRB
+         JkDyuZGiX+uNqz1C6lMXKkJBXLCKHlTg3Q1VPoqaQV6P4uN5Ds8NlPeD/ja5Rt0Gu0
+         ycU0r8WRM6jTiYJoNKjzLyXID7yWBFmA3oXMC63qDReVP93wfEnzkD0DRQA6Rr44us
+         Ld/TXryjcgyIQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 376815C05C5; Mon,  9 Jan 2023 15:14:16 -0800 (PST)
 Date:   Mon, 9 Jan 2023 15:14:16 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        foo@bar.com
+Subject: Re: [PATCH -rcu] rcu: Disable lazy if call_rcu() called when GPs
+ expedited
+Message-ID: <20230109231416.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230109221756.1361168-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Linux 6.2-rc3
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
- <20230109174742.GA1191249@roeck-us.net>
- <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109221756.1361168-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 14:18, Linus Torvalds wrote:
-> On Mon, Jan 9, 2023 at 11:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
->> include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
+On Mon, Jan 09, 2023 at 10:17:56PM +0000, Joel Fernandes (Google) wrote:
+> During suspend, we see failures to suspend 1 in 300-500 suspends.
+> Looking closer, it appears that we are queuing lazy callbacks even
+> though rcu_gp_is_expedited(). These delays appear to not be very welcome
+> by the suspend/resume code as evidenced by these occasional suspend
+> failures.
 > 
-> Ok, I guess we'll have to disable this gcc warning for this version
-> again. I don't think anybody figured out why it happens. We had
-> several people look at it (Kees, Vlastimil, Jaegeuk) and I think
-> everybody ended up going "tis looks like a compiler thing".
+> This commit therefore checks if rcu_gp_is_expedited() and ignores the
+> lazy hint if so.
 > 
-> Does anybody remember - what was the compiler version again and what
-> do we need to disable?
+> Ignoring the lazy hint if rcu_gp_is_expedited() makes the 3000
+> suspend/resume cycles pass reliably on a 12th gen 12-core Intel CPU.
+
+Yow!!!  ;-)
+
+> Fixes: 3cb278e73be5 ("rcu: Make call_rcu() lazy to save power")
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+> Paul, could we take this for 6.2 -rc cycle? Thanks.
 > 
+>  kernel/rcu/tree.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 63545d79da51..93eb03f8ed99 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2594,12 +2594,12 @@ static void check_cb_ovld(struct rcu_data *rdp)
+>  }
+>  
+>  static void
+> -__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
+> +__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+>  {
+>  	static atomic_t doublefrees;
+>  	unsigned long flags;
+>  	struct rcu_data *rdp;
+> -	bool was_alldone;
+> +	bool was_alldone, lazy;
 
-I currently run my build tests with gcc 11.3. There is "config CC_NO_ARRAY_BOUNDS"
-which disables it for gcc 12.
+Please put "lazy" in alpha order.  Except that...
 
-Guenter
+>  	/* Misaligned rcu_head! */
+>  	WARN_ON_ONCE((unsigned long)head & (sizeof(void *) - 1));
+> @@ -2622,6 +2622,7 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
+>  	kasan_record_aux_stack_noalloc(head);
+>  	local_irq_save(flags);
+>  	rdp = this_cpu_ptr(&rcu_data);
+> +	lazy = lazy_in && !rcu_gp_is_expedited();
 
+Doesn't this completely disable laziness on Android?
+
+							Thanx, Paul
+
+>  	/* Add the callback to our list. */
+>  	if (unlikely(!rcu_segcblist_is_enabled(&rdp->cblist))) {
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
