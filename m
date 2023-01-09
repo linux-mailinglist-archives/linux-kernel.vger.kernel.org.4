@@ -2,132 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF07D661FC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF72661FCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbjAIIOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S233228AbjAIISs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjAIIOl (ORCPT
+        with ESMTP id S233434AbjAIISo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:14:41 -0500
-Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB676457;
-        Mon,  9 Jan 2023 00:14:37 -0800 (PST)
-Received: by a3.inai.de (Postfix, from userid 25121)
-        id 1BED758957AAE; Mon,  9 Jan 2023 09:14:34 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by a3.inai.de (Postfix) with ESMTP id 5306160BC6B00;
-        Mon,  9 Jan 2023 09:14:34 +0100 (CET)
-Date:   Mon, 9 Jan 2023 09:14:34 +0100 (CET)
-From:   Jan Engelhardt <jengelh@inai.de>
-To:     Jiri Slaby <jirislaby@kernel.org>
-cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kees Cook <keescook@chromium.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-Subject: Re: [PATCH net-next] Remove DECnet support from kernel
-In-Reply-To: <07786498-2209-3af0-8d68-c34427049947@kernel.org>
-Message-ID: <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
-References: <20220818004357.375695-1-stephen@networkplumber.org> <07786498-2209-3af0-8d68-c34427049947@kernel.org>
-User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
+        Mon, 9 Jan 2023 03:18:44 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4EB64E7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:18:43 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id w3so8713734ply.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s513E4dErzOS7TZdSXS86SQPydYzgshBqtf/+wa1x4E=;
+        b=L6mq5UmjA2YzxuvR0EpoEO1abZqE9g9ZP71jkxJRpO8UlcZi6AnlU07KnrUcRwQgdx
+         m0hNjXZDmVTgRgjChcNHJ09O6Oc/On6JwUs+jmAVSKt1C/qdfoZAf02SzxZ7LzkQpPgz
+         W/sf+zknQpuAY3LXRKDrwvXLCSGH/3a7/3epciI6s0S6DafB4hj8uhQLAkMmFdsEP2in
+         DboyVlktXhiMHL75W3fDNSg0mPh3Nvsv5YJsLRDUd9954cDm/9YqQ4XtNow1ZRmVxs8M
+         J3sbBIXW6GXyNzwR91p+p8+6a31Fkor776Aviw0VGKiJCYQxdFczA6VmwANJ7ype3Vtr
+         Oh8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s513E4dErzOS7TZdSXS86SQPydYzgshBqtf/+wa1x4E=;
+        b=aSIcn4jyu8UjktroUOXniimCROn8DUjNlqVKo3vvbgS7oBAV/mrcNn10AB05s396cn
+         CpUBG2HLnfzuKg94xjQjjmYCfQgYRMsGE41Y6Tm9Qeo+84TaZDEkJpN3ss2VffiaCYkn
+         jH9/jKqWZaRPbVBG6lwIKVUrF0reUCUDCMIErR3564kK8RHfO7HcIwCsYSNWaaQCgJaA
+         Uj2RWkSacW6mk3JfM+vEfOF+S6k4Z30jgg+p9uaUDM//8aHRL5GYgoQFxxNC6JFz70EB
+         vv6VnahrCHovHdK61NPaji0/JfaG7dtdPyZuaJGze2nw0A6mU5CCivn5GjSjB7C3ylbd
+         +9Kg==
+X-Gm-Message-State: AFqh2kqVYa4VmxqMRvvuUEi/UwRGYC4Xj1n8tRz2slz1hV3wDQl95i+x
+        NfpszREyUXIZQUDMAaZ2CqM4cTxgbGGiuOs=
+X-Google-Smtp-Source: AMrXdXs8AKMvnXxMrUQDy6esHiyJWQEv/AV0sLSY3/lKfqwIyYnflbG4wWhx8N/FOgcUqHVJ8uMytQ==
+X-Received: by 2002:a05:6a20:3a84:b0:b5:cc98:153c with SMTP id d4-20020a056a203a8400b000b5cc98153cmr3746328pzh.24.1673252322777;
+        Mon, 09 Jan 2023 00:18:42 -0800 (PST)
+Received: from thinkpad ([117.217.177.135])
+        by smtp.gmail.com with ESMTPSA id o9-20020a170902d4c900b00192cf87ed25sm5500117plg.35.2023.01.09.00.18.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 00:18:41 -0800 (PST)
+Date:   Mon, 9 Jan 2023 13:48:32 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, robin.murphy@arm.com, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        amit.pundir@linaro.org, regressions@leemhuis.info,
+        sumit.semwal@linaro.org, will@kernel.org, catalin.marinas@arm.com,
+        hch@lst.de
+Subject: Re: [PATCH V2 05/11] remoteproc: qcom_q6v5_mss: revert "map/unmap
+ metadata region before/after use"
+Message-ID: <20230109081832.GA4966@thinkpad>
+References: <20230109034843.23759-1-quic_sibis@quicinc.com>
+ <20230109034843.23759-6-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230109034843.23759-6-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++ Christoph
 
-On Monday 2023-01-09 08:04, Jiri Slaby wrote:
-> On 18. 08. 22, 2:43, Stephen Hemminger wrote:
->> DECnet is an obsolete network protocol
->
-> this breaks userspace. Some projects include linux/dn.h:
->
->  https://codesearch.debian.net/search?q=include.*linux%2Fdn.h&literal=0
->
-> I found Trinity fails to build:
-> net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
->     5 | #include <linux/dn.h>
->
-> Should we provide the above as empty files?
+Hi Sibi,
 
-Not a good idea. There may be configure tests / code that merely checks for
-dn.h existence without checking for specific contents/defines. If you provide
-empty files, this would fail to build:
+On Mon, Jan 09, 2023 at 09:18:37AM +0530, Sibi Sankar wrote:
+> This reverts commit fc156629b23a21181e473e60341e3a78af25a1d4.
+> 
+> The memory region allocated using dma_alloc_attr with no kernel mapping
+> attribute set would still be a part of the linear kernel map. Hence as a
+> precursor to using reserved memory for modem metadata region, revert back
+> to the simpler way of dynamic memory allocation.
+> 
+> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-#include "config.h"
-#ifdef HAVE_LINUX_DN_H
-#	include <linux/dn.h>
-#endif
-int main() {
-#ifdef HAVE_LINUX_DN_H
-	socket(AF_DECNET, 0, DNPROTO_NSP); // or whatever
-#else
-	...
-#endif
-}
+Christoph already submitted a patch that reverts fc156629b23a:
+https://lore.kernel.org/linux-arm-msm/20221223092703.61927-2-hch@lst.de/
 
-So, with my distro hat on, outright removing header files feels like the
-slightly lesser of two evils. Given the task to port $arbitrary software
-between operating systems, absent header files is something more or less
-"regularly" encountered, so one could argue we are "trained" to deal with it.
-But missing individual defines is a much deeper dive into the APIs and
-software to patch it out.
+Thanks,
+Mani
+
+> ---
+>  drivers/remoteproc/qcom_q6v5_mss.c | 38 +++++-------------------------
+>  1 file changed, 6 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index 2f4027664a0e..e2f765f87ec9 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/devcoredump.h>
+> -#include <linux/dma-map-ops.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -961,52 +960,27 @@ static void q6v5proc_halt_axi_port(struct q6v5 *qproc,
+>  static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  				const char *fw_name)
+>  {
+> -	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS | DMA_ATTR_NO_KERNEL_MAPPING;
+> -	unsigned long flags = VM_DMA_COHERENT | VM_FLUSH_RESET_PERMS;
+> -	struct page **pages;
+> -	struct page *page;
+> +	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+>  	dma_addr_t phys;
+>  	void *metadata;
+>  	int mdata_perm;
+>  	int xferop_ret;
+>  	size_t size;
+> -	void *vaddr;
+> -	int count;
+> +	void *ptr;
+>  	int ret;
+> -	int i;
+>  
+>  	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
+>  	if (IS_ERR(metadata))
+>  		return PTR_ERR(metadata);
+>  
+> -	page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> -	if (!page) {
+> +	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> +	if (!ptr) {
+>  		kfree(metadata);
+>  		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+>  		return -ENOMEM;
+>  	}
+>  
+> -	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+> -	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
+> -	if (!pages) {
+> -		ret = -ENOMEM;
+> -		goto free_dma_attrs;
+> -	}
+> -
+> -	for (i = 0; i < count; i++)
+> -		pages[i] = nth_page(page, i);
+> -
+> -	vaddr = vmap(pages, count, flags, pgprot_dmacoherent(PAGE_KERNEL));
+> -	kfree(pages);
+> -	if (!vaddr) {
+> -		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
+> -		ret = -EBUSY;
+> -		goto free_dma_attrs;
+> -	}
+> -
+> -	memcpy(vaddr, metadata, size);
+> -
+> -	vunmap(vaddr);
+> +	memcpy(ptr, metadata, size);
+>  
+>  	/* Hypervisor mapping to access metadata by modem */
+>  	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+> @@ -1036,7 +1010,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  			 "mdt buffer not reclaimed system may become unstable\n");
+>  
+>  free_dma_attrs:
+> -	dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
+> +	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+>  	kfree(metadata);
+>  
+>  	return ret < 0 ? ret : 0;
+> -- 
+> 2.17.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
