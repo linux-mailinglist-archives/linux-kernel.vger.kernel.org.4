@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D87D662EE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE33662EDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbjAISXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S237362AbjAISX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237481AbjAISXE (ORCPT
+        with ESMTP id S236801AbjAISXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:23:04 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699E6AE45
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:22:09 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id m7so9100882wrn.10
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jvYugD5smOlPeb8yw4a3uYKIpMLS5cDQVS3icNcFMKA=;
-        b=Z6PyaEpVm6gQZPhyOA+umXIzP1gj2ivonb832kvaPK2LHBAyLgqzEzWs+trmEE0Jln
-         khMmlms5Uv6PhL4q8PhFwsygO3DHLGc4l5gyw4ZBVAMxJaFNOTa/D+37v6hQEgNUi6HJ
-         MwrpiJXqxUpvHZ/jLL+pwFgBfNyRIeOFG6BE2kS+7uUlUG3H6z1r5xzHXB+rv1s49c7Z
-         /cxqXGU2xlMj3qBcL9i+f7FQf/GhDu4ibCR+/YuG/aUITAgdMLmIeG9x8sQ8tEVru5a6
-         NNDcVLsWYktntSaFMN0HlSbfAEBeUesEeaNrLaNMlba8+UyRhbCP48f1qqKf5QYGnay+
-         VoIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvYugD5smOlPeb8yw4a3uYKIpMLS5cDQVS3icNcFMKA=;
-        b=XuXBdDB/7PCKPNHavZLV0o0K/n2ruwRaABfsDiA0n9tYCgY84S2oybjUoGbqXCLpHn
-         qV0JgxiN6lsnXLQ5KX4d4V3UA04KYZ9FsdmXdoNNVhw62WjmqAfRp+VphnVfcOOzsJPt
-         W3RD6ToVdem9HiHLFJVkc1s4B/mNPxT05uMUChXjj8pVwbcefnkLSNGCVjvdCHuKlEWY
-         WG6PH0mVCxgQCjpnGzihYByXXbH85pJuA+To3m4XiisgPbkpe3l0M8uE7eyM9jV9Ayj1
-         UQAVfKE9iJeH9yX+SVbD6fXqlKesrLzaBGO8mPvSOUkMLiaCHT3PWBo8pxLr79gkPlVr
-         GhOQ==
-X-Gm-Message-State: AFqh2kr+CzcfWj54hTukq7qJhXEgQSgdQA0nvEVaMcyJYf0RWGo01Q0K
-        cE82/VK2IXZpL96SROqmP1PKxQ==
-X-Google-Smtp-Source: AMrXdXvjfzGBA2k+30sjPaP84E+50hgotZRZMLKqmz8cAfThUKaz2IKhBGPXhX7+mGfJd+LOudPNGg==
-X-Received: by 2002:a5d:5544:0:b0:26d:2af7:420 with SMTP id g4-20020a5d5544000000b0026d2af70420mr40676769wrw.33.1673288528036;
-        Mon, 09 Jan 2023 10:22:08 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o15-20020a5d62cf000000b002bbedd60a9asm3589168wrv.77.2023.01.09.10.22.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:22:07 -0800 (PST)
-Message-ID: <e96fcaee-488f-53ff-5fb2-0cea411677b9@linaro.org>
-Date:   Mon, 9 Jan 2023 19:22:04 +0100
+        Mon, 9 Jan 2023 13:23:06 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8BA1742A;
+        Mon,  9 Jan 2023 10:22:09 -0800 (PST)
+Date:   Mon, 09 Jan 2023 18:22:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673288527;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2rUwRHOpeMmottQzafUCHpL3iCCe5UPPqlLHncTduVo=;
+        b=yfitI0/+5Z6/mJKB5hBILT1xzObkeEl6YC4BMN/UJvbBGu9w3+hsqknTPaB9s2bq2/CB6a
+        0omhcFxkbm/0tOqcES2ViIb0THTTEMbu9tzDpZKjg3AuGUD4iP3MAwl+zW0Q+tjbX7Jc51
+        LOafarpYzq3vKvDMnX7CDGJhns05n5N6/ilcz17iNC8O65IeTJk1yRjX9amNm8WTzsTkky
+        sV5jGeec+OFYZzISVSFHEHsxT2mfDxV/eYUZd4qzGjHA1CEF/qyPALwssKJDEDK1UMpcEu
+        xwfpvWqeoqmy9JCdRkJtTyQVYioAQB2lh0c9hHDwWxsvJ9IArzox4G/OnLvVsg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673288527;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2rUwRHOpeMmottQzafUCHpL3iCCe5UPPqlLHncTduVo=;
+        b=KQQR8aWCRQM+eR9faud3eh1wEfnu5O/51CvWglOHlYo3RQTk0JN7zpO3JV5c/Ry9PMn8Mh
+        RfCnxIVQ9YCTIMAg==
+From:   "tip-bot2 for Alexander Lobakin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/boot] scripts/head-object-list: Remove x86 from the list
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230109170403.4117105-3-alexandr.lobakin@intel.com>
+References: <20230109170403.4117105-3-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 07/18] interconnect: qcom: add a driver for sa8775p
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-8-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109174511.1740856-8-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167328852698.4906.1342756515976813355.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 18:45, Bartosz Golaszewski wrote:
-> From: Shazad Hussain <quic_shazhuss@quicinc.com>
-> 
-> Introduce QTI SA8775P-specific interconnect driver.
-> 
+The following commit has been merged into the x86/boot branch of tip:
 
-> +
-> +static struct qcom_icc_desc sa8775p_pcie_anoc = {
-> +	.nodes = pcie_anoc_nodes,
-> +	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
-> +	.bcms = pcie_anoc_bcms,
-> +	.num_bcms = ARRAY_SIZE(pcie_anoc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *system_noc_bcms[] = {
-> +	&bcm_sn0,
-> +	&bcm_sn1,
-> +	&bcm_sn3,
-> +	&bcm_sn4,
-> +	&bcm_sn9,
-> +};
-> +
-> +static struct qcom_icc_node *system_noc_nodes[] = {
-> +	[MASTER_GIC_AHB] = &qhm_gic,
-> +	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
-> +	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
-> +	[MASTER_LPASS_ANOC] = &qnm_lpass_noc,
-> +	[MASTER_SNOC_CFG] = &qnm_snoc_cfg,
-> +	[MASTER_PIMEM] = &qxm_pimem,
-> +	[MASTER_GIC] = &xm_gic,
-> +	[SLAVE_SNOC_GEM_NOC_GC] = &qns_gemnoc_gc,
-> +	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
-> +	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_system_noc = {
+Commit-ID:     5353fff29e42d0efc844dcaf764336d20a7f6b44
+Gitweb:        https://git.kernel.org/tip/5353fff29e42d0efc844dcaf764336d20a7f6b44
+Author:        Alexander Lobakin <alexandr.lobakin@intel.com>
+AuthorDate:    Mon, 09 Jan 2023 18:04:03 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Mon, 09 Jan 2023 18:22:21 +01:00
 
-This and several others are const, which means you started entire work
-on some old code. It's quite a waste of your effort as now you have to
-get all the patches we did for cleanups. Much better to start off from a
-newest file. If you based work on downstream code, then this definitely
-needs many fixes...
+scripts/head-object-list: Remove x86 from the list
 
-Best regards,
-Krzysztof
+Now that x86 boot code is not hardcoded to the particular linking
+order, remove x86 files from the list and let them be placed inside
+the vmlinux according only to the linker script and linker
+preferences.
 
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
+Link: https://lore.kernel.org/r/20230109170403.4117105-3-alexandr.lobakin@intel.com
+---
+ scripts/head-object-list.txt | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+index b074134..b2a0e21 100644
+--- a/scripts/head-object-list.txt
++++ b/scripts/head-object-list.txt
+@@ -42,10 +42,4 @@ arch/s390/kernel/head64.o
+ arch/sh/kernel/head_32.o
+ arch/sparc/kernel/head_32.o
+ arch/sparc/kernel/head_64.o
+-arch/x86/kernel/head_32.o
+-arch/x86/kernel/head_64.o
+-arch/x86/kernel/head32.o
+-arch/x86/kernel/head64.o
+-arch/x86/kernel/ebda.o
+-arch/x86/kernel/platform-quirks.o
+ arch/xtensa/kernel/head.o
