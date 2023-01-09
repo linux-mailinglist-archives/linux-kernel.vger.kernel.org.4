@@ -2,137 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F6A661E76
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F2F661E77
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjAIF2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 00:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S235999AbjAIFaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 00:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjAIF22 (ORCPT
+        with ESMTP id S234205AbjAIFaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 00:28:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3823F2C6
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:28:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2F151042;
-        Sun,  8 Jan 2023 21:29:08 -0800 (PST)
-Received: from a077893.blr.arm.com (unknown [10.162.40.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5923C3F71A;
-        Sun,  8 Jan 2023 21:28:24 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
-Date:   Mon,  9 Jan 2023 10:58:16 +0530
-Message-Id: <20230109052816.405335-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 9 Jan 2023 00:30:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278862C6
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1E21B80CB6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4331FC433F0;
+        Mon,  9 Jan 2023 05:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673242216;
+        bh=E75lcGz7LkVv7ZTlmKv/+QUdYCQj+x1JMimW1iTMQ+Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Ox6gmlFLjqZbCLGjHD9H3xqQhQjqhKHpOV8rSyRv3RFIag5sX7fmptesBY8rSpxNH
+         Xs/yXKncl4VAcNooxCdV8toCMSLQ3bZn8pD7jntrRJtch+ODfYFIE7HbqGOC6KuAoN
+         /L6UN04ScHnP/WXHSWTWXNfOhMMzRyjys25C4S7pgQq7JKY8EgFaehyGwLRq9jpvnZ
+         wBbtWgWpM/8iLqVEfVdJS26ttjvudQZokldprKZvc4vVIJlq5iL3AW7Df5mkWjF+9N
+         5vktKtQ3jtu43CRRW088+rNVcquNLYFYHL43Fp/1LkeXccnxt5BcFAP/MBwB2G/MWb
+         Q+gJfhKQ0jMfw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32ABCE21EE9;
+        Mon,  9 Jan 2023 05:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 0/2] Handle CrOS EC Panics
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167324221620.8677.14256406572957344179.git-patchwork-notify@kernel.org>
+Date:   Mon, 09 Jan 2023 05:30:16 +0000
+References: <20230104011524.369764-1-robbarnes@google.com>
+In-Reply-To: <20230104011524.369764-1-robbarnes@google.com>
+To:     Rob Barnes <robbarnes@google.com>
+Cc:     groeck@chromium.org, pmalani@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dtor@chromium.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changing pfn on a user page table mapped entry, without first going through
-break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
-to intercept such changes, via an updated pgattr_change_is_safe(). This new
-check happens via __check_racy_pte_update(), which has now been renamed as
-__check_safe_pte_update().
+Hello:
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v6.2-rc3. This patch had some test time on an internal CI
-system without any issues being reported.
+This series was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Changes in V1:
+On Wed,  4 Jan 2023 01:15:22 +0000 you wrote:
+> Currently the OS ignores EC panics when they occur.
+> After reporting a panic, the EC will force a hard reset,
+> possibly after a short delay. This may cause loss of data.
+> 
+> These patches add a handler for CrOS EC panics. When
+> a panic is detected the OS will attempt to flush critical
+> data for debugging purposes and attempt an orderly shutdown.
+> 
+> [...]
 
-https://lore.kernel.org/all/20221116031001.292236-1-anshuman.khandual@arm.com/
+Here is the summary with links:
+  - [v3,1/2] platform/chrome: cros_ec: Poll EC log on EC panic
+    https://git.kernel.org/chrome-platform/c/d90fa2c64d59
+  - [v3,2/2] platform/chrome: cros_ec: Shutdown on EC Panic
+    https://git.kernel.org/chrome-platform/c/957445d730ba
 
- arch/arm64/include/asm/pgtable.h | 8 ++++++--
- arch/arm64/mm/mmu.c              | 8 +++++++-
- 2 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index b4bbeed80fb6..832c9c8fb58f 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -275,6 +275,7 @@ static inline void set_pte(pte_t *ptep, pte_t pte)
- }
- 
- extern void __sync_icache_dcache(pte_t pteval);
-+bool pgattr_change_is_safe(u64 old, u64 new);
- 
- /*
-  * PTE bits configuration in the presence of hardware Dirty Bit Management
-@@ -292,7 +293,7 @@ extern void __sync_icache_dcache(pte_t pteval);
-  *   PTE_DIRTY || (PTE_WRITE && !PTE_RDONLY)
-  */
- 
--static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
-+static inline void __check_safe_pte_update(struct mm_struct *mm, pte_t *ptep,
- 					   pte_t pte)
- {
- 	pte_t old_pte;
-@@ -318,6 +319,9 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
- 	VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
- 		     "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
- 		     __func__, pte_val(old_pte), pte_val(pte));
-+	VM_WARN_ONCE(!pgattr_change_is_safe(pte_val(old_pte), pte_val(pte)),
-+		     "%s: unsafe attribute change: 0x%016llx -> 0x%016llx",
-+		     __func__, pte_val(old_pte), pte_val(pte));
- }
- 
- static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-@@ -346,7 +350,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
- 			mte_sync_tags(old_pte, pte);
- 	}
- 
--	__check_racy_pte_update(mm, ptep, pte);
-+	__check_safe_pte_update(mm, ptep, pte);
- 
- 	set_pte(ptep, pte);
- }
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 14c87e8d69d8..a1d16b35c4f6 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -133,7 +133,7 @@ static phys_addr_t __init early_pgtable_alloc(int shift)
- 	return phys;
- }
- 
--static bool pgattr_change_is_safe(u64 old, u64 new)
-+bool pgattr_change_is_safe(u64 old, u64 new)
- {
- 	/*
- 	 * The following mapping attributes may be updated in live
-@@ -145,6 +145,12 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
- 	if (old == 0 || new == 0)
- 		return true;
- 
-+	/* If old and new ptes are valid, pfn should not change */
-+	if (pte_valid(__pte(old)) && pte_valid(__pte(new))) {
-+		if (pte_pfn(__pte(old)) != pte_pfn(__pte(new)))
-+			return false;
-+	}
-+
- 	/* live contiguous mappings may not be manipulated at all */
- 	if ((old | new) & PTE_CONT)
- 		return false;
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
