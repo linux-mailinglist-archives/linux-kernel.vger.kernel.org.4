@@ -2,216 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B29662A96
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6521662AAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjAIPx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S236511AbjAIP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjAIPxs (ORCPT
+        with ESMTP id S234889AbjAIP6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:53:48 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0910F4;
-        Mon,  9 Jan 2023 07:53:48 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id g68so5060926pgc.11;
-        Mon, 09 Jan 2023 07:53:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kr5NMyR17w820E39Zxy+TJT5WIxXv3t9mTGHg5DI4M8=;
-        b=p925wfq85MYYr0Q3szQHiqh8M9TGBDNLmFWeMdVCKRfm+cOHibl08yqwJoSo2r7XJP
-         wq9Jltk/+brtH8hNCZXvq0DxtwSQIazxtjZdEKfg/0vGYUECRtOKJhbchra23Qxq01EI
-         LW2KfmroEgha10Hiqqq7sbs4sKftMAXbHM5UfrApMgHovRtAjqup/7ZDx5c66hJHq9Cr
-         iYTmJQehTgnexoKO7TcMDfBVxLmHJagL/RtulJH5m9HvVCQxeaP/W6dGAdxxBRvcFDn6
-         /uu4CaMMaHvzdo/E1y8HoopqpLRDOCKFzxs2QxX+RtbfC5zpKXwCLbC6QNQfLNGjuHM5
-         8s7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kr5NMyR17w820E39Zxy+TJT5WIxXv3t9mTGHg5DI4M8=;
-        b=vsVUyyhZaXC1xZa0W/BkpO28agq8dxXdBLZwJdYz8+hOKSGPkePAbr+IXJer1xGS/x
-         vIa08qKS+TyQTvnM8R3uG7GqRUPS+6gIzWiLrfTPFdU1WcAyl9kU3Wh9FZIAZu+JzHzo
-         dVDzK3utkV+zj8y4iS+c8obaR64okqEHZYm9NISdKQEpy6YKMkdAI+Cfpz/9CTWrBPPO
-         cHHwE8mEkKTaODrCdOYUxzxx42uPAUFQlKe2+YOAszc9LCC20yEsMue6PEAGX3IoZ+MY
-         nBf7hl7rmNfCFfEvDMqMo6ELbsXW4MZmF1edhQREXln6fDUnnTaF/FcFprn42l1vkL5i
-         adrg==
-X-Gm-Message-State: AFqh2kr93MOknIB1o+1etlr9ym9CmzXNP1B0/FZCyO0i3FGNkIZXOEsT
-        q7dmOOQoczYQQb/o/KO9Kk0o5oFyY6CcOaZRa+0=
-X-Google-Smtp-Source: AMrXdXu5iAQa5w4G/nXooBZotH/u8Cle9aRMcHOGEDe3ZcG1lDUD8XzrRE/n7dp+CGJamrwD1EZHy0OvHYQNsDsudys=
-X-Received: by 2002:a63:1e42:0:b0:478:9503:f498 with SMTP id
- p2-20020a631e42000000b004789503f498mr3557980pgm.96.1673279627421; Mon, 09 Jan
- 2023 07:53:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
- <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
- <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
-In-Reply-To: <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 9 Jan 2023 23:53:35 +0800
-Message-ID: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
+        Mon, 9 Jan 2023 10:58:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695083633E;
+        Mon,  9 Jan 2023 07:58:07 -0800 (PST)
+Received: from jupiter.universe (dyndsl-037-138-188-006.ewe-ip-backbone.de [37.138.188.6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D08526602D11;
+        Mon,  9 Jan 2023 15:58:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673279886;
+        bh=cAkULhRBzF03giwfdqr6IH+cvMkj6qiyC0tTtyDFCQA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XcCGZqslsY0rKq1J0TDjYXad3jvAqPGB0ePZhi5yO8srXPim+u7Pliia9KyR37t4a
+         x47mq1edd3voScjMZhMU6kRBBEqircjwQi+knZ6SYo62lxLyvy/5lhdK6nA1GhuoVr
+         T2+S72kF32yeEjcbfy+ClfIADv66S6BD2nqFHM3MWzruFrbOteDPZ0aAjtx+eK9X7m
+         ELxUUFBSlHYOjFrPMXjZxe5D3Xjl4CC/nZ7EOolS4RBb7+3IxTqWZ4HgPonZ4CwS+r
+         KivsBimRP5e+Us/OUGfoDRsS04iT5Ow6VfbJWguyudMchtv3evwxP1Wri6zE86s3RJ
+         cbPkr1uwWBeFQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 7DFDA480116; Mon,  9 Jan 2023 16:58:03 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv8 0/7] Initial rk3588 DT
+Date:   Mon,  9 Jan 2023 16:57:54 +0100
+Message-Id: <20230109155801.51642-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
->
-> Hi Jeff,
->
-> On 1/9/23 16:11, Jeff Xie wrote:
-> > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrot=
-e:
-> >> Hi Jeff,
-> >>
-> >> On 1/7/23 07:25, Jeff Xie wrote:
-> >>> Hi,
-> >>>
-> >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wr=
-ote:
-> >>>> [snip]
-> >>>>
-> >>>> A kvx toolchain can be built using:
-> >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev lib=
-mpfr-dev
-> >>>> $ git clone https://github.com/kalray/build-scripts
-> >>>> $ cd build-scripts
-> >>>> $ source last.refs
-> >>>> $ ./build-kvx-xgcc.sh output
-> >>> I would like to build the kvx-xgcc to compile and test the linux
-> >>> kernel, but it reported a compile error.
-> >>> I wonder what version of gcc you are using.
-> >>>
-> >>> My build environment:
-> >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
-> >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
-> >>>
-> >>>
-> >>> Compile error:
-> >>> $ ./build-kvx-xgcc.sh output
-> >>>
-> >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_repl=
-ace_key_data=E2=80=99:
-> >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=E2=
-=80=99 undeclared
-> >>> (first use in this function)
-> >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
-> >>>         |                        ^~~~~~~~
-> >>> [snip]
-> >> What SHA1 of https://github.com/kalray/build-scripts are you using?
-> > I have executed the "source last.refs"
->
-> I was referring to the SHA1 of the repo itself (build-scripts).
->
-> `last.refs` is a symbolic link which can point to several releases,
-> depending on "when" you did the clone.
->
-> I am asking this because we recently published new toolchains.
->
-> I want to make sure which one you are trying to build.
+Hi,
 
-Unfortunately I deleted this repo a few minutes before you asked me ;-(
-But I remember that I cloned this repo two days ago.
-it should be:  last.refs -> refs/4.11.0.refs
+This adds initial rk3588(s) DT including three different board
+devicetrees. All required driver changes have been merged into
+Linus tree already. To avoid warnings from
 
+$ make CHECK_DTBS=y rockchip/rk3588-evb1-v10.dtb \
+  rockchip/rk3588-rock-5b.dtb rockchip/rk3588s-rock-5a.dtb
 
-> >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 withou=
-t
-> >> issues, I don't understand why it does not work for you, although inde=
-ed
-> >> the error log you are having pops out on my search engine and seems to
-> >> be some well known issue.
-> > Yes, there are many answers on the web, but none of them solve this pro=
-blem.
-> >
-> >> If the build-script does not work for you, you can still use the
-> >> pre-built toolchains generated by the GitHub automated actions:
-> >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest"
-> >> means 22.04)
-> > Thanks, this is the final solution ;-)
-> Good to see it helped :)
->
-> Regards,
->
-> --
->
-> Yann
->
->
->
->
->
+it is required to have dt-schema 2022.12 (older releases may
+generate warnings for the ethernet nodes) and c69bffe199270c
+("dt-bindings: rtc: convert hym8563 bindings to json-schema")
+from rtc-next.
 
+Changes since PATCHv7:
+ * https://lore.kernel.org/all/20221215183002.211081-1-sebastian.reichel@collabora.com/
+ * update DT model string for ROCK 5A/5B to match the description in the DT binding
+ * capitalize Rock (ROCK) in DT binding
+ * rebase to v6.2-rc1
 
---=20
-Thanks,
-JeffXie
+Changes since PATCHv6:
+ * https://lore.kernel.org/all/20221214182247.79824-1-sebastian.reichel@collabora.com/
+ * renamed ppi_cluster<x> to ppi_partition<x>
+ * updated commit message of the third patch removing the incorrect "(single core)" and
+   listing all added IP blocks.
+ * removed brightness levels from EVB1 backlight; I kept the backlight node. It's the
+   test case for PWM support.
+ * rebase to current linus master (041fae9c105a)
+
+Changes since PATCHv5:
+ * https://lore.kernel.org/all/20221205172350.75234-1-sebastian.reichel@collabora.com/
+ * modified GIC interrupts to use rk3399 style setup with two PPI partitions
+ * add interrupt-names to the ARM timer node
+ * add hyp-virt IRQ to the ARM timer node
+ * re-add the #power-domain-cells for the power-controller sub-nodes and set to 0;
+   the DT binding document requires it. I'm not sure why it was not pointed out by
+   DTBS_CHECK when sending v4 and v5.
+
+Changes since PATCHv4:
+ * https://lore.kernel.org/all/20221124144928.35381-1-sebastian.reichel@collabora.com/
+ * update compatible string for the PHY to provide PHY ID. Without the IDs
+   provided in the firmware, the kernel tries to identify the correct driver by
+   reading the ID. This fails, if the bootloader does not setup the reset GPIO,
+   since the kernel only setups the reset GPIO in the PHY driver. Rock 5A with
+   the default bootloader runs into this, but I also changed EVB1 since the kernel
+   should not depend on bootloader configuration for this.
+ * added pinctrl for PHY reset-gpios
+ * drop rgmii-rxid from gmac1 node
+ * added reviewed-by from Michael Risch for board DTs
+ * I kept the order of the trailers (i.e. my SoB being the last), which is the usual
+   order in most subsystems
+
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20221121175814.68927-1-sebastian.reichel@collabora.com/
+ * update reset gpio + timings in EVB1 and Rock 5A DT to new style
+ * change regulator- prefix to -regulator suffix in EVB1 and Rock 5B DTB
+ * merge dt-binding update patches for EVB1, Rock 5A and Rock 5B and add Krzysztof's Ack
+ * change pinctrl name "active" to "default" for all PWM nodes
+ * remove aliases from rk3588s and rk3588 DTSI
+ * sort includes in rk3588s.dtsi
+ * add dma names for uart
+ * some more property order fixes
+ * remove #power-domain-cells for the power-controller sub-nodes; only the main node should be referenced
+ * add dynamic-power-coefficient and #cooling-cells for all CPU cores
+
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20221115161702.163057-1-sebastian.reichel@collabora.com/
+ * add minimal Radxa Rock 5B DT
+ * Add aliases for i2c, spi and gpio in rk3588s.dtsi
+ * Fix ethernet-phy node name and remove #phy-cells
+ * Sort nodes / includes in both boards
+ * Sort nodes in rk3588s.dtsi according to register address
+ * add missing spi4 node in rk3588s.dtsi
+ * split board specific dt-bindings into their own patches
+ * add board specific mmc alias following the downstream enumeration
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20221108171500.99599-1-sebastian.reichel@collabora.com/
+ * Drop Acked-by from Krzysztof
+ * Add 'regulator-' prefix to VCC12V VCC5V0 regulators
+ * Change 'Radxa Rock 5A' to 'Radxa ROCK 5 Model A' in DT binding
+ * Update cover-letter (clock driver and some DT binding fixes got merged)
+
+-- Sebastian
+
+Christopher Obbard (1):
+  arm64: dts: rockchip: Add rock-5b board
+
+Jianqun Xu (1):
+  arm64: dts: rockchip: Add rk3588 pinctrl data
+
+Kever Yang (2):
+  arm64: dts: rockchip: Add base DT for rk3588 SoC
+  arm64: dts: rockchip: Add rk3588-evb1 board
+
+Sebastian Reichel (3):
+  dt-bindings: soc: rockchip: add initial rk3588 syscon compatibles
+  dt-bindings: arm: rockchip: add initial rk3588 boards
+  arm64: dts: rockchip: Add rock-5a board
+
+ .../devicetree/bindings/arm/rockchip.yaml     |   15 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    3 +
+ .../boot/dts/rockchip/rk3588-evb1-v10.dts     |  129 +
+ .../boot/dts/rockchip/rk3588-pinctrl.dtsi     |  516 +++
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      |   44 +
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |   58 +
+ .../boot/dts/rockchip/rk3588s-pinctrl.dtsi    | 3403 +++++++++++++++++
+ .../boot/dts/rockchip/rk3588s-rock-5a.dts     |   73 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 1703 +++++++++
+ 10 files changed, 5949 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+
+-- 
+2.39.0
+
