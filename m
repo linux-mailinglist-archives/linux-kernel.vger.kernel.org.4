@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388CC662C96
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5A1662C9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237167AbjAIRZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S237138AbjAIRZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbjAIRZF (ORCPT
+        with ESMTP id S237186AbjAIRZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:25:05 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD2240871;
-        Mon,  9 Jan 2023 09:25:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 51D6920040;
-        Mon,  9 Jan 2023 17:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673285101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0CXunOTUL8UJMKw/JLqxROwKh3zUZZ2e0csICXto58=;
-        b=xl+Dc/r0HXHDoLeEeSJZ+vjjJl1EMHyb6zwmrehhVvD0AwO/+pRikl7f2fCKShunYJelaD
-        GxCcS0M2lHN/okQL57U4gfSMZtv1JRRTR+DHY01e00Nk61nWF2xKA+Hs3hwqL8/764Z6Lj
-        2xgjuOwv6u+Fihc5zuDv4O/PwyZAp/k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673285101;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0CXunOTUL8UJMKw/JLqxROwKh3zUZZ2e0csICXto58=;
-        b=ugMSHNKOkTuqkjXCjLGqfgcTtIvpkPJ87OSNpKlvjl3E6LCZjy1Fk4JRVpVuuWmErcUWDf
-        Qu69zShVl0lfhFCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 40784134AD;
-        Mon,  9 Jan 2023 17:25:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eS+4D+1NvGMiFAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 17:25:01 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id ADDE1A0749; Mon,  9 Jan 2023 18:25:00 +0100 (CET)
-Date:   Mon, 9 Jan 2023 18:25:00 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages
- rather than ref'ing if appropriate
-Message-ID: <20230109172500.bd4z2incticapm7x@quack3>
-References: <d86e6340-534c-c34c-ab1d-6ebacb213bb9@kernel.dk>
- <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
- <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
- <1880793.1673257404@warthog.procyon.org.uk>
+        Mon, 9 Jan 2023 12:25:22 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C541941017
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:25:21 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-14fb7fdb977so9325358fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 09:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfmjP2mndLDes9oQRNaJXeRDdi6D0K9ObPAqlxFeEu0=;
+        b=n90Q6czpE5ApJ2gN/nhORqyIrmbjapJ05+Aff3Ztvw5ahUAcOGpKgIM6yaDv0lJO8Z
+         +Mi25azRzciEp5kW6wNc8xmhvdj8UtvajbJQ1mLZy/4rtz95POVxJ9bBaWv05g2yO1yB
+         1NpiAnyRFitfTzeRTk6gk7dL6msevio0pwpGakUWJusEBE/6ln9/R2Q1x/5FMJfErXIH
+         aGzGU1NtQSkc8dDkz6Bstdg9nlHsXEH9p1wh9N5ociAd8ZOFGUulqZqwkYDZbcDWm4s/
+         29fLrU1Z55eNQEHJsUzWeS24GerzqvBUqJM/tocu9i+0uEp6+I8EzI7VdukyCoB7Op1L
+         /t9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BfmjP2mndLDes9oQRNaJXeRDdi6D0K9ObPAqlxFeEu0=;
+        b=2sjVUdg5oBfabPBK8bVxKMOSAXBCt7AbLvZrkKKBe52faMAcKZogMZAGeVhrCfupIH
+         YST2rXghpDw8OwXdAFsqUkJafVanZKF3Yf2Bkph3YGa8ThF5jhAaXl0cWCDH1q8n4kkH
+         A6P1GWqkpclUTPOFge5KKtY8Yk4tYUk4In4BQOZQzbr9UwSLOYg7LBsz3YM3FQvoXQFq
+         uSRUd0URiLKmChhzcpoShnovUIR1MMjcVGFHkaPHgb3C+9WOrwHUEw9obS3CbqzzDiYi
+         Gqk6CCDvwt8LMeNav6aj7kOE8Kp6JbJnnrPNq+Q5tojUgt3jfBrFUBFDOwLVt17omvaK
+         e9pQ==
+X-Gm-Message-State: AFqh2ko69UxiYv0d/A6uvtZovqIX8gy1VtPzMjFSTVmw60ZiE6TCaqTa
+        EG5BGD40YjFGWBP8b96omARUHpeDh8cuqZiKz4qUjw==
+X-Google-Smtp-Source: AMrXdXtzQNFiyh4xIRzhYuKtkMcUQ2K4IiyYKYar0Jys/Q3OEqkhPu8uyjJho++He3RsqGUv1AZTzdsWHegUt+RO7OQ=
+X-Received: by 2002:a05:6870:b8f:b0:153:8960:d987 with SMTP id
+ lg15-20020a0568700b8f00b001538960d987mr1155220oab.103.1673285121011; Mon, 09
+ Jan 2023 09:25:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1880793.1673257404@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230107011025.565472-1-seanjc@google.com> <20230107011025.565472-6-seanjc@google.com>
+In-Reply-To: <20230107011025.565472-6-seanjc@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 9 Jan 2023 09:25:09 -0800
+Message-ID: <CALMp9eQRc7rFruYQiaP1wUfPpvp4oVE=JX=TDtR=WZSoC6Nb2w@mail.gmail.com>
+Subject: Re: [PATCH 5/6] KVM: VMX: Always intercept accesses to unsupported
+ "extended" x2APIC regs
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Orr <marcorr@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Venkatesh Srinivas <venkateshs@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-01-23 09:43:24, David Howells wrote:
-> Jens Axboe <axboe@kernel.dk> wrote:
-> 
-> > > A field, bi_cleanup_mode, is added to the bio struct that gets set by
-> > > iov_iter_extract_pages() with FOLL_* flags indicating what cleanup is
-> > > necessary.  FOLL_GET -> put_page(), FOLL_PIN -> unpin_user_page().  Other
-> > > flags could also be used in future.
-> > > 
-> > > Newly allocated bio structs have bi_cleanup_mode set to FOLL_GET to
-> > > indicate that attached pages are ref'd by default.  Cloning sets it to 0.
-> > > __bio_iov_iter_get_pages() overrides it to what iov_iter_extract_pages()
-> > > indicates.
-> > 
-> > What's the motivation for this change?
-> 
-> DIO reads in most filesystems and, I think, the block layer are currently
-> broken with respect to concurrent fork in the same process because they take
-> refs (FOLL_GET) on the pages involved which causes the CoW mechanism to
-> malfunction, leading (I think) the parent process to not see the result of the
-> DIO.  IIRC, the pages undergoing DIO get forcibly copied by fork - and the
-> copies given to the parent.  Instead, DIO reads should be pinning the pages
-> (FOLL_PIN).  Maybe Willy can weigh in on this?
-> 
-> Further, getting refs on pages in, say, a KVEC iterator is the wrong
-> thing to do as the kvec may point to things that shouldn't be ref'd
-> (vmap'd or vmalloc'd regions, for example).  Instead, the in-kernel
-> caller should do what it needs to do to keep hold of the memory and the
-> DIO should not take a ref at all.
+On Fri, Jan 6, 2023 at 5:10 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Don't clear the "read" bits for x2APIC registers above SELF_IPI (APIC regs
 
-Yes, plus there is also a problem if user sets up a DIO read into a buffer
-backed by memory mapped file, then these mapped pages can be cleaned by
-writeback while the DIO read is running causing checksum failures or
-DIF/DIX failures. Also once the writeback is done, the filesystem currently
-thinks it controls all paths modifying page data and thus can happily go on
-deduplicating file blocks or do similar stuff although pages are
-concurrently modified by DIO read possibly causing data corruption. See [1]
-for more details why filesystems have a problem with this. So filesystems
-really need DIO reads to use FOLL_PIN instead of FOLL_GET and consequently
-we need to pass information to bio completion function how page references
-should be dropped.
+Odd use of quotation marks in the shortlog  and here.
 
-								Honza
-
-[1] https://lore.kernel.org/all/20180103100430.GE4911@quack2.suse.cz/ 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 0x400 - 0xff0, MSRs 0x840 - 0x8ff).  KVM doesn't emulate registers in that
+> space (there are a smattering of AMD-only extensions) and so should
+> intercept reads in order to inject #GP.  When APICv is fully enabled,
+> Intel hardware doesn't validate the registers on RDMSR and instead blindly
+> retrieves data from the vAPIC page, i.e. it's software's responsibility to
+> intercept reads to non-existent MSRs.
+>
+> Fixes: 8d14695f9542 ("x86, apicv: add virtual x2apic support")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
