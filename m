@@ -2,131 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBF1662324
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215EB662329
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbjAIKYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S233238AbjAIKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237131AbjAIKXM (ORCPT
+        with ESMTP id S236892AbjAIKYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:23:12 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2058.outbound.protection.outlook.com [40.107.244.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA746186AC;
-        Mon,  9 Jan 2023 02:21:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kDqclpScFQIZf71oT80czfOHLFj+8fy4iR7A2VdeLIl9nG0NuvEUNjYEPV8u61LYj8nwVK/huh3ADcvepmmDw1aUvJ/4FAiTvy7uKwOvIU1MwMMOSolCnU8HkjiOxuGD9C5UxJb0AAj3L2M+sO5j3PVcYOYqdELOo3sqeamZ6+/U7Cofk4/MNRvg5Pi2TIbYSErt17B5F/BiIZJ1IDIK/EVnP0QOLVxftrJwdhcSpTtg4Pyxr5+JB9APh51fuGiw25IvlyixnAKe67unmpmTbxts1zkNGCdfwxjVB70cc92AKPOyZZKqNl6EDtYINxy3ilMlpn2lkQDs1ALqJCslrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kUPaZxOqPv/bp7yRxTt/JKhgQbGK00RuI2OXHa9gDWM=;
- b=GLRtN2EZXu6zunykJ1R+jswGWY2o8hoR2R8/qSOOtL9c2G+cMoWT33rb9XDfzKz3SHFU8UFe4AhX0KIogW1Ej/jYODCHhg+FXj1SOmgWOg2sqpJL9OETxOQCQd0TYgW0c4V+DBM96fO8ibIEvBfbhFyeM+Ypros8zG3PSzGacMc8NfcfJ0YS5/sG+He0krCx8oSYWJFTk4/SzZsYl15kyafEJpYw2AZmy6lTUBt+1q2hUElCKGEKScZX1mxWy5kcX0F2yX+eDv3rMzeCnaZAYh9ynbDt2qRHkXf15sX6SJCbpLwE9UGOg9n47flS38XbynYQJHs4fPe+PBKNmqls2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kUPaZxOqPv/bp7yRxTt/JKhgQbGK00RuI2OXHa9gDWM=;
- b=zXhf714YSRsuEfIdP6D62aOSnJPBe54FEhnJK07XnYvdaZyFnLisAsWctZxBBxqlIwWfBWsuNuG1cKL9wGl/XwVTG+lA8CUCaP6DETYjH7SpWpY03EO7kiiIfwtHB3rKh19YfahPfvb6XA0JG8xTBSoddgIEZjNrYCRE6yXROFQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com (2603:10b6:208:394::20)
- by CY8PR12MB7339.namprd12.prod.outlook.com (2603:10b6:930:51::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 10:21:25 +0000
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::e36e:5151:6912:18e]) by BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::e36e:5151:6912:18e%5]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 10:21:25 +0000
-Message-ID: <c5956679-82c1-336b-3190-de32db1c0926@amd.com>
-Date:   Mon, 9 Jan 2023 15:51:11 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net-next 08/11] sfc: implement device status related vdpa
- config operations
-To:     Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@amd.com>
-Cc:     linux-net-drivers@amd.com, netdev@vger.kernel.org,
-        eperezma@redhat.com, tanuj.kamde@amd.com, Koushik.Dutta@amd.com,
-        harpreet.anand@amd.com, Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <20221207145428.31544-1-gautam.dawar@amd.com>
- <20221207145428.31544-9-gautam.dawar@amd.com>
- <CACGkMEtGCbUBZRFh7EUJyymuWZ9uxiAOeJHA6h-dGa9Y3pDZGw@mail.gmail.com>
-Content-Language: en-US
-From:   Gautam Dawar <gdawar@amd.com>
-In-Reply-To: <CACGkMEtGCbUBZRFh7EUJyymuWZ9uxiAOeJHA6h-dGa9Y3pDZGw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0067.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::7) To BL1PR12MB5825.namprd12.prod.outlook.com
- (2603:10b6:208:394::20)
+        Mon, 9 Jan 2023 05:24:38 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3174895BA;
+        Mon,  9 Jan 2023 02:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673259877; x=1704795877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t7piUvgFVAZlRcs6FJ2kBJ8E4oIW/FTU20o4L5Xp3uU=;
+  b=vQDCn53hYNOmWBuIKPjkNZGR3GYgYAV83bg7x/adtRsNw+kL3UiLu2Vv
+   TimwLeH0/SHccqIzSy1vU8XvwV1CcRvDCQILT9B5KPo5oYQPxbkFWJk31
+   tMv7LPD8JbYKE/8+Dx8WVpguycjrgCIu2vywOMehTOEGqX8gwaap68VAQ
+   fs3XAkp5CQ6TUhQm8l0vF7+C6w0v3ZCjiGzCMFyQCAu/93kLO0NRvhF1m
+   PRcids8AOLkSi9kVTuQtU4HorlqMi68VDLZm+XX56l+yXOW7p8FrpZ0jO
+   C7t7pF2Wq6LReeYVyJvuOPThNgjvYHlECFvNd7BIUeFxieCskaPS9WDqF
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="asc'?scan'208";a="195843441"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2023 03:24:35 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 9 Jan 2023 03:24:35 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 9 Jan 2023 03:24:32 -0700
+Date:   Mon, 9 Jan 2023 10:24:11 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <palmer@dabbelt.com>,
+        <atishp@rivosinc.com>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <apatel@ventanamicro.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <opensbi@lists.infradead.org>,
+        <samuel@sholland.org>
+Subject: Re: [PATCH v4] dt-bindings: riscv: add SBI PMU event mappings
+Message-ID: <Y7vrS4S1NIyV3fJI@wendy>
+References: <20230108215047.3165032-1-conor@kernel.org>
+ <20230109092715.bwomqoeosif43lr2@orel>
+ <Y7vpxW1AeEOhcxUf@wendy>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5825:EE_|CY8PR12MB7339:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d5a708e-e0a0-4319-a176-08daf22b42fb
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NMpHUJm8mROg2blvfUccrDvG2jnXLwYYw7WxH9YORLhmIbne0Rh0+AYZYlEd1CgkMWmXetVIwoWgDFEmEXJ7ojl0xQFxI1acLZH4XAkpr+gY47v6+H5aA1GHj2B8YnEKwEBOu1uH4q2hwzTy9u/QudsZn1waARAMv60iFnFGGBriRwzyzE/0yDp3mwdXtBVvtAzKxsdksLp86g5zUXDz9freveCON1XqI1cweQ605IqiUTvkiwNFwNbzHyqXPM2XTPjXJoMM27aItXysD/T3dOknNIzMvU8d57Ark1xzOITcpayGCzVdHfqH0WzRECX7kZr/OleikQADms2JA907w2uACug8VHcV7iIWTBXf89lWoFzrTeBjmQE6XYRReP4mInpWdZ7Iubl2HYxkVURFxfn7TevpHeWKnLy/T2ChopOzQ8P0s6sg60/WE7gBRN6laQ9aHMOLNHpGRd1FoeBtA9uC1wjcfqc6An+fRg9Q0UEIBXCoLqfXvwwgGBm21GQylOweaeudPqmhBTLSvFX+MC6qLct7WKk+9vtDt//7ke1bh5/87HCaztdS3dIIbLgWQliF38pZpttx4vnto0vmL93MlOcqzNGBJfJKmCOqZknOtxKcLwDcZeKoq0FTlVWfOD1r0hst1INB9BQwTYnmAz1WkNZtrScYSLAqk3RvYcHyKADaCN14/HYPJjHIoVm6rvvQI1snk7M6g2HYCG8gLrXWuJ9toMZ9i5MfmiHw8FM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5825.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(36756003)(6636002)(186003)(53546011)(8936002)(6666004)(26005)(6506007)(6512007)(2616005)(110136005)(54906003)(5660300002)(66946007)(7416002)(66476007)(66556008)(4326008)(316002)(31696002)(6486002)(38100700002)(478600001)(41300700001)(31686004)(8676002)(2906002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b0phUzQwdGJtSG9IaWRnMWI5UStzUUVrRm1vdWtKMUNha2FLV3ZkVGc0aGRP?=
- =?utf-8?B?R2xWLzBQUllhbE9Wdk5BeGxhZk95SVZ6MklJT0gyeW1HYlVxVDFtS1lIQjB2?=
- =?utf-8?B?QXBwR09wUmhPMWRRZE1XMTB2KzlUdUdWT3ZBaEhvU1hCaW02YmhMQzVKK0pN?=
- =?utf-8?B?a0thVDNVTHhhbVRJWXhMWHk2amcraUIwWVVlTkNFVU12SC92bmNNOEV5NWFW?=
- =?utf-8?B?TzJES0xSenRsM0FJeG9DMFQ2NTZ3Sk9oQ2lZWkt2djdUcGpkSnZJdHZHdURk?=
- =?utf-8?B?QXZnaEhjdkE2d3NaWENiY2Y2cVlUVFRDSDJaalhMVmE5azBlOWFNc2J1UmZK?=
- =?utf-8?B?Mk90ck1pWDJRTW1LeDBrTVYweWlaVXAxWW1BSVh2VWs1SEpmUE5NdlJBcnl1?=
- =?utf-8?B?aVFoL2NaeVI2ckMzbk1pRU9ELzlJcWQ0Q3dyTGxYQjBOZTZwYUR5a2VzT2Ft?=
- =?utf-8?B?NWhuMjVOK1AvTzhhMDl1c1BOQ2lWRnpqNWVrSlBtM0ROTXRPTDZQSWZYaUd3?=
- =?utf-8?B?b1VweDlmdHRmYUJOS3ZQTWpic0JiejFQa2o2cTk1dFJMSEVldEJEaVhDZUFY?=
- =?utf-8?B?QmZZMWRkeWdXbzhldHZNTEUvY1NSdWFpdHFmNVZQTTVPMGhTazNaQ3JRbDJQ?=
- =?utf-8?B?akhVdWp2ZXdTMDg5bEtNUU8raUpCWjBzWGtoeVcrRm9ueFY1YjJFS3VsVXdi?=
- =?utf-8?B?eVVrVTV4b012aHRlWmZ4K2krdG82bExyNFZkYVVLb0xTY054Q3FqdksvWFJQ?=
- =?utf-8?B?YmtucGV6OFBOL3FWTkZIdTI4YTloZWNSa1poQXlMME5QQ1YycnQ5QTRlNk4v?=
- =?utf-8?B?MHVJaWJWL25odTI5aVVZTnJuRy9tZ1AvaU9CZm9rdTZOYmhIOXlkaFVNYjdS?=
- =?utf-8?B?dTI2RmxGdXR3Z1d6MWZUdkJKVTZoUXVhMmxGVTJWZkpHL2ZoaE9tZm1HNGNl?=
- =?utf-8?B?ZzcwNks3ZGpkYkdMSVhHWkkzN1pMdUNqTi93cEluVGoybHFwSGlRNUVoeU11?=
- =?utf-8?B?Nml6cTAyZ1ZSb0Y3dDRkMWJuWG0wWlA0dDFXNHhoanFzR0U4S1hCVUJRajd0?=
- =?utf-8?B?U2pMd2FPWE5hek1zTS9Cd2U5RDNYL2lvaC9hNlcrRE5wS09wU0M4eVpkelNZ?=
- =?utf-8?B?Y2c0bjVIc1lHUkUycmc5S0dhbk1sRXpvaHNqQ3IwejRMZ2p0d1VZTDFMR1pF?=
- =?utf-8?B?d1RwMGRyMDF5aVRSbkFZVTFoNWFmR0VwQm9UVUpIV0V4ZVkrNE5tcXJMMXNW?=
- =?utf-8?B?QXYwY29ON1lVOCtKSzl4Y1ZPZTZTNVBZcTMzOHk2WFZtRzYrWUVzOXloUTQz?=
- =?utf-8?B?N0NvY3MyQ1J5WGc3OUE2Z0RhaFRGdlZ5VGxiSmZ6MDhuQUcvZWpFd3RtNXRJ?=
- =?utf-8?B?b3NQQTNWcU8wdE5lOEhoUTlqODZlYWVheXZXNm9KczZiWWgzQ0N4OGFiS1dM?=
- =?utf-8?B?VkxnOXpWOUUxSXBhK0pCQ0l1S2o2WWZkRlVBZEpqdlNSOVhrMExuMEpHcG9z?=
- =?utf-8?B?eTl1cjdyNStsc0FVWXRUSXduTiswT2ljN2VYNnIyalEyQVpZS3daQTRSZzhJ?=
- =?utf-8?B?OEV5ckRQMDc3b2NFWWtFYjNaVWc1OXpIdnhKRDloYkZBQWdYTDl4dFg3dmln?=
- =?utf-8?B?NG9OeENHVG44OUxPdExTQ3F3eHVHNDhOK0hocXU3cndPdFRPTCt1NFNEcis5?=
- =?utf-8?B?ZVJxTEg0K1Y3L3FZNkRDY05hSkRxNnNUTjJrSnp4VFl1OWFCbVUyakhOYnls?=
- =?utf-8?B?bVVraUlwMFdGcHoyeWFyb2NjMUo3eGx5UjdPWi9ieW9ReHhIL3JDdDNKTWZk?=
- =?utf-8?B?VTdwS0tyeWcvcFNSOU4xNkNWK0duZXJSVnI3S1lQSFRiV2prWVB0R3Z6akxj?=
- =?utf-8?B?OWhEb1BxL1NWU3ZYWjl1R1BkRnRYNCtORS9pbGQ1dlI3Zjd4dFM5NWU1VmZ5?=
- =?utf-8?B?aGFHa1MzblZSRmg0S3JrM1oxZmkvY1RKaTVQNkI3and0Qmt0RWtzSXMyeWxm?=
- =?utf-8?B?c0ZJQndHT2lpemF4blNjYjFBUi9hSmg5QUxXRVhsUEpDNnJLeFJWSEQzempk?=
- =?utf-8?B?Uldnci9pVFN6KzY3dUtXOWE0bkJhd3hJc3R5UHY3a041cjZlUHlnWXp4V0lw?=
- =?utf-8?Q?Rmv2EoEGLeSCxXw0UMjRf9O4a?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d5a708e-e0a0-4319-a176-08daf22b42fb
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5825.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 10:21:25.0930
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3l7SVhz4NrtI5qkJkoAnLpfOBeoRaTrA7ZMP7EeftCBK6CcafKVX4soB1p7QGwL5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7339
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="n57OAywK18Rpbp8P"
+Content-Disposition: inline
+In-Reply-To: <Y7vpxW1AeEOhcxUf@wendy>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -135,202 +70,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--n57OAywK18Rpbp8P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/14/22 12:15, Jason Wang wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->
->
-> On Wed, Dec 7, 2022 at 10:57 PM Gautam Dawar <gautam.dawar@amd.com> wrote:
->> vDPA config opertions to handle get/set device status and device
->> reset have been implemented.
->>
->> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
->> ---
->>   drivers/net/ethernet/sfc/ef100_vdpa.c     |   7 +-
->>   drivers/net/ethernet/sfc/ef100_vdpa.h     |   1 +
->>   drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 133 ++++++++++++++++++++++
->>   3 files changed, 140 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c b/drivers/net/ethernet/sfc/ef100_vdpa.c
->> index 04d64bfe3c93..80bca281a748 100644
->> --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
->> @@ -225,9 +225,14 @@ static int vdpa_allocate_vis(struct efx_nic *efx, unsigned int *allocated_vis)
->>
->>   static void ef100_vdpa_delete(struct efx_nic *efx)
->>   {
->> +       struct vdpa_device *vdpa_dev;
->> +
->>          if (efx->vdpa_nic) {
->> +               vdpa_dev = &efx->vdpa_nic->vdpa_dev;
->> +               ef100_vdpa_reset(vdpa_dev);
-> Any reason we need to reset during delete?
-ef100_reset_vdpa_device() does the necessary clean-up including freeing 
-irqs, deleting filters and deleting the vrings which is required while 
-removing the vdpa device or unloading the driver.
->
->> +
->>                  /* replace with _vdpa_unregister_device later */
->> -               put_device(&efx->vdpa_nic->vdpa_dev.dev);
->> +               put_device(&vdpa_dev->dev);
->>                  efx->vdpa_nic = NULL;
->>          }
->>          efx_mcdi_free_vis(efx);
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet/sfc/ef100_vdpa.h
->> index a33edd6dda12..1b0bbba88154 100644
->> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
->> @@ -186,6 +186,7 @@ int ef100_vdpa_add_filter(struct ef100_vdpa_nic *vdpa_nic,
->>                            enum ef100_vdpa_mac_filter_type type);
->>   int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, u16 nvqs);
->>   void ef100_vdpa_irq_vectors_free(void *data);
->> +int ef100_vdpa_reset(struct vdpa_device *vdev);
->>
->>   static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic *vdpa_nic)
->>   {
->> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->> index 132ddb4a647b..718b67f6da90 100644
->> --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->> @@ -251,6 +251,62 @@ static bool is_qid_invalid(struct ef100_vdpa_nic *vdpa_nic, u16 idx,
->>          return false;
->>   }
->>
->> +static void ef100_reset_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
->> +{
->> +       int i;
->> +
->> +       WARN_ON(!mutex_is_locked(&vdpa_nic->lock));
->> +
->> +       if (!vdpa_nic->status)
->> +               return;
->> +
->> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_INITIALIZED;
->> +       vdpa_nic->status = 0;
->> +       vdpa_nic->features = 0;
->> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++)
->> +               reset_vring(vdpa_nic, i);
->> +}
->> +
->> +/* May be called under the rtnl lock */
->> +int ef100_vdpa_reset(struct vdpa_device *vdev)
->> +{
->> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->> +
->> +       /* vdpa device can be deleted anytime but the bar_config
->> +        * could still be vdpa and hence efx->state would be STATE_VDPA.
->> +        * Accordingly, ensure vdpa device exists before reset handling
->> +        */
->> +       if (!vdpa_nic)
->> +               return -ENODEV;
->> +
->> +       mutex_lock(&vdpa_nic->lock);
->> +       ef100_reset_vdpa_device(vdpa_nic);
->> +       mutex_unlock(&vdpa_nic->lock);
->> +       return 0;
->> +}
->> +
->> +static int start_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
->> +{
->> +       int rc = 0;
->> +       int i, j;
->> +
->> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
->> +               if (can_create_vring(vdpa_nic, i)) {
->> +                       rc = create_vring(vdpa_nic, i);
-> So I think we can safely remove the create_vring() in set_vq_ready()
-> since it's undefined behaviour if set_vq_ready() is called after
-> DRIVER_OK.
-Is this (undefined) behavior documented in the virtio spec? If so, can 
-you please point me to the section of virtio spec that calls this order 
-(set_vq_ready() after setting DRIVER_OK) undefined? Is it just that the 
-queue can't be enabled after DRIVER_OK or the reverse (disabling the 
-queue) after DRIVER_OK is not allowed?
->
->> +                       if (rc)
->> +                               goto clear_vring;
->> +               }
->> +       }
->> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_STARTED;
->> +       return rc;
->> +
->> +clear_vring:
->> +       for (j = 0; j < i; j++)
->> +               if (vdpa_nic->vring[j].vring_created)
->> +                       delete_vring(vdpa_nic, j);
->> +       return rc;
->> +}
->> +
->>   static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
->>                                       u16 idx, u64 desc_area, u64 driver_area,
->>                                       u64 device_area)
->> @@ -568,6 +624,80 @@ static u32 ef100_vdpa_get_vendor_id(struct vdpa_device *vdev)
->>          return EF100_VDPA_VENDOR_ID;
->>   }
->>
->> +static u8 ef100_vdpa_get_status(struct vdpa_device *vdev)
->> +{
->> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->> +       u8 status;
->> +
->> +       mutex_lock(&vdpa_nic->lock);
->> +       status = vdpa_nic->status;
->> +       mutex_unlock(&vdpa_nic->lock);
->> +       return status;
->> +}
->> +
->> +static void ef100_vdpa_set_status(struct vdpa_device *vdev, u8 status)
->> +{
->> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->> +       u8 new_status;
->> +       int rc;
->> +
->> +       mutex_lock(&vdpa_nic->lock);
->> +       if (!status) {
->> +               dev_info(&vdev->dev,
->> +                        "%s: Status received is 0. Device reset being done\n",
->> +                        __func__);
->> +               ef100_reset_vdpa_device(vdpa_nic);
->> +               goto unlock_return;
->> +       }
->> +       new_status = status & ~vdpa_nic->status;
->> +       if (new_status == 0) {
->> +               dev_info(&vdev->dev,
->> +                        "%s: New status same as current status\n", __func__);
->> +               goto unlock_return;
->> +       }
->> +       if (new_status & VIRTIO_CONFIG_S_FAILED) {
->> +               ef100_reset_vdpa_device(vdpa_nic);
->> +               goto unlock_return;
->> +       }
->> +
->> +       if (new_status & VIRTIO_CONFIG_S_ACKNOWLEDGE &&
->> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
-> As replied before, I think there's no need to check
-> EF100_VDPA_STATE_INITIALIZED, otherwise it could be a bug somewhere.
-Ok. Will remove the check against EF100_VDPA_STATE_INITIALIZED.
->> +               vdpa_nic->status |= VIRTIO_CONFIG_S_ACKNOWLEDGE;
->> +               new_status &= ~VIRTIO_CONFIG_S_ACKNOWLEDGE;
->> +       }
->> +       if (new_status & VIRTIO_CONFIG_S_DRIVER &&
->> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
->> +               vdpa_nic->status |= VIRTIO_CONFIG_S_DRIVER;
->> +               new_status &= ~VIRTIO_CONFIG_S_DRIVER;
->> +       }
->> +       if (new_status & VIRTIO_CONFIG_S_FEATURES_OK &&
->> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
->> +               vdpa_nic->status |= VIRTIO_CONFIG_S_FEATURES_OK;
->> +               vdpa_nic->vdpa_state = EF100_VDPA_STATE_NEGOTIATED;
-> I think we can simply map EF100_VDPA_STATE_NEGOTIATED to
-> VIRTIO_CONFIG_S_FEATURES_OK.
->
-> E.g the code doesn't fail the feature negotiation by clearing the
-> VIRTIO_CONFIG_S_FEATURES_OK when ef100_vdpa_set_driver_feature fails?
-Ok.
->
-> Thanks
+On Mon, Jan 09, 2023 at 10:17:41AM +0000, Conor Dooley wrote:
+> On Mon, Jan 09, 2023 at 10:27:15AM +0100, Andrew Jones wrote:
+> > On Sun, Jan 08, 2023 at 09:50:48PM +0000, Conor Dooley wrote:
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > >=20
+> > > The SBI PMU extension requires a firmware to be aware of the event to
+> > > counter/mhpmevent mappings supported by the hardware. OpenSBI may use
+> > > DeviceTree to describe the PMU mappings. This binding is currently
+> > > described in markdown in OpenSBI (since v1.0 in Dec 2021) & used by Q=
+EMU
+> > > since v7.2.0.
+> > >=20
+> > > Import the binding for use while validating dtb dumps from QEMU and
+> > > upcoming hardware (eg JH7110 SoC) that will make use of the event
+> > > mapping.
+> > >=20
+> > > Link: https://github.com/riscv-software-src/opensbi/blob/master/docs/=
+pmu_support.md
+> > > Link: https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/risc=
+v-sbi.adoc # Performance Monitoring Unit Extension
+> > > Co-developed-by: Atish Patra <atishp@rivosinc.com>
+> > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > > Changes in v4:
+> > > - A bunch of minor description/comment changes suggested by Drew
+> > >=20
+> > > Changes in v3:
+> > > - align descriptions to SBI spec (and fix a misinterpretation of mine)
+> > > - switch to a nested items description, since the descriptions are for
+> > >   the elements of each entry, not the entries themselves
+> > >=20
+> > > Changes in v2:
+> > > - use the schema mechanism for dependancies between properties
+> > > - +CC perf maintainers...
+> > > - move the matrix element descriptions into regular item descriptions
+> > >   rather than doing so freeform in the property description
+> > > - drop some description text that no longer applies since changes were
+> > >   made to the SBI spec
+> > > - drop mention of the "generic platform" which is OpenSBI specific
+> > > - drop the min/max items from the matrices, they don't appear to be
+> > >   needed?
+> > >=20
+> > > Note:
+> > > OpenSBI is BSD-2-Clause licensed so I am unsure as to whether I can
+> > > submit it with a dual license.
+> > > ---
+> > >  .../devicetree/bindings/perf/riscv,pmu.yaml   | 160 ++++++++++++++++=
+++
+> > >  1 file changed, 160 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/perf/riscv,pmu.=
+yaml
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/perf/riscv,pmu.yaml b/=
+Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> > > new file mode 100644
+> > > index 000000000000..5e7a54e3d91b
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> > > @@ -0,0 +1,160 @@
+> > > +# SPDX-License-Identifier: BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/perf/riscv,pmu.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: RISC-V SBI PMU events
+> > > +
+> > > +maintainers:
+> > > +  - Atish Patra <atishp@rivosinc.com>
+> > > +
+> > > +description: |
+> > > +  The SBI PMU extension allows supervisor software to configure, sta=
+rt and
+> > > +  stop any performance counter at anytime. Thus, a user can leverage=
+ all
+> > > +  capabilities of performance analysis tools, such as perf, if the S=
+BI PMU
+> > > +  extension is enabled. The following constraints apply:
+> > > +
+> > > +    The platform must provide information about PMU event to counter=
+ mappings
+> > > +    via device tree or platform specific hooks. Otherwise, the SBI P=
+MU
+> > > +    extension will not be enabled.
+> > > +
+> > > +    Platforms should provide information about the PMU event selecto=
+r values
+> > > +    that should be encoded in the expected value of MHPMEVENTx while=
+ configuring
+> > > +    MHPMCOUNTERx for that specific event. This can be done via a dev=
+ice tree or
+> > > +    platform specific hooks. The exact value to be written to MHPMEV=
+ENTx is
+> > > +    completely dependent on the platform.
+> >=20
+> > The previous two paragraphs reference 'platform specific hooks'. I don't
+> > think this DT-specific description, as opposed to the more general Open=
+SBI
+> > description it's derived from, should reference the hooks, as "hooks"
+> > aren't defined in this context.
+>=20
+> Do you have any suggestion about how it should be worded? It is
+> apparently valid to have only a compatible string in the dt-binding and
 
-Regards,
+Meh, DT itself not dt-binding. The binding only "enforces"/documents that
+lax requirement.
 
-Gautam
+> rely on using platform hooks to communicate the mapping. In that case,
+> the dt-binding only communicates the presence of SBI PMU support.
+> IMO, if we don't mention that that is a valid way, the fact that we only
+> require a compatible for a DT to be valid looks like a mistake in the
+> binding.
+>=20
+> Thanks,
+> Conor.
+>=20
+> > > +    For information on the SBI specification see the section "Perfor=
+mance
+> > > +    Monitoring Unit Extension" of:
+> > > +      https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/ris=
+cv-sbi.adoc
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: riscv,pmu
+> > > +
+> > > +  riscv,event-to-mhpmevent:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > > +    description:
+> > > +      Represents an ONE-to-ONE mapping between a PMU event and the e=
+vent
+> > > +      selector value that the platform expects to be written to the =
+MHPMEVENTx
+> > > +      CSR for that event.
+> > > +      The mapping is encoded in an matrix format where each element =
+represents
+> > > +      an event.
+> > > +      This property shouldn't encode any raw hardware event.
+> > > +    items:
+> > > +      items:
+> > > +        - description: event_idx, a 20-bit wide encoding of the even=
+t type and
+> > > +            code. Refer to the SBI specification for a complete desc=
+ription of
+> > > +            the event types and codes.
+> > > +        - description: upper 32 bits of the event selector value for=
+ MHPMEVENTx
+> > > +        - description: lower 32 bits of the event selector value for=
+ MHPMEVENTx
+> > > +
+> > > +  riscv,event-to-mhpmcounters:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > > +    description:
+> > > +      Represents a MANY-to-MANY mapping between a range of events an=
+d all the
+> > > +      MHPMCOUNTERx in a bitmap format that can be used to monitor th=
+ese range
+> > > +      of events. The information is encoded in an matrix format wher=
+e each
+> > > +      element represents a certain range of events and corresponding=
+ counters.
+> > > +      This property shouldn't encode any raw event.
+> > > +    items:
+> > > +      items:
+> > > +        - description: first event_idx of the range of events
+> > > +        - description: last event_idx of the range of events
+> > > +        - description: bitmap of MHPMCOUNTERx for this event
+> > > +
+> > > +  riscv,raw-event-to-mhpmcounters:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > > +    description:
+> > > +      Represents an ONE-to-MANY or MANY-to-MANY mapping between the =
+rawevent(s)
+> > > +      and all the MHPMCOUNTERx in a bitmap format that can be used t=
+o monitor
+> > > +      that raw event.
+> > > +      The encoding of the raw events are platform specific. The info=
+rmation is
+> > > +      encoded in a matrix format where each element represents the s=
+pecific raw
+> > > +      event(s).
+> > > +      If a platform directly encodes each raw PMU event as a unique =
+ID, the
+> > > +      value of variant must be 0xffffffff_ffffffff.
+> > > +    items:
+> > > +      items:
+> > > +        - description:
+> > > +            upper 32 invariant bits for the range of events
+> > > +        - description:
+> > > +            lower 32 invariant bits for the range of events
+> > > +        - description:
+> > > +            upper 32 bits of the variant bit mask for the range of e=
+vents
+> > > +        - description:
+> > > +            lower 32 bits of the variant bit mask for the range of e=
+vents
+> > > +        - description:
+> > > +            bitmap of all MHPMCOUNTERx that can monitor the range of=
+ events
+> > > +
+> > > +dependencies:
+> > > +  "riscv,event-to-mhpmevent": [ "riscv,event-to-mhpmcounters" ]
+> > > +  "riscv,event-to-mhpmcounters": [ "riscv,event-to-mhpmevent" ]
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    pmu {
+> > > +        compatible =3D "riscv,pmu";
+> > > +        riscv,event-to-mhpmevent =3D <0x0000B 0x0000 0x0001>;
+> > > +        riscv,event-to-mhpmcounters =3D <0x00001 0x00001 0x00000001>,
+> > > +                                      <0x00002 0x00002 0x00000004>,
+> > > +                                      <0x00003 0x0000A 0x00000ff8>,
+> > > +                                      <0x10000 0x10033 0x000ff000>;
+> > > +        riscv,raw-event-to-mhpmcounters =3D
+> > > +            /* For event ID 0x0002 */
+> > > +            <0x0000 0x0002 0xffffffff 0xffffffff 0x00000f8>,
+> > > +            /* For event ID 0-4 */
+> > > +            <0x0 0x0 0xffffffff 0xfffffff0 0x00000ff0>,
+> > > +            /* For event ID 0xffffffff0000000f - 0xffffffff000000ff =
+*/
+> > > +            <0xffffffff 0x0 0xffffffff 0xffffff0f 0x00000ff0>;
+> > > +    };
+> > > +
+> > > +  - |
+> > > +    /*
+> > > +     * For HiFive Unmatched board the encodings can be found here
+> > > +     * https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-=
+86ed8b16acba_fu740-c000-manual-v1p6.pdf
+> > > +     *
+> > > +     * This example also binds standard SBI PMU hardware IDs to U74 =
+PMU event
+> > > +     * codes, U74 uses a bitfield for events encoding, so several U7=
+4 events
+> > > +     * can be bound to a single perf ID.
+> > > +     * See SBI PMU hardware IDs in arch/riscv/include/asm/sbi.h
+> > > +     */
+> > > +    pmu {
+> > > +          compatible =3D "riscv,pmu";
+> > > +          riscv,event-to-mhpmevent =3D
+> > > +              /* SBI_PMU_HW_CACHE_REFERENCES -> Instruction or Data =
+cache/ITIM busy */
+> > > +              <0x00003 0x00000000 0x1801>,
+> > > +              /* SBI_PMU_HW_CACHE_MISSES -> Instruction or Data cach=
+e miss or MMIO access */
+> > > +              <0x00004 0x00000000 0x0302>,
+> > > +              /* SBI_PMU_HW_BRANCH_INSTRUCTIONS -> Conditional branc=
+h retired */
+> > > +              <0x00005 0x00000000 0x4000>,
+> > > +              /* SBI_PMU_HW_BRANCH_MISSES -> Branch or jump mispredi=
+ction */
+> > > +              <0x00006 0x00000000 0x6001>,
+> > > +              /* L1D_READ_MISS -> Data cache miss or MMIO access */
+> > > +              <0x10001 0x00000000 0x0202>,
+> > > +              /* L1D_WRITE_ACCESS -> Data cache write-back */
+> > > +              <0x10002 0x00000000 0x0402>,
+> > > +              /* L1I_READ_ACCESS -> Instruction cache miss */
+> > > +              <0x10009 0x00000000 0x0102>,
+> > > +              /* LL_READ_MISS -> UTLB miss */
+> > > +              <0x10011 0x00000000 0x2002>,
+> > > +              /* DTLB_READ_MISS -> Data TLB miss */
+> > > +              <0x10019 0x00000000 0x1002>,
+> > > +              /* ITLB_READ_MISS-> Instruction TLB miss */
+> > > +              <0x10021 0x00000000 0x0802>;
+> > > +          riscv,event-to-mhpmcounters =3D <0x00003 0x00006 0x18>,
+> > > +                                        <0x10001 0x10002 0x18>,
+> > > +                                        <0x10009 0x10009 0x18>,
+> > > +                                        <0x10011 0x10011 0x18>,
+> > > +                                        <0x10019 0x10019 0x18>,
+> > > +                                        <0x10021 0x10021 0x18>;
+> > > +          riscv,raw-event-to-mhpmcounters =3D <0x0 0x0 0xffffffff 0x=
+fc0000ff 0x18>,
+> > > +                                            <0x0 0x1 0xffffffff 0xff=
+f800ff 0x18>,
+> > > +                                            <0x0 0x2 0xffffffff 0xff=
+ffe0ff 0x18>;
+> > > +    };
+> > > --=20
+> > > 2.39.0
+> > >
+> >=20
+> > Besides the comment above,
+> >=20
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> >=20
+> > Thanks,
+> > drew
+> >=20
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
+
+
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
+--n57OAywK18Rpbp8P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7vrSwAKCRB4tDGHoIJi
+0rtIAP9OgKUHF/vkmIB1SlBWT8I2YiA2ddYqU9E4/orbDdQI2QEA34zdhsFAMbVb
+b7aa3akI4C7o9GiOK+02qfeNYR1ZoAg=
+=LTBo
+-----END PGP SIGNATURE-----
+
+--n57OAywK18Rpbp8P--
