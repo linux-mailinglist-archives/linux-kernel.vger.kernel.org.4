@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A823661E90
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED6F661E8F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbjAIGDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 01:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S230382AbjAIGDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 01:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjAIGDq (ORCPT
+        with ESMTP id S230458AbjAIGDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 Jan 2023 01:03:46 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74610B6F
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03B310B74
         for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:03:44 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id x8-20020a056e021ca800b0030c075dc55dso5397680ill.7
+Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so5499826ilh.22
         for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 22:03:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wzHJLWm9LNa/lQNpAVyuVPX1ZS0ziAse1UdwET5NjtE=;
-        b=ES1iG2mxFOUxsZZmcP/rboJYnqnlTbDxrWKW2YXnJRpImvhZiz3sQm+F5YG5VOR2jW
-         orRf2bd/Gjzr1uu05RIqJEuMNAEElix1DM+b8LoCspdku3hT+5DE0NaqpKZRwHhz4SFq
-         /0dFXUdTY6RtjANONG8DwYSrgAwlScPKoyqWPI/4BZRvt2Ouu8x4fVj4qwuS3/IL9Gd1
-         rIR+EkEEpb7uNZQF5bixJnPdWTn94WYRBk415naQESh/O2umopSBd71vSkRCW2Tj3dtv
-         tAFVcaKfJXLVRe4MUWeOJfPddzl5YvLNxaTrKfcb0xZXt3Wcs5C1l63Hr+P9P5BtS8NH
-         FIDg==
-X-Gm-Message-State: AFqh2kocgObW2eVcfDUAVcCD63LibXDXlA8FcJ6BvY7ihaAA3Q66QOnF
-        XubjPFVsCActARks7gfy+asSduq8PUIOQ16hMEwxdTtiO4kX
-X-Google-Smtp-Source: AMrXdXvcB32WP6tUEvImMLOznkmRAFIOBQDboVApqZqwvXjgdJs9FSFMpLibyjBzIZIzahULXaQXnri/BuaVF/NG5FRVhY9tmQMF
+        bh=/W/WnXVBwSpp6PANALKdRoS5gdTY8R5EztsFYbtEx18=;
+        b=Gg2eo6H2lX1TG2fSkUOz2lrga3mo844yHHLYp89V4U2K/z5zDwY0wT7XYB9aeTTLG3
+         s0IXUVaa7EP+mkDIFmkXERSavb7K7kDPeCK3Laxuz7ypwWWsIVoJsK2Td1KSdi+QQPu3
+         VJmxcYYElApv9yQjTftMxccQlrLdE29tFwYUDledRUghFxkjmX9IZnPu8bfAo1nkDWIi
+         AaXduQbMWt7Q/cI3IsUdytxPMcwrLaebwiLMXlYzxTlm+jPzEbWH+aZeyfiRb4i6/GiQ
+         nK0ESICHFu83cVUZYsum8+29sXq0eN2ECR50ngmq40S5hQcevKMBfWe35+h16TlwEQYl
+         gyuA==
+X-Gm-Message-State: AFqh2kq5Tn8YDm9h2WskaCDgNYEcklRAV3N5I8ZG+PzbU+c74wYW++P2
+        TV5YGJZWR0aYlQU4M+QMgu/Yw8UjqdY9XpTYjXBIxCX9daSI
+X-Google-Smtp-Source: AMrXdXvfjFahAiysqFzn0mrIwmIT+c8MHLk/4JCEEw9FJrbvlcf2WuQlLWSMYXF9X8Uy2hYt8qV6SGjJE0KSmOj5MtggxeC2khoi
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:37a9:b0:38a:b267:8900 with SMTP id
- w41-20020a05663837a900b0038ab2678900mr5456530jal.151.1673244223992; Sun, 08
- Jan 2023 22:03:43 -0800 (PST)
-Date:   Sun, 08 Jan 2023 22:03:43 -0800
+X-Received: by 2002:a6b:6d15:0:b0:6e0:2650:ca85 with SMTP id
+ a21-20020a6b6d15000000b006e02650ca85mr4532306iod.96.1673244224256; Sun, 08
+ Jan 2023 22:03:44 -0800 (PST)
+Date:   Sun, 08 Jan 2023 22:03:44 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097fc2305f1ce87d9@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in io_worker_get
-From:   syzbot <syzbot+55cc59267340fad29512@syzkaller.appspotmail.com>
+Message-ID: <0000000000009bff3c05f1ce87f1@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in io_wqe_worker (2)
+From:   syzbot <syzbot+ad53b671c30ddaba634d@syzkaller.appspotmail.com>
 To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
         linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -57,201 +57,161 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a689b938df39 Merge tag 'block-2023-01-06' of git://git.ker..
+HEAD commit:    9b43a525db12 Merge tag 'nfs-for-6.2-2' of git://git.linux-..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1495a5e6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33ad6720950f996d
-dashboard link: https://syzkaller.appspot.com/bug?extid=55cc59267340fad29512
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1532ef72480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b43f3a480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=161784d2480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff5cf657dd0e7643
+dashboard link: https://syzkaller.appspot.com/bug?extid=ad53b671c30ddaba634d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160480ba480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14cddc6a480000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5fcfa927aa80/disk-a689b938.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e92e2a5e7778/vmlinux-a689b938.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5e792fc2d1a8/bzImage-a689b938.xz
-
-The issue was bisected to:
-
-commit af82425c6a2d2f347c79b63ce74fca6dc6be157f
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Mon Jan 2 23:49:46 2023 +0000
-
-    io_uring/io-wq: free worker if task_work creation is canceled
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a90a6e480000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a90a6e480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a90a6e480000
+disk image: https://storage.googleapis.com/syzbot-assets/ddf8271f0077/disk-9b43a525.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5a43fe665720/vmlinux-9b43a525.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/323f0f0f7267/bzImage-9b43a525.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+55cc59267340fad29512@syzkaller.appspotmail.com
-Fixes: af82425c6a2d ("io_uring/io-wq: free worker if task_work creation is canceled")
+Reported-by: syzbot+ad53b671c30ddaba634d@syzkaller.appspotmail.com
 
 ==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
-BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:147 [inline]
-BUG: KASAN: use-after-free in __refcount_add_not_zero include/linux/refcount.h:152 [inline]
-BUG: KASAN: use-after-free in __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
-BUG: KASAN: use-after-free in refcount_inc_not_zero include/linux/refcount.h:245 [inline]
-BUG: KASAN: use-after-free in io_worker_get+0x77/0x2a0 io_uring/io-wq.c:153
-Read of size 4 at addr ffff888028085c00 by task syz-executor161/5058
+BUG: KASAN: use-after-free in __list_del_entry_valid+0xec/0x110 lib/list_debug.c:62
+Read of size 8 at addr ffff88807ba8f020 by task iou-wrk-10331/10338
 
-CPU: 0 PID: 5058 Comm: syz-executor161 Not tainted 6.2.0-rc2-syzkaller-00256-ga689b938df39 #0
+CPU: 0 PID: 10338 Comm: iou-wrk-10331 Not tainted 6.2.0-rc2-syzkaller-00313-g9b43a525db12 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
 Call Trace:
  <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2d0 lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:306
- print_report+0x107/0x220 mm/kasan/report.c:417
- kasan_report+0x139/0x170 mm/kasan/report.c:517
- kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:72 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- refcount_read include/linux/refcount.h:147 [inline]
- __refcount_add_not_zero include/linux/refcount.h:152 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- io_worker_get+0x77/0x2a0 io_uring/io-wq.c:153
- io_wq_for_each_worker io_uring/io-wq.c:846 [inline]
- io_wq_exit_workers io_uring/io-wq.c:1250 [inline]
- io_wq_put_and_exit+0x2f8/0xcb0 io_uring/io-wq.c:1289
- io_uring_clean_tctx+0x164/0x1d0 io_uring/tctx.c:193
- io_uring_cancel_generic+0x60e/0x670 io_uring/io_uring.c:3145
- io_uring_files_cancel include/linux/io_uring.h:55 [inline]
- do_exit+0x2ad/0x2150 kernel/exit.c:822
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f43fd8b3ce9
-Code: 00 49 c7 c0 c0 ff ff ff be e7 00 00 00 ba 3c 00 00 00 eb 12 0f 1f 44 00 00 89 d0 0f 05 48 3d 00 f0 ff ff 77 1c f4 89 f0 0f 05 <48> 3d 00 f0 ff ff 76 e7 f7 d8 64 41 89 00 eb df 0f 1f 80 00 00 00
-RSP: 002b:00007fffe594c5b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f43fd929350 RCX: 00007f43fd8b3ce9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f43fd929350
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
+ __list_del_entry_valid+0xec/0x110 lib/list_debug.c:62
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del_rcu include/linux/rculist.h:157 [inline]
+ io_worker_exit io_uring/io-wq.c:229 [inline]
+ io_wqe_worker+0x852/0xe40 io_uring/io-wq.c:661
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
  </TASK>
 
-Allocated by task 5058:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+Allocated by task 10331:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa5/0xb0 mm/kasan/common.c:380
  kmalloc_node include/linux/slab.h:606 [inline]
  kzalloc_node include/linux/slab.h:731 [inline]
- create_io_worker+0xef/0x630 io_uring/io-wq.c:801
- create_worker_cb+0x16b/0x330 io_uring/io-wq.c:339
- task_work_run+0x243/0x300 kernel/task_work.c:179
- get_signal+0x1654/0x1820 kernel/signal.c:2635
- arch_do_signal_or_restart+0x8d/0x5f0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop+0x74/0x160 kernel/entry/common.c:168
- exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:203
- irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:309
- exc_page_fault+0xa2/0x120 arch/x86/mm/fault.c:1578
- asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
-Freed by task 5058:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
- kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- __kmem_cache_free+0x71/0x110 mm/slub.c:3800
- io_wq_cancel_tw_create io_uring/io-wq.c:1233 [inline]
- io_wq_exit_workers io_uring/io-wq.c:1244 [inline]
- io_wq_put_and_exit+0x137/0xcb0 io_uring/io-wq.c:1289
- io_uring_clean_tctx+0x164/0x1d0 io_uring/tctx.c:193
- io_uring_cancel_generic+0x60e/0x670 io_uring/io_uring.c:3145
- io_uring_files_cancel include/linux/io_uring.h:55 [inline]
- do_exit+0x2ad/0x2150 kernel/exit.c:822
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
+ create_io_worker+0x10c/0x630 io_uring/io-wq.c:801
+ io_wqe_create_worker io_uring/io-wq.c:310 [inline]
+ io_wqe_enqueue+0x6c3/0xbc0 io_uring/io-wq.c:936
+ io_queue_iowq+0x282/0x5c0 io_uring/io_uring.c:475
+ io_queue_sqe_fallback+0xf3/0x190 io_uring/io_uring.c:2059
+ io_submit_sqe io_uring/io_uring.c:2281 [inline]
+ io_submit_sqes+0x11db/0x1e60 io_uring/io_uring.c:2397
+ __do_sys_io_uring_enter+0xc1d/0x2540 io_uring/io_uring.c:3345
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 Last potentially related work creation:
- kasan_save_stack+0x3b/0x60 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:488
- task_work_add+0x87/0x340 kernel/task_work.c:48
- io_queue_worker_create+0x1e2/0x430 io_uring/io-wq.c:373
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
+ task_work_add+0x7f/0x2c0 kernel/task_work.c:48
+ io_queue_worker_create+0x41d/0x660 io_uring/io-wq.c:373
+ io_wqe_dec_running+0x1e4/0x240 io_uring/io-wq.c:410
+ io_wq_worker_sleeping+0xa6/0xc0 io_uring/io-wq.c:698
  sched_submit_work kernel/sched/core.c:6597 [inline]
- schedule+0x63/0x190 kernel/sched/core.c:6628
- schedule_timeout+0xac/0x300 kernel/time/timer.c:2143
- wait_woken+0xca/0x1b0 kernel/sched/wait.c:463
- af_alg_wait_for_data+0x458/0x700 crypto/af_alg.c:904
- _skcipher_recvmsg crypto/algif_skcipher.c:65 [inline]
- skcipher_recvmsg+0x2d9/0xea0 crypto/algif_skcipher.c:157
- sock_recvmsg_nosec net/socket.c:995 [inline]
- sock_recvmsg net/socket.c:1013 [inline]
- sock_read_iter+0x3fa/0x530 net/socket.c:1086
- call_read_iter include/linux/fs.h:2183 [inline]
- io_iter_do_read io_uring/rw.c:643 [inline]
- io_read+0x4a8/0x1310 io_uring/rw.c:766
- io_issue_sqe+0x44e/0xcd0 io_uring/io_uring.c:1856
- io_wq_submit_work+0x44a/0x9c0 io_uring/io_uring.c:1932
- io_worker_handle_work+0x8e1/0xee0 io_uring/io-wq.c:587
- io_wqe_worker+0x36c/0xde0 io_uring/io-wq.c:632
+ schedule+0x16e/0x1b0 kernel/sched/core.c:6628
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ io_ring_submit_lock io_uring/io_uring.h:215 [inline]
+ io_file_get_fixed io_uring/io_uring.c:1966 [inline]
+ io_assign_file io_uring/io_uring.c:1834 [inline]
+ io_assign_file io_uring/io_uring.c:1828 [inline]
+ io_wq_submit_work+0x5f7/0xdc0 io_uring/io_uring.c:1916
+ io_worker_handle_work+0xc41/0x1c60 io_uring/io-wq.c:587
+ io_wqe_worker+0xa5b/0xe40 io_uring/io-wq.c:632
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-The buggy address belongs to the object at ffff888028085c00
+The buggy address belongs to the object at ffff88807ba8f000
  which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 0 bytes inside of
- 512-byte region [ffff888028085c00, ffff888028085e00)
+The buggy address is located 32 bytes inside of
+ 512-byte region [ffff88807ba8f000, ffff88807ba8f200)
 
 The buggy address belongs to the physical page:
-page:ffffea0000a02100 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x28084
-head:ffffea0000a02100 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff888012841c80 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page:ffffea0001eea300 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7ba8c
+head:ffffea0001eea300 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012441c80 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 9757639976, free_ts 0
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 10143, tgid 10077 (syz-executor429), ts 196666481357, free_ts 195660604482
  prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
- alloc_page_interleave+0x22/0x1c0 mm/mempolicy.c:2119
- alloc_slab_page+0xbd/0x190 mm/slub.c:1851
- allocate_slab+0x5e/0x3c0 mm/slub.c:1998
+ get_page_from_freelist+0x119c/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+ __alloc_pages_node include/linux/gfp.h:237 [inline]
+ alloc_slab_page mm/slub.c:1853 [inline]
+ allocate_slab+0xa7/0x350 mm/slub.c:1998
  new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0x7f4/0xeb0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
  __slab_alloc_node mm/slub.c:3345 [inline]
  slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x25b/0x340 mm/slub.c:3491
- kmalloc_trace+0x26/0x60 mm/slab_common.c:1062
- kmalloc include/linux/slab.h:580 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- device_private_init drivers/base/core.c:3323 [inline]
- device_add+0xb6/0xf90 drivers/base/core.c:3373
- netdev_register_kobject+0x178/0x310 net/core/net-sysfs.c:2015
- register_netdevice+0x136c/0x1a30 net/core/dev.c:10045
- register_netdev+0x37/0x50 net/core/dev.c:10173
- rose_proto_init+0x197/0x7c0 net/rose/af_rose.c:1545
- do_one_initcall+0xbd/0x2c0 init/main.c:1306
- do_initcall_level+0x168/0x220 init/main.c:1379
- do_initcalls+0x43/0x90 init/main.c:1395
-page_owner free stack trace missing
+ __kmem_cache_alloc_node+0x1a4/0x430 mm/slub.c:3491
+ kmalloc_node_trace+0x21/0x60 mm/slab_common.c:1075
+ kmalloc_node include/linux/slab.h:606 [inline]
+ kzalloc_node include/linux/slab.h:731 [inline]
+ create_io_worker+0x10c/0x630 io_uring/io-wq.c:801
+ io_wqe_create_worker io_uring/io-wq.c:310 [inline]
+ io_wqe_enqueue+0x6c3/0xbc0 io_uring/io-wq.c:936
+ io_queue_iowq+0x282/0x5c0 io_uring/io_uring.c:475
+ io_queue_sqe_fallback+0xf3/0x190 io_uring/io_uring.c:2059
+ io_submit_sqe io_uring/io_uring.c:2281 [inline]
+ io_submit_sqes+0x11db/0x1e60 io_uring/io_uring.c:2397
+ __do_sys_io_uring_enter+0xc1d/0x2540 io_uring/io_uring.c:3345
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x65c/0xc00 mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3464
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2637
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x66/0x90 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x1e4/0x430 mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ taskstats_tgid_alloc kernel/taskstats.c:583 [inline]
+ taskstats_exit+0x5f3/0xb80 kernel/taskstats.c:622
+ do_exit+0x822/0x2950 kernel/exit.c:852
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __se_sys_exit_group kernel/exit.c:1021 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 Memory state around the buggy address:
- ffff888028085b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888028085b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888028085c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff888028085c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888028085d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807ba8ef00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88807ba8ef80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88807ba8f000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                               ^
+ ffff88807ba8f080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807ba8f100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
 
@@ -262,6 +222,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 syzbot can test patches for this issue, for details see:
 https://goo.gl/tpsmEJ#testing-patches
