@@ -2,112 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128BC662EAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783DA662EA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237022AbjAISUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S237339AbjAISUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237672AbjAISTx (ORCPT
+        with ESMTP id S237681AbjAISUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:19:53 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECF658F97
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:16:45 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bs20so9100388wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0suPC5TVLcS8nNGO/uxkyjzB0A8aNEq3nFa8/ScbpjU=;
-        b=lfafRM5yH69X40B9JehSTLUaUEOVvfYvekBP+PRdeEB6cSwFb6XsJLduJckiK4qi3j
-         Hd+Ib6grHgYmcYpmU5WPry8+7bieIofFptuhlFMaEkmaPjnvgfZI0o5Sq7CHYw46Z8OF
-         2B4+PeyzQMSEwl5ADeTVx0vgINlqYo1Z20UQ4v1MhzGuBJ+65U3x47yU8/qBViE5b/Da
-         5q9JZNeZp2C2+7lZUc5KblUxCT4/DFOwyHinGP7BwXQtJbsa5lvdsyFvY2g/WAFvMPdd
-         U4ERaS1CIXyOxjirbodTQhkvu5KOaiJsAuzH9V6Ax42e28WWkAK8ERRMZ6aFuXvt3ur3
-         FL4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0suPC5TVLcS8nNGO/uxkyjzB0A8aNEq3nFa8/ScbpjU=;
-        b=2TkX5BpV5/SQEOeMBLCAfCUkWa2LRQRUM5Jg7CT9trpjZMvhd3bvhSV3G82AbUxZRi
-         MkVKYc8BRpVLP4qCHB1TJMpbyG90uShYlAUrN+wGgWYRWFRpUSqQbQ1xXEklNnsxItRx
-         wV7eKYCJ47PX2JsvOhMPHt4PWgflRqHJQLBeU3FRwmvODc4o3+kV+t6eOXT9Z48gcdhd
-         zxonhC3aBSkIR3NW2UUKl98QFeMClF5a8CXLeFGnevzUcTPFz2w3zrmZaMgd0Doxov5r
-         LxkFt2tRencKNhdqTmDQ2vAb4/wxOW4G4Ni3RwwRMBDKqsxPlNCSk7CUneQGtyqCgbjp
-         KKPQ==
-X-Gm-Message-State: AFqh2koS2R+jdGG0ARmq3UAgfhdtHw2j7c6C7+bgdet50Z7ehGzv9OjB
-        0fp+hjRnbmklbSe7KoSP1P0zXw==
-X-Google-Smtp-Source: AMrXdXvw49czkPeS8nF7GItRYhDkccRG8n6dXrFwd8g49mIBf/wNufVk2oW7rchwxmaWTY320P8rlQ==
-X-Received: by 2002:a05:6000:10d2:b0:299:4e2f:fca6 with SMTP id b18-20020a05600010d200b002994e2ffca6mr17221430wrx.58.1673288203699;
-        Mon, 09 Jan 2023 10:16:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a11-20020a5d508b000000b002779dab8d85sm9077169wrt.8.2023.01.09.10.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:16:43 -0800 (PST)
-Message-ID: <10d1c870-5ddb-163b-11d5-c29d8ee14f62@linaro.org>
-Date:   Mon, 9 Jan 2023 19:16:39 +0100
+        Mon, 9 Jan 2023 13:20:01 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D565F4E;
+        Mon,  9 Jan 2023 10:17:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673288253; x=1704824253;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=cX8hNu/kXqFhEaU/swi7wdtMmf6CjBQz1mHBUebItQ8=;
+  b=AnmuoTZuEDkouUaKVEI3RKObufJoxiKgjHPoLLXF5SxcpsNPXNacV80C
+   xsJmqA+q4yNSlhR9xKwysgCax12ut8/PphacZaJQxnL35QinG3H8/lEur
+   /M8WMGs/bfHsET5yIEjjf0+/GQmTtXiIJoMte2HFgntBnleS1odmx9lYv
+   GKt3FMatlH7TQcKuRtlYHon+zQHtB39eBfqHA3tszlpAKO9vAW7QVLNa6
+   FQYhJgy4EaEQdxYiFBdVlw0Q7FAlS7iJHyPX9mos6MWzJzAsywPa6Z7Or
+   ZRDZGqkFhq0MS3In1TDJimzQsClso8MWtFrv8tlNewr7SML5kOHuE21Sd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="320643305"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="320643305"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:17:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="656758245"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="656758245"
+Received: from aabdilla-mobl.amr.corp.intel.com ([10.251.221.240])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 10:17:29 -0800
+Date:   Mon, 9 Jan 2023 20:17:32 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 02/10] mfd: intel-m10-bmc: Rename the local
+ variables
+In-Reply-To: <Y7xXzxqG+9Sv/Nf9@google.com>
+Message-ID: <c35cb9ff-dc16-a897-4721-931020995cf8@linux.intel.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-3-ilpo.jarvinen@linux.intel.com> <Y7xXzxqG+9Sv/Nf9@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 04/18] dt-bindings: clock: qcom-rpmhcc: document the clock
- for sa8775p
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-5-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109174511.1740856-5-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1833037273-1673287927=:1694"
+Content-ID: <225bb90-ac7e-ec66-7dc8-7c2560c447f3@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 18:44, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1833037273-1673287927=:1694
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <d4678c30-5f7d-ceb7-aca7-391fb041ed2@linux.intel.com>
+
+On Mon, 9 Jan 2023, Lee Jones wrote:
+
+> On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
 > 
-> Add a new compatible for SA8775P platforms.
+> > Local variables directly interact with dev_get_drvdata/dev_set_drvdata
+> > should be named ddata.
+> > 
+> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> It took 2 people to rename some variables? :)
 
+It took one person to rename the variables, and other to prepare it into a 
+series which required some changes to the original patch (which is when 
+I added my SoB). But I can remove Tianfei (Andy mentioned earlier for 
+simple changes it's okay).
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-- 
+ i.
 
-Best regards,
-Krzysztof
+> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/mfd/intel-m10-bmc.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > index 12c522c16d83..2c26203c4799 100644
+> > --- a/drivers/mfd/intel-m10-bmc.c
+> > +++ b/drivers/mfd/intel-m10-bmc.c
+> > @@ -81,15 +81,15 @@ static DEVICE_ATTR_RO(bmcfw_version);
+> >  static ssize_t mac_address_show(struct device *dev,
+> >  				struct device_attribute *attr, char *buf)
+> >  {
+> > -	struct intel_m10bmc *max10 = dev_get_drvdata(dev);
+> > +	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+> 
+> In general I'm all for the use of 'ddata' for driver data.
+> 
+> For my own reference (apply this as-is to your sign-off block):
+>                                                        
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 
+--8323329-1833037273-1673287927=:1694--
