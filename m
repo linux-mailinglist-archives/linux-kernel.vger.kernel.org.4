@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816D4662941
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AB6662947
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbjAIPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S232742AbjAIPDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbjAIPDV (ORCPT
+        with ESMTP id S234288AbjAIPDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:03:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AA41EAC3;
-        Mon,  9 Jan 2023 07:03:12 -0800 (PST)
+        Mon, 9 Jan 2023 10:03:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF43057F;
+        Mon,  9 Jan 2023 07:03:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A132661158;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C32B2B80DFD;
+        Mon,  9 Jan 2023 15:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A19C433F1;
         Mon,  9 Jan 2023 15:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4D6C433EF;
-        Mon,  9 Jan 2023 15:03:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673276591;
-        bh=eqspIp8DuB38ba++6GsDkOao4Lq7XrLjjTS1VgCoAsU=;
+        s=k20201202; t=1673276593;
+        bh=vIvYs1lDqLsZilPM81Z8ZsgYtnlNdn8Mw/+MwH9YkiQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D1Xg1FUruiOJO9uwnD/wJSFbhNe3jv6o6Nk+Sx/GZABLCxkb519RZiIx0lu0SjhAN
-         qs+RQXLqRo+IOFpBcfWY5pxjhfmgOIoiNxcOwiMoBt76gD8hkg/dfRxJejtyxS+a0K
-         hs57vTuyUhy+gqmf8A+41BOq67QCIYeu/CDIxTqsBVCYwfx51fTnxFkBM5WHVpDtCC
-         Z4Wur6YFje3O7WcUR9awPn01wB/btd+wR29UZIy3wwUauPLqAFfiFls8q77YqVITOH
-         bqVYQ7x4l3JvRNbHRhNyLB46kGxCfyqWjL2rOVe2UzHCx43P5Bqn+qdonLog79LygD
-         eKuJJ7qmw4GUA==
+        b=jli7YSJtw8OBlrxcYaws/3jwBshfdiB/37fnQxL2b5g+lfVNZ3AmtYVkP1iWr8pOB
+         oC9Oa5oAtJqjj8OYcd/FYFOXvdfg50kywD4dyamJqoianQbPzy2wvABA32NYKU5fz9
+         NR0bOGF5VDITzpkqwCAxNaCYFJavwKzTIeAuijsBz8os6ECWsF+TZ9Wdrv553ccGa9
+         h8O7Q2C/LFc8cMCfppDlC0WkxEJRtb1HxUdSE3cOWrUTqGH+ZPcU+r4YTFZJsiPk1Y
+         WhztcKYWjxrE+jssbFrd5iYTMtyfhIeUYJz+UAXFdybICF+no3GRP/apFFdmrp64M7
+         GuM12pQNWhvYw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20221219191125.1974879-1-robh@kernel.org>
-References: <20221219191125.1974879-1-robh@kernel.org>
-Subject: Re: [PATCH] regulator: dt-bindings: Convert Fairchild FAN53555 to DT schema
-Message-Id: <167327658893.217427.12495185483455805011.b4-ty@kernel.org>
-Date:   Mon, 09 Jan 2023 15:03:08 +0000
+In-Reply-To: <20230109004656.451231-1-robh@kernel.org>
+References: <20230109004656.451231-1-robh@kernel.org>
+Subject: Re: [PATCH v2] regulator: dt-bindings: Convert Fairchild FAN53555 to
+ DT schema
+Message-Id: <167327659132.217427.17369473114141624221.b4-ty@kernel.org>
+Date:   Mon, 09 Jan 2023 15:03:11 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -55,13 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 13:11:25 -0600, Rob Herring wrote:
+On Sun, 08 Jan 2023 18:46:56 -0600, Rob Herring wrote:
 > Convert the Fairchild FAN53555 and compatible variants binding to DT
 > schema format.
 > 
+> Add the undocumented 'vsel-gpios' property used to control the VSEL pin.
+> 
 > The example was missing 'reg', so add it.
 > 
-> 
+> [...]
 
 Applied to
 
