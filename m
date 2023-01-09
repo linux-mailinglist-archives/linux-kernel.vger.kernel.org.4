@@ -2,125 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BF366200C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30BA662018
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbjAIIdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S233672AbjAIIeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbjAIIdI (ORCPT
+        with ESMTP id S231176AbjAIIee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:33:08 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB6F637B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:33:07 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id ja17so5682553wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDytp4ppEMXSrwGkxdHQ2/Mw1kec/DZDS/Y2CvEOddk=;
-        b=fpkQU3VDvUACOj+YNaC9ZvbLMA+CAtC9Tvdv8hxMA4sNEcnjNRoBkA7F3xE6gbn2vM
-         k6sQLcmL4g4o6cWK0qvxUc0h77czTT/3swoeaLSf2HitylMjS1J07hUlwLywdTjbcZu5
-         TiwVxKZfBbgPPb8e1B6vbM+WBIm0BKoXrndfrXkmHz4kAZruAmgUbUy/WyJB0qIaJASr
-         9dP9YbKO+tsWV6j4t2RS/XsLzRJWI2wZRz5OXs8ncm8CuZ4KumOynT7DmVN5Bq5N7xpx
-         bT/syfsvZu3JHh9bhMwoCKY09uMFG5SfdLDAIC7r7uD1fR6nxpFw+x4cDxcg0HhU196k
-         2TMw==
+        Mon, 9 Jan 2023 03:34:34 -0500
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC9DF5;
+        Mon,  9 Jan 2023 00:34:32 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso5977697wms.5;
+        Mon, 09 Jan 2023 00:34:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kDytp4ppEMXSrwGkxdHQ2/Mw1kec/DZDS/Y2CvEOddk=;
-        b=7pNzu5EU92S/yobIVQt4Jv/V7Kjnqe+aPgNYMzLqKtPV1aI2U40tuOpv6h9W/qdykm
-         wV0IppO3NG2yQdmBqkakf8xpm+B80PrEkSD0so+sc1jFaVdNhTRhjOAhChYHJWHhBgVk
-         1U1IppZfqAL/gfxlTsExOl6uV+MUDy0nA/9RFR24QST+ma5DoesZeDDfQaRcnXxKPJfF
-         uaWsrquy8gcU//50CC3v/C5nsxWQHEpNGzJ/U3rdRURBef/qGty1I+3+tpf+HTFpW6M2
-         gNoNMYGTSl1m0FsfUE2HjsXPIEDAYtV46w21KyNmfgW9pDiOzDKbVOoll6+V0bze/n3/
-         2g0w==
-X-Gm-Message-State: AFqh2kooX9AmlYdK1ZOpFBX5ZH1Dn1uGYVj2qdwk826IEl+GluDSXDj8
-        NFWdrjJUjmMRhR7TA6jrHRMMww==
-X-Google-Smtp-Source: AMrXdXsLwyWAEbdbQRoBmwjSYWVjlFKmD8qGN6kpAD3cSTddXE5MW9DFn4WfCzGRxhPU8bOsceAXRQ==
-X-Received: by 2002:a05:600c:4998:b0:3cf:68d3:3047 with SMTP id h24-20020a05600c499800b003cf68d33047mr44934987wmp.41.1673253185638;
-        Mon, 09 Jan 2023 00:33:05 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f28-20020a05600c491c00b003d9bd56e9c1sm10031744wmp.11.2023.01.09.00.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 00:33:05 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: dt-bindings: simple-card: correct DAI subnodes pattern
-Date:   Mon,  9 Jan 2023 09:33:01 +0100
-Message-Id: <20230109083301.76282-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ai89XU1vTr8jmWYzTC3dz44+t98FTx9wn3aEaRiaIuk=;
+        b=Hq3eULkwKSpgiEsZEcTMwXIhs74jCq2uXa/DPWeW8EbJdZpIV9PyYAYxkCPOa/dYuG
+         t9bPptkdVaLfEPsQH453Kpi4kSy6CbhGg1Bm4l+2ScSnTQGAjWwmaoEBXOTOO8Tqy7Oc
+         4WKriAby1jqh/E+Qxe47w7i9quBfVg2dJRsVsVWrYxQJMsszYbjWwHAPMzGf58MxLnGQ
+         OhqwOww7doQH3ar1OzitZD9WoAZihQiNUBgR0xUJxWgmGcpnZRYpUKTsY6uLYe4iK+7h
+         tAj72nI+oPv4R05ONlHFHYNXNLZ0OZUDVKEdVGK97dPsuGKrURfifEjS6ibgPiTj8bo9
+         ww2Q==
+X-Gm-Message-State: AFqh2koychD3BjTnfm0fM9rstqns47vwO/zTsqoI4LaEJhFL8nV2t6ZV
+        a7EVU/sjNdsRnFGaZu42EZo=
+X-Google-Smtp-Source: AMrXdXtjlHdY/ENv0HKrQhiUW86lNsmrAe9U9q9o1ZJzBphFcyOOuX1i4xq4T+O9/Z+J1SnbwUA6Kw==
+X-Received: by 2002:a05:600c:1da3:b0:3d0:965f:63ed with SMTP id p35-20020a05600c1da300b003d0965f63edmr46049641wms.23.1673253271256;
+        Mon, 09 Jan 2023 00:34:31 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003a84375d0d1sm16068925wmc.44.2023.01.09.00.34.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 00:34:30 -0800 (PST)
+Message-ID: <ad6efc07-1706-a8e2-1478-45124838a043@kernel.org>
+Date:   Mon, 9 Jan 2023 09:34:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net-next] Remove DECnet support from kernel
+Content-Language: en-US
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Akhmat Karakotov <hmukos@yandex-team.ru>,
+        Antoine Tenart <atenart@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kees Cook <keescook@chromium.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+        "open list:NETFILTER" <coreteam@netfilter.org>
+References: <20220818004357.375695-1-stephen@networkplumber.org>
+ <07786498-2209-3af0-8d68-c34427049947@kernel.org>
+ <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The simple-audio-card,dai-link node does not allow address/size-cells
-thus children (cpu, codec) should come without unit addresses.  For
-cases with multiple nodes of same type, require a dash before index
-(e.g. cpu-x) and add trailing $ to the pattern to disallow other
-characters.
+On 09. 01. 23, 9:14, Jan Engelhardt wrote:
+> 
+> On Monday 2023-01-09 08:04, Jiri Slaby wrote:
+>> On 18. 08. 22, 2:43, Stephen Hemminger wrote:
+>>> DECnet is an obsolete network protocol
+>>
+>> this breaks userspace. Some projects include linux/dn.h:
+>>
+>>   https://codesearch.debian.net/search?q=include.*linux%2Fdn.h&literal=0
+>>
+>> I found Trinity fails to build:
+>> net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
+>>      5 | #include <linux/dn.h>
+>>
+>> Should we provide the above as empty files?
+> 
+> Not a good idea. There may be configure tests / code that merely checks for
+> dn.h existence without checking for specific contents/defines. If you provide
+> empty files, this would fail to build:
+> 
+> #include "config.h"
+> #ifdef HAVE_LINUX_DN_H
+> #	include <linux/dn.h>
+> #endif
+> int main() {
+> #ifdef HAVE_LINUX_DN_H
+> 	socket(AF_DECNET, 0, DNPROTO_NSP); // or whatever
+> #else
+> 	...
+> #endif
+> }
+> 
+> So, with my distro hat on, outright removing header files feels like the
+> slightly lesser of two evils. Given the task to port $arbitrary software
+> between operating systems, absent header files is something more or less
+> "regularly" encountered, so one could argue we are "trained" to deal with it.
+> But missing individual defines is a much deeper dive into the APIs and
+> software to patch it out.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/sound/simple-card.yaml       | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Right, we used to keep providing also defines and structs in uapi 
+headers of removed functionality. So that the above socket would 
+compile, but fail during runtime.
 
-diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
-index ed19899bc94b..08743741b09e 100644
---- a/Documentation/devicetree/bindings/sound/simple-card.yaml
-+++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
-@@ -244,9 +244,9 @@ patternProperties:
-         maxItems: 1
- 
-     patternProperties:
--      "^cpu(@[0-9a-f]+)?":
-+      "^cpu(-[0-9]+)?$":
-         $ref: "#/definitions/dai"
--      "^codec(@[0-9a-f]+)?":
-+      "^codec(-[0-9]+)?$":
-         $ref: "#/definitions/dai"
-     additionalProperties: false
- 
-@@ -462,16 +462,16 @@ examples:
- 
-             convert-channels = <8>; /* TDM Split */
- 
--            sndcpu1: cpu0 {
-+            sndcpu1: cpu-0 {
-                 sound-dai = <&rcar_sound 1>;
-             };
--            cpu1 {
-+            cpu-1 {
-                 sound-dai = <&rcar_sound 2>;
-             };
--            cpu2 {
-+            cpu-2 {
-                 sound-dai = <&rcar_sound 3>;
-             };
--            cpu3 {
-+            cpu-3 {
-                 sound-dai = <&rcar_sound 4>;
-             };
-             codec {
+I am not biased to any solution. In fact, I found out trinity was fixed 
+already. So either path networking takes, it's fine by me. I'm not sure 
+about the chromium users, though (and I don't care).
+
+thanks,
 -- 
-2.34.1
+js
+suse labs
 
