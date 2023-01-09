@@ -2,192 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF7D662129
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A009F66212A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbjAIJOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S236540AbjAIJOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbjAIJND (ORCPT
+        with ESMTP id S231264AbjAIJNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:13:03 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18BE12ACD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:09:29 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id e76so7879329ybh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ksUju8ytzlEweTpFQYqcZ9BkrnYInhKOiXTltSA/eNo=;
-        b=KE2dHBcJ85l1aPKOz2mZustc8ycE905TTmv0LmYCR3+SU7Fcb9oIDIC3gA/LE+NGoc
-         UWuGEtIYHR2PZtNw87jyhYqZcB699Gp39dylMUUATXUF8/v82qsSarg+eQ4ccoPUevmy
-         0WuDy3drpNywj9k7GRGHPML4fZcofOtx5nyYYHGwHawzvputQJ6OshoE9dmMgxlCNd65
-         fmpBm+j1sWd9tFiuwKEQG9iKHFF+/kMAkC9HWC4/5w4geGsONLkpUMHVeMhABiBfmXzC
-         oNh6Che20j7CWPrm2Qbo9ImKj6xn8w8oH6SJcXoqUrp0iQAmOi2VZ+ZOIwwreGavcCeu
-         hRbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ksUju8ytzlEweTpFQYqcZ9BkrnYInhKOiXTltSA/eNo=;
-        b=R90l1GOrqrYAFr1Q1PMUlbX1kkzDTA0MkUMLFx9V8yAttEdMp9cLeBEGjePZGP7FD5
-         FHF/Daqa+dW3iXwnYAOhECtSkhTBTXjWLPn/c5sBBEMroy+ZcH7EfRNDNYuWeXym1R+5
-         QpQcotDT8LqJ9jXizyhtQTbmg4VQh+9DbURgt8fjQO/BiHy/pJ9+UO+xbeHI/VpZ1ra9
-         bns4YuMLM9SilFDIZ23jw1WoPWIYM3THbi6AHMkIfQ5oqY11Y/eD0k2DL4ugWtdfvE7k
-         sVKqYH2c7I3J/suF7z65SAtT67x3OBIQwsOVA2gCsszhG6rnl/E/2DlI+8hRdIa5icKk
-         qw8w==
-X-Gm-Message-State: AFqh2koBxyDfcKhRJA3IAvGxDEAvq83VXdx9FHqIV3TDbcJvrQpKxcYW
-        AH5EiqHniUDX0DBcQ7jJxUw8bpptktqAyMD6nqxvmg==
-X-Google-Smtp-Source: AMrXdXvgY4bPiSF3cDb82Kc6j/QVAY8FdBTgl+GCmX5CEP6zIModo62yxzJQ6CmBGYfoIPPv5/HCpyD+a7FlHgIMbfY=
-X-Received: by 2002:a25:81c7:0:b0:726:7335:50af with SMTP id
- n7-20020a2581c7000000b00726733550afmr7898518ybm.516.1673255368894; Mon, 09
- Jan 2023 01:09:28 -0800 (PST)
+        Mon, 9 Jan 2023 04:13:06 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4713713F7B;
+        Mon,  9 Jan 2023 01:09:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EF8266CF;
+        Mon,  9 Jan 2023 10:09:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673255379;
+        bh=kBHbbWIFlK/b+c+0jxoh4qEo8lk9ttGUtdE2RimROEU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+M+6T+6Y9nD5jhcpEd0kWy2msZbHxhNWqzHCdktIp1FfkxvZzXm2MAAqOxajWS1u
+         p1Kh0Xdi52jqV8Hx0npaakXGzj5OjbLvMxghs+FM9tg4s4t1QqSAm0M29wjM0AQ+yI
+         y3989dLyrR/WEwS5+BFDGPVVSUEgS1ezIOEAw8j0=
+Date:   Mon, 9 Jan 2023 11:09:34 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
+ Deserializer
+Message-ID: <Y7vZzg6YyC2IaUso@pendragon.ideasonboard.com>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
+ <Y7o3QEq9utV8nswA@pendragon.ideasonboard.com>
+ <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
 MIME-Version: 1.0
-References: <20230109025044.27766-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230109025044.27766-1-jiasheng@iscas.ac.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 9 Jan 2023 11:09:18 +0200
-Message-ID: <CAA8EJpr=1E6JvE+8NBa7fW5jKe23NhDeAXGBp90XLCphnYc12A@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/msm/dsi: Add missing check for alloc_ordered_workqueue
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
-        airlied@gmail.com, daniel@ffwll.ch, marijn.suijten@somainline.org,
-        vkoul@kernel.org, dianders@chromium.org, marex@denx.de,
-        vladimir.lypak@gmail.com, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 Jan 2023 at 04:51, Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> Add check for the return value of alloc_ordered_workqueue as it may return
-> NULL pointer and cause NULL pointer dereference.
-> Moreover, change the "goto fail" into "return ret" and drop the "fail"
-> label since they are the same.
->
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
->
-> v1 -> v2:
->
-> 1. Change the "goto fail" into "return ret" and drop the "fail" label.
+On Mon, Jan 09, 2023 at 10:30:13AM +0200, Tomi Valkeinen wrote:
+> On 08/01/2023 05:23, Laurent Pinchart wrote:
+> > Hi Tomi,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Thu, Jan 05, 2023 at 04:03:04PM +0200, Tomi Valkeinen wrote:
+> >> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
+> >>
+> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >> Reviewed-by: Rob Herring <robh@kernel.org>
+> >> ---
+> >>   .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
+> >>   1 file changed, 402 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >> new file mode 100644
+> >> index 000000000000..664799ae55be
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >> @@ -0,0 +1,402 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
+> >> +
+> >> +maintainers:
+> >> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >> +
+> >> +description:
+> >> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+> >> +  forwarding.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - ti,ds90ub960-q1
+> >> +      - ti,ds90ub9702-q1
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  clocks:
+> >> +    maxItems: 1
+> >> +    description:
+> >> +      Reference clock connected to the REFCLK pin.
+> >> +
+> >> +  clock-names:
+> >> +    items:
+> >> +      - const: refclk
+> >> +
+> >> +  powerdown-gpios:
+> >> +    maxItems: 1
+> >> +    description:
+> >> +      Specifier for the GPIO connected to the PDB pin.
+> >> +
+> >> +  i2c-alias-pool:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+> >> +    description:
+> >> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
+> >> +      used to access the remote peripherals on the serializer's I2C bus. The
+> >> +      addresses must be available, not used by any other peripheral. Each
+> >> +      remote peripheral is assigned an alias from the pool, and transactions to
+> >> +      that address will be forwarded to the remote peripheral, with the address
+> >> +      translated to the remote peripheral's real address. This property is not
+> >> +      needed if there are no I2C addressable remote peripherals.
+> >> +
+> >> +  links:
+> >> +    type: object
+> >> +    additionalProperties: false
+> >> +
+> >> +    properties:
+> >> +      '#address-cells':
+> >> +        const: 1
+> >> +
+> >> +      '#size-cells':
+> >> +        const: 0
+> >> +
+> >> +      ti,manual-strobe:
+> >> +        type: boolean
+> >> +        description:
+> >> +          Enable manual strobe position and EQ level
+> >> +
+> >> +    patternProperties:
+> >> +      '^link@[0-3]$':
+> >> +        type: object
+> >> +        additionalProperties: false
+> >> +        properties:
+> >> +          reg:
+> >> +            description: The link number
+> >> +            maxItems: 1
+> >> +
+> >> +          i2c-alias:
+> >> +            description:
+> >> +              The I2C address used for the serializer. Transactions to this
+> >> +              address on the I2C bus where the deserializer resides are
+> >> +              forwarded to the serializer.
+> >> +
+> >> +          ti,rx-mode:
+> >> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >> +            enum:
+> >> +              - 0 # RAW10
+> >> +              - 1 # RAW12 HF
+> >> +              - 2 # RAW12 LF
+> >> +              - 3 # CSI2 SYNC
+> >> +              - 4 # CSI2 NON-SYNC
+> >> +            description:
+> >> +              FPD-Link Input Mode. This should reflect the hardware and the
+> >> +              default mode of the connected camera module.
+> > 
+> > As the remote device may not be a camera, I'd write "of the connected
+> > device" or "of the connected serializer".
+> 
+> I was trying to include the sensor also in the "camera module", as the 
+> sensor's "normal" pixel cloud would affect RAW modes (HF/LF). Perhaps 
+> "connected device" covers this.
+> 
+> >> +
+> >> +          ti,cdr-mode:
+> >> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >> +            enum:
+> >> +              - 0 # FPD-Link III
+> >> +              - 1 # FPD-Link IV
+> >> +            description:
+> >> +              FPD-Link CDR Mode. This should reflect the hardware and the
+> >> +              default mode of the connected camera module.
+> >> +
+> >> +          ti,strobe-pos:
+> >> +            $ref: /schemas/types.yaml#/definitions/int32
+> >> +            minimum: -13
+> >> +            maximum: 13
+> >> +            description: Manual strobe position
+> >> +
+> >> +          ti,eq-level:
+> >> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >> +            maximum: 14
+> >> +            description: Manual EQ level
+> >> +
+> >> +          serializer:
+> >> +            type: object
+> >> +            description: FPD-Link Serializer node
+> >> +
+> >> +        required:
+> >> +          - reg
+> >> +          - i2c-alias
+> >> +          - ti,rx-mode
+> >> +          - serializer
+> >> +
+> >> +  ports:
+> >> +    $ref: /schemas/graph.yaml#/properties/ports
+> >> +
+> >> +    properties:
+> >> +      port@0:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: FPD-Link input 0
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +            description:
+> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >> +              hsync-active and vsync-active must be defined.
+> >> +
+> >> +      port@1:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: FPD-Link input 1
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +            description:
+> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >> +              hsync-active and vsync-active must be defined.
+> >> +
+> >> +      port@2:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: FPD-Link input 2
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +            description:
+> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >> +              hsync-active and vsync-active must be defined.
+> >> +
+> >> +      port@3:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: FPD-Link input 3
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +            description:
+> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >> +              hsync-active and vsync-active must be defined.
+> >> +
+> >> +      port@4:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: CSI-2 Output 0
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +
+> >> +            properties:
+> >> +              data-lanes:
+> >> +                minItems: 1
+> >> +                maxItems: 4
+> >> +
+> >> +            required:
+> >> +              - data-lanes
+> >> +
+> >> +      port@5:
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >> +        unevaluatedProperties: false
+> >> +        description: CSI-2 Output 1
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: /schemas/media/video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> >> +
+> >> +            properties:
+> >> +              data-lanes:
+> >> +                minItems: 1
+> >> +                maxItems: 4
+> >> +
+> >> +            required:
+> >> +              - data-lanes
+> > 
+> > I think you need
+> > 
+> >      required:
+> >        - port@0
+> >        - port@1
+> >        - port@2
+> >        - port@3
+> >        - port@4
+> >        - port@5
+> 
+> Is that needed? I think often some of the ports are unused (e.g. the 
+> example in this yaml file). Is it customary to still require empty port 
+> nodes in the DT?
 
-These are separate changes and should come as separate patches.
-
-> ---
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 89aadd3b3202..819f5be5fd77 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -1884,7 +1884,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->         msm_host = devm_kzalloc(&pdev->dev, sizeof(*msm_host), GFP_KERNEL);
->         if (!msm_host) {
->                 ret = -ENOMEM;
-> -               goto fail;
-> +               return ret;
->         }
->
->         msm_host->pdev = pdev;
-> @@ -1893,14 +1893,14 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->         ret = dsi_host_parse_dt(msm_host);
->         if (ret) {
->                 pr_err("%s: failed to parse dt\n", __func__);
-> -               goto fail;
-> +               return ret;
->         }
->
->         msm_host->ctrl_base = msm_ioremap_size(pdev, "dsi_ctrl", &msm_host->ctrl_size);
->         if (IS_ERR(msm_host->ctrl_base)) {
->                 pr_err("%s: unable to map Dsi ctrl base\n", __func__);
->                 ret = PTR_ERR(msm_host->ctrl_base);
-> -               goto fail;
-> +               return ret;
->         }
->
->         pm_runtime_enable(&pdev->dev);
-> @@ -1909,7 +1909,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->         if (!msm_host->cfg_hnd) {
->                 ret = -EINVAL;
->                 pr_err("%s: get config failed\n", __func__);
-> -               goto fail;
-> +               return ret;
->         }
->         cfg = msm_host->cfg_hnd->cfg;
->
-> @@ -1917,7 +1917,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->         if (msm_host->id < 0) {
->                 ret = msm_host->id;
->                 pr_err("%s: unable to identify DSI host index\n", __func__);
-> -               goto fail;
-> +               return ret;
->         }
->
->         /* fixup base address by io offset */
-> @@ -1927,19 +1927,19 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->                                             cfg->regulator_data,
->                                             &msm_host->supplies);
->         if (ret)
-> -               goto fail;
-> +               return ret;
->
->         ret = dsi_clk_init(msm_host);
->         if (ret) {
->                 pr_err("%s: unable to initialize dsi clks\n", __func__);
-> -               goto fail;
-> +               return ret;
->         }
->
->         msm_host->rx_buf = devm_kzalloc(&pdev->dev, SZ_4K, GFP_KERNEL);
->         if (!msm_host->rx_buf) {
->                 ret = -ENOMEM;
->                 pr_err("%s: alloc rx temp buf failed\n", __func__);
-> -               goto fail;
-> +               return ret;
->         }
->
->         ret = devm_pm_opp_set_clkname(&pdev->dev, "byte");
-> @@ -1977,15 +1977,17 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->
->         /* setup workqueue */
->         msm_host->workqueue = alloc_ordered_workqueue("dsi_drm_work", 0);
-> +       if (!msm_host->workqueue) {
-> +               ret = -ENOMEM;
-> +               return ret;
-> +       }
-> +
->         INIT_WORK(&msm_host->err_work, dsi_err_worker);
->
->         msm_dsi->id = msm_host->id;
->
->         DBG("Dsi Host %d initialized", msm_host->id);
->         return 0;
-> -
-> -fail:
-> -       return ret;
->  }
->
->  void msm_dsi_host_destroy(struct mipi_dsi_host *host)
-> --
-> 2.25.1
->
-
+Ports are an intrinsic property of a device, they don't depend on the
+device integration in the system. In this case, the UB960 has four
+FPD-Link inputs and two CSI-2 outputs, that's a property of the chip.
+They don't have to be connected to anything on the board, so endpooints
+are optional.
 
 -- 
-With best wishes
-Dmitry
+Regards,
+
+Laurent Pinchart
