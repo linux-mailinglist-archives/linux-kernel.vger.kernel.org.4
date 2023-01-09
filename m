@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2996620B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E946066201A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjAIIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S233929AbjAIIfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbjAIIyB (ORCPT
+        with ESMTP id S233151AbjAIIfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:54:01 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD12DF0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:45:57 -0800 (PST)
-X-UUID: 10559a3b014e4c4dafccc2fcf81277e1-20230109
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=BAp+xDBGU54PPm/5VMviuQnl/KdEsY0dtwop6ZaDpbE=;
-        b=Lh6Kv2eOAHNBuX+fabw0f7BoGh6FE2jcq2Vq+/TjNFfhU3uaXKcfsW08fR7rQxpsYJvEGFPniqHjHnqsyRCgnDJnQfPf6fKc1iiSSBDy1FxG6iYedTeNbjfXuhHGScAiZASD9auB7+9Hk0L1UdvpUPHtyB65eNizFYTuQtMCuO8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:79fc4fbf-def8-4ea4-a046-e4f36bb84947,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:16751754-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 10559a3b014e4c4dafccc2fcf81277e1-20230109
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1951956810; Mon, 09 Jan 2023 16:45:52 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 9 Jan 2023 16:45:51 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 9 Jan 2023 16:45:50 +0800
-From:   <yf.wang@mediatek.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
-        jianjiao zeng <jianjiao.zeng@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>
-Subject: [PATCH] iommu/iova: Fix alloc iova overflows issue
-Date:   Mon, 9 Jan 2023 16:34:28 +0800
-Message-ID: <20230109083429.25622-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        Mon, 9 Jan 2023 03:35:40 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53766575;
+        Mon,  9 Jan 2023 00:35:38 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Nr6hm3whKz4xVnD;
+        Mon,  9 Jan 2023 16:35:36 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl2.zte.com.cn with SMTP id 3098ZNiW068141;
+        Mon, 9 Jan 2023 16:35:23 +0800 (+08)
+        (envelope-from guo.ziliang@zte.com.cn)
+Received: from mapi (xaxapp03[null])
+        by mapi (Zmail) with MAPI id mid32;
+        Mon, 9 Jan 2023 16:35:25 +0800 (CST)
+Date:   Mon, 9 Jan 2023 16:35:25 +0800 (CST)
+X-Zmail-TransId: 2afb63bbd1cd5bc25402
+X-Mailer: Zmail v1.0
+Message-ID: <202301091635256312056@zte.com.cn>
+In-Reply-To: <20230106121845.GA1216249@bhelgaas>
+References: 20230106121845.GA1216249@bhelgaas
+Mime-Version: 1.0
+From:   <guo.ziliang@zte.com.cn>
+To:     <helgaas@kernel.org>
+Cc:     <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chen.lin5@zte.com.cn>
+Subject: =?UTF-8?B?562U5aSNOiBbUEFUQ0hdIFBDSTogb2Y6IFdhcm4gaWYgYnJpZGdlIGJhc2UvbGltaXQgcmVnaW9uIG92ZXJsYXBzIHdpdGggc3lzdGVtIHJhbSByZWdpb24=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 3098ZNiW068141
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63BBD1D8.000 by FangMail milter!
+X-FangMail-Envelope: 1673253336/4Nr6hm3whKz4xVnD/63BBD1D8.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<guo.ziliang@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63BBD1D8.000/4Nr6hm3whKz4xVnD
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,57 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+bridge base/limit(memory behind in lspci info, outbound pcie address/size)
+region is used to route outbound mem read/write transaction to ep. This
+base/limit region also may filter out inbound transactions which will
+result in inbound(eg: dma) transaction fail.
 
-In __alloc_and_insert_iova_range, there is an issue that retry_pfn
-overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
-iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
-overflow. As a result, if the retry logic is executed, low_pfn is
-updated to 0, and then new_pfn < low_pfn returns false to make the
-allocation successful.
+For example, if bridge base/limit is [0x20000000, 0x203fffff], system ram
+is [0x20000000, 0x27ffffff]. The inbound mapping is usually 1:1 equal
+mapping. When allocated system ram for inbound tansaction is 0x20004000
+(any in bridge base/limit), this inbound transactions will be filter out.
 
-This issue occurs in the following two situations:
-1. The first iova size exceeds the domain size. When initializing
-iova domain, iovad->cached_node is assigned as iovad->anchor. For
-example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
-and the iova size allocated for the first time is 11M. The
-following is the log information, new->pfn_lo is smaller than
-iovad->cached_node.
+AER may report 'UnsupReq' on inbound mem read/write transactions if address
+is in this base/limit region, but not all pcie AER enabled or work well. We
+warn it also in bridge pci address setting phase.
 
-Example log:
-[  223.798112][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
-[  223.799590][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new->pfn_hi:0x1f08ff
-
-2. The node with the largest iova->pfn_lo value in the iova domain
-is deleted, iovad->cached_node will be updated to iovad->anchor,
-and then the alloc iova size exceeds the maximum iova size that can
-be allocated in the domain.
-
-Adding judgment that retry_pfn must be greater than iovad->start_pfn
-can fix this issue.
-
-Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
 ---
- drivers/iommu/iova.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pci/setup-bus.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index a44ad92fc5eb..0073206c2a95 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -209,7 +209,8 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
- 	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >= low_pfn);
- 
- 	if (high_pfn < size || new_pfn < low_pfn) {
--		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
-+		if (low_pfn == iovad->start_pfn &&
-+		    retry_pfn >= iovad->start_pfn && retry_pfn < limit_pfn) {
- 			high_pfn = limit_pfn;
- 			low_pfn = retry_pfn;
- 			curr = iova_find_limit(iovad, limit_pfn);
+diff --git a/drivers/pci/setup-bus.c b/drivers/pci/setup-bus.c
+index b4096598dbcb..1a9f527d2317 100644
+--- a/drivers/pci/setup-bus.c
++++ b/drivers/pci/setup-bus.c
+@@ -608,6 +608,24 @@ static void pci_setup_bridge_io(struct pci_dev *bridge)
+ 	pci_write_config_dword(bridge, PCI_IO_BASE_UPPER16, io_upper16);
+ }
+
++static void check_bridge_region_overlaps_systemram(struct pci_dev *bridge,
++							struct pci_bus_region *region)
++{
++	int is_ram;
++
++	/*
++	 * bridge base/limit(memory behind) region may filter out inbound
++	 * transactions which will result in inbound(eg: dma) fail of ep.
++	 * AER may report it if enabled, we warn it also.
++	 */
++	is_ram = region_intersects(region->start, region->end - region->start + 1,
++				IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE);
++	if (is_ram == REGION_INTERSECTS) {
++		pci_warn(bridge, "%#012llx..%#012llx bridge base/limit region overlaps with system ram, may result in inbound fail\n",
++			region->start, region->end);
++	}
++}
++
+ static void pci_setup_bridge_mmio(struct pci_dev *bridge)
+ {
+ 	struct resource *res;
+@@ -621,6 +639,7 @@ static void pci_setup_bridge_mmio(struct pci_dev *bridge)
+ 		l = (region.start >> 16) & 0xfff0;
+ 		l |= region.end & 0xfff00000;
+ 		pci_info(bridge, "  bridge window %pR\n", res);
++		check_bridge_region_overlaps_systemram(bridge, &region);
+ 	} else {
+ 		l = 0x0000fff0;
+ 	}
+@@ -652,6 +671,7 @@ static void pci_setup_bridge_mmio_pref(struct pci_dev *bridge)
+ 			lu = upper_32_bits(region.end);
+ 		}
+ 		pci_info(bridge, "  bridge window %pR\n", res);
++		check_bridge_region_overlaps_systemram(bridge, &region);
+ 	} else {
+ 		l = 0x0000fff0;
+ 	}
 -- 
-2.18.0
-
+2.15.2
