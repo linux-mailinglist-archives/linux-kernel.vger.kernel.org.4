@@ -2,74 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710846628B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC546628BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjAIOnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S233609AbjAIOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjAIOm5 (ORCPT
+        with ESMTP id S229801AbjAIOn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:42:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6061AA07;
-        Mon,  9 Jan 2023 06:42:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A67A61168;
-        Mon,  9 Jan 2023 14:42:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D93C433D2;
-        Mon,  9 Jan 2023 14:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673275376;
-        bh=vyhQ5Kv0jvomCtF2wA1v2cv86vfLJ4UcKD5du8lOS44=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=cUs47DELJbya0V+D1JRWcGin6AUwqy93PoasktkKfpnLZbriVm4P/ZxqgcZw9a4Mi
-         HT1mdDbx+UhZP9RsyrmaCCjAYFXtYyGLUl/KTRmzZuUVw3Q3JqHUHicn/tqmQdZlw+
-         5RJTMcyxKssxJCBgbGPmaC2yWTTVhmvy0NfrsosTmMrkKke7vbDIYz7AbNYwOKrkh+
-         wbHGKvoKG8iEEgHTDehxMpumffCkgcpTelnBQkE0LEKYxCg3L0nJU7IsD422rWhXN1
-         hFJxVwScDbRyEN4NBipWYnSMDEWjEqrO0l8ktNb0za5Cl7PDj1DTmJwQRXfmJHTkJ0
-         faHJ7vg7FxbJg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     gregory.greenman@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        luciano.coelho@intel.com, johannes.berg@intel.com,
-        shaul.triebitz@intel.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iwlwifi: Add missing check for alloc_ordered_workqueue
-References: <20230104100059.24987-1-jiasheng@iscas.ac.cn>
-Date:   Mon, 09 Jan 2023 16:42:48 +0200
-In-Reply-To: <20230104100059.24987-1-jiasheng@iscas.ac.cn> (Jiasheng Jiang's
-        message of "Wed, 4 Jan 2023 18:00:59 +0800")
-Message-ID: <87358jixav.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 9 Jan 2023 09:43:29 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A8E1D0E3;
+        Mon,  9 Jan 2023 06:43:28 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id c124so8670866ybb.13;
+        Mon, 09 Jan 2023 06:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOV5umT1eYSPCClB4+myHjuitl4aoXhb6nSLgQO08gk=;
+        b=Ib8K8rpcpPPnd9UkyVa/rWjXDwToqrzgUpjzVKUSRZwwpX1/bygdNFWszldeYNJSKv
+         2l2s465QUYwoiGziVnnF+6sSA0Ej93BBrzdBGvm7sXf7hiGWgcQRVHIJO1B7896Eh7tf
+         1j4CN9XN5vSSv4S4fR29YT+fN3APmmwcoBNEw1xh4GC6Lutp0cu54vQee31/gXmmzluQ
+         P5uoZfOVYbNt9L1Hc+i31cFQP/6NHfK1WqLbPz2Jglew/mwYo1kS+FqRiVDf9jGR/7Tt
+         Kp6UnbAdy87hgMXFq7W93ytiR9shY9Ix+tjFLUIWWDPM1RRwnFzQBV3biIyw0HbibwU9
+         8TRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oOV5umT1eYSPCClB4+myHjuitl4aoXhb6nSLgQO08gk=;
+        b=g55Qrfu03NIF6y994ds0T8MomCF6SvdzFW6p68Y8myu8spAerfUlXaRJY/eJegkO1p
+         IRskS2vduODwUvOY/3F7zVBXqo1dsJNGA1OQv20NMKLIHDm5jVyE7F9FBK9nIaYDKNFx
+         vP3PL2YyNAaBZfF/ktH8LFFnMg0eo6eI7hc1trNpItReAyfzM5Di/WUvTh0B5rAjPITV
+         Wd823RQDSocpQ9ibp0ouhHwzT0Fu3ecfgXRJYlSsSQzCTg/UbueB1Fp9qVvyFBWk5SBj
+         IZ3DPe0qZumiCRPqGLrSpaRlaXMnzCW/cAz5j1opX32nd3XoIg53lGqbnAja5veGd6sS
+         Qd+g==
+X-Gm-Message-State: AFqh2koHgTXt768F1ywGAuL09xIzHCndeJyiKy/tjwM9YDZnUwgcs3WO
+        3NKPdhU1QJ5CHRp9kMTPRXdEtVNucsyoj/ztnYI=
+X-Google-Smtp-Source: AMrXdXvKAG5k8loTwZqxTwRU18wP1QE+Dt8R/ykgqKVgjUlqiWFM6VPMl5w1bD4uIBxMdKmhYHCFhd88rGVJU2HCyQE=
+X-Received: by 2002:a25:af13:0:b0:7bf:b130:9e24 with SMTP id
+ a19-20020a25af13000000b007bfb1309e24mr164044ybh.328.1673275407758; Mon, 09
+ Jan 2023 06:43:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109135828.879136-1-mark.rutland@arm.com> <20230109135828.879136-2-mark.rutland@arm.com>
+In-Reply-To: <20230109135828.879136-2-mark.rutland@arm.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 9 Jan 2023 15:43:16 +0100
+Message-ID: <CANiq72kgmFYEO_EB_NxAF=S7VOf45KM7W3uwxxvftVErwfWzjg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] Compiler attributes: GCC function alignment workarounds
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, revest@chromium.org,
+        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiasheng Jiang <jiasheng@iscas.ac.cn> writes:
-
-> Add check for the return value of alloc_ordered_workqueue since it may
-> return NULL pointer.
+On Mon, Jan 9, 2023 at 2:58 PM Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> As far as I can tell, GCC doesn't respect '-falign-functions=N':
+>
+> * When the __weak__ attribute is used
+>
+>   GCC seems to forget the alignment specified by '-falign-functions=N',
+>   but will respect the '__aligned__(N)' function attribute. Thus, we can
+>   work around this by explciitly setting the alignment for weak
+>   functions.
+>
+> * When the __cold__ attribute is used
+>
+>   GCC seems to forget the alignment specified by '-falign-functions=N',
+>   and also doesn't seem to respect the '__aligned__(N)' function
+>   attribute. The only way to work around this is to not use the __cold__
+>   attibute.
 
-Your address for linux-wireless was wrong, I manually fixed it (".or" ->
-".org"). But patchwork didn't see this patch now so please resubmit as
-v2 with the correct list address.
+If you happen to have a reduced case, then it would be nice to link it
+in the commit. A bug report to GCC would also be nice.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+I gave it a very quick try in Compiler Explorer, but I couldn't
+reproduce it, so I guess it depends on flags, non-trivial functions or
+something else.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> + * '-falign-functions=N', and require alignment to be specificed via a function
+
+Nit: specificed -> specified
+
+> +#if CONFIG_FUNCTION_ALIGNMENT > 0
+> +#define __function_aligned             __aligned(CONFIG_FUNCTION_ALIGNMENT)
+> +#else
+> +#define __function_aligned
+> +#endif
+
+Currently, the file is intended for attributes that do not depend on
+`CONFIG_*` options.
+
+What I usually mention is that we could change that policy, but
+otherwise these would go into e.g. `compiler_types.h`.
+
+> +#if !defined(CONFIG_CC_IS_GCC) || (CONFIG_FUNCTION_ALIGNMENT == 0)
+>  #define __cold                          __attribute__((__cold__))
+> +#else
+> +#define __cold
+> +#endif
+
+Similarly, in this case this could go into `compiler-gcc.h` /
+`compiler-clang.h` etc., since the definition will be different for
+each.
+
+Cheers,
+Miguel
