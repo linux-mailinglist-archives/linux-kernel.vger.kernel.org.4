@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95CE661CB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF85661CB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbjAIDaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 22:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S234023AbjAIDd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 22:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjAIDaI (ORCPT
+        with ESMTP id S233780AbjAIDdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:30:08 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DAD5FC9
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 19:30:04 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso8022424pjo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 19:30:04 -0800 (PST)
+        Sun, 8 Jan 2023 22:33:52 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DE765AC;
+        Sun,  8 Jan 2023 19:33:51 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so11415773pjg.5;
+        Sun, 08 Jan 2023 19:33:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1Q0s3QZP3zgMoieH09ETwIZdLie5eQr6iy50h+rqPs=;
-        b=53o2f2czGsiadqF8jeoKIJ9bjpIMB+3jP+24mrPAyfFwUmUX6qSkx0LpX8JBjk/y2D
-         /zVzBFSraoYAG/2RZZNqZm6+7XyQ8qGpOB0d97N2ATqfS0AFBsBGjmD7dbUtaoD1Efti
-         EPDzn3gUBg+rAFjHwy8VAxPg8a/RIxruvrKbFg2/DyWNnrXa/XM6FpphPhyG/0fd4JyK
-         8mccONWce58PXfyURCPRZbDGQpwgBzQyLLzLV9d6oY5Ztgu7hQl0cdT+X4jPwYPnwMfB
-         tQ56VmDyFhqMj94Z3D6Y+XPiJLF4L61cTueI67N2tar93NMNbYTBMFECfnTAAvZ6D3E/
-         B7OQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKPIVV+yleqWH2PtdMd1KwqVVqdXC+JKz6r5k8c0PzE=;
+        b=V3/tp5znzXs078BgTLmcjKpnI2N2TC5CZhfJ/JilbaJaFJxJzSNaAFpX25smTKMBLq
+         CZfPHn1djIs23uhm8aWLyBnsdkqnaS82azZhvcWbo92Q5iYzhMk1uzVTgQWZsORMICm/
+         EZPTzrxHbzZYX4ECUrp1dhMAf9yrgNCGDpNwcRQNhYsEP0FsmDmdbqgxMxVVwGSYDrln
+         DaxrzYbUuuBtg9u0+AZ3Hzop/F3NxDK1YMTjT6u0BZXQj8peGOPx5kj02vs/2Y0im6II
+         yw+hOIfwL5YxvKoE0ei03s0wd8HHNjMjriDmtp4ul1Tncs9Z4Qr/aG786cbIQYqAZE5B
+         LRIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l1Q0s3QZP3zgMoieH09ETwIZdLie5eQr6iy50h+rqPs=;
-        b=OYrC0AgqCqrBpGLC18RJJgZYPnFCzJQpUZwzTZk7Gr+1iVLRGwHhunzpVcQteoDqso
-         cd5Ix2XEzEofKsbvwdMvXLrqOE8IbzMF1eUTovC+x8u9cZcSa8a52pxb7yp+Fe3fSuz0
-         TKcoCiki8UI6wSrvWobF+16akW2MgSpb16yg+MT6UxxJzmZxNQAZFBc8d+gJINa/g3Gv
-         F+oamV+1Hf15NX+rFMFuHbv9N9ruvis9py2H1HrEReTty+I0FO81WVPt0GCXqMCBNQV+
-         1JQmRV5ACa40N1ZFBomFAE+/Nzuk3ayheKrMk9ygLEJ8JSkpgai8kORZNJYsOB7V3EUJ
-         gwag==
-X-Gm-Message-State: AFqh2kom2SXNJJ7leidj/agKVHDNa6cxv2hS3Da0TmJqY9YS1Wpxybvv
-        a/G2EABLf/GlLbfBMkgb3W220YjkvmtLQZTN
-X-Google-Smtp-Source: AMrXdXsxPtBfJ2yhCEFV7jgfVbDZJ4zEnmdJgwY/fXZ8EruCYvaNWOFlrqmk9onvRakIQ2QISugdbQ==
-X-Received: by 2002:a05:6a20:a6a7:b0:b5:c751:78ac with SMTP id ba39-20020a056a20a6a700b000b5c75178acmr780704pzb.2.1673235003564;
-        Sun, 08 Jan 2023 19:30:03 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ik9-20020a170902ab0900b00183c67844aesm4858264plb.22.2023.01.08.19.30.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dKPIVV+yleqWH2PtdMd1KwqVVqdXC+JKz6r5k8c0PzE=;
+        b=yBpX6f+nZqysC8Hfvc7mM62LJ8ebPFCQdEokIQbF6muLk2vDgpWrujr/fM61FNzAuC
+         Yj/+6Qs5dy0ZfDjj9/0jRdrXW8CTJvETnYlCj8hQCM7TZNJ/MGYOMSDD+SoNOVmpXzKy
+         QN6FcVL2UttQoIyE106C34iTY6e95aRpAL+3dk/k2G4HuxPiMOSkB4LHyAIX7OC4oIcG
+         TaI1KjFxHtStYou4iKJPy22GPOUG9bXAtXqLzU3UStlI1HVFNhC72PQ4uoPAoYYrniUo
+         AMWXnNcoE8Je4IAeuZrOLizKbtIN+0LC20DEHYUnfQpjs1nsyAOuas5Hu8tXT/ixNz5d
+         INcQ==
+X-Gm-Message-State: AFqh2kpef42s21ZK1hc2wZMccjy0473/8ZcVG2691tWEC9WDcjxTMZA5
+        wHlpaeATRuuraYHVl5uy7OjmmfJyH5k=
+X-Google-Smtp-Source: AMrXdXsrBEb6z5H3fodpDhtJDnG3BndRrwViBgeXkkNojR66sJV2HfQ0XyrQpyuDq8N2E9k6JjL2rA==
+X-Received: by 2002:a05:6a20:c112:b0:ad:e904:f247 with SMTP id bh18-20020a056a20c11200b000ade904f247mr69929474pzb.29.1673235230885;
+        Sun, 08 Jan 2023 19:33:50 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id z7-20020a63e547000000b00476d1385265sm4147301pgj.25.2023.01.08.19.33.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 19:30:03 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
-References: <Y7g3L6fntnTtOm63@kili> <Y7hbYPSdLqW++y/p@slm.duckdns.org>
- <9ac3390c-055b-546c-f1f4-68350dfe04f8@kernel.dk>
- <Y7iFwjN+XzWvLv3y@slm.duckdns.org>
-Subject: Re: [PATCH block/for-6.2-fixes] block: Drop spurious might_sleep()
- from blk_put_queue()
-Message-Id: <167323500264.3803.6715346209932603598.b4-ty@kernel.dk>
-Date:   Sun, 08 Jan 2023 20:30:02 -0700
+        Sun, 08 Jan 2023 19:33:50 -0800 (PST)
+From:   Quanfa Fu <quanfafu@gmail.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Quanfa Fu <quanfafu@gmail.com>
+Subject: [PATCH v2] tracing/eprobe: Replace snprintf with memcpy
+Date:   Mon,  9 Jan 2023 11:32:13 +0800
+Message-Id: <20230109033213.3220884-1-quanfafu@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-cc11a
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+No need to check for negative return value from snprintf() as the
+code does not return negative values. Replace snprintf with memcpy.
 
-On Fri, 06 Jan 2023 10:34:10 -1000, Tejun Heo wrote:
-> Dan reports the following smatch detected the following:
-> 
->   block/blk-cgroup.c:1863 blkcg_schedule_throttle() warn: sleeping in atomic context
-> 
-> caused by blkcg_schedule_throttle() calling blk_put_queue() in an
-> non-sleepable context.
-> 
-> [...]
+Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
 
-Applied, thanks!
+-----
+V1 -> V2: memory allc uses kzalloc and replace snprintf with memcpy
+---
+ kernel/trace/trace_eprobe.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-[1/1] block: Drop spurious might_sleep() from blk_put_queue()
-      commit: 49e4d04f0486117ac57a97890eb1db6d52bf82b3
-
-Best regards,
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 352b65e2b910..56eb39f495f6 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -905,7 +905,7 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
+ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const char *argv[])
+ {
+ 	struct event_filter *dummy = NULL;
+-	int i, ret, len = 0;
++	int i, ret, arg_len, len = 0;
+ 	char *p;
+ 
+ 	if (argc == 0) {
+@@ -923,17 +923,17 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
+ 
+ 	p = ep->filter_str;
+ 	for (i = 0; i < argc; i++) {
+-		ret = snprintf(p, len, "%s ", argv[i]);
+-		if (ret < 0)
+-			goto error;
+-		if (ret > len) {
+-			ret = -E2BIG;
+-			goto error;
+-		}
+-		p += ret;
+-		len -= ret;
++		arg_len = strlen(argv[i]);
++		memcpy((void *)p, argv[i], arg_len);
++
++		if (i == argc - 1)
++			p[arg_len] = '\0';
++		else
++			p[arg_len] = ' ';
++
++		p += arg_len + 1;
++		len -= arg_len + 1;
+ 	}
+-	p[-1] = '\0';
+ 
+ 	/*
+ 	 * Ensure the filter string can be parsed correctly. Note, this
 -- 
-Jens Axboe
-
+2.31.1
 
